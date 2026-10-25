@@ -496,11 +496,12 @@ antippbar(truhe, () => spielOrt(() => profi() ? sprechblase("🏝️", "Schatz-S
 const ZX = 60; // Mitte des Zimmers
 let drinnen = false;
 const zimmer = new Group(); zimmer.position.set(ZX, 0, 0); scene.add(zimmer);
+const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlauf }), WAND_SEITE = new MeshToonMaterial({ color: "#FFE9C2", gradientMap: verlauf });
 {
   const boden = new Mesh(new BoxGeometry(8.4, 0.3, 7.4), mat("#E2B47E")); boden.position.y = 0.1; boden.receiveShadow = true; zimmer.add(boden);
   for (let i = -3; i <= 3; i++) zimmer.add(setze(new Mesh(new BoxGeometry(0.04, 0.02, 7.4), mat("#C9955E")), i * 1.2, 0.26, 0));
-  const wand = (b, h, t, x, z, f) => { const w = new Mesh(new BoxGeometry(b, h, t), mat(f)); w.position.set(x, h / 2 + 0.25, z); w.receiveShadow = true; zimmer.add(w); return w; };
-  wand(8.4, 3.2, 0.25, 0, -3.7, "#FFD9E6"); wand(0.25, 3.2, 7.4, -4.2, 0, "#FFE9C2"); wand(0.25, 3.2, 7.4, 4.2, 0, "#FFE9C2");
+  const wand = (b, h, t, x, z, m) => { const w = new Mesh(new BoxGeometry(b, h, t), m); w.position.set(x, h / 2 + 0.25, z); w.receiveShadow = true; zimmer.add(w); return w; };
+  wand(8.4, 3.2, 0.25, 0, -3.7, WAND_HINTEN); wand(0.25, 3.2, 7.4, -4.2, 0, WAND_SEITE); wand(0.25, 3.2, 7.4, 4.2, 0, WAND_SEITE);
   zimmer.add(setze(teil(new BoxGeometry(1.8, 1.2, 0.08), fensterMat, { dicke: 1.04 }), 0, 2.1, -3.55));
   zimmer.add(setze(new Mesh(new BoxGeometry(0.08, 1.2, 0.1), mat("#FFFFFF")), 0, 2.1, -3.5));
   const teppich = new Mesh(new CylinderGeometry(1.6, 1.6, 0.04, 40), mat("#B7A4F2")); teppich.position.set(0, 0.27, 0.6); teppich.receiveShadow = true; zimmer.add(teppich);
@@ -510,7 +511,7 @@ const zimmer = new Group(); zimmer.position.set(ZX, 0, 0); scene.add(zimmer);
   bett.add(setze(teil(new BoxGeometry(1.7, 0.2, 1.8), "#7FC6F5", { dicke: 1.03 }), 0, 0.6, 0.35));
   const kissen = teil(kugel(0.4), "#FFFFFF"); kissen.scale.set(1.6, 0.5, 0.9); bett.add(setze(kissen, 0, 0.65, -0.85));
   block(ZX - 2.9, -2.2, 1.4);
-  antippbar(bett, () => sprechblase("🛏️", "Dein Bett", tier ? `Hier kuschelt ${tierDaten.name || "dein Tier"}, wenn es müde ist.` : "Ein gemütliches Bett. Bald kannst du dein Zimmer einrichten.", S.paar(["", "Уютная кровать."])[1], null));
+  antippbar(bett, () => sprechblase("🛏️", "Dein Bett", tier ? `Hier kuschelt ${tierDaten.name || "dein Tier"}, wenn es müde ist.` : "Ein gemütliches Bett. Mit dem Knopf „Einrichten“ machst du dein Zimmer schön.", S.paar(["", "Уютная кровать."])[1], null));
   // Kleiderschrank
   const schrank = new Group(); schrank.position.set(2.8, 0.25, -3.0); zimmer.add(schrank);
   schrank.add(setze(teil(new BoxGeometry(2.0, 2.6, 0.9), "#C2337A", { dicke: 1.03 }), 0, 1.3, 0));
@@ -529,18 +530,103 @@ const zimmer = new Group(); zimmer.position.set(ZX, 0, 0); scene.add(zimmer);
   [[0, 0.75, 0, 0.35], [0.2, 0.95, 0.1, 0.25], [-0.18, 0.9, -0.05, 0.25]].forEach(([x, y, z, r]) => topf.add(setze(teil(kugel(r), "#5DBB5A"), x, y, z)));
   block(ZX + 3.4, 2.4, 0.5);
 }
+// ---------- Zimmer einrichten: Möbel mit Sternen kaufen und auf Plätze stellen ----------
+const PLAETZE = [
+  { id: "fenster", name: "am Fenster", x: -0.2, z: -3.0 },
+  { id: "bett", name: "neben dem Bett", x: -1.5, z: -3.0 },
+  { id: "links", name: "an der linken Wand", x: -3.5, z: 0.0 },
+  { id: "vornlinks", name: "vorne links", x: -3.4, z: 2.5 },
+  { id: "rechts", name: "an der rechten Wand", x: 3.5, z: -1.0 },
+  { id: "mitterechts", name: "rechts beim Teppich", x: 2.2, z: 0.9 }
+];
+const holz = "#B07A48";
+const MOEBEL = [
+  { id: "lampe", name: "Stehlampe", e: "💡", preis: 4, text: "Sie macht dein Zimmer gemütlich.", bau() { const g = new Group(); g.add(setze(teil(new CylinderGeometry(0.28, 0.32, 0.08, 18), "#6B6B7A"), 0, 0.04, 0)); g.add(setze(teil(new CylinderGeometry(0.04, 0.04, 1.6, 8), "#6B6B7A"), 0, 0.84, 0)); g.add(setze(teil(new CylinderGeometry(0.22, 0.38, 0.45, 18, 1, true), "#FFD84D"), 0, 1.75, 0)); g.add(setze(new Mesh(kugel(0.12, 10, 8), new MeshBasicMaterial({ color: "#FFF4C2" })), 0, 1.65, 0)); return g; } },
+  { id: "baer", name: "Kuschelbär", e: "🧸", preis: 4, text: "Er passt auf dein Zimmer auf.", bau() { const g = new Group(), f = "#C98A50"; const k = teil(kugel(0.32), f); k.scale.y = 1.1; g.add(setze(k, 0, 0.35, 0)); g.add(setze(teil(kugel(0.24), f), 0, 0.85, 0)); [-1, 1].forEach(sx => { g.add(setze(teil(kugel(0.09), f), sx * 0.17, 1.05, 0)); g.add(setze(teil(kugel(0.1), f), sx * 0.3, 0.42, 0.1)); g.add(setze(teil(kugel(0.11), f), sx * 0.17, 0.1, 0.15)); }); g.add(setze(teil(kugel(0.09), "#F2D2A8", { umriss: false }), 0, 0.8, 0.2)); augen(g, 0.08, 0.9, 0.21, 0.035); return g; } },
+  { id: "sitzsack", name: "Sitzsack", e: "🫘", preis: 5, text: "Perfekt zum Lesen und Ausruhen.", bau() { const g = new Group(); const s1 = teil(kugel(0.6), "#5CCBA6"); s1.scale.set(1, 0.6, 1); g.add(setze(s1, 0, 0.35, 0)); const s2 = teil(kugel(0.4), "#5CCBA6"); s2.scale.set(1.1, 0.9, 0.6); g.add(setze(s2, 0, 0.7, -0.3)); return g; } },
+  { id: "kiste", name: "Spielzeugkiste", e: "🧩", preis: 5, text: "Darin ist Platz für alle Spielsachen.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.0, 0.6, 0.6), "#7B9BFF"), 0, 0.3, 0)); g.add(setze(teil(kugel(0.14), "#FF6F91"), -0.25, 0.68, 0)); g.add(setze(teil(new BoxGeometry(0.22, 0.22, 0.22), "#FFD84D"), 0.1, 0.68, 0.05)); g.add(setze(teil(new ConeGeometry(0.12, 0.3, 4), "#5CCBA6"), 0.33, 0.72, -0.05)); return g; } },
+  { id: "korb", name: "Tierkörbchen", e: "🧺", preis: 6, text: "Ein weiches Bett für dein Tier.", bau() { const g = new Group(); g.add(setze(teil(new CylinderGeometry(0.55, 0.45, 0.3, 24), "#D9A066"), 0, 0.15, 0)); g.add(setze(new Mesh(new CylinderGeometry(0.47, 0.47, 0.06, 24), mat("#FF9EC4")), 0, 0.3, 0)); g.add(setze(teil(new TorusGeometry(0.5, 0.08, 8, 24), "#C88A50"), 0, 0.3, 0).rotateX(Math.PI / 2)); return g; } },
+  { id: "globus", name: "Globus", e: "🌍", preis: 7, text: "Die ganze Welt in deinem Zimmer. Ella liebt ihn!", bau() { const g = new Group(); g.add(setze(teil(new CylinderGeometry(0.4, 0.45, 0.6, 16), holz), 0, 0.3, 0)); g.add(setze(teil(new CylinderGeometry(0.03, 0.03, 0.3, 6), "#FFC83D"), 0, 0.75, 0)); const k = teil(kugel(0.32), "#5EC3E6"); setze(k, 0, 1.15, 0); k.rotation.z = 0.4; [[0.15, 0.1, 0.2], [-0.2, -0.05, 0.15], [0.05, 0.2, -0.22]].forEach(([x, y, z]) => k.add(setze(new Mesh(kugel(0.13, 10, 8), mat("#7CCB5B")), x, y, z))); g.add(k); g.userData.dreh = k; return g; } },
+  { id: "regal", name: "Bücherregal", e: "📚", preis: 8, text: "Hier wohnen deine Lieblingsbücher.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.3, 1.9, 0.45), holz, { dicke: 1.03 }), 0, 0.95, 0)); [0.5, 1.1, 1.65].forEach((y, j) => { let x = -0.5; ["#E0574A", "#5CCBA6", "#7B9BFF", "#FFD84D", "#C27BFF"].forEach((c, i) => { if ((i + j) % 4 === 3) { x += 0.2; return; } const b = new Mesh(new BoxGeometry(0.14, 0.4 - (i % 2) * 0.06, 0.32), mat(c)); b.position.set(x, y - 0.1 + 0.05, 0.1); x += 0.19; g.add(b); }); }); return g; } },
+  { id: "staffelei", name: "Mal-Staffelei", e: "🎨", preis: 9, text: "Für große Künstlerinnen und Künstler.", bau() { const g = new Group(); [[-0.3, 0.12], [0.3, -0.12]].forEach(([x, rz]) => { const b = teil(new BoxGeometry(0.06, 1.7, 0.06), holz); b.rotation.z = rz; g.add(setze(b, x, 0.85, 0)); }); const h = teil(new BoxGeometry(0.06, 1.6, 0.06), holz); h.rotation.x = -0.3; g.add(setze(h, 0, 0.8, -0.25)); g.add(setze(teil(new BoxGeometry(0.9, 0.7, 0.04), "#FFFFFF"), 0, 1.15, 0.06)); [["#FF6F91", -0.2, 1.25], ["#FFD84D", 0.15, 1.1], ["#5CCBA6", 0, 0.98]].forEach(([c, x, y]) => { const f = new Mesh(kugel(0.1, 10, 8), mat(c)); f.scale.set(1, 1, 0.2); g.add(setze(f, x, y, 0.09)); }); return g; } },
+  { id: "tisch", name: "Schreibtisch", e: "✏️", preis: 10, text: "Hier kannst du malen und schreiben.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.4, 0.08, 0.75), holz), 0, 0.8, 0)); [[-0.6, -0.3], [0.6, -0.3], [-0.6, 0.3], [0.6, 0.3]].forEach(([x, z]) => g.add(setze(teil(new BoxGeometry(0.08, 0.8, 0.08), holz), x, 0.4, z))); g.add(setze(teil(new BoxGeometry(0.4, 0.04, 0.3), "#FFFFFF"), -0.2, 0.86, 0.05)); g.add(setze(teil(new CylinderGeometry(0.08, 0.08, 0.22, 10), "#E0574A"), 0.45, 0.95, -0.15)); const st = new Group(); st.add(setze(teil(new BoxGeometry(0.5, 0.06, 0.5), "#7B9BFF"), 0, 0.5, 0)); st.add(setze(teil(new BoxGeometry(0.5, 0.5, 0.06), "#7B9BFF"), 0, 0.78, 0.24)); [[-0.2, -0.2], [0.2, -0.2], [-0.2, 0.2], [0.2, 0.2]].forEach(([x, z]) => st.add(setze(new Mesh(new BoxGeometry(0.05, 0.5, 0.05), mat("#6B6B7A")), x, 0.25, z))); st.position.z = 0.7; g.add(st); return g; } },
+  { id: "aquarium", name: "Aquarium", e: "🐠", preis: 12, text: "Blub, blub! Die Fische winken dir zu.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.2, 0.7, 0.6), holz), 0, 0.35, 0)); g.add(setze(new Mesh(new BoxGeometry(1.1, 0.7, 0.5), new MeshToonMaterial({ color: "#7FD3F0", gradientMap: verlauf, transparent: true, opacity: 0.6 })), 0, 1.05, 0)); g.add(setze(new Mesh(new BoxGeometry(1.1, 0.1, 0.5), mat("#F2D9A2")), 0, 0.75, 0)); const fische = new Group(); ["#FF9E5E", "#FFD84D"].forEach((c, i) => { const f = new Mesh(kugel(0.09, 10, 8), mat(c)); f.scale.set(1.5, 1, 0.6); f.position.set(i ? 0.2 : -0.2, 1.0 + i * 0.15, 0); f.add(setze(new Mesh(new ConeGeometry(0.06, 0.12, 4), mat(c)), -0.12, 0, 0).rotateZ(Math.PI / 2)); fische.add(f); }); g.add(fische); g.userData.fische = fische; [-0.35, 0.4].forEach(x => g.add(setze(new Mesh(new ConeGeometry(0.05, 0.35, 5), mat("#3E9E5A")), x, 0.95, -0.1))); return g; } }
+];
+const WANDFARBEN = [
+  { id: "rosa", name: "Rosa", farbe: ["#FFD9E6", "#FFE9C2"], preis: 0 },
+  { id: "mint", name: "Mint", farbe: ["#C9F2E3", "#EAF8F1"], preis: 3 },
+  { id: "himmel", name: "Himmelblau", farbe: ["#CFE6FF", "#EEF5FF"], preis: 3 },
+  { id: "sonne", name: "Sonnengelb", farbe: ["#FFE9A8", "#FFF5D6"], preis: 3 },
+  { id: "lila", name: "Lavendel", farbe: ["#E3D6FF", "#F3EDFF"], preis: 3 }
+];
+const zimmerDaten = () => Object.assign({ plaetze: {}, wand: "rosa" }, S.lade("zimmer") || {});
+const besitzt = (id, preis) => !preis || S.offen(S.istFrei(id));
+const moebelObj = {}; const platzHindernis = {};
+function stelleMoebel() {
+  const d = zimmerDaten();
+  PLAETZE.forEach(pl => {
+    const id = d.plaetze[pl.id], alt = moebelObj[pl.id];
+    if (alt && alt.userData.id === id) return;
+    if (alt) { zimmer.remove(alt); tippbar.splice(tippbar.indexOf(alt), 1); delete moebelObj[pl.id]; }
+    if (platzHindernis[pl.id]) { hindernisse.splice(hindernisse.indexOf(platzHindernis[pl.id]), 1); delete platzHindernis[pl.id]; }
+    const m = MOEBEL.find(x => x.id === id); if (!m) return;
+    const o = m.bau(); o.userData.id = id; o.position.set(pl.x, 0.25, pl.z); o.rotation.y = Math.atan2(-pl.x, 0.8 - pl.z); zimmer.add(o); moebelObj[pl.id] = o;
+    platzHindernis[pl.id] = { x: ZX + pl.x, z: pl.z, r: 0.6 }; hindernisse.push(platzHindernis[pl.id]);
+    antippbar(o, () => sprechblase(m.e, m.name, m.text, "", null));
+  });
+  const w = WANDFARBEN.find(x => x.id === d.wand) || WANDFARBEN[0];
+  WAND_HINTEN.color.set(w.farbe[0]); WAND_SEITE.color.set(w.farbe[1]);
+}
+stelleMoebel();
+// Ringe zeigen beim Aussuchen, wo die Plätze sind
+const platzRinge = PLAETZE.map(pl => { const r = new Mesh(new TorusGeometry(0.55, 0.05, 6, 28), new MeshBasicMaterial({ color: "#FF6F91" })); r.rotation.x = Math.PI / 2; r.position.set(pl.x, 0.3, pl.z); r.visible = false; zimmer.add(r); return r; });
+let ladenWahl = null;
+function laden(text) {
+  const d = zimmerDaten(), L = $("laden-liste"); $("laden").hidden = false; $("blase").hidden = true;
+  platzRinge.forEach(r => r.visible = !!ladenWahl);
+  if (ladenWahl) {
+    const m = MOEBEL.find(x => x.id === ladenWahl), steht = Object.keys(d.plaetze).find(k => d.plaetze[k] === m.id);
+    $("laden-titel").textContent = `${m.e} ${m.name}: Wohin?`;
+    $("laden-text").textContent = text || "Die rosa Ringe im Zimmer zeigen die Plätze.";
+    L.innerHTML = PLAETZE.map((pl, i) => { const da = MOEBEL.find(x => x.id === d.plaetze[pl.id]); return `<button class="ware" data-platz="${pl.id}"><b>${i + 1}. ${pl.name}</b><span>${da ? (da.id === m.id ? "✓ steht hier" : `${da.e} ${da.name}`) : "frei"}</span></button>`; }).join("")
+      + (steht ? `<button class="ware weg" data-weg="1"><b>📦 Wegräumen</b><span>in den Keller</span></button>` : "") + `<button class="ware weg" data-zurueck="1"><b>⬅️ Zurück</b></button>`;
+    platzRinge.forEach((r, i) => r.material.color.set(d.plaetze[PLAETZE[i].id] ? "#FFB0C8" : "#FF6F91"));
+    return;
+  }
+  $("laden-titel").textContent = "🛋️ Zimmer einrichten"; $("laden-text").textContent = text || "Kaufe Möbel mit deinen Sternen und stell sie auf. Gekauftes bleibt für immer deins.";
+  const karte = (id, e, name, preis, info, extra) => `<button class="ware${besitzt(id, preis) ? " hat" : ""}" ${extra}><span class="e">${e}</span><b>${name}</b><span>${besitzt(id, preis) ? info : `⭐ ${preis}`}</span></button>`;
+  L.innerHTML = `<h3>Möbel</h3><div class="waren">` + MOEBEL.map(m => { const steht = PLAETZE.find(pl => d.plaetze[pl.id] === m.id); return karte("moebel-" + m.id, m.e, m.name, m.preis, steht ? `✓ ${steht.name}` : "✓ Hinstellen", `data-moebel="${m.id}"`); }).join("")
+    + `</div><h3>Wandfarbe</h3><div class="waren">` + WANDFARBEN.map(w => karte("wand-" + w.id, `<i style="background:${w.farbe[0]}"></i>`, w.name, w.preis, d.wand === w.id ? "✓ an der Wand" : "✓ Streichen", `data-wand="${w.id}"`)).join("") + `</div>`;
+}
+function kaufe(id, preis) {
+  if (besitzt(id, preis)) return true;
+  if (S.schalteFrei(id, preis)) { $("sterne").textContent = S.sterne(); S.ton("juhu"); return true; }
+  S.ton("nein"); laden(`Dafür brauchst du ${preis} Sterne. Dir fehlen noch ${preis - S.sterne()}. Beim Lernen sammelst du neue!`); return false;
+}
+$("laden-liste").addEventListener("click", (ev) => {
+  const b = ev.target.closest("button"); if (!b) return; const d = zimmerDaten();
+  if (b.dataset.moebel) { const m = MOEBEL.find(x => x.id === b.dataset.moebel); if (kaufe("moebel-" + m.id, m.preis)) { ladenWahl = m.id; laden(); } return; }
+  if (b.dataset.wand) { const w = WANDFARBEN.find(x => x.id === b.dataset.wand); if (kaufe("wand-" + w.id, w.preis)) { d.wand = w.id; S.speichere("zimmer", d); stelleMoebel(); laden("Frisch gestrichen!"); } return; }
+  if (b.dataset.zurueck) { ladenWahl = null; laden(); return; }
+  const raus = () => Object.keys(d.plaetze).forEach(k => { if (d.plaetze[k] === ladenWahl) delete d.plaetze[k]; });
+  if (b.dataset.weg) { raus(); S.speichere("zimmer", d); stelleMoebel(); ladenWahl = null; laden("Weggeräumt. Du kannst es jederzeit wieder hinstellen."); return; }
+  if (b.dataset.platz) { raus(); d.plaetze[b.dataset.platz] = ladenWahl; S.speichere("zimmer", d); stelleMoebel(); S.ton("tipp"); const pl = PLAETZE.find(x => x.id === b.dataset.platz); const m = MOEBEL.find(x => x.id === ladenWahl); ladenWahl = null; laden(`${m.e} ${m.name} steht jetzt ${pl.name}.`); }
+});
+$("einrichten").addEventListener("click", () => { ladenWahl = null; laden(); });
+$("laden-zu").addEventListener("click", () => { $("laden").hidden = true; ladenWahl = null; platzRinge.forEach(r => r.visible = false); });
+
 let draussenPos = new Vector3();
 function reingehen() {
-  drinnen = true; $("raus").hidden = false; $("blase").hidden = true;
+  drinnen = true; $("raus").hidden = false; $("einrichten").hidden = false; $("blase").hidden = true;
   draussenPos.copy(ich.position);
   ich.position.set(ZX, 0.25, 2.2); ich.rotation.y = Math.PI;
   if (tier) tier.position.set(ZX + 1.2, 0.25, 2.6);
   scene.background = new Color("#F7E3C6"); scene.fog.color.set("#F7E3C6"); wasser.visible = false; wolken.forEach(w => w.visible = false);
-  $("info").textContent = "Dein Zimmer. Tippe auf den Kleiderschrank oder den Spiegel!";
+  $("info").textContent = "Dein Zimmer. Kleiderschrank, Spiegel – oder richte es mit 🛋️ ein!";
   S.ton("tipp");
 }
 function rausgehen() {
-  drinnen = false; $("raus").hidden = true;
+  drinnen = false; $("raus").hidden = true; $("einrichten").hidden = true; $("laden").hidden = true;
   ich.position.set(-4.1, 0.25, -2.0); ich.rotation.y = 0;
   if (tier) tier.position.set(-3.0, 0.25, -1.6);
   scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true);
@@ -784,6 +870,7 @@ function bild() {
     halme.instanceMatrix.needsUpdate = true;
   }
   if (schnee) { const a = schnee.geometry.attributes.position; for (let i = 0; i < a.count; i++) { let y = a.getY(i) - dt * 1.2; if (y < 0) y = 16; a.setY(i, y); a.setX(i, a.getX(i) + Math.sin(t + i) * dt * 0.2); } a.needsUpdate = true; }
+  if (drinnen) { const gl = moebelObj && Object.values(moebelObj); gl.forEach(o => { if (o.userData.dreh) o.userData.dreh.rotation.y += dt * 0.5; if (o.userData.fische) o.userData.fische.children.forEach((f, i) => { f.position.x = Math.sin(t * (0.8 + i * 0.3) + i * 2) * 0.35; f.rotation.y = Math.cos(t * (0.8 + i * 0.3) + i * 2) > 0 ? 0 : Math.PI; }); }); }
   windrad.rotation.y += dt * (0.6 + Math.min(40, (wetter && wetter.wind) || 8) * 0.15);
   if (regen) { const a = regen.geometry.attributes.position; for (let i = 0; i < a.count; i += 2) { let y = a.getY(i) - dt * 14; if (y < 0) y = 16; a.setY(i, y); a.setY(i + 1, y - 0.55); } a.needsUpdate = true; regen.visible = !drinnen; }
   if (schnee) schnee.visible = !drinnen;
@@ -802,4 +889,4 @@ function bild() {
 requestAnimationFrame(bild);
 zeigeLernmodus(); if (!NACHT) zeigeWetterInfo();
 if (q.get("drinnen") === "1" && spielZeit()) reingehen();
-window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, SAISON, NACHT };
+window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, SAISON, NACHT };
