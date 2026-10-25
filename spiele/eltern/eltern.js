@@ -161,8 +161,8 @@
         <h2>Kind und Einstellungen</h2>
         <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre, ${S.kind().klasse}. Klasse · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1]}</p>
         <p class="hinweis"><b>Empfehlung der Kinderärzte (DGKJ):</b> ${empfehlung(S.kind().alter)}</p>
-        <div class="knoepfe"><button class="knopf" id="kind-aendern">Ändern</button><button class="knopf" id="neu-laden">🔄 App neu laden</button></div>
-        <p class="klein">„App neu laden“ holt die neueste Version. Der Spielstand bleibt erhalten.</p>
+        <div class="knoepfe"><button class="knopf haupt" id="erwachsen">👤 Als Erwachsener spielen</button><button class="knopf" id="kind-aendern">Ändern</button><button class="knopf" id="neu-laden">🔄 App neu laden</button></div>
+        <p class="klein">„Als Erwachsener spielen“ öffnet für eine Stunde alles, ohne Sperren und Zeitgrenzen (bis „Beenden“ oder die App geschlossen wird). „App neu laden“ holt die neueste Version. Der Spielstand bleibt erhalten.</p>
       </div>
       <div class="karte">
         <h2>Hinweise</h2>
@@ -170,6 +170,7 @@
         <div class="knoepfe"><button class="knopf" id="pin-neu">PIN ändern</button><button class="knopf" id="abmelden">Bereich schließen</button></div>
       </div>`;
     $("pin-neu").addEventListener("click", () => { S.speichere("eltern", Object.assign(eltern(), { pin: null })); sessionStorage.removeItem(SITZUNG); pinSeite(); });
+    $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
     $("neu-laden").addEventListener("click", neuLaden);
     $("abmelden").addEventListener("click", () => { sessionStorage.removeItem(SITZUNG); location.href = "../ich/"; });

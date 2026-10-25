@@ -6,6 +6,9 @@
   // Testmodus (/dev): eigener, getrennter Spielstand – der echte bleibt unberührt
   const TEST = !!cfg.test;
   const KEY = TEST ? "spielwelt.dev.profil.v1" : "spielwelt.profil.v1";
+  // Erwachsenen-Modus (nach PIN im Elternbereich): alles offen, keine Zeitgrenzen, gilt für diese Sitzung
+  const ERW = TEST ? "spielwelt.dev.erwachsen" : "spielwelt.erwachsen";
+  const erwachsen = () => { try { return +sessionStorage.getItem(ERW) > Date.now(); } catch (e) { return false; } };
   const DB_NAME = TEST ? "spielwelt-dev" : "spielwelt", DB_STORE = "stand";
 
   const leeresProfil = () => ({ name: "", sterne: 0, freigeschaltet: [], ton: true, daten: {}, stand: 0 });
@@ -97,7 +100,9 @@
     config: cfg,
     test: TEST,
     // Im Testmodus ist alles offen
-    offen(bedingung) { return TEST || !!bedingung; },
+    offen(bedingung) { return TEST || erwachsen() || !!bedingung; },
+    erwachsen,
+    setzeErwachsen(minuten) { try { if (minuten) sessionStorage.setItem(ERW, String(Date.now() + minuten * 60000)); else sessionStorage.removeItem(ERW); } catch (e) { /* egal */ } },
     get profil() { return profil; },
     speicherSchutz,                    // Promise<boolean>
     // "Annas", aber "Max'"
@@ -223,6 +228,20 @@
       document.body.appendChild(b);
     };
     if (document.body) banner(); else addEventListener("DOMContentLoaded", banner);
+  }
+
+  if (!TEST && erwachsen()) {
+    const leiste = () => {
+      const b = document.createElement("div");
+      b.innerHTML = `<b>👤 Erwachsenen-Modus</b><button>Beenden</button>`;
+      b.style.cssText = "position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:8px;align-items:center;" +
+        "background:#3b1f63;color:#fff;font:600 14px Fredoka,sans-serif;padding:4px 10px;border-radius:0 0 14px 14px;box-shadow:0 3px 0 rgba(0,0,0,.2)";
+      const k = b.querySelector("button");
+      k.style.cssText = "font:inherit;border:0;border-radius:999px;padding:4px 10px;background:#fff;color:#3b1f63;cursor:pointer";
+      k.addEventListener("click", () => { Spielwelt.setzeErwachsen(0); location.reload(); });
+      document.body.appendChild(b);
+    };
+    if (document.body) leiste(); else addEventListener("DOMContentLoaded", leiste);
   }
 
   if ("serviceWorker" in navigator && location.protocol === "https:") {

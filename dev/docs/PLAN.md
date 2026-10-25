@@ -30,6 +30,7 @@ Einstellbar im Elternbereich (PIN), mehrere Regeln kombinierbar:
 - Ruhezeiten (z. B. ab 19 Uhr nur Lernen oder gar nichts), Wochenend-Regeln
 - Lernzeit zählt nur **aktiv** (keine Eingabe > 60 s = Pause), damit man sie nicht „absitzen“ kann
 - Eltern-Freigabe per PIN für Ausnahmen („heute 10 Minuten extra“)
+- **Erwachsene dürfen immer spielen:** Erwachsenen-Modus nach PIN (erledigt: 1 Stunde, alles offen, keine Zeitgrenzen, Leiste oben mit „Beenden“)
 
 **Rücksicht auf ADHS und Konzentrationsprobleme** (eigener Schalter „Fokus-Hilfen“):
 - Kurze Lernhäppchen (5 Minuten oder 5 Aufgaben), dann eine kleine Bewegungs- oder Atempause mit Ella
@@ -54,7 +55,9 @@ Einstellbar im Elternbereich (PIN), mehrere Regeln kombinierbar:
 Die Insel ist nur zugänglich, wenn das Zeitsystem Spielzeit erlaubt.
 
 **Entscheidungen 3D-Welt:**
-- Stil: weiche Low-Poly-Optik, Figuren mit großem Kopf (passend zu den 2D-Figuren).
+- **Entschieden (25.10.2026): Stil B – rund im Animal-Crossing-Stil** (glatte Formen, Konturen, Toon-Licht, wehendes Gras, Wellen),
+  mit Stufe „einfache Grafik“ für schwächere Tablets (weniger Gras, ruhiges Wasser). Probeszene: spiele/welt3d/probe.html?stil=b
+- Verworfen: weiche Low-Poly-Optik, Figuren mit großem Kopf (passend zu den 2D-Figuren).
   **Alternative: echter Animal-Crossing-Aufwand** – runde, glatte Modelle statt Kanten, Toon-Shading,
   weiche Schatten, viele Animationen (Laufen, Winken, Gesichtsausdrücke), Gras/Wasser mit Bewegung.
   Folgen: Modelle in Blender (per Skript) oder gekaufte/CC-Pakete, deutlich mehr Bauzeit, größerer Download (~40–80 MB),

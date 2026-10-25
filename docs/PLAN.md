@@ -30,6 +30,7 @@ Einstellbar im Elternbereich (PIN), mehrere Regeln kombinierbar:
 - Ruhezeiten (z. B. ab 19 Uhr nur Lernen oder gar nichts), Wochenend-Regeln
 - Lernzeit zählt nur **aktiv** (keine Eingabe > 60 s = Pause), damit man sie nicht „absitzen“ kann
 - Eltern-Freigabe per PIN für Ausnahmen („heute 10 Minuten extra“)
+- **Erwachsene dürfen immer spielen:** Erwachsenen-Modus nach PIN (erledigt: 1 Stunde, alles offen, keine Zeitgrenzen, Leiste oben mit „Beenden“)
 
 **Rücksicht auf ADHS und Konzentrationsprobleme** (eigener Schalter „Fokus-Hilfen“):
 - Kurze Lernhäppchen (5 Minuten oder 5 Aufgaben), dann eine kleine Bewegungs- oder Atempause mit Ella
