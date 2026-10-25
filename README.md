@@ -6,7 +6,7 @@ keine Werbung, keine Käufe, kein Server, keine Daten ins Internet.
 **Ersteinrichtung immer durch einen Erwachsenen**: PIN, Vorname, Alter, Klasse, Ansprache und Hilfesprache
 werden im Elternbereich festgelegt und bleiben nur auf dem Tablet.
 
-**Der Gesamtplan steht in [`docs/PLAN.md`](docs/PLAN.md)** (Umgebungen, Lehrplan Sachsen, Zeitsystem,
+**Konzept: [`docs/KONZEPT.md`](docs/KONZEPT.md) · Gesamtplan: [`docs/PLAN.md`](docs/PLAN.md) · Prompt für Arbeitssitzungen: [`docs/SESSION-PROMPT.md`](docs/SESSION-PROMPT.md)** (Umgebungen, Lehrplan Sachsen, Zeitsystem,
 3D-Heimatinsel, Kleiderschrank, Integration/Mehrsprachigkeit, Ideen ohne Server).
 
 ## Was schon da ist
@@ -25,6 +25,7 @@ werden im Elternbereich festgelegt und bleiben nur auf dem Tablet.
   freundlicher Umgang. Jede Frage, Antwort und Erklärung kann vorgelesen (🔊) und auf Russisch gezeigt und
   vorgelesen werden (RU, abschaltbar). Am Ende Urkunde (als Bild speicherbar), Abzeichen auf der Startseite und 3 Extra-Sterne
 - **Sachkunde mit Eule Ella:** Themen mit Bildern, Quiz, „Stimmt das?“ und Zuordnen, alles mit 🔊 und RU. Themen: „Wer bringt die Geschenke?“ (Nikolaus vs. Weihnachtsmann, Christkind, Santa Claus, Ded Moros mit Snegurotschka und Troika) und „Meine Familie“ (Stammbaum über vier Generationen zum Antippen: Geschwister, Großeltern, Urgroßeltern, Enkel, Tante/Onkel, Nichte/Neffe, Cousine, Schwager, Großtante, Großcousine). Neue Themen kommen in `spiele/sachkunde/themen.js` dazu. Fähigkeit „Welt-Wissen“ 🌍, Stufe 2 schaltet die Weihnachtsmütze frei.
+- **Meine Insel (3D, Stil B):** Figur trägt den Look aus dem Kleiderschrank, das eigene Tier läuft mit (Ei im Nest, solange es nicht geschlüpft ist), Eule Ella, Fipsi, Robo Pixel und das Matheweg-Schild führen zu den Fächern, Ballon-Wiese und Schatz-Strand, Tag/Nacht nach Uhr, Jahreszeiten nach Datum, Grafikstufe einfach/schön
 - **3D-Welt** (öffnet sich mit dem Tablet-Führerschein): Ballon-Party (60 Sekunden Ballons antippen, Sterne bei
   15/30/45 Punkten) und Insel-Abenteuer (mit Joystick laufen und springen, 10 Sterne sammeln, Schatztruhe öffnen)
 - **Mein Ich (Charakter):** 5 Fähigkeiten mit je 10 Stufen – Rechen-Kraft (Mathe), Wort-Zauber (Abenteuer, Wort des
