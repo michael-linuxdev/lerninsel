@@ -301,4 +301,6 @@ Sachunterricht „Körper und Gesundheit“; Einstufungstest.
 - Geplant: Hügel und abwechslungsreiches Gelände, Rollschuhe/Skateboard/Fahrrad (Abschnitt 4)
 - Geplant (8b): Schach, eigene Stärken, soziale Fähigkeiten und Werte, Gefühle, Kreativität/Musik, Bewegung
 
-**Nächster Schritt:** Stickeralbum, dann Weihnachts-Erststart und QR-Geschenk; danach 8b schrittweise (Bewegungs-Aufgaben und Gefühle zuerst, weil sie ins Zeitsystem passen).
+- Stickeralbum: 6 Seiten × 8 Sticker (Lernen: alle 6 Aufgaben einer, max. 3/Tag; Wetter entdecken; Feste DE/RU), Album auf dem Bett und unter „Mein Ich“
+
+**Nächster Schritt:** Weihnachts-Erststart und QR-Geschenk; danach 8b schrittweise (Bewegungs-Aufgaben und Gefühle zuerst, weil sie ins Zeitsystem passen).

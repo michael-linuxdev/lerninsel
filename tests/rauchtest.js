@@ -5,7 +5,7 @@ const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const SEITEN = [
   "", "spiele/anziehen/", "spiele/mathe/", "spiele/deutsch/", "spiele/medien/", "spiele/sachkunde/",
-  "spiele/ich/", "spiele/tier/", "spiele/eltern/", "spiele/welt3d/"
+  "spiele/ich/", "spiele/tier/", "spiele/eltern/", "spiele/welt3d/", "spiele/album/"
 ];
 const SEITEN_3D = ["spiele/welt3d/heimat.html", "spiele/welt3d/ballons.html", "spiele/welt3d/insel.html", "spiele/welt3d/probe.html?stil=b"];
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;

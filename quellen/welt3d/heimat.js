@@ -200,6 +200,7 @@ function wendeWetterAn(w) {
   }
   if (art !== "schnee" && art !== "regen" && schnee && SAISON === "winter" && w.temp > 3) { scene.remove(schnee); schnee = null; } // kein Schneefall bei Plusgraden ohne Schnee-Wetter
 }
+function wetterSticker(w) { if (window.Sticker && w && w.art) { window.Sticker.entdecke("w-" + (w.art === "heiter" ? "wolken" : w.art)); if (NACHT) window.Sticker.entdecke("w-mond"); } }
 function wetterSatz() {
   if (!wetter) return null;
   const [e, txt] = WETTER_TEXT[wetter.art] || WETTER_TEXT.wolken;
@@ -213,13 +214,13 @@ async function holeWetter() {
     const c = (await a.json()).current; if (!c) return;
     const w = { lat: ORT.lat, lon: ORT.lon, ort: ORT.name, zeit: Date.now(), temp: c.temperature_2m, wind: c.wind_speed_10m, code: c.weather_code, art: WETTER_ART(c.weather_code) };
     try { localStorage.setItem(WETTER_KEY, JSON.stringify(w)); } catch (e) {}
-    wendeWetterAn(w); zeigeWetterInfo();
+    wendeWetterAn(w); zeigeWetterInfo(); wetterSticker(w);
   } catch (e) { /* offline: Jahreszeiten-Wetter bleibt */ }
 }
 {
   const test = q.get("wetter"), c = wetterCache();
   if (test) wendeWetterAn({ ort: (ORT && ORT.name) || "Testhausen", temp: test === "schnee" ? -2 : 14, wind: 12, art: test });
-  else if (c) { wendeWetterAn(c); if (Date.now() - c.zeit > 30 * 60000) holeWetter(); }
+  else if (c) { wendeWetterAn(c); setTimeout(() => wetterSticker(c), 1500); if (Date.now() - c.zeit > 30 * 60000) holeWetter(); }
   else holeWetter();
 }
 
@@ -512,6 +513,12 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
   bett.add(setze(teil(new BoxGeometry(1.7, 0.2, 1.8), "#7FC6F5", { dicke: 1.03 }), 0, 0.6, 0.35));
   const kissen = teil(kugel(0.4), "#FFFFFF"); kissen.scale.set(1.6, 0.5, 0.9); bett.add(setze(kissen, 0, 0.65, -0.85));
   block(ZX - 2.9, -2.2, 1.4);
+  // Stickeralbum liegt auf dem Bett
+  const album = new Group(); album.position.set(0.25, 0.76, 0.75); album.rotation.y = 0.4; bett.add(album);
+  album.add(setze(teil(new BoxGeometry(0.62, 0.1, 0.48), "#E0457B", { dicke: 1.05 }), 0, 0, 0));
+  album.add(setze(new Mesh(new BoxGeometry(0.56, 0.11, 0.42), mat("#FFF6E8")), 0.02, 0, 0));
+  album.add(setze(new Mesh(kugel(0.07, 10, 8), mat("#FFD84D")), 0.05, 0.07, 0.02));
+  antippbar(album, () => { const s = window.Sticker && window.Sticker.stand(); sprechblase("📒", "Dein Stickeralbum", s ? `Du hast schon ${s.hat} von ${s.gesamt} Stickern${s.neu ? ` – ${s.neu} neue warten auf dich` : ""}!` : "Hier sammelst du deine Sticker.", S.paar(["", "Здесь ты собираешь наклейки."])[1], "../album/?von=insel"); }, ["📒", "Album"], 1.6);
   antippbar(bett, () => sprechblase("🛏️", "Dein Bett", tier ? `Hier kuschelt ${tierDaten.name || "dein Tier"}, wenn es müde ist.` : "Ein gemütliches Bett. Mit dem Knopf „Einrichten“ machst du dein Zimmer schön.", S.paar(["", "Уютная кровать."])[1], null), ["🛏️", "Ansehen"], 2.2);
   // Kleiderschrank
   const schrank = new Group(); schrank.position.set(2.8, 0.25, -3.0); zimmer.add(schrank);
@@ -921,5 +928,6 @@ function bild() {
 }
 requestAnimationFrame(bild);
 zeigeLernmodus(); if (!NACHT) zeigeWetterInfo();
+if (window.Sticker) setTimeout(() => { window.Sticker.feste(); if (NACHT && !q.has("stunde")) window.Sticker.entdecke("w-mond"); }, 1200);
 if (q.get("drinnen") === "1" && spielZeit()) reingehen();
 window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), SAISON, NACHT };
