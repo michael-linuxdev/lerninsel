@@ -7,7 +7,7 @@ import {
   PCFSoftShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide,
   CylinderGeometry, SphereGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry, PlaneGeometry,
   LatheGeometry, ExtrudeGeometry, Shape, Vector2, Vector3, DataTexture, RedFormat, NearestFilter, InstancedMesh,
-  Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, Float32BufferAttribute, Points, PointsMaterial
+  Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial
 } from "../three/three.module.js";
 import { S } from "./gemeinsam.js";
 
@@ -171,6 +171,75 @@ if (SAISON === "winter" && !EINFACH) {
   const g = new BufferGeometry(); g.setAttribute("position", new Float32BufferAttribute(pos, 3));
   schnee = new Points(g, new PointsMaterial({ color: "#FFFFFF", size: 0.14 })); scene.add(schnee);
 }
+
+// ---------- Echtes Wetter (Open-Meteo, Ort aus dem Elternbereich, kein GPS) ----------
+// Cache 30 Minuten in localStorage; offline bleibt das Jahreszeiten-Wetter. Test: ?wetter=regen|schnee|nebel|wolken|gewitter|klar
+const WETTER_KEY = "lerninsel.wetter", ORT = S.kind().ort;
+const WETTER_ART = (c) => c == null ? null : c === 0 ? "klar" : c <= 3 ? (c === 3 ? "wolken" : "heiter") : c <= 48 ? "nebel" : c <= 67 || (c >= 80 && c <= 82) ? "regen" : c <= 77 || c === 85 || c === 86 ? "schnee" : c >= 95 ? "gewitter" : "wolken";
+const WETTER_TEXT = { klar: ["☀️", "Sonne pur", "солнечно"], heiter: ["🌤️", "ein paar Wolken", "немного облаков"], wolken: ["☁️", "bewölkt", "облачно"], nebel: ["🌫️", "Nebel", "туман"], regen: ["🌧️", "Regen", "дождь"], schnee: ["❄️", "Schnee", "снег"], gewitter: ["⛈️", "Gewitter", "гроза"] };
+let wetter = null, regen = null, blitz = 0; const SONNE_BASIS = sonne.intensity;
+function wetterCache() { try { const w = JSON.parse(lies(WETTER_KEY)); return w && ORT && w.lat === ORT.lat && w.lon === ORT.lon ? w : null; } catch (e) { return null; } }
+function wendeWetterAn(w) {
+  wetter = w; const art = w.art;
+  sonne.intensity = SONNE_BASIS * ({ wolken: 0.7, nebel: 0.6, regen: 0.5, gewitter: 0.4, schnee: 0.75 }[art] || 1);
+  const grau = { wolken: "#B7C7D3", nebel: "#C9D1D6", regen: "#8FA2B2", gewitter: "#6C7A8C", schnee: "#D5DEE6" }[art];
+  if (grau && !NACHT) { scene.background = new Color(grau); scene.fog.color.set(grau); }
+  if (art === "nebel") { scene.fog.near = 6; scene.fog.far = 34; } else if (art === "regen" || art === "gewitter" || art === "schnee") { scene.fog.near = 18; scene.fog.far = 60; }
+  if (["wolken", "regen", "gewitter", "nebel", "schnee"].includes(art)) wolken.forEach(wo => wo.children.forEach(k => k.material.color.set(NACHT ? "#4E5B80" : art === "gewitter" ? "#7D8796" : "#C4CCD4")));
+  if (art === "klar") wolken.forEach((wo, i) => { wo.visible = i < 2; });
+  if ((art === "regen" || art === "gewitter") && !regen) {
+    const pos = []; for (let i = 0; i < (EINFACH ? 300 : 900); i++) { const x = (Math.random() - 0.5) * 40, y = Math.random() * 16, z = (Math.random() - 0.5) * 40; pos.push(x, y, z, x + 0.05, y - 0.55, z); }
+    const g = new BufferGeometry(); g.setAttribute("position", new Float32BufferAttribute(pos, 3));
+    regen = new LineSegments(g, new LineBasicMaterial({ color: "#F2F8FF", transparent: true, opacity: 0.75 })); scene.add(regen);
+  }
+  if (art === "schnee" && !schnee) {
+    const pos = []; for (let i = 0; i < (EINFACH ? 200 : 500); i++) pos.push((Math.random() - 0.5) * 40, Math.random() * 16, (Math.random() - 0.5) * 40);
+    const g = new BufferGeometry(); g.setAttribute("position", new Float32BufferAttribute(pos, 3));
+    schnee = new Points(g, new PointsMaterial({ color: "#FFFFFF", size: 0.14 })); scene.add(schnee);
+  }
+  if (art !== "schnee" && art !== "regen" && schnee && SAISON === "winter" && w.temp > 3) { scene.remove(schnee); schnee = null; } // kein Schneefall bei Plusgraden ohne Schnee-Wetter
+}
+function wetterSatz() {
+  if (!wetter) return null;
+  const [e, txt] = WETTER_TEXT[wetter.art] || WETTER_TEXT.wolken;
+  return `${e} In ${wetter.ort}: ${Math.round(wetter.temp)} °C, ${txt}`;
+}
+async function holeWetter() {
+  if (!ORT || ORT.lat == null || !navigator.onLine) return;
+  try {
+    const st = new AbortController(); setTimeout(() => st.abort(), 6000);
+    const a = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${ORT.lat}&longitude=${ORT.lon}&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto`, { signal: st.signal });
+    const c = (await a.json()).current; if (!c) return;
+    const w = { lat: ORT.lat, lon: ORT.lon, ort: ORT.name, zeit: Date.now(), temp: c.temperature_2m, wind: c.wind_speed_10m, code: c.weather_code, art: WETTER_ART(c.weather_code) };
+    try { localStorage.setItem(WETTER_KEY, JSON.stringify(w)); } catch (e) {}
+    wendeWetterAn(w); zeigeWetterInfo();
+  } catch (e) { /* offline: Jahreszeiten-Wetter bleibt */ }
+}
+{
+  const test = q.get("wetter"), c = wetterCache();
+  if (test) wendeWetterAn({ ort: (ORT && ORT.name) || "Testhausen", temp: test === "schnee" ? -2 : 14, wind: 12, art: test });
+  else if (c) { wendeWetterAn(c); if (Date.now() - c.zeit > 30 * 60000) holeWetter(); }
+  else holeWetter();
+}
+
+// Wetterstation neben dem Haus: Hütte, Thermometer, Windrad
+const station = new Group(); station.position.set(-1.8, 0.25, -6.3); station.rotation.y = 0.3; scene.add(station); block(-1.8, -6.3, 0.6);
+station.add(setze(teil(new CylinderGeometry(0.07, 0.09, 1.6, 10), "#8A6A4A"), 0, 0.8, 0));
+station.add(setze(teil(new BoxGeometry(0.8, 0.6, 0.6), "#FFFFFF"), 0, 1.85, 0));
+{ const dach = teil(new ConeGeometry(0.62, 0.38, 4), "#E0574A"); dach.rotation.y = Math.PI / 4; station.add(setze(dach, 0, 2.34, 0)); }
+[-0.12, 0, 0.12].forEach(y => station.add(setze(new Mesh(new BoxGeometry(0.62, 0.035, 0.02), mat("#C9D6DF")), 0, 1.85 + y, 0.31)));
+station.add(setze(teil(new CylinderGeometry(0.035, 0.035, 0.5, 8), "#FFFFFF"), 0.5, 1.85, 0.05));
+station.add(setze(new Mesh(kugel(0.06, 10, 8), mat("#E0574A")), 0.5, 1.62, 0.05));
+const windrad = new Group(); windrad.position.set(0, 2.75, 0); station.add(windrad);
+windrad.add(setze(teil(new CylinderGeometry(0.02, 0.02, 0.4, 6), "#6B6B7A"), 0, -0.2, 0));
+[0, 1, 2].forEach(i => { const b = new Group(); b.rotation.y = i * Math.PI * 2 / 3; const sch = teil(kugel(0.1, 12, 8), ["#FFD84D", "#5CCBA6", "#7B9BFF"][i], { dicke: 1.1 }); sch.scale.set(1, 0.6, 1); b.add(setze(sch, 0.24, 0, 0)); b.add(setze(new Mesh(new BoxGeometry(0.22, 0.02, 0.02), mat("#6B6B7A")), 0.12, 0, 0)); windrad.add(b); });
+antippbar(station, () => {
+  if (!ORT || ORT.lat == null) return sprechblase("🌦️", "Die Wetterstation", "Hier siehst du das echte Wetter bei dir zu Hause. Frag deine Eltern, ob sie im Elternbereich euren Ort eintragen.", S.paar(["", "Здесь видно настоящую погоду у тебя дома. Попроси родителей вписать ваш город в разделе для родителей."])[1], null);
+  if (!wetter) return sprechblase("🌦️", "Die Wetterstation", `Die Station hat noch keine Nachricht aus ${ORT.name}. Mit Internet klappt es beim nächsten Mal.`, S.paar(["", "Станция ещё не получила данные. С интернетом получится в следующий раз."])[1], null);
+  const [, txt, ru] = WETTER_TEXT[wetter.art] || WETTER_TEXT.wolken, tp = Math.round(wetter.temp);
+  const tipp = wetter.art === "regen" || wetter.art === "gewitter" ? "Nimm draußen eine Regenjacke mit!" : tp <= 3 ? "Brr! Mütze und Handschuhe nicht vergessen." : tp >= 26 ? "Heiß! Trink viel Wasser und denk an die Sonnencreme." : wetter.art === "klar" ? "Ein schöner Tag zum Rausgehen!" : "Zieh dich passend an, wenn du rausgehst.";
+  sprechblase("🌦️", `Wetter in ${wetter.ort}`, `Draußen sind es ${tp} Grad, ${txt}. Wind: ${Math.round(wetter.wind || 0)} km/h. ${tipp}`, S.paar(["", `На улице ${tp} градусов, ${ru}.`])[1], null);
+});
 
 // ---------- Wehendes Gras ----------
 let halme = null; const halmDaten = [];
@@ -476,6 +545,7 @@ function rausgehen() {
   if (tier) tier.position.set(-3.0, 0.25, -1.6);
   scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true);
   $("info").textContent = spielZeit() ? `Hallo ${name}!` : "🌱 Erst lernen: Geh zu Ella, Fipsi, Pixel oder zum Matheweg.";
+  if (wetter) { wendeWetterAn(wetter); zeigeWetterInfo(); }
   S.ton("tipp");
 }
 $("raus").addEventListener("click", rausgehen);
@@ -624,6 +694,7 @@ function markiere(p) { marke.position.set(p.x, 0.32, p.z); marke.visible = true;
 
 // Begrüßung
 $("sterne").textContent = S.sterne();
+function zeigeWetterInfo() { const w = wetterSatz(); if (w && !drinnen && spielZeit()) $("info").textContent = `${w} – hallo ${name}!`; }
 $("info").textContent = NACHT ? `Gute Nacht, ${name}! Die Insel schläft bald.` : SAISON === "winter" ? `Es hat geschneit, ${name}!` : SAISON === "herbst" ? `Die Blätter sind bunt, ${name}!` : `Hallo ${name}! Schön, dass du da bist.`;
 
 // ---------- Größe, Schleife ----------
@@ -713,6 +784,10 @@ function bild() {
     halme.instanceMatrix.needsUpdate = true;
   }
   if (schnee) { const a = schnee.geometry.attributes.position; for (let i = 0; i < a.count; i++) { let y = a.getY(i) - dt * 1.2; if (y < 0) y = 16; a.setY(i, y); a.setX(i, a.getX(i) + Math.sin(t + i) * dt * 0.2); } a.needsUpdate = true; }
+  windrad.rotation.y += dt * (0.6 + Math.min(40, (wetter && wetter.wind) || 8) * 0.15);
+  if (regen) { const a = regen.geometry.attributes.position; for (let i = 0; i < a.count; i += 2) { let y = a.getY(i) - dt * 14; if (y < 0) y = 16; a.setY(i, y); a.setY(i + 1, y - 0.55); } a.needsUpdate = true; regen.visible = !drinnen; }
+  if (schnee) schnee.visible = !drinnen;
+  if (wetter && wetter.art === "gewitter" && !drinnen && !RUHIG) { blitz -= dt; if (blitz < -6 - Math.random() * 6) { blitz = 0.12; } scene.background.set(blitz > 0 ? "#E8ECF5" : NACHT ? HIMMEL : "#6C7A8C"); }
   wolken.forEach((w, i) => { w.position.x += dt * (0.4 + i * 0.1); if (w.position.x > 40) w.position.x = -40; });
 
   blick.set(ich.position.x, 1.25 + hoehe * 0.3, ich.position.z);
@@ -725,6 +800,6 @@ function bild() {
   requestAnimationFrame(bild);
 }
 requestAnimationFrame(bild);
-zeigeLernmodus();
+zeigeLernmodus(); if (!NACHT) zeigeWetterInfo();
 if (q.get("drinnen") === "1" && spielZeit()) reingehen();
-window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), SAISON, NACHT };
+window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, SAISON, NACHT };

@@ -63,6 +63,8 @@
         <label>Ansprache in der App<select id="e-geschlecht">${option(ANSPRACHE, k.geschlecht)}</select></label>
         <label>Hilfesprache (Muttersprache)<select id="e-sprache">${option(SPRACHEN, k.hilfesprache)}</select></label>
       </div>
+      <label>Ort für das Wetter auf der Insel (optional)<input id="e-ort" maxlength="40" autocomplete="off" placeholder="z. B. Dresden" value="${((k.ort || {}).name || "").replace(/"/g, "&quot;")}"></label>
+      <p class="klein" style="margin-top:-8px">Nur der Ortsname, kein GPS. Die Insel fragt damit das Wetter bei Open-Meteo ab.</p>
       <label>Bundesland (Lehrplan)<select id="e-land">${option(LAENDER.concat([["", "Andere Bundesländer folgen", true]]), k.land || "sachsen")}</select></label>
       <p class="hinweis" id="e-empf"></p>
       <p class="fehler" id="e-fehler"></p>
@@ -71,15 +73,33 @@
     const empf = () => { $("e-empf").innerHTML = `<b>Empfehlung der Kinderärzte (DGKJ):</b> ${empfehlung(+$("e-alter").value)} Wichtiger als die Minuten: Bewegung, freies Spiel, Freunde, genug Schlaf und bildschirmfreie Zeiten, z. B. beim Essen und vor dem Schlafen.`; };
     $("e-alter").addEventListener("change", empf); empf();
     setTimeout(() => { const x = $("e-name"); if (x) x.focus(); }, 50);
-    $("e-ok").addEventListener("click", () => {
+    $("e-ok").addEventListener("click", async () => {
       const n = $("e-name").value.trim();
       if (!n) { $("e-fehler").textContent = "Bitte einen Vornamen eingeben."; $("e-name").focus(); return; }
+      const ortName = $("e-ort").value.trim(), altOrt = S.kind().ort;
+      let ort = ortName ? (altOrt && altOrt.name === ortName ? altOrt : { name: ortName }) : null;
+      if (ort && ort.lat == null) {
+        $("e-ok").disabled = true; $("e-fehler").textContent = "Suche den Ort …";
+        ort = await sucheOrt(ortName) || { name: ortName };
+        $("e-ok").disabled = false; $("e-fehler").textContent = "";
+        S.meldung(ort.lat != null ? `Wetter-Ort: ${ort.name}${ort.region ? ", " + ort.region : ""}` : "Ort nicht gefunden oder offline – die Insel nimmt das Jahreszeiten-Wetter.");
+      }
       S.setzeName(n);
       S.speichere("eltern", Object.assign(eltern(), { eingerichtet: true, kind: {
-        alter: +$("e-alter").value, klasse: +$("e-klasse").value, geschlecht: $("e-geschlecht").value, hilfesprache: $("e-sprache").value, land: $("e-land").value || "sachsen" } }));
+        alter: +$("e-alter").value, klasse: +$("e-klasse").value, geschlecht: $("e-geschlecht").value, hilfesprache: $("e-sprache").value, land: $("e-land").value || "sachsen", ort } }));
       if (bearbeiten) { S.meldung("Gespeichert."); uebersicht(); } else location.href = "../../";
     });
     if (bearbeiten) $("e-zurueck").addEventListener("click", uebersicht);
+  }
+
+  // Ort für das Wetter (Open-Meteo Geocoding, ohne GPS)
+  async function sucheOrt(name) {
+    try {
+      const st = new AbortController(); setTimeout(() => st.abort(), 5000);
+      const a = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=1&language=de&format=json`, { signal: st.signal });
+      const j = await a.json(), x = j.results && j.results[0];
+      return x ? { name: x.name, region: x.admin1 || x.country || "", lat: +x.latitude.toFixed(3), lon: +x.longitude.toFixed(3) } : null;
+    } catch (e) { return null; }
   }
 
   // App neu laden: Offline-Speicher dieser Version leeren, Spielstand bleibt erhalten
@@ -277,7 +297,7 @@
       </div>
       <div class="karte">
         <h2>Kind und Einstellungen</h2>
-        <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre, ${S.kind().klasse}. Klasse · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1].replace(" (in Arbeit)", "")}</p>
+        <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre, ${S.kind().klasse}. Klasse · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1].replace(" (in Arbeit)", "")} · Wetter-Ort: ${(S.kind().ort || {}).lat != null ? S.kind().ort.name : "keiner"}</p>
         <p class="hinweis"><b>Empfehlung der Kinderärzte (DGKJ):</b> ${empfehlung(S.kind().alter)}</p>
         <div class="knoepfe"><button class="knopf haupt" id="erwachsen">👤 Als Erwachsener spielen</button><button class="knopf" id="kind-aendern">Ändern</button><button class="knopf" id="neu-laden">🔄 App neu laden</button></div>
         <p class="klein">„Als Erwachsener spielen“ öffnet für eine Stunde alles, ohne Sperren und Zeitgrenzen; dabei werden keine Sterne und kein Fortschritt fürs Kind gespeichert (bis „Beenden“ oder die App geschlossen wird). „App neu laden“ holt die neueste Version. Der Spielstand bleibt erhalten.</p>
