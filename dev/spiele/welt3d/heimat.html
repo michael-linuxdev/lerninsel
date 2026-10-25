@@ -24,6 +24,7 @@
   #blase { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(560px, calc(100% - 28px)); background: #fff; border-radius: 26px; padding: 18px 20px; box-shadow: 0 10px 0 rgba(0,0,0,.12); z-index: 3; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: start; }
   #blase[hidden] { display: none; }
   #blase-e { font-size: 3rem; line-height: 1; grid-row: span 2; }
+  #blase-e svg { width: 84px; height: 84px; display: block; }
   #blase-titel { margin: 0; font-size: 1.35rem; }
   #blase-text { margin: 0; font-size: 1.2rem; line-height: 1.35; font-weight: 500; }
   #blase-ru { grid-column: 2; margin: 0; background: #FFF6D6; color: #7A4A10; border-radius: 12px; padding: 6px 10px; }
@@ -45,6 +46,7 @@
   <div class="knopf">⭐ <b id="sterne">0</b></div>
   <span class="platz"></span>
   <button class="knopf" id="grafik" aria-label="Grafik schön oder einfach">✨ schön</button>
+  <button class="knopf" id="steuerung" aria-label="Steuerung Joystick oder Tippen">🕹️ Joystick</button>
   <button class="knopf" id="kamera" aria-label="Kamera fest oder frei">🎥 fest</button>
 </div>
 <div id="info"></div>
@@ -72,6 +74,7 @@
 <script src="../anziehen/figur.js"></script>
 <script src="../../shared/tiere.js"></script>
 <script src="../../shared/tierpflege.js"></script>
+<script src="../../shared/figuren.js"></script>
 <script>try { if (localStorage.getItem("lerninsel.joystick")) document.getElementById("joy-hinweis").hidden = true; } catch (e) {}</script>
 <script type="module" src="heimat.js"></script>
 </body>

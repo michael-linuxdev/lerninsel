@@ -317,26 +317,62 @@ const NEST = new Vector3(-2.2, 0.25, -6.2);
 }
 
 // ---------- Nachbarn ----------
+// Eule Ella wie in der 2D-Zeichnung: braun, cremefarbener Bauch, große Augen mit lila Brille, Doktorhut mit gelber Quaste
 function eule() {
-  const g = new Group();
-  const stumpf = teil(new CylinderGeometry(0.5, 0.6, 0.6, 18), "#9A6A3F"); setze(stumpf, 0, 0.3, 0); g.add(stumpf);
-  const b = teil(kugel(0.55), "#B8804A"); b.scale.set(1, 1.15, 0.95); setze(b, 0, 1.15, 0); g.add(b);
-  const bauch = teil(kugel(0.38), "#F3DEC0", { umriss: false }); bauch.scale.set(1, 1.2, 0.6); setze(bauch, 0, 1.05, 0.3); g.add(bauch);
+  const g = new Group(), BR = "#B8804A", DK = "#A0693F", CR = "#F3DEC0";
+  const stumpf = teil(new CylinderGeometry(0.55, 0.65, 0.5, 20), "#9A6A3F"); setze(stumpf, 0, 0.25, 0); g.add(stumpf);
+  const ringe = teil(new CylinderGeometry(0.42, 0.42, 0.02, 20), "#C9955E", { umriss: false }); setze(ringe, 0, 0.51, 0); g.add(ringe);
+  const k = new Group(); k.position.y = 0.5; g.add(k);
+  const b = teil(kugel(0.62), BR, { dicke: 1.04 }); b.scale.set(1, 1.12, 0.95); setze(b, 0, 0.72, 0); k.add(b);
+  const bauch = teil(kugel(0.44), CR, { umriss: false }); bauch.scale.set(0.95, 1.1, 0.5); setze(bauch, 0, 0.55, 0.34); k.add(bauch);
+  for (let i = 0; i < 3; i++) { const f = new Mesh(new TorusGeometry(0.08, 0.018, 6, 12, Math.PI), mat("#C9A26B")); f.rotation.z = Math.PI; setze(f, (i - 1) * 0.16, 0.5 + (i % 2) * 0.14, 0.56); k.add(f); }
   [-1, 1].forEach(s => {
-    g.add(setze(teil(kugel(0.17), "#FFFFFF", { dicke: 1.1 }), 0.19 * s, 1.42, 0.42));
-    g.add(setze(new Mesh(kugel(0.08), AUGE), 0.19 * s, 1.42, 0.56));
-    const r = new Mesh(new TorusGeometry(0.19, 0.03, 8, 20), mat("#7B55B8")); setze(r, 0.19 * s, 1.42, 0.5); g.add(r);
-    const o = teil(new ConeGeometry(0.1, 0.25, 10), "#A0693F"); setze(o, 0.35 * s, 1.85, 0); o.rotation.z = -0.3 * s; g.add(o);
-    const fl = teil(kugel(0.3), "#A0693F"); fl.scale.set(0.35, 0.9, 0.7); setze(fl, 0.55 * s, 1.1, 0); g.add(fl);
+    const auge = teil(kugel(0.2), "#FFFFFF", { dicke: 1.06 }); auge.scale.z = 0.6; setze(auge, 0.21 * s, 0.98, 0.48); k.add(auge);
+    const pupille = new Mesh(kugel(0.1, 16, 12), AUGE); pupille.scale.z = 0.5; setze(pupille, 0.22 * s, 0.97, 0.6); k.add(pupille);
+    k.add(setze(new Mesh(kugel(0.04, 8, 6), WEISS), 0.25 * s, 1.01, 0.65));
+    const brille = new Mesh(new TorusGeometry(0.24, 0.035, 10, 28), mat("#7B55B8")); setze(brille, 0.21 * s, 0.98, 0.57); k.add(brille);
+    const ohr = teil(new ConeGeometry(0.12, 0.3, 14), DK); setze(ohr, 0.38 * s, 1.42, 0); ohr.rotation.z = -0.35 * s; k.add(ohr);
+    const fl = teil(kugel(0.32), DK); fl.scale.set(0.35, 0.95, 0.7); setze(fl, 0.6 * s, 0.62, 0); fl.rotation.z = 0.25 * s; k.add(fl);
+    const fuss = teil(kugel(0.09), "#FFB03B", { dicke: 1.12 }); fuss.scale.set(1.5, 0.6, 1.3); setze(fuss, 0.18 * s, 0.03, 0.3); k.add(fuss);
   });
-  const sn = teil(new ConeGeometry(0.07, 0.16, 10), "#FFB03B", { dicke: 1.1 }); sn.rotation.x = Math.PI; setze(sn, 0, 1.25, 0.55); g.add(sn);
+  k.add(setze(new Mesh(new BoxGeometry(0.07, 0.04, 0.05), mat("#7B55B8")), 0, 0.99, 0.6));
+  const schnabel = teil(new ConeGeometry(0.08, 0.18, 12), "#FFB03B", { dicke: 1.12 }); schnabel.rotation.x = Math.PI; setze(schnabel, 0, 0.78, 0.6); k.add(schnabel);
+  // Doktorhut
+  const hut = new Group(); hut.position.set(0, 1.42, -0.02); hut.rotation.x = -0.12; k.add(hut);
+  hut.add(setze(teil(new CylinderGeometry(0.26, 0.28, 0.16, 18), "#3b1f63"), 0, 0, 0));
+  hut.add(setze(teil(new BoxGeometry(0.85, 0.06, 0.85), "#3b1f63", { dicke: 1.04 }), 0, 0.1, 0));
+  const quaste = teil(new CylinderGeometry(0.02, 0.02, 0.32, 6), "#FFC83D", { umriss: false }); setze(quaste, 0.36, -0.04, 0.2); hut.add(quaste);
+  hut.add(setze(teil(kugel(0.06), "#FFC83D", { dicke: 1.12 }), 0.36, -0.22, 0.2));
+  g.userData.koerper = k;
   return g;
 }
+// Fipsi wie in der 2D-Zeichnung: sitzender Fuchs mit großem Kopf, weißer Gesichtsmaske, rosa Innenohren und Wangen
 function fipsi() {
-  const g = tierModell("fuchs", { h: "#F28C38", l: "#FFF3E6", d: "#7A3E18" }, 2);
-  const tuch = teil(new TorusGeometry(0.2, 0.06, 8, 20), "#3AA0E0"); tuch.rotation.x = Math.PI / 2 - 0.3; setze(tuch, 0, 0.7, 0.38); g.userData.k.add(tuch);
-  const rucks = teil(new BoxGeometry(0.34, 0.3, 0.2), "#5CCBA6"); setze(rucks, 0, 0.78, -0.05); g.userData.k.add(rucks);
-  g.scale.setScalar(1.1);
+  const g = new Group(), O = "#F28C38", W = "#FFF3E6", D2 = "#5C3A21";
+  const k = new Group(); g.add(k);
+  // Schwanz (hinten, nach oben geschwungen) mit weißer Spitze
+  const sw = new Group(); sw.position.set(0.25, 0.35, -0.3); k.add(sw);
+  const s1 = teil(kugel(0.28), O); s1.scale.set(0.8, 1.3, 0.8); setze(s1, 0.18, 0.15, -0.1); s1.rotation.z = -0.5; sw.add(s1);
+  const s2 = teil(kugel(0.2), W); setze(s2, 0.42, 0.5, -0.12); sw.add(s2);
+  // Körper und Bauch
+  const leib = teil(kugel(0.46), O); leib.scale.set(1, 0.92, 0.88); setze(leib, 0, 0.42, 0); k.add(leib);
+  const bauch = teil(kugel(0.28), W, { umriss: false }); bauch.scale.set(1, 1, 0.5); setze(bauch, 0, 0.36, 0.3); k.add(bauch);
+  [-1, 1].forEach(s => { const f = teil(kugel(0.13), D2, { dicke: 1.1 }); f.scale.set(1.2, 0.6, 1.4); setze(f, 0.2 * s, 0.05, 0.26); k.add(f); });
+  // Kopf
+  const kopf = new Group(); kopf.position.y = 1.12; k.add(kopf);
+  const schaedel = teil(kugel(0.52), O, { dicke: 1.04 }); schaedel.scale.set(1.1, 0.95, 0.95); kopf.add(schaedel);
+  const maske = teil(kugel(0.36), W, { umriss: false }); maske.scale.set(1.15, 0.72, 0.6); setze(maske, 0, -0.16, 0.3); kopf.add(maske);
+  [-1, 1].forEach(s => {
+    const ohr = teil(new ConeGeometry(0.2, 0.46, 16), O); setze(ohr, 0.34 * s, 0.5, -0.02); ohr.rotation.z = -0.32 * s; kopf.add(ohr);
+    const innen = new Mesh(new ConeGeometry(0.11, 0.28, 12), mat("#FFC3A0")); setze(innen, 0.33 * s, 0.47, 0.08); innen.rotation.z = -0.32 * s; kopf.add(innen);
+    const w = new Mesh(new CircleGeometry(0.08, 16), new MeshBasicMaterial({ color: "#FF7FA6", transparent: true, opacity: 0.5 })); setze(w, 0.36 * s, -0.12, 0.44); w.rotation.y = 0.55 * s; kopf.add(w);
+  });
+  augen(kopf, 0.19, 0.04, 0.44, 0.075);
+  const nase = new Mesh(kugel(0.07, 14, 10), AUGE); nase.scale.set(1.3, 1, 0.8); setze(nase, 0, -0.08, 0.53); kopf.add(nase);
+  const mund = new Mesh(new TorusGeometry(0.07, 0.016, 6, 12, Math.PI), AUGE); mund.rotation.z = Math.PI; setze(mund, 0, -0.2, 0.5); kopf.add(mund);
+  // blaues Halstuch als Erkennungszeichen
+  const tuch = teil(new TorusGeometry(0.28, 0.07, 10, 24), "#3AA0E0"); tuch.rotation.x = Math.PI / 2; setze(tuch, 0, 0.78, 0.02); k.add(tuch);
+  g.userData.koerper = k; g.userData.schwanz = sw;
   return g;
 }
 function robo() {
@@ -345,6 +381,7 @@ function robo() {
   const k = teil(new BoxGeometry(0.9, 0.65, 0.65), "#7FC6F5"); setze(k, 0, 1.6, 0); g.add(k);
   const sch = teil(new BoxGeometry(0.66, 0.42, 0.05), "#E8F6FF", { dicke: 1.08 }); setze(sch, 0, 1.6, 0.34); g.add(sch);
   [-1, 1].forEach(s => g.add(setze(new Mesh(kugel(0.07), AUGE), 0.15 * s, 1.63, 0.38)));
+  [-1, 1].forEach(s => g.add(setze(teil(new CapsuleGeometry(0.07, 0.2, 4, 10), "#FF9BC8"), 0.5 * s, 1.6, 0)));
   g.add(setze(new Mesh(new CylinderGeometry(0.02, 0.02, 0.3, 6), mat("#3b1f63")), 0, 2.05, 0));
   g.add(setze(teil(kugel(0.09), "#FFC83D", { dicke: 1.12 }), 0, 2.22, 0));
   [-1, 1].forEach(s => { const a = teil(new CapsuleGeometry(0.07, 0.35, 4, 10), "#FF9BC8"); setze(a, 0.5 * s, 0.85, 0); a.rotation.z = 0.3 * s; g.add(a); });
@@ -358,13 +395,13 @@ function tafel(text, farbe) {
 }
 const name = S.profil.name || "du";
 const NACHBARN = [
-  { bau: eule, x: 8.5, z: -3, dreh: -1.2, e: "🦉", titel: "Eule Ella", text: `Hallo ${name}! Ich weiß spannende Dinge über die Welt. Kommst du mit?`, ru: "Привет! Я знаю много интересного о мире. Пойдёшь со мной?", ziel: "../sachkunde/" },
-  { bau: fipsi, x: -8.5, z: 1.5, dreh: 1.4, e: "🦊", titel: "Fipsi", text: `Hallo ${name}! Hilfst du mir, meine Schatzkarte zu finden?`, ru: "Привет! Поможешь мне найти мою карту сокровищ?", ziel: "../deutsch/" },
-  { bau: robo, x: 5.5, z: 8.5, dreh: -2.6, e: "🤖", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Хочешь стать мастером планшета?", ziel: "../medien/" },
+  { bau: eule, x: 8.5, z: -3, dreh: -1.2, e: "eule", titel: "Eule Ella", text: `Hallo ${name}! Ich weiß spannende Dinge über die Welt. Kommst du mit?`, ru: "Привет! Я знаю много интересного о мире. Пойдёшь со мной?", ziel: "../sachkunde/" },
+  { bau: fipsi, x: -7.6, z: -0.6, dreh: 1.0, e: "fipsi", titel: "Fipsi", text: `Hallo ${name}! Hilfst du mir, meine Schatzkarte zu finden?`, ru: "Привет! Поможешь мне найти мою карту сокровищ?", ziel: "../deutsch/" },
+  { bau: robo, x: 5.5, z: 8.5, dreh: -2.6, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Хочешь стать мастером планшета?", ziel: "../medien/" },
   { bau: () => tafel("Mathe", "#5CCBA6"), x: 2, z: -8, dreh: 0.2, e: "🧮", titel: "Der Matheweg", text: "Hier beginnt der Matheweg. Sammle Sterne an jeder Station!", ru: "Здесь начинается математическая тропа. Собирай звёзды на каждой станции!", ziel: "../mathe/" }
 ];
 NACHBARN.forEach(n => {
-  const o = n.bau(); o.position.set(n.x, 0.25, n.z); o.rotation.y = n.dreh; scene.add(o); block(n.x, n.z, 0.8);
+  const o = n.bau(); o.position.set(n.x, 0.25, n.z); o.rotation.y = n.dreh; if (n.e !== "🧮") o.scale.multiplyScalar(1.3); scene.add(o); block(n.x, n.z, 0.8);
   n.obj = o;
   antippbar(o, () => { o.userData.huepf = 1; sprechblase(n.e, n.titel, n.text, S.ht(n), n.ziel); });
 });
@@ -455,7 +492,7 @@ setInterval(zeigeLernmodus, 10000);
 // ---------- Sprechblase ----------
 let blaseZiel = null;
 function sprechblase(e, titel, text, ru, ziel) {
-  $("blase-e").textContent = e; $("blase-titel").textContent = titel; $("blase-text").textContent = text;
+  $("blase-e").innerHTML = window.Figuren && window.Figuren[e] ? window.Figuren[e]("") : e; $("blase-titel").textContent = titel; $("blase-text").textContent = text;
   const ruEl = $("blase-ru"); ruEl.textContent = ru || ""; ruEl.hidden = true;
   const hl = S.hilfe && S.hilfe(); $("blase-ruk").hidden = !(ru && hl); if (hl) { $("blase-ruk").textContent = hl.kurz; ruEl.lang = hl.code; ruEl.dir = hl.rtl ? "rtl" : "ltr"; }
   $("blase-los").hidden = !ziel; blaseZiel = ziel;
@@ -488,7 +525,7 @@ addEventListener("keyup", e => { tasten[e.key.toLowerCase()] = false; });
 let unten = null, bewegt = false;
 fl.addEventListener("pointerdown", e => {
   fl.setPointerCapture(e.pointerId); finger.set(e.pointerId, { x: e.clientX, y: e.clientY });
-  if (stickId === null && e.clientX < innerWidth * 0.55) { stickId = e.pointerId; stickMitte = { x: e.clientX, y: e.clientY }; stickAktiv = false; }
+  if (STEUERUNG === "joystick" && stickId === null && e.clientX < innerWidth * 0.55) { stickId = e.pointerId; stickMitte = { x: e.clientX, y: e.clientY }; stickAktiv = false; }
   unten = { x: e.clientX, y: e.clientY }; bewegt = false;
 });
 fl.addEventListener("pointermove", e => {
@@ -543,7 +580,13 @@ fl.addEventListener("pointerup", e => {
       tmp.subVectors(ich.position, p); tmp.y = 0;
       if (tmp.length() > 2.4) { tmp.setLength(1.6); ziel = p.clone().add(tmp); ziel.y = 0.25; ankunft = o.userData.tipp; markiere(ziel); }
       else o.userData.tipp();
+      return;
     }
+  }
+  // Tipp-Steuerung: auf den Boden tippen = dorthin laufen
+  if (STEUERUNG === "tippen") {
+    const t = ray.intersectObjects(drinnen ? [zimmer] : boden, true)[0];
+    if (t) { ziel = new Vector3(t.point.x, 0.25, t.point.z); wegVonHindernissen(ziel, 0.4); ankunft = null; markiere(ziel); }
   }
 });
 fl.addEventListener("wheel", e => { if (!freiKamera) return; e.preventDefault(); abstand = MathUtils.clamp(abstand + e.deltaY * 0.01, 6, 26); }, { passive: false });
@@ -553,6 +596,18 @@ $("kamera").addEventListener("click", (e) => {
   if (!freiKamera) { gieren = 0; neigung = 0.72; abstand = 15; }
 });
 $("grafik").textContent = EINFACH ? "✨ einfach" : "✨ schön";
+// Steuerung: Joystick oder Tippen (jederzeit umschaltbar, das Tablet merkt es sich)
+let STEUERUNG = lies("lerninsel.steuerung") === "tippen" ? "tippen" : "joystick";
+function zeigeSteuerung() {
+  $("steuerung").textContent = STEUERUNG === "tippen" ? "👆 Tippen" : "🕹️ Joystick";
+  $("joy-hinweis").textContent = STEUERUNG === "tippen" ? "👆 Tippe auf die Wiese zum Laufen · Antippen zum Reden" : "🕹️ Hier links schieben zum Laufen · Antippen zum Reden";
+}
+$("steuerung").addEventListener("click", () => {
+  STEUERUNG = STEUERUNG === "tippen" ? "joystick" : "tippen";
+  try { localStorage.setItem("lerninsel.steuerung", STEUERUNG); } catch (e) { /* egal */ }
+  zeigeSteuerung(); $("joy-hinweis").hidden = false; setTimeout(() => { $("joy-hinweis").hidden = true; }, 4000); S.ton("tipp");
+});
+zeigeSteuerung();
 $("grafik").addEventListener("click", () => { try { localStorage.setItem(GRAFIK_KEY, EINFACH ? "schoen" : "einfach"); } catch (e) { /* egal */ } location.reload(); });
 let ankunft = null;
 const marke = new Mesh(new TorusGeometry(0.35, 0.06, 6, 28), new MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.9 }));
@@ -618,7 +673,12 @@ function bild() {
     tu.schwanz.rotation.y = Math.sin(t * (hoppelt ? 10 : schlaeft ? 0.5 : 3)) * 0.5;
   }
   NACHBARN.forEach((n, i) => {
-    const o = n.obj; if (o.userData.huepf > 0) { o.userData.huepf = Math.max(0, o.userData.huepf - dt * 2); }
+    const o = n.obj;
+    if (o.userData.schwanz) o.userData.schwanz.rotation.z = Math.sin(t * 3) * 0.25;
+    // zur Figur drehen, wenn sie in der Nähe ist
+    const dx = ich.position.x - o.position.x, dz = ich.position.z - o.position.z, nah = !drinnen && Math.hypot(dx, dz) < 7;
+    const soll = nah ? Math.atan2(dx, dz) : n.dreh; let diff = soll - o.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff)); o.rotation.y += diff * Math.min(1, dt * 4);
+    if (o.userData.koerper) o.userData.koerper.scale.y = 1 + Math.sin(t * 2.2 + i) * 0.02; if (o.userData.huepf > 0) { o.userData.huepf = Math.max(0, o.userData.huepf - dt * 2); }
     o.position.y = 0.25 + Math.sin((1 - (o.userData.huepf || 0)) * Math.PI) * (o.userData.huepf ? 0.4 : 0) + (i === 2 ? Math.sin(t * 2) * 0.05 : 0);
   });
   ballons.children.forEach(b => { if (b.userData.p !== undefined) b.position.y = 2.3 + (b.userData.p % 2) * 0.35 + Math.sin(t * 1.5 + b.userData.p) * 0.12; });
@@ -652,4 +712,4 @@ function bild() {
 requestAnimationFrame(bild);
 zeigeLernmodus();
 if (q.get("drinnen") === "1" && spielZeit()) reingehen();
-window.__heimat = { ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), SAISON, NACHT };
+window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), SAISON, NACHT };

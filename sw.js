@@ -2,7 +2,7 @@
 // danach auch ohne Internet geladen. Bei Internet wird im Hintergrund aktualisiert.
 // /dev hat einen eigenen Cache, damit sich Test- und echte Seite nicht gegenseitig löschen
 const VORSILBE = self.registration.scope.includes("/dev/test/") ? "test-" : self.registration.scope.includes("/dev/") ? "dev-" : "";
-const CACHE = VORSILBE + "spielwelt-af7d4b111b";
+const CACHE = VORSILBE + "spielwelt-1709932431";
 const START = [
   "./",
   "index.html",
@@ -24,6 +24,7 @@ const START = [
   "shared/sprache.js",
   "shared/charakter.js",
   "shared/zeit.js",
+  "shared/figuren.js",
   "shared/lehrplan.js",
   "shared/woerter.js",
   "shared/tiere.js",
