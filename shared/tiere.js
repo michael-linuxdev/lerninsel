@@ -8,8 +8,6 @@
   const ARTEN = {
     drache: { name: "Drache", ei: "feuer", farben: [
       { name: "Grün", h: "#7ED957", l: "#DDF7CC", d: "#3E8E2E" }, { name: "Lila", h: "#B58CF0", l: "#EFE4FF", d: "#6B3FB8" }, { name: "Blau", h: "#6FC2F2", l: "#DFF3FF", d: "#2C6FA6" }] },
-    einhorn: { name: "Einhorn", ei: "regenbogen", farben: [
-      { name: "Weiß", h: "#FFFFFF", l: "#FFE3F0", d: "regenbogen" }, { name: "Lila", h: "#E8DBFF", l: "#FFFFFF", d: "#7FD3F5" }, { name: "Mint", h: "#D3F5E8", l: "#FFFFFF", d: "#C9A4F5" }] },
     fuchs: { name: "Fuchs", ei: "wald", farben: [
       { name: "Rot", h: "#F28C38", l: "#FFF3E6", d: "#7A3E18" }, { name: "Silber", h: "#AEB7C7", l: "#F5F7FB", d: "#4B5566" }, { name: "Polar", h: "#F5F1EA", l: "#FFFFFF", d: "#8C95A6" }] },
     katze: { name: "Kätzchen", ei: "kuschel", farben: [
@@ -17,7 +15,6 @@
   };
   const EIER = {
     feuer: { name: "Feuer-Ei", art: "drache", a: "#FFB36B", b: "#E8463B" },
-    regenbogen: { name: "Regenbogen-Ei", art: "einhorn", a: "#FFFFFF", b: "#9B6BE0" },
     wald: { name: "Wald-Ei", art: "fuchs", a: "#CDEBB5", b: "#3E9E5A" },
     kuschel: { name: "Kuschel-Ei", art: "katze", a: "#FFE0EC", b: "#E0457B" }
   };
