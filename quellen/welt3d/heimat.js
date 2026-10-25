@@ -401,12 +401,37 @@ function herzen(p) {
 // ---------- Steuerung ----------
 let ziel = null, freiKamera = false, gieren = 0, neigung = 0.72, abstand = 15;
 const ray = new Raycaster(), zeiger = new Vector2(), fl = renderer.domElement, finger = new Map();
+// Joystick: Finger links aufsetzen und schieben (erscheint, wo der Finger ist). Kurz tippen = antippen.
+const eingabe = { x: 0, z: 0 }, RADIUS = 56, stick = $("stick"), knauf = $("knauf");
+let stickId = null, stickMitte = null, stickAktiv = false;
+const tasten = {};
+addEventListener("keydown", e => { tasten[e.key.toLowerCase()] = true; });
+addEventListener("keyup", e => { tasten[e.key.toLowerCase()] = false; });
 let unten = null, bewegt = false;
-fl.addEventListener("pointerdown", e => { fl.setPointerCapture(e.pointerId); finger.set(e.pointerId, { x: e.clientX, y: e.clientY }); unten = { x: e.clientX, y: e.clientY }; bewegt = false; });
+fl.addEventListener("pointerdown", e => {
+  fl.setPointerCapture(e.pointerId); finger.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (stickId === null && e.clientX < innerWidth * 0.55) { stickId = e.pointerId; stickMitte = { x: e.clientX, y: e.clientY }; stickAktiv = false; }
+  unten = { x: e.clientX, y: e.clientY }; bewegt = false;
+});
 fl.addEventListener("pointermove", e => {
   const alt = finger.get(e.pointerId); if (!alt) return;
   const dx = e.clientX - alt.x, dy = e.clientY - alt.y;
-  if (finger.size === 2) {
+  if (e.pointerId === stickId) {
+    let sx = e.clientX - stickMitte.x, sy = e.clientY - stickMitte.y; const l = Math.hypot(sx, sy);
+    if (!stickAktiv && l > 10) {
+      stickAktiv = true; ziel = null; ankunft = null; marke.visible = false;
+      stick.style.left = (stickMitte.x - 70) + "px"; stick.style.top = (stickMitte.y - 70) + "px"; stick.classList.add("an");
+      $("joy-hinweis").hidden = true; try { localStorage.setItem("lerninsel.joystick", "1"); } catch (er) { /* egal */ }
+    }
+    if (stickAktiv) {
+      if (l > RADIUS) { sx *= RADIUS / l; sy *= RADIUS / l; }
+      knauf.style.transform = `translate(${sx}px, ${sy}px)`;
+      eingabe.x = sx / RADIUS; eingabe.z = sy / RADIUS;
+    }
+    finger.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    return;
+  }
+  if (finger.size === 2 && stickId === null) {
     const [a, b] = [...finger.values()]; const d0 = Math.hypot(a.x - b.x, a.y - b.y);
     finger.set(e.pointerId, { x: e.clientX, y: e.clientY });
     const [c, d] = [...finger.values()]; const d1 = Math.hypot(c.x - d.x, c.y - d.y);
@@ -417,9 +442,18 @@ fl.addEventListener("pointermove", e => {
   if (unten && Math.hypot(e.clientX - unten.x, e.clientY - unten.y) > 8) bewegt = true;
   if (freiKamera && bewegt) { gieren -= dx * 0.008; neigung = MathUtils.clamp(neigung + dy * 0.005, 0.25, 1.35); }
 });
+function stickLos(e) {
+  if (e.pointerId !== stickId) return false;
+  const warAktiv = stickAktiv;
+  stickId = null; stickAktiv = false; eingabe.x = 0; eingabe.z = 0; stick.classList.remove("an"); knauf.style.transform = "translate(0,0)";
+  return warAktiv;
+}
+fl.addEventListener("pointercancel", e => { finger.delete(e.pointerId); stickLos(e); });
 fl.addEventListener("pointerup", e => {
   finger.delete(e.pointerId);
+  if (stickLos(e)) return;
   if (bewegt) return;
+  // Antippen: Nachbarn, Tier, Haus, Ballons, Truhe
   const r = fl.getBoundingClientRect();
   zeiger.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
   ray.setFromCamera(zeiger, camera);
@@ -428,15 +462,11 @@ fl.addEventListener("pointerup", e => {
     let o = treffer.object; while (o && !o.userData.tipp) o = o.parent;
     if (o) {
       const p = new Vector3(); o.getWorldPosition(p);
-      // erst hinlaufen, dann reagieren
       tmp.subVectors(ich.position, p); tmp.y = 0;
       if (tmp.length() > 2.4) { tmp.setLength(1.6); ziel = p.clone().add(tmp); ziel.y = 0.25; ankunft = o.userData.tipp; markiere(ziel); }
       else o.userData.tipp();
-      return;
     }
   }
-  const t = ray.intersectObjects(boden, false)[0];
-  if (t) { ziel = new Vector3(t.point.x, 0.25, t.point.z); if (ziel.length() > 14.5) ziel.setLength(14.5); ankunft = null; markiere(ziel); }
 });
 fl.addEventListener("wheel", e => { if (!freiKamera) return; e.preventDefault(); abstand = MathUtils.clamp(abstand + e.deltaY * 0.01, 6, 26); }, { passive: false });
 $("kamera").addEventListener("click", (e) => {
@@ -453,7 +483,7 @@ function markiere(p) { marke.position.set(p.x, 0.32, p.z); marke.visible = true;
 
 // Begrüßung
 $("sterne").textContent = S.sterne();
-$("info").textContent = NACHT ? `Gute Nacht, ${name}! Die Insel schläft bald.` : SAISON === "winter" ? `Es hat geschneit, ${name}!` : SAISON === "herbst" ? `Die Blätter sind bunt, ${name}!` : `Hallo ${name}! Tippe auf die Wiese.`;
+$("info").textContent = NACHT ? `Gute Nacht, ${name}! Die Insel schläft bald.` : SAISON === "winter" ? `Es hat geschneit, ${name}!` : SAISON === "herbst" ? `Die Blätter sind bunt, ${name}!` : `Hallo ${name}! Schön, dass du da bist.`;
 
 // ---------- Größe, Schleife ----------
 function groesse() { const el = $("buehne"); renderer.setSize(el.clientWidth, el.clientHeight, false); camera.aspect = el.clientWidth / Math.max(1, el.clientHeight); camera.updateProjectionMatrix(); }
@@ -467,7 +497,18 @@ function wegVonHindernissen(p, r) {
 function bild() {
   const dt = Math.min(uhr.getDelta(), 0.05), t = uhr.elapsedTime;
   const u = ich.userData; let geht = false;
-  if (ziel) {
+  let ix = eingabe.x, iz = eingabe.z;
+  if (tasten["arrowleft"] || tasten["a"]) ix -= 1; if (tasten["arrowright"] || tasten["d"]) ix += 1;
+  if (tasten["arrowup"] || tasten["w"]) iz -= 1; if (tasten["arrowdown"] || tasten["s"]) iz += 1;
+  const staerke = Math.min(1, Math.hypot(ix, iz));
+  if (staerke > 0.12) {
+    ziel = null; ankunft = null; marke.visible = false; geht = true;
+    const gw0 = freiKamera ? gieren : 0, n = Math.hypot(ix, iz);
+    const wx = (ix * Math.cos(gw0) + iz * Math.sin(gw0)) / n, wz = (-ix * Math.sin(gw0) + iz * Math.cos(gw0)) / n;
+    ich.position.x += wx * 4 * staerke * dt; ich.position.z += wz * 4 * staerke * dt; wegVonHindernissen(ich.position, 0.4);
+    const soll = Math.atan2(wx, wz); let diff = soll - ich.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+    ich.rotation.y += diff * Math.min(1, dt * 12);
+  } else if (ziel) {
     tmp.subVectors(ziel, ich.position); tmp.y = 0; const d = tmp.length();
     if (d < 0.1) { ziel = null; marke.visible = false; if (ankunft) { const f = ankunft; ankunft = null; f(); } }
     else {

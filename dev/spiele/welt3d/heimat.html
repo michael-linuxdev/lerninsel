@@ -28,6 +28,11 @@
   .blase-knoepfe { grid-column: 1 / -1; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 6px; }
   .blase-knoepfe .knopf { min-height: 54px; font-size: 1.15rem; }
   .blase-knoepfe [hidden] { display: none; }
+  #stick { position: fixed; width: 140px; height: 140px; border-radius: 50%; background: rgba(255,255,255,.35); box-shadow: inset 0 0 0 4px rgba(255,255,255,.85); pointer-events: none; opacity: 0; transition: opacity .12s; z-index: 2; }
+  #stick.an { opacity: 1; }
+  #knauf { position: absolute; left: 40px; top: 40px; width: 60px; height: 60px; border-radius: 50%; background: #fff; box-shadow: 0 4px 0 rgba(0,0,0,.2); }
+  #joy-hinweis { position: fixed; left: max(20px, env(safe-area-inset-left)); bottom: max(80px, calc(env(safe-area-inset-bottom) + 70px)); z-index: 2; background: rgba(255,255,255,.88); border-radius: 999px; padding: 10px 16px; font-weight: 600; color: var(--pflaume); pointer-events: none; }
+  #joy-hinweis[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -40,6 +45,8 @@
   <button class="knopf" id="kamera" aria-label="Kamera fest oder frei">🎥 fest</button>
 </div>
 <div id="info"></div>
+<div id="stick"><div id="knauf"></div></div>
+<div id="joy-hinweis">👆 Hier links schieben zum Laufen · Antippen zum Reden</div>
 <div id="blase" hidden role="dialog" aria-live="polite">
   <div id="blase-e"></div>
   <h2 id="blase-titel"></h2>
@@ -59,6 +66,7 @@
 <script src="../anziehen/figur.js"></script>
 <script src="../../shared/tiere.js"></script>
 <script src="../../shared/tierpflege.js"></script>
+<script>try { if (localStorage.getItem("lerninsel.joystick")) document.getElementById("joy-hinweis").hidden = true; } catch (e) {}</script>
 <script type="module" src="heimat.js"></script>
 </body>
 </html>

@@ -54,6 +54,18 @@ Einstellbar im Elternbereich (PIN), mehrere Regeln kombinierbar:
 
 Die Insel ist nur zugänglich, wenn das Zeitsystem Spielzeit erlaubt.
 
+**Neue Entscheidungen (25.10.2026):**
+- **Joystick statt Hintippen** (erledigt): Finger links aufsetzen und schieben; Antippen von Nachbarn, Tier und Orten bleibt.
+- **Springen inkl. Doppelsprung** kommt später (Doppelsprung als Belohnung wie im Insel-Abenteuer).
+- **Die Insel wird zur Startseite der Spielwelt:** Auf dem Dashboard ersetzt „Meine Insel“ die Kachel „3D-Welt“.
+  Die anderen Kacheln werden **Orte/Minispiele auf der Insel**: Anziehen im Haus (Kleiderschrank im Zimmer),
+  Fächer bei den Nachbarn, Tier im Nest/Garten, Mein Ich z. B. als Spiegel im Haus.
+  Offene Frage für die Umsetzung: Lernen muss auch dann erreichbar sein, wenn das Zeitsystem gerade keine Spielzeit erlaubt
+  (Vorschlag: die Insel ist dann im „Lernmodus“ – Laufen zu den Lern-Nachbarn geht, Spielorte schlafen).
+- **Eine ganze Welt statt einer Insel:** mehrere Inseln/Gebiete, später größer, mit Boot oder Brücken verbunden.
+- **Mehrere Start-Inseln zur Auswahl:** zufällig erzeugt (Form, Bäume, Lage von Haus und Strand), das Kind sucht sich bei der
+  ersten Einrichtung eine aus. Technisch: Insel aus einem Zufalls-Startwert (Seed) erzeugen und nur den Seed speichern.
+
 **Entscheidungen 3D-Welt:**
 - **Entschieden (25.10.2026): Stil B – rund im Animal-Crossing-Stil** (glatte Formen, Konturen, Toon-Licht, wehendes Gras, Wellen),
   mit Stufe „einfache Grafik“ für schwächere Tablets (weniger Gras, ruhiges Wasser). Probeszene: spiele/welt3d/probe.html?stil=b
