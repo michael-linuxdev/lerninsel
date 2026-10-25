@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Probeszene Insel</title>
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #BFE6FF; }
+  #buehne { position: fixed; inset: 0; touch-action: none; }
+  #buehne canvas { width: 100%; height: 100%; display: block; }
+  .leiste { position: fixed; top: max(12px, env(safe-area-inset-top)); left: 12px; right: 12px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; z-index: 2; }
+  .leiste .knopf { min-height: 50px; font-size: 1.05rem; padding: 0 18px; text-decoration: none; }
+  .leiste .knopf.an { background: var(--pflaume); color: #fff; }
+  .hinweis { position: fixed; bottom: max(14px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: rgba(255,255,255,.92); border-radius: 999px; padding: 10px 18px; font-weight: 600; color: var(--pflaume); z-index: 2; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="buehne"></div>
+<div class="leiste">
+  <a class="knopf" href="../../" aria-label="Zur Startseite">🏠</a>
+  <a class="knopf" id="stil-a" href="?stil=a">A: Low-Poly</a>
+  <a class="knopf" id="stil-b" href="?stil=b">B: Rund (Animal-Crossing-Stil)</a>
+  <button class="knopf" id="kamera">🎥 Kamera fest</button>
+</div>
+<div class="hinweis">Tippe auf die Wiese, um zu laufen</div>
+<script>
+  const b = new URLSearchParams(location.search).get("stil") === "b";
+  document.getElementById(b ? "stil-b" : "stil-a").classList.add("an");
+</script>
+<script type="module" src="probe.js"></script>
+</body>
+</html>
