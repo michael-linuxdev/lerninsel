@@ -138,6 +138,30 @@ Wetterstation im Baumhaus: eine Woche lang das echte Wetter eintragen (Sachunter
 - Wochenbericht für Eltern, Erinnerung ans Sichern, druckbare Urkunden
 - Vorlesestimmen für fehlende Sprachen als vorab erzeugte Tondateien
 
+## 8b. Ganzheitlich: mehr als Schulfächer (geplant, noch nicht gebaut)
+Nicht nur Mathe und Deutsch: Die Insel soll auch das stärken, was im Zeugnis kaum steht. Alles ohne Server und ohne Bewertung des Kindes.
+In Sachsen passen dazu die Fächer Ethik/Religion, Musik, Kunst, Sport und der Sachunterricht-Lernbereich „Zusammenleben“.
+- **Schach (Minispiel)**: eigener Ort auf der Insel (Schachtisch unter einem Baum). Erst Mini-Schach mit wenigen Figuren
+  („Bauernkrieg“, nur Turm, nur Springer), dann ganzes Brett gegen eine freundliche, einstellbare KI; Rätsel „Matt in 1“.
+  Später Duell Kind gegen Eltern auf einem Tablet. Schult Konzentration, Vorausdenken, mit Verlieren umgehen.
+- **Eigene Stärken entdecken**: kein Test, sondern beobachten und selbst einschätzen. Der Spiegel zeigt neben den Lern-Fähigkeiten
+  „Was ich gut kann“ (z. B. Ausdauer, Fantasie, Hilfsbereitschaft, Rhythmus, genau hinschauen) aus dem, was das Kind tut und was es selbst ankreuzt.
+  Eltern können Stärken ergänzen („Heute habe ich gesehen, dass du …“). Nie Rangliste, nie Schwächen-Liste für das Kind.
+- **Soziale Fähigkeiten und Werte**: kleine Bildergeschichten mit Entscheidungen („Ein Kind steht allein auf dem Hof – was machst du?“),
+  ohne „falsch“, mit Gespräch über Folgen. Themen: teilen, helfen, streiten und vertragen, Nein sagen, Regeln, Fairness,
+  Vielfalt (andere Sprachen, Familien, Feste – passt zur Integration), Kinderrechte, Natur schützen. Mit Eltern-Gesprächsimpuls fürs Abendessen.
+- **Gefühle (emotionale Fähigkeiten)**: Gefühle erkennen (Gesichter, Situationen), benennen auf Deutsch und Russisch,
+  Gefühls-Barometer am Tagesanfang (freiwillig, bleibt lokal, nur das Kind und auf Wunsch Eltern sehen es),
+  Beruhigungs-Ecke im Zimmer (Atem-Übung mit dem Tier, „Schildkröte“, Wut-Ballon). Keine Diagnosen, keine Auswertung.
+- **Kreativ und musikalisch**: Malen (freie Leinwand an der Staffelei im Zimmer, Bilder als Poster an die Wand),
+  Musik-Ecke: Xylofon/Klavier, Rhythmus nachklatschen, eigene kleine Melodie bauen, Kinderlieder-Melodien (gemeinfrei, z. B. deutsche und russische Volkslieder),
+  Töne hoch/tief, laut/leise (Lehrplan Musik). Insel-Bühne, auf der Tiere zur eigenen Melodie tanzen.
+- **Bewegung und Sport**: Bewegungs-Aufgaben weg vom Bildschirm statt Spielzeit-Verlängerung am Tablet
+  („10 Hampelmänner wie Fipsi“, Balancieren, Tier-Yoga, Tanzen zur Insel-Musik), Ella/Fipsi machen vor; Haken setzt das Kind selbst (kein Kamera-Tracking).
+  Bewegungspausen aus dem Zeitsystem nutzen diese Übungen; Wochenziel „draußen gespielt“ im Elternbericht. Passt zur DGKJ-Empfehlung.
+- **Figuren**: eine neue Nachbarin für Gefühle/Miteinander (z. B. ein Bär „Bruno“ mit Herz-Laterne) und ein Musik-Vogel; Schach beim Fuchs Fipsi oder einer Schildkröte.
+- **Belohnung**: Diese Bereiche geben keine Sterne für „richtige“ Gefühle oder Meinungen – nur fürs Mitmachen; Sticker und Möbel dazu (Notenständer, Schachtisch, Sitzkissen).
+
 ## 9. Server (vorerst nicht)
 Sinnvoll erst für: automatischen Abgleich/Sicherung, Eltern-Ansicht auf dem Handy, Schulen/Klassen,
 Klassen-Inselbesuche, KI-Funktionen, anonyme Auswertung. Erster Schritt dann: auf dem Gerät
@@ -256,3 +280,12 @@ Sachunterricht „Körper und Gesundheit“; Einstufungstest.
 - Lehrplan Sachsen Kl. 1/2 jetzt: Mathe alle 4 Lernbereiche abgedeckt (2 teilweise), Deutsch und Sachunterricht deutlich besser
 
 **Nächster Schritt:** Insel lebendiger (Springen/Doppelsprung, Zimmer einrichten, Wetterstation, Stickeralbum), dann Weihnachts-Erststart und QR-Geschenk.
+
+## Stand 25.10.2026 (Insel lebendiger)
+- Joystick und Tippen jederzeit umschaltbar, Springen mit Doppelsprung
+- Aktionsknopf: Vor Ella, Fipsi, Pixel, Haus, Schrank, Spiegel, Wetterstation usw. wird aus „Springen“ „Reden“, „Öffnen“, „Reingehen“ …
+- Wetterstation mit echtem Wetter (Open-Meteo, Ort im Elternbereich, kein GPS)
+- Zimmer einrichten: 10 Möbel, 6 Plätze, 5 Wandfarben, mit Sternen
+- Geplant (8b): Schach, eigene Stärken, soziale Fähigkeiten und Werte, Gefühle, Kreativität/Musik, Bewegung
+
+**Nächster Schritt:** Stickeralbum, dann Weihnachts-Erststart und QR-Geschenk; danach 8b schrittweise (Bewegungs-Aufgaben und Gefühle zuerst, weil sie ins Zeitsystem passen).

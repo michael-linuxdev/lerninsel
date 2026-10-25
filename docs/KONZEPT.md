@@ -21,6 +21,7 @@ Gemacht auch für Kinder mit anderer Muttersprache.
 | Gewohnheit | Tagesaufgaben, Zeitsystem, Erinnerungen der Figuren, Wochenkalender, Stempel und Truhe |
 | Charakter | Fähigkeiten mit Stufen und Belohnungen, Titel, Stickeralbum |
 | Spielen | 3D-Heimatinsel (Stil B, rund): Figur mit Kleiderschrank-Look, Tier läuft mit, Baumhaus, Nachbarn, Minispiel-Orte, echtes Wetter/Tageszeit/Jahreszeit |
+| Ganzheitlich | Schach, eigene Stärken entdecken, soziale Fähigkeiten und Werte, Gefühle, Malen und Musik, Bewegung weg vom Bildschirm – ohne Bewertung, Sterne nur fürs Mitmachen (PLAN 8b) |
 | Kleiderschrank | 150+ Teile, einmal beschrieben, in 2D und 3D; später auch für Jungen |
 | Haustiere | Drache, Fuchs, Katze zum Start; später mehr; pflegen ohne Strafe |
 | Familie | Kopfrechen-Duell, gemeinsames Vorlesen, „Heute erkläre ich dir …“, Wochenbericht – immer freiwillig |

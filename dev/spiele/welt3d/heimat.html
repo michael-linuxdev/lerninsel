@@ -24,6 +24,10 @@
   #springen { position: fixed; right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 2; width: 100px; height: 100px; border-radius: 50%; background: var(--sonne); font-size: 1.05rem; font-weight: 700; color: var(--pflaume); box-shadow: 0 8px 0 #C79512; touch-action: none; border: 0; }
   #springen:active { transform: translateY(5px); box-shadow: 0 3px 0 #C79512; }
   #springen span { display: block; font-size: 2.2rem; line-height: 1; }
+  #springen.aktion { background: #FF8FB8; color: #fff; box-shadow: 0 8px 0 #D45A88; animation: winken 1.4s ease-in-out infinite; }
+  #springen.aktion:active { box-shadow: 0 3px 0 #D45A88; }
+  @keyframes winken { 0%, 100% { scale: 1; } 50% { scale: 1.07; } }
+  @media (prefers-reduced-motion: reduce) { #springen.aktion { animation: none; } }
   #blase { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(560px, calc(100% - 28px)); background: #fff; border-radius: 26px; padding: 18px 20px; box-shadow: 0 10px 0 rgba(0,0,0,.12); z-index: 3; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: start; }
   #blase[hidden] { display: none; }
   #blase-e { font-size: 3rem; line-height: 1; grid-row: span 2; }

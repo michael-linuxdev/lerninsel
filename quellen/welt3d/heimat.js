@@ -80,7 +80,8 @@ function spielOrt(fn) {
   sprechblase("💤", "Schläft noch", st.genug ? "Für heute ist genug gespielt. Morgen geht es weiter!" : `Erst lernen, dann spielen! Noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Ella, Fipsi, Pixel und der Matheweg helfen dir.`,
     S.paar(["", "Сначала учиться, потом играть! Элла, Фипси, Пиксель и математическая тропа помогут тебе."])[1], null);
 }
-function antippbar(obj, fn) { obj.userData.tipp = fn; tippbar.push(obj); }
+// aktion = Beschriftung des Aktionsknopfs, wenn die Figur nah davor steht; nah = Reichweite
+function antippbar(obj, fn, aktion = ["👀", "Ansehen"], nah = 1.9) { Object.assign(obj.userData, { tipp: fn, aktion, nah }); tippbar.push(obj); }
 
 // ---------- Insel und Wasser ----------
 const GRAS = SAISON === "winter" ? "#EEF5FB" : SAISON === "herbst" ? "#8DC45A" : "#7CCB5B";
@@ -149,7 +150,7 @@ const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" :
   [0.95, -0.95].forEach(x => h.add(setze(teil(new BoxGeometry(0.7, 0.7, 0.1), fensterMat, { dicke: 1.1 }), x, 1.5, 1.7)));
   h.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.9, 16), "#B9584A"), 0.9, 3.5, -0.5));
   h.position.set(-5, 0.25, -4.5); h.rotation.y = 0.35; scene.add(h); block(-5, -4.5, 2.3);
-  antippbar(h, () => spielOrt(() => reingehen()));
+  antippbar(h, () => spielOrt(() => reingehen()), ["🚪", "Reingehen"], 3.4);
 }
 
 // ---------- Wolken, Sterne, Schnee ----------
@@ -239,7 +240,7 @@ antippbar(station, () => {
   const [, txt, ru] = WETTER_TEXT[wetter.art] || WETTER_TEXT.wolken, tp = Math.round(wetter.temp);
   const tipp = wetter.art === "regen" || wetter.art === "gewitter" ? "Nimm draußen eine Regenjacke mit!" : tp <= 3 ? "Brr! Mütze und Handschuhe nicht vergessen." : tp >= 26 ? "Heiß! Trink viel Wasser und denk an die Sonnencreme." : wetter.art === "klar" ? "Ein schöner Tag zum Rausgehen!" : "Zieh dich passend an, wenn du rausgehst.";
   sprechblase("🌦️", `Wetter in ${wetter.ort}`, `Draußen sind es ${tp} Grad, ${txt}. Wind: ${Math.round(wetter.wind || 0)} km/h. ${tipp}`, S.paar(["", `На улице ${tp} градусов, ${ru}.`])[1], null);
-});
+}, ["🌦️", "Ansehen"]);
 
 // ---------- Wehendes Gras ----------
 let halme = null; const halmDaten = [];
@@ -374,7 +375,7 @@ const NEST = new Vector3(-2.2, 0.25, -6.2);
       const ok = TP.streicheln ? TP.streicheln() : false;
       S.ton("juhu");
       $("info").textContent = `${tierDaten.name || "Dein Tier"} freut sich!` + (ok === false ? "" : "");
-    });
+    }, null, 0); // läuft immer mit, darum nicht auf dem Aktionsknopf
   } else if (tierDaten && tierDaten.phase === "ei" && T) {
     const e = T.EIER[tierDaten.ei] || { a: "#FFFFFF", b: "#E0457B" };
     const ei = teil(kugel(0.36), e.a); ei.scale.set(1, 1.3, 1); setze(ei, 0, 0.5, 0); nest.add(ei);
@@ -472,7 +473,7 @@ const NACHBARN = [
 NACHBARN.forEach(n => {
   const o = n.bau(); o.position.set(n.x, 0.25, n.z); o.rotation.y = n.dreh; if (n.e !== "🧮") o.scale.multiplyScalar(1.3); scene.add(o); block(n.x, n.z, 0.8);
   n.obj = o;
-  antippbar(o, () => { o.userData.huepf = 1; sprechblase(n.e, n.titel, n.text, S.ht(n), n.ziel); });
+  antippbar(o, () => { o.userData.huepf = 1; sprechblase(n.e, n.titel, n.text, S.ht(n), n.ziel); }, n.e === "🧮" ? ["🧮", "Lesen"] : ["💬", "Reden"], 2.3);
 });
 
 // ---------- Orte für Minispiele ----------
@@ -485,12 +486,12 @@ const ballons = new Group(); ballons.position.set(10, 0.25, 6); scene.add(ballon
 });
 ballons.add(setze(teil(new CylinderGeometry(0.12, 0.16, 0.5, 12), "#9A6A3F"), 0, 0.25, 0));
 const fuehrerscheinFehlt = () => sprechblase("🪪", "Noch gesperrt", "Mach zuerst den Tablet-Führerschein bei Robo Pixel. Dann darfst du hier spielen!", S.paar(["", "Сначала получи права на планшет у Робо Пикселя."])[1], "../medien/");
-antippbar(ballons, () => spielOrt(() => profi() ? sprechblase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", S.paar(["", "Лопни как можно больше шариков!"])[1], "ballons.html") : fuehrerscheinFehlt()));
+antippbar(ballons, () => spielOrt(() => profi() ? sprechblase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", S.paar(["", "Лопни как можно больше шариков!"])[1], "ballons.html") : fuehrerscheinFehlt()), ["🎈", "Spielen"]);
 const truhe = new Group(); truhe.position.set(-1, 0.05, 13.6); scene.add(truhe);
 truhe.add(setze(teil(new BoxGeometry(0.9, 0.5, 0.6), "#B9732E"), 0, 0.25, 0));
 const deckel = teil(new CylinderGeometry(0.3, 0.3, 0.9, 16, 1, false, 0, Math.PI), "#C98A3E"); deckel.rotation.z = Math.PI / 2; setze(deckel, 0, 0.5, 0); truhe.add(deckel);
 truhe.add(setze(teil(new BoxGeometry(0.16, 0.2, 0.05), "#FFC83D", { dicke: 1.1 }), 0, 0.45, 0.32));
-antippbar(truhe, () => spielOrt(() => profi() ? sprechblase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", S.paar(["", "На острове сокровищ ждёт сундук. Найдёшь его?"])[1], "insel.html") : fuehrerscheinFehlt()));
+antippbar(truhe, () => spielOrt(() => profi() ? sprechblase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", S.paar(["", "На острове сокровищ ждёт сундук. Найдёшь его?"])[1], "insel.html") : fuehrerscheinFehlt()), ["🔓", "Öffnen"]);
 
 // ---------- Zimmer im Haus (eigener Bereich weit weg von der Insel) ----------
 const ZX = 60; // Mitte des Zimmers
@@ -511,19 +512,19 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
   bett.add(setze(teil(new BoxGeometry(1.7, 0.2, 1.8), "#7FC6F5", { dicke: 1.03 }), 0, 0.6, 0.35));
   const kissen = teil(kugel(0.4), "#FFFFFF"); kissen.scale.set(1.6, 0.5, 0.9); bett.add(setze(kissen, 0, 0.65, -0.85));
   block(ZX - 2.9, -2.2, 1.4);
-  antippbar(bett, () => sprechblase("🛏️", "Dein Bett", tier ? `Hier kuschelt ${tierDaten.name || "dein Tier"}, wenn es müde ist.` : "Ein gemütliches Bett. Mit dem Knopf „Einrichten“ machst du dein Zimmer schön.", S.paar(["", "Уютная кровать."])[1], null));
+  antippbar(bett, () => sprechblase("🛏️", "Dein Bett", tier ? `Hier kuschelt ${tierDaten.name || "dein Tier"}, wenn es müde ist.` : "Ein gemütliches Bett. Mit dem Knopf „Einrichten“ machst du dein Zimmer schön.", S.paar(["", "Уютная кровать."])[1], null), ["🛏️", "Ansehen"], 2.2);
   // Kleiderschrank
   const schrank = new Group(); schrank.position.set(2.8, 0.25, -3.0); zimmer.add(schrank);
   schrank.add(setze(teil(new BoxGeometry(2.0, 2.6, 0.9), "#C2337A", { dicke: 1.03 }), 0, 1.3, 0));
   [-0.48, 0.48].forEach(x => { schrank.add(setze(teil(new BoxGeometry(0.9, 2.3, 0.06), "#E0579A", { dicke: 1.02 }), x, 1.3, 0.47)); schrank.add(setze(teil(kugel(0.07), "#FFC83D", { dicke: 1.15 }), x * 0.25, 1.35, 0.53)); });
   schrank.add(setze(teil(new BoxGeometry(0.5, 0.3, 0.05), "#FFFFFF", { dicke: 1.08 }), 0, 2.35, 0.52));
   block(ZX + 2.8, -3.0, 1.2);
-  antippbar(schrank, () => sprechblase("👗", "Dein Kleiderschrank", "Such dir etwas Schönes zum Anziehen aus. Auf der Insel trägst du es dann!", S.paar(["", "Выбери что-нибудь красивое из одежды!"])[1], "../anziehen/?von=insel"));
+  antippbar(schrank, () => sprechblase("👗", "Dein Kleiderschrank", "Such dir etwas Schönes zum Anziehen aus. Auf der Insel trägst du es dann!", S.paar(["", "Выбери что-нибудь красивое из одежды!"])[1], "../anziehen/?von=insel"), ["🚪", "Öffnen"], 2.0);
   // Spiegel
   const spiegel = new Group(); spiegel.position.set(-4.05, 1.7, 1.0); spiegel.rotation.y = Math.PI / 2; zimmer.add(spiegel);
   const rahmen = teil(new TorusGeometry(0.55, 0.08, 10, 30), "#FFC83D"); rahmen.scale.y = 1.4; spiegel.add(rahmen);
   const glas = new Mesh(new CircleGeometry(0.52, 30), new MeshBasicMaterial({ color: "#CFEFFF" })); glas.scale.y = 1.4; glas.position.z = 0.02; spiegel.add(glas);
-  antippbar(spiegel, () => sprechblase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, Aufgaben und Abzeichen.", S.paar(["", "Посмотри, как ты выросла!"])[1], "../ich/"));
+  antippbar(spiegel, () => sprechblase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, Aufgaben und Abzeichen.", S.paar(["", "Посмотри, как ты выросла!"])[1], "../ich/"), ["🪞", "Reinschauen"], 1.6);
   // Pflanze und Lampe
   const topf = new Group(); topf.position.set(3.4, 0.25, 2.4); zimmer.add(topf);
   topf.add(setze(teil(new CylinderGeometry(0.3, 0.22, 0.45, 16), "#E2604F"), 0, 0.22, 0));
@@ -676,7 +677,7 @@ const ray = new Raycaster(), zeiger = new Vector2(), fl = renderer.domElement, f
 const eingabe = { x: 0, z: 0 }, RADIUS = 56, stick = $("stick"), knauf = $("knauf");
 let stickId = null, stickMitte = null, stickAktiv = false;
 const tasten = {};
-addEventListener("keydown", e => { tasten[e.key.toLowerCase()] = true; if (e.key === " ") { e.preventDefault(); springe(); } });
+addEventListener("keydown", e => { tasten[e.key.toLowerCase()] = true; if (e.key === " ") { e.preventDefault(); springe(); } if (e.key === "Enter" || e.key.toLowerCase() === "e") { if (naechstes) { e.preventDefault(); aktion(); } } });
 // Springen: einfach immer, Doppelsprung als Belohnung (Entdecker-Mut) oder im Testmodus
 let hoehe = 0, vy = 0, spruenge = 0;
 const doppelErlaubt = () => S.offen(window.Charakter && window.Charakter.hat && window.Charakter.hat("doppelsprung"));
@@ -684,7 +685,31 @@ function springe() {
   if (hoehe <= 0.001) { vy = 6.2; spruenge = 1; S.ton("tipp"); }
   else if (spruenge === 1 && doppelErlaubt()) { vy = 6.2; spruenge = 2; S.ton("wahl"); }
 }
-$("springen").addEventListener("pointerdown", e => { e.preventDefault(); e.stopPropagation(); springe(); });
+// Aktionsknopf: steht die Figur vor etwas Antippbarem, wird aus „Springen“ z. B. „Reden“ oder „Öffnen“
+let naechstes = null, knopfZustand = "";
+const wp = new Vector3();
+function pruefeNaehe() {
+  let best = null, bestD = Infinity;
+  if ($("blase").hidden && $("laden").hidden && hoehe <= 0) for (const o of tippbar) {
+    const u = o.userData; if (!u.nah || !o.visible || (o.parent && !o.parent.visible)) continue;
+    o.getWorldPosition(wp); const d = Math.hypot(wp.x - ich.position.x, wp.z - ich.position.z);
+    if (d < u.nah && d < bestD) { best = o; bestD = d; }
+  }
+  naechstes = best;
+  const z = best ? best.userData.aktion.join("|") : "";
+  if (z !== knopfZustand) {
+    knopfZustand = z; const k = $("springen");
+    k.innerHTML = best ? `<span>${best.userData.aktion[0]}</span>${best.userData.aktion[1]}` : "<span>⬆️</span>Springen";
+    k.classList.toggle("aktion", !!best); k.setAttribute("aria-label", best ? best.userData.aktion[1] : "Springen");
+  }
+}
+function aktion() {
+  if (!naechstes) return springe();
+  const o = naechstes; o.getWorldPosition(wp);
+  ich.rotation.y = Math.atan2(wp.x - ich.position.x, wp.z - ich.position.z); ziel = null; marke.visible = false;
+  o.userData.tipp();
+}
+$("springen").addEventListener("pointerdown", e => { e.preventDefault(); e.stopPropagation(); aktion(); });
 addEventListener("keyup", e => { tasten[e.key.toLowerCase()] = false; });
 let unten = null, bewegt = false;
 fl.addEventListener("pointerdown", e => {
@@ -871,6 +896,7 @@ function bild() {
   }
   if (schnee) { const a = schnee.geometry.attributes.position; for (let i = 0; i < a.count; i++) { let y = a.getY(i) - dt * 1.2; if (y < 0) y = 16; a.setY(i, y); a.setX(i, a.getX(i) + Math.sin(t + i) * dt * 0.2); } a.needsUpdate = true; }
   if (drinnen) { const gl = moebelObj && Object.values(moebelObj); gl.forEach(o => { if (o.userData.dreh) o.userData.dreh.rotation.y += dt * 0.5; if (o.userData.fische) o.userData.fische.children.forEach((f, i) => { f.position.x = Math.sin(t * (0.8 + i * 0.3) + i * 2) * 0.35; f.rotation.y = Math.cos(t * (0.8 + i * 0.3) + i * 2) > 0 ? 0 : Math.PI; }); }); }
+  pruefeNaehe();
   windrad.rotation.y += dt * (0.6 + Math.min(40, (wetter && wetter.wind) || 8) * 0.15);
   if (regen) { const a = regen.geometry.attributes.position; for (let i = 0; i < a.count; i += 2) { let y = a.getY(i) - dt * 14; if (y < 0) y = 16; a.setY(i, y); a.setY(i + 1, y - 0.55); } a.needsUpdate = true; regen.visible = !drinnen; }
   if (schnee) schnee.visible = !drinnen;
@@ -889,4 +915,4 @@ function bild() {
 requestAnimationFrame(bild);
 zeigeLernmodus(); if (!NACHT) zeigeWetterInfo();
 if (q.get("drinnen") === "1" && spielZeit()) reingehen();
-window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, SAISON, NACHT };
+window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), SAISON, NACHT };
