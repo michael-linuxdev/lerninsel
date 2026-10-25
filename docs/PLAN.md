@@ -225,3 +225,15 @@ fast unsichtbar und extrem datensparsam.
 **Nächster Schritt:** Phase 1 – Zeitsystem „Erst lernen, dann spielen“ (DGKJ-Standardwerte, Fokus-Hilfen, Erinnerungen der Figuren),
 zusammen mit „Meine Insel“ als Startseite (Lernmodus: Lern-Nachbarn immer erreichbar, Spielorte schlafen bis die Lernzeit geschafft ist)
 und dem betretbaren Haus mit Kleiderschrank.
+
+## Stand 25.10.2026 (Phase 1 – Kern-Schleife)
+**Fertig:**
+- Zeitsystem `shared/zeit.js`: Lernzeit (nur aktiv) oder richtige Aufgaben → Spielzeit-Guthaben, Tagesgrenze, Ruhezeit, DGKJ-Standardwerte je Alter,
+  Sperre auf Spielseiten, Erst-dann-Leiste, 2-Minuten-Ankündigung, Eltern-Einstellungen inkl. „+10 Minuten heute“
+- Fokus-Hilfen (Bewegungspause nach 5 min), Erinnerungen (Ella: Trinken nach 20 min Lernen, Pixel: Augenpause nach 15 min Spielen), ruhige Darstellung
+- Startseite: „Meine Insel“ als Haupttür, Lernfächer darunter (Deutsch, Mathe, Sachunterricht, Tablet-Profi), Anziehen im Haus
+- Insel: Lernmodus ohne Spielzeit, betretbares Zimmer mit Kleiderschrank, Spiegel, Bett
+
+**Offen in Phase 1:** Wiederholung nach 1/3/7 Tagen (Mathe zuerst), Wochenbericht für Eltern, Bewegungsaufgaben „weg vom Bildschirm“ am Ende einer Spielzeit.
+
+**Nächster Schritt:** Wiederholung nach 1/3/7 Tagen und Wochenbericht, danach Phase 2 (Lehrplan-Gerüst KMK + Sachsen).

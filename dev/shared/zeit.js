@@ -30,7 +30,7 @@
   const heute = () => { if (window.__heute) return window.__heute; const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
   function tag() {
     let d = S.lade("zeit");
-    if (!d || d.tag !== heute()) d = { tag: heute(), lernSek: 0, aufgaben: 0, spielSek: 0, extraMin: 0, gewarnt: 0 };
+    if (!d || d.tag !== heute()) d = { tag: heute(), lernSek: 0, aufgaben: 0, spielSek: 0, extraMin: 0, gewarnt: 0, seitPause: 0, seitWasser: 0, seitAugen: 0 };
     return d;
   }
   const speichere = (d) => S.speichere("zeit", d);
@@ -132,23 +132,61 @@
     const st = status(); if (st.frei || st.ruhe) return;
     const d = tag();
     if (ART === "lernen") {
-      if ((Date.now() - letzteEingabe) / 1000 <= AKTIV_FENSTER) { d.lernSek += TICK; speichere(d); pruefeFreischaltung(); Zeit._nachLernTick && Zeit._nachLernTick(d); }
+      if ((Date.now() - letzteEingabe) / 1000 <= AKTIV_FENSTER) { d.lernSek += TICK; speichere(d); pruefeFreischaltung(); window.__zeitLern(d); speichere(d); }
     } else if ((ART === "spielen" || ART === "insel") && st.spielen) {
       d.spielSek += TICK;
       const rest = Math.max(0, st.rest - TICK);
       if (rest <= 120 && rest > 0 && d.gewarnt !== st.bloecke + "/" + d.extraMin && C()) {
         d.gewarnt = st.bloecke + "/" + d.extraMin; C().hinweis("⏰ Noch 2 Minuten", "Dann macht die Insel eine Pause.", "#E8A33D");
       }
+      window.__zeitSpiel(d);
       speichere(d);
-      Zeit._nachSpielTick && Zeit._nachSpielTick(d);
       if (rest <= 0) { if (ART === "spielen") zeigeSperre(status()); document.dispatchEvent(new CustomEvent("zeit-aenderung")); }
     }
   }
 
+  // ---------- Fokus-Hilfen und Erinnerungen ----------
+  const UEBUNGEN = [
+    ["Hüpfe 10-mal wie ein Frosch!", "🐸"], ["Strecke dich ganz groß bis zur Decke!", "🙆"], ["Drehe dich 3-mal langsam im Kreis!", "🌀"],
+    ["Klatsche 10-mal in die Hände!", "👏"], ["Atme 3-mal tief ein und aus – wie ein Luftballon!", "🎈"], ["Stampfe 10-mal wie ein Elefant!", "🐘"],
+    ["Stell dich auf ein Bein und zähle bis 10!", "🦩"], ["Schüttle Arme und Beine aus!", "💃"]
+  ];
+  function bewegungspause() {
+    const [text, e] = UEBUNGEN[Math.floor(Math.random() * UEBUNGEN.length)];
+    const o = overlay(`<div style="font-size:4rem">${e}</div><h2 style="margin:6px 0">Bewegungspause mit Fipsi</h2>
+      <p style="font-size:1.4rem;line-height:1.4;font-weight:600">${text}</p>
+      <button id="pause-fertig" disabled style="font:inherit;font-weight:700;font-size:1.2rem;min-height:60px;padding:0 28px;border:0;border-radius:999px;background:#2E9C5A;color:#fff;opacity:.5">Noch <span id="pause-n">15</span> Sekunden</button>`);
+    if (window.Sprache && window.Sprache.sprich) window.Sprache.sprich(text, "de-DE");
+    let n = 15; const b = o.querySelector("#pause-fertig");
+    const t = setInterval(() => { n--; const el = o.querySelector("#pause-n"); if (el) el.textContent = n; if (n <= 0) { clearInterval(t); b.disabled = false; b.style.opacity = 1; b.textContent = "Geschafft! 💪"; } }, 1000);
+    b.addEventListener("click", () => { entferneOverlay(); if (S.ton) S.ton("juhu"); });
+  }
+  Zeit_hooks();
+  function Zeit_hooks() {
+    window.__zeitLern = (d) => {
+      const r = regeln();
+      d.seitPause = (d.seitPause || 0) + TICK; d.seitWasser = (d.seitWasser || 0) + TICK;
+      if (r.fokus && d.seitPause >= 300) { d.seitPause = 0; speichere(d); bewegungspause(); return; }
+      if (d.seitWasser >= 1200 && C()) { d.seitWasser = 0; speichere(d); C().hinweis("🦉 Ella sagt:", "Trink einen Schluck Wasser! Das hilft beim Denken.", "#1F8F8A"); }
+    };
+    window.__zeitSpiel = (d) => {
+      d.seitAugen = (d.seitAugen || 0) + TICK;
+      if (d.seitAugen >= 900 && C()) { d.seitAugen = 0; speichere(d); C().hinweis("🤖 Pixel sagt:", "Augenpause! Schau 20 Sekunden aus dem Fenster in die Ferne.", "#2F86C8"); }
+    };
+  }
+  // Ruhige Darstellung: keine Animationen und Übergänge
+  function ruhigAnwenden() {
+    if (!regeln().ruhig) return;
+    document.documentElement.classList.add("ruhig");
+    const st = document.createElement("style"); st.textContent = ".ruhig *, .ruhig *::before, .ruhig *::after { animation: none !important; transition: none !important; }";
+    document.head.appendChild(st);
+  }
+  ruhigAnwenden();
+
   const Zeit = {
     ART, regeln, setzeRegeln, empfehlung, status, aufgabe, inRuhe,
     extra(min) { const d = tag(); d.extraMin += min; speichere(d); },
-    heute: tag,
+    heute: tag, bewegungspause,
     leisteHtml: () => leiste(status())
   };
   window.Zeit = Zeit;

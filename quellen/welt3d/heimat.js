@@ -22,6 +22,7 @@ const NACHT = STUNDE >= 20 || STUNDE < 6.5, DAEMMER = !NACHT && (STUNDE >= 18 ||
 const GRAFIK_KEY = "lerninsel.grafik";
 const lies = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const EINFACH = lies(GRAFIK_KEY) === "einfach";
+const RUHIG = !!(window.Zeit && window.Zeit.regeln().ruhig); // ruhige Darstellung: Gras und Wasser bewegen sich nicht
 
 // ---------- Renderer, Szene, Licht ----------
 const renderer = new WebGLRenderer({ antialias: !EINFACH, powerPreference: "high-performance" });
@@ -623,12 +624,12 @@ function bild() {
   ballons.children.forEach(b => { if (b.userData.p !== undefined) b.position.y = 2.3 + (b.userData.p % 2) * 0.35 + Math.sin(t * 1.5 + b.userData.p) * 0.12; });
   for (let i = herzListe.length - 1; i >= 0; i--) { const h = herzListe[i]; h.userData.t += dt; h.position.y += dt * h.userData.v; h.material.opacity = 1 - h.userData.t; if (h.userData.t > 1) { scene.remove(h); herzListe.splice(i, 1); } }
 
-  if (!EINFACH) {
+  if (!EINFACH && !RUHIG) {
     const a = wasserGeo.attributes.position;
     for (let i = 0; i < a.count; i++) { const x = wasserBasis[i * 3], z = wasserBasis[i * 3 + 2]; a.setY(i, Math.sin(x * 0.35 + t * 1.4) * 0.1 + Math.cos(z * 0.3 + t * 1.1) * 0.1); }
     a.needsUpdate = true; wasserGeo.computeVertexNormals();
   }
-  if (halme) {
+  if (halme && !RUHIG) {
     for (let i = 0; i < halmDaten.length; i++) {
       const h = halmDaten[i]; if (!h.s) continue;
       halmO.position.set(h.x, 0.25, h.z); halmO.scale.setScalar(h.s); halmO.rotation.set(Math.sin(t * 1.8 + h.p + h.x * 0.3) * 0.18, 0, Math.cos(t * 1.5 + h.p) * 0.12);
