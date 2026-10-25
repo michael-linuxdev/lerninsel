@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Für Eltern</title>
+<meta name="theme-color" content="#F2F4F8">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #F2F4F8; background-image: none; -webkit-user-select: text; user-select: text; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) 16px 0; }
+  .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .seite { max-width: 960px; margin: 0 auto; padding: 16px 16px 40px; display: grid; gap: 16px; }
+  .karte { background: #fff; border-radius: 22px; padding: 20px; box-shadow: 0 4px 0 rgba(0,0,0,.06); }
+  .karte h2 { margin: 0 0 12px; font-size: 1.35rem; }
+  .karte p { margin: 0 0 10px; line-height: 1.45; }
+  .zahlen { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .zahl { background: #F6F3FB; border-radius: 16px; padding: 12px 14px; }
+  .zahl b { display: block; font-size: 1.6rem; }
+  .zahl span { font-size: .95rem; color: var(--pflaume-hell); }
+  table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid #ECE8F3; }
+  th { font-size: .9rem; color: var(--pflaume-hell); font-weight: 600; }
+  th.r { text-align: right; }
+  td.zahl-r { text-align: right; font-variant-numeric: tabular-nums; }
+  .quote { display: inline-block; min-width: 54px; text-align: center; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+  .gut { background: #DFF5EA; color: #1F6E52; } .mittel { background: #FFF3CF; color: #7A5A10; } .schwach { background: #FFE1DD; color: #A3322A; } .leer { background: #EEF0F5; color: #8C8FA3; }
+  .kalender { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .kalender div { text-align: center; padding: 8px 0; border-radius: 10px; background: #F6F3FB; font-size: .9rem; }
+  .kalender div.an { background: var(--beere); color: #fff; font-weight: 600; }
+  .kalender div.kopf { background: none; font-weight: 600; color: var(--pflaume-hell); }
+  .pin { max-width: 420px; margin: 40px auto; text-align: center; }
+  .pin input { font: inherit; font-size: 2rem; letter-spacing: .4em; text-align: center; width: 100%; padding: 12px; border-radius: 16px; border: 3px solid #D9D2EC; margin: 10px 0; }
+  .pin .knopf { width: 100%; min-height: 58px; margin-top: 8px; }
+  .fehler { color: #A3322A; font-weight: 600; min-height: 1.4em; }
+  .klein { font-size: .95rem; color: var(--pflaume-hell); }
+  .liste { margin: 0; padding-left: 1.2em; line-height: 1.6; }
+  .knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
+  .einricht { max-width: 620px; margin: 10px auto; width: 100%; }
+  .einricht label { display: grid; gap: 6px; font-weight: 600; margin-bottom: 14px; }
+  .einricht input, .einricht select { font: inherit; font-size: 1.2rem; padding: 12px 14px; border-radius: 14px; border: 3px solid #D9D2EC; background: #fff; width: 100%; }
+  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .zwei { grid-template-columns: 1fr; } }
+  .hinweis { background: #F0F7FF; border-radius: 14px; padding: 12px 14px; font-size: .98rem; }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../ich/" aria-label="Zurück">⬅️</a>
+  <h1>Für Eltern</h1>
+</div>
+<div class="seite" id="inhalt"></div>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../mathe/aufgaben.js"></script>
+<script src="../deutsch/geschichte.js"></script>
+<script src="../medien/lektionen.js"></script>
+<script src="../sachkunde/themen.js"></script>
+<script src="eltern.js"></script>
+</body>
+</html>

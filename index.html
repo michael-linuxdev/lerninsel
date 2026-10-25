@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Spielwelt</title>
+<meta name="theme-color" content="#E6EFFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Spielwelt">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="shared/style.css">
+<style>
+  .seite {
+    min-height: 100%;
+    padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 32px max(20px, env(safe-area-inset-left));
+    max-width: 1100px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 28px;
+  }
+  .leiste { display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+  .sterne { gap: .35em; }
+  .sterne b { font-size: 1.5rem; }
+
+  .hallo { text-align: center; margin-top: 4px; }
+  .hallo p { margin: 0; font-size: 1.6rem; font-weight: 500; color: var(--pflaume-hell); }
+  .name {
+    margin: 4px 0 0; line-height: 1;
+    font-size: clamp(3.4rem, 11vw, 7rem); font-weight: 700;
+    display: flex; justify-content: center; flex-wrap: wrap; gap: .04em;
+  }
+  .name span {
+    display: inline-block; color: #fff;
+    padding: 0 .08em;
+    -webkit-text-stroke: .045em var(--pflaume);
+    paint-order: stroke fill;
+    text-shadow: 0 .06em 0 var(--pflaume);
+  }
+  .name-aendern { font-size: 1rem; min-height: 44px; margin-top: 10px; box-shadow: none; background: transparent; text-decoration: underline; text-underline-offset: 4px; }
+
+  /* Der Schrank: Türen für jedes Spiel */
+  .schrank {
+    display: grid; gap: 18px;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-areas: "anziehen mathe deutsch" "anziehen sach medien" "anziehen welt3d welt3d";
+    background: var(--holz);
+    padding: 18px; border-radius: var(--rund-gross);
+    box-shadow: inset 0 0 0 6px #EBC48F, 0 10px 0 #D9A867;
+  }
+  .tuer {
+    position: relative; min-height: 190px;
+    border-radius: var(--rund);
+    padding: 20px; text-align: left;
+    display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
+    color: #fff;
+    box-shadow: inset 0 0 0 5px rgba(255,255,255,.35), 0 6px 0 rgba(0,0,0,.15);
+    overflow: hidden;
+    transition: transform .1s;
+  }
+  .tuer:active { transform: scale(.98); }
+  .tuer::after { /* Türknauf */
+    content: ""; position: absolute; top: 50%; right: 16px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--sonne); box-shadow: inset -3px -3px 0 rgba(0,0,0,.15);
+  }
+  .tuer h2 { margin: 0; font-size: 1.9rem; font-weight: 700; line-height: 1.05; }
+  .tuer p { margin: 0; font-size: 1.1rem; font-weight: 500; opacity: .92; max-width: 22ch; }
+  .tuer .bild { position: absolute; top: 16px; left: 18px; width: 92px; height: 92px; }
+  .tuer.anziehen { grid-area: anziehen; background: var(--beere); min-height: 400px; }
+  .tuer.anziehen .bild { width: 190px; height: 190px; }
+  .tuer.mathe { grid-area: mathe; background: var(--minze); }
+  .tuer.deutsch { grid-area: deutsch; background: var(--koralle); }
+  .tuer.welt3d { grid-area: welt3d; background: var(--pflaume-hell); }
+  .tuer.medien { grid-area: medien; background: #3AA0E0; }
+  .tuer.sach { grid-area: sach; background: #1F8F8A; }
+  .abzeichen { display: inline-flex; align-items: center; gap: .4em; margin-top: 10px; padding: 6px 16px; border-radius: 999px; background: #fff; font-weight: 600; font-size: 1.05rem; box-shadow: var(--schatten); }
+  .abzeichen[hidden] { display: none; }
+  .ich-reihe { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .ich-knopf { display: inline-flex; align-items: center; gap: 14px; margin-top: 14px; padding: 10px 22px 10px 10px; border-radius: 26px; background: #fff; color: var(--pflaume); text-decoration: none; box-shadow: var(--schatten); text-align: left; }
+  .ich-knopf:active { transform: translateY(3px); }
+  .ich-bild { width: 76px; height: 76px; border-radius: 20px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #FFE3F0, #FFD1A8); flex: none; }
+  .ich-bild svg { width: 100%; height: 100%; }
+  .ich-text { display: grid; gap: 2px; }
+  .ich-text b { font-size: 1.4rem; }
+  .ich-aufgaben { font-weight: 600; color: var(--beere); }
+  .tuer.zu { filter: saturate(.55); }
+  .tuer .schloss {
+    position: absolute; top: 14px; right: 14px;
+    background: rgba(255,255,255,.9); color: var(--pflaume);
+    font-size: 1rem; font-weight: 600;
+    padding: 6px 12px; border-radius: 999px;
+  }
+
+  @media (max-width: 760px) {
+    .schrank { grid-template-columns: 1fr 1fr; grid-template-areas: "anziehen anziehen" "mathe deutsch" "sach medien" "welt3d welt3d"; }
+    .tuer.anziehen { min-height: 300px; }
+    .tuer.anziehen .bild { width: 150px; height: 150px; }
+  }
+
+  /* Erster Start: Name eingeben */
+  .dialog {
+    position: fixed; inset: 0; z-index: 40;
+    background: rgba(75, 35, 128, .55);
+    display: grid; place-items: center; padding: 20px;
+  }
+  .dialog[hidden] { display: none; }
+  .karte {
+    background: var(--wolke); border-radius: var(--rund-gross);
+    padding: 30px; width: min(520px, 100%);
+    text-align: center; box-shadow: 0 12px 0 rgba(0,0,0,.15);
+  }
+  .karte h2 { margin: 0 0 18px; font-size: 2.2rem; }
+  .karte input {
+    width: 100%; font: inherit; font-size: 2rem; font-weight: 600;
+    text-align: center; color: var(--pflaume);
+    padding: 14px; border-radius: var(--rund);
+    border: 4px solid var(--pflaume-hell); background: var(--himmel);
+    -webkit-user-select: text; user-select: text;
+  }
+  .karte .knopf { margin-top: 20px; width: 100%; min-height: 64px; font-size: 1.5rem; }
+</style>
+</head>
+<body>
+<main class="seite">
+  <div class="leiste">
+    <button class="knopf" id="spielstand">💾 Spielstand</button>
+    <button class="knopf" id="ton" aria-pressed="true">🔊 Ton an</button>
+    <div class="knopf sterne" aria-live="polite">⭐ <b id="sterne">0</b> Sterne</div>
+  </div>
+
+  <header class="hallo">
+    <p>Hallo,</p>
+    <h1 class="name" id="name" aria-label=""></h1>
+    <div><span class="abzeichen" id="abzeichen" hidden>🪪 Tablet-Profi</span></div>
+    <div class="ich-reihe">
+    <a class="ich-knopf" href="spiele/ich/" id="ich-knopf">
+      <span class="ich-bild" id="ich-bild" aria-hidden="true"></span>
+      <span class="ich-text"><b>Mein Ich</b><span id="ich-titel"></span><span class="ich-aufgaben" id="ich-aufgaben"></span></span>
+    </a>
+    <a class="ich-knopf" href="spiele/tier/" id="tier-knopf">
+      <span class="ich-bild" id="tier-bild" aria-hidden="true"></span>
+      <span class="ich-text"><b id="tier-name">Mein Tier</b><span id="tier-zeile"></span></span>
+    </a>
+    </div>
+  </header>
+
+  <nav class="schrank" aria-label="Spiele">
+    <a class="tuer anziehen" href="spiele/anziehen/" style="text-decoration:none">
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M50 18c-6 0-9 5-9 9h6c0-3 1-4 3-4s4 2 4 4c0 4-4 5-4 10v3L10 66c-6 3-4 10 2 10h76c6 0 8-7 2-10L54 42c0-3 4-4 4-11 0-7-4-13-8-13z" fill="#fff"/>
+        <path d="M30 48l10 10 10-10 10 10 10-10" stroke="#FFC83D" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,6)"/>
+      </svg>
+      <h2>Anziehen</h2>
+      <p>Kleider, Frisuren und Glitzer aussuchen</p>
+    </a>
+    <a class="tuer mathe" href="spiele/mathe/" style="text-decoration:none">
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M30 50h40M50 30v40" stroke="#fff" stroke-width="12" stroke-linecap="round"/></svg>
+      <h2>Mathe</h2>
+      <p>Rechnen und Sterne sammeln</p>
+    </a>
+    <a class="tuer deutsch" href="spiele/deutsch/" style="text-decoration:none">
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M20 70 50 22l30 48z" fill="#fff"/><circle cx="72" cy="30" r="9" fill="#FFC83D"/></svg>
+      <h2>Abenteuer</h2>
+      <p>Mit Fipsi die Schatzkarte finden</p>
+    </a>
+    <a class="tuer sach" href="spiele/sachkunde/" style="text-decoration:none">
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34" fill="#fff"/><path d="M28 36c8 2 10 10 18 8s6-12 14-10 8 8 12 6M24 58c10-2 14 6 22 4s10 6 16 10" stroke="#1F8F8A" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="76" cy="22" r="9" fill="#FFC83D"/></svg>
+      <h2>Sachkunde</h2>
+      <p>Mit Eule Ella die Welt entdecken</p>
+    </a>
+    <a class="tuer medien" href="spiele/medien/" style="text-decoration:none">
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><rect x="26" y="14" width="48" height="72" rx="10" fill="#fff"/><rect x="33" y="24" width="34" height="46" rx="4" fill="#3AA0E0"/><path d="M40 47l7 7 14-14" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h2>Tablet-Profi</h2>
+      <p>Sicher am Tablet und im Internet</p>
+    </a>
+    <a class="tuer welt3d" id="tuer-3d" href="spiele/welt3d/" style="text-decoration:none">
+      <span class="schloss" id="schloss-3d" hidden>🪪 Mit Tablet-Führerschein</span>
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 14 84 32v36L50 86 16 68V32z" fill="#fff"/><path d="M16 32l34 18 34-18M50 50v36" stroke="#7B55B8" stroke-width="5" fill="none"/></svg>
+      <h2>3D-Welt</h2>
+      <p>Ballons platzen lassen und eine Insel entdecken</p>
+    </a>
+  </nav>
+</main>
+
+
+
+<script src="shared/config.js"></script>
+<script src="shared/core.js" data-root="./"></script>
+<script src="shared/charakter.js"></script>
+<script src="spiele/anziehen/teile.js"></script>
+<script src="spiele/anziehen/figur.js"></script>
+<script src="shared/tiere.js"></script>
+<script src="shared/tierpflege.js"></script>
+<script src="shared/vendor/qrcodegen.js"></script>
+<script src="shared/spielstand.js" data-root="./"></script>
+<script>
+  const S = Spielwelt;
+  // Ersteinrichtung immer durch einen Erwachsenen
+  if (!S.eingerichtet()) location.replace("spiele/eltern/?einrichtung=1");
+  const farben = ["#C2337A", "#FF6F61", "#FFC83D", "#5CCBA6", "#7B55B8", "#3AA0E0"];
+  const kippen = [-6, 4, -3, 6, -5, 3, -4, 5];
+
+  function zeigeName() {
+    const el = document.getElementById("name");
+    const n = S.profil.name || "Du";
+    el.setAttribute("aria-label", n);
+    el.innerHTML = "";
+    [...n].forEach((b, i) => {
+      const s = document.createElement("span");
+      s.textContent = b;
+      s.setAttribute("aria-hidden", "true");
+      s.style.color = farben[i % farben.length];
+      s.style.transform = `rotate(${kippen[i % kippen.length]}deg)`;
+      el.appendChild(s);
+    });
+    document.title = S.genitiv(n) + " Spielwelt";
+  }
+  function zeigeSterne() { document.getElementById("sterne").textContent = S.sterne(); }
+  function zeigeTon() {
+    const b = document.getElementById("ton");
+    b.textContent = S.tonAn() ? "🔊 Ton an" : "🔇 Ton aus";
+    b.setAttribute("aria-pressed", S.tonAn());
+  }
+
+  document.getElementById("spielstand").addEventListener("click", () => { S.ton("tipp"); Spielstand.oeffnen(); });
+  document.getElementById("ton").addEventListener("click", () => { S.setzeTon(!S.tonAn()); zeigeTon(); S.ton("tipp"); });
+  document.querySelectorAll("[data-bald]").forEach((b) =>
+    b.addEventListener("click", () => { S.ton("tipp"); S.meldung(b.dataset.bald + " wird gerade gebaut."); })
+  );
+
+  zeigeName(); zeigeSterne(); zeigeTon();
+  const medien = S.lade("medien");
+  // Mein Ich: Figur, Titel und Tagesaufgaben
+  const look = (S.lade("anziehen") || {}).aktuell || Figur.STANDARD();
+  document.getElementById("ich-bild").innerHTML = `<svg viewBox="60 40 180 180">${Figur.zeichneFigur(look)}</svg>`;
+  document.getElementById("ich-titel").textContent = Charakter.titel();
+  const offenAufgaben = Charakter.aufgaben().filter(a => !a.erledigt).length;
+  document.getElementById("ich-aufgaben").textContent = offenAufgaben ? `📅 Noch ${offenAufgaben} Tagesaufgabe${offenAufgaben === 1 ? "" : "n"}` : "✅ Alle Tagesaufgaben geschafft";
+  // Mein Tier
+  const tier = TierPflege.lade();
+  const tb = document.getElementById("tier-bild"), tz = document.getElementById("tier-zeile");
+  if (!tier.phase) { tb.innerHTML = `<svg viewBox="40 30 220 250">${Tiere.zeichneEi("kuschel")}</svg>`; tz.textContent = "🥚 Such dir ein Ei aus!"; }
+  else if (tier.phase === "ei") { tb.innerHTML = `<svg viewBox="40 30 220 250">${Tiere.zeichneEi(tier.ei)}</svg>`; tz.textContent = tier.waerme >= TierPflege.WAERME_ZIEL ? "✨ Gleich schlüpft es!" : `🔥 Wärme ${tier.waerme} von ${TierPflege.WAERME_ZIEL}`; }
+  else {
+    tb.innerHTML = `<svg viewBox="40 0 220 230">${Tiere.zeichneTier({ art: tier.art, farbe: tier.farbe, stufe: TierPflege.stufe(tier), ausdruck: TierPflege.ausdruck(tier), zubehoer: tier.traegt })}</svg>`;
+    document.getElementById("tier-name").textContent = tier.name || "Mein Tier";
+    tz.textContent = tier.satt < 25 ? "😋 hat Hunger" : tier.freude < 20 ? "🥺 möchte spielen" : `🍪 ${tier.leckerli} Leckerli`;
+  }
+  const profi = !!(medien && medien.fuehrerschein);
+  document.getElementById("abzeichen").hidden = !profi;
+  document.getElementById("schloss-3d").hidden = S.offen(profi);
+  document.getElementById("tuer-3d").classList.toggle("zu", !S.offen(profi));
+
+</script>
+</body>
+</html>

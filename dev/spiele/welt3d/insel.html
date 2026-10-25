@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Insel-Abenteuer</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<link rel="stylesheet" href="welt3d.css">
+</head>
+<body>
+<div id="buehne"></div>
+<div class="hud">
+  <a class="knopf rund" href="./" aria-label="Zur 3D-Welt">⬅️</a>
+  <div class="knopf anzeige" aria-live="polite">⭐ <span id="zaehler">0 / 10</span></div>
+</div>
+<div id="stick"><div id="knauf"></div></div>
+<div class="hinweis-links">👆 Hier schieben zum Laufen</div>
+<button id="springen" aria-label="Springen"><span>⬆️</span>Springen</button>
+<div id="overlay" hidden></div>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script type="module" src="insel.js"></script>
+</body>
+</html>
