@@ -19,9 +19,9 @@ Neu: Matheweg-Stationen „Formen und Körper“, „Strichlisten und Diagramme�
 5. Hinweis: Einmaleins mit 3, 4 und 6–9 ordnet der Lehrplan 2025 eher Klasse 3 zu – Matheweg-Stationen so lassen, aber für Klasse 3 kennzeichnen.
 
 ### Deutsch
-1. **Sprache untersuchen:** Verben und Adjektive (Wort des Tages erweitern), Wortfamilien, zusammengesetzte Nomen.
-2. **Richtig schreiben:** Umlaute, Auslautverhärtung (Verlängern: Hund – Hunde), Großschreibung im Satz, Satzzeichen.
-3. **Schriftspracherwerb:** Silben klatschen, Laute hören (Anlaut, Inlaut, Endlaut), Buchstaben nachspuren.
+1. ~~Sprache untersuchen: Verben und Adjektive~~ (erledigt: Wörter-Werkstatt); offen: Wortfamilien, zusammengesetzte Nomen.
+2. **Richtig schreiben:** ~~Auslautverhärtung (Verlängern)~~ erledigt; offen: Umlaute, Großschreibung im Satz, Satzzeichen.
+3. **Schriftspracherwerb:** ~~Silben klatschen~~ erledigt; offen: Laute hören (Anlaut, Inlaut, Endlaut), Buchstaben nachspuren.
 4. **Lesen:** kurze Lesetexte mit Verständnisfragen (auch Märchen), Lesemotivation.
 5. **Schreiben:** kurze Sätze tippen, Glückwunsch- und Einladungskarte gestalten.
 6. **Sprechen:** sich selbst aufnehmen und anhören (Gedicht vortragen).

@@ -35,6 +35,12 @@
   .ort.zu .emoji { filter: grayscale(1); opacity: .45; }
   .ort.jetzt { box-shadow: 0 0 0 5px var(--koralle), 0 7px 0 rgba(194,74,60,.25); }
   @media (max-width: 760px) { .orte { grid-template-columns: repeat(3, 1fr); } }
+  .werk-titel { text-align: center; margin: 26px 0 4px; font-size: 1.8rem; }
+  .werk-text { text-align: center; margin: 0 16px; font-size: 1.1rem; }
+  .orte.werkstatt { padding-bottom: 40px; }
+  .klatsch { min-height: 60px; font-size: 1.5rem; padding: 0 26px; margin-bottom: 8px; }
+  .silbe { background: #FFE08A; border-radius: 10px; padding: 0 6px; }
+  .trenn { color: var(--pflaume-hell); margin: 0 4px; }
 
   .schatz { max-width: 760px; margin: 14px auto 0; padding: 0 16px; text-align: center; }
   .schatz h2 { margin: 0 0 10px; font-size: 1.5rem; }
@@ -91,6 +97,8 @@
   .artikel-wort .luecke { display: inline-block; min-width: 2.6em; border-bottom: 6px solid var(--pflaume-hell); margin-right: .25em; }
   .optionen.artikel { grid-template-columns: repeat(3, 1fr); max-width: 560px; }
   .optionen.artikel .option { font-size: 2.2rem; color: #fff; min-height: 96px; }
+  .optionen.artikel.klar .option { color: var(--pflaume); background: #fff; box-shadow: inset 0 0 0 4px var(--akzent), 0 6px 0 rgba(0,0,0,.1); }
+  .optionen.artikel.klar .option.richtig { background: #CFF3E4; }
   .option[data-wert="der"] { background: #3A7BD5; }
   .option[data-wert="die"] { background: #E0457B; }
   .option[data-wert="das"] { background: #2FA66B; }
@@ -155,6 +163,9 @@
   <div class="fipsi-start"><span id="fipsi-klein"></span><p id="karte-text"></p></div>
   <div class="orte" id="orte"></div>
   <div class="schatz"><h2 id="schatz-titel">Die Schatzkarte</h2><div id="schatz"></div></div>
+  <h2 class="werk-titel">🛠️ Fipsis Wörter-Werkstatt</h2>
+  <p class="werk-text">Hier übst du Tunwörter, Wiewörter, Silben und schwierige Buchstaben – so oft du willst.</p>
+  <div class="orte werkstatt" id="werkstatt"></div>
 </section>
 
 <section class="ansicht" id="kapitel-ansicht" hidden>
@@ -206,6 +217,7 @@
 <script src="../../shared/zeit.js" data-art="lernen"></script>
 <script src="../../shared/sprache.js"></script>
 <script src="geschichte.js"></script>
+<script src="werkstatt.js"></script>
 <script src="abenteuer.js"></script>
 </body>
 </html>

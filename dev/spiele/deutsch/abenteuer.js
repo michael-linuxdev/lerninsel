@@ -1,5 +1,5 @@
 (function () {
-  const S = window.Spielwelt, SP = window.Sprache, G = window.GESCHICHTE;
+  const S = window.Spielwelt, SP = window.Sprache, G = window.GESCHICHTE, W = window.WERKSTATT || [];
   const $ = (id) => document.getElementById(id);
   const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
   const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -90,6 +90,17 @@
       });
       $("orte").appendChild(b);
     });
+    const wk = $("werkstatt");
+    if (wk) {
+      wk.innerHTML = "";
+      W.forEach((k, i) => {
+        const best = bestes(k.id), b = document.createElement("button");
+        b.className = "ort"; b.setAttribute("aria-label", k.name);
+        b.innerHTML = `<span class="emoji">${k.ort}</span><span>${k.name}</span><span class="stern-reihe">${best ? [1, 2, 3].map(n => `<span class="${n <= best ? "" : "leer"}">⭐</span>`).join("") : ""}</span>`;
+        b.addEventListener("click", () => { S.ton("tipp"); starte(i, W); });
+        wk.appendChild(b);
+      });
+    }
     $("schatz-titel").textContent = anzahl === 5 ? "Die Schatzkarte ist komplett!" : `Die Schatzkarte: ${anzahl} von 5 Teilen`;
     $("schatz").innerHTML = schatzkarte(gefunden);
   }
@@ -97,9 +108,9 @@
   // ---------- Kapitel ----------
   let lauf = null;
 
-  function starte(i) {
-    const k = G[i];
-    lauf = { i, k, pos: 0, fehler: 0, stufe: 0 };
+  function starte(i, liste = G) {
+    const k = liste[i];
+    lauf = { i, k, liste, werk: liste !== G, pos: 0, fehler: 0, stufe: 0 };
     document.body.style.setProperty("--grund", k.grund);
     document.body.style.setProperty("--akzent", k.farbe);
     $("kapitel-name").textContent = k.name;
@@ -174,6 +185,50 @@
             if (s.typ === "wort") return s.frage.endsWith("…") ? s.frage.replace("…", o.t) : o.t;
             $("blase").querySelector(".luecke").textContent = s.optionen[0];
             return s.satz.replace("___", s.optionen[0]);
+          });
+        }));
+        break;
+      }
+      case "wortart": {
+        const ARTEN = [["nomen", "Namenwort", "Nomen"], ["verb", "Tunwort", "Verb"], ["adjektiv", "Wiewort", "Adjektiv"]];
+        blase("Was für ein Wort ist das?", `Was für ein Wort ist das? ${s.wort}`, S.ht(s) ? `${S.ht(s)} — ?` : "");
+        A.innerHTML = (s.e ? `<div class="gross-emoji" aria-hidden="true">${s.e}</div>` : "") + `<div class="artikel-wort">${s.wort}</div>` +
+          `<div class="optionen texte">` + ARTEN.map(([id, a, b]) => `<button class="option" data-wert="${id}">${a}<br><small>(${b})</small></button>`).join("") + `</div>` + hinweis;
+        A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
+          antwort(b, b.dataset.wert === s.richtig, () => {
+            const a = ARTEN.find(x => x[0] === s.richtig);
+            return `${s.wort} ist ein ${a[1]}.`;
+          });
+        }));
+        break;
+      }
+      case "verlaengern": {
+        const anzeige = s.wort.replace("_", `<span class="luecke" id="vl-luecke">&nbsp;</span>`);
+        blase(`${s.richtig} oder ${s.falsch}? Verlängere das Wort!`, `${s.richtig} oder ${s.falsch}? Verlängere das Wort!`, S.ht(s));
+        const opts = mische([s.richtig, s.falsch]);
+        A.innerHTML = `<div class="gross-emoji" aria-hidden="true">${s.e}</div><div class="artikel-wort">${anzeige}</div>` +
+          `<div class="optionen artikel klar">` + opts.map(o => `<button class="option" data-wert="${o}">${o}</button>`).join("") + `</div>` + hinweis;
+        A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
+          antwort(b, b.dataset.wert === s.richtig, () => {
+            $("vl-luecke").textContent = s.richtig;
+            const ganz = s.wort.replace("_", s.richtig);
+            $("hinweis").insertAdjacentHTML("afterend", `<p class="hinweis gut" style="margin-top:4px">${ganz} – ${s.lang}</p>`);
+            return `${ganz}, ${s.lang}`;
+          });
+        }));
+        break;
+      }
+      case "silben": {
+        blase("Wie viele Silben hat das Wort? Klatsch mit!", `Wie viele Silben hat das Wort? ${s.wort}`, S.ht(s));
+        A.innerHTML = `<div class="gross-emoji" aria-hidden="true">${s.e}</div><div class="artikel-wort" id="silben-wort">${s.wort}</div>` +
+          `<button class="knopf klatsch" id="klatsch" aria-label="Klatschen">👏 <span id="klatsch-n">0</span></button>` +
+          `<div class="optionen artikel klar">` + [1, 2, 3, 4, 5].map(n => `<button class="option" data-wert="${n}">${n}</button>`).join("") + `</div>` + hinweis;
+        let n = 0; $("klatsch").addEventListener("click", () => { n++; $("klatsch-n").textContent = n; S.ton("tipp"); });
+        if (SP.verfuegbar() && daten().vorlesen) setTimeout(() => SP.sprich(s.wort), 600);
+        A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
+          antwort(b, +b.dataset.wert === s.teile.length, () => {
+            $("silben-wort").innerHTML = s.teile.map(t => `<span class="silbe">${t}</span>`).join("<span class='trenn'>–</span>");
+            return s.teile.join(" – ");
           });
         }));
         break;
@@ -290,17 +345,17 @@
     const d = daten(); d.kapitel[k.id] = Math.max(vorher, sterne); S.speichere("deutsch", d);
     if (gewinn) S.gibSterne(gewinn);
     if (window.Charakter) { Charakter.gib("deutsch", 5); Charakter.ereignis("deutsch-kapitel"); }
-    const alle = G.every(x => bestes(x.id) > 0);
+    const alle = G.every(x => bestes(x.id) > 0), L = lauf.liste, werk = lauf.werk;
 
-    $("ende-titel").textContent = alle && i === G.length - 1 ? "Schatzkarte komplett!" : `Kartenteil ${i + 1} gefunden!`;
-    $("ende-teil").innerHTML = kartenteil(i);
+    $("ende-titel").textContent = werk ? `${k.name}: geschafft!` : alle && i === G.length - 1 ? "Schatzkarte komplett!" : `Kartenteil ${i + 1} gefunden!`;
+    $("ende-teil").innerHTML = werk ? `<div class="gross-emoji">${k.ort}</div>` : kartenteil(i);
     $("ende-sterne").innerHTML = [1, 2, 3].map(n => `<span class="${n <= sterne ? "" : "leer"}" style="animation-delay:${300 + n * 180}ms">⭐</span>`).join("");
     $("ende-text").textContent = fehler === 0 ? "Alles beim ersten Mal richtig!" : fehler === 1 ? "Nur ein kleiner Fehler. Super!" : `Geschafft! ${fehler} Aufgaben brauchten einen zweiten Versuch.`;
     $("ende-gewinn").textContent = gewinn ? `+${gewinn} ${gewinn === 1 ? "Stern" : "Sterne"} für den Kleiderschrank. Du hast jetzt ${S.sterne()}.` : `Du hast ${S.sterne()} Sterne.`;
     const kn = $("ende-knoepfe"); kn.innerHTML = "";
     const knopf = (t, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = t; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
-    if (i + 1 < G.length) knopf(`Weiter: ${G[i + 1].name}`, true, () => starte(i + 1));
-    knopf("Zur Schatzkarte", i + 1 >= G.length, () => { zeige("karte"); zeichneKarte(); });
+    if (i + 1 < L.length) knopf(`Weiter: ${L[i + 1].name}`, true, () => starte(i + 1, L));
+    knopf(werk ? "Zur Werkstatt" : "Zur Schatzkarte", i + 1 >= L.length, () => { zeige("karte"); zeichneKarte(); if (werk) setTimeout(() => { const w = $("werkstatt"); if (w) w.scrollIntoView({ behavior: "smooth" }); }, 50); });
     zeige("ende"); S.ton("juhu");
   }
 
