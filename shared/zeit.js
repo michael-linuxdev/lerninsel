@@ -113,7 +113,7 @@
     overlay(`<div style="font-size:4rem">🌱</div><h2 style="margin:6px 0">Erst lernen, dann spielen</h2>
       <p style="font-size:1.2rem;line-height:1.4">Noch ${st.fehltMin} Minuten lernen oder ${st.fehltAufgaben} Aufgaben richtig lösen, dann darfst du ${st.regeln.spielMin} Minuten spielen.</p>
       ${leiste(st)}
-      <div>${knopf("spiele/mathe/", "🧮 Mathe", true)}${knopf("spiele/deutsch/", "🦊 Deutsch", true)}${knopf("spiele/sachkunde/", "🦉 Sachkunde", true)}${knopf("spiele/medien/", "🤖 Tablet", true)}</div>
+      <div>${knopf("spiele/mathe/", "🧮 Mathe", true)}${knopf("spiele/deutsch/", "🦊 Deutsch", true)}${knopf("spiele/sachkunde/", "🦉 Sachunterricht", true)}${knopf("spiele/medien/", "🤖 Tablet", true)}</div>
       ${knopf("", "🏠 Zur Startseite", false)}`);
   }
   function entferneOverlay() { const o = document.getElementById("zeit-overlay"); if (o) o.remove(); }

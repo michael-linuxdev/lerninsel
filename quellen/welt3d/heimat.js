@@ -69,6 +69,16 @@ function augen(eltern, abstand, y, z, r = 0.075) {
 const hindernisse = []; // { x, z, r }
 const tippbar = [];     // Object3D mit userData.tipp()
 const block = (x, z, r) => hindernisse.push({ x, z, r });
+// Zeitsystem: ohne Spielzeit ist die Insel im Lernmodus (Lern-Nachbarn gehen, Spielorte schlafen)
+const Z = window.Zeit;
+const spielZeit = () => !Z || Z.status().spielen;
+const profi = () => S.offen((S.lade("medien") || {}).fuehrerschein);
+function spielOrt(fn) {
+  if (spielZeit()) { fn(); return; }
+  const st = Z.status();
+  sprechblase("💤", "Schläft noch", st.genug ? "Für heute ist genug gespielt. Morgen geht es weiter!" : `Erst lernen, dann spielen! Noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Ella, Fipsi, Pixel und der Matheweg helfen dir.`,
+    S.paar(["", "Сначала учиться, потом играть! Элла, Фипси, Пиксель и математическая тропа помогут тебе."])[1], null);
+}
 function antippbar(obj, fn) { obj.userData.tipp = fn; tippbar.push(obj); }
 
 // ---------- Insel und Wasser ----------
@@ -138,7 +148,7 @@ const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" :
   [0.95, -0.95].forEach(x => h.add(setze(teil(new BoxGeometry(0.7, 0.7, 0.1), fensterMat, { dicke: 1.1 }), x, 1.5, 1.7)));
   h.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.9, 16), "#B9584A"), 0.9, 3.5, -0.5));
   h.position.set(-5, 0.25, -4.5); h.rotation.y = 0.35; scene.add(h); block(-5, -4.5, 2.3);
-  antippbar(h, () => sprechblase("🏠", "Dein Zuhause", "Bald kannst du hier hinein und dein Zimmer einrichten.", S.paar(["", "Скоро ты сможешь зайти сюда и обставить свою комнату."])[1], null));
+  antippbar(h, () => spielOrt(() => reingehen()));
 }
 
 // ---------- Wolken, Sterne, Schnee ----------
@@ -367,12 +377,79 @@ const ballons = new Group(); ballons.position.set(10, 0.25, 6); scene.add(ballon
   b.position.set(Math.cos(a) * 0.45, 2.3 + (i % 2) * 0.35, Math.sin(a) * 0.45); b.userData.p = i; ballons.add(b);
 });
 ballons.add(setze(teil(new CylinderGeometry(0.12, 0.16, 0.5, 12), "#9A6A3F"), 0, 0.25, 0));
-antippbar(ballons, () => sprechblase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", S.paar(["", "Лопни как можно больше шариков!"])[1], "ballons.html"));
+const fuehrerscheinFehlt = () => sprechblase("🪪", "Noch gesperrt", "Mach zuerst den Tablet-Führerschein bei Robo Pixel. Dann darfst du hier spielen!", S.paar(["", "Сначала получи права на планшет у Робо Пикселя."])[1], "../medien/");
+antippbar(ballons, () => spielOrt(() => profi() ? sprechblase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", S.paar(["", "Лопни как можно больше шариков!"])[1], "ballons.html") : fuehrerscheinFehlt()));
 const truhe = new Group(); truhe.position.set(-1, 0.05, 13.6); scene.add(truhe);
 truhe.add(setze(teil(new BoxGeometry(0.9, 0.5, 0.6), "#B9732E"), 0, 0.25, 0));
 const deckel = teil(new CylinderGeometry(0.3, 0.3, 0.9, 16, 1, false, 0, Math.PI), "#C98A3E"); deckel.rotation.z = Math.PI / 2; setze(deckel, 0, 0.5, 0); truhe.add(deckel);
 truhe.add(setze(teil(new BoxGeometry(0.16, 0.2, 0.05), "#FFC83D", { dicke: 1.1 }), 0, 0.45, 0.32));
-antippbar(truhe, () => sprechblase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", S.paar(["", "На острове сокровищ ждёт сундук. Найдёшь его?"])[1], "insel.html"));
+antippbar(truhe, () => spielOrt(() => profi() ? sprechblase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", S.paar(["", "На острове сокровищ ждёт сундук. Найдёшь его?"])[1], "insel.html") : fuehrerscheinFehlt()));
+
+// ---------- Zimmer im Haus (eigener Bereich weit weg von der Insel) ----------
+const ZX = 60; // Mitte des Zimmers
+let drinnen = false;
+const zimmer = new Group(); zimmer.position.set(ZX, 0, 0); scene.add(zimmer);
+{
+  const boden = new Mesh(new BoxGeometry(8.4, 0.3, 7.4), mat("#E2B47E")); boden.position.y = 0.1; boden.receiveShadow = true; zimmer.add(boden);
+  for (let i = -3; i <= 3; i++) zimmer.add(setze(new Mesh(new BoxGeometry(0.04, 0.02, 7.4), mat("#C9955E")), i * 1.2, 0.26, 0));
+  const wand = (b, h, t, x, z, f) => { const w = new Mesh(new BoxGeometry(b, h, t), mat(f)); w.position.set(x, h / 2 + 0.25, z); w.receiveShadow = true; zimmer.add(w); return w; };
+  wand(8.4, 3.2, 0.25, 0, -3.7, "#FFD9E6"); wand(0.25, 3.2, 7.4, -4.2, 0, "#FFE9C2"); wand(0.25, 3.2, 7.4, 4.2, 0, "#FFE9C2");
+  zimmer.add(setze(teil(new BoxGeometry(1.8, 1.2, 0.08), fensterMat, { dicke: 1.04 }), 0, 2.1, -3.55));
+  zimmer.add(setze(new Mesh(new BoxGeometry(0.08, 1.2, 0.1), mat("#FFFFFF")), 0, 2.1, -3.5));
+  const teppich = new Mesh(new CylinderGeometry(1.6, 1.6, 0.04, 40), mat("#B7A4F2")); teppich.position.set(0, 0.27, 0.6); teppich.receiveShadow = true; zimmer.add(teppich);
+  // Bett
+  const bett = new Group(); bett.position.set(-2.9, 0.25, -2.2); zimmer.add(bett);
+  bett.add(setze(teil(new BoxGeometry(1.8, 0.5, 2.6), "#9A6A3F", { dicke: 1.03 }), 0, 0.25, 0));
+  bett.add(setze(teil(new BoxGeometry(1.7, 0.2, 1.8), "#7FC6F5", { dicke: 1.03 }), 0, 0.6, 0.35));
+  const kissen = teil(kugel(0.4), "#FFFFFF"); kissen.scale.set(1.6, 0.5, 0.9); bett.add(setze(kissen, 0, 0.65, -0.85));
+  block(ZX - 2.9, -2.2, 1.4);
+  antippbar(bett, () => sprechblase("🛏️", "Dein Bett", tier ? `Hier kuschelt ${tierDaten.name || "dein Tier"}, wenn es müde ist.` : "Ein gemütliches Bett. Bald kannst du dein Zimmer einrichten.", S.paar(["", "Уютная кровать."])[1], null));
+  // Kleiderschrank
+  const schrank = new Group(); schrank.position.set(2.8, 0.25, -3.0); zimmer.add(schrank);
+  schrank.add(setze(teil(new BoxGeometry(2.0, 2.6, 0.9), "#C2337A", { dicke: 1.03 }), 0, 1.3, 0));
+  [-0.48, 0.48].forEach(x => { schrank.add(setze(teil(new BoxGeometry(0.9, 2.3, 0.06), "#E0579A", { dicke: 1.02 }), x, 1.3, 0.47)); schrank.add(setze(teil(kugel(0.07), "#FFC83D", { dicke: 1.15 }), x * 0.25, 1.35, 0.53)); });
+  schrank.add(setze(teil(new BoxGeometry(0.5, 0.3, 0.05), "#FFFFFF", { dicke: 1.08 }), 0, 2.35, 0.52));
+  block(ZX + 2.8, -3.0, 1.2);
+  antippbar(schrank, () => sprechblase("👗", "Dein Kleiderschrank", "Such dir etwas Schönes zum Anziehen aus. Auf der Insel trägst du es dann!", S.paar(["", "Выбери что-нибудь красивое из одежды!"])[1], "../anziehen/?von=insel"));
+  // Spiegel
+  const spiegel = new Group(); spiegel.position.set(-4.05, 1.7, 1.0); spiegel.rotation.y = Math.PI / 2; zimmer.add(spiegel);
+  const rahmen = teil(new TorusGeometry(0.55, 0.08, 10, 30), "#FFC83D"); rahmen.scale.y = 1.4; spiegel.add(rahmen);
+  const glas = new Mesh(new CircleGeometry(0.52, 30), new MeshBasicMaterial({ color: "#CFEFFF" })); glas.scale.y = 1.4; glas.position.z = 0.02; spiegel.add(glas);
+  antippbar(spiegel, () => sprechblase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, Aufgaben und Abzeichen.", S.paar(["", "Посмотри, как ты выросла!"])[1], "../ich/"));
+  // Pflanze und Lampe
+  const topf = new Group(); topf.position.set(3.4, 0.25, 2.4); zimmer.add(topf);
+  topf.add(setze(teil(new CylinderGeometry(0.3, 0.22, 0.45, 16), "#E2604F"), 0, 0.22, 0));
+  [[0, 0.75, 0, 0.35], [0.2, 0.95, 0.1, 0.25], [-0.18, 0.9, -0.05, 0.25]].forEach(([x, y, z, r]) => topf.add(setze(teil(kugel(r), "#5DBB5A"), x, y, z)));
+  block(ZX + 3.4, 2.4, 0.5);
+}
+let draussenPos = new Vector3();
+function reingehen() {
+  drinnen = true; $("raus").hidden = false; $("blase").hidden = true;
+  draussenPos.copy(ich.position);
+  ich.position.set(ZX, 0.25, 2.2); ich.rotation.y = Math.PI;
+  if (tier) tier.position.set(ZX + 1.2, 0.25, 2.6);
+  scene.background = new Color("#F7E3C6"); scene.fog.color.set("#F7E3C6"); wasser.visible = false; wolken.forEach(w => w.visible = false);
+  $("info").textContent = "Dein Zimmer. Tippe auf den Kleiderschrank oder den Spiegel!";
+  S.ton("tipp");
+}
+function rausgehen() {
+  drinnen = false; $("raus").hidden = true;
+  ich.position.set(-4.1, 0.25, -2.0); ich.rotation.y = 0;
+  if (tier) tier.position.set(-3.0, 0.25, -1.6);
+  scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true);
+  $("info").textContent = spielZeit() ? `Hallo ${name}!` : "🌱 Erst lernen: Geh zu Ella, Fipsi, Pixel oder zum Matheweg.";
+  S.ton("tipp");
+}
+$("raus").addEventListener("click", rausgehen);
+
+// Lernmodus anzeigen und bei Änderung der Spielzeit aktualisieren
+function zeigeLernmodus() {
+  const an = !spielZeit(); $("lern-hinweis").hidden = !an;
+  if (an && Z) { const st = Z.status(); $("lern-hinweis").textContent = st.genug ? "😴 Für heute genug gespielt – Lernen geht noch!" : `🌱 Erst lernen: noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Geh zu Ella, Fipsi, Pixel oder zum Matheweg!`; }
+  if (an && drinnen) rausgehen();
+}
+document.addEventListener("zeit-aenderung", zeigeLernmodus);
+setInterval(zeigeLernmodus, 10000);
 
 // ---------- Sprechblase ----------
 let blaseZiel = null;
@@ -492,6 +569,7 @@ const uhr = new Clock(), blick = new Vector3(), tmp = new Vector3(), halmO = new
 let lauf = 0;
 function wegVonHindernissen(p, r) {
   for (const h of hindernisse) { const dx = p.x - h.x, dz = p.z - h.z, d = Math.hypot(dx, dz), m = h.r + r; if (d < m && d > 0.001) { p.x = h.x + dx / d * m; p.z = h.z + dz / d * m; } }
+  if (drinnen) { p.x = MathUtils.clamp(p.x, ZX - 3.7, ZX + 3.7); p.z = MathUtils.clamp(p.z, -3.1, 3.3); if (p.z >= 3.25 && ich.position === p) rausgehen(); return; }
   const l = Math.hypot(p.x, p.z); if (l > 14.6) { p.x *= 14.6 / l; p.z *= 14.6 / l; }
 }
 function bild() {
@@ -562,12 +640,15 @@ function bild() {
   wolken.forEach((w, i) => { w.position.x += dt * (0.4 + i * 0.1); if (w.position.x > 40) w.position.x = -40; });
 
   blick.copy(ich.position).add(tmp.set(0, 1, 0));
-  const gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : 0.72;
-  camera.position.set(blick.x + Math.sin(gw) * Math.cos(nw) * abstand, blick.y + Math.sin(nw) * abstand, blick.z + Math.cos(gw) * Math.cos(nw) * abstand);
+  const gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.85 : 0.72, ab = drinnen && !freiKamera ? 10 : abstand;
+  if (drinnen) blick.set(MathUtils.clamp(blick.x, ZX - 1.5, ZX + 1.5), blick.y, MathUtils.clamp(blick.z, -1.5, 1.2));
+  camera.position.set(blick.x + Math.sin(gw) * Math.cos(nw) * ab, blick.y + Math.sin(nw) * ab, blick.z + Math.cos(gw) * Math.cos(nw) * ab);
   camera.lookAt(blick);
   sonne.position.set(ich.position.x + 10, 18, ich.position.z + 8); sonne.target.position.copy(ich.position);
   renderer.render(scene, camera);
   requestAnimationFrame(bild);
 }
 requestAnimationFrame(bild);
-window.__heimat = { ich, tier, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), SAISON, NACHT };
+zeigeLernmodus();
+if (q.get("drinnen") === "1" && spielZeit()) reingehen();
+window.__heimat = { ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), SAISON, NACHT };

@@ -10,7 +10,7 @@
     { id: "deutsch", name: "Wort-Zauber", icon: "🪄", farbe: "#E0574A", woher: "Abenteuer und Wort des Tages" },
     { id: "tablet", name: "Tablet-Klugheit", icon: "📱", farbe: "#2F86C8", woher: "Tablet-Führerschein" },
     { id: "entdecker", name: "Entdecker-Mut", icon: "🧭", farbe: "#D08A1E", woher: "3D-Welt" },
-    { id: "sachkunde", name: "Welt-Wissen", icon: "🌍", farbe: "#1F8F8A", woher: "Sachkunde mit Eule Ella" }
+    { id: "sachkunde", name: "Welt-Wissen", icon: "🌍", farbe: "#1F8F8A", woher: "Sachunterricht mit Eule Ella" }
   ];
   // Erfahrung, die für Stufe 1…10 nötig ist
   const STUFEN_XP = [0, 10, 25, 45, 70, 100, 140, 190, 250, 320];
@@ -132,7 +132,7 @@
     { id: "foto", emoji: "📸", titel: "Neuer Look", text: "Zieh deiner Figur etwas an und mach ein Foto.", ereignis: "anziehen-foto", skill: "tablet", link: "../anziehen/" },
     { id: "kapitel", emoji: "🦊", titel: "Abenteuer", text: "Spiele ein Kapitel mit Fipsi (auch eins von früher).", ereignis: "deutsch-kapitel", skill: "deutsch", link: "../deutsch/" },
     { id: "lektion", emoji: "🪪", titel: "Tablet-Profi", text: "Mach eine Lektion im Tablet-Führerschein.", ereignis: "tablet-lektion", skill: "tablet", link: "../medien/" },
-    { id: "thema", emoji: "🦉", titel: "Sachkunde", text: "Entdecke mit Eule Ella ein Thema (auch eins von früher).", ereignis: "sachkunde-thema", skill: "sachkunde", link: "../sachkunde/" },
+    { id: "thema", emoji: "🦉", titel: "Sachunterricht", text: "Entdecke mit Eule Ella ein Thema (auch eins von früher).", ereignis: "sachkunde-thema", skill: "sachkunde", link: "../sachkunde/" },
     { id: "station", emoji: "🗺️", titel: "Matheweg", text: "Spiele eine Station auf dem Matheweg.", ereignis: "mathe-runde", skill: "mathe", link: "../mathe/" }
   ];
   function aufgaben() {

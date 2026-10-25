@@ -42,8 +42,8 @@
   /* Der Schrank: Türen für jedes Spiel */
   .schrank {
     display: grid; gap: 18px;
-    grid-template-columns: 1.4fr 1fr 1fr;
-    grid-template-areas: "anziehen mathe deutsch" "anziehen sach medien" "anziehen welt3d welt3d";
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "insel insel" "mathe deutsch" "sach medien";
     background: var(--holz);
     padding: 18px; border-radius: var(--rund-gross);
     box-shadow: inset 0 0 0 6px #EBC48F, 0 10px 0 #D9A867;
@@ -67,8 +67,9 @@
   .tuer h2 { margin: 0; font-size: 1.9rem; font-weight: 700; line-height: 1.05; }
   .tuer p { margin: 0; font-size: 1.1rem; font-weight: 500; opacity: .92; max-width: 22ch; }
   .tuer .bild { position: absolute; top: 16px; left: 18px; width: 92px; height: 92px; }
-  .tuer.anziehen { grid-area: anziehen; background: var(--beere); min-height: 400px; }
-  .tuer.anziehen .bild { width: 190px; height: 190px; }
+  .tuer.insel { grid-area: insel; background: linear-gradient(160deg, #8FD66B, #2E9C5A); min-height: 280px; }
+  .tuer.insel .bild { top: 10px; left: auto; right: 24px; width: 260px; height: 210px; }
+  .tuer.insel h2 { font-size: 2.6rem; }
   .tuer.mathe { grid-area: mathe; background: var(--minze); }
   .tuer.deutsch { grid-area: deutsch; background: var(--koralle); }
   .tuer.welt3d { grid-area: welt3d; background: var(--pflaume-hell); }
@@ -93,9 +94,9 @@
   }
 
   @media (max-width: 760px) {
-    .schrank { grid-template-columns: 1fr 1fr; grid-template-areas: "anziehen anziehen" "mathe deutsch" "sach medien" "welt3d welt3d"; }
-    .tuer.anziehen { min-height: 300px; }
-    .tuer.anziehen .bild { width: 150px; height: 150px; }
+    .schrank { grid-template-columns: 1fr 1fr; grid-template-areas: "insel insel" "mathe deutsch" "sach medien"; }
+    .tuer.insel { min-height: 240px; }
+    .tuer.insel .bild { width: 170px; height: 140px; }
   }
 
   /* Erst lernen, dann spielen */
@@ -163,14 +164,17 @@
   </header>
   <div class="erst-dann" id="erst-dann" hidden></div>
 
-  <nav class="schrank" aria-label="Spiele">
-    <a class="tuer anziehen" href="spiele/anziehen/" style="text-decoration:none">
-      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true">
-        <path d="M50 18c-6 0-9 5-9 9h6c0-3 1-4 3-4s4 2 4 4c0 4-4 5-4 10v3L10 66c-6 3-4 10 2 10h76c6 0 8-7 2-10L54 42c0-3 4-4 4-11 0-7-4-13-8-13z" fill="#fff"/>
-        <path d="M30 48l10 10 10-10 10 10 10-10" stroke="#FFC83D" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,6)"/>
+  <nav class="schrank" aria-label="Insel und Lernen">
+    <a class="tuer insel" id="tuer-insel" href="spiele/welt3d/heimat.html" style="text-decoration:none">
+      <span class="schloss" id="insel-status" hidden></span>
+      <svg class="bild" viewBox="0 0 120 100" aria-hidden="true">
+        <ellipse cx="60" cy="78" rx="52" ry="14" fill="#F2D9A2"/><ellipse cx="60" cy="74" rx="44" ry="11" fill="#7CCB5B"/>
+        <rect x="30" y="50" width="22" height="20" rx="4" fill="#FFE3B8"/><path d="M26 52 41 38 56 52z" fill="#E2604F"/>
+        <rect x="76" y="46" width="5" height="24" rx="2" fill="#9A6A3F"/><circle cx="78" cy="40" r="13" fill="#5DBB5A"/><circle cx="70" cy="46" r="8" fill="#4FAF62"/>
+        <circle cx="98" cy="20" r="9" fill="#FFC83D"/>
       </svg>
-      <h2>Anziehen</h2>
-      <p>Kleider, Frisuren und Glitzer aussuchen</p>
+      <h2>Meine Insel</h2>
+      <p>Dein Zuhause mit Tier, Haus, Kleiderschrank und Nachbarn</p>
     </a>
     <a class="tuer mathe" href="spiele/mathe/" style="text-decoration:none">
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M30 50h40M50 30v40" stroke="#fff" stroke-width="12" stroke-linecap="round"/></svg>
@@ -179,24 +183,18 @@
     </a>
     <a class="tuer deutsch" href="spiele/deutsch/" style="text-decoration:none">
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M20 70 50 22l30 48z" fill="#fff"/><circle cx="72" cy="30" r="9" fill="#FFC83D"/></svg>
-      <h2>Abenteuer</h2>
+      <h2>Deutsch</h2>
       <p>Mit Fipsi die Schatzkarte finden</p>
     </a>
     <a class="tuer sach" href="spiele/sachkunde/" style="text-decoration:none">
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34" fill="#fff"/><path d="M28 36c8 2 10 10 18 8s6-12 14-10 8 8 12 6M24 58c10-2 14 6 22 4s10 6 16 10" stroke="#1F8F8A" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="76" cy="22" r="9" fill="#FFC83D"/></svg>
-      <h2>Sachkunde</h2>
+      <h2>Sachunterricht</h2>
       <p>Mit Eule Ella die Welt entdecken</p>
     </a>
     <a class="tuer medien" href="spiele/medien/" style="text-decoration:none">
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><rect x="26" y="14" width="48" height="72" rx="10" fill="#fff"/><rect x="33" y="24" width="34" height="46" rx="4" fill="#3AA0E0"/><path d="M40 47l7 7 14-14" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <h2>Tablet-Profi</h2>
-      <p>Sicher am Tablet und im Internet</p>
-    </a>
-    <a class="tuer welt3d" id="tuer-3d" href="spiele/welt3d/" style="text-decoration:none">
-      <span class="schloss" id="schloss-3d" hidden>🪪 Mit Tablet-Führerschein</span>
-      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 14 84 32v36L50 86 16 68V32z" fill="#fff"/><path d="M16 32l34 18 34-18M50 50v36" stroke="#7B55B8" stroke-width="5" fill="none"/></svg>
-      <h2>3D-Welt</h2>
-      <p>Ballons platzen lassen und eine Insel entdecken</p>
+      <p>Medienbildung: sicher am Tablet und im Internet</p>
     </a>
   </nav>
 </main>
@@ -302,8 +300,13 @@
   }
   const profi = !!(medien && medien.fuehrerschein);
   document.getElementById("abzeichen").hidden = !profi;
-  document.getElementById("schloss-3d").hidden = S.offen(profi);
-  document.getElementById("tuer-3d").classList.toggle("zu", !S.offen(profi));
+  // Insel: zeigt, ob gerade Spielzeit ist (Lernen geht dort immer über die Nachbarn)
+  function zeigeInselStatus() {
+    const el = document.getElementById("insel-status"); if (!window.Zeit) return;
+    const st = Zeit.status();
+    el.hidden = st.frei || st.spielen; el.textContent = st.genug ? "😴 Für heute genug gespielt" : "🌱 Erst lernen – die Nachbarn helfen dir";
+  }
+  zeigeInselStatus(); setInterval(zeigeInselStatus, 10000);
 
 </script>
 </body>
