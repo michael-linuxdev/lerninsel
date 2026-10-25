@@ -191,6 +191,22 @@
     return `<svg viewBox="0 0 200 180" class="bild-uhr" role="img" aria-label="Form">${g}</svg>`;
   }
 
+  function linealBild(start, laenge, farbe = "#FFC83D") {
+    const px = 36, x0 = 30; let striche = "";
+    for (let mm = 0; mm <= 150; mm++) {
+      const x = x0 + mm * px / 10, cm = mm % 10 === 0, halb = mm % 5 === 0;
+      striche += `<line x1="${x}" y1="96" x2="${x}" y2="${96 + (cm ? 22 : halb ? 14 : 8)}" stroke="${D}" stroke-width="${cm ? 2.5 : 1}"/>`;
+      if (cm) striche += `<text x="${x}" y="138" font-size="15" text-anchor="middle" fill="${D}" font-family="Fredoka, Arial">${mm / 10}</text>`;
+    }
+    const xa = x0 + start * px, xb = xa + laenge * px;
+    return `<svg viewBox="0 0 600 160" role="img" aria-label="Lineal"><rect x="18" y="94" width="564" height="54" rx="6" fill="#FFF3C4" stroke="${D}" stroke-width="3"/>${striche}
+      <path d="M${xa} 52 L${xb - 22} 52 L${xb} 66 L${xb - 22} 80 L${xa} 80 Z" fill="${farbe}" stroke="${D}" stroke-width="3" stroke-linejoin="round"/><rect x="${xa}" y="52" width="16" height="28" fill="#FF8FA3" stroke="${D}" stroke-width="3"/>
+      <line x1="${xa}" y1="84" x2="${xa}" y2="96" stroke="#C2337A" stroke-width="2" stroke-dasharray="3 3"/><line x1="${xb}" y1="84" x2="${xb}" y2="96" stroke="#C2337A" stroke-width="2" stroke-dasharray="3 3"/></svg>`;
+  }
+  const TAGE = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
+  const MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+  const NAMEN = ["Lena", "Ben", "Aylin", "Noah", "Mia", "Ali", "Sofia", "Emil", "Nora", "Jonas"];
+
   // ---------- Stationen ----------
   const zahl = (text, antwort, hilfe, extra = {}) => Object.assign({ text, antwort: String(antwort), art: "zahl", hilfe }, extra);
 
@@ -208,6 +224,20 @@
         const z = a < b ? "<" : a > b ? ">" : "=";
         return { text: `${a} ? ${b}`, antwort: z, art: "wahl", optionen: ["<", "=", ">"], frage: "Welches Zeichen passt?",
           hilfe: a === b ? `${a} und ${b} sind gleich groß` : `Vergleiche zuerst die Zehner, dann die Einer. ${Math.min(a, b)} ist kleiner als ${Math.max(a, b)}` };
+      } },
+    { id: "gerade", name: "Gerade und ungerade", icon: "2",
+      neu: () => {
+        if (Math.random() < 0.6) {
+          const n = r(1, 99), g = n % 2 === 0;
+          const paare = n <= 12 ? `<svg viewBox="0 0 ${Math.ceil(n / 2) * 40 + 20} 100" role="img" aria-label="Punkte in Paaren">${Array.from({ length: n }, (_, i) => `<circle cx="${30 + Math.floor(i / 2) * 40}" cy="${i % 2 ? 70 : 30}" r="14" fill="${i === n - 1 && !g ? "#FF6F61" : "#5CCBA6"}" stroke="${D}" stroke-width="3"/>`).join("")}</svg>` : undefined;
+          return { text: "", frage: `Ist ${n} gerade oder ungerade?`, antwort: g ? "gerade" : "ungerade", art: "wahl", optionen: ["gerade", "ungerade"], bild: paare, nurLuecke: true,
+            hilfe: `Schau auf die letzte Ziffer: ${n % 10}. Gerade Zahlen enden auf 0, 2, 4, 6 oder 8. Also ist ${n} ${g ? "gerade" : "ungerade"}.` };
+        }
+        const g = Math.random() < 0.5; let zahlen;
+        do { zahlen = Array.from({ length: 4 }, () => r(1, 99)); } while (zahlen.filter(z => (z % 2 === 0) === g).length !== 1 || new Set(zahlen).size < 4);
+        const richtig = zahlen.find(z => (z % 2 === 0) === g);
+        return { text: "", frage: `Welche Zahl ist ${g ? "gerade" : "ungerade"}?`, antwort: String(richtig), art: "wahl", optionen: zahlen.map(String), nurLuecke: true,
+          hilfe: `${richtig} endet auf ${richtig % 10} – das ist ${g ? "gerade" : "ungerade"}. Gerade Zahlen enden auf 0, 2, 4, 6, 8.` };
       } },
     { id: "formen", name: "Formen und Körper", icon: "△",
       neu: () => {
@@ -272,6 +302,16 @@
         const a = r(11, 89); const z = Math.ceil(a / 10) * 10;
         return zahl(`${a} + ? = 100`, 100 - a, a % 10 ? `${a} + ${z - a} = ${z}, ${z} + ${100 - z} = 100, also ${100 - a}` : `${a} + ${100 - a} = 100`);
       } },
+    { id: "sachaufgaben", name: "Sachaufgaben", icon: "📝",
+      neu: () => {
+        const n = wahl(NAMEN), art = r(1, 5);
+        const dinge = wahl([["Äpfel", "🍎"], ["Murmeln", "🔵"], ["Sticker", "⭐"], ["Bonbons", "🍬"], ["Muscheln", "🐚"], ["Stifte", "✏️"]]);
+        if (art === 1) { const a = r(5, 40), b = r(3, 30); return zahl("", a + b, `${a} + ${b} = ${a + b}. Dazubekommen heißt plus.`, { frage: `${n} hat ${a} ${dinge[0]} ${dinge[1]}. ${n} bekommt ${b} dazu. Wie viele ${dinge[0]} hat ${n} jetzt?`, nurLuecke: true }); }
+        if (art === 2) { const a = r(15, 60), b = r(3, a - 2); return zahl("", a - b, `${a} ${M} ${b} = ${a - b}. Verschenken heißt minus.`, { frage: `${n} hat ${a} ${dinge[0]} ${dinge[1]} und verschenkt ${b}. Wie viele ${dinge[0]} bleiben übrig?`, nurLuecke: true }); }
+        if (art === 3) { const k = r(2, 6), je = wahl([2, 5, 10]); return zahl("", k * je, `${k} · ${je} = ${k * je}. Gleich viele in jeder Tüte heißt mal.`, { frage: `In jeder Tüte sind ${je} ${dinge[0]} ${dinge[1]}. ${n} hat ${k} Tüten. Wie viele ${dinge[0]} sind das zusammen?`, nurLuecke: true }); }
+        if (art === 4) { const preis = r(2, 9), euro = wahl([10, 20]); return zahl("", euro - preis, `${euro} € ${M} ${preis} € = ${euro - preis} €.`, { frage: `${n} kauft ein Buch für ${preis} € und bezahlt mit ${euro} €. Wie viel Geld bekommt ${n} zurück?`, einheit: "€", nurLuecke: true }); }
+        const a = r(10, 40), b = r(2, 9); return zahl("", a + b, `${a} + ${b} = ${a + b}. Einsteigen heißt plus.`, { frage: `Im Bus sitzen ${a} Kinder 🚌. An der Haltestelle steigen ${b} Kinder ein. Wie viele Kinder sind jetzt im Bus?`, nurLuecke: true });
+      } },
     { id: "daten", name: "Strichlisten und Diagramme", icon: "📊",
       neu: () => {
         const art = r(1, 4);
@@ -303,6 +343,14 @@
         }
         let st, s; do { st = Array.from({ length: r(2, 5) }, () => wahl([1, 2, 5, 10, 20, 50])).sort((a, b) => b - a); s = st.reduce((a, b) => a + b, 0); } while (s > 100);
         return zahl("", s, st.join(" € + ") + " € = " + s + " €", { frage: "Wie viel Geld ist das?", bild: geldBild(st, "eur"), einheit: "€", nurLuecke: true });
+      } },
+    { id: "laenge", name: "Länge", icon: "📏",
+      neu: () => {
+        const art = r(1, 4);
+        if (art <= 2) { const start = art === 1 ? 0 : r(1, 4), l = r(3, 15 - start); return zahl("", l, start ? `Der Stift fängt bei ${start} an und hört bei ${start + l} auf: ${start + l} ${M} ${start} = ${l} cm.` : `Der Stift fängt bei 0 an. Lies ab, wo er aufhört: ${l} cm.`, { frage: start ? "Achtung, der Stift fängt nicht bei 0 an! Wie lang ist er?" : "Wie lang ist der Stift?", bild: linealBild(start, l, wahl(["#FFC83D", "#5CCBA6", "#7B9BFF"])), einheit: "cm", nurLuecke: true }); }
+        if (art === 3) { const m = r(1, 5); return zahl(`${m} m = ? cm`, m * 100, `1 m sind 100 cm. ${m} m sind ${m * 100} cm.`, { einheit: "", nurLuecke: false }); }
+        const sch = wahl([["ein Bleistift", "15 cm", ["15 m", "1 cm"]], ["eine Tür", "2 m", ["2 cm", "20 m"]], ["ein Daumennagel", "1 cm", ["1 m", "10 m"]], ["ein Fußballtor", "7 m", ["7 cm", "70 cm"]], ["ein Lineal", "30 cm", ["30 m", "3 cm"]]]);
+        return { text: "", frage: `Wie lang ist ${sch[0]} ungefähr?`, antwort: sch[1], art: "wahl", optionen: mische([sch[1], ...sch[2]]), nurLuecke: true, hilfe: `${sch[0][0].toUpperCase() + sch[0].slice(1)} ist ungefähr ${sch[1]} lang. Ein Zentimeter ist etwa so breit wie dein kleiner Finger.` };
       } },
     { id: "zufall", name: "Sicher, möglich, unmöglich", icon: "🎲",
       neu: () => {
@@ -336,6 +384,15 @@
         const worte = { 0: `${h} Uhr`, 30: `halb ${(h % 12) + 1}`, 15: `Viertel nach ${h}`, 45: `Viertel vor ${(h % 12) + 1}` }[m];
         return { text: "", frage: "Wie spät ist es?", antwort: richtig, art: "wahl", optionen: opt, bild: uhrBild(h, m), nurLuecke: true,
           hilfe: `Der kurze Zeiger zeigt die Stunde, der lange die Minuten. Es ist ${richtig} Uhr, also ${worte}.` };
+      } },
+    { id: "kalender", name: "Woche, Monat, Jahr", icon: "📅",
+      neu: () => {
+        const art = r(1, 5);
+        if (art === 1) { const i = r(0, 6); const n = TAGE[(i + 1) % 7]; return { text: "", frage: `Welcher Tag kommt nach ${TAGE[i]}?`, antwort: n, art: "wahl", optionen: mische([n, TAGE[(i + 2) % 7], TAGE[(i + 6) % 7]]), nurLuecke: true, hilfe: `Die Wochentage: ${TAGE.join(", ")}. Nach ${TAGE[i]} kommt ${n}.` }; }
+        if (art === 2) { const i = r(0, 6), d = r(2, 4), n = TAGE[(i + d) % 7]; return { text: "", frage: `Heute ist ${TAGE[i]}. Welcher Tag ist in ${d} Tagen?`, antwort: n, art: "wahl", optionen: mische([n, TAGE[(i + d + 1) % 7], TAGE[(i + d + 6) % 7]]), nurLuecke: true, hilfe: `Zähle weiter: ${Array.from({ length: d }, (_, k) => TAGE[(i + k + 1) % 7]).join(", ")}.` }; }
+        if (art === 3) { const i = r(0, 11), n = MONATE[(i + 1) % 12]; return { text: "", frage: `Welcher Monat kommt nach ${MONATE[i]}?`, antwort: n, art: "wahl", optionen: mische([n, MONATE[(i + 2) % 12], MONATE[(i + 11) % 12]]), nurLuecke: true, hilfe: `Die Monate: ${MONATE.join(", ")}.` }; }
+        const f = wahl([["Wie viele Tage hat eine Woche?", 7, "Montag bis Sonntag: 7 Tage."], ["Wie viele Monate hat ein Jahr?", 12, "Januar bis Dezember: 12 Monate."], ["Wie viele Stunden hat ein Tag?", 24, "Ein Tag hat 24 Stunden – Tag und Nacht zusammen."], ["Wie viele Tage hat das Wochenende?", 2, "Samstag und Sonntag: 2 Tage."]]);
+        return zahl("", f[1], f[2], { frage: f[0], nurLuecke: true });
       } }
   ];
 

@@ -14,8 +14,8 @@ Neu: Matheweg-Stationen „Formen und Körper“, „Strichlisten und Diagramme�
 ### Mathematik
 1. ~~Daten und Zufall~~ (erledigt; offen: einfache Kombinationen): Strichlisten zählen, Säulendiagramm lesen und selbst „bauen“, sicher/möglich/unmöglich mit Glücksrad und Würfel.
 2. **Raum und Form** (Formen/Körper erledigt; offen:) Spiegelbilder ergänzen, Würfelgebäude zählen und nachbauen – passt gut in 3D auf der Insel.
-3. **Länge und Kalender** (Größen): mit virtuellem Lineal messen, cm/m schätzen; Wochentage, Monate, Kalender lesen.
-4. **Ergänzungen in Zahl und Operation:** gerade/ungerade, Quadratzahlen, Sachaufgaben mit Bildern.
+3. ~~Länge und Kalender~~ (erledigt).
+4. **Zahl und Operation:** ~~gerade/ungerade, Sachaufgaben~~ erledigt; offen: Quadratzahlen.
 5. Hinweis: Einmaleins mit 3, 4 und 6–9 ordnet der Lehrplan 2025 eher Klasse 3 zu – Matheweg-Stationen so lassen, aber für Klasse 3 kennzeichnen.
 
 ### Deutsch

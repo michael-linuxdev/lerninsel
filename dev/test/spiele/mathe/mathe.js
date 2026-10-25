@@ -158,7 +158,7 @@
     else ausdruck = `${a.text} = §`;
 
     $("tafel").innerHTML =
-      (a.frage ? `<p class="frage">${a.frage}</p>` : "") +
+      (a.frage ? `<p class="frage${a.bild ? "" : " gross"}">${a.frage}</p>` : "") +
       (a.bild ? `<div class="bild">${a.bild}</div>` : "") +
       (a.art === "wahl" && a.nurLuecke ? "" : `<div class="ausdruck ${a.wort ? "wort" : ""}" id="ausdruck">${ausdruck}</div>`) +
       `<p class="rueck" id="rueck"></p><div id="hilfe-platz"></div>`;

@@ -19,9 +19,9 @@ window.LEHRPLAN = {
             "1/2": [
               { nr: 1, titel: "Raum und Form", kmk: "Raum und Form", inhalte: ["Lagebeziehungen, Wege, Würfelgebäude", "Punkt, Gerade, Strecke, parallel, senkrecht", "Dreieck, Viereck, Rechteck, Quadrat, Kreis", "Würfel, Quader, Kugel", "Achsensymmetrie, Muster"], app: ["mathe:formen"], abdeckung: "teil", hinweis: "Formen, Ecken und Körper ja; Lagebeziehungen, Symmetrie und Würfelgebäude fehlen noch." },
               { nr: 2, titel: "Zahl und Operation", kmk: "Zahl und Operation", inhalte: ["Zahlen bis 100, Stellenwerttafel (E, Z, H)", "Vergleichen, Ordnen, Vorgänger/Nachfolger, gerade/ungerade", "Plus und Minus bis 100 mit Strategien", "Mal und Geteilt: Kernaufgaben 2, 5, 10, Quadratzahlen, Tausch- und Umkehraufgaben", "Sachaufgaben"],
-                app: ["mathe:plus20", "mathe:minus20", "mathe:zehner", "mathe:vergleich", "mathe:plus100", "mathe:minus100", "mathe:doppelt", "mathe:ergaenzen", "mathe:mal1", "mathe:geteilt"], abdeckung: "ja",
-                hinweis: "Sachaufgaben, gerade/ungerade und Quadratzahlen fehlen noch." },
-              { nr: 3, titel: "Größen und Messen", kmk: "Größen und Messen", inhalte: ["Geld: Euro und Cent", "Länge: mm, cm, dm, m, messen", "Zeit: Minute, Stunde, Tag, Woche, Monat, Jahr, Uhr, Kalender"], app: ["mathe:geld", "mathe:uhr"], abdeckung: "teil", hinweis: "Länge und Kalender fehlen." },
+                app: ["mathe:plus20", "mathe:minus20", "mathe:zehner", "mathe:vergleich", "mathe:gerade", "mathe:plus100", "mathe:minus100", "mathe:doppelt", "mathe:ergaenzen", "mathe:sachaufgaben", "mathe:mal1", "mathe:geteilt"], abdeckung: "ja",
+                hinweis: "Quadratzahlen fehlen noch." },
+              { nr: 3, titel: "Größen und Messen", kmk: "Größen und Messen", inhalte: ["Geld: Euro und Cent", "Länge: mm, cm, dm, m, messen", "Zeit: Minute, Stunde, Tag, Woche, Monat, Jahr, Uhr, Kalender"], app: ["mathe:geld", "mathe:laenge", "mathe:uhr", "mathe:kalender"], abdeckung: "ja" },
               { nr: 4, titel: "Daten und Zufall", kmk: "Daten und Zufall", inhalte: ["Strichlisten, Tabellen, Säulen- und Balkendiagramme", "Einfache Kombinationen", "Zufall: sicher, möglich, unmöglich"], app: ["mathe:daten", "mathe:zufall"], abdeckung: "ja", hinweis: "Einfache Kombinationen fehlen noch." }
             ],
             "3": [
