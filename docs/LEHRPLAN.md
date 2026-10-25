@@ -7,12 +7,13 @@ Die Daten stehen in `shared/lehrplan.js`. Jeder Lernbereich nennt die passenden 
 
 Weitere Bundesländer: in `shared/lehrplan.js` unter `laender` ergänzen und im Elternbereich (`LAENDER`) freischalten.
 
-## Stand Klasse 1/2 (heute): 2 gut · 8 teilweise · 7 fehlen
+## Stand Klasse 1/2 (heute): 3 gut · 9 teilweise · 5 fehlen
+Neu: Matheweg-Stationen „Formen und Körper“, „Strichlisten und Diagramme“, „Sicher, möglich, unmöglich“.
 
 ## Bauplan – nach Nutzen für Klasse 2 geordnet
 ### Mathematik
-1. **Daten und Zufall** (fehlt ganz): Strichlisten zählen, Säulendiagramm lesen und selbst „bauen“, sicher/möglich/unmöglich mit Glücksrad und Würfel.
-2. **Raum und Form** (fehlt ganz): Formen erkennen, Spiegelbilder ergänzen, Würfelgebäude zählen und nachbauen – passt gut in 3D auf der Insel.
+1. ~~Daten und Zufall~~ (erledigt; offen: einfache Kombinationen): Strichlisten zählen, Säulendiagramm lesen und selbst „bauen“, sicher/möglich/unmöglich mit Glücksrad und Würfel.
+2. **Raum und Form** (Formen/Körper erledigt; offen:) Spiegelbilder ergänzen, Würfelgebäude zählen und nachbauen – passt gut in 3D auf der Insel.
 3. **Länge und Kalender** (Größen): mit virtuellem Lineal messen, cm/m schätzen; Wochentage, Monate, Kalender lesen.
 4. **Ergänzungen in Zahl und Operation:** gerade/ungerade, Quadratzahlen, Sachaufgaben mit Bildern.
 5. Hinweis: Einmaleins mit 3, 4 und 6–9 ordnet der Lehrplan 2025 eher Klasse 3 zu – Matheweg-Stationen so lassen, aber für Klasse 3 kennzeichnen.
