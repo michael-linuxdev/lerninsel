@@ -206,5 +206,98 @@ window.THEMEN = [
         text: "Toll, {name}! Jetzt kennst du die ganze Familie. Male doch mit Mama oder Papa deinen eigenen Stammbaum! Wer ist deine Tante, wer dein Cousin, wer deine Uroma?",
         ru: "Отлично, {name}! Теперь ты знаешь всю семью. Нарисуй с мамой или папой своё семейное древо! Кто твоя тётя, кто двоюродный брат, кто прабабушка?" }
     ]
+  },
+  {
+    id: "gesundheit", name: "Gesund und munter", e: "🦷", farbe: "#2E9C5A", grund: "#E3F7EF",
+    kurz: "Zähne putzen, Frühstück, Trinken, Erste Hilfe",
+    schritte: [
+      { typ: "info", titel: "Gesund und munter", bild: "🦷",
+        text: "Hallo {name}! Heute geht es um deinen Körper. Was tut ihm gut? Zähne putzen, gutes Essen, viel trinken und Bewegung!",
+        ru: "Привет, {name}! Сегодня поговорим о твоём теле. Что ему полезно? Чистить зубы, хорошо есть, много пить и двигаться!" },
+      { typ: "info", titel: "Zähne putzen mit KAI", bild: "🪥",
+        text: "Putze deine Zähne zweimal am Tag, morgens und abends, zwei bis drei Minuten lang. Die KAI-Regel hilft dir.",
+        ru: "Чисти зубы два раза в день, утром и вечером, две-три минуты. Тебе поможет правило KAI.",
+        fakten: [["K wie Kauflächen: oben auf den Backenzähnen hin und her.", "K — жевательные поверхности: сверху на коренных зубах туда-сюда."],
+          ["A wie Außenflächen: mit kleinen Kreisen.", "A — внешние поверхности: маленькими кругами."],
+          ["I wie Innenflächen: von Rot nach Weiß, also vom Zahnfleisch zum Zahn.", "I — внутренние поверхности: от красного к белому, то есть от десны к зубу."]] },
+      { typ: "wahl", frage: "Wie oft am Tag putzt du die Zähne?", ru: "Сколько раз в день нужно чистить зубы?", bild: "🪥", optionen: [
+        { t: "Zweimal: morgens und abends", ru: "Два раза: утром и вечером", ok: true, warum: "Genau! Morgens und abends vor dem Schlafen.", warumRu: "Точно! Утром и вечером перед сном." },
+        { t: "Einmal in der Woche", ru: "Один раз в неделю", ok: false, warum: "Viel zu selten! Zweimal am Tag ist richtig.", warumRu: "Слишком редко! Правильно — два раза в день." },
+        { t: "Nur wenn ich Süßes gegessen habe", ru: "Только если ел сладкое", ok: false, warum: "Nein, jeden Tag zweimal – morgens und abends.", warumRu: "Нет, каждый день два раза — утром и вечером." }] },
+      { typ: "info", titel: "Ein gutes Frühstück", bild: "🥣",
+        text: "Ein gutes Frühstück gibt dir Kraft für die Schule. Gut sind Vollkornbrot, Obst, Gemüse, Joghurt oder Müsli. Süßigkeiten machen nur kurz satt.",
+        ru: "Хороший завтрак даёт силы для школы. Полезны цельнозерновой хлеб, фрукты, овощи, йогурт или мюсли. Сладости насыщают ненадолго." },
+      { typ: "zuordnen", frage: "Was passt in eine gesunde Brotdose?", ru: "Что подходит для полезного ланч-бокса?",
+        gruppen: [{ id: "ja", name: "Gesund", ru: "Полезно", bild: "🍎" }, { id: "selten", name: "Lieber selten", ru: "Лучше редко", bild: "🍭" }],
+        dinge: [
+          { t: "Apfel", ru: "Яблоко", gruppe: "ja" }, { t: "Vollkornbrot mit Käse", ru: "Хлеб с сыром", gruppe: "ja" },
+          { t: "Gurke und Karotte", ru: "Огурец и морковь", gruppe: "ja" }, { t: "Schokoriegel", ru: "Шоколадный батончик", gruppe: "selten" },
+          { t: "Gummibärchen", ru: "Мармеладные мишки", gruppe: "selten" }, { t: "Joghurt", ru: "Йогурт", gruppe: "ja" },
+          { t: "Limonade", ru: "Лимонад", gruppe: "selten" }, { t: "Wasser", ru: "Вода", gruppe: "ja" }] },
+      { typ: "daumen", satz: "Wasser ist das beste Getränk gegen Durst.", satzRu: "Вода — лучший напиток от жажды.", bild: "💧", ok: true,
+        warum: "Stimmt! Kinder sollten über den Tag verteilt etwa einen Liter trinken, am besten Wasser.", warumRu: "Верно! Детям нужно пить около литра в день, лучше всего воду." },
+      { typ: "info", titel: "Kleine Verletzungen", bild: "🩹",
+        text: "Hingefallen? Bei einer kleinen Schürfwunde hilft ein Pflaster. Bei einer Beule hilft Kühlen. Sag immer einem Erwachsenen Bescheid!",
+        ru: "Упал? При маленькой ссадине поможет пластырь. При шишке поможет холод. Всегда скажи взрослому!" },
+      { typ: "info", titel: "Im Notfall: 112", bild: "🚑",
+        text: "Wenn etwas Schlimmes passiert, hol sofort einen Erwachsenen. Ist keiner da, ruf die 112 an. Das ist der Notruf für Rettungswagen und Feuerwehr.",
+        ru: "Если случилось что-то серьёзное, сразу позови взрослого. Если никого нет, звони 112. Это номер скорой помощи и пожарных.",
+        fakten: [["Sag am Telefon: Wo ist es passiert?", "Скажи по телефону: где это случилось?"],
+          ["Was ist passiert?", "Что случилось?"],
+          ["Wer ruft an? Dann warten, bis dich jemand fragt.", "Кто звонит? Потом жди вопросов."],
+          ["Die Polizei erreichst du mit 110.", "Полицию можно вызвать по номеру 110."]] },
+      { typ: "wahl", frage: "Welche Nummer rufst du an, wenn ein Rettungswagen kommen soll?", ru: "Какой номер нужно набрать, чтобы вызвать скорую помощь?", bild: "🚑", optionen: [
+        { t: "112", ru: "112", ok: true, warum: "Richtig! 112 ist der Notruf für Rettungswagen und Feuerwehr.", warumRu: "Правильно! 112 — номер скорой и пожарных." },
+        { t: "123", ru: "123", ok: false, warum: "Nein, die Notrufnummer ist 112.", warumRu: "Нет, номер экстренной службы — 112." },
+        { t: "999", ru: "999", ok: false, warum: "Das gilt in manchen anderen Ländern. In Deutschland ist es die 112.", warumRu: "Так в некоторых других странах. В Германии — 112." }] },
+      { typ: "daumen", satz: "Zum Spaß darf man die 112 anrufen.", satzRu: "Можно звонить на 112 ради шутки.", bild: "📞", ok: false,
+        warum: "Nein! Die 112 ist nur für echte Notfälle. Sonst kann den Menschen, die wirklich Hilfe brauchen, nicht geholfen werden.", warumRu: "Нет! 112 — только для настоящих экстренных случаев." },
+      { typ: "info", titel: "Geschafft!", bild: "💪",
+        text: "Super, {name}! Jetzt weißt du, was deinem Körper guttut. Hast du heute schon genug getrunken?",
+        ru: "Супер, {name}! Теперь ты знаешь, что полезно твоему телу. Ты сегодня уже достаточно выпил(а)?" }
+    ]
+  },
+  {
+    id: "baeume-voegel", name: "Bäume und Vögel", e: "🌳", farbe: "#8A6E2F", grund: "#F7F0DD",
+    kurz: "Laub- und Nadelbäume, Zugvögel und Wintervögel",
+    schritte: [
+      { typ: "info", titel: "Draußen in der Natur", bild: "🌳",
+        text: "Hallo {name}! Heute gehen wir in den Park. Wir schauen uns Bäume und Vögel an – und wie sie sich im Jahr verändern.",
+        ru: "Привет, {name}! Сегодня мы идём в парк. Посмотрим на деревья и птиц и на то, как они меняются в течение года." },
+      { typ: "info", titel: "Laubbäume und Nadelbäume", bild: "🍂",
+        text: "Laubbäume haben breite Blätter. Im Herbst werden die Blätter bunt und fallen ab. Nadelbäume haben spitze Nadeln und bleiben meistens auch im Winter grün.",
+        ru: "У лиственных деревьев широкие листья. Осенью листья становятся разноцветными и опадают. У хвойных деревьев острые иголки, и они обычно остаются зелёными и зимой.",
+        fakten: [["Laubbäume: Eiche, Buche, Ahorn, Kastanie, Birke", "Лиственные: дуб, бук, клён, каштан, берёза"],
+          ["Nadelbäume: Fichte, Kiefer, Tanne", "Хвойные: ель, сосна, пихта"]] },
+      { typ: "zuordnen", frage: "Laubbaum oder Nadelbaum?", ru: "Лиственное или хвойное дерево?",
+        gruppen: [{ id: "laub", name: "Laubbaum", ru: "Лиственное", bild: "🌳" }, { id: "nadel", name: "Nadelbaum", ru: "Хвойное", bild: "🌲" }],
+        dinge: [
+          { t: "Eiche", ru: "Дуб", gruppe: "laub" }, { t: "Fichte", ru: "Ель", gruppe: "nadel" }, { t: "Ahorn", ru: "Клён", gruppe: "laub" },
+          { t: "Kiefer", ru: "Сосна", gruppe: "nadel" }, { t: "Birke", ru: "Берёза", gruppe: "laub" }, { t: "Tanne", ru: "Пихта", gruppe: "nadel" },
+          { t: "Kastanie", ru: "Каштан", gruppe: "laub" }] },
+      { typ: "wahl", frage: "Von welchem Baum kommt die Eichel?", ru: "С какого дерева жёлудь?", bild: "🌰", optionen: [
+        { t: "Von der Eiche", ru: "С дуба", ok: true, warum: "Richtig! Eichhörnchen und Wildschweine fressen Eicheln gern.", warumRu: "Правильно! Белки и кабаны любят жёлуди." },
+        { t: "Von der Fichte", ru: "С ели", ok: false, warum: "Die Fichte hat Zapfen. Die Eichel wächst an der Eiche.", warumRu: "У ели шишки. Жёлудь растёт на дубе." },
+        { t: "Von der Birke", ru: "С берёзы", ok: false, warum: "Nein, die Eichel kommt von der Eiche.", warumRu: "Нет, жёлудь растёт на дубе." }] },
+      { typ: "daumen", satz: "Die Fichte sticht, die Tanne nicht.", satzRu: "Ель колется, а пихта нет.", bild: "🌲", ok: true,
+        warum: "Stimmt! Mit diesem Spruch kannst du sie unterscheiden: Fichtennadeln sind spitz, Tannennadeln eher weich.", warumRu: "Верно! Так их можно различить: иголки ели острые, а у пихты мягче." },
+      { typ: "info", titel: "Zugvögel", bild: "🐦",
+        text: "Manche Vögel fliegen im Herbst in den warmen Süden, bis nach Afrika. Sie heißen Zugvögel. Im Frühling kommen sie zurück.",
+        ru: "Некоторые птицы осенью улетают на тёплый юг, даже в Африку. Их называют перелётными. Весной они возвращаются.",
+        fakten: [["Zugvögel: Storch, Schwalbe, Kuckuck", "Перелётные: аист, ласточка, кукушка"],
+          ["Diese Vögel bleiben bei uns: Amsel, Meise, Spatz", "Эти птицы остаются у нас: чёрный дрозд, синица, воробей"]] },
+      { typ: "zuordnen", frage: "Fliegt der Vogel im Herbst weg oder bleibt er?", ru: "Птица осенью улетает или остаётся?",
+        gruppen: [{ id: "weg", name: "Fliegt in den Süden", ru: "Улетает на юг", bild: "✈️" }, { id: "bleibt", name: "Bleibt im Winter hier", ru: "Остаётся зимой", bild: "❄️" }],
+        dinge: [
+          { t: "Storch", ru: "Аист", gruppe: "weg" }, { t: "Amsel", ru: "Чёрный дрозд", gruppe: "bleibt" }, { t: "Schwalbe", ru: "Ласточка", gruppe: "weg" },
+          { t: "Meise", ru: "Синица", gruppe: "bleibt" }, { t: "Spatz", ru: "Воробей", gruppe: "bleibt" }, { t: "Kuckuck", ru: "Кукушка", gruppe: "weg" }] },
+      { typ: "wahl", frage: "Warum fliegen Zugvögel im Herbst weg?", ru: "Почему перелётные птицы улетают осенью?", bild: "🌍", optionen: [
+        { t: "Im Winter finden sie hier nicht genug Futter", ru: "Зимой им здесь не хватает корма", ok: true, warum: "Genau! Im Winter gibt es kaum Insekten. Im Süden finden sie genug zu fressen.", warumRu: "Точно! Зимой почти нет насекомых. На юге им хватает еды." },
+        { t: "Sie machen Urlaub am Meer", ru: "Они едут в отпуск на море", ok: false, warum: "Lustige Idee! Aber sie fliegen weg, weil sie im Winter hier kein Futter finden.", warumRu: "Смешная идея! Но они улетают, потому что зимой здесь нет корма." },
+        { t: "Sie mögen keinen Schnee anschauen", ru: "Они не любят смотреть на снег", ok: false, warum: "Nein – es geht ums Futter. Im Winter gibt es hier kaum Insekten.", warumRu: "Нет, дело в корме. Зимой здесь почти нет насекомых." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🍁",
+        text: "Toll, {name}! Sammle beim nächsten Spaziergang doch drei verschiedene Blätter. Weißt du, von welchem Baum sie sind?",
+        ru: "Отлично, {name}! На следующей прогулке собери три разных листа. Знаешь, с какого они дерева?" }
+    ]
   }
 ];

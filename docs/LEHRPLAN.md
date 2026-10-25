@@ -27,8 +27,8 @@ Neu: Matheweg-Stationen „Formen und Körper“, „Strichlisten und Diagramme�
 6. **Sprechen:** sich selbst aufnehmen und anhören (Gedicht vortragen).
 
 ### Sachunterricht
-1. **Mein Körper und meine Gesundheit:** Zähne putzen, gesundes Frühstück, Trinken, Erste Hilfe und Rettungskette.
-2. **Pflanzen und Tiere:** Laub- und Nadelbäume, Frühblüher, Vögel, Haustiere halten (Bezug zum eigenen Tier).
+1. ~~Mein Körper und meine Gesundheit~~ (erledigt: „Gesund und munter“).
+2. **Pflanzen und Tiere:** ~~Bäume und Vögel~~ erledigt; offen: Frühblüher, Keimen und Wachsen, Haustiere halten.
 3. **Unbelebte Natur:** Wetterstation auf der Insel (echtes Wetter), Licht und Schatten, Luft und Wind, Wasser.
 4. **Raum und Zeit:** Schulweg und Verkehrszeichen, Ortsplan, Kalender.
 5. **Zusammen leben:** Regeln und Konflikte lösen.
