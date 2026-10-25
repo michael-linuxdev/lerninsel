@@ -210,3 +210,18 @@ fast unsichtbar und extrem datensparsam.
 
 **Einführung:** 1. mit 1–2 Kindern sehr gut machen → 2. 5–10 befreundete Familien → 3. vorsichtig Schulen ansprechen
 (Medienkompetenz + Lehrplanbezug) → 4. Server erst, wenn Sync und geschlossene Gruppen wirklich gebraucht werden.
+
+## Stand 25.10.2026 (Fundament, Phase 0)
+**Fertig:**
+- Automatischer Rauchtest `tests/laufen.sh`: Einrichtung, alle Seiten quer/hoch, 3D-Seiten, zweites Kind und „Wer spielt?“
+- Umgebungen `/`, `/dev` (normale Regeln, „🛠 DEV“), `/dev/test` (Testmodus), getrennte Speicher und Caches
+- Hilfesprachen allgemein (`S.hilfe`, `S.ht`, `S.paar`), alle Spiele und die Insel; weitere Sprachen vorbereitet (`docs/SPRACHEN.md`)
+- Mehrere Kinder pro Tablet: Haushalt mit PIN und Kinderliste, eigener Spielstand je Kind, „Wer spielt?“, Kinder im Elternbereich verwalten,
+  alte Einzelspielstände werden automatisch übernommen; Startfigur für Jungen
+- Meine Insel mit Joystick; Erwachsenen-Modus ohne Sterne
+
+**Offen in Phase 0:** Elternbereich-Texte als Sprachschlüssel (für Eltern in ihrer Sprache), Spielstand-Export für den ganzen Haushalt (heute je Kind).
+
+**Nächster Schritt:** Phase 1 – Zeitsystem „Erst lernen, dann spielen“ (DGKJ-Standardwerte, Fokus-Hilfen, Erinnerungen der Figuren),
+zusammen mit „Meine Insel“ als Startseite (Lernmodus: Lern-Nachbarn immer erreichbar, Spielorte schlafen bis die Lernzeit geschafft ist)
+und dem betretbaren Haus mit Kleiderschrank.

@@ -4,12 +4,13 @@
   const P = window.Puppe;
   const HAUT = ["#FFE0C7", "#F6C9A3", "#E8B08A", "#C98D63", "#A0694A", "#6E4630"];
   const HAARFARBEN = ["#F4CD6A", "#D9A04E", "#A8693A", "#5C3A21", "#2A2230", "#C9542B", "#FF8CC6", "#9B6BE0", "#4FA8F0", "#6ED8B8"];
-  const STANDARD = () => ({
+  // Startfigur; für Jungen (Ansprache „m“ aus der Ersteinrichtung) kurze Haare, T-Shirt und Jeans
+  const STANDARD = (g = window.Spielwelt && window.Spielwelt.kind ? window.Spielwelt.kind().geschlecht : "w") => ({
     ort: "zimmer",
     figur: { id: "laecheln", farbe: HAUT[1] },
-    haare: { id: "lang", farbe: HAARFARBEN[2] },
-    oberteil: { id: "tshirt", farbe: "#FF9BC8" },
-    unterteil: { id: "rock", farbe: "#7B55B8" },
+    haare: g === "m" ? { id: "kurz", farbe: HAARFARBEN[2] } : { id: "lang", farbe: HAARFARBEN[2] },
+    oberteil: { id: "tshirt", farbe: g === "m" ? "#3AA0E0" : "#FF9BC8" },
+    unterteil: g === "m" ? { id: "jeans", farbe: "#3A5FA8" } : { id: "rock", farbe: "#7B55B8" },
     kleid: null,
     schuhe: { id: "turn", farbe: "#FFFFFF" },
     extras: {}

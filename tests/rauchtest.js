@@ -35,6 +35,20 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       if (kachel) { await kachel.click(); await q.waitForTimeout(400); const w = await q.$("#weiter"); if (w) { await w.click(); await q.waitForTimeout(300); } }
       await q.close();
     }
+    if (lage === "quer") {
+      // zweites Kind anlegen, neue Sitzung muss „Wer spielt?“ zeigen
+      const e = await neueSeite(ctx, "zweites Kind");
+      await e.goto(BASIS + "spiele/eltern/"); await e.fill("#pin1", "1234"); await e.click("#pin-ok"); await e.click("#kind-neu"); await e.waitForSelector("#e-name");
+      await e.fill("#e-name", "Zweitkind"); await e.click("#e-ok"); await e.waitForTimeout(600); await e.close();
+      const w = await neueSeite(ctx, "wer spielt");
+      await w.goto(BASIS); await w.waitForTimeout(600);
+      const anzahl = await w.$$eval(".wer-kind", x => x.length);
+      if (anzahl !== 2) fehler.push(`wer spielt: ${anzahl} statt 2 Kinder`);
+      await w.click(".wer-kind >> nth=0"); await w.waitForTimeout(500);
+      const name = await w.evaluate(() => Spielwelt.profil.name);
+      if (name !== "Testkind") fehler.push(`wer spielt: falsches Kind aktiv (${name})`);
+      await w.close();
+    }
     if (lage === "quer") for (const s of SEITEN_3D) {
       const q = await neueSeite(ctx, `${s} (3D)`);
       await q.goto(BASIS + s); await q.waitForTimeout(2500); await q.close();

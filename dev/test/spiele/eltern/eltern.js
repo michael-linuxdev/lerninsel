@@ -8,7 +8,7 @@
 
   // ---------- PIN ----------
   function pinSeite() {
-    const neu = !eltern().pin;
+    const neu = !S.pin();
     inhalt.innerHTML = `<div class="karte pin">
       ${neu && !S.eingerichtet() ? `<p style="font-size:2.6rem;margin:0">👋</p><h2>Willkommen!</h2><p>Diese App richtet ein Erwachsener ein. Das dauert zwei Minuten: erst eine PIN für den Elternbereich, dann ein paar Angaben zum Kind.</p>` : `<h2>${neu ? "PIN festlegen" : "PIN eingeben"}</h2>`}
       <p>${neu ? "Lege eine 4-stellige PIN fest. Damit bleibt dieser Bereich für Erwachsene." : "Dieser Bereich ist für Erwachsene."}</p>
@@ -25,15 +25,15 @@
       if (!/^\d{4}$/.test(p1)) { f.textContent = "Bitte genau 4 Ziffern eingeben."; return; }
       if (neu) {
         if ($("pin2").value.trim() !== p1) { f.textContent = "Die beiden PINs sind verschieden."; return; }
-        S.speichere("eltern", Object.assign(eltern(), { pin: hash(p1) }));
-      } else if (eltern().pin !== hash(p1)) { f.textContent = "Die PIN stimmt nicht."; $("pin1").value = ""; return; }
+        S.setzePin(hash(p1));
+      } else if (S.pin() !== hash(p1)) { f.textContent = "Die PIN stimmt nicht."; $("pin1").value = ""; return; }
       sessionStorage.setItem(SITZUNG, "1");
       if (S.eingerichtet()) uebersicht(); else einrichtung(false);
     });
     const v = $("pin-vergessen");
     if (v) v.addEventListener("click", () => {
       const a = prompt("Zum Zurücksetzen: Wie viel ist 17 × 13?");
-      if (a && a.trim() === "221") { S.speichere("eltern", Object.assign(eltern(), { pin: null })); pinSeite(); }
+      if (a && a.trim() === "221") { S.setzePin(null); pinSeite(); }
       else if (a !== null) f.textContent = "Leider falsch.";
     });
   }
@@ -158,6 +158,12 @@
         <p><b>3D-Welt:</b> Ballon-Rekord ${(welt.ballon && welt.ballon.rekord) || 0} Punkte, Insel-Schatz ${(welt.insel && welt.insel.geschafft) || 0}× gefunden</p>
       </div>
       <div class="karte">
+        <h2>Kinder auf diesem Tablet</h2>
+        <ul class="kinderliste">${S.kinder().map(k => `<li>${k.aktiv ? "👉 " : ""}<b>${k.name || "(noch ohne Namen)"}</b>${k.aktiv ? " – gerade aktiv" : ` <button class="knopf klein-k" data-wechsel="${k.id}">Wechseln</button>`}${S.kinder().length > 1 ? ` <button class="knopf klein-k" data-weg="${k.id}">Entfernen</button>` : ""}</li>`).join("")}</ul>
+        <div class="knoepfe"><button class="knopf" id="kind-neu">➕ Kind hinzufügen</button></div>
+        <p class="klein">Jedes Kind hat einen eigenen Spielstand. Gibt es mehrere Kinder, fragt die Startseite zuerst „Wer spielt?“. Die PIN gilt für alle.</p>
+      </div>
+      <div class="karte">
         <h2>Kind und Einstellungen</h2>
         <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre, ${S.kind().klasse}. Klasse · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1].replace(" (in Arbeit)", "")}</p>
         <p class="hinweis"><b>Empfehlung der Kinderärzte (DGKJ):</b> ${empfehlung(S.kind().alter)}</p>
@@ -169,12 +175,22 @@
         <p>Alle Daten bleiben nur auf diesem Tablet, nichts wird ins Internet geschickt. Den Spielstand kannst du auf der Startseite unter „💾 Spielstand“ sichern oder aufs andere Tablet übertragen.</p>
         <div class="knoepfe"><button class="knopf" id="pin-neu">PIN ändern</button><button class="knopf" id="abmelden">Bereich schließen</button></div>
       </div>`;
-    $("pin-neu").addEventListener("click", () => { S.speichere("eltern", Object.assign(eltern(), { pin: null })); sessionStorage.removeItem(SITZUNG); pinSeite(); });
+    $("pin-neu").addEventListener("click", () => { S.setzePin(null); sessionStorage.removeItem(SITZUNG); pinSeite(); });
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
+    $("kind-neu").addEventListener("click", () => {
+      const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
+      S.wechsleKind(id); location.href = "./?einrichtung=1";
+    });
+    inhalt.querySelectorAll("[data-wechsel]").forEach(b => b.addEventListener("click", () => { S.wechsleKind(b.dataset.wechsel); location.reload(); }));
+    inhalt.querySelectorAll("[data-weg]").forEach(b => b.addEventListener("click", () => {
+      const k = S.kinder().find(x => x.id === b.dataset.weg);
+      if (!confirm(`${k.name || "Dieses Kind"} und den ganzen Spielstand wirklich löschen? Das lässt sich nicht rückgängig machen.`)) return;
+      S.entferneKind(k.id); location.reload();
+    }));
     $("neu-laden").addEventListener("click", neuLaden);
     $("abmelden").addEventListener("click", () => { sessionStorage.removeItem(SITZUNG); location.href = "../ich/"; });
   }
 
-  if (sessionStorage.getItem(SITZUNG) && eltern().pin) { if (S.eingerichtet()) uebersicht(); else einrichtung(false); } else pinSeite();
+  if (sessionStorage.getItem(SITZUNG) && S.pin()) { if (S.eingerichtet()) uebersicht(); else einrichtung(false); } else pinSeite();
 })();

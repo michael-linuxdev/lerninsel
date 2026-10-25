@@ -8,7 +8,10 @@
   const UMG = cfg.umgebung || (cfg.test ? "test" : "prod");
   const TEST = UMG === "test";
   const PRE = UMG === "prod" ? "spielwelt." : "spielwelt." + UMG + ".";   // eigene Speicher je Umgebung
-  const KEY = PRE + "profil.v1";
+  // Haushalt: PIN und Liste der Kinder auf diesem Tablet. Jedes Kind hat einen eigenen Spielstand.
+  // Das erste Kind („k1“) nutzt den bisherigen Schlüssel, damit alte Spielstände erhalten bleiben.
+  const HKEY = PRE + "haushalt.v1";
+  const profilKey = (id) => id === "k1" ? PRE + "profil.v1" : PRE + "profil.v1." + id;
   // Erwachsenen-Modus (nach PIN im Elternbereich): alles offen, keine Zeitgrenzen, gilt für diese Sitzung
   const ERW = PRE + "erwachsen";
   const erwachsen = () => { try { return +sessionStorage.getItem(ERW) > Date.now(); } catch (e) { return false; } };
@@ -26,12 +29,10 @@
   const leeresProfil = () => ({ name: "", sterne: 0, freigeschaltet: [], ton: true, daten: {}, stand: 0 });
 
   // ---------- localStorage ----------
-  function lokalLesen() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { return null; }
-  }
-  function lokalSchreiben(p) {
-    try { localStorage.setItem(KEY, JSON.stringify(p)); return true; } catch (e) { return false; }
-  }
+  const lesenK = (k) => { try { return JSON.parse(localStorage.getItem(k)) || null; } catch (e) { return null; } };
+  const schreibenK = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+  function lokalLesen() { return lesenK(KEY); }
+  function lokalSchreiben(p) { return schreibenK(KEY, p); }
 
   // ---------- IndexedDB (zweite Kopie) ----------
   let dbVersprechen = null;
@@ -47,17 +48,17 @@
     }
     return dbVersprechen;
   }
-  function dbLesen() {
+  function dbLesen(schluessel = KEY) {
     return db().then(d => new Promise((ok, fehler) => {
-      const r = d.transaction(DB_STORE, "readonly").objectStore(DB_STORE).get(KEY);
+      const r = d.transaction(DB_STORE, "readonly").objectStore(DB_STORE).get(schluessel);
       r.onsuccess = () => ok(r.result || null);
       r.onerror = () => fehler(r.error);
     })).catch(() => null);
   }
-  function dbSchreiben(p) {
+  function dbSchreiben(p, schluessel = KEY) {
     return db().then(d => new Promise((ok) => {
       const t = d.transaction(DB_STORE, "readwrite");
-      t.objectStore(DB_STORE).put(JSON.parse(JSON.stringify(p)), KEY);
+      t.objectStore(DB_STORE).put(JSON.parse(JSON.stringify(p)), schluessel);
       t.oncomplete = () => ok(true);
       t.onerror = () => ok(false);
     })).catch(() => false);
@@ -96,9 +97,34 @@
     return n;
   }
 
+  // ---------- Haushalt laden (bei Bedarf aus dem alten Einzelprofil anlegen) ----------
+  function bereinigeHaushalt(h) {
+    if (!h || typeof h !== "object" || !Array.isArray(h.kinder) || !h.kinder.length) return null;
+    const kinder = h.kinder.filter(k => k && /^k[0-9a-z]{1,12}$/.test(k.id)).map(k => ({ id: k.id, name: String(k.name || "").slice(0, 20) })).slice(0, 8);
+    if (!kinder.length) return null;
+    return { aktiv: kinder.some(k => k.id === h.aktiv) ? h.aktiv : kinder[0].id, kinder, pin: typeof h.pin === "string" ? h.pin : null, stand: Number.isFinite(h.stand) ? h.stand : 0 };
+  }
+  let haushalt = bereinigeHaushalt(lesenK(HKEY));
+  if (!haushalt) {
+    const alt = lesenK(PRE + "profil.v1");
+    haushalt = { aktiv: "k1", kinder: [{ id: "k1", name: (alt && alt.name) || "" }], pin: (alt && alt.daten && alt.daten.eltern && alt.daten.eltern.pin) || null, stand: alt ? 1 : 0 };
+    if (alt) schreibenK(HKEY, haushalt);
+  }
+  function haushaltSpeichern() { haushalt.stand = Date.now(); schreibenK(HKEY, haushalt); dbSchreiben(haushalt, HKEY); }
+  let KEY = profilKey(haushalt.aktiv);
+
   let profil = bereinige(lokalLesen()) || leeresProfil();
 
-  // Beim Start mit der zweiten Kopie abgleichen
+  // Haushalt mit der zweiten Kopie abgleichen
+  dbLesen(HKEY).then((kopie) => {
+    const k = bereinigeHaushalt(kopie);
+    if (k && (!lesenK(HKEY) || k.stand > haushalt.stand)) {
+      schreibenK(HKEY, k);
+      if (!sessionStorage.getItem(PRE + "haushalt-wieder")) { sessionStorage.setItem(PRE + "haushalt-wieder", "1"); location.reload(); }
+    } else if (lesenK(HKEY) && (!k || haushalt.stand > k.stand)) dbSchreiben(haushalt, HKEY);
+  });
+
+  // Spielstand des aktiven Kindes mit der zweiten Kopie abgleichen
   dbLesen().then((kopie) => {
     const k = bereinige(kopie);
     const lokalDa = !!lokalLesen();
@@ -144,7 +170,34 @@
     ht(o, feld) { const h = Spielwelt.hilfe(); if (!h || !o) return ""; const k = feld ? feld + h.code[0].toUpperCase() + h.code.slice(1) : h.code; return o[k] || ""; },
     // Feste Textpaare: [deutsch, russisch] (alt) oder { de, ru, uk } → [deutsch, hilfe]
     paar(x) { const h = Spielwelt.hilfe(); if (Array.isArray(x)) return [x[0], h && h.code === "ru" ? x[1] || "" : ""]; return [x.de, h ? x[h.code] || "" : ""]; },
-    setzeName(n) { const name = String(n).trim().slice(0, 20); speichernFest(p => { p.name = name; }); },
+    setzeName(n) {
+      const name = String(n).trim().slice(0, 20); speichernFest(p => { p.name = name; });
+      const e = haushalt.kinder.find(k => k.id === haushalt.aktiv); if (e && e.name !== name) { e.name = name; haushaltSpeichern(); }
+    },
+    // ---------- Mehrere Kinder pro Tablet ----------
+    kinder() { return haushalt.kinder.map(k => Object.assign({ aktiv: k.id === haushalt.aktiv }, k)); },
+    aktivesKind() { return haushalt.aktiv; },
+    wechsleKind(id) { if (!haushalt.kinder.some(k => k.id === id)) return false; haushalt.aktiv = id; haushaltSpeichern(); try { sessionStorage.setItem(PRE + "gewaehlt", id); } catch (e) { /* egal */ } return true; },
+    neuesKind() {
+      if (haushalt.kinder.length >= 8) return null;
+      let n = 2; while (haushalt.kinder.some(k => k.id === "k" + n)) n++;
+      const id = "k" + n; haushalt.kinder.push({ id, name: "" }); haushaltSpeichern(); return id;
+    },
+    entferneKind(id) {
+      if (haushalt.kinder.length <= 1) return false;
+      haushalt.kinder = haushalt.kinder.filter(k => k.id !== id);
+      if (haushalt.aktiv === id) haushalt.aktiv = haushalt.kinder[0].id;
+      haushaltSpeichern();
+      try { localStorage.removeItem(profilKey(id)); } catch (e) { /* egal */ }
+      db().then(d => d.transaction(DB_STORE, "readwrite").objectStore(DB_STORE).delete(profilKey(id))).catch(() => {});
+      return true;
+    },
+    // Wurde in dieser Sitzung schon gewählt, wer spielt? (nur nötig bei mehreren Kindern)
+    kindGewaehlt() { try { return haushalt.kinder.length < 2 || sessionStorage.getItem(PRE + "gewaehlt") === haushalt.aktiv; } catch (e) { return true; } },
+    profilVon(id) { return bereinige(lesenK(profilKey(id))); },
+    // PIN gilt für den ganzen Haushalt
+    pin() { return haushalt.pin; },
+    setzePin(h) { haushalt.pin = h || null; haushaltSpeichern(); },
     sterne() { return profil.sterne; },
     gibSterne(n) { profil.sterne += n; speichern(); },
     istFrei(id) { return profil.freigeschaltet.includes(id); },
@@ -253,7 +306,7 @@
         const t = e.target.dataset.t;
         if (t === "plus") { Spielwelt.gibSterne(50); setTimeout(() => location.reload(), 300); }
         if (t === "reset" && confirm("Testspielstand komplett löschen? Der echte Spielstand bleibt erhalten.")) {
-          try { localStorage.removeItem(KEY); } catch (er) { /* egal */ }
+          try { Object.keys(localStorage).filter(k => k.startsWith(PRE)).forEach(k => localStorage.removeItem(k)); } catch (er) { /* egal */ }
           try { indexedDB.deleteDatabase(DB_NAME); } catch (er) { /* egal */ }
           profil = leeresProfil(); setTimeout(() => location.reload(), 300);
         }

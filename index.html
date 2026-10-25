@@ -98,6 +98,18 @@
     .tuer.anziehen .bild { width: 150px; height: 150px; }
   }
 
+  /* Wer spielt? (mehrere Kinder) */
+  .wer { position: fixed; inset: 0; z-index: 50; background: rgba(75,35,128,.6); display: grid; place-items: center; padding: 20px; }
+  .wer[hidden] { display: none; }
+  .wer-karte { background: var(--wolke); border-radius: var(--rund-gross); padding: 28px; width: min(760px, 100%); text-align: center; box-shadow: 0 12px 0 rgba(0,0,0,.15); }
+  .wer-karte h2 { margin: 0 0 18px; font-size: 2.2rem; }
+  .wer-liste { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; }
+  .wer-kind { width: 170px; border-radius: 26px; background: #fff; padding: 12px 12px 16px; box-shadow: var(--schatten); display: grid; gap: 8px; justify-items: center; font-size: 1.4rem; font-weight: 700; color: var(--pflaume); }
+  .wer-kind:active { transform: translateY(3px); }
+  .wer-kind .bild { width: 130px; height: 130px; border-radius: 22px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #FFE3F0, #FFD1A8); }
+  .wer-kind .bild svg { width: 100%; height: 100%; }
+  [hidden] { display: none !important; }
+
   /* Erster Start: Name eingeben */
   .dialog {
     position: fixed; inset: 0; z-index: 40;
@@ -124,6 +136,7 @@
 <body>
 <main class="seite">
   <div class="leiste">
+    <button class="knopf" id="wer-knopf" hidden>👥 Wechseln</button>
     <button class="knopf" id="spielstand">💾 Spielstand</button>
     <button class="knopf" id="ton" aria-pressed="true">🔊 Ton an</button>
     <div class="knopf sterne" aria-live="polite">⭐ <b id="sterne">0</b> Sterne</div>
@@ -183,6 +196,13 @@
   </nav>
 </main>
 
+<div class="wer" id="wer" hidden>
+  <div class="wer-karte">
+    <h2>Wer spielt?</h2>
+    <div class="wer-liste" id="wer-liste"></div>
+  </div>
+</div>
+
 
 
 <script src="shared/config.js"></script>
@@ -198,6 +218,23 @@
   const S = Spielwelt;
   // Ersteinrichtung immer durch einen Erwachsenen
   if (!S.eingerichtet()) location.replace("spiele/eltern/?einrichtung=1");
+  // Mehrere Kinder: zuerst fragen, wer spielt
+  function zeigeWer() {
+    const liste = document.getElementById("wer-liste"); liste.innerHTML = "";
+    S.kinder().forEach(k => {
+      const p = S.profilVon(k.id), look = (p && p.daten.anziehen && p.daten.anziehen.aktuell) || Figur.STANDARD(p && p.daten.eltern && p.daten.eltern.kind ? p.daten.eltern.kind.geschlecht : "n");
+      const b = document.createElement("button"); b.className = "wer-kind";
+      b.innerHTML = `<span class="bild"><svg viewBox="60 40 180 180">${Figur.zeichneFigur(look)}</svg></span>${k.name || "Neues Kind"}`;
+      b.addEventListener("click", () => { S.ton("juhu"); S.wechsleKind(k.id); location.reload(); });
+      liste.appendChild(b);
+    });
+    document.getElementById("wer").hidden = false;
+  }
+  if (S.kinder().length > 1) {
+    document.getElementById("wer-knopf").hidden = false;
+    document.getElementById("wer-knopf").addEventListener("click", () => { S.ton("tipp"); zeigeWer(); });
+    if (!S.kindGewaehlt()) zeigeWer();
+  }
   const farben = ["#C2337A", "#FF6F61", "#FFC83D", "#5CCBA6", "#7B55B8", "#3AA0E0"];
   const kippen = [-6, 4, -3, 6, -5, 3, -4, 5];
 

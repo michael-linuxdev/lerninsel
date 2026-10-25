@@ -39,6 +39,8 @@ werden im Elternbereich festgelegt und bleiben nur auf dem Tablet.
   3 Farben), mit Tagesaufgaben und einmal täglich Antippen wärmen, schlüpfen lassen und benennen. Füttern mit Leckerli
   (gibt es für Tagesaufgaben und Spielrunden), spielen, streicheln. Freundschaft lässt es wachsen (Baby → Kind → Groß).
   Zubehör für Sterne. Keine Strafe: vergessen heißt nur hungrig oder traurig
+- **Mehrere Kinder pro Tablet:** jedes Kind mit eigenem Spielstand; bei mehreren Kindern fragt die Startseite „Wer spielt?“ (Knopf „👥 Wechseln“). Kinder werden im Elternbereich hinzugefügt oder entfernt; die PIN gilt für alle
+- **Hilfesprachen:** Russisch fertig, Ukrainisch, Arabisch, Türkisch, Polnisch und Farsi vorbereitet (siehe `docs/SPRACHEN.md`)
 - **Für Eltern (PIN):** Ersteinrichtung und Kind-Einstellungen (mit der Bildschirmzeit-Empfehlung der DGKJ fürs Alter),
   „App neu laden“ (holt die neueste Version, Spielstand bleibt), Übersicht über Fähigkeiten, Tagesaufgaben-Kalender, Trefferquote pro Matheweg-Station,
   zuletzt falsch gelöste Aufgaben und den Stand in Abenteuer, Sachkunde, Führerschein, Haustier und 3D-Welt
