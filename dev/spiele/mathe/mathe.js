@@ -4,7 +4,7 @@
   const LOB = ["Richtig!", "Super!", "Klasse!", "Genau!", "Toll gerechnet!", "Spitze!", "Prima!"];
 
   // ---------- Fortschritt ----------
-  const daten = () => S.lade("mathe") || { k2: {} };
+  const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; return d; };
   const bestes = (id) => daten().k2[id] || 0;
   const istOffen = (i) => S.offen(i === 0 || bestes(ST[i - 1].id) > 0);
   function merke(id, sterne) {
@@ -12,6 +12,11 @@
   }
   const C = () => window.Charakter;
   // Trefferquote pro Station (erster Versuch) und gemerkte Fehler fürs Training
+  // Wiederholung wie bei einer Lernkartei: falsch → morgen, dann nach 3 und 7 Tagen; dreimal richtig = gelernt
+  const ABSTAND = [0, 1, 3, 7];
+  const pad = (n) => String(n).padStart(2, "0");
+  const tagIn = (n) => { const d = window.__heute ? new Date(window.__heute) : new Date(); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+  const faellig = (f) => !f.faellig || f.faellig <= tagIn(0);
   function statistik(a, richtig) {
     if (!a.station) return;
     const d = daten(); d.stat = d.stat || {};
@@ -21,10 +26,17 @@
     if (!richtig && !a.bild) {
       const { station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort } = a;
       d.fehler = d.fehler.filter(x => x.text !== text);
-      d.fehler.push({ station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort, am: Date.now() });
-      d.fehler = d.fehler.slice(-20);
+      d.fehler.push({ station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort, am: Date.now(), stufe: 1, faellig: tagIn(ABSTAND[1]) });
+      d.fehler = d.fehler.slice(-40);
     }
-    if (richtig && a.ausFehler) d.fehler = d.fehler.filter(x => x.text !== a.text);
+    if (richtig && a.ausFehler) {
+      const f = d.fehler.find(x => x.text === a.text);
+      if (f) {
+        const stufe = (f.stufe || 1) + 1;
+        if (stufe >= ABSTAND.length) { d.fehler = d.fehler.filter(x => x !== f); d.gelernt = (d.gelernt || 0) + 1; }
+        else { f.stufe = stufe; f.faellig = tagIn(ABSTAND[stufe]); }
+      }
+    }
     S.speichere("mathe", d);
   }
 
@@ -108,7 +120,9 @@
     const schwaeche = (id) => { const x = stat[id] || { r: 0, f: 0 }; return (x.f + 1) / (x.r + x.f + 2); };
     const schwach = offen.slice().sort((a, b) => schwaeche(b.id) - schwaeche(a.id) || Math.random() - 0.5).slice(0, 2);
     const offeneIds = offen.map(s => s.id);
-    let liste = (d.fehler || []).filter(f => offeneIds.includes(f.station)).slice(-3).map(f => Object.assign({}, f, { ausFehler: true, wieder: false }));
+    // zuerst fällige Wiederholungen (höchstens 4), älteste zuerst
+    let liste = (d.fehler || []).filter(f => offeneIds.includes(f.station) && faellig(f)).sort((x, y) => (x.faellig || "").localeCompare(y.faellig || "")).slice(0, 4)
+      .map(f => Object.assign({}, f, { ausFehler: true, wieder: false }));
     const rest = 8 - liste.length;
     schwach.forEach((s, i) => {
       const n = schwach.length === 1 ? rest : i === 0 ? Math.ceil(rest / 2) : Math.floor(rest / 2);
@@ -304,5 +318,5 @@
 
   zeichneWeg();
   if (new URLSearchParams(location.search).has("training")) starteTraining();
-  window.__mathe = { starte, starteTraining, get lauf() { return lauf; } }; // für Tests
+  window.__mathe = { faellig, tagIn, starte, starteTraining, get lauf() { return lauf; } }; // für Tests
 })();

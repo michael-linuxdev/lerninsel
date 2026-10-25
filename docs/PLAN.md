@@ -234,6 +234,8 @@ und dem betretbaren Haus mit Kleiderschrank.
 - Startseite: „Meine Insel“ als Haupttür, Lernfächer darunter (Deutsch, Mathe, Sachunterricht, Tablet-Profi), Anziehen im Haus
 - Insel: Lernmodus ohne Spielzeit, betretbares Zimmer mit Kleiderschrank, Spiegel, Bett
 
-**Offen in Phase 1:** Wiederholung nach 1/3/7 Tagen (Mathe zuerst), Wochenbericht für Eltern, Bewegungsaufgaben „weg vom Bildschirm“ am Ende einer Spielzeit.
+**Nachtrag (erledigt):** Lernkartei in Mathe (falsch → nach 1, 3, 7 Tagen wieder, dreimal richtig = gelernt), Wochenbericht mit Balken und Tipps für den Alltag, Ideen fürs echte Leben, wenn die Spielzeit vorbei ist.
 
-**Nächster Schritt:** Wiederholung nach 1/3/7 Tagen und Wochenbericht, danach Phase 2 (Lehrplan-Gerüst KMK + Sachsen).
+**Offen:** Lernkartei auch für Deutsch und Sachunterricht.
+
+**Nächster Schritt:** Phase 2 – Lehrplan-Gerüst (KMK-Bildungsstandards + Lehrplan Sachsen als Datenstruktur), Einstufungstest.

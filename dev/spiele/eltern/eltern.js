@@ -91,6 +91,45 @@
     location.reload();
   }
 
+  // ---------- Wochenbericht ----------
+  const ALLTAG = {
+    geld: "beim Einkaufen mit echtem Geld bezahlen und Wechselgeld nachzählen lassen",
+    uhr: "im Alltag die Uhr lesen lassen („Wie spät ist es? Wann gibt es Essen?“)",
+    mal1: "Einmaleins-Reihen beim Autofahren oder Treppensteigen aufsagen", mal2: "Einmaleins-Reihen beim Autofahren oder Treppensteigen aufsagen", mal3: "Einmaleins-Reihen beim Autofahren oder Treppensteigen aufsagen",
+    doppelt: "beim Backen Mengen verdoppeln oder halbieren", geteilt: "Süßigkeiten oder Spielkarten gerecht aufteilen lassen",
+    vergleich: "Preise im Prospekt vergleichen: Was ist teurer?", zehner: "mit Münzen oder Streichhölzern Zehnerbündel legen"
+  };
+  function wochenbericht(schwach, mathe) {
+    if (!window.Zeit || !window.Zeit.verlauf) return "";
+    const v = window.Zeit.verlauf(), tage = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      tage.push(Object.assign({ tag: iso, lern: 0, aufgaben: 0, spiel: 0, name: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"][d.getDay()] }, v.find(x => x.tag === iso) || {}));
+    }
+    const summe = (k) => tage.reduce((n, t) => n + (t[k] || 0), 0), lernTage = tage.filter(t => t.lern > 0 || t.aufgaben > 0).length;
+    const max = Math.max(10, ...tage.map(t => Math.max(t.lern, t.spiel)));
+    const faelligN = (mathe.fehler || []).filter(f => !f.faellig || f.faellig <= heuteIso()).length;
+    const tipps = [];
+    if (lernTage < 4) tipps.push("Lieber jeden Tag 10 Minuten als einmal lange: Eine feste Lernzeit hilft, z. B. direkt nach dem Mittagessen.");
+    schwach.slice(0, 2).forEach(o => tipps.push(`Übt gemeinsam „${o.s.name}“: ${ALLTAG[o.s.id] || "im Alltag kleine Rechenaufgaben stellen"}.`));
+    if (summe("spiel") > 0 && tage.filter(t => t.spiel >= Zeit.regeln().maxSpiel).length >= 3) tipps.push("Die Spielzeit wird oft ganz genutzt. Schönes Ritual danach: gemeinsam etwas draußen unternehmen.");
+    if (!tipps.length) tipps.push(lernTage ? "Eine richtig gute Woche! Fragt, was am meisten Spaß gemacht hat – Lob für die Mühe wirkt am besten." : "Diese Woche wurde noch nicht gelernt. Gemeinsam anfangen hilft: einfach eine Runde Mathe zusammen machen.");
+    return `<div class="karte">
+      <h2>📅 Wochenbericht (letzte 7 Tage)</h2>
+      <div class="zahlen">
+        <div class="zahl"><b>${summe("lern")} min</b><span>gelernt an ${lernTage} von 7 Tagen</span></div>
+        <div class="zahl"><b>${summe("aufgaben")}</b><span>Aufgaben richtig gelöst</span></div>
+        <div class="zahl"><b>${summe("spiel")} min</b><span>gespielt</span></div>
+        <div class="zahl"><b>${faelligN}</b><span>Wiederholungen heute dran${mathe.gelernt ? ` · ${mathe.gelernt} gelernt` : ""}</span></div>
+      </div>
+      <div class="woche-balken" aria-label="Lern- und Spielminuten pro Tag">${tage.map(t => `<div class="tag-balken"><div class="saeulen"><span class="lern" style="height:${Math.round(t.lern / max * 100)}%" title="${t.lern} min gelernt"></span><span class="spiel" style="height:${Math.round(t.spiel / max * 100)}%" title="${t.spiel} min gespielt"></span></div><small>${t.name}</small></div>`).join("")}</div>
+      <p class="klein"><span class="punkt lern"></span> Lernen <span class="punkt spiel"></span> Spielen (Minuten)</p>
+      <h3 style="margin:10px 0 6px;font-size:1.05rem">Tipp für diese Woche</h3>
+      <ul class="liste">${tipps.map(t => `<li>${t}</li>`).join("")}</ul>
+    </div>`;
+  }
+
   // ---------- Zeit-Regeln ----------
   const Z = window.Zeit;
   const minText = (sek) => `${Math.round(sek / 60)} min`;
@@ -129,6 +168,9 @@
     $("z-extra").addEventListener("click", () => { Z.extra(10); S.meldung("Heute 10 Minuten extra."); uebersicht(); });
   }
 
+  const heuteIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+  const wannWieder = (f) => !f.faellig || f.faellig <= heuteIso() ? "· heute dran" : `· wieder am ${f.faellig.slice(8)}.${f.faellig.slice(5, 7)}.`;
+
   // ---------- Übersicht ----------
   const quoteKlasse = (q) => q == null ? "leer" : q >= 0.8 ? "gut" : q >= 0.6 ? "mittel" : "schwach";
   const prozent = (q) => q == null ? "–" : Math.round(q * 100) + " %";
@@ -166,6 +208,7 @@
           <div class="zahl"><b>${gesR + gesF ? Math.round(gesR / (gesR + gesF) * 100) + " %" : "–"}</b><span>Mathe beim 1. Versuch richtig (${gesR + gesF} Aufgaben)</span></div>
         </div>
       </div>
+      ${wochenbericht(schwach, mathe)}
       <div class="karte">
         <h2>Fähigkeiten</h2>
         <table><tr><th>Fähigkeit</th><th class="r">Stufe</th><th class="r">Punkte</th><th>Wächst durch</th></tr>
@@ -185,7 +228,7 @@
       </div>
       <div class="karte">
         <h2>Zuletzt falsch gelöst</h2>
-        ${fehler.length ? `<ul class="liste">${fehler.map(f => `<li>${f.text || f.frage} → richtig: <b>${f.antwort}${f.einheit ? " " + f.einheit : ""}</b></li>`).join("")}</ul><p class="klein">Diese Aufgaben kommen im Mathe-Training wieder, bis sie sitzen.</p>` : `<p>Noch keine gemerkten Fehler.</p>`}
+        ${fehler.length ? `<ul class="liste">${fehler.map(f => `<li>${f.text || f.frage} → richtig: <b>${f.antwort}${f.einheit ? " " + f.einheit : ""}</b> <span class="klein">${"●".repeat(f.stufe || 1)}${"○".repeat(3 - (f.stufe || 1))} ${wannWieder(f)}</span></li>`).join("")}</ul><p class="klein">Lernkartei: Falsch gelöste Aufgaben kommen im Mathe-Training nach 1, 3 und 7 Tagen wieder. Dreimal richtig = gelernt${mathe.gelernt ? ` (schon ${mathe.gelernt} gelernt)` : ""}.</p>` : `<p>Noch keine gemerkten Fehler.</p>`}
       </div>
       <div class="karte">
         <h2>Deutsch, Sachunterricht, Tablet-Führerschein und 3D-Welt</h2>

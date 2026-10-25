@@ -28,8 +28,22 @@
   // ---------- Tageswerte ----------
   const pad = (n) => String(n).padStart(2, "0");
   const heute = () => { if (window.__heute) return window.__heute; const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+  // Vergangene Tage für den Wochenbericht (höchstens 60 Tage)
+  function merkeTag(alt) {
+    if (!alt || !alt.tag || (!alt.lernSek && !alt.spielSek && !alt.aufgaben)) return;
+    const v = S.lade("zeitverlauf") || [];
+    if (v.some(x => x.tag === alt.tag)) return;
+    v.push({ tag: alt.tag, lern: Math.round(alt.lernSek / 60), aufgaben: alt.aufgaben, spiel: Math.round(alt.spielSek / 60) });
+    S.speichere("zeitverlauf", v.slice(-60));
+  }
+  function verlauf() {
+    const v = (S.lade("zeitverlauf") || []).slice(), d = tag();
+    v.push({ tag: d.tag, lern: Math.round(d.lernSek / 60), aufgaben: d.aufgaben, spiel: Math.round(d.spielSek / 60), heute: true });
+    return v;
+  }
   function tag() {
     let d = S.lade("zeit");
+    if (d && d.tag !== heute()) merkeTag(d);
     if (!d || d.tag !== heute()) d = { tag: heute(), lernSek: 0, aufgaben: 0, spielSek: 0, extraMin: 0, gewarnt: 0, seitPause: 0, seitWasser: 0, seitAugen: 0 };
     return d;
   }
@@ -97,6 +111,13 @@
     return `<div style="margin:14px auto;max-width:420px"><div style="height:22px;border-radius:999px;background:#EEE6FB;overflow:hidden"><div style="height:100%;width:${p}%;background:linear-gradient(90deg,#5CCBA6,#2E9C5A);border-radius:999px"></div></div>
       <div style="display:flex;justify-content:space-between;font-weight:600;margin-top:6px"><span>📚 Lernen</span><span>🏝️ Spielen</span></div></div>`;
   }
+  // Ideen fürs echte Leben, wenn die Spielzeit vorbei ist
+  const IDEEN = [
+    ["🏕️", "Bau eine Höhle aus Decken und Kissen!"], ["🎨", "Mal ein Bild von deinem Tier auf der Insel!"], ["📚", "Lies ein Buch oder lass dir vorlesen!"],
+    ["🍳", "Hilf beim Kochen oder Tischdecken!"], ["🧱", "Bau den höchsten Turm, den du schaffst!"], ["🏃", "Spiel draußen Fangen oder Verstecken!"],
+    ["🍂", "Sammle draußen 5 verschiedene Blätter!"], ["🗣️", "Erzähl jemandem, was du heute gelernt hast!"], ["🧩", "Mach ein Puzzle oder spiel ein Brettspiel!"]
+  ];
+  const idee = () => { const [e, t] = IDEEN[Math.floor(Math.random() * IDEEN.length)]; return `<p style="font-size:1.25rem;background:#E3F7EF;border-radius:18px;padding:12px 16px;margin:12px 0"><span style="font-size:2rem;vertical-align:middle">${e}</span> <b>Idee für jetzt:</b> ${t}</p>`; };
   function zeigeSperre(st) {
     if (st.ruhe) {
       overlay(`<div style="font-size:4rem">🌙</div><h2 style="margin:6px 0">Die Insel schläft</h2>
@@ -106,11 +127,12 @@
     }
     if (st.genug) {
       overlay(`<div style="font-size:4rem">😴</div><h2 style="margin:6px 0">Genug gespielt für heute</h2>
-        <p style="font-size:1.2rem;line-height:1.4">Dein Tier ist müde. Wie wäre es mit Bewegung draußen, Malen oder Bauen? Morgen geht es weiter!</p>
+        <p style="font-size:1.2rem;line-height:1.4">Dein Tier ist müde. Morgen geht es weiter!</p>${idee()}
         ${knopf("", "🏠 Zur Startseite", true)}`);
       return;
     }
-    overlay(`<div style="font-size:4rem">🌱</div><h2 style="margin:6px 0">Erst lernen, dann spielen</h2>
+    const vorbei = st.bloecke > 0 && st.rest <= 0;
+    overlay(`<div style="font-size:4rem">${vorbei ? "⏰" : "🌱"}</div><h2 style="margin:6px 0">${vorbei ? "Spielzeit vorbei!" : "Erst lernen, dann spielen"}</h2>${vorbei ? idee() : ""}
       <p style="font-size:1.2rem;line-height:1.4">Noch ${st.fehltMin} Minuten lernen oder ${st.fehltAufgaben} Aufgaben richtig lösen, dann darfst du ${st.regeln.spielMin} Minuten spielen.</p>
       ${leiste(st)}
       <div>${knopf("spiele/mathe/", "🧮 Mathe", true)}${knopf("spiele/deutsch/", "🦊 Deutsch", true)}${knopf("spiele/sachkunde/", "🦉 Sachunterricht", true)}${knopf("spiele/medien/", "🤖 Tablet", true)}</div>
@@ -186,7 +208,7 @@
   const Zeit = {
     ART, regeln, setzeRegeln, empfehlung, status, aufgabe, inRuhe,
     extra(min) { const d = tag(); d.extraMin += min; speichere(d); },
-    heute: tag, bewegungspause,
+    heute: tag, bewegungspause, verlauf,
     leisteHtml: () => leiste(status())
   };
   window.Zeit = Zeit;
