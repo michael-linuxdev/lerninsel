@@ -43,6 +43,7 @@ werden im Elternbereich festgelegt und bleiben nur auf dem Tablet.
 - **Mehrere Kinder pro Tablet:** jedes Kind mit eigenem Spielstand; bei mehreren Kindern fragt die Startseite „Wer spielt?“ (Knopf „👥 Wechseln“). Kinder werden im Elternbereich hinzugefügt oder entfernt; die PIN gilt für alle
 - **Hilfesprachen:** Russisch fertig, Ukrainisch, Arabisch, Türkisch, Polnisch und Farsi vorbereitet (siehe `docs/SPRACHEN.md`)
 - **Lernkartei:** falsch gelöste Mathe-Aufgaben kommen nach 1, 3 und 7 Tagen im Mathe-Training wieder, dreimal richtig = gelernt
+- **Lehrplan-Gerüst:** KMK-Bildungsstandards und Lehrplan Sachsen (Klasse 1–4) in `shared/lehrplan.js`; der Elternbereich zeigt, welche Lernbereiche die App schon übt (`docs/LEHRPLAN.md`)
 - **Für Eltern (PIN):** Wochenbericht (Lern- und Spielminuten je Tag, Aufgaben, Tipps für den Alltag), Ersteinrichtung und Kind-Einstellungen (mit der Bildschirmzeit-Empfehlung der DGKJ fürs Alter),
   „App neu laden“ (holt die neueste Version, Spielstand bleibt), Übersicht über Fähigkeiten, Tagesaufgaben-Kalender, Trefferquote pro Matheweg-Station,
   zuletzt falsch gelöste Aufgaben und den Stand in Abenteuer, Sachkunde, Führerschein, Haustier und 3D-Welt

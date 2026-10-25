@@ -239,3 +239,11 @@ und dem betretbaren Haus mit Kleiderschrank.
 **Offen:** Lernkartei auch für Deutsch und Sachunterricht.
 
 **Nächster Schritt:** Phase 2 – Lehrplan-Gerüst (KMK-Bildungsstandards + Lehrplan Sachsen als Datenstruktur), Einstufungstest.
+
+## Stand 25.10.2026 (Phase 2 begonnen – Lehrplan-Gerüst)
+- `shared/lehrplan.js`: KMK-Bildungsstandards + Lehrplan Sachsen (Mathe 2025, Deutsch und Sachunterricht 2019), Klassen 1–4, mit Zuordnung der App-Inhalte
+- Elternbereich: „📘 Was übt die App?“ je Klasse; Bundesland in der Ersteinrichtung (zuerst Sachsen)
+- `docs/LEHRPLAN.md`: Bauplan für fehlende Inhalte, nach Nutzen für Klasse 2 geordnet
+
+**Nächster Schritt:** Inhalte aus dem Bauplan, beginnend mit Mathe „Daten und Zufall“ und „Raum und Form“, Deutsch „Verben und Adjektive“,
+Sachunterricht „Körper und Gesundheit“; Einstufungstest.

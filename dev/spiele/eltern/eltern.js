@@ -63,6 +63,7 @@
         <label>Ansprache in der App<select id="e-geschlecht">${option(ANSPRACHE, k.geschlecht)}</select></label>
         <label>Hilfesprache (Muttersprache)<select id="e-sprache">${option(SPRACHEN, k.hilfesprache)}</select></label>
       </div>
+      <label>Bundesland (Lehrplan)<select id="e-land">${option(LAENDER.concat([["", "Andere Bundesländer folgen", true]]), k.land || "sachsen")}</select></label>
       <p class="hinweis" id="e-empf"></p>
       <p class="fehler" id="e-fehler"></p>
       <div class="knoepfe"><button class="knopf haupt" id="e-ok">${bearbeiten ? "Speichern" : "Fertig – los geht's"}</button>${bearbeiten ? `<button class="knopf" id="e-zurueck">Abbrechen</button>` : ""}</div>
@@ -75,7 +76,7 @@
       if (!n) { $("e-fehler").textContent = "Bitte einen Vornamen eingeben."; $("e-name").focus(); return; }
       S.setzeName(n);
       S.speichere("eltern", Object.assign(eltern(), { eingerichtet: true, kind: {
-        alter: +$("e-alter").value, klasse: +$("e-klasse").value, geschlecht: $("e-geschlecht").value, hilfesprache: $("e-sprache").value } }));
+        alter: +$("e-alter").value, klasse: +$("e-klasse").value, geschlecht: $("e-geschlecht").value, hilfesprache: $("e-sprache").value, land: $("e-land").value || "sachsen" } }));
       if (bearbeiten) { S.meldung("Gespeichert."); uebersicht(); } else location.href = "../../";
     });
     if (bearbeiten) $("e-zurueck").addEventListener("click", uebersicht);
@@ -89,6 +90,33 @@
       if (navigator.serviceWorker) for (const r of await navigator.serviceWorker.getRegistrations()) if (location.href.startsWith(r.scope)) await r.unregister();
     } catch (e) { /* trotzdem neu laden */ }
     location.reload();
+  }
+
+  // ---------- Lehrplan: Was übt die App? ----------
+  const LAENDER = [["sachsen", "Sachsen"]];
+  function lehrplanKarte(mathe) {
+    const L = window.LEHRPLAN; if (!L) return "";
+    const k = S.kind(), land = k.land || "sachsen", lname = (L.laender[land] || {}).name || land;
+    const zeichen = { ja: "✅", teil: "◐", nein: "○" };
+    const k2 = mathe.k2 || {};
+    const fortschritt = (app) => {
+      const st = app.filter(a => a.startsWith("mathe:")).map(a => a.slice(6));
+      return st.length ? ` · Matheweg: ${st.filter(id => k2[id]).length} von ${st.length} Stationen geschafft` : "";
+    };
+    let n = { ja: 0, teil: 0, nein: 0 };
+    const faecher = ["mathe", "deutsch", "sachkunde"].map(f => {
+      const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
+      lb.forEach(x => n[x.abdeckung]++);
+      return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span></h3><ul class="lp-liste">${lb.map(x =>
+        `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app)}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}</span></li>`).join("")}</ul>`;
+    }).join("");
+    return `<div class="karte">
+      <h2>📘 Was übt die App? (Lehrplan ${lname}, ${k.klasse}. Klasse)</h2>
+      <p>${n.ja} Lernbereiche gut abgedeckt, ${n.teil} teilweise, ${n.nein} noch nicht. Die App ergänzt den Unterricht, sie ersetzt ihn nicht. Was gerade in der Schule dran ist, weiß die Lehrkraft am besten.</p>
+      <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App</p>
+      ${faecher}
+      <p class="klein">Quelle: Lehrpläne Grundschule des Freistaates Sachsen (schulportal.sachsen.de), KMK-Bildungsstandards Primarbereich.</p>
+    </div>`;
   }
 
   // ---------- Wochenbericht ----------
@@ -209,6 +237,7 @@
         </div>
       </div>
       ${wochenbericht(schwach, mathe)}
+      ${lehrplanKarte(mathe)}
       <div class="karte">
         <h2>Fähigkeiten</h2>
         <table><tr><th>Fähigkeit</th><th class="r">Stufe</th><th class="r">Punkte</th><th>Wächst durch</th></tr>
