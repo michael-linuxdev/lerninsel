@@ -35,5 +35,21 @@ Lies zuerst `README.md`, `docs/KONZEPT.md` und `docs/PLAN.md`. Sie sind die Grun
 - Ersteinrichtung ist Pflicht: im Test zuerst PIN `1234` zweimal, dann Vorname eingeben.
 - Jede geänderte Seite einmal öffnen, auf Fehler in der Konsole achten, Screenshots ansehen (Quer- und Hochformat).
 
+**Praktische Hinweise aus den bisherigen Sitzungen**
+- Rauchtest über alle Seiten: `sh tests/laufen.sh` (für /dev: `PFAD=dev/ sh tests/laufen.sh`).
+- In eigenen Tests `addInitScript(() => { window.__jetzt = new Date(2026,9,25,15,0).getTime(); })` setzen, sonst greift nachts die Ruhezeit.
+  Die Insel nutzt die echte Uhr: für Tag `heimat.html?stunde=14`, Jahreszeit `?monat=12`, Wetter `?wetter=regen|schnee|nebel|gewitter|klar`.
+- Server im selben Befehl starten: `(python3 -m http.server 8766 >/dev/null 2>&1 &) ; sleep 1; …` (Hintergrund-Server enden zwischen Befehlen).
+- Swiftshader läuft mit wenigen Bildern pro Sekunde: Bewegungen im Test langsam, zeitabhängige Logik mit Uhrzeit statt dt prüfen.
+- Pulsierende Knöpfe (Aktionsknopf) im Test mit `click(…, { force: true })`.
+- Test-Haken der Insel: `window.__heimat` (blick, ich, reingehen, rausgehen, laufeZu, tippe, station, laden, zimmerDaten, aktion, druecke, rennt, wetter).
+- Externe Seiten (Open-Meteo, Google Fonts) sind aus der Sandbox meist nicht erreichbar – mit Cache-Daten in localStorage testen.
+
+**Aktueller Stand (25.10.2026)** – Einzelheiten in `docs/PLAN.md` (letzter „Stand“-Abschnitt)
+- Fertig: Phase 0/1, Lehrplan-Gerüst Sachsen mit Inhalten Kl. 2, Insel mit Joystick/Tippen, Rennen, Springen/Doppelsprung,
+  Aktionsknopf, Zimmer (einrichten mit Sternen), Wetterstation mit echtem Wetter, Stickeralbum (48 Sticker).
+- Nächste Schritte: Weihnachts-Erststart und erstes QR-Geschenk (signiert, einmal pro Profil) → Minispiel-Orte →
+  Bewegungs-Aufgaben und Gefühle (PLAN 8b) → Hügel/Gelände und Fahrzeuge (PLAN 4) → Inhalte aus `docs/LEHRPLAN.md` → Tests auf Tablets.
+
 **Berichten**
 - Kurz und auf Deutsch: was fertig ist (mit Bildern, wenn es etwas zu sehen gibt), was ich testen soll, was als Nächstes kommt.
