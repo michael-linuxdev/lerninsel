@@ -6,7 +6,8 @@
   // ---------- Fortschritt ----------
   const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; return d; };
   const bestes = (id) => daten().k2[id] || 0;
-  const istOffen = (i) => S.offen(i === 0 || bestes(ST[i - 1].id) > 0);
+  const startAb = () => (daten().einstufung || {}).startAb || 0;   // aus dem Einstufungstest
+  const istOffen = (i) => S.offen(i === 0 || i <= startAb() || bestes(ST[i - 1].id) > 0);
   function merke(id, sterne) {
     const d = daten(); d.k2[id] = Math.max(d.k2[id] || 0, sterne); S.speichere("mathe", d);
   }
@@ -67,7 +68,9 @@
       if (y0 === y1) d += ` L${x1} ${y1}`;
       else { const bogen = x0 > breite / 2 ? dx * 0.9 : -dx * 0.9; d += ` C${x0 + bogen} ${y0} ${x1 + bogen} ${y1} ${x1} ${y1}`; }
     }
-    let jetzt = ST.findIndex((s, i) => istOffen(i) && !bestes(s.id));
+    let jetzt = ST.findIndex((s, i) => i >= startAb() && istOffen(i) && !bestes(s.id));
+    if (jetzt < 0) jetzt = ST.findIndex((s, i) => istOffen(i) && !bestes(s.id));
+    zeigeEinstufungAngebot();
 
     karte.innerHTML = `<svg class="pfad" viewBox="0 0 ${breite} ${hoehe}" preserveAspectRatio="none">
       <path d="${d}" stroke="#B8E6D4" stroke-width="30" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -114,6 +117,55 @@
   }
 
   // Tagesaufgabe: 8 Aufgaben aus gemerkten Fehlern und den schwächsten offenen Stationen
+  // ---------- Einstufungstest: je 2 Aufgaben wichtiger Stationen, von leicht nach schwer ----------
+  const TEST_ST = ["plus20", "minus20", "zehner", "vergleich", "plus100", "minus100", "plusUeber", "minusUeber", "doppelt", "ergaenzen", "mal1", "geld", "uhr"];
+  function zeigeEinstufungAngebot() {
+    const d = daten(), box = $("einstufung");
+    if (!box) return;
+    const zeigen = !d.einstufung && (!Object.keys(d.k2).length || d.einstufungAngebot);
+    box.hidden = !zeigen; if (!zeigen) return;
+    box.innerHTML = `<b>🧭 Was kannst du schon?</b><p>Mach einen kurzen Test. Dann startest du an der richtigen Stelle auf dem Matheweg.</p>
+      <div class="knoepfe-e"><button class="knopf haupt" id="einst-los">Test starten</button><button class="knopf" id="einst-nein">Lieber von vorne</button></div>`;
+    $("einst-los").addEventListener("click", () => { S.ton("tipp"); starteEinstufung(); });
+    $("einst-nein").addEventListener("click", () => { const x = daten(); x.einstufung = { am: tagIn(0), startAb: 0, uebersprungen: true }; S.speichere("mathe", x); S.ton("tipp"); zeichneWeg(); });
+  }
+  function starteEinstufung() {
+    const liste = [];
+    TEST_ST.forEach(id => { if (ST.some(s => s.id === id)) window.Mathe.runde(id, 2).forEach(a => liste.push(Object.assign(a, { station: id, wieder: false }))); });
+    lauf = { nr: -1, einstufung: true, station: { name: "Was kannst du schon?" }, liste, pos: 0, fehler: 0, versuch: 0, ergebnis: [], erst: [], eingabe: "", gesperrt: false, fehlStationen: 0, geschafft: [] };
+    $("station-name").textContent = "Was kannst du schon?";
+    zeige("rechnen");
+    zeigeAufgabe();
+  }
+  // Nach jedem Aufgabenpaar auswerten; nach 2 nicht geschafften Stationen aufhören
+  function einstufungPruefen() {
+    if (lauf.pos % 2 === 0) return false;
+    const a = lauf.liste[lauf.pos], ok = lauf.erst[lauf.pos] && lauf.erst[lauf.pos - 1];
+    if (ok) lauf.geschafft.push(a.station); else lauf.fehlStationen++;
+    return lauf.fehlStationen >= 2 || lauf.pos >= lauf.liste.length - 1;
+  }
+  function beendeEinstufung() {
+    const d = daten();
+    // Startpunkt: erste getestete Station, die nicht geschafft wurde
+    const ersteFehl = TEST_ST.find(id => lauf.liste.some(a => a.station === id) && !lauf.geschafft.includes(id) && lauf.liste.findIndex(a => a.station === id) <= lauf.pos);
+    const startId = ersteFehl || null;
+    lauf.geschafft.forEach(id => { d.k2[id] = Math.max(d.k2[id] || 0, 1); });
+    let start = startId ? ST.findIndex(s => s.id === startId) : ST.findIndex(s => !d.k2[s.id]);
+    if (start < 0) start = ST.length - 1;
+    d.einstufung = { am: tagIn(0), startAb: Math.max(0, start), geschafft: lauf.geschafft.slice() }; delete d.einstufungAngebot;
+    S.speichere("mathe", d);
+    C() && C().gib("mathe", 3);
+    $("ende-titel").textContent = "Test fertig!";
+    $("ende-sterne").innerHTML = `<span style="animation-delay:180ms">🧭</span>`;
+    $("ende-text").textContent = lauf.geschafft.length ? `Das kannst du schon: ${lauf.geschafft.map(id => ST.find(s => s.id === id).name).join(", ")}.` : "Wir fangen gemeinsam ganz vorne an. Das ist super so!";
+    $("ende-gewinn").textContent = `Dein Startpunkt: ${ST[Math.max(0, start)].name}. Alle Stationen davor sind offen.`;
+    const k = $("ende-knoepfe"); k.innerHTML = "";
+    const knopf = (text, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = text; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); k.appendChild(b); };
+    knopf(`Los geht's: ${ST[Math.max(0, start)].name}`, true, () => starte(Math.max(0, start)));
+    knopf("Zum Matheweg", false, () => { zeige("weg"); zeichneWeg(); });
+    zeige("ende"); S.ton("juhu");
+  }
+
   function starteTraining() {
     const d = daten(), stat = d.stat || {};
     const offen = ST.filter((s, i) => istOffen(i));
@@ -204,6 +256,7 @@
     if (antwort === a.antwort) {
       lauf.gesperrt = true;
       if (!lauf.ergebnis[lauf.pos]) lauf.ergebnis[lauf.pos] = "gut";
+      if (lauf.einstufung) lauf.erst[lauf.pos] = lauf.versuch === 0;
       if (lauf.versuch === 0 && !a.wieder) { statistik(a, true); C() && C().gib("mathe", 1); }
       if (luecke) luecke.className = "luecke richtig";
       markiereWahl(wert, true);
@@ -232,7 +285,7 @@
     // Zweiter Fehler: Lösung und Rechenweg zeigen, Aufgabe kommt am Ende nochmal
     lauf.gesperrt = true;
     if (!lauf.ergebnis[lauf.pos]) { lauf.ergebnis[lauf.pos] = "nochmal"; lauf.fehler++; }
-    if (!a.wieder) lauf.liste.push(Object.assign({}, a, { wieder: true }));
+    if (!a.wieder && !lauf.einstufung) lauf.liste.push(Object.assign({}, a, { wieder: true }));
     rueck.className = "rueck"; rueck.textContent = "";
     if (luecke) { luecke.className = "luecke loesung"; luecke.textContent = a.antwort; }
     $("hilfe-platz").innerHTML = `<div class="hilfe"><b>Die Lösung ist ${a.antwort}${a.einheit ? " " + a.einheit : ""}.</b>${a.hilfe}</div>`;
@@ -249,6 +302,7 @@
   }
 
   function naechste() {
+    if (lauf.einstufung && einstufungPruefen()) return beendeEinstufung();
     lauf.pos++;
     if (lauf.pos < lauf.liste.length) zeigeAufgabe();
     else beende();
@@ -318,5 +372,5 @@
 
   zeichneWeg();
   if (new URLSearchParams(location.search).has("training")) starteTraining();
-  window.__mathe = { faellig, tagIn, starte, starteTraining, get lauf() { return lauf; } }; // für Tests
+  window.__mathe = { faellig, tagIn, starteEinstufung, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte, starteTraining, get lauf() { return lauf; } }; // für Tests
 })();

@@ -252,6 +252,7 @@
       </div>
       <div class="karte">
         <h2>Mathe: Matheweg 2. Klasse</h2>
+        ${mathe.einstufung && !mathe.einstufung.uebersprungen ? `<p>🧭 <b>Einstufungstest</b> am ${mathe.einstufung.am.slice(8)}.${mathe.einstufung.am.slice(5, 7)}.: Start bei „${(window.Mathe.STATIONEN[mathe.einstufung.startAb] || {}).name || "–"}“${mathe.einstufung.geschafft && mathe.einstufung.geschafft.length ? `, schon gekonnt: ${mathe.einstufung.geschafft.map(id => (window.Mathe.STATIONEN.find(x => x.id === id) || {}).name).join(", ")}` : ""}. <button class="knopf klein-k" id="einst-neu">Test wiederholen</button></p>` : ""}
         ${schwach.length ? `<p><b>Braucht noch Übung:</b> ${schwach.map(o => o.s.name).join(", ")}. Das tägliche Mathe-Training übt diese Themen automatisch öfter.</p>` : `<p>Zurzeit keine auffälligen Schwächen (ab 5 gelösten Aufgaben pro Station bewertet).</p>`}
         <table><tr><th>Station</th><th class="r">Bestes Ergebnis</th><th class="r">Aufgaben</th><th class="r">1. Versuch richtig</th></tr>${stationen}</table>
       </div>
@@ -289,6 +290,7 @@
     $("pin-neu").addEventListener("click", () => { S.setzePin(null); sessionStorage.removeItem(SITZUNG); pinSeite(); });
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
+    const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
     zeitKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }

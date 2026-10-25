@@ -71,6 +71,9 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
     box-shadow: 0 10px 0 rgba(46,125,98,.18); min-height: 0; overflow: auto; text-align: center;
   }
+  .einstufung { max-width: 640px; margin: 10px auto 0; background: #fff; border-radius: 24px; padding: 16px 20px; box-shadow: 0 6px 0 rgba(0,0,0,.08); text-align: center; font-size: 1.2rem; }
+  .einstufung p { margin: 6px 0 10px; }
+  .knoepfe-e { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .tafel .frage { margin: 0; font-size: 1.5rem; font-weight: 600; color: #2E7D62; }
   .tafel .frage.gross { font-size: clamp(1.6rem, 3.2vw, 2.2rem); line-height: 1.35; max-width: 28ch; color: var(--pflaume); }
   .tafel .bild { width: 100%; }
@@ -149,6 +152,7 @@
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
   <p class="klasse">2. Klasse</p>
+  <div class="einstufung" id="einstufung" hidden></div>
   <div class="karte-weg" id="karte"></div>
 </section>
 

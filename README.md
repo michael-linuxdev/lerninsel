@@ -42,6 +42,8 @@ werden im Elternbereich festgelegt und bleiben nur auf dem Tablet.
 - **Erst lernen, dann spielen (Zeitsystem):** aktive Lernzeit oder richtig gelöste Aufgaben schalten Spielzeit frei (Standardwerte nach Alter und DGKJ-Empfehlung, z. B. 8 Jahre: 10 min oder 8 Aufgaben → 20 min spielen, höchstens 40 min am Tag). Ohne Spielzeit: „Erst lernen, dann spielen“ mit Fortschritt; Ruhezeit (Standard 19:30–7:00): „Die Insel schläft“. Fokus-Hilfen mit Bewegungspausen, Erinnerungen von Ella (Trinken) und Pixel (Augenpause), ruhige Darstellung. Alles im Elternbereich einstellbar; Erwachsene ausgenommen
 - **Mehrere Kinder pro Tablet:** jedes Kind mit eigenem Spielstand; bei mehreren Kindern fragt die Startseite „Wer spielt?“ (Knopf „👥 Wechseln“). Kinder werden im Elternbereich hinzugefügt oder entfernt; die PIN gilt für alle
 - **Hilfesprachen:** Russisch fertig, Ukrainisch, Arabisch, Türkisch, Polnisch und Farsi vorbereitet (siehe `docs/SPRACHEN.md`)
+- **Einstufungstest** auf dem Matheweg: je 2 Aufgaben wichtiger Stationen, setzt den Startpunkt
+- **Fipsis Wörter-Werkstatt** (Deutsch): Tunwörter, Wiewörter, Wortarten, Verlängern, Silben
 - **Lernkartei:** falsch gelöste Mathe-Aufgaben kommen nach 1, 3 und 7 Tagen im Mathe-Training wieder, dreimal richtig = gelernt
 - **Lehrplan-Gerüst:** KMK-Bildungsstandards und Lehrplan Sachsen (Klasse 1–4) in `shared/lehrplan.js`; der Elternbereich zeigt, welche Lernbereiche die App schon übt (`docs/LEHRPLAN.md`)
 - **Für Eltern (PIN):** Wochenbericht (Lern- und Spielminuten je Tag, Aufgaben, Tipps für den Alltag), Ersteinrichtung und Kind-Einstellungen (mit der Bildschirmzeit-Empfehlung der DGKJ fürs Alter),

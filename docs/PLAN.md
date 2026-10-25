@@ -247,3 +247,12 @@ und dem betretbaren Haus mit Kleiderschrank.
 
 **Nächster Schritt:** Inhalte aus dem Bauplan, beginnend mit Mathe „Daten und Zufall“ und „Raum und Form“, Deutsch „Verben und Adjektive“,
 Sachunterricht „Körper und Gesundheit“; Einstufungstest.
+
+## Stand 25.10.2026 (Inhalte Klasse 2)
+- Deutsch: Fipsis Wörter-Werkstatt (Tunwörter, Wiewörter, Wortarten, Verlängern d/t g/k b/p, Silben klatschen)
+- Sachunterricht: „Gesund und munter“, „Bäume und Vögel“
+- Mathe: neue Stationen Formen und Körper, Strichlisten und Diagramme, Sicher/möglich/unmöglich, Gerade/ungerade, Sachaufgaben, Länge, Woche/Monat/Jahr
+- Einstufungstest auf dem Matheweg (Startpunkt statt geschenkter Sterne; im Elternbereich wiederholbar)
+- Lehrplan Sachsen Kl. 1/2 jetzt: Mathe alle 4 Lernbereiche abgedeckt (2 teilweise), Deutsch und Sachunterricht deutlich besser
+
+**Nächster Schritt:** Insel lebendiger (Springen/Doppelsprung, Zimmer einrichten, Wetterstation, Stickeralbum), dann Weihnachts-Erststart und QR-Geschenk.
