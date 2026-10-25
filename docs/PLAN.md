@@ -89,6 +89,17 @@ Die Insel ist nur zugänglich, wenn das Zeitsystem Spielzeit erlaubt.
 Kein GPS: den Ort einmal im Elternbereich einstellen (z. B. Dresden). Ohne Internet: Wetter passend zur Jahreszeit.
 Wetterstation im Baumhaus: eine Woche lang das echte Wetter eintragen (Sachunterricht).
 
+### Abwechslungsreichere Insel und Fortbewegung (geplant)
+- **Gelände**: Hügel und kleine Täler statt flacher Scheibe (Höhenkarte, Figur, Tier und Nachbarn laufen auf der Höhe),
+  ein Aussichtshügel mit Fernrohr, Bach mit Brücke, Teich, Strand-Bucht, Wäldchen, Blumenwiese, Felsen zum Klettern.
+  Gute Gelegenheit zusammen mit der größeren Welt und den generierten Start-Inseln (gleicher Höhenkarten-Baustein).
+- **Rennen** (gebaut): Joystick ganz nach außen schieben oder Umschalt-Taste → nach einer halben Sekunde schneller, das Tier rennt mit.
+- **Fahrzeuge zum Freischalten** (mit Sternen oder als Fähigkeits-Belohnung, im Schuppen neben dem Haus):
+  Rollschuhe → Skateboard → Fahrrad (später Roller, Boot zum Nachbar-Eiland). Eigene Physik je Fahrzeug
+  (Rollschuhe: gleiten und schwingen, Skateboard: Sprung „Ollie“ mit dem Aktionsknopf und eine kleine Halfpipe,
+  Fahrrad: schneller, Klingel, Wege und Rampen). Helm im Kleiderschrank – das Spiel erinnert freundlich daran („Erst den Helm!“), Verkehrsregeln-Bezug zum Sachunterricht.
+- **Wege und Ziele dafür**: Rundweg um die Insel mit Zeitmessung gegen sich selbst (kein Ranking), Sammel-Sterne an Hügeln, Rampen.
+
 ## 5. Haustiere
 - **Keine Einhörner.**
 - Zum Start **drei** Tiere zur Wahl: Drache, Fuchs, Katze (Einhorn aus Tiere.ARTEN und EIER entfernen)
@@ -286,6 +297,8 @@ Sachunterricht „Körper und Gesundheit“; Einstufungstest.
 - Aktionsknopf: Vor Ella, Fipsi, Pixel, Haus, Schrank, Spiegel, Wetterstation usw. wird aus „Springen“ „Reden“, „Öffnen“, „Reingehen“ …
 - Wetterstation mit echtem Wetter (Open-Meteo, Ort im Elternbereich, kein GPS)
 - Zimmer einrichten: 10 Möbel, 6 Plätze, 5 Wandfarben, mit Sternen
+- Rennen (Joystick ganz außen oder Umschalt-Taste), Tier rennt mit
+- Geplant: Hügel und abwechslungsreiches Gelände, Rollschuhe/Skateboard/Fahrrad (Abschnitt 4)
 - Geplant (8b): Schach, eigene Stärken, soziale Fähigkeiten und Werte, Gefühle, Kreativität/Musik, Bewegung
 
 **Nächster Schritt:** Stickeralbum, dann Weihnachts-Erststart und QR-Geschenk; danach 8b schrittweise (Bewegungs-Aufgaben und Gefühle zuerst, weil sie ins Zeitsystem passen).

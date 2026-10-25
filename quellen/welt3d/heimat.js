@@ -812,7 +812,7 @@ $("info").textContent = NACHT ? `Gute Nacht, ${name}! Die Insel schläft bald.` 
 function groesse() { const el = $("buehne"); renderer.setSize(el.clientWidth, el.clientHeight, false); camera.aspect = el.clientWidth / Math.max(1, el.clientHeight); camera.updateProjectionMatrix(); }
 addEventListener("resize", groesse); groesse();
 const uhr = new Clock(), blick = new Vector3(), tmp = new Vector3(), halmO = new Object3D();
-let lauf = 0;
+let lauf = 0, vollGas = 0, rennt = false;
 function wegVonHindernissen(p, r) {
   for (const h of hindernisse) { const dx = p.x - h.x, dz = p.z - h.z, d = Math.hypot(dx, dz), m = h.r + r; if (d < m && d > 0.001) { p.x = h.x + dx / d * m; p.z = h.z + dz / d * m; } }
   if (drinnen) { p.x = MathUtils.clamp(p.x, ZX - 3.7, ZX + 3.7); p.z = MathUtils.clamp(p.z, -3.1, 3.3); if (p.z >= 3.25 && ich.position === p) rausgehen(); return; }
@@ -829,7 +829,11 @@ function bild() {
     ziel = null; ankunft = null; marke.visible = false; geht = true;
     const gw0 = freiKamera ? gieren : 0, n = Math.hypot(ix, iz);
     const wx = (ix * Math.cos(gw0) + iz * Math.sin(gw0)) / n, wz = (-ix * Math.sin(gw0) + iz * Math.cos(gw0)) / n;
-    ich.position.x += wx * 4 * staerke * dt; ich.position.z += wz * 4 * staerke * dt; wegVonHindernissen(ich.position, 0.4);
+    // Rennen: Joystick ganz nach außen (oder Umschalt-Taste) – nach kurzer Zeit wird die Figur schneller
+    if (Math.hypot(eingabe.x, eingabe.z) > 0.92 || tasten["shift"]) { if (vollGas === 0) vollGas = t; } else vollGas = 0;
+    rennt = vollGas > 0 && t - vollGas > 0.5 && !drinnen;
+    const tempo = (rennt ? 7 : 4) * staerke;
+    ich.position.x += wx * tempo * dt; ich.position.z += wz * tempo * dt; wegVonHindernissen(ich.position, 0.4);
     const soll = Math.atan2(wx, wz); let diff = soll - ich.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff));
     ich.rotation.y += diff * Math.min(1, dt * 12);
   } else if (ziel) {
@@ -844,10 +848,13 @@ function bild() {
       ich.rotation.y += diff * Math.min(1, dt * 10);
     }
   }
-  lauf += dt * (geht ? 11 : 0);
+  if (!geht) { vollGas = 0; rennt = false; }
+  lauf += dt * (geht ? (rennt ? 17 : 11) : 0);
   const schwung = geht ? Math.sin(lauf) : 0;
-  u.beine[0].rotation.x = schwung * 0.6; u.beine[1].rotation.x = -schwung * 0.6;
-  u.arme[0].rotation.x = -schwung * 0.6; u.arme[1].rotation.x = schwung * 0.6;
+  const ausholen = rennt ? 0.95 : 0.6;
+  u.beine[0].rotation.x = schwung * ausholen; u.beine[1].rotation.x = -schwung * ausholen;
+  u.arme[0].rotation.x = -schwung * ausholen; u.arme[1].rotation.x = schwung * ausholen;
+  u.koerper.rotation.x = rennt ? 0.15 : 0;
   u.koerper.position.y = geht && hoehe <= 0 ? Math.abs(Math.sin(lauf)) * 0.08 : Math.sin(t * 2) * 0.015;
   if (hoehe > 0 || vy > 0) {
     vy -= 18 * dt; hoehe += vy * dt;
@@ -862,7 +869,7 @@ function bild() {
     tmp.subVectors(ich.position, tier.position); tmp.y = 0; const dT = tmp.length(), tu = tier.userData; let hoppelt = false;
     const schlaeft = NACHT && !geht && dT < 3;
     if (dT > 1.5) {
-      hoppelt = true; tmp.normalize(); tier.position.addScaledVector(tmp, Math.min(dT - 1.5, (dT > 4 ? 5 : 3.2) * dt)); wegVonHindernissen(tier.position, 0.3);
+      hoppelt = true; tmp.normalize(); tier.position.addScaledVector(tmp, Math.min(dT - 1.5, (dT > 4 ? 7.5 : 3.2) * dt)); wegVonHindernissen(tier.position, 0.3);
       const soll = Math.atan2(tmp.x, tmp.z); let diff = soll - tier.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff)); tier.rotation.y += diff * Math.min(1, dt * 8);
     }
     tu.k.position.y = hoppelt ? Math.abs(Math.sin(t * 12)) * 0.18 : 0;
@@ -915,4 +922,4 @@ function bild() {
 requestAnimationFrame(bild);
 zeigeLernmodus(); if (!NACHT) zeigeWetterInfo();
 if (q.get("drinnen") === "1" && spielZeit()) reingehen();
-window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), SAISON, NACHT };
+window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), SAISON, NACHT };
