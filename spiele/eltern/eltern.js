@@ -91,6 +91,44 @@
     location.reload();
   }
 
+  // ---------- Zeit-Regeln ----------
+  const Z = window.Zeit;
+  const minText = (sek) => `${Math.round(sek / 60)} min`;
+  function zeitKarte() {
+    if (!Z) return "";
+    const r = Z.regeln(), st = Z.status(), e = Z.empfehlung(S.kind().alter);
+    const zahl = (id, wert, min, max, schritt = 1) => `<input id="${id}" type="number" inputmode="numeric" min="${min}" max="${max}" step="${schritt}" value="${wert}">`;
+    return `<div class="karte">
+      <h2>⏰ Erst lernen, dann spielen</h2>
+      <p><b>Heute:</b> ${minText(st.lernSek)} gelernt · ${st.aufgaben} Aufgaben richtig · ${minText(st.spielSek)} gespielt (erlaubt: ${minText(st.erlaubt)})${st.ruhe ? " · gerade Ruhezeit" : ""}</p>
+      <label class="schalter-z"><input type="checkbox" id="z-an" ${r.an ? "checked" : ""}> Zeit-Regeln einschalten</label>
+      <div class="zeit-raster">
+        <label>Lernzeit pro Block (min)${zahl("z-lern", r.lernMin, 1, 60)}</label>
+        <label>… oder richtige Aufgaben${zahl("z-aufg", r.lernAufgaben, 1, 50)}</label>
+        <label>Spielzeit pro Block (min)${zahl("z-spiel", r.spielMin, 1, 120)}</label>
+        <label>Höchstens Spielzeit pro Tag (min)${zahl("z-max", r.maxSpiel, 0, 240, 5)}</label>
+        <label>Ruhezeit ab<input id="z-von" type="time" value="${r.ruheVon}"></label>
+        <label>Ruhezeit bis<input id="z-bis" type="time" value="${r.ruheBis}"></label>
+      </div>
+      <label class="schalter-z"><input type="checkbox" id="z-fokus" ${r.fokus ? "checked" : ""}> Fokus-Hilfen (kurze Häppchen, Bewegungspausen – z. B. bei ADHS)</label>
+      <label class="schalter-z"><input type="checkbox" id="z-ruhig" ${r.ruhig ? "checked" : ""}> Ruhige Darstellung (weniger Bewegung und Effekte)</label>
+      <p class="hinweis">Empfehlung für ${S.kind().alter} Jahre: ${e.lernMin} min lernen (oder ${e.lernAufgaben} Aufgaben) → ${e.spielMin} min spielen, höchstens ${e.maxSpiel} min Spielzeit am Tag.
+        Grundlage: ${empfehlung(S.kind().alter)} Lernzeit zählt nur, wenn das Kind wirklich etwas tut.</p>
+      <div class="knoepfe"><button class="knopf haupt" id="z-speichern">Speichern</button><button class="knopf" id="z-empf">Empfehlung übernehmen</button><button class="knopf" id="z-extra">+10 Minuten nur heute</button></div>
+    </div>`;
+  }
+  function zeitKnoepfe() {
+    if (!Z) return;
+    const wert = (id) => Math.max(0, parseInt($(id).value, 10) || 0);
+    $("z-speichern").addEventListener("click", () => {
+      Z.setzeRegeln({ an: $("z-an").checked, lernMin: Math.max(1, wert("z-lern")), lernAufgaben: Math.max(1, wert("z-aufg")), spielMin: Math.max(1, wert("z-spiel")),
+        maxSpiel: wert("z-max"), ruheVon: $("z-von").value, ruheBis: $("z-bis").value, fokus: $("z-fokus").checked, ruhig: $("z-ruhig").checked });
+      S.meldung("Zeit-Regeln gespeichert."); uebersicht();
+    });
+    $("z-empf").addEventListener("click", () => { Z.setzeRegeln(Z.empfehlung(S.kind().alter)); S.meldung("Empfehlung übernommen."); uebersicht(); });
+    $("z-extra").addEventListener("click", () => { Z.extra(10); S.meldung("Heute 10 Minuten extra."); uebersicht(); });
+  }
+
   // ---------- Übersicht ----------
   const quoteKlasse = (q) => q == null ? "leer" : q >= 0.8 ? "gut" : q >= 0.6 ? "mittel" : "schwach";
   const prozent = (q) => q == null ? "–" : Math.round(q * 100) + " %";
@@ -157,6 +195,7 @@
         <p><b>Haustier:</b> ${(() => { const t = S.lade("tier"); return !t || !t.phase ? "noch kein Ei ausgesucht" : t.phase === "ei" ? `Ei wird gewärmt (${t.waerme || 0} von 3)` : `${t.name || "ohne Namen"}, Freundschaft ${t.freundschaft || 0}, ${t.leckerli || 0} Leckerli`; })()}</p>
         <p><b>3D-Welt:</b> Ballon-Rekord ${(welt.ballon && welt.ballon.rekord) || 0} Punkte, Insel-Schatz ${(welt.insel && welt.insel.geschafft) || 0}× gefunden</p>
       </div>
+      ${zeitKarte()}
       <div class="karte">
         <h2>Kinder auf diesem Tablet</h2>
         <ul class="kinderliste">${S.kinder().map(k => `<li>${k.aktiv ? "👉 " : ""}<b>${k.name || "(noch ohne Namen)"}</b>${k.aktiv ? " – gerade aktiv" : ` <button class="knopf klein-k" data-wechsel="${k.id}">Wechseln</button>`}${S.kinder().length > 1 ? ` <button class="knopf klein-k" data-weg="${k.id}">Entfernen</button>` : ""}</li>`).join("")}</ul>
@@ -178,6 +217,7 @@
     $("pin-neu").addEventListener("click", () => { S.setzePin(null); sessionStorage.removeItem(SITZUNG); pinSeite(); });
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
+    zeitKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";

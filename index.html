@@ -98,6 +98,10 @@
     .tuer.anziehen .bild { width: 150px; height: 150px; }
   }
 
+  /* Erst lernen, dann spielen */
+  .erst-dann { max-width: 640px; margin: 14px auto 0; background: #fff; border-radius: 24px; padding: 14px 18px; box-shadow: var(--schatten); text-align: center; font-weight: 600; font-size: 1.15rem; }
+  .erst-dann b { color: var(--beere); }
+
   /* Wer spielt? (mehrere Kinder) */
   .wer { position: fixed; inset: 0; z-index: 50; background: rgba(75,35,128,.6); display: grid; place-items: center; padding: 20px; }
   .wer[hidden] { display: none; }
@@ -157,6 +161,7 @@
     </a>
     </div>
   </header>
+  <div class="erst-dann" id="erst-dann" hidden></div>
 
   <nav class="schrank" aria-label="Spiele">
     <a class="tuer anziehen" href="spiele/anziehen/" style="text-decoration:none">
@@ -208,6 +213,7 @@
 <script src="shared/config.js"></script>
 <script src="shared/core.js" data-root="./"></script>
 <script src="shared/charakter.js"></script>
+<script src="shared/zeit.js" data-art="neutral"></script>
 <script src="spiele/anziehen/teile.js"></script>
 <script src="spiele/anziehen/figur.js"></script>
 <script src="shared/tiere.js"></script>
@@ -267,6 +273,16 @@
   );
 
   zeigeName(); zeigeSterne(); zeigeTon();
+  // Erst lernen, dann spielen
+  function zeigeErstDann() {
+    const el = document.getElementById("erst-dann"); if (!window.Zeit) return;
+    const st = Zeit.status(); if (st.frei) { el.hidden = true; return; }
+    el.hidden = false;
+    if (st.genug) el.innerHTML = "😴 Für heute genug gespielt. Lernen geht noch!";
+    else if (st.spielen) el.innerHTML = `🏝️ Spielzeit: noch <b>${Math.max(1, Math.round(st.rest / 60))} Minuten</b>` + Zeit.leisteHtml().replace("margin:14px auto", "margin:8px auto 0");
+    else el.innerHTML = `🌱 Noch <b>${st.fehltMin} Minuten</b> lernen oder <b>${st.fehltAufgaben} Aufgaben</b>, dann ${st.regeln.spielMin} Minuten spielen` + Zeit.leisteHtml().replace("margin:14px auto", "margin:8px auto 0");
+  }
+  zeigeErstDann(); setInterval(zeigeErstDann, 10000);
   const medien = S.lade("medien");
   // Mein Ich: Figur, Titel und Tagesaufgaben
   const look = (S.lade("anziehen") || {}).aktuell || Figur.STANDARD();

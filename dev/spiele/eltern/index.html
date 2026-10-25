@@ -47,6 +47,11 @@
   .kinderliste { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
   .kinderliste li { background: #F6F3FB; border-radius: 14px; padding: 10px 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .klein-k { min-height: 40px; font-size: .95rem; padding: 0 14px; }
+  .zeit-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 14px; margin: 10px 0; }
+  .zeit-raster label { display: grid; gap: 4px; font-weight: 600; font-size: .95rem; }
+  .zeit-raster input { font: inherit; font-size: 1.1rem; padding: 8px 10px; border-radius: 12px; border: 3px solid #D9D2EC; }
+  .schalter-z { display: flex; gap: 10px; align-items: center; font-weight: 600; margin: 8px 0; }
+  .schalter-z input { width: 26px; height: 26px; }
   .hinweis { background: #F0F7FF; border-radius: 14px; padding: 12px 14px; font-size: .98rem; }
 </style>
 </head>
@@ -59,6 +64,7 @@
 <script src="../../shared/config.js"></script>
 <script src="../../shared/core.js" data-root="../../"></script>
 <script src="../../shared/charakter.js"></script>
+<script src="../../shared/zeit.js" data-art="eltern"></script>
 <script src="../mathe/aufgaben.js"></script>
 <script src="../deutsch/geschichte.js"></script>
 <script src="../medien/lektionen.js"></script>
