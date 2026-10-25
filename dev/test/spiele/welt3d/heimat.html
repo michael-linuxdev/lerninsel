@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Meine Insel</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #A8DDF5; }
+  #buehne { position: fixed; inset: 0; touch-action: none; }
+  #buehne canvas { width: 100%; height: 100%; display: block; }
+  .leiste { position: fixed; top: max(12px, env(safe-area-inset-top)); left: 12px; right: 12px; display: flex; gap: 10px; align-items: center; z-index: 2; pointer-events: none; }
+  .leiste > * { pointer-events: auto; }
+  .leiste .knopf { min-height: 52px; font-size: 1.05rem; padding: 0 16px; text-decoration: none; }
+  .leiste .knopf.an { background: var(--pflaume); color: #fff; }
+  .leiste .platz { flex: 1; }
+  #info { position: fixed; bottom: max(14px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: rgba(255,255,255,.92); border-radius: 999px; padding: 10px 20px; font-weight: 600; color: var(--pflaume); z-index: 2; max-width: calc(100% - 32px); text-align: center; }
+  #blase { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(560px, calc(100% - 28px)); background: #fff; border-radius: 26px; padding: 18px 20px; box-shadow: 0 10px 0 rgba(0,0,0,.12); z-index: 3; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: start; }
+  #blase[hidden] { display: none; }
+  #blase-e { font-size: 3rem; line-height: 1; grid-row: span 2; }
+  #blase-titel { margin: 0; font-size: 1.35rem; }
+  #blase-text { margin: 0; font-size: 1.2rem; line-height: 1.35; font-weight: 500; }
+  #blase-ru { grid-column: 2; margin: 0; background: #FFF6D6; color: #7A4A10; border-radius: 12px; padding: 6px 10px; }
+  #blase-ru[hidden] { display: none; }
+  .blase-knoepfe { grid-column: 1 / -1; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 6px; }
+  .blase-knoepfe .knopf { min-height: 54px; font-size: 1.15rem; }
+  .blase-knoepfe [hidden] { display: none; }
+  #stick { position: fixed; width: 140px; height: 140px; border-radius: 50%; background: rgba(255,255,255,.35); box-shadow: inset 0 0 0 4px rgba(255,255,255,.85); pointer-events: none; opacity: 0; transition: opacity .12s; z-index: 2; }
+  #stick.an { opacity: 1; }
+  #knauf { position: absolute; left: 40px; top: 40px; width: 60px; height: 60px; border-radius: 50%; background: #fff; box-shadow: 0 4px 0 rgba(0,0,0,.2); }
+  #joy-hinweis { position: fixed; left: max(20px, env(safe-area-inset-left)); bottom: max(80px, calc(env(safe-area-inset-bottom) + 70px)); z-index: 2; background: rgba(255,255,255,.88); border-radius: 999px; padding: 10px 16px; font-weight: 600; color: var(--pflaume); pointer-events: none; }
+  #joy-hinweis[hidden] { display: none; }
+</style>
+</head>
+<body>
+<div id="buehne"></div>
+<div class="leiste">
+  <a class="knopf" href="./" aria-label="Zur 3D-Welt">⬅️</a>
+  <div class="knopf">⭐ <b id="sterne">0</b></div>
+  <span class="platz"></span>
+  <button class="knopf" id="grafik" aria-label="Grafik schön oder einfach">✨ schön</button>
+  <button class="knopf" id="kamera" aria-label="Kamera fest oder frei">🎥 fest</button>
+</div>
+<div id="info"></div>
+<div id="stick"><div id="knauf"></div></div>
+<div id="joy-hinweis">👆 Hier links schieben zum Laufen · Antippen zum Reden</div>
+<div id="blase" hidden role="dialog" aria-live="polite">
+  <div id="blase-e"></div>
+  <h2 id="blase-titel"></h2>
+  <p id="blase-text"></p>
+  <p id="blase-ru" lang="ru" hidden></p>
+  <div class="blase-knoepfe">
+    <button class="knopf" id="blase-ruk" lang="ru">RU</button>
+    <button class="knopf" id="blase-zu">Tschüss</button>
+    <button class="knopf haupt" id="blase-los">Los geht's!</button>
+  </div>
+</div>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../anziehen/teile.js"></script>
+<script src="../anziehen/figur.js"></script>
+<script src="../../shared/tiere.js"></script>
+<script src="../../shared/tierpflege.js"></script>
+<script>try { if (localStorage.getItem("lerninsel.joystick")) document.getElementById("joy-hinweis").hidden = true; } catch (e) {}</script>
+<script type="module" src="heimat.js"></script>
+</body>
+</html>

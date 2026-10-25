@@ -1,6 +1,6 @@
 # Gesamtplan Spielwelt (Stand 25.10.2026, nur Planung)
 
-## 1. Umgebungen
+## 1. Umgebungen (erledigt 25.10.2026)
 | Adresse | Zweck | Speicher (getrennt!) |
 |---|---|---|
 | `<domain>` | **Prod** – das, was das Kind benutzt | spielwelt.profil.v1 |

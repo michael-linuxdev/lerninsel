@@ -1,6 +1,6 @@
 #!/bin/sh
-# Erzeugt die Testversion unter /dev:
-# gleiche Dateien wie die echte Seite, aber Testmodus mit eigenem Spielstand und allem freigeschaltet.
+# Erzeugt /dev (neue Funktionen, normale Regeln) und /dev/test (Testmodus, alles frei),
+# jeweils mit eigenem Spielstand.
 # Vor jedem Push ausführen, damit /dev aktuell bleibt.
 set -e
 cd "$(dirname "$0")/.."
@@ -15,12 +15,20 @@ for f in *; do
   case "$f" in dev|quellen|docs|tests|CNAME|README.md) ;; *) cp -R "$f" dev/ ;; esac
 done
 cat > dev/shared/config.js <<'CFG'
-// TESTVERSION (/dev) – wird von quellen/dev-bauen.sh erzeugt, nicht von Hand ändern.
-window.SPIELWELT_CONFIG = {
-  modus: "schule",
-  version: "dev",
-  test: true            // eigener Spielstand, alles freigeschaltet, Testleiste oben
-};
+// DEV-VERSION (/dev) – wird von quellen/dev-bauen.sh erzeugt, nicht von Hand ändern.
+// Neue Funktionen zuerst hier, mit normalen Regeln und eigenem Spielstand.
+window.SPIELWELT_CONFIG = { modus: "schule", version: "dev", umgebung: "dev" };
 CFG
-sed -i 's/"name": "Spielwelt"/"name": "Spielwelt TEST"/; s/"short_name": "Spielwelt"/"short_name": "Test"/' dev/manifest.webmanifest
-echo "dev/ aktualisiert"
+sed -i 's/"name": "Lerninsel"/"name": "Lerninsel DEV"/; s/"short_name": "Lerninsel"/"short_name": "DEV"/' dev/manifest.webmanifest
+# Testmodus (/dev/test): Kopie von /dev mit allem freigeschaltet, +50 Sterne, Zurücksetzen
+mkdir dev/test
+for f in dev/*; do
+  case "$f" in dev/test) ;; *) cp -R "$f" dev/test/ ;; esac
+done
+cat > dev/test/shared/config.js <<'CFG'
+// TESTMODUS (/dev/test) – wird von quellen/dev-bauen.sh erzeugt, nicht von Hand ändern.
+window.SPIELWELT_CONFIG = { modus: "schule", version: "test", umgebung: "test" };
+CFG
+sed -i 's/"name": "Lerninsel DEV"/"name": "Lerninsel TEST"/; s/"short_name": "DEV"/"short_name": "TEST"/' dev/test/manifest.webmanifest
+echo "dev/ und dev/test/ aktualisiert"
+

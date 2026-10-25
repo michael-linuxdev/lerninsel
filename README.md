@@ -97,12 +97,19 @@ zum Abgleich den QR-Code nutzen. Damit Android den Speicher nicht aufräumt, die
 
 Fremd-Bibliotheken in `shared/vendor/`: QR-Code generator (Project Nayuki, MIT) und jsQR (Apache 2.0).
 
-## Testversion unter /dev
+## Umgebungen und Tests
 
-`/dev` ist eine Kopie mit Testmodus: eigener Spielstand (der echte bleibt unberührt), alle Stationen,
-Kapitel, Lektionen und die 3D-Welt offen, oben eine gelbe Testleiste mit „+50 ⭐“ und „Zurücksetzen“.
-Vor jedem Push `quellen/dev-bauen.sh` ausführen: setzt die Cache-Version automatisch (Prüfsumme aller Dateien)
-und aktualisiert `/dev` (die 3D-Spiele vorher mit `quellen/bauen.sh` bauen).
+| Adresse | Zweck |
+|---|---|
+| `/` | Hauptseite (Prod) |
+| `/dev/` | Neue Funktionen zuerst, normale Regeln, eigener Spielstand, kleine Marke „🛠 DEV“ |
+| `/dev/test/` | Testmodus: alles freigeschaltet, gelbe Leiste mit „+50 ⭐“ und „Zurücksetzen“, eigener Spielstand |
+
+Vor jedem Push `sh quellen/dev-bauen.sh` ausführen: setzt die Cache-Version automatisch (Prüfsumme aller Dateien)
+und baut `/dev` und `/dev/test` neu (die 3D-Spiele vorher mit `quellen/bauen.sh` bauen).
+
+**Rauchtest:** `sh tests/laufen.sh` (für /dev: `PFAD=dev/ sh tests/laufen.sh`). Richtet die App ein, öffnet jede Seite
+quer und hoch und alle 3D-Seiten und meldet JavaScript-Fehler.
 
 ## Veröffentlichen mit GitHub Pages
 

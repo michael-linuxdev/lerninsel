@@ -4,12 +4,15 @@
 (function () {
   const cfg = window.SPIELWELT_CONFIG || { kind: "", modus: "schule" };
   // Testmodus (/dev): eigener, getrennter Spielstand – der echte bleibt unberührt
-  const TEST = !!cfg.test;
-  const KEY = TEST ? "spielwelt.dev.profil.v1" : "spielwelt.profil.v1";
+  // Umgebung: "prod" (Hauptseite), "dev" (/dev, neue Funktionen, normale Regeln), "test" (/dev/test, alles frei)
+  const UMG = cfg.umgebung || (cfg.test ? "test" : "prod");
+  const TEST = UMG === "test";
+  const PRE = UMG === "prod" ? "spielwelt." : "spielwelt." + UMG + ".";   // eigene Speicher je Umgebung
+  const KEY = PRE + "profil.v1";
   // Erwachsenen-Modus (nach PIN im Elternbereich): alles offen, keine Zeitgrenzen, gilt für diese Sitzung
-  const ERW = TEST ? "spielwelt.dev.erwachsen" : "spielwelt.erwachsen";
+  const ERW = PRE + "erwachsen";
   const erwachsen = () => { try { return +sessionStorage.getItem(ERW) > Date.now(); } catch (e) { return false; } };
-  const DB_NAME = TEST ? "spielwelt-dev" : "spielwelt", DB_STORE = "stand";
+  const DB_NAME = UMG === "prod" ? "spielwelt" : "spielwelt-" + UMG, DB_STORE = "stand";
 
   const leeresProfil = () => ({ name: "", sterne: 0, freigeschaltet: [], ton: true, daten: {}, stand: 0 });
 
@@ -93,8 +96,8 @@
     if (k && (!lokalDa || k.stand > profil.stand)) {
       // localStorage war leer oder älter: aus IndexedDB wiederherstellen
       lokalSchreiben(k);
-      if (!sessionStorage.getItem((TEST ? "spielwelt.dev.wiederhergestellt" : "spielwelt.wiederhergestellt"))) {
-        sessionStorage.setItem((TEST ? "spielwelt.dev.wiederhergestellt" : "spielwelt.wiederhergestellt"), "1");
+      if (!sessionStorage.getItem((PRE + "wiederhergestellt"))) {
+        sessionStorage.setItem((PRE + "wiederhergestellt"), "1");
         location.reload();
       }
     } else if (lokalDa && (!k || profil.stand > k.stand)) {
@@ -110,6 +113,8 @@
   const Spielwelt = {
     config: cfg,
     test: TEST,
+    umgebung: UMG,
+    vorsilbe: PRE,
     // Im Testmodus ist alles offen
     offen(bedingung) { return TEST || erwachsen() || !!bedingung; },
     erwachsen,
@@ -242,6 +247,12 @@
     if (document.body) banner(); else addEventListener("DOMContentLoaded", banner);
   }
 
+  if (UMG === "dev") {
+    const marke = () => { const b = document.createElement("div"); b.textContent = "🛠 DEV";
+      b.style.cssText = "position:fixed;bottom:6px;left:6px;z-index:100;background:#2E2B47;color:#fff;font:600 12px Fredoka,sans-serif;padding:3px 8px;border-radius:999px;opacity:.8;pointer-events:none";
+      document.body.appendChild(b); };
+    if (document.body) marke(); else addEventListener("DOMContentLoaded", marke);
+  }
   if (!TEST && erwachsen()) {
     const leiste = () => {
       const b = document.createElement("div");

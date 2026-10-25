@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Mathe</title>
+<meta name="theme-color" content="#DDF5EC">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #DDF5EC; background-image: none; }
+  .ansicht[hidden] { display: none !important; }
+  .oben {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
+  }
+  .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; min-width: 0; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .sterne b { font-size: 1.4rem; }
+
+  /* ---------- Matheweg ---------- */
+  #weg-ansicht { min-height: 100dvh; }
+  .klasse { margin: 6px 16px 0; font-size: 1.2rem; font-weight: 500; color: #2E7D62; }
+  .karte-weg { position: relative; margin: 8px auto 40px; max-width: 1100px; }
+  .karte-weg svg.pfad { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .station {
+    position: absolute; transform: translate(-50%, -50%);
+    width: 150px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-weight: 600; font-size: 1rem; line-height: 1.15; text-align: center; color: var(--pflaume);
+  }
+  .station .kreis {
+    width: 92px; height: 92px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 2.3rem; font-weight: 700; color: #fff;
+    background: var(--minze); box-shadow: inset 0 0 0 6px rgba(255,255,255,.45), 0 7px 0 #2E9C77;
+    transition: transform .1s;
+  }
+  .station:active .kreis { transform: translateY(4px); box-shadow: inset 0 0 0 6px rgba(255,255,255,.45), 0 3px 0 #2E9C77; }
+  .station .nr {
+    position: absolute; top: -4px; left: calc(50% + 26px);
+    width: 30px; height: 30px; border-radius: 50%; background: #fff; color: #2E7D62;
+    display: grid; place-items: center; font-size: .95rem; font-weight: 700;
+    box-shadow: 0 2px 0 rgba(0,0,0,.12);
+  }
+  .station .name { background: rgba(255,255,255,.85); padding: 2px 10px; border-radius: 10px; }
+  .station .stern-reihe { font-size: 1.05rem; letter-spacing: 2px; min-height: 1.2em; }
+  .station .stern-reihe .leer { filter: grayscale(1); opacity: .3; }
+  .station.jetzt .kreis { background: var(--beere); box-shadow: inset 0 0 0 6px rgba(255,255,255,.45), 0 7px 0 #8E1F58; animation: puls 1.6s ease-in-out infinite; }
+  @keyframes puls { 50% { transform: scale(1.07); } }
+  .station.zu .kreis { background: #B9C7C1; box-shadow: inset 0 0 0 6px rgba(255,255,255,.45), 0 7px 0 #93A39C; font-size: 1.9rem; }
+  .station.zu .name { opacity: .7; }
+  .station.ziel .kreis { background: var(--sonne); box-shadow: inset 0 0 0 6px rgba(255,255,255,.5), 0 7px 0 #C79512; }
+
+  /* ---------- Rechnen ---------- */
+  #rechnen-ansicht { height: 100dvh; display: flex; flex-direction: column; }
+  .punkte { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .punkte span { width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 3px #A7DCC8; }
+  .punkte .gut { background: var(--minze); box-shadow: none; }
+  .punkte .nochmal { background: var(--koralle); box-shadow: none; }
+  .punkte .jetzt { box-shadow: inset 0 0 0 4px var(--pflaume); }
+  .rechnen {
+    flex: 1; min-height: 0;
+    display: grid; grid-template-columns: 1fr minmax(300px, 380px); gap: 18px;
+    padding: 14px max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+  .tafel {
+    background: #fff; border-radius: 30px; padding: 22px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    box-shadow: 0 10px 0 rgba(46,125,98,.18); min-height: 0; overflow: auto; text-align: center;
+  }
+  .tafel .frage { margin: 0; font-size: 1.5rem; font-weight: 600; color: #2E7D62; }
+  .tafel .bild { width: 100%; }
+  .tafel .bild svg { display: block; width: 100%; max-height: 34dvh; margin: 0 auto; }
+  .tafel .bild .bild-zehner { max-width: 460px; }
+  .tafel .bild .bild-uhr { width: min(260px, 32dvh); }
+  .ausdruck {
+    font-size: clamp(2.6rem, 7vw, 4.6rem); font-weight: 700; line-height: 1.1;
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .25em;
+    font-variant-numeric: tabular-nums;
+  }
+  .ausdruck.wort { font-size: clamp(2rem, 5vw, 3.2rem); }
+  .luecke {
+    display: inline-grid; place-items: center;
+    min-width: 2.3em; height: 1.4em; padding: 0 .2em;
+    border-radius: .28em; background: var(--himmel); color: var(--pflaume);
+    box-shadow: inset 0 0 0 .07em var(--pflaume-hell);
+  }
+  .luecke.leer::after { content: ""; width: .08em; height: .9em; background: var(--pflaume-hell); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .luecke.richtig { background: #CFF3E4; box-shadow: inset 0 0 0 .07em var(--minze); color: #1F6E52; }
+  .luecke.loesung { background: #FFF6D6; box-shadow: inset 0 0 0 .07em #F2C230; }
+  .luecke.falsch { background: #FFE1DD; box-shadow: inset 0 0 0 .07em var(--koralle); animation: wackel .35s; }
+  @keyframes wackel { 25% { transform: translateX(-.12em); } 75% { transform: translateX(.12em); } }
+  .einheit { font-size: .7em; color: var(--pflaume-hell); }
+  .rueck { min-height: 2.2em; margin: 0; font-size: 1.5rem; font-weight: 600; }
+  .rueck.gut { color: #1F8A63; }
+  .rueck.nein { color: #D24A3C; }
+  .hilfe {
+    background: #FFF6D6; border-radius: 20px; padding: 14px 20px; max-width: 40ch;
+    font-size: 1.3rem; font-weight: 500; line-height: 1.4; box-shadow: inset 0 0 0 3px #FFE08A;
+  }
+  .hilfe b { display: block; font-size: 1.5rem; margin-bottom: 4px; }
+
+  .eingabe { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+  .tasten { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: 12px; min-height: 0; }
+  .taste {
+    border-radius: 24px; background: #fff; font-size: 2.4rem; font-weight: 700; color: var(--pflaume);
+    box-shadow: 0 6px 0 rgba(46,125,98,.25); min-height: 64px;
+    transition: transform .06s;
+  }
+  .taste:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(46,125,98,.25); }
+  .taste.loeschen { background: #FFE1DD; font-size: 2rem; }
+  .taste.ok { background: var(--minze); color: #fff; }
+  .wahl-tasten { flex: 1; display: grid; gap: 14px; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; }
+  .wahl-tasten.drei { grid-template-columns: 1fr; }
+  .wahl-tasten .taste { font-size: 2.6rem; }
+  .weiter { min-height: 76px; font-size: 1.6rem; background: var(--pflaume); color: #fff; }
+
+  @media (orientation: portrait) {
+    .rechnen { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+    .eingabe { height: 42dvh; }
+    .tafel .bild svg { max-height: 24dvh; }
+  }
+
+  /* ---------- Ende ---------- */
+  #ende-ansicht { min-height: 100dvh; display: grid; place-items: center; padding: 20px; }
+  .ende-karte { background: #fff; border-radius: 32px; padding: 30px; width: min(560px, 100%); text-align: center; box-shadow: 0 12px 0 rgba(46,125,98,.2); }
+  .ende-karte h2 { margin: 0 0 6px; font-size: 2.6rem; }
+  .ende-karte p { margin: 0 0 8px; font-size: 1.35rem; }
+  .gross-sterne { display: flex; justify-content: center; gap: 10px; margin: 14px 0 10px; font-size: 4.4rem; }
+  .gross-sterne span { display: inline-block; transform: scale(0); animation: plopp .45s cubic-bezier(.3,1.7,.5,1) forwards; }
+  .gross-sterne span.leer { filter: grayscale(1); opacity: .25; }
+  @keyframes plopp { to { transform: scale(1); } }
+  .gewinn { display: inline-block; background: #FFF6D6; padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 1.3rem; margin: 6px 0 18px; }
+  .ende-knoepfe { display: grid; gap: 12px; }
+  .ende-knoepfe .knopf { min-height: 64px; font-size: 1.35rem; }
+</style>
+</head>
+<body>
+
+<section class="ansicht" id="weg-ansicht">
+  <div class="oben">
+    <a class="knopf rund" href="../../" aria-label="Zur Spielwelt">🏠</a>
+    <h1>Matheweg</h1>
+    <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
+  </div>
+  <p class="klasse">2. Klasse</p>
+  <div class="karte-weg" id="karte"></div>
+</section>
+
+<section class="ansicht" id="rechnen-ansicht" hidden>
+  <div class="oben">
+    <button class="knopf rund" id="zum-weg" aria-label="Zum Matheweg">⬅️</button>
+    <h1 id="station-name"></h1>
+    <div class="punkte" id="punkte" aria-hidden="true"></div>
+  </div>
+  <div class="rechnen">
+    <div class="tafel" id="tafel" aria-live="polite"></div>
+    <div class="eingabe" id="eingabe"></div>
+  </div>
+</section>
+
+<section class="ansicht" id="ende-ansicht" hidden>
+  <div class="ende-karte">
+    <h2 id="ende-titel"></h2>
+    <div class="gross-sterne" id="ende-sterne" aria-hidden="true"></div>
+    <p id="ende-text"></p>
+    <div class="gewinn" id="ende-gewinn"></div>
+    <div class="ende-knoepfe" id="ende-knoepfe"></div>
+  </div>
+</section>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="aufgaben.js"></script>
+<script src="mathe.js"></script>
+</body>
+</html>

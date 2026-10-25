@@ -2,7 +2,7 @@
   const S = window.Spielwelt, C = window.Charakter;
   const $ = (id) => document.getElementById(id);
   const inhalt = $("inhalt");
-  const SITZUNG = S.test ? "spielwelt.dev.eltern" : "spielwelt.eltern";
+  const SITZUNG = S.vorsilbe + "eltern";
   const hash = (t) => { let h = 5381; for (const c of "pin:" + t) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0; return h.toString(36); };
   const eltern = () => S.lade("eltern") || {};
 
@@ -84,7 +84,7 @@
   // App neu laden: Offline-Speicher dieser Version leeren, Spielstand bleibt erhalten
   async function neuLaden() {
     try {
-      const vorsilbe = S.test ? "dev-" : "spielwelt-";
+      const vorsilbe = S.umgebung === "prod" ? "spielwelt-" : S.umgebung + "-";
       if (window.caches) for (const k of await caches.keys()) if (k.startsWith(vorsilbe)) await caches.delete(k);
       if (navigator.serviceWorker) for (const r of await navigator.serviceWorker.getRegistrations()) if (location.href.startsWith(r.scope)) await r.unregister();
     } catch (e) { /* trotzdem neu laden */ }
