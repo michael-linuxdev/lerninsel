@@ -17,10 +17,13 @@
   .leiste .knopf { min-height: 52px; font-size: 1.05rem; padding: 0 16px; text-decoration: none; }
   .leiste .knopf.an { background: var(--pflaume); color: #fff; }
   .leiste .platz { flex: 1; }
-  #info { position: fixed; bottom: max(14px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: rgba(255,255,255,.92); border-radius: 999px; padding: 10px 20px; font-weight: 600; color: var(--pflaume); z-index: 2; max-width: calc(100% - 32px); text-align: center; }
+  #info { position: fixed; bottom: max(14px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: rgba(255,255,255,.92); border-radius: 999px; padding: 10px 20px; font-weight: 600; color: var(--pflaume); z-index: 2; max-width: calc(100% - 270px); text-align: center; }
   #lern-hinweis { position: fixed; top: calc(max(12px, env(safe-area-inset-top)) + 64px); left: 50%; transform: translateX(-50%); z-index: 2; background: #FFF6D6; color: #7A4A10; border-radius: 18px; padding: 10px 18px; font-weight: 600; max-width: min(620px, calc(100% - 32px)); text-align: center; box-shadow: 0 4px 0 rgba(0,0,0,.1); }
   #lern-hinweis[hidden], #raus[hidden] { display: none; }
-  #raus { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(70px, calc(env(safe-area-inset-bottom) + 60px)); z-index: 2; min-height: 56px; font-size: 1.15rem; }
+  #raus { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(150px, calc(env(safe-area-inset-bottom) + 140px)); z-index: 2; min-height: 56px; font-size: 1.15rem; }
+  #springen { position: fixed; right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 2; width: 100px; height: 100px; border-radius: 50%; background: var(--sonne); font-size: 1.05rem; font-weight: 700; color: var(--pflaume); box-shadow: 0 8px 0 #C79512; touch-action: none; border: 0; }
+  #springen:active { transform: translateY(5px); box-shadow: 0 3px 0 #C79512; }
+  #springen span { display: block; font-size: 2.2rem; line-height: 1; }
   #blase { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(560px, calc(100% - 28px)); background: #fff; border-radius: 26px; padding: 18px 20px; box-shadow: 0 10px 0 rgba(0,0,0,.12); z-index: 3; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: start; }
   #blase[hidden] { display: none; }
   #blase-e { font-size: 3rem; line-height: 1; grid-row: span 2; }
@@ -52,6 +55,7 @@
 <div id="info"></div>
 <div id="lern-hinweis" hidden></div>
 <button class="knopf" id="raus" hidden>🚪 Nach draußen</button>
+<button id="springen" aria-label="Springen"><span>⬆️</span>Springen</button>
 <div id="stick"><div id="knauf"></div></div>
 <div id="joy-hinweis">👆 Hier links schieben zum Laufen · Antippen zum Reden</div>
 <div id="blase" hidden role="dialog" aria-live="polite">

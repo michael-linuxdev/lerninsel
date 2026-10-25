@@ -520,7 +520,15 @@ const ray = new Raycaster(), zeiger = new Vector2(), fl = renderer.domElement, f
 const eingabe = { x: 0, z: 0 }, RADIUS = 56, stick = $("stick"), knauf = $("knauf");
 let stickId = null, stickMitte = null, stickAktiv = false;
 const tasten = {};
-addEventListener("keydown", e => { tasten[e.key.toLowerCase()] = true; });
+addEventListener("keydown", e => { tasten[e.key.toLowerCase()] = true; if (e.key === " ") { e.preventDefault(); springe(); } });
+// Springen: einfach immer, Doppelsprung als Belohnung (Entdecker-Mut) oder im Testmodus
+let hoehe = 0, vy = 0, spruenge = 0;
+const doppelErlaubt = () => S.offen(window.Charakter && window.Charakter.hat && window.Charakter.hat("doppelsprung"));
+function springe() {
+  if (hoehe <= 0.001) { vy = 6.2; spruenge = 1; S.ton("tipp"); }
+  else if (spruenge === 1 && doppelErlaubt()) { vy = 6.2; spruenge = 2; S.ton("wahl"); }
+}
+$("springen").addEventListener("pointerdown", e => { e.preventDefault(); e.stopPropagation(); springe(); });
 addEventListener("keyup", e => { tasten[e.key.toLowerCase()] = false; });
 let unten = null, bewegt = false;
 fl.addEventListener("pointerdown", e => {
@@ -658,7 +666,14 @@ function bild() {
   const schwung = geht ? Math.sin(lauf) : 0;
   u.beine[0].rotation.x = schwung * 0.6; u.beine[1].rotation.x = -schwung * 0.6;
   u.arme[0].rotation.x = -schwung * 0.6; u.arme[1].rotation.x = schwung * 0.6;
-  u.koerper.position.y = geht ? Math.abs(Math.sin(lauf)) * 0.08 : Math.sin(t * 2) * 0.015;
+  u.koerper.position.y = geht && hoehe <= 0 ? Math.abs(Math.sin(lauf)) * 0.08 : Math.sin(t * 2) * 0.015;
+  if (hoehe > 0 || vy > 0) {
+    vy -= 18 * dt; hoehe += vy * dt;
+    if (hoehe <= 0) { hoehe = 0; vy = 0; spruenge = 0; }
+  }
+  ich.position.y = 0.25 + hoehe;
+  if (hoehe > 0) { u.beine[0].rotation.x = -0.5; u.beine[1].rotation.x = 0.3; u.arme[0].rotation.z = 0.9; u.arme[1].rotation.z = -0.9; }
+  else { u.arme[0].rotation.z = 0.25; u.arme[1].rotation.z = -0.25; }
   if (marke.visible) marke.scale.setScalar(1 + Math.sin(t * 6) * 0.1);
 
   if (tier) {
@@ -700,7 +715,7 @@ function bild() {
   if (schnee) { const a = schnee.geometry.attributes.position; for (let i = 0; i < a.count; i++) { let y = a.getY(i) - dt * 1.2; if (y < 0) y = 16; a.setY(i, y); a.setX(i, a.getX(i) + Math.sin(t + i) * dt * 0.2); } a.needsUpdate = true; }
   wolken.forEach((w, i) => { w.position.x += dt * (0.4 + i * 0.1); if (w.position.x > 40) w.position.x = -40; });
 
-  blick.copy(ich.position).add(tmp.set(0, 1, 0));
+  blick.set(ich.position.x, 1.25 + hoehe * 0.3, ich.position.z);
   const gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.85 : 0.72, ab = drinnen && !freiKamera ? 10 : abstand;
   if (drinnen) blick.set(MathUtils.clamp(blick.x, ZX - 1.5, ZX + 1.5), blick.y, MathUtils.clamp(blick.z, -1.5, 1.2));
   camera.position.set(blick.x + Math.sin(gw) * Math.cos(nw) * ab, blick.y + Math.sin(nw) * ab, blick.z + Math.cos(gw) * Math.cos(nw) * ab);
