@@ -1,6 +1,7 @@
 (function () {
   const S = window.Spielwelt, SP = window.Sprache, G = window.GESCHICHTE;
   const $ = (id) => document.getElementById(id);
+  const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
   const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const LOB = ["Richtig!", "Super!", "Genau!", "Toll!", "Prima!", "Klasse!"];
   const name = () => S.profil.name || "du";
@@ -110,14 +111,14 @@
   function blase(html, gesprochen, ru) {
     $("blase").innerHTML = html + `<div class="blase-knoepfe">` +
       (SP.verfuegbar() ? `<button class="klein-knopf" id="nochmal-hoeren" aria-label="Nochmal vorlesen">🔊</button>` : "") +
-      (daten().ru && ru ? `<button class="klein-knopf" id="ru-knopf" lang="ru">RU</button>` : "") + `</div>`;
-    const rb = $("ru-blase"); rb.hidden = true; rb.textContent = "";
+      (daten().ru && ru ? `<button class="klein-knopf" id="ru-knopf" lang="${HL().code}">${HL().kurz}</button>` : "") + `</div>`;
+    const rb = $("ru-blase"); rb.hidden = true; rb.textContent = ""; rb.lang = HL().code; rb.dir = HL().rtl ? "rtl" : "ltr";
     const nh = $("nochmal-hoeren");
     if (nh) nh.addEventListener("click", () => { const st = SP.verfuegbar(); if (st) SP.sprich(gesprochen, "de-DE"); });
     const rk = $("ru-knopf");
     if (rk) rk.addEventListener("click", () => {
       rb.hidden = !rb.hidden; rb.textContent = mitName(ru);
-      if (!rb.hidden && SP.hat("ru-RU")) SP.sprich(mitName(ru), "ru-RU");
+      if (!rb.hidden && SP.hat(HL().tts)) SP.sprich(mitName(ru), HL().tts);
     });
     if (gesprochen) sprich(gesprochen);
   }
@@ -137,7 +138,7 @@
     switch (s.typ) {
       case "sag": {
         const t = mitName(s.text);
-        blase(t, t, s.ru);
+        blase(t, t, S.ht(s));
         A.innerHTML = `<div class="gross-emoji" aria-hidden="true">${k.ort}</div><button class="knopf weiter" id="weiter">Weiter</button>`;
         $("weiter").addEventListener("click", () => { S.ton("tipp"); weiter(); });
         break;
@@ -146,8 +147,8 @@
         const opts = mische(s.optionen.map((o, idx) => Object.assign({ richtig: idx === 0 }, o)));
         const hoeren = s.typ === "hoeren";
         const ohneStimme = hoeren && !(SP.verfuegbar() && daten().vorlesen && SP.hat("de-DE"));
-        if (hoeren) blase(ohneStimme ? `Lies und finde das Bild: <b>${s.sag}</b>` : "Hör gut zu! Welches Bild passt?", ohneStimme ? "" : s.sag, s.ru);
-        else blase(s.frage, s.frage, s.ru);
+        if (hoeren) blase(ohneStimme ? `Lies und finde das Bild: <b>${s.sag}</b>` : "Hör gut zu! Welches Bild passt?", ohneStimme ? "" : s.sag, S.ht(s));
+        else blase(s.frage, s.frage, S.ht(s));
         A.innerHTML = (hoeren && !ohneStimme ? `<button class="hoeren-knopf" id="hoeren" aria-label="Anhören">🔊</button>` : "") +
           `<div class="optionen bilder">` + opts.map((o, n) => `<button class="option" data-n="${n}" aria-label="${hoeren ? "Bild " + (n + 1) : o.t}"><span class="emoji">${o.e}</span><span class="name"></span></button>`).join("") + `</div>` + hinweis;
         if ($("hoeren")) $("hoeren").addEventListener("click", () => SP.sprich(s.sag, "de-DE"));
@@ -163,9 +164,9 @@
       case "wort": case "luecke": case "wo": {
         const opts = mische(s.optionen.map((t, idx) => ({ t, richtig: idx === 0 })));
         let oben = "";
-        if (s.typ === "wort") { blase(s.frage, s.frage, s.ru); oben = `<div class="gross-emoji" aria-hidden="true">${s.e}</div>`; }
-        else if (s.typ === "luecke") { blase(luecke(s.satz), sprechbar(s.satz), s.ru); oben = s.e ? `<div class="gross-emoji" aria-hidden="true">${s.e}</div>` : ""; }
-        else { blase(luecke(s.satz), sprechbar(s.satz), s.ru); oben = szene(s.ding, s.lage, s.ding2); }
+        if (s.typ === "wort") { blase(s.frage, s.frage, S.ht(s)); oben = `<div class="gross-emoji" aria-hidden="true">${s.e}</div>`; }
+        else if (s.typ === "luecke") { blase(luecke(s.satz), sprechbar(s.satz), S.ht(s)); oben = s.e ? `<div class="gross-emoji" aria-hidden="true">${s.e}</div>` : ""; }
+        else { blase(luecke(s.satz), sprechbar(s.satz), S.ht(s)); oben = szene(s.ding, s.lage, s.ding2); }
         A.innerHTML = oben + `<div class="optionen texte">` + opts.map((o, n) => `<button class="option" data-n="${n}">${o.t}</button>`).join("") + `</div>` + hinweis;
         A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
           const o = opts[+b.dataset.n];
@@ -178,7 +179,7 @@
         break;
       }
       case "artikel": {
-        blase(`der, die oder das?`, `der, die oder das? ${s.wort}`, s.ru ? `${s.ru} — der, die или das?` : "");
+        blase(`der, die oder das?`, `der, die oder das? ${s.wort}`, S.ht(s) ? `${S.ht(s)} — der, die, das?` : "");
         A.innerHTML = `<div class="gross-emoji" aria-hidden="true">${s.e}</div><div class="artikel-wort"><span class="luecke" id="art-luecke">&nbsp;</span>${s.wort}</div>` +
           `<div class="optionen artikel">` + ["der", "die", "das"].map(a => `<button class="option" data-wert="${a}">${a}</button>`).join("") + `</div>` + hinweis;
         A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
@@ -187,7 +188,7 @@
         break;
       }
       case "satz": {
-        blase("Bau den Satz! Tippe die Wörter der Reihe nach an.", "Bau den Satz!", s.ru);
+        blase("Bau den Satz! Tippe die Wörter der Reihe nach an.", "Bau den Satz!", S.ht(s));
         lauf.gewaehlt = [];
         let chips = mische(s.woerter.map((w, idx) => ({ w, idx })));
         if (chips.every((c, n) => c.idx === n)) chips = chips.reverse();
@@ -306,13 +307,14 @@
   // ---------- Einstellungen ----------
   function zeigeEinst() {
     const d = daten();
-    $("sch-ru").hidden = !S.hilfeRu();
+    $("sch-ru").hidden = !S.hilfeRu(); $("test-ru").hidden = !S.hilfeRu();
+    $("sch-ru").firstChild.textContent = `Hilfe auf ${HL().name} `; $("test-ru").textContent = `🔊 ${HL().name} testen`;
     [["sch-vorlesen", d.vorlesen], ["sch-ru", d.ru]].forEach(([id, an]) => { const b = $(id); b.setAttribute("aria-pressed", an); b.querySelector("b").textContent = an ? "an" : "aus"; });
     let info;
     if (!SP.verfuegbar()) info = "Dieser Browser kann nicht vorlesen.";
     else {
-      const de = SP.hat("de-DE"), ru = SP.hat("ru-RU");
-      info = `Deutsch: ${de ? SP.stimmeName("de-DE") : "keine Stimme gefunden"}. Russisch: ${ru ? SP.stimmeName("ru-RU") : "keine Stimme gefunden"}. ` +
+      const de = SP.hat("de-DE"), h = S.hilfe(), ru = !h || SP.hat(h.tts);
+      info = `Deutsch: ${de ? SP.stimmeName("de-DE") : "keine Stimme gefunden"}. ` + (h ? `${h.name}: ${ru ? SP.stimmeName(h.tts) : "keine Stimme gefunden"}. ` : "") +
         "Kein Ton? Lauter stellen und am iPad im Kontrollzentrum die Glocke (Stumm) ausschalten." +
         (!de || !ru ? " Stimmen installieren: iPad → Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen. Android → Einstellungen → Sprachausgabe → Google → Sprachdaten." : "");
     }
@@ -323,7 +325,7 @@
   $("sch-vorlesen").addEventListener("click", () => { setze("vorlesen", !daten().vorlesen); S.ton("tipp"); zeigeEinst(); });
   $("sch-ru").addEventListener("click", () => { setze("ru", !daten().ru); S.ton("tipp"); zeigeEinst(); });
   $("test-de").addEventListener("click", () => SP.sprich(`Hallo ${name()}! Ich bin Fipsi, der kleine Fuchs.`, "de-DE"));
-  $("test-ru").addEventListener("click", () => SP.sprich(`Привет, ${name()}! Я Фипси, маленький лисёнок.`, "ru-RU"));
+  $("test-ru").addEventListener("click", () => { const g = S.paar({ de: "", ru: `Привет, ${name()}! Я Фипси, маленький лисёнок.` })[1]; SP.sprich(g || `Hallo ${name()}!`, g ? HL().tts : "de-DE"); });
 
   $("zur-karte").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); lauf = null; zeige("karte"); zeichneKarte(); });
 

@@ -1,6 +1,8 @@
 (function () {
   const S = window.Spielwelt, SP = window.Sprache, TH = window.THEMEN, BI = window.SachBilder;
   const $ = (id) => document.getElementById(id);
+  const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
+  const LANG = () => `lang="${HL().code}"${HL().rtl ? ' dir="rtl"' : ""}`;
   const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const name = () => S.profil.name || "du";
   const mitName = (t) => (t || "").replace(/\{name\}/g, name());
@@ -20,11 +22,11 @@
   const texte = [];
   const ohneTags = (t) => String(t || "").replace(/<[^>]+>/g, "");
   function eintrag(de, ru) { texte.push({ de: mitName(de), ru: mitName(ru || "") }); return texte.length - 1; }
-  function vt(id) { const e = texte[id]; return e.de + (e.ru ? `<span class="ru-text" lang="ru" data-ru="${id}" hidden>${e.ru}</span>` : ""); }
+  function vt(id) { const e = texte[id]; return e.de + (e.ru ? `<span class="ru-text" ${LANG()} data-ru="${id}" hidden>${e.ru}</span>` : ""); }
   function mini(id) {
     const e = texte[id];
     return `<span class="mini-knoepfe">` + (SP.verfuegbar() ? `<button class="mk" data-vt="${id}" data-sprache="de" aria-label="Vorlesen">🔊</button>` : "") +
-      (daten().ru && e.ru ? `<button class="mk ru" data-vt="${id}" data-sprache="ru" lang="ru" aria-label="Auf Russisch">RU</button>` : "") + `</span>`;
+      (daten().ru && e.ru ? `<button class="mk ru" data-vt="${id}" data-sprache="hilfe" ${LANG()} aria-label="Auf ${HL().name}">${HL().kurz}</button>` : "") + `</span>`;
   }
   document.addEventListener("click", (ev) => {
     const b = ev.target.closest(".mk"); if (!b) return;
@@ -35,7 +37,7 @@
     const zeigen = els.length && els[0].hidden;
     els.forEach(x => x.hidden = !zeigen);
     b.classList.toggle("an", !!zeigen);
-    if (zeigen || !els.length) SP.sprich(ohneTags(e.ru), "ru-RU");
+    if (zeigen || !els.length) SP.sprich(ohneTags(e.ru), HL().tts);
   }, true);
 
   function sprich(text) {
@@ -51,7 +53,7 @@
     $("sterne").textContent = S.sterne();
     $("eule-klein").innerHTML = BI.eule("");
     $("ton-vorlesen").textContent = d.vorlesen ? "🗣️" : "🔇";
-    $("ru-schalter").hidden = !S.hilfeRu(); $("ru-schalter").classList.toggle("aus", !d.ru); $("ru-schalter").setAttribute("aria-pressed", d.ru);
+    $("ru-schalter").hidden = !S.hilfeRu(); $("ru-schalter").textContent = HL().kurz; $("ru-schalter").classList.toggle("aus", !d.ru); $("ru-schalter").setAttribute("aria-pressed", d.ru);
     const fertig = TH.filter(t => bestes(t.id) > 0).length;
     $("intro-text").textContent = fertig === 0 ? `Hallo ${name()}! Ich bin Eule Ella. Mit mir entdeckst du spannende Dinge über die Welt.`
       : `Du hast schon ${fertig} ${fertig === 1 ? "Thema" : "Themen"} entdeckt. Bald kommen neue dazu!`;
@@ -108,12 +110,12 @@
         b.classList.add("richtig");
         if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1);
         container.querySelectorAll(".option").forEach(x => x.disabled = true);
-        S.ton("juhu"); erklaere(warum, "gut", o.warum, o.warumRu);
+        S.ton("juhu"); erklaere(warum, "gut", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
         warum.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
       } else {
         if (!versucht) { lauf.fehler++; versucht = true; }
         b.classList.add("falsch"); b.disabled = true;
-        S.ton("nein"); erklaere(warum, "nein", o.warum, o.warumRu);
+        S.ton("nein"); erklaere(warum, "nein", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
       }
     }));
   }
@@ -129,31 +131,31 @@
 
     switch (s.typ) {
       case "info": {
-        blase(s.text, s.ru);
+        blase(s.text, S.ht(s));
         const fakten = (s.fakten || []).map(([de, ru]) => { const id = eintrag(de, ru); return `<li>${vt(id)}${mini(id)}</li>`; }).join("");
         A.innerHTML = `<h2 style="margin:0">${mitName(s.titel)}</h2>` + bildVon(s) + (fakten ? `<ul class="fakten">${fakten}</ul>` : "") + weiterKnopf(lauf.pos === t.schritte.length - 1 ? "Fertig!" : "Weiter");
         aufWeiter(); break;
       }
       case "wahl": {
         const opts = mische(s.optionen);
-        blase(s.frage, s.ru);
-        A.innerHTML = bildVon(s) + `<div class="optionen">` + opts.map(o => optionZeile(o.t, o.ru)).join("") + `</div>`;
+        blase(s.frage, S.ht(s));
+        A.innerHTML = bildVon(s) + `<div class="optionen">` + opts.map(o => optionZeile(o.t, S.ht(o))).join("") + `</div>`;
         auswahl(A.querySelector(".optionen"), opts);
         break;
       }
       case "daumen": {
-        blase(...T.daumenFrage);
-        const sid = eintrag(s.satz, s.satzRu);
+        blase(...S.paar(T.daumenFrage));
+        const sid = eintrag(s.satz, S.ht(s, "satz"));
         A.innerHTML = bildVon(s) + `<p class="satz-gross">${vt(sid)}${mini(sid)}</p>` +
           `<div class="daumen optionen" style="display:flex;width:auto"><button class="option" aria-label="Stimmt">👍</button><button class="option" aria-label="Stimmt nicht">👎</button></div>`;
         auswahl(A.querySelector(".daumen"), [
-          { ok: s.ok, warum: s.ok ? s.warum : T.nochmalHin[0], warumRu: s.ok ? s.warumRu : T.nochmalHin[1] },
-          { ok: !s.ok, warum: s.ok ? T.dochNicht[0] : s.warum, warumRu: s.ok ? T.dochNicht[1] : s.warumRu }]);
+          { ok: s.ok, warum: s.ok ? s.warum : S.paar(T.nochmalHin)[0], hilfe: s.ok ? S.ht(s, "warum") : S.paar(T.nochmalHin)[1] },
+          { ok: !s.ok, warum: s.ok ? S.paar(T.dochNicht)[0] : s.warum, hilfe: s.ok ? S.paar(T.dochNicht)[1] : S.ht(s, "warum") }]);
         setTimeout(() => sprich(s.satz), 50);
         break;
       }
       case "baum": {
-        blase(s.frage, s.ru);
+        blase(s.frage, S.ht(s));
         const P = {}; t.stammbaum.personen.forEach(p => P[p.id] = p);
         A.innerHTML = BI.stammbaum(t.stammbaum, [], true) + `<div class="warum" hidden></div>`;
         A.querySelector(".stammbaum").classList.add("gross");
@@ -166,29 +168,29 @@
             if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1);
             A.querySelector(".stammbaum").outerHTML = BI.stammbaum(t.stammbaum, [id]);
             A.querySelector(".stammbaum").classList.add("gross");
-            erklaere(w, "gut", s.warum, s.warumRu);
+            erklaere(w, "gut", s.warum, S.ht(s, "warum"));
             w.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
           } else {
             if (!versucht) { lauf.fehler++; versucht = true; }
             S.ton("nein"); g.classList.add("falsch");
-            erklaere(w, "nein", `Das ist nicht die richtige Person. ${P[id].wer}`, `Это не тот человек. ${P[id].werRu}`);
+            erklaere(w, "nein", `Das ist nicht die richtige Person. ${P[id].wer}`, S.ht(P[id], "wer") ? S.paar({ de: "", ru: "Это не тот человек." })[1] + " " + S.ht(P[id], "wer") : "");
           }
         }));
         break;
       }
       case "zuordnen": {
-        blase(s.frage, s.ru);
+        blase(s.frage, S.ht(s));
         const dinge = mische(s.dinge); let k = 0;
         const zeichne = () => {
           if (k >= dinge.length) {
             A.innerHTML = `<div class="gross-emoji">🎉</div>`;
-            S.ton("juhu"); const id = eintrag(...T.sortiert);
+            S.ton("juhu"); const id = eintrag(...S.paar(T.sortiert));
             A.insertAdjacentHTML("beforeend", `<div class="warum gut">${vt(id)}${mini(id)}</div>` + weiterKnopf());
             aufWeiter(); sprich(texte[id].de); return;
           }
           const d = dinge[k]; let versucht = false;
-          const did = eintrag(d.t, d.ru);
-          const gruppen = s.gruppen.map(g => { const gid = eintrag(g.name, g.ru); return `<button class="option" data-g="${g.id}">${BI.bild(g.bild, "klein")}${vt(gid)}</button>`; }).join("");
+          const did = eintrag(d.t, S.ht(d));
+          const gruppen = s.gruppen.map(g => { const gid = eintrag(g.name, S.ht(g)); return `<button class="option" data-g="${g.id}">${BI.bild(g.bild, "klein")}${vt(gid)}</button>`; }).join("");
           A.innerHTML = `<div class="zaehler">${k + 1} von ${dinge.length}</div><div class="sortier-karte">${vt(did)}${mini(did)}</div>` +
             `<div class="gruppen">${gruppen}</div><div class="warum" hidden></div>`;
           sprich(d.t);
@@ -201,7 +203,7 @@
             } else {
               if (!versucht) { lauf.fehler++; versucht = true; }
               b.classList.add("falsch"); b.disabled = true; S.ton("nein");
-              erklaere(w, "nein", ...T.zuordnenFalsch);
+              erklaere(w, "nein", ...S.paar(T.zuordnenFalsch));
             }
           }));
         };
@@ -233,7 +235,7 @@
   }
 
   $("zur-liste").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); lauf = null; zeige("liste"); zeichneListe(); });
-  $("ru-schalter").addEventListener("click", () => { const d = daten(); d.ru = !d.ru; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.ru ? "Russisch-Hilfe ist an." : "Russisch-Hilfe ist aus."); });
+  $("ru-schalter").addEventListener("click", () => { const d = daten(); d.ru = !d.ru; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(`${HL().name}-Hilfe ist ${d.ru ? "an" : "aus"}.`); });
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Vorlesen ist an." : "Vorlesen ist aus."); });
 
   zeichneListe();

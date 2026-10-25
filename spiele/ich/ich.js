@@ -2,7 +2,8 @@
   const S = window.Spielwelt, C = window.Charakter, SP = window.Sprache, W = window.WOERTER;
   const $ = (id) => document.getElementById(id);
   const name = () => S.profil.name || "Du";
-  const ruAn = () => { const d = S.lade("deutsch"); return !d || d.ru !== false; };
+  const ruAn = () => { const d = S.lade("deutsch"); return S.hilfeRu() && (!d || d.ru !== false); };
+  const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
 
   function zufall(seed) {
     let h = 2166136261;
@@ -111,7 +112,7 @@
     frage();
   }
   const farbeArt = { der: "#3A7BD5", die: "#E0457B", das: "#2FA66B" };
-  function ruKnopf(text) { return ruAn() ? `<button class="mk" data-ru="${text}" lang="ru">RU</button>` : ""; }
+  function ruKnopf(text) { return ruAn() && text ? `<button class="mk" data-ru="${text}" lang="${HL().code}">${HL().kurz}</button>` : ""; }
   function deKnopf(text) { return SP.verfuegbar() ? `<button class="mk" data-de="${text}">🔊</button>` : ""; }
 
   function frage() {
@@ -131,13 +132,13 @@
       K.innerHTML = `<p class="klein">Dein Wort für heute:</p><div class="riesig" aria-hidden="true">${x.e}</div>
         <div class="wort-gross"><span class="art" style="--f:${farbeArt[x.a]}">${x.a}</span> ${x.w}</div>
         ${x.p ? `<div class="zeile">Mehrzahl: <b>die ${x.p}</b></div>` : ""}
-        <div class="zeile">${deKnopf(`${x.a} ${x.w}`)}${ruKnopf(x.ru)}</div><div class="ru-box" id="ru-box" lang="ru" hidden>${x.ru}</div>
+        <div class="zeile">${deKnopf(`${x.a} ${x.w}`)}${ruKnopf(S.ht(x))}</div><div class="ru-box" id="ru-box" lang="${HL().code}" hidden>${S.ht(x)}</div>
         <button class="knopf haupt weiter" id="q-weiter">Los geht's mit den Rätseln</button>`;
       SP.sprich(`${x.a} ${x.w}`, "de-DE");
       $("q-weiter").addEventListener("click", () => { S.ton("tipp"); quiz.pos++; frage(); });
     } else if (q.typ === "artikel") {
       K.innerHTML = `<p class="klein">der, die oder das?</p><div class="riesig" aria-hidden="true">${x.e}</div><div class="wort-gross">___ ${x.w}</div>
-        <div class="zeile">${deKnopf(x.w)}${ruKnopf(x.ru)}</div><div class="ru-box" id="ru-box" lang="ru" hidden>${x.ru}</div>
+        <div class="zeile">${deKnopf(x.w)}${ruKnopf(S.ht(x))}</div><div class="ru-box" id="ru-box" lang="${HL().code}" hidden>${S.ht(x)}</div>
         <div class="opts drei">${["der", "die", "das"].map(a => `<button class="opt" data-a="${a}">${a}</button>`).join("")}</div>${hinweis}`;
       K.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
         if (b.dataset.a === x.a) { b.classList.add("richtig"); K.querySelectorAll(".opt").forEach(o => o.disabled = true); K.querySelector(".wort-gross").textContent = `${x.a} ${x.w}`; $("q-hinweis").textContent = "Richtig!"; fertig(`${x.a} ${x.w}`); }
@@ -153,7 +154,7 @@
       }));
     } else if (q.typ === "plural") {
       K.innerHTML = `<p class="klein">Wenn es mehr sind …</p><div class="riesig" aria-hidden="true">${x.e}${x.e}</div><div class="wort-gross">ein${x.a === "die" ? "e" : ""} ${x.w} – zwei ___</div>
-        <div class="zeile">${deKnopf(`ein${x.a === "die" ? "e" : ""} ${x.w}`)}${ruKnopf(x.ru)}</div><div class="ru-box" id="ru-box" lang="ru" hidden>${x.ru}</div>
+        <div class="zeile">${deKnopf(`ein${x.a === "die" ? "e" : ""} ${x.w}`)}${ruKnopf(S.ht(x))}</div><div class="ru-box" id="ru-box" lang="${HL().code}" hidden>${S.ht(x)}</div>
         <div class="opts">${q.opts.map((o, i) => `<button class="opt" data-i="${i}">${o}</button>`).join("")}</div>${hinweis}`;
       K.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
         if (q.opts[+b.dataset.i] === x.p) { b.classList.add("richtig"); K.querySelectorAll(".opt").forEach(z => z.disabled = true); K.querySelector(".wort-gross").textContent = `zwei ${x.p}`; $("q-hinweis").textContent = "Super!"; fertig(`zwei ${x.p}`); }
@@ -172,7 +173,7 @@
     }
     K.querySelectorAll(".mk").forEach(b => b.addEventListener("click", () => {
       if (b.dataset.de) SP.sprich(b.dataset.de, "de-DE");
-      if (b.dataset.ru) { const box = $("ru-box"); if (box) box.hidden = !box.hidden; SP.sprich(b.dataset.ru, "ru-RU"); }
+      if (b.dataset.ru) { const box = $("ru-box"); if (box) box.hidden = !box.hidden; SP.sprich(b.dataset.ru, HL().tts); }
     }));
   }
 

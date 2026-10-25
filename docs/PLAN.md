@@ -108,6 +108,7 @@ Wetterstation im Baumhaus: eine Woche lang das echte Wetter eintragen (Sachunter
 ## 7. Integration und Mehrsprachigkeit (großes Thema)
 - Ziel: Die App ist für Kinder **jeder Muttersprache** gut nutzbar. Start: **Deutsch + Russisch**,
   danach z. B. Ukrainisch, Arabisch, Türkisch, Polnisch, Farsi
+- **Grundlage erledigt (25.10.2026):** Sprachliste, Hilfetext-Helfer, alle Spiele und die Insel nutzen die gewählte Hilfesprache; siehe docs/SPRACHEN.md
 - Technik: alle Texte (Oberfläche und Inhalte) als Sprachschlüssel { de, ru, … } statt fest eingebautem `ru`;
   Hilfesprache im Profil; Rechts-nach-links-Darstellung für Arabisch und Farsi; Vorlesen je Sprache, soweit eine Stimme vorhanden ist
 - **Elternbereich in der Sprache der Eltern** (wichtig, wenn die Eltern selbst wenig Deutsch sprechen)

@@ -1,6 +1,8 @@
 (function () {
   const S = window.Spielwelt, SP = window.Sprache, L = window.LEKTIONEN, T = window.LEKTIONEN_TEXTE;
   const $ = (id) => document.getElementById(id);
+  const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
+  const LANG = () => `lang="${HL().code}"${HL().rtl ? ' dir="rtl"' : ""}`;
   const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const name = () => S.profil.name || "du";
   const mitName = (t) => (t || "").replace(/\{name\}/g, name());
@@ -15,12 +17,12 @@
   function eintrag(de, ru) { texte.push({ de: mitName(de), ru: mitName(ru || "") }); return texte.length - 1; }
   function vt(id, extraRu = "") {
     const e = texte[id];
-    return `${e.de}` + (e.ru ? `<span class="ru-text" lang="ru" data-ru="${id}" hidden>${extraRu || e.ru}</span>` : "");
+    return `${e.de}` + (e.ru ? `<span class="ru-text" ${LANG()} data-ru="${id}" hidden>${extraRu || e.ru}</span>` : "");
   }
   function mini(id) {
     const e = texte[id];
     return `<span class="mini-knoepfe">` + (SP.verfuegbar() ? `<button class="mk" data-vt="${id}" data-sprache="de" aria-label="Vorlesen">🔊</button>` : "") +
-      (daten().ru && e.ru ? `<button class="mk ru" data-vt="${id}" data-sprache="ru" lang="ru" aria-label="Auf Russisch">RU</button>` : "") + `</span>`;
+      (daten().ru && e.ru ? `<button class="mk ru" data-vt="${id}" data-sprache="hilfe" ${LANG()} aria-label="Auf ${HL().name}">${HL().kurz}</button>` : "") + `</span>`;
   }
   document.addEventListener("click", (ev) => {
     const b = ev.target.closest(".mk"); if (!b) return;
@@ -31,7 +33,7 @@
     const zeigen = els.length && els[0].hidden;
     els.forEach(x => x.hidden = !zeigen);
     b.classList.toggle("an", !!zeigen);
-    if (zeigen || !els.length) SP.sprich(ohneTags(e.ru), "ru-RU");
+    if (zeigen || !els.length) SP.sprich(ohneTags(e.ru), HL().tts);
   }, true);
   function speichere(d) { S.speichere("medien", d); }
   const bestes = (id) => daten().lektionen[id] || 0;
@@ -68,7 +70,7 @@
     $("sterne").textContent = S.sterne();
     $("robo-klein").innerHTML = robo("");
     $("ton-vorlesen").textContent = d.vorlesen ? "🗣️" : "🔇";
-    $("ru-schalter").hidden = !S.hilfeRu(); $("ru-schalter").classList.toggle("aus", !d.ru); $("ru-schalter").setAttribute("aria-pressed", d.ru);
+    $("ru-schalter").hidden = !S.hilfeRu(); $("ru-schalter").textContent = HL().kurz; $("ru-schalter").classList.toggle("aus", !d.ru); $("ru-schalter").setAttribute("aria-pressed", d.ru);
     const fertig = L.filter(l => bestes(l.id) > 0).length;
     $("intro-text").textContent = fertig === 0 ? `Hallo ${name()}! Ich bin Pixel. Schaffe alle 6 Lektionen, dann bekommst du deinen Tablet-Führerschein.`
       : fertig < L.length ? `Schon ${fertig} von ${L.length} Lektionen geschafft. Weiter so!` : `Du hast den Tablet-Führerschein! Du kannst jede Lektion nochmal machen.`;
@@ -137,12 +139,12 @@
         b.classList.add("richtig");
         if (!versucht && window.Charakter) Charakter.gib("tablet", 1);
         container.querySelectorAll(".option").forEach(x => x.disabled = true);
-        S.ton("juhu"); erklaere(warum, "gut", o.warum, o.warumRu);
+        S.ton("juhu"); erklaere(warum, "gut", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
         warum.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
       } else {
         if (!versucht) { lauf.fehler++; versucht = true; }
         b.classList.add("falsch"); b.disabled = true;
-        S.ton("nein"); erklaere(warum, "nein", o.warum, o.warumRu);
+        S.ton("nein"); erklaere(warum, "nein", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
       }
     }));
   }
@@ -156,42 +158,42 @@
 
     switch (s.typ) {
       case "sag":
-        blase(s.text, s.ru);
+        blase(s.text, S.ht(s));
         A.innerHTML = `<div class="gross-emoji" aria-hidden="true">${s.e || l.e}</div>` + weiterKnopf();
         aufWeiter(); break;
 
       case "wahl": case "chat": {
         const opts = mische(s.optionen);
-        blase(s.frage, s.ru);
+        blase(s.frage, S.ht(s));
         let oben = s.e ? `<div class="gross-emoji" aria-hidden="true">${s.e}</div>` : "";
-        if (s.typ === "chat") { const id = eintrag(s.nachricht, s.nachrichtRu); oben = `<div class="chat"><div class="kopf"><span>👤</span>${s.von}</div><div class="nachricht">${vt(id)}${mini(id)}</div></div>`; }
-        A.innerHTML = oben + `<div class="optionen">` + opts.map(o => optionZeile(o.t, o.ru)).join("") + `</div>`;
+        if (s.typ === "chat") { const id = eintrag(s.nachricht, S.ht(s, "nachricht")); oben = `<div class="chat"><div class="kopf"><span>👤</span>${s.von}</div><div class="nachricht">${vt(id)}${mini(id)}</div></div>`; }
+        A.innerHTML = oben + `<div class="optionen">` + opts.map(o => optionZeile(o.t, S.ht(o))).join("") + `</div>`;
         auswahl(A.querySelector(".optionen"), opts);
         break;
       }
 
       case "daumen": {
-        blase(...T.daumenFrage);
-        const sid = eintrag(s.satz, s.satzRu);
+        blase(...S.paar(T.daumenFrage));
+        const sid = eintrag(s.satz, S.ht(s, "satz"));
         A.innerHTML = (s.e ? `<div class="gross-emoji" aria-hidden="true">${s.e}</div>` : "") + `<p class="satz-gross">${vt(sid)}${mini(sid)}</p>` +
           `<div class="daumen optionen" style="display:flex;width:auto"><button class="option" aria-label="Stimmt">👍</button><button class="option" aria-label="Stimmt nicht">👎</button></div>`;
         auswahl(A.querySelector(".daumen"), [
-          { ok: s.ok, warum: s.ok ? s.warum : T.nochmalHin[0], warumRu: s.ok ? s.warumRu : T.nochmalHin[1] },
-          { ok: !s.ok, warum: s.ok ? T.dochGut[0] : s.warum, warumRu: s.ok ? T.dochGut[1] : s.warumRu }]);
+          { ok: s.ok, warum: s.ok ? s.warum : S.paar(T.nochmalHin)[0], hilfe: s.ok ? S.ht(s, "warum") : S.paar(T.nochmalHin)[1] },
+          { ok: !s.ok, warum: s.ok ? S.paar(T.dochGut)[0] : s.warum, hilfe: s.ok ? S.paar(T.dochGut)[1] : S.ht(s, "warum") }]);
         sprich(s.satz);
         break;
       }
 
       case "sortieren": {
-        blase(s.frage, s.ru);
+        blase(s.frage, S.ht(s));
         const dinge = mische(s.dinge); let k = 0;
         const zeichne = () => {
-          if (k >= dinge.length) { A.innerHTML = `<div class="gross-emoji">🎉</div>`; uebungGeschafft(T.sortiert); return; }
+          if (k >= dinge.length) { A.innerHTML = `<div class="gross-emoji">🎉</div>`; uebungGeschafft(S.paar(T.sortiert)); return; }
           const d = dinge[k]; let versucht = false;
-          const did = eintrag(d.t, d.ru);
-          const ruBtn = (t) => daten().ru ? `<span class="ru-text" lang="ru" data-ru="${did}" hidden>${t}</span>` : "";
+          const did = eintrag(d.t, S.ht(d));
+          const ruBtn = (t) => daten().ru ? `<span class="ru-text" ${LANG()} data-ru="${did}" hidden>${t}</span>` : "";
           A.innerHTML = `<div class="zaehler">${k + 1} von ${dinge.length}</div><div class="sortier-karte"><span class="e">${d.e}</span>${vt(did)}${mini(did)}</div>` +
-            `<div class="sortier-knoepfe"><button class="option" data-seite="links">${s.links}${ruBtn(s.linksRu)}</button><button class="option" data-seite="rechts">${s.rechts}${ruBtn(s.rechtsRu)}</button></div><div class="warum" hidden></div>`;
+            `<div class="sortier-knoepfe"><button class="option" data-seite="links">${s.links}${ruBtn(S.ht(s, "links"))}</button><button class="option" data-seite="rechts">${s.rechts}${ruBtn(S.ht(s, "rechts"))}</button></div><div class="warum" hidden></div>`;
           sprich(d.t);
           A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
             const w = A.querySelector(".warum");
@@ -201,7 +203,7 @@
             } else {
               if (!versucht) { lauf.fehler++; versucht = true; }
               b.classList.add("falsch"); b.disabled = true; S.ton("nein");
-              const [de, ru] = d.seite === "rechts" ? T.geheim : T.darfSagen;
+              const [de, ru] = d.seite === "rechts" ? S.paar(T.geheim) : S.paar(T.darfSagen);
               erklaere(w, "nein", de, ru);
             }
           }));
@@ -210,20 +212,20 @@
       }
 
       case "tippen": {
-        blase(s.text, s.ru);
+        blase(s.text, S.ht(s));
         A.innerHTML = `<div class="zaehler" id="zaehler">0 von 3</div><div class="feld" id="feld"><button class="ziel-stern" id="ziel" aria-label="Stern">⭐</button></div>`;
         let n = 0; const z = $("ziel");
         const setze = () => { z.style.left = (15 + Math.random() * 70) + "%"; z.style.top = (18 + Math.random() * 64) + "%"; };
         setze();
         z.addEventListener("click", () => {
           n++; $("zaehler").textContent = `${n} von 3`; S.ton("wahl");
-          if (n >= 3) { z.remove(); uebungGeschafft(T.getippt); } else setze();
+          if (n >= 3) { z.remove(); uebungGeschafft(S.paar(T.getippt)); } else setze();
         });
         break;
       }
 
       case "wischen": {
-        blase(s.text, s.ru);
+        blase(s.text, S.ht(s));
         const bilder = ["🐶", "🌈", "🚀", "🦄"];
         A.innerHTML = `<div class="feld" id="feld"><div class="karussell" id="kar">${bilder.map(b => `<div>${b}</div>`).join("")}</div></div><div class="punkte" id="pkt"></div>`;
         let idx = 0, fertig = false;
@@ -236,13 +238,13 @@
           if (x0 === null) return; const dx = e.clientX - x0; x0 = null;
           if (Math.abs(dx) < 40) return;
           idx = Math.max(0, Math.min(bilder.length - 1, idx + (dx < 0 ? 1 : -1))); S.ton("tipp"); zeigeP();
-          if (idx === bilder.length - 1 && !fertig) { fertig = true; uebungGeschafft(T.gewischt); }
+          if (idx === bilder.length - 1 && !fertig) { fertig = true; uebungGeschafft(S.paar(T.gewischt)); }
         });
         break;
       }
 
       case "ziehen": {
-        blase(s.text, s.ru);
+        blase(s.text, S.ht(s));
         A.innerHTML = `<div class="feld" id="feld"><div class="korb" id="korb">🧺</div><div class="apfel" id="apfel" role="img" aria-label="Apfel">🍎</div></div>`;
         const apfel = $("apfel"), feld = $("feld"), korb = $("korb");
         let ziehe = false, fertig = false;
@@ -255,20 +257,20 @@
           if (!ziehe) return; ziehe = false;
           const k = korb.getBoundingClientRect();
           if (e.clientX > k.left - 20 && e.clientX < k.right + 20 && e.clientY > k.top - 20 && e.clientY < k.bottom + 20) {
-            fertig = true; korb.classList.add("voll"); korb.textContent = "🧺🍎"; apfel.remove(); uebungGeschafft(T.apfel);
+            fertig = true; korb.classList.add("voll"); korb.textContent = "🧺🍎"; apfel.remove(); uebungGeschafft(S.paar(T.apfel));
           }
         });
         break;
       }
 
       case "halten": {
-        blase(s.text, s.ru);
+        blase(s.text, S.ht(s));
         A.innerHTML = `<button class="halten" id="halten"><span>Gedrückt halten</span></button>`;
         const b = $("halten"); let t0 = 0, raf = 0, fertig = false;
         const lauf2 = () => {
           const p = Math.min(100, (performance.now() - t0) / 12);
           b.style.setProperty("--p", p);
-          if (p >= 100) { fertig = true; b.querySelector("span").textContent = "Geschafft!"; uebungGeschafft(T.gedrueckt); return; }
+          if (p >= 100) { fertig = true; b.querySelector("span").textContent = "Geschafft!"; uebungGeschafft(S.paar(T.gedrueckt)); return; }
           raf = requestAnimationFrame(lauf2);
         };
         b.addEventListener("pointerdown", e => { if (fertig) return; b.setPointerCapture(e.pointerId); t0 = performance.now(); raf = requestAnimationFrame(lauf2); });
@@ -280,37 +282,37 @@
       }
 
       case "zoomen": {
-        blase(s.text, s.ru);
+        blase(s.text, S.ht(s));
         A.innerHTML = `<div class="feld" id="feld"><div class="zoom-bild" id="zb">🐞</div></div><button class="knopf ueberspringen" id="skip" hidden>Klappt nicht? Weiter</button>`;
         const feld = $("feld"), zb = $("zb"), punkte = new Map(); let d0 = 0, s0 = 1, sk = 1, fertig = false;
         const abst = () => { const [a, b] = [...punkte.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
         feld.addEventListener("pointerdown", e => { feld.setPointerCapture(e.pointerId); punkte.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (punkte.size === 2) { d0 = abst(); s0 = sk; } });
         feld.addEventListener("pointermove", e => {
           if (!punkte.has(e.pointerId)) return; punkte.set(e.pointerId, { x: e.clientX, y: e.clientY });
-          if (punkte.size === 2 && d0 > 0) { sk = Math.max(1, Math.min(4, s0 * abst() / d0)); zb.style.setProperty("--s", sk); if (sk >= 2.4 && !fertig) { fertig = true; uebungGeschafft(T.kaefer); } }
+          if (punkte.size === 2 && d0 > 0) { sk = Math.max(1, Math.min(4, s0 * abst() / d0)); zb.style.setProperty("--s", sk); if (sk >= 2.4 && !fertig) { fertig = true; uebungGeschafft(S.paar(T.kaefer)); } }
         });
         const weg = e => punkte.delete(e.pointerId);
         feld.addEventListener("pointerup", weg); feld.addEventListener("pointercancel", weg);
         // Ohne Touch (z. B. am Computer): Strg + Mausrad zum Zoomen, sonst Überspringen anbieten
-        feld.addEventListener("wheel", e => { e.preventDefault(); sk = Math.max(1, Math.min(4, sk - e.deltaY / 200)); zb.style.setProperty("--s", sk); if (sk >= 2.4 && !fertig) { fertig = true; uebungGeschafft(T.kaefer); } }, { passive: false });
+        feld.addEventListener("wheel", e => { e.preventDefault(); sk = Math.max(1, Math.min(4, sk - e.deltaY / 200)); zb.style.setProperty("--s", sk); if (sk >= 2.4 && !fertig) { fertig = true; uebungGeschafft(S.paar(T.kaefer)); } }, { passive: false });
         const t = setTimeout(() => { const k = $("skip"); if (k && !fertig) { k.hidden = false; k.addEventListener("click", () => { S.ton("tipp"); weiter(); }); } }, 9000);
         aufraeumer.push(() => clearTimeout(t));
         break;
       }
 
       case "popup": {
-        blase(s.text, s.ru);
+        blase(s.text, S.ht(s));
         A.innerHTML = `<div class="spielchen"><div class="frosch">🐸</div>
           <div class="werbung" id="werbung"><span class="label">Werbung</span><button class="schliessen" id="zu" aria-label="Werbung schließen">✕</button>
             <div class="gross">🎁💎</div><b style="font-size:1.4rem">Du hast gewonnen!</b><button class="gratis" id="gratis">GRATIS HOLEN!</button></div></div><div class="warum" id="w" hidden></div>`;
         let versucht = false;
         $("gratis").addEventListener("click", () => {
           if (!versucht) { lauf.fehler++; versucht = true; }
-          S.ton("nein"); erklaere($("w"), "nein", ...T.werbungFalsch);
+          S.ton("nein"); erklaere($("w"), "nein", ...S.paar(T.werbungFalsch));
         });
         $("zu").addEventListener("click", () => {
           $("werbung").remove(); const w = $("w");
-          S.ton("juhu"); erklaere(w, "gut", ...T.werbungRichtig); w.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
+          S.ton("juhu"); erklaere(w, "gut", ...S.paar(T.werbungRichtig)); w.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
         });
         break;
       }
@@ -379,7 +381,7 @@
   $("fs-zurueck").addEventListener("click", () => { S.ton("tipp"); zeige("liste"); zeichneListe(); });
   $("fs-zeigen").addEventListener("click", () => { S.ton("tipp"); zeigeFuehrerschein(); });
   $("zur-liste").addEventListener("click", () => { SP.stopp(); aufraeumen(); S.ton("tipp"); lauf = null; zeige("liste"); zeichneListe(); });
-  $("ru-schalter").addEventListener("click", () => { const d = daten(); d.ru = !d.ru; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.ru ? "Russisch-Hilfe ist an." : "Russisch-Hilfe ist aus."); });
+  $("ru-schalter").addEventListener("click", () => { const d = daten(); d.ru = !d.ru; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(`${HL().name}-Hilfe ist ${d.ru ? "an" : "aus"}.`); });
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Vorlesen ist an." : "Vorlesen ist aus."); });
 
   zeichneListe();

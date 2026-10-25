@@ -138,7 +138,7 @@ const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" :
   [0.95, -0.95].forEach(x => h.add(setze(teil(new BoxGeometry(0.7, 0.7, 0.1), fensterMat, { dicke: 1.1 }), x, 1.5, 1.7)));
   h.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.9, 16), "#B9584A"), 0.9, 3.5, -0.5));
   h.position.set(-5, 0.25, -4.5); h.rotation.y = 0.35; scene.add(h); block(-5, -4.5, 2.3);
-  antippbar(h, () => sprechblase("🏠", "Dein Zuhause", "Bald kannst du hier hinein und dein Zimmer einrichten.", "Скоро ты сможешь зайти сюда и обставить свою комнату.", null));
+  antippbar(h, () => sprechblase("🏠", "Dein Zuhause", "Bald kannst du hier hinein und dein Zimmer einrichten.", S.paar(["", "Скоро ты сможешь зайти сюда и обставить свою комнату."])[1], null));
 }
 
 // ---------- Wolken, Sterne, Schnee ----------
@@ -299,9 +299,9 @@ const NEST = new Vector3(-2.2, 0.25, -6.2);
     const e = T.EIER[tierDaten.ei] || { a: "#FFFFFF", b: "#E0457B" };
     const ei = teil(kugel(0.36), e.a); ei.scale.set(1, 1.3, 1); setze(ei, 0, 0.5, 0); nest.add(ei);
     const band = teil(new TorusGeometry(0.33, 0.07, 10, 24), e.b, { dicke: 1.1 }); band.rotation.x = Math.PI / 2; setze(band, 0, 0.5, 0); nest.add(band);
-    antippbar(nest, () => sprechblase("🥚", "Dein Ei", "Es braucht noch Wärme. Wärme es auf der Tier-Seite!", "Ему нужно тепло. Согрей его на странице питомца!", "../tier/"));
+    antippbar(nest, () => sprechblase("🥚", "Dein Ei", "Es braucht noch Wärme. Wärme es auf der Tier-Seite!", S.paar(["", "Ему нужно тепло. Согрей его на странице питомца!"])[1], "../tier/"));
   } else {
-    antippbar(nest, () => sprechblase("🪺", "Ein leeres Nest", "Hier könnte dein Haustier wohnen. Such dir ein Ei aus!", "Здесь мог бы жить твой питомец. Выбери яйцо!", "../tier/"));
+    antippbar(nest, () => sprechblase("🪺", "Ein leeres Nest", "Hier könnte dein Haustier wohnen. Such dir ein Ei aus!", S.paar(["", "Здесь мог бы жить твой питомец. Выбери яйцо!"])[1], "../tier/"));
   }
 }
 
@@ -355,7 +355,7 @@ const NACHBARN = [
 NACHBARN.forEach(n => {
   const o = n.bau(); o.position.set(n.x, 0.25, n.z); o.rotation.y = n.dreh; scene.add(o); block(n.x, n.z, 0.8);
   n.obj = o;
-  antippbar(o, () => { o.userData.huepf = 1; sprechblase(n.e, n.titel, n.text, n.ru, n.ziel); });
+  antippbar(o, () => { o.userData.huepf = 1; sprechblase(n.e, n.titel, n.text, S.ht(n), n.ziel); });
 });
 
 // ---------- Orte für Minispiele ----------
@@ -367,26 +367,26 @@ const ballons = new Group(); ballons.position.set(10, 0.25, 6); scene.add(ballon
   b.position.set(Math.cos(a) * 0.45, 2.3 + (i % 2) * 0.35, Math.sin(a) * 0.45); b.userData.p = i; ballons.add(b);
 });
 ballons.add(setze(teil(new CylinderGeometry(0.12, 0.16, 0.5, 12), "#9A6A3F"), 0, 0.25, 0));
-antippbar(ballons, () => sprechblase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", "Лопни как можно больше шариков!", "ballons.html"));
+antippbar(ballons, () => sprechblase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", S.paar(["", "Лопни как можно больше шариков!"])[1], "ballons.html"));
 const truhe = new Group(); truhe.position.set(-1, 0.05, 13.6); scene.add(truhe);
 truhe.add(setze(teil(new BoxGeometry(0.9, 0.5, 0.6), "#B9732E"), 0, 0.25, 0));
 const deckel = teil(new CylinderGeometry(0.3, 0.3, 0.9, 16, 1, false, 0, Math.PI), "#C98A3E"); deckel.rotation.z = Math.PI / 2; setze(deckel, 0, 0.5, 0); truhe.add(deckel);
 truhe.add(setze(teil(new BoxGeometry(0.16, 0.2, 0.05), "#FFC83D", { dicke: 1.1 }), 0, 0.45, 0.32));
-antippbar(truhe, () => sprechblase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "insel.html"));
+antippbar(truhe, () => sprechblase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", S.paar(["", "На острове сокровищ ждёт сундук. Найдёшь его?"])[1], "insel.html"));
 
 // ---------- Sprechblase ----------
 let blaseZiel = null;
 function sprechblase(e, titel, text, ru, ziel) {
   $("blase-e").textContent = e; $("blase-titel").textContent = titel; $("blase-text").textContent = text;
   const ruEl = $("blase-ru"); ruEl.textContent = ru || ""; ruEl.hidden = true;
-  $("blase-ruk").hidden = !(ru && S.hilfeRu && S.hilfeRu());
+  const hl = S.hilfe && S.hilfe(); $("blase-ruk").hidden = !(ru && hl); if (hl) { $("blase-ruk").textContent = hl.kurz; ruEl.lang = hl.code; ruEl.dir = hl.rtl ? "rtl" : "ltr"; }
   $("blase-los").hidden = !ziel; blaseZiel = ziel;
   $("blase").hidden = false; S.ton("tipp");
   if (SP && SP.sprich) SP.sprich(text, "de-DE");
 }
 $("blase-zu").addEventListener("click", () => { $("blase").hidden = true; if (SP && SP.stopp) SP.stopp(); });
 $("blase-los").addEventListener("click", () => { if (blaseZiel) location.href = blaseZiel; });
-$("blase-ruk").addEventListener("click", () => { const r = $("blase-ru"); r.hidden = !r.hidden; if (!r.hidden && SP) SP.sprich(r.textContent, "ru-RU"); });
+$("blase-ruk").addEventListener("click", () => { const r = $("blase-ru"); r.hidden = !r.hidden; if (!r.hidden && SP) SP.sprich(r.textContent, (S.hilfe() || { tts: "ru-RU" }).tts); });
 
 // ---------- Herzen beim Streicheln ----------
 const herzListe = [];

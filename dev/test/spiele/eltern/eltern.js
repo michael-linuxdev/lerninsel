@@ -39,9 +39,9 @@
   }
 
   // ---------- Ersteinrichtung und Kind-Einstellungen ----------
-  const SPRACHEN = [["", "Keine (nur Deutsch)"], ["ru", "Russisch"]];
+  const SPRACHEN = [["", "Keine (nur Deutsch)"]].concat(S.SPRACHEN.map(x => [x.code, `${x.name} – ${x.eigen}${x.fertig ? "" : " (in Arbeit)"}`, !x.fertig]));
   const ANSPRACHE = [["w", "Mädchen"], ["m", "Junge"], ["n", "Keine Angabe"]];
-  const option = (liste, wert) => liste.map(([v, t]) => `<option value="${v}"${String(v) === String(wert) ? " selected" : ""}>${t}</option>`).join("");
+  const option = (liste, wert) => liste.map(([v, t, aus]) => `<option value="${v}"${String(v) === String(wert) ? " selected" : ""}${aus ? " disabled" : ""}>${t}</option>`).join("");
   // Empfehlung zur freizeitlichen Bildschirmzeit (DGKJ, AWMF-S2k-Leitlinie zur Prävention dysregulierten Bildschirmmediengebrauchs)
   function empfehlung(alter) {
     if (alter < 6) return "3–6 Jahre: höchstens 30 Minuten an einzelnen Tagen, immer mit einem Erwachsenen, nicht täglich.";
@@ -159,7 +159,7 @@
       </div>
       <div class="karte">
         <h2>Kind und Einstellungen</h2>
-        <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre, ${S.kind().klasse}. Klasse · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1]}</p>
+        <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre, ${S.kind().klasse}. Klasse · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1].replace(" (in Arbeit)", "")}</p>
         <p class="hinweis"><b>Empfehlung der Kinderärzte (DGKJ):</b> ${empfehlung(S.kind().alter)}</p>
         <div class="knoepfe"><button class="knopf haupt" id="erwachsen">👤 Als Erwachsener spielen</button><button class="knopf" id="kind-aendern">Ändern</button><button class="knopf" id="neu-laden">🔄 App neu laden</button></div>
         <p class="klein">„Als Erwachsener spielen“ öffnet für eine Stunde alles, ohne Sperren und Zeitgrenzen; dabei werden keine Sterne und kein Fortschritt fürs Kind gespeichert (bis „Beenden“ oder die App geschlossen wird). „App neu laden“ holt die neueste Version. Der Spielstand bleibt erhalten.</p>

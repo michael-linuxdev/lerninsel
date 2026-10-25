@@ -14,6 +14,15 @@
   const erwachsen = () => { try { return +sessionStorage.getItem(ERW) > Date.now(); } catch (e) { return false; } };
   const DB_NAME = UMG === "prod" ? "spielwelt" : "spielwelt-" + UMG, DB_STORE = "stand";
 
+  // Hilfesprachen. fertig: Inhalte sind übersetzt (nur fertige können gewählt werden). rtl: von rechts nach links.
+  const SPRACHEN = [
+    { code: "ru", name: "Russisch", eigen: "Русский", kurz: "RU", tts: "ru-RU", fertig: true },
+    { code: "uk", name: "Ukrainisch", eigen: "Українська", kurz: "UK", tts: "uk-UA", fertig: false },
+    { code: "ar", name: "Arabisch", eigen: "العربية", kurz: "AR", tts: "ar-SA", rtl: true, fertig: false },
+    { code: "tr", name: "Türkisch", eigen: "Türkçe", kurz: "TR", tts: "tr-TR", fertig: false },
+    { code: "pl", name: "Polnisch", eigen: "Polski", kurz: "PL", tts: "pl-PL", fertig: false },
+    { code: "fa", name: "Persisch (Farsi)", eigen: "فارسی", kurz: "FA", tts: "fa-IR", rtl: true, fertig: false }
+  ];
   const leeresProfil = () => ({ name: "", sterne: 0, freigeschaltet: [], ton: true, daten: {}, stand: 0 });
 
   // ---------- localStorage ----------
@@ -127,7 +136,14 @@
     // Von den Eltern eingerichtet (Elternbereich): Alter, Klasse, Ansprache, Hilfesprache
     eingerichtet() { return !!(profil.daten.eltern && profil.daten.eltern.eingerichtet); },
     kind() { return Object.assign({ alter: 8, klasse: 2, geschlecht: "n", hilfesprache: "" }, (profil.daten.eltern || {}).kind || {}); },
-    hilfeRu() { return Spielwelt.kind().hilfesprache === "ru"; },
+    // Hilfesprachen: Inhalte tragen Hilfetexte als Felder je Sprache, z. B. { text, ru, uk } oder { warum, warumRu, warumUk }
+    SPRACHEN,
+    hilfe() { const c = Spielwelt.kind().hilfesprache; return SPRACHEN.find(x => x.code === c && x.fertig) || null; },
+    hilfeRu() { return !!Spielwelt.hilfe(); },   // alter Name: „gibt es eine Hilfesprache?“
+    // Hilfetext zu einem Feld: ht(o) → o.ru, ht(o, "warum") → o.warumRu (je nach gewählter Sprache)
+    ht(o, feld) { const h = Spielwelt.hilfe(); if (!h || !o) return ""; const k = feld ? feld + h.code[0].toUpperCase() + h.code.slice(1) : h.code; return o[k] || ""; },
+    // Feste Textpaare: [deutsch, russisch] (alt) oder { de, ru, uk } → [deutsch, hilfe]
+    paar(x) { const h = Spielwelt.hilfe(); if (Array.isArray(x)) return [x[0], h && h.code === "ru" ? x[1] || "" : ""]; return [x.de, h ? x[h.code] || "" : ""]; },
     setzeName(n) { const name = String(n).trim().slice(0, 20); speichernFest(p => { p.name = name; }); },
     sterne() { return profil.sterne; },
     gibSterne(n) { profil.sterne += n; speichern(); },
