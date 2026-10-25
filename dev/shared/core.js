@@ -51,14 +51,25 @@
     })).catch(() => false);
   }
   let dbTimer = null;
+  // Im Erwachsenen-Modus wird Spielfortschritt nicht gespeichert (keine Sterne, kein Fortschritt fürs Kind)
   function speichern() {
+    if (!TEST && erwachsen()) return;
     profil.stand = Date.now();
     lokalSchreiben(profil);
     clearTimeout(dbTimer);
     dbTimer = setTimeout(() => dbSchreiben(profil), 250);
   }
   // Beim Verlassen der Seite sofort sichern
-  addEventListener("pagehide", () => { clearTimeout(dbTimer); dbSchreiben(profil); });
+  addEventListener("pagehide", () => { if (!TEST && erwachsen()) return; clearTimeout(dbTimer); dbSchreiben(profil); });
+  // Einstellungen immer speichern, auch im Erwachsenen-Modus: Änderung auf den gespeicherten Stand anwenden,
+  // damit vorübergehender Fortschritt des Erwachsenen nicht mitgespeichert wird
+  function speichernFest(aendern) {
+    aendern(profil);
+    if (TEST || !erwachsen()) { speichern(); return; }
+    const p = lokalLesen() || leeresProfil();
+    aendern(p); p.stand = Date.now();
+    lokalSchreiben(p); dbSchreiben(p);
+  }
 
   // ---------- Spielstand prüfen (für Datei und QR-Code) ----------
   function bereinige(p) {
@@ -112,7 +123,7 @@
     eingerichtet() { return !!(profil.daten.eltern && profil.daten.eltern.eingerichtet); },
     kind() { return Object.assign({ alter: 8, klasse: 2, geschlecht: "n", hilfesprache: "" }, (profil.daten.eltern || {}).kind || {}); },
     hilfeRu() { return Spielwelt.kind().hilfesprache === "ru"; },
-    setzeName(n) { profil.name = String(n).trim().slice(0, 20); speichern(); },
+    setzeName(n) { const name = String(n).trim().slice(0, 20); speichernFest(p => { p.name = name; }); },
     sterne() { return profil.sterne; },
     gibSterne(n) { profil.sterne += n; speichern(); },
     istFrei(id) { return profil.freigeschaltet.includes(id); },
@@ -125,9 +136,9 @@
       return true;
     },
     lade(spiel) { return profil.daten[spiel] || null; },
-    speichere(spiel, d) { profil.daten[spiel] = d; speichern(); },
+    speichere(spiel, d) { if (spiel === "eltern") speichernFest(p => { p.daten.eltern = d; }); else { profil.daten[spiel] = d; speichern(); } },
     tonAn() { return profil.ton; },
-    setzeTon(an) { profil.ton = !!an; speichern(); },
+    setzeTon(an) { speichernFest(p => { p.ton = !!an; }); },
 
     // ---------- Sichern und Übertragen ----------
     exportiere() {
@@ -139,7 +150,8 @@
     },
     importiere(neu) {
       profil = neu;
-      speichern();
+      profil.stand = Date.now();
+      lokalSchreiben(profil);
       clearTimeout(dbTimer);
       return dbSchreiben(profil);
     },
@@ -233,7 +245,7 @@
   if (!TEST && erwachsen()) {
     const leiste = () => {
       const b = document.createElement("div");
-      b.innerHTML = `<b>👤 Erwachsenen-Modus</b><button>Beenden</button>`;
+      b.innerHTML = `<b>👤 Erwachsenen-Modus · ohne Sterne</b><button>Beenden</button>`;
       b.style.cssText = "position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:8px;align-items:center;" +
         "background:#3b1f63;color:#fff;font:600 14px Fredoka,sans-serif;padding:4px 10px;border-radius:0 0 14px 14px;box-shadow:0 3px 0 rgba(0,0,0,.2)";
       const k = b.querySelector("button");
