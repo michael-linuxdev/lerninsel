@@ -443,6 +443,16 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - Zählt als Lernzeit; Startseiten-Kachel „Schach“ und Schachtisch mit Tilda auf der Insel/in jeder Welt (auch ohne Spielzeit erreichbar).
 - Weiter in 8b: eigene Stärken (Spiegel), soziale Bildergeschichten, Malen/Musik.
 
+**Nachtrag 26.10.2026 – 8b: Stärken und Miteinander**
+- `shared/staerken.js`: 16 Stärken (de/ru), **nie** eine Schwächen-Liste, kein Test, keine Rangliste. Drei Quellen:
+  Kind kreuzt selbst an (🙋) · App bemerkt etwas aus dem, was das Kind tut (Schach-Rätsel, Bauplatz, Bewegung, Erklären …) und
+  fragt nach („Bruni hat bemerkt … Kannst du gut …?“ – Ja/Eher nicht, Ablehnung wird respektiert) (🔍) · Eltern ergänzen im
+  Elternbereich „Heute habe ich gesehen, dass du …“ (❤️). Anzeige als Karte „⭐ Was ich gut kann“ in Mein Ich (Spiegel).
+- **Miteinander** bei Bruni (`spiele/gefuehle/`): 8 kleine Bildergeschichten (neues Kind, Streit ums Spielzeug, Auslachen, …),
+  Kind wählt, Bruni zeigt freundlich die Folge (keine „falsch“-Antwort), danach eine Nachdenk-Frage und ein
+  **Gesprächsimpuls fürs Abendessen**; der letzte Impuls erscheint im Wochenbericht der Eltern. Lernfund + Erfahrung Sachkunde.
+- Weiter in 8b: Malen/Kreativität und Musik.
+
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**

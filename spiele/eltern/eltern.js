@@ -197,6 +197,7 @@
   // Gemeinsame Momente der Woche (Erklären, Kopfrechen-Duell) – Eltern als Mitspieler
   // Gefühle (nur wenn das Kind es erlaubt) und Bewegungs-Minuten der Woche
   function gefuehleHtml() {
+    const esc2 = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     const d = S.lade("gefuehle"); if (!d) return "";
     const tage = [], E = { froh: "😊", ruhig: "😌", muede: "🥱", traurig: "😢", wuetend: "😠", aengstlich: "😟", aufgeregt: "🤩" };
     for (let i = 6; i >= 0; i--) { const t = new Date(); t.setDate(t.getDate() - i); tage.push(`${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`); }
@@ -204,6 +205,7 @@
     const gef = d.teilen ? tage.filter(t => (d.tage || {})[t]).map(t => `${E[d.tage[t]] || "❔"} ${t.slice(8)}.${t.slice(5, 7)}.`).join(" · ") : "";
     return `<h3 style="margin:10px 0 6px;font-size:1.05rem">💗 Gefühle und Bewegung</h3>
       <p class="klein">🤸 ${bew} Bewegungs-Minute${bew === 1 ? "" : "n"} diese Woche.${d.ruhe ? ` 🌬️ ${d.ruhe}-mal eine Ruhe-Übung gemacht (insgesamt).` : ""}</p>
+      ${(d.impulse || []).length ? `<p class="klein">🍽️ Gesprächsimpuls aus „Miteinander“ (${esc2(d.impulse[d.impulse.length - 1].g)}): ${esc2(d.impulse[d.impulse.length - 1].t)}</p>` : ""}
       ${d.teilen ? `<p class="klein">Gefühls-Barometer (vom Kind freigegeben): ${gef || "diese Woche noch nichts eingetragen"}</p>` : `<p class="klein">Das Gefühls-Barometer bleibt privat, solange das Kind es nicht freigibt. Fragt lieber direkt: „Wie war dein Tag?“</p>`}`;
   }
   function gemeinsamHtml() {
@@ -281,6 +283,26 @@
   }
   function echteWeltKnoepfe() {
     $("ew-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.echtewelt = { selbst: $("ew-selbst").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });
+  }
+
+  // ---------- Stärken: „Heute habe ich gesehen, dass du …“ ----------
+  function staerkenKarte() {
+    if (!window.Staerken) return "";
+    const ST = window.Staerken, m = ST.meine();
+    return `<div class="karte">
+      <h2>⭐ Stärken</h2>
+      <p>Ohne Test und ohne Rangliste: Das Kind kreuzt selbst an, die App bemerkt Dinge aus dem Spielen, und ihr könnt ergänzen. Schwächen werden nie gezeigt.</p>
+      ${m.length ? `<p><b>Das kann ${S.profil.name} gut:</b> ${m.map(x => `${x.e} ${x.text}`).join(" · ")}</p>` : ""}
+      <p><b>Heute habe ich gesehen, dass du …</b></p>
+      <div class="zeit-raster"><label>Stärke<select id="st-id">${ST.STAERKEN.map(([id, e, t]) => `<option value="${id}">${e} gut ${t}</option>`).join("")}</select></label>
+        <label>Was genau? (freiwillig)<input id="st-text" type="text" maxlength="120" placeholder="z. B. deiner Schwester beim Aufräumen geholfen"></label></div>
+      <div class="knoepfe"><button class="knopf haupt" id="st-speichern">❤️ Dem Kind zeigen</button></div>
+      <p class="klein">Das Kind sieht es beim nächsten Öffnen von „Mein Ich“.</p>
+    </div>`;
+  }
+  function staerkenKnoepfe() {
+    const b = $("st-speichern"); if (!b) return;
+    b.addEventListener("click", () => { window.Staerken.elternGesehen($("st-id").value, $("st-text").value.trim()); $("st-text").value = ""; S.meldung("Gespeichert – das Kind sieht es in „Mein Ich“."); });
   }
 
   function inselKnoepfe() {
@@ -382,6 +404,7 @@
       ${zeitKarte()}
       ${inselKarte()}
       ${echteWeltKarte()}
+      ${staerkenKarte()}
       <div class="karte">
         <h2>Kinder auf diesem Tablet</h2>
         <ul class="kinderliste">${S.kinder().map(k => `<li>${k.aktiv ? "👉 " : ""}<b>${k.name || "(noch ohne Namen)"}</b>${k.aktiv ? " – gerade aktiv" : ` <button class="knopf klein-k" data-wechsel="${k.id}">Wechseln</button>`}${S.kinder().length > 1 ? ` <button class="knopf klein-k" data-weg="${k.id}">Entfernen</button>` : ""}</li>`).join("")}</ul>
@@ -404,7 +427,7 @@
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
-    zeitKnoepfe(); inselKnoepfe(); echteWeltKnoepfe();
+    zeitKnoepfe(); inselKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";

@@ -50,7 +50,7 @@
       `<p class="klein">Jede Aufgabe: +1 ⭐. Alle drei: ein Stempel und +2 ⭐.</p>`;
     $("aufgaben").querySelectorAll('[data-id="wort"]').forEach(b => b.addEventListener("click", (e) => { e.preventDefault(); S.ton("tipp"); starteWort(); }));
 
-    zeichneFunde(); zeichneGemeinsam(); zeichneEchteWelt(); zeichneWoche();
+    zeichneFunde(); zeichneGemeinsam(); zeichneEchteWelt(); zeichneWoche(); zeichneStaerken();
 
     // Woche
     const montag = C.wocheVon(C.heute()), stempel = C.stempel();
@@ -160,6 +160,28 @@
     const b = $("woche-ab"); if (b) b.addEventListener("click", () => { if (Schatz.abholen()) C.hinweis("🥇 Wochen-Medaille!", "+3 ⭐ – sie hängt jetzt in deiner Schatzkammer.", "#D08A1E"); zeichne(); });
     Schatz.neuePokale().forEach(p => C.hinweis(`🏆 Neuer Pokal: ${p.e} ${p.name}`, `${p.text} – schau in deine Schatzkammer!`, "#D08A1E"));
   }
+
+  // ---------- Was ich gut kann (shared/staerken.js) ----------
+  const QUELLE = { selbst: "🙋", app: "🔍", eltern: "❤️" };
+  function zeichneStaerken() {
+    const el = $("staerken-inhalt"); if (!el || !window.Staerken) return;
+    const ST = window.Staerken, meine = ST.meine(), d = ST.lade(), neuE = d.gesehen.filter(g => g.neu), bem = ST.bemerkt()[0], esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    el.innerHTML =
+      neuE.map(g => `<div class="st-eltern">❤️ <b>Deine Eltern haben gesehen:</b> Du kannst gut ${esc(ST.A[g.id][2])}.${g.t ? `<br>„${esc(g.t)}“` : ""}</div>`).join("") +
+      (bem ? `<div class="st-bemerkt">🔍 <b>Bruni hat bemerkt:</b> ${esc(bem[1])} Kannst du gut ${esc(ST.A[bem[0]][2])}?<br><button class="knopf haupt" data-st-ja="${bem[0]}">Ja, stimmt!</button><button class="knopf" data-st-nein="${bem[0]}">Eher nicht</button></div>` : "") +
+      (meine.length ? `<div class="st-liste">${meine.map(m => `<span class="st-chip">${m.e} ${esc(m.text)} <small>${m.quelle.map(q => QUELLE[q]).join("")}</small></span>`).join("")}</div>`
+        : `<p class="klein" style="margin-bottom:10px">Jeder kann etwas besonders gut. Was ist es bei dir? Kreuze es an!</p>`);
+    if (neuE.length) setTimeout(() => ST.gesehenGelesen(), 4000);
+    el.querySelectorAll("[data-st-ja]").forEach(b => b.addEventListener("click", () => { ST.antwortApp(b.dataset.stJa, true); S.ton("juhu"); zeichneStaerken(); }));
+    el.querySelectorAll("[data-st-nein]").forEach(b => b.addEventListener("click", () => { ST.antwortApp(b.dataset.stNein, false); S.ton("tipp"); zeichneStaerken(); }));
+  }
+  function staerkenWahl() {
+    const ST = window.Staerken, d = ST.lade(), hl = S.hilfe();
+    $("st-wahl").innerHTML = ST.STAERKEN.filter(x => x[0] !== "sprachen" || hl).map(([id, e, t, r]) => `<button class="${d.selbst.includes(id) ? "an" : ""}" data-st="${id}"><span class="e">${e}</span>${t}${hl && hl.code === "ru" ? `<br><small lang="ru">${r}</small>` : ""}</button>`).join("");
+  }
+  $("staerken-waehlen").addEventListener("click", () => { S.ton("tipp"); staerkenWahl(); $("staerken-dialog").hidden = false; });
+  $("st-wahl").addEventListener("click", e => { const b = e.target.closest("[data-st]"); if (!b) return; const an = !b.classList.contains("an"); window.Staerken.setzeSelbst(b.dataset.st, an); b.classList.toggle("an", an); S.ton("tipp"); });
+  $("st-fertig").addEventListener("click", () => { $("staerken-dialog").hidden = true; zeichneStaerken(); S.ton("tipp"); });
 
   function zeigeStufen(id) {
     const f = C.FAEHIGKEITEN.find(x => x.id === id), st = C.stufe(id);

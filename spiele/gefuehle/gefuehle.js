@@ -27,7 +27,7 @@
   const G = Object.fromEntries(GEFUEHLE.map(g => [g[0], g]));
   if (window.Figuren) document.querySelectorAll(".bruni").forEach(el => { el.innerHTML = window.Figuren.baer(""); });
 
-  function zeige(n) { ["start", "barometer", "ruhe", "atmen", "schildkroete", "wut", "erkennen", "bewegen"].forEach(v => { $(v + "-ansicht").hidden = v !== n; }); scrollTo(0, 0); if (SP && SP.stopp) SP.stopp(); }
+  function zeige(n) { ["start", "barometer", "ruhe", "atmen", "schildkroete", "wut", "erkennen", "bewegen", "miteinander"].forEach(v => { $(v + "-ansicht").hidden = v !== n; }); scrollTo(0, 0); if (SP && SP.stopp) SP.stopp(); }
   document.querySelectorAll("[data-zu]").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); stoppe(); zeige(b.dataset.zu); if (b.dataset.zu === "start") start(); }));
   let laeufer = [];
   const stoppe = () => { laeufer.forEach(clearInterval); laeufer.forEach(clearTimeout); laeufer = []; };
@@ -165,10 +165,66 @@
     $("bew-weiter").addEventListener("click", () => { S.ton("tipp"); bew.pos++; uebung(); });
   }
 
+  // ---------- Miteinander: Bildergeschichten mit Entscheidungen (ohne „falsch“) ----------
+  // [id, Emoji, Titel, Geschichte, russisch, [[Wahl, was passiert], …], Frage zum Nachdenken, Gesprächsimpuls fürs Abendessen]
+  const GESCHICHTEN = [
+    ["allein", "🧍", "Allein auf dem Hof", "In der Pause steht ein Kind ganz allein am Zaun. Es schaut traurig zu, wie die anderen spielen.", "Ребёнок стоит один у забора и грустно смотрит, как играют другие.",
+      [["Ich frage: „Willst du mitspielen?“", "Das Kind lächelt. Vielleicht findet es heute einen neuen Freund – dich!"], ["Ich sage es der Lehrerin.", "Die Lehrerin hilft. Gut, dass du hingeschaut hast."], ["Ich spiele einfach weiter.", "Das ist okay, manchmal merkt man so etwas nicht. Wie fühlt sich das Kind wohl?"]],
+      "Wie fühlt man sich, wenn man allein ist?", "Erinnerst du dich an einen Moment, in dem du allein warst? Was hat dir geholfen?"],
+    ["teilen", "🍪", "Ein Keks für zwei", "Du hast einen Keks. Dein Freund hat seinen vergessen und schaut dich an.", "У тебя есть печенье. Друг забыл своё и смотрит на тебя.",
+      [["Ich teile den Keks.", "Ihr freut euch beide. Geteilte Freude ist doppelte Freude!"], ["Ich esse ihn allein.", "Das darfst du auch. Wie fühlt sich dein Freund wohl?"], ["Wir überlegen, was wir zusammen machen.", "Gute Idee! Vielleicht findet ihr eine Lösung für beide."]],
+      "Wann teilst du gern – und wann nicht?", "Was teilst du gern? Gibt es etwas, das du lieber für dich behältst – und warum?"],
+    ["streit", "😤", "Streit beim Spielen", "Du und deine Schwester wollt beide mit dem gleichen Spielzeug spielen. Ihr werdet laut.", "Ты и сестра хотите играть одной игрушкой. Вы начинаете кричать.",
+      [["Ich atme erst tief durch.", "Wenn man ruhiger ist, findet man leichter eine Lösung."], ["Wir wechseln uns ab – mit Sanduhr.", "So kommt jeder dran. Fair!"], ["Ich nehme es mir einfach.", "Dann ist die andere bestimmt wütend. Wie könntet ihr euch wieder vertragen?"]],
+      "Wie kann man sich nach einem Streit wieder vertragen?", "Wie vertragen wir uns in unserer Familie, wenn wir gestritten haben?"],
+    ["nein", "✋", "Nein sagen", "Ein Kind will, dass du einem anderen Kind die Mütze wegnimmst. Du willst das nicht.", "Ребёнок хочет, чтобы ты отобрал шапку у другого. Ты не хочешь.",
+      [["Ich sage laut: „Nein, das mache ich nicht.“", "Das ist mutig! Nein sagen darf man immer, wenn sich etwas falsch anfühlt."], ["Ich gehe einfach weg.", "Auch das ist ein Nein. Gut, dass du auf dein Gefühl hörst."], ["Ich mache es doch.", "Manchmal ist es schwer, Nein zu sagen. Was könnte dir beim nächsten Mal helfen?"]],
+      "Wann ist es wichtig, Nein zu sagen?", "Wann hast du schon mal Nein gesagt, obwohl es schwer war?"],
+    ["regeln", "⚽", "Fair spielen", "Beim Fußball merkst du, dass dein Team schummelt. Das andere Team hat es nicht gesehen.", "В футболе твоя команда жульничает. Другая команда этого не заметила.",
+      [["Ich sage es ehrlich.", "Ehrlich sein ist manchmal schwer – und richtig stark."], ["Ich sage meinem Team, dass wir fair spielen sollen.", "So macht das Spiel allen Spaß."], ["Ich sage nichts.", "Wie fühlt sich das andere Team, wenn es später davon erfährt?"]],
+      "Warum gibt es beim Spielen Regeln?", "Welche Regeln haben wir zu Hause – und welche findest du wichtig?"],
+    ["sprache", "🌍", "Ein neues Kind", "Ein neues Kind kommt in die Klasse. Es spricht noch wenig Deutsch und sagt kaum etwas.", "В класс пришёл новый ребёнок. Он ещё плохо говорит по-немецки.",
+      [["Ich zeige ihm die Schule mit Händen und Füßen.", "Man kann sich auch ohne viele Worte verstehen. Toll!"], ["Ich frage, welche Sprache es spricht.", "Vielleicht könnt ihr euch gegenseitig Wörter beibringen!"], ["Ich warte, bis es besser Deutsch kann.", "Was würde dem Kind jetzt am meisten helfen?"]],
+      "Wie fühlt man sich, wenn man die Sprache noch nicht kann?", "Welche Sprachen sprechen Menschen, die wir kennen? Welches Wort kennst du in einer anderen Sprache?"],
+    ["natur", "🗑️", "Müll im Park", "Im Park liegt eine Plastikflasche auf der Wiese. Es ist nicht deine.", "В парке на траве лежит пластиковая бутылка. Она не твоя.",
+      [["Ich werfe sie in den Mülleimer.", "Danke! Die Tiere und die Wiese freuen sich."], ["Ich sage es einem Erwachsenen.", "Gut – zusammen kann man aufräumen."], ["Ich lasse sie liegen.", "Was könnte mit der Flasche passieren, wenn sie dort bleibt?"]],
+      "Warum ist es wichtig, die Natur zu schützen?", "Was können wir als Familie tun, damit weniger Müll entsteht?"],
+    ["meinung", "🙋", "Deine Meinung zählt", "Ihr plant einen Ausflug. Alle reden, nur du sagst nichts, obwohl du eine Idee hast.", "Вы планируете поездку. Все говорят, а ты молчишь, хотя у тебя есть идея.",
+      [["Ich sage meine Idee.", "Super! Kinder dürfen mitreden – das ist sogar ein Kinderrecht."], ["Ich flüstere sie einer Person zu.", "Ein guter Anfang. Vielleicht sagst du sie nächstes Mal laut?"], ["Ich bleibe still.", "Das ist okay. Was würde dir helfen, deine Idee zu sagen?"]],
+      "Warum ist es gut, wenn alle mitreden dürfen?", "Bei welcher Familien-Entscheidung möchtest du gern mitreden?"]
+  ];
+  function miteinander() {
+    const d = lade(), gelesen = d.geschichten || {};
+    $("mit-karte").innerHTML = `<h2>🤝 Miteinander</h2><p class="klein">Was würdest du tun? Es gibt kein Richtig oder Falsch – Bruni erzählt dir, was passieren könnte.</p>
+      <div class="geschichten">${GESCHICHTEN.map((g, i) => `<button class="kachel ${["k1", "k2", "k3", "k4", "k5"][i % 5]}" data-gesch="${i}"><span class="e">${g[1]}</span>${g[2]}${gelesen[g[0]] ? "<small>✅ gelesen</small>" : ""}</button>`).join("")}</div>`;
+    $("mit-karte").querySelectorAll("[data-gesch]").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); geschichte(+b.dataset.gesch); }));
+  }
+  function geschichte(n) {
+    const [id, e, titel, text, r, wahlen, frage, impuls] = GESCHICHTEN[n];
+    $("mit-karte").innerHTML = `<div class="gross">${e}</div><h2>${titel}</h2><p class="lage"></p>${ru(r) ? `<p class="lage-ru" lang="ru"></p>` : ""}<p><b>Was würdest du tun?</b></p>
+      <div class="wahlen">${wahlen.map((w, i) => `<button data-w="${i}">${w[0]}</button>`).join("")}</div><div id="mit-folge"></div>`;
+    $("mit-karte").querySelector(".lage").textContent = text; if (ru(r)) $("mit-karte").querySelector(".lage-ru").textContent = r;
+    sprich(text);
+    $("mit-karte").querySelectorAll("[data-w]").forEach(b => b.addEventListener("click", () => {
+      const w = wahlen[+b.dataset.w]; S.ton("tipp");
+      $("mit-karte").querySelectorAll("[data-w]").forEach(x => { x.disabled = true; x.style.opacity = x === b ? 1 : 0.5; });
+      $("mit-folge").innerHTML = `<div class="folge"><div class="bruni-zeile"><div class="bruni" aria-hidden="true" style="width:70px;height:74px"></div><p></p></div></div>
+        <p><b>🤔 ${frage}</b></p><div class="impuls">🍽️ <b>Zum Reden beim Abendessen:</b> ${impuls}</div>
+        <button class="knopf haupt" id="mit-weiter">Andere Geschichte</button>`;
+      $("mit-folge").querySelector(".folge p").textContent = w[1];
+      if (window.Figuren) $("mit-folge").querySelector(".bruni").innerHTML = window.Figuren.baer("");
+      sprich(w[1]);
+      const d = lade(); d.geschichten = Object.assign({}, d.geschichten, { [id]: 1 }); d.impulse = (d.impulse || []).concat([{ d: heute(), t: impuls, g: titel }]).slice(-20); speichere(d);
+      if (C && C.gib) C.gib("sachkunde", 2);
+      if (window.Lernfunde) Lernfunde.merke({ fach: "sachkunde", art: "miteinander", e, text: `Miteinander: ${titel}`, schluessel: "mit:" + id });
+      $("mit-weiter").addEventListener("click", () => { S.ton("tipp"); miteinander(); });
+    }));
+  }
+
   // Kacheln auf der Startseite
   document.querySelectorAll("[data-oeffne]").forEach(b => b.addEventListener("click", () => {
     S.ton("tipp"); const n = b.dataset.oeffne; zeige(n);
-    ({ barometer, atmen, schildkroete, wut, erkennen, bewegen })[n] && ({ barometer, atmen, schildkroete, wut, erkennen, bewegen })[n]();
+    ({ barometer, atmen, schildkroete, wut, erkennen, bewegen, miteinander })[n] && ({ barometer, atmen, schildkroete, wut, erkennen, bewegen, miteinander })[n]();
   }));
   start();
   const q = new URLSearchParams(location.search).get("zu"); if (q && ["barometer", "bewegen", "ruhe"].includes(q)) { zeige(q); if (q === "barometer") barometer(); if (q === "bewegen") bewegen(); }

@@ -854,7 +854,7 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
   const spiegel = new Group(); spiegel.position.set(-4.05, 1.7, 1.0); spiegel.rotation.y = Math.PI / 2; zimmer.add(spiegel);
   const rahmen = teil(new TorusGeometry(0.55, 0.08, 10, 30), "#FFC83D"); rahmen.scale.y = 1.4; spiegel.add(rahmen);
   const glas = new Mesh(new CircleGeometry(0.52, 30), new MeshBasicMaterial({ color: "#CFEFFF" })); glas.scale.y = 1.4; glas.position.z = 0.02; spiegel.add(glas);
-  antippbar(spiegel, () => sprechblase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, Aufgaben und Abzeichen.", S.paar(["", "Посмотри, как ты выросла!"])[1], "../ich/"), ["🪞", "Reinschauen"], 1.6);
+  antippbar(spiegel, () => sprechblase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, was du gut kannst, und deine Pokale.", S.paar(["", "Посмотри, как ты выросла!"])[1], "../ich/"), ["🪞", "Reinschauen"], 1.6);
   // Pinnwand: Lernfunde der letzten 7 Tage als Zettel (heute mit Glanz), Antippen zeigt die Liste
   {
     const L = window.Lernfunde, funde = L ? L.letzteTage(7) : [], heute = L ? L.heute().length : 0;

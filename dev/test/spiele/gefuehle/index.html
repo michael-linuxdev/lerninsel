@@ -26,6 +26,7 @@
   .kachel { border-radius: 26px; padding: 18px 14px; min-height: 150px; display: grid; justify-items: center; align-content: center; gap: 6px; font-size: 1.25rem; font-weight: 700; color: var(--pflaume); box-shadow: 0 6px 0 rgba(0,0,0,.1); }
   .kachel .e { font-size: 3.2rem; }
   .kachel small { font-weight: 500; font-size: .98rem; }
+  .k5 { background: #FFF1D6; }
   .k1 { background: #FFE1EC; } .k2 { background: #DFF3FF; } .k3 { background: #EFE6FF; } .k4 { background: #E3F7EF; }
   .faces { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 10px 0; }
   .face { width: 112px; min-height: 112px; border-radius: 24px; background: #FFF7FA; display: grid; justify-items: center; align-content: center; gap: 2px; font-size: 1.05rem; font-weight: 700; color: var(--pflaume); box-shadow: inset 0 0 0 3px #F6D5E2; }
@@ -53,6 +54,12 @@
   @keyframes huepf { 50% { transform: translateY(-14px); } }
   .karte .knopf { min-height: 60px; margin: 6px; }
   .ansicht[hidden] { display: none !important; }
+  .wahlen { display: grid; gap: 10px; max-width: 620px; margin: 12px auto; }
+  .wahlen button { min-height: 64px; border-radius: 20px; background: #FFF7FA; box-shadow: inset 0 0 0 3px #F6D5E2; font-size: 1.15rem; font-weight: 600; color: var(--pflaume); padding: 8px 14px; text-align: left; }
+  .wahlen button small { display: block; font-weight: 500; font-size: .95rem; }
+  .folge { background: #FFF6D6; border-radius: 20px; padding: 14px; font-size: 1.15rem; text-align: left; max-width: 620px; margin: 10px auto; }
+  .impuls { background: #E3F7EF; border-radius: 16px; padding: 10px 14px; margin: 10px auto; max-width: 620px; text-align: left; }
+  .geschichten { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -68,6 +75,7 @@
       <button class="kachel k2" data-zu="ruhe"><span class="e">🌬️</span>Ruhig werden<small>Atmen, Schildkröte, Wut-Ballon</small></button>
       <button class="kachel k3" data-oeffne="erkennen"><span class="e">🎭</span>Gefühle erkennen<small>Wie fühlt sich das an?</small></button>
       <button class="kachel k4" data-oeffne="bewegen"><span class="e">🤸</span>Bewegungs-Minute<small>Mach mit Fipsi mit!</small></button>
+      <button class="kachel k5" data-oeffne="miteinander"><span class="e">🤝</span>Miteinander<small>Was würdest du tun?</small></button>
     </div>
   </section>
 
@@ -106,6 +114,10 @@
   </section>
   <section class="ansicht" id="erkennen-ansicht" hidden>
     <div class="karte" id="erk-karte"></div>
+    <button class="knopf" data-zu="start">⬅️ Zurück zu Bruni</button>
+  </section>
+  <section class="ansicht" id="miteinander-ansicht" hidden>
+    <div class="karte" id="mit-karte"></div>
     <button class="knopf" data-zu="start">⬅️ Zurück zu Bruni</button>
   </section>
   <section class="ansicht" id="bewegen-ansicht" hidden>
