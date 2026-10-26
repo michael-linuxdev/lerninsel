@@ -761,6 +761,57 @@ antippbar(truhe, () => spielOrt(() => profi() ? sprechblase("🏝️", "Schatz-S
   antippbar(g, () => sprechblase("🐢", "Tilda am Schachtisch", `Hallo ${name}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, S.paar(["", "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?"])[1], "../schach/"), ["♟️", "Schach"], 2.4);
 }
 
+// ---------- Bühne mit Papagei Paula: spielt die eigene Melodie aus dem Atelier, alle tanzen ----------
+let tanzBis = 0;
+const paula = (() => {
+  const g = new Group(), k = new Group(); g.add(k);
+  const leib = teil(kugel(0.36), "#E8453C"); leib.scale.set(1, 1.25, 0.95); setze(leib, 0, 0.62, 0); k.add(leib);
+  const bauch = teil(kugel(0.24), "#FFB26B", { umriss: false }); bauch.scale.set(1, 1.2, 0.5); setze(bauch, 0, 0.56, 0.22); k.add(bauch);
+  [-1, 1].forEach(s => { const f = teil(kugel(0.22), "#2FA37C"); f.scale.set(0.45, 1.1, 0.9); setze(f, 0.36 * s, 0.66, -0.02); f.rotation.z = -0.25 * s; k.add(f); });
+  const schwanz = teil(new BoxGeometry(0.2, 0.5, 0.06), "#2F86C8"); setze(schwanz, 0, 0.2, -0.3); schwanz.rotation.x = 0.5; k.add(schwanz);
+  [-1, 1].forEach(s => k.add(setze(teil(kugel(0.07, 8, 6), "#F2A33A"), 0.12 * s, 0.12, 0.05)));
+  const kopf = new Group(); kopf.position.y = 1.15; k.add(kopf);
+  kopf.add(teil(kugel(0.3), "#E8453C")); const ges = teil(kugel(0.2), "#FFF4E6", { umriss: false }); ges.scale.set(1, 0.9, 0.5); setze(ges, 0, 0, 0.18); kopf.add(ges);
+  augen(kopf, 0.09, 0.05, 0.25, 0.045);
+  const schnabel = teil(new ConeGeometry(0.08, 0.22, 10), "#FFC83D"); schnabel.rotation.x = Math.PI / 2 + 0.5; setze(schnabel, 0, -0.08, 0.32); kopf.add(schnabel);
+  const muetze = teil(new CylinderGeometry(0.3, 0.26, 0.1, 18), "#7B55B8"); setze(muetze, 0.03, 0.27, -0.02); muetze.rotation.z = -0.2; kopf.add(muetze);
+  kopf.add(setze(teil(kugel(0.06, 8, 6), "#7B55B8"), 0.06, 0.36, -0.02));
+  g.userData.koerper = k; return g;
+})();
+{
+  const [x, z, d] = P.buehne, g = new Group(); g.position.set(x, bodenY(x, z), z); g.rotation.y = d; scene.add(g); block(x, z, 1.5);
+  g.add(setze(teil(new CylinderGeometry(1.4, 1.5, 0.3, 28), "#B98A55"), 0, 0.15, 0));
+  g.add(setze(new Mesh(new CylinderGeometry(1.25, 1.25, 0.02, 28), mat("#FFD9E6")), 0, 0.31, 0));
+  [-1, 1].forEach(s => {   // Lautsprecher und Notenständer
+    const box = teil(new BoxGeometry(0.4, 0.6, 0.35), "#3b1f63"); setze(box, s * 1.05, 0.6, -0.55); g.add(box);
+    g.add(setze(new Mesh(new CircleGeometry(0.13, 16), mat("#FFC83D")), s * 1.05, 0.66, -0.37));
+  });
+  const note = schildSprite("🎵"); note.position.set(0, 2.3, 0); g.add(note); g.userData.note = note;
+  paula.position.set(0, 0.3, 0); g.add(paula);
+  let ctx = null;
+  const TOENE = [523.25, 587.33, 659.25, 698.46, 783.99, 880.0, 987.77, 1046.5];
+  function klang(f, wann) {
+    try { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === "suspended") ctx.resume(); } catch (e) { return; }
+    const t = ctx.currentTime + wann, o = ctx.createOscillator(), v = ctx.createGain(); o.type = "sine"; o.frequency.value = f;
+    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(0.4, t + 0.01); v.gain.exponentialRampToValueAtTime(0.0001, t + 0.8);
+    o.connect(v).connect(ctx.destination); o.start(t); o.stop(t + 0.85);
+  }
+  const SCHRITT = 380;
+  function spiele(mel) {
+    const runden = 2; tanzBis = performance.now() + mel.length * runden * SCHRITT + 400;
+    for (let r = 0; r < runden; r++) mel.forEach((ton, i) => {
+      const w = (r * mel.length + i) * SCHRITT;
+      if (ton >= 0) klang(TOENE[ton], w / 1000);
+      setTimeout(() => { NACHBARN.forEach(n => { if (n.obj) n.obj.userData.huepf = 1; }); paula.userData.huepf = 1; }, w);
+    });
+  }
+  antippbar(g, () => {
+    const m = ((S.lade("atelier") || {}).musik || {}).melodien || [];
+    if (m.length) { spiele(m[0]); sprechblase("papagei", "Paula auf der Bühne", `Hör mal, ${name}! Das ist deine eigene Melodie – und alle tanzen dazu!`, S.paar(["", "Послушай! Это твоя мелодия – и все танцуют!"])[1], "../atelier/?musik"); if (SP && SP.stopp) setTimeout(() => SP.stopp(), 10); }
+    else sprechblase("papagei", "Paula auf der Bühne", `Hallo ${name}! Erfinde im Atelier deine eigene Melodie. Dann spiele ich sie hier – und alle tanzen dazu!`, S.paar(["", "Придумай свою мелодию в ателье – и все будут танцевать!"])[1], "../atelier/?musik");
+  }, ["🎵", "Musik"], 2.6);
+}
+
 // ---------- Neue Minispiel-Orte: öffnen sich, wenn der Wissensbaum wächst ----------
 function schildSprite(text) {
   const c = document.createElement("canvas"); c.width = c.height = 128; const g2 = c.getContext("2d");
@@ -1283,11 +1334,12 @@ function bild() {
       hoppelt = true; tmp.normalize(); tier.position.addScaledVector(tmp, Math.min(dT - 1.5, (dT > 4 ? 7.5 : 3.2) * dt)); wegVonHindernissen(tier.position, 0.3);
       const soll = Math.atan2(tmp.x, tmp.z); let diff = soll - tier.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff)); tier.rotation.y += diff * Math.min(1, dt * 8);
     }
-    tier.position.y = bodenY(tier.position.x, tier.position.z);
+    tier.position.y = bodenY(tier.position.x, tier.position.z) + (performance.now() < tanzBis ? Math.abs(Math.sin(t * 9)) * 0.35 : 0);
     tu.k.position.y = hoppelt ? Math.abs(Math.sin(t * 12)) * 0.18 : 0;
     tu.k.rotation.z = schlaeft ? 1.2 : 0;
     tu.schwanz.rotation.y = Math.sin(t * (hoppelt ? 10 : schlaeft ? 0.5 : 3)) * 0.5;
   }
+  { const pu = paula.userData; if (pu.huepf > 0) pu.huepf = Math.max(0, pu.huepf - dt * 2.6); paula.position.y = 0.3 + Math.sin((1 - (pu.huepf || 0)) * Math.PI) * (pu.huepf ? 0.3 : 0); paula.rotation.y = performance.now() < tanzBis ? Math.sin(t * 6) * 0.5 : 0; }
   NACHBARN.forEach((n, i) => {
     const o = n.obj;
     if (o.userData.schwanz) o.userData.schwanz.rotation.z = Math.sin(t * 3) * 0.25;

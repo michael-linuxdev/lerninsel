@@ -45,11 +45,18 @@ Lies zuerst `README.md`, `docs/KONZEPT.md` und `docs/PLAN.md`. Sie sind die Grun
 - Test-Haken der Insel: `window.__heimat` (blick, ich, reingehen, rausgehen, laufeZu, tippe, station, laden, zimmerDaten, aktion, druecke, rennt, wetter).
 - Externe Seiten (Open-Meteo, Google Fonts) sind aus der Sandbox meist nicht erreichbar – mit Cache-Daten in localStorage testen.
 
-**Aktueller Stand (25.10.2026)** – Einzelheiten in `docs/PLAN.md` (letzter „Stand“-Abschnitt)
-- Fertig: Phase 0/1, Lehrplan-Gerüst Sachsen mit Inhalten Kl. 2, Insel mit Joystick/Tippen, Rennen, Springen/Doppelsprung,
-  Aktionsknopf, Zimmer (einrichten mit Sternen), Wetterstation mit echtem Wetter, Stickeralbum (48 Sticker),
-  Lernfunde „Heute neu“ (26.10.: konkreter Tagesfortschritt in Mein Ich, bei den Insel-Nachbarn und im Wochenbericht; siehe KONZEPT „Schärfung“).
-- Nächste Schritte: siehe „Reihenfolge (abgestimmt 26.10.2026)“ am Ende von `docs/PLAN.md` – Weihnachts-Erststart mit Tutorial kommt zuletzt.
+**Aktueller Stand (26.10.2026)** – Einzelheiten in `docs/PLAN.md` (Nachträge 26.10.2026 und „Stand 26.10.2026“)
+- Fertig: Phase 0/1, Lehrplan-Gerüst Sachsen, Insel bzw. eigene generierte Welt (Wünsche-Assistent, bis 5 Welten), Zimmer,
+  Lernfunde/Wissensbaum/Pinnwand, Biber Benno (Mathe), Minispiele Sternenlauf/Kart/Bauplatz, Eltern als Mitspieler (Duell, Erklären),
+  Echte-Welt-Aufgaben, Schatzkammer und Wochen-Challenge, „Heute noch x Minuten spielen“ (Eltern), Leistungsmodus fürs iPad.
+- 8b komplett: Bärin Bruni (Gefühle, Ruhe-Übungen, Bewegung, Miteinander-Geschichten), Schach mit Tilda, „Was ich gut kann“ (Stärken),
+  Atelier mit Papagei Paula (Malen mit Galerie, Bilder als Poster im Zimmer; Musik-Ecke mit Xylofon, Rhythmus, Hörtest, eigener Melodie),
+  Insel-Bühne: Paula spielt die eigene Melodie, alle tanzen.
+- Test-Haken: `__heimat`, `__atelier`, `__musik`, `__schach`, `__gefuehle`, `__lauf`, `__kart`, `__bau`, `__duell`, `__ich`, `__mathe`.
+- Gemalte Bilder liegen in einer eigenen IndexedDB (`shared/bilder.js`), nicht im Spielstand (nicht im QR-Transfer/Backup).
+- Offen/als Nächstes: iPad-10-Test (Leistung, Atelier, Musik-Ton), Bauwerk vom Bauplatz in der Welt aufstellen, Kart-Strecke passend zur Landschaft,
+  Lehrplan-Inhalte, russische Volkslied-Melodien (Noten prüfen), Punkt 5 Muttersprache als Stärke (übersprungen),
+  **zuletzt** Weihnachts-Erststart mit QR-Geschenk und Tutorial.
 
 **Berichten**
 - Kurz und auf Deutsch: was fertig ist (mit Bildern, wenn es etwas zu sehen gibt), was ich testen soll, was als Nächstes kommt.

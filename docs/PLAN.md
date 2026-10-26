@@ -481,6 +481,16 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
   bis zu 5 Melodien gespeichert (im Spielstand, sehr klein) – Grundlage für die Insel-Bühne, auf der die Tiere tanzen (später).
 - Erfahrung „Kreativ-Funke“ nur fürs Mitmachen, Musik höchstens 12 Punkte am Tag. Russische Volkslied-Melodien folgen, wenn die Noten geprüft sind.
 
+**Nachtrag 26.10.2026 – Insel-Bühne mit Papagei Paula**
+- Neuer Platz `buehne` in `welt.js` (Standard-Insel und generierte Welten, flache Fläche). Runde Bühne mit Lautsprechern, Paula in 3D.
+- Antippen: Paula spielt die zuletzt gespeicherte eigene Melodie zweimal (Web Audio), alle Nachbarn und Paula hüpfen im Takt,
+  das eigene Tier tanzt. Ohne Melodie lädt Paula ins Atelier ein (`../atelier/?musik` öffnet direkt die Musik-Ecke).
+
+**Stand 26.10.2026 (Ende der Sitzung)**
+- Fertig: Punkte 1–4 der Sitzungsziele (Tagesfortschritt, echte Welt, Eltern als Mitspieler, Langzeit-Motivation) und 8b komplett.
+- Offen: iPad-10-Test, Bauwerk in der Welt, Kart-Strecke zur Landschaft, Lehrplan-Inhalte, russische Lieder, Punkt 5 Muttersprache,
+  zuletzt Weihnachts-Erststart mit Tutorial. Nächster Schritt: iPad-Rückmeldung abwarten, dann Bauwerk in der Welt.
+
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**
