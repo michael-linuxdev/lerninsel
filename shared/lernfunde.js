@@ -59,6 +59,7 @@
     liste.push(neu); zaehle(d, neu, h);
     const alt = Object.keys(d.tage).sort(); while (alt.length > TAGE) delete d.tage[alt.shift()];
     S.speichere("lernfunde", d);
+    if (window.Ereignisse) window.Ereignisse.melde("fund", { f: neu.f, a: neu.a, s: neu.s, n: d.summe });
     if (fund.melden && window.Charakter && window.Charakter.hinweis) window.Charakter.hinweis("🌱 Das kannst du jetzt!", neu.t, "#2E9C5A");
     return true;
   }

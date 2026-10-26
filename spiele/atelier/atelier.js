@@ -157,6 +157,7 @@
     if (!id) return frage(`Deine Galerie ist voll (${B.MAX} Bilder). Lösche zuerst ein altes Bild.`, [["🖼️ Zur Galerie", () => zeige("galerie")], ["Weitermalen", null]]);
     const neu = !bildId; bildId = id; geaendert = false;
     belohne(neu);
+    if (window.Ereignisse) window.Ereignisse.melde("bild", { id: String(id), neu });
     const d = lade(), wand = d.wand.length < B.WAND && !d.wand.includes(id);
     if (wand) B.setzeWand(id, true);
     frage(wand ? "Wunderschön! Dein Bild hängt jetzt auch in deinem Zimmer auf der Insel. 🖼️" : "Wunderschön! Dein Bild ist in deiner Galerie.", [["🖼️ Galerie ansehen", () => zeige("galerie")], ["🖌️ Noch ein Bild", () => zeige("start")]]);

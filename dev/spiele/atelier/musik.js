@@ -221,6 +221,7 @@
   $("mel-speichern").addEventListener("click", () => {
     if (mel.every(x => x < 0)) { sag("Tippe erst ein paar Töne ins Raster!", "Сначала нажми несколько нот в сетке!"); return; }
     const d = lade(); d.melodien.unshift(mel.slice()); d.melodien = d.melodien.slice(0, 5); speichere(d);
+    if (window.Ereignisse) window.Ereignisse.melde("melodie", { anzahl: d.melodien.length });
     S.ton("juhu"); gib(2); if (d.melodien.length === 1) fund("Musik: eine eigene Melodie komponiert", "melodie", "🎼");
     sag("💾 Gespeichert! Deine Melodien stehen unten (höchstens 5). Auf der Insel spielt Paula deine neueste Melodie auf der Bühne!", "Сохранено! На острове Паула сыграет твою мелодию на сцене!"); zeigeListe();
   });

@@ -34,6 +34,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     for (const s of SEITEN) {
       const q = await neueSeite(ctx, `${s || "start"} (${lage})`);
       await q.goto(BASIS + s); await q.waitForTimeout(500);
+      if (!(await q.evaluate(() => !!window.__ereignisse && !!(Spielwelt.profil.daten.story)))) fehler.push(`${s || "start"} (${lage}): Ereignisse/Story fehlen`);
       // ein Thema/eine Lektion antippen, wo es Kacheln gibt
       const kachel = await q.$(".lek:not(.zu)");
       if (kachel) { await kachel.click(); await q.waitForTimeout(400); const w = await q.$("#weiter"); if (w) { await w.click(); await q.waitForTimeout(300); } }
@@ -57,7 +58,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     if (lage === "quer") { const f = await neueSeite(ctx, "führerschein"); await f.goto(BASIS); await f.evaluate(() => { const m = Spielwelt.lade("medien") || {}; m.fuehrerschein = "2026-10-01"; Spielwelt.speichere("medien", m); }); await f.waitForTimeout(300); await f.close(); }
     if (lage === "quer") for (const s of SEITEN_3D) {
       const q = await neueSeite(ctx, `${s} (3D)`);
-      await q.goto(BASIS + s); await q.waitForTimeout(2500); await q.close();
+      await q.goto(BASIS + s); await q.waitForTimeout(2500);
+      if (!(await q.evaluate(() => !!window.__ereignisse))) fehler.push(`${s} (3D): Ereignisse fehlen`);
+      await q.close();
     }
     await ctx.close();
   }

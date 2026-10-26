@@ -139,6 +139,8 @@
   function schliessen() { zeige("start"); dialog.hidden = true; }
 
   function frage(neu) {
+    // Story-Zustand prüfen bzw. bei alten Spielständen anlegen (Kapitel 0)
+    if (window.Ereignisse) window.Ereignisse.migriere(neu.daten);
     gefunden = neu;
     document.getElementById("stand-frage").textContent =
       `Spielstand von ${neu.name || "ohne Namen"}: ${beschreibe(neu)}. Soll er den Spielstand auf diesem Tablet ersetzen?`;
