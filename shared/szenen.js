@@ -19,6 +19,16 @@
   ] });
 })();
 
+// ---------- Weihnachts-Sonderstart (NA-15): Paket am Steg ----------
+(function () {
+  const Sz = window.Szene; if (!Sz) return;
+  const E = { ru: "entwurf" };
+  Sz.registriere("weihnachtspaket", { titel: "Ein Paket am Steg", blasen: [
+    { wer: "robo", text: { de: "Frohe Weihnachten, {name}! Am Steg liegt ein Paket für dich.", ru: "С Рождеством, {name}! У причала лежит подарок для тебя.", status: E } },
+    { wer: "robo", text: { de: "Lauf hin und mach es auf!", ru: "Подойди и открой его!", status: E } }
+  ] });
+})();
+
 // ---------- Tutorial E2 „Erst lernen“ und Szene „Die Sonne geht auf“, E3 „Erste Frucht“ = Kapitel 1 „Der Spross“ (NA-13) ----------
 (function () {
   const Sz = window.Szene; if (!Sz) return;

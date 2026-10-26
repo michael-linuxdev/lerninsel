@@ -62,6 +62,8 @@
       if (S.sterne() < z.preis) return false;
       S.gibSterne(-z.preis); d.besitz[id] = true; d.traegt[id] = true; speichere(d); return true;
     },
+    // Geschenk (z. B. Weihnachtspaket): Zubehör gehört dem Kind und wird gleich getragen
+    schenke(id) { const d = lade(); if (!T.ZUBEHOER.some(x => x.id === id) || d.besitz[id]) return false; d.besitz[id] = true; d.traegt[id] = true; speichere(d); return true; },
     trage(id, an) { const d = lade(); if (d.besitz[id]) { d.traegt[id] = !!an; speichere(d); } },
     // Wird von Tagesaufgaben und Spielen aufgerufen
     gib(leckerli, waerme) {

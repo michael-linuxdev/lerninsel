@@ -6,7 +6,8 @@
 // Was keine Seite sofort erledigt (Zuhörer gibt nicht true zurück), wird im Spielstand vorgemerkt
 // (story.offen, höchstens 20 Einträge, ältere fallen weg). So erfährt z. B. die Insel beim nächsten Öffnen,
 // dass im Atelier ein Bild gemalt wurde.
-// Story-Zustand: profil.daten.story = { kapitel, etappen: { E1: "JJJJ-MM-TT" }, gesehen: [szenen-id], chronik: [{ s, d }], offen: [] }
+// Story-Zustand: profil.daten.story = { kapitel, etappen: { E1: "JJJJ-MM-TT" | 1 }, gesehen: [szenen-id], chronik: [{ s, d }], offen: [],
+//   geschenke: [eingelöste Geschenk-IDs, z. B. "weihnachten-2026" oder QR-Codes] } – Etappe 1 statt Datum = bei der Umstellung übernommen
 //   Story.kapitel(), Story.setzeKapitel(n) (nie rückwärts), Story.etappe(id) / Story.etappeFertig(id),
 //   Story.gesehen(szene) / Story.merkeSzene(szene) (landet auch in der Chronik)
 // Nach core.js laden. Alte Spielstände bekommen beim ersten Laden story mit Kapitel 0 (Migration in bereinige()).
@@ -20,7 +21,7 @@
   const DATUM = /^\d{4}-\d{2}-\d{2}$/;
   function bereinige(s) {
     s = istObjekt(s) ? s : {};
-    const n = { kapitel: 0, etappen: {}, gesehen: [], chronik: [], offen: [] };
+    const n = { kapitel: 0, etappen: {}, gesehen: [], chronik: [], offen: [], geschenke: [] };
     if (Number.isFinite(s.kapitel)) n.kapitel = Math.max(0, Math.min(MAX_KAPITEL, Math.floor(s.kapitel)));
     if (istObjekt(s.etappen)) Object.keys(s.etappen).forEach(k => {
       const v = s.etappen[k];
@@ -29,6 +30,7 @@
     if (Array.isArray(s.gesehen)) n.gesehen = [...new Set(s.gesehen.filter(x => typeof x === "string" && x).map(x => kurz(x, 40)))].slice(-MAX_GESEHEN);
     if (Array.isArray(s.chronik)) n.chronik = s.chronik.filter(x => istObjekt(x) && typeof x.s === "string" && x.s)
       .map(x => ({ s: kurz(x.s, 40), d: typeof x.d === "string" && DATUM.test(x.d) ? x.d : "" })).slice(-MAX_CHRONIK);
+    if (Array.isArray(s.geschenke)) n.geschenke = [...new Set(s.geschenke.filter(x => typeof x === "string" && x).map(x => kurz(x, 40)))].slice(-50);
     if (Array.isArray(s.offen)) n.offen = s.offen.filter(x => istObjekt(x) && ARTEN.includes(x.a))
       .map(x => ({ a: x.a, d: istObjekt(x.d) ? x.d : {}, z: Number.isFinite(x.z) ? x.z : 0 })).slice(-MAX_OFFEN);
     return n;
@@ -54,10 +56,10 @@
   if (!istObjekt(S.profil.daten.story)) {
     const st = lade(), m = S.profil.daten.medien;
     if (m && m.fuehrerschein) {
-      st.etappen.E1 = st.etappen.E2 = heute();   // kannte Insel und „Erst lernen, dann spielen“ schon
+      st.etappen.E1 = st.etappen.E2 = 1;   // kannte Insel und „Erst lernen, dann spielen“ schon (1 = übernommen, zählt nicht als „heute neu“)
       st.gesehen.push("sonne");                   // (ohne Chronik-Eintrag: die Szene wurde nie gezeigt)
       const lf = S.profil.daten.lernfunde;
-      if (lf && (lf.summe > 0 || Object.keys(lf.tage || {}).length)) { st.etappen.E3 = heute(); st.kapitel = Math.max(st.kapitel, 1); }
+      if (lf && (lf.summe > 0 || Object.keys(lf.tage || {}).length)) { st.etappen.E3 = 1; st.kapitel = Math.max(st.kapitel, 1); }
     }
     speichere(st);
   }
@@ -127,6 +129,9 @@
       speichere(st); return true;
     },
     chronik: () => lade().chronik.slice(),
+    // Geschenke (Weihnachts-Sonderstart, QR-Geschenke): jedes nur einmal je Kind
+    hatGeschenk: (id) => lade().geschenke.includes(id),
+    merkeGeschenk(id) { const st = lade(); if (typeof id !== "string" || !id || st.geschenke.includes(id)) return false; st.geschenke.push(kurz(id, 40)); speichere(st); return true; },
     // Eltern: Story und Tutorial zurücksetzen (Lernfunde und alles andere bleiben)
     zuruecksetzen() { speichere(bereinige({})); }
   };

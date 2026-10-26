@@ -1072,6 +1072,16 @@ const MOEBEL = [
   { id: "tisch", name: "Schreibtisch", e: "✏️", preis: 10, text: "Hier kannst du malen und schreiben.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.4, 0.08, 0.75), holz), 0, 0.8, 0)); [[-0.6, -0.3], [0.6, -0.3], [-0.6, 0.3], [0.6, 0.3]].forEach(([x, z]) => g.add(setze(teil(new BoxGeometry(0.08, 0.8, 0.08), holz), x, 0.4, z))); g.add(setze(teil(new BoxGeometry(0.4, 0.04, 0.3), "#FFFFFF"), -0.2, 0.86, 0.05)); g.add(setze(teil(new CylinderGeometry(0.08, 0.08, 0.22, 10), "#E0574A"), 0.45, 0.95, -0.15)); const st = new Group(); st.add(setze(teil(new BoxGeometry(0.5, 0.06, 0.5), "#7B9BFF"), 0, 0.5, 0)); st.add(setze(teil(new BoxGeometry(0.5, 0.5, 0.06), "#7B9BFF"), 0, 0.78, 0.24)); [[-0.2, -0.2], [0.2, -0.2], [-0.2, 0.2], [0.2, 0.2]].forEach(([x, z]) => st.add(setze(new Mesh(new BoxGeometry(0.05, 0.5, 0.05), mat("#6B6B7A")), x, 0.25, z))); st.position.z = 0.7; g.add(st); return g; } },
   { id: "aquarium", name: "Aquarium", e: "🐠", preis: 12, text: "Blub, blub! Die Fische winken dir zu.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.2, 0.7, 0.6), holz), 0, 0.35, 0)); g.add(setze(new Mesh(new BoxGeometry(1.1, 0.7, 0.5), new MeshToonMaterial({ color: "#7FD3F0", gradientMap: verlauf, transparent: true, opacity: 0.6 })), 0, 1.05, 0)); g.add(setze(new Mesh(new BoxGeometry(1.1, 0.1, 0.5), mat("#F2D9A2")), 0, 0.75, 0)); const fische = new Group(); ["#FF9E5E", "#FFD84D"].forEach((c, i) => { const f = new Mesh(kugel(0.09, 10, 8), mat(c)); f.scale.set(1.5, 1, 0.6); f.position.set(i ? 0.2 : -0.2, 1.0 + i * 0.15, 0); f.add(setze(new Mesh(new ConeGeometry(0.06, 0.12, 4), mat(c)), -0.12, 0, 0).rotateZ(Math.PI / 2)); fische.add(f); }); g.add(fische); g.userData.fische = fische; [-0.35, 0.4].forEach(x => g.add(setze(new Mesh(new ConeGeometry(0.05, 0.35, 5), mat("#3E9E5A")), x, 0.95, -0.1))); return g; } }
 ];
+// Geschenke (nicht im Laden zu kaufen, erscheinen nur, wenn das Kind sie bekommen hat)
+MOEBEL.push({ id: "tannenbaum", name: "Tannenbaum", e: "🎄", preis: 0, geschenk: true, text: "Ein Geschenk von Robo Pixel. Frohe Weihnachten! Mit „Einrichten“ kannst du ihn wegräumen.", bau() {
+  const g = new Group();
+  g.add(setze(teil(new CylinderGeometry(0.1, 0.12, 0.3, 10), "#8A5A35"), 0, 0.15, 0));
+  [[0.62, 0.7, 0.55], [0.48, 0.6, 1.0], [0.32, 0.5, 1.4]].forEach(([r, h, y]) => g.add(setze(teil(new ConeGeometry(r, h, 14), "#2E8B57"), 0, y, 0)));
+  g.add(setze(new Mesh(kugel(0.1, 10, 8), mat("#FFC83D")), 0, 1.72, 0));
+  [[0.38, 0.55, 0.2, "#E2604F"], [-0.3, 0.7, 0.25, "#FFC83D"], [0.1, 0.95, 0.38, "#5EC3E6"], [-0.2, 1.1, -0.2, "#E2604F"], [0.25, 1.2, 0.05, "#FFC83D"], [-0.4, 0.5, -0.1, "#5EC3E6"]]
+    .forEach(([x, y, z, f]) => g.add(setze(new Mesh(kugel(0.07, 8, 6), mat(f)), x, y, z)));
+  return g;
+} });
 const WANDFARBEN = [
   { id: "rosa", name: "Rosa", farbe: ["#FFD9E6", "#FFE9C2"], preis: 0 },
   { id: "mint", name: "Mint", farbe: ["#C9F2E3", "#EAF8F1"], preis: 3 },
@@ -1115,7 +1125,7 @@ function laden(text) {
   }
   $("laden-titel").textContent = "🛋️ Zimmer einrichten"; $("laden-text").textContent = text || "Kaufe Möbel mit deinen Sternen und stell sie auf. Gekauftes bleibt für immer deins.";
   const karte = (id, e, name, preis, info, extra) => `<button class="ware${besitzt(id, preis) ? " hat" : ""}" ${extra}><span class="e">${e}</span><b>${name}</b><span>${besitzt(id, preis) ? info : `⭐ ${preis}`}</span></button>`;
-  L.innerHTML = `<h3>Möbel</h3><div class="waren">` + MOEBEL.map(m => { const steht = PLAETZE.find(pl => d.plaetze[pl.id] === m.id); return karte("moebel-" + m.id, m.e, m.name, m.preis, steht ? `✓ ${steht.name}` : "✓ Hinstellen", `data-moebel="${m.id}"`); }).join("")
+  L.innerHTML = `<h3>Möbel</h3><div class="waren">` + MOEBEL.filter(m => !m.geschenk || S.istFrei("moebel-" + m.id)).map(m => { const steht = PLAETZE.find(pl => d.plaetze[pl.id] === m.id); return karte("moebel-" + m.id, m.e, m.name, m.preis, steht ? `✓ ${steht.name}` : "✓ Hinstellen", `data-moebel="${m.id}"`); }).join("")
     + `</div><h3>Wandfarbe</h3><div class="waren">` + WANDFARBEN.map(w => karte("wand-" + w.id, `<i style="background:${w.farbe[0]}"></i>`, w.name, w.preis, d.wand === w.id ? "✓ an der Wand" : "✓ Streichen", `data-wand="${w.id}"`)).join("") + `</div>`;
 }
 function kaufe(id, preis) {
@@ -1540,6 +1550,59 @@ $("welt-zu").addEventListener("click", () => { S.ton("tipp"); $("welt").hidden =
   }
 }
 
+// ---------- Weihnachts-Sonderstart (NA-15) ----------
+// Wer die Insel zwischen dem 1. und 26. Dezember zum ersten Mal betritt (Etappe E1 mit diesem Datum), findet am Steg ein Paket:
+// einen Tannenbaum fürs Zimmer und eine Schleife fürs Tier. Das Paket wartet, bis es geöffnet wird (auch nach Weihnachten).
+// Im Dezember trägt Pixels Boot eine Lichterkette. Außerhalb des Dezembers ist der Prolog gleich, nur ohne Paket.
+const isoJetzt = () => { const d = new Date(window.__jetzt || Date.now()); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+function weihnachtsPaket() {
+  const St = window.Story; if (!St) return null;
+  const e1 = St.zustand().etappen.E1, datum = typeof e1 === "string" ? e1 : !e1 ? isoJetzt() : null;   // 1 = übernommen → kein Sonderstart
+  if (!datum) return null;
+  const [y, m, t] = datum.split("-").map(Number); if (m !== 12 || t > 26) return null;
+  const id = "weihnachten-" + y; return St.hatGeschenk(id) ? null : id;
+}
+let paket = null;
+const PAKET_POS = { x: STEG.x + 0.95, z: STEG.z0 + 0.15 };
+if (weihnachtsPaket()) {
+  paket = new Group(); const y = bodenY(PAKET_POS.x, PAKET_POS.z);
+  paket.add(setze(teil(new BoxGeometry(0.62, 0.5, 0.62), "#E2604F"), 0, 0.25, 0));
+  paket.add(setze(teil(new BoxGeometry(0.66, 0.08, 0.66), "#C94A3B"), 0, 0.52, 0));
+  paket.add(setze(new Mesh(new BoxGeometry(0.12, 0.6, 0.67), mat("#FFC83D")), 0, 0.29, 0));
+  paket.add(setze(new Mesh(new BoxGeometry(0.67, 0.6, 0.12), mat("#FFC83D")), 0, 0.29, 0));
+  [-1, 1].forEach(sx => { const s = new Mesh(new TorusGeometry(0.1, 0.035, 6, 14), mat("#FFC83D")); s.rotation.y = sx * 0.6; paket.add(setze(s, sx * 0.09, 0.66, 0)); });
+  paket.position.set(PAKET_POS.x, y, PAKET_POS.z); paket.rotation.y = 0.3; scene.add(paket); block(PAKET_POS.x, PAKET_POS.z, 0.45);
+  antippbar(paket, () => oeffnePaket(), ["🎁", "Öffnen"], 1.8);
+}
+function oeffnePaket() {
+  const id = weihnachtsPaket(); if (!id || !paket) return;
+  window.Story.merkeGeschenk(id);
+  S.schalteFrei("moebel-tannenbaum", 0);
+  // Tannenbaum gleich auf einen freien Platz im Zimmer stellen (kann mit „Einrichten“ weggeräumt werden)
+  const d = zimmerDaten();
+  if (!Object.values(d.plaetze).includes("tannenbaum")) {
+    const frei = ["vornlinks", "links", "rechts", "mitterechts", "fenster", "bett"].find(k => !d.plaetze[k]);
+    if (frei) { d.plaetze[frei] = "tannenbaum"; S.speichere("zimmer", d); stelleMoebel(); }
+  }
+  if (window.TierPflege && window.TierPflege.schenke) window.TierPflege.schenke("schleife");
+  scene.remove(paket); tippbar.splice(tippbar.indexOf(paket), 1); paket = null; naechstes = null;
+  S.ton("juhu");
+  sprechblase("robo", "Dein Weihnachtspaket", "Darin sind ein Tannenbaum für dein Zimmer und eine rote Schleife für dein Tier. Der Baum steht schon in deinem Haus!",
+    S.paar(["", "Внутри ёлка для твоей комнаты и красный бантик для твоего питомца. Ёлка уже стоит в твоём доме!"])[1], null);
+}
+// Lichterkette am Boot und am Steg (nur im Dezember): eine Instanz-Gruppe = 1 Zeichenaufruf, Funkeln über Farben
+let lichter = null;
+if (MONAT === 12) {
+  const punkte = [];
+  for (let i = 0; i < 7; i++) [-0.66, 0.66].forEach(dx => punkte.push([STEG.x + dx, 0.36 + Math.sin(i * 1.3) * 0.03, STEG.z0 + 0.4 + i * (STEG.z1 - STEG.z0 - 0.8) / 6]));
+  for (let i = 0; i < 6; i++) punkte.push([STEG.x + 1.55 + Math.sin(i * 1.1) * 0.12, 0.1 + i * 0.16, STEG.z1 - 0.4 + Math.cos(i * 1.1) * 0.12]);
+  lichter = new InstancedMesh(kugel(0.06, 8, 6), new MeshBasicMaterial({ color: "#FFFFFF" }), punkte.length);
+  const o = new Object3D(), FARBEN_L = ["#FFD84D", "#FF6F61", "#5EC3E6", "#7CE38B"].map(f => new Color(f));
+  punkte.forEach(([x, y, z], i) => { o.position.set(x, y, z); o.updateMatrix(); lichter.setMatrixAt(i, o.matrix); lichter.setColorAt(i, FARBEN_L[i % 4]); });
+  scene.add(lichter);
+  if (!RUHIG) setInterval(() => { const n = Math.floor(performance.now() / 600); for (let i = 0; i < punkte.length; i++) lichter.setColorAt(i, FARBEN_L[(i + n) % 4]); lichter.instanceColor.needsUpdate = true; }, 600);
+}
+
 // ---------- Prolog „Ankunft“ (Tutorial E1, NA-11) ----------
 // Robo Pixel bringt das Kind mit dem Boot. Das Kind lernt Laufen (Joystick oder Tippen), läuft zum Haus und geht mit dem
 // Aktionsknopf hinein. Genau einmal je Kind (story.etappen.E1); Eltern können ihn überspringen oder neu starten,
@@ -1583,6 +1646,7 @@ function spieleStory(id) {
   const b = def.blasen, I = window.Insel;
   if (id === "erst-lernen") { b[0].zeige = I.ort("sonnenuhr"); b[2].zeige = I.ort("eule"); }
   if (id === "sonne") { b[0].zeige = I.ort("sonnenuhr"); b[0].beim = zeigeSonnenuhr; }
+  if (id === "weihnachtspaket") { b.forEach(x => { x.zeige = () => paket ? I.bildschirm(paket.position.x, paket.position.y + 0.8, paket.position.z) : null; }); b[1].bis = (weiter) => { const t = setInterval(() => { if (!paket) { clearInterval(t); weiter(); } }, 200); return () => clearInterval(t); }; }
   if (id === "erste-frucht") { b[0].zeige = I.ort("wissensbaum"); b[2].beim = () => { St.setzeKapitel(1); nebelWeicht(); }; }
   storyLaeuft = true;
   Sz.spiele(def).then(() => {
@@ -1598,6 +1662,7 @@ function naechsteStory() {
   const St = window.Story, Sz = window.Szene;
   if (!St || !Sz || prolog || drinnen || storyLaeuft || Sz.laeuft || !St.etappe("E1") || q.has("szene")) return;
   const Zt = window.Zeit, st = Zt ? Zt.status() : { frei: true, spielen: true }, frei = st.frei;
+  if (paket && !St.gesehen("weihnachtspaket")) return spieleStory("weihnachtspaket");
   if (!St.etappe("E2")) {
     if (frei) St.etappeFertig("E2");   // ohne Zeit-Regeln gibt es nichts zu erklären
     else if (St.darfNeueEtappe()) return spieleStory(st.spielen ? "sonne" : "erst-lernen");
@@ -1629,4 +1694,4 @@ const ORTE = {
 };
 // Insel.ort("haus") liefert eine Funktion für Zeige.auf(); Insel.bildschirm(x, y, z) rechnet einen 3D-Punkt um
 window.Insel = { bildschirm, ort: (name) => () => (ORTE[name] && !drinnen ? bildschirm(...ORTE[name]()) : null), ORTE: Object.keys(ORTE) };
-window.__heimat = { bildschirm, sonnenuhr, su: SU, nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };

@@ -39,7 +39,8 @@ const TAG1 = new Date(2026, 9, 25, 15, 0).getTime(), TAG2 = new Date(2026, 9, 26
   // Sonnenuhr antippen
   await p.evaluate(() => { const s = __heimat.su; __heimat.ich.position.set(s.x - 0.2, 0.25, s.z - 1.1); });
   await p.waitForTimeout(800);
-  erwarte(await p.evaluate(() => __heimat.aktion === "Ansehen"), "an der Sonnenuhr zeigt der Aktionsknopf „Ansehen“");
+  const ak = await p.evaluate(() => ({ a: __heimat.aktion, blase: !document.getElementById("blase").hidden, szene: __szene.aktuell() && __szene.aktuell().id }));
+  erwarte(ak.a === "Ansehen", `an der Sonnenuhr zeigt der Aktionsknopf „Ansehen“ (${JSON.stringify(ak)})`);
   await p.evaluate(() => __heimat.druecke()); await p.waitForTimeout(300);
   erwarte(await p.evaluate(() => /Sonnenuhr/.test(document.getElementById("blase-titel").textContent) && /Prozent/.test(document.getElementById("blase-text").textContent)), "Sonnenuhr erklärt, wie viel schon geschafft ist");
 
