@@ -659,6 +659,11 @@ const wissen = (() => {
     [[0, 2.15, 0, 1.0], [0.7, 1.8, 0.2, 0.7], [-0.65, 1.85, -0.1, 0.72], [0.05, 1.8, 0.7, 0.65], [0, 2.8, 0, 0.62]].slice(0, 2 + Math.min(3, info.stufe))
       .forEach(([dx, y, dz, r], i) => g.add(setze(teil(kugel(r * k), krone[i % 2]), dx * k, y * k, dz * k)));
     if (SAISON === "winter") g.add(setze(teil(kugel(0.5 * k), "#FFFFFF"), 0, 3.1 * k, 0));
+    // Jahreszeiten am Wissensbaum: Blüten im Frühling, bunte Blätter im Herbst, Lichterkette im Dezember
+    const aussen = (i, n, r0) => { const a = i * 2.399, y = 1.75 + (i % n) / n * 1.2, rr = r0 * Math.sqrt(Math.max(0.15, 1 - ((y - 2.15) / 1.1) ** 2)); return [Math.cos(a) * rr * k, y * k, Math.sin(a) * rr * k]; };
+    if (SAISON === "fruehling") for (let i = 0; i < 14; i++) { const [x, y, zz] = aussen(i, 14, 1.02); g.add(setze(new Mesh(kugel(0.09, 8, 6), new MeshBasicMaterial({ color: i % 3 ? "#FFC4DC" : "#FFFFFF" })), x, y, zz)); }
+    if (SAISON === "herbst") for (let i = 0; i < 9; i++) { const a = i * 2.1, r = 0.6 + (i % 3) * 0.35; const bl = new Mesh(new CircleGeometry(0.12, 6), mat(["#F2A03D", "#E2603A", "#F4C542"][i % 3])); bl.rotation.x = -Math.PI / 2; bl.position.set(Math.cos(a) * r, 0.03, Math.sin(a) * r); g.add(bl); }
+    if (MONAT === 12) for (let i = 0; i < 26; i++) { const [x, y, zz] = aussen(i, 26, 1.06); const l = new Mesh(kugel(0.1, 8, 6), new MeshBasicMaterial({ color: ["#FFD84D", "#FF6F61", "#5EC3E6", "#5CCBA6"][i % 4] })); setze(l, x, y, zz); l.userData.licht = i; g.add(l); }
   }
   // Schild am Fuß
   const schild = new Group(); schild.position.set(0.75, 0, 0.5); schild.rotation.y = -0.4; g.add(schild);
@@ -686,6 +691,7 @@ const wissen = (() => {
   return {
     info, fruechte,
     tick(t) {
+      if (MONAT === 12) g.children.forEach(c => { if (c.userData.licht !== undefined) c.visible = Math.sin(t * 2.5 + c.userData.licht * 1.3) > -0.4; });
       fruechte.forEach((m, i) => {
         const z = MathUtils.clamp((t - m.userData.verz) * 3, 0, 1), plopp = z < 1 ? z * (1 + Math.sin(z * Math.PI) * 0.5) : 1;
         m.scale.setScalar(Math.max(0.001, plopp * (1 + Math.sin(t * 2.5 + i) * 0.06)));

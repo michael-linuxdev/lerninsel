@@ -20,7 +20,23 @@
   const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   const heute = () => window.__heute || (window.Charakter ? window.Charakter.heute() : iso(new Date()));
 
-  function lade() { const d = S.lade("lernfunde") || {}; d.tage = d.tage || {}; return d; }
+  function lade() {
+    const d = S.lade("lernfunde") || {}; d.tage = d.tage || {};
+    // Dauerhafte Zähler und Schatzkammer (werden nicht mit den 60 Tagen gekürzt); alte Spielstände einmalig aus den Tagen füllen
+    if (!d.z) { d.z = {}; d.schatz = d.schatz || []; Object.entries(d.tage).forEach(([tag, l]) => l.forEach(f => zaehle(d, f, tag))); }
+    d.schatz = d.schatz || [];
+    return d;
+  }
+  // Zähler: je Art (gemeistert, welt, wort …), je Fach (f:mathe …), erklärt; Schätze = gemeisterte, erklärte und Echte-Welt-Funde
+  function zaehle(d, f, tag) {
+    d.z[f.a] = (d.z[f.a] || 0) + 1; d.z["f:" + f.f] = (d.z["f:" + f.f] || 0) + 1;
+    if (f.x) d.z.erklaert = (d.z.erklaert || 0) + 1;
+    if (f.a === "gemeistert" || f.a === "welt" || f.x) schatzRein(d, f, tag);
+  }
+  function schatzRein(d, f, tag) {
+    if (d.schatz.some(x => x.s === f.s && x.d === tag)) return;
+    d.schatz.push({ e: f.e, t: f.t, f: f.f, a: f.x ? "erklaert" : f.a, d: tag, s: f.s }); d.schatz = d.schatz.slice(-200);
+  }
 
   // fund: { fach, art, e, text, ru, schluessel, melden }
   function merke(fund) {
@@ -37,7 +53,7 @@
     const neu = { f: fund.fach, a: fund.art || "neu", e: fund.e || FAECHER[fund.fach].e, t: String(fund.text).slice(0, 90), s };
     if (fund.ru) neu.r = String(fund.ru).slice(0, 90);
     d.summe = summeAus(d) + 1;   // vor dem Hinzufügen zählen, sonst doppelt bei alten Spielständen ohne summe
-    liste.push(neu);
+    liste.push(neu); zaehle(d, neu, h);
     const alt = Object.keys(d.tage).sort(); while (alt.length > TAGE) delete d.tage[alt.shift()];
     S.speichere("lernfunde", d);
     if (fund.melden && window.Charakter && window.Charakter.hinweis) window.Charakter.hinweis("🌱 Das kannst du jetzt!", neu.t, "#2E9C5A");
@@ -71,7 +87,9 @@
   // Ein Fund wurde einem Erwachsenen erklärt (gemeinsamer Moment) → Markierung x: 1
   function erklaert(datum, schl) {
     const d = lade(), f = (d.tage[datum] || []).find(x => x.s === schl); if (!f || f.x) return false;
-    f.x = 1; S.speichere("lernfunde", d); return true;
+    f.x = 1; d.z.erklaert = (d.z.erklaert || 0) + 1; schatzRein(d, f, datum); S.speichere("lernfunde", d); return true;
   }
-  window.Lernfunde = { FAECHER, MAX_TAG, STUFEN, merke, erklaert, datumHeute: heute, heute: () => tag(heute()), tag, letzteTage, heuteFach, gesamt, baum, baumGesehen };
+  const zaehler = () => Object.assign({}, lade().z);
+  const schaetze = () => lade().schatz.slice();
+  window.Lernfunde = { FAECHER, MAX_TAG, STUFEN, merke, zaehler, schaetze, erklaert, datumHeute: heute, heute: () => tag(heute()), tag, letzteTage, heuteFach, gesamt, baum, baumGesehen };
 })();

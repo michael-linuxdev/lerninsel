@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Schatzkammer</title>
+<meta name="theme-color" content="#FFF4D6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #FFF4D6; background-image: none; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .seite { max-width: 1100px; margin: 0 auto; padding: 16px 16px 40px; display: grid; gap: 18px; }
+  .karte { background: #fff; border-radius: 28px; padding: 20px; box-shadow: 0 8px 0 rgba(180,130,30,.14); }
+  .karte h2 { margin: 0 0 12px; font-size: 1.45rem; }
+  .klein { font-size: 1rem; color: var(--pflaume-hell); margin: 0; }
+  .zahlen { display: flex; gap: 12px; flex-wrap: wrap; }
+  .zahl { flex: 1; min-width: 150px; background: #FFF8E6; border-radius: 18px; padding: 12px 14px; }
+  .zahl b { display: block; font-size: 1.8rem; }
+  .pokale { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .pokal { border-radius: 22px; padding: 14px 10px; text-align: center; background: linear-gradient(160deg, #FFF3C4, #FFD86B); box-shadow: inset 0 0 0 3px #F2C14E; }
+  .pokal .e { font-size: 2.8rem; display: block; }
+  .pokal b { display: block; font-size: 1.02rem; margin: 4px 0 2px; }
+  .pokal span.t { font-size: .9rem; }
+  .pokal.zu { background: #F3F0F7; box-shadow: inset 0 0 0 3px #E3DDEE; }
+  .pokal.zu .e { filter: grayscale(1); opacity: .35; }
+  .balken { height: 10px; border-radius: 999px; background: #fff; overflow: hidden; margin-top: 8px; }
+  .balken span { display: block; height: 100%; background: var(--beere); border-radius: 999px; }
+  .medaillen { display: flex; gap: 8px; flex-wrap: wrap; }
+  .medaille { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-size: 1.6rem; background: radial-gradient(circle at 35% 30%, #FFF6C9, #F2B632); box-shadow: 0 4px 0 #C98E1A; }
+  .monat h3 { margin: 14px 0 8px; font-size: 1.15rem; }
+  .schatz { display: grid; grid-template-columns: 48px 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 16px; background: #FFF8E6; margin-bottom: 6px; }
+  .schatz .e { font-size: 1.8rem; text-align: center; }
+  .schatz small { color: var(--pflaume-hell); font-weight: 600; }
+  .fach-zeile { display: grid; grid-template-columns: 170px 1fr 44px; gap: 10px; align-items: center; margin-bottom: 8px; font-weight: 600; }
+  .fach-zeile .balken { height: 16px; margin: 0; background: #F3F0F7; }
+  .woche-ch { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .woche-ch .e { font-size: 2.6rem; }
+  .woche-ch p { margin: 0; font-size: 1.15rem; font-weight: 600; flex: 1; min-width: 220px; }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../ich/" aria-label="Zurück zu Mein Ich">⬅️</a>
+  <h1>🏆 Meine Schatzkammer</h1>
+  <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
+</div>
+<main class="seite">
+  <div class="karte"><div class="zahlen" id="zahlen"></div></div>
+  <div class="karte"><h2>⭐ Wochen-Herausforderung</h2><div id="woche"></div></div>
+  <div class="karte"><h2>🏆 Pokale</h2><p class="klein" style="margin-bottom:12px">Pokale bleiben für immer. Manche schaffst du schnell, für andere brauchst du Monate.</p><div class="pokale" id="pokale"></div></div>
+  <div class="karte"><h2>🥇 Wochen-Medaillen</h2><div class="medaillen" id="medaillen"></div></div>
+  <div class="karte"><h2>📚 Was ich in jedem Fach gefunden habe</h2><div id="faecher"></div></div>
+  <div class="karte"><h2>💎 Meine Schätze</h2><p class="klein">Schwere Aufgaben, die du gemeistert hast, Dinge, die du erklärt hast, und Echte-Welt-Abenteuer.</p><div id="schaetze"></div></div>
+</main>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/familie.js"></script>
+<script src="../../shared/schatz.js"></script>
+<script src="../../shared/zeit.js" data-art="neutral"></script>
+<script src="kammer.js"></script>
+</body>
+</html>

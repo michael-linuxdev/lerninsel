@@ -50,7 +50,7 @@
       `<p class="klein">Jede Aufgabe: +1 ⭐. Alle drei: ein Stempel und +2 ⭐.</p>`;
     $("aufgaben").querySelectorAll('[data-id="wort"]').forEach(b => b.addEventListener("click", (e) => { e.preventDefault(); S.ton("tipp"); starteWort(); }));
 
-    zeichneFunde(); zeichneGemeinsam(); zeichneEchteWelt();
+    zeichneFunde(); zeichneGemeinsam(); zeichneEchteWelt(); zeichneWoche();
 
     // Woche
     const montag = C.wocheVon(C.heute()), stempel = C.stempel();
@@ -149,6 +149,17 @@
     if (EchteWelt.geschafft()) C.hinweis("🌍 Echte Welt geschafft!", "+1 ⭐ – und eine neue Frucht für deinen Wissensbaum.", "#2E9C5A");
     zeichne();
   });
+
+  // ---------- Wochen-Herausforderung (shared/schatz.js) ----------
+  function zeichneWoche() {
+    const el = $("woche-ch"); if (!el || !window.Schatz) return;
+    const w = Schatz.woche();
+    el.innerHTML = `<div class="kopf"><span class="e" aria-hidden="true">${w.e}</span><p>Wochen-Herausforderung: ${w.text}</p><b>${w.wert}/${w.ziel}</b></div>
+      <div class="balken"><span style="width:${Math.round(w.wert / w.ziel * 100)}%"></span></div>` +
+      (w.fertig ? `<p class="klein" style="margin-top:6px">🥇 Geschafft! Am Montag kommt eine neue.</p>` : w.bereit ? `<button class="knopf haupt" id="woche-ab">🥇 Medaille abholen (+3 ⭐)</button>` : "");
+    const b = $("woche-ab"); if (b) b.addEventListener("click", () => { if (Schatz.abholen()) C.hinweis("🥇 Wochen-Medaille!", "+3 ⭐ – sie hängt jetzt in deiner Schatzkammer.", "#D08A1E"); zeichne(); });
+    Schatz.neuePokale().forEach(p => C.hinweis(`🏆 Neuer Pokal: ${p.e} ${p.name}`, `${p.text} – schau in deine Schatzkammer!`, "#D08A1E"));
+  }
 
   function zeigeStufen(id) {
     const f = C.FAEHIGKEITEN.find(x => x.id === id), st = C.stufe(id);

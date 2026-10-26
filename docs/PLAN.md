@@ -413,6 +413,17 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - Elternbereich: Karte „🌍 Echte-Welt-Aufgaben“ (heutige Aufgabe, Schalter „Kind darf selbst abhaken“).
 - Bewusst keine zusätzliche Spielzeit als Lohn (Bildschirmzeit soll nicht durch Offline-Aktivität „verdient“ werden).
 
+**Nachtrag 26.10.2026 – Langzeit-Motivation (Punkt 4)**
+- Lernfunde haben jetzt dauerhafte Zähler (je Art, je Fach, erklärt) und eine **Schatzkammer-Liste** (gemeistert, erklärt, Echte Welt; 200 Einträge),
+  die nicht mit den 60 Tagen gekürzt werden; alte Spielstände werden beim ersten Laden aus den Tagen gefüllt.
+- `shared/schatz.js`: **17 Pokale** (z. B. 25/100/250 Lernfunde, 10/50 gemeistert, 20 Funde je Fach, 10× erklärt, 25 Echte-Welt-Aufgaben,
+  10 Wochen-Herausforderungen, 20 Stempel-Tage) – manche schnell, manche erst nach Monaten; Meldung bei neuem Pokal.
+- **Wochen-Herausforderung**, jede Woche eine andere (8 Lernfunde, 2 gemeistert, 3 Fächer, 2× erklären, 3 Echte-Welt, 4 Stempel-Tage):
+  in „Mein Ich → Meine Woche“, Medaille abholen = +3 ⭐, Medaillen in der Schatzkammer.
+- **Schatzkammer** (`spiele/schatz/`, über „Mein Ich“): Zahlen, Wochen-Herausforderung, Pokale mit Fortschritt, Wochen-Medaillen,
+  Funde je Fach, Schätze nach Monaten.
+- **Jahreszeiten am Wissensbaum:** Blüten im Frühling, bunte Blätter im Herbst, Schnee im Winter, blinkende Lichterkette im Dezember.
+
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**

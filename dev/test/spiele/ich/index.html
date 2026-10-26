@@ -70,6 +70,14 @@
   .ew-knoepfe .knopf { min-height: 54px; flex: 1; min-width: 160px; }
   .ew-fertig { margin: 10px 0 0; font-weight: 700; color: #2E9C5A; font-size: 1.15rem; }
 
+  .woche-ch { margin-top: 12px; padding: 12px; border-radius: 20px; background: #FFF6D6; }
+  .woche-ch .kopf { display: flex; gap: 10px; align-items: center; }
+  .woche-ch .kopf .e { font-size: 2rem; }
+  .woche-ch .kopf p { margin: 0; flex: 1; font-weight: 600; }
+  .woche-ch .balken { margin: 8px 0 0; background: #fff; }
+  .woche-ch .balken span { background: #D08A1E; }
+  .woche-ch .knopf { margin-top: 10px; min-height: 52px; text-decoration: none; }
+
   /* Gemeinsam */
   .gemeinsam-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
   .gemeinsam-knoepfe .knopf { min-height: 58px; text-decoration: none; flex: 1; min-width: 200px; }
@@ -165,6 +173,7 @@
         <div class="vorteile" id="vorteile"></div>
         <div class="ich-knoepfe">
           <a class="knopf" href="../tier/" id="tier-link">🐾 Mein Tier</a>
+          <a class="knopf" href="../schatz/">🏆 Schatzkammer</a>
           <a class="knopf" href="../album/" id="album-link">📒 Stickeralbum</a>
           <a class="knopf" href="../medien/" id="fs-link">🪪 Tablet-Führerschein</a>
           <a class="knopf" href="../anziehen/">👗 Figur anziehen</a>
@@ -198,6 +207,7 @@
         <h2>Meine Woche</h2>
         <div class="woche" id="woche"></div>
         <div class="truhe" id="truhe"></div>
+        <div class="woche-ch" id="woche-ch"></div>
       </div>
       <div class="karte">
         <h2>Meine Fähigkeiten</h2>
@@ -258,6 +268,7 @@
 <script src="../../shared/charakter.js"></script>
 <script src="../../shared/lernfunde.js"></script>
 <script src="../../shared/familie.js"></script>
+<script src="../../shared/schatz.js"></script>
 <script src="../../shared/sticker.js"></script>
 <script src="../../shared/echtewelt.js"></script>
 <script src="../../shared/zeit.js" data-art="lernen"></script>
