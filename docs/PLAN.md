@@ -385,6 +385,14 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - `figur3d.js`: die eigene Figur für alle Minispiele (heimat.js hat noch eine eigene Kopie – zusammenführen).
 - Offen: Bauwerk vom Bauplatz auf der eigenen Welt aufstellen; Kart-Strecke passend zur Landschaft; weitere Spiele (siehe oben).
 
+**Nachtrag 26.10.2026 – Flüssiger auf älteren Tablets (Feedback: „riesig“ + „schön“ ruckelt auf dem iPad 10)**
+- Feste Deko (Bäume, Steine, Blumen, Wegsteine) wird beim Laden je Material zu einem Mesh verschmolzen (`verschmelze()` in heimat.js):
+  Zeichenaufrufe gemessen – Wald riesig 906 → 230, Berge riesig 512 → 81, erste Insel 499 → 339; sieht gleich aus.
+- Gras höchstens 900 Halme, bewegt sich nur jedes zweite Bild.
+- Automatischer Sparmodus: in den ersten Sekunden wird gemessen; unter 30 Bildern/s → keine Schatten, Auflösung 1, Wasser und Gras ruhig,
+  kurzer Hinweis; das Tablet merkt es sich (`lerninsel.sparen`), bis „Grafik“ oder die Eltern-Einstellung neu gewählt wird.
+- Bitte erneut auf dem iPad 10 testen; falls nötig als Nächstes: weniger Bäume bei „riesig“, Schatten nur nahe der Figur, Kamera-Sichtweite kürzer.
+
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → Eltern als Mitspieler („hat es mir erklärt“, Duell) → „echte Welt“-Aufgaben →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**

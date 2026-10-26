@@ -7,7 +7,7 @@ import {
   PCFSoftShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide,
   CylinderGeometry, SphereGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry, PlaneGeometry,
   LatheGeometry, ExtrudeGeometry, Shape, Vector2, Vector3, DataTexture, RedFormat, NearestFilter, InstancedMesh,
-  Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
+  Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, BufferAttribute, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
 } from "../three/three.module.js";
 import { S, SPIELE, istFrei, baumStufe } from "./gemeinsam.js";
 import { erzeuge, BIOME, FARBEN, neuerSeed } from "./welt.js";
@@ -110,6 +110,9 @@ const JAHRESZEIT_GRAS = !WELT.insel && ["wiese", "wald", "berge"].includes(WELT.
 const GRAS = WELT.insel ? (SAISON === "winter" ? "#EEF5FB" : SAISON === "herbst" ? "#8DC45A" : "#7CCB5B")
   : JAHRESZEIT_GRAS && SAISON === "winter" ? "#EEF5FB" : JAHRESZEIT_GRAS && SAISON === "herbst" ? "#8DC45A" : WELT.B.gras;
 const boden = [];
+// Feste Deko (Bäume, Steine, Blumen, Wegsteine) kommt erst in diese Gruppe und wird danach zu wenigen Meshes verschmolzen:
+// aus vielen hundert Zeichenaufrufen werden so ein paar wenige – wichtig für ältere Tablets (iPad 10 ruckelte bei „riesig“).
+const deko = new Group();
 if (!WELT.insel) {
   // Gelände: Ringe um die Mitte, Höhe aus der Welt, Farben je Höhe (Gras, Fels, Schneekuppen, Strand)
   const ringe = EINFACH ? Math.round(WELT.R * 1.4) : Math.round(WELT.R * 2.6), segs = EINFACH ? 64 : 120, RA = WELT.R + 1.2;
@@ -140,7 +143,7 @@ if (!WELT.insel) {
     t.rotation.x = -Math.PI / 2; t.position.set(WELT.see.x, -0.18, WELT.see.z); scene.add(t);
     block(WELT.see.x, WELT.see.z, WELT.see.r - 0.2);
   }
-  WELT.pfad.forEach(([x, z]) => { const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, 20), mat("#D9CDB8")); p.receiveShadow = true; setze(p, x, bodenY(x, z) + 0.03, z); scene.add(p); });
+  WELT.pfad.forEach(([x, z]) => { const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, 20), mat("#D9CDB8")); p.receiveShadow = true; setze(p, x, bodenY(x, z) + 0.03, z); deko.add(p); });
 }
 if (WELT.insel) {
   const sand = new LatheGeometry([new Vector2(0, -1.2), new Vector2(15.2, -1.2), new Vector2(15.6, -0.6), new Vector2(15.2, -0.1), new Vector2(0, -0.1)], 64);
@@ -150,7 +153,7 @@ if (WELT.insel) {
   // Pfad vom Haus zum Platz in der Mitte
   for (let i = 0; i < 7; i++) {
     const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, 20), mat("#D9CDB8"));
-    p.receiveShadow = true; setze(p, -4 + i * 1.25, 0.28, -2.6 + Math.sin(i * 0.9) * 0.6); scene.add(p);
+    p.receiveShadow = true; setze(p, -4 + i * 1.25, 0.28, -2.6 + Math.sin(i * 0.9) * 0.6); deko.add(p);
   }
 }
 const wasserGeo = new PlaneGeometry(140, 140, EINFACH ? 1 : 70, EINFACH ? 1 : 70); wasserGeo.rotateX(-Math.PI / 2);
@@ -169,7 +172,7 @@ function baum(x, z, k = 1, i = 0) {
     b.add(setze(teil(kugel(r * k), f), dx * k, y * k, dz * k)));
   if (SAISON === "winter") b.add(setze(teil(kugel(0.6 * k), "#FFFFFF"), 0, 3.45 * k, 0));
   if (SAISON === "sommer" && i % 2 === 0) [[0.6, 2.3, 0.9], [-0.8, 2.6, 0.6], [0.9, 2.8, -0.4]].forEach(([dx, y, dz]) => b.add(setze(teil(kugel(0.16 * k), "#FF7A6B", { dicke: 1.12 }), dx * k, y * k, dz * k)));
-  b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 1.7; scene.add(b); block(x, z, 0.6 * k);
+  b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 1.7; deko.add(b); block(x, z, 0.6 * k);
 }
 // Nadelbaum, Palme, Kaktus für die eigenen Welten
 function nadelbaum(x, z, k) {
@@ -177,25 +180,25 @@ function nadelbaum(x, z, k) {
   b.add(setze(teil(new CylinderGeometry(0.16 * k, 0.24 * k, 1.0 * k, 12), "#8A5A34"), 0, 0.5 * k, 0));
   [[1.15, 1.3, 1.1], [0.9, 1.1, 1.9], [0.62, 0.9, 2.6]].forEach(([r, h, y]) => b.add(setze(teil(new ConeGeometry(r * k, h * k, 14), f), 0, y * k, 0)));
   if (WINTERLICH) b.add(setze(teil(new ConeGeometry(0.4 * k, 0.5 * k, 14), "#FFFFFF"), 0, 3.0 * k, 0));
-  b.position.set(x, bodenY(x, z) - 0.05, z); scene.add(b); block(x, z, 0.5 * k);
+  b.position.set(x, bodenY(x, z) - 0.05, z); deko.add(b); block(x, z, 0.5 * k);
 }
 function palme(x, z, k) {
   const b = new Group(), stamm = new Group(); b.add(stamm);
   for (let i = 0; i < 6; i++) stamm.add(setze(teil(new CylinderGeometry(0.17 * k, 0.21 * k, 0.5 * k, 10), i % 2 ? "#B98A55" : "#A47746"), Math.sin(i * 0.35) * 0.25 * k, (0.25 + i * 0.45) * k, 0));
   for (let i = 0; i < 6; i++) { const bl = teil(kugel(0.5 * k, 14, 8), "#4FAF62"); bl.scale.set(1.9, 0.18, 0.55); bl.rotation.y = i / 6 * Math.PI * 2; bl.rotation.z = -0.35; const g = new Group(); g.rotation.y = i / 6 * Math.PI * 2; setze(bl, 0.75 * k, 0, 0); g.add(bl); g.position.set(0.55 * k, 2.85 * k, 0); b.add(g); }
   [[0.45, 2.6, 0.15], [0.62, 2.62, -0.12]].forEach(([dx, y, dz]) => b.add(setze(teil(kugel(0.14 * k), "#7A4E25"), dx * k, y * k, dz * k)));
-  b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 2.1; scene.add(b); block(x, z, 0.35 * k);
+  b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 2.1; deko.add(b); block(x, z, 0.35 * k);
 }
 function kaktus(x, z, k) {
   const b = new Group(), f = "#5FA05A";
   b.add(setze(teil(new CapsuleGeometry(0.28 * k, 1.4 * k, 6, 12), f), 0, 0.95 * k, 0));
   [[-1, 0.9, 0.5], [1, 1.3, 0.4]].forEach(([s, y, h]) => { b.add(setze(teil(new CapsuleGeometry(0.16 * k, 0.3 * k, 6, 10), f), 0.38 * s * k, y * k, 0)); const arm = teil(new CapsuleGeometry(0.16 * k, h * k, 6, 10), f); setze(arm, 0.52 * s * k, (y + 0.32) * k, 0); b.add(arm); });
   b.add(setze(teil(kugel(0.12 * k, 10, 8), WELT.farbe || "#FF6F91"), 0, 1.95 * k, 0));
-  b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 1.3; scene.add(b); block(x, z, 0.4 * k);
+  b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 1.3; deko.add(b); block(x, z, 0.4 * k);
 }
 WELT.baeume.forEach(({ x, z, k, i, typ }) => typ === "nadel" ? nadelbaum(x, z, k) : typ === "palme" ? palme(x, z, k) : typ === "kaktus" ? kaktus(x, z, k) : baum(x, z, k, i));
 WELT.steine.forEach(([x, z, r]) => {
-  const st = teil(kugel(r, 20, 14), WELT.insel ? "#A7A9B8" : WELT.B.fels); st.scale.y = 0.65; setze(st, x, bodenY(x, z) + r * 0.3, z); scene.add(st); block(x, z, r);
+  const st = teil(kugel(r, 20, 14), WELT.insel ? "#A7A9B8" : WELT.B.fels); st.scale.y = 0.65; setze(st, x, bodenY(x, z) + r * 0.3, z); deko.add(st); block(x, z, r);
 });
 if (!WELT.insel && WELT.blumen.length && !(JAHRESZEIT_GRAS && SAISON === "winter")) {
   const BL = [WELT.farbe, WELT.farbe, "#FFD84D", "#FFFFFF", WELT.farbe, "#B28DFF", "#FF9E5E"];
@@ -203,7 +206,7 @@ if (!WELT.insel && WELT.blumen.length && !(JAHRESZEIT_GRAS && SAISON === "winter
     const f = new Group();
     f.add(setze(new Mesh(new CylinderGeometry(0.03, 0.03, 0.4, 4), mat("#3E9E55")), 0, 0.2, 0));
     f.add(setze(teil(kugel(0.14, 12, 8), BL[i % BL.length], { dicke: 1.15 }), 0, 0.45, 0));
-    f.position.set(x, bodenY(x, z), z); scene.add(f);
+    f.position.set(x, bodenY(x, z), z); deko.add(f);
   });
 }
 if (WELT.insel && SAISON !== "winter") {
@@ -214,9 +217,36 @@ if (WELT.insel && SAISON !== "winter") {
     const f = new Group();
     f.add(setze(new Mesh(new CylinderGeometry(0.03, 0.03, 0.4, 4), mat("#3E9E55")), 0, 0.2, 0));
     f.add(setze(teil(kugel(0.14, 12, 8), BL[i % BL.length], { dicke: 1.15 }), 0, 0.45, 0));
-    f.position.set(x, 0.25, z); scene.add(f);
+    f.position.set(x, 0.25, z); deko.add(f);
   }
 }
+
+// ---------- Deko verschmelzen (je Material ein Mesh) ----------
+function verschmelze(gruppe) {
+  gruppe.updateMatrixWorld(true);
+  const sammel = new Map();
+  gruppe.traverse(m => {
+    if (!m.isMesh || Array.isArray(m.material)) return;
+    let g = m.geometry.clone(); g.applyMatrix4(m.matrixWorld);
+    if (!g.index) { const n = g.attributes.position.count; g.setIndex([...Array(n).keys()]); }
+    const e = sammel.get(m.material) || { teile: [], schatten: false };
+    e.teile.push(g); e.schatten = e.schatten || m.castShadow; sammel.set(m.material, e);
+  });
+  sammel.forEach(({ teile, schatten }, material) => {
+    let anzahl = 0, idxAnzahl = 0; teile.forEach(g => { anzahl += g.attributes.position.count; idxAnzahl += g.index.count; });
+    const pos = new Float32Array(anzahl * 3), nor = new Float32Array(anzahl * 3), idx = new Uint32Array(idxAnzahl);
+    let o = 0, oi = 0;
+    teile.forEach(g => {
+      pos.set(g.attributes.position.array, o * 3); if (g.attributes.normal) nor.set(g.attributes.normal.array, o * 3);
+      const ix = g.index.array; for (let k = 0; k < ix.length; k++) idx[oi + k] = ix[k] + o;
+      o += g.attributes.position.count; oi += ix.length; g.dispose();
+    });
+    const geo = new BufferGeometry(); geo.setAttribute("position", new Float32BufferAttribute(pos, 3)); geo.setAttribute("normal", new Float32BufferAttribute(nor, 3)); geo.setIndex(new BufferAttribute(idx, 1));
+    geo.computeBoundingSphere();
+    const m = new Mesh(geo, material); m.castShadow = schatten; m.receiveShadow = true; scene.add(m);
+  });
+}
+verschmelze(deko);
 
 // ---------- Haus ----------
 const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" : "#9BD7F5" });
@@ -332,7 +362,7 @@ antippbar(station, () => {
 // ---------- Wehendes Gras ----------
 let halme = null; const halmDaten = [];
 const MIT_GRAS = WELT.insel ? SAISON !== "winter" : !WINTERLICH && !["wueste"].includes(WELT.biom) && !(JAHRESZEIT_GRAS && SAISON === "winter");
-const HALME = WELT.insel ? 700 : Math.round(700 * (WELT.rand / 12.9) ** 2);
+const HALME = WELT.insel ? 700 : Math.min(900, Math.round(700 * (WELT.rand / 12.9) ** 2));
 if (!EINFACH && MIT_GRAS) {
   const geo = new ConeGeometry(0.06, 0.45, 4); geo.translate(0, 0.22, 0);
   halme = new InstancedMesh(geo, mat(WELT.biom === "strand" ? "#7FC25A" : SAISON === "herbst" ? "#7FB24A" : "#5FB548"), HALME);
@@ -1087,7 +1117,7 @@ $("steuerung").addEventListener("click", () => {
   zeigeSteuerung(); $("joy-hinweis").hidden = false; setTimeout(() => { $("joy-hinweis").hidden = true; }, 4000); S.ton("tipp");
 });
 zeigeSteuerung();
-$("grafik").addEventListener("click", () => { merkeEin("grafik", EINFACH ? "schoen" : "einfach"); setTimeout(() => location.reload(), 150); });
+$("grafik").addEventListener("click", () => { merkeEin("grafik", EINFACH ? "schoen" : "einfach"); try { localStorage.removeItem("lerninsel.sparen"); } catch (e) { /* egal */ } setTimeout(() => location.reload(), 150); });
 let ankunft = null;
 const marke = new Mesh(new TorusGeometry(0.35, 0.06, 6, 28), new MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.9 }));
 marke.rotation.x = Math.PI / 2; marke.visible = false; scene.add(marke);
@@ -1109,8 +1139,22 @@ function wegVonHindernissen(p, r) {
   if (drinnen) { p.x = MathUtils.clamp(p.x, ZX - 3.7, ZX + 3.7); p.z = MathUtils.clamp(p.z, -3.1, 3.3); if (p.z >= 3.25 && ich.position === p) rausgehen(); return; }
   const RMAX = WELT.insel ? 14.6 : WELT.R - 0.6, l = Math.hypot(p.x, p.z); if (l > RMAX) { p.x *= RMAX / l; p.z *= RMAX / l; }
 }
+// ---------- Automatisch sparen, wenn das Tablet nicht hinterherkommt ----------
+// In den ersten Sekunden wird gemessen; unter 30 Bildern pro Sekunde: keine Schatten, Auflösung 1, Wasser und Gras ruhig.
+// Das Tablet merkt es sich (localStorage), damit es beim nächsten Mal gleich flüssig startet.
+const SPAR_KEY = "lerninsel.sparen";
+let sparen = false, bildNr = 0, messBilder = 0, gemessen = false;
+function spare(melden) {
+  if (sparen) return; sparen = true;
+  sonne.castShadow = false; renderer.shadowMap.enabled = false; mats.forEach(m => { m.needsUpdate = true; }); scene.traverse(o => { if (o.material && !Array.isArray(o.material)) o.material.needsUpdate = true; });
+  renderer.setPixelRatio(1); groesse();
+  try { localStorage.setItem(SPAR_KEY, "1"); } catch (e) { /* egal */ }
+  if (melden) $("info").textContent = "🌿 Die Grafik ist jetzt etwas einfacher, damit alles flüssig läuft.";
+}
+if (!EINFACH && lies(SPAR_KEY) === "1") spare(false);
 function bild() {
   const dt = Math.min(uhr.getDelta(), 0.05), t = uhr.elapsedTime;
+  if (!gemessen && !EINFACH) { if (t > 1.5) messBilder++; if (t >= 5.5) { gemessen = true; if (messBilder / 4 < 30) spare(true); } }
   const u = ich.userData; let geht = false;
   let ix = eingabe.x, iz = eingabe.z;
   if (tasten["arrowleft"] || tasten["a"]) ix -= 1; if (tasten["arrowright"] || tasten["d"]) ix += 1;
@@ -1182,12 +1226,12 @@ function bild() {
   ballons.children.forEach(b => { if (b.userData.p !== undefined) b.position.y = 2.3 + (b.userData.p % 2) * 0.35 + Math.sin(t * 1.5 + b.userData.p) * 0.12; });
   for (let i = herzListe.length - 1; i >= 0; i--) { const h = herzListe[i]; h.userData.t += dt; h.position.y += dt * h.userData.v; h.material.opacity = 1 - h.userData.t; if (h.userData.t > 1) { scene.remove(h); herzListe.splice(i, 1); } }
 
-  if (!EINFACH && !RUHIG) {
+  if (!EINFACH && !RUHIG && !sparen) {
     const a = wasserGeo.attributes.position;
     for (let i = 0; i < a.count; i++) { const x = wasserBasis[i * 3], z = wasserBasis[i * 3 + 2]; a.setY(i, Math.sin(x * 0.35 + t * 1.4) * 0.1 + Math.cos(z * 0.3 + t * 1.1) * 0.1); }
     a.needsUpdate = true; wasserGeo.computeVertexNormals();
   }
-  if (halme && !RUHIG) {
+  if (halme && !RUHIG && !sparen && (bildNr++ & 1) === 0) {   // Gras nur jedes zweite Bild bewegen
     for (let i = 0; i < halmDaten.length; i++) {
       const h = halmDaten[i]; if (!h.s) continue;
       halmO.position.set(h.x, h.y, h.z); halmO.scale.setScalar(h.s); halmO.rotation.set(Math.sin(t * 1.8 + h.p + h.x * 0.3) * 0.18, 0, Math.cos(t * 1.5 + h.p) * 0.12);
@@ -1281,4 +1325,4 @@ $("welt-zu").addEventListener("click", () => { S.ton("tipp"); $("welt").hidden =
   }
 }
 
-window.__heimat = { wissen: () => wissen, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), SAISON, NACHT };
+window.__heimat = { wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), SAISON, NACHT };

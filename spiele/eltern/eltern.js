@@ -248,7 +248,7 @@
     $("i-speichern").addEventListener("click", () => {
       const e = S.lade("eltern") || {};
       e.insel = { grafik: $("i-grafik").value, steuerung: $("i-steuerung").value, kamera: $("i-kamera").value, kindDarf: $("i-kind").checked };
-      S.speichere("eltern", e); S.meldung("Insel-Einstellungen gespeichert.");
+      S.speichere("eltern", e); try { localStorage.removeItem("lerninsel.sparen"); } catch (er) { /* egal */ } S.meldung("Insel-Einstellungen gespeichert.");
     });
   }
 
