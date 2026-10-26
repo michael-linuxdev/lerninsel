@@ -50,7 +50,7 @@
       `<p class="klein">Jede Aufgabe: +1 ⭐. Alle drei: ein Stempel und +2 ⭐.</p>`;
     $("aufgaben").querySelectorAll('[data-id="wort"]').forEach(b => b.addEventListener("click", (e) => { e.preventDefault(); S.ton("tipp"); starteWort(); }));
 
-    zeichneFunde();
+    zeichneFunde(); zeichneGemeinsam();
 
     // Woche
     const montag = C.wocheVon(C.heute()), stempel = C.stempel();
@@ -94,10 +94,35 @@
     el.innerHTML = funde.slice().reverse().map((f, i) => `<div class="fund ${f.a === "gemeistert" ? "gemeistert" : ""}" style="animation-delay:${i * 90}ms">
         <span class="emoji" aria-hidden="true">${f.e}</span>
         <div><span class="fach">${F[f.f] ? F[f.f].e + " " + F[f.f].name : ""}</span><b>${esc(f.t)}</b>
-        ${f.r && hl ? `<span class="zwei" lang="${hl.code}">🌍 Auf ${hl.name}: ${esc(f.r)} – du kennst es in zwei Sprachen!</span>` : ""}</div>
+        ${f.r && hl ? `<span class="zwei" lang="${hl.code}">🌍 Auf ${hl.name}: ${esc(f.r)} – du kennst es in zwei Sprachen!</span>` : ""}
+        ${f.x ? `<span class="erklaert">❤️ Einem Erwachsenen erklärt</span>` : `<button class="knopf erklaeren" data-s="${esc(f.s)}">🗣️ Erklären</button>`}</div>
       </div>`).join("") +
       `<p class="erzaehl">🌳 Auf der Insel ${funde.length === 1 ? "hängt jetzt eine neue Frucht" : `hängen jetzt ${funde.length} neue Früchte`} an deinem Wissensbaum.</p>` +
       `<p class="erzaehl">🗣️ Erzähl heute jemandem, was du Neues weißt!</p>`;
+  }
+
+  // ---------- Gemeinsam: Erklär-Moment (Erwachsene bestätigen mit der PIN) ----------
+  let erklaerFund = null;
+  function oeffneErklaeren(schl) {
+    const funde = window.Lernfunde ? Lernfunde.heute() : [];
+    const f = schl ? funde.find(x => x.s === schl) : funde.slice().reverse().find(x => !x.x);
+    if (!f) { S.meldung && S.meldung("Lern zuerst etwas Neues – dann kannst du es erklären!"); return; }
+    erklaerFund = f;
+    $("erklaer-fund").innerHTML = `<span class="e" aria-hidden="true">${f.e}</span><span></span>`; $("erklaer-fund").lastChild.textContent = f.t;
+    $("erklaer-pin").value = ""; $("erklaer-fehler").textContent = ""; $("erklaer-dialog").hidden = false; S.ton("tipp");
+  }
+  $("erklaer-start").addEventListener("click", () => oeffneErklaeren(null));
+  $("erklaer-zu").addEventListener("click", () => { $("erklaer-dialog").hidden = true; S.ton("tipp"); });
+  $("erklaer-ok").addEventListener("click", () => {
+    if (!S.pinStimmt($("erklaer-pin").value)) { $("erklaer-fehler").textContent = "Die PIN stimmt nicht."; $("erklaer-pin").value = ""; S.ton("nein"); return; }
+    if (erklaerFund && Lernfunde.erklaert(Lernfunde.datumHeute(), erklaerFund.s)) { if (window.Familie) Familie.merke("erklaert", erklaerFund.t); C.gib("deutsch", 2); }
+    $("erklaer-dialog").hidden = true; C.hinweis("❤️ Gut erklärt!", "Wer etwas erklärt, behält es besonders gut.", "#C2337A"); zeichne();
+  });
+  $("heute-neu").addEventListener("click", (e) => { const b = e.target.closest(".erklaeren"); if (b) oeffneErklaeren(b.dataset.s); });
+  function zeichneGemeinsam() {
+    const el = $("gemeinsam-zahl"); if (!el || !window.Familie) return;
+    const n = Familie.letzteTage(7).length;
+    el.textContent = n ? `❤️ Diese Woche ${n === 1 ? "ein gemeinsamer Moment" : `${n} gemeinsame Momente`}` : "";
   }
 
   function zeigeStufen(id) {

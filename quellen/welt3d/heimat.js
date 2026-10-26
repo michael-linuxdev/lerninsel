@@ -669,7 +669,7 @@ const wissen = (() => {
   // Richtungen vom Kronen-Mittelpunkt aus, Früchte sitzen knapp außen auf der Krone (vorne zuerst)
   const PL = [[0.6, -0.1, 0.8], [-0.6, 0.15, 0.8], [0.1, 0.65, 0.75], [0.9, 0.25, -0.3], [-0.85, -0.05, -0.4]].map(v => new Vector3(...v).normalize());
   const fruechte = funde.slice(0, PL.length).map((f, i) => {
-    const farbe = f.a === "gemeistert" ? "#FFC83D" : FRUCHT[f.f] || "#FF7A6B";
+    const farbe = f.x ? "#FF5C8A" : f.a === "gemeistert" ? "#FFC83D" : FRUCHT[f.f] || "#FF7A6B";   // einem Erwachsenen erklärt: rosa Herzfrucht
     const m = new Mesh(kugel(0.2, 14, 10), new MeshBasicMaterial({ color: farbe }));
     const v = PL[i], r = 1.0 * k + 0.06; setze(m, v.x * r, 2.15 * k + v.y * r, v.z * r); m.scale.setScalar(0.001); m.userData.verz = 0.6 + i * 0.35; g.add(m);
     return m;

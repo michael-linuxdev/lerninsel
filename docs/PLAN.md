@@ -393,7 +393,18 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
   kurzer Hinweis; das Tablet merkt es sich (`lerninsel.sparen`), bis „Grafik“ oder die Eltern-Einstellung neu gewählt wird.
 - Bitte erneut auf dem iPad 10 testen; falls nötig als Nächstes: weniger Bäume bei „riesig“, Schatten nur nahe der Figur, Kamera-Sichtweite kürzer.
 
-**Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → Eltern als Mitspieler („hat es mir erklärt“, Duell) → „echte Welt“-Aufgaben →
+**Nachtrag 26.10.2026 – Eltern als Mitspieler (Punkt 3)**
+- `shared/familie.js`: gemeinsame Momente (Erklären, Duell) pro Kind, Wochenbericht „🤝 Gemeinsam“ mit Tipp.
+- **Erklär-Moment:** unter „Mein Ich → Heute neu“ hat jeder Fund „🗣️ Erklären“ (oder „Etwas erklären“ in der Karte „🤝 Gemeinsam“):
+  Das Kind erklärt einem Erwachsenen (Leitfragen: Was ist das? Beispiel? Wo im echten Leben?), der Erwachsene bestätigt mit der PIN.
+  Lohn: „❤️ Einem Erwachsenen erklärt“ am Fund, rosa Herzfrucht am Wissensbaum, Erfahrung für Wort-Zauber. `S.pinStimmt()` in core.js.
+- **Kopfrechen-Duell** (`spiele/familie/duell.html`): Kind gegen Erwachsenen auf einem Tablet, Hochformat gegenüber (obere Hälfte gedreht),
+  Querformat nebeneinander; Kind bekommt Aufgaben seiner Klasse, Erwachsene leichter/mittel/knifflig; erst 10 richtig oder 90 s;
+  falsch = 1 s Pause; zählt fürs Kind als Lernzeit und Matheweg-Tagesaufgabe.
+- Alles freiwillig: keine Mahnung, keine Strafe, wenn niemand Zeit hat.
+- Ideen für später: gemeinsam Vorlesen (Kind liest, Erwachsener hört zu), Wort-Duell (Artikel), Eltern stellen eine eigene „Echte-Welt-Aufgabe“.
+
+**Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → „echte Welt“-Aufgaben →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**
 

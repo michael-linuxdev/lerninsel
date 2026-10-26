@@ -60,6 +60,21 @@
   .erzaehl { margin: 10px 0 0; font-size: 1.05rem; font-weight: 600; color: var(--pflaume); }
   @keyframes fund-rein { from { transform: scale(.85); opacity: 0; } }
 
+  /* Gemeinsam */
+  .gemeinsam-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
+  .gemeinsam-knoepfe .knopf { min-height: 58px; text-decoration: none; flex: 1; min-width: 200px; }
+  .gemeinsam-zahl { margin: 10px 0 0; font-weight: 600; color: var(--beere); }
+  .fund .erklaeren { margin-top: 6px; min-height: 40px; padding: 0 12px; font-size: .95rem; box-shadow: none; background: #FFF1D6; }
+  .fund .erklaert { display: inline-block; margin-top: 6px; font-weight: 600; color: var(--beere); }
+  .erklaer-fund { display: flex; align-items: center; gap: 12px; background: #EFFAF3; border-radius: 18px; padding: 12px; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+  .erklaer-fund .e { font-size: 2.6rem; }
+  .erklaer-tipps { margin: 0 0 12px; padding-left: 22px; font-size: 1.1rem; line-height: 1.5; }
+  .erwachsene { background: #F6F3FB; border-radius: 16px; padding: 12px; margin-bottom: 12px; }
+  .pin-zeile { display: flex; gap: 10px; margin-top: 8px; }
+  .pin-zeile input { font: inherit; font-size: 1.3rem; width: 120px; padding: 8px 12px; border-radius: 12px; border: 3px solid #D9D2EC; -webkit-user-select: text; user-select: text; }
+  .pin-zeile .knopf { flex: 1; min-height: 52px; }
+  .fehler { color: #C0392B; font-weight: 600; margin: 6px 0 0; min-height: 1.2em; }
+
   /* Kalender */
   .woche { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
   .tag { text-align: center; padding: 8px 2px; border-radius: 16px; background: #FFF7EE; font-weight: 600; }
@@ -156,6 +171,15 @@
         <h2>🌱 Heute neu</h2>
         <div id="heute-neu"></div>
       </div>
+      <div class="karte" id="gemeinsam-karte">
+        <h2>🤝 Gemeinsam</h2>
+        <p class="klein" style="margin-bottom:10px">Ein paar Minuten mit Mama, Papa, Oma oder Opa – wenn sie gerade Zeit haben.</p>
+        <div class="gemeinsam-knoepfe">
+          <a class="knopf haupt" href="../familie/duell.html">🧮 Kopfrechen-Duell</a>
+          <button class="knopf" id="erklaer-start">🗣️ Etwas erklären</button>
+        </div>
+        <p class="gemeinsam-zahl" id="gemeinsam-zahl"></p>
+      </div>
       <div class="karte">
         <h2>Meine Woche</h2>
         <div class="woche" id="woche"></div>
@@ -179,6 +203,20 @@
   <div class="quiz"><div class="karte" id="quiz"></div></div>
 </section>
 
+<div class="dialog" id="erklaer-dialog" hidden>
+  <div class="dkarte erklaer" role="dialog" aria-labelledby="erklaer-titel">
+    <h2 id="erklaer-titel">🗣️ Erklär es einem Erwachsenen!</h2>
+    <div class="erklaer-fund" id="erklaer-fund"></div>
+    <ul class="erklaer-tipps"><li>Was ist das? Zeig oder sag es mit deinen Worten.</li><li>Wie geht das? Mach ein Beispiel.</li><li>Wo begegnet es dir im echten Leben?</li></ul>
+    <div class="erwachsene">
+      <b>Für Erwachsene:</b> Hat es dir gut erklärt? Dann bestätige mit deiner PIN.
+      <div class="pin-zeile"><input id="erklaer-pin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="PIN"><button class="knopf haupt" id="erklaer-ok">❤️ Gut erklärt!</button></div>
+      <p class="fehler" id="erklaer-fehler"></p>
+    </div>
+    <button class="knopf" id="erklaer-zu">Später</button>
+  </div>
+</div>
+
 <div class="dialog" id="stufen-dialog" hidden>
   <div class="dkarte" role="dialog" aria-labelledby="stufen-titel">
     <h2 id="stufen-titel"></h2>
@@ -192,6 +230,7 @@
 <script src="../../shared/core.js" data-root="../../"></script>
 <script src="../../shared/charakter.js"></script>
 <script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/familie.js"></script>
 <script src="../../shared/sticker.js"></script>
 <script src="../../shared/zeit.js" data-art="lernen"></script>
 <script src="../../shared/sprache.js"></script>

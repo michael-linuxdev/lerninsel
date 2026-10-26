@@ -197,6 +197,8 @@
     profilVon(id) { return bereinige(lesenK(profilKey(id))); },
     // PIN gilt für den ganzen Haushalt
     pin() { return haushalt.pin; },
+    // PIN prüfen (gleiche Prüfsumme wie im Elternbereich), z. B. wenn Erwachsene einen gemeinsamen Moment bestätigen
+    pinStimmt(t) { let h = 5381; for (const c of "pin:" + String(t || "")) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0; return !!haushalt.pin && haushalt.pin === h.toString(36); },
     setzePin(h) { haushalt.pin = h || null; haushaltSpeichern(); },
     sterne() { return profil.sterne; },
     gibSterne(n) { profil.sterne += n; speichern(); },

@@ -175,6 +175,7 @@
       <div class="woche-balken" aria-label="Lern- und Spielminuten pro Tag">${tage.map(t => `<div class="tag-balken"><div class="saeulen"><span class="lern" style="height:${Math.round(t.lern / max * 100)}%" title="${t.lern} min gelernt"></span><span class="spiel" style="height:${Math.round(t.spiel / max * 100)}%" title="${t.spiel} min gespielt"></span></div><small>${t.name}</small></div>`).join("")}</div>
       <p class="klein"><span class="punkt lern"></span> Lernen <span class="punkt spiel"></span> Spielen (Minuten)</p>
       ${lernfundeHtml()}
+      ${gemeinsamHtml()}
       <h3 style="margin:10px 0 6px;font-size:1.05rem">Tipp für diese Woche</h3>
       <ul class="liste">${tipps.map(t => `<li>${t}</li>`).join("")}</ul>
     </div>`;
@@ -190,6 +191,16 @@
     return `<h3 style="margin:10px 0 6px;font-size:1.05rem">🌱 Neu gelernt (${f.length})</h3>
       <ul class="liste">${f.slice(0, 12).map(x => `<li><b>${tagName(x.datum)}</b> ${x.e} ${esc(x.t)}</li>`).join("")}</ul>
       <p class="klein">${n ? `${n}× hat eine früher schwere Matheaufgabe jetzt sicher geklappt. ` : ""}Fragt nach einem Punkt: „Erklär mir das mal!“ – das Erklären festigt das Gelernte.</p>`;
+  }
+
+  // Gemeinsame Momente der Woche (Erklären, Kopfrechen-Duell) – Eltern als Mitspieler
+  function gemeinsamHtml() {
+    if (!window.Familie) return "";
+    const m = Familie.letzteTage(7), esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const tipp = "Kurze gemeinsame Momente (1–3 Minuten) wirken mehr als lange Sitzungen: „Erklär mir das mal!“ unter „Mein Ich → Heute neu“ oder ein Kopfrechen-Duell.";
+    if (!m.length) return `<h3 style="margin:10px 0 6px;font-size:1.05rem">🤝 Gemeinsam</h3><p class="klein">Diese Woche noch keine gemeinsamen Momente. ${tipp}</p>`;
+    return `<h3 style="margin:10px 0 6px;font-size:1.05rem">🤝 Gemeinsam (${m.length})</h3>
+      <ul class="liste">${m.slice(-8).reverse().map(x => `<li>${(Familie.ART[x.a] || ["❤️"])[0]} ${esc(x.t)}</li>`).join("")}</ul>`;
   }
 
   // ---------- Zeit-Regeln ----------

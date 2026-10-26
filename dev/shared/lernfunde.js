@@ -67,5 +67,10 @@
   const heuteFach = (fach) => tag(heute()).filter(x => x.f === fach).pop() || null;
   const gesamt = () => summeAus(lade());
 
-  window.Lernfunde = { FAECHER, MAX_TAG, STUFEN, merke, heute: () => tag(heute()), tag, letzteTage, heuteFach, gesamt, baum, baumGesehen };
+  // Ein Fund wurde einem Erwachsenen erklärt (gemeinsamer Moment) → Markierung x: 1
+  function erklaert(datum, schl) {
+    const d = lade(), f = (d.tage[datum] || []).find(x => x.s === schl); if (!f || f.x) return false;
+    f.x = 1; S.speichere("lernfunde", d); return true;
+  }
+  window.Lernfunde = { FAECHER, MAX_TAG, STUFEN, merke, erklaert, datumHeute: heute, heute: () => tag(heute()), tag, letzteTage, heuteFach, gesamt, baum, baumGesehen };
 })();
