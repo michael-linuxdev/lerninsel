@@ -42,8 +42,8 @@
   /* Der Schrank: Türen für jedes Spiel */
   .schrank {
     display: grid; gap: 18px;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-areas: "insel insel insel" "mathe deutsch sach";
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "insel insel insel insel" "mathe deutsch sach gef";
     background: var(--holz);
     padding: 18px; border-radius: var(--rund-gross);
     box-shadow: inset 0 0 0 6px #EBC48F, 0 10px 0 #D9A867;
@@ -75,6 +75,7 @@
   .tuer.welt3d { grid-area: welt3d; background: var(--pflaume-hell); }
   .tuer.medien { grid-area: medien; background: #3AA0E0; }
   .tuer.sach { grid-area: sach; background: #1F8F8A; }
+  .tuer.gef { grid-area: gef; background: #E0578F; }
   .abzeichen { display: inline-flex; align-items: center; gap: .4em; margin-top: 10px; padding: 6px 16px; border-radius: 999px; background: #fff; font-weight: 600; font-size: 1.05rem; box-shadow: var(--schatten); }
   .abzeichen[hidden] { display: none; }
   .ich-reihe { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
@@ -94,7 +95,7 @@
   }
 
   @media (max-width: 760px) {
-    .schrank { grid-template-columns: 1fr 1fr; grid-template-areas: "insel insel" "mathe deutsch" "sach sach"; }
+    .schrank { grid-template-columns: 1fr 1fr; grid-template-areas: "insel insel" "mathe deutsch" "sach gef"; }
     .tuer.insel { min-height: 240px; }
     .tuer.insel .bild { width: 170px; height: 140px; }
   }
@@ -205,6 +206,11 @@
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34" fill="#fff"/><path d="M28 36c8 2 10 10 18 8s6-12 14-10 8 8 12 6M24 58c10-2 14 6 22 4s10 6 16 10" stroke="#1F8F8A" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="76" cy="22" r="9" fill="#FFC83D"/></svg>
       <h2>Sachunterricht</h2>
       <p>Mit Eule Ella die Welt entdecken</p>
+    </a>
+    <a class="tuer gef" href="spiele/gefuehle/" style="text-decoration:none">
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 82 L20 52 a16 16 0 0 1 30 -22 a16 16 0 0 1 30 22 z" fill="#fff"/><circle cx="78" cy="22" r="9" fill="#FFC83D"/></svg>
+      <h2>Gefühle</h2>
+      <p>Mit Bärin Bruni: Gefühle und Bewegung</p>
     </a>
   </nav>
 </main>

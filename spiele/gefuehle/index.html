@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Gefühle und Bewegung</title>
+<meta name="theme-color" content="#FFEFF4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #FFEFF4; background-image: none; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .seite { max-width: 960px; margin: 0 auto; padding: 16px 16px 40px; display: grid; gap: 16px; }
+  .karte { background: #fff; border-radius: 28px; padding: 20px; box-shadow: 0 8px 0 rgba(194,51,122,.12); text-align: center; }
+  .karte h2 { margin: 0 0 10px; font-size: 1.5rem; }
+  .klein { font-size: 1rem; color: var(--pflaume-hell); margin: 0; }
+  .bruni-zeile { display: flex; gap: 14px; align-items: center; text-align: left; }
+  .bruni { width: 120px; height: 126px; flex: none; } .bruni svg { width: 100%; height: 100%; }
+  .bruni-zeile p { margin: 0; font-size: 1.2rem; font-weight: 500; }
+  .ru { background: #FFF6D6; border-radius: 12px; padding: 6px 10px; font-size: 1.05rem; margin-top: 6px !important; }
+  .kacheln { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .kachel { border-radius: 26px; padding: 18px 14px; min-height: 150px; display: grid; justify-items: center; align-content: center; gap: 6px; font-size: 1.25rem; font-weight: 700; color: var(--pflaume); box-shadow: 0 6px 0 rgba(0,0,0,.1); }
+  .kachel .e { font-size: 3.2rem; }
+  .kachel small { font-weight: 500; font-size: .98rem; }
+  .k1 { background: #FFE1EC; } .k2 { background: #DFF3FF; } .k3 { background: #EFE6FF; } .k4 { background: #E3F7EF; }
+  .faces { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 10px 0; }
+  .face { width: 112px; min-height: 112px; border-radius: 24px; background: #FFF7FA; display: grid; justify-items: center; align-content: center; gap: 2px; font-size: 1.05rem; font-weight: 700; color: var(--pflaume); box-shadow: inset 0 0 0 3px #F6D5E2; }
+  .face .e { font-size: 2.8rem; }
+  .face small { font-weight: 500; font-size: .85rem; }
+  .face.an { box-shadow: inset 0 0 0 5px var(--beere); background: #FFE1EC; }
+  .antwort { background: #FFF6D6; border-radius: 20px; padding: 14px; font-size: 1.2rem; margin-top: 10px; }
+  .antwort .knopf { margin-top: 10px; }
+  .verlauf { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+  .verlauf span { display: grid; justify-items: center; font-size: 2rem; background: #F6F3FB; border-radius: 14px; padding: 6px 8px; }
+  .verlauf small { font-size: .75rem; }
+  .teilen { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 14px; font-weight: 600; }
+  .teilen input { width: 26px; height: 26px; }
+  .ballon-feld { height: 300px; display: grid; place-items: center; }
+  #ballon { width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFD0E2, #FF6F91); transform: scale(.6); box-shadow: 0 10px 0 rgba(0,0,0,.08); }
+  .gross { font-size: 6rem; line-height: 1.1; }
+  #schild { font-size: 7rem; transition: transform .6s; }
+  #schild.klein { transform: scale(.6); }
+  .lage { font-size: 1.35rem; font-weight: 600; margin: 8px 0; }
+  .lage-ru { background: #FFF6D6; border-radius: 12px; padding: 6px 10px; display: inline-block; }
+  .erk-antwort { min-height: 1.6em; font-size: 1.2rem; font-weight: 600; color: var(--beere); }
+  #wut-ballon { width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFB3A6, #E0574A); margin: 20px auto; transform: scale(.4); }
+  #wut-knopf { min-height: 80px; font-size: 1.4rem; padding: 0 30px; touch-action: none; }
+  .huepf { animation: huepf 1s ease-in-out infinite; }
+  @keyframes huepf { 50% { transform: translateY(-14px); } }
+  .karte .knopf { min-height: 60px; margin: 6px; }
+  .ansicht[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../../" aria-label="Zur Startseite">🏠</a>
+  <h1>💗 Gefühle und Bewegung</h1>
+</div>
+<main class="seite">
+  <section class="ansicht" id="start-ansicht">
+    <div class="karte"><div class="bruni-zeile"><div class="bruni" aria-hidden="true"></div><div><p id="bruni-text"></p><p class="ru" id="bruni-ru" lang="ru" hidden></p></div></div></div>
+    <div class="kacheln" style="margin-top:16px">
+      <button class="kachel k1" data-oeffne="barometer"><span class="e">😊</span>Wie geht's dir?<small>Dein Gefühl von heute</small></button>
+      <button class="kachel k2" data-zu="ruhe"><span class="e">🌬️</span>Ruhig werden<small>Atmen, Schildkröte, Wut-Ballon</small></button>
+      <button class="kachel k3" data-oeffne="erkennen"><span class="e">🎭</span>Gefühle erkennen<small>Wie fühlt sich das an?</small></button>
+      <button class="kachel k4" data-oeffne="bewegen"><span class="e">🤸</span>Bewegungs-Minute<small>Mach mit Fipsi mit!</small></button>
+    </div>
+  </section>
+
+  <section class="ansicht" id="barometer-ansicht" hidden>
+    <div class="karte">
+      <h2>Wie fühlst du dich heute?</h2>
+      <p class="klein">Es gibt kein richtig oder falsch. Alle Gefühle sind okay.</p>
+      <div class="faces" id="faces"></div>
+      <div class="antwort" id="antwort" hidden><div class="bruni-zeile"><div class="bruni" aria-hidden="true" style="width:80px;height:84px"></div><p id="antwort-text"></p></div><div id="antwort-knoepfe"></div></div>
+      <div id="verlauf"></div>
+      <label class="teilen"><input type="checkbox" id="teilen"> Meine Eltern dürfen sehen, wie es mir ging</label>
+      <button class="knopf" data-zu="start">⬅️ Zurück zu Bruni</button>
+    </div>
+  </section>
+
+  <section class="ansicht" id="ruhe-ansicht" hidden>
+    <div class="karte">
+      <h2>🌬️ Ruhig werden</h2>
+      <p class="klein">Wenn alles zu viel ist, helfen diese kleinen Übungen.</p>
+      <div class="kacheln" style="margin:14px 0">
+        <button class="kachel k1" data-oeffne="atmen"><span class="e">🎈</span>Ballon-Atmen</button>
+        <button class="kachel k4" data-oeffne="schildkroete"><span class="e">🐢</span>Schildkröte</button>
+        <button class="kachel k3" data-oeffne="wut"><span class="e">😤</span>Wut-Ballon</button>
+      </div>
+      <button class="knopf" data-zu="start">⬅️ Zurück zu Bruni</button>
+    </div>
+  </section>
+  <section class="ansicht" id="atmen-ansicht" hidden>
+    <div class="karte"><h2>🎈 Ballon-Atmen</h2><p class="klein" id="atem-runde"></p><div class="ballon-feld"><div id="ballon"></div></div><p class="lage" id="atem-text"></p><button class="knopf" data-zu="ruhe">⬅️ Zurück</button></div>
+  </section>
+  <section class="ansicht" id="schildkroete-ansicht" hidden>
+    <div class="karte"><h2>🐢 Die Schildkröte</h2><div id="schild">🐢</div><p class="lage" id="schild-text"></p><button class="knopf" data-zu="ruhe">⬅️ Zurück</button></div>
+  </section>
+  <section class="ansicht" id="wut-ansicht" hidden>
+    <div class="karte"><h2>😤 Der Wut-Ballon</h2><div id="wut-ballon"></div><p class="lage" id="wut-text"></p><button class="knopf haupt" id="wut-knopf">💨 Gedrückt halten und pusten</button><br><button class="knopf" data-zu="ruhe">⬅️ Zurück</button></div>
+  </section>
+  <section class="ansicht" id="erkennen-ansicht" hidden>
+    <div class="karte" id="erk-karte"></div>
+    <button class="knopf" data-zu="start">⬅️ Zurück zu Bruni</button>
+  </section>
+  <section class="ansicht" id="bewegen-ansicht" hidden>
+    <div class="karte" id="bew-karte"></div>
+    <button class="knopf" data-zu="start">⬅️ Zurück zu Bruni</button>
+  </section>
+</main>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/sticker.js"></script>
+<script src="../../shared/echtewelt.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../shared/figuren.js"></script>
+<script src="gefuehle.js"></script>
+</body>
+</html>

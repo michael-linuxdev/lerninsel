@@ -424,6 +424,16 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
   Funde je Fach, Schätze nach Monaten.
 - **Jahreszeiten am Wissensbaum:** Blüten im Frühling, bunte Blätter im Herbst, Schnee im Winter, blinkende Lichterkette im Dezember.
 
+**Nachtrag 26.10.2026 – 8b begonnen: Gefühle und Bewegung mit Bärin Bruni**
+- Neue Nachbarin **Bärin Bruni** (2D in figuren.js, 3D auf der Insel/in jeder Welt, Startseiten-Kachel „Gefühle“) → `spiele/gefuehle/`.
+- **Wie geht's dir?** Gefühls-Barometer (7 Gefühle, de/ru), freiwillig, einmal am Tag, Bruni antwortet freundlich und schlägt passend
+  „Ruhig werden“ oder „Bewegungs-Minute“ vor; eigener Verlauf der letzten Tage; Eltern sehen es nur, wenn das Kind es freigibt.
+- **Ruhig werden:** Ballon-Atmen (5 Runden, 4 s ein/aus), Schildkröte (3 Runden), Wut-Ballon (gedrückt halten, langsam Luft ablassen).
+- **Gefühle erkennen:** 6 von 12 Situationen, Gefühl wählen – nie „falsch“ („Das kann auch sein! Viele fühlen sich eher …“); Lernfund.
+- **Bewegungs-Minute:** 4 von 12 Übungen à 15 s, Kind hakt selbst ab (keine Kamera); Wochenbericht: Bewegungs-Minuten, Ruhe-Übungen,
+  Barometer nur mit Freigabe. Keine Sterne für Gefühle, nur Erfahrung fürs Mitmachen.
+- Weiter in 8b: Schach, eigene Stärken (Spiegel), soziale Bildergeschichten, Malen/Musik.
+
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**

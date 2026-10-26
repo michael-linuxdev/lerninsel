@@ -73,5 +73,26 @@
       <path d="M52 50 Q54 18 100 16 Q146 18 148 50 Z" fill="#FFC83D" ${s}/><path d="M42 50 H158 Q160 58 152 58 H48 Q40 58 42 50 Z" fill="#FFB020" ${s}/><rect x="94" y="16" width="12" height="34" rx="4" fill="#FFB020"/>
     </svg>`;
   }
-  window.Figuren = { fipsi, robo, eule, biber };
+  // Bärin Bruni (Gefühle und Miteinander): hellbraun, runder Bauch, rosa Schal, trägt eine Laterne mit Herz
+  function baer(klasse = "baer") {
+    const D = "#3b1f63", B = "#C98E5A", H = "#F3DEC0", s = `stroke="${D}" stroke-width="4" stroke-linejoin="round"`;
+    return `<svg class="${klasse}" viewBox="0 0 200 210" aria-hidden="true">
+      <ellipse cx="100" cy="150" rx="52" ry="48" fill="${B}" ${s}/>
+      <ellipse cx="100" cy="160" rx="30" ry="30" fill="${H}"/>
+      <ellipse cx="74" cy="196" rx="18" ry="10" fill="#8A5A34" ${s}/><ellipse cx="126" cy="196" rx="18" ry="10" fill="#8A5A34" ${s}/>
+      <ellipse cx="50" cy="140" rx="13" ry="20" fill="${B}" ${s} transform="rotate(20 50 140)"/>
+      <path d="M152 120 q22 4 22 26" stroke="${D}" stroke-width="4" fill="none"/>
+      <rect x="160" y="146" width="28" height="34" rx="8" fill="#FFF1C2" ${s}/><path d="M174 172 l-8 -8 a5 5 0 0 1 8 -6 a5 5 0 0 1 8 6 z" fill="#FF5C8A"/>
+      <ellipse cx="150" cy="132" rx="13" ry="18" fill="${B}" ${s}/>
+      <path d="M62 112 Q100 128 138 112 L134 124 Q100 140 66 124 Z" fill="#FF9BC8" ${s}/>
+      <circle cx="58" cy="44" r="18" fill="${B}" ${s}/><circle cx="142" cy="44" r="18" fill="${B}" ${s}/><circle cx="58" cy="44" r="9" fill="#E9A7A0"/><circle cx="142" cy="44" r="9" fill="#E9A7A0"/>
+      <ellipse cx="100" cy="78" rx="56" ry="48" fill="${B}" ${s}/>
+      <ellipse cx="100" cy="96" rx="26" ry="20" fill="${H}"/>
+      <circle cx="78" cy="72" r="8" fill="${D}"/><circle cx="122" cy="72" r="8" fill="${D}"/><circle cx="81" cy="69" r="3" fill="#fff"/><circle cx="125" cy="69" r="3" fill="#fff"/>
+      <ellipse cx="100" cy="88" rx="10" ry="7" fill="${D}"/>
+      <path d="M88 100 Q100 110 112 100" stroke="${D}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <circle cx="66" cy="94" r="8" fill="#FF7FA6" opacity=".45"/><circle cx="134" cy="94" r="8" fill="#FF7FA6" opacity=".45"/>
+    </svg>`;
+  }
+  window.Figuren = { fipsi, robo, eule, biber, baer };
 })();

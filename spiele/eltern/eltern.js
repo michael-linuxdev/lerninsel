@@ -176,6 +176,7 @@
       <p class="klein"><span class="punkt lern"></span> Lernen <span class="punkt spiel"></span> Spielen (Minuten)</p>
       ${lernfundeHtml()}
       ${gemeinsamHtml()}
+      ${gefuehleHtml()}
       <h3 style="margin:10px 0 6px;font-size:1.05rem">Tipp für diese Woche</h3>
       <ul class="liste">${tipps.map(t => `<li>${t}</li>`).join("")}</ul>
     </div>`;
@@ -194,6 +195,17 @@
   }
 
   // Gemeinsame Momente der Woche (Erklären, Kopfrechen-Duell) – Eltern als Mitspieler
+  // Gefühle (nur wenn das Kind es erlaubt) und Bewegungs-Minuten der Woche
+  function gefuehleHtml() {
+    const d = S.lade("gefuehle"); if (!d) return "";
+    const tage = [], E = { froh: "😊", ruhig: "😌", muede: "🥱", traurig: "😢", wuetend: "😠", aengstlich: "😟", aufgeregt: "🤩" };
+    for (let i = 6; i >= 0; i--) { const t = new Date(); t.setDate(t.getDate() - i); tage.push(`${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`); }
+    const bew = tage.reduce((n, t) => n + ((d.bewegung || {})[t] || 0), 0);
+    const gef = d.teilen ? tage.filter(t => (d.tage || {})[t]).map(t => `${E[d.tage[t]] || "❔"} ${t.slice(8)}.${t.slice(5, 7)}.`).join(" · ") : "";
+    return `<h3 style="margin:10px 0 6px;font-size:1.05rem">💗 Gefühle und Bewegung</h3>
+      <p class="klein">🤸 ${bew} Bewegungs-Minute${bew === 1 ? "" : "n"} diese Woche.${d.ruhe ? ` 🌬️ ${d.ruhe}-mal eine Ruhe-Übung gemacht (insgesamt).` : ""}</p>
+      ${d.teilen ? `<p class="klein">Gefühls-Barometer (vom Kind freigegeben): ${gef || "diese Woche noch nichts eingetragen"}</p>` : `<p class="klein">Das Gefühls-Barometer bleibt privat, solange das Kind es nicht freigibt. Fragt lieber direkt: „Wie war dein Tag?“</p>`}`;
+  }
   function gemeinsamHtml() {
     if (!window.Familie) return "";
     const m = Familie.letzteTage(7), esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));

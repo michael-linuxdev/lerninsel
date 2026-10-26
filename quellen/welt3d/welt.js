@@ -28,7 +28,7 @@ export const STANDARD = {
     start: [1, 2], tier: [2.5, 3], haus: [-5, -4.5, 0.35], station: [-1.8, -6.3, 0.3], nest: [-2.2, -6.2],
     eule: [8.5, -3, -1.2], fipsi: [-7.6, -0.6, 1.0], robo: [5.5, 8.5, -2.6], biber: [2, -8, 0.2], schild: [3.3, -8.5, 0.2],
     wissensbaum: [-3.2, 2.2], ballons: [10, 6], truhe: [-1, 13.6],
-    lauf: [6, 10.2], kart: [-8.6, 8.2], bau: [11.2, -5]
+    lauf: [6, 10.2], kart: [-8.6, 8.2], bau: [11.2, -5], baer: [-3.7, 6.9, 2.6]
   },
   baeume: [[-9, -6, 1.1], [-7.5, 3.2, 0.9], [7.5, -7, 1], [10.5, 1, 1.1], [3, -10, 0.85], [-3.5, 9.8, 0.8], [-11, -1, 0.75], [1.5, 11, 0.7], [-11.5, 6, 0.8]].map(([x, z, k], i) => ({ x, z, k, i })),
   steine: [[4.5, 3.6, 0.6], [5.2, 4.1, 0.35], [-6, 6.5, 0.5]],
@@ -78,6 +78,7 @@ export function erzeuge(w) {
   P.biber = [...polar(a0 + 4.6 + r() * 0.4, R * (0.42 + r() * 0.12)), 0];
   P.schild = [P.biber[0] + 1.3, P.biber[1] - 0.5, 0];
   P.robo = [...polar(a0 + 5.5, R * 0.55), 0];
+  P.baer = [...polar(a0 + 1.3, R * 0.46), 0];
   P.wissensbaum = polar(a0 + 0.9, 3.6);
   P.ballons = polar(a0 + 2.6 + r() * 0.5, R * 0.62);
   P.truhe = polar(a0 + Math.PI + (r() - 0.5), R - 1.6);
@@ -85,10 +86,10 @@ export function erzeuge(w) {
   P.kart = polar(a0 + 3.95 + r() * 0.2, R * 0.68);
   P.bau = polar(a0 + 5.6 + r() * 0.2, R * 0.66);
   P.tier = [1.5, 1];
-  ["eule", "fipsi", "biber", "schild", "robo"].forEach(k => { P[k][2] = Math.atan2(-P[k][0], -P[k][1]); });   // schauen zur Mitte
+  ["eule", "fipsi", "biber", "schild", "robo", "baer"].forEach(k => { P[k][2] = Math.atan2(-P[k][0], -P[k][1]); });   // schauen zur Mitte
 
   // flache Flächen um die Plätze (Höhe = Rauschen in der Mitte des Platzes)
-  const flach = [[P.start, 3.2], [P.haus, 3.2], [P.station, 1.2], [P.nest, 1], [P.eule, 1.6], [P.fipsi, 1.6], [P.biber, 2.4], [P.wissensbaum, 1.6], [P.ballons, 1.6], [P.tier, 1], [P.lauf, 1.8], [P.kart, 1.8], [P.bau, 1.8]]
+  const flach = [[P.start, 3.2], [P.haus, 3.2], [P.station, 1.2], [P.nest, 1], [P.eule, 1.6], [P.fipsi, 1.6], [P.biber, 2.4], [P.wissensbaum, 1.6], [P.ballons, 1.6], [P.tier, 1], [P.lauf, 1.8], [P.kart, 1.8], [P.bau, 1.8], [P.baer, 1.6]]
     .map(([p, rad]) => ({ x: p[0], z: p[1], r: rad, h: roh(p[0], p[1]) }));
 
   // Teich (Wunsch): nicht auf Plätzen

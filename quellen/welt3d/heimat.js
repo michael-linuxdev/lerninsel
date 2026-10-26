@@ -600,6 +600,29 @@ function biber() {
   g.userData.koerper = k; g.userData.schwanz = sw;
   return g;
 }
+// Bärin Bruni (Gefühle und Bewegung): hellbraun, rosa Schal, Laterne mit Herz
+function baer() {
+  const g = new Group(), B = "#C98E5A", H = "#F3DEC0";
+  const k = new Group(); g.add(k);
+  const leib = teil(kugel(0.55), B); leib.scale.set(1, 0.95, 0.9); setze(leib, 0, 0.5, 0); k.add(leib);
+  const bauch = teil(kugel(0.32), H, { umriss: false }); bauch.scale.set(1, 1.05, 0.5); setze(bauch, 0, 0.45, 0.35); k.add(bauch);
+  [-1, 1].forEach(s => { const f = teil(kugel(0.16), "#8A5A34", { dicke: 1.1 }); f.scale.set(1.3, 0.6, 1.4); setze(f, 0.24 * s, 0.06, 0.26); k.add(f); });
+  [-1, 1].forEach(s => { const a = teil(kugel(0.15), B); a.scale.set(0.8, 1.3, 0.8); setze(a, 0.48 * s, 0.6, 0.12); k.add(a); });
+  const schal = teil(new TorusGeometry(0.34, 0.09, 10, 24), "#FF9BC8"); schal.rotation.x = Math.PI / 2; setze(schal, 0, 0.92, 0.02); k.add(schal);
+  const kopf = new Group(); kopf.position.y = 1.3; k.add(kopf);
+  const schaedel = teil(kugel(0.5), B, { dicke: 1.04 }); kopf.add(schaedel);
+  const schnauze = teil(kugel(0.24), H, { umriss: false }); schnauze.scale.set(1.15, 0.85, 0.7); setze(schnauze, 0, -0.12, 0.38); kopf.add(schnauze);
+  [-1, 1].forEach(s => { const o = teil(kugel(0.17), B); o.scale.set(1, 1, 0.6); setze(o, 0.36 * s, 0.38, -0.02); kopf.add(o); const oi = new Mesh(kugel(0.09, 10, 8), mat("#E9A7A0")); setze(oi, 0.36 * s, 0.38, 0.06); kopf.add(oi); });
+  augen(kopf, 0.17, 0.08, 0.44, 0.07);
+  const nase = new Mesh(kugel(0.08, 14, 10), AUGE); nase.scale.set(1.3, 0.9, 0.8); setze(nase, 0, -0.05, 0.62); kopf.add(nase);
+  // Laterne mit Herz
+  const lat = new Group(); lat.position.set(0.62, 0.55, 0.25); k.add(lat);
+  lat.add(setze(teil(new BoxGeometry(0.26, 0.32, 0.26), "#FFF1C2"), 0, 0, 0));
+  lat.add(setze(new Mesh(kugel(0.07, 10, 8), new MeshBasicMaterial({ color: "#FF5C8A" })), 0, 0, 0.14));
+  lat.add(setze(teil(new ConeGeometry(0.2, 0.14, 4), "#C2337A"), 0, 0.23, 0));
+  g.userData.koerper = k;
+  return g;
+}
 function tafel(text, farbe) {
   const g = new Group();
   g.add(setze(teil(new CylinderGeometry(0.06, 0.06, 1.3, 8), "#9A6A3F"), 0, 0.65, 0));
@@ -612,6 +635,7 @@ const NACHBARN = [
   { bau: fipsi, x: P.fipsi[0], z: P.fipsi[1], dreh: P.fipsi[2], e: "fipsi", titel: "Fipsi", text: `Hallo ${name}! Hilfst du mir, meine Schatzkarte zu finden?`, ru: "Привет! Поможешь мне найти мою карту сокровищ?", ziel: "../deutsch/" },
   // Robo Pixel wohnt vorerst nicht auf der Insel: Er begleitet den Tablet-Führerschein (Schlüssel zur Insel) und kommt später zurück.
   // { bau: robo, x: 5.5, z: 8.5, dreh: -2.6, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Хочешь стать мастером планшета?", ziel: "../medien/" },
+  { bau: baer, x: P.baer[0], z: P.baer[1], dreh: P.baer[2], e: "baer", titel: "Bärin Bruni", text: `Hallo ${name}! Ich bin Bruni. Bei mir geht es um Gefühle – und ums Bewegen. Kommst du?`, ru: "Привет! Я медведица Бруни. У меня – про чувства и движение. Пойдёшь?", ziel: "../gefuehle/" },
   { bau: biber, x: P.biber[0], z: P.biber[1], dreh: P.biber[2], e: "biber", titel: "Biber Benno", text: `Hallo ${name}! Ich bin Benno. Ich baue Dämme und zähle jeden Stamm. Rechnest du mit mir auf dem Matheweg?`, ru: "Привет! Я бобр Бенно. Я строю плотины и считаю каждое бревно. Посчитаешь со мной на математической тропе?", ziel: "../mathe/" }
 ];
 { const t = tafel("Mathe", "#5CCBA6"), [x, z, d] = P.schild; t.position.set(x, bodenY(x, z), z); t.rotation.y = d; scene.add(t); block(x, z, 0.4); }
