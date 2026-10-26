@@ -1,0 +1,59 @@
+// Lernfunde: konkrete Dinge, die das Kind heute NEU kann oder weiß – nicht nur Sterne.
+// Beispiele: „7 + 8 = 15 – war schwer, jetzt kannst du es“, „Neues Wort: die Eiche“, „Thema: Bäume und Vögel“.
+// Die Lernspiele melden Funde, „Mein Ich“ zeigt „Heute neu“, die Nachbarn auf der Insel sprechen darüber,
+// der Wochenbericht im Elternbereich listet sie. Später Grundlage für das persönliche Museum (KONZEPT: Langzeit-Motivation).
+// Nach core.js und charakter.js laden. Daten: profil.daten.lernfunde = { tage: { "JJJJ-MM-TT": [fund, …] } }
+// fund = { f: fach, a: art, e: emoji, t: Text (de), r?: Text in der Hilfesprache, s: Schlüssel gegen Doppelte }
+// Bewusst knapp gehalten (höchstens 5 am Tag, 60 Tage), damit der Spielstand für den QR-Transfer klein bleibt.
+(function () {
+  const S = window.Spielwelt; if (!S) return;
+  const MAX_TAG = 5, TAGE = 60;
+  const FAECHER = {
+    mathe: { e: "🧮", name: "Mathe" },
+    deutsch: { e: "🦊", name: "Deutsch" },
+    sachkunde: { e: "🦉", name: "Sachunterricht" },
+    tablet: { e: "🤖", name: "Tablet" }
+  };
+  const pad = (n) => String(n).padStart(2, "0");
+  const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const heute = () => window.__heute || (window.Charakter ? window.Charakter.heute() : iso(new Date()));
+
+  function lade() { const d = S.lade("lernfunde") || {}; d.tage = d.tage || {}; return d; }
+
+  // fund: { fach, art, e, text, ru, schluessel, melden }
+  function merke(fund) {
+    if (!fund || !fund.text || !FAECHER[fund.fach]) return false;
+    const d = lade(), h = heute(), liste = d.tage[h] = d.tage[h] || [];
+    const s = String(fund.schluessel || fund.text).slice(0, 60);
+    if (liste.some(x => x.s === s)) return false;
+    // Gemeisterte Aufgaben sind der wertvollste Fund: sie dürfen einen einfachen Fund vom selben Tag ersetzen
+    if (liste.length >= MAX_TAG) {
+      if (fund.art !== "gemeistert") return false;
+      const i = liste.findIndex(x => x.a !== "gemeistert"); if (i < 0) return false;
+      liste.splice(i, 1);
+    }
+    const neu = { f: fund.fach, a: fund.art || "neu", e: fund.e || FAECHER[fund.fach].e, t: String(fund.text).slice(0, 90), s };
+    if (fund.ru) neu.r = String(fund.ru).slice(0, 90);
+    liste.push(neu);
+    const alt = Object.keys(d.tage).sort(); while (alt.length > TAGE) delete d.tage[alt.shift()];
+    S.speichere("lernfunde", d);
+    if (fund.melden && window.Charakter && window.Charakter.hinweis) window.Charakter.hinweis("🌱 Das kannst du jetzt!", neu.t, "#2E9C5A");
+    return true;
+  }
+
+  const tag = (datum) => (lade().tage[datum] || []).slice();
+  // Letzte n Tage (heute eingeschlossen), jeder Fund mit Datum, neueste zuerst
+  function letzteTage(n = 7) {
+    const d = lade(), [y, m, t] = heute().split("-").map(Number), aus = [];
+    for (let i = 0; i < n; i++) {
+      const k = iso(new Date(y, m - 1, t - i));
+      (d.tage[k] || []).slice().reverse().forEach(f => aus.push(Object.assign({ datum: k }, f)));
+    }
+    return aus;
+  }
+  // Neuester Fund eines Fachs von heute (für die Nachbarn auf der Insel)
+  const heuteFach = (fach) => tag(heute()).filter(x => x.f === fach).pop() || null;
+  const gesamt = () => Object.values(lade().tage).reduce((n, l) => n + l.length, 0);
+
+  window.Lernfunde = { FAECHER, MAX_TAG, merke, heute: () => tag(heute()), tag, letzteTage, heuteFach, gesamt };
+})();

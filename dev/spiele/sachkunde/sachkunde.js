@@ -221,6 +221,7 @@
     if (vorher === 3 && sterne === 3) gewinn = 1;
     const d = daten(); d.themen[t.id] = Math.max(vorher, sterne); speichere(d);
     if (gewinn) S.gibSterne(gewinn);
+    if (window.Lernfunde) Lernfunde.merke({ fach: "sachkunde", art: "thema", e: t.e, text: `${t.name} – ${t.kurz}`, schluessel: "s:" + t.id });
     if (window.Charakter) { Charakter.gib("sachkunde", 2 + sterne * 2); Charakter.ereignis("sachkunde-thema"); }
 
     $("ende-titel").textContent = "Thema geschafft!";

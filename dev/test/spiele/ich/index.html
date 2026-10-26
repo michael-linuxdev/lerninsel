@@ -48,6 +48,18 @@
   .aufgabe.fertig { background: #E3F7EF; }
   .aufgabe .haken { font-size: 2rem; width: 54px; height: 54px; border-radius: 50%; background: var(--minze); color: #fff; display: grid; place-items: center; }
 
+  /* Heute neu (Lernfunde) */
+  .fund { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 18px; background: #EFFAF3; margin-bottom: 8px; animation: fund-rein .5s cubic-bezier(.3,1.4,.5,1) both; }
+  .fund .emoji { font-size: 2.2rem; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 16px; background: #fff; }
+  .fund b { display: block; font-size: 1.15rem; line-height: 1.3; }
+  .fund .fach { font-size: .95rem; color: var(--pflaume-hell); font-weight: 600; }
+  .fund .zwei { display: block; margin-top: 4px; padding: 4px 10px; border-radius: 10px; background: #FFF6D6; font-size: 1rem; }
+  .fund.gemeistert { background: #FFF1D6; box-shadow: inset 0 0 0 3px #F2C46B; }
+  .heute-leer { display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 18px; background: #F6F3FB; font-size: 1.1rem; }
+  .heute-leer span { font-size: 2.2rem; filter: grayscale(.4); }
+  .erzaehl { margin: 10px 0 0; font-size: 1.05rem; font-weight: 600; color: var(--pflaume); }
+  @keyframes fund-rein { from { transform: scale(.85); opacity: 0; } }
+
   /* Kalender */
   .woche { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
   .tag { text-align: center; padding: 8px 2px; border-radius: 16px; background: #FFF7EE; font-weight: 600; }
@@ -139,6 +151,10 @@
         <div class="tag-kopf"><h2>Tagesaufgaben</h2><p id="datum"></p></div>
         <div id="aufgaben"></div>
       </div>
+      <div class="karte" id="heute-neu-karte">
+        <h2>🌱 Heute neu</h2>
+        <div id="heute-neu"></div>
+      </div>
       <div class="karte">
         <h2>Meine Woche</h2>
         <div class="woche" id="woche"></div>
@@ -174,6 +190,7 @@
 <script src="../../shared/config.js"></script>
 <script src="../../shared/core.js" data-root="../../"></script>
 <script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
 <script src="../../shared/sticker.js"></script>
 <script src="../../shared/zeit.js" data-art="lernen"></script>
 <script src="../../shared/sprache.js"></script>

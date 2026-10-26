@@ -331,6 +331,7 @@
     if (neuFuehrerschein) { d.fuehrerschein = new Date().toISOString().slice(0, 10); gewinn += 3; }
     speichere(d);
     if (gewinn) S.gibSterne(gewinn);
+    if (window.Lernfunde) Lernfunde.merke({ fach: "tablet", art: "lektion", e: l.e, text: `Tablet-Führerschein: ${l.name}`, schluessel: "t:" + l.id });
     if (window.Charakter) { Charakter.gib("tablet", 2 + sterne * 2); Charakter.ereignis("tablet-lektion"); }
 
     $("ende-titel").textContent = neuFuehrerschein ? "Führerschein bestanden!" : "Lektion geschafft!";

@@ -45,6 +45,8 @@
       `<p class="klein">Jede Aufgabe: +1 ⭐. Alle drei: ein Stempel und +2 ⭐.</p>`;
     $("aufgaben").querySelectorAll('[data-id="wort"]').forEach(b => b.addEventListener("click", (e) => { e.preventDefault(); S.ton("tipp"); starteWort(); }));
 
+    zeichneFunde();
+
     // Woche
     const montag = C.wocheVon(C.heute()), stempel = C.stempel();
     const tage = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
@@ -73,6 +75,23 @@
       </button>`;
     }).join("");
     $("faehigkeiten").querySelectorAll(".fh").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); zeigeStufen(b.dataset.f); }));
+  }
+
+  // Heute neu: konkrete Lernfunde des Tages (shared/lernfunde.js)
+  function zeichneFunde() {
+    const el = $("heute-neu"); if (!el || !window.Lernfunde) return;
+    const funde = Lernfunde.heute(), hl = S.hilfe(), F = Lernfunde.FAECHER;
+    if (!funde.length) {
+      el.innerHTML = `<div class="heute-leer"><span aria-hidden="true">🌱</span><p style="margin:0">Hier wächst, was du heute Neues lernst. Fang mit einer Tagesaufgabe an!</p></div>`;
+      return;
+    }
+    const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    el.innerHTML = funde.slice().reverse().map((f, i) => `<div class="fund ${f.a === "gemeistert" ? "gemeistert" : ""}" style="animation-delay:${i * 90}ms">
+        <span class="emoji" aria-hidden="true">${f.e}</span>
+        <div><span class="fach">${F[f.f] ? F[f.f].e + " " + F[f.f].name : ""}</span><b>${esc(f.t)}</b>
+        ${f.r && hl ? `<span class="zwei" lang="${hl.code}">🌍 Auf ${hl.name}: ${esc(f.r)} – du kennst es in zwei Sprachen!</span>` : ""}</div>
+      </div>`).join("") +
+      `<p class="erzaehl">🗣️ Erzähl heute jemandem, was du Neues weißt!</p>`;
   }
 
   function zeigeStufen(id) {
@@ -178,8 +197,9 @@
   }
 
   function ende() {
-    C.ereignis("wort-fertig");
     const x = quiz.fragen[0].x, K = $("quiz");
+    if (window.Lernfunde) Lernfunde.merke({ fach: "deutsch", art: "wort", e: x.e, text: `Neues Wort: ${x.a} ${x.w}${x.p && x.p !== x.w ? ` (die ${x.p})` : ""}`, ru: S.ht(x), schluessel: "w:" + x.w });
+    C.ereignis("wort-fertig");
     $("quiz-punkte").innerHTML = quiz.fragen.slice(1).map(() => `<span class="an"></span>`).join("");
     K.innerHTML = `<div class="riesig">🎉</div><h2 style="margin:0">Geschafft!</h2>
       <p style="font-size:1.3rem;margin:0">${quiz.fehler === 0 ? "Alles beim ersten Mal richtig!" : `${5 - quiz.fehler} von 5 beim ersten Mal richtig.`}<br>Dein Wort heute: <b>${x.a} ${x.w}</b> ${x.e}</p>

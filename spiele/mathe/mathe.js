@@ -34,11 +34,24 @@
       const f = d.fehler.find(x => x.text === a.text);
       if (f) {
         const stufe = (f.stufe || 1) + 1;
-        if (stufe >= ABSTAND.length) { d.fehler = d.fehler.filter(x => x !== f); d.gelernt = (d.gelernt || 0) + 1; }
+        if (stufe >= ABSTAND.length) { d.fehler = d.fehler.filter(x => x !== f); d.gelernt = (d.gelernt || 0) + 1; gemeistert(f); }
         else { f.stufe = stufe; f.faellig = tagIn(ABSTAND[stufe]); }
       }
     }
     S.speichere("mathe", d);
+  }
+
+  // Lernfund: eine Aufgabe, die früher schwer war, sitzt jetzt (dreimal an verschiedenen Tagen richtig)
+  function loesungsText(a) {
+    const e = a.einheit ? " " + a.einheit : "";
+    if (a.text && a.text.includes("?")) return a.text.replace("?", a.antwort + e);
+    if (!a.text) return `${a.frage} ${a.antwort}${e}`;
+    return a.wort ? `${a.text} ist ${a.antwort}${e}` : `${a.text} = ${a.antwort}${e}`;
+  }
+  function gemeistert(a) {
+    if (!window.Lernfunde) return;
+    const t = loesungsText(a);
+    Lernfunde.merke({ fach: "mathe", art: "gemeistert", e: "💪", text: `${t} – war schwer, jetzt kannst du es!`, schluessel: "m:" + t, melden: true });
   }
 
   function zeige(name) {
@@ -335,6 +348,8 @@
     if (vorher === 3 && sterne === 3) gewinn = 1; // Bonus fürs fehlerfreie Üben
     merke(station.id, sterne);
     if (gewinn) S.gibSterne(gewinn);
+    if (sterne > vorher && window.Lernfunde) Lernfunde.merke({ fach: "mathe", art: vorher ? "besser" : "neu", e: station.e || "🧮",
+      text: vorher ? `${station.name}: jetzt ${sterne} ${sterne === 1 ? "Stern" : "Sterne"} statt ${vorher}` : `Neu geschafft: ${station.name}`, schluessel: "s:" + station.id });
     if (C()) { C().gib("mathe", sterne === 3 ? 5 : 3); C().ereignis("mathe-runde"); }
 
     $("ende-titel").textContent = sterne === 3 ? "Super gemacht!" : sterne === 2 ? "Toll geschafft!" : "Geschafft!";

@@ -346,6 +346,14 @@
     if (gewinn) S.gibSterne(gewinn);
     if (window.Charakter) { Charakter.gib("deutsch", 5); Charakter.ereignis("deutsch-kapitel"); }
     const alle = G.every(x => bestes(x.id) > 0), L = lauf.liste, werk = lauf.werk;
+    // Lernfund: in der Werkstatt die Regel, im Abenteuer die Wörter mit Artikel aus diesem Kapitel
+    if (window.Lernfunde) {
+      const w = (k.schritte || []).filter(x => x.typ === "artikel").slice(0, 3);
+      if (werk) Lernfunde.merke({ fach: "deutsch", art: "geuebt", e: k.ort, text: `Werkstatt: ${k.name}`, schluessel: "d:" + k.id });
+      else Lernfunde.merke({ fach: "deutsch", art: "woerter", e: k.ort, schluessel: "d:" + k.id,
+        text: w.length ? `${k.name}: ${w.map(x => `${x.richtig} ${x.wort}`).join(", ")}` : `Abenteuer: ${k.name}`,
+        ru: w.every(x => x.ru) ? w.map(x => x.ru).join(", ") : "" });
+    }
 
     $("ende-titel").textContent = werk ? `${k.name}: geschafft!` : alle && i === G.length - 1 ? "Schatzkarte komplett!" : `Kartenteil ${i + 1} gefunden!`;
     $("ende-teil").innerHTML = werk ? `<div class="gross-emoji">${k.ort}</div>` : kartenteil(i);

@@ -304,3 +304,19 @@ Sachunterricht „Körper und Gesundheit“; Einstufungstest.
 - Stickeralbum: 6 Seiten × 8 Sticker (Lernen: alle 6 Aufgaben einer, max. 3/Tag; Wetter entdecken; Feste DE/RU), Album auf dem Bett und unter „Mein Ich“
 
 **Nächster Schritt:** Weihnachts-Erststart und QR-Geschenk; danach 8b schrittweise (Bewegungs-Aufgaben und Gefühle zuerst, weil sie ins Zeitsystem passen).
+
+## Stand 26.10.2026 (Lernfunde – „Heute neu“)
+**Fertig:**
+- `shared/lernfunde.js`: konkrete Lernfunde pro Tag (höchstens 5, 60 Tage), gemeisterte Aufgaben verdrängen einfache Funde
+- Quellen: Mathe-Lernkartei gemeistert (mit Hinweis „🌱 Das kannst du jetzt!“), Matheweg-Station neu/besser, Wort des Tages (mit Übersetzung),
+  Fipsi-Kapitel (Wörter mit Artikel), Wörter-Werkstatt, Sachthema, Tablet-Lektion
+- Sichtbar: Karte „🌱 Heute neu“ in „Mein Ich“ (mit „Auf Russisch … – du kennst es in zwei Sprachen!“ und „Erzähl heute jemandem …“),
+  Zähler auf der Startseite, Nachbarn auf der Insel hüpfen und sprechen über den Fund ihres Fachs (Aktionsknopf 🌱), Wochenbericht „Neu gelernt“
+- Rauchtest grün, eigener Test für Lernkartei → Fund → Mein Ich/Insel/Eltern
+
+**Offen / nächster Schritt:**
+- Lernkartei auch für Deutsch und Sachunterricht → dann gibt es dort ebenfalls „war schwer, jetzt kannst du es“
+- Ein Fund pro Tag als kleine Veränderung im Zimmer oder am Tier (z. B. Tier lernt das Wort des Tages mit, Pinnwand im Zimmer)
+- Freiwillige „echte Welt“-Aufgabe als Tagesaufgaben-Variante (Punkt 2) und Eltern-Bestätigung „hat es mir erklärt“ (Punkt 3)
+- Museum/Schatzkammer aus den Lernfunden (Punkt 4)
+

@@ -18,7 +18,7 @@ Gemacht auch für Kinder mit anderer Muttersprache.
 | Bereich | Inhalt |
 |---|---|
 | Lernen | Deutsch (Fipsi, Schatzkarte), Mathematik (Matheweg Kl. 1–4), Sachunterricht (Eule Ella), Englisch ab Kl. 3, Medienbildung (Robo Pixel). Lehrplan: KMK-Bildungsstandards + Länder (Sachsen zuerst). Wiederholung nach 1/3/7 Tagen. |
-| Gewohnheit | Tagesaufgaben, Zeitsystem, Erinnerungen der Figuren, Wochenkalender, Stempel und Truhe |
+| Gewohnheit | Tagesaufgaben, Zeitsystem, Erinnerungen der Figuren, Wochenkalender, Stempel und Truhe, **Lernfunde „Heute neu“** (was das Kind heute konkret neu kann) |
 | Charakter | Fähigkeiten mit Stufen und Belohnungen, Titel, Stickeralbum |
 | Spielen | 3D-Heimatinsel (Stil B, rund): Figur mit Kleiderschrank-Look, Tier läuft mit, Baumhaus, Nachbarn, Minispiel-Orte, echtes Wetter/Tageszeit/Jahreszeit |
 | Ganzheitlich | Schach, eigene Stärken entdecken, soziale Fähigkeiten und Werte, Gefühle, Malen und Musik, Bewegung weg vom Bildschirm – ohne Bewertung, Sterne nur fürs Mitmachen (PLAN 8b) |
@@ -28,6 +28,24 @@ Gemacht auch für Kinder mit anderer Muttersprache.
 | Papier | Tagesplan und Arbeitsblätter aus den eigenen Fehlern zum Ausdrucken |
 | Sozial ohne Server | QR-Code-Geschenke, Sticker tauschen und Insel-Besuchskarte per QR |
 | Später | Sicherheits-Insel: geschlossene Klassen-/Freundes-Inseln nur mit Einladung + Elternfreigabe (Server, EU, verschlüsselt) |
+
+## Schärfung (Oktober 2026): Fortschritt statt Eintrittskarte
+Der tägliche Lernblock soll sich nicht wie ein Ticket für die Spielzeit anfühlen, sondern wie Wachsen, das man sieht.
+1. **Spürbarer täglicher Fortschritt** – jeden Tag eine konkrete Fähigkeit oder Erkenntnis, sichtbar im Charakter und auf der Insel.
+   *Umgesetzt (Schritt 1):* Lernfunde (`shared/lernfunde.js`). Die Spiele melden, was heute neu ist: gemeisterte Lernkartei-Aufgaben
+   („7 + 8 = 15 – war schwer, jetzt kannst du es!“), das Wort des Tages mit Artikel und Mehrzahl, Wörter aus Fipsis Kapitel, Werkstatt-Regel,
+   Sachthema, Tablet-Lektion, neue/bessere Matheweg-Station. Sichtbar in „Mein Ich“ (Karte „Heute neu“), auf der Startseite,
+   bei den Nachbarn auf der Insel (sie hüpfen und sprechen über den Fund) und im Wochenbericht der Eltern.
+2. **Brücke ins echte Leben** – kurze freiwillige „echte Welt“-Aufgaben, im Wochenbericht sichtbar. Ansatz bisher: „Erzähl heute jemandem …“ unter den Lernfunden, Ella fragt nach der Familie.
+3. **Eltern als Mitspieler** – 1–3-Minuten-Momente (Erklären, Duell), immer freiwillig. Die Lernfunde liefern den Gesprächsanlass („Erklär mir das mal!“).
+4. **Langzeit-Motivation** – Jahreszeiten, wachsendes persönliches Museum/Schatzkammer, wiederholbare Herausforderungen. Lernfunde sind die Rohdaten fürs Museum.
+5. **Muttersprache als Stärke** – Übersetzungen nicht nur als Hilfe zeigen: „Auf Russisch: дуб – du kennst es in zwei Sprachen!“ (in „Heute neu“ begonnen).
+
+**Entscheidungen:** Lernfunde sind sparsam (höchstens 5 am Tag, 60 Tage gespeichert, kompakt für den QR-Transfer); gemeisterte Aufgaben haben Vorrang.
+Keine Sterne für Funde – der Fund selbst ist die Belohnung, damit es kein zweites Punktesystem gibt. Kein Druck: ohne Lernen gibt es einfach keine Funde, keine Mahnung.
+
+**Offene Fragen:** Sollen Lernfunde dauerhaft ins Museum wandern (eigene, kleinere Liste, z. B. nur „gemeistert“ und Wörter)?
+Wie viel Muttersprache zeigen, wenn die Hilfesprache ausgeschaltet ist (heute: gar nicht)? Sollen Eltern einen Fund „bestätigen“ können („hat es mir erklärt“) – als erster gemeinsamer Moment?
 
 ## Entwicklungsreihenfolge ohne Zeitdruck
 Grundsatz: **erst das Fundament, dann die Kern-Schleife prüfen, dann Inhalte und Belohnung ausbauen, erst zuletzt öffnen.**

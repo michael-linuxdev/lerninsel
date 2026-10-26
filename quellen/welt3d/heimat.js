@@ -471,10 +471,26 @@ const NACHBARN = [
   { bau: robo, x: 5.5, z: 8.5, dreh: -2.6, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Хочешь стать мастером планшета?", ziel: "../medien/" },
   { bau: () => tafel("Mathe", "#5CCBA6"), x: 2, z: -8, dreh: 0.2, e: "🧮", titel: "Der Matheweg", text: "Hier beginnt der Matheweg. Sammle Sterne an jeder Station!", ru: "Здесь начинается математическая тропа. Собирай звёзды на каждой станции!", ziel: "../mathe/" }
 ];
+// Lernfunde des Tages: Wer heute etwas Neues im Fach gelernt hat, wird vom passenden Nachbarn begrüßt.
+// Die Nachbarn hüpfen dann ab und zu, bis man mit ihnen gesprochen hat (shared/lernfunde.js).
+const FACH = { eule: "sachkunde", fipsi: "deutsch", robo: "tablet", "🧮": "mathe" };
+const FREUDE = {
+  sachkunde: (f) => [`${name}, heute hast du etwas Neues entdeckt: ${f.t}. Ich bin stolz auf dich! Erzählst du es nachher deiner Familie?`, "Сегодня у тебя новое открытие! Расскажешь потом об этом своей семье?"],
+  deutsch: (f) => [`Juhu, ${name}! Du kennst jetzt: ${f.t.replace(/^Neues Wort: /, "")}. Sag es einmal ganz laut!`, f.r ? `Ура! Теперь ты знаешь: ${f.r}. Скажи это вслух по-немецки!` : "Ура! Ты знаешь новые слова. Скажи их вслух!"],
+  tablet: (f) => [`Piep! Neu in deinem Kopf: ${f.t}. Du wirst ein echter Tablet-Profi!`, "Пип! Ты узнаёшь всё больше о планшете!"],
+  mathe: (f) => [`Neu auf dem Matheweg: ${f.t}`, "Новое на математической тропе! Так держать!"]
+};
 NACHBARN.forEach(n => {
   const o = n.bau(); o.position.set(n.x, 0.25, n.z); o.rotation.y = n.dreh; if (n.e !== "🧮") o.scale.multiplyScalar(1.3); scene.add(o); block(n.x, n.z, 0.8);
   n.obj = o;
-  antippbar(o, () => { o.userData.huepf = 1; sprechblase(n.e, n.titel, n.text, S.ht(n), n.ziel); }, n.e === "🧮" ? ["🧮", "Lesen"] : ["💬", "Reden"], 2.3);
+  const fach = FACH[n.e], fund = window.Lernfunde && fach ? window.Lernfunde.heuteFach(fach) : null;
+  n.freut = !!fund && n.e !== "🧮";
+  const aktion = fund ? ["🌱", n.e === "🧮" ? "Lesen" : "Reden"] : n.e === "🧮" ? ["🧮", "Lesen"] : ["💬", "Reden"];
+  antippbar(o, () => {
+    o.userData.huepf = 1; n.freut = false;
+    if (fund) { const [de, ru] = FREUDE[fach](fund); sprechblase(n.e, `${n.titel} freut sich`, de, S.paar(["", ru])[1], n.ziel); }
+    else sprechblase(n.e, n.titel, n.text, S.ht(n), n.ziel);
+  }, aktion, 2.3);
 });
 
 // ---------- Orte für Minispiele ----------
@@ -889,6 +905,7 @@ function bild() {
     // zur Figur drehen, wenn sie in der Nähe ist
     const dx = ich.position.x - o.position.x, dz = ich.position.z - o.position.z, nah = !drinnen && Math.hypot(dx, dz) < 7;
     const soll = nah ? Math.atan2(dx, dz) : n.dreh; let diff = soll - o.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff)); o.rotation.y += diff * Math.min(1, dt * 4);
+    if (n.freut && !(o.userData.huepf > 0) && (t + i * 1.3) % 5 < dt) o.userData.huepf = 1;
     if (o.userData.koerper) o.userData.koerper.scale.y = 1 + Math.sin(t * 2.2 + i) * 0.02; if (o.userData.huepf > 0) { o.userData.huepf = Math.max(0, o.userData.huepf - dt * 2); }
     o.position.y = 0.25 + Math.sin((1 - (o.userData.huepf || 0)) * Math.PI) * (o.userData.huepf ? 0.4 : 0) + (i === 2 ? Math.sin(t * 2) * 0.05 : 0);
   });

@@ -211,6 +211,7 @@
 <script src="shared/config.js"></script>
 <script src="shared/core.js" data-root="./"></script>
 <script src="shared/charakter.js"></script>
+<script src="shared/lernfunde.js"></script>
 <script src="shared/zeit.js" data-art="neutral"></script>
 <script src="spiele/anziehen/teile.js"></script>
 <script src="spiele/anziehen/figur.js"></script>
@@ -287,7 +288,9 @@
   document.getElementById("ich-bild").innerHTML = `<svg viewBox="60 40 180 180">${Figur.zeichneFigur(look)}</svg>`;
   document.getElementById("ich-titel").textContent = Charakter.titel();
   const offenAufgaben = Charakter.aufgaben().filter(a => !a.erledigt).length;
-  document.getElementById("ich-aufgaben").textContent = offenAufgaben ? `📅 Noch ${offenAufgaben} Tagesaufgabe${offenAufgaben === 1 ? "" : "n"}` : "✅ Alle Tagesaufgaben geschafft";
+  const neuHeute = window.Lernfunde ? Lernfunde.heute().length : 0;
+  document.getElementById("ich-aufgaben").textContent = (offenAufgaben ? `📅 Noch ${offenAufgaben} Tagesaufgabe${offenAufgaben === 1 ? "" : "n"}` : "✅ Alle Tagesaufgaben geschafft") +
+    (neuHeute ? ` · 🌱 ${neuHeute} neu gelernt` : "");
   // Mein Tier
   const tier = TierPflege.lade();
   const tb = document.getElementById("tier-bild"), tz = document.getElementById("tier-zeile");

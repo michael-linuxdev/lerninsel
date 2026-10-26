@@ -173,9 +173,22 @@
       </div>
       <div class="woche-balken" aria-label="Lern- und Spielminuten pro Tag">${tage.map(t => `<div class="tag-balken"><div class="saeulen"><span class="lern" style="height:${Math.round(t.lern / max * 100)}%" title="${t.lern} min gelernt"></span><span class="spiel" style="height:${Math.round(t.spiel / max * 100)}%" title="${t.spiel} min gespielt"></span></div><small>${t.name}</small></div>`).join("")}</div>
       <p class="klein"><span class="punkt lern"></span> Lernen <span class="punkt spiel"></span> Spielen (Minuten)</p>
+      ${lernfundeHtml()}
       <h3 style="margin:10px 0 6px;font-size:1.05rem">Tipp für diese Woche</h3>
       <ul class="liste">${tipps.map(t => `<li>${t}</li>`).join("")}</ul>
     </div>`;
+  }
+
+  // Konkrete Lernfunde der Woche (shared/lernfunde.js) – als Gesprächsanlass, nicht als Prüfung
+  function lernfundeHtml() {
+    if (!window.Lernfunde) return "";
+    const f = Lernfunde.letzteTage(7); if (!f.length) return "";
+    const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const tagName = (iso) => { const [y, m, t] = iso.split("-").map(Number); return ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"][new Date(y, m - 1, t).getDay()]; };
+    const n = f.filter(x => x.a === "gemeistert").length;
+    return `<h3 style="margin:10px 0 6px;font-size:1.05rem">🌱 Neu gelernt (${f.length})</h3>
+      <ul class="liste">${f.slice(0, 12).map(x => `<li><b>${tagName(x.datum)}</b> ${x.e} ${esc(x.t)}</li>`).join("")}</ul>
+      <p class="klein">${n ? `${n}× hat eine früher schwere Matheaufgabe jetzt sicher geklappt. ` : ""}Fragt nach einem Punkt: „Erklär mir das mal!“ – das Erklären festigt das Gelernte.</p>`;
   }
 
   // ---------- Zeit-Regeln ----------
