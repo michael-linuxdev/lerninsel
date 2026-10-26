@@ -7,7 +7,7 @@ import {
   PCFSoftShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide,
   CylinderGeometry, SphereGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry, PlaneGeometry,
   LatheGeometry, ExtrudeGeometry, Shape, Vector2, Vector3, DataTexture, RedFormat, NearestFilter, InstancedMesh,
-  Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial
+  Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture
 } from "../three/three.module.js";
 import { S } from "./gemeinsam.js";
 
@@ -608,6 +608,38 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
   const rahmen = teil(new TorusGeometry(0.55, 0.08, 10, 30), "#FFC83D"); rahmen.scale.y = 1.4; spiegel.add(rahmen);
   const glas = new Mesh(new CircleGeometry(0.52, 30), new MeshBasicMaterial({ color: "#CFEFFF" })); glas.scale.y = 1.4; glas.position.z = 0.02; spiegel.add(glas);
   antippbar(spiegel, () => sprechblase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, Aufgaben und Abzeichen.", S.paar(["", "Посмотри, как ты выросла!"])[1], "../ich/"), ["🪞", "Reinschauen"], 1.6);
+  // Pinnwand: Lernfunde der letzten 7 Tage als Zettel (heute mit Glanz), Antippen zeigt die Liste
+  {
+    const L = window.Lernfunde, funde = L ? L.letzteTage(7) : [], heute = L ? L.heute().length : 0;
+    const FARBE = { mathe: "#CFF3E4", deutsch: "#FFE1DD", sachkunde: "#D6F1EF", tablet: "#DCEBFA" };
+    const c = document.createElement("canvas"); c.width = 512; c.height = 320; const g2 = c.getContext("2d");
+    g2.fillStyle = "#C98F55"; g2.fillRect(0, 0, 512, 320);
+    for (let i = 0; i < 260; i++) { g2.fillStyle = i % 2 ? "rgba(120,70,30,.18)" : "rgba(255,230,190,.18)"; g2.fillRect((i * 97) % 512, (i * 53) % 320, 4, 3); }
+    g2.fillStyle = "#4B2380"; g2.font = "bold 34px Fredoka, sans-serif"; g2.textAlign = "center"; g2.fillText("Das habe ich gelernt", 256, 44);
+    const zettel = funde.slice(0, 8);
+    if (!zettel.length) zettel.push({ e: "🌱", f: "", leer: true });
+    zettel.forEach((f, i) => {
+      const x = 22 + (i % 4) * 122, y = 70 + Math.floor(i / 4) * 120, neu = i < heute;
+      g2.save(); g2.translate(x + 50, y + 50); g2.rotate(((i * 37) % 9 - 4) * 0.025);
+      g2.fillStyle = "rgba(0,0,0,.18)"; g2.fillRect(-46, -42, 100, 100);
+      g2.fillStyle = f.a === "gemeistert" ? "#FFE7A3" : FARBE[f.f] || "#FFF6E0"; g2.fillRect(-50, -46, 100, 100);
+      if (neu) { g2.strokeStyle = "#FFC83D"; g2.lineWidth = 6; g2.strokeRect(-50, -46, 100, 100); }
+      g2.font = "54px sans-serif"; g2.textAlign = "center"; g2.textBaseline = "middle"; g2.fillText(f.e || "⭐", 0, 8);
+      g2.fillStyle = "#E0457B"; g2.beginPath(); g2.arc(0, -36, 7, 0, Math.PI * 2); g2.fill();
+      g2.restore();
+    });
+    const tex = new CanvasTexture(c); tex.colorSpace = SRGBColorSpace;
+    const wand = new Group(); wand.position.set(4.06, 1.95, 0.9); wand.rotation.y = -Math.PI / 2; zimmer.add(wand);
+    wand.add(teil(new BoxGeometry(1.72, 1.1, 0.06), "#8A5A34", { dicke: 1.03 }));
+    wand.add(setze(new Mesh(new PlaneGeometry(1.6, 1.0), new MeshBasicMaterial({ map: tex })), 0, 0, 0.035));
+    const liste = () => {
+      if (!funde.length) return ["Hier hängst du auf, was du diese Woche Neues lernst. Jeder Lernfund bekommt einen Zettel!", "Здесь висит всё новое, что ты узнаёшь за неделю."];
+      const de = `Diese Woche ${funde.length === 1 ? "1 Zettel" : `${funde.length} Zettel`}${heute ? `, ${heute} von heute (golden umrandet)` : ""}: ` +
+        funde.slice(0, 4).map(f => f.t.replace(/^Neues Wort: /, "").replace(/ – (war|jetzt).*$/, "")).join(" · ") + (funde.length > 4 ? " …" : "");
+      return [de, `На этой неделе ты узнаёшь много нового: ${funde.length}!`];
+    };
+    antippbar(wand, () => { const [de, ru] = liste(); sprechblase("📌", "Deine Pinnwand", de, S.paar(["", ru])[1], "../ich/"); }, ["📌", "Ansehen"], 1.9);
+  }
   // Pflanze und Lampe
   const topf = new Group(); topf.position.set(3.4, 0.25, 2.4); zimmer.add(topf);
   topf.add(setze(teil(new CylinderGeometry(0.3, 0.22, 0.45, 16), "#E2604F"), 0, 0.22, 0));

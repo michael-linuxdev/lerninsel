@@ -342,7 +342,11 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - Entscheidungen: gilt sofort auch ohne Lernen (bewusste Ausnahme der Eltern), kann auch verkürzen (0 = für heute Schluss),
   Lernen bringt danach weiter Spielzeit dazu, Ruhezeit gilt weiter. Das Kind sieht einmal eine Ansage („🎁 Du darfst heute noch 15 Minuten spielen!“).
 
-**Reihenfolge (abgestimmt 26.10.2026):** Pinnwand im Zimmer → Eltern als Mitspieler („hat es mir erklärt“, Duell) → „echte Welt“-Aufgaben →
+**Nachtrag 26.10.2026 – Pinnwand im Zimmer**
+- Rechte Zimmerwand: Korkwand „Das habe ich gelernt“ mit bis zu 8 Zetteln (Lernfunde der letzten 7 Tage, Fachfarbe, gemeistert golden,
+  heutige golden umrandet). Antippen: Liste der Woche, Knopf zu „Mein Ich“. Wird beim Betreten der Insel neu gezeichnet.
+
+**Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → Eltern als Mitspieler („hat es mir erklärt“, Duell) → „echte Welt“-Aufgaben →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**
 
