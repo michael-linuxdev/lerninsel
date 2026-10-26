@@ -36,12 +36,12 @@
   const idee = () => AUFTRAEGE[(tagIndex() + ideeVersatz) % AUFTRAEGE.length];
 
   // ---------- Ansichten ----------
-  function zeige(n) { ["start", "malen", "vorlagen", "galerie"].forEach(v => { $(v + "-ansicht").hidden = v !== n; }); scrollTo(0, 0); if (SP && SP.stopp) SP.stopp(); if (n === "start") start(); if (n === "vorlagen") zeigeVorlagen(); if (n === "galerie") zeigeGalerie(); }
+  function zeige(n) { ["start", "malen", "vorlagen", "galerie", "musik"].forEach(v => { $(v + "-ansicht").hidden = v !== n; }); scrollTo(0, 0); if (SP && SP.stopp) SP.stopp(); if (n === "start") start(); if (n === "vorlagen") zeigeVorlagen(); if (n === "galerie") zeigeGalerie(); if (n === "musik" && window.MusikEcke) window.MusikEcke.zeige(); }
   document.querySelectorAll("[data-zu]").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); zeige(b.dataset.zu); }));
 
   async function start() {
     const d = lade(), a = idee();
-    $("paula-text").textContent = d.gemalt ? `Hallo ${name}! Schön, dass du wieder malst. Ich habe eine Idee für dich – oder du malst, was du willst.` : `Hallo ${name}! Ich bin Papagei Paula. Im Atelier darfst du malen, was du willst. Es gibt kein Falsch!`;
+    $("paula-text").textContent = d.gemalt ? `Hallo ${name}! Schön, dass du wieder malst. Ich habe eine Idee für dich – oder du malst, was du willst.` : `Hallo ${name}! Ich bin Papagei Paula. Im Atelier darfst du malen und Musik machen, wie du willst. Es gibt kein Falsch!`;
     $("paula-ru").textContent = ru("Привет! Я попугай Паула. Здесь можно рисовать всё, что хочешь. Неправильно не бывает!"); $("paula-ru").hidden = !$("paula-ru").textContent;
     $("tagesauftrag-text").textContent = `💡 ${d.auftraege[a[0]] ? "Schon gemalt: " : "Idee: "}${a[1]}`;
     let n = 0; try { n = (await B.alle()).length; } catch (e) { /* ohne IndexedDB */ }
@@ -223,6 +223,6 @@
     $("frage-dlg").hidden = false;
   }
 
-  window.__atelier = { fuelle, oeffneMalen, sichern, g, AUFTRAEGE };
-  start();
+  window.__atelier = { fuelle, oeffneMalen, sichern, g, AUFTRAEGE, zeige };
+  if (/[?&]musik\b/.test(location.search)) zeige("musik"); else start();
 })();

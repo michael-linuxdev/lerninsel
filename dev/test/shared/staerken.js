@@ -37,6 +37,7 @@
     if ((z.erklaert || 0) >= 2) aus.push(["erklaeren", "Du hast Erwachsenen schon Dinge erklärt."]);
     if (bew >= 3) aus.push(["bewegen", "Du hast schon mehrere Bewegungs-Minuten geschafft."]);
     if ((z.welt || 0) >= 3) aus.push(["helfen", "Du machst bei Echte-Welt-Aufgaben mit – auch beim Helfen."]);
+    if ((((S.lade("atelier") || {}).musik) || {}).rhythmus >= 5) aus.push(["rhythmus", "Du klatschst Rhythmen ganz genau nach."]);
     if ((S.lade("atelier") || {}).gemalt >= 3) aus.push(["malen", "Du hast im Atelier schon viele Bilder gemalt."]);
     if (tier.phase === "tier" && (tier.gepflegt || tier.leckerli || 0) > 0) aus.push(["tiere", "Du kümmerst dich um dein Tier."]);
     if (S.hilfe() && (z.wort || 0) >= 3) aus.push(["sprachen", "Du lernst neue Wörter und kennst sie in zwei Sprachen."]);

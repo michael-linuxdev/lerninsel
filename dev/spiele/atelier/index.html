@@ -60,6 +60,35 @@
   .galerie .an-wand { position: absolute; top: 14px; right: 14px; background: #fff; border-radius: 999px; padding: 2px 8px; font-size: 1.1rem; }
   .leer { text-align: center; font-size: 1.2rem; padding: 20px; }
 
+  /* Musik */
+  .m-teil[hidden] { display: none !important; }
+  .m-teil.karte { text-align: center; margin-top: 16px; }
+  .paula.klein-p { width: 80px; height: 84px; }
+  .lage { font-size: 1.3rem; font-weight: 600; min-height: 1.6em; margin: 10px 0; }
+  .xylo { display: flex; gap: 8px; justify-content: center; align-items: center; padding: 18px 6px; background: #8A5A34; border-radius: 22px; touch-action: none; }
+  .xylo button { flex: 1; max-width: 100px; border-radius: 14px; color: #fff; font-size: 1.6rem; font-weight: 700; display: grid; align-content: space-between; justify-items: center; padding: 10px 0; box-shadow: inset 0 -6px 0 rgba(0,0,0,.18), 0 4px 0 rgba(0,0,0,.25); text-shadow: 0 2px 0 rgba(0,0,0,.25); transition: transform .08s; }
+  .xylo button::before, .xylo button::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: #E9E2D8; box-shadow: inset 0 2px 0 rgba(0,0,0,.25); }
+  .xylo button.tipp { transform: scale(.95); filter: brightness(1.2); }
+  .xylo button.dran { animation: dran .7s ease-in-out infinite; box-shadow: 0 0 0 6px #fff, 0 0 22px 8px #FFF4A6; }
+  @keyframes dran { 50% { transform: translateY(-8px); } }
+  .lieder { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+  .lieder .knopf { margin: 0; min-height: 54px; }
+  .lieder .knopf.an { background: #FFE1EC; box-shadow: inset 0 0 0 4px var(--beere); }
+  .takt { display: flex; gap: 10px; justify-content: center; margin: 14px 0; }
+  .takt span { width: 56px; height: 56px; border-radius: 50%; background: #F6F3FB; display: grid; place-items: center; font-size: 1.7rem; transition: transform .1s; }
+  .takt span.voll { background: #FFF1C2; }
+  .takt span.jetzt { transform: scale(1.25); background: #FFC83D; }
+  .trommel { width: 200px; height: 200px; border-radius: 50%; font-size: 6rem; background: radial-gradient(circle at 40% 35%, #FFE1C2, #E8A33D); box-shadow: 0 10px 0 #B5721E; touch-action: none; margin: 8px auto 14px; display: block; }
+  .trommel:active, .trommel.tipp { transform: translateY(6px); box-shadow: 0 4px 0 #B5721E; }
+  .gross-k { min-height: 90px !important; font-size: 1.4rem; padding: 0 30px; }
+  .raster { display: grid; grid-template-columns: 54px repeat(8, 1fr); gap: 5px; max-width: 760px; margin: 12px auto; }
+  .raster .ton { font-weight: 700; display: grid; place-items: center; color: var(--pflaume); }
+  .raster button { aspect-ratio: 2; border-radius: 10px; background: #F6F3FB; padding: 0; min-height: 34px; }
+  .raster button.an { background: var(--f); box-shadow: inset 0 -4px 0 rgba(0,0,0,.2); }
+  .raster button.spalte { outline: 4px solid #FFC83D; }
+  .gespeichert { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 10px 0; }
+  .gespeichert .knopf { margin: 0; min-height: 50px; }
+
   /* Dialog */
   .dlg { position: fixed; inset: 0; z-index: 40; background: rgba(75,35,128,.55); display: grid; place-items: center; padding: 16px; }
   .dlg[hidden] { display: none; }
@@ -80,6 +109,7 @@
     <div class="kacheln">
       <button class="kachel k1" id="frei-malen"><span class="e">🖌️</span>Freies Malen<small>Eine leere Leinwand</small></button>
       <button class="kachel k2" data-zu="vorlagen"><span class="e">🖍️</span>Ausmalbilder<small>Mit dem Farbeimer füllen</small></button>
+      <button class="kachel k3" data-zu="musik"><span class="e">🎵</span>Musik-Ecke<small>Xylofon, Rhythmus, eigene Melodie</small></button>
       <button class="kachel k4" data-zu="galerie"><span class="e">🖼️</span>Meine Galerie<small id="galerie-zahl">Deine Bilder</small></button>
     </div>
   </section>
@@ -109,6 +139,47 @@
     <div class="karte"><h2>🖍️ Ausmalbilder</h2><p class="klein">Tipp: Mit dem Farbeimer 🪣 füllst du eine ganze Fläche auf einmal.</p></div>
     <div class="vorlagen" id="vorlagen"></div>
     <button class="knopf" data-zu="start">⬅️ Zurück zu Paula</button>
+  </section>
+
+  <section class="ansicht" id="musik-ansicht" hidden>
+    <div class="karte"><div class="paula-zeile"><div class="paula klein-p" aria-hidden="true"></div><div><p id="musik-text"></p><p class="ru" id="musik-ru" hidden></p></div></div></div>
+    <div class="m-teil" id="m-menue">
+      <div class="kacheln">
+        <button class="kachel k1" data-m="xylo"><span class="e">🎹</span>Xylofon<small>Frei spielen und Lieder</small></button>
+        <button class="kachel k2" data-m="rhythmus"><span class="e">👏</span>Rhythmus<small>Hör zu und klatsch nach</small></button>
+        <button class="kachel k3" data-m="hoertest"><span class="e">👂</span>Hoch oder tief?<small>Laut oder leise?</small></button>
+        <button class="kachel k4" data-m="melodie"><span class="e">🎼</span>Meine Melodie<small>Selbst komponieren</small></button>
+      </div>
+      <button class="knopf" data-zu="start" style="margin-top:14px">⬅️ Zurück zu Paula</button>
+    </div>
+    <div class="m-teil karte" id="m-xylo" hidden>
+      <div class="xylo" id="xylo"></div>
+      <div class="lieder" id="lieder"></div>
+      <p class="lage" id="xylo-text"></p>
+      <button class="knopf" data-m="menue">⬅️ Zurück</button>
+    </div>
+    <div class="m-teil karte" id="m-rhythmus" hidden>
+      <h2>👏 Rhythmus nachklatschen</h2>
+      <div class="takt" id="takt"></div>
+      <p class="lage" id="rh-text"></p>
+      <button class="trommel" id="trommel" aria-label="Trommel">🥁</button>
+      <div><button class="knopf" id="rh-hoeren">🔁 Nochmal hören</button><button class="knopf" id="rh-weiter" hidden>➡️ Nächster Rhythmus</button><button class="knopf" data-m="menue">⬅️ Zurück</button></div>
+    </div>
+    <div class="m-teil karte" id="m-hoertest" hidden>
+      <h2 id="ht-frage">👂</h2>
+      <p class="klein" id="ht-stand"></p>
+      <div><button class="knopf haupt gross-k" data-ht="0">1️⃣ Der erste</button><button class="knopf haupt gross-k" data-ht="1">2️⃣ Der zweite</button></div>
+      <p class="lage" id="ht-text"></p>
+      <div><button class="knopf" id="ht-hoeren">🔁 Nochmal hören</button><button class="knopf" id="ht-weiter" hidden>➡️ Weiter</button><button class="knopf" data-m="menue">⬅️ Zurück</button></div>
+    </div>
+    <div class="m-teil karte" id="m-melodie" hidden>
+      <h2>🎼 Meine Melodie</h2>
+      <p class="klein">Tippe in jede Spalte einen Ton. Oben ist hoch, unten ist tief. Leere Spalten sind Pausen.</p>
+      <div class="raster" id="raster"></div>
+      <div><button class="knopf haupt" id="mel-spielen">▶️ Abspielen</button><button class="knopf" id="mel-zufall">🎲 Überrasch mich</button><button class="knopf" id="mel-leer">🧽 Leeren</button><button class="knopf" id="mel-speichern">💾 Speichern</button></div>
+      <div class="gespeichert" id="mel-liste"></div>
+      <button class="knopf" data-m="menue">⬅️ Zurück</button>
+    </div>
   </section>
 
   <section class="ansicht" id="galerie-ansicht" hidden>
@@ -145,6 +216,7 @@
 <script src="../../shared/figuren.js"></script>
 <script src="../../shared/bilder.js"></script>
 <script src="vorlagen.js"></script>
+<script src="musik.js"></script>
 <script src="atelier.js"></script>
 </body>
 </html>

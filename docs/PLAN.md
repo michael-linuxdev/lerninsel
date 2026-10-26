@@ -468,6 +468,19 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
   Neue Bilder hängen automatisch, solange Platz ist; in der Galerie „An die Wand“ / „Von der Wand nehmen“.
 - Zählt als Lernzeit (Kunst ist Schulfach). Weiter in 8b: Musik (Musik-Ecke im Atelier).
 
+**Nachtrag 26.10.2026 – 8b: Musik-Ecke im Atelier (`spiele/atelier/musik.js`)**
+- Alle Klänge per Web Audio im Browser (Klangstab = Sinus + 2 abklingende Obertöne, Klatschen = gefiltertes Rauschen), keine Audiodateien.
+- **Xylofon** C–C' (8 farbige Klangstäbe, lang = tief). **Lieder zum Mitspielen** (nur gemeinfreie Melodien, keine Texte):
+  Alle meine Entchen, Hänschen klein, Morgen kommt der Weihnachtsmann, Ode an die Freude. Paula spielt vor, dann leuchtet
+  der Stab, der dran ist; falsche Töne klingen einfach, kein Fehlerzähler. Erstes Mal je Lied: 1 ⭐ + Lernfund (Fach „musik“).
+- **Rhythmus nachklatschen:** 5 Rhythmen je Runde (8 Achtel, 10 Muster vom Leichten zum Schweren), Kind tippt auf der Trommel;
+  Prüfung von Anzahl und Abständen mit großzügiger Toleranz (±45 % eines Achtels). Freundliche Hinweise („Es waren 4 Klatscher“),
+  nach zwei Versuchen darf man weiter. Ab 5 geschafften Rhythmen: Lernfund und Stärke „Rhythmus“ wird bemerkt.
+- **Hoch oder tief? / Laut oder leise?** (Lehrplan Musik): 6 Fragen, Abstände werden kleiner (Oktave → Sekunde), immer „Nochmal hören“.
+- **Meine Melodie:** Raster 8 Spalten × 8 Töne, Abspielen, „Überrasch mich“ (Zufallsmelodie aus kleinen Schritten, endet auf C),
+  bis zu 5 Melodien gespeichert (im Spielstand, sehr klein) – Grundlage für die Insel-Bühne, auf der die Tiere tanzen (später).
+- Erfahrung „Kreativ-Funke“ nur fürs Mitmachen, Musik höchstens 12 Punkte am Tag. Russische Volkslied-Melodien folgen, wenn die Noten geprüft sind.
+
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**
