@@ -1453,4 +1453,17 @@ $("welt-zu").addEventListener("click", () => { S.ton("tipp"); $("welt").hidden =
   }
 }
 
-window.__heimat = { wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+// ---------- Bildschirm-Punkte für Szenen und Zeigehand (NA-10) ----------
+const _bp = new Vector3();
+function bildschirm(x, y, z) {
+  _bp.set(x, y, z).project(camera);
+  const r = renderer.domElement.getBoundingClientRect();
+  return { x: r.left + (_bp.x + 1) / 2 * r.width, y: r.top + (1 - _bp.y) / 2 * r.height, sichtbar: _bp.z < 1 && Math.abs(_bp.x) <= 1.05 && Math.abs(_bp.y) <= 1.05, hinten: _bp.z >= 1 };
+}
+const ORTE = {
+  ich: () => [ich.position.x, ich.position.y + 1.4, ich.position.z],
+  haus: () => [P.haus[0], bodenY(P.haus[0], P.haus[1]) + 1.2, P.haus[1]]
+};
+// Insel.ort("haus") liefert eine Funktion für Zeige.auf(); Insel.bildschirm(x, y, z) rechnet einen 3D-Punkt um
+window.Insel = { bildschirm, ort: (name) => () => (ORTE[name] && !drinnen ? bildschirm(...ORTE[name]()) : null), ORTE: Object.keys(ORTE) };
+window.__heimat = { bildschirm,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
