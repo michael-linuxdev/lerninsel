@@ -50,7 +50,7 @@
       `<p class="klein">Jede Aufgabe: +1 ⭐. Alle drei: ein Stempel und +2 ⭐.</p>`;
     $("aufgaben").querySelectorAll('[data-id="wort"]').forEach(b => b.addEventListener("click", (e) => { e.preventDefault(); S.ton("tipp"); starteWort(); }));
 
-    zeichneFunde(); zeichneGemeinsam();
+    zeichneFunde(); zeichneGemeinsam(); zeichneEchteWelt();
 
     // Woche
     const montag = C.wocheVon(C.heute()), stempel = C.stempel();
@@ -124,6 +124,31 @@
     const n = Familie.letzteTage(7).length;
     el.textContent = n ? `❤️ Diese Woche ${n === 1 ? "ein gemeinsamer Moment" : `${n} gemeinsame Momente`}` : "";
   }
+
+  // ---------- Echte Welt: eine freiwillige Aufgabe weg vom Bildschirm ----------
+  function zeichneEchteWelt() {
+    const el = $("ew"); if (!el || !window.EchteWelt) return;
+    const a = EchteWelt.heutige(); if (!a) { $("ew-karte").hidden = true; return; }
+    const hl = S.hilfe(), ru = hl && hl.code === "ru" ? a.ru : "";
+    el.innerHTML = `<div class="ew-aufgabe"><span class="emoji" aria-hidden="true">${a.e}</span><div><span class="bereich">${a.bereichName}</span><b></b>${ru ? `<span class="ru" lang="ru"></span>` : ""}</div></div>` +
+      (a.erledigt ? `<p class="ew-fertig">✅ Geschafft! Super gemacht – das war echtes Leben statt Bildschirm.</p>`
+        : `<div class="ew-knoepfe"><button class="knopf haupt" id="ew-geschafft">✅ Geschafft!</button>${a.wechselUebrig > 0 ? `<button class="knopf" id="ew-andere">🔄 Andere Idee (${a.wechselUebrig})</button>` : ""}</div>`);
+    el.querySelector("b").textContent = a.text; if (ru) el.querySelector(".ru").textContent = ru;
+    const g = $("ew-geschafft"); if (g) g.addEventListener("click", () => {
+      S.ton("tipp");
+      if (EchteWelt.selbstAbhaken()) { if (EchteWelt.geschafft()) { C.hinweis("🌍 Echte Welt geschafft!", "+1 ⭐ – und eine neue Frucht für deinen Wissensbaum.", "#2E9C5A"); } zeichne(); return; }
+      $("ew-was").innerHTML = `<span class="e" aria-hidden="true">${a.e}</span><span></span>`; $("ew-was").lastChild.textContent = a.text;
+      $("ew-pin").value = ""; $("ew-fehler").textContent = ""; $("ew-dialog").hidden = false;
+    });
+    const an = $("ew-andere"); if (an) an.addEventListener("click", () => { S.ton("tipp"); EchteWelt.andere(); zeichneEchteWelt(); });
+  }
+  $("ew-zu").addEventListener("click", () => { $("ew-dialog").hidden = true; S.ton("tipp"); });
+  $("ew-ok").addEventListener("click", () => {
+    if (!S.pinStimmt($("ew-pin").value)) { $("ew-fehler").textContent = "Die PIN stimmt nicht."; $("ew-pin").value = ""; S.ton("nein"); return; }
+    $("ew-dialog").hidden = true;
+    if (EchteWelt.geschafft()) C.hinweis("🌍 Echte Welt geschafft!", "+1 ⭐ – und eine neue Frucht für deinen Wissensbaum.", "#2E9C5A");
+    zeichne();
+  });
 
   function zeigeStufen(id) {
     const f = C.FAEHIGKEITEN.find(x => x.id === id), st = C.stufe(id);

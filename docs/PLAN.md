@@ -404,7 +404,16 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - Alles freiwillig: keine Mahnung, keine Strafe, wenn niemand Zeit hat.
 - Ideen für später: gemeinsam Vorlesen (Kind liest, Erwachsener hört zu), Wort-Duell (Artikel), Eltern stellen eine eigene „Echte-Welt-Aufgabe“.
 
-**Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → „echte Welt“-Aufgaben →
+**Nachtrag 26.10.2026 – Echte-Welt-Aufgaben (Punkt 2)**
+- `shared/echtewelt.js`: 32 kurze Ideen in 7 Bereichen (Rechnen im Alltag, Natur, Lesen/Schreiben, Familiensprache – nur mit Hilfesprache,
+  Helfen/Fragen, Bewegung, Gefühle), nach Klasse gefiltert, mit russischem Text; jeden Tag eine (pro Kind gleich), „Andere Idee“ höchstens 2-mal.
+- „Mein Ich“: Karte „🌍 Echte Welt (freiwillig)“ → „✅ Geschafft!“ → Erwachsene bestätigen mit der PIN (oder Kind hakt selbst ab, wenn Eltern es erlauben).
+- Lohn: 1 Stern, Lernfund „🌍 Echte Welt: …“ (grüne Frucht am Wissensbaum), Eintrag im Wochenbericht unter „🤝 Gemeinsam“.
+- Zeitsystem: Ist die Spielzeit vorbei oder für heute genug gespielt, wird die heutige Echte-Welt-Aufgabe statt einer Zufallsidee vorgeschlagen.
+- Elternbereich: Karte „🌍 Echte-Welt-Aufgaben“ (heutige Aufgabe, Schalter „Kind darf selbst abhaken“).
+- Bewusst keine zusätzliche Spielzeit als Lohn (Bildschirmzeit soll nicht durch Offline-Aktivität „verdient“ werden).
+
+**Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**
 

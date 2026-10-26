@@ -60,6 +60,16 @@
   .erzaehl { margin: 10px 0 0; font-size: 1.05rem; font-weight: 600; color: var(--pflaume); }
   @keyframes fund-rein { from { transform: scale(.85); opacity: 0; } }
 
+  /* Echte Welt */
+  .ew-aufgabe { display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: center; padding: 12px; border-radius: 20px; background: #EEF7E6; }
+  .ew-aufgabe .emoji { font-size: 2.6rem; width: 64px; height: 64px; display: grid; place-items: center; border-radius: 18px; background: #fff; }
+  .ew-aufgabe b { display: block; font-size: 1.2rem; line-height: 1.35; }
+  .ew-aufgabe .bereich { font-size: .95rem; color: var(--pflaume-hell); font-weight: 600; }
+  .ew-aufgabe .ru { display: block; margin-top: 4px; padding: 4px 10px; border-radius: 10px; background: #FFF6D6; font-size: 1rem; }
+  .ew-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .ew-knoepfe .knopf { min-height: 54px; flex: 1; min-width: 160px; }
+  .ew-fertig { margin: 10px 0 0; font-weight: 700; color: #2E9C5A; font-size: 1.15rem; }
+
   /* Gemeinsam */
   .gemeinsam-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
   .gemeinsam-knoepfe .knopf { min-height: 58px; text-decoration: none; flex: 1; min-width: 200px; }
@@ -167,6 +177,10 @@
         <div class="tag-kopf"><h2>Tagesaufgaben</h2><p id="datum"></p></div>
         <div id="aufgaben"></div>
       </div>
+      <div class="karte ew-karte" id="ew-karte">
+        <div class="tag-kopf"><h2>🌍 Echte Welt</h2><p>freiwillig</p></div>
+        <div id="ew"></div>
+      </div>
       <div class="karte" id="heute-neu-karte">
         <h2>🌱 Heute neu</h2>
         <div id="heute-neu"></div>
@@ -217,6 +231,19 @@
   </div>
 </div>
 
+<div class="dialog" id="ew-dialog" hidden>
+  <div class="dkarte erklaer" role="dialog" aria-labelledby="ew-titel">
+    <h2 id="ew-titel">🌍 Geschafft?</h2>
+    <div class="erklaer-fund" id="ew-was"></div>
+    <div class="erwachsene">
+      <b>Für Erwachsene:</b> Hat das Kind die Aufgabe gemacht? Dann bestätige mit deiner PIN.
+      <div class="pin-zeile"><input id="ew-pin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="PIN"><button class="knopf haupt" id="ew-ok">✅ Ja, geschafft!</button></div>
+      <p class="fehler" id="ew-fehler"></p>
+    </div>
+    <button class="knopf" id="ew-zu">Später</button>
+  </div>
+</div>
+
 <div class="dialog" id="stufen-dialog" hidden>
   <div class="dkarte" role="dialog" aria-labelledby="stufen-titel">
     <h2 id="stufen-titel"></h2>
@@ -232,6 +259,7 @@
 <script src="../../shared/lernfunde.js"></script>
 <script src="../../shared/familie.js"></script>
 <script src="../../shared/sticker.js"></script>
+<script src="../../shared/echtewelt.js"></script>
 <script src="../../shared/zeit.js" data-art="lernen"></script>
 <script src="../../shared/sprache.js"></script>
 <script src="../../shared/woerter.js"></script>

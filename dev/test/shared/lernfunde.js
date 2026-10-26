@@ -13,7 +13,8 @@
     mathe: { e: "🦫", name: "Mathe" },
     deutsch: { e: "🦊", name: "Deutsch" },
     sachkunde: { e: "🦉", name: "Sachunterricht" },
-    tablet: { e: "🤖", name: "Tablet" }
+    tablet: { e: "🤖", name: "Tablet" },
+    welt: { e: "🌍", name: "Echte Welt" }
   };
   const pad = (n) => String(n).padStart(2, "0");
   const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;

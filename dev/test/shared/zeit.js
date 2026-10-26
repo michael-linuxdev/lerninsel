@@ -117,7 +117,11 @@
     ["🍳", "Hilf beim Kochen oder Tischdecken!"], ["🧱", "Bau den höchsten Turm, den du schaffst!"], ["🏃", "Spiel draußen Fangen oder Verstecken!"],
     ["🍂", "Sammle draußen 5 verschiedene Blätter!"], ["🗣️", "Erzähl jemandem, was du heute gelernt hast!"], ["🧩", "Mach ein Puzzle oder spiel ein Brettspiel!"]
   ];
-  const idee = () => { const [e, t] = IDEEN[Math.floor(Math.random() * IDEEN.length)]; return `<p style="font-size:1.25rem;background:#E3F7EF;border-radius:18px;padding:12px 16px;margin:12px 0"><span style="font-size:2rem;vertical-align:middle">${e}</span> <b>Idee für jetzt:</b> ${t}</p>`; };
+  const idee = () => {
+    // Die Echte-Welt-Aufgabe des Tages hat Vorrang (shared/echtewelt.js), sonst eine zufällige Idee
+    const ew = window.EchteWelt && window.EchteWelt.heutige();
+    if (ew && !ew.erledigt) return `<p style="font-size:1.2rem;background:#E3F7EF;border-radius:18px;padding:12px 16px;margin:12px 0"><span style="font-size:2rem;vertical-align:middle">${ew.e}</span> <b>Deine Echte-Welt-Aufgabe:</b> ${ew.text}</p>`;
+    const [e, t] = IDEEN[Math.floor(Math.random() * IDEEN.length)]; return `<p style="font-size:1.25rem;background:#E3F7EF;border-radius:18px;padding:12px 16px;margin:12px 0"><span style="font-size:2rem;vertical-align:middle">${e}</span> <b>Idee für jetzt:</b> ${t}</p>`; };
   function zeigeSperre(st) {
     if (st.ruhe) {
       overlay(`<div style="font-size:4rem">🌙</div><h2 style="margin:6px 0">Die Insel schläft</h2>

@@ -255,6 +255,22 @@
       <div class="knoepfe"><button class="knopf haupt" id="i-speichern">Speichern</button></div>
     </div>`;
   }
+  // ---------- Echte-Welt-Aufgaben ----------
+  function echteWeltKarte() {
+    const e = (S.lade("eltern") || {}).echtewelt || {}, a = window.EchteWelt && EchteWelt.heutige();
+    return `<div class="karte">
+      <h2>🌍 Echte-Welt-Aufgaben</h2>
+      <p>Jeden Tag schlägt die App eine kurze, freiwillige Aufgabe weg vom Bildschirm vor (Rechnen im Alltag, Natur, Lesen, Familiensprache, Helfen, Bewegung, Gefühle).
+        Ist die Spielzeit vorbei, erscheint sie als Vorschlag. Geschafft bringt 1 Stern und einen Lernfund.</p>
+      ${a ? `<p><b>Heute:</b> ${a.e} ${a.text}${a.erledigt ? " ✅" : ""}</p>` : ""}
+      <label class="schalter-z"><input type="checkbox" id="ew-selbst" ${e.selbst ? "checked" : ""}> Das Kind darf Echte-Welt-Aufgaben selbst abhaken (sonst bestätigt ihr mit der PIN)</label>
+      <div class="knoepfe"><button class="knopf haupt" id="ew-speichern">Speichern</button></div>
+    </div>`;
+  }
+  function echteWeltKnoepfe() {
+    $("ew-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.echtewelt = { selbst: $("ew-selbst").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });
+  }
+
   function inselKnoepfe() {
     $("i-speichern").addEventListener("click", () => {
       const e = S.lade("eltern") || {};
@@ -353,6 +369,7 @@
       </div>
       ${zeitKarte()}
       ${inselKarte()}
+      ${echteWeltKarte()}
       <div class="karte">
         <h2>Kinder auf diesem Tablet</h2>
         <ul class="kinderliste">${S.kinder().map(k => `<li>${k.aktiv ? "👉 " : ""}<b>${k.name || "(noch ohne Namen)"}</b>${k.aktiv ? " – gerade aktiv" : ` <button class="knopf klein-k" data-wechsel="${k.id}">Wechseln</button>`}${S.kinder().length > 1 ? ` <button class="knopf klein-k" data-weg="${k.id}">Entfernen</button>` : ""}</li>`).join("")}</ul>
@@ -375,7 +392,7 @@
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
-    zeitKnoepfe(); inselKnoepfe();
+    zeitKnoepfe(); inselKnoepfe(); echteWeltKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";
