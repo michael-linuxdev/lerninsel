@@ -666,7 +666,7 @@ NACHBARN.forEach(n => {
 // Wächst mit allen Lernfunden seit Beginn (shared/lernfunde.js), jeder Fund von heute hängt als leuchtende Frucht daran.
 // Ohne Lernen passiert nichts Schlimmes: der Baum bleibt einfach, wie er ist (kein Welken, keine Strafe).
 const WB = new Vector3(P.wissensbaum[0], bodenY(P.wissensbaum[0], P.wissensbaum[1]), P.wissensbaum[1]);
-const FRUCHT = { mathe: "#2FA37C", deutsch: "#E0574A", sachkunde: "#1F8F8A", tablet: "#2F86C8", welt: "#8BC34A" };
+const FRUCHT = { mathe: "#2FA37C", deutsch: "#E0574A", sachkunde: "#1F8F8A", tablet: "#2F86C8", welt: "#8BC34A", schach: "#7B55B8" };
 const wissen = (() => {
   const L = window.Lernfunde; if (!L) return null;
   const info = L.baum(), funde = L.heute();
@@ -744,6 +744,22 @@ truhe.add(setze(teil(new BoxGeometry(0.9, 0.5, 0.6), "#B9732E"), 0, 0.25, 0));
 const deckel = teil(new CylinderGeometry(0.3, 0.3, 0.9, 16, 1, false, 0, Math.PI), "#C98A3E"); deckel.rotation.z = Math.PI / 2; setze(deckel, 0, 0.5, 0); truhe.add(deckel);
 truhe.add(setze(teil(new BoxGeometry(0.16, 0.2, 0.05), "#FFC83D", { dicke: 1.1 }), 0, 0.45, 0.32));
 antippbar(truhe, () => spielOrt(() => profi() ? sprechblase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", S.paar(["", "На острове сокровищ ждёт сундук. Найдёшь его?"])[1], "insel.html") : fuehrerscheinFehlt()), ["🔓", "Öffnen"]);
+
+// ---------- Schachtisch mit Schildkröte Tilda (Lernen, daher auch ohne Spielzeit) ----------
+{
+  const [x, z, d] = P.schach, g = new Group(); g.position.set(x, bodenY(x, z), z); g.rotation.y = d; scene.add(g); block(x, z, 1.1);
+  g.add(setze(teil(new CylinderGeometry(0.12, 0.18, 0.75, 10), "#8A5A34"), 0, 0.37, 0));
+  g.add(setze(teil(new BoxGeometry(1.2, 0.1, 1.2), "#B98A55"), 0, 0.78, 0));
+  for (let a = 0; a < 4; a++) for (let c = 0; c < 4; c++) g.add(setze(new Mesh(new BoxGeometry(0.25, 0.02, 0.25), mat((a + c) % 2 ? "#5C3A21" : "#F3E3C3")), -0.375 + a * 0.25, 0.84, -0.375 + c * 0.25));
+  [[-0.25, 0.25, "#FFFFFF"], [0.25, -0.25, "#2E2240"]].forEach(([px, pz, f]) => { g.add(setze(teil(new CylinderGeometry(0.06, 0.09, 0.22, 10), f), px, 0.96, pz)); g.add(setze(teil(kugel(0.07, 10, 8), f), px, 1.1, pz)); });
+  // Tilda, die Schildkröte
+  const t = new Group(); t.position.set(0.95, 0, 0.2); t.rotation.y = -1.2; g.add(t);
+  const panzer = teil(new SphereGeometry(0.42, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), "#4FAF62"); panzer.scale.set(1, 0.85, 1.15); setze(panzer, 0, 0.18, 0); t.add(panzer);
+  t.add(setze(teil(new CylinderGeometry(0.43, 0.43, 0.08, 18), "#E8D9A0"), 0, 0.17, 0));
+  const kopf = new Group(); kopf.position.set(0, 0.32, 0.5); t.add(kopf); kopf.add(teil(kugel(0.17, 14, 10), "#8FD06A")); augen(kopf, 0.07, 0.04, 0.14, 0.035);
+  [[-0.3, 0.35], [0.3, 0.35], [-0.3, -0.35], [0.3, -0.35]].forEach(([fx, fz]) => t.add(setze(teil(kugel(0.1, 10, 8), "#8FD06A"), fx, 0.07, fz)));
+  antippbar(g, () => sprechblase("🐢", "Tilda am Schachtisch", `Hallo ${name}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, S.paar(["", "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?"])[1], "../schach/"), ["♟️", "Schach"], 2.4);
+}
 
 // ---------- Neue Minispiel-Orte: öffnen sich, wenn der Wissensbaum wächst ----------
 function schildSprite(text) {

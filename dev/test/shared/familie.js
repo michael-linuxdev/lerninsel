@@ -14,5 +14,5 @@
     const [y, m, t] = heute().split("-").map(Number), ab = iso(new Date(y, m - 1, t - n + 1));
     return lade().momente.filter(x => x.d >= ab);
   }
-  window.Familie = { merke, letzteTage, alle: () => lade().momente.slice(), ART: { erklaert: ["🗣️", "Erklärt"], duell: ["🧮", "Kopfrechen-Duell"], welt: ["🌍", "Echte Welt"] } };
+  window.Familie = { merke, letzteTage, alle: () => lade().momente.slice(), ART: { erklaert: ["🗣️", "Erklärt"], duell: ["🧮", "Kopfrechen-Duell"], welt: ["🌍", "Echte Welt"], schach: ["♟️", "Schach zu zweit"] } };
 })();

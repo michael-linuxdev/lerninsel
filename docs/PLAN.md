@@ -434,6 +434,15 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
   Barometer nur mit Freigabe. Keine Sterne für Gefühle, nur Erfahrung fürs Mitmachen.
 - Weiter in 8b: Schach, eigene Stärken (Spiegel), soziale Bildergeschichten, Malen/Musik.
 
+**Nachtrag 26.10.2026 – 8b: Schach mit Schildkröte Tilda**
+- `spiele/schach/`: `regeln.js` (Zuggenerator, Schach/Matt/Patt, freundliche KI in 3 Stufen; vereinfacht ohne Rochade und en passant,
+  Bauer wird Dame; im Node-Test geprüft) und `schach.js` (Brett mit Antippen, grüne Zielpunkte, letzter Zug, Schach rot).
+- **Figuren kennenlernen:** 6 Lektionen (Turm, Läufer, Dame, König, Springer, Bauer) – mit der Figur alle Sterne einsammeln; je Lektion 1 ⭐ beim ersten Mal und ein Lernfund.
+- **Matt in 1:** 9 Rätsel (per Skript geprüft), falscher Zug wird zurückgestellt; alle gelöst = Lernfund.
+- **Spielen:** gegen Tilda leicht/mittel/schwer (erster Sieg je Stufe: Sterne + Lernfund), **zu zweit** mit Eltern (Brett drehbar), zählt als gemeinsamer Moment.
+- Zählt als Lernzeit; Startseiten-Kachel „Schach“ und Schachtisch mit Tilda auf der Insel/in jeder Welt (auch ohne Spielzeit erreichbar).
+- Weiter in 8b: eigene Stärken (Spiegel), soziale Bildergeschichten, Malen/Musik.
+
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**

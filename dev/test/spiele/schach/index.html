@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Schach mit Tilda</title>
+<meta name="theme-color" content="#EAF6E8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #EAF6E8; background-image: none; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .seite { max-width: 1000px; margin: 0 auto; padding: 14px 16px 40px; display: grid; gap: 16px; }
+  .karte { background: #fff; border-radius: 28px; padding: 18px; box-shadow: 0 8px 0 rgba(46,156,90,.12); }
+  .karte h2 { margin: 0 0 10px; font-size: 1.4rem; }
+  .tilda { display: flex; gap: 12px; align-items: center; }
+  .tilda .e { font-size: 3.4rem; }
+  .tilda p { margin: 0; font-size: 1.2rem; font-weight: 500; }
+  .kacheln { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .kachel { border-radius: 22px; padding: 12px 8px; min-height: 104px; display: grid; justify-items: center; align-content: center; gap: 4px; font-size: 1.1rem; font-weight: 700; color: var(--pflaume); background: #F3FAF1; box-shadow: inset 0 0 0 3px #CFEBCB; }
+  .kachel .e { font-size: 2.6rem; line-height: 1; }
+  .kachel small { font-weight: 600; font-size: .9rem; color: #2E9C5A; }
+  .kachel.fertig { background: #E3F7EF; }
+  .kachel.klein { min-height: 80px; }
+  .knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
+  .knoepfe .knopf { min-height: 60px; flex: 1; min-width: 150px; }
+  .spiel { display: grid; grid-template-columns: minmax(0, 560px) 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .spiel { grid-template-columns: 1fr; } }
+  #brett { display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); width: 100%; max-width: min(560px, calc(100dvh - 190px)); aspect-ratio: 1; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 6px #8A5A34, 0 10px 0 6px rgba(0,0,0,.12); margin: 0 auto; transition: transform .5s; }
+  #brett.gedreht { transform: rotate(180deg); }
+  #brett.gedreht .f span, #brett.gedreht .f small { transform: rotate(180deg); }
+  .f { position: relative; border-radius: 0; display: grid; place-items: center; overflow: hidden; min-width: 0; font-size: clamp(1.8rem, 6.4vw, 3rem); line-height: 1; padding: 0; min-height: 0; }
+  .f.hell { background: #F3E3C3; } .f.dunkel { background: #B98A55; }
+  .f.wahl { box-shadow: inset 0 0 0 5px #FFC83D; }
+  .f.ziel::after { content: ""; width: 28%; height: 28%; border-radius: 50%; background: rgba(46,156,90,.65); }
+  .f.schlag { box-shadow: inset 0 0 0 5px rgba(46,156,90,.75); }
+  .f.letzt { background-image: linear-gradient(rgba(255,216,77,.35), rgba(255,216,77,.35)); }
+  .f.schach { box-shadow: inset 0 0 0 6px #E0574A; }
+  .f .weiss { color: #fff; -webkit-text-stroke: 1.5px #3b1f63; paint-order: stroke fill; text-shadow: 0 2px 0 rgba(0,0,0,.2); }
+  .f .schwarz { color: #2E2240; }
+  .f .stern { font-size: .7em; } .f .stern.klein { position: absolute; right: 2px; top: 2px; font-size: .35em; }
+  .f .zahl { position: absolute; left: 3px; top: 2px; font-size: .75rem; opacity: .6; }
+  .f .buchst { position: absolute; right: 4px; bottom: 2px; font-size: .75rem; opacity: .6; }
+  .seitenleiste { display: grid; gap: 12px; }
+  .seitenleiste .knopf { min-height: 58px; }
+  .klein-t { font-size: 1rem; color: var(--pflaume-hell); margin: 0; }
+  .zeile { display: flex; gap: 8px; align-items: center; font-weight: 600; }
+  .zeile input { width: 24px; height: 24px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../../" aria-label="Zur Startseite">🏠</a>
+  <h1 id="kopf">♟️ Schach mit Tilda</h1>
+  <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
+</div>
+<main class="seite">
+  <div class="karte"><div class="tilda"><span class="e" aria-hidden="true">🐢</span><p id="tilda-text"></p></div></div>
+  <section id="auswahl">
+    <div class="karte"><h2>1. Figuren kennenlernen</h2><p class="klein-t" style="margin-bottom:10px">Jede Figur zieht anders. Sammle mit ihr alle Sterne!</p><div class="kacheln" id="lektionen"></div></div>
+    <div class="karte" style="margin-top:16px"><h2>2. Rätsel: Matt in 1</h2><p class="klein-t" style="margin-bottom:10px">Weiß zieht – und der schwarze König kann nicht mehr entkommen.</p><div class="kacheln" id="raetsel"></div></div>
+    <div class="karte" style="margin-top:16px"><h2>3. Spielen</h2>
+      <div class="knoepfe">
+        <button class="knopf" data-ki="1">🐢 Tilda (leicht)</button>
+        <button class="knopf" data-ki="2">🐢 Tilda (mittel)</button>
+        <button class="knopf" data-ki="3">🐢 Tilda (schwer)</button>
+        <button class="knopf haupt" id="zu-zweit">👨‍👧 Zu zweit (mit Mama oder Papa)</button>
+      </div>
+      <p class="klein-t" id="ki-zahl" style="margin-top:8px"></p>
+      <p class="klein-t" style="margin-top:6px">Einfache Regeln für den Anfang: ohne Rochade und „en passant“, ein Bauer am Ende wird zur Dame.</p>
+    </div>
+  </section>
+  <section id="spiel" hidden>
+    <div class="spiel">
+      <div id="brett" role="grid" aria-label="Schachbrett"></div>
+      <div class="seitenleiste">
+        <div class="karte"><h2 id="spiel-titel"></h2>
+          <label class="zeile" id="drehen-zeile" hidden><input type="checkbox" id="drehen"> Brett für Schwarz drehen (gegenüber sitzen)</label>
+        </div>
+        <button class="knopf haupt" id="nochmal" hidden>➡️ Weiter / Nochmal</button>
+        <button class="knopf" id="zurueck">⬅️ Zur Auswahl</button>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/sticker.js"></script>
+<script src="../../shared/familie.js"></script>
+<script src="../../shared/echtewelt.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="regeln.js"></script>
+<script src="schach.js"></script>
+<script>document.getElementById("sterne").textContent = Spielwelt.sterne();</script>
+</body>
+</html>
