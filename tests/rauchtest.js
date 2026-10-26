@@ -49,8 +49,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       await w.goto(BASIS); await w.waitForTimeout(600);
       const anzahl = await w.$$eval(".wer-kind", x => x.length);
       if (anzahl !== 2) fehler.push(`wer spielt: ${anzahl} statt 2 Kinder`);
-      await w.click(".wer-kind >> nth=0"); await w.waitForTimeout(500);
-      const name = await w.evaluate(() => Spielwelt.profil.name);
+      await w.click(".wer-kind >> nth=0"); await w.waitForTimeout(500); await w.waitForLoadState("load");
+      // die Seite kann sich nach der Wahl einmal neu laden – dann einfach nochmal fragen
+      const name = await w.evaluate(() => Spielwelt.profil.name).catch(async () => { await w.waitForLoadState("load"); await w.waitForTimeout(500); return w.evaluate(() => Spielwelt.profil.name); });
       if (name !== "Testkind") fehler.push(`wer spielt: falsches Kind aktiv (${name})`);
       await w.close();
     }

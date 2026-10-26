@@ -53,7 +53,12 @@
   // kannte die Insel bereits: Etappe E1 (Ankunft) gilt als erledigt, der Prolog kommt nur, wenn die Eltern ihn neu starten.
   if (!istObjekt(S.profil.daten.story)) {
     const st = lade(), m = S.profil.daten.medien;
-    if (m && m.fuehrerschein) st.etappen.E1 = heute();
+    if (m && m.fuehrerschein) {
+      st.etappen.E1 = st.etappen.E2 = heute();   // kannte Insel und „Erst lernen, dann spielen“ schon
+      st.gesehen.push("sonne");                   // (ohne Chronik-Eintrag: die Szene wurde nie gezeigt)
+      const lf = S.profil.daten.lernfunde;
+      if (lf && (lf.summe > 0 || Object.keys(lf.tage || {}).length)) { st.etappen.E3 = heute(); st.kapitel = Math.max(st.kapitel, 1); }
+    }
     speichere(st);
   }
 
@@ -101,6 +106,9 @@
       st.kapitel = n; speichere(st); melde("kapitel", { n }); return true;
     },
     etappe: (id) => !!lade().etappen[id],
+    // Höchstens zwei neue Etappen am Tag (KONZEPT, Tutorial-Grundsatz 4) – die ersten Tage sollen nicht zu voll werden
+    neuHeute: () => Object.values(lade().etappen).filter(x => x === heute()).length,
+    darfNeueEtappe: () => Story.neuHeute() < 2,
     etappeFertig(id) {
       if (!/^E\d{1,2}$/.test(id)) return false;
       const st = lade(); if (st.etappen[id]) return false;

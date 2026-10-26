@@ -129,6 +129,8 @@
     wk.textContent = (letzte ? TEXTE.fertig.de : TEXTE.weiter.de) + (letzte ? "" : " ▶");
     const hw = hilfeText(letzte ? TEXTE.fertig : TEXTE.weiter); wk.title = hw ? hw.text : "";
     $("szene-punkte").innerHTML = aktiv.def.blasen.map((_, i) => `<span class="${i === aktiv.nr ? "da" : ""}"></span>`).join("");
+    // Etwas passiert in der Welt, sobald die Blase erscheint (z. B. der Nebel weicht)
+    if (typeof b.beim === "function") { try { b.beim(); } catch (e) { console.warn(e); } }
     // Zeigehand
     if (b.zeige && window.Zeige) {
       const z = b.zeige, istOpt = z && typeof z === "object" && !(z instanceof Element) && "ziel" in z;

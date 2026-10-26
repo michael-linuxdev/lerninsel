@@ -63,7 +63,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
 
     // 2) Zweiter Besuch: kein Prolog
     await p.goto(INSEL); await p.waitForTimeout(2500);
-    erwarte(await p.evaluate(() => !__szene.aktuell()), `zweiter Besuch: kein Prolog (${lage})`);
+    erwarte(await p.evaluate(() => !__szene.aktuell() || __szene.aktuell().id !== "prolog"), `zweiter Besuch: kein Prolog (${lage})`);
+    await p.evaluate(() => { if (__szene.aktuell()) Szene.abbrechen(); });
 
     if (lage === "quer") {
       // 3) Bei Robo Pixel wiederholen
@@ -108,7 +109,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       await alt.evaluate(() => { const k = Spielwelt.vorsilbe + "profil.v1", pr = JSON.parse(localStorage.getItem(k)); delete pr.daten.story; pr.stand = Date.now() + 60000; localStorage.setItem(k, JSON.stringify(pr)); });
       await alt.goto(INSEL); await alt.waitForTimeout(2500);
       const r = await alt.evaluate(() => ({ e1: Story.etappe("E1"), szene: __szene.aktuell() }));
-      erwarte(r.e1 && !r.szene, "altes Kind mit Führerschein bekommt keinen Prolog (E1 gilt als erledigt)");
+      erwarte(r.e1 && (!r.szene || r.szene.id !== "prolog"), "altes Kind mit Führerschein bekommt keinen Prolog (E1 gilt als erledigt)");
       await alt.close();
     }
     await ctx.close();

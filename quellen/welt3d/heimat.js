@@ -4,7 +4,7 @@
 // Test-Parameter: ?stunde=21  ?monat=12  (Jahreszeit/Nacht ausprobieren)
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Color, Fog, HemisphereLight, DirectionalLight, Clock, SRGBColorSpace,
-  PCFSoftShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide,
+  PCFSoftShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide, DoubleSide,
   CylinderGeometry, SphereGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry, PlaneGeometry,
   LatheGeometry, ExtrudeGeometry, Shape, Vector2, Vector3, DataTexture, RedFormat, NearestFilter, InstancedMesh,
   Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, BufferAttribute, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
@@ -260,7 +260,66 @@ const STEG = { x: 3.2, z0: UFER - 2.2, z1: UFER + 2.4 };
   deko.add(setze(teil(new CylinderGeometry(0.05, 0.05, 1.5, 6), "#9A6A3F"), STEG.x + 1.55, 0.4, STEG.z1 - 0.4));
   deko.add(setze(teil(new BoxGeometry(0.04, 0.32, 0.5), "#FFC83D"), STEG.x + 1.55, 0.98, STEG.z1 - 0.15));
 }
+// ---------- Sonnenuhr am Steg (NA-13): dunkel ohne Spielzeit, hell mit Spielzeit ----------
+// „Die Sonne für die Spielorte – sie geht auf, wenn du gelernt hast.“ Fortschritt des Lernblocks färbt die Sonne langsam gelb.
+const SU = { x: STEG.x + 2.1, z: Math.min(RMAX_LAUF - 1.1, STEG.z0 + 0.6) };
+{
+  const y = bodenY(SU.x, SU.z);
+  deko.add(setze(teil(new CylinderGeometry(0.42, 0.5, 0.7, 14), "#D9CDB8"), SU.x, y + 0.35, SU.z));
+  deko.add(setze(teil(new CylinderGeometry(0.62, 0.62, 0.08, 20), "#F3E9D8"), SU.x, y + 0.74, SU.z));
+  const zeiger = teil(new BoxGeometry(0.06, 0.4, 0.5), "#9A6A3F"); zeiger.rotation.x = -0.6; deko.add(setze(zeiger, SU.x, y + 0.92, SU.z));
+  deko.add(setze(teil(new CylinderGeometry(0.04, 0.04, 0.8, 6), "#9A6A3F"), SU.x - 0.5, y + 1.1, SU.z));
+  block(SU.x, SU.z, 0.6);
+}
 verschmelze(deko);
+const sonnenMat = new MeshBasicMaterial({ color: "#7E7A92" });
+const uhrSonne = setze(new Mesh(kugel(0.22, 16, 12), sonnenMat), SU.x - 0.5, bodenY(SU.x, SU.z) + 1.6, SU.z); scene.add(uhrSonne);
+const SONNE_DUNKEL = new Color("#7E7A92"), SONNE_HELL = new Color("#FFC83D");
+// Zustand für die Sonnenuhr: hell 0…1 (1 = Spielzeit), genug = für heute genug gespielt
+function sonnenuhr() {
+  const Zt = window.Zeit; if (!Zt) return { hell: 1, spielen: true, genug: false };
+  const st = Zt.status();
+  return { hell: st.spielen ? 1 : st.genug ? 0 : Math.round(st.fortschritt * 100) / 100, spielen: st.spielen, genug: st.genug };
+}
+function zeigeSonnenuhr() { const u = sonnenuhr(); sonnenMat.color.copy(SONNE_DUNKEL).lerp(SONNE_HELL, u.spielen ? 1 : u.hell * 0.6); uhrSonne.scale.setScalar(u.spielen ? 1.25 : 1); }
+zeigeSonnenuhr(); setInterval(zeigeSonnenuhr, 5000);
+
+// ---------- Nebelrand (NA-13): die Insel liegt im Nebel, der Wissensbaum vertreibt ihn ----------
+// Stufe = höchstes von Kapitel und Lernfunden (1 / 5 / 15 Funde) → bestehende Kinder mit vielen Funden sehen keinen Nebel.
+// Kostet höchstens 1 Zeichenaufruf (ein Nebelband über dem Wasser) plus die Szene-Fog-Werte.
+const NEBEL = [ { near: 16, far: 44, r: UFER + 3.2, a: 0.85 }, { near: 21, far: 54, r: UFER + 7, a: 0.6 }, { near: 26, far: 66, r: UFER + 12, a: 0.35 }, { near: 32, far: 80, r: 0, a: 0 } ];
+function nebelStufe() {
+  const St = window.Story; if (!St) return 3;
+  // Lernfunde zählen erst, wenn Ella den Wissensbaum erklärt hat (E3) – so sieht ein neues Kind den Nebel weichen
+  const n = St.etappe("E3") && window.Lernfunde ? window.Lernfunde.gesamt() : 0;
+  return Math.min(3, Math.max(St.kapitel(), n >= 15 ? 3 : n >= 5 ? 2 : n >= 1 ? 1 : 0));
+}
+let nebelJetzt = nebelStufe(), nebelBasis = { near: 32, far: 80 }, nebelDrinnen = false;
+const nebelBand = (() => {
+  const g = new CylinderGeometry(1, 1, 1.6, EINFACH ? 32 : 64, 1, true), farben = [];
+  const pos = g.attributes.position; for (let i = 0; i < pos.count; i++) { const unten = pos.getY(i) < 0; farben.push(1, 1, 1, unten ? 1 : 0); }
+  g.setAttribute("color", new Float32BufferAttribute(farben, 4)); g.translate(0, 0.8, 0);
+  const m = new Mesh(g, new MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, side: DoubleSide, fog: false }));
+  m.position.y = -0.55; m.renderOrder = 2; scene.add(m); return m;
+})();
+function wendeNebelAn() {
+  const n = NEBEL[nebelJetzt];
+  scene.fog.near = Math.min(nebelBasis.near, n.near); scene.fog.far = Math.min(nebelBasis.far, n.far);
+  nebelBand.visible = n.a > 0 && !nebelDrinnen; if (n.a > 0) { nebelBand.scale.set(n.r, 1, n.r); nebelBand.material.opacity = n.a; }
+}
+wendeNebelAn();
+// Der Nebel weicht (z. B. nach der ersten Frucht): sanft über 3 Sekunden, zeitabhängig
+function nebelWeicht() {
+  const ziel = nebelStufe(); if (ziel <= nebelJetzt) return false;
+  const von = NEBEL[nebelJetzt], nach = NEBEL[ziel], t0 = performance.now();
+  const schritt = () => {
+    const f = Math.min(1, (performance.now() - t0) / 3000), e = f * f * (3 - 2 * f);
+    scene.fog.near = Math.min(nebelBasis.near, MathUtils.lerp(von.near, nach.near, e)); scene.fog.far = Math.min(nebelBasis.far, MathUtils.lerp(von.far, nach.far, e));
+    const r = MathUtils.lerp(von.r || UFER + 16, nach.r || UFER + 16, e); nebelBand.scale.set(r, 1, r); nebelBand.material.opacity = MathUtils.lerp(von.a, nach.a, e);
+    if (f < 1) requestAnimationFrame(schritt); else { nebelJetzt = ziel; wendeNebelAn(); }
+  };
+  schritt(); return true;
+}
 
 // ---------- Haus ----------
 let hausObj = null, prolog = null;   // prolog: läuft gerade die Ankunft (NA-11)?
@@ -317,7 +376,8 @@ function wendeWetterAn(w) {
   sonne.intensity = SONNE_BASIS * ({ wolken: 0.7, nebel: 0.6, regen: 0.5, gewitter: 0.4, schnee: 0.75 }[art] || 1);
   const grau = { wolken: "#B7C7D3", nebel: "#C9D1D6", regen: "#8FA2B2", gewitter: "#6C7A8C", schnee: "#D5DEE6" }[art];
   if (grau && !NACHT) { scene.background = new Color(grau); scene.fog.color.set(grau); }
-  if (art === "nebel") { scene.fog.near = 6; scene.fog.far = 34; } else if (art === "regen" || art === "gewitter" || art === "schnee") { scene.fog.near = 18; scene.fog.far = 60; }
+  nebelBasis = art === "nebel" ? { near: 6, far: 34 } : art === "regen" || art === "gewitter" || art === "schnee" ? { near: 18, far: 60 } : { near: 32, far: 80 };
+  wendeNebelAn();
   if (["wolken", "regen", "gewitter", "nebel", "schnee"].includes(art)) wolken.forEach(wo => wo.children.forEach(k => k.material.color.set(NACHT ? "#4E5B80" : art === "gewitter" ? "#7D8796" : "#C4CCD4")));
   if (art === "klar") wolken.forEach((wo, i) => { wo.visible = i < 2; });
   if ((art === "regen" || art === "gewitter") && !regen) {
@@ -1082,6 +1142,7 @@ function reingehen() {
   ich.position.set(ZX, 0.25, 2.2); ich.rotation.y = Math.PI;
   if (tier) tier.position.set(ZX + 1.2, 0.25, 2.6);
   scene.background = new Color("#F7E3C6"); scene.fog.color.set("#F7E3C6"); wasser.visible = false; wolken.forEach(w => w.visible = false);
+  nebelDrinnen = true; nebelBand.visible = false; scene.fog.near = 32; scene.fog.far = 80;
   $("info").textContent = "Dein Zimmer. Kleiderschrank, Spiegel – oder richte es mit 🛋️ ein!";
   S.ton("tipp");
 }
@@ -1091,6 +1152,7 @@ function rausgehen() {
   ich.position.set(tx, bodenY(tx, tz), tz); ich.rotation.y = hr;
   if (tier) tier.position.set(tx + 1.1, bodenY(tx + 1.1, tz + 0.4), tz + 0.4);
   scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true);
+  nebelDrinnen = false; wendeNebelAn();
   $("info").textContent = spielZeit() ? `Hallo ${name}!` : "🌱 Erst lernen: Geh zu Ella, Fipsi oder Benno.";
   if (wetter) { wendeWetterAn(wetter); zeigeWetterInfo(); }
   S.ton("tipp");
@@ -1514,6 +1576,43 @@ function starteProlog(wiederholen) {
 // Neues Kind: beim ersten Besuch (nicht wenn die Seite direkt im Zimmer startet)
 if (window.Story && !window.Story.etappe("E1") && q.get("drinnen") !== "1" && !q.has("szene")) setTimeout(() => starteProlog(false), 700);
 
+// ---------- Tutorial E2 „Erst lernen“, Szene „Sonne geht auf“, E3 „Erste Frucht“ (= Kapitel 1) (NA-13) ----------
+// Reihenfolge und Auslöser aus KONZEPT „Etappen“; höchstens zwei neue Etappen am Tag; nur draußen auf der Insel.
+function spieleStory(id) {
+  const Sz = window.Szene, St = window.Story, def = Sz && Sz.def(id); if (!def) return;
+  const b = def.blasen, I = window.Insel;
+  if (id === "erst-lernen") { b[0].zeige = I.ort("sonnenuhr"); b[2].zeige = I.ort("eule"); }
+  if (id === "sonne") { b[0].zeige = I.ort("sonnenuhr"); b[0].beim = zeigeSonnenuhr; }
+  if (id === "erste-frucht") { b[0].zeige = I.ort("wissensbaum"); b[2].beim = () => { St.setzeKapitel(1); nebelWeicht(); }; }
+  storyLaeuft = true;
+  Sz.spiele(def).then(() => {
+    storyLaeuft = false;
+    if (def.etappe) St.etappeFertig(def.etappe);
+    if (def.kapitel) St.setzeKapitel(def.kapitel);
+    nebelWeicht();
+    setTimeout(naechsteStory, 1200);
+  });
+}
+let storyLaeuft = false;
+function naechsteStory() {
+  const St = window.Story, Sz = window.Szene;
+  if (!St || !Sz || prolog || drinnen || storyLaeuft || Sz.laeuft || !St.etappe("E1") || q.has("szene")) return;
+  const Zt = window.Zeit, st = Zt ? Zt.status() : { frei: true, spielen: true }, frei = st.frei;
+  if (!St.etappe("E2")) {
+    if (frei) St.etappeFertig("E2");   // ohne Zeit-Regeln gibt es nichts zu erklären
+    else if (St.darfNeueEtappe()) return spieleStory(st.spielen ? "sonne" : "erst-lernen");
+  }
+  if (St.etappe("E2") && st.spielen && !frei && !St.gesehen("sonne")) return spieleStory("sonne");
+  if (!St.etappe("E3") && window.Lernfunde && window.Lernfunde.gesamt() >= 1 && St.darfNeueEtappe()) return spieleStory("erste-frucht");
+}
+setTimeout(naechsteStory, 900);
+setInterval(naechsteStory, 5000);   // z. B. wenn die Spielzeit beginnt, während das Kind auf der Insel ist
+antippbar(uhrSonne, () => {
+  const u = sonnenuhr();
+  sprechblase("robo", "Die Sonnenuhr", u.spielen ? "Die Sonne scheint: Jetzt ist Spielzeit! Die Spielorte sind wach." : u.genug ? "Die Sonne ist untergegangen. Für heute ist genug gespielt – morgen geht sie wieder auf." : `Die Sonne ist noch dunkel. Lerne bei Ella, Fipsi oder Benno – dann geht sie auf. Schon ${Math.round(u.hell * 100)} Prozent geschafft!`,
+    S.paar(["", u.spielen ? "Солнце светит: сейчас время игры!" : u.genug ? "Солнце село. На сегодня хватит игр – завтра оно снова встанет." : "Солнце ещё тёмное. Поучись у Эллы, Фипси или Бенно – и оно встанет."])[1], null);
+}, ["☀️", "Ansehen"], 1.9);
+
 // ---------- Bildschirm-Punkte für Szenen und Zeigehand (NA-10) ----------
 const _bp = new Vector3();
 function bildschirm(x, y, z) {
@@ -1523,8 +1622,11 @@ function bildschirm(x, y, z) {
 }
 const ORTE = {
   ich: () => [ich.position.x, ich.position.y + 1.4, ich.position.z],
+  sonnenuhr: () => [uhrSonne.position.x, uhrSonne.position.y, uhrSonne.position.z],
+  wissensbaum: () => [WB.x, WB.y + 1.6, WB.z],
+  eule: () => { const n = NACHBARN.find(x => x.e === "eule"); return [n.obj.position.x, n.obj.position.y + 1.6, n.obj.position.z]; },
   haus: () => [P.haus[0], bodenY(P.haus[0], P.haus[1]) + 1.2, P.haus[1]]
 };
 // Insel.ort("haus") liefert eine Funktion für Zeige.auf(); Insel.bildschirm(x, y, z) rechnet einen 3D-Punkt um
 window.Insel = { bildschirm, ort: (name) => () => (ORTE[name] && !drinnen ? bildschirm(...ORTE[name]()) : null), ORTE: Object.keys(ORTE) };
-window.__heimat = { bildschirm, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { bildschirm, sonnenuhr, su: SU, nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
