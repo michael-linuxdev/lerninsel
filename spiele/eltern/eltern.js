@@ -56,22 +56,52 @@
       <p class="klein">Alles bleibt nur auf diesem Tablet.</p>
       <label>Vorname (so wird das Kind begrüßt)<input id="e-name" maxlength="20" autocomplete="off" autocapitalize="words" value="${(S.profil.name || "").replace(/"/g, "&quot;")}"></label>
       <div class="zwei">
-        <label>Alter<select id="e-alter">${option([5, 6, 7, 8, 9, 10, 11].map(n => [n, n + " Jahre"]), k.alter)}</select></label>
-        <label>Klasse<select id="e-klasse">${option([1, 2, 3, 4].map(n => [n, n + ". Klasse"]), k.klasse)}</select></label>
+        <label>Alter<select id="e-alter">${option([4, 5, 6, 7, 8, 9, 10, 11].map(n => [n, n + " Jahre"]), k.alter)}</select></label>
+        <label>Stufe<select id="e-stufe">${option(S.STUFEN.map(x => [x.code, x.name]), k.stufe)}</select></label>
       </div>
+      <p class="hinweis" id="e-stufe-hinweis" hidden></p>
       <div class="zwei">
+        <label>Bundesland (Lehrplan)<select id="e-land">${option(S.LAENDER.map(x => [x.code, x.name]), k.land)}</select></label>
         <label>Ansprache in der App<select id="e-geschlecht">${option(ANSPRACHE, k.geschlecht)}</select></label>
-        <label>Hilfesprache (Muttersprache)<select id="e-sprache">${option(SPRACHEN, k.hilfesprache)}</select></label>
       </div>
+      <p class="hinweis" id="e-land-hinweis" hidden></p>
+      <div class="zwei">
+        <label>Muttersprache (zu Hause)<select id="e-mutter">${option(S.MUTTERSPRACHEN, k.muttersprache)}</select></label>
+        <label>Deutsch-Kenntnisse<select id="e-deutsch">${option(S.DEUTSCHSTAND.map(x => [x.code, x.name]), k.deutschstand)}</select></label>
+      </div>
+      <p class="klein" id="e-deutsch-text" style="margin-top:-8px"></p>
+      <label>Hilfesprache in der App<select id="e-sprache">${option(SPRACHEN, k.hilfesprache)}</select></label>
+      <p class="klein" id="e-sprache-text" style="margin-top:-8px"></p>
       <label>Ort für das Wetter auf der Insel (optional)<input id="e-ort" maxlength="40" autocomplete="off" placeholder="z. B. Dresden" value="${((k.ort || {}).name || "").replace(/"/g, "&quot;")}"></label>
       <p class="klein" style="margin-top:-8px">Nur der Ortsname, kein GPS. Die Insel fragt damit das Wetter bei Open-Meteo ab.</p>
-      <label>Bundesland (Lehrplan)<select id="e-land">${option(LAENDER.concat([["", "Andere Bundesländer folgen", true]]), k.land || "sachsen")}</select></label>
       <p class="hinweis" id="e-empf"></p>
       <p class="fehler" id="e-fehler"></p>
       <div class="knoepfe"><button class="knopf haupt" id="e-ok">${bearbeiten ? "Speichern" : "Fertig – los geht's"}</button>${bearbeiten ? `<button class="knopf" id="e-zurueck">Abbrechen</button>` : ""}</div>
     </div>`;
     const empf = () => { $("e-empf").innerHTML = `<b>Empfehlung der Kinderärzte (DGKJ):</b> ${empfehlung(+$("e-alter").value)} Wichtiger als die Minuten: Bewegung, freies Spiel, Freunde, genug Schlaf und bildschirmfreie Zeiten, z. B. beim Essen und vor dem Schlafen.`; };
     $("e-alter").addEventListener("change", empf); empf();
+    // Ehrliche Hinweise und kurze Erklärungen zu Stufe, Land, Deutschstand und Hilfesprache
+    const erklaere = () => {
+      const st = S.STUFEN.find(x => x.code === $("e-stufe").value), la = S.LAENDER.find(x => x.code === $("e-land").value);
+      const sh = $("e-stufe-hinweis"); sh.hidden = !st.wenig;
+      sh.textContent = st.code === "vs" ? "Für die Vorschule gibt es noch wenig eigene Inhalte. Bis dahin übt das Kind mit den Aufgaben der 1. Klasse, alles mit Bildern und Ton."
+        : "Für den Übergang in Klasse 5 gibt es noch wenig eigene Inhalte. Bis dahin übt das Kind mit den Aufgaben der 4. Klasse.";
+      const lh = $("e-land-hinweis"); lh.hidden = !!la.lehrplan;
+      lh.textContent = `Für ${la.name} zeigt die App vorerst die gemeinsamen Bildungsstandards (KMK) und den sächsischen Lehrplan als Beispiel. Die Besonderheiten von ${la.name} folgen.`;
+      $("e-deutsch-text").textContent = S.DEUTSCHSTAND.find(x => x.code === $("e-deutsch").value).text;
+      const m = $("e-mutter").value, hilfe = S.SPRACHEN.find(x => x.code === m);
+      $("e-sprache-text").textContent = m === "de" ? "Ohne Hilfesprache ist alles nur auf Deutsch."
+        : hilfe && hilfe.fertig ? "Hilfetexte und Vorlesen in der Muttersprache sind möglich."
+        : "Für diese Sprache gibt es noch keine geprüften Hilfetexte. Die App bleibt auf Deutsch, mit Bildern und Vorlesen.";
+    };
+    ["e-stufe", "e-land", "e-deutsch"].forEach(id => $(id).addEventListener("change", erklaere));
+    // Muttersprache gewählt → passende fertige Hilfesprache vorschlagen; Deutsch → keine Hilfesprache, gutes Deutsch
+    $("e-mutter").addEventListener("change", () => {
+      const m = $("e-mutter").value, hilfe = S.SPRACHEN.find(x => x.code === m && x.fertig);
+      if (hilfe) $("e-sprache").value = hilfe.code; else if (m === "de") { $("e-sprache").value = ""; $("e-deutsch").value = "gut"; }
+      erklaere();
+    });
+    erklaere();
     setTimeout(() => { const x = $("e-name"); if (x) x.focus(); }, 50);
     $("e-ok").addEventListener("click", async () => {
       const n = $("e-name").value.trim();
@@ -86,7 +116,8 @@
       }
       S.setzeName(n);
       S.speichere("eltern", Object.assign(eltern(), { eingerichtet: true, kind: {
-        alter: +$("e-alter").value, klasse: +$("e-klasse").value, geschlecht: $("e-geschlecht").value, hilfesprache: $("e-sprache").value, land: $("e-land").value || "sachsen", ort } }));
+        alter: +$("e-alter").value, stufe: $("e-stufe").value, klasse: S.STUFEN.find(x => x.code === $("e-stufe").value).klasse, geschlecht: $("e-geschlecht").value,
+        hilfesprache: $("e-sprache").value, muttersprache: $("e-mutter").value, deutschstand: $("e-deutsch").value, land: $("e-land").value, ort } }));
       if (bearbeiten) { S.meldung("Gespeichert."); uebersicht(); } else location.href = "../../";
     });
     if (bearbeiten) $("e-zurueck").addEventListener("click", uebersicht);
@@ -113,10 +144,11 @@
   }
 
   // ---------- Lehrplan: Was übt die App? ----------
-  const LAENDER = [["sachsen", "Sachsen"]];
   function lehrplanKarte(mathe) {
     const L = window.LEHRPLAN; if (!L) return "";
-    const k = S.kind(), land = k.land || "sachsen", lname = (L.laender[land] || {}).name || land;
+    // Nur Sachsen ist ausgearbeitet; andere Länder sehen vorerst Sachsen als Beispiel (ehrlicher Hinweis)
+    const k = S.kind(), la = S.land(), land = la.lehrplan && L.laender[la.lehrplan] ? la.lehrplan : "sachsen", lname = (L.laender[land] || {}).name || land;
+    const stufe = S.stufe();
     const zeichen = { ja: "✅", teil: "◐", nein: "○" };
     const k2 = mathe.k2 || {};
     const fortschritt = (app) => {
@@ -132,6 +164,8 @@
     }).join("");
     return `<div class="karte">
       <h2>📘 Was übt die App? (Lehrplan ${lname}, ${k.klasse}. Klasse)</h2>
+      ${la.lehrplan ? "" : `<p class="hinweis">Für ${la.name} ist der Lehrplan noch nicht ausgearbeitet. Gezeigt wird der sächsische Lehrplan als Beispiel; er folgt in großen Teilen den gemeinsamen KMK-Bildungsstandards.</p>`}
+      ${stufe.wenig ? `<p class="hinweis">Stufe „${stufe.name}“: Gezeigt wird die ${k.klasse}. Klasse, bis eigene Inhalte da sind.</p>` : ""}
       <p>${n.ja} Lernbereiche gut abgedeckt, ${n.teil} teilweise, ${n.nein} noch nicht. Die App ergänzt den Unterricht, sie ersetzt ihn nicht. Was gerade in der Schule dran ist, weiß die Lehrkraft am besten.</p>
       <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App</p>
       ${faecher}
@@ -413,7 +447,7 @@
       </div>
       <div class="karte">
         <h2>Kind und Einstellungen</h2>
-        <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre, ${S.kind().klasse}. Klasse · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1].replace(" (in Arbeit)", "")} · Wetter-Ort: ${(S.kind().ort || {}).lat != null ? S.kind().ort.name : "keiner"}</p>
+        <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre, ${S.stufe().name}, ${S.land().name} · Muttersprache: ${(S.MUTTERSPRACHEN.find(x => x[0] === S.kind().muttersprache) || S.MUTTERSPRACHEN[0])[1].split(" – ")[0]}, ${S.DEUTSCHSTAND.find(x => x.code === S.kind().deutschstand).name} · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1].replace(" (in Arbeit)", "")} · Wetter-Ort: ${(S.kind().ort || {}).lat != null ? S.kind().ort.name : "keiner"}</p>
         <p class="hinweis"><b>Empfehlung der Kinderärzte (DGKJ):</b> ${empfehlung(S.kind().alter)}</p>
         <div class="knoepfe"><button class="knopf haupt" id="erwachsen">👤 Als Erwachsener spielen</button><button class="knopf" id="kind-aendern">Ändern</button><button class="knopf" id="neu-laden">🔄 App neu laden</button></div>
         <p class="klein">„Als Erwachsener spielen“ öffnet für eine Stunde alles, ohne Sperren und Zeitgrenzen; dabei werden keine Sterne und kein Fortschritt fürs Kind gespeichert (bis „Beenden“ oder die App geschlossen wird). „App neu laden“ holt die neueste Version. Der Spielstand bleibt erhalten.</p>

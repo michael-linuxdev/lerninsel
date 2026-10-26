@@ -26,6 +26,42 @@
     { code: "pl", name: "Polnisch", eigen: "Polski", kurz: "PL", tts: "pl-PL", fertig: false },
     { code: "fa", name: "Persisch (Farsi)", eigen: "فارسی", kurz: "FA", tts: "fa-IR", rtl: true, fertig: false }
   ];
+  // Profil des Kindes (NA-02): Stufe, Bundesland, Muttersprache, Deutschstand
+  const STUFEN = [
+    { code: "vs", name: "Vorschule", klasse: 1, wenig: true },
+    { code: "1", name: "1. Klasse", klasse: 1 }, { code: "2", name: "2. Klasse", klasse: 2 },
+    { code: "3", name: "3. Klasse", klasse: 3 }, { code: "4", name: "4. Klasse", klasse: 4 },
+    { code: "5", name: "Übergang Klasse 5", klasse: 4, wenig: true }
+  ];
+  // lehrplan: Schlüssel in shared/lehrplan.js (nur Sachsen ist schon ausgearbeitet)
+  const LAENDER = [
+    { code: "sn", name: "Sachsen", lehrplan: "sachsen" }, { code: "nw", name: "Nordrhein-Westfalen" },
+    { code: "by", name: "Bayern" }, { code: "bw", name: "Baden-Württemberg" },
+    { code: "ni", name: "Niedersachsen" }, { code: "bb", name: "Berlin / Brandenburg" }
+  ];
+  const DEUTSCHSTAND = [
+    { code: "keine", name: "Noch kein Deutsch", text: "Das Kind ist neu in Deutschland oder hört Deutsch erst seit Kurzem." },
+    { code: "wenig", name: "Wenig Deutsch", text: "Das Kind versteht einzelne Wörter und kurze Sätze." },
+    { code: "alltag", name: "Alltags-Deutsch", text: "Das Kind kommt im Alltag zurecht, Schulsprache ist noch schwer." },
+    { code: "gut", name: "Gutes Deutsch", text: "Das Kind spricht Deutsch wie Gleichaltrige (auch wenn zu Hause eine andere Sprache gesprochen wird)." }
+  ];
+  // Muttersprachen (auch ohne fertige Hilfe wählbar, Reihenfolge nach docs/SPRACHEN.md)
+  const MUTTERSPRACHEN = [
+    ["de", "Deutsch"], ["ru", "Russisch – Русский"], ["uk", "Ukrainisch – Українська"], ["ar", "Arabisch – العربية"],
+    ["tr", "Türkisch – Türkçe"], ["pl", "Polnisch – Polski"], ["ro", "Rumänisch – Română"], ["fa", "Farsi/Dari – فارسی"],
+    ["kmr", "Kurdisch (Kurmandschi) – Kurmancî"], ["en", "Englisch – English"], ["bg", "Bulgarisch – Български"],
+    ["ckb", "Kurdisch (Sorani) – کوردی"], ["andere", "Andere Sprache"]
+  ];
+  // Alte Kind-Angaben auf die neuen Felder bringen: Klasse → Stufe, "sachsen" → "sn", Deutschstand und Muttersprache ergänzen
+  function kindMigrieren(k) {
+    if (!k || typeof k !== "object" || Array.isArray(k)) return k;
+    if (!STUFEN.some(x => x.code === k.stufe)) k.stufe = String(Math.max(1, Math.min(4, Math.round(+k.klasse) || 2)));
+    k.klasse = STUFEN.find(x => x.code === k.stufe).klasse;
+    if (k.land === "sachsen" || !LAENDER.some(x => x.code === k.land)) k.land = "sn";
+    if (!DEUTSCHSTAND.some(x => x.code === k.deutschstand)) k.deutschstand = "gut";
+    if (!MUTTERSPRACHEN.some(x => x[0] === k.muttersprache)) k.muttersprache = k.hilfesprache || "de";
+    return k;
+  }
   const leeresProfil = () => ({ name: "", sterne: 0, freigeschaltet: [], ton: true, daten: {}, stand: 0 });
 
   // ---------- localStorage ----------
@@ -93,6 +129,7 @@
     n.freigeschaltet = Array.isArray(p.freigeschaltet) ? p.freigeschaltet.filter(x => typeof x === "string").slice(0, 500) : [];
     n.ton = p.ton !== false;
     n.daten = p.daten && typeof p.daten === "object" && !Array.isArray(p.daten) ? p.daten : {};
+    if (n.daten.eltern && n.daten.eltern.kind) kindMigrieren(n.daten.eltern.kind);
     n.stand = Number.isFinite(p.stand) ? p.stand : 0;
     return n;
   }
@@ -161,7 +198,10 @@
     hatName() { return !!profil.name; },
     // Von den Eltern eingerichtet (Elternbereich): Alter, Klasse, Ansprache, Hilfesprache
     eingerichtet() { return !!(profil.daten.eltern && profil.daten.eltern.eingerichtet); },
-    kind() { return Object.assign({ alter: 8, klasse: 2, geschlecht: "n", hilfesprache: "" }, (profil.daten.eltern || {}).kind || {}); },
+    kind() { return kindMigrieren(Object.assign({ alter: 8, klasse: 2, geschlecht: "n", hilfesprache: "" }, (profil.daten.eltern || {}).kind || {})); },
+    STUFEN, LAENDER, DEUTSCHSTAND, MUTTERSPRACHEN, kindMigrieren,
+    stufe() { return STUFEN.find(x => x.code === Spielwelt.kind().stufe); },
+    land() { return LAENDER.find(x => x.code === Spielwelt.kind().land); },
     // Hilfesprachen: Inhalte tragen Hilfetexte als Felder je Sprache, z. B. { text, ru, uk } oder { warum, warumRu, warumUk }
     SPRACHEN,
     hilfe() { const c = Spielwelt.kind().hilfesprache; return SPRACHEN.find(x => x.code === c && x.fertig) || null; },
