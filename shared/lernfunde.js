@@ -10,7 +10,7 @@
   const S = window.Spielwelt; if (!S) return;
   const MAX_TAG = 5, TAGE = 60;
   const FAECHER = {
-    mathe: { e: "🧮", name: "Mathe" },
+    mathe: { e: "🦫", name: "Mathe" },
     deutsch: { e: "🦊", name: "Deutsch" },
     sachkunde: { e: "🦉", name: "Sachunterricht" },
     tablet: { e: "🤖", name: "Tablet" }

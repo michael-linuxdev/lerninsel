@@ -356,9 +356,10 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - Insel-Einstellungen Grafik/Laufen/Kamera werden pro Kind gemerkt; im Elternbereich „🏝️ Insel-Einstellungen“ mit Schalter, ob das Kind die Knöpfe sieht.
 
 **Wünsche aus dem Feedback (26.10.2026), noch zu planen:**
-- **Charakter für Mathe** (wie Fipsi, Ella, Robo): eigene Figur mit 2D-Zeichnung, 3D-Modell auf der Insel statt der Tafel, Sprechtexte de/ru.
-- **Coolere Minispiele**, die zum Lernen motivieren (Spielzeit als Belohnung muss sich lohnen).
-- **Eigene Welt statt fester Insel:** zufällig erzeugtes, größeres Stück Land nach Wünschen und Vorlieben des Kindes
+- ~~**Charakter für Mathe**~~ erledigt: **Biber Benno** (baut Dämme, zählt Stämme, gelber Helm) – 2D in `shared/figuren.js`, auf dem Matheweg mit Sprechblase und am Ende,
+  3D auf der Insel neben dem Matheweg-Schild (reagiert auf Mathe-Lernfunde), Startseite „Mit Biber Benno rechnen“.
+- **Coolere Minispiele**, die zum Lernen motivieren – breit für alle Vorlieben (Geschick, Bauen, Sammeln/Entdecken, Fahrzeuge …), nach der eigenen Welt.
+- **Eigene Welt statt fester Insel** (entschieden: Wünsche-Assistent; als Nächstes): zufällig erzeugtes, größeres Stück Land nach Wünschen und Vorlieben des Kindes
   (z. B. Wald, Berge, Strand, Schnee, Wiese, Farben), als Skin austauschbar, neu erzeugbar und speicherbar (Seed + Vorlieben, klein für den QR-Transfer).
 
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → Eltern als Mitspieler („hat es mir erklärt“, Duell) → „echte Welt“-Aufgaben →

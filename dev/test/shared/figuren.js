@@ -1,5 +1,5 @@
 // Die Figuren der App als 2D-Zeichnungen (SVG), z. B. für Sprechblasen auf der Insel.
-// Quelle: dieselben Zeichnungen wie in Deutsch (Fipsi), Tablet-Profi (Robo Pixel) und Sachunterricht (Eule Ella).
+// Quelle: dieselben Zeichnungen wie in Deutsch (Fipsi), Tablet-Profi (Robo Pixel) und Sachunterricht (Eule Ella), Mathe (Biber Benno).
 (function () {
   function fipsi(klasse = "fipsi") {
     const D = "#3b1f63", O = "#F28C38", W = "#FFF3E6";
@@ -50,5 +50,28 @@
       <path d="M86 238 l-8 12 M96 240 l0 14 M124 240 l0 14 M134 238 l8 12" stroke="#FFB03B" stroke-width="6" stroke-linecap="round"/>
       <path d="M70 56 L150 56 L156 66 L64 66 Z" fill="${D}"/><rect x="92" y="40" width="36" height="18" fill="${D}"/><path d="M150 60 q16 6 10 28" stroke="#FFC83D" stroke-width="4" fill="none"/></svg>`;
   }
-  window.Figuren = { fipsi, robo, eule };
+  // Biber Benno (Mathe): braun, großer flacher Schwanz mit Gittermuster, zwei große Zähne, gelber Bauarbeiterhelm mit Zollstock
+  function biber(klasse = "biber") {
+    const D = "#3b1f63", B = "#A86A3D", H = "#F3DEC0", s = `stroke="${D}" stroke-width="4" stroke-linejoin="round"`;
+    return `<svg class="${klasse}" viewBox="0 0 200 210" aria-hidden="true">
+      <path d="M128 168 Q190 150 196 186 Q170 206 126 190 Z" fill="#6B4A3A" ${s}/>
+      <path d="M140 172 L184 182 M146 184 L188 176 M150 170 L160 198 M168 168 L176 198" stroke="#8A6650" stroke-width="3"/>
+      <ellipse cx="100" cy="150" rx="48" ry="44" fill="${B}" ${s}/>
+      <ellipse cx="100" cy="160" rx="28" ry="28" fill="${H}"/>
+      <ellipse cx="76" cy="194" rx="16" ry="9" fill="#5C3A21" ${s}/><ellipse cx="124" cy="194" rx="16" ry="9" fill="#5C3A21" ${s}/>
+      <ellipse cx="54" cy="136" rx="12" ry="18" fill="${B}" ${s} transform="rotate(25 54 136)"/>
+      <g transform="rotate(-20 152 120)"><rect x="140" y="98" width="14" height="52" rx="3" fill="#FFC83D" ${s}/><path d="M140 110h8M140 122h6M140 134h8M140 146h6" stroke="${D}" stroke-width="2"/></g>
+      <ellipse cx="150" cy="134" rx="12" ry="16" fill="${B}" ${s}/>
+      <circle cx="60" cy="52" r="15" fill="${B}" ${s}/><circle cx="140" cy="52" r="15" fill="${B}" ${s}/><circle cx="60" cy="52" r="7" fill="#E9A7A0"/><circle cx="140" cy="52" r="7" fill="#E9A7A0"/>
+      <ellipse cx="100" cy="82" rx="54" ry="48" fill="${B}" ${s}/>
+      <ellipse cx="100" cy="100" rx="32" ry="24" fill="${H}"/>
+      <circle cx="80" cy="76" r="8" fill="${D}"/><circle cx="120" cy="76" r="8" fill="${D}"/><circle cx="83" cy="73" r="3" fill="#fff"/><circle cx="123" cy="73" r="3" fill="#fff"/>
+      <ellipse cx="100" cy="92" rx="10" ry="7" fill="${D}"/>
+      <path d="M92 101 Q100 106 108 101" stroke="${D}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <rect x="91" y="104" width="8" height="12" rx="2" fill="#fff" ${s.replace('stroke-width="4"', 'stroke-width="2.5"')}/><rect x="101" y="104" width="8" height="12" rx="2" fill="#fff" ${s.replace('stroke-width="4"', 'stroke-width="2.5"')}/>
+      <circle cx="68" cy="96" r="7" fill="#FF7FA6" opacity=".4"/><circle cx="132" cy="96" r="7" fill="#FF7FA6" opacity=".4"/>
+      <path d="M52 50 Q54 18 100 16 Q146 18 148 50 Z" fill="#FFC83D" ${s}/><path d="M42 50 H158 Q160 58 152 58 H48 Q40 58 42 50 Z" fill="#FFB020" ${s}/><rect x="94" y="16" width="12" height="34" rx="4" fill="#FFB020"/>
+    </svg>`;
+  }
+  window.Figuren = { fipsi, robo, eule, biber };
 })();

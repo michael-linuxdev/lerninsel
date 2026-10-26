@@ -82,8 +82,8 @@ const profi = () => S.offen((S.lade("medien") || {}).fuehrerschein);
 function spielOrt(fn) {
   if (spielZeit()) { fn(); return; }
   const st = Z.status();
-  sprechblase("💤", "Schläft noch", st.genug ? "Für heute ist genug gespielt. Morgen geht es weiter!" : `Erst lernen, dann spielen! Noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Ella, Fipsi und der Matheweg helfen dir.`,
-    S.paar(["", "Сначала учиться, потом играть! Элла, Фипси и математическая тропа помогут тебе."])[1], null);
+  sprechblase("💤", "Schläft noch", st.genug ? "Für heute ist genug gespielt. Morgen geht es weiter!" : `Erst lernen, dann spielen! Noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Ella, Fipsi und Biber Benno helfen dir.`,
+    S.paar(["", "Сначала учиться, потом играть! Элла, Фипси и бобр Бенно помогут тебе."])[1], null);
 }
 // aktion = Beschriftung des Aktionsknopfs, wenn die Figur nah davor steht; nah = Reichweite
 function antippbar(obj, fn, aktion = ["👀", "Ansehen"], nah = 1.9) { Object.assign(obj.userData, { tipp: fn, aktion, nah }); tippbar.push(obj); }
@@ -463,6 +463,29 @@ function robo() {
   [-1, 1].forEach(s => { const a = teil(new CapsuleGeometry(0.07, 0.35, 4, 10), "#FF9BC8"); setze(a, 0.5 * s, 0.85, 0); a.rotation.z = 0.3 * s; g.add(a); });
   return g;
 }
+// Biber Benno (Mathe): brauner Körper, cremefarbener Bauch und Schnauze, zwei große Zähne, flacher Gitter-Schwanz, gelber Helm
+function biber() {
+  const g = new Group(), B = "#A86A3D", H = "#F3DEC0", D2 = "#5C3A21";
+  const k = new Group(); g.add(k);
+  const sw = new Group(); sw.position.set(0, 0.2, -0.42); k.add(sw);
+  const schwanz = teil(new CylinderGeometry(0.34, 0.34, 0.08, 20), "#6B4A3A"); schwanz.scale.set(0.75, 1, 1.25); setze(schwanz, 0, 0, -0.32); schwanz.rotation.x = 0.35; sw.add(schwanz);
+  const leib = teil(kugel(0.5), B); leib.scale.set(1, 0.95, 0.9); setze(leib, 0, 0.45, 0); k.add(leib);
+  const bauch = teil(kugel(0.3), H, { umriss: false }); bauch.scale.set(1, 1.05, 0.5); setze(bauch, 0, 0.4, 0.32); k.add(bauch);
+  [-1, 1].forEach(s => { const f = teil(kugel(0.14), D2, { dicke: 1.1 }); f.scale.set(1.3, 0.6, 1.4); setze(f, 0.22 * s, 0.05, 0.26); k.add(f); });
+  [-1, 1].forEach(s => { const a = teil(kugel(0.13), B); a.scale.set(0.8, 1.3, 0.8); setze(a, 0.42 * s, 0.55, 0.15); k.add(a); });
+  const kopf = new Group(); kopf.position.y = 1.15; k.add(kopf);
+  const schaedel = teil(kugel(0.5), B, { dicke: 1.04 }); schaedel.scale.set(1.08, 0.95, 0.95); kopf.add(schaedel);
+  const schnauze = teil(kugel(0.28), H, { umriss: false }); schnauze.scale.set(1.2, 0.8, 0.7); setze(schnauze, 0, -0.14, 0.34); kopf.add(schnauze);
+  [-1, 1].forEach(s => { const o = teil(kugel(0.13), B); o.scale.set(1, 1, 0.6); setze(o, 0.4 * s, 0.32, -0.05); kopf.add(o); });
+  augen(kopf, 0.18, 0.06, 0.43, 0.07);
+  const nase = new Mesh(kugel(0.08, 14, 10), AUGE); nase.scale.set(1.3, 0.9, 0.8); setze(nase, 0, -0.04, 0.6); kopf.add(nase);
+  [-1, 1].forEach(s => { const z = new Mesh(new BoxGeometry(0.075, 0.12, 0.04), WEISS); setze(z, 0.042 * s, -0.27, 0.56); kopf.add(z); });
+  // gelber Bauarbeiterhelm
+  const helm = teil(new SphereGeometry(0.42, 22, 12, 0, Math.PI * 2, 0, Math.PI / 2), "#FFC83D"); setze(helm, 0, 0.22, -0.02); kopf.add(helm);
+  const krempe = teil(new CylinderGeometry(0.52, 0.52, 0.05, 24), "#FFB020"); setze(krempe, 0, 0.22, 0.02); kopf.add(krempe);
+  g.userData.koerper = k; g.userData.schwanz = sw;
+  return g;
+}
 function tafel(text, farbe) {
   const g = new Group();
   g.add(setze(teil(new CylinderGeometry(0.06, 0.06, 1.3, 8), "#9A6A3F"), 0, 0.65, 0));
@@ -475,16 +498,18 @@ const NACHBARN = [
   { bau: fipsi, x: -7.6, z: -0.6, dreh: 1.0, e: "fipsi", titel: "Fipsi", text: `Hallo ${name}! Hilfst du mir, meine Schatzkarte zu finden?`, ru: "Привет! Поможешь мне найти мою карту сокровищ?", ziel: "../deutsch/" },
   // Robo Pixel wohnt vorerst nicht auf der Insel: Er begleitet den Tablet-Führerschein (Schlüssel zur Insel) und kommt später zurück.
   // { bau: robo, x: 5.5, z: 8.5, dreh: -2.6, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Хочешь стать мастером планшета?", ziel: "../medien/" },
-  { bau: () => tafel("Mathe", "#5CCBA6"), x: 2, z: -8, dreh: 0.2, e: "🧮", titel: "Der Matheweg", text: "Hier beginnt der Matheweg. Sammle Sterne an jeder Station!", ru: "Здесь начинается математическая тропа. Собирай звёзды на каждой станции!", ziel: "../mathe/" }
+  { bau: biber, x: 2, z: -8, dreh: 0.2, e: "biber", titel: "Biber Benno", text: `Hallo ${name}! Ich bin Benno. Ich baue Dämme und zähle jeden Stamm. Rechnest du mit mir auf dem Matheweg?`, ru: "Привет! Я бобр Бенно. Я строю плотины и считаю каждое бревно. Посчитаешь со мной на математической тропе?", ziel: "../mathe/" }
 ];
+{ const t = tafel("Mathe", "#5CCBA6"); t.position.set(3.3, 0.25, -8.5); t.rotation.y = 0.2; scene.add(t); block(3.3, -8.5, 0.4); }
+
 // Lernfunde des Tages: Wer heute etwas Neues im Fach gelernt hat, wird vom passenden Nachbarn begrüßt.
 // Die Nachbarn hüpfen dann ab und zu, bis man mit ihnen gesprochen hat (shared/lernfunde.js).
-const FACH = { eule: "sachkunde", fipsi: "deutsch", robo: "tablet", "🧮": "mathe" };
+const FACH = { eule: "sachkunde", fipsi: "deutsch", robo: "tablet", biber: "mathe" };
 const FREUDE = {
   sachkunde: (f) => [`${name}, heute hast du etwas Neues entdeckt: ${f.t}. Ich bin stolz auf dich! Erzählst du es nachher deiner Familie?`, "Сегодня у тебя новое открытие! Расскажешь потом об этом своей семье?"],
   deutsch: (f) => [`Juhu, ${name}! Du kennst jetzt: ${f.t.replace(/^Neues Wort: /, "")}. Sag es einmal ganz laut!`, f.r ? `Ура! Теперь ты знаешь: ${f.r}. Скажи это вслух по-немецки!` : "Ура! Ты знаешь новые слова. Скажи их вслух!"],
   tablet: (f) => [`Piep! Neu in deinem Kopf: ${f.t}. Du wirst ein echter Tablet-Profi!`, "Пип! Ты узнаёшь всё больше о планшете!"],
-  mathe: (f) => [`Neu auf dem Matheweg: ${f.t}`, "Новое на математической тропе! Так держать!"]
+  mathe: (f) => [`Super, ${name}! Das hast du heute geschafft: ${f.t.replace(/^Neu geschafft: /, "")}. Ich zähle mit dir weiter!`, "Супер! Сегодня у тебя получилось новое. Считаем дальше вместе!"]
 };
 NACHBARN.forEach(n => {
   const o = n.bau(); o.position.set(n.x, 0.25, n.z); o.rotation.y = n.dreh; if (n.e !== "🧮") o.scale.multiplyScalar(1.3); scene.add(o); block(n.x, n.z, 0.8);
@@ -752,7 +777,7 @@ function rausgehen() {
   ich.position.set(-4.1, 0.25, -2.0); ich.rotation.y = 0;
   if (tier) tier.position.set(-3.0, 0.25, -1.6);
   scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true);
-  $("info").textContent = spielZeit() ? `Hallo ${name}!` : "🌱 Erst lernen: Geh zu Ella, Fipsi oder zum Matheweg.";
+  $("info").textContent = spielZeit() ? `Hallo ${name}!` : "🌱 Erst lernen: Geh zu Ella, Fipsi oder Benno.";
   if (wetter) { wendeWetterAn(wetter); zeigeWetterInfo(); }
   S.ton("tipp");
 }
@@ -761,7 +786,7 @@ $("raus").addEventListener("click", rausgehen);
 // Lernmodus anzeigen und bei Änderung der Spielzeit aktualisieren
 function zeigeLernmodus() {
   const an = !spielZeit(); $("lern-hinweis").hidden = !an;
-  if (an && Z) { const st = Z.status(); $("lern-hinweis").textContent = st.genug ? "😴 Für heute genug gespielt – Lernen geht noch!" : `🌱 Erst lernen: noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Geh zu Ella, Fipsi oder zum Matheweg!`; }
+  if (an && Z) { const st = Z.status(); $("lern-hinweis").textContent = st.genug ? "😴 Für heute genug gespielt – Lernen geht noch!" : `🌱 Erst lernen: noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Geh zu Ella, Fipsi oder Benno!`; }
   if (an && drinnen) rausgehen();
 }
 document.addEventListener("zeit-aenderung", zeigeLernmodus);

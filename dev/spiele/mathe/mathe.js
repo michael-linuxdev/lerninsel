@@ -60,8 +60,19 @@
   }
 
   // ---------- Matheweg ----------
+  // Biber Benno begleitet den Matheweg
+  function benno() {
+    const F = window.Figuren; if (!F || !F.biber) return;
+    $("benno").innerHTML = F.biber(""); $("benno-ende").innerHTML = F.biber("");
+    const d = daten(), geschafft = ST.filter(s => (d.k2[s.id] || 0) > 0).length, faellig = (d.fehler || []).filter(f => faellig_(f)).length, n = S.profil.name || "du";
+    $("benno-text").textContent = geschafft === 0 ? `Hallo ${n}! Ich bin Biber Benno. Ich baue Dämme und zähle jeden Stamm. Komm, wir rechnen zusammen!`
+      : faellig ? `Hallo ${n}! ${faellig} ${faellig === 1 ? "Aufgabe von früher wartet" : "Aufgaben von früher warten"} im Mathe-Training. Die schaffen wir!`
+      : `Schon ${geschafft} von ${ST.length} Stationen geschafft! Mein Damm wird immer länger.`;
+  }
+  const faellig_ = (f) => !f.faellig || f.faellig <= tagIn(0);
+
   function zeichneWeg() {
-    $("sterne").textContent = S.sterne();
+    $("sterne").textContent = S.sterne(); benno();
     const karte = $("karte");
     const breite = Math.min(karte.parentElement.clientWidth, 1100);
     const spalten = breite > 940 ? 5 : breite > 620 ? 4 : 3;

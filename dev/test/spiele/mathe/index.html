@@ -141,6 +141,13 @@
   .gewinn { display: inline-block; background: #FFF6D6; padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 1.3rem; margin: 6px 0 18px; }
   .ende-knoepfe { display: grid; gap: 12px; }
   .ende-knoepfe .knopf { min-height: 64px; font-size: 1.35rem; }
+  /* Biber Benno */
+  .benno-zeile { display: flex; align-items: center; gap: 12px; max-width: 760px; margin: 6px auto 0; padding: 0 16px; }
+  .benno { width: 96px; height: 100px; flex: none; }
+  .benno svg { width: 100%; height: 100%; }
+  .benno.klein { width: 110px; height: 115px; margin: 0 auto -6px; }
+  .benno-blase { position: relative; margin: 0; background: #fff; border-radius: 22px; padding: 12px 16px; font-size: 1.15rem; font-weight: 500; box-shadow: 0 6px 0 rgba(0,0,0,.08); }
+  .benno-blase::before { content: ""; position: absolute; left: -10px; top: 50%; margin-top: -10px; border: 10px solid transparent; border-right-color: #fff; border-left: 0; }
 </style>
 </head>
 <body>
@@ -151,6 +158,7 @@
     <h1>Matheweg</h1>
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
+  <div class="benno-zeile"><div class="benno" id="benno" aria-hidden="true"></div><p class="benno-blase" id="benno-text"></p></div>
   <p class="klasse">2. Klasse</p>
   <div class="einstufung" id="einstufung" hidden></div>
   <div class="karte-weg" id="karte"></div>
@@ -170,6 +178,7 @@
 
 <section class="ansicht" id="ende-ansicht" hidden>
   <div class="ende-karte">
+    <div class="benno klein" id="benno-ende" aria-hidden="true"></div>
     <h2 id="ende-titel"></h2>
     <div class="gross-sterne" id="ende-sterne" aria-hidden="true"></div>
     <p id="ende-text"></p>
@@ -184,6 +193,7 @@
 <script src="../../shared/lernfunde.js"></script>
 <script src="../../shared/sticker.js"></script>
 <script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/figuren.js"></script>
 <script src="aufgaben.js"></script>
 <script src="mathe.js"></script>
 </body>
