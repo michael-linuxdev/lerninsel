@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Sternenlauf</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<link rel="stylesheet" href="welt3d.css">
+<style>
+  .lauf-knoepfe { position: fixed; left: 0; right: 0; bottom: max(20px, env(safe-area-inset-bottom)); display: flex; justify-content: space-between; padding: 0 max(20px, env(safe-area-inset-left)); z-index: 6; pointer-events: none; }
+  .lauf-knoepfe button { pointer-events: auto; width: 96px; height: 96px; border-radius: 50%; font-size: 2.6rem; background: rgba(255,255,255,.85); box-shadow: 0 6px 0 rgba(0,0,0,.15); touch-action: none; }
+  .lauf-knoepfe button:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,.15); }
+  .lauf-knoepfe .mitte { display: flex; gap: 14px; }
+  #hoch { background: var(--sonne); }
+</style>
+</head>
+<body>
+<div id="buehne"></div>
+<div class="hud">
+  <a class="knopf rund" href="heimat.html" aria-label="Zurück zur Insel">⬅️</a>
+  <div class="knopf anzeige" aria-live="polite">⭐ <span id="punkte">0</span></div>
+  <div class="zeitleiste" aria-hidden="true"><span id="zeit"></span></div>
+</div>
+<div class="lauf-knoepfe">
+  <button id="links" aria-label="Nach links">◀</button>
+  <button id="hoch" aria-label="Springen">⤒</button>
+  <button id="rechts" aria-label="Nach rechts">▶</button>
+</div>
+<div id="overlay" hidden></div>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/zeit.js" data-art="spielen"></script>
+<script src="../anziehen/teile.js"></script>
+<script src="../anziehen/figur.js"></script>
+<script type="module" src="lauf.js"></script>
+</body>
+</html>

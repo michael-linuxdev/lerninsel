@@ -7,9 +7,9 @@ import {
   PCFSoftShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide,
   CylinderGeometry, SphereGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry, PlaneGeometry,
   LatheGeometry, ExtrudeGeometry, Shape, Vector2, Vector3, DataTexture, RedFormat, NearestFilter, InstancedMesh,
-  Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture
+  Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
 } from "../three/three.module.js";
-import { S } from "./gemeinsam.js";
+import { S, SPIELE, istFrei, baumStufe } from "./gemeinsam.js";
 import { erzeuge, BIOME, FARBEN, neuerSeed } from "./welt.js";
 
 const $ = (id) => document.getElementById(id);
@@ -684,6 +684,62 @@ truhe.add(setze(teil(new BoxGeometry(0.9, 0.5, 0.6), "#B9732E"), 0, 0.25, 0));
 const deckel = teil(new CylinderGeometry(0.3, 0.3, 0.9, 16, 1, false, 0, Math.PI), "#C98A3E"); deckel.rotation.z = Math.PI / 2; setze(deckel, 0, 0.5, 0); truhe.add(deckel);
 truhe.add(setze(teil(new BoxGeometry(0.16, 0.2, 0.05), "#FFC83D", { dicke: 1.1 }), 0, 0.45, 0.32));
 antippbar(truhe, () => spielOrt(() => profi() ? sprechblase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", S.paar(["", "На острове сокровищ ждёт сундук. Найдёшь его?"])[1], "insel.html") : fuehrerscheinFehlt()), ["🔓", "Öffnen"]);
+
+// ---------- Neue Minispiel-Orte: öffnen sich, wenn der Wissensbaum wächst ----------
+function schildSprite(text) {
+  const c = document.createElement("canvas"); c.width = c.height = 128; const g2 = c.getContext("2d");
+  g2.fillStyle = "rgba(255,255,255,.92)"; g2.beginPath(); g2.arc(64, 64, 56, 0, Math.PI * 2); g2.fill();
+  g2.font = "64px sans-serif"; g2.textAlign = "center"; g2.textBaseline = "middle"; g2.fillText(text, 64, 70);
+  const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace;
+  const sp = new Sprite(new SpriteMaterial({ map: t, depthTest: false })); sp.scale.set(0.9, 0.9, 1); return sp;
+}
+const ORT_BAU = {
+  lauf() { // Startbogen mit Stern
+    const g = new Group();
+    [-1, 1].forEach(s => g.add(setze(teil(new CylinderGeometry(0.12, 0.14, 2.2, 10), "#E0574A"), s * 1.1, 1.1, 0)));
+    g.add(setze(teil(new BoxGeometry(2.6, 0.5, 0.12), "#FFFFFF"), 0, 2.15, 0));
+    [-0.9, -0.3, 0.3, 0.9].forEach((x, i) => g.add(setze(new Mesh(new BoxGeometry(0.3, 0.25, 0.14), mat(i % 2 ? "#2E2240" : "#FFFFFF")), x, 2.27, 0)));
+    g.add(setze(teil(kugel(0.28, 14, 10), "#FFD24D"), 0, 2.75, 0));
+    return g;
+  },
+  kart() { // kleines Kart mit Zielflagge
+    const g = new Group(), k = new Group(); g.add(k); k.rotation.y = 0.6;
+    k.add(setze(teil(new BoxGeometry(1.0, 0.3, 1.6), "#3AA0E0"), 0, 0.42, 0));
+    k.add(setze(teil(new BoxGeometry(0.6, 0.35, 0.5), "#FFC83D"), 0, 0.7, -0.15));
+    [[-0.55, 0.55], [0.55, 0.55], [-0.55, -0.55], [0.55, -0.55]].forEach(([x, z]) => { const r = teil(new CylinderGeometry(0.25, 0.25, 0.22, 14), "#2E2240"); r.rotation.z = Math.PI / 2; setze(r, x, 0.27, z); k.add(r); });
+    g.add(setze(teil(new CylinderGeometry(0.05, 0.05, 2, 8), "#8A5A34"), 1.1, 1, -0.6));
+    for (let a = 0; a < 3; a++) for (let b = 0; b < 2; b++) g.add(setze(new Mesh(new BoxGeometry(0.22, 0.22, 0.04), mat((a + b) % 2 ? "#2E2240" : "#FFFFFF")), 1.25 + a * 0.22, 1.85 - b * 0.22, -0.6));
+    return g;
+  },
+  bau() { // bunte Bausteine
+    const g = new Group(), F = ["#E0574A", "#3AA0E0", "#FFC83D", "#5CCBA6", "#B28DFF"];
+    [[0, 0, 0], [0.62, 0, 0], [-0.62, 0, 0], [0.31, 0.5, 0], [-0.31, 0.5, 0], [0, 1.0, 0], [0.4, 0, 0.62], [-0.3, 0, -0.62]].forEach(([x, y, z], i) => g.add(setze(teil(new BoxGeometry(0.58, 0.48, 0.58), F[i % F.length]), x, 0.25 + y, z)));
+    return g;
+  }
+};
+const BALD = new Set(["kart", "bau"]);   // Spiele, die noch entstehen
+const ORT_TEXT = {
+  lauf: ["Der Sternenlauf", "Lauf so schnell du kannst und sammle Sterne! Wische, um auszuweichen.", "Беги и собирай звёзды!", "lauf.html"],
+  kart: ["Die Kart-Bahn", "Fahr ein Rennen mit deinem Kart!", "Гонка на карте!", "kart.html"],
+  bau: ["Der Bauplatz", "Bau mit bunten Steinen, was du willst!", "Строй из цветных кубиков что хочешь!", "bau.html"]
+};
+["lauf", "kart", "bau"].forEach(id => {
+  const [x, z] = P[id], o = ORT_BAU[id](); o.position.set(x, bodenY(x, z), z); o.rotation.y = Math.atan2(-x, -z); scene.add(o); block(x, z, 1.2);
+  const frei = istFrei(id), info = SPIELE[id];
+  if (!frei) { const sp = schildSprite("🔒"); sp.position.set(0, 3.2, 0); o.add(sp); o.traverse(m => { if (m.material && m.material.color && !m.isSprite) { m.material = m.material.clone(); m.material.color.lerp(new Color("#B9B4C6"), 0.55); } }); }
+  const [titel, de, ru, ziel] = ORT_TEXT[id];
+  antippbar(o, () => {
+    if (!frei) {
+      const brauch = window.Lernfunde ? window.Lernfunde.STUFEN[info.stufe - 1] : 0, hat = window.Lernfunde ? window.Lernfunde.gesamt() : 0;
+      sprechblase("🌳", `${info.e} ${info.name} – noch zu`, `Dieser Ort öffnet sich, wenn dein Wissensbaum wächst. Noch ${Math.max(1, brauch - hat)} ${brauch - hat === 1 ? "Lernfund" : "Lernfunde"} – lern etwas Neues bei Ella, Fipsi oder Benno!`,
+        S.paar(["", "Это место откроется, когда вырастет твоё дерево знаний. Узнай что-нибудь новое!"])[1], null);
+      return;
+    }
+    if (BALD.has(id)) { sprechblase("🚧", titel, "Hier wird noch gebaut! Bald kannst du hier spielen.", S.paar(["", "Здесь ещё строят! Скоро можно будет играть."])[1], null); return; }
+    spielOrt(() => sprechblase(info.e, titel, de, S.paar(["", ru])[1], ziel));
+  }, frei ? [info.e, "Spielen"] : ["🔒", "Ansehen"], 2.4);
+});
+
 
 // ---------- Zimmer im Haus (eigener Bereich weit weg von der Insel) ----------
 const ZX = 60; // Mitte des Zimmers

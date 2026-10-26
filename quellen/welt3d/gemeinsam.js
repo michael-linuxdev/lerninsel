@@ -75,9 +75,31 @@ export function karte({ titel, text, sterne, knoepfe }) {
 export function daten() { return Object.assign({ ballon: { rekord: 0, ziele: [] }, insel: { geschafft: 0 } }, S.lade("welt3d") || {}); }
 export function speichere(d) { S.speichere("welt3d", d); }
 
-// Ohne Führerschein geht es zurück zur Übersicht
-export function pruefeZugang() {
+// Ohne Führerschein begrüßt Robo Pixel auf der Startseite
+export function pruefeZugang(spiel) {
   const m = S.lade("medien");
-  if (!S.offen(m && m.fuehrerschein)) { location.replace("./"); return false; }
+  if (!S.offen(m && m.fuehrerschein)) { location.replace("../../?robo=1"); return false; }
+  if (spiel && !istFrei(spiel)) { location.replace("heimat.html"); return false; }
   return true;
+}
+
+// Minispiele öffnen sich, wenn der Wissensbaum wächst (Lernen lohnt sich): Stufe des Baums aus shared/lernfunde.js
+export const SPIELE = {
+  ballons: { name: "Ballon-Party", e: "🎈", stufe: 0 },
+  insel: { name: "Schatz-Strand", e: "🏝️", stufe: 0 },
+  lauf: { name: "Sternenlauf", e: "🏃", stufe: 1 },
+  kart: { name: "Kart-Rennen", e: "🏎️", stufe: 2 },
+  bau: { name: "Bauplatz", e: "🧱", stufe: 3 }
+};
+export const baumStufe = () => (window.Lernfunde ? window.Lernfunde.baum().stufe : 0);
+export const istFrei = (id) => S.offen(baumStufe() >= ((SPIELE[id] || {}).stufe || 0));
+
+// Sterne nur für neu erreichte Ziele (wie auf dem Matheweg) – Wiederholen bringt Spaß, aber keine Sterne-Flut
+export function sterneFuer(spiel, punkte, grenzen) {
+  const d = daten(), e = d[spiel] = Object.assign({ rekord: 0, beste: 0 }, d[spiel] || {});
+  const stufe = grenzen.filter(g => punkte >= g).length, neu = Math.max(0, stufe - e.beste);
+  const rekord = punkte > e.rekord;
+  e.beste = Math.max(e.beste, stufe); e.rekord = Math.max(e.rekord, punkte); speichere(d);
+  if (neu) S.gibSterne(neu);
+  return { stufe, neu, rekord, bisher: e.rekord };
 }
