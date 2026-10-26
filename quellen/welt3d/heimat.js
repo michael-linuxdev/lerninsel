@@ -717,7 +717,7 @@ const ORT_BAU = {
     return g;
   }
 };
-const BALD = new Set(["kart", "bau"]);   // Spiele, die noch entstehen
+const BALD = new Set(["bau"]);   // Spiele, die noch entstehen
 const ORT_TEXT = {
   lauf: ["Der Sternenlauf", "Lauf so schnell du kannst und sammle Sterne! Wische, um auszuweichen.", "Беги и собирай звёзды!", "lauf.html"],
   kart: ["Die Kart-Bahn", "Fahr ein Rennen mit deinem Kart!", "Гонка на карте!", "kart.html"],

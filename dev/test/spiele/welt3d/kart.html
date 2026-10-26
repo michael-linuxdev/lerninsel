@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Kart-Rennen</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<link rel="stylesheet" href="welt3d.css">
+<style>
+  .kart-knoepfe { position: fixed; left: 0; right: 0; bottom: max(20px, env(safe-area-inset-bottom)); display: flex; justify-content: space-between; padding: 0 max(20px, env(safe-area-inset-left)); z-index: 6; pointer-events: none; }
+  .kart-knoepfe button { pointer-events: auto; width: 110px; height: 110px; border-radius: 50%; font-size: 3rem; background: rgba(255,255,255,.85); box-shadow: 0 6px 0 rgba(0,0,0,.15); touch-action: none; }
+  .kart-knoepfe button[data-an="1"] { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,.15); background: #fff; }
+  .hud .klein-anz { font-size: 1.2rem; font-weight: 700; }
+  #start { position: fixed; left: 50%; top: 38%; transform: translate(-50%, -50%); font-size: 7rem; font-weight: 700; color: #fff; -webkit-text-stroke: 4px var(--pflaume); paint-order: stroke fill; z-index: 7; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="buehne"></div>
+<div class="hud">
+  <a class="knopf rund" href="heimat.html" aria-label="Zurück zur Insel">⬅️</a>
+  <div class="knopf klein-anz" aria-label="Runde">🏁 <span id="runde">1/3</span></div>
+  <div class="knopf klein-anz" aria-label="Platz">🏆 <span id="platz">1.</span></div>
+  <div class="knopf klein-anz" aria-label="Münzen">🪙 <span id="muenzen">0</span></div>
+  <div class="knopf klein-anz" aria-label="Zeit">⏱️ <span id="zeit">0:00</span></div>
+</div>
+<div id="start" hidden></div>
+<div class="kart-knoepfe">
+  <button id="links" aria-label="Nach links lenken">◀</button>
+  <button id="rechts" aria-label="Nach rechts lenken">▶</button>
+</div>
+<div id="overlay" hidden></div>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/zeit.js" data-art="spielen"></script>
+<script src="../anziehen/teile.js"></script>
+<script src="../anziehen/figur.js"></script>
+<script type="module" src="kart.js"></script>
+</body>
+</html>
