@@ -6,7 +6,7 @@ set -e
 cd "$(dirname "$0")/.."
 ESBUILD=${ESBUILD:-esbuild}
 rm -f spiele/welt3d/gemeinsam*.js
-$ESBUILD quellen/welt3d/ballons.js quellen/welt3d/insel.js quellen/welt3d/heimat.js quellen/welt3d/lauf.js quellen/welt3d/kart.js --bundle --format=esm --splitting --minify \
+$ESBUILD quellen/welt3d/ballons.js quellen/welt3d/insel.js quellen/welt3d/heimat.js quellen/welt3d/lauf.js quellen/welt3d/kart.js quellen/welt3d/bau.js --bundle --format=esm --splitting --minify \
   --target=es2020 --outdir=spiele/welt3d --chunk-names=gemeinsam-[hash] --legal-comments=none
 # Probeszene einzeln (nicht im Offline-Speicher, nur zum Vergleichen der Grafikstile)
 $ESBUILD quellen/welt3d/probe.js --bundle --format=esm --minify --target=es2020 --outfile=spiele/welt3d/probe.js --legal-comments=none

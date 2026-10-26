@@ -2,7 +2,7 @@
 // danach auch ohne Internet geladen. Bei Internet wird im Hintergrund aktualisiert.
 // /dev hat einen eigenen Cache, damit sich Test- und echte Seite nicht gegenseitig löschen
 const VORSILBE = self.registration.scope.includes("/dev/test/") ? "test-" : self.registration.scope.includes("/dev/") ? "dev-" : "";
-const CACHE = VORSILBE + "spielwelt-bbef89908d";
+const CACHE = VORSILBE + "spielwelt-0fec4631c9";
 const START = [
   "./",
   "index.html",
@@ -58,14 +58,16 @@ const START = [
   "spiele/welt3d/ballons.js",
   "spiele/welt3d/insel.html",
   "spiele/welt3d/insel.js",
-  "spiele/welt3d/gemeinsam-NC3YSOIO.js",
-  "spiele/welt3d/gemeinsam-Q7GSYOKD.js",
+  "spiele/welt3d/gemeinsam-4OTONCGU.js",
+  "spiele/welt3d/gemeinsam-MULHSBLE.js",
   "spiele/welt3d/heimat.html",
   "spiele/welt3d/heimat.js",
   "spiele/welt3d/lauf.html",
   "spiele/welt3d/lauf.js",
   "spiele/welt3d/kart.html",
   "spiele/welt3d/kart.js",
+  "spiele/welt3d/bau.html",
+  "spiele/welt3d/bau.js",
 ];
 
 self.addEventListener("install", (e) => {

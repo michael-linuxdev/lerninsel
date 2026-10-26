@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Bauplatz</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<link rel="stylesheet" href="welt3d.css">
+<style>
+  .werkzeug { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(14px, env(safe-area-inset-bottom)); z-index: 6; background: rgba(255,255,255,.92); border-radius: 26px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; max-width: calc(100% - 24px); box-shadow: 0 6px 0 rgba(0,0,0,.12); }
+  #farben { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .farbe { width: 44px; height: 44px; border-radius: 14px; border: 3px solid #fff; box-shadow: 0 0 0 2px #D9D2EC; }
+  .farbe.an { box-shadow: 0 0 0 5px var(--beere); transform: scale(1.08); }
+  .werkzeug .knopf { min-height: 52px; padding: 0 14px; font-size: 1.1rem; }
+  .werkzeug .knopf.an { background: var(--koralle); color: #fff; }
+  .seite-knoepfe { position: fixed; right: max(14px, env(safe-area-inset-right)); top: 50%; transform: translateY(-50%); display: grid; gap: 10px; z-index: 6; }
+  .seite-knoepfe .knopf { width: 64px; padding: 0; font-size: 1.6rem; }
+  #aufgabe { position: fixed; left: max(14px, env(safe-area-inset-left)); top: calc(max(14px, env(safe-area-inset-top)) + 70px); z-index: 6; display: flex; align-items: center; gap: 10px; max-width: min(420px, calc(100% - 110px)); background: #fff; border-radius: 22px; padding: 8px 12px; box-shadow: 0 6px 0 rgba(0,0,0,.1); }
+  #aufgabe.geschafft { background: #E3F7EF; }
+  #benno { width: 64px; height: 66px; flex: none; } #benno svg { width: 100%; height: 100%; }
+  #benno-text { margin: 0; font-weight: 600; font-size: 1.05rem; flex: 1; }
+  #neue-aufgabe { min-height: 44px; padding: 0 10px; font-size: 1.2rem; }
+</style>
+</head>
+<body>
+<div id="buehne"></div>
+<div class="hud">
+  <a class="knopf rund" href="heimat.html" aria-label="Zurück zur Insel">⬅️</a>
+</div>
+<div id="aufgabe"><div id="benno" aria-hidden="true"></div><p id="benno-text">Hallo! Ich bin Benno.</p><button class="knopf" id="neue-aufgabe" aria-label="Andere Aufgabe">🔄</button></div>
+<div class="seite-knoepfe">
+  <button class="knopf" id="links" aria-label="Nach links drehen">⟲</button>
+  <button class="knopf" id="rechts" aria-label="Nach rechts drehen">⟳</button>
+  <button class="knopf" id="zoom" aria-label="Zoomen">🔍</button>
+</div>
+<div class="werkzeug">
+  <div id="farben"></div>
+  <button class="knopf" id="abriss">🔨 Abreißen</button>
+  <button class="knopf" id="rueck">↩️</button>
+  <button class="knopf" id="leeren">🗑️</button>
+</div>
+<div id="overlay" hidden></div>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/zeit.js" data-art="spielen"></script>
+<script src="../../shared/figuren.js"></script>
+<script type="module" src="bau.js"></script>
+</body>
+</html>

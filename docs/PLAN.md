@@ -358,7 +358,7 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 **Wünsche aus dem Feedback (26.10.2026), noch zu planen:**
 - ~~**Charakter für Mathe**~~ erledigt: **Biber Benno** (baut Dämme, zählt Stämme, gelber Helm) – 2D in `shared/figuren.js`, auf dem Matheweg mit Sprechblase und am Ende,
   3D auf der Insel neben dem Matheweg-Schild (reagiert auf Mathe-Lernfunde), Startseite „Mit Biber Benno rechnen“.
-- **Coolere Minispiele**, die zum Lernen motivieren – breit für alle Vorlieben (Geschick, Bauen, Sammeln/Entdecken, Fahrzeuge …), nach der eigenen Welt.
+- **Coolere Minispiele** – begonnen (siehe Nachtrag Minispiele). Weitere Ideen: Musik/Rhythmus, Tiere pflegen/Zoo, Malen, Höhle erkunden, Boot/Flugzeug, Schach.
 - ~~**Eigene Welt statt fester Insel**~~ Schritt 1–3 erledigt (siehe unten). Ursprünglicher Wunsch: zufällig erzeugtes, größeres Stück Land nach Wünschen und Vorlieben des Kindes
   (z. B. Wald, Berge, Strand, Schnee, Wiese, Farben), als Skin austauschbar, neu erzeugbar und speicherbar (Seed + Vorlieben, klein für den QR-Transfer).
 
@@ -372,6 +372,18 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - Gespeichert wird nur `{ welten: [Wünsche + seed + Name], aktiv }` (klein für QR). Test-Parameter: `heimat.html?biom=berge&groesse=gross&huegel=viel&see=1&seed=5`.
 - Offen: auf echten (schwachen) Tablets prüfen, ob „riesig“ + „schön“ flüssig läuft (Stufe „einfach“ hat weniger Geländepunkte);
   Fluss, Höhle, eigene Tiere in der Welt; Jahreszeiten-Deko je Landschaft; Minispiel-Orte je Welt.
+
+**Nachtrag 26.10.2026 – Minispiele (je eins pro Vorliebe)**
+- Lern-Anreiz: neue Spielorte öffnen sich, wenn der Wissensbaum wächst (`SPIELE` in gemeinsam.js): Sternenlauf ab Stufe 1 (1 Lernfund),
+  Kart ab Stufe 2 (5), Bauplatz ab Stufe 3 (15). Gesperrte Orte stehen mit 🔒 in der Welt und sagen, wie viele Lernfunde fehlen.
+- Sterne nur für neu erreichte Ziele je Spiel (`sterneFuer`), damit Spielen keine Sterne-Flut bringt; Erfahrung für Entdecker-Mut.
+- 🏃 **Sternenlauf** (Geschick & Tempo): eigene Figur, 3 Bahnen, wischen/Knöpfe, 60 s, Stämme/Steine, Sternen-Magnet aus Wort-Zauber 4.
+- 🏎️ **Kart-Rennen** (Fahrzeuge): 3 Runden gegen Fipsi und Benno, Münzen, Turbo-Felder, Gas automatisch, Lenkhilfe, Bestzeit.
+- 🧱 **Bauplatz** (Bauen & Gestalten): Steine in 11 Farben setzen/abreißen, drehen/zoomen, Rückgängig, gespeichert; Benno stellt Zähl-Aufgaben
+  (Turm aus n Steinen, Reihe aus n, genau n Farben, genau n Steine) → Mathe-Erfahrung und Sterne.
+- Sammeln & Entdecken: bisher Schatz-Strand (Insel-Abenteuer) und Ballon-Party.
+- `figur3d.js`: die eigene Figur für alle Minispiele (heimat.js hat noch eine eigene Kopie – zusammenführen).
+- Offen: Bauwerk vom Bauplatz auf der eigenen Welt aufstellen; Kart-Strecke passend zur Landschaft; weitere Spiele (siehe oben).
 
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → Eltern als Mitspieler („hat es mir erklärt“, Duell) → „echte Welt“-Aufgaben →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
