@@ -91,6 +91,7 @@
         <div><span class="fach">${F[f.f] ? F[f.f].e + " " + F[f.f].name : ""}</span><b>${esc(f.t)}</b>
         ${f.r && hl ? `<span class="zwei" lang="${hl.code}">🌍 Auf ${hl.name}: ${esc(f.r)} – du kennst es in zwei Sprachen!</span>` : ""}</div>
       </div>`).join("") +
+      `<p class="erzaehl">🌳 Auf der Insel ${funde.length === 1 ? "hängt jetzt eine neue Frucht" : `hängen jetzt ${funde.length} neue Früchte`} an deinem Wissensbaum.</p>` +
       `<p class="erzaehl">🗣️ Erzähl heute jemandem, was du Neues weißt!</p>`;
   }
 

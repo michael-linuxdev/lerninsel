@@ -3,6 +3,7 @@
 // Die Lernspiele melden Funde, „Mein Ich“ zeigt „Heute neu“, die Nachbarn auf der Insel sprechen darüber,
 // der Wochenbericht im Elternbereich listet sie. Später Grundlage für das persönliche Museum (KONZEPT: Langzeit-Motivation).
 // Nach core.js und charakter.js laden. Daten: profil.daten.lernfunde = { tage: { "JJJJ-MM-TT": [fund, …] } }
+// summe: alle Funde seit Beginn (Wissensbaum), baumGesehen: zuletzt auf der Insel gezeigte Baum-Stufe
 // fund = { f: fach, a: art, e: emoji, t: Text (de), r?: Text in der Hilfesprache, s: Schlüssel gegen Doppelte }
 // Bewusst knapp gehalten (höchstens 5 am Tag, 60 Tage), damit der Spielstand für den QR-Transfer klein bleibt.
 (function () {
@@ -34,12 +35,23 @@
     }
     const neu = { f: fund.fach, a: fund.art || "neu", e: fund.e || FAECHER[fund.fach].e, t: String(fund.text).slice(0, 90), s };
     if (fund.ru) neu.r = String(fund.ru).slice(0, 90);
+    d.summe = summeAus(d) + 1;   // vor dem Hinzufügen zählen, sonst doppelt bei alten Spielständen ohne summe
     liste.push(neu);
     const alt = Object.keys(d.tage).sort(); while (alt.length > TAGE) delete d.tage[alt.shift()];
     S.speichere("lernfunde", d);
     if (fund.melden && window.Charakter && window.Charakter.hinweis) window.Charakter.hinweis("🌱 Das kannst du jetzt!", neu.t, "#2E9C5A");
     return true;
   }
+
+  // Lebenszeit-Zähler (wird nie gekürzt) – daran wächst der Wissensbaum auf der Insel
+  function summeAus(d) { return Number.isFinite(d.summe) ? d.summe : Object.values(d.tage).reduce((n, l) => n + l.length, 0); }
+  const STUFEN = [1, 5, 15, 35, 70, 120];   // ab so vielen Funden die nächste Baum-Stufe (0 = Samen/Spross)
+  const stufeVon = (n) => STUFEN.filter(x => n >= x).length;
+  function baum() {
+    const d = lade(), summe = summeAus(d), stufe = stufeVon(summe);
+    return { summe, stufe, max: STUFEN.length, naechste: STUFEN[stufe] || null, gewachsen: stufe > (d.baumGesehen || 0) };
+  }
+  function baumGesehen() { const d = lade(), st = stufeVon(summeAus(d)); if ((d.baumGesehen || 0) !== st) { d.baumGesehen = st; S.speichere("lernfunde", d); } }
 
   const tag = (datum) => (lade().tage[datum] || []).slice();
   // Letzte n Tage (heute eingeschlossen), jeder Fund mit Datum, neueste zuerst
@@ -53,7 +65,7 @@
   }
   // Neuester Fund eines Fachs von heute (für die Nachbarn auf der Insel)
   const heuteFach = (fach) => tag(heute()).filter(x => x.f === fach).pop() || null;
-  const gesamt = () => Object.values(lade().tage).reduce((n, l) => n + l.length, 0);
+  const gesamt = () => summeAus(lade());
 
-  window.Lernfunde = { FAECHER, MAX_TAG, merke, heute: () => tag(heute()), tag, letzteTage, heuteFach, gesamt };
+  window.Lernfunde = { FAECHER, MAX_TAG, STUFEN, merke, heute: () => tag(heute()), tag, letzteTage, heuteFach, gesamt, baum, baumGesehen };
 })();

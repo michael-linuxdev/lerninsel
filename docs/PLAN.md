@@ -320,3 +320,13 @@ Sachunterricht „Körper und Gesundheit“; Einstufungstest.
 - Freiwillige „echte Welt“-Aufgabe als Tagesaufgaben-Variante (Punkt 2) und Eltern-Bestätigung „hat es mir erklärt“ (Punkt 3)
 - Museum/Schatzkammer aus den Lernfunden (Punkt 4)
 
+**Nachtrag 26.10.2026 – Wissensbaum auf der Insel**
+- Neben dem Pfad (Platz vor dem Haus) wächst ein Wissensbaum: Größe nach allen Lernfunden seit Beginn
+  (Stufen ab 1, 5, 15, 35, 70, 120 Funden; vorher ein Spross), jeder Fund von heute hängt als leuchtende Frucht in der Fachfarbe daran
+  (gemeistert = golden), Früchte ploppen beim Betreten auf und leuchten nachts. Wächst er, sagt die Insel einmal „Dein Wissensbaum ist gewachsen!“.
+- Antippen: „Schon N Dinge gelernt … Heute hängen 3 neue Früchte dran …“, Knopf führt zu „Mein Ich“. Kein Welken, keine Strafe.
+- `Lernfunde.summe` zählt dauerhaft (wird nicht mit den 60 Tagen gekürzt); Hinweis auf den Baum unter „Heute neu“.
+
+**Nächster Schritt:** Lernkartei für Deutsch und Sachunterricht (mehr „gemeistert“-Funde), dann Jahreszeiten am Wissensbaum (Blüten im Frühling,
+Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
+

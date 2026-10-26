@@ -493,6 +493,66 @@ NACHBARN.forEach(n => {
   }, aktion, 2.3);
 });
 
+// ---------- Wissensbaum ----------
+// Wächst mit allen Lernfunden seit Beginn (shared/lernfunde.js), jeder Fund von heute hängt als leuchtende Frucht daran.
+// Ohne Lernen passiert nichts Schlimmes: der Baum bleibt einfach, wie er ist (kein Welken, keine Strafe).
+const WB = new Vector3(-3.2, 0.25, 2.2);
+const FRUCHT = { mathe: "#2FA37C", deutsch: "#E0574A", sachkunde: "#1F8F8A", tablet: "#2F86C8" };
+const wissen = (() => {
+  const L = window.Lernfunde; if (!L) return null;
+  const info = L.baum(), funde = L.heute();
+  const g = new Group(); g.position.copy(WB); scene.add(g);
+  const k = [0.35, 0.5, 0.62, 0.75, 0.88, 1.0, 1.12][info.stufe];
+  const krone = SAISON === "herbst" ? ["#8BD06A", "#6FBF68"] : SAISON === "winter" ? ["#5FB07A", "#5FB07A"] : ["#7FD67A", "#62C46E"];
+  if (info.stufe === 0) {
+    // Spross: zwei Blätter und ein kleiner Erdhügel
+    g.add(setze(teil(kugel(0.35, 16, 10), "#9A6A3F"), 0, -0.15, 0));
+    g.add(setze(teil(new CylinderGeometry(0.03, 0.04, 0.45, 8), "#3E9E55"), 0, 0.22, 0));
+    [-1, 1].forEach(sx => { const b = teil(kugel(0.16, 12, 8), "#62C46E"); b.scale.set(1.4, 0.4, 0.8); b.rotation.z = sx * 0.5; g.add(setze(b, sx * 0.16, 0.45, 0)); });
+  } else {
+    g.add(setze(teil(new CylinderGeometry(0.18 * k, 0.28 * k, 1.5 * k, 14), "#A27449"), 0, 0.75 * k, 0));
+    [[0, 2.15, 0, 1.0], [0.7, 1.8, 0.2, 0.7], [-0.65, 1.85, -0.1, 0.72], [0.05, 1.8, 0.7, 0.65], [0, 2.8, 0, 0.62]].slice(0, 2 + Math.min(3, info.stufe))
+      .forEach(([dx, y, dz, r], i) => g.add(setze(teil(kugel(r * k), krone[i % 2]), dx * k, y * k, dz * k)));
+    if (SAISON === "winter") g.add(setze(teil(kugel(0.5 * k), "#FFFFFF"), 0, 3.1 * k, 0));
+  }
+  // Schild am Fuß
+  const schild = new Group(); schild.position.set(0.75, 0, 0.5); schild.rotation.y = -0.4; g.add(schild);
+  schild.add(setze(teil(new CylinderGeometry(0.04, 0.04, 0.7, 6), "#9A6A3F"), 0, 0.35, 0));
+  schild.add(setze(teil(new BoxGeometry(0.55, 0.3, 0.05), "#FFF1D6"), 0, 0.68, 0));
+  block(WB.x, WB.z, info.stufe ? 0.45 * k + 0.2 : 0.4);
+  // Früchte von heute (gemeistert = golden), mit Ploppen beim Erscheinen
+  // Richtungen vom Kronen-Mittelpunkt aus, Früchte sitzen knapp außen auf der Krone (vorne zuerst)
+  const PL = [[0.6, -0.1, 0.8], [-0.6, 0.15, 0.8], [0.1, 0.65, 0.75], [0.9, 0.25, -0.3], [-0.85, -0.05, -0.4]].map(v => new Vector3(...v).normalize());
+  const fruechte = funde.slice(0, PL.length).map((f, i) => {
+    const farbe = f.a === "gemeistert" ? "#FFC83D" : FRUCHT[f.f] || "#FF7A6B";
+    const m = new Mesh(kugel(0.2, 14, 10), new MeshBasicMaterial({ color: farbe }));
+    const v = PL[i], r = 1.0 * k + 0.06; setze(m, v.x * r, 2.15 * k + v.y * r, v.z * r); m.scale.setScalar(0.001); m.userData.verz = 0.6 + i * 0.35; g.add(m);
+    return m;
+  });
+  const text = () => {
+    const b = L.baum(), h = L.heute();
+    const de = b.summe === 0 ? "Hier wächst dein Wissensbaum. Mit allem, was du Neues lernst, wird er größer!"
+      : `Schon ${b.summe} ${b.summe === 1 ? "Ding" : "Dinge"} gelernt!` + (h.length ? ` Heute ${h.length === 1 ? "hängt eine neue Frucht" : `hängen ${h.length} neue Früchte`} dran: ${h.slice(-2).map(x => x.t.replace(/^Neues Wort: /, "")).join(" · ")}`
+        : " Heute ist noch keine Frucht dazugekommen. Lern etwas Neues, dann wächst eine!") + (b.naechste ? ` Noch ${b.naechste - b.summe} bis der Baum wieder wächst.` : "");
+    const ru = b.summe === 0 ? "Здесь растёт твоё дерево знаний. Чем больше ты узнаёшь, тем больше оно становится!" : `Ты уже узнаёшь так много: ${b.summe}! Каждая новая вещь — новый плод.`;
+    return [de, ru];
+  };
+  antippbar(g, () => { const [de, ru] = text(); sprechblase("🌳", "Dein Wissensbaum", de, S.paar(["", ru])[1], "../ich/"); }, ["🌳", "Ansehen"], 2.2);
+  return {
+    info, fruechte,
+    tick(t) {
+      fruechte.forEach((m, i) => {
+        const z = MathUtils.clamp((t - m.userData.verz) * 3, 0, 1), plopp = z < 1 ? z * (1 + Math.sin(z * Math.PI) * 0.5) : 1;
+        m.scale.setScalar(Math.max(0.001, plopp * (1 + Math.sin(t * 2.5 + i) * 0.06)));
+      });
+    }
+  };
+})();
+if (wissen && wissen.info.gewachsen) {
+  setTimeout(() => { $("info").textContent = "🌳 Dein Wissensbaum ist gewachsen!"; S.ton && S.ton("juhu"); }, 1200);
+  window.Lernfunde.baumGesehen();
+}
+
 // ---------- Orte für Minispiele ----------
 const ballons = new Group(); ballons.position.set(10, 0.25, 6); scene.add(ballons); block(10, 6, 0.6);
 ["#FF6F91", "#FFD84D", "#5CCBA6", "#7B9BFF", "#C27BFF"].forEach((c, i) => {
@@ -909,6 +969,7 @@ function bild() {
     if (o.userData.koerper) o.userData.koerper.scale.y = 1 + Math.sin(t * 2.2 + i) * 0.02; if (o.userData.huepf > 0) { o.userData.huepf = Math.max(0, o.userData.huepf - dt * 2); }
     o.position.y = 0.25 + Math.sin((1 - (o.userData.huepf || 0)) * Math.PI) * (o.userData.huepf ? 0.4 : 0) + (i === 2 ? Math.sin(t * 2) * 0.05 : 0);
   });
+  if (wissen) wissen.tick(t);
   ballons.children.forEach(b => { if (b.userData.p !== undefined) b.position.y = 2.3 + (b.userData.p % 2) * 0.35 + Math.sin(t * 1.5 + b.userData.p) * 0.12; });
   for (let i = herzListe.length - 1; i >= 0; i--) { const h = herzListe[i]; h.userData.t += dt; h.position.y += dt * h.userData.v; h.material.opacity = 1 - h.userData.t; if (h.userData.t > 1) { scene.remove(h); herzListe.splice(i, 1); } }
 
@@ -947,4 +1008,4 @@ requestAnimationFrame(bild);
 zeigeLernmodus(); if (!NACHT) zeigeWetterInfo();
 if (window.Sticker) setTimeout(() => { window.Sticker.feste(); if (NACHT && !q.has("stunde")) window.Sticker.entdecke("w-mond"); }, 1200);
 if (q.get("drinnen") === "1" && spielZeit()) reingehen();
-window.__heimat = { blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), SAISON, NACHT };
+window.__heimat = { wissen: () => wissen, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), SAISON, NACHT };

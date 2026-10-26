@@ -36,6 +36,7 @@ Der tägliche Lernblock soll sich nicht wie ein Ticket für die Spielzeit anfüh
    („7 + 8 = 15 – war schwer, jetzt kannst du es!“), das Wort des Tages mit Artikel und Mehrzahl, Wörter aus Fipsis Kapitel, Werkstatt-Regel,
    Sachthema, Tablet-Lektion, neue/bessere Matheweg-Station. Sichtbar in „Mein Ich“ (Karte „Heute neu“), auf der Startseite,
    bei den Nachbarn auf der Insel (sie hüpfen und sprechen über den Fund) und im Wochenbericht der Eltern.
+   *Schritt 2:* Wissensbaum auf der Insel – wächst mit allen Funden seit Beginn, die Funde von heute hängen als leuchtende Früchte daran.
 2. **Brücke ins echte Leben** – kurze freiwillige „echte Welt“-Aufgaben, im Wochenbericht sichtbar. Ansatz bisher: „Erzähl heute jemandem …“ unter den Lernfunden, Ella fragt nach der Familie.
 3. **Eltern als Mitspieler** – 1–3-Minuten-Momente (Erklären, Duell), immer freiwillig. Die Lernfunde liefern den Gesprächsanlass („Erklär mir das mal!“).
 4. **Langzeit-Motivation** – Jahreszeiten, wachsendes persönliches Museum/Schatzkammer, wiederholbare Herausforderungen. Lernfunde sind die Rohdaten fürs Museum.
