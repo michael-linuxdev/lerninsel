@@ -42,8 +42,8 @@
   /* Der Schrank: Türen für jedes Spiel */
   .schrank {
     display: grid; gap: 18px;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: "insel insel" "mathe deutsch" "sach medien";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: "insel insel insel" "mathe deutsch sach";
     background: var(--holz);
     padding: 18px; border-radius: var(--rund-gross);
     box-shadow: inset 0 0 0 6px #EBC48F, 0 10px 0 #D9A867;
@@ -94,7 +94,7 @@
   }
 
   @media (max-width: 760px) {
-    .schrank { grid-template-columns: 1fr 1fr; grid-template-areas: "insel insel" "mathe deutsch" "sach medien"; }
+    .schrank { grid-template-columns: 1fr 1fr; grid-template-areas: "insel insel" "mathe deutsch" "sach sach"; }
     .tuer.insel { min-height: 240px; }
     .tuer.insel .bild { width: 170px; height: 140px; }
   }
@@ -136,6 +136,11 @@
     -webkit-user-select: text; user-select: text;
   }
   .karte .knopf { margin-top: 20px; width: 100%; min-height: 64px; font-size: 1.5rem; }
+  .robo-karte p { font-size: 1.25rem; line-height: 1.4; margin: 8px 0 0; }
+  .robo-karte .robo-ru { background: #FFF6D6; border-radius: 14px; padding: 8px 12px; font-size: 1.1rem; }
+  .robo-karte .knopf { text-decoration: none; margin-top: 14px; }
+  .robo-bild { width: 140px; height: 140px; margin: 0 auto; }
+  .robo-bild svg { width: 100%; height: 100%; }
 </style>
 </head>
 <body>
@@ -163,6 +168,16 @@
     </div>
   </header>
   <div class="erst-dann" id="erst-dann" hidden></div>
+  <div class="dialog" id="robo-dialog" hidden>
+    <div class="karte robo-karte" role="dialog" aria-labelledby="robo-titel">
+      <div class="robo-bild" id="robo-bild" aria-hidden="true"></div>
+      <h2 id="robo-titel">Piep! Ich bin Robo Pixel.</h2>
+      <p id="robo-text"></p>
+      <p class="robo-ru" id="robo-ru" hidden></p>
+      <a class="knopf haupt" href="spiele/medien/" id="robo-los">🪪 Zum Tablet-Führerschein</a>
+      <button class="knopf" id="robo-zu">Später</button>
+    </div>
+  </div>
 
   <nav class="schrank" aria-label="Insel und Lernen">
     <a class="tuer insel" id="tuer-insel" href="spiele/welt3d/heimat.html" style="text-decoration:none">
@@ -191,11 +206,6 @@
       <h2>Sachunterricht</h2>
       <p>Mit Eule Ella die Welt entdecken</p>
     </a>
-    <a class="tuer medien" href="spiele/medien/" style="text-decoration:none">
-      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><rect x="26" y="14" width="48" height="72" rx="10" fill="#fff"/><rect x="33" y="24" width="34" height="46" rx="4" fill="#3AA0E0"/><path d="M40 47l7 7 14-14" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h2>Tablet-Profi</h2>
-      <p>Medienbildung: sicher am Tablet und im Internet</p>
-    </a>
   </nav>
 </main>
 
@@ -215,6 +225,8 @@
 <script src="shared/zeit.js" data-art="neutral"></script>
 <script src="spiele/anziehen/teile.js"></script>
 <script src="spiele/anziehen/figur.js"></script>
+<script src="shared/figuren.js"></script>
+<script src="shared/sprache.js"></script>
 <script src="shared/tiere.js"></script>
 <script src="shared/tierpflege.js"></script>
 <script src="shared/vendor/qrcodegen.js"></script>
@@ -306,10 +318,33 @@
   // Insel: zeigt, ob gerade Spielzeit ist (Lernen geht dort immer über die Nachbarn)
   function zeigeInselStatus() {
     const el = document.getElementById("insel-status"); if (!window.Zeit) return;
+    if (!S.offen(medien && medien.fuehrerschein)) { el.hidden = false; el.textContent = "🔒 Mit dem Tablet-Führerschein"; return; }
     const st = Zeit.status();
     el.hidden = st.frei || st.spielen; el.textContent = st.genug ? "😴 Für heute genug gespielt" : "🌱 Erst lernen – die Nachbarn helfen dir";
   }
   zeigeInselStatus(); setInterval(zeigeInselStatus, 10000);
+
+  // Ohne Tablet-Führerschein bleibt die Insel zu – Robo Pixel begrüßt und erklärt, wie man hinkommt
+  const inselOffen = () => S.offen(medien && medien.fuehrerschein);
+  function roboBegruessung() {
+    const L = 6, fertig = Object.values((medien && medien.lektionen) || {}).filter(x => x > 0).length;
+    document.getElementById("robo-bild").innerHTML = window.Figuren ? Figuren.robo("") : "🤖";
+    document.getElementById("robo-text").textContent = fertig
+      ? `Hallo ${S.profil.name || "du"}! Deine Insel wartet schon auf dich. Du hast ${fertig} von ${L} Lektionen im Tablet-Führerschein geschafft – mach weiter, dann öffnet sich die Insel!`
+      : `Hallo ${S.profil.name || "du"}! Deine eigene Insel wartet auf dich. Den Schlüssel bekommst du bei mir: Mach den Tablet-Führerschein – 6 kurze Lektionen. Dann darfst du auf deine Insel!`;
+    const ru = S.paar(["", "Пип! Твой остров ждёт тебя. Ключ ты получишь у меня: пройди права на планшет — 6 коротких уроков."])[1];
+    const r = document.getElementById("robo-ru"); r.textContent = ru; r.hidden = !ru;
+    document.getElementById("robo-dialog").hidden = false;
+    if (window.Sprache && Sprache.sprich) Sprache.sprich(document.getElementById("robo-text").textContent, "de-DE");
+  }
+  document.getElementById("robo-zu").addEventListener("click", () => { document.getElementById("robo-dialog").hidden = true; if (window.Sprache && Sprache.stopp) Sprache.stopp(); });
+  const tuerInsel = document.getElementById("tuer-insel");
+  if (!inselOffen()) {
+    tuerInsel.classList.add("zu");
+    tuerInsel.querySelector("p").textContent = "Robo Pixel hat den Schlüssel: Mach den Tablet-Führerschein!";
+    tuerInsel.addEventListener("click", (e) => { e.preventDefault(); S.ton && S.ton("tipp"); roboBegruessung(); });
+    if (new URLSearchParams(location.search).has("robo")) { history.replaceState(null, "", location.pathname); roboBegruessung(); }
+  }
 
 </script>
 </body>

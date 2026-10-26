@@ -386,5 +386,7 @@
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Vorlesen ist an." : "Vorlesen ist aus."); });
 
   zeichneListe();
+  // Aus „Mein Ich“: direkt den Führerschein zeigen – aber nur, wenn das Kind ihn wirklich hat
+  if (location.hash === "#fuehrerschein" && daten().fuehrerschein) zeigeFuehrerschein();
   window.__medien = { starte, get lauf() { return lauf; } };
 })();

@@ -21,7 +21,12 @@ const SAISON = [12, 1, 2].includes(MONAT) ? "winter" : [3, 4, 5].includes(MONAT)
 const NACHT = STUNDE >= 20 || STUNDE < 6.5, DAEMMER = !NACHT && (STUNDE >= 18 || STUNDE < 8);
 const GRAFIK_KEY = "lerninsel.grafik";
 const lies = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
-const EINFACH = lies(GRAFIK_KEY) === "einfach";
+// Insel-Einstellungen (Grafik, Steuerung, Kamera) werden pro Kind bei den Eltern-Daten gemerkt.
+// Eltern legen im Elternbereich fest, ob das Kind die Knöpfe überhaupt sieht (kindDarf). Alte Tablet-Werte dienen als Startwert.
+const EIN = Object.assign({ grafik: lies(GRAFIK_KEY) === "einfach" ? "einfach" : "schoen", steuerung: lies("lerninsel.steuerung") === "tippen" ? "tippen" : "joystick", kamera: "fest", kindDarf: true },
+  (S.lade("eltern") || {}).insel || {});
+function merkeEin(k, v) { EIN[k] = v; const e = S.lade("eltern") || {}; e.insel = Object.assign({}, e.insel || {}, { [k]: v }); S.speichere("eltern", e); }
+const EINFACH = EIN.grafik === "einfach";
 const RUHIG = !!(window.Zeit && window.Zeit.regeln().ruhig); // ruhige Darstellung: Gras und Wasser bewegen sich nicht
 
 // ---------- Renderer, Szene, Licht ----------
@@ -77,8 +82,8 @@ const profi = () => S.offen((S.lade("medien") || {}).fuehrerschein);
 function spielOrt(fn) {
   if (spielZeit()) { fn(); return; }
   const st = Z.status();
-  sprechblase("💤", "Schläft noch", st.genug ? "Für heute ist genug gespielt. Morgen geht es weiter!" : `Erst lernen, dann spielen! Noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Ella, Fipsi, Pixel und der Matheweg helfen dir.`,
-    S.paar(["", "Сначала учиться, потом играть! Элла, Фипси, Пиксель и математическая тропа помогут тебе."])[1], null);
+  sprechblase("💤", "Schläft noch", st.genug ? "Für heute ist genug gespielt. Morgen geht es weiter!" : `Erst lernen, dann spielen! Noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Ella, Fipsi und der Matheweg helfen dir.`,
+    S.paar(["", "Сначала учиться, потом играть! Элла, Фипси и математическая тропа помогут тебе."])[1], null);
 }
 // aktion = Beschriftung des Aktionsknopfs, wenn die Figur nah davor steht; nah = Reichweite
 function antippbar(obj, fn, aktion = ["👀", "Ansehen"], nah = 1.9) { Object.assign(obj.userData, { tipp: fn, aktion, nah }); tippbar.push(obj); }
@@ -468,7 +473,8 @@ const name = S.profil.name || "du";
 const NACHBARN = [
   { bau: eule, x: 8.5, z: -3, dreh: -1.2, e: "eule", titel: "Eule Ella", text: `Hallo ${name}! Ich weiß spannende Dinge über die Welt. Kommst du mit?`, ru: "Привет! Я знаю много интересного о мире. Пойдёшь со мной?", ziel: "../sachkunde/" },
   { bau: fipsi, x: -7.6, z: -0.6, dreh: 1.0, e: "fipsi", titel: "Fipsi", text: `Hallo ${name}! Hilfst du mir, meine Schatzkarte zu finden?`, ru: "Привет! Поможешь мне найти мою карту сокровищ?", ziel: "../deutsch/" },
-  { bau: robo, x: 5.5, z: 8.5, dreh: -2.6, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Хочешь стать мастером планшета?", ziel: "../medien/" },
+  // Robo Pixel wohnt vorerst nicht auf der Insel: Er begleitet den Tablet-Führerschein (Schlüssel zur Insel) und kommt später zurück.
+  // { bau: robo, x: 5.5, z: 8.5, dreh: -2.6, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Хочешь стать мастером планшета?", ziel: "../medien/" },
   { bau: () => tafel("Mathe", "#5CCBA6"), x: 2, z: -8, dreh: 0.2, e: "🧮", titel: "Der Matheweg", text: "Hier beginnt der Matheweg. Sammle Sterne an jeder Station!", ru: "Здесь начинается математическая тропа. Собирай звёзды на каждой станции!", ziel: "../mathe/" }
 ];
 // Lernfunde des Tages: Wer heute etwas Neues im Fach gelernt hat, wird vom passenden Nachbarn begrüßt.
@@ -746,7 +752,7 @@ function rausgehen() {
   ich.position.set(-4.1, 0.25, -2.0); ich.rotation.y = 0;
   if (tier) tier.position.set(-3.0, 0.25, -1.6);
   scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true);
-  $("info").textContent = spielZeit() ? `Hallo ${name}!` : "🌱 Erst lernen: Geh zu Ella, Fipsi, Pixel oder zum Matheweg.";
+  $("info").textContent = spielZeit() ? `Hallo ${name}!` : "🌱 Erst lernen: Geh zu Ella, Fipsi oder zum Matheweg.";
   if (wetter) { wendeWetterAn(wetter); zeigeWetterInfo(); }
   S.ton("tipp");
 }
@@ -755,7 +761,7 @@ $("raus").addEventListener("click", rausgehen);
 // Lernmodus anzeigen und bei Änderung der Spielzeit aktualisieren
 function zeigeLernmodus() {
   const an = !spielZeit(); $("lern-hinweis").hidden = !an;
-  if (an && Z) { const st = Z.status(); $("lern-hinweis").textContent = st.genug ? "😴 Für heute genug gespielt – Lernen geht noch!" : `🌱 Erst lernen: noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Geh zu Ella, Fipsi, Pixel oder zum Matheweg!`; }
+  if (an && Z) { const st = Z.status(); $("lern-hinweis").textContent = st.genug ? "😴 Für heute genug gespielt – Lernen geht noch!" : `🌱 Erst lernen: noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Geh zu Ella, Fipsi oder zum Matheweg!`; }
   if (an && drinnen) rausgehen();
 }
 document.addEventListener("zeit-aenderung", zeigeLernmodus);
@@ -894,25 +900,28 @@ fl.addEventListener("pointerup", e => {
   }
 });
 fl.addEventListener("wheel", e => { if (!freiKamera) return; e.preventDefault(); abstand = MathUtils.clamp(abstand + e.deltaY * 0.01, 6, 26); }, { passive: false });
-$("kamera").addEventListener("click", (e) => {
-  freiKamera = !freiKamera; e.currentTarget.classList.toggle("an", freiKamera);
-  e.currentTarget.textContent = freiKamera ? "🎥 frei" : "🎥 fest";
+function zeigeKamera() { const k = $("kamera"); k.classList.toggle("an", freiKamera); k.textContent = freiKamera ? "🎥 frei" : "🎥 fest"; }
+freiKamera = EIN.kamera === "frei"; zeigeKamera();
+$("kamera").addEventListener("click", () => {
+  freiKamera = !freiKamera; zeigeKamera(); merkeEin("kamera", freiKamera ? "frei" : "fest");
   if (!freiKamera) { gieren = 0; neigung = 0.72; abstand = 15; }
 });
+// Eltern können die Einstellungs-Knöpfe ausblenden (Erwachsene sehen sie immer)
+if (!EIN.kindDarf && !(S.erwachsen && S.erwachsen())) ["grafik", "steuerung", "kamera"].forEach(id => { $(id).hidden = true; });
 $("grafik").textContent = EINFACH ? "✨ einfach" : "✨ schön";
 // Steuerung: Joystick oder Tippen (jederzeit umschaltbar, das Tablet merkt es sich)
-let STEUERUNG = lies("lerninsel.steuerung") === "tippen" ? "tippen" : "joystick";
+let STEUERUNG = EIN.steuerung === "tippen" ? "tippen" : "joystick";
 function zeigeSteuerung() {
   $("steuerung").textContent = STEUERUNG === "tippen" ? "👆 Tippen" : "🕹️ Joystick";
   $("joy-hinweis").textContent = STEUERUNG === "tippen" ? "👆 Tippe auf die Wiese zum Laufen · Antippen zum Reden" : "🕹️ Hier links schieben zum Laufen · Antippen zum Reden";
 }
 $("steuerung").addEventListener("click", () => {
   STEUERUNG = STEUERUNG === "tippen" ? "joystick" : "tippen";
-  try { localStorage.setItem("lerninsel.steuerung", STEUERUNG); } catch (e) { /* egal */ }
+  merkeEin("steuerung", STEUERUNG);
   zeigeSteuerung(); $("joy-hinweis").hidden = false; setTimeout(() => { $("joy-hinweis").hidden = true; }, 4000); S.ton("tipp");
 });
 zeigeSteuerung();
-$("grafik").addEventListener("click", () => { try { localStorage.setItem(GRAFIK_KEY, EINFACH ? "schoen" : "einfach"); } catch (e) { /* egal */ } location.reload(); });
+$("grafik").addEventListener("click", () => { merkeEin("grafik", EINFACH ? "schoen" : "einfach"); setTimeout(() => location.reload(), 150); });
 let ankunft = null;
 const marke = new Mesh(new TorusGeometry(0.35, 0.06, 6, 28), new MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.9 }));
 marke.rotation.x = Math.PI / 2; marke.visible = false; scene.add(marke);
@@ -999,7 +1008,7 @@ function bild() {
     const soll = nah ? Math.atan2(dx, dz) : n.dreh; let diff = soll - o.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff)); o.rotation.y += diff * Math.min(1, dt * 4);
     if (n.freut && !(o.userData.huepf > 0) && (t + i * 1.3) % 5 < dt) o.userData.huepf = 1;
     if (o.userData.koerper) o.userData.koerper.scale.y = 1 + Math.sin(t * 2.2 + i) * 0.02; if (o.userData.huepf > 0) { o.userData.huepf = Math.max(0, o.userData.huepf - dt * 2); }
-    o.position.y = 0.25 + Math.sin((1 - (o.userData.huepf || 0)) * Math.PI) * (o.userData.huepf ? 0.4 : 0) + (i === 2 ? Math.sin(t * 2) * 0.05 : 0);
+    o.position.y = 0.25 + Math.sin((1 - (o.userData.huepf || 0)) * Math.PI) * (o.userData.huepf ? 0.4 : 0) + (n.e === "robo" ? Math.sin(t * 2) * 0.05 : 0);
   });
   if (wissen) wissen.tick(t);
   ballons.children.forEach(b => { if (b.userData.p !== undefined) b.position.y = 2.3 + (b.userData.p % 2) * 0.35 + Math.sin(t * 1.5 + b.userData.p) * 0.12; });

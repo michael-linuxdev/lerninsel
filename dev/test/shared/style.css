@@ -1,5 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
 
+/* hidden muss immer gewinnen – sonst bleiben z. B. .knopf-Elemente trotz hidden sichtbar */
+[hidden] { display: none !important; }
+
 :root {
   --pflaume: #4B2380;
   --pflaume-hell: #7B55B8;

@@ -64,7 +64,7 @@
 <body>
 <div id="buehne"></div>
 <div class="leiste">
-  <a class="knopf" href="./" aria-label="Zur 3D-Welt">⬅️</a>
+  <a class="knopf" href="../../" aria-label="Zur Startseite">⬅️</a>
   <div class="knopf">⭐ <b id="sterne">0</b></div>
   <span class="platz"></span>
   <button class="knopf" id="grafik" aria-label="Grafik schön oder einfach">✨ schön</button>
@@ -100,6 +100,7 @@
 <script src="../../shared/lernfunde.js"></script>
 <script src="../../shared/sticker.js"></script>
 <script src="../../shared/zeit.js" data-art="insel"></script>
+<script>/* Die Insel öffnet sich erst mit dem Tablet-Führerschein – sonst begrüßt Robo Pixel auf der Startseite */ if (!Spielwelt.offen((Spielwelt.lade("medien") || {}).fuehrerschein)) location.replace("../../?robo=1");</script>
 <script src="../../shared/sprache.js"></script>
 <script src="../anziehen/teile.js"></script>
 <script src="../anziehen/figur.js"></script>

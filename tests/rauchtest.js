@@ -53,6 +53,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       if (name !== "Testkind") fehler.push(`wer spielt: falsches Kind aktiv (${name})`);
       await w.close();
     }
+    // Die Insel und die Minispiele öffnen sich erst mit dem Tablet-Führerschein
+    if (lage === "quer") { const f = await neueSeite(ctx, "führerschein"); await f.goto(BASIS); await f.evaluate(() => { const m = Spielwelt.lade("medien") || {}; m.fuehrerschein = "2026-10-01"; Spielwelt.speichere("medien", m); }); await f.waitForTimeout(300); await f.close(); }
     if (lage === "quer") for (const s of SEITEN_3D) {
       const q = await neueSeite(ctx, `${s} (3D)`);
       await q.goto(BASIS + s); await q.waitForTimeout(2500); await q.close();

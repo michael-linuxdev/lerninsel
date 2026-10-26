@@ -2,70 +2,11 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<title>3D-Welt</title>
-<meta name="theme-color" content="#EDE6FF">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="manifest" href="../../manifest.webmanifest">
-<link rel="apple-touch-icon" href="../../icons/icon-180.png">
-<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../shared/style.css">
-<style>
-  body { background: #EDE6FF; background-image: none; }
-  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
-  .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; }
-  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
-  .sterne b { font-size: 1.4rem; }
-  .spiele { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 980px; margin: 24px auto; padding: 0 16px; }
-  .spiel {
-    position: relative; overflow: hidden; border-radius: 30px; min-height: 320px; padding: 22px; color: #fff; text-decoration: none;
-    display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
-    box-shadow: inset 0 0 0 6px rgba(255,255,255,.35), 0 8px 0 rgba(0,0,0,.15);
-  }
-  .spiel:active { transform: scale(.98); }
-  .spiel h2 { margin: 0; font-size: 2.2rem; }
-  .spiel p { margin: 0; font-size: 1.2rem; font-weight: 500; max-width: 26ch; }
-  .spiel .gross { position: absolute; top: 18px; right: 22px; font-size: 6rem; line-height: 1; }
-  .spiel .rekord { position: absolute; top: 18px; left: 18px; background: rgba(255,255,255,.9); color: var(--pflaume); font-weight: 600; padding: 6px 14px; border-radius: 999px; }
-  .ballons { background: linear-gradient(160deg, #FF8CC6, #C2337A); }
-  .insel { background: linear-gradient(160deg, #4FB5E6, #2E9C77); }
-  .heimat { grid-column: 1 / -1; background: linear-gradient(160deg, #8FD66B, #3E9E5A); }
-  @media (max-width: 700px) { .spiele { grid-template-columns: 1fr; } .spiel { min-height: 230px; } }
-  .gesperrt { max-width: 560px; margin: 40px auto; background: #fff; border-radius: 30px; padding: 30px; text-align: center; }
-  .gesperrt .gross { font-size: 5rem; }
-  .gesperrt h2 { margin: 6px 0; font-size: 2rem; }
-  .gesperrt p { font-size: 1.3rem; line-height: 1.4; }
-  .gesperrt .knopf { min-height: 62px; font-size: 1.3rem; }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spielwelt</title>
+<!-- Die frühere Übersicht „3D-Welt“ gibt es nicht mehr: Alles läuft über „Meine Insel“ (heimat.html), die Minispiele liegen auf der Insel. -->
+<script>location.replace("../../");</script>
+<meta http-equiv="refresh" content="0; url=../../">
 </head>
-<body>
-<div class="oben">
-  <a class="knopf rund" href="../../" aria-label="Zur Spielwelt">🏠</a>
-  <h1>3D-Welt</h1>
-  <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
-</div>
-<div id="inhalt"></div>
-<script src="../../shared/config.js"></script>
-<script src="../../shared/core.js" data-root="../../"></script>
-<script src="../../shared/charakter.js"></script>
-<script src="../../shared/zeit.js" data-art="spielen"></script>
-<script>
-  const S = Spielwelt;
-  document.getElementById("sterne").textContent = S.sterne();
-  const m = S.lade("medien"), w = S.lade("welt3d") || {};
-  const inhalt = document.getElementById("inhalt");
-  if (!S.offen(m && m.fuehrerschein)) {
-    inhalt.innerHTML = `<div class="gesperrt"><div class="gross">🪪</div><h2>Noch verschlossen</h2>
-      <p>Die 3D-Welt öffnet sich mit dem Tablet-Führerschein. Mach alle Lektionen bei Robo Pixel!</p>
-      <a class="knopf haupt" href="../medien/" style="text-decoration:none">Zum Tablet-Führerschein</a></div>`;
-  } else {
-    const rek = w.ballon && w.ballon.rekord, ins = w.insel && w.insel.geschafft;
-    inhalt.innerHTML = `<div class="spiele">
-      <a class="spiel heimat" href="heimat.html"><span class="gross" aria-hidden="true">🏡</span><h2>Meine Insel</h2><p>Dein Zuhause mit deinem Tier und deinen Nachbarn</p></a>
-      <a class="spiel ballons" href="ballons.html">${rek ? `<span class="rekord">Rekord: ${rek}</span>` : ""}<span class="gross" aria-hidden="true">🎈</span><h2>Ballon-Party</h2><p>Tippe die Ballons an, bevor sie wegfliegen</p></a>
-      <a class="spiel insel" href="insel.html">${ins ? `<span class="rekord">Schon ${ins}× geschafft</span>` : ""}<span class="gross" aria-hidden="true">🏝️</span><h2>Insel-Abenteuer</h2><p>Lauf über die Insel und finde den Schatz</p></a>
-    </div>`;
-  }
-</script>
-</body>
+<body></body>
 </html>

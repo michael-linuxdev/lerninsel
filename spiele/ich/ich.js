@@ -22,6 +22,11 @@
     if (tier && tier.phase === "tier") $("tier-link").textContent = `🐾 ${tier.name || "Mein Tier"} (${Tiere.ARTEN[tier.art].name})`;
     else if (tier && tier.phase === "ei") $("tier-link").textContent = "🥚 Mein Ei";
     $("titel").textContent = C.titel();
+    // Tablet-Führerschein (Schlüssel zur Insel): Fortschritt, oder der fertige Führerschein zum Ansehen
+    const md = S.lade("medien") || {}, anz = (window.LEKTIONEN || []).length || 6, ok = Object.values(md.lektionen || {}).filter(x => x > 0).length;
+    const fs = $("fs-link");
+    if (md.fuehrerschein) { fs.textContent = "🪪 Mein Tablet-Führerschein"; fs.href = "../medien/#fuehrerschein"; }
+    else { fs.textContent = `🪪 Tablet-Führerschein: ${ok} von ${anz}`; fs.href = "../medien/"; }
     $("gesamt").textContent = `Gesamtstufe ${C.gesamt()} von ${C.FAEHIGKEITEN.length * C.MAX}`;
 
     // Superkräfte (Vorteile)

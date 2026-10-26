@@ -223,6 +223,35 @@
       <div class="knoepfe"><button class="knopf haupt" id="z-speichern">Speichern</button><button class="knopf" id="z-empf">Empfehlung übernehmen</button><button class="knopf" id="z-extra">+10 Minuten nur heute</button></div>
     </div>`;
   }
+  // ---------- Insel-Einstellungen (pro Kind, werden auf der Insel gemerkt) ----------
+  function inselEin() {
+    const lies = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+    return Object.assign({ grafik: lies("lerninsel.grafik") === "einfach" ? "einfach" : "schoen", steuerung: lies("lerninsel.steuerung") === "tippen" ? "tippen" : "joystick", kamera: "fest", kindDarf: true },
+      (S.lade("eltern") || {}).insel || {});
+  }
+  function inselKarte() {
+    const e = inselEin();
+    const wahl = (id, wert, opts) => `<select id="${id}">${opts.map(([v, t]) => `<option value="${v}" ${v === wert ? "selected" : ""}>${t}</option>`).join("")}</select>`;
+    return `<div class="karte">
+      <h2>🏝️ Insel-Einstellungen</h2>
+      <div class="zeit-raster">
+        <label>Grafik${wahl("i-grafik", e.grafik, [["schoen", "✨ Schön"], ["einfach", "Einfach (für ältere Tablets)"]])}</label>
+        <label>Laufen${wahl("i-steuerung", e.steuerung, [["joystick", "🕹️ Joystick"], ["tippen", "👆 Tippen"]])}</label>
+        <label>Kamera${wahl("i-kamera", e.kamera, [["fest", "🎥 Fest (folgt der Figur)"], ["frei", "🎥 Frei (drehen und zoomen)"]])}</label>
+      </div>
+      <label class="schalter-z"><input type="checkbox" id="i-kind" ${e.kindDarf ? "checked" : ""}> Das Kind darf diese Einstellungen auf der Insel selbst umschalten</label>
+      <p class="klein">Ist der Haken aus, sind die drei Knöpfe auf der Insel ausgeblendet und es gilt, was hier eingestellt ist. Änderungen des Kindes werden gemerkt.</p>
+      <div class="knoepfe"><button class="knopf haupt" id="i-speichern">Speichern</button></div>
+    </div>`;
+  }
+  function inselKnoepfe() {
+    $("i-speichern").addEventListener("click", () => {
+      const e = S.lade("eltern") || {};
+      e.insel = { grafik: $("i-grafik").value, steuerung: $("i-steuerung").value, kamera: $("i-kamera").value, kindDarf: $("i-kind").checked };
+      S.speichere("eltern", e); S.meldung("Insel-Einstellungen gespeichert.");
+    });
+  }
+
   function zeitKnoepfe() {
     if (!Z) return;
     const wert = (id) => Math.max(0, parseInt($(id).value, 10) || 0);
@@ -312,6 +341,7 @@
         <p><b>3D-Welt:</b> Ballon-Rekord ${(welt.ballon && welt.ballon.rekord) || 0} Punkte, Insel-Schatz ${(welt.insel && welt.insel.geschafft) || 0}× gefunden</p>
       </div>
       ${zeitKarte()}
+      ${inselKarte()}
       <div class="karte">
         <h2>Kinder auf diesem Tablet</h2>
         <ul class="kinderliste">${S.kinder().map(k => `<li>${k.aktiv ? "👉 " : ""}<b>${k.name || "(noch ohne Namen)"}</b>${k.aktiv ? " – gerade aktiv" : ` <button class="knopf klein-k" data-wechsel="${k.id}">Wechseln</button>`}${S.kinder().length > 1 ? ` <button class="knopf klein-k" data-weg="${k.id}">Entfernen</button>` : ""}</li>`).join("")}</ul>
@@ -334,7 +364,7 @@
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
-    zeitKnoepfe();
+    zeitKnoepfe(); inselKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";

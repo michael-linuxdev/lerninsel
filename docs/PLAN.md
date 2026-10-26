@@ -346,6 +346,21 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - Rechte Zimmerwand: Korkwand „Das habe ich gelernt“ mit bis zu 8 Zetteln (Lernfunde der letzten 7 Tage, Fachfarbe, gemeistert golden,
   heutige golden umrandet). Antippen: Liste der Woche, Knopf zu „Mein Ich“. Wird beim Betreten der Insel neu gezeichnet.
 
+**Nachtrag 26.10.2026 – Insel-Zugang und Aufräumen (Feedback)**
+- Die Insel ist ohne Tablet-Führerschein gesperrt: Die Tür auf der Startseite zeigt 🔒, Antippen öffnet die Begrüßung von Robo Pixel
+  („Den Schlüssel bekommst du bei mir …“) mit Knopf zum Führerschein; ein direkter Aufruf von heimat.html leitet ebenfalls dorthin.
+- Die alte Übersicht „3D-Welt“ (spiele/welt3d/index.html) leitet zur Startseite; Zurück von der Insel → Startseite, aus Ballon-Party/Insel-Abenteuer → Insel.
+- Kachel „Tablet-Profi“ entfernt; der Führerschein steht in „Mein Ich“ („Tablet-Führerschein: 3 von 6“ bzw. „Mein Tablet-Führerschein“).
+- „Meinen Führerschein ansehen“ nur noch mit Führerschein: Ursache war, dass `.knopf` das `hidden`-Attribut überschrieb → global `[hidden] { display: none !important }`.
+- Robo Pixel wohnt vorerst nicht auf der Insel (kommt im späteren Spielverlauf zurück).
+- Insel-Einstellungen Grafik/Laufen/Kamera werden pro Kind gemerkt; im Elternbereich „🏝️ Insel-Einstellungen“ mit Schalter, ob das Kind die Knöpfe sieht.
+
+**Wünsche aus dem Feedback (26.10.2026), noch zu planen:**
+- **Charakter für Mathe** (wie Fipsi, Ella, Robo): eigene Figur mit 2D-Zeichnung, 3D-Modell auf der Insel statt der Tafel, Sprechtexte de/ru.
+- **Coolere Minispiele**, die zum Lernen motivieren (Spielzeit als Belohnung muss sich lohnen).
+- **Eigene Welt statt fester Insel:** zufällig erzeugtes, größeres Stück Land nach Wünschen und Vorlieben des Kindes
+  (z. B. Wald, Berge, Strand, Schnee, Wiese, Farben), als Skin austauschbar, neu erzeugbar und speicherbar (Seed + Vorlieben, klein für den QR-Transfer).
+
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → Eltern als Mitspieler („hat es mir erklärt“, Duell) → „echte Welt“-Aufgaben →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**
