@@ -581,7 +581,7 @@ Alle Pakete: kein Bezug zu einem echten Kind, Texte mit Sprachschlüsseln, Rauch
   Kind kann ihn bei Pixel („Wie ging das nochmal?“) wiederholen; läuft auf „einfach“.
 - Test: Playwright neues Kind → Prolog → Haus betreten (`__heimat.reingehen`), `story.etappen.E1 = true`.
 
-**NA-12 Insel-Zugang neu regeln** (S, **wartet auf Antwort des Auftraggebers**)
+**NA-12 Insel-Zugang neu regeln** (S, Antwort 26.10.2026: ja – erledigt)
 - Ziel: Statt des kompletten Tablet-Führerscheins öffnet die Lektion „Bedienung“ (im Prolog) die Insel; übrige Lektionen werden
   Aufgaben in Kapitel 1–2. Elternschalter „Insel erst nach komplettem Führerschein“ behält die alte Regel.
 - Dateien: `index.html` (`inselOffen`), `spiele/medien/medien.js`, `spiele/eltern/eltern.js`.
@@ -609,7 +609,7 @@ Alle Pakete: kein Bezug zu einem echten Kind, Texte mit Sprachschlüsseln, Rauch
 - Abnahme: außerhalb Dezember gleicher Prolog ohne Schnee/Paket; Tannenbaum bleibt im Zimmer, kann weggeräumt werden.
 - Test: `window.__jetzt` auf 10.12. und 10.11.
 
-**NA-16 Weihnachts-QR-Geschenk (signiert)** (M, **Schlüsselfrage offen**)
+**NA-16 Weihnachts-QR-Geschenk (signiert)** (M, Antwort 26.10.2026: privater Schlüssel nur beim Auftraggeber, Node-Skript – einverstanden; Geschenk-Auswahl noch offen)
 - Ziel: QR-Code mit Geschenk (z. B. Ei mit Schleife, Möbel), signiert; jeder Code einmal pro Kind; funktioniert offline.
 - Dateien: neu `shared/geschenk.js` (Prüfung mit öffentlichem Schlüssel über WebCrypto ECDSA P-256), Scanner aus dem QR-Transfer
   wiederverwenden, `quellen/geschenk-erzeugen.js` (Node, läuft nur beim Auftraggeber, privater Schlüssel **nie** im Repo).
@@ -693,11 +693,11 @@ NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Vol
 - `docs/LIZENZEN.md` anlegen, sobald die erste fremde Datei (CC0-Modell, Noto-Schrift, Stimme) ins Repo kommt.
 
 ### Reihenfolge (gültig ab 26.10.2026, ersetzt die bisherigen Reihenfolgen)
-1. **NA-01** Story-Zustand und Ereignisse → **NA-02** Profil erweitern
-2. **NA-10** Szenen-Baustein → **NA-11** Prolog → **NA-13** Erst lernen/erste Frucht → **NA-15** Weihnachts-Sonderstart
-   (**Meilenstein 15.12.2026:** Prolog, E1–E3, Weihnachten)
+1. ~~**NA-01** Story-Zustand und Ereignisse~~ → ~~**NA-02** Profil erweitern~~
+2. ~~**NA-10** Szenen-Baustein~~ → ~~**NA-11** Prolog~~ → ~~**NA-13** Erst lernen/erste Frucht~~ → ~~**NA-15** Weihnachts-Sonderstart~~
+   (**Meilenstein 15.12.2026:** Prolog, E1–E3, Weihnachten – technisch erreicht am 27.10.2026, iPad-Test steht aus)
 3. Daneben, sobald eine Sitzung Luft hat: **NA-21** Leistungs-Test → **NA-20** Probeszenen (Stilentscheidung im November)
-4. **NA-14** Tutorial E4–E8 → **NA-12** Insel-Zugang (nach Antwort) → **NA-16** QR-Geschenk (nach Antwort) → **NA-17** Kapitel 1–2 → **NA-18** Chronik
+4. **NA-14** Tutorial E4–E8 → ~~**NA-12** Insel-Zugang~~ → **NA-16** QR-Geschenk → **NA-17** Kapitel 1–2 → **NA-18** Chronik
 5. **NA-03** Lehrplan-Kern → **NA-40** Wortschatz-Kern/DaZ D0 → **NA-30** Anlaute → **NA-32** Mathe Kl. 1/Vorschule → **NA-31** Lesen
 6. **NA-22** eine Kind-Figur → **NA-23** Neubau nach Stilwahl (abwechselnd mit 7)
 7. **NA-50** Können je Lernziel → **NA-51** Bennos Brücke → **NA-52** Paulas Fest → NA-53/54/55
@@ -705,6 +705,9 @@ NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Vol
 9. Minispiele **NA-60**, **NA-61**, **NA-62**, **NA-64**, dann der Rest; Phase G
 
 ### Offene Fragen an den Auftraggeber
+Antworten vom 26.10.2026: Frage 1 **ja** (umgesetzt in NA-12), Frage 2 **ja** zum Schlüssel-Verfahren (welche Geschenke, ist noch offen).
+Keine neuen Rückmeldungen vom iPad 10; Reihenfolge gilt unverändert; nichts ist für die Sitzung gesperrt.
+
 1. **Insel-Zugang (NA-12):** Reicht künftig die Lektion „Bedienung“ im Prolog, und die übrigen Führerschein-Lektionen werden Aufgaben in
    Kapitel 1–2? (Vorschlag: ja, mit Elternschalter für die alte Regel.)
 2. **QR-Geschenke (NA-16):** Einverstanden, dass ein privater Schlüssel nur beim Auftraggeber liegt und Geschenke per Node-Skript erzeugt werden?
@@ -715,3 +718,51 @@ NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Vol
 5. **Tonaufnahmen:** Wer spricht die deutschen Aufnahmen für Wortschatz, Tutorial und Prolog ein (ruhige Erwachsenenstimme), und ist eine
    vorab erzeugte Sprachausgabe (z. B. Piper) für Sprachen ohne Gerätestimme in Ordnung, wenn ein Muttersprachler sie anhört?
 
+
+### Stand 27.10.2026 (Sitzung 26./27.10.: NA-01, NA-02, NA-10, NA-11, NA-12, NA-13, NA-15)
+**Fertig und gepusht** (jeweils mit eigenem Test, Rauchtest grün, `/dev` gebaut):
+- **NA-01** `shared/ereignisse.js`: `Ereignisse.melde/hoere/offene/abholen` (Arten `fund`, `bild`, `melodie`, `bauwerk`, `kapitel`, `etappe`);
+  Ereignisse ohne Zuhörer, der sie erledigt (`return true`), werden in `story.offen` vorgemerkt (höchstens 20). `window.Story` mit Kapitel
+  (nie rückwärts), Etappen, gesehenen Szenen, Chronik, Geschenken. Migration in `bereinige()` (Node-Test `tests/story-migration.js`) und beim Laden;
+  QR-Daten wachsen um ~44 Zeichen. Gemeldet wird aus `lernfunde.js`, Atelier (`bild`) und Musik (`melodie`). Test `tests/ereignisse.js`.
+- **NA-02** Profil: `stufe` (vs, 1–4, 5), `land` (sn, nw, by, bw, ni, bb), `muttersprache` (auch ohne fertige Hilfe), `deutschstand`
+  (keine/wenig/alltag/gut) mit kurzer Erklärung; `klasse` bleibt für alte Abfragen (vs → 1, 5 → 4). Ehrliche Hinweise für Vorschule,
+  Übergang 5 und Länder ohne eigenen Lehrplan („Was übt die App?“ zeigt dann Sachsen als Beispiel). Alte Spielstände: Klasse 2 → `stufe: "2"`,
+  `"sachsen"` → `"sn"`. Test `tests/profil.js`.
+- **NA-10** `shared/szene.js` (höchstens 4 Blasen, Vorlesen an/aus, Hilfesprache-Knopf, bei Deutschstand keine/wenig gleich sichtbar,
+  „Weiter“ leuchtet nach dem Vorlesen, `bis` = warten auf eine Handlung, `beim` = etwas passiert in der Welt, Blase rutscht nach oben,
+  wenn sie das Ziel verdeckt) und `shared/zeige.js` (Zeigehand, Leuchten, Schiebe-Geste, Pfeil am Rand für Ziele außerhalb des Bildes).
+  Übersetzungen mit `status: { ru: "entwurf" }` erscheinen **nur in /dev** (gestrichelt markiert), nie auf der Hauptseite.
+  Probeszene `?szene=probe` auf Startseite und Insel. `window.Insel.ort("haus")` usw. für 3D-Ziele. Test `tests/szene.js`.
+- **NA-11** Prolog „Ankunft“ (E1): Steg mit Pixels Boot am Südufer (mit der Deko verschmolzen), Kamerafahrt, Laufen mit Zeigehand
+  (oder Tippen), Haus, Aktionsknopf. Im Prolog darf das Kind auch ohne Spielzeit ins Haus. **Robo Pixel wohnt wieder auf der Insel** (am Steg)
+  und bietet „🔁 Wie ging das nochmal?“ an. Elternbereich: Karte „🧭 Geschichte und Einführung“ (Ankunft überspringen/neu starten).
+  Kinder mit komplettem Führerschein von früher bekommen E1–E3 automatisch (Wert `1` = übernommen). Texte in `shared/szenen.js`. Test `tests/prolog.js`.
+- **NA-12** Insel-Zugang: `Spielwelt.inselOffen()` – Standard: erste Lektion „Das Tablet bedienen“ öffnet die Insel; Elternschalter
+  „Insel erst nach dem kompletten Tablet-Führerschein (alte Regel)“. **Minispiele brauchen weiter den kompletten Führerschein**
+  (sonst zurück auf die Insel bzw. Pixels Hinweis). Lektionsende zeigt „🏝️ Zur Insel“. Test `tests/zugang.js`.
+- **NA-13** Sonnenuhr am Steg (dunkel → gelb mit Lernfortschritt, hell mit Spielzeit, antippbar), Szene „Erst lernen“ (E2), Szene
+  „Die Sonne geht auf“, Szene „Erste Frucht“ (E3 = Kapitel 1 „Der Spross“) mit **weichendem Nebel** (Fog-Werte + ein Nebelband = 1 Zeichenaufruf).
+  Höchstens zwei neue Etappen am Tag (`Story.darfNeueEtappe()`). Test `tests/tutorial.js` (stellt die Uhr um einen Tag vor).
+- **NA-15** Weihnachts-Sonderstart: E1 zwischen 1. und 26.12. → Paket am Steg (wartet, bis es geöffnet ist), darin Tannenbaum (neues
+  Geschenk-Möbel, steht gleich im Zimmer, wegräumbar) und Schleife fürs Tier; im Dezember Lichterkette an Steg und Boot (1 Zeichenaufruf).
+  Geschenke landen in `story.geschenke` (Grundlage für NA-16). Test `tests/weihnachten.js`.
+
+**Abweichungen vom Plan / Entscheidungen**
+- Story-Daten liegen in `profil.daten.story` (Migration in `ereignisse.js`, beim Import in `spielstand.js`), nicht in einer eigenen Datei.
+- E2 gilt mit der Szene „Erst lernen“ als erledigt (nicht erst, wenn die Sonne aufgeht); das Aufgehen ist eine eigene Szene ohne Etappe.
+  Wer schon Spielzeit hat, sieht statt „Erst lernen“ gleich „Die Sonne geht auf“; ohne Zeit-Regeln wird E2 still erledigt.
+- Der Nebel richtet sich nach dem höheren Wert aus Kapitel und Lernfunden (1/5/15), Lernfunde zählen aber erst nach E3 –
+  so sieht ein neues Kind den Nebel weichen, und Kinder mit vielen Funden sehen keinen.
+- „Ei mit Schleife“ ist als **Schleife fürs Tier** umgesetzt (das Kind sucht sein Ei weiter selbst aus).
+- Die Insel lag schon vorher über dem Leistungsbudget (erste Insel „schön“ ≈ 495, „einfach“ ≈ 335 Zeichenaufrufe je nach Blick);
+  NA-11/13/15 kommen zusammen auf etwa +12 (Robo Pixel zurück, Sonnenuhr-Sonne, Nebelband, Lichter). Das Budget löst NA-21/NA-20.
+- Russische Texte der Szenen sind Entwürfe (`entwurf`) und brauchen eine Prüfung durch eine Muttersprachlerin.
+- `tests/laufen.sh <name>` startet einzelne Tests (`ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `weihnachten`).
+
+**Offen / als Nächstes**
+- **iPad 10 testen** (in `/dev`): neues Kind anlegen → erste Lektion bei Pixel → Insel (Ankunft, Joystick-Hand, Haus) → Insel nochmal öffnen
+  („Erst lernen“) → lernen → Insel („Sonne geht auf“) → am nächsten Tag „Erste Frucht“ und Nebel. Hochformat, Ton, Grafik „einfach“.
+  Weihnachten: im Testmodus `/dev/test` mit Uhr im Dezember nicht direkt einstellbar → am besten am 1.12. mit einem neuen Kind ansehen.
+- Nächstes Paket: **NA-14** Tutorial E4–E8 (`shared/tutorial.js`), daneben **NA-21** Leistungs-Test → **NA-20** Probeszenen.
+- NA-16 braucht die Geschenk-Auswahl für Weihnachten 2026; NA-18 (Chronik im Album) kann die Szenen aus `shared/szenen.js` direkt abspielen.

@@ -83,6 +83,10 @@ Frühere Planung (Historie):
 index.html              Startseite
 shared/config.js        Name-Vorschlag und Modus dieser Spielwelt
 shared/core.js          Profil, Sterne, Freischaltungen, Töne (für alle Spiele)
+shared/ereignisse.js    Insel-Ereignisse (fund, bild, melodie …) und Story-Zustand (Kapitel, Etappen, Chronik, Geschenke)
+shared/szene.js         Szenen-Baustein: Sprechblasen-Folgen für Story und Tutorial (vorgelesen, Hilfesprache, Zeigehand)
+shared/szenen.js        Texte der Story- und Tutorial-Szenen (Prolog, Erst lernen, Erste Frucht, Weihnachtspaket)
+shared/zeige.js         Zeigehand und Leuchten auf Knöpfe oder 3D-Punkte
 shared/style.css        Farben, Schrift, Knöpfe
 spiele/anziehen/        Anziehspiel (teile.js = Zeichnungen, spiel.js = Logik)
 spiele/mathe/           Mathe (aufgaben.js = Aufgaben und Rechenwege, mathe.js = Matheweg und Runden)

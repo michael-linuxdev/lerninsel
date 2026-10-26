@@ -35,7 +35,11 @@ Die Planung ist fertig. Diese Sitzung **baut**, in der Reihenfolge aus `docs/PLA
    „Stand <Datum>“ ergänzen (erledigte Pakete, Abweichungen vom Plan, offene Punkte, nächstes Paket), in der Reihenfolge erledigte Pakete
    durchstreichen, pushen und kurz berichten.
 
-## Erster Schritt: NA-01 „Story-Zustand und Insel-Ereignisse“ (S), danach NA-02 und NA-10
+## Stand 27.10.2026
+NA-01, NA-02, NA-10, NA-11, NA-12, NA-13 und NA-15 sind fertig (siehe „Stand 27.10.2026“ in `docs/PLAN.md`). Nächstes Paket: **NA-14**
+(Tutorial E4–E8, `shared/tutorial.js`), daneben NA-21/NA-20. Die Fragerunde trotzdem machen (iPad-Rückmeldung zu Prolog/Tutorial, Geschenke für NA-16).
+
+## (erledigt) Erster Schritt: NA-01 „Story-Zustand und Insel-Ereignisse“ (S), danach NA-02 und NA-10
 Konkret für NA-01 (Einzelheiten im Backlog):
 1. Neue Datei `shared/ereignisse.js`: `Ereignisse.melde(art, daten)` und `Ereignisse.hoere(art, fn)`; Arten `fund`, `bild`, `melodie`,
    `bauwerk`, `kapitel`, `etappe`. Ereignisse, die eine andere Seite betreffen, werden im Spielstand als kurze Liste vorgemerkt
@@ -91,7 +95,8 @@ Danach **NA-02** (Profil: Stufe, Deutschstand, Bundesland) und **NA-10** (Szenen
 - Pulsierende Knöpfe (Aktionsknopf) mit `click(…, { force: true })`.
 - Test-Haken: `__heimat` (blick, ich, reingehen, rausgehen, laufeZu, tippe, station, laden, zimmerDaten, aktion, druecke, rennt, wetter),
   `__atelier`, `__musik`, `__schach`, `__gefuehle`, `__lauf`, `__kart`, `__bau`, `__duell`, `__ich`, `__mathe`;
-  neu geplant: `__szene`, `__tutorial`, `__ereignisse`. Jeder neue Baustein bekommt einen Test-Haken.
+  `__szene`, `__ereignisse` (neu), `__heimat.prolog/sonnenuhr/nebel/paket/oeffnePaket/bildschirm`; geplant: `__tutorial`. Jeder neue Baustein bekommt einen Test-Haken.
+- Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `weihnachten`.
 - Externe Seiten (Open-Meteo, Google Fonts) sind aus der Sandbox meist nicht erreichbar – mit Cache-Daten in localStorage testen.
 
 ## Stand zu Beginn (26.10.2026)
