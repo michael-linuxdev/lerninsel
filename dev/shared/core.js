@@ -200,6 +200,15 @@
     eingerichtet() { return !!(profil.daten.eltern && profil.daten.eltern.eingerichtet); },
     kind() { return kindMigrieren(Object.assign({ alter: 8, klasse: 2, geschlecht: "n", hilfesprache: "" }, (profil.daten.eltern || {}).kind || {})); },
     STUFEN, LAENDER, DEUTSCHSTAND, MUTTERSPRACHEN, kindMigrieren,
+    // Insel-Zugang (NA-12): Standard ist die erste Lektion „Das Tablet bedienen“; Eltern können die alte Regel
+    // (kompletter Tablet-Führerschein) wählen. Die Minispiele brauchen weiter den kompletten Führerschein.
+    inselRegel() { return ((profil.daten.eltern || {}).insel || {}).zugang === "fuehrerschein" ? "fuehrerschein" : "bedienung"; },
+    inselOffen() {
+      const m = profil.daten.medien || {};
+      if (Spielwelt.offen(m.fuehrerschein)) return true;
+      return Spielwelt.inselRegel() === "bedienung" && !!(m.lektionen && m.lektionen.bedienung > 0);
+    },
+    minispieleOffen() { return Spielwelt.offen((profil.daten.medien || {}).fuehrerschein); },
     stufe() { return STUFEN.find(x => x.code === Spielwelt.kind().stufe); },
     land() { return LAENDER.find(x => x.code === Spielwelt.kind().land); },
     // Hilfesprachen: Inhalte tragen Hilfetexte als Felder je Sprache, z. B. { text, ru, uk } oder { warum, warumRu, warumUk }

@@ -340,21 +340,24 @@
   // Insel: zeigt, ob gerade Spielzeit ist (Lernen geht dort immer über die Nachbarn)
   function zeigeInselStatus() {
     const el = document.getElementById("insel-status"); if (!window.Zeit) return;
-    if (!S.offen(medien && medien.fuehrerschein)) { el.hidden = false; el.textContent = "🔒 Mit dem Tablet-Führerschein"; return; }
+    if (!S.inselOffen()) { el.hidden = false; el.textContent = S.inselRegel() === "bedienung" ? "🔒 Mit der ersten Lektion bei Robo Pixel" : "🔒 Mit dem Tablet-Führerschein"; return; }
     const st = Zeit.status();
     el.hidden = st.frei || st.spielen; el.textContent = st.genug ? "😴 Für heute genug gespielt" : "🌱 Erst lernen – die Nachbarn helfen dir";
   }
   zeigeInselStatus(); setInterval(zeigeInselStatus, 10000);
 
-  // Ohne Tablet-Führerschein bleibt die Insel zu – Robo Pixel begrüßt und erklärt, wie man hinkommt
-  const inselOffen = () => S.offen(medien && medien.fuehrerschein);
+  // Insel noch zu – Robo Pixel begrüßt und erklärt, wie man hinkommt (NA-12: erste Lektion „Das Tablet bedienen“,
+  // oder – wenn die Eltern die alte Regel gewählt haben – der komplette Tablet-Führerschein)
+  const inselOffen = () => S.inselOffen();
   function roboBegruessung() {
-    const L = 6, fertig = Object.values((medien && medien.lektionen) || {}).filter(x => x > 0).length;
+    const L = 6, fertig = Object.values((medien && medien.lektionen) || {}).filter(x => x > 0).length, neu = S.inselRegel() === "bedienung";
     document.getElementById("robo-bild").innerHTML = window.Figuren ? Figuren.robo("") : "🤖";
-    document.getElementById("robo-text").textContent = fertig
+    document.getElementById("robo-text").textContent = neu
+      ? `Hallo ${S.profil.name || "du"}! Deine eigene Insel wartet auf dich. Den Schlüssel bekommst du bei mir: Mach die erste Lektion „Das Tablet bedienen“. Dann bringe ich dich mit meinem Boot hin!`
+      : fertig
       ? `Hallo ${S.profil.name || "du"}! Deine Insel wartet schon auf dich. Du hast ${fertig} von ${L} Lektionen im Tablet-Führerschein geschafft – mach weiter, dann öffnet sich die Insel!`
       : `Hallo ${S.profil.name || "du"}! Deine eigene Insel wartet auf dich. Den Schlüssel bekommst du bei mir: Mach den Tablet-Führerschein – 6 kurze Lektionen. Dann darfst du auf deine Insel!`;
-    const ru = S.paar(["", "Пип! Твой остров ждёт тебя. Ключ ты получишь у меня: пройди права на планшет — 6 коротких уроков."])[1];
+    const ru = S.paar(["", neu ? "Пип! Твой остров ждёт тебя. Пройди первый урок «Как пользоваться планшетом» – и я отвезу тебя туда на лодке!" : "Пип! Твой остров ждёт тебя. Ключ ты получишь у меня: пройди права на планшет — 6 коротких уроков."])[1];
     const r = document.getElementById("robo-ru"); r.textContent = ru; r.hidden = !ru;
     document.getElementById("robo-dialog").hidden = false;
     if (window.Sprache && Sprache.sprich) Sprache.sprich(document.getElementById("robo-text").textContent, "de-DE");
@@ -363,7 +366,7 @@
   const tuerInsel = document.getElementById("tuer-insel");
   if (!inselOffen()) {
     tuerInsel.classList.add("zu");
-    tuerInsel.querySelector("p").textContent = "Robo Pixel hat den Schlüssel: Mach den Tablet-Führerschein!";
+    tuerInsel.querySelector("p").textContent = S.inselRegel() === "bedienung" ? "Robo Pixel hat den Schlüssel: Mach die erste Lektion bei ihm!" : "Robo Pixel hat den Schlüssel: Mach den Tablet-Führerschein!";
     tuerInsel.addEventListener("click", (e) => { e.preventDefault(); S.ton && S.ton("tipp"); roboBegruessung(); });
     if (new URLSearchParams(location.search).has("robo")) { history.replaceState(null, "", location.pathname); roboBegruessung(); }
   }

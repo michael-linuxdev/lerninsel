@@ -299,6 +299,8 @@
         <label>Kamera${wahl("i-kamera", e.kamera, [["fest", "🎥 Fest (folgt der Figur)"], ["frei", "🎥 Frei (drehen und zoomen)"]])}</label>
       </div>
       <label class="schalter-z"><input type="checkbox" id="i-kind" ${e.kindDarf ? "checked" : ""}> Das Kind darf diese Einstellungen auf der Insel selbst umschalten</label>
+      <label class="schalter-z"><input type="checkbox" id="i-zugang" ${e.zugang === "fuehrerschein" ? "checked" : ""}> Insel erst nach dem kompletten Tablet-Führerschein (alte Regel)</label>
+      <p class="klein">Ohne Haken öffnet die erste Lektion „Das Tablet bedienen“ die Insel; die übrigen Lektionen bleiben Aufgaben bei Robo Pixel. Die Minispiele (Ballons, Schatz-Strand, Sternenlauf, Kart, Bauplatz) brauchen in beiden Fällen den kompletten Führerschein.</p>
       <p class="klein">Ist der Haken aus, sind die drei Knöpfe auf der Insel ausgeblendet und es gilt, was hier eingestellt ist. Änderungen des Kindes werden gemerkt.</p>
       <div class="knoepfe"><button class="knopf haupt" id="i-speichern">Speichern</button></div>
     </div>`;
@@ -354,7 +356,7 @@
   function inselKnoepfe() {
     $("i-speichern").addEventListener("click", () => {
       const e = S.lade("eltern") || {};
-      e.insel = { grafik: $("i-grafik").value, steuerung: $("i-steuerung").value, kamera: $("i-kamera").value, kindDarf: $("i-kind").checked };
+      e.insel = { grafik: $("i-grafik").value, steuerung: $("i-steuerung").value, kamera: $("i-kamera").value, kindDarf: $("i-kind").checked, zugang: $("i-zugang").checked ? "fuehrerschein" : "bedienung" };
       S.speichere("eltern", e); try { localStorage.removeItem("lerninsel.sparen"); } catch (er) { /* egal */ } S.meldung("Insel-Einstellungen gespeichert.");
     });
   }

@@ -75,10 +75,9 @@ export function karte({ titel, text, sterne, knoepfe }) {
 export function daten() { return Object.assign({ ballon: { rekord: 0, ziele: [] }, insel: { geschafft: 0 } }, S.lade("welt3d") || {}); }
 export function speichere(d) { S.speichere("welt3d", d); }
 
-// Ohne Führerschein begrüßt Robo Pixel auf der Startseite
+// Minispiele brauchen den kompletten Tablet-Führerschein; ohne geht es zurück auf die Insel (oder zu Robo Pixel)
 export function pruefeZugang(spiel) {
-  const m = S.lade("medien");
-  if (!S.offen(m && m.fuehrerschein)) { location.replace("../../?robo=1"); return false; }
+  if (!S.minispieleOffen()) { location.replace(S.inselOffen() ? "heimat.html" : "../../?robo=1"); return false; }
   if (spiel && !istFrei(spiel)) { location.replace("heimat.html"); return false; }
   return true;
 }

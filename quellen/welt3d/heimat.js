@@ -879,7 +879,7 @@ const ORT_TEXT = {
       return;
     }
     if (BALD.has(id)) { sprechblase("🚧", titel, "Hier wird noch gebaut! Bald kannst du hier spielen.", S.paar(["", "Здесь ещё строят! Скоро можно будет играть."])[1], null); return; }
-    spielOrt(() => sprechblase(info.e, titel, de, S.paar(["", ru])[1], ziel));
+    spielOrt(() => profi() ? sprechblase(info.e, titel, de, S.paar(["", ru])[1], ziel) : fuehrerscheinFehlt());
   }, frei ? [info.e, "Spielen"] : ["🔒", "Ansehen"], 2.4);
 });
 

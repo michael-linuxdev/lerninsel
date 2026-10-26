@@ -327,6 +327,7 @@
     let gewinn = Math.max(0, sterne - vorher);
     if (vorher === 3 && sterne === 3) gewinn = 1;
     const d = daten(); d.lektionen[l.id] = Math.max(vorher, sterne);
+    const inselVorher = S.inselOffen();
     const neuFuehrerschein = !d.fuehrerschein && L.every(x => d.lektionen[x.id] > 0);
     if (neuFuehrerschein) { d.fuehrerschein = new Date().toISOString().slice(0, 10); gewinn += 3; }
     speichere(d);
@@ -336,12 +337,16 @@
 
     $("ende-titel").textContent = neuFuehrerschein ? "Führerschein bestanden!" : "Lektion geschafft!";
     $("ende-sterne").innerHTML = [1, 2, 3].map(n => `<span class="${n <= sterne ? "" : "leer"}" style="animation-delay:${n * 180}ms">⭐</span>`).join("");
-    $("ende-text").textContent = neuFuehrerschein ? "Du hast alle Lektionen geschafft. Dafür gibt es 3 Extra-Sterne!" : fehler === 0 ? "Alles beim ersten Mal richtig!" : `${l.name}: geschafft!`;
+    const inselNeu = !inselVorher && S.inselOffen();   // NA-12: die erste Lektion öffnet die Insel
+    $("ende-text").textContent = neuFuehrerschein ? "Du hast alle Lektionen geschafft. Dafür gibt es 3 Extra-Sterne!"
+      : inselNeu ? "Geschafft! Jetzt hast du den Schlüssel: Deine Insel ist offen. Robo Pixel bringt dich mit dem Boot hin!"
+      : fehler === 0 ? "Alles beim ersten Mal richtig!" : `${l.name}: geschafft!`;
     $("ende-gewinn").textContent = gewinn ? `+${gewinn} ${gewinn === 1 ? "Stern" : "Sterne"} für den Kleiderschrank. Du hast jetzt ${S.sterne()}.` : `Du hast ${S.sterne()} Sterne.`;
     const kn = $("ende-knoepfe"); kn.innerHTML = "";
     const knopf = (t, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = t; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
+    if (inselNeu) knopf("🏝️ Zur Insel", true, () => { location.href = "../welt3d/heimat.html"; });
     if (neuFuehrerschein) knopf("🪪 Führerschein ansehen", true, zeigeFuehrerschein);
-    else if (i + 1 < L.length) knopf(`Weiter: ${L[i + 1].name}`, true, () => starte(i + 1));
+    else if (i + 1 < L.length) knopf(`Weiter: ${L[i + 1].name}`, !inselNeu, () => starte(i + 1));
     knopf("Zur Übersicht", false, () => { zeige("liste"); zeichneListe(); });
     zeige("ende"); S.ton("juhu");
   }
