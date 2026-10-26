@@ -59,9 +59,11 @@
     hoertest: ["Ich spiele zwei Töne. Hör genau hin!", "Я сыграю два звука. Слушай внимательно!"],
     melodie: ["Erfinde deine eigene Melodie! Vielleicht tanzen bald die Tiere auf der Insel dazu.", "Придумай свою мелодию!"]
   };
+  // Paula sagt etwas (deutsch und in der Hilfesprache, damit beide immer zusammenpassen)
+  function sag(de, r = "") { $("musik-text").textContent = de; $("musik-ru").textContent = ru(r); $("musik-ru").hidden = !$("musik-ru").textContent; }
   function teil(n) {
     stoppe(); TEILE.forEach(t => { $("m-" + t).hidden = t !== n; });
-    const [de, r] = TEXTE[n]; $("musik-text").textContent = de; $("musik-ru").textContent = ru(r); $("musik-ru").hidden = !$("musik-ru").textContent;
+    sag(...TEXTE[n]);
     if (n === "xylo") zeigeXylo(); if (n === "rhythmus") rhStart(); if (n === "hoertest") htStart(); if (n === "melodie") zeigeRaster();
     scrollTo(0, 0);
   }
@@ -217,10 +219,10 @@
     zeigeRaster(); spieleMelodie(mel);
   });
   $("mel-speichern").addEventListener("click", () => {
-    if (mel.every(x => x < 0)) { $("musik-text").textContent = "Tippe erst ein paar Töne ins Raster!"; return; }
+    if (mel.every(x => x < 0)) { sag("Tippe erst ein paar Töne ins Raster!", "Сначала нажми несколько нот в сетке!"); return; }
     const d = lade(); d.melodien.unshift(mel.slice()); d.melodien = d.melodien.slice(0, 5); speichere(d);
     S.ton("juhu"); gib(2); if (d.melodien.length === 1) fund("Musik: eine eigene Melodie komponiert", "melodie", "🎼");
-    $("musik-text").textContent = "💾 Gespeichert! Deine Melodien stehen unten (höchstens 5)."; zeigeListe();
+    sag("💾 Gespeichert! Deine Melodien stehen unten (höchstens 5). Auf der Insel spielt Paula deine neueste Melodie auf der Bühne!", "Сохранено! На острове Паула сыграет твою мелодию на сцене!"); zeigeListe();
   });
   function zeigeListe() {
     const l = lade().melodien;
