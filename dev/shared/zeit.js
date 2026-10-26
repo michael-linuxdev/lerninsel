@@ -208,12 +208,33 @@
   const Zeit = {
     ART, regeln, setzeRegeln, empfehlung, status, aufgabe, inRuhe,
     extra(min) { const d = tag(); d.extraMin += min; speichere(d); },
+    // Eltern legen die restliche Spielzeit für heute direkt fest („Du darfst noch x Minuten spielen“).
+    // Gilt auch ohne Lernen (bewusste Ausnahme der Eltern) und kann auch verkürzen (0 = für heute Schluss).
+    // Umsetzung über extraMin (darf negativ oder krumm sein), damit Tagesgrenze und Anzeige wie gewohnt funktionieren. Ruhezeit gilt weiter.
+    noch(min) {
+      min = Math.max(0, Math.min(240, Math.round(min) || 0));
+      const st = status(), d = tag(), r = st.regeln;
+      const basis = Math.min(st.bloecke * r.spielMin * 60, r.maxSpiel * 60) + d.extraMin * 60 - d.spielSek;
+      d.extraMin += (min * 60 - basis) / 60;
+      d.geschenk = { min, gezeigt: false };
+      speichere(d); document.dispatchEvent(new CustomEvent("zeit-aenderung"));
+      return status();
+    },
     heute: tag, bewegungspause, verlauf,
     leisteHtml: () => leiste(status())
   };
   window.Zeit = Zeit;
   warVorher = status().spielen;
-  const start = () => { pruefeSeite(); setInterval(tick, TICK * 1000); };
+  // Ansage fürs Kind, wenn die Eltern die Spielzeit festgelegt haben (einmal, auf der nächsten Kinder-Seite)
+  function zeigeGeschenk() {
+    if (ART === "eltern" || !C()) return;
+    const d = tag(); if (!d.geschenk || d.geschenk.gezeigt) return;
+    d.geschenk.gezeigt = true; speichere(d);
+    const m = d.geschenk.min;
+    if (m > 0) C().hinweis(`🎁 Du darfst heute noch ${m} ${m === 1 ? "Minute" : "Minuten"} spielen!`, "Das haben deine Eltern so eingestellt.", "#2E9C5A");
+    else C().hinweis("⏰ Für heute ist Schluss mit Spielen", "Das haben deine Eltern so entschieden. Lernen geht noch!", "#E8A33D");
+  }
+  const start = () => { pruefeSeite(); zeigeGeschenk(); setInterval(tick, TICK * 1000); };
   if (document.body) start(); else addEventListener("DOMContentLoaded", start);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) pruefeSeite(); });
 })();

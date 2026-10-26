@@ -202,6 +202,11 @@
     return `<div class="karte">
       <h2>⏰ Erst lernen, dann spielen</h2>
       <p><b>Heute:</b> ${minText(st.lernSek)} gelernt · ${st.aufgaben} Aufgaben richtig · ${minText(st.spielSek)} gespielt (erlaubt: ${minText(st.erlaubt)})${st.ruhe ? " · gerade Ruhezeit" : ""}</p>
+      <div class="noch-zeile">
+        <label>Heute noch spielen dürfen (min)<input id="z-noch" type="number" inputmode="numeric" min="0" max="240" step="5" value="${Math.round(st.rest / 60)}"></label>
+        <button class="knopf haupt" id="z-noch-ok">Festlegen</button>
+      </div>
+      <p class="klein">Gilt sofort, auch wenn heute noch nicht gelernt wurde. 0 = für heute Schluss. Das Kind sieht beim nächsten Öffnen eine kurze Ansage. Die Ruhezeit gilt weiter.</p>
       <label class="schalter-z"><input type="checkbox" id="z-an" ${r.an ? "checked" : ""}> Zeit-Regeln einschalten</label>
       <div class="zeit-raster">
         <label>Lernzeit pro Block (min)${zahl("z-lern", r.lernMin, 1, 60)}</label>
@@ -228,6 +233,10 @@
     });
     $("z-empf").addEventListener("click", () => { Z.setzeRegeln(Z.empfehlung(S.kind().alter)); S.meldung("Empfehlung übernommen."); uebersicht(); });
     $("z-extra").addEventListener("click", () => { Z.extra(10); S.meldung("Heute 10 Minuten extra."); uebersicht(); });
+    $("z-noch-ok").addEventListener("click", () => {
+      const st = Z.noch(parseInt($("z-noch").value, 10) || 0), m = Math.round(st.rest / 60);
+      S.meldung(m ? `Heute noch ${m} Minuten Spielzeit.` : "Für heute keine Spielzeit mehr."); uebersicht();
+    });
   }
 
   const heuteIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };

@@ -49,8 +49,7 @@ Lies zuerst `README.md`, `docs/KONZEPT.md` und `docs/PLAN.md`. Sie sind die Grun
 - Fertig: Phase 0/1, Lehrplan-Gerüst Sachsen mit Inhalten Kl. 2, Insel mit Joystick/Tippen, Rennen, Springen/Doppelsprung,
   Aktionsknopf, Zimmer (einrichten mit Sternen), Wetterstation mit echtem Wetter, Stickeralbum (48 Sticker),
   Lernfunde „Heute neu“ (26.10.: konkreter Tagesfortschritt in Mein Ich, bei den Insel-Nachbarn und im Wochenbericht; siehe KONZEPT „Schärfung“).
-- Nächste Schritte: Weihnachts-Erststart und erstes QR-Geschenk (signiert, einmal pro Profil) → Minispiel-Orte →
-  Bewegungs-Aufgaben und Gefühle (PLAN 8b) → Hügel/Gelände und Fahrzeuge (PLAN 4) → Inhalte aus `docs/LEHRPLAN.md` → Tests auf Tablets.
+- Nächste Schritte: siehe „Reihenfolge (abgestimmt 26.10.2026)“ am Ende von `docs/PLAN.md` – Weihnachts-Erststart mit Tutorial kommt zuletzt.
 
 **Berichten**
 - Kurz und auf Deutsch: was fertig ist (mit Bildern, wenn es etwas zu sehen gibt), was ich testen soll, was als Nächstes kommt.

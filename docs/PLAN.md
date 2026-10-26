@@ -337,6 +337,12 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - Dreimal richtig = gemeistert → goldener Lernfund mit Hinweis („die Eule – war knifflig, jetzt kannst du es!“), goldene Frucht am Wissensbaum.
 - Wochenbericht: „Wiederholungen heute dran“ zählt jetzt alle drei Fächer.
 
-**Gemerkt (Wunsch):** Elternbereich: „Du darfst noch x Minuten spielen“ – Eltern legen die restliche Spielzeit für heute direkt fest
-(heute gibt es nur „+10 Minuten“). Klären: soll das auch ohne Lernen gelten (Ausnahme), und soll das Kind die Ansage sehen („Mama/Papa schenkt dir noch x Minuten“)?
+**Nachtrag 26.10.2026 – „Du darfst noch x Minuten spielen“ (Elternbereich)**
+- Unter „Erst lernen, dann spielen“: Feld „Heute noch spielen dürfen (min)“ + „Festlegen“ (`Zeit.noch(min)`).
+- Entscheidungen: gilt sofort auch ohne Lernen (bewusste Ausnahme der Eltern), kann auch verkürzen (0 = für heute Schluss),
+  Lernen bringt danach weiter Spielzeit dazu, Ruhezeit gilt weiter. Das Kind sieht einmal eine Ansage („🎁 Du darfst heute noch 15 Minuten spielen!“).
+
+**Reihenfolge (abgestimmt 26.10.2026):** Pinnwand im Zimmer → Eltern als Mitspieler („hat es mir erklärt“, Duell) → „echte Welt“-Aufgaben →
+Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
+**zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**
 
