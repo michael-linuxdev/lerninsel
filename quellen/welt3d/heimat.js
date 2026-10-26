@@ -246,9 +246,24 @@ function verschmelze(gruppe) {
     const m = new Mesh(geo, material); m.castShadow = schatten; m.receiveShadow = true; scene.add(m);
   });
 }
+// ---------- Steg mit Pixels Boot (Ankunft im Prolog, NA-11) ----------
+// Liegt am Südufer (zur Kamera hin), damit die Ankunft gleich zu sehen ist. Wird mit der Deko verschmolzen.
+const UFER = WELT.insel ? 15.2 : WELT.R, RMAX_LAUF = WELT.insel ? 14.6 : WELT.R - 0.6;
+const STEG = { x: 3.2, z0: UFER - 2.2, z1: UFER + 2.4 };
+{
+  const laenge = STEG.z1 - STEG.z0, mz = (STEG.z0 + STEG.z1) / 2;
+  deko.add(setze(teil(new BoxGeometry(1.4, 0.14, laenge), "#C8955B"), STEG.x, 0.2, mz));
+  for (let i = 0; i < 4; i++) [-0.62, 0.62].forEach(dx => deko.add(setze(teil(new CylinderGeometry(0.09, 0.09, 1.1, 8), "#9A6A3F"), STEG.x + dx, -0.38, STEG.z0 + 0.6 + i * (laenge - 0.9) / 3)));
+  const rumpf = teil(new SphereGeometry(1, EINFACH ? 12 : 20, EINFACH ? 6 : 10, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), "#E2604F");
+  rumpf.scale.set(0.8, 0.5, 1.6); deko.add(setze(rumpf, STEG.x + 1.55, -0.18, STEG.z1 - 0.9));
+  deko.add(setze(teil(new BoxGeometry(1.2, 0.1, 0.35), "#9A6A3F"), STEG.x + 1.55, -0.3, STEG.z1 - 0.9));
+  deko.add(setze(teil(new CylinderGeometry(0.05, 0.05, 1.5, 6), "#9A6A3F"), STEG.x + 1.55, 0.4, STEG.z1 - 0.4));
+  deko.add(setze(teil(new BoxGeometry(0.04, 0.32, 0.5), "#FFC83D"), STEG.x + 1.55, 0.98, STEG.z1 - 0.15));
+}
 verschmelze(deko);
 
 // ---------- Haus ----------
+let hausObj = null, prolog = null;   // prolog: läuft gerade die Ankunft (NA-11)?
 const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" : "#9BD7F5" });
 {
   const h = new Group();
@@ -266,7 +281,8 @@ const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" :
   [0.95, -0.95].forEach(x => h.add(setze(teil(new BoxGeometry(0.7, 0.7, 0.1), fensterMat, { dicke: 1.1 }), x, 1.5, 1.7)));
   h.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.9, 16), "#B9584A"), 0.9, 3.5, -0.5));
   h.position.set(P.haus[0], bodenY(P.haus[0], P.haus[1]), P.haus[1]); h.rotation.y = WELT.insel ? 0.35 : P.haus[2]; scene.add(h); block(P.haus[0], P.haus[1], 2.3);
-  antippbar(h, () => spielOrt(() => reingehen()), ["🚪", "Reingehen"], 3.4);
+  antippbar(h, () => prolog ? reingehen() : spielOrt(() => reingehen()), ["🚪", "Reingehen"], 3.4);
+  hausObj = h;
 }
 
 // ---------- Wolken, Sterne, Schnee ----------
@@ -633,8 +649,8 @@ const name = S.profil.name || "du";
 const NACHBARN = [
   { bau: eule, x: P.eule[0], z: P.eule[1], dreh: P.eule[2], e: "eule", titel: "Eule Ella", text: `Hallo ${name}! Ich weiß spannende Dinge über die Welt. Kommst du mit?`, ru: "Привет! Я знаю много интересного о мире. Пойдёшь со мной?", ziel: "../sachkunde/" },
   { bau: fipsi, x: P.fipsi[0], z: P.fipsi[1], dreh: P.fipsi[2], e: "fipsi", titel: "Fipsi", text: `Hallo ${name}! Hilfst du mir, meine Schatzkarte zu finden?`, ru: "Привет! Поможешь мне найти мою карту сокровищ?", ziel: "../deutsch/" },
-  // Robo Pixel wohnt vorerst nicht auf der Insel: Er begleitet den Tablet-Führerschein (Schlüssel zur Insel) und kommt später zurück.
-  // { bau: robo, x: 5.5, z: 8.5, dreh: -2.6, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Хочешь стать мастером планшета?", ziel: "../medien/" },
+  // Robo Pixel wohnt am Steg bei seinem Boot: Er hat das Kind hergebracht (Prolog) und begleitet den Tablet-Führerschein.
+  { bau: robo, x: STEG.x - 1.5, z: Math.min(RMAX_LAUF - 0.9, STEG.z0 + 0.9), dreh: 0.3, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Mit meinem Boot habe ich dich hergebracht. Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Я привёз тебя на своей лодке. Хочешь стать мастером планшета?", ziel: "../medien/" },
   { bau: baer, x: P.baer[0], z: P.baer[1], dreh: P.baer[2], e: "baer", titel: "Bärin Bruni", text: `Hallo ${name}! Ich bin Bruni. Bei mir geht es um Gefühle – und ums Bewegen. Kommst du?`, ru: "Привет! Я медведица Бруни. У меня – про чувства и движение. Пойдёшь?", ziel: "../gefuehle/" },
   { bau: biber, x: P.biber[0], z: P.biber[1], dreh: P.biber[2], e: "biber", titel: "Biber Benno", text: `Hallo ${name}! Ich bin Benno. Ich baue Dämme und zähle jeden Stamm. Rechnest du mit mir auf dem Matheweg?`, ru: "Привет! Я бобр Бенно. Я строю плотины и считаю каждое бревно. Посчитаешь со мной на математической тропе?", ziel: "../mathe/" }
 ];
@@ -658,7 +674,7 @@ NACHBARN.forEach(n => {
   antippbar(o, () => {
     o.userData.huepf = 1; n.freut = false;
     if (fund) { const [de, ru] = FREUDE[fach](fund); sprechblase(n.e, `${n.titel} freut sich`, de, S.paar(["", ru])[1], n.ziel); }
-    else sprechblase(n.e, n.titel, n.text, S.ht(n), n.ziel);
+    else sprechblase(n.e, n.titel, n.text, S.ht(n), n.ziel, n.e === "robo" && window.Story && window.Story.etappe("E1") ? ["🔁 Wie ging das nochmal?", () => starteProlog(true)] : null);
   }, aktion, 2.3);
 });
 
@@ -1092,7 +1108,9 @@ setInterval(zeigeLernmodus, 10000);
 
 // ---------- Sprechblase ----------
 let blaseZiel = null;
-function sprechblase(e, titel, text, ru, ziel) {
+let blaseExtra = null;
+function sprechblase(e, titel, text, ru, ziel, extra) {
+  blaseExtra = extra || null; $("blase-extra").hidden = !extra; if (extra) $("blase-extra").textContent = extra[0];
   $("blase-e").innerHTML = window.Figuren && window.Figuren[e] ? window.Figuren[e]("") : e; $("blase-titel").textContent = titel; $("blase-text").textContent = text;
   const ruEl = $("blase-ru"); ruEl.textContent = ru || ""; ruEl.hidden = true;
   const hl = S.hilfe && S.hilfe(); $("blase-ruk").hidden = !(ru && hl); if (hl) { $("blase-ruk").textContent = hl.kurz; ruEl.lang = hl.code; ruEl.dir = hl.rtl ? "rtl" : "ltr"; }
@@ -1102,6 +1120,7 @@ function sprechblase(e, titel, text, ru, ziel) {
 }
 $("blase-zu").addEventListener("click", () => { $("blase").hidden = true; if (SP && SP.stopp) SP.stopp(); });
 $("blase-los").addEventListener("click", () => { if (blaseZiel) location.href = blaseZiel; });
+$("blase-extra").addEventListener("click", () => { $("blase").hidden = true; if (SP && SP.stopp) SP.stopp(); if (blaseExtra) blaseExtra[1](); });
 $("blase-ruk").addEventListener("click", () => { const r = $("blase-ru"); r.hidden = !r.hidden; if (!r.hidden && SP) SP.sprich(r.textContent, (S.hilfe() || { tts: "ru-RU" }).tts); });
 
 // ---------- Herzen beim Streicheln ----------
@@ -1136,6 +1155,7 @@ function pruefeNaehe() {
   let best = null, bestD = Infinity;
   if ($("blase").hidden && $("laden").hidden && hoehe <= 0) for (const o of tippbar) {
     const u = o.userData; if (!u.nah || !o.visible || (o.parent && !o.parent.visible)) continue;
+    if (prolog && o !== hausObj) continue;   // im Prolog führt der Aktionsknopf nur ins Haus
     o.getWorldPosition(wp); const d = Math.hypot(wp.x - ich.position.x, wp.z - ich.position.z);
     if (d < u.nah && d < bestD) { best = o; bestD = d; }
   }
@@ -1377,7 +1397,12 @@ function bild() {
   wolken.forEach((w, i) => { w.position.x += dt * (0.4 + i * 0.1); if (w.position.x > 40) w.position.x = -40; });
 
   blick.set(ich.position.x, 1.0 + grund + hoehe * 0.3, ich.position.z);
-  const gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.85 : 0.72, ab = drinnen && !freiKamera ? 10 : abstand;
+  let gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.85 : 0.72, ab = drinnen && !freiKamera ? 10 : abstand;
+  if (fahrt && !drinnen) {   // Ankunft: Kamera schwebt von weit oben heran (zeitabhängig, nicht pro Bild)
+    const f = Math.min(1, (performance.now() - fahrt) / 3500), e = 1 - (1 - f) ** 3;
+    ab = MathUtils.lerp(30, ab, e); nw = MathUtils.lerp(1.15, nw, e); gw = MathUtils.lerp(-0.6, gw, e);
+    if (f >= 1) fahrt = null;
+  }
   if (drinnen) blick.set(MathUtils.clamp(blick.x, ZX - 1.5, ZX + 1.5), blick.y, MathUtils.clamp(blick.z, -1.5, 1.2));
   camera.position.set(blick.x + Math.sin(gw) * Math.cos(nw) * ab, blick.y + Math.sin(nw) * ab, blick.z + Math.cos(gw) * Math.cos(nw) * ab);
   camera.lookAt(blick);
@@ -1453,6 +1478,42 @@ $("welt-zu").addEventListener("click", () => { S.ton("tipp"); $("welt").hidden =
   }
 }
 
+// ---------- Prolog „Ankunft“ (Tutorial E1, NA-11) ----------
+// Robo Pixel bringt das Kind mit dem Boot. Das Kind lernt Laufen (Joystick oder Tippen), läuft zum Haus und geht mit dem
+// Aktionsknopf hinein. Genau einmal je Kind (story.etappen.E1); Eltern können ihn überspringen oder neu starten,
+// das Kind kann ihn bei Pixel wiederholen. Bricht das Kind ab („Überspringen“), gilt E1 trotzdem als erledigt.
+let fahrt = null;
+function starteProlog(wiederholen) {
+  const Sz = window.Szene, St = window.Story; if (!Sz || !St || prolog) return false;
+  const def = Sz.def("prolog"); if (!def) return false;
+  if (drinnen) rausgehen();
+  $("blase").hidden = true; $("joy-hinweis").hidden = true;
+  ich.position.set(STEG.x, 0, Math.min(RMAX_LAUF - 0.2, STEG.z0 + 1.4)); ich.position.y = bodenY(ich.position.x, ich.position.z); ich.rotation.y = Math.PI;
+  ziel = null; marke.visible = false; fahrt = performance.now();
+  prolog = { start: ich.position.clone() };
+  const poll = (pruef, weiter) => { const id = setInterval(() => { if (pruef()) { clearInterval(id); weiter(); } }, 150); return () => clearInterval(id); };
+  const b = def.blasen;
+  // 2: Laufen lernen – Hand zeigt links das Schieben (oder bei „Tippen“ auf die Wiese vor der Figur)
+  if (STEUERUNG === "tippen" && b[1].alt && b[1].alt.tippen) b[1].text = b[1].alt.tippen;
+  b[1].zeige = STEUERUNG === "tippen"
+    ? () => window.Insel.bildschirm(ich.position.x, ich.position.y, ich.position.z - 3)
+    : { ziel: () => ({ x: Math.min(170, innerWidth * 0.2), y: innerHeight * 0.48 }), schieben: [0, -70] };
+  b[1].bis = (weiter) => poll(() => ich.position.distanceTo(prolog.start) > 2.2, weiter);
+  // 3: zum Haus – Leuchten auf dem Haus, weiter, sobald der Aktionsknopf „Reingehen“ zeigt
+  b[2].zeige = window.Insel.ort("haus");
+  b[2].bis = (weiter) => poll(() => naechstes === hausObj, weiter);
+  // 4: Aktionsknopf drücken
+  b[3].zeige = "#springen";
+  b[3].bis = (weiter) => poll(() => drinnen, weiter);
+  Sz.spiele(def, { chronik: !wiederholen }).then(() => {
+    prolog = null; fahrt = null;
+    St.etappeFertig("E1");
+  });
+  return true;
+}
+// Neues Kind: beim ersten Besuch (nicht wenn die Seite direkt im Zimmer startet)
+if (window.Story && !window.Story.etappe("E1") && q.get("drinnen") !== "1" && !q.has("szene")) setTimeout(() => starteProlog(false), 700);
+
 // ---------- Bildschirm-Punkte für Szenen und Zeigehand (NA-10) ----------
 const _bp = new Vector3();
 function bildschirm(x, y, z) {
@@ -1466,4 +1527,4 @@ const ORTE = {
 };
 // Insel.ort("haus") liefert eine Funktion für Zeige.auf(); Insel.bildschirm(x, y, z) rechnet einen 3D-Punkt um
 window.Insel = { bildschirm, ort: (name) => () => (ORTE[name] && !drinnen ? bildschirm(...ORTE[name]()) : null), ORTE: Object.keys(ORTE) };
-window.__heimat = { bildschirm,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { bildschirm, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };

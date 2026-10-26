@@ -134,6 +134,12 @@
       const z = b.zeige, istOpt = z && typeof z === "object" && !(z instanceof Element) && "ziel" in z;
       aktiv.zeiger = window.Zeige.auf(istOpt ? z.ziel : z, istOpt ? z : {});
     }
+    // Liegt das Ziel der Zeigehand unter der Sprechblase (z. B. Aktionsknopf im Hochformat), rutscht die Blase nach oben
+    el.classList.remove("oben");
+    if (aktiv.zeiger && window.Zeige) requestAnimationFrame(() => {
+      const r = window.Zeige.rechteck(aktiv && aktiv.zeiger ? aktiv.zeiger.ziel : null), k = el.getBoundingClientRect();
+      if (r && r.x < k.right && r.x + r.w > k.left && r.y < k.bottom && r.y + r.h > k.top - 30) el.classList.add("oben");
+    });
     // Warten auf eine Handlung des Kindes (z. B. Joystick schieben): „Weiter“ erst danach
     wk.hidden = !!b.bis;
     if (typeof b.bis === "function") {
@@ -182,7 +188,9 @@
     { wer: "eule", text: { de: "Und wenn du fertig bist, tippst du auf den leuchtenden Knopf.", ru: "А когда закончишь, нажми на светящуюся кнопку.", status: { ru: "entwurf" } } }
   ] });
 
-  const Szene = { MAX_BLASEN, FIGUREN, registriere, spiele, weiter, aktuell, abbrechen: () => ende(true), hilfeText, get laeuft() { return !!aktiv; } };
+  // Kopie einer registrierten Szene (z. B. um Zeigehand und Bedingungen zu ergänzen)
+  const def = (id) => szenen[id] ? Object.assign({}, szenen[id], { blasen: szenen[id].blasen.map(x => Object.assign({}, x)) }) : null;
+  const Szene = { MAX_BLASEN, FIGUREN, registriere, def, spiele, weiter, aktuell, abbrechen: () => ende(true), hilfeText, get laeuft() { return !!aktiv; } };
   window.Szene = Szene;
   window.__szene = { spiele, aktuell, weiter, abbrechen: () => ende(true), szenen: () => Object.keys(szenen) };
 

@@ -49,8 +49,13 @@
 
   function lade() { return bereinige(S.lade("story")); }
   function speichere(st) { S.speichere("story", st); }
-  // Beim Laden einmal migrieren (alter Spielstand ohne story → Kapitel 0)
-  if (!istObjekt(S.profil.daten.story)) speichere(lade());
+  // Beim Laden einmal migrieren (alter Spielstand ohne story → Kapitel 0). Wer schon den kompletten Tablet-Führerschein hatte,
+  // kannte die Insel bereits: Etappe E1 (Ankunft) gilt als erledigt, der Prolog kommt nur, wenn die Eltern ihn neu starten.
+  if (!istObjekt(S.profil.daten.story)) {
+    const st = lade(), m = S.profil.daten.medien;
+    if (m && m.fuehrerschein) st.etappen.E1 = heute();
+    speichere(st);
+  }
 
   // ---------- Ereignisse ----------
   const zuhoerer = {};
@@ -101,7 +106,10 @@
       const st = lade(); if (st.etappen[id]) return false;
       st.etappen[id] = heute(); speichere(st); melde("etappe", { id }); return true;
     },
+    // Eltern: eine Etappe zurücksetzen (z. B. Prolog neu starten); die Chronik bleibt
+    etappeZuruecksetzen(id) { const st = lade(); if (!st.etappen[id]) return false; delete st.etappen[id]; speichere(st); return true; },
     gesehen: (szene) => lade().gesehen.includes(szene),
+    vergiss(szene) { const st = lade(); if (!st.gesehen.includes(szene)) return false; st.gesehen = st.gesehen.filter(x => x !== szene); speichere(st); return true; },
     // Gesehene Szene merken; jede Szene steht einmal in der Chronik (zum Wiederansehen im Album)
     merkeSzene(szene) {
       if (typeof szene !== "string" || !szene) return false;

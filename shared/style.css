@@ -79,6 +79,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   background: #fff; border-radius: 28px; padding: 16px 18px 12px; box-shadow: 0 10px 0 rgba(75, 35, 128, .16), 0 0 0 4px rgba(75, 35, 128, .08);
   display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; align-items: start; color: var(--pflaume); }
 .szene[hidden] { display: none; }
+.szene.oben { bottom: auto; top: max(16px, env(safe-area-inset-top)); }
 .szene-kopf { grid-row: span 2; width: 96px; height: 96px; border-radius: 50%; background: var(--himmel); display: grid; place-items: center; font-size: 3.4rem; line-height: 1; overflow: hidden; }
 .szene-kopf svg { width: 88px; height: 88px; display: block; }
 .szene-wer { font-weight: 700; font-size: 1.05rem; color: var(--pflaume-hell); }

@@ -320,6 +320,18 @@
   }
 
   // ---------- Stärken: „Heute habe ich gesehen, dass du …“ ----------
+  // Geschichte und Einführung (Story-Zustand aus shared/ereignisse.js)
+  function storyKarte() {
+    const St = window.Story; if (!St) return "";
+    const st = St.zustand(), e1 = St.etappe("E1");
+    return `<div class="karte">
+      <h2>🧭 Geschichte und Einführung</h2>
+      <p>Beim ersten Besuch der Insel bringt Robo Pixel das Kind mit dem Boot: Laufen lernen, zum Haus gehen, hineingehen.
+        ${e1 ? "Die Ankunft ist erledigt." : "Die Ankunft kommt beim nächsten Besuch der Insel."} Kapitel der Geschichte: ${st.kapitel} · gesehene Szenen: ${st.chronik.length}</p>
+      <div class="knoepfe">${e1 ? `<button class="knopf" id="prolog-neu">🔁 Ankunft neu starten</button>` : `<button class="knopf" id="prolog-weg">⏭️ Ankunft überspringen</button>`}</div>
+      <p class="klein">Das Kind kann die Ankunft jederzeit selbst bei Robo Pixel wiederholen („Wie ging das nochmal?“). Nichts geht verloren, es gibt keine Fristen.</p>
+    </div>`;
+  }
   function staerkenKarte() {
     if (!window.Staerken) return "";
     const ST = window.Staerken, m = ST.meine();
@@ -439,6 +451,7 @@
       ${inselKarte()}
       ${echteWeltKarte()}
       ${staerkenKarte()}
+      ${storyKarte()}
       <div class="karte">
         <h2>Kinder auf diesem Tablet</h2>
         <ul class="kinderliste">${S.kinder().map(k => `<li>${k.aktiv ? "👉 " : ""}<b>${k.name || "(noch ohne Namen)"}</b>${k.aktiv ? " – gerade aktiv" : ` <button class="knopf klein-k" data-wechsel="${k.id}">Wechseln</button>`}${S.kinder().length > 1 ? ` <button class="knopf klein-k" data-weg="${k.id}">Entfernen</button>` : ""}</li>`).join("")}</ul>
@@ -460,6 +473,8 @@
     $("pin-neu").addEventListener("click", () => { S.setzePin(null); sessionStorage.removeItem(SITZUNG); pinSeite(); });
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
+    if ($("prolog-neu")) $("prolog-neu").addEventListener("click", () => { window.Story.etappeZuruecksetzen("E1"); S.meldung("Die Ankunft startet beim nächsten Besuch der Insel."); uebersicht(); });
+    if ($("prolog-weg")) $("prolog-weg").addEventListener("click", () => { window.Story.etappeFertig("E1"); S.meldung("Ankunft übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
     zeitKnoepfe(); inselKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
     $("kind-neu").addEventListener("click", () => {
