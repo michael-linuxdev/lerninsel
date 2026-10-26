@@ -359,8 +359,19 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - ~~**Charakter für Mathe**~~ erledigt: **Biber Benno** (baut Dämme, zählt Stämme, gelber Helm) – 2D in `shared/figuren.js`, auf dem Matheweg mit Sprechblase und am Ende,
   3D auf der Insel neben dem Matheweg-Schild (reagiert auf Mathe-Lernfunde), Startseite „Mit Biber Benno rechnen“.
 - **Coolere Minispiele**, die zum Lernen motivieren – breit für alle Vorlieben (Geschick, Bauen, Sammeln/Entdecken, Fahrzeuge …), nach der eigenen Welt.
-- **Eigene Welt statt fester Insel** (entschieden: Wünsche-Assistent; als Nächstes): zufällig erzeugtes, größeres Stück Land nach Wünschen und Vorlieben des Kindes
+- ~~**Eigene Welt statt fester Insel**~~ Schritt 1–3 erledigt (siehe unten). Ursprünglicher Wunsch: zufällig erzeugtes, größeres Stück Land nach Wünschen und Vorlieben des Kindes
   (z. B. Wald, Berge, Strand, Schnee, Wiese, Farben), als Skin austauschbar, neu erzeugbar und speicherbar (Seed + Vorlieben, klein für den QR-Transfer).
+
+**Nachtrag 26.10.2026 – Eigene Welt (Wünsche-Assistent)**
+- `quellen/welt3d/welt.js`: Welt aus Wünschen + seed – Landschaft (Blumenwiese, Wald, Berge, Strand, Schneeland, Wüste), Lieblingsfarbe,
+  Größe (klein 15 / mittel 20 / riesig 25), Hügel (wenig/mittel/viel), Teich, viele Blumen. Hügel aus Rauschen, flache Plätze für Haus,
+  Nachbarn, Wissensbaum, Wetterstation, Nest und Spielorte, Pfad zum Haus, Bäume je Landschaft (Laub, Nadel, Palme, Kaktus), Steine, Blumen.
+- Ohne gespeicherte Welt gilt die bisherige Insel unverändert (`STANDARD`, flach).
+- Insel: Knopf „🌍 Welt“ (nur in der Spielzeit) → Liste „Meine Welten“ (erste Insel + bis zu 5 eigene, besuchen, löschen) → Assistent in 3 Schritten
+  → „Gefällt dir deine neue Welt? 🎲 Neu würfeln / ✅ Behalten / ↩️ Zurück“.
+- Gespeichert wird nur `{ welten: [Wünsche + seed + Name], aktiv }` (klein für QR). Test-Parameter: `heimat.html?biom=berge&groesse=gross&huegel=viel&see=1&seed=5`.
+- Offen: auf echten (schwachen) Tablets prüfen, ob „riesig“ + „schön“ flüssig läuft (Stufe „einfach“ hat weniger Geländepunkte);
+  Fluss, Höhle, eigene Tiere in der Welt; Jahreszeiten-Deko je Landschaft; Minispiel-Orte je Welt.
 
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → Eltern als Mitspieler („hat es mir erklärt“, Duell) → „echte Welt“-Aufgaben →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →

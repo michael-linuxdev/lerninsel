@@ -46,6 +46,32 @@
   #joy-hinweis[hidden] { display: none; }
   #einrichten { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(220px, calc(env(safe-area-inset-bottom) + 210px)); z-index: 2; min-height: 56px; font-size: 1.15rem; }
   #einrichten[hidden], #laden[hidden] { display: none; }
+  /* Meine Welt: Wünsche-Assistent und gespeicherte Welten */
+  #welt { position: fixed; inset: 0; z-index: 6; background: rgba(40,30,80,.55); display: grid; place-items: center; padding: 14px; }
+  .welt-karte { background: #fff; border-radius: 28px; padding: 18px 20px; width: min(760px, 100%); max-height: calc(100dvh - 28px); overflow-y: auto; box-shadow: 0 12px 0 rgba(0,0,0,.15); color: var(--pflaume); }
+  .welt-karte h2 { margin: 0; font-size: 1.6rem; }
+  .welt-karte h3 { margin: 14px 0 8px; font-size: 1.2rem; }
+  .welt-karte p { margin: 6px 0; font-size: 1.1rem; }
+  .wahl-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .wahl { border: 4px solid #EFE6FF; background: #FBF8FF; border-radius: 22px; padding: 12px 8px; font: inherit; font-weight: 600; font-size: 1.1rem; color: var(--pflaume); display: grid; justify-items: center; gap: 4px; min-height: 64px; }
+  .wahl .e { font-size: 2.6rem; line-height: 1.1; }
+  .wahl.an { border-color: var(--beere); background: #FFEFF6; }
+  .farben { display: flex; flex-wrap: wrap; gap: 10px; }
+  .farbe { width: 58px; height: 58px; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 0 0 3px #E2D8F5; }
+  .farbe.an { box-shadow: 0 0 0 5px var(--beere); }
+  .welt-unten { display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap; margin-top: 16px; }
+  .welt-unten .knopf { min-height: 60px; }
+  .schritte { display: flex; gap: 8px; justify-content: center; margin: 8px 0 4px; }
+  .schritte span { width: 14px; height: 14px; border-radius: 50%; background: #E2D8F5; }
+  .schritte span.an { background: var(--beere); }
+  .welt-liste { display: grid; gap: 10px; }
+  .welt-eintrag { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 20px; background: #F6F3FB; }
+  .welt-eintrag .e { font-size: 2.2rem; }
+  .welt-eintrag b { flex: 1; font-size: 1.15rem; }
+  .welt-eintrag.aktiv { background: #E3F7EF; box-shadow: inset 0 0 0 3px var(--minze); }
+  .welt-eintrag .knopf { min-height: 48px; padding: 0 14px; font-size: 1rem; }
+  #welt-leiste { position: fixed; left: 50%; transform: translateX(-50%); top: calc(max(12px, env(safe-area-inset-top)) + 72px); z-index: 5; background: #fff; border-radius: 26px; padding: 10px 14px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; box-shadow: 0 8px 0 rgba(0,0,0,.12); font-weight: 600; width: max-content; max-width: calc(100% - 28px); }
+  #welt-leiste .knopf { min-height: 52px; }
   #laden { position: fixed; top: calc(max(12px, env(safe-area-inset-top)) + 64px); right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); width: min(440px, calc(100% - 28px)); background: #fff; border-radius: 26px; padding: 16px 18px; box-shadow: 0 10px 0 rgba(0,0,0,.12); z-index: 4; overflow-y: auto; }
   .laden-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .laden-kopf h2 { margin: 0; font-size: 1.3rem; }
@@ -67,6 +93,7 @@
   <a class="knopf" href="../../" aria-label="Zur Startseite">⬅️</a>
   <div class="knopf">⭐ <b id="sterne">0</b></div>
   <span class="platz"></span>
+  <button class="knopf" id="welt-knopf" aria-label="Meine Welt">🌍 Welt</button>
   <button class="knopf" id="grafik" aria-label="Grafik schön oder einfach">✨ schön</button>
   <button class="knopf" id="steuerung" aria-label="Steuerung Joystick oder Tippen">🕹️ Joystick</button>
   <button class="knopf" id="kamera" aria-label="Kamera fest oder frei">🎥 fest</button>
@@ -79,6 +106,18 @@
   <div class="laden-kopf"><h2 id="laden-titel">🛋️ Zimmer einrichten</h2><button class="knopf" id="laden-zu" aria-label="Schließen">✖</button></div>
   <p id="laden-text"></p>
   <div id="laden-liste"></div>
+</div>
+<div id="welt" hidden role="dialog" aria-label="Meine Welt">
+  <div class="welt-karte">
+    <div class="laden-kopf"><h2 id="welt-titel">🌍 Meine Welten</h2><button class="knopf" id="welt-zu" aria-label="Schließen">✖</button></div>
+    <div id="welt-inhalt"></div>
+  </div>
+</div>
+<div id="welt-leiste" hidden>
+  <span>Gefällt dir deine neue Welt?</span>
+  <button class="knopf" id="welt-wuerfeln">🎲 Neu würfeln</button>
+  <button class="knopf haupt" id="welt-behalten">✅ Behalten</button>
+  <button class="knopf" id="welt-verwerfen">↩️ Zurück</button>
 </div>
 <button id="springen" aria-label="Springen"><span>⬆️</span>Springen</button>
 <div id="stick"><div id="knauf"></div></div>

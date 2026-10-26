@@ -10,6 +10,7 @@ import {
   Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture
 } from "../three/three.module.js";
 import { S } from "./gemeinsam.js";
+import { erzeuge, BIOME, FARBEN, neuerSeed } from "./welt.js";
 
 const $ = (id) => document.getElementById(id);
 const SP = window.Sprache;
@@ -18,6 +19,22 @@ const jetzt = new Date();
 const STUNDE = q.has("stunde") ? +q.get("stunde") : jetzt.getHours() + jetzt.getMinutes() / 60;
 const MONAT = q.has("monat") ? +q.get("monat") : jetzt.getMonth() + 1;
 const SAISON = [12, 1, 2].includes(MONAT) ? "winter" : [3, 4, 5].includes(MONAT) ? "fruehling" : [9, 10, 11].includes(MONAT) ? "herbst" : "sommer";
+// ---------- Eigene Welt (Wünsche + seed, siehe welt.js); ohne gespeicherte Welt: die bisherige Insel ----------
+// Test: ?biom=wald&groesse=gross&huegel=viel&see=1&seed=7
+const WELT_DATEN = S.lade("welt") || {};
+const WUNSCH = q.has("biom") ? { biom: q.get("biom"), groesse: q.get("groesse") || "mittel", huegel: q.get("huegel") || "mittel", see: q.get("see") === "1", blumen: q.get("blumen") !== "0", farbe: q.get("farbe") ? "#" + q.get("farbe") : undefined, seed: +q.get("seed") || 1 }
+  : (WELT_DATEN.welten || [])[WELT_DATEN.aktiv] || null;
+const WELT = erzeuge(WUNSCH), P = WELT.plaetze;
+const ZX_GRENZE = 40;   // ab hier liegt das Zimmer (x ≈ 60), dort ist der Boden immer flach
+// Bodenhöhe für Figuren und Dinge (bisherige Insel: überall 0.25)
+function bodenY(x, z) {
+  if (WELT.insel || x > ZX_GRENZE) return 0.25;
+  const d = Math.hypot(x, z);
+  if (d <= WELT.rand) return 0.25 + WELT.hoehe(x, z);
+  if (d <= WELT.R) { const t = (d - WELT.rand) / (WELT.R - WELT.rand); return 0.25 - t * t * 0.35; }
+  return -0.1 - Math.min(1.1, (d - WELT.R) * 1.4);
+}
+const WINTERLICH = SAISON === "winter" || WELT.biom === "schnee";
 const NACHT = STUNDE >= 20 || STUNDE < 6.5, DAEMMER = !NACHT && (STUNDE >= 18 || STUNDE < 8);
 const GRAFIK_KEY = "lerninsel.grafik";
 const lies = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
@@ -38,7 +55,7 @@ renderer.shadowMap.type = PCFSoftShadowMap;
 $("buehne").appendChild(renderer.domElement);
 
 const scene = new Scene();
-const HIMMEL = NACHT ? "#1C2A55" : DAEMMER ? "#F6B98A" : SAISON === "winter" ? "#CFE6F5" : "#A8DDF5";
+const HIMMEL = NACHT ? "#1C2A55" : DAEMMER ? "#F6B98A" : WINTERLICH ? "#CFE6F5" : WELT.biom === "wueste" ? "#BFE3F2" : "#A8DDF5";
 scene.background = new Color(HIMMEL);
 scene.fog = new Fog(HIMMEL, 32, 80);
 const camera = new PerspectiveCamera(40, 1, 0.1, 200);
@@ -89,9 +106,43 @@ function spielOrt(fn) {
 function antippbar(obj, fn, aktion = ["👀", "Ansehen"], nah = 1.9) { Object.assign(obj.userData, { tipp: fn, aktion, nah }); tippbar.push(obj); }
 
 // ---------- Insel und Wasser ----------
-const GRAS = SAISON === "winter" ? "#EEF5FB" : SAISON === "herbst" ? "#8DC45A" : "#7CCB5B";
+const JAHRESZEIT_GRAS = !WELT.insel && ["wiese", "wald", "berge"].includes(WELT.biom);
+const GRAS = WELT.insel ? (SAISON === "winter" ? "#EEF5FB" : SAISON === "herbst" ? "#8DC45A" : "#7CCB5B")
+  : JAHRESZEIT_GRAS && SAISON === "winter" ? "#EEF5FB" : JAHRESZEIT_GRAS && SAISON === "herbst" ? "#8DC45A" : WELT.B.gras;
 const boden = [];
-{
+if (!WELT.insel) {
+  // Gelände: Ringe um die Mitte, Höhe aus der Welt, Farben je Höhe (Gras, Fels, Schneekuppen, Strand)
+  const ringe = EINFACH ? Math.round(WELT.R * 1.4) : Math.round(WELT.R * 2.6), segs = EINFACH ? 64 : 120, RA = WELT.R + 1.2;
+  const pos = [], farb = [], idx = [];
+  const cG = new Color(GRAS), cS = new Color(WINTERLICH && WELT.biom !== "wueste" ? "#F3E9D8" : WELT.B.sand), cF = new Color(WELT.B.fels), cW = new Color("#FFFFFF"), c = new Color();
+  for (let i = 0; i <= ringe; i++) {
+    const rr = RA * (i / ringe) ** 0.85;
+    for (let j = 0; j < segs; j++) {
+      const a = j / segs * Math.PI * 2, x = Math.cos(a) * rr, z = Math.sin(a) * rr, y = bodenY(x, z);
+      pos.push(x, y, z);
+      if (rr > WELT.rand - 0.4) c.copy(cS);
+      else { const h = y - 0.25; c.copy(cG); if (h > 1.6 && WELT.biom === "berge") c.lerp(cF, Math.min(1, (h - 1.6) / 1.2)); if (h > 3.3 && WELT.biom === "berge") c.lerp(cW, Math.min(1, (h - 3.3) / 0.6)); if (WELT.see && h < -0.25) c.lerp(cS, 0.6); }
+      farb.push(c.r, c.g, c.b);
+    }
+  }
+  for (let i = 0; i < ringe; i++) for (let j = 0; j < segs; j++) {
+    const a = i * segs + j, b = i * segs + (j + 1) % segs, cc = (i + 1) * segs + j, d = (i + 1) * segs + (j + 1) % segs;
+    idx.push(a, b, cc, b, d, cc);
+  }
+  const geo = new BufferGeometry(); geo.setAttribute("position", new Float32BufferAttribute(pos, 3)); geo.setAttribute("color", new Float32BufferAttribute(farb, 3));
+  geo.setIndex(idx); geo.computeVertexNormals();
+  const g = new Mesh(geo, new MeshToonMaterial({ vertexColors: true, gradientMap: verlauf })); g.receiveShadow = true; scene.add(g); boden.push(g);
+  // Unterseite (Sockel unter Wasser)
+  const sockel = new Mesh(new CylinderGeometry(RA, RA - 1, 1.2, segs), mat(WELT.B.sand)); sockel.position.y = -1.7; scene.add(sockel);
+  // Teich
+  if (WELT.see) {
+    const t = new Mesh(new CircleGeometry(WELT.see.r + 0.3, 40), new MeshToonMaterial({ color: NACHT ? "#2E5F8C" : "#5EC3E6", gradientMap: verlauf, transparent: true, opacity: 0.9 }));
+    t.rotation.x = -Math.PI / 2; t.position.set(WELT.see.x, -0.18, WELT.see.z); scene.add(t);
+    block(WELT.see.x, WELT.see.z, WELT.see.r - 0.2);
+  }
+  WELT.pfad.forEach(([x, z]) => { const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, 20), mat("#D9CDB8")); p.receiveShadow = true; setze(p, x, bodenY(x, z) + 0.03, z); scene.add(p); });
+}
+if (WELT.insel) {
   const sand = new LatheGeometry([new Vector2(0, -1.2), new Vector2(15.2, -1.2), new Vector2(15.6, -0.6), new Vector2(15.2, -0.1), new Vector2(0, -0.1)], 64);
   const s = new Mesh(sand, mat(SAISON === "winter" ? "#F3E9D8" : "#F2D9A2")); s.receiveShadow = true; scene.add(s);
   const g = new Mesh(new LatheGeometry([new Vector2(13.1, -0.3), new Vector2(12.9, 0.05), new Vector2(12.2, 0.25), new Vector2(0, 0.25)], 64), mat(GRAS));
@@ -106,7 +157,7 @@ const wasserGeo = new PlaneGeometry(140, 140, EINFACH ? 1 : 70, EINFACH ? 1 : 70
 const wasser = new Mesh(wasserGeo, new MeshToonMaterial({ color: NACHT ? "#2E5F8C" : "#5EC3E6", gradientMap: verlauf, transparent: true, opacity: 0.92 }));
 wasser.position.y = -0.55; wasser.receiveShadow = true; scene.add(wasser);
 const wasserBasis = Float32Array.from(wasserGeo.attributes.position.array);
-{ const schaum = new Mesh(new TorusGeometry(15.9, 0.18, 8, 80), new MeshBasicMaterial({ color: "#EAFBFF" })); schaum.rotation.x = Math.PI / 2; schaum.position.y = -0.48; scene.add(schaum); }
+{ const schaum = new Mesh(new TorusGeometry(WELT.insel ? 15.9 : WELT.R + 0.9, 0.18, 8, 80), new MeshBasicMaterial({ color: "#EAFBFF" })); schaum.rotation.x = Math.PI / 2; schaum.position.y = -0.48; scene.add(schaum); }
 
 // ---------- Bäume (Farbe nach Jahreszeit), Steine, Blumen ----------
 const KRONE = { sommer: ["#5DBB5A", "#4FAF62"], fruehling: ["#5DBB5A", "#F6B6CE"], herbst: ["#F2A03D", "#E2603A", "#F4C542", "#5DBB5A"], winter: ["#3E8E5A", "#3E8E5A"] };
@@ -118,14 +169,44 @@ function baum(x, z, k = 1, i = 0) {
     b.add(setze(teil(kugel(r * k), f), dx * k, y * k, dz * k)));
   if (SAISON === "winter") b.add(setze(teil(kugel(0.6 * k), "#FFFFFF"), 0, 3.45 * k, 0));
   if (SAISON === "sommer" && i % 2 === 0) [[0.6, 2.3, 0.9], [-0.8, 2.6, 0.6], [0.9, 2.8, -0.4]].forEach(([dx, y, dz]) => b.add(setze(teil(kugel(0.16 * k), "#FF7A6B", { dicke: 1.12 }), dx * k, y * k, dz * k)));
-  b.position.set(x, 0.2, z); b.rotation.y = x * 1.7; scene.add(b); block(x, z, 0.6 * k);
+  b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 1.7; scene.add(b); block(x, z, 0.6 * k);
 }
-[[-9, -6, 1.1], [-7.5, 3.2, 0.9], [7.5, -7, 1], [10.5, 1, 1.1], [3, -10, 0.85], [-3.5, 9.8, 0.8], [-11, -1, 0.75], [1.5, 11, 0.7], [-11.5, 6, 0.8]]
-  .forEach(([x, z, k], i) => baum(x, z, k, i));
-[[4.5, 3.6, 0.6], [5.2, 4.1, 0.35], [-6, 6.5, 0.5]].forEach(([x, z, r]) => {
-  const st = teil(kugel(r, 20, 14), "#A7A9B8"); st.scale.y = 0.65; setze(st, x, 0.25 + r * 0.3, z); scene.add(st); block(x, z, r);
+// Nadelbaum, Palme, Kaktus für die eigenen Welten
+function nadelbaum(x, z, k) {
+  const b = new Group(), f = WINTERLICH ? "#3E8E5A" : "#3F9A5C";
+  b.add(setze(teil(new CylinderGeometry(0.16 * k, 0.24 * k, 1.0 * k, 12), "#8A5A34"), 0, 0.5 * k, 0));
+  [[1.15, 1.3, 1.1], [0.9, 1.1, 1.9], [0.62, 0.9, 2.6]].forEach(([r, h, y]) => b.add(setze(teil(new ConeGeometry(r * k, h * k, 14), f), 0, y * k, 0)));
+  if (WINTERLICH) b.add(setze(teil(new ConeGeometry(0.4 * k, 0.5 * k, 14), "#FFFFFF"), 0, 3.0 * k, 0));
+  b.position.set(x, bodenY(x, z) - 0.05, z); scene.add(b); block(x, z, 0.5 * k);
+}
+function palme(x, z, k) {
+  const b = new Group(), stamm = new Group(); b.add(stamm);
+  for (let i = 0; i < 6; i++) stamm.add(setze(teil(new CylinderGeometry(0.17 * k, 0.21 * k, 0.5 * k, 10), i % 2 ? "#B98A55" : "#A47746"), Math.sin(i * 0.35) * 0.25 * k, (0.25 + i * 0.45) * k, 0));
+  for (let i = 0; i < 6; i++) { const bl = teil(kugel(0.5 * k, 14, 8), "#4FAF62"); bl.scale.set(1.9, 0.18, 0.55); bl.rotation.y = i / 6 * Math.PI * 2; bl.rotation.z = -0.35; const g = new Group(); g.rotation.y = i / 6 * Math.PI * 2; setze(bl, 0.75 * k, 0, 0); g.add(bl); g.position.set(0.55 * k, 2.85 * k, 0); b.add(g); }
+  [[0.45, 2.6, 0.15], [0.62, 2.62, -0.12]].forEach(([dx, y, dz]) => b.add(setze(teil(kugel(0.14 * k), "#7A4E25"), dx * k, y * k, dz * k)));
+  b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 2.1; scene.add(b); block(x, z, 0.35 * k);
+}
+function kaktus(x, z, k) {
+  const b = new Group(), f = "#5FA05A";
+  b.add(setze(teil(new CapsuleGeometry(0.28 * k, 1.4 * k, 6, 12), f), 0, 0.95 * k, 0));
+  [[-1, 0.9, 0.5], [1, 1.3, 0.4]].forEach(([s, y, h]) => { b.add(setze(teil(new CapsuleGeometry(0.16 * k, 0.3 * k, 6, 10), f), 0.38 * s * k, y * k, 0)); const arm = teil(new CapsuleGeometry(0.16 * k, h * k, 6, 10), f); setze(arm, 0.52 * s * k, (y + 0.32) * k, 0); b.add(arm); });
+  b.add(setze(teil(kugel(0.12 * k, 10, 8), WELT.farbe || "#FF6F91"), 0, 1.95 * k, 0));
+  b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 1.3; scene.add(b); block(x, z, 0.4 * k);
+}
+WELT.baeume.forEach(({ x, z, k, i, typ }) => typ === "nadel" ? nadelbaum(x, z, k) : typ === "palme" ? palme(x, z, k) : typ === "kaktus" ? kaktus(x, z, k) : baum(x, z, k, i));
+WELT.steine.forEach(([x, z, r]) => {
+  const st = teil(kugel(r, 20, 14), WELT.insel ? "#A7A9B8" : WELT.B.fels); st.scale.y = 0.65; setze(st, x, bodenY(x, z) + r * 0.3, z); scene.add(st); block(x, z, r);
 });
-if (SAISON !== "winter") {
+if (!WELT.insel && WELT.blumen.length && !(JAHRESZEIT_GRAS && SAISON === "winter")) {
+  const BL = [WELT.farbe, WELT.farbe, "#FFD84D", "#FFFFFF", WELT.farbe, "#B28DFF", "#FF9E5E"];
+  WELT.blumen.forEach(([x, z, i]) => {
+    const f = new Group();
+    f.add(setze(new Mesh(new CylinderGeometry(0.03, 0.03, 0.4, 4), mat("#3E9E55")), 0, 0.2, 0));
+    f.add(setze(teil(kugel(0.14, 12, 8), BL[i % BL.length], { dicke: 1.15 }), 0, 0.45, 0));
+    f.position.set(x, bodenY(x, z), z); scene.add(f);
+  });
+}
+if (WELT.insel && SAISON !== "winter") {
   const BL = ["#FF6F91", "#FFD84D", "#FFFFFF", "#B28DFF", "#FF9E5E"], n = SAISON === "fruehling" ? 44 : 26;
   for (let i = 0; i < n; i++) {
     const w = i * 2.399, r = 4 + (i * 37 % 70) / 10, x = Math.cos(w) * r, z = Math.sin(w) * r;
@@ -154,7 +235,7 @@ const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" :
   h.add(setze(teil(new BoxGeometry(0.8, 1.3, 0.12), "#9A6A3F", { dicke: 1.08 }), 0, 0.65, 1.7));
   [0.95, -0.95].forEach(x => h.add(setze(teil(new BoxGeometry(0.7, 0.7, 0.1), fensterMat, { dicke: 1.1 }), x, 1.5, 1.7)));
   h.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.9, 16), "#B9584A"), 0.9, 3.5, -0.5));
-  h.position.set(-5, 0.25, -4.5); h.rotation.y = 0.35; scene.add(h); block(-5, -4.5, 2.3);
+  h.position.set(P.haus[0], bodenY(P.haus[0], P.haus[1]), P.haus[1]); h.rotation.y = WELT.insel ? 0.35 : P.haus[2]; scene.add(h); block(P.haus[0], P.haus[1], 2.3);
   antippbar(h, () => spielOrt(() => reingehen()), ["🚪", "Reingehen"], 3.4);
 }
 
@@ -172,7 +253,7 @@ if (NACHT) {
   const sterne = new Points(g, new PointsMaterial({ color: "#FFFFFF", size: 0.5, fog: false })); scene.add(sterne);
 }
 let schnee = null;
-if (SAISON === "winter" && !EINFACH) {
+if (WINTERLICH && !EINFACH) {
   const pos = []; for (let i = 0; i < 500; i++) pos.push((Math.random() - 0.5) * 40, Math.random() * 16, (Math.random() - 0.5) * 40);
   const g = new BufferGeometry(); g.setAttribute("position", new Float32BufferAttribute(pos, 3));
   schnee = new Points(g, new PointsMaterial({ color: "#FFFFFF", size: 0.14 })); scene.add(schnee);
@@ -230,7 +311,7 @@ async function holeWetter() {
 }
 
 // Wetterstation neben dem Haus: Hütte, Thermometer, Windrad
-const station = new Group(); station.position.set(-1.8, 0.25, -6.3); station.rotation.y = 0.3; scene.add(station); block(-1.8, -6.3, 0.6);
+const station = new Group(); station.position.set(P.station[0], bodenY(P.station[0], P.station[1]), P.station[1]); station.rotation.y = P.station[2]; scene.add(station); block(P.station[0], P.station[1], 0.6);
 station.add(setze(teil(new CylinderGeometry(0.07, 0.09, 1.6, 10), "#8A6A4A"), 0, 0.8, 0));
 station.add(setze(teil(new BoxGeometry(0.8, 0.6, 0.6), "#FFFFFF"), 0, 1.85, 0));
 { const dach = teil(new ConeGeometry(0.62, 0.38, 4), "#E0574A"); dach.rotation.y = Math.PI / 4; station.add(setze(dach, 0, 2.34, 0)); }
@@ -250,15 +331,18 @@ antippbar(station, () => {
 
 // ---------- Wehendes Gras ----------
 let halme = null; const halmDaten = [];
-if (!EINFACH && SAISON !== "winter") {
+const MIT_GRAS = WELT.insel ? SAISON !== "winter" : !WINTERLICH && !["wueste"].includes(WELT.biom) && !(JAHRESZEIT_GRAS && SAISON === "winter");
+const HALME = WELT.insel ? 700 : Math.round(700 * (WELT.rand / 12.9) ** 2);
+if (!EINFACH && MIT_GRAS) {
   const geo = new ConeGeometry(0.06, 0.45, 4); geo.translate(0, 0.22, 0);
-  halme = new InstancedMesh(geo, mat(SAISON === "herbst" ? "#7FB24A" : "#5FB548"), 700);
+  halme = new InstancedMesh(geo, mat(WELT.biom === "strand" ? "#7FC25A" : SAISON === "herbst" ? "#7FB24A" : "#5FB548"), HALME);
   const o = new Object3D();
-  for (let i = 0; i < 700; i++) {
-    const w = Math.random() * Math.PI * 2, r = 2 + Math.sqrt(Math.random()) * 10.5, x = Math.cos(w) * r, z = Math.sin(w) * r;
-    if (Math.hypot(x + 5, z + 4.5) < 2.6) { halmDaten.push({ x: 0, z: 0, p: 0, s: 0 }); o.scale.setScalar(0); o.updateMatrix(); halme.setMatrixAt(i, o.matrix); continue; }
-    halmDaten.push({ x, z, p: Math.random() * 6, s: 0.6 + Math.random() * 0.8 });
-    o.position.set(x, 0.25, z); o.scale.setScalar(halmDaten[i].s); o.updateMatrix(); halme.setMatrixAt(i, o.matrix);
+  const HX = WELT.insel ? -5 : P.haus[0], HZ = WELT.insel ? -4.5 : P.haus[1], RW = WELT.insel ? 10.5 : WELT.rand - 2.4;
+  for (let i = 0; i < HALME; i++) {
+    const w = Math.random() * Math.PI * 2, r = 2 + Math.sqrt(Math.random()) * RW, x = Math.cos(w) * r, z = Math.sin(w) * r;
+    if (Math.hypot(x - HX, z - HZ) < 2.6 || (WELT.see && Math.hypot(x - WELT.see.x, z - WELT.see.z) < WELT.see.r + 0.4)) { halmDaten.push({ x: 0, z: 0, p: 0, s: 0 }); o.scale.setScalar(0); o.updateMatrix(); halme.setMatrixAt(i, o.matrix); continue; }
+    halmDaten.push({ x, z, y: bodenY(x, z), p: Math.random() * 6, s: 0.6 + Math.random() * 0.8 });
+    o.position.set(x, bodenY(x, z), z); o.scale.setScalar(halmDaten[i].s); o.updateMatrix(); halme.setMatrixAt(i, o.matrix);
   }
   halme.receiveShadow = true; scene.add(halme);
 }
@@ -335,7 +419,7 @@ function figur(look) {
   return f;
 }
 const look = (S.lade("anziehen") || {}).aktuell || (window.Figur ? window.Figur.STANDARD() : { figur: { farbe: "#F8D2B8" } });
-const ich = figur(look); ich.position.set(1, 0.25, 2); scene.add(ich);
+const ich = figur(look); ich.position.set(WELT.insel ? 1 : P.start[0] + 1, 0.25, WELT.insel ? 2 : P.start[1] + 2); ich.position.y = bodenY(ich.position.x, ich.position.z); scene.add(ich);
 
 // ---------- Das eigene Tier ----------
 const TP = window.TierPflege, T = window.Tiere;
@@ -367,7 +451,7 @@ function tierModell(art, f, stufe) {
   return t;
 }
 let tier = null, nest = null;
-const NEST = new Vector3(-2.2, 0.25, -6.2);
+const NEST = new Vector3(P.nest[0], bodenY(P.nest[0], P.nest[1]), P.nest[1]);
 {
   nest = new Group(); nest.position.copy(NEST); scene.add(nest); block(NEST.x, NEST.z, 0.6);
   const ring = teil(new TorusGeometry(0.45, 0.16, 10, 24), "#B98A55"); ring.rotation.x = Math.PI / 2; ring.position.y = 0.12; nest.add(ring);
@@ -375,7 +459,7 @@ const NEST = new Vector3(-2.2, 0.25, -6.2);
   if (tierDaten && tierDaten.phase === "tier" && T && T.ARTEN[tierDaten.art]) {
     const f = T.ARTEN[tierDaten.art].farben[tierDaten.farbe] || T.ARTEN[tierDaten.art].farben[0];
     tier = tierModell(tierDaten.art, f, TP.stufe ? TP.stufe(tierDaten) : 0);
-    tier.position.set(2.5, 0.25, 3); scene.add(tier);
+    tier.position.set(P.tier[0], bodenY(P.tier[0], P.tier[1]), P.tier[1]); scene.add(tier);
     antippbar(tier, () => {
       herzen(tier.position);
       const ok = TP.streicheln ? TP.streicheln() : false;
@@ -494,13 +578,13 @@ function tafel(text, farbe) {
 }
 const name = S.profil.name || "du";
 const NACHBARN = [
-  { bau: eule, x: 8.5, z: -3, dreh: -1.2, e: "eule", titel: "Eule Ella", text: `Hallo ${name}! Ich weiß spannende Dinge über die Welt. Kommst du mit?`, ru: "Привет! Я знаю много интересного о мире. Пойдёшь со мной?", ziel: "../sachkunde/" },
-  { bau: fipsi, x: -7.6, z: -0.6, dreh: 1.0, e: "fipsi", titel: "Fipsi", text: `Hallo ${name}! Hilfst du mir, meine Schatzkarte zu finden?`, ru: "Привет! Поможешь мне найти мою карту сокровищ?", ziel: "../deutsch/" },
+  { bau: eule, x: P.eule[0], z: P.eule[1], dreh: P.eule[2], e: "eule", titel: "Eule Ella", text: `Hallo ${name}! Ich weiß spannende Dinge über die Welt. Kommst du mit?`, ru: "Привет! Я знаю много интересного о мире. Пойдёшь со мной?", ziel: "../sachkunde/" },
+  { bau: fipsi, x: P.fipsi[0], z: P.fipsi[1], dreh: P.fipsi[2], e: "fipsi", titel: "Fipsi", text: `Hallo ${name}! Hilfst du mir, meine Schatzkarte zu finden?`, ru: "Привет! Поможешь мне найти мою карту сокровищ?", ziel: "../deutsch/" },
   // Robo Pixel wohnt vorerst nicht auf der Insel: Er begleitet den Tablet-Führerschein (Schlüssel zur Insel) und kommt später zurück.
   // { bau: robo, x: 5.5, z: 8.5, dreh: -2.6, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Хочешь стать мастером планшета?", ziel: "../medien/" },
-  { bau: biber, x: 2, z: -8, dreh: 0.2, e: "biber", titel: "Biber Benno", text: `Hallo ${name}! Ich bin Benno. Ich baue Dämme und zähle jeden Stamm. Rechnest du mit mir auf dem Matheweg?`, ru: "Привет! Я бобр Бенно. Я строю плотины и считаю каждое бревно. Посчитаешь со мной на математической тропе?", ziel: "../mathe/" }
+  { bau: biber, x: P.biber[0], z: P.biber[1], dreh: P.biber[2], e: "biber", titel: "Biber Benno", text: `Hallo ${name}! Ich bin Benno. Ich baue Dämme und zähle jeden Stamm. Rechnest du mit mir auf dem Matheweg?`, ru: "Привет! Я бобр Бенно. Я строю плотины и считаю каждое бревно. Посчитаешь со мной на математической тропе?", ziel: "../mathe/" }
 ];
-{ const t = tafel("Mathe", "#5CCBA6"); t.position.set(3.3, 0.25, -8.5); t.rotation.y = 0.2; scene.add(t); block(3.3, -8.5, 0.4); }
+{ const t = tafel("Mathe", "#5CCBA6"), [x, z, d] = P.schild; t.position.set(x, bodenY(x, z), z); t.rotation.y = d; scene.add(t); block(x, z, 0.4); }
 
 // Lernfunde des Tages: Wer heute etwas Neues im Fach gelernt hat, wird vom passenden Nachbarn begrüßt.
 // Die Nachbarn hüpfen dann ab und zu, bis man mit ihnen gesprochen hat (shared/lernfunde.js).
@@ -512,7 +596,7 @@ const FREUDE = {
   mathe: (f) => [`Super, ${name}! Das hast du heute geschafft: ${f.t.replace(/^Neu geschafft: /, "")}. Ich zähle mit dir weiter!`, "Супер! Сегодня у тебя получилось новое. Считаем дальше вместе!"]
 };
 NACHBARN.forEach(n => {
-  const o = n.bau(); o.position.set(n.x, 0.25, n.z); o.rotation.y = n.dreh; if (n.e !== "🧮") o.scale.multiplyScalar(1.3); scene.add(o); block(n.x, n.z, 0.8);
+  const o = n.bau(); n.y = bodenY(n.x, n.z); o.position.set(n.x, n.y, n.z); o.rotation.y = n.dreh; if (n.e !== "🧮") o.scale.multiplyScalar(1.3); scene.add(o); block(n.x, n.z, 0.8);
   n.obj = o;
   const fach = FACH[n.e], fund = window.Lernfunde && fach ? window.Lernfunde.heuteFach(fach) : null;
   n.freut = !!fund && n.e !== "🧮";
@@ -527,7 +611,7 @@ NACHBARN.forEach(n => {
 // ---------- Wissensbaum ----------
 // Wächst mit allen Lernfunden seit Beginn (shared/lernfunde.js), jeder Fund von heute hängt als leuchtende Frucht daran.
 // Ohne Lernen passiert nichts Schlimmes: der Baum bleibt einfach, wie er ist (kein Welken, keine Strafe).
-const WB = new Vector3(-3.2, 0.25, 2.2);
+const WB = new Vector3(P.wissensbaum[0], bodenY(P.wissensbaum[0], P.wissensbaum[1]), P.wissensbaum[1]);
 const FRUCHT = { mathe: "#2FA37C", deutsch: "#E0574A", sachkunde: "#1F8F8A", tablet: "#2F86C8" };
 const wissen = (() => {
   const L = window.Lernfunde; if (!L) return null;
@@ -585,7 +669,7 @@ if (wissen && wissen.info.gewachsen) {
 }
 
 // ---------- Orte für Minispiele ----------
-const ballons = new Group(); ballons.position.set(10, 0.25, 6); scene.add(ballons); block(10, 6, 0.6);
+const ballons = new Group(); ballons.position.set(P.ballons[0], bodenY(P.ballons[0], P.ballons[1]), P.ballons[1]); scene.add(ballons); block(P.ballons[0], P.ballons[1], 0.6);
 ["#FF6F91", "#FFD84D", "#5CCBA6", "#7B9BFF", "#C27BFF"].forEach((c, i) => {
   const b = new Group(), a = i / 5 * Math.PI * 2;
   const ball = teil(kugel(0.34), c); ball.scale.y = 1.15; b.add(setze(ball, 0, 0, 0));
@@ -595,7 +679,7 @@ const ballons = new Group(); ballons.position.set(10, 0.25, 6); scene.add(ballon
 ballons.add(setze(teil(new CylinderGeometry(0.12, 0.16, 0.5, 12), "#9A6A3F"), 0, 0.25, 0));
 const fuehrerscheinFehlt = () => sprechblase("🪪", "Noch gesperrt", "Mach zuerst den Tablet-Führerschein bei Robo Pixel. Dann darfst du hier spielen!", S.paar(["", "Сначала получи права на планшет у Робо Пикселя."])[1], "../medien/");
 antippbar(ballons, () => spielOrt(() => profi() ? sprechblase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", S.paar(["", "Лопни как можно больше шариков!"])[1], "ballons.html") : fuehrerscheinFehlt()), ["🎈", "Spielen"]);
-const truhe = new Group(); truhe.position.set(-1, 0.05, 13.6); scene.add(truhe);
+const truhe = new Group(); truhe.position.set(P.truhe[0], WELT.insel ? 0.05 : bodenY(P.truhe[0], P.truhe[1]) - 0.15, P.truhe[1]); truhe.rotation.y = WELT.insel ? 0 : Math.atan2(-P.truhe[0], -P.truhe[1]); scene.add(truhe);
 truhe.add(setze(teil(new BoxGeometry(0.9, 0.5, 0.6), "#B9732E"), 0, 0.25, 0));
 const deckel = teil(new CylinderGeometry(0.3, 0.3, 0.9, 16, 1, false, 0, Math.PI), "#C98A3E"); deckel.rotation.z = Math.PI / 2; setze(deckel, 0, 0.5, 0); truhe.add(deckel);
 truhe.add(setze(teil(new BoxGeometry(0.16, 0.2, 0.05), "#FFC83D", { dicke: 1.1 }), 0, 0.45, 0.32));
@@ -774,8 +858,9 @@ function reingehen() {
 }
 function rausgehen() {
   drinnen = false; $("raus").hidden = true; $("einrichten").hidden = true; $("laden").hidden = true;
-  ich.position.set(-4.1, 0.25, -2.0); ich.rotation.y = 0;
-  if (tier) tier.position.set(-3.0, 0.25, -1.6);
+  const hr = WELT.insel ? 0.35 : P.haus[2], tx = P.haus[0] + Math.sin(hr) * 2.75, tz = P.haus[1] + Math.cos(hr) * 2.75;
+  ich.position.set(tx, bodenY(tx, tz), tz); ich.rotation.y = hr;
+  if (tier) tier.position.set(tx + 1.1, bodenY(tx + 1.1, tz + 0.4), tz + 0.4);
   scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true);
   $("info").textContent = spielZeit() ? `Hallo ${name}!` : "🌱 Erst lernen: Geh zu Ella, Fipsi oder Benno.";
   if (wetter) { wendeWetterAn(wetter); zeigeWetterInfo(); }
@@ -950,12 +1035,13 @@ $("grafik").addEventListener("click", () => { merkeEin("grafik", EINFACH ? "scho
 let ankunft = null;
 const marke = new Mesh(new TorusGeometry(0.35, 0.06, 6, 28), new MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.9 }));
 marke.rotation.x = Math.PI / 2; marke.visible = false; scene.add(marke);
-function markiere(p) { marke.position.set(p.x, 0.32, p.z); marke.visible = true; }
+function markiere(p) { marke.position.set(p.x, bodenY(p.x, p.z) + 0.07, p.z); marke.visible = true; }
 
 // Begrüßung
 $("sterne").textContent = S.sterne();
 function zeigeWetterInfo() { const w = wetterSatz(); if (w && !drinnen && spielZeit()) $("info").textContent = `${w} – hallo ${name}!`; }
-$("info").textContent = NACHT ? `Gute Nacht, ${name}! Die Insel schläft bald.` : SAISON === "winter" ? `Es hat geschneit, ${name}!` : SAISON === "herbst" ? `Die Blätter sind bunt, ${name}!` : `Hallo ${name}! Schön, dass du da bist.`;
+const WELT_GRUSS = { wiese: "Die Blumen blühen", wald: "Der Wald rauscht", berge: "Die Berge rufen", strand: "Die Wellen rauschen", schnee: "Alles glitzert im Schnee", wueste: "Die Sonne scheint warm" };
+$("info").textContent = NACHT ? `Gute Nacht, ${name}! Die Insel schläft bald.` : !WELT.insel ? `${WELT_GRUSS[WELT.biom]}, ${name}! Willkommen in deiner Welt.` : SAISON === "winter" ? `Es hat geschneit, ${name}!` : SAISON === "herbst" ? `Die Blätter sind bunt, ${name}!` : `Hallo ${name}! Schön, dass du da bist.`;
 
 // ---------- Größe, Schleife ----------
 function groesse() { const el = $("buehne"); renderer.setSize(el.clientWidth, el.clientHeight, false); camera.aspect = el.clientWidth / Math.max(1, el.clientHeight); camera.updateProjectionMatrix(); }
@@ -965,7 +1051,7 @@ let lauf = 0, vollGas = 0, rennt = false;
 function wegVonHindernissen(p, r) {
   for (const h of hindernisse) { const dx = p.x - h.x, dz = p.z - h.z, d = Math.hypot(dx, dz), m = h.r + r; if (d < m && d > 0.001) { p.x = h.x + dx / d * m; p.z = h.z + dz / d * m; } }
   if (drinnen) { p.x = MathUtils.clamp(p.x, ZX - 3.7, ZX + 3.7); p.z = MathUtils.clamp(p.z, -3.1, 3.3); if (p.z >= 3.25 && ich.position === p) rausgehen(); return; }
-  const l = Math.hypot(p.x, p.z); if (l > 14.6) { p.x *= 14.6 / l; p.z *= 14.6 / l; }
+  const RMAX = WELT.insel ? 14.6 : WELT.R - 0.6, l = Math.hypot(p.x, p.z); if (l > RMAX) { p.x *= RMAX / l; p.z *= RMAX / l; }
 }
 function bild() {
   const dt = Math.min(uhr.getDelta(), 0.05), t = uhr.elapsedTime;
@@ -1009,7 +1095,7 @@ function bild() {
     vy -= 18 * dt; hoehe += vy * dt;
     if (hoehe <= 0) { hoehe = 0; vy = 0; spruenge = 0; }
   }
-  ich.position.y = 0.25 + hoehe;
+  const grund = bodenY(ich.position.x, ich.position.z); ich.position.y = grund + hoehe;
   if (hoehe > 0) { u.beine[0].rotation.x = -0.5; u.beine[1].rotation.x = 0.3; u.arme[0].rotation.z = 0.9; u.arme[1].rotation.z = -0.9; }
   else { u.arme[0].rotation.z = 0.25; u.arme[1].rotation.z = -0.25; }
   if (marke.visible) marke.scale.setScalar(1 + Math.sin(t * 6) * 0.1);
@@ -1021,6 +1107,7 @@ function bild() {
       hoppelt = true; tmp.normalize(); tier.position.addScaledVector(tmp, Math.min(dT - 1.5, (dT > 4 ? 7.5 : 3.2) * dt)); wegVonHindernissen(tier.position, 0.3);
       const soll = Math.atan2(tmp.x, tmp.z); let diff = soll - tier.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff)); tier.rotation.y += diff * Math.min(1, dt * 8);
     }
+    tier.position.y = bodenY(tier.position.x, tier.position.z);
     tu.k.position.y = hoppelt ? Math.abs(Math.sin(t * 12)) * 0.18 : 0;
     tu.k.rotation.z = schlaeft ? 1.2 : 0;
     tu.schwanz.rotation.y = Math.sin(t * (hoppelt ? 10 : schlaeft ? 0.5 : 3)) * 0.5;
@@ -1033,7 +1120,7 @@ function bild() {
     const soll = nah ? Math.atan2(dx, dz) : n.dreh; let diff = soll - o.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff)); o.rotation.y += diff * Math.min(1, dt * 4);
     if (n.freut && !(o.userData.huepf > 0) && (t + i * 1.3) % 5 < dt) o.userData.huepf = 1;
     if (o.userData.koerper) o.userData.koerper.scale.y = 1 + Math.sin(t * 2.2 + i) * 0.02; if (o.userData.huepf > 0) { o.userData.huepf = Math.max(0, o.userData.huepf - dt * 2); }
-    o.position.y = 0.25 + Math.sin((1 - (o.userData.huepf || 0)) * Math.PI) * (o.userData.huepf ? 0.4 : 0) + (n.e === "robo" ? Math.sin(t * 2) * 0.05 : 0);
+    o.position.y = n.y + Math.sin((1 - (o.userData.huepf || 0)) * Math.PI) * (o.userData.huepf ? 0.4 : 0) + (n.e === "robo" ? Math.sin(t * 2) * 0.05 : 0);
   });
   if (wissen) wissen.tick(t);
   ballons.children.forEach(b => { if (b.userData.p !== undefined) b.position.y = 2.3 + (b.userData.p % 2) * 0.35 + Math.sin(t * 1.5 + b.userData.p) * 0.12; });
@@ -1047,7 +1134,7 @@ function bild() {
   if (halme && !RUHIG) {
     for (let i = 0; i < halmDaten.length; i++) {
       const h = halmDaten[i]; if (!h.s) continue;
-      halmO.position.set(h.x, 0.25, h.z); halmO.scale.setScalar(h.s); halmO.rotation.set(Math.sin(t * 1.8 + h.p + h.x * 0.3) * 0.18, 0, Math.cos(t * 1.5 + h.p) * 0.12);
+      halmO.position.set(h.x, h.y, h.z); halmO.scale.setScalar(h.s); halmO.rotation.set(Math.sin(t * 1.8 + h.p + h.x * 0.3) * 0.18, 0, Math.cos(t * 1.5 + h.p) * 0.12);
       halmO.updateMatrix(); halme.setMatrixAt(i, halmO.matrix);
     }
     halme.instanceMatrix.needsUpdate = true;
@@ -1061,7 +1148,7 @@ function bild() {
   if (wetter && wetter.art === "gewitter" && !drinnen && !RUHIG) { blitz -= dt; if (blitz < -6 - Math.random() * 6) { blitz = 0.12; } scene.background.set(blitz > 0 ? "#E8ECF5" : NACHT ? HIMMEL : "#6C7A8C"); }
   wolken.forEach((w, i) => { w.position.x += dt * (0.4 + i * 0.1); if (w.position.x > 40) w.position.x = -40; });
 
-  blick.set(ich.position.x, 1.25 + hoehe * 0.3, ich.position.z);
+  blick.set(ich.position.x, 1.0 + grund + hoehe * 0.3, ich.position.z);
   const gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.85 : 0.72, ab = drinnen && !freiKamera ? 10 : abstand;
   if (drinnen) blick.set(MathUtils.clamp(blick.x, ZX - 1.5, ZX + 1.5), blick.y, MathUtils.clamp(blick.z, -1.5, 1.2));
   camera.position.set(blick.x + Math.sin(gw) * Math.cos(nw) * ab, blick.y + Math.sin(nw) * ab, blick.z + Math.cos(gw) * Math.cos(nw) * ab);
@@ -1074,4 +1161,68 @@ requestAnimationFrame(bild);
 zeigeLernmodus(); if (!NACHT) zeigeWetterInfo();
 if (window.Sticker) setTimeout(() => { window.Sticker.feste(); if (NACHT && !q.has("stunde")) window.Sticker.entdecke("w-mond"); }, 1200);
 if (q.get("drinnen") === "1" && spielZeit()) reingehen();
+// ---------- Meine Welt: Wünsche-Assistent, Neu würfeln, gespeicherte Welten wechseln ----------
+// Daten: S.lade("welt") = { welten: [wünsche…], aktiv: Index (-1/fehlt = erste Insel), entwurf: true solange „Behalten?“ offen, vorher }
+const MAX_WELTEN = 5;
+const weltDaten = () => Object.assign({ welten: [], aktiv: -1 }, S.lade("welt") || {});
+const weltSpeichern = (d) => S.speichere("welt", d);
+const neuLaden = () => setTimeout(() => location.reload(), 200);
+let wunsch = null, schritt = 0;
+function weltListe() {
+  const d = weltDaten();
+  $("welt-titel").textContent = "🌍 Meine Welten";
+  const eintrag = (i, e, n) => `<div class="welt-eintrag ${d.aktiv === i || (i === -1 && !(d.aktiv >= 0)) ? "aktiv" : ""}"><span class="e">${e}</span><b>${n}</b>` +
+    (d.aktiv === i || (i === -1 && !(d.aktiv >= 0)) ? `<span>📍 Hier bist du</span>` : `<button class="knopf haupt" data-besuch="${i}">Besuchen</button>`) +
+    (i >= 0 ? `<button class="knopf" data-weg="${i}" aria-label="Welt löschen">🗑️</button>` : "") + `</div>`;
+  $("welt-inhalt").innerHTML = `<p>Erschaffe dir eine eigene Welt, so wie du sie magst. Du kannst mehrere Welten haben und hin- und herreisen.</p>
+    <div class="welt-liste">${eintrag(-1, "🏝️", "Meine erste Insel")}${d.welten.map((w, i) => eintrag(i, (BIOME[w.biom] || {}).e || "🌍", w.name || "Meine Welt")).join("")}</div>
+    <div class="welt-unten">${d.welten.length < MAX_WELTEN ? `<button class="knopf haupt" id="welt-neu">✨ Neue Welt erschaffen</button>` : `<p>Du hast schon ${MAX_WELTEN} Welten. Lösche eine, um eine neue zu erschaffen.</p>`}</div>`;
+  $("welt-inhalt").querySelectorAll("[data-besuch]").forEach(b => b.addEventListener("click", () => { const d2 = weltDaten(); d2.aktiv = +b.dataset.besuch; d2.entwurf = false; weltSpeichern(d2); S.ton("juhu"); neuLaden(); }));
+  $("welt-inhalt").querySelectorAll("[data-weg]").forEach(b => b.addEventListener("click", () => {
+    const i = +b.dataset.weg, d2 = weltDaten(), w = d2.welten[i];
+    if (!confirm(`„${w.name || "Meine Welt"}“ wirklich löschen?`)) return;
+    d2.welten.splice(i, 1); const war = d2.aktiv === i; if (d2.aktiv > i) d2.aktiv--; if (war) d2.aktiv = -1; weltSpeichern(d2);
+    if (war) neuLaden(); else weltListe();
+  }));
+  const neu = $("welt-neu"); if (neu) neu.addEventListener("click", () => { wunsch = { biom: "wiese", farbe: FARBEN[0][0], groesse: "mittel", huegel: "mittel", see: false, blumen: true }; schritt = 0; assistent(); S.ton("tipp"); });
+}
+function assistent() {
+  const W = wunsch, punkte = `<div class="schritte">${[0, 1, 2].map(i => `<span class="${i <= schritt ? "an" : ""}"></span>`).join("")}</div>`;
+  $("welt-titel").textContent = "✨ Neue Welt erschaffen";
+  let html = punkte;
+  if (schritt === 0) html += `<h3>Wie soll deine Welt aussehen?</h3><div class="wahl-raster">${Object.entries(BIOME).map(([id, b]) => `<button class="wahl ${W.biom === id ? "an" : ""}" data-biom="${id}"><span class="e">${b.e}</span>${b.name}</button>`).join("")}</div>`;
+  if (schritt === 1) html += `<h3>Deine Lieblingsfarbe für Blumen und Blüten</h3><div class="farben">${FARBEN.map(([f, n]) => `<button class="farbe ${W.farbe === f ? "an" : ""}" data-farbe="${f}" style="background:${f}" aria-label="${n}"></button>`).join("")}</div>
+    <h3>Wie groß?</h3><div class="wahl-raster">${[["klein", "🏝️", "Klein"], ["mittel", "🗺️", "Mittel"], ["gross", "🌍", "Riesig"]].map(([v, e, t]) => `<button class="wahl ${W.groesse === v ? "an" : ""}" data-groesse="${v}"><span class="e">${e}</span>${t}</button>`).join("")}</div>`;
+  if (schritt === 2) html += `<h3>Wie hügelig?</h3><div class="wahl-raster">${[["wenig", "➖", "Fast flach"], ["mittel", "〰️", "Ein paar Hügel"], ["viel", "⛰️", "Viele Hügel"]].map(([v, e, t]) => `<button class="wahl ${W.huegel === v ? "an" : ""}" data-huegel="${v}"><span class="e">${e}</span>${t}</button>`).join("")}</div>
+    <h3>Was soll es noch geben?</h3><div class="wahl-raster"><button class="wahl ${W.see ? "an" : ""}" data-extra="see"><span class="e">💧</span>Einen Teich</button><button class="wahl ${W.blumen ? "an" : ""}" data-extra="blumen"><span class="e">🌸</span>Viele Blumen</button></div>`;
+  html += `<div class="welt-unten"><button class="knopf" id="welt-zurueck">${schritt ? "⬅️ Zurück" : "Abbrechen"}</button>${schritt < 2 ? `<button class="knopf haupt" id="welt-weiter">Weiter ➡️</button>` : `<button class="knopf haupt" id="welt-los">✨ Welt erschaffen!</button>`}</div>`;
+  $("welt-inhalt").innerHTML = html;
+  const I = $("welt-inhalt");
+  I.querySelectorAll("[data-biom]").forEach(b => b.addEventListener("click", () => { W.biom = b.dataset.biom; S.ton("tipp"); assistent(); }));
+  I.querySelectorAll("[data-farbe]").forEach(b => b.addEventListener("click", () => { W.farbe = b.dataset.farbe; S.ton("tipp"); assistent(); }));
+  I.querySelectorAll("[data-groesse]").forEach(b => b.addEventListener("click", () => { W.groesse = b.dataset.groesse; S.ton("tipp"); assistent(); }));
+  I.querySelectorAll("[data-huegel]").forEach(b => b.addEventListener("click", () => { W.huegel = b.dataset.huegel; S.ton("tipp"); assistent(); }));
+  I.querySelectorAll("[data-extra]").forEach(b => b.addEventListener("click", () => { W[b.dataset.extra] = !W[b.dataset.extra]; S.ton("tipp"); assistent(); }));
+  $("welt-zurueck").addEventListener("click", () => { S.ton("tipp"); if (schritt) { schritt--; assistent(); } else weltListe(); });
+  const weiter = $("welt-weiter"); if (weiter) weiter.addEventListener("click", () => { S.ton("tipp"); schritt++; assistent(); });
+  const los = $("welt-los"); if (los) los.addEventListener("click", () => {
+    const d = weltDaten(), anzahl = d.welten.filter(w => w.biom === W.biom).length;
+    d.welten.push(Object.assign({}, W, { seed: neuerSeed(), name: `${BIOME[W.biom].name}${anzahl ? " " + (anzahl + 1) : ""}` }));
+    d.vorher = d.aktiv; d.aktiv = d.welten.length - 1; d.entwurf = true; weltSpeichern(d);
+    $("welt-inhalt").innerHTML = `<p style="font-size:1.4rem;text-align:center">✨ Deine Welt entsteht …</p>`; S.ton("juhu"); neuLaden();
+  });
+}
+$("welt-knopf").addEventListener("click", () => { S.ton("tipp"); spielOrt(() => { $("welt").hidden = false; weltListe(); }); });
+$("welt-zu").addEventListener("click", () => { S.ton("tipp"); $("welt").hidden = true; });
+// Nach dem Erschaffen: neu würfeln, behalten oder zurück
+{
+  const d = weltDaten();
+  if (d.entwurf && d.aktiv >= 0 && d.welten[d.aktiv]) {
+    $("welt-leiste").hidden = false;
+    $("welt-wuerfeln").addEventListener("click", () => { const d2 = weltDaten(); d2.welten[d2.aktiv].seed = neuerSeed(); weltSpeichern(d2); S.ton("tipp"); neuLaden(); });
+    $("welt-behalten").addEventListener("click", () => { const d2 = weltDaten(); d2.entwurf = false; delete d2.vorher; weltSpeichern(d2); $("welt-leiste").hidden = true; S.ton("juhu"); $("info").textContent = "🌍 Deine Welt ist gespeichert!"; });
+    $("welt-verwerfen").addEventListener("click", () => { const d2 = weltDaten(); d2.welten.splice(d2.aktiv, 1); d2.aktiv = d2.vorher >= 0 && d2.vorher < d2.welten.length ? d2.vorher : -1; d2.entwurf = false; delete d2.vorher; weltSpeichern(d2); S.ton("tipp"); neuLaden(); });
+  }
+}
+
 window.__heimat = { wissen: () => wissen, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), SAISON, NACHT };
