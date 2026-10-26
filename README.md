@@ -57,6 +57,13 @@ werden im Elternbereich festgelegt und bleiben nur auf dem Tablet.
 
 ## Geplant (Kurzfassung, Details in docs/PLAN.md)
 
+**Neuausrichtung 26.10.2026** (gültige Reihenfolge in `docs/PLAN.md`, Abschnitt „Neuausrichtung“): durchgehende Geschichte
+„Die Insel erwacht“ mit Kapiteln und Tutorial (Weihnachten als Sonder-Start), verzahnte und an das Kind angepasste Features,
+Lehrplan Vorschule bis Übergang Klasse 5 (KMK-Kern + Länder, `docs/LEHRPLAN.md`), Muttersprachen und Deutsch als Zweitsprache
+(`docs/SPRACHEN.md`), neues Grafik-Konzept mit Leistungsbudget fürs iPad 10 (`docs/GRAFIK.md`), mehr Minispiele (`docs/MINISPIELE.md`).
+
+Frühere Planung (Historie):
+
 1. Umgebungen: Prod (`/`), Dev (`/dev/`), Testmodus (`/dev/test/`, das bisherige /dev)
 2. Lernen nach echten Fächern und dem **Lehrplan Sachsen**: Deutsch (bisher „Abenteuer“, Fipsis Schatzkarte bleibt),
    Mathematik (Klasse 1–4), Sachunterricht (bisher „Sachkunde“), Englisch ab Klasse 3, Medienbildung
@@ -94,7 +101,13 @@ spiele/anziehen/figur.js Zeichnet die Figur (auch für Startseite und Mein Ich)
 spiele/welt3d/          3D-Spiele (gebaut, nicht von Hand ändern)
 quellen/welt3d/         Quellcode der 3D-Spiele, quellen/three/ = three.js (MIT); bauen mit quellen/bauen.sh (esbuild)
 sw.js                   Offline-Speicher
-docs/PLAN.md            Gesamtplan
+docs/PLAN.md            Gesamtplan, Backlog der Neuausrichtung (NA-xx)
+docs/KONZEPT.md         Leitidee, Story, Tutorial, Verzahnung, Individualisierung
+docs/LEHRPLAN.md        Lehrplan-Matrix, Abdeckung, Inhalte als Daten
+docs/SPRACHEN.md        Muttersprachen, DaZ, Schriften, Vorlesen, Übersetzungsprüfung
+docs/GRAFIK.md          Stil-Leitfaden, Figuren-Steckbriefe, Leistungsbudget
+docs/MINISPIELE.md      Minispiel-Katalog und Qualitätskriterien
+docs/SESSION-PROMPT.md  Prompt für die nächste Arbeitssitzung
 CNAME                   Domain für GitHub Pages
 ```
 

@@ -1,5 +1,8 @@
 # Gesamtplan Spielwelt (Stand 25.10.2026, nur Planung)
 
+> **Neu: Abschnitt „Neuausrichtung 26.10.2026“ am Ende dieses Dokuments.** Er enthält die gültige Reihenfolge und den
+> Arbeitspaket-Backlog. Alle Abschnitte davor bleiben als Historie stehen.
+
 ## 1. Umgebungen (erledigt 25.10.2026)
 | Adresse | Zweck | Speicher (getrennt!) |
 |---|---|---|
@@ -184,7 +187,7 @@ verschlüsselter Familien-Abgleich (Server sieht nichts). Kinderdaten → DSGVO,
 - Vision: Gegenentwurf zu Roblox – Zugang über Schulen, Eltern einbezogen, kein freier Chat,
   Klassen-Inselbesuche nur mit festen Grüßen. Schrittweise einführen (siehe 11).
 
-## Vorschlag Reihenfolge
+## Vorschlag Reihenfolge (Historie – ersetzt durch „Neuausrichtung 26.10.2026“)
 1. Umgebungen prod / dev / dev/test
 2. Lernen nach Fächern umbauen und umbenennen, Einhorn raus, Zeitsystem mit Elternkonfiguration
 3. Umbau auf Sprachschlüssel (Grundlage für alle weiteren Sprachen)
@@ -491,7 +494,224 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 - Offen: iPad-10-Test, Bauwerk in der Welt, Kart-Strecke zur Landschaft, Lehrplan-Inhalte, russische Lieder, Punkt 5 Muttersprache,
   zuletzt Weihnachts-Erststart mit Tutorial. Nächster Schritt: iPad-Rückmeldung abwarten, dann Bauwerk in der Welt.
 
-**Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
+**Reihenfolge (abgestimmt 26.10.2026, Historie – ersetzt durch „Neuausrichtung 26.10.2026“ unten):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**
+
+---
+
+## Neuausrichtung 26.10.2026
+Grundlage: Rückmeldung des Auftraggebers vom 26.10.2026 (Story und Tutorial, Verzahnung und Individualisierung,
+inhaltliche Tiefe nach Lehrplänen, Sprachen und DaZ, Grafik, mehr Minispiele). Die Konzepte stehen in
+[`KONZEPT.md`](KONZEPT.md), [`LEHRPLAN.md`](LEHRPLAN.md), [`SPRACHEN.md`](SPRACHEN.md), [`GRAFIK.md`](GRAFIK.md) und
+[`MINISPIELE.md`](MINISPIELE.md). Dieser Abschnitt legt fest, **in welcher Reihenfolge** gebaut wird.
+
+### Entscheidungen (26.10.2026)
+1. **Story und Tutorial kommen nach vorn.** Weihnachten ist kein Endpunkt mehr, sondern Anlass für einen Sonder-Start
+   (Erststart im Dezember oder Weihnachts-QR). Prolog, Tutorial E1–E5 und Weihnachts-Sonderstart müssen **bis 15.12.2026** fertig sein.
+2. **Lehrplan:** gemeinsamer Kern aus den KMK-Bildungsstandards (Deutsch, Mathe), KMK „Bildung in der digitalen Welt“ und
+   GDSU-Perspektivrahmen; Länder als Abweichungen. Sachsen bleibt das erste vollständig gepflegte Land, danach NRW, Bayern,
+   Baden-Württemberg, Niedersachsen, Berlin/Brandenburg.
+3. **Sprachen:** nach Russisch zuerst **Ukrainisch**, dann **Arabisch** (baut die RTL-Technik), dann **Türkisch**; danach Polnisch,
+   Rumänisch, Farsi/Dari, Kurdisch, Englisch, Bulgarisch. Keine ungeprüfte Maschinenübersetzung im Kinder-UI.
+4. **Grafik:** Der Stil darf sich grundlegend ändern. Erst drei Probeszenen auf dem iPad 10 vergleichen, dann entscheiden.
+   **Bis zur Entscheidung werden keine Figuren neu gebaut**; Story und Tutorial nutzen die heutigen Figuren.
+5. **Inhalte als Daten:** Lernziel-IDs, Wortschatz-Kern und Inhaltsdateien nach `LEHRPLAN.md`. Bestehende Inhalte werden nicht
+   umgebaut, sondern bekommen zuerst nur Verweise; nichts wird entfernt.
+
+### Phasen
+| Phase | Inhalt | Zeitraum (Ziel) | Ergebnis für das Kind |
+|---|---|---|---|
+| A | Fundament: Story-Zustand, Ereignisse, Profil-Erweiterung, Lernziel-Kern | Ende Oktober / Anfang November | (unsichtbar) |
+| B | Story-Prolog, Tutorial, Weihnachts-Sonderstart, Kapitel 1–2 | November bis 15.12. | Die Insel erklärt sich selbst, es gibt eine Geschichte |
+| C | Grafik-Probeszenen und Entscheidung (läuft neben B) | November | Auftraggeber + Kinder wählen den Stil |
+| D | Inhalte Prio 1: Lesen Kl. 1, DaZ D0/D1, Wortschatz-Kern, Mathe Kl. 1/Vorschule, Ukrainisch | Dezember bis Februar | Kinder ohne Deutsch und Erstklässler können loslegen |
+| E | Verzahnung und Individualisierung: Können je Lernziel, Kapitel 3–4, Interessen-Kulissen | ab Januar | Aufgaben passen sich an, Lernen baut sichtbar die Insel |
+| F | Grafik-Neubau nach Wahl, Minispiele Prio 1–2 | ab Januar, abwechselnd mit D/E | schönere Insel, mehr Abwechslung |
+| G | Inhalte Prio 2/3, weitere Länder und Sprachen, Kapitel 5–7, Übergang 5, Vorschul-Pfad | 2027 | breite Abdeckung |
+
+Regel für jede Sitzung: höchstens **ein** großes Paket gleichzeitig offen; jedes Paket endet mit grünem Rauchtest, Push und
+einem Eintrag „Stand <Datum>“ in diesem Dokument.
+
+### Arbeitspaket-Backlog (priorisiert)
+Größe: **S** ≈ 1 Sitzung, **M** ≈ 2–3 Sitzungen (in einzeln auslieferbaren Schritten a/b/c), **L** ≈ 4+ Sitzungen.
+Alle Pakete: kein Bezug zu einem echten Kind, Texte mit Sprachschlüsseln, Rauchtest grün, neue Test-Haken in `tests/rauchtest.js`.
+
+#### Phase A – Fundament
+**NA-01 Story-Zustand und Insel-Ereignisse** (S)
+- Ziel: ein Ort für den Story-Fortschritt und ein einfacher Nachrichtenweg zwischen Features.
+- Dateien: neu `shared/ereignisse.js` (`Ereignisse.melde(art, daten)`, `Ereignisse.hoere(art, fn)`, Arten `fund`, `bild`, `melodie`,
+  `bauwerk`, `kapitel`, `etappe`), `shared/spielstand.js` (neues Feld `story: { kapitel, etappen: {}, gesehen: [], chronik: [] }`,
+  Migration alter Spielstände), `shared/lernfunde.js` meldet `fund`, `spiele/atelier/atelier.js` meldet `bild`, `musik.js` meldet `melodie`.
+- Abnahme: alter Spielstand lädt ohne Fehler und bekommt `story` mit Kapitel 0; Ereignisse kommen auf derselben Seite und
+  (über den Spielstand) seitenübergreifend an; QR-Transfer bleibt unter der bisherigen Größe + 200 Byte.
+- Test: Node-Test für Migration; Playwright: Lernfund erzeugen → `story`/Ereignis im Spielstand sichtbar.
+
+**NA-02 Profil erweitern: Stufe, Deutschstand, Länder** (S)
+- Ziel: Grundlage für Individualisierung und Länder-Filter (KONZEPT Abschnitt 4).
+- Dateien: `spiele/eltern/eltern.js`, `index.html` (Ersteinrichtung), `shared/core.js` (Profilfelder `stufe`: `vs|1|2|3|4|5`,
+  `deutschstand`: `keine|wenig|alltag|gut`, `land`: `sn|nw|by|bw|ni|bb`); bestehendes Feld Klasse wird zu `stufe` übernommen.
+- Abnahme: Ersteinrichtung fragt Stufe, Bundesland, Muttersprache und Deutschstand (kurze Erklärung je Wert, später in der Elternsprache);
+  alle bisherigen Klassenabfragen funktionieren weiter; „Übergang 5“ und „Vorschule“ wählbar, auch wenn es noch wenig Inhalt gibt (ehrlicher Hinweis).
+- Test: Rauchtest mit Ersteinrichtung je Stufe; alter Spielstand mit Klasse 2 → `stufe: "2"`.
+
+**NA-03 Lehrplan-Kern und Lernziel-IDs** (M)
+- Ziel: Datenformat aus `LEHRPLAN.md` („Inhalte als Daten“) einführen, ohne bestehende Inhalte umzubauen.
+- Schritte: (a) `shared/lehrplan/kern.js` mit Lernziel-IDs für Mathe und Deutsch Kl. 1–4 (KMK 2022, **fünf** Deutsch-Bereiche statt vier);
+  (b) `shared/lehrplan/laender/sachsen.js` aus `shared/lehrplan.js` überführen, `window.LEHRPLAN` als Kompatibilitäts-Schicht;
+  (c) `lz`-Verweise an Matheweg-Stationen, Fipsi-Kapiteln, Sachthemen; Abdeckung wird errechnet; `tests/lehrplan.js`.
+- Abnahme: „📘 Was übt die App?“ im Elternbereich zeigt dasselbe wie vorher (plus Hinweis auf errechnete Abdeckung);
+  `tests/lehrplan.js` listet Lernziele ohne Inhalt.
+- Test: Node-Test `tests/lehrplan.js`; Rauchtest Elternbereich.
+
+#### Phase B – Story und Tutorial (Ziel: 15.12.2026)
+**NA-10 Szenen-Baustein und Zeigehand** (M)
+- Ziel: ein Baustein für alle Story- und Tutorial-Momente (KONZEPT Abschnitt 1 „Regeln für die Geschichte“, Abschnitt 2).
+- Dateien: neu `shared/szene.js` (Sprechblasen-Folge mit Figurenkopf, höchstens 4 Blasen, jede automatisch vorgelesen – abschaltbar –,
+  Hilfesprache-Knopf, „Weiter“ groß), neu `shared/zeige.js` (Zeigehand und Leuchten auf ein DOM-Element oder einen 3D-Punkt),
+  `shared/style.css`; Einbindung in `quellen/welt3d/heimat.js`.
+- Abnahme: Szene auf Startseite und Insel abspielbar; ohne Lesen bedienbar (Ton + Zeigehand); in Quer- und Hochformat ohne Überlauf;
+  gesehene Szenen landen in `story.chronik`.
+- Test: Test-Haken `window.__szene` (spiele, aktuell, weiter); Screenshots quer/hoch mit Russisch als Hilfesprache.
+
+**NA-11 Prolog „Ankunft“ (Tutorial E1)** (M)
+- Ziel: Robo Pixel bringt das Kind mit dem Boot, Joystick-Zeigehand, Weg zum Haus, Aktionsknopf „Reingehen“.
+- Dateien: `quellen/welt3d/heimat.js` (Boot am Steg, Ankunfts-Kamerafahrt, Pixel kurz auf der Insel), `shared/szene.js`.
+- Abnahme: Neues Kind erlebt den Prolog genau einmal; Eltern können ihn im Elternbereich überspringen/neu starten;
+  Kind kann ihn bei Pixel („Wie ging das nochmal?“) wiederholen; läuft auf „einfach“.
+- Test: Playwright neues Kind → Prolog → Haus betreten (`__heimat.reingehen`), `story.etappen.E1 = true`.
+
+**NA-12 Insel-Zugang neu regeln** (S, **wartet auf Antwort des Auftraggebers**)
+- Ziel: Statt des kompletten Tablet-Führerscheins öffnet die Lektion „Bedienung“ (im Prolog) die Insel; übrige Lektionen werden
+  Aufgaben in Kapitel 1–2. Elternschalter „Insel erst nach komplettem Führerschein“ behält die alte Regel.
+- Dateien: `index.html` (`inselOffen`), `spiele/medien/medien.js`, `spiele/eltern/eltern.js`.
+- Abnahme: beide Einstellungen funktionieren; bestehende Kinder mit Führerschein merken nichts.
+- Test: Rauchtest beide Schalterstellungen.
+
+**NA-13 „Erst lernen“ und erste Frucht (Tutorial E2, E3) mit Nebelrand** (M)
+- Ziel: Sonnenuhr am Steg (dunkel → hell mit Spielzeit), erster Lernblock mit Führung, erste Frucht mit Ella, Nebel weicht ein Stück.
+- Dateien: `quellen/welt3d/heimat.js` (Sonnenuhr, Nebelrand abhängig von `Lernfunde.summe`/Kapitel), `quellen/welt3d/welt.js`
+  (Nebelbereiche je Kapitel), `shared/zeit.js` (Zustand für die Sonnenuhr), `shared/szene.js`.
+- Abnahme: Nebel kostet ≤ 2 Zeichenaufrufe; Kapitel 1 öffnet bei 1 Lernfund; nichts geht verloren, wenn das Kind abbricht.
+- Test: `__heimat` um `nebel()` und `sonnenuhr()` erweitern; Playwright mit `?stunde=14`.
+
+**NA-14 Tutorial E4–E8 und Etappen-Steuerung** (M)
+- Ziel: Sterne/Zimmer (Benno), Ei (Pixel), erste Spielzeit, Lernkartei (Fipsi), „Wie geht's dir?“ (Bruni); höchstens zwei neue
+  Etappen pro Tag; Wiederholen bei Pixel.
+- Dateien: neu `shared/tutorial.js` (Etappen-Liste, Auslöser, Tageslimit), `heimat.js`, `spiele/tier/tier.js`, `shared/lernkartei.js`.
+- Abnahme: Etappen erscheinen nur beim Auslöser; Tutorial im Elternbereich überspringbar; bestehende Kinder bekommen nur Etappen,
+  deren Feature sie noch nie genutzt haben.
+- Test: Uhr per `window.__jetzt` über drei Tage vorstellen, Etappen-Reihenfolge prüfen.
+
+**NA-15 Weihnachts-Sonderstart** (S)
+- Ziel: Erststart 1.–26.12. → Ankunft im Schnee, Paket am Steg (Ei mit Schleife, Tannenbaum fürs Zimmer), Pixel mit Lichterkette.
+- Dateien: `heimat.js` (`?monat=12` vorhanden), `shared/szene.js`, Zimmer-Möbel Tannenbaum.
+- Abnahme: außerhalb Dezember gleicher Prolog ohne Schnee/Paket; Tannenbaum bleibt im Zimmer, kann weggeräumt werden.
+- Test: `window.__jetzt` auf 10.12. und 10.11.
+
+**NA-16 Weihnachts-QR-Geschenk (signiert)** (M, **Schlüsselfrage offen**)
+- Ziel: QR-Code mit Geschenk (z. B. Ei mit Schleife, Möbel), signiert; jeder Code einmal pro Kind; funktioniert offline.
+- Dateien: neu `shared/geschenk.js` (Prüfung mit öffentlichem Schlüssel über WebCrypto ECDSA P-256), Scanner aus dem QR-Transfer
+  wiederverwenden, `quellen/geschenk-erzeugen.js` (Node, läuft nur beim Auftraggeber, privater Schlüssel **nie** im Repo).
+- Abnahme: gefälschter oder doppelter Code wird freundlich abgelehnt; Geschenk erscheint am Steg.
+- Test: Node-Test mit Test-Schlüsselpaar (nur für Tests, als solches markiert).
+
+**NA-17 Kapitel 1 „Der Spross“ und 2 „Fipsis Karte“** (M)
+- Ziel: Kapitel-Bedingungen (Lernfunde + Fach-Bedingung), Szenen, ein neuer Weg; Wörter aus Fipsis Kapiteln stehen auf Insel-Schildern.
+- Dateien: neu `shared/kapitel.js` (Bedingungen aus KONZEPT „Kapitelbogen“), `heimat.js` (Schilder, Weg), `spiele/deutsch/abenteuer.js` (Kartenstück).
+- Abnahme: Kapitel öffnen sich nie rückwärts, keine Fristen; Schilder zeigen nur Wörter, die das Kind schon hatte.
+- Test: Spielstand mit 5 Funden + Deutsch-Kapitel → Kapitel 2 aktiv, Schild-Text prüfen.
+
+**NA-18 Inselchronik im Stickeralbum** (S)
+- Ziel: jede gesehene Szene noch einmal ansehen (KONZEPT „Regeln für die Geschichte“).
+- Dateien: `spiele/album/album.js`, `shared/szene.js`.
+- Abnahme: Chronik-Seite listet Szenen in Reihenfolge, Abspielen mit Ton.
+
+#### Phase C – Grafik-Entscheidung (neben Phase B)
+**NA-20 Probeszenen B+, C, D mit Messwerten** (M)
+- Ziel: Entscheidungsgrundlage (GRAFIK Abschnitt 2). Gleiche Szene (Kind, Fipsi, Baum, Haus, Wasser, Wiese) in drei Stilen.
+- Dateien: `quellen/welt3d/probe.js` (`?stil=b2|c|d`, bestehende `a`/`b` bleiben), `spiele/welt3d/probe.html`, Einblendung von
+  `renderer.info` (Zeichenaufrufe, Dreiecke, Texturen) und Bildern/s.
+- Abnahme: alle drei Stile im Leistungsbudget „schön“; Vergleich nebeneinander per Knopf; Screenshots in den Plan.
+- Test: `tests/leistung.js` (NA-21) über alle Stile.
+
+**NA-21 Leistungs-Test** (S)
+- Ziel: Zählwerte je 3D-Szene automatisch erfassen (Bilder/s unter Swiftshader sind nicht aussagekräftig).
+- Dateien: neu `tests/leistung.js`; Test-Haken `__heimat.info()` u. a.
+- Abnahme: Tabelle Zeichenaufrufe/Dreiecke je Szene und Landschaft; Warnung über Budget aus GRAFIK Abschnitt 6.
+
+**NA-22 Eine Kind-Figur für alle 3D-Szenen** (M)
+- Ziel: doppelte Kind-Figur (`heimat.js` und `figur3d.js`) zusammenführen; Kleiderschrank-Daten als einzige Quelle. Unabhängig vom Stil.
+- Dateien: `quellen/welt3d/figur3d.js`, `heimat.js`, `lauf.js`, `kart.js`, `bau.js`.
+- Abnahme: Insel und alle Minispiele zeigen dieselbe Figur mit derselben Kleidung; keine Funktion fällt weg.
+- Test: Screenshots aller 3D-Seiten mit gleichem Spielstand.
+
+**NA-23 Neubau nach Stilwahl** (L, startet erst nach der Entscheidung)
+- Reihenfolge laut GRAFIK Abschnitt 7: Kind → Fipsi → Ella → Benno → Pixel → Bruni → Paula → Tilda → Tiere → Deko → UI.
+  Je Figur ein eigenes S-Paket: `shared/figuren-daten.js` (Farben, Proportionen) → 2D-SVG + 3D, sieben Grund-Animationen.
+
+#### Phase D – Inhalte Priorität 1 und Sprachen
+**NA-30 Anlaute und Buchstabe–Laut (Deutsch Kl. 1, Vorschule)** (M) – `inhalte/deutsch/`, Wortschatz-Kern; Abnahme: 26 Buchstaben +
+  Umlaute mit Bild und Ton, ohne Lesepflicht; Lernkartei; Lernziel-IDs `de.le.*`, `de.su.*`.
+**NA-31 Silben lesen und erste Lesetexte** (M) – Silbenbögen, 20 kurze Bildtexte mit Fragen (Kl. 1–2); Verknüpfung mit Sachthemen.
+**NA-32 Mathe Kl. 1 und Vorschule: Mengen** (M) – Mengen bis 10/20 mit Material (Würfelbilder, Zwanzigerfeld), eigene Stufe statt Kl.-2-Stationen.
+**NA-35 Schreiben: Wörter nachspuren und tippen** (M) – Druckschrift nachspuren (Finger), Wörter aus dem Wortschatz-Kern tippen.
+**NA-40 Wortschatz-Kern und DaZ D0 „Ankommen“** (M)
+- Ziel: `inhalte/woerter/*.js` nach LEHRPLAN-Format; `shared/woerter.js` liest daraus (Wort des Tages bleibt); DaZ D0: 100 Wörter, 20 Sätze.
+- Abnahme: Wort hat Bild, Artikel mit Farbe **und** Form, Mehrzahl, Silben, deutschen Ton; Kind mit Deutschstand „keine“ landet in D0.
+- Test: Node-Test Wortschatz-Kern (jede ID eindeutig, jedes Wort mit Bild); Playwright DaZ-Pfad.
+**NA-42 Ukrainisch als zweite Hilfesprache** (M, **braucht zwei Muttersprachler**) – Glossar `docs/glossar/uk.md`, Status je Text,
+  `tests/sprachen.js`; `fertig: true` erst, wenn Tutorial, Prolog, D0 und Oberfläche geprüft sind (SPRACHEN Abschnitt 6).
+**NA-43 Ton-Aufnahmen offline** (M) – `audio/<sprache>/<id>.m4a`, eigener Cache je Sprache im Service Worker, Reihenfolge Aufnahme > Gerätestimme > kein Ton,
+  „Stimmen testen“ im Elternbereich.
+**NA-44 RTL-Technik und Arabisch vorbereiten** (S) – `dir="rtl"` nur für Hilfe-Elemente, getrennte Elemente in gemischten Zeilen, Screenshots im Rauchtest.
+**NA-45 Elternbereich in der Elternsprache** (M, alt aus Phase 0) – Elternbereich-Texte als Sprachschlüssel, Elternsprache getrennt von der Hilfesprache.
+
+#### Phase E – Verzahnung und Individualisierung
+**NA-50 Können je Lernziel und nächste Aufgabe** (M) – Stand 0–4 je Lernziel-ID im Profil (kompakt), Auswahl der nächsten Aufgabe
+  (Ziel 70–85 % Treffer), leichter nach zwei Fehlern; zuerst im Matheweg. Test: Simulations-Test in Node.
+**NA-51 Kapitel 3 „Bennos Brücke“ + Bauwerk in der Welt** (M) – Mathe-Stationen liefern Baupläne, Bauwerk vom Bauplatz steht in der eigenen Welt (alt offen).
+**NA-52 Kapitel 4 „Paulas Fest“** (M) – eigene Bilder als Festplakate, eigene Melodie auf der Bühne, Ballon-Party als Festspiel.
+**NA-53 Interessen-Kulissen** (S) – gleiche Aufgabe, andere Bilder (Tiere, Fahrzeuge, Weltraum, Natur) aus Wünsche-Assistent und Minispiel-Wahl.
+**NA-54 Muttersprache dosiert („Ausschleichen“)** (S) – Hilfe sichtbar → auf Knopfdruck → nur bei neuen Wörtern, nach Deutschstand.
+**NA-55 Stärken und Lernkartei verzahnen** (S) – Stärken schlagen Minispiele/Szenen vor; Lernkartei-Wort nach Minispielen (freiwillig).
+
+#### Phase F – Minispiele (Katalog in `MINISPIELE.md`)
+**NA-60 Lern-Varianten bestehender Spiele** (S) – Ballons mit Zahlen/Wörtern, Wort-Tore im Sternenlauf, Tanzschritte auf der Bühne.
+**NA-61 Wörter-Angeln** (S) · **NA-62 Insel-Garten** (M) · **NA-63 Tierpflege-Station** (M) · **NA-64 Bäckerei Benno** (M) ·
+**NA-65 Murmelbahn** (M) · **NA-66 Rhythmus-Boot** (M) · **NA-67 Wetter-Drache** (S) · **NA-68 Kart-Strecke passend zur Landschaft** (M, alt offen).
+Jedes Spiel: Prüffragen aus `MINISPIELE.md` Abschnitt 1, Test-Haken, Eintrag in `SEITEN_3D`, Leistungs-Test.
+
+#### Phase G – Breite (2027)
+NA-33 Mathe Kl. 3 · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 · NA-37 Mathe Kl. 4 · NA-38 Medienbildung
+„Produzieren/Problemlösen“ (Roboter-Weg) · NA-39 Übergang 5 · NA-41 Vorschul-Pfad · NA-46 Arabisch, Türkisch und weitere Sprachen ·
+NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Volkslied-Melodien (Noten prüfen).
+
+#### Laufend (in jeder passenden Sitzung)
+- iPad-10-Test nach jedem 3D-Paket (Leistung, Atelier, Musik-Ton); Rückmeldung des Auftraggebers einarbeiten.
+- Spielstand-Export für den ganzen Haushalt (alt offen aus Phase 0).
+- `docs/LIZENZEN.md` anlegen, sobald die erste fremde Datei (CC0-Modell, Noto-Schrift, Stimme) ins Repo kommt.
+
+### Reihenfolge (gültig ab 26.10.2026, ersetzt die bisherigen Reihenfolgen)
+1. **NA-01** Story-Zustand und Ereignisse → **NA-02** Profil erweitern
+2. **NA-10** Szenen-Baustein → **NA-11** Prolog → **NA-13** Erst lernen/erste Frucht → **NA-15** Weihnachts-Sonderstart
+   (**Meilenstein 15.12.2026:** Prolog, E1–E3, Weihnachten)
+3. Daneben, sobald eine Sitzung Luft hat: **NA-21** Leistungs-Test → **NA-20** Probeszenen (Stilentscheidung im November)
+4. **NA-14** Tutorial E4–E8 → **NA-12** Insel-Zugang (nach Antwort) → **NA-16** QR-Geschenk (nach Antwort) → **NA-17** Kapitel 1–2 → **NA-18** Chronik
+5. **NA-03** Lehrplan-Kern → **NA-40** Wortschatz-Kern/DaZ D0 → **NA-30** Anlaute → **NA-32** Mathe Kl. 1/Vorschule → **NA-31** Lesen
+6. **NA-22** eine Kind-Figur → **NA-23** Neubau nach Stilwahl (abwechselnd mit 7)
+7. **NA-50** Können je Lernziel → **NA-51** Bennos Brücke → **NA-52** Paulas Fest → NA-53/54/55
+8. **NA-44** RTL → **NA-43** Ton-Aufnahmen → **NA-42** Ukrainisch (sobald Muttersprachler bereitstehen, darf es vorgezogen werden)
+9. Minispiele **NA-60**, **NA-61**, **NA-62**, **NA-64**, dann der Rest; Phase G
+
+### Offene Fragen an den Auftraggeber
+1. **Insel-Zugang (NA-12):** Reicht künftig die Lektion „Bedienung“ im Prolog, und die übrigen Führerschein-Lektionen werden Aufgaben in
+   Kapitel 1–2? (Vorschlag: ja, mit Elternschalter für die alte Regel.)
+2. **QR-Geschenke (NA-16):** Einverstanden, dass ein privater Schlüssel nur beim Auftraggeber liegt und Geschenke per Node-Skript erzeugt werden?
+   Welche Geschenke zu Weihnachten 2026?
+3. **Grafik (NA-20):** Wann kann der Vergleich der Probeszenen auf dem iPad 10 mit 2–3 Kindern stattfinden?
+4. **Menschen fürs Gegenlesen:** Gibt es Muttersprachler für Ukrainisch (und Arabisch, Türkisch) sowie eine Grundschul- und eine DaZ-Lehrkraft
+   für die Fachprüfung? Ohne sie bleibt eine Sprache im Status `entwurf` und erscheint nicht im Kinder-UI.
+5. **Tonaufnahmen:** Wer spricht die deutschen Aufnahmen für Wortschatz, Tutorial und Prolog ein (ruhige Erwachsenenstimme), und ist eine
+   vorab erzeugte Sprachausgabe (z. B. Piper) für Sprachen ohne Gerätestimme in Ordnung, wenn ein Muttersprachler sie anhört?
 
