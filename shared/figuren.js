@@ -94,5 +94,24 @@
       <circle cx="66" cy="94" r="8" fill="#FF7FA6" opacity=".45"/><circle cx="134" cy="94" r="8" fill="#FF7FA6" opacity=".45"/>
     </svg>`;
   }
-  window.Figuren = { fipsi, robo, eule, biber, baer };
+  // Papagei Paula: Atelier (Malen und Musik) – bunte Federn, Malerinnen-Mütze, Pinsel
+  function papagei(klasse = "papagei") {
+    const D = "#3b1f63", s = `stroke="${D}" stroke-width="4" stroke-linejoin="round"`;
+    return `<svg class="${klasse}" viewBox="0 0 200 210" aria-hidden="true">
+      <path d="M86 168 L70 206 L92 204 L100 172 Z" fill="#2F86C8" ${s}/><path d="M104 170 L112 206 L132 200 L116 166 Z" fill="#FFC83D" ${s}/>
+      <ellipse cx="100" cy="126" rx="46" ry="54" fill="#E8453C" ${s}/>
+      <ellipse cx="100" cy="140" rx="26" ry="32" fill="#FFB26B"/>
+      <path d="M58 104 Q30 130 46 172 Q66 160 74 128 Z" fill="#2FA37C" ${s}/><path d="M50 150 Q58 160 66 150" stroke="#FFC83D" stroke-width="5" fill="none"/>
+      <path d="M142 104 Q170 128 158 168 Q138 158 128 128 Z" fill="#2FA37C" ${s}/>
+      <path d="M150 140 L184 98" stroke="#9A6A3F" stroke-width="7" stroke-linecap="round"/><path d="M184 98 l8 -12 l-2 14 z" fill="#FF5C8A" ${s}/>
+      <path d="M84 176 l-4 10 M92 178 l0 10 M110 178 l0 10 M118 176 l4 10" stroke="#F2A33A" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="100" cy="70" r="40" fill="#E8453C" ${s}/>
+      <ellipse cx="100" cy="74" rx="24" ry="22" fill="#FFF4E6"/>
+      <path d="M58 46 Q100 6 142 40 Q150 52 132 50 Q100 30 70 52 Q52 58 58 46 Z" fill="#7B55B8" ${s}/><circle cx="104" cy="22" r="8" fill="#7B55B8" ${s}/>
+      <circle cx="86" cy="68" r="8" fill="${D}"/><circle cx="114" cy="68" r="8" fill="${D}"/><circle cx="89" cy="65" r="3" fill="#fff"/><circle cx="117" cy="65" r="3" fill="#fff"/>
+      <path d="M90 82 Q100 76 110 82 Q110 100 100 106 Q92 98 90 82 Z" fill="#FFC83D" ${s}/>
+      <circle cx="74" cy="86" r="7" fill="#FF7FA6" opacity=".5"/><circle cx="126" cy="86" r="7" fill="#FF7FA6" opacity=".5"/>
+    </svg>`;
+  }
+  window.Figuren = { fipsi, robo, eule, biber, baer, papagei };
 })();

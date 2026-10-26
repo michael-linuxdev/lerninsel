@@ -436,7 +436,7 @@
     inhalt.querySelectorAll("[data-weg]").forEach(b => b.addEventListener("click", () => {
       const k = S.kinder().find(x => x.id === b.dataset.weg);
       if (!confirm(`${k.name || "Dieses Kind"} und den ganzen Spielstand wirklich löschen? Das lässt sich nicht rückgängig machen.`)) return;
-      S.entferneKind(k.id); location.reload();
+      const weg = window.Bilder ? window.Bilder.loescheKind(k.id).catch(() => {}) : Promise.resolve(); S.entferneKind(k.id); weg.then(() => location.reload());
     }));
     $("neu-laden").addEventListener("click", neuLaden);
     $("abmelden").addEventListener("click", () => { sessionStorage.removeItem(SITZUNG); location.href = "../ich/"; });

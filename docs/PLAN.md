@@ -453,6 +453,21 @@ Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
   **Gesprächsimpuls fürs Abendessen**; der letzte Impuls erscheint im Wochenbericht der Eltern. Lernfund + Erfahrung Sachkunde.
 - Weiter in 8b: Malen/Kreativität und Musik.
 
+**Nachtrag 26.10.2026 – 8b: Atelier mit Papagei Paula (Malen)**
+- Neue Figur **Papagei Paula** (figuren.js), Startseiten-Kachel „Atelier“ → `spiele/atelier/`. Startseite jetzt 3 × 2 Kacheln unter der Insel.
+- **Malen:** Leinwand 1024 × 768 (4:3, passt sich dem Bildschirm an), 15 Farben, Pinsel in 3 Größen, Regenbogen-Pinsel,
+  Farbeimer (Zeilen-Füllung mit Toleranz, Ränder werden mitgefärbt), 12 Stempel, Radierer, 8 Schritte Rückgängig.
+- **Ausmalbilder** (`vorlagen.js`, selbst gezeichnete Umrisse): Haus, Blume, Fisch, Schmetterling, Mandala, Rakete.
+- **Malaufträge** (Lehrplan Kunst): 14 Ideen, eine pro Tag (+ „Andere Idee“), z. B. warme/kalte Farben, Muster, Formen,
+  Punkte, hell/dunkel, „Male, wie du dich fühlst“. Erster Auftrag je Art: Lernfund (Fach „kunst“, eigene Frucht am Wissensbaum) + 1 ⭐.
+- **Belohnung nur fürs Mitmachen:** neue Fähigkeit „Kreativ-Funke“ 🎨 (+3 Erfahrung für bis zu 3 Bilder am Tag), 1 ⭐ fürs erste Bild des Tages.
+  Bilder werden nie bewertet. Stärke „malen und gestalten“ wird ab 3 Bildern von Bruni bemerkt.
+- **Bilder speichern:** eigene IndexedDB je Kind (`shared/bilder.js`), JPEG 800 × 600, höchstens 30 Bilder; **nicht** im Spielstand,
+  damit QR-Transfer und Sicherung klein bleiben (Bilder bleiben auf dem Tablet). Löschen eines Kindes im Elternbereich löscht auch seine Bilder.
+- **Insel:** Staffelei im Zimmer zeigt das neueste Bild (→ Atelier), bis zu 3 Bilder hängen als Poster (zwei über dem Bett, eins rechts).
+  Neue Bilder hängen automatisch, solange Platz ist; in der Galerie „An die Wand“ / „Von der Wand nehmen“.
+- Zählt als Lernzeit (Kunst ist Schulfach). Weiter in 8b: Musik (Musik-Ecke im Atelier).
+
 **Reihenfolge (abgestimmt 26.10.2026):** ~~Pinnwand im Zimmer~~ (erledigt) → ~~Eltern als Mitspieler~~ (erledigt) → ~~„echte Welt“-Aufgaben~~ (erledigt) →
 Jahreszeiten am Wissensbaum und Schatzkammer → Muttersprache als Stärke → Minispiel-Orte, 8b, Gelände, Lehrplan-Inhalte, Tablet-Tests →
 **zuletzt Weihnachts-Erststart mit QR-Geschenk und Tutorial.**

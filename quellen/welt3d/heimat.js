@@ -666,7 +666,7 @@ NACHBARN.forEach(n => {
 // Wächst mit allen Lernfunden seit Beginn (shared/lernfunde.js), jeder Fund von heute hängt als leuchtende Frucht daran.
 // Ohne Lernen passiert nichts Schlimmes: der Baum bleibt einfach, wie er ist (kein Welken, keine Strafe).
 const WB = new Vector3(P.wissensbaum[0], bodenY(P.wissensbaum[0], P.wissensbaum[1]), P.wissensbaum[1]);
-const FRUCHT = { mathe: "#2FA37C", deutsch: "#E0574A", sachkunde: "#1F8F8A", tablet: "#2F86C8", welt: "#8BC34A", schach: "#7B55B8" };
+const FRUCHT = { mathe: "#2FA37C", deutsch: "#E0574A", sachkunde: "#1F8F8A", tablet: "#2F86C8", welt: "#8BC34A", schach: "#7B55B8", kunst: "#FF8A3D", musik: "#3DB8E0" };
 const wissen = (() => {
   const L = window.Lernfunde; if (!L) return null;
   const info = L.baum(), funde = L.heute();
@@ -886,6 +886,36 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
       return [de, `На этой неделе ты узнаёшь много нового: ${funde.length}!`];
     };
     antippbar(wand, () => { const [de, ru] = liste(); sprechblase("📌", "Deine Pinnwand", de, S.paar(["", ru])[1], "../ich/"); }, ["📌", "Ansehen"], 1.9);
+  }
+  // Atelier: Staffelei mit dem neuesten Bild und bis zu drei gemalten Bildern als Poster an den Wänden (shared/bilder.js)
+  {
+    const staffelei = new Group(); staffelei.position.set(-2.1, 0.25, 2.3); staffelei.rotation.y = 0.55; zimmer.add(staffelei);
+    [[-0.42, 0.12], [0.42, -0.12]].forEach(([x, r]) => { const b = teil(new BoxGeometry(0.07, 2.0, 0.07), "#B07A48"); b.position.set(x, 1.0, 0); b.rotation.z = r; staffelei.add(b); });
+    const hinten = teil(new BoxGeometry(0.07, 1.9, 0.07), "#B07A48"); hinten.position.set(0, 0.95, -0.38); hinten.rotation.x = -0.25; staffelei.add(hinten);
+    staffelei.add(setze(teil(new BoxGeometry(1.0, 0.07, 0.16), "#B07A48"), 0, 0.88, 0.06));
+    const brett = new Group(); brett.position.set(0, 1.32, 0.1); brett.rotation.x = -0.08; staffelei.add(brett);
+    brett.add(teil(new BoxGeometry(1.06, 0.82, 0.04), "#FFFFFF", { dicke: 1.03 }));
+    const leinwandMat = new MeshBasicMaterial({ color: "#FFFFFF" });
+    brett.add(setze(new Mesh(new PlaneGeometry(1.0, 0.75), leinwandMat), 0, 0, 0.025));
+    const klecks = [["#E8453C", -0.18, 0.05], ["#FFC83D", 0, 0.12], ["#2F86C8", 0.18, 0.04]];
+    const palette = new Group(); palette.position.set(0.25, 0.94, 0.12); staffelei.add(palette);
+    palette.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.03, 20), "#D9A867"), 0, 0, 0));
+    klecks.forEach(([f, x, z]) => palette.add(setze(new Mesh(kugel(0.045, 8, 6), mat(f)), x * 0.8, 0.03, z - 0.06)));
+    block(ZX - 2.1, 2.3, 0.6);
+    const bildTextur = (url, fertig) => { const img = new Image(); img.onload = () => { const t = new CanvasTexture(img); t.colorSpace = SRGBColorSpace; fertig(t); }; img.src = url; };
+    let neuestes = null;
+    if (window.Bilder) {
+      window.Bilder.alle().then(l => { neuestes = l[0] || null; if (neuestes) bildTextur(neuestes.url, (t) => { leinwandMat.map = t; leinwandMat.needsUpdate = true; }); }).catch(() => {});
+      // Poster: zwei an der Rückwand über dem Bett, eines an der rechten Wand
+      const PLATZ = [[-1.7, 2.2, -3.55, 0], [-3.0, 2.3, -3.55, 0], [4.05, 2.1, -1.0, -Math.PI / 2]];
+      window.Bilder.wandBilder().then(l => l.slice(0, PLATZ.length).forEach((b, i) => bildTextur(b.url, (t) => {
+        const [x, y, z, r] = PLATZ[i], p = new Group(); p.position.set(x, y, z); p.rotation.y = r; zimmer.add(p);
+        p.add(teil(new BoxGeometry(0.9, 0.7, 0.05), ["#FFC83D", "#5EC3E6", "#FF7FB0"][i], { dicke: 1.03 }));
+        p.add(setze(new Mesh(new PlaneGeometry(0.8, 0.6), new MeshBasicMaterial({ map: t })), 0, 0, 0.03));
+        antippbar(p, () => sprechblase("papagei", "Dein Bild", `Das hast du am ${new Date(b.t).toLocaleDateString("de-DE")} gemalt. Es hängt hier, bis du ein anderes aufhängst.`, S.paar(["", "Это ты нарисовал(а)! Красиво!"])[1], "../atelier/"), ["🖼️", "Ansehen"], 2.4);
+      }))).catch(() => {});
+    }
+    antippbar(staffelei, () => sprechblase("papagei", "Deine Staffelei", neuestes ? "Hier steht dein neuestes Bild. Papagei Paula hat schon Farben bereitgelegt – malst du noch eins?" : "Eine leere Leinwand! Mit Papagei Paula kannst du im Atelier malen, was du willst.", S.paar(["", "Здесь можно рисовать с попугаем Паулой!"])[1], "../atelier/"), ["🎨", "Malen"], 2.0);
   }
   // Pflanze und Lampe
   const topf = new Group(); topf.position.set(3.4, 0.25, 2.4); zimmer.add(topf);

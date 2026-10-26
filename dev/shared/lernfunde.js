@@ -15,7 +15,9 @@
     sachkunde: { e: "🦉", name: "Sachunterricht" },
     tablet: { e: "🤖", name: "Tablet" },
     welt: { e: "🌍", name: "Echte Welt" },
-    schach: { e: "♟️", name: "Schach" }
+    schach: { e: "♟️", name: "Schach" },
+    kunst: { e: "🎨", name: "Kunst" },
+    musik: { e: "🎵", name: "Musik" }
   };
   const pad = (n) => String(n).padStart(2, "0");
   const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
