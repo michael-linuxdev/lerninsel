@@ -72,8 +72,25 @@
 
   // ---------- Thema ----------
   let lauf = null;
+  // Lernkartei (shared/lernkartei.js): fällige Fragen von früher kommen als kurze Wiederholung an den Anfang
+  function mitWiederholung(t) {
+    if (!window.Lernkartei) return t;
+    const eigene = new Set(t.schritte.map(x => JSON.stringify(x)));
+    const karten = Lernkartei.faellige("sachkunde", 3).filter(x => { const y = Object.assign({}, x); delete y.__karte; return !eigene.has(JSON.stringify(y)); });
+    if (!karten.length) return t;
+    const intro = { typ: "info", titel: "Kurz wiederholen", bild: "🔁",
+      text: "Hallo {name}! Bevor wir anfangen, schauen wir uns kurz an, was letztes Mal knifflig war.",
+      ru: "Привет, {name}! Сначала коротко повторим то, что в прошлый раз было трудно." };
+    return Object.assign({}, t, { schritte: [intro, ...karten, ...t.schritte] });
+  }
+  function loesungText(s) {
+    if (s.typ === "daumen") return `${s.satz} – ${s.ok ? "stimmt" : "stimmt nicht"}`;
+    const o = (s.optionen || []).find(x => x.ok);
+    return o ? `${s.frage} – ${o.t}` : s.frage;
+  }
+
   function starte(i) {
-    const t = TH[i];
+    const t = mitWiederholung(TH[i]);
     lauf = { i, t, pos: 0, fehler: 0 };
     document.body.style.setProperty("--grund", t.grund);
     document.body.style.setProperty("--akzent", t.farbe);
@@ -106,14 +123,21 @@
     container.after(warum);
     container.querySelectorAll(".option").forEach((b, n) => b.addEventListener("click", () => {
       const o = optionen[n];
+      const sj = lauf.t.schritte[lauf.pos];
       if (o.ok) {
         b.classList.add("richtig");
         if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1);
+        if (!versucht && sj && sj.__karte && window.Lernkartei && Lernkartei.richtig("sachkunde", sj) && window.Lernfunde)
+          { const t = loesungText(sj); Lernfunde.merke({ fach: "sachkunde", art: "gemeistert", e: "💪", text: t.length > 64 ? t : `${t} – jetzt weißt du es!`, schluessel: "sk:" + t, melden: true }); }
         container.querySelectorAll(".option").forEach(x => x.disabled = true);
         S.ton("juhu"); erklaere(warum, "gut", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
         warum.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
       } else {
-        if (!versucht) { lauf.fehler++; versucht = true; }
+        if (!versucht) {
+          if (!(sj && sj.__karte)) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
+          versucht = true;
+          if (window.Lernkartei) Lernkartei.falsch("sachkunde", sj);
+        }
         b.classList.add("falsch"); b.disabled = true;
         S.ton("nein"); erklaere(warum, "nein", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
       }

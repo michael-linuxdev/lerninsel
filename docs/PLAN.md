@@ -330,3 +330,13 @@ Sachunterricht „Körper und Gesundheit“; Einstufungstest.
 **Nächster Schritt:** Lernkartei für Deutsch und Sachunterricht (mehr „gemeistert“-Funde), dann Jahreszeiten am Wissensbaum (Blüten im Frühling,
 Lichterkette im Advent) und Schatzkammer aus den Funden (Punkt 4).
 
+**Nachtrag 26.10.2026 – Lernkartei für Deutsch und Sachunterricht**
+- `shared/lernkartei.js`: beim ersten Fehler wird der Schritt gemerkt (Deutsch: Artikel, Bild, Hören, Wort, Lücke, Wo, Wortart, Verlängern, Silben, Satz;
+  Sachunterricht: Wahl- und Daumen-Fragen), Abstände wie in Mathe (1, 3, 7 Tage).
+- Fällige Karten (höchstens 3) kommen mit kurzer Ansage von Fipsi bzw. Ella an den Anfang des nächsten Kapitels/Themas; sie zählen nicht gegen die Sterne.
+- Dreimal richtig = gemeistert → goldener Lernfund mit Hinweis („die Eule – war knifflig, jetzt kannst du es!“), goldene Frucht am Wissensbaum.
+- Wochenbericht: „Wiederholungen heute dran“ zählt jetzt alle drei Fächer.
+
+**Gemerkt (Wunsch):** Elternbereich: „Du darfst noch x Minuten spielen“ – Eltern legen die restliche Spielzeit für heute direkt fest
+(heute gibt es nur „+10 Minuten“). Klären: soll das auch ohne Lernen gelten (Ausnahme), und soll das Kind die Ansage sehen („Mama/Papa schenkt dir noch x Minuten“)?
+

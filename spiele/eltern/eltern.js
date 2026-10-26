@@ -157,7 +157,8 @@
     }
     const summe = (k) => tage.reduce((n, t) => n + (t[k] || 0), 0), lernTage = tage.filter(t => t.lern > 0 || t.aufgaben > 0).length;
     const max = Math.max(10, ...tage.map(t => Math.max(t.lern, t.spiel)));
-    const faelligN = (mathe.fehler || []).filter(f => !f.faellig || f.faellig <= heuteIso()).length;
+    const faelligN = (mathe.fehler || []).filter(f => !f.faellig || f.faellig <= heuteIso()).length +
+      (window.Lernkartei ? Lernkartei.anzahlFaellig("deutsch") + Lernkartei.anzahlFaellig("sachkunde") : 0);
     const tipps = [];
     if (lernTage < 4) tipps.push("Lieber jeden Tag 10 Minuten als einmal lange: Eine feste Lernzeit hilft, z. B. direkt nach dem Mittagessen.");
     schwach.slice(0, 2).forEach(o => tipps.push(`Übt gemeinsam „${o.s.name}“: ${ALLTAG[o.s.id] || "im Alltag kleine Rechenaufgaben stellen"}.`));

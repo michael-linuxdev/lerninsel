@@ -108,8 +108,18 @@
   // ---------- Kapitel ----------
   let lauf = null;
 
+  // Lernkartei (shared/lernkartei.js): fällige Schritte von früher kommen als kurze Wiederholung an den Anfang
+  const WIEDER_INTRO = { typ: "sag", text: "Bevor es losgeht: Wir wiederholen kurz, was letztes Mal knifflig war. Du schaffst das!",
+    ru: "Сначала коротко повторим то, что в прошлый раз было трудно. У тебя получится!" };
+  function mitWiederholung(k) {
+    if (!window.Lernkartei) return k;
+    const eigene = new Set(k.schritte.map(x => JSON.stringify(x)));
+    const karten = Lernkartei.faellige("deutsch", 3).filter(x => { const y = Object.assign({}, x); delete y.__karte; return !eigene.has(JSON.stringify(y)); });
+    return karten.length ? Object.assign({}, k, { schritte: [WIEDER_INTRO, ...karten, ...k.schritte] }) : k;
+  }
+
   function starte(i, liste = G) {
-    const k = liste[i];
+    const k = mitWiederholung(liste[i]);
     lauf = { i, k, liste, werk: liste !== G, pos: 0, fehler: 0, stufe: 0 };
     document.body.style.setProperty("--grund", k.grund);
     document.body.style.setProperty("--akzent", k.farbe);
@@ -300,6 +310,7 @@
   function antwort(knopf, richtig, beiRichtig, beiFalsch, zeigeLoesung) {
     if (lauf.gesperrt) return;
     const h = $("hinweis");
+    const schrittJetzt = lauf.k.schritte[lauf.pos];
     if (richtig) {
       lauf.gesperrt = true;
       if (lauf.versuche === 0 && window.Charakter) Charakter.gib("deutsch", 1);
@@ -308,12 +319,19 @@
       h.className = "hinweis gut"; h.textContent = LOB[Math.floor(Math.random() * LOB.length)];
       S.ton("juhu");
       const satz = beiRichtig();
+      if (lauf.versuche === 0 && schrittJetzt && schrittJetzt.__karte && window.Lernkartei && Lernkartei.richtig("deutsch", schrittJetzt) && window.Lernfunde) {
+        const t = String(satz || "").trim();
+        Lernfunde.merke({ fach: "deutsch", art: "gemeistert", e: "💪", text: t.length > 50 ? t : `${t} – war knifflig, jetzt kannst du es!`, schluessel: "dk:" + t, melden: true });
+      }
       setTimeout(() => sprich(satz), 350);
       setTimeout(() => { lauf.gesperrt = false; weiter(); }, 2300);
       return;
     }
     lauf.versuche++;
-    if (lauf.versuche === 1) lauf.fehler++;
+    if (lauf.versuche === 1) {
+      if (!(schrittJetzt && schrittJetzt.__karte)) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
+      if (window.Lernkartei) Lernkartei.falsch("deutsch", schrittJetzt);
+    }
     S.ton("nein");
     if (knopf) { knopf.classList.add("falsch"); knopf.disabled = true; }
     h.className = "hinweis nein";
@@ -348,7 +366,7 @@
     const alle = G.every(x => bestes(x.id) > 0), L = lauf.liste, werk = lauf.werk;
     // Lernfund: in der Werkstatt die Regel, im Abenteuer die Wörter mit Artikel aus diesem Kapitel
     if (window.Lernfunde) {
-      const w = (k.schritte || []).filter(x => x.typ === "artikel").slice(0, 3);
+      const w = (k.schritte || []).filter(x => x.typ === "artikel" && !x.__karte).slice(0, 3);
       if (werk) Lernfunde.merke({ fach: "deutsch", art: "geuebt", e: k.ort, text: `Werkstatt: ${k.name}`, schluessel: "d:" + k.id });
       else Lernfunde.merke({ fach: "deutsch", art: "woerter", e: k.ort, schluessel: "d:" + k.id,
         text: w.length ? `${k.name}: ${w.map(x => `${x.richtig} ${x.wort}`).join(", ")}` : `Abenteuer: ${k.name}`,
