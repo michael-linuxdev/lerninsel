@@ -136,10 +136,11 @@
     }
     // Liegt das Ziel der Zeigehand unter der Sprechblase (z. B. Aktionsknopf im Hochformat), rutscht die Blase nach oben
     el.classList.remove("oben");
-    if (aktiv.zeiger && window.Zeige) requestAnimationFrame(() => {
+    const ueberdeckt = () => {
       const r = window.Zeige.rechteck(aktiv && aktiv.zeiger ? aktiv.zeiger.ziel : null), k = el.getBoundingClientRect();
       if (r && r.x < k.right && r.x + r.w > k.left && r.y < k.bottom && r.y + r.h > k.top - 30) el.classList.add("oben");
-    });
+    };
+    if (aktiv.zeiger && window.Zeige) { ueberdeckt(); requestAnimationFrame(() => { if (aktiv) ueberdeckt(); }); }
     // Warten auf eine Handlung des Kindes (z. B. Joystick schieben): „Weiter“ erst danach
     wk.hidden = !!b.bis;
     if (typeof b.bis === "function") {
