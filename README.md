@@ -89,7 +89,8 @@ shared/szenen.js        Texte der Story- und Tutorial-Szenen (Prolog, Erst lerne
 shared/zeige.js         Zeigehand und Leuchten auf Knöpfe oder 3D-Punkte
 shared/insel-kern.js    Insel-Kern (NA-24): Welt, Orte, Nachbarn, Stationen, Story-Auswahl, Paket, Nebel, Zimmer-Daten, Wetter – für beide Looks
 spiele/insel/           Einstieg zur Insel: leitet je nach Look zu „Rund“ (welt3d/heimat.html) oder „Pixel“ (pixel/insel.html)
-quellen/pixel/          Pixel-Look (DS-Stil): zeichnen.js = gemeinsamer Zeichenweg, insel.js = Pixel-Insel (im Aufbau)
+quellen/pixel/          Pixel-Look (DS-Stil): zeichnen.js = gemeinsamer Zeichenweg, dinge.js = alle Pixel-Dinge und Figuren, insel.js = Pixel-Insel
+spiele/pixel/           Pixel-Insel (gebaut mit `ENGINES=<ordner> node quellen/probe/bauen.js insel`, insel.js nicht von Hand ändern)
 shared/style.css        Farben, Schrift, Knöpfe
 spiele/anziehen/        Anziehspiel (teile.js = Zeichnungen, spiel.js = Logik)
 spiele/mathe/           Mathe (aufgaben.js = Aufgaben und Rechenwege, mathe.js = Matheweg und Runden)
@@ -136,7 +137,8 @@ Vor jedem Push `sh quellen/dev-bauen.sh` ausführen: setzt die Cache-Version aut
 und baut `/dev` und `/dev/test` neu (die 3D-Spiele vorher mit `quellen/bauen.sh` bauen).
 
 **Rauchtest:** `sh tests/laufen.sh` (für /dev: `PFAD=dev/ sh tests/laufen.sh`). Richtet die App ein, öffnet jede Seite
-quer und hoch und alle 3D-Seiten und meldet JavaScript-Fehler.
+quer und hoch und alle 3D- und Pixel-Seiten und meldet JavaScript-Fehler.
+Einzelne Tests: `sh tests/laufen.sh <name>` (z. B. `pixelinsel`, `look` – `look` braucht ein frisch gebautes `/dev`).
 
 ## Veröffentlichen mit GitHub Pages
 

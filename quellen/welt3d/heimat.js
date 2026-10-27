@@ -520,9 +520,9 @@ const NEST = new Vector3(P.nest[0], bodenY(P.nest[0], P.nest[1]), P.nest[1]);
     const e = T.EIER[tierDaten.ei] || { a: "#FFFFFF", b: "#E0457B" };
     const ei = teil(kugel(0.36), e.a); ei.scale.set(1, 1.3, 1); setze(ei, 0, 0.5, 0); nest.add(ei);
     const band = teil(new TorusGeometry(0.33, 0.07, 10, 24), e.b, { dicke: 1.1 }); band.rotation.x = Math.PI / 2; setze(band, 0, 0.5, 0); nest.add(band);
-    antippbar(nest, () => sprechblase("🥚", "Dein Ei", "Es braucht noch Wärme. Wärme es auf der Tier-Seite!", S.paar(["", "Ему нужно тепло. Согрей его на странице питомца!"])[1], "../tier/"));
+    antippbar(nest, () => zeigeAntwort(K.antwort("nest")));
   } else {
-    antippbar(nest, () => sprechblase("🪺", "Ein leeres Nest", "Hier könnte dein Haustier wohnen. Such dir ein Ei aus!", S.paar(["", "Здесь мог бы жить твой питомец. Выбери яйцо!"])[1], "../tier/"));
+    antippbar(nest, () => zeigeAntwort(K.antwort("nest")));
   }
 }
 
@@ -1022,9 +1022,9 @@ $("laden-liste").addEventListener("click", (ev) => {
 $("einrichten").addEventListener("click", () => { ladenWahl = null; laden(); });
 $("laden-zu").addEventListener("click", () => { $("laden").hidden = true; ladenWahl = null; platzRinge.forEach(r => r.visible = false); });
 
-let draussenPos = new Vector3();
+let draussenPos = new Vector3(), besuche = 0;
 function reingehen() {
-  drinnen = true; $("raus").hidden = false; $("einrichten").hidden = false; $("blase").hidden = true;
+  drinnen = true; besuche++; $("raus").hidden = false; $("einrichten").hidden = false; $("blase").hidden = true;
   draussenPos.copy(ich.position);
   ich.position.set(ZX, 0.25, 2.2); ich.rotation.y = Math.PI;
   if (tier) tier.position.set(ZX + 1.2, 0.25, 2.6);
@@ -1550,4 +1550,4 @@ const ORTE = { ich: () => [ich.position.x, ich.position.y + 1.4, ich.position.z]
 Object.entries(KI.ORTE).forEach(([k, o]) => { ORTE[k] = () => [o.x, bodenY(o.x, o.z) + o.h, o.z]; });
 // Insel.ort("haus") liefert eine Funktion für Zeige.auf(); Insel.bildschirm(x, y, z) rechnet einen 3D-Punkt um
 window.Insel = { bildschirm, ort: (name) => () => (ORTE[name] && !drinnen ? bildschirm(...ORTE[name]()) : null), ORTE: Object.keys(ORTE) };
-window.__heimat = { bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };

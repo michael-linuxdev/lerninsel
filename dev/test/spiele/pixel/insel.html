@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Meine Insel</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<!-- Pixel-Insel (NA-26): dieselbe Welt wie spiele/welt3d/heimat.html im Look „Pixel“ (DS-Stil, PixiJS).
+     Gebaut aus quellen/pixel/insel.js mit: ENGINES=<ordner> node quellen/probe/bauen.js insel  (insel.js hier nie von Hand ändern). -->
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #2459B8; }
+  #buehne { position: fixed; inset: 0; touch-action: none; }
+  #buehne canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+  .leiste { position: fixed; top: max(12px, env(safe-area-inset-top)); left: 12px; right: 12px; display: flex; gap: 10px; align-items: center; z-index: 2; pointer-events: none; }
+  .leiste > * { pointer-events: auto; }
+  .leiste .knopf { min-height: 52px; font-size: 1.05rem; padding: 0 16px; text-decoration: none; }
+  .leiste .platz { flex: 1; }
+  /* Kästen im Stil der DS-Abenteuer: heller Kasten, zweifarbiger Rahmen */
+  .ds { background: linear-gradient(#FFFFFF, #F4F8FC); color: #30283A; border: 3px solid #4A4058; box-shadow: inset 0 0 0 3px #FFFFFF, inset 0 0 0 6px #9ACEF2, 0 4px 0 rgba(26,16,64,.25); border-radius: 12px; }
+  #info { position: fixed; bottom: max(14px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); padding: 10px 20px; font-weight: 700; z-index: 2; max-width: calc(100% - 270px); text-align: center; }
+  #info:empty { display: none; }
+  #lern-hinweis { position: fixed; top: calc(max(12px, env(safe-area-inset-top)) + 64px); left: 50%; transform: translateX(-50%); z-index: 2; background: #FFF6D6; color: #7A4A10; border: 3px solid #B88A22; border-radius: 12px; padding: 10px 18px; font-weight: 700; max-width: min(620px, calc(100% - 32px)); text-align: center; box-shadow: 0 4px 0 rgba(0,0,0,.15); }
+  #lern-hinweis[hidden], #raus[hidden] { display: none; }
+  #raus { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(150px, calc(env(safe-area-inset-bottom) + 140px)); z-index: 2; min-height: 56px; font-size: 1.15rem; }
+  #springen { position: fixed; right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 2; width: 100px; height: 100px; border-radius: 50%; background: var(--sonne); font-size: 1.05rem; font-weight: 700; color: var(--pflaume); box-shadow: 0 8px 0 #C79512; touch-action: none; border: 3px solid #4A4058; }
+  #springen:active { transform: translateY(5px); box-shadow: 0 3px 0 #C79512; }
+  #springen span { display: block; font-size: 2.2rem; line-height: 1; }
+  #springen.aktion { background: #FF8FB8; color: #fff; box-shadow: 0 8px 0 #D45A88; animation: winken 1.4s steps(2) infinite; }
+  #springen.aktion:active { box-shadow: 0 3px 0 #D45A88; }
+  @keyframes winken { 0%, 100% { scale: 1; } 50% { scale: 1.07; } }
+  @media (prefers-reduced-motion: reduce) { #springen.aktion { animation: none; } }
+  #blase { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(600px, calc(100% - 28px)); box-sizing: border-box; padding: 16px 20px; z-index: 3; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: start; }
+  #blase[hidden] { display: none; }
+  #blase-e { font-size: 3rem; line-height: 1; grid-row: span 2; }
+  #blase-e svg { width: 84px; height: 84px; display: block; }
+  #blase-titel { margin: 0; font-size: 1.15rem; justify-self: start; background: #4A6AD8; color: #fff; border-radius: 6px; padding: 2px 10px; }
+  #blase-text { margin: 0; font-size: 1.2rem; line-height: 1.4; font-weight: 600; }
+  #blase-ru { grid-column: 2; margin: 0; background: #FFF6D6; color: #7A4A10; border-radius: 8px; padding: 6px 10px; }
+  #blase-ru[hidden] { display: none; }
+  .blase-knoepfe { grid-column: 1 / -1; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 6px; }
+  .blase-knoepfe .knopf { min-height: 54px; font-size: 1.15rem; }
+  .blase-knoepfe [hidden] { display: none; }
+  #laden-an { position: fixed; inset: 0; display: grid; place-items: center; font-weight: 700; color: #fff; z-index: 1; }
+  @media (max-width: 600px) { .leiste .knopf { min-height: 46px; font-size: .95rem; padding: 0 12px; } #info { max-width: calc(100% - 150px); font-size: .9rem; } }
+</style>
+</head>
+<body>
+<div id="buehne"><div id="laden-an">Die Insel lädt …</div></div>
+<div class="leiste">
+  <a class="knopf" href="../../" aria-label="Zur Startseite">⬅️</a>
+  <div class="knopf">⭐ <b id="sterne">0</b></div>
+  <span class="platz"></span>
+  <button class="knopf" id="look" aria-label="Zum Look Rund wechseln" hidden>🐾 Rund</button>
+</div>
+<div id="info" class="ds"></div>
+<div id="lern-hinweis" hidden></div>
+<button class="knopf" id="raus" hidden>🚪 Nach draußen</button>
+<button id="springen" aria-label="Springen"><span>⬆️</span>Springen</button>
+<div id="blase" class="ds" hidden role="dialog" aria-live="polite">
+  <div id="blase-e"></div>
+  <h2 id="blase-titel"></h2>
+  <p id="blase-text"></p>
+  <p id="blase-ru" lang="ru" hidden></p>
+  <div class="blase-knoepfe">
+    <button class="knopf" id="blase-ruk" lang="ru">RU</button>
+    <button class="knopf" id="blase-extra" hidden></button>
+    <button class="knopf" id="blase-zu">Tschüss</button>
+    <button class="knopf haupt" id="blase-los">Los geht's!</button>
+  </div>
+</div>
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/sticker.js"></script>
+<script src="../../shared/echtewelt.js"></script>
+<script src="../../shared/zeit.js" data-art="insel"></script>
+<script>/* Insel-Zugang wie bei „Rund“ (NA-12) */ if (!Spielwelt.inselOffen()) location.replace("../../?robo=1");</script>
+<script src="../../shared/sprache.js"></script>
+<script src="../anziehen/teile.js"></script>
+<script src="../anziehen/figur.js"></script>
+<script src="../../shared/tiere.js"></script>
+<script src="../../shared/tierpflege.js"></script>
+<script src="../../shared/figuren.js"></script>
+<script src="../../shared/zeige.js"></script>
+<script src="../../shared/szene.js"></script>
+<script src="../../shared/szenen.js"></script>
+<script src="../../shared/insel-kern.js"></script>
+<script type="module">
+  import("./insel.js").then(() => { const l = document.getElementById("laden-an"); if (l) l.remove(); }, (f) => { document.getElementById("laden-an").textContent = "Fehler: " + f.message; console.error(f); });
+</script>
+</body>
+</html>

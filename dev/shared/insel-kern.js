@@ -451,6 +451,12 @@
       case "station": return wetterAntwort(lage.wetter);
       case "wissensbaum": return wissensbaumText();
       case "sonnenuhr": return { blase: [...sonnenuhrText(), null] };
+      // Nest am Haus: Ei (noch warm halten) oder leer (Ei aussuchen); ein geschlüpftes Tier läuft mit und wird gestreichelt
+      case "nest": {
+        const d = W.TierPflege ? W.TierPflege.lade() : null;
+        if (d && d.phase === "ei") return blase("🥚", "Dein Ei", "Es braucht noch Wärme. Wärme es auf der Tier-Seite!", "Ему нужно тепло. Согрей его на странице питомца!", "../tier/");
+        return blase("🪺", "Ein leeres Nest", "Hier könnte dein Haustier wohnen. Such dir ein Ei aus!", "Здесь мог бы жить твой питомец. Выбери яйцо!", "../tier/");
+      }
       // im Zimmer
       case "album": { const s = W.Sticker && W.Sticker.stand(); return blase("📒", "Dein Stickeralbum", s ? `Du hast schon ${s.hat} von ${s.gesamt} Stickern${s.neu ? ` – ${s.neu} neue warten auf dich` : ""}!` : "Hier sammelst du deine Sticker.", "Здесь ты собираешь наклейки.", "../album/?von=insel"); }
       case "bett": return blase("🛏️", "Dein Bett", lage.tier ? `Hier kuschelt ${lage.tier}, wenn es müde ist.` : "Ein gemütliches Bett. Mit dem Knopf „Einrichten“ machst du dein Zimmer schön.", "Уютная кровать.");

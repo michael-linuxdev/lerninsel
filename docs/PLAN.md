@@ -817,7 +817,7 @@ Neue Pakete (vor NA-14):
 - **NA-28 Pixel-Zimmer** (M): Zimmer und Möbel in Pixel, gleiche Möbel-Daten.
 - Minispiele bleiben vorerst 3D und werden aus beiden Looks gestartet; Pixel-Fassungen später je Spiel. NA-21 (Leistung „Rund“) bleibt wichtig.
 
-**Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** ~~**NA-24**~~ → **NA-25** (vorbereitet, eingeschaltet mit NA-26) → **NA-26** → **NA-27** → **NA-28** → **NA-14** (in beiden Looks)
+**Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** ~~**NA-24**~~ → ~~**NA-25**~~ (in /dev eingeschaltet) → ~~**NA-26**~~ → **NA-27** → **NA-28** → **NA-14** (in beiden Looks)
 → **NA-21** → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 → Punkt 5 ff. wie oben.
 
 ### Stand 27.10.2026, morgens (Sitzung 27.10. früh: DS-Look, NA-24 fertig, NA-25 vorbereitet, NA-26 begonnen)
@@ -864,3 +864,43 @@ Geschenke für NA-16: weiter offen.
 - c) Minimales Pixel-Zimmer (Bett, Schrank, Spiegel, Album, Raus), `sw.js`-Einträge (`spiele/pixel/…`, Lizenzen), Tests `tests/pixelinsel.js`
   (Prolog/Story/Paket in Pixel) und `tests/look.js` (Umschalten in /dev, gleicher Spielstand); dann `lookWaehlbar()` auf `UMG !== "prod"`.
 - Danach NA-27 (Figuren), NA-28 (Zimmer mit Möbeln), NA-14 (Tutorial in beiden Looks), NA-21.
+
+### Stand 27.10.2026, Vormittag (Sitzung 27.10.: NA-26 Pixel-Insel fertig, NA-25 in /dev eingeschaltet)
+**Antworten des Auftraggebers (27.10.2026, 05:40):** iPad-Test von Ankunft/Sonnenuhr/Frucht/Paket: noch nicht; DS-Probe noch nicht angesehen;
+Reihenfolge gilt (NA-26 zuerst); nichts ist gesperrt; Geschenke für NA-16 weiter offen.
+
+**Fertig und gepusht**
+- **NA-26 Pixel-Insel** `spiele/pixel/insel.html` (gebaut aus `quellen/pixel/insel.js`, Grafiken in `quellen/pixel/dinge.js`):
+  - a) Boden als ein großes Bild aus der Welt des Kerns (Meer mit Tiefe/Schaum/Glitzern, Strand, Gras/Schnee/Wüstensand je Biom und Jahreszeit,
+    Weg Haustür → Startplatz → Steg, Teich, Hügelstufen mit Felskante, Fels in den Bergen, Blumen in der Lieblingsfarbe), zwei Bilder für Wasser/Blumen.
+    Alle Orte aus `K.erstelle(q)`: Bäume je Typ (Laub/Herbst/Tanne/Palme/Kaktus, Schneehauben), Steine, Haus (Tür nach Süden, Fenster nachts gelb),
+    Wetterstation mit Windrad, Nest (Ei/leer), Mathe-Schild, alle Nachbarn (Ella, Fipsi, Robo Pixel, Bruni, Benno), Wissensbaum je Stufe mit den
+    Früchten von heute, Ballons, Truhe, Sternenlauf/Kart/Bauplatz (gesperrt grau mit Schloss), Schachtisch mit Tilda, Bühne mit Paula (Melodie, alle hüpfen),
+    Steg mit Pixels Boot, Sonnenuhr mit Sonne (dunkel/halb/hell), Weihnachtspaket. Kind aus den Kleiderschrank-Farben (Haut, Haare lang/kurz,
+    Oberteil, Rock/Hose/Kleid, Schuhe), drei Ansichten × drei Schrittbilder; Haustier folgt (Fuchs/Kätzchen/Drache, Schleife), Streicheln mit Herzen.
+    Laufen per Tippen (auf ein Ding: hinlaufen und ansprechen) und Pfeiltasten/WASD; Aktionsknopf `#springen` mit `K.aktionFuer`; Antworten
+    nur über `K.antwort`/`K.nachbarAntwort`; Sprechblase `#blase` im DS-Stil. **1 Zeichenaufruf**, 0,88 MB.
+  - b) Story: Prolog E1 (Kamera schwebt vom Meer heran, Tippen-Variante, Haus, Aktionsknopf), `K.naechsteStory` (Erst lernen, Sonne geht auf,
+    Erste Frucht, Weihnachtspaket), Zeigehand über `window.Insel.ort()/bildschirm()`, Nebelring je Stufe (blendet in 3 s über), Tönung für Nacht/
+    Dämmerung/Wetter (Container-Tint, kein Zusatzaufruf), Regen/Schnee/Blitz, Lichterkette an Steg, Boot und Wissensbaum im Dezember.
+  - c) Minimales Zimmer (Rückwand mit Fenster in der Wandfarbe, Holzboden, Bett mit Album, Schrank, Spiegel, Teppich, Tür unten = raus;
+    Tannenbaum auf seinem Platz), `sw.js`, Lizenzen (`spiele/pixel/LIZENZEN.txt`, `docs/LIZENZEN.md`), Rauchtest um drei Pixel-Seiten erweitert.
+  - Test `tests/pixelinsel.js` (Prolog quer/hoch mit echtem Tippen, Zimmer, Stationen, Nachbar antippen → hinlaufen → Ella spricht, Pfeiltasten,
+    E2/E3 mit Nebel, Minispiel-Ort, Weihnachtspaket + Tannenbaum im Zimmer, Zeichenaufrufe ≤ 4). Test-Haken `__pixel`.
+- **NA-25 Umschalter eingeschaltet (nur /dev und /dev/test):** `Spielwelt.lookWaehlbar()` = `UMG !== "prod"`. Knopf „👾 Pixel“ auf der runden
+  Insel, „🐾 Rund“ auf der Pixel-Insel, Elternkarte (Look + „Kind darf umschalten“). Hauptseite bleibt „Rund“. Test `tests/look.js` (braucht /dev).
+- Kern: neue Station `K.antwort("nest")` (Ei/leeres Nest), die runde Insel nutzt sie jetzt auch.
+- Zeichenweg: Farbreihen `haut2`, `haut3` für dunklere Hauttöne (Kind-Figur aus dem Kleiderschrank).
+
+**Entscheidungen / Abweichungen**
+- In Pixel zeigt die Haustür immer nach Süden (Draufsicht); Tür und Reingehen-Punkt liegen 2 Einheiten südlich vom Hausplatz (`__pixel.tuer`).
+- Laufen in Pixel nur per Tippen und Tasten (kein Joystick); im Prolog gilt deshalb immer der Tippen-Text.
+- Das Zimmer in Pixel zeigt bisher nur Bett, Album, Schrank, Spiegel, Teppich und den Tannenbaum; übrige Möbel, Pinnwand, Staffelei, Bilder und
+  „Einrichten“ folgen mit **NA-28** (bis dahin über „Rund“). „Meine Welt“ (Welten wechseln/erschaffen) gibt es vorerst nur in „Rund“.
+- Wie bei „Rund“ schickt die Insel ein Kind ohne Spielzeit nach dem Prolog nach spätestens 10 Sekunden wieder aus dem Haus (Zeit-Regel).
+- Figuren sind einfache, eigene Pixelzeichnungen; Feinschliff und vier Blickrichtungen für Tier und Nachbarn folgen mit NA-27.
+
+**Offen / als Nächstes**
+- **iPad 10 und Handy testen** (in `/dev`): Insel öffnen → Knopf „👾 Pixel“ → laufen (Tippen), Ella antippen, Haus, Zimmer, zurück „🐾 Rund“.
+  Neues Kind in `/dev`: Prolog in Pixel (Eltern → „Look der Insel: Pixel“ vor dem ersten Inselbesuch).
+- Nächstes Paket: **NA-27 Pixel-Figuren**, dann **NA-28 Pixel-Zimmer**, dann NA-14 in beiden Looks.

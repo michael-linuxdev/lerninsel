@@ -1,7 +1,7 @@
 #!/bin/sh
 # Startet einen lokalen Server, führt einen Browser-Test aus und beendet den Server wieder.
 #   sh tests/laufen.sh              → Node-Tests (story-migration, inselkern) und Rauchtest über alle Seiten
-#   sh tests/laufen.sh ereignisse   → nur tests/ereignisse.js
+#   sh tests/laufen.sh ereignisse   → nur tests/ereignisse.js (ebenso profil, szene, prolog, zugang, tutorial, weihnachten, probe, pixelinsel, look)
 cd "$(dirname "$0")/.."
 PORT=${PORT:-8799}
 TEST=${1:-rauchtest}

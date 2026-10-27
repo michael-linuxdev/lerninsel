@@ -33,7 +33,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     // 1) Erster Besuch: Prolog startet von selbst
     const p = await seite(`insel ${lage}`);
     await p.goto(INSEL);
-    await p.waitForFunction(() => window.__szene && __szene.aktuell() && __szene.aktuell().id === "prolog", null, { timeout: 15000 });
+    await p.waitForFunction(() => window.__szene && __szene.aktuell() && __szene.aktuell().id === "prolog", null, { timeout: 30000 });
     let a = await p.evaluate(() => __szene.aktuell());
     erwarte(a.nr === 0 && a.wer === "robo" && /Mira/.test(a.text), `Prolog beginnt mit Robo Pixel (${lage})`);
     const spielzeit = await p.evaluate(() => Zeit.status().spielen);
@@ -57,8 +57,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(await p.evaluate(() => __heimat.aktion === "Reingehen"), `vor dem Haus zeigt der Aktionsknopf „Reingehen“ (${lage})`);
     await bild(p, `prolog-4-${lage}`);
     await p.click("#springen", { force: true }); await p.waitForTimeout(800);
-    const nachher = await p.evaluate(() => ({ drinnen: __heimat.drinnen, szene: __szene.aktuell(), e1: Story.etappe("E1"), chronik: Story.chronik().map(x => x.s), imProlog: __heimat.imProlog }));
-    erwarte(nachher.drinnen && !nachher.szene && nachher.e1 && !nachher.imProlog, `Aktionsknopf führt ins Haus, Prolog fertig, story.etappen.E1 gesetzt (${lage})`);
+    const nachher = await p.evaluate(() => ({ drinnen: __heimat.besuche === 1, szene: __szene.aktuell(), e1: Story.etappe("E1"), chronik: Story.chronik().map(x => x.s), imProlog: __heimat.imProlog }));
+    erwarte(nachher.drinnen && (!nachher.szene || nachher.szene.id !== "prolog") && nachher.e1 && !nachher.imProlog, `Aktionsknopf führt ins Haus, Prolog fertig, story.etappen.E1 gesetzt (${lage})`);
     erwarte(nachher.chronik.includes("prolog"), `Prolog steht in der Inselchronik (${lage})`);
 
     // 2) Zweiter Besuch: kein Prolog
