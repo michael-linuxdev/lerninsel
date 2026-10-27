@@ -36,8 +36,9 @@
   ];
 
   function ausBestand() {
-    if (window.Mathe && Mathe.STATIONEN) Mathe.STATIONEN.forEach(s => s.lz && registriere({
-      id: "mathe:" + s.id, fach: "mathe", lz: s.lz, aufgaben: 50, lernkartei: true, titel: s.name, quelle: "bestand" }));
+    if (window.Mathe && Mathe.STATIONEN) Mathe.STATIONEN.concat(Mathe.STATIONEN_K1 || []).forEach(s => s.lz && registriere({
+      id: "mathe:" + s.id, fach: "mathe", lz: s.lz, aufgaben: 50, lernkartei: true, titel: s.name, quelle: "bestand",
+      stufe: s.stufe ? (s.stufe === "vs" ? ["vs", "1"] : [s.stufe]) : undefined }));
     (window.GESCHICHTE || []).forEach(k => {
       const je = {};
       k.schritte.forEach(s => (TYP_LZ_GESCHICHTE[s.typ] || []).forEach(z => { je[z] = (je[z] || 0) + 1; }));

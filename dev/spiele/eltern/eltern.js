@@ -410,11 +410,15 @@
       kal += `<div class="${stempel.includes(iso) ? "an" : ""}">${dt.getDate()}.${dt.getMonth() + 1}.</div>`;
     }
 
-    const stationen = window.Mathe.STATIONEN.map(s => {
+    // Klasse-1-Weg (NA-32) mit anzeigen, wenn das Kind dort übt oder in Vorschule/Klasse 1 ist
+    const k1 = mathe.k1 || {}, mitK1 = Object.keys(k1).length || ["vs", "1"].includes((S.stufe() || {}).code);
+    const alleSt = (mitK1 ? (window.Mathe.STATIONEN_K1 || []).map(s => ({ s, st: k1[s.id], vor: "Kl. 1: " })) : [])
+      .concat(window.Mathe.STATIONEN.map(s => ({ s, st: k2[s.id], vor: "" })));
+    const stationen = alleSt.map(({ s, st, vor }) => {
       const x = stat[s.id], n = x ? x.r + x.f : 0, q = n ? x.r / n : null;
-      return `<tr><td>${s.name}</td><td class="zahl-r">${k2[s.id] ? "⭐".repeat(k2[s.id]) : "–"}</td><td class="zahl-r">${n || "–"}</td><td class="zahl-r"><span class="quote ${quoteKlasse(n >= 3 ? q : null)}">${prozent(q)}</span></td></tr>`;
+      return `<tr><td>${vor}${s.name}</td><td class="zahl-r">${st ? "⭐".repeat(st) : "–"}</td><td class="zahl-r">${n || "–"}</td><td class="zahl-r"><span class="quote ${quoteKlasse(n >= 3 ? q : null)}">${prozent(q)}</span></td></tr>`;
     }).join("");
-    const schwach = window.Mathe.STATIONEN.map(s => ({ s, x: stat[s.id] })).filter(o => o.x && o.x.r + o.x.f >= 5 && o.x.r / (o.x.r + o.x.f) < 0.7);
+    const schwach = alleSt.map(({ s }) => ({ s, x: stat[s.id] })).filter(o => o.x && o.x.r + o.x.f >= 5 && o.x.r / (o.x.r + o.x.f) < 0.7);
     const fehler = (mathe.fehler || []).slice(-10).reverse();
 
     inhalt.innerHTML = `

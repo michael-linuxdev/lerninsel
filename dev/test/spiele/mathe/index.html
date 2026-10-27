@@ -23,7 +23,9 @@
 
   /* ---------- Matheweg ---------- */
   #weg-ansicht { min-height: 100dvh; }
-  .klasse { margin: 6px 16px 0; font-size: 1.2rem; font-weight: 500; color: #2E7D62; }
+  .klasse { margin: 6px 16px 0; display: flex; gap: 10px; flex-wrap: wrap; }
+  .weg-wahl { font: inherit; font-size: 1.05rem; font-weight: 600; border: 0; border-radius: 999px; padding: 8px 16px; background: #fff; color: #2E7D62; cursor: pointer; box-shadow: 0 4px 0 rgba(46,156,119,.25); }
+  .weg-wahl.an { background: var(--minze); color: #fff; }
   .karte-weg { position: relative; margin: 8px auto 40px; max-width: 1100px; }
   .karte-weg svg.pfad { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
   .station {
@@ -148,6 +150,8 @@
   .benno.klein { width: 110px; height: 115px; margin: 0 auto -6px; }
   .benno-blase { position: relative; margin: 0; background: #fff; border-radius: 22px; padding: 12px 16px; font-size: 1.15rem; font-weight: 500; box-shadow: 0 6px 0 rgba(0,0,0,.08); }
   .benno-blase::before { content: ""; position: absolute; left: -10px; top: 50%; margin-top: -10px; border: 10px solid transparent; border-right-color: #fff; border-left: 0; }
+  /* Kleine Handys: Stationen schmaler, damit nichts über den Rand ragt */
+  @media (max-width: 480px) { .station { width: 112px; font-size: .92rem; } .station .kreis { width: 76px; height: 76px; font-size: 1.9rem; } }
 </style>
 </head>
 <body>
@@ -159,7 +163,7 @@
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
   <div class="benno-zeile"><div class="benno" id="benno" aria-hidden="true"></div><p class="benno-blase" id="benno-text"></p></div>
-  <p class="klasse">2. Klasse</p>
+  <div class="klasse" id="klasse"></div>
   <div class="einstufung" id="einstufung" hidden></div>
   <div class="karte-weg" id="karte"></div>
 </section>

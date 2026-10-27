@@ -74,7 +74,8 @@ pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziel
 pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten knapp teilweise, Anlaute gut, flüssig Lesen und Schreiben noch nicht", () => {
   assert.strictEqual(I.abdeckung("ma.zo.07"), "ja");    // vier Stationen
   assert.strictEqual(I.abdeckung("de.su.04"), "teil");  // drei Werkstatt-Kapitel, aber nur 28 Aufgaben
-  assert.strictEqual(I.abdeckung("ma.zo.03"), "teil");  // nur zwei Stationen
+  assert.strictEqual(I.abdeckung("ma.zo.03"), "ja");    // Plus/Minus bis 20 und bis 10 (Klasse-1-Weg)
+  assert.strictEqual(I.abdeckung("ma.zo.05"), "teil");  // nur eine Station
   assert.strictEqual(I.abdeckung("me.ph.01"), "teil");  // ohne Lernkartei
   assert.strictEqual(I.abdeckung("de.le.02"), "ja");    // NA-30: Tafel, Finde das Bild, Welcher Buchstabe (mit Lernkartei)
   assert.strictEqual(I.abdeckung("de.le.05"), "nein");
@@ -96,7 +97,9 @@ pruefe("Inhalte.fuer(kind): passende Stufe oder eine darunter, Vorschule nur Vor
   assert.ok(kl2.includes("mathe:plus100") && kl2.includes("mathe:plus20"), "Kl. 2 bekommt Kl.-2- und Kl.-1-Stationen");
   assert.ok(!kl2.includes("mathe:mal3"), "Einmaleins 6–9 erst ab Kl. 3");
   assert.ok(ids({ stufe: "3", land: "sn" }).includes("mathe:mal3"));
-  assert.deepStrictEqual(ids({ stufe: "vs", land: "sn" }).sort().join(), "daz:d0,de.anlaute.bild,de.anlaute.gleich,de.anlaute.tafel", "Vorschule: Ankommen und Anlaute");
+  const vs = ids({ stufe: "vs", land: "sn" });
+  assert.ok(vs.includes("daz:d0") && vs.includes("de.anlaute.gleich") && vs.includes("mathe:k1wuerfel"), "Vorschule: Ankommen, Anlaute, Mengen");
+  assert.ok(!vs.includes("mathe:plus20") && !vs.includes("mathe:k1zwanzig"), "Vorschule: keine Klasse-1/2-Rechenaufgaben");
   I.registriere({ id: "test:nurby", lz: ["de.le.05"], stufe: ["1"], laender: ["by"] });
   assert.ok(ids({ stufe: "1", land: "by" }).includes("test:nurby"));
   assert.ok(!ids({ stufe: "1", land: "sn" }).includes("test:nurby"));

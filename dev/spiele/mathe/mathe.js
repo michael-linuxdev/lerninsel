@@ -1,15 +1,22 @@
 (function () {
-  const S = window.Spielwelt, ST = window.Mathe.STATIONEN;
+  const S = window.Spielwelt;
+  // Zwei Wege (NA-32): „k1“ = Klasse 1 und Vorschule (Mengen mit Material), „k2“ = der bisherige Matheweg Klasse 2.
+  // Fortschritt je Weg in mathe.k1 bzw. mathe.k2; der Einstufungstest gehört nur zu Klasse 2.
+  const WEGE = { k1: window.Mathe.STATIONEN_K1 || [], k2: window.Mathe.STATIONEN };
+  const ersterWeg = () => { const d = S.lade("mathe") || {}; if (d.weg && WEGE[d.weg]) return d.weg;
+    const st = (S.stufe && S.stufe()) || {}; return ["vs", "1"].includes(st.code) && WEGE.k1.length ? "k1" : "k2"; };
+  let WEG = ersterWeg(), ST = WEGE[WEG];
+  function setzeWeg(w) { if (!WEGE[w] || !WEGE[w].length) return; WEG = w; ST = WEGE[w]; const d = daten(); d.weg = w; S.speichere("mathe", d); }
   const $ = (id) => document.getElementById(id);
   const LOB = ["Richtig!", "Super!", "Klasse!", "Genau!", "Toll gerechnet!", "Spitze!", "Prima!"];
 
   // ---------- Fortschritt ----------
-  const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; return d; };
-  const bestes = (id) => daten().k2[id] || 0;
-  const startAb = () => (daten().einstufung || {}).startAb || 0;   // aus dem Einstufungstest
+  const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; d.k1 = d.k1 || {}; return d; };
+  const bestes = (id) => daten()[WEG][id] || 0;
+  const startAb = () => WEG === "k2" ? (daten().einstufung || {}).startAb || 0 : 0;   // aus dem Einstufungstest (nur Klasse 2)
   const istOffen = (i) => S.offen(i === 0 || i <= startAb() || bestes(ST[i - 1].id) > 0);
   function merke(id, sterne) {
-    const d = daten(); d.k2[id] = Math.max(d.k2[id] || 0, sterne); S.speichere("mathe", d);
+    const d = daten(); d[WEG][id] = Math.max(d[WEG][id] || 0, sterne); S.speichere("mathe", d);
   }
   const C = () => window.Charakter;
   // Trefferquote pro Station (erster Versuch) und gemerkte Fehler fürs Training
@@ -64,7 +71,7 @@
   function benno() {
     const F = window.Figuren; if (!F || !F.biber) return;
     $("benno").innerHTML = F.biber(""); $("benno-ende").innerHTML = F.biber("");
-    const d = daten(), geschafft = ST.filter(s => (d.k2[s.id] || 0) > 0).length, faellig = (d.fehler || []).filter(f => faellig_(f)).length, n = S.profil.name || "du";
+    const d = daten(), geschafft = ST.filter(s => (d[WEG][s.id] || 0) > 0).length, faellig = (d.fehler || []).filter(f => faellig_(f)).length, n = S.profil.name || "du";
     $("benno-text").textContent = geschafft === 0 ? `Hallo ${n}! Ich bin Biber Benno. Ich baue Dämme und zähle jeden Stamm. Komm, wir rechnen zusammen!`
       : faellig ? `Hallo ${n}! ${faellig} ${faellig === 1 ? "Aufgabe von früher wartet" : "Aufgaben von früher warten"} im Mathe-Training. Die schaffen wir!`
       : `Schon ${geschafft} von ${ST.length} Stationen geschafft! Mein Damm wird immer länger.`;
@@ -73,6 +80,13 @@
 
   function zeichneWeg() {
     $("sterne").textContent = S.sterne(); benno();
+    // Umschalter zwischen den Wegen (Klasse 1 / Klasse 2)
+    const kl = $("klasse");
+    if (kl) {
+      kl.innerHTML = `<button class="weg-wahl${WEG === "k1" ? " an" : ""}" data-weg="k1" aria-pressed="${WEG === "k1"}">🐣 Klasse 1 und Vorschule</button>` +
+        `<button class="weg-wahl${WEG === "k2" ? " an" : ""}" data-weg="k2" aria-pressed="${WEG === "k2"}">2. Klasse</button>`;
+      kl.querySelectorAll(".weg-wahl").forEach(b => b.addEventListener("click", () => { if (b.dataset.weg === WEG) return; S.ton("tipp"); setzeWeg(b.dataset.weg); zeichneWeg(); }));
+    }
     const karte = $("karte");
     const breite = Math.min(karte.parentElement.clientWidth, 1100);
     const spalten = breite > 940 ? 5 : breite > 620 ? 4 : 3;
@@ -105,9 +119,16 @@
       b.style.left = pos[i][0] + "px"; b.style.top = pos[i][1] + "px";
       if (k.ziel) {
         const alle = ST.every(s => bestes(s.id) > 0);
-        b.className = "station ziel" + (alle ? "" : " zu");
-        b.innerHTML = `<span class="kreis">${alle ? "🎓" : "🔒"}</span><span class="name">3. Klasse</span><span class="stern-reihe"></span>`;
-        b.addEventListener("click", () => { S.ton("tipp"); S.meldung(alle ? "Die 3. Klasse wird gerade gebaut." : "Schaffe alle Stationen, dann geht es in die 3. Klasse."); });
+        if (WEG === "k1") {
+          // Klasse 1 → weiter auf dem Matheweg Klasse 2 (immer erreichbar, auch ohne alle Stationen)
+          b.className = "station ziel";
+          b.innerHTML = `<span class="kreis">${alle ? "🎓" : "➡️"}</span><span class="name">2. Klasse</span><span class="stern-reihe"></span>`;
+          b.addEventListener("click", () => { S.ton("tipp"); setzeWeg("k2"); zeichneWeg(); scrollTo(0, 0); });
+        } else {
+          b.className = "station ziel" + (alle ? "" : " zu");
+          b.innerHTML = `<span class="kreis">${alle ? "🎓" : "🔒"}</span><span class="name">3. Klasse</span><span class="stern-reihe"></span>`;
+          b.addEventListener("click", () => { S.ton("tipp"); S.meldung(alle ? "Die 3. Klasse wird gerade gebaut." : "Schaffe alle Stationen, dann geht es in die 3. Klasse."); });
+        }
       } else {
         const offen = istOffen(i), best = bestes(k.s.id);
         b.className = "station" + (offen ? "" : " zu") + (i === jetzt ? " jetzt" : "");
@@ -146,7 +167,7 @@
   function zeigeEinstufungAngebot() {
     const d = daten(), box = $("einstufung");
     if (!box) return;
-    const zeigen = !d.einstufung && (!Object.keys(d.k2).length || d.einstufungAngebot);
+    const zeigen = WEG === "k2" && !d.einstufung && (!Object.keys(d.k2).length || d.einstufungAngebot);
     box.hidden = !zeigen; if (!zeigen) return;
     box.innerHTML = `<b>🧭 Was kannst du schon?</b><p>Mach einen kurzen Test. Dann startest du an der richtigen Stelle auf dem Matheweg.</p>
       <div class="knoepfe-e"><button class="knopf haupt" id="einst-los">Test starten</button><button class="knopf" id="einst-nein">Lieber von vorne</button></div>`;

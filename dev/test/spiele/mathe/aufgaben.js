@@ -1,4 +1,4 @@
-// Aufgaben für Klasse 2. Jede Station hat einen Generator, der eine Aufgabe liefert:
+// Aufgaben für Klasse 2 (STATIONEN) und Klasse 1/Vorschule (STATIONEN_K1, NA-32). Jede Station hat einen Generator, der eine Aufgabe liefert:
 // { text, frage?, antwort, art: "zahl"|"wahl", optionen?, einheit?, bild?, hilfe }
 // "?" in text markiert die Lücke. Ohne "?" wird "= Lücke" angehängt.
 (function () {
@@ -396,6 +396,97 @@
       } }
   ];
 
+  // ---------- Klasse 1 und Vorschule (NA-32): Mengen mit Material ----------
+  // Würfelbild: Augen 1–6 in der vertrauten Anordnung
+  const AUGEN = { 1: [[1, 1]], 2: [[0, 0], [2, 2]], 3: [[0, 0], [1, 1], [2, 2]], 4: [[0, 0], [2, 0], [0, 2], [2, 2]],
+    5: [[0, 0], [2, 0], [1, 1], [0, 2], [2, 2]], 6: [[0, 0], [2, 0], [0, 1], [2, 1], [0, 2], [2, 2]] };
+  function wuerfel(n, x) {
+    return `<g transform="translate(${x} 6)"><rect width="108" height="108" rx="20" fill="#fff" stroke="#3b1f63" stroke-width="5"/>` +
+      AUGEN[n].map(([c, z]) => `<circle cx="${24 + c * 30}" cy="${24 + z * 30}" r="11" fill="#3b1f63"/>`).join("") + `</g>`;
+  }
+  function wuerfelBild(a, b) {
+    const w = b ? 250 : 120;
+    return `<svg viewBox="0 0 ${w} 120" role="img" aria-label="Würfel">${wuerfel(a, 6)}${b ? wuerfel(b, 136) : ""}</svg>`;
+  }
+  // Zwanzigerfeld: zwei Zehnerreihen, Fünfer abgesetzt; rot = n Plättchen (optional blau = zweiter Teil)
+  function zwanzigerBild(n, blau = 0) {
+    let s = "";
+    for (let i = 0; i < 20; i++) {
+      const reihe = Math.floor(i / 10), sp = i % 10, x = 14 + sp * 40 + (sp >= 5 ? 14 : 0), y = 14 + reihe * 44;
+      const farbe = i < n ? "#E8463B" : i < n + blau ? "#3A7BD5" : "#fff";
+      s += `<rect x="${x - 2}" y="${y - 2}" width="38" height="40" fill="none" stroke="#C9B8F0" stroke-width="2"/><circle cx="${x + 17}" cy="${y + 18}" r="14" fill="${farbe}" stroke="#3b1f63" stroke-width="${i < n + blau ? 2.5 : 1.5}"/>`;
+    }
+    return `<svg viewBox="0 0 440 110" role="img" aria-label="Zwanzigerfeld">${s}</svg>`;
+  }
+  // Menge aus Bildern, in Fünfergruppen (zählen ohne Abzählfehler); weg = so viele am Ende durchgestrichen
+  const DINGE = ["🍎", "⭐", "🐟", "🌸", "🎈", "🐞", "🍓", "🚗", "🦆", "🍪"];
+  function mengeBild(n, ding, weg = 0, ding2 = null, n2 = 0) {
+    const alle = Array.from({ length: n }, () => ding).concat(Array.from({ length: n2 }, () => ding2));
+    let s = "";
+    alle.forEach((d, i) => {
+      const x = 8 + (i % 10) * 46 + ((i % 10) >= 5 ? 16 : 0), y = 8 + Math.floor(i / 10) * 52;
+      s += `<text x="${x + 21}" y="${y + 36}" font-size="36" text-anchor="middle">${d}</text>`;
+      if (i >= n - weg && i < n) s += `<path d="M${x + 4} ${y + 44} L${x + 40} ${y + 6}" stroke="#D7263D" stroke-width="5" stroke-linecap="round"/>`;
+    });
+    const zeilen = Math.max(1, Math.ceil(alle.length / 10));
+    return `<svg viewBox="0 0 490 ${zeilen * 52 + 12}" role="img" aria-label="${alle.length} Dinge">${s}</svg>`;
+  }
+  function zweiGruppen(a, b, da, db) {
+    const gruppe = (n, d, x0) => Array.from({ length: n }, (_, i) => `<text x="${x0 + 24 + (i % 3) * 52}" y="${44 + Math.floor(i / 3) * 52}" font-size="38" text-anchor="middle">${d}</text>`).join("");
+    const h = Math.max(Math.ceil(a / 3), Math.ceil(b / 3)) * 52 + 16;
+    return `<svg viewBox="0 0 400 ${h}" role="img" aria-label="Zwei Gruppen"><rect x="2" y="2" width="180" height="${h - 4}" rx="18" fill="#FFF6DA" stroke="#E8A33D" stroke-width="3"/>` +
+      `<rect x="218" y="2" width="180" height="${h - 4}" rx="18" fill="#E3F2FF" stroke="#3AA0E0" stroke-width="3"/>${gruppe(a, da, 12)}${gruppe(b, db, 228)}</svg>`;
+  }
+  const MUSTER = [["🔴", "🔵"], ["🍎", "🍌"], ["⭐", "🌙"], ["🐟", "🐸", "🐞"], ["▲", "●", "■"], ["🌸", "🌸", "🍃"], ["🔵", "🔵", "🟡"]];
+
+  const STATIONEN_K1 = [
+    { id: "k1wuerfel", stufe: "vs", lz: ["ma.zo.01"], name: "Würfelbilder", icon: "⚄",
+      neu: () => {
+        if (Math.random() < 0.6) { const n = r(1, 6); return zahl("", n, `Das Würfelbild für ${n} kennst du bald auf einen Blick. Zähle die Punkte: ${Array.from({ length: n }, (_, i) => i + 1).join(", ")}.`, { frage: "Wie viele Punkte siehst du?", bild: wuerfelBild(n), nurLuecke: true }); }
+        const a = r(1, 6), b = r(1, Math.min(6, 10 - a));
+        return zahl("", a + b, `Ein Würfel zeigt ${a}, der andere ${b}. Zähle beim zweiten Würfel weiter: ${a}, ${Array.from({ length: b }, (_, i) => a + i + 1).join(", ")}.`, { frage: "Wie viele Punkte sind es zusammen?", bild: wuerfelBild(a, b), nurLuecke: true });
+      } },
+    { id: "k1zaehlen", stufe: "vs", lz: ["ma.zo.01", "ma.pk.05"], name: "Zählen bis 10", icon: "🍎",
+      neu: () => { const n = r(1, 10), d = wahl(DINGE); return zahl("", n, n > 5 ? `Erst die Fünf, dann weiterzählen: 5, ${Array.from({ length: n - 5 }, (_, i) => 6 + i).join(", ")}.` : `Zähle mit dem Finger: ${Array.from({ length: n }, (_, i) => i + 1).join(", ")}.`, { frage: "Wie viele sind es?", bild: mengeBild(n, d), nurLuecke: true }); } },
+    { id: "k1mehr", stufe: "vs", lz: ["ma.zo.02", "ma.dz.01"], name: "Wo sind mehr?", icon: "⚖️",
+      neu: () => {
+        const a = r(1, 9), b = Math.random() < 0.15 ? a : Math.max(1, Math.min(9, a + wahl([-1, 1]) * r(1, 4)));
+        const da = wahl(DINGE), db = wahl(DINGE.filter(x => x !== da));
+        // Pfeile, damit auch Kinder ohne Lesen wählen können
+        const antwort = a > b ? "⬅️ links" : a < b ? "rechts ➡️" : "🟰 gleich viele";
+        return { text: "", frage: "Wo sind mehr?", antwort, art: "wahl", optionen: ["⬅️ links", "🟰 gleich viele", "rechts ➡️"], bild: zweiGruppen(a, b, da, db), nurLuecke: true,
+          hilfe: a === b ? `Links ${a} und rechts ${b}: gleich viele.` : `Links sind ${a}, rechts sind ${b}. ${Math.max(a, b)} ist mehr als ${Math.min(a, b)}.` };
+      } },
+    { id: "k1muster", stufe: "vs", lz: ["ma.ms.01", "ma.ms.02"], name: "Muster fortsetzen", icon: "🔁",
+      neu: () => {
+        const m = wahl(MUSTER), laenge = m.length * 2 + r(0, m.length - 1), reihe = Array.from({ length: laenge }, (_, i) => m[i % m.length]);
+        const antwort = m[laenge % m.length];
+        const optionen = mische([...new Set(m.concat(wahl(DINGE.filter(x => !m.includes(x)))))]).slice(0, 3);
+        if (!optionen.includes(antwort)) optionen[0] = antwort;
+        return { text: reihe.join(" ") + " ?", frage: "Was kommt als Nächstes?", antwort, art: "wahl", optionen: mische(optionen), nurLuecke: true,
+          hilfe: `Das Muster ist ${m.join(" ")} – und dann geht es wieder von vorne los. Als Nächstes kommt ${antwort}.` };
+      } },
+    { id: "k1zwanzig", stufe: "1", lz: ["ma.zo.02"], name: "Zwanzigerfeld", icon: "🔴",
+      neu: () => { const n = r(3, 20); return zahl("", n, n >= 10 ? `Eine volle Reihe sind 10. Dazu ${n - 10}: zusammen ${n}.` : n >= 5 ? `Fünf sind abgesetzt. 5 und ${n - 5} sind ${n}.` : `Zähle die roten Punkte: ${n}.`, { frage: "Wie viele rote Punkte?", bild: zwanzigerBild(n), nurLuecke: true }); } },
+    { id: "k1nachbar", stufe: "1", lz: ["ma.zo.02", "ma.ms.02"], name: "Nachbarzahlen", icon: "↔️",
+      neu: () => {
+        const n = r(1, 19), vor = Math.random() < 0.5 && n > 1;
+        return zahl(vor ? `? ${n}` : `${n} ?`, vor ? n - 1 : n + 1, vor ? `Die Zahl vor ${n} ist um eins kleiner: ${n - 1}.` : `Die Zahl nach ${n} ist um eins größer: ${n + 1}.`,
+          { frage: vor ? `Welche Zahl kommt vor ${n}?` : `Welche Zahl kommt nach ${n}?`, nurLuecke: true });
+      } },
+    { id: "k1zerlegen", stufe: "1", lz: ["ma.zo.04"], name: "Zahlen zerlegen", icon: "✂️",
+      neu: () => { const n = r(3, 10), a = r(1, n - 1); return zahl(`${n} = ${a} + ?`, n - a, `${a} rote und ${n - a} blaue Punkte sind zusammen ${n}.`, { bild: zwanzigerBild(a, n - a) }); } },
+    { id: "k1plus10", stufe: "1", lz: ["ma.zo.03"], name: "Plus bis 10", icon: "+",
+      neu: () => { const a = r(1, 8), b = r(1, 10 - a), d = wahl(DINGE), d2 = wahl(DINGE.filter(x => x !== d)); return zahl(`${a} + ${b}`, a + b, `Zähle weiter: ${a}, ${Array.from({ length: b }, (_, i) => a + i + 1).join(", ")}.`, { bild: mengeBild(a, d, 0, d2, b) }); } },
+    { id: "k1minus10", stufe: "1", lz: ["ma.zo.03"], name: "Minus bis 10", icon: M,
+      neu: () => { const a = r(2, 10), b = r(1, a - 1), d = wahl(DINGE); return zahl(`${a} ${M} ${b}`, a - b, `${b} ${b === 1 ? "ist" : "sind"} durchgestrichen. Zähle, was übrig bleibt: ${a - b}.`, { bild: mengeBild(a, d, b) }); } },
+    { id: "k1doppelt", stufe: "1", lz: ["ma.zo.04"], name: "Verdoppeln", icon: "🦋",
+      neu: () => {
+        if (Math.random() < 0.6) { const n = r(1, 5); return zahl(`${n} + ${n}`, 2 * n, `Doppelt so viele: ${n} und noch einmal ${n} sind ${2 * n}.`, { frage: "Verdopple!", bild: wuerfelBild(n, n) }); }
+        const n = r(1, 5) * 2; return zahl("", n / 2, `Die Hälfte von ${n}: ${n / 2} und ${n / 2} sind ${n}.`, { frage: `Wie viel ist die Hälfte von ${n}?`, bild: zwanzigerBild(n / 2, n / 2), nurLuecke: true });
+      } }
+  ];
+
   function malAufgabe(reihen) {
     const n = wahl(reihen), k = r(1, 10);
     const [a, b] = Math.random() < 0.5 ? [k, n] : [n, k];
@@ -404,7 +495,7 @@
 
   // Eine Runde: verschiedene Aufgaben ohne Doppelte
   function runde(station, anzahl = 10) {
-    const s = STATIONEN.find(x => x.id === station);
+    const s = STATIONEN.find(x => x.id === station) || STATIONEN_K1.find(x => x.id === station);
     const liste = [], gesehen = new Set();
     let versuche = 0;
     while (liste.length < anzahl && versuche++ < 400) {
@@ -416,5 +507,5 @@
     return liste;
   }
 
-  window.Mathe = { STATIONEN, runde, _bilder: { zehnerBild, geldBild, uhrBild } };
+  window.Mathe = { STATIONEN, STATIONEN_K1, runde, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
 })();
