@@ -19,7 +19,7 @@
   }
 
   // Fipsis Geschichte mischt viele Übungen; dort ergibt sich das Lernziel aus dem Schritt-Typ.
-  const TYP_LZ_GESCHICHTE = {
+  const TYP_LZ_GESCHICHTE = window.GESCHICHTE_LZ_TYP || {
     artikel: ["de.su.05", "daz.d0.03"], bild: ["de.su.03", "daz.d0.01"], wort: ["de.su.03"], hoeren: ["de.sz.04"],
     luecke: ["de.le.04"], satz: ["de.su.06", "de.le.04"], wo: ["de.su.07"]
   };

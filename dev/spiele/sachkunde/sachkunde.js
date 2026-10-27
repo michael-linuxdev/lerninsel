@@ -126,7 +126,7 @@
       const sj = lauf.t.schritte[lauf.pos];
       if (o.ok) {
         b.classList.add("richtig");
-        if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1);
+        if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde(lauf.t.lz, true);
         if (!versucht && sj && sj.__karte && window.Lernkartei && Lernkartei.richtig("sachkunde", sj) && window.Lernfunde)
           { const t = loesungText(sj); Lernfunde.merke({ fach: "sachkunde", art: "gemeistert", e: "💪", text: t.length > 64 ? t : `${t} – jetzt weißt du es!`, schluessel: "sk:" + t, melden: true }); }
         container.querySelectorAll(".option").forEach(x => x.disabled = true);
@@ -135,6 +135,7 @@
       } else {
         if (!versucht) {
           if (!(sj && sj.__karte)) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
+          if (window.Koennen) Koennen.melde(lauf.t.lz, false);
           versucht = true;
           if (window.Lernkartei) Lernkartei.falsch("sachkunde", sj);
         }
@@ -189,13 +190,13 @@
           const id = g.dataset.id, w = A.querySelector(".warum");
           if (id === s.ziel) {
             fertig = true; S.ton("juhu");
-            if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1);
+            if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde(lauf.t.lz, true);
             A.querySelector(".stammbaum").outerHTML = BI.stammbaum(t.stammbaum, [id]);
             A.querySelector(".stammbaum").classList.add("gross");
             erklaere(w, "gut", s.warum, S.ht(s, "warum"));
             w.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
           } else {
-            if (!versucht) { lauf.fehler++; versucht = true; }
+            if (!versucht) { lauf.fehler++; versucht = true; if (window.Koennen) Koennen.melde(lauf.t.lz, false); }
             S.ton("nein"); g.classList.add("falsch");
             erklaere(w, "nein", `Das ist nicht die richtige Person. ${P[id].wer}`, S.ht(P[id], "wer") ? S.paar({ de: "", ru: "Это не тот человек." })[1] + " " + S.ht(P[id], "wer") : "");
           }
@@ -222,10 +223,10 @@
             const w = A.querySelector(".warum");
             if (b.dataset.g === d.gruppe) {
               b.classList.add("richtig"); S.ton("juhu"); A.querySelectorAll(".gruppen .option").forEach(x => x.disabled = true);
-              if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1);
+              if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde(lauf.t.lz, true);
               setTimeout(() => { k++; zeichne(); }, 800);
             } else {
-              if (!versucht) { lauf.fehler++; versucht = true; }
+              if (!versucht) { lauf.fehler++; versucht = true; if (window.Koennen) Koennen.melde(lauf.t.lz, false); }
               b.classList.add("falsch"); b.disabled = true; S.ton("nein");
               erklaere(w, "nein", ...S.paar(T.zuordnenFalsch));
             }

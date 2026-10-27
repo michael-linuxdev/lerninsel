@@ -2,6 +2,11 @@
 // Schritte:  sag (Fipsi spricht) | bild | wort | artikel | luecke | satz | hoeren | wo
 // Bei Auswahl-Aufgaben ist die ERSTE Option immer die richtige (wird beim Spielen gemischt).
 // ru = Russisch-Hilfe. {name} wird durch den Spielernamen ersetzt.
+// Lernziele je Schritt-Typ (NA-03/NA-50): Fipsis Kapitel mischen viele Übungen, das Lernziel ergibt sich aus dem Typ.
+window.GESCHICHTE_LZ_TYP = {
+  artikel: ["de.su.05", "daz.d0.03"], bild: ["de.su.03", "daz.d0.01"], wort: ["de.su.03"], hoeren: ["de.sz.04"],
+  luecke: ["de.le.04"], satz: ["de.su.06", "de.le.04"], wo: ["de.su.07"]
+};
 window.GESCHICHTE = [
   {
     id: "wald", lz: ["daz.d0.01"], name: "Im Wald", ort: "🌲", farbe: "#5DB84A", grund: "#E3F5DC",

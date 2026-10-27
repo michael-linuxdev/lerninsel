@@ -105,8 +105,8 @@ Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `in
 Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
 Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
 beiden Looks oder im Plan als offen vermerken.
-1. **Können weiter verzahnen** (S): Fipsis Kapitel, Werkstatt und Sachthemen melden ihre Lernziele an `Koennen.melde(lz, richtig)`; „Lesen und
-   Schreiben“ wählt die Runden nach `Koennen.naechste()`; Mein Ich zeigt einen kindgerechten Fortschritt (ohne Noten).
+1. **Können sichtbar machen** (S): „Lesen und Schreiben“ wählt Runden nach `Koennen.naechste()`; Mein Ich zeigt einen kindgerechten
+   Fortschritt je Fach (ohne Noten, z. B. wachsende Pflanze). Alle Lernspiele melden schon an `Koennen.melde(lz, richtig)`.
 2. Nach Rückmeldung: **NA-34 Sachunterricht** je Perspektive (Wasser, Verkehr, früher/heute, Bauen, Regeln), **NA-33 Mathe Kl. 3**, oder
    Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)
    → **NA-17** Kapitel 1–2 → **NA-18** Chronik im Album.

@@ -112,6 +112,8 @@
 
   // ---------- Kapitel ----------
   let lauf = null;
+  // NA-50: Lernziele eines Schritts – Werkstatt-Kapitel haben eigene lz, Fipsis Geschichte nach Schritt-Typ
+  const lzSchritt = (s) => (lauf && lauf.werk && lauf.k.lz) || (s && (window.GESCHICHTE_LZ_TYP || {})[s.typ]) || [];
 
   // Lernkartei (shared/lernkartei.js): fällige Schritte von früher kommen als kurze Wiederholung an den Anfang
   const WIEDER_INTRO = { typ: "sag", text: "Bevor es losgeht: Wir wiederholen kurz, was letztes Mal knifflig war. Du schaffst das!",
@@ -319,6 +321,7 @@
     if (richtig) {
       lauf.gesperrt = true;
       if (lauf.versuche === 0 && window.Charakter) Charakter.gib("deutsch", 1);
+      if (lauf.versuche === 0 && window.Koennen) Koennen.melde(lzSchritt(schrittJetzt), true);
       if (knopf) knopf.classList.add("richtig");
       document.querySelectorAll(".option").forEach(o => o.disabled = true);
       h.className = "hinweis gut"; h.textContent = LOB[Math.floor(Math.random() * LOB.length)];
@@ -336,6 +339,7 @@
     if (lauf.versuche === 1) {
       if (!(schrittJetzt && schrittJetzt.__karte)) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
       if (window.Lernkartei) Lernkartei.falsch("deutsch", schrittJetzt);
+      if (window.Koennen) Koennen.melde(lzSchritt(schrittJetzt), false);
     }
     S.ton("nein");
     if (knopf) { knopf.classList.add("falsch"); knopf.disabled = true; }

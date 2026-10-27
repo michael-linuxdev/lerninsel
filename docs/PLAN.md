@@ -1134,6 +1134,7 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
   `tests/lesen.js` erweitert.
 
 **Offen / als Nächstes**
-- Können steuert noch nicht die Reihenfolge auf den Wegen selbst (nur Training/Empfehlung); Fipsis Kapitel und Sachthemen melden noch nichts.
+- Nachtrag: Fipsis Kapitel (Lernziel je Schritt-Typ, `window.GESCHICHTE_LZ_TYP` in `geschichte.js`), die Werkstatt und Ellas Sachthemen melden jetzt
+  ebenfalls an `Koennen`. Offen: Können steuert noch nicht die Reihenfolge auf den Wegen selbst (nur Training/Empfehlung); Mein Ich zeigt es noch nicht.
 - Nächste Pakete nach Rückmeldung: NA-34 Sachunterricht, NA-33 Mathe Kl. 3, oder Grafik/Story (NA-29b, NA-29 Teil 2, NA-16/17/18).
 
