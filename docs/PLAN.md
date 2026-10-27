@@ -1542,3 +1542,11 @@ Auftrag: „Übergang Klasse 5 überspringen, weiter mit Klasse 1, um Mathe Grun
   bringen), aber es gibt keine Stationssterne und keinen Abzug (Regel: kein Druck, nichts geht verloren).
 - **Test:** neu `tests/schuljahr.js` (quer und hoch, absichtlicher Fehler, Elternbereich, Rücksetzen der Einstellung).
 - **Nächstes:** Reihenfolge-Vorschlag je Halbjahr; Gerüst für die anderen Fächer, sobald deren Inhaltspunkte stehen (PDFs).
+
+### Stand 28.10.2026, früh (Hochformat: Mathe-Tafel ohne Scrollen)
+- **Fehler behoben:** Im Hochformat schnitt die Tafel bei langen Fragen das Bild unten ab (die Tafel scrollte, das sah aber kein Kind).
+  Gemessen über alle Stationen aller Wege (3 Aufgaben je Station): vorher 46 Stationen auf dem Handy (390 × 760) und 14 im iPad-Hochformat
+  betroffen. Jetzt schrumpft das Bild in den Platz, der neben Frage und Lücke bleibt (`.tafel .bild` flex, `max-height: min(100%, …)`); auf
+  kleinen Handys hochkant kleinere Frage-Schrift, Abstände und Tastatur; die längsten Sachtexte gekürzt. **Ergebnis: 0 Überläufe auf iPad
+  hoch/quer und Handy 390 × 760.** Sehr kleine Handys (360 × 640) scrollen bei langen Sachtexten noch etwas.
+- **Neu `tests/tafel.js`** (432 Aufgaben je Gerätegröße) und Test-Haken `__mathe.zeige(n)`.

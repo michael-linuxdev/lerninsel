@@ -538,5 +538,5 @@
 
   zeichneWeg();
   if (new URLSearchParams(location.search).has("training")) starteTraining();
-  window.__mathe = { faellig, tagIn, starteEinstufung, starteLernstand, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte, starteTraining, zeigeUrkunde, get lauf() { return lauf; } }; // für Tests
+  window.__mathe = { faellig, tagIn, starteEinstufung, starteLernstand, zeige: (n) => { lauf.pos = n; zeigeAufgabe(); }, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte, starteTraining, zeigeUrkunde, get lauf() { return lauf; } }; // für Tests
 })();
