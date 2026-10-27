@@ -1,0 +1,121 @@
+// Wortschatz-Kern (NA-40), Teil „DaZ D0 – Ankommen“: Überlebenswörter für Kinder ohne Deutsch (SPRACHEN.md Abschnitt 3).
+// Zusammen mit den Bestandswörtern (daz: "d0" in bestand.js) genau 100 Wörter, dazu 20 feste Sätze (Chunks).
+// Übersetzungen Russisch und Ukrainisch sind ENTWÜRFE (status entwurf) und erscheinen nur in /dev, bis eine Muttersprachlerin geprüft hat.
+// wortart: Standard "nomen" (mit Artikel); sonst "zahl", "farbe", "adjektiv", "wort" (Gruß, ja/nein …).
+(window.WORTSCHATZ_DATEN = window.WORTSCHATZ_DATEN || []).push({
+  quelle: "d0", status: { ru: "entwurf", uk: "entwurf" }, daz: "d0",
+  woerter: [
+    // Grüßen und sich melden
+    { id: "w.hallo", de: "hallo", wortart: "wort", silben: "hal-lo", bild: "👋", themen: ["sprechen"], ru: "привет", uk: "привіт" },
+    { id: "w.tschuess", de: "tschüss", wortart: "wort", silben: "tschüss", bild: "🙋", themen: ["sprechen"], ru: "пока", uk: "бувай" },
+    { id: "w.ja", de: "ja", wortart: "wort", silben: "ja", bild: "👍", themen: ["sprechen"], ru: "да", uk: "так" },
+    { id: "w.nein", de: "nein", wortart: "wort", silben: "nein", bild: "👎", themen: ["sprechen"], ru: "нет", uk: "ні" },
+    { id: "w.bitte", de: "bitte", wortart: "wort", silben: "bit-te", bild: "🤲", themen: ["sprechen"], ru: "пожалуйста", uk: "будь ласка" },
+    { id: "w.danke", de: "danke", wortart: "wort", silben: "dan-ke", bild: "🙏", themen: ["sprechen"], ru: "спасибо", uk: "дякую" },
+    { id: "w.hilfe", de: "Hilfe", artikel: "die", mehrzahl: null, silben: "Hil-fe", bild: "🆘", themen: ["sprechen"], ru: "помощь", uk: "допомога" },
+    { id: "w.name", de: "Name", artikel: "der", mehrzahl: "Namen", silben: "Na-me", bild: "📛", themen: ["sprechen"], ru: "имя", uk: "ім’я" },
+    // Zahlen 1–10
+    { id: "w.eins", de: "eins", wortart: "zahl", silben: "eins", bild: "1️⃣", themen: ["zahlen"], ru: "один", uk: "один" },
+    { id: "w.zwei", de: "zwei", wortart: "zahl", silben: "zwei", bild: "2️⃣", themen: ["zahlen"], ru: "два", uk: "два" },
+    { id: "w.drei", de: "drei", wortart: "zahl", silben: "drei", bild: "3️⃣", themen: ["zahlen"], ru: "три", uk: "три" },
+    { id: "w.vier", de: "vier", wortart: "zahl", silben: "vier", bild: "4️⃣", themen: ["zahlen"], ru: "четыре", uk: "чотири" },
+    { id: "w.fuenf", de: "fünf", wortart: "zahl", silben: "fünf", bild: "5️⃣", themen: ["zahlen"], ru: "пять", uk: "п’ять" },
+    { id: "w.sechs", de: "sechs", wortart: "zahl", silben: "sechs", bild: "6️⃣", themen: ["zahlen"], ru: "шесть", uk: "шість" },
+    { id: "w.sieben", de: "sieben", wortart: "zahl", silben: "sie-ben", bild: "7️⃣", themen: ["zahlen"], ru: "семь", uk: "сім" },
+    { id: "w.acht", de: "acht", wortart: "zahl", silben: "acht", bild: "8️⃣", themen: ["zahlen"], ru: "восемь", uk: "вісім" },
+    { id: "w.neun", de: "neun", wortart: "zahl", silben: "neun", bild: "9️⃣", themen: ["zahlen"], ru: "девять", uk: "дев’ять" },
+    { id: "w.zehn", de: "zehn", wortart: "zahl", silben: "zehn", bild: "🔟", themen: ["zahlen"], ru: "десять", uk: "десять" },
+    // Farben
+    { id: "w.rot", de: "rot", wortart: "farbe", silben: "rot", bild: "🔴", themen: ["farben"], ru: "красный", uk: "червоний" },
+    { id: "w.blau", de: "blau", wortart: "farbe", silben: "blau", bild: "🔵", themen: ["farben"], ru: "синий", uk: "синій" },
+    { id: "w.gelb", de: "gelb", wortart: "farbe", silben: "gelb", bild: "🟡", themen: ["farben"], ru: "жёлтый", uk: "жовтий" },
+    { id: "w.gruen", de: "grün", wortart: "farbe", silben: "grün", bild: "🟢", themen: ["farben"], ru: "зелёный", uk: "зелений" },
+    { id: "w.schwarz", de: "schwarz", wortart: "farbe", silben: "schwarz", bild: "⚫", themen: ["farben"], ru: "чёрный", uk: "чорний" },
+    { id: "w.weiss", de: "weiß", wortart: "farbe", silben: "weiß", bild: "⚪", themen: ["farben"], ru: "белый", uk: "білий" },
+    // Schule
+    { id: "w.schule", de: "Schule", artikel: "die", mehrzahl: "Schulen", silben: "Schu-le", bild: "🏫", themen: ["schule"], ru: "школа", uk: "школа" },
+    { id: "w.lehrerin", de: "Lehrerin", artikel: "die", mehrzahl: "Lehrerinnen", silben: "Leh-re-rin", bild: "👩‍🏫", themen: ["schule"], ru: "учительница", uk: "вчителька" },
+    { id: "w.lehrer", de: "Lehrer", artikel: "der", mehrzahl: "Lehrer", silben: "Leh-rer", bild: "👨‍🏫", themen: ["schule"], ru: "учитель", uk: "вчитель" },
+    { id: "w.kind", de: "Kind", artikel: "das", mehrzahl: "Kinder", silben: "Kind", bild: "🧒", themen: ["schule", "familie"], ru: "ребёнок", uk: "дитина" },
+    { id: "w.heft", de: "Heft", artikel: "das", mehrzahl: "Hefte", silben: "Heft", bild: "📓", themen: ["schule"], ru: "тетрадь", uk: "зошит" },
+    { id: "w.papier", de: "Papier", artikel: "das", mehrzahl: null, silben: "Pa-pier", bild: "📄", themen: ["schule"], ru: "бумага", uk: "папір" },
+    { id: "w.lineal", de: "Lineal", artikel: "das", mehrzahl: "Lineale", silben: "Li-ne-al", bild: "📏", themen: ["schule"], ru: "линейка", uk: "лінійка" },
+    { id: "w.schulranzen", de: "Schulranzen", artikel: "der", mehrzahl: "Schulranzen", silben: "Schul-ran-zen", bild: "🎒", themen: ["schule"], ru: "школьный рюкзак", uk: "шкільний рюкзак" },
+    { id: "w.computer", de: "Computer", artikel: "der", mehrzahl: "Computer", silben: "Com-pu-ter", bild: "💻", themen: ["schule"], ru: "компьютер", uk: "комп’ютер" },
+    { id: "w.toilette", de: "Toilette", artikel: "die", mehrzahl: "Toiletten", silben: "Toi-let-te", bild: "🚽", themen: ["schule", "zuhause"], ru: "туалет", uk: "туалет" },
+    { id: "w.pause", de: "Pause", artikel: "die", mehrzahl: "Pausen", silben: "Pau-se", bild: "🔔", themen: ["schule"], ru: "перемена", uk: "перерва" },
+    // Körper und wie es mir geht
+    { id: "w.kopf", de: "Kopf", artikel: "der", mehrzahl: "Köpfe", silben: "Kopf", bild: "👤", themen: ["koerper"], ru: "голова", uk: "голова" },
+    { id: "w.bein", de: "Bein", artikel: "das", mehrzahl: "Beine", silben: "Bein", bild: "🦵", themen: ["koerper"], ru: "нога", uk: "нога" },
+    { id: "w.fuss", de: "Fuß", artikel: "der", mehrzahl: "Füße", silben: "Fuß", bild: "🦶", themen: ["koerper"], ru: "стопа", uk: "стопа" },
+    { id: "w.auge", de: "Auge", artikel: "das", mehrzahl: "Augen", silben: "Au-ge", bild: "👁️", themen: ["koerper"], ru: "глаз", uk: "око" },
+    { id: "w.mund", de: "Mund", artikel: "der", mehrzahl: "Münder", silben: "Mund", bild: "👄", themen: ["koerper"], ru: "рот", uk: "рот" },
+    { id: "w.hunger", de: "Hunger", artikel: "der", mehrzahl: null, silben: "Hun-ger", bild: "🍽️", themen: ["gefuehle"], ru: "голод", uk: "голод" },
+    { id: "w.durst", de: "Durst", artikel: "der", mehrzahl: null, silben: "Durst", bild: "🥤", themen: ["gefuehle"], ru: "жажда", uk: "спрага" },
+    { id: "w.muede", de: "müde", wortart: "adjektiv", silben: "mü-de", bild: "😴", themen: ["gefuehle"], ru: "сонный", uk: "сонний" },
+    { id: "w.krank", de: "krank", wortart: "adjektiv", silben: "krank", bild: "🤒", themen: ["gefuehle"], ru: "больной", uk: "хворий" },
+    { id: "w.traurig", de: "traurig", wortart: "adjektiv", silben: "trau-rig", bild: "😢", themen: ["gefuehle"], ru: "грустный", uk: "сумний" },
+    { id: "w.froh", de: "froh", wortart: "adjektiv", silben: "froh", bild: "😊", themen: ["gefuehle"], ru: "радостный", uk: "радісний" },
+    // Essen und Trinken
+    { id: "w.wasser", de: "Wasser", artikel: "das", mehrzahl: null, silben: "Was-ser", bild: "💧", themen: ["essen"], ru: "вода", uk: "вода" },
+    { id: "w.saft", de: "Saft", artikel: "der", mehrzahl: "Säfte", silben: "Saft", bild: "🧃", themen: ["essen"], ru: "сок", uk: "сік" },
+    { id: "w.broetchen", de: "Brötchen", artikel: "das", mehrzahl: "Brötchen", silben: "Bröt-chen", bild: "🥯", themen: ["essen"], ru: "булочка", uk: "булочка" },
+    { id: "w.reis", de: "Reis", artikel: "der", mehrzahl: null, silben: "Reis", bild: "🍚", themen: ["essen"], ru: "рис", uk: "рис" },
+    { id: "w.suppe", de: "Suppe", artikel: "die", mehrzahl: "Suppen", silben: "Sup-pe", bild: "🍲", themen: ["essen"], ru: "суп", uk: "суп" },
+    { id: "w.tee", de: "Tee", artikel: "der", mehrzahl: "Tees", silben: "Tee", bild: "🍵", themen: ["essen"], ru: "чай", uk: "чай" },
+    // Familie und Freunde
+    { id: "w.mama", de: "Mama", artikel: "die", mehrzahl: "Mamas", silben: "Ma-ma", bild: "👩", themen: ["familie"], ru: "мама", uk: "мама" },
+    { id: "w.papa", de: "Papa", artikel: "der", mehrzahl: "Papas", silben: "Pa-pa", bild: "👨", themen: ["familie"], ru: "папа", uk: "тато" },
+    { id: "w.bruder", de: "Bruder", artikel: "der", mehrzahl: "Brüder", silben: "Bru-der", bild: "👦", themen: ["familie"], ru: "брат", uk: "брат" },
+    { id: "w.schwester", de: "Schwester", artikel: "die", mehrzahl: "Schwestern", silben: "Schwes-ter", bild: "👧", themen: ["familie"], ru: "сестра", uk: "сестра" },
+    { id: "w.oma", de: "Oma", artikel: "die", mehrzahl: "Omas", silben: "O-ma", bild: "👵", themen: ["familie"], ru: "бабушка", uk: "бабуся" },
+    { id: "w.opa", de: "Opa", artikel: "der", mehrzahl: "Opas", silben: "O-pa", bild: "👴", themen: ["familie"], ru: "дедушка", uk: "дідусь" },
+    { id: "w.baby", de: "Baby", artikel: "das", mehrzahl: "Babys", silben: "Ba-by", bild: "👶", themen: ["familie"], ru: "малыш", uk: "немовля" },
+    { id: "w.freund", de: "Freund", artikel: "der", mehrzahl: "Freunde", silben: "Freund", bild: "🤝", themen: ["familie"], ru: "друг", uk: "друг" },
+    { id: "w.familie", de: "Familie", artikel: "die", mehrzahl: "Familien", silben: "Fa-mi-li-e", bild: "👨‍👩‍👧", themen: ["familie"], ru: "семья", uk: "сім’я" },
+    // Kleidung, Zuhause, draußen, Wetter
+    { id: "w.jacke", de: "Jacke", artikel: "die", mehrzahl: "Jacken", silben: "Ja-cke", bild: "🧥", themen: ["kleidung"], ru: "куртка", uk: "куртка" },
+    { id: "w.socke", de: "Socke", artikel: "die", mehrzahl: "Socken", silben: "So-cke", bild: "🧦", themen: ["kleidung"], ru: "носок", uk: "шкарпетка" },
+    { id: "w.fenster", de: "Fenster", artikel: "das", mehrzahl: "Fenster", silben: "Fens-ter", bild: "🪟", themen: ["zuhause"], ru: "окно", uk: "вікно" },
+    { id: "w.ampel", de: "Ampel", artikel: "die", mehrzahl: "Ampeln", silben: "Am-pel", bild: "🚦", themen: ["verkehr"], ru: "светофор", uk: "світлофор" },
+    { id: "w.strasse", de: "Straße", artikel: "die", mehrzahl: "Straßen", silben: "Stra-ße", bild: "🛣️", themen: ["verkehr"], ru: "улица", uk: "вулиця" },
+    { id: "w.spielplatz", de: "Spielplatz", artikel: "der", mehrzahl: "Spielplätze", silben: "Spiel-platz", bild: "🛝", themen: ["spiel"], ru: "детская площадка", uk: "дитячий майданчик" },
+    { id: "w.regen", de: "Regen", artikel: "der", mehrzahl: null, silben: "Re-gen", bild: "🌧️", themen: ["wetter"], ru: "дождь", uk: "дощ" },
+    { id: "w.kalt", de: "kalt", wortart: "adjektiv", silben: "kalt", bild: "🥶", themen: ["wetter"], ru: "холодный", uk: "холодний" },
+    { id: "w.heiss", de: "heiß", wortart: "adjektiv", silben: "heiß", bild: "🥵", themen: ["wetter"], ru: "жаркий", uk: "спекотний" },
+    { id: "w.arzt", de: "Arzt", artikel: "der", mehrzahl: "Ärzte", silben: "Arzt", bild: "🧑‍⚕️", themen: ["gefuehle"], ru: "врач", uk: "лікар" },
+    { id: "w.telefon", de: "Telefon", artikel: "das", mehrzahl: "Telefone", silben: "Te-le-fon", bild: "📞", themen: ["zuhause"], ru: "телефон", uk: "телефон" }
+  ],
+  // Ukrainisch für die Bestandswörter, die zu D0 gehören (Entwurf)
+  ergaenzungen: {
+    "w.apfel": { uk: "яблуко" }, "w.banane": { uk: "банан" }, "w.brot": { uk: "хліб" }, "w.kaese": { uk: "сир" }, "w.ei": { uk: "яйце" },
+    "w.milch": { uk: "молоко" }, "w.kuchen": { uk: "торт" }, "w.haus": { uk: "будинок" }, "w.sonne": { uk: "сонце" }, "w.auto": { uk: "машина" },
+    "w.bus": { uk: "автобус" }, "w.ball": { uk: "м’яч" }, "w.buch": { uk: "книга" }, "w.stift": { uk: "олівець" }, "w.schere": { uk: "ножиці" },
+    "w.schuh": { uk: "черевик" }, "w.kleid": { uk: "сукня" }, "w.hose": { uk: "штани" }, "w.muetze": { uk: "шапка" }, "w.uhr": { uk: "годинник" },
+    "w.bett": { uk: "ліжко" }, "w.stuhl": { uk: "стілець" }, "w.tuer": { uk: "двері" }, "w.lampe": { uk: "лампа" }, "w.hand": { uk: "рука" },
+    "w.ohr": { uk: "вухо" }, "w.nase": { uk: "ніс" }, "w.zahn": { uk: "зуб" }
+  },
+  // 20 feste Sätze für den Alltag (Chunks vor Grammatik). {name} = Name des Kindes.
+  saetze: [
+    { id: "s.d0.01", de: "Hallo, ich heiße {name}.", bild: "👋", woerter: ["w.hallo", "w.name"], ru: "Привет, меня зовут {name}.", uk: "Привіт, мене звати {name}." },
+    { id: "s.d0.02", de: "Wie heißt du?", bild: "📛", woerter: ["w.name"], ru: "Как тебя зовут?", uk: "Як тебе звати?" },
+    { id: "s.d0.03", de: "Darf ich auf die Toilette?", bild: "🚽", woerter: ["w.toilette"], ru: "Можно мне в туалет?", uk: "Можна мені в туалет?" },
+    { id: "s.d0.04", de: "Ich habe Hunger.", bild: "🍽️", woerter: ["w.hunger"], ru: "Я хочу есть.", uk: "Я хочу їсти." },
+    { id: "s.d0.05", de: "Ich habe Durst.", bild: "🥤", woerter: ["w.durst"], ru: "Я хочу пить.", uk: "Я хочу пити." },
+    { id: "s.d0.06", de: "Ich verstehe das nicht.", bild: "🤷", woerter: [], ru: "Я этого не понимаю.", uk: "Я цього не розумію." },
+    { id: "s.d0.07", de: "Kannst du mir helfen?", bild: "🆘", woerter: ["w.hilfe"], ru: "Ты можешь мне помочь?", uk: "Ти можеш мені допомогти?" },
+    { id: "s.d0.08", de: "Noch einmal, bitte.", bild: "🔁", woerter: ["w.bitte"], ru: "Ещё раз, пожалуйста.", uk: "Ще раз, будь ласка." },
+    { id: "s.d0.09", de: "Bitte langsam.", bild: "🐢", woerter: ["w.bitte"], ru: "Помедленнее, пожалуйста.", uk: "Повільніше, будь ласка." },
+    { id: "s.d0.10", de: "Ich bin müde.", bild: "😴", woerter: ["w.muede"], ru: "Я хочу спать.", uk: "Я хочу спати." },
+    { id: "s.d0.11", de: "Mir ist kalt.", bild: "🥶", woerter: ["w.kalt"], ru: "Мне холодно.", uk: "Мені холодно." },
+    { id: "s.d0.12", de: "Mein Bauch tut weh.", bild: "🤕", woerter: [], ru: "У меня болит живот.", uk: "У мене болить живіт." },
+    { id: "s.d0.13", de: "Ich bin krank.", bild: "🤒", woerter: ["w.krank"], ru: "Я болею.", uk: "Я хворію." },
+    { id: "s.d0.14", de: "Wo ist meine Mama?", bild: "👩", woerter: ["w.mama"], ru: "Где моя мама?", uk: "Де моя мама?" },
+    { id: "s.d0.15", de: "Ja, bitte.", bild: "👍", woerter: ["w.ja", "w.bitte"], ru: "Да, пожалуйста.", uk: "Так, будь ласка." },
+    { id: "s.d0.16", de: "Nein, danke.", bild: "👎", woerter: ["w.nein", "w.danke"], ru: "Нет, спасибо.", uk: "Ні, дякую." },
+    { id: "s.d0.17", de: "Darf ich mitspielen?", bild: "⚽", woerter: ["w.ball"], ru: "Можно мне поиграть с вами?", uk: "Можна мені погратися з вами?" },
+    { id: "s.d0.18", de: "Ich bin fertig.", bild: "✅", woerter: [], ru: "У меня готово.", uk: "У мене готово." },
+    { id: "s.d0.19", de: "Guten Morgen!", bild: "🌅", woerter: [], ru: "Доброе утро!", uk: "Доброго ранку!" },
+    { id: "s.d0.20", de: "Tschüss, bis morgen!", bild: "🙋", woerter: ["w.tschuess"], ru: "Пока, до завтра!", uk: "Бувай, до завтра!" }
+  ]
+});

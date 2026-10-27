@@ -1,67 +1,62 @@
-// Wortschatz für „Wort des Tages“: Wort, Artikel, Mehrzahl, Bild, Russisch.
-window.WOERTER = [
-  { w: "Apfel", a: "der", p: "Äpfel", e: "🍎", ru: "яблоко" },
-  { w: "Banane", a: "die", p: "Bananen", e: "🍌", ru: "банан" },
-  { w: "Brot", a: "das", p: "Brote", e: "🍞", ru: "хлеб" },
-  { w: "Käse", a: "der", p: "Käse", e: "🧀", ru: "сыр" },
-  { w: "Ei", a: "das", p: "Eier", e: "🥚", ru: "яйцо" },
-  { w: "Erdbeere", a: "die", p: "Erdbeeren", e: "🍓", ru: "клубника" },
-  { w: "Karotte", a: "die", p: "Karotten", e: "🥕", ru: "морковь" },
-  { w: "Kuchen", a: "der", p: "Kuchen", e: "🍰", ru: "торт" },
-  { w: "Eis", a: "das", p: "Eis", e: "🍦", ru: "мороженое" },
-  { w: "Milch", a: "die", p: null, e: "🥛", ru: "молоко" },
-  { w: "Hund", a: "der", p: "Hunde", e: "🐶", ru: "собака" },
-  { w: "Katze", a: "die", p: "Katzen", e: "🐱", ru: "кошка" },
-  { w: "Pferd", a: "das", p: "Pferde", e: "🐴", ru: "лошадь" },
-  { w: "Maus", a: "die", p: "Mäuse", e: "🐭", ru: "мышь" },
-  { w: "Vogel", a: "der", p: "Vögel", e: "🐦", ru: "птица" },
-  { w: "Fisch", a: "der", p: "Fische", e: "🐟", ru: "рыба" },
-  { w: "Schwein", a: "das", p: "Schweine", e: "🐷", ru: "свинья" },
-  { w: "Kuh", a: "die", p: "Kühe", e: "🐄", ru: "корова" },
-  { w: "Schaf", a: "das", p: "Schafe", e: "🐑", ru: "овца" },
-  { w: "Hase", a: "der", p: "Hasen", e: "🐰", ru: "заяц" },
-  { w: "Bär", a: "der", p: "Bären", e: "🐻", ru: "медведь" },
-  { w: "Schmetterling", a: "der", p: "Schmetterlinge", e: "🦋", ru: "бабочка" },
-  { w: "Biene", a: "die", p: "Bienen", e: "🐝", ru: "пчела" },
-  { w: "Frosch", a: "der", p: "Frösche", e: "🐸", ru: "лягушка" },
-  { w: "Ente", a: "die", p: "Enten", e: "🦆", ru: "утка" },
-  { w: "Haus", a: "das", p: "Häuser", e: "🏠", ru: "дом" },
-  { w: "Baum", a: "der", p: "Bäume", e: "🌳", ru: "дерево" },
-  { w: "Blume", a: "die", p: "Blumen", e: "🌸", ru: "цветок" },
-  { w: "Sonne", a: "die", p: "Sonnen", e: "☀️", ru: "солнце" },
-  { w: "Mond", a: "der", p: "Monde", e: "🌙", ru: "луна" },
-  { w: "Stern", a: "der", p: "Sterne", e: "⭐", ru: "звезда" },
-  { w: "Wolke", a: "die", p: "Wolken", e: "☁️", ru: "облако" },
-  { w: "Regenschirm", a: "der", p: "Regenschirme", e: "☂️", ru: "зонтик" },
-  { w: "Auto", a: "das", p: "Autos", e: "🚗", ru: "машина" },
-  { w: "Fahrrad", a: "das", p: "Fahrräder", e: "🚲", ru: "велосипед" },
-  { w: "Bus", a: "der", p: "Busse", e: "🚌", ru: "автобус" },
-  { w: "Zug", a: "der", p: "Züge", e: "🚆", ru: "поезд" },
-  { w: "Flugzeug", a: "das", p: "Flugzeuge", e: "✈️", ru: "самолёт" },
-  { w: "Schiff", a: "das", p: "Schiffe", e: "🚢", ru: "корабль" },
-  { w: "Ball", a: "der", p: "Bälle", e: "⚽", ru: "мяч" },
-  { w: "Buch", a: "das", p: "Bücher", e: "📖", ru: "книга" },
-  { w: "Stift", a: "der", p: "Stifte", e: "✏️", ru: "карандаш" },
-  { w: "Schere", a: "die", p: "Scheren", e: "✂️", ru: "ножницы" },
-  { w: "Tasche", a: "die", p: "Taschen", e: "👜", ru: "сумка" },
-  { w: "Schuh", a: "der", p: "Schuhe", e: "👟", ru: "ботинок" },
-  { w: "Kleid", a: "das", p: "Kleider", e: "👗", ru: "платье" },
-  { w: "Hose", a: "die", p: "Hosen", e: "👖", ru: "брюки" },
-  { w: "Mütze", a: "die", p: "Mützen", e: "🧢", ru: "шапка" },
-  { w: "Brille", a: "die", p: "Brillen", e: "👓", ru: "очки" },
-  { w: "Uhr", a: "die", p: "Uhren", e: "⏰", ru: "часы" },
-  { w: "Schlüssel", a: "der", p: "Schlüssel", e: "🔑", ru: "ключ" },
-  { w: "Bett", a: "das", p: "Betten", e: "🛏️", ru: "кровать" },
-  { w: "Stuhl", a: "der", p: "Stühle", e: "🪑", ru: "стул" },
-  { w: "Tür", a: "die", p: "Türen", e: "🚪", ru: "дверь" },
-  { w: "Lampe", a: "die", p: "Lampen", e: "💡", ru: "лампа" },
-  { w: "Herz", a: "das", p: "Herzen", e: "❤️", ru: "сердце" },
-  { w: "Geschenk", a: "das", p: "Geschenke", e: "🎁", ru: "подарок" },
-  { w: "Ballon", a: "der", p: "Ballons", e: "🎈", ru: "воздушный шарик" },
-  { w: "Krone", a: "die", p: "Kronen", e: "👑", ru: "корона" },
-  { w: "Rakete", a: "die", p: "Raketen", e: "🚀", ru: "ракета" },
-  { w: "Hand", a: "die", p: "Hände", e: "✋", ru: "рука" },
-  { w: "Ohr", a: "das", p: "Ohren", e: "👂", ru: "ухо" },
-  { w: "Nase", a: "die", p: "Nasen", e: "👃", ru: "нос" },
-  { w: "Zahn", a: "der", p: "Zähne", e: "🦷", ru: "зуб" }
-];
+// Wortschatz (NA-40): liest den Wortschatz-Kern aus inhalte/woerter/*.js (window.WORTSCHATZ_DATEN) und bietet
+//   window.Wortschatz – wort(id), alle(), feld(thema), daz("d0"), saetze("d0"), tagesWoerter(), hilfe(wort|satz), artikel(a)
+//   window.WOERTER    – alte Form für „Wort des Tages“ ({ w, a, p, e, ru }, gleiche Reihenfolge wie vorher)
+// Einbinden: zuerst inhalte/woerter/bestand.js und d0.js, dann diese Datei.
+(function () {
+  const DATEN = window.WORTSCHATZ_DATEN || [];
+  const woerter = [], saetze = [], nachId = {};
+
+  function status(eintrag, datei) { return Object.assign({}, datei.status || {}, eintrag.status || {}); }
+  DATEN.forEach(datei => {
+    (datei.woerter || []).forEach(w => {
+      if (nachId[w.id]) throw new Error("Wortschatz: doppelte ID " + w.id);
+      const x = Object.assign({ artikel: null, mehrzahl: null, wortart: w.artikel ? "nomen" : "wort", themen: [], stufe: ["vs", "1", "2"],
+        daz: datei.daz || null, ton: w.id }, w);
+      x.silben = String(w.silben || w.de).split("-");
+      x.status = status(w, datei);
+      woerter.push(x); nachId[x.id] = x;
+    });
+    (datei.saetze || []).forEach(s => {
+      const x = Object.assign({ daz: datei.daz || null, ton: s.id, woerter: [] }, s);
+      x.status = status(s, datei);
+      saetze.push(x); nachId[x.id] = x;
+    });
+  });
+  // Ergänzungen (z. B. Ukrainisch für Bestandswörter) mit dem Status der Datei, die sie liefert
+  DATEN.forEach(datei => Object.entries(datei.ergaenzungen || {}).forEach(([id, felder]) => {
+    const w = nachId[id]; if (!w) throw new Error("Wortschatz: Ergänzung für unbekanntes Wort " + id);
+    Object.entries(felder).forEach(([k, v]) => { w[k] = v; if (datei.status && datei.status[k] && !(w.status[k])) w.status[k] = datei.status[k]; });
+  }));
+
+  // Artikel mit Farbe UND Form (funktioniert auch bei Farbschwäche): der ■ blau, die ● rot, das ▲ grün
+  const ARTIKEL = {
+    der: { farbe: "#2F6FD6", form: "■", name: "der" },
+    die: { farbe: "#D7263D", form: "●", name: "die" },
+    das: { farbe: "#2E9C5A", form: "▲", name: "das" }
+  };
+
+  // Hilfe in der Sprache des Kindes; Entwürfe nur außerhalb der Hauptseite (wie bei den Szenen)
+  function hilfe(eintrag) {
+    const S = window.Spielwelt; const h = S && S.hilfe && S.hilfe();
+    if (!h || !eintrag || !eintrag[h.code]) return null;
+    const st = (eintrag.status || {})[h.code] || "entwurf";
+    if (st === "entwurf" && S.umgebung === "prod") return null;
+    const name = (S.profil && S.profil.name) || "";
+    return { text: String(eintrag[h.code]).replace(/\{name\}/g, name), sprache: h, entwurf: st === "entwurf" };
+  }
+
+  window.Wortschatz = {
+    ARTIKEL,
+    wort: (id) => nachId[id] || null,
+    alle: () => woerter.slice(),
+    feld: (thema) => woerter.filter(w => w.themen.includes(thema)),
+    daz: (stufe) => woerter.filter(w => w.daz === stufe),
+    saetze: (stufe) => saetze.filter(s => !stufe || s.daz === stufe),
+    tagesWoerter: () => woerter.filter(w => w.tag),
+    hilfe,
+    mitArtikel: (w) => (w.artikel ? w.artikel + " " : "") + w.de
+  };
+
+  // Alte Form für „Wort des Tages“ (spiele/ich/)
+  window.WOERTER = woerter.filter(w => w.tag).map(w => ({ w: w.de, a: w.artikel, p: w.mehrzahl, e: w.bild, ru: w.ru, id: w.id }));
+})();
