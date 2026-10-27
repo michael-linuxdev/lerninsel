@@ -85,7 +85,7 @@
       const st = S.STUFEN.find(x => x.code === $("e-stufe").value), la = S.LAENDER.find(x => x.code === $("e-land").value);
       const sh = $("e-stufe-hinweis"); sh.hidden = !st.wenig;
       sh.textContent = st.code === "vs" ? "Für die Vorschule gibt es noch wenig eigene Inhalte. Bis dahin übt das Kind mit den Aufgaben der 1. Klasse, alles mit Bildern und Ton."
-        : "Für den Übergang in Klasse 5 gibt es noch wenig eigene Inhalte. Bis dahin übt das Kind mit den Aufgaben der 4. Klasse.";
+        : "Für den Übergang in Klasse 5 gibt es einen eigenen Matheweg („Übergang 5“), Fachbegriffe und Lesestrategien in Deutsch sowie „Lernen lernen“ und „Neue Schule“ bei Eule Ella. Alles andere übt das Kind mit den Aufgaben der 4. Klasse. Die App bewertet nicht, welche Schulform passt.";
       const lh = $("e-land-hinweis"); lh.hidden = !!la.lehrplan;
       lh.textContent = `Für ${la.name} zeigt die App vorerst die gemeinsamen Bildungsstandards (KMK) und den sächsischen Lehrplan als Beispiel. Die Besonderheiten von ${la.name} folgen.`;
       $("e-deutsch-text").textContent = S.DEUTSCHSTAND.find(x => x.code === $("e-deutsch").value).text;
@@ -171,7 +171,7 @@
     return `<div class="karte">
       <h2>📘 Was übt die App? (Lehrplan ${lname}, ${k.klasse}. Klasse)</h2>
       ${la.lehrplan ? "" : `<p class="hinweis">Für ${la.name} ist der Lehrplan noch nicht ausgearbeitet. Gezeigt wird der sächsische Lehrplan als Beispiel; er folgt in großen Teilen den gemeinsamen KMK-Bildungsstandards.</p>`}
-      ${stufe.wenig ? `<p class="hinweis">Stufe „${stufe.name}“: Gezeigt wird die ${k.klasse}. Klasse, bis eigene Inhalte da sind.</p>` : ""}
+      ${stufe.wenig ? `<p class="hinweis">Stufe „${stufe.name}“: Gezeigt wird der Lehrplan der ${k.klasse}. Klasse${stufe.code === "5" ? "; dazu kommen eigene Übergangs-Inhalte (Matheweg „Übergang 5“, Fachbegriffe, Lesestrategien, Lernen lernen)" : ", bis eigene Inhalte da sind"}.</p>` : ""}
       <p>${n.ja} Lernbereiche gut abgedeckt, ${n.teil} teilweise, ${n.nein} noch nicht. Die App ergänzt den Unterricht, sie ersetzt ihn nicht. Was gerade in der Schule dran ist, weiß die Lehrkraft am besten.</p>
       <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App</p>
       ${L.zaehle ? (() => { const e = L.zaehle(land, k.klasse).errechnet; return `<p class="klein">Zum Vergleich, aus den Lernzielen der Inhalte errechnet (gut = mindestens drei Inhalte mit zusammen 30 Aufgaben und Wiederholung in der Lernkartei): ${e.ja} gut, ${e.teil} teilweise, ${e.nein} noch nicht.</p>`; })() : ""}
@@ -436,7 +436,7 @@
     const alleSt = (mitK1 ? (window.Mathe.STATIONEN_K1 || []).map(s => ({ s, st: k1[s.id], vor: "Kl. 1: " })) : [])
       .concat(window.Mathe.STATIONEN.map(s => ({ s, st: k2[s.id], vor: "" })))
       // Klasse 3/4 (NA-33/37), wenn das Kind dort übt oder in der Klasse ist
-      .concat(...[["k3", "STATIONEN_K3", "3", "Kl. 3: "], ["k4", "STATIONEN_K4", "4", "Kl. 4: "]].map(([w, liste, kl, vor]) => {
+      .concat(...[["k3", "STATIONEN_K3", "3", "Kl. 3: "], ["k4", "STATIONEN_K4", "4", "Kl. 4: "], ["k5", "STATIONEN_K5", "5", "Übergang 5: "]].map(([w, liste, kl, vor]) => {
         const d = mathe[w] || {}, mit = Object.keys(d).length || (S.stufe() || {}).code === kl;
         return mit ? (window.Mathe[liste] || []).map(s => ({ s, st: d[s.id], vor })) : []; }));
     const stationen = alleSt.map(({ s, st, vor }) => {

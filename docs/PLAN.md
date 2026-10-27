@@ -684,7 +684,7 @@ Jedes Spiel: Prüffragen aus `MINISPIELE.md` Abschnitt 1, Test-Haken, Eintrag in
 
 #### Phase G – Breite (2027)
 ~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1–4, 23 Werkstatt-Kapitel für Kl. 3–4; Teil 4 = Schritt A „Deutsch schreiben“) · ~~NA-37 Mathe Kl. 4~~ (27.10.: Weg mit 14 Stationen und Urkunde) · NA-38 Medienbildung
-„Produzieren/Problemlösen“ (Roboter-Weg) · NA-39 Übergang 5 · NA-41 Vorschul-Pfad · NA-46 Arabisch, Türkisch und weitere Sprachen ·
+„Produzieren/Problemlösen“ (Roboter-Weg) · ~~NA-39 Übergang 5~~ (27.10.: erster Stand) · NA-41 Vorschul-Pfad · NA-46 Arabisch, Türkisch und weitere Sprachen ·
 NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Volkslied-Melodien (Noten prüfen).
 
 #### Laufend (in jeder passenden Sitzung)
@@ -1296,4 +1296,28 @@ Auftrag: „B und C“; Grafik/3D/Story weiter tabu.
 - **Offen:** Mathe Kl. 4 Schrägbilder, Vierecke, Volumen, Klammerregel; Kl. 3 Schiebe-/Drehsymmetrie, Zeichnen. SU: Bundesland/Heimatort (NA-47),
   Ernährung/Pubertät. Ukrainisch für alle neuen Inhalte.
 - **Nächstes:** Schritt D (Länderprofile, NA-47) – damit auch SU Kl. 4 „Raum und Zeit“; oder NA-39 Übergang Kl. 5 (die Urkunde verweist schon darauf).
+
+### Stand 27.10.2026, Abend (Sitzung 27.10., 18:15: NA-39 Übergang Klasse 5)
+Auftrag: „Übergang in Klasse 5“. Grundsatz aus LEHRPLAN.md: Wiederholung der Kl.-4-Ziele, Lernstrategien, Selbstständigkeit; **keine Bewertung der
+Schulform, keine Noten**; Berlin/Brandenburg (Grundschule bis Kl. 6) ausdrücklich erwähnt.
+- **Matheweg „🎒 Übergang 5“** (`Mathe.STATIONEN_K5`, Fortschritt `mathe.k5`, Kinder mit Stufe „Übergang 5“ starten dort; fünfter Weg-Knopf):
+  „Fit aus Klasse 4“ (Mischung aus 11 Kl.-4-Stationen), „Brüche erkennen“ (Kreis/Streifen), „Bruchteile von Mengen“, „Brüche vergleichen“ (gleicher
+  Nenner, gleicher Zähler, gleichwertig), „Kommazahlen bei Größen“ (€/ct, m/cm, kg/g – Eingabe ohne Komma über die kleinere Einheit, dazu Schreibweise
+  wählen), „Klammer und Punkt vor Strich“, „Koordinaten“ (Gitter 0–6), „Winkel“ (spitz/recht/stumpf, ohne verräterisches Quadrat), „Durchschnitt“
+  (Säulendiagramm), „Sachaufgaben in Schritten“ (Rückgeld, Busse mit Rest aufrunden, Packungen). Ende: Urkunde „Fit für Klasse 5!“.
+  Die Kl.-4-Urkunde hat jetzt einen Knopf „Zum Übergang 5“. `zeigeUrkunde(weg)` gilt für beide.
+- **Deutsch:** Werkstatt-Kapitel `stufe: 5` „Fachbegriffe für Klasse 5“ (Substantiv, Verb, Adjektiv, Pronomen, Präposition, Artikel, Subjekt, Prädikat)
+  und „Lesestrategien“ (5 Schritte ordnen, Sachtext „Die Honigbiene“ mit Fragen, Zusammenfassung verbessern). Werkstatt jetzt 30 Kapitel.
+- **Sachunterricht:** Themen mit neuem optionalem Feld `stufe` (wie in der Werkstatt: sichtbar ab der Klasse davor): „Lernen lernen“ (verteilt üben,
+  Pausen, sich selbst abfragen, Fehler als Hilfe, Hausaufgabenheft) und „Neue Schule“ (Raum finden, Ranzen nach Stundenplan, Aufregung ist normal,
+  Schulweg vorher üben, Grundschule vs. neue Schule). Jetzt 28 Themen.
+- **Neue Kern-Lernziele (Stufe 5):** `ma.rf.10` Koordinaten/Winkel, `ma.ms.06` Terme mit Klammern, `ma.gm.10` Kommaschreibweise, `ma.dz.08` Durchschnitt,
+  `de.le.08` Lesestrategien, `de.su.13` Fachbegriffe, `su.so.07` Übergang/Lernen organisieren. Kern jetzt 155 Ziele.
+- **Elternbereich:** Hinweis zur Stufe „Übergang Klasse 5“ beschreibt die eigenen Inhalte statt „noch wenig“; „Was übt die App?“ ebenso;
+  Elternbericht listet „Übergang 5: …“-Stationen.
+- **Tests:** neu `tests/uebergang5.js` (Weg, 10 Stationen mit Tasten/Antwort, Bilder, Urkunden und Wechsel, Sichtbarkeit Kl. 3/4, Deutsch und
+  Sachunterricht echt durchgeklickt quer und hoch, Elternhinweis, Elternbericht); `tests/mathe-generatoren.js` prüft auch Übergang 5; `tests/sachkunde.js` 28 Themen.
+- **Offen:** Englisch (eigenes Fach, fehlt ganz), Erdkunde Deutschland/Europa, „längere Texte schreiben“, Ukrainisch für die neuen Inhalte;
+  Sachsen hat keinen Kl.-5-Lehrplan in der App (Grundschule endet mit Kl. 4) – Übergang 5 ist KMK-orientiert.
+- **Nächstes:** Schritt D (Länderprofile, NA-47) oder Englisch-Einstieg (Kl. 3–5), nach Rückfrage.
 

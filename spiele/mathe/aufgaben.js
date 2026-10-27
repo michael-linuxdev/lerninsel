@@ -886,6 +886,116 @@
         return zahl("", z.reduce((x, y) => x + y, 0), schriftVieleHilfe(z), { frage: "Rechne schriftlich: Fang bei den Einern an. Der Übertrag kann auch 2 sein.", bild: schriftBildViele(z), nurLuecke: true, max: 7 }); } }
   );
 
+  // ---------- Übergang 5 (NA-39): Wiederholung Kl. 4, Brüche, Kommazahlen bei Größen, Klammern, Koordinaten, Winkel, Durchschnitt ----------
+  // Bruchbild: Kreis (Tortenstücke) oder Streifen mit n gleichen Teilen, k davon gefärbt
+  function bruchBild(k, n, form, farbe = "#FFB03B") {
+    let s = "";
+    if (form === "kreis") { const R = 70, cx = 80, cy = 80;
+      if (n === 1) s = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="${k ? farbe : "#fff"}" stroke="#3b1f63" stroke-width="3"/>`;
+      for (let i = 0; i < n && n > 1; i++) { const w0 = (i / n) * 2 * Math.PI - Math.PI / 2, w1 = ((i + 1) / n) * 2 * Math.PI - Math.PI / 2, gross = 1 / n > 0.5 ? 1 : 0;
+        const p = (w) => `${(cx + R * Math.cos(w)).toFixed(1)} ${(cy + R * Math.sin(w)).toFixed(1)}`;
+        s += `<path d="M${cx} ${cy} L${p(w0)} A${R} ${R} 0 ${gross} 1 ${p(w1)} Z" fill="${i < k ? farbe : "#fff"}" stroke="#3b1f63" stroke-width="3" stroke-linejoin="round"/>`; }
+      return `<svg viewBox="0 0 160 160" style="max-height:190px" role="img" aria-label="Kreis in ${n} gleiche Teile geteilt, ${k} gefärbt">${s}</svg>`;
+    }
+    const b = 300 / n;
+    for (let i = 0; i < n; i++) s += `<rect x="${6 + i * b}" y="6" width="${b}" height="60" fill="${i < k ? farbe : "#fff"}" stroke="#3b1f63" stroke-width="3"/>`;
+    return `<svg viewBox="0 0 312 72" style="max-height:110px" role="img" aria-label="Streifen in ${n} gleiche Teile geteilt, ${k} gefärbt">${s}</svg>`;
+  }
+  function zweiBrueche(a, b) { // zwei Streifen untereinander zum Vergleichen
+    const zeile = (k, n, y, f, t) => { let s = `<text x="4" y="${y + 30}" font-size="22" font-weight="700" fill="#3b1f63">${t}</text>`; const w = 260 / n;
+      for (let i = 0; i < n; i++) s += `<rect x="${50 + i * w}" y="${y}" width="${w}" height="44" fill="${i < k ? f : "#fff"}" stroke="#3b1f63" stroke-width="2.5"/>`; return s; };
+    return `<svg viewBox="0 0 316 110" style="max-height:140px" role="img" aria-label="Zwei Brüche als Streifen">${zeile(a[0], a[1], 4, "#FFB03B", "A")}${zeile(b[0], b[1], 60, "#5CCBA6", "B")}</svg>`;
+  }
+  // Koordinatengitter 0–6 mit Punkten [[name, x, y], ...]
+  function gitterBild(punkte) {
+    const g = 34, x0 = 30, y0 = 230; let s = "";
+    for (let i = 0; i <= 6; i++) s += `<line x1="${x0 + i * g}" y1="${y0}" x2="${x0 + i * g}" y2="${y0 - 6 * g}" stroke="#e3dcef" stroke-width="1.5"/><line x1="${x0}" y1="${y0 - i * g}" x2="${x0 + 6 * g}" y2="${y0 - i * g}" stroke="#e3dcef" stroke-width="1.5"/>` +
+      `<text x="${x0 + i * g}" y="${y0 + 20}" text-anchor="middle" font-size="14" fill="#3b1f63">${i}</text>` + (i ? `<text x="${x0 - 10}" y="${y0 - i * g + 5}" text-anchor="end" font-size="14" fill="#3b1f63">${i}</text>` : "");
+    s += `<line x1="${x0}" y1="${y0}" x2="${x0 + 6 * g + 12}" y2="${y0}" stroke="#3b1f63" stroke-width="2.5"/><line x1="${x0}" y1="${y0}" x2="${x0}" y2="${y0 - 6 * g - 12}" stroke="#3b1f63" stroke-width="2.5"/>`;
+    s += punkte.map(([n, x, y], i) => `<circle cx="${x0 + x * g}" cy="${y0 - y * g}" r="7" fill="${["#E5484D", "#4B6FC8", "#2E9C5A"][i]}"/><text x="${x0 + x * g + 9}" y="${y0 - y * g - 8}" font-size="18" font-weight="700" fill="#3b1f63">${n}</text>`).join("");
+    return `<svg viewBox="0 0 260 262" style="max-height:240px" role="img" aria-label="Koordinatengitter mit Punkten">${s}</svg>`;
+  }
+  // Winkel: zwei Schenkel vom Scheitel, Bogen (ohne verräterisches Quadrat für den rechten Winkel)
+  function winkelBild(grad, drehung) {
+    const cx = 90, cy = 110, L = 80, r = (w) => (w - drehung) * Math.PI / 180, p = (w, l) => [cx + l * Math.cos(r(w)), cy - l * Math.sin(r(w))];
+    const [ax, ay] = p(0, L), [bx, by] = p(grad, L), [a2x, a2y] = p(0, 26), [b2x, b2y] = p(grad, 26);
+    return `<svg viewBox="0 0 180 200" style="max-height:200px" role="img" aria-label="Ein Winkel">` +
+      `<path d="M${a2x.toFixed(1)} ${a2y.toFixed(1)} A26 26 0 ${grad > 180 ? 1 : 0} 0 ${b2x.toFixed(1)} ${b2y.toFixed(1)}" fill="none" stroke="#E5484D" stroke-width="3"/>` +
+      `<line x1="${cx}" y1="${cy}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" stroke="#3b1f63" stroke-width="4" stroke-linecap="round"/><line x1="${cx}" y1="${cy}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="#3b1f63" stroke-width="4" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="5" fill="#3b1f63"/></svg>`;
+  }
+  const komma = (cent, stellen = 2) => { const s = String(cent).padStart(stellen + 1, "0"); return s.slice(0, -stellen) + "," + s.slice(-stellen); };
+  const K4_FIT = ["k4million", "k4runden", "k4malschrift", "k4geteilt", "k4teilbar", "k4flaeche", "k4liter", "k4massstab", "k4zeit", "k4plusviele", "k4chance"];
+
+  const STATIONEN_K5 = [
+    { id: "k5fit", stufe: "5", lz: ["ma.zo.15", "ma.zo.16"], name: "Fit aus Klasse 4", icon: "💪",
+      neu: () => { const id = wahl(K4_FIT), s = STATIONEN_K4.find(x => x.id === id); return Object.assign({}, s.neu()); } },
+    { id: "k5bruchbild", stufe: "5", lz: ["ma.zo.19", "ma.zo.14"], name: "Brüche erkennen", icon: "🍕",
+      neu: () => { const n = wahl([2, 3, 4, 5, 6, 8]), k = r(1, n - 1), richtig = `${k}/${n}`, opts = new Set([richtig]);
+        [`${n - k}/${n}`, `${k}/${n + 1}`, `${Math.min(k + 1, n)}/${n}`, `${Math.max(1, k - 1)}/${n}`, `${n}/${k}`].forEach(o => opts.size < 3 && opts.add(o));
+        return { text: "", frage: "Welcher Bruchteil ist gefärbt?", antwort: richtig, art: "wahl", optionen: mische([...opts]), nurLuecke: true, bild: bruchBild(k, n, wahl(["kreis", "streifen"])),
+          hilfe: `Das Ganze hat ${n} gleich große Teile – das ist der Nenner (unten). ${k} ${k === 1 ? "Teil ist" : "Teile sind"} gefärbt – das ist der Zähler (oben): ${richtig}.` }; } },
+    { id: "k5bruchvon", stufe: "5", lz: ["ma.zo.19", "ma.zo.14"], name: "Bruchteile von Mengen", icon: "🧮",
+      neu: () => { const n = wahl([2, 3, 4, 5, 6, 10]), k = r(1, n - 1), m = n * r(2, 10), teil = m / n, erg = teil * k, wer = wahl(NAMEN);
+        const d = wahl([["Gummibärchen", "isst"], ["Murmeln", "verschenkt"], ["Seiten", "liest"], ["Euro", "spart"]]);
+        return zahl("", erg, `Erst durch den Nenner teilen: ${m} : ${n} = ${teil}. Dann mal den Zähler: ${teil} · ${k} = ${erg}.`,
+          { frage: `${wer} hat ${m} ${d[0]} und ${d[1]} ${k}/${n} davon. Wie viele ${d[0]} sind das?`, nurLuecke: true }); } },
+    { id: "k5bruchvergleich", stufe: "5", lz: ["ma.zo.19"], name: "Brüche vergleichen", icon: "⚖️",
+      neu: () => { const art = r(0, 2); let a, b;
+        if (art === 0) { const n = wahl([4, 5, 6, 8]); let x = r(1, n - 1), y = r(1, n - 1); while (y === x) y = r(1, n - 1); a = [x, n]; b = [y, n]; }
+        else if (art === 1) { const [n1, n2] = mische(wahl([[2, 4], [3, 6], [2, 8], [4, 8], [3, 4], [2, 3]])); a = [1, n1]; b = [1, n2]; }
+        else { const [x, n] = wahl([[1, 2], [1, 3], [1, 4], [2, 3], [3, 4]]), f = wahl([2, 2, 3]); [a, b] = mische([[x, n], [x * f, n * f]]); }
+        const wa = a[0] / a[1], wb = b[0] / b[1], antwort = Math.abs(wa - wb) < 1e-9 ? "gleich viel" : wa > wb ? `A: ${a[0]}/${a[1]}` : `B: ${b[0]}/${b[1]}`;
+        const hilfe = art === 0 ? `Gleicher Nenner (${a[1]}): Der größere Zähler ist mehr.` : art === 1 ? "Gleicher Zähler (1): Je mehr Teile das Ganze hat, desto kleiner ist jedes Teil. Darum ist der Bruch mit dem kleineren Nenner mehr."
+          : `Beide Streifen sind gleich weit gefärbt: ${a[0]}/${a[1]} und ${b[0]}/${b[1]} sind gleich viel (erweitert).`;
+        return { text: "", frage: "Welcher Bruch ist mehr?", antwort, art: "wahl", optionen: [`A: ${a[0]}/${a[1]}`, `B: ${b[0]}/${b[1]}`, "gleich viel"], nurLuecke: true, bild: zweiBrueche(a, b), hilfe }; } },
+    { id: "k5komma", stufe: "5", lz: ["ma.gm.10", "ma.gm.09"], name: "Kommazahlen bei Größen", icon: "💶",
+      neu: () => { const art = r(0, 3);
+        if (art === 0) { const c = r(105, 1999); return zahl("", c, `Vor dem Komma stehen die Euro, dahinter die Cent. ${komma(c)} € = ${Math.floor(c / 100)} € ${c % 100} ct = ${c} ct.`, { frage: `Wie viele Cent sind ${komma(c)} €?`, einheit: "ct", nurLuecke: true, max: 7 }); }
+        if (art === 1) { const c = r(101, 999); return zahl("", c, `1 m = 100 cm. ${komma(c)} m = ${Math.floor(c / 100)} m ${c % 100} cm = ${c} cm.`, { frage: `Wie viele Zentimeter sind ${komma(c)} m?`, einheit: "cm", nurLuecke: true }); }
+        if (art === 2) { const g = r(1, 9) * 1000 + wahl([100, 250, 500, 750]); return zahl("", g, `1 kg = 1000 g. Hinter dem Komma stehen die Gramm (drei Stellen): ${komma(g, 3)} kg = ${g} g.`, { frage: `Wie viel Gramm sind ${komma(g, 3)} kg?`, einheit: "g", nurLuecke: true, max: 7 }); }
+        const e = r(1, 9), ct = wahl([5, 8, 50, 9, 40]), richtig = `${e},${String(ct).padStart(2, "0")} €`, opts = new Set([richtig, `${e},${ct} €`, `${e},${String(ct).padStart(2, "0").split("").reverse().join("")} €`, `${e}${ct} €`]);
+        return { text: "", frage: `Wie schreibt man ${e} € ${ct} ct mit Komma?`, antwort: richtig, art: "wahl", optionen: mische([richtig, ...mische([...opts].filter(o => o !== richtig)).slice(0, 2)]), nurLuecke: true,
+          hilfe: `Cent haben immer zwei Stellen hinter dem Komma: ${ct} ct schreibt man als ,${String(ct).padStart(2, "0")}. Also ${richtig}.` }; } },
+    { id: "k5klammer", stufe: "5", lz: ["ma.zo.17", "ma.ms.06"], name: "Klammer und Punkt vor Strich", icon: "( )",
+      neu: () => { const a = r(2, 9), b = r(2, 9), c = r(2, 9), art = r(0, 4);
+        if (art === 0) return zahl(`${a} + ${b} · ${c}`, a + b * c, `Punkt vor Strich: erst ${b} · ${c} = ${b * c}, dann ${a} + ${b * c} = ${a + b * c}.`);
+        if (art === 1) return zahl(`(${a} + ${b}) · ${c}`, (a + b) * c, `Klammer zuerst: ${a} + ${b} = ${a + b}, dann ${a + b} · ${c} = ${(a + b) * c}.`);
+        if (art === 2) { const d = r(1, Math.min(9, a * b - 1)); return zahl(`${a} · ${b} ${M} ${d}`, a * b - d, `Punkt vor Strich: erst ${a} · ${b} = ${a * b}, dann ${a * b} ${M} ${d} = ${a * b - d}.`); }
+        if (art === 3) { const q = b * c, s = q + a; return zahl(`${s} ${M} ${q} : ${c}`, s - b, `Punkt vor Strich: erst ${q} : ${c} = ${b}, dann ${s} ${M} ${b} = ${s - b}.`); }
+        const g = Math.max(a, b) + r(1, 9); return zahl(`(${g} ${M} ${a}) · ${c}`, (g - a) * c, `Klammer zuerst: ${g} ${M} ${a} = ${g - a}, dann ${g - a} · ${c} = ${(g - a) * c}.`); } },
+    { id: "k5koordinaten", stufe: "5", lz: ["ma.rf.10"], name: "Koordinaten", icon: "📍",
+      neu: () => { const p = []; while (p.length < 3) { const x = r(1, 6), y = r(1, 6); if (!p.some(q => (q[1] === x && q[2] === y) || (q[1] === y && q[2] === x))) p.push([["A", "B", "C"][p.length], x, y]); }
+        const z = wahl(p);
+        if (Math.random() < 0.5) return { text: "", frage: `Welcher Punkt liegt bei (${z[1]}|${z[2]})?`, antwort: z[0], art: "wahl", optionen: ["A", "B", "C"], nurLuecke: true, bild: gitterBild(p),
+          hilfe: `Erst ${z[1]} nach rechts, dann ${z[2]} nach oben. Dort liegt ${z[0]}.` };
+        const richtig = `(${z[1]}|${z[2]})`, opts = new Set([richtig]);
+        [`(${z[2]}|${z[1]})`, `(${z[1]}|${Math.min(6, z[2] + 1)})`, `(${Math.max(1, z[1] - 1)}|${z[2]})`, `(${Math.min(6, z[1] + 1)}|${z[2]})`].forEach(o => opts.size < 3 && opts.add(o));
+        return { text: "", frage: `Bei welchen Koordinaten liegt ${z[0]}?`, antwort: richtig, art: "wahl", optionen: mische([...opts]), nurLuecke: true, bild: gitterBild(p),
+          hilfe: `Zuerst kommt der Wert nach rechts (${z[1]}), dann der nach oben (${z[2]}): ${richtig}.` }; } },
+    { id: "k5winkel", stufe: "5", lz: ["ma.rf.10"], name: "Winkel", icon: "📐",
+      neu: () => { const grad = wahl([30, 45, 60, 90, 90, 90, 120, 135, 150]), dreh = wahl([0, 15, 30, 45, 60, 90, 180, 200, 270, 300]);
+        const art = grad === 90 ? "rechter Winkel" : grad < 90 ? "spitz" : "stumpf";
+        return { text: "", frage: "Ist der Winkel spitz, ein rechter Winkel oder stumpf?", antwort: art, art: "wahl", optionen: ["spitz", "rechter Winkel", "stumpf"], nurLuecke: true, bild: winkelBild(grad, dreh),
+          hilfe: (art === "rechter Winkel" ? "Er ist genau so weit offen wie die Ecke eines Blattes Papier: ein rechter Winkel." : art === "spitz" ? "Er ist enger als die Ecke eines Blattes Papier: spitz." : "Er ist weiter offen als die Ecke eines Blattes Papier: stumpf.") + " Tipp: Halte eine Papierecke an den Bildschirm." }; } },
+    { id: "k5mittel", stufe: "5", lz: ["ma.dz.08", "ma.dz.03"], name: "Durchschnitt", icon: "📊",
+      neu: () => { const n = wahl([3, 4]), m = r(3, 7); let w;
+        do { w = Array.from({ length: n - 1 }, () => r(Math.max(1, m - 3), Math.min(10, m + 3))); w.push(n * m - w.reduce((x, y) => x + y, 0)); } while (w[n - 1] < 1 || w[n - 1] > 10);
+        const tage = ["Mo", "Di", "Mi", "Do"].slice(0, n), wer = wahl(NAMEN), was = wahl([["Kilometer", "fährt Rad"], ["Seiten", "liest"], ["Tore", "schießt beim Training"]]);
+        return zahl("", m, `Alles zusammenzählen: ${w.join(" + ")} = ${n * m}. Durch die Anzahl der Tage teilen: ${n * m} : ${n} = ${m}.`,
+          { frage: `${wer} ${was[1]} an ${n} Tagen (Diagramm). Wie viele ${was[0]} sind es im Durchschnitt pro Tag?`, bild: saeulenBild(tage, w), nurLuecke: true }); } },
+    { id: "k5sach", stufe: "5", lz: ["ma.pk.04", "ma.ms.05"], name: "Sachaufgaben in Schritten", icon: "🧩",
+      neu: () => { const wer = wahl(NAMEN), art = r(0, 2);
+        if (art === 0) { const h = r(2, 4), hp = r(1, 3), s = r(2, 5), sp = r(1, 2), sum = h * hp + s * sp, schein = sum < 20 ? 20 : 50;
+          return zahl("", schein - sum, `1. ${h} Hefte: ${h} · ${hp} € = ${h * hp} €. 2. ${s} Stifte: ${s} · ${sp} € = ${s * sp} €. 3. Zusammen ${sum} €. 4. ${schein} € ${M} ${sum} € = ${schein - sum} €.`,
+            { frage: `${wer} kauft ${h} Hefte zu je ${hp} € und ${s} Stifte zu je ${sp} €. ${wer} bezahlt mit ${schein} €. Wie viel Geld bekommt ${wer} zurück?`, einheit: "€", nurLuecke: true }); }
+        if (art === 1) { const plaetze = wahl([20, 30, 40, 50]), kinder = r(plaetze + 1, plaetze * 4 - 1), busse = Math.ceil(kinder / plaetze);
+          return zahl("", busse, `${kinder} : ${plaetze} = ${Math.floor(kinder / plaetze)} Rest ${kinder % plaetze}. Auch die restlichen ${kinder % plaetze || plaetze} Kinder brauchen einen Platz – also ${busse} Busse.`,
+            { frage: `${kinder} Kinder fahren ins Schullandheim. In einen Bus passen ${plaetze} Kinder. Wie viele Busse braucht man?`, nurLuecke: true }); }
+        const preis = r(2, 6), stueck = wahl([3, 4, 5]), packungen = r(2, 6);
+        return zahl("", packungen * stueck * preis, `1. ${packungen} Packungen mit je ${stueck} Stück: ${packungen} · ${stueck} = ${packungen * stueck} Stück. 2. Jedes kostet ${preis} €: ${packungen * stueck} · ${preis} € = ${packungen * stueck * preis} €.`,
+          { frage: `Die Klasse kauft ${packungen} Packungen Wasserfarben. In jeder Packung sind ${stueck} Farbkästen, jeder kostet ${preis} €. Wie viel kostet alles?`, einheit: "€", nurLuecke: true }); } }
+  ];
+
   function malAufgabe(reihen) {
     const n = wahl(reihen), k = r(1, 10);
     const [a, b] = Math.random() < 0.5 ? [k, n] : [n, k];
@@ -894,7 +1004,7 @@
 
   // Eine Runde: verschiedene Aufgaben ohne Doppelte
   function runde(station, anzahl = 10) {
-    const s = STATIONEN.find(x => x.id === station) || STATIONEN_K1.find(x => x.id === station) || STATIONEN_K3.find(x => x.id === station) || STATIONEN_K4.find(x => x.id === station);
+    const s = STATIONEN.find(x => x.id === station) || STATIONEN_K1.find(x => x.id === station) || STATIONEN_K3.find(x => x.id === station) || STATIONEN_K4.find(x => x.id === station) || STATIONEN_K5.find(x => x.id === station);
     const liste = [], gesehen = new Set();
     let versuche = 0;
     while (liste.length < anzahl && versuche++ < 400) {
@@ -906,5 +1016,5 @@
     return liste;
   }
 
-  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, runde, _k3: { istWuerfelnetz, zufallsNetz, roemisch, istPrim, wuerfelGebaeude }, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
+  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, STATIONEN_K5, runde, _k3: { istWuerfelnetz, zufallsNetz, roemisch, istPrim, wuerfelGebaeude }, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
 })();

@@ -115,7 +115,7 @@ Schulform passt, und zeigt keine Noten.
 | Medienbildung | Tablet-Führerschein (6 Lektionen) | `spiele/medien/` | Bereiche Schützen und Analysieren gut, Produzieren/Problemlösen fehlen |
 | Denken | Schach (Lektionen, Matt in 1, KI) | `spiele/schach/` | Zusatz, kein Lehrplanfach |
 | Vorschule | „Gleicher Anfang“, Buchstaben-Tafel, Matheweg Klasse 1/Vorschule (Mengen, Würfel, Muster), „Ankommen“ | `spiele/lesen/`, `spiele/mathe/`, `spiele/daz/` | Anfang gemacht, kein eigener Pfad |
-| Übergang 5 | – | – | fehlt |
+| Übergang 5 | Matheweg „Übergang 5“ (10 Stationen: Fit aus Kl. 4, Brüche erkennen/von Mengen/vergleichen, Kommazahlen bei Größen, Klammer und Punkt vor Strich, Koordinaten, Winkel, Durchschnitt, Sachaufgaben in Schritten, Urkunde), Werkstatt „Fachbegriffe für Klasse 5“ und „Lesestrategien“, Eule Ella „Lernen lernen“ und „Neue Schule“ (NA-39) | `spiele/mathe/aufgaben.js` (`STATIONEN_K5`), `spiele/deutsch/werkstatt.js`, `spiele/sachkunde/themen.js` | Anfang gemacht: Mathe gut, Deutsch und Lernstrategien teilweise; Englisch, Erdkunde/Europa fehlen |
 
 ## Lücken nach Priorität
 Gewichtung: (1) Grundlage für alles Weitere, (2) betrifft viele Kinder/Stufen, (3) passt in Story und Insel.
@@ -131,7 +131,7 @@ Gewichtung: (1) Grundlage für alles Weitere, (2) betrifft viele Kinder/Stufen, 
 | 3 | Deutsch Kl. 3–4 (Zeitformen, Satzglieder, Texte überarbeiten) | spätere Stufen | NA-36 |
 | 3 | Mathe Kl. 4 | spätere Stufe | NA-37 |
 | 3 | Medienbildung „Produzieren“ und „Problemlösen“ (Bildergeschichte erstellen, Robo programmieren) | passt zu Pixel und Atelier | NA-38 |
-| 3 | Übergang 5 (Wiederholungspfad, Lernstrategien) | wenige Kinder gleichzeitig | NA-39 |
+| 3 | ~~Übergang 5 (Wiederholungspfad, Lernstrategien)~~ (27.10.: erster Stand) | wenige Kinder gleichzeitig | NA-39 |
 | 3 | Vorschule als eigener Pfad (ohne Lesen, Spielzeug-Ecke) | eigener Aufwand | NA-41 |
 
 ---

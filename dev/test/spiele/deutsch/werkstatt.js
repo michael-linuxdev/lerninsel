@@ -397,5 +397,34 @@ window.WERKSTATT = [
       { typ: "ordnen", e: "🎤", frage: "So bereitest du einen Vortrag vor. Was kommt zuerst?", teile: ["Thema wählen", "Informationen sammeln", "Stichwortzettel schreiben", "Zu Hause laut üben", "Vortrag halten"], ru: "Как готовить доклад: выбрать тему, собрать информацию, написать шпаргалку, потренироваться вслух, выступить." },
       { typ: "sag", text: "Toll! Übe deinen Vortrag vorher laut, zum Beispiel vor deiner Familie oder vor dem Spiegel.", ru: "Здорово! Потренируй доклад заранее вслух, например перед семьёй или перед зеркалом." }
     ]
+  },
+  {
+    id: "w-fachbegriffe", stufe: 5, lz: ["de.su.13", "de.su.04", "de.su.10"], name: "Fachbegriffe für Klasse 5", ort: "🎒", farbe: "#2F6FB8", grund: "#E5EFFB",
+    schritte: [
+      { typ: "sag", text: "In Klasse 5 hörst du oft Fachbegriffe. Namenwörter heißen Nomen oder Substantive, Tunwörter Verben, Wiewörter Adjektive. Die kennst du schon – nur mit neuem Namen!", ru: "В 5-м классе часто звучат научные термины. Существительные называют Nomen или Substantive, глаголы — Verben, прилагательные — Adjektive. Ты их уже знаешь — только под новым названием!" },
+      { typ: "luecke", e: "🐕", satz: "„Hund“ ist ein ___.", optionen: ["Substantiv", "Verb", "Adjektiv"], ru: "«Hund» — существительное (Substantiv)." },
+      { typ: "luecke", e: "🏃", satz: "„laufen“ ist ein ___.", optionen: ["Verb", "Substantiv", "Pronomen"], ru: "«laufen» — глагол (Verb)." },
+      { typ: "luecke", e: "⚡", satz: "„schnell“ ist ein ___.", optionen: ["Adjektiv", "Artikel", "Verb"], ru: "«schnell» — прилагательное (Adjektiv)." },
+      { typ: "luecke", e: "👥", satz: "„er, sie, es, wir“ sind ___.", optionen: ["Pronomen", "Präpositionen", "Artikel"], ru: "«er, sie, es, wir» — местоимения (Pronomen)." },
+      { typ: "luecke", e: "📦", satz: "„auf, unter, neben, in“ sind ___.", optionen: ["Präpositionen", "Pronomen", "Adjektive"], ru: "«auf, unter, neben, in» — предлоги (Präpositionen)." },
+      { typ: "luecke", e: "🔤", satz: "„der, die, das, ein“ sind ___.", optionen: ["Artikel", "Verben", "Präpositionen"], ru: "«der, die, das, ein» — артикли (Artikel)." },
+      { typ: "luecke", e: "🐶", satz: "Im Satz „Der Hund bellt.“ ist „Der Hund“ das ___.", optionen: ["Subjekt", "Prädikat", "Adjektiv"], ru: "В предложении «Der Hund bellt.» «Der Hund» — подлежащее (Subjekt)." },
+      { typ: "luecke", e: "📢", satz: "Im Satz „Der Hund bellt.“ ist „bellt“ das ___.", optionen: ["Prädikat", "Subjekt", "Artikel"], ru: "В предложении «Der Hund bellt.» «bellt» — сказуемое (Prädikat)." },
+      { typ: "sag", text: "Super, {name}! Leg dir in Klasse 5 eine kleine Liste mit den Fachbegriffen an. Dann hast du sie immer dabei.", ru: "Супер! Заведи себе в 5-м классе маленький список терминов. Тогда они всегда будут под рукой." }
+    ]
+  },
+  {
+    id: "w-lesestrategien", stufe: 5, lz: ["de.le.08", "de.le.07"], name: "Lesestrategien", ort: "🔍", farbe: "#7B55B8", grund: "#EFE6FF",
+    schritte: [
+      { typ: "sag", text: "Lange Sachtexte verstehst du besser mit einem Plan: erst Überschrift und Bilder ansehen, dann lesen, unbekannte Wörter klären, Schlüsselwörter finden und jeden Abschnitt kurz zusammenfassen.", ru: "Длинные научные тексты понятнее, если есть план: сначала посмотреть заголовок и картинки, потом читать, выяснить незнакомые слова, найти ключевые слова и коротко пересказать каждый абзац." },
+      { typ: "ordnen", e: "🗺️", frage: "Bring die Lesestrategie in die richtige Reihenfolge!", teile: ["Überschrift und Bilder ansehen: Worum geht es?", "Den Text einmal ganz lesen", "Unbekannte Wörter klären", "Schlüsselwörter markieren", "Jeden Abschnitt in einem Satz zusammenfassen"], ru: "Расставь шаги чтения по порядку." },
+      { typ: "sag", text: "Lies diesen Text: Die Honigbiene. Honigbienen leben in einem Volk mit bis zu 50 000 Tieren. Es gibt eine Königin, viele Arbeiterinnen und im Sommer auch Drohnen. Die Arbeiterinnen sammeln Nektar und Blütenstaub. Aus dem Nektar machen sie im Stock Honig. Dabei bestäuben sie die Blüten – so wachsen Äpfel, Kirschen und viele andere Früchte.", ru: "Прочитай текст: Медоносная пчела. Пчёлы живут семьёй до 50 000 особей. Есть матка, много рабочих пчёл, а летом ещё и трутни. Рабочие пчёлы собирают нектар и пыльцу. Из нектара в улье они делают мёд. При этом они опыляют цветы — так растут яблоки, вишни и многие другие плоды." },
+      { typ: "luecke", e: "🐝", satz: "Ein Schlüsselwort aus dem Text ist ___.", optionen: ["Nektar", "dabei", "viele"], ru: "Ключевое слово из текста — «Nektar» (нектар)." },
+      { typ: "luecke", e: "👑", satz: "In einem Bienenvolk gibt es eine ___.", optionen: ["Königin", "Kaiserin", "Lehrerin"], ru: "В пчелиной семье есть одна матка (Königin)." },
+      { typ: "luecke", e: "🍯", satz: "Honig machen die Bienen aus ___.", optionen: ["Nektar", "Wasser", "Blättern"], ru: "Мёд пчёлы делают из нектара." },
+      { typ: "luecke", e: "🍎", satz: "Welche Überschrift passt zum letzten Satz? „___“", optionen: ["Bienen helfen den Früchten", "Bienen schlafen im Winter", "Wie ein Stock gebaut ist"], ru: "Какой заголовок подходит к последнему предложению? «Пчёлы помогают плодам»." },
+      { typ: "verbessern", e: "📝", frage: "In dieser Zusammenfassung steht etwas Falsches. Tippe das Wort an!", satz: "Honigbienen leben allein und sammeln Nektar.", falsch: "allein", optionen: ["im Volk", "im Wasser", "im Winter"], tipp: "Richtig! Was steht im Text?", ru: "В пересказе ошибка: пчёлы живут не поодиночке, а семьёй." },
+      { typ: "sag", text: "Klasse, {name}! Mit dieser Strategie schaffst du auch lange Texte in Erdkunde, Biologie und Geschichte.", ru: "Класс! С этой стратегией ты справишься и с длинными текстами по географии, биологии и истории." }
+    ]
   }
 ];

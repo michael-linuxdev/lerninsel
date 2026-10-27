@@ -2,12 +2,12 @@
   const S = window.Spielwelt;
   // Zwei Wege (NA-32): „k1“ = Klasse 1 und Vorschule (Mengen mit Material), „k2“ = der bisherige Matheweg Klasse 2.
   // Fortschritt je Weg in mathe.k1 bzw. mathe.k2; der Einstufungstest gehört nur zu Klasse 2.
-  const WEGE = { k1: window.Mathe.STATIONEN_K1 || [], k2: window.Mathe.STATIONEN, k3: window.Mathe.STATIONEN_K3 || [], k4: window.Mathe.STATIONEN_K4 || [] };
+  const WEGE = { k1: window.Mathe.STATIONEN_K1 || [], k2: window.Mathe.STATIONEN, k3: window.Mathe.STATIONEN_K3 || [], k4: window.Mathe.STATIONEN_K4 || [], k5: window.Mathe.STATIONEN_K5 || [] };
   const ersterWeg = () => { const d = S.lade("mathe") || {}; if (d.weg && WEGE[d.weg]) return d.weg;
-    const st = (S.stufe && S.stufe()) || {}; return ["vs", "1"].includes(st.code) && WEGE.k1.length ? "k1" : ["4", "5"].includes(st.code) && WEGE.k4.length ? "k4" : ["3", "4", "5"].includes(st.code) && WEGE.k3.length ? "k3" : "k2"; };
+    const st = (S.stufe && S.stufe()) || {}; return ["vs", "1"].includes(st.code) && WEGE.k1.length ? "k1" : st.code === "5" && WEGE.k5.length ? "k5" : ["4", "5"].includes(st.code) && WEGE.k4.length ? "k4" : ["3", "4", "5"].includes(st.code) && WEGE.k3.length ? "k3" : "k2"; };
   let WEG = ersterWeg(), ST = WEGE[WEG];
   // Können je Lernziel (NA-50): Lernziele einer Station (beide Wege)
-  const stationVon = (id) => WEGE.k1.find(s => s.id === id) || WEGE.k2.find(s => s.id === id) || WEGE.k3.find(s => s.id === id) || WEGE.k4.find(s => s.id === id);
+  const stationVon = (id) => WEGE.k1.find(s => s.id === id) || WEGE.k2.find(s => s.id === id) || WEGE.k3.find(s => s.id === id) || WEGE.k4.find(s => s.id === id) || WEGE.k5.find(s => s.id === id);
   const lzVon = (id) => (stationVon(id) || {}).lz || [];
   const KN = () => window.Koennen;
   function setzeWeg(w) { if (!WEGE[w] || !WEGE[w].length) return; WEG = w; ST = WEGE[w]; const d = daten(); d.weg = w; S.speichere("mathe", d); }
@@ -15,7 +15,7 @@
   const LOB = ["Richtig!", "Super!", "Klasse!", "Genau!", "Toll gerechnet!", "Spitze!", "Prima!"];
 
   // ---------- Fortschritt ----------
-  const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; d.k1 = d.k1 || {}; d.k3 = d.k3 || {}; d.k4 = d.k4 || {}; return d; };
+  const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; d.k1 = d.k1 || {}; d.k3 = d.k3 || {}; d.k4 = d.k4 || {}; d.k5 = d.k5 || {}; return d; };
   const bestes = (id) => daten()[WEG][id] || 0;
   const startAb = () => WEG === "k2" ? (daten().einstufung || {}).startAb || 0 : 0;   // aus dem Einstufungstest (nur Klasse 2)
   const istOffen = (i) => S.offen(i === 0 || i <= startAb() || bestes(ST[i - 1].id) > 0);
@@ -97,7 +97,8 @@
       kl.innerHTML = `<button class="weg-wahl${WEG === "k1" ? " an" : ""}" data-weg="k1" aria-pressed="${WEG === "k1"}">🐣 Klasse 1 und Vorschule</button>` +
         `<button class="weg-wahl${WEG === "k2" ? " an" : ""}" data-weg="k2" aria-pressed="${WEG === "k2"}">2. Klasse</button>` +
         `<button class="weg-wahl${WEG === "k3" ? " an" : ""}" data-weg="k3" aria-pressed="${WEG === "k3"}">3. Klasse</button>` +
-        (WEGE.k4.length ? `<button class="weg-wahl${WEG === "k4" ? " an" : ""}" data-weg="k4" aria-pressed="${WEG === "k4"}">4. Klasse</button>` : "");
+        (WEGE.k4.length ? `<button class="weg-wahl${WEG === "k4" ? " an" : ""}" data-weg="k4" aria-pressed="${WEG === "k4"}">4. Klasse</button>` : "") +
+        (WEGE.k5.length ? `<button class="weg-wahl${WEG === "k5" ? " an" : ""}" data-weg="k5" aria-pressed="${WEG === "k5"}">🎒 Übergang 5</button>` : "");
       kl.querySelectorAll(".weg-wahl").forEach(b => b.addEventListener("click", () => { if (b.dataset.weg === WEG) return; S.ton("tipp"); setzeWeg(b.dataset.weg); zeichneWeg(); }));
     }
     const karte = $("karte");
@@ -148,14 +149,14 @@
             b.className = "station ziel";
             b.innerHTML = `<span class="kreis">${alle ? "🎓" : "➡️"}</span><span class="name">4. Klasse</span><span class="stern-reihe"></span>`;
             b.addEventListener("click", () => { S.ton("tipp"); setzeWeg("k4"); zeichneWeg(); scrollTo(0, 0); });
-          } else if (WEG === "k4") {
-            // Schritt B: Abschluss der Grundschul-Mathematik mit Urkunde (statt „Mehr kommt bald“)
+          } else if (WEG === "k4" || WEG === "k5") {
+            // Schritt B / NA-39: Abschluss eines Wegs mit Urkunde (statt „Mehr kommt bald“); von der Kl.-4-Urkunde geht es zum Übergang 5
             b.className = "station ziel" + (alle ? "" : " zu"); b.id = "urkunde-ziel";
             b.innerHTML = `<span class="kreis">${alle ? "🎓" : "🔒"}</span><span class="name">Urkunde</span><span class="stern-reihe"></span>`;
             b.addEventListener("click", () => {
               S.ton("tipp");
               if (!alle) { const fehlt = ST.filter(s => !bestes(s.id)).length; S.meldung(`Noch ${fehlt} ${fehlt === 1 ? "Station" : "Stationen"}, dann bekommst du deine Mathe-Urkunde.`); return; }
-              zeigeUrkunde();
+              zeigeUrkunde(WEG);
             });
           } else {
             b.className = "station ziel" + (alle ? "" : " zu");
@@ -184,19 +185,22 @@
   }
 
   // Mathe-Urkunde am Ende des Wegs „4. Klasse“: alle Wege mit Sternen, zum Ansehen (nichts zu kaufen, nichts geht verloren)
-  function zeigeUrkunde() {
-    const d = daten(), name = (S.profil && S.profil.name) || "Du";
+  function zeigeUrkunde(weg = "k4") {
+    const d = daten(), name = (S.profil && S.profil.name) || "Du", ue = weg === "k5";
     const zeile = (titel, w) => { const st = WEGE[w] || [], fertig = st.filter(s => (d[w] || {})[s.id] > 0).length, sterne = st.reduce((x, s) => x + ((d[w] || {})[s.id] || 0), 0);
       return st.length ? `<li><b>${titel}</b>: ${fertig} von ${st.length} Stationen, ${sterne} ⭐</li>` : ""; };
     const el = document.createElement("div"); el.className = "urkunde-schleier"; el.id = "urkunde";
-    el.innerHTML = `<div class="urkunde" role="dialog" aria-label="Mathe-Urkunde"><div class="urkunde-siegel" aria-hidden="true">🎓</div>
-      <h2>Mathe-Urkunde</h2><p class="urkunde-name">${name}</p>
-      <p>hat den ganzen Matheweg der 4. Klasse geschafft: große Zahlen, schriftlich rechnen, Maßstab, Zeit, Zufall und vieles mehr.</p>
-      <ul>${zeile("1. Klasse", "k1")}${zeile("2. Klasse", "k2")}${zeile("3. Klasse", "k3")}${zeile("4. Klasse", "k4")}</ul>
-      <p class="urkunde-weiter">Du kannst jede Station jederzeit wiederholen. Bald geht es weiter mit dem Übergang in die 5. Klasse.</p>
-      <button class="knopf haupt" id="urkunde-zu">Toll!</button></div>`;
+    el.innerHTML = `<div class="urkunde" role="dialog" aria-label="Mathe-Urkunde"><div class="urkunde-siegel" aria-hidden="true">${ue ? "🎒" : "🎓"}</div>
+      <h2>${ue ? "Fit für Klasse 5!" : "Mathe-Urkunde"}</h2><p class="urkunde-name">${name}</p>
+      <p>${ue ? "hat den Übergangsweg geschafft: Brüche, Kommazahlen, Klammern, Koordinaten, Winkel und Durchschnitt. Damit bist du gut vorbereitet – egal, auf welche Schule du gehst."
+        : "hat den ganzen Matheweg der 4. Klasse geschafft: große Zahlen, schriftlich rechnen, Maßstab, Zeit, Zufall und vieles mehr."}</p>
+      <ul>${zeile("1. Klasse", "k1")}${zeile("2. Klasse", "k2")}${zeile("3. Klasse", "k3")}${zeile("4. Klasse", "k4")}${zeile("Übergang 5", "k5")}</ul>
+      <p class="urkunde-weiter">Du kannst jede Station jederzeit wiederholen.${ue ? "" : " Weiter geht es mit dem Übergang in die 5. Klasse."}</p>
+      <div class="urkunde-knoepfe">${ue || !WEGE.k5.length ? "" : `<button class="knopf" id="urkunde-weiter">🎒 Zum Übergang 5</button>`}<button class="knopf haupt" id="urkunde-zu">Toll!</button></div></div>`;
     document.body.appendChild(el); S.ton("juhu");
     el.querySelector("#urkunde-zu").addEventListener("click", () => { S.ton("tipp"); el.remove(); });
+    const w5 = el.querySelector("#urkunde-weiter");
+    if (w5) w5.addEventListener("click", () => { S.ton("tipp"); el.remove(); setzeWeg("k5"); zeichneWeg(); scrollTo(0, 0); });
   }
 
   // ---------- Runde ----------

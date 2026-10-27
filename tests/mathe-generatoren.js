@@ -1,4 +1,4 @@
-// Node-Test (Schritt B): alle Mathe-Generatoren (Kl. 1–4) liefern 400-mal gültige Aufgaben – kein NaN/undefined,
+// Node-Test (Schritt B, NA-39): alle Mathe-Generatoren (Kl. 1–4 und Übergang 5) liefern 400-mal gültige Aufgaben – kein NaN/undefined,
 // Zahl-Antworten nur aus Ziffern und mit der erlaubten Länge (`max`, Standard 3), Wahl-Antworten unter den Optionen, keine doppelten Optionen.
 // Dazu römische Zahlen und Primzahlen. Aufruf: node tests/mathe-generatoren.js
 const assert = require("assert");
@@ -8,7 +8,7 @@ const M = window.Mathe;
 let n = 0;
 const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
 
-for (const [weg, liste, anzahl] of [["Kl. 1", M.STATIONEN_K1, 10], ["Kl. 2", M.STATIONEN, 23], ["Kl. 3", M.STATIONEN_K3, 20], ["Kl. 4", M.STATIONEN_K4, 14]]) {
+for (const [weg, liste, anzahl] of [["Kl. 1", M.STATIONEN_K1, 10], ["Kl. 2", M.STATIONEN, 23], ["Kl. 3", M.STATIONEN_K3, 20], ["Kl. 4", M.STATIONEN_K4, 14], ["Übergang 5", M.STATIONEN_K5, 10]]) {
   pruefe(`${weg}: ${anzahl} Stationen, je 400 gültige Aufgaben`, () => {
     assert.strictEqual(liste.length, anzahl);
     for (const s of liste) {

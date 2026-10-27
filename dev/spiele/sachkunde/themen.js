@@ -1,6 +1,7 @@
 // Sachkunde-Themen mit Eule Ella.
 // Schritt-Typen:
 //   info     { titel, bild?, text, ru, fakten?: [[de, ru], ...] }
+// Thema mit stufe (optional, NA-39): erst ab der Klasse davor sichtbar (stufe 5 = Übergang, sichtbar ab Kl. 4).
 //   wahl     { frage, ru, bild?, optionen: [{ t, ru, ok, warum, warumRu }] }
 //   daumen   { satz, satzRu, bild?, ok, warum, warumRu }
 //   zuordnen { frage, ru, gruppen: [{ id, name, ru, bild }], dinge: [{ t, ru, gruppe }] }
@@ -918,6 +919,66 @@ window.THEMEN = [
       { typ: "info", titel: "Geschafft!", bild: "🦉",
         text: "Prima, {name}! Für einen Vortrag: zwei gute Quellen suchen, Stichworte aufschreiben und sagen, woher du es weißt.",
         ru: "Отлично, {name}! Для доклада: найди два хороших источника, запиши ключевые слова и скажи, откуда ты это знаешь." }
+    ]
+  },
+  {
+    id: "lernen-lernen", stufe: 5, lz: ["su.so.07"], name: "Lernen lernen", e: "🧠", farbe: "#2E9C5A", grund: "#E3F7EF",
+    kurz: "Kurz und oft üben, Pausen, sich selbst abfragen, Hausaufgaben planen",
+    schritte: [
+      { typ: "info", titel: "So lernt dein Kopf gut", bild: "🧠",
+        text: "Hallo {name}! Dein Gehirn lernt am besten in kleinen Portionen: lieber jeden Tag ein bisschen als alles auf einmal. Pausen und Schlaf helfen beim Merken.",
+        ru: "Привет, {name}! Мозг лучше всего учится маленькими порциями: лучше каждый день понемногу, чем всё сразу. Перерывы и сон помогают запоминать.",
+        fakten: [["Nach etwa 20 Minuten eine kurze Pause machen.", "Примерно через 20 минут делать короткий перерыв."], ["Sich selbst abfragen statt nur durchlesen.", "Проверять себя, а не просто перечитывать."]] },
+      { typ: "wahl", frage: "In 5 Tagen schreibst du einen Test. Wie lernst du am besten?", ru: "Через 5 дней контрольная. Как лучше учить?", bild: "📅", optionen: [
+        { t: "Jeden Tag 15 Minuten", ru: "Каждый день по 15 минут", ok: true, warum: "Genau! Wer verteilt übt, behält mehr – und am Tag davor ist es entspannter.", warumRu: "Точно! Кто учит понемногу каждый день, запоминает больше — и накануне спокойнее." },
+        { t: "Am Abend vorher zwei Stunden", ru: "Накануне вечером два часа", ok: false, warum: "So vergisst man schnell wieder, und man ist müde. Besser jeden Tag ein bisschen.", warumRu: "Так быстро забываешь, и устаёшь. Лучше каждый день понемногу." },
+        { t: "Gar nicht, das klappt schon", ru: "Вообще не учить, и так получится", ok: false, warum: "Üben gibt Sicherheit. Schon wenige Minuten am Tag helfen.", warumRu: "Тренировка даёт уверенность. Помогают даже несколько минут в день." }] },
+      { typ: "zuordnen", frage: "Hilft das beim Lernen oder stört es?", ru: "Это помогает учиться или мешает?",
+        gruppen: [{ id: "h", name: "Hilft", ru: "Помогает", bild: "👍" }, { id: "s", name: "Stört", ru: "Мешает", bild: "👎" }],
+        dinge: [
+          { t: "Handy in ein anderes Zimmer legen", ru: "Убрать телефон в другую комнату", gruppe: "h" }, { t: "Kurze Pause mit Bewegung", ru: "Короткий перерыв с движением", gruppe: "h" },
+          { t: "Fernseher läuft nebenbei", ru: "Рядом работает телевизор", gruppe: "s" }, { t: "Alles in letzter Minute", ru: "Всё в последнюю минуту", gruppe: "s" }] },
+      { typ: "daumen", satz: "Wenn ich mich selbst abfrage, merke ich, was ich schon kann und was noch nicht.", satzRu: "Когда я проверяю себя сам, я замечаю, что уже умею, а что ещё нет.", bild: "🗂️", ok: true,
+        warum: "Stimmt! Zum Beispiel mit Karteikarten: vorne die Frage, hinten die Antwort.", warumRu: "Верно! Например, с карточками: спереди вопрос, сзади ответ." },
+      { typ: "daumen", satz: "Fehler zeigen, dass ich etwas nicht lernen kann.", satzRu: "Ошибки показывают, что я не могу это выучить.", bild: "🌱", ok: false,
+        warum: "Nein! Fehler zeigen dir, was du noch üben kannst. Aus Fehlern lernt jeder – auch Erwachsene.", warumRu: "Нет! Ошибки показывают, что ещё можно потренировать. На ошибках учатся все — и взрослые тоже." },
+      { typ: "wahl", frage: "Wo schreibst du deine Hausaufgaben auf?", ru: "Куда записывать домашние задания?", bild: "📓", optionen: [
+        { t: "Ins Hausaufgabenheft", ru: "В дневник для домашних заданий", ok: true, warum: "Richtig! Dann vergisst du nichts und kannst planen, was wann dran ist.", warumRu: "Правильно! Тогда ничего не забудешь и сможешь планировать." },
+        { t: "Ich merke sie mir einfach", ru: "Просто запоминаю", ok: false, warum: "Bei vielen Fächern vergisst man leicht etwas. Aufschreiben ist sicherer.", warumRu: "Когда предметов много, легко что-то забыть. Записывать надёжнее." },
+        { t: "Auf die Hand", ru: "На руке", ok: false, warum: "Das wäscht sich ab. Ein Heft oder Planer ist besser.", warumRu: "Это смоется. Лучше тетрадь или планер." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Probier diese Woche eine Sache aus: jeden Tag kurz üben oder dich selbst abfragen. Merkst du einen Unterschied?",
+        ru: "Здорово, {name}! Попробуй на этой неделе что-то одно: каждый день немного заниматься или проверять себя. Заметишь разницу?" }
+    ]
+  },
+  {
+    id: "neue-schule", stufe: 5, lz: ["su.so.07"], name: "Neue Schule", e: "🏫", farbe: "#2F86C8", grund: "#E5F1FB",
+    kurz: "Stundenplan, neue Fächer und Lehrkräfte, Schulweg, Hilfe holen",
+    schritte: [
+      { typ: "info", titel: "Was ist anders?", bild: "🏫",
+        text: "Hallo {name}! Nach der Grundschule wechseln viele Kinder auf eine neue Schule – in Berlin und Brandenburg meist erst nach Klasse 6. Es gibt neue Fächer, für fast jedes Fach eine andere Lehrkraft und einen Stundenplan.",
+        ru: "Привет, {name}! После начальной школы многие дети переходят в новую школу — в Берлине и Бранденбурге обычно после 6-го класса. Появляются новые предметы, почти у каждого свой учитель, и есть расписание.",
+        fakten: [["Neue Fächer sind zum Beispiel Biologie, Geschichte, Erdkunde.", "Новые предметы — например, биология, история, география."], ["Jede Schule ist anders. Jede Schulform kann gut zu einem Kind passen.", "Все школы разные. Любой тип школы может хорошо подойти ребёнку."]] },
+      { typ: "wahl", frage: "Du findest am ersten Tag deinen Raum nicht. Was tust du?", ru: "В первый день ты не можешь найти свой кабинет. Что ты сделаешь?", bild: "🚪", optionen: [
+        { t: "Jemanden fragen", ru: "Спросить кого-нибудь", ok: true, warum: "Genau! Ältere Kinder, Lehrkräfte und das Sekretariat helfen gern. Am Anfang fragen alle.", warumRu: "Точно! Старшие ученики, учителя и секретариат охотно помогут. В начале все спрашивают." },
+        { t: "Nach Hause gehen", ru: "Пойти домой", ok: false, warum: "Bitte nicht einfach gehen – frag lieber. Dann weiß auch jemand, wo du bist.", warumRu: "Пожалуйста, не уходи просто так — лучше спроси. Тогда кто-то будет знать, где ты." },
+        { t: "Allein suchen, bis die Stunde vorbei ist", ru: "Искать одному, пока урок не закончится", ok: false, warum: "Fragen geht viel schneller. Das ist ganz normal.", warumRu: "Спросить гораздо быстрее. Это совершенно нормально." }] },
+      { typ: "wahl", frage: "Am Dienstag stehen Mathe, Englisch und Sport auf dem Stundenplan. Was packst du ein?", ru: "Во вторник в расписании математика, английский и физкультура. Что положить в рюкзак?", bild: "🎒", optionen: [
+        { t: "Mathe- und Englischsachen und Sportzeug", ru: "Вещи для математики и английского и спортивную форму", ok: true, warum: "Richtig! Den Ranzen am Abend nach dem Stundenplan packen – dann fehlt morgens nichts.", warumRu: "Правильно! Собирать рюкзак вечером по расписанию — тогда утром ничего не забудешь." },
+        { t: "Alle Bücher, die ich habe", ru: "Все книги, которые у меня есть", ok: false, warum: "Das wird viel zu schwer. Nur einpacken, was laut Stundenplan dran ist.", warumRu: "Будет слишком тяжело. Бери только то, что по расписанию." },
+        { t: "Nur das Mäppchen", ru: "Только пенал", ok: false, warum: "Dann fehlen Hefte, Bücher und Sportsachen.", warumRu: "Тогда не хватит тетрадей, учебников и спортивной формы." }] },
+      { typ: "daumen", satz: "Vor der neuen Schule aufgeregt zu sein, ist ganz normal.", satzRu: "Волноваться перед новой школой — совершенно нормально.", bild: "💓", ok: true,
+        warum: "Stimmt! Den meisten Kindern geht es so. Sprich mit deiner Familie darüber – das hilft.", warumRu: "Верно! Так чувствуют себя большинство детей. Поговори об этом с семьёй — это помогает." },
+      { typ: "daumen", satz: "Den neuen Schulweg sollte man vorher einmal ausprobieren.", satzRu: "Новый путь в школу стоит заранее один раз пройти.", bild: "🚌", ok: true,
+        warum: "Stimmt! Fahrt den Weg in den Ferien gemeinsam ab – mit Bus, Bahn, Rad oder zu Fuß.", warumRu: "Верно! Пройдите путь вместе на каникулах — на автобусе, поезде, велосипеде или пешком." },
+      { typ: "zuordnen", frage: "Grundschule oder neue Schule (meistens)?", ru: "Начальная школа или новая школа (обычно)?",
+        gruppen: [{ id: "g", name: "Grundschule", ru: "Начальная школа", bild: "🏠" }, { id: "n", name: "Neue Schule", ru: "Новая школа", bild: "🏫" }],
+        dinge: [
+          { t: "Eine Klassenlehrerin für fast alles", ru: "Одна учительница почти по всем предметам", gruppe: "g" }, { t: "Sachunterricht", ru: "Природоведение", gruppe: "g" },
+          { t: "Viele verschiedene Lehrkräfte", ru: "Много разных учителей", gruppe: "n" }, { t: "Biologie und Geschichte", ru: "Биология и история", gruppe: "n" }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Prima, {name}! Viele Schulen haben einen Tag der offenen Tür. Schau dir die Schule vorher mit deiner Familie an.",
+        ru: "Отлично, {name}! Во многих школах бывает день открытых дверей. Посмотри школу заранее вместе с семьёй." }
     ]
   }
 ];
