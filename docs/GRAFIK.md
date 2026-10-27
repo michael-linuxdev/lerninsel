@@ -21,6 +21,23 @@
 > **Entscheidung 27.10.2026: beide Looks bleiben, jederzeit umschaltbar** (Profilfeld `look`). Jede neue Figur und jedes neue Ding
 > wird für „Rund“ und „Pixel“ gebaut. Pixel-Regeln: 16×16-Kacheln, feste Palette, automatischer dunkler Umriss, ganzzahlige Vergrößerung,
 > Animationen in wenigen festen Bildern. Pakete NA-24 bis NA-28 in PLAN.md.
+>
+> **Pixel = DS-Look (Entscheidung 27.10.2026, morgens):** „Etwas moderner, Nintendo-DS-Zeitalter“, gewählt wurde die
+> **Draufsicht wie bei den Handheld-Abenteuern um 2010** (nicht 2,5D, nicht Low-Poly). Eigener Stil, keine fremden Figuren/Kacheln.
+> Regeln für alles, was in Pixel gezeichnet wird (Vorlage: `quellen/probe/pixel.js`):
+> - **Farbreihen statt Einzelfarben:** jede Farbe in `PAL` hat 5 Stufen (0 dunkel … 4 hell), Schatten kühl/lila, Licht warm/gelblich.
+>   Nur diese Farben verwenden.
+> - **Licht immer von oben links.** Formen mit `kugel()`, `zylinder()`, `vieleck()`, `fuelle()` schattieren; Zwischenstufen werden
+>   gerastert, aber nur als schmaler Übergang (`raster()`), Flächen bleiben klar. Boden (Gras) ohne Rasterung.
+> - **Farbiger Umriss:** automatisch in der dunkelsten Stufe der Nachbarfarbe (`umriss()`), kein reines Schwarz.
+> - **Weiche Übergänge im Boden:** Gras/Sand/Weg/Wasser werden pro Pixel aus der Kachelkarte berechnet (gezackte Kanten, dunkle
+>   Graskante, Schatten darunter, Schaum am Ufer, Wassertiefe). Der Boden ist ein großes Bild in zwei Fassungen (Wasser, Schaum, Blumen).
+> - **Schatten:** halbdurchsichtige Ellipse unter jeder Figur und jedem Ding, Wolkenschatten ziehen langsam (einzige Halbtransparenz).
+> - **Figuren:** großer Kopf (Chibi), Augen mit Glanzpunkt, Glanzbogen im Haar, drei Bilder je Richtung (stehen, links, rechts →
+>   Schrittfolge links–stehen–rechts–stehen).
+> - **Ein Bildatlas** für alle Dinge und Figuren (`merke()` → `packe()`), damit alles in einem Zeichenaufruf bleibt.
+> - Textfeld: heller Kasten mit zweifarbigem Rahmen, Namensschild und blinkendem Pfeil.
+> - Sichtbar etwa 16–18 × 12 Felder (wie ein DS-Bildschirm), ganzzahlige Vergrößerung (iPad ×4, Handy ×2).
 
 1. **Drei Probeszenen** (Erweiterung von `spiele/welt3d/probe.html`, gleiche Szene: Kind, Fipsi, Baum, Haus, Wasser, Wiese):
    - **B+ „Toon verbessert“:** wie heute, aber einheitliche Proportionen, weichere Konturen, Farbverlauf-Licht (Gradient-Map), Randlicht.

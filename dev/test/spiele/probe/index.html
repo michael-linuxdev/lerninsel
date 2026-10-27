@@ -14,8 +14,13 @@
   .leiste .knopf.an { background: var(--pflaume); color: #fff; }
   .mess { position: fixed; left: 10px; bottom: max(10px, env(safe-area-inset-bottom)); right: 10px; background: rgba(255,255,255,.88); border-radius: 10px; padding: 6px 10px; font-size: .85rem; color: var(--pflaume); z-index: 2; width: fit-content; max-width: calc(100% - 40px); }
   .laden { position: fixed; inset: 0; display: grid; place-items: center; font-weight: 700; color: var(--pflaume); }
-  .pixelbox { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(54px, calc(env(safe-area-inset-bottom) + 46px)); width: min(560px, calc(100% - 28px)); box-sizing: border-box;
-    background: #F8F8F0; color: #30283A; border: 4px solid #30283A; box-shadow: inset 0 0 0 3px #88C8F8, 0 4px 0 rgba(0,0,0,.2); border-radius: 6px; padding: 12px 16px; font: 600 1.1rem/1.4 ui-monospace, Menlo, monospace; z-index: 3; }
+  /* Textfeld im Stil der DS-Abenteuer: heller Kasten, zweifarbiger Rahmen, blinkender Pfeil */
+  .pixelbox { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(54px, calc(env(safe-area-inset-bottom) + 46px)); width: min(600px, calc(100% - 28px)); box-sizing: border-box;
+    background: linear-gradient(#FFFFFF, #F4F8FC); color: #30283A; border: 3px solid #4A4058; box-shadow: inset 0 0 0 3px #FFFFFF, inset 0 0 0 6px #9ACEF2, 0 4px 0 rgba(26,16,64,.25);
+    border-radius: 12px; padding: 14px 40px 16px 20px; font: 700 1.1rem/1.45 ui-monospace, Menlo, monospace; z-index: 3; image-rendering: pixelated; }
+  .pixelbox b { display: inline-block; background: #4A6AD8; color: #fff; border-radius: 6px; padding: 0 8px; margin-bottom: 4px; }
+  .pixelbox::after { content: "▼"; position: absolute; right: 16px; bottom: 10px; color: #D8443E; font-size: .9rem; animation: pixelpfeil 1s steps(2) infinite; }
+  @keyframes pixelpfeil { 50% { transform: translateY(3px); } }
   @media (max-width: 600px) { .leiste .knopf { min-height: 44px; font-size: .9rem; padding: 0 10px; } }
 </style>
 </head>
