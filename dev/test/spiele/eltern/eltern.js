@@ -149,7 +149,7 @@
     // Nur Sachsen ist ausgearbeitet; andere Länder sehen vorerst Sachsen als Beispiel (ehrlicher Hinweis)
     const k = S.kind(), la = S.land(), land = la.lehrplan && L.laender[la.lehrplan] ? la.lehrplan : "sachsen", lname = (L.laender[land] || {}).name || land;
     const stufe = S.stufe();
-    const zeichen = { ja: "✅", teil: "◐", nein: "○" };
+    const zeichen = { ja: "✅", teil: "◐", nein: "○" }, worte = { ja: "gut abgedeckt", teil: "teilweise", nein: "noch nicht" };
     const k2 = mathe.k2 || {};
     const fortschritt = (app) => {
       const st = app.filter(a => a.startsWith("mathe:")).map(a => a.slice(6));
@@ -160,7 +160,7 @@
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
       return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span></h3><ul class="lp-liste">${lb.map(x =>
-        `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app)}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}</span></li>`).join("")}</ul>`;
+        `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app)}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
     }).join("");
     return `<div class="karte">
       <h2>📘 Was übt die App? (Lehrplan ${lname}, ${k.klasse}. Klasse)</h2>
@@ -168,6 +168,7 @@
       ${stufe.wenig ? `<p class="hinweis">Stufe „${stufe.name}“: Gezeigt wird die ${k.klasse}. Klasse, bis eigene Inhalte da sind.</p>` : ""}
       <p>${n.ja} Lernbereiche gut abgedeckt, ${n.teil} teilweise, ${n.nein} noch nicht. Die App ergänzt den Unterricht, sie ersetzt ihn nicht. Was gerade in der Schule dran ist, weiß die Lehrkraft am besten.</p>
       <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App</p>
+      ${L.zaehle ? (() => { const e = L.zaehle(land, k.klasse).errechnet; return `<p class="klein">Zum Vergleich, aus den Lernzielen der Inhalte errechnet (gut = mindestens drei Inhalte mit zusammen 30 Aufgaben und Wiederholung in der Lernkartei): ${e.ja} gut, ${e.teil} teilweise, ${e.nein} noch nicht.</p>`; })() : ""}
       ${faecher}
       <p class="klein">Quelle: Lehrpläne Grundschule des Freistaates Sachsen (schulportal.sachsen.de), KMK-Bildungsstandards Primarbereich.</p>
     </div>`;

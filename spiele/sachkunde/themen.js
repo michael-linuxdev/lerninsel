@@ -9,7 +9,7 @@
 // bild: Name einer Zeichnung aus bilder.js oder ein Emoji.
 window.THEMEN = [
   {
-    id: "geschenkebringer", name: "Wer bringt die Geschenke?", e: "🎅", farbe: "#D7263D", grund: "#FFEDEF",
+    id: "geschenkebringer", lz: ["su.so.04"], name: "Wer bringt die Geschenke?", e: "🎅", farbe: "#D7263D", grund: "#FFEDEF",
     kurz: "Nikolaus, Weihnachtsmann, Santa Claus und Ded Moros",
     schritte: [
       { typ: "info", titel: "Bald ist Weihnachten!", bild: "baum",
@@ -109,7 +109,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "familie", name: "Meine Familie", e: "👨‍👩‍👧‍👦", farbe: "#7B55B8", grund: "#F1EAFF",
+    id: "familie", lz: ["su.so.02"], name: "Meine Familie", e: "👨‍👩‍👧‍👦", farbe: "#7B55B8", grund: "#F1EAFF",
     kurz: "Oma, Opa, Tante, Cousine, Uroma, Schwager …",
     stammbaum: {
       personen: [
@@ -208,7 +208,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "gesundheit", name: "Gesund und munter", e: "🦷", farbe: "#2E9C5A", grund: "#E3F7EF",
+    id: "gesundheit", lz: ["su.na.02"], name: "Gesund und munter", e: "🦷", farbe: "#2E9C5A", grund: "#E3F7EF",
     kurz: "Zähne putzen, Frühstück, Trinken, Erste Hilfe",
     schritte: [
       { typ: "info", titel: "Gesund und munter", bild: "🦷",
@@ -258,7 +258,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "baeume-voegel", name: "Bäume und Vögel", e: "🌳", farbe: "#8A6E2F", grund: "#F7F0DD",
+    id: "baeume-voegel", lz: ["su.na.03"], name: "Bäume und Vögel", e: "🌳", farbe: "#8A6E2F", grund: "#F7F0DD",
     kurz: "Laub- und Nadelbäume, Zugvögel und Wintervögel",
     schritte: [
       { typ: "info", titel: "Draußen in der Natur", bild: "🌳",

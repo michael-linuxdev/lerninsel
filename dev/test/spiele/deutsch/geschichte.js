@@ -4,7 +4,7 @@
 // ru = Russisch-Hilfe. {name} wird durch den Spielernamen ersetzt.
 window.GESCHICHTE = [
   {
-    id: "wald", name: "Im Wald", ort: "🌲", farbe: "#5DB84A", grund: "#E3F5DC",
+    id: "wald", lz: ["daz.d0.01"], name: "Im Wald", ort: "🌲", farbe: "#5DB84A", grund: "#E3F5DC",
     schritte: [
       { typ: "sag", text: "Hallo {name}! Ich bin Fipsi, der kleine Fuchs.", ru: "Привет, {name}! Я Фипси, маленький лисёнок." },
       { typ: "sag", text: "Oh nein! Der Wind hat meine Schatzkarte weggeweht. Hilfst du mir, die fünf Teile zu finden?", ru: "О нет! Ветер унёс мою карту сокровищ. Ты поможешь мне найти пять частей?" },
@@ -24,7 +24,7 @@ window.GESCHICHTE = [
     ]
   },
   {
-    id: "hof", name: "Auf dem Bauernhof", ort: "🐄", farbe: "#E8A33D", grund: "#FFF1D9",
+    id: "hof", lz: ["de.su.05"], name: "Auf dem Bauernhof", ort: "🐄", farbe: "#E8A33D", grund: "#FFF1D9",
     schritte: [
       { typ: "sag", text: "Das nächste Teil ist auf dem Bauernhof. Komm mit!", ru: "Следующая часть на ферме. Пойдём!" },
       { typ: "hoeren", sag: "Die Kuh macht Muh.", ru: "Корова говорит «му».",
@@ -43,7 +43,7 @@ window.GESCHICHTE = [
     ]
   },
   {
-    id: "baeckerei", name: "In der Bäckerei", ort: "🥨", farbe: "#C2337A", grund: "#FFE8F1",
+    id: "baeckerei", lz: ["de.sz.03", "daz.d0.02"], name: "In der Bäckerei", ort: "🥨", farbe: "#C2337A", grund: "#FFE8F1",
     schritte: [
       { typ: "sag", text: "Jetzt gehen wir in die Stadt. Ich habe Hunger!", ru: "Теперь мы идём в город. Я голоден!" },
       { typ: "bild", frage: "Wo ist das Brot?", ru: "Где хлеб?",
@@ -64,7 +64,7 @@ window.GESCHICHTE = [
     ]
   },
   {
-    id: "strand", name: "Am Strand", ort: "🏖️", farbe: "#3AA0E0", grund: "#E1F3FF",
+    id: "strand", lz: ["de.su.07"], name: "Am Strand", ort: "🏖️", farbe: "#3AA0E0", grund: "#E1F3FF",
     schritte: [
       { typ: "sag", text: "Wir fahren ans Meer. Die Sonne scheint!", ru: "Мы едем к морю. Светит солнце!" },
       { typ: "sag", text: "Am Strand stehen ein Tisch und eine Kiste. Wo sind die Sachen? Auf, unter, neben oder in?", ru: "На пляже стоят стол и ящик. Где вещи? На, под, рядом или в?" },
@@ -80,7 +80,7 @@ window.GESCHICHTE = [
     ]
   },
   {
-    id: "schloss", name: "Im Schloss", ort: "🏰", farbe: "#7B55B8", grund: "#EFE6FF",
+    id: "schloss", lz: ["et.ge.01"], name: "Im Schloss", ort: "🏰", farbe: "#7B55B8", grund: "#EFE6FF",
     schritte: [
       { typ: "sag", text: "Das letzte Teil ist im Schloss. Pssst, ganz leise!", ru: "Последняя часть в замке. Тсс, совсем тихо!" },
       { typ: "wort", e: "🐘", frage: "Der Elefant ist …", optionen: ["groß", "klein", "leise"], ru: "Слон большой." },

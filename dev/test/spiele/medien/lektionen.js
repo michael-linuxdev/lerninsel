@@ -10,7 +10,7 @@
 // {name} wird durch den Spielernamen ersetzt. ru = Russisch-Hilfe.
 window.LEKTIONEN = [
   {
-    id: "bedienung", name: "Das Tablet bedienen", e: "👆", farbe: "#3AA0E0", grund: "#E1F3FF",
+    id: "bedienung", lz: ["me.ph.01"], name: "Das Tablet bedienen", e: "👆", farbe: "#3AA0E0", grund: "#E1F3FF",
     schritte: [
       { typ: "sag", text: "Hallo {name}! Ich bin Pixel. Ich zeige dir, wie du ein Tablet-Profi wirst. Am Ende bekommst du einen Tablet-Führerschein!",
         ru: "Привет, {name}! Я Пиксель. Я покажу тебе, как стать мастером планшета. В конце ты получишь права на планшет!" },
@@ -43,7 +43,7 @@ window.LEKTIONEN = [
     ]
   },
   {
-    id: "pflege", name: "Tablet und ich", e: "💤", farbe: "#5CCBA6", grund: "#DDF5EC",
+    id: "pflege", lz: ["me.sa.02"], name: "Tablet und ich", e: "💤", farbe: "#5CCBA6", grund: "#DDF5EC",
     schritte: [
       { typ: "sag", e: "📱", text: "Ein Tablet ist empfindlich. Wenn du gut darauf aufpasst, hält es lange.",
         ru: "Планшет — хрупкая вещь. Если ты его бережёшь, он прослужит долго." },
@@ -70,7 +70,7 @@ window.LEKTIONEN = [
     ]
   },
   {
-    id: "daten", name: "Meine Daten sind geheim", e: "🔒", farbe: "#7B55B8", grund: "#EFE6FF",
+    id: "daten", lz: ["me.sa.01"], name: "Meine Daten sind geheim", e: "🔒", farbe: "#7B55B8", grund: "#EFE6FF",
     schritte: [
       { typ: "sag", e: "🔒", text: "Manche Sachen über dich sind geheim. Die verrätst du im Internet niemandem, den du nicht kennst.",
         ru: "Некоторые вещи о тебе — секрет. В интернете ты не рассказываешь их никому, кого не знаешь." },
@@ -102,7 +102,7 @@ window.LEKTIONEN = [
     ]
   },
   {
-    id: "fremde", name: "Fremde im Internet", e: "💬", farbe: "#FF6F61", grund: "#FFE9E2",
+    id: "fremde", lz: ["me.sa.01", "me.kk.01"], name: "Fremde im Internet", e: "💬", farbe: "#FF6F61", grund: "#FFE9E2",
     schritte: [
       { typ: "sag", e: "🎭", text: "Im Internet sieht man nicht, wer wirklich schreibt. Jemand sagt vielleicht, er ist ein Kind, ist aber ein Erwachsener.",
         ru: "В интернете не видно, кто на самом деле пишет. Кто-то может сказать, что он ребёнок, а на самом деле это взрослый." },
@@ -130,7 +130,7 @@ window.LEKTIONEN = [
     ]
   },
   {
-    id: "werbung", name: "Werbung und Kaufen", e: "🛒", farbe: "#E8A33D", grund: "#FFF1D9",
+    id: "werbung", lz: ["me.ar.01"], name: "Werbung und Kaufen", e: "🛒", farbe: "#E8A33D", grund: "#FFF1D9",
     schritte: [
       { typ: "sag", e: "📢", text: "In vielen Spielen und Videos gibt es Werbung. Werbung will, dass du etwas kaufst oder irgendwo hintippst.",
         ru: "Во многих играх и видео есть реклама. Реклама хочет, чтобы ты что-нибудь купил или куда-нибудь нажал." },
@@ -151,7 +151,7 @@ window.LEKTIONEN = [
     ]
   },
   {
-    id: "freundlich", name: "Wahr, falsch und freundlich", e: "🕵️", farbe: "#C2337A", grund: "#FFE8F1",
+    id: "freundlich", lz: ["me.ar.02", "me.kk.01"], name: "Wahr, falsch und freundlich", e: "🕵️", farbe: "#C2337A", grund: "#FFE8F1",
     schritte: [
       { typ: "sag", e: "🕵️", text: "Nicht alles im Internet ist wahr. Bilder kann man verändern, und manche Geschichten sind erfunden.",
         ru: "Не всё в интернете правда. Картинки можно изменить, а некоторые истории выдуманы." },
