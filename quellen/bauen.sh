@@ -10,6 +10,7 @@ $ESBUILD quellen/welt3d/ballons.js quellen/welt3d/insel.js quellen/welt3d/heimat
   --target=es2020 --outdir=spiele/welt3d --chunk-names=gemeinsam-[hash] --legal-comments=none
 # Probeszene einzeln (nicht im Offline-Speicher, nur zum Vergleichen der Grafikstile)
 $ESBUILD quellen/welt3d/probe.js --bundle --format=esm --minify --target=es2020 --outfile=spiele/welt3d/probe.js --legal-comments=none
+$ESBUILD quellen/welt3d/probe25d.js --bundle --format=esm --minify --target=es2020 --outfile=spiele/welt3d/probe25d.js --legal-comments=none
 cp quellen/three/LICENSE.txt spiele/welt3d/three-LICENSE.txt
 # sw.js: alte gemeinsam*-Einträge raus, aktuelle rein (vor der Zeile mit heimat.html)
 grep -v '"spiele/welt3d/gemeinsam' sw.js > sw.js.neu

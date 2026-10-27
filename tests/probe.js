@@ -1,11 +1,11 @@
 // Grafik-Probe (NA-20): öffnet die Pixel-Probe und die runde three.js-Probe auf Handy- und iPad-Größe (quer und hoch), prüft auf Fehler,
 // liest die Messwerte und macht Bildschirmfotos (BILDER=<ordner>). Aufruf: sh tests/laufen.sh probe
-// NUR=pixel oder NUR=rund misst nur eine Probe.
+// NUR=pixel, NUR=rund oder NUR=pixel25d misst nur eine Probe.
 const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;
-const PROBEN = [["pixel", "spiele/probe/"], ["rund", "spiele/welt3d/probe.html?stil=b"]].filter(([n]) => !process.env.NUR || process.env.NUR.split(",").includes(n));
+const PROBEN = [["pixel", "spiele/probe/"], ["rund", "spiele/welt3d/probe.html?stil=b"], ["pixel25d", "spiele/welt3d/probe25d.html"]].filter(([n]) => !process.env.NUR || process.env.NUR.split(",").includes(n));
 // iPad 10 (logisch 1180 × 820) und ein typisches Handy (390 × 844)
 const GERAETE = [["ipad-quer", 1180, 820, 2], ["handy-hoch", 390, 844, 3], ["ipad-hoch", 820, 1180, 2], ["handy-quer", 844, 390, 3]];
 

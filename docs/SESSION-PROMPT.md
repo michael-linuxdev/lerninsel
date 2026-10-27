@@ -71,6 +71,10 @@ der Prolog-Test der runden Insel wackelt, wenn der Rechner nebenbei ausgelastet 
 **Offene Fragen an den Auftraggeber:** iPad-/Handy-Test von Pixel-Look, Ankunft, Sonnenuhr, Erste Frucht, Paket, Einführung E4–E8 (in `/dev`);
 soll „Pixel“ danach auch auf der Hauptseite wählbar sein? Geschenke zu Weihnachten 2026 (NA-16); Muttersprachler/Lehrkräfte; Tonaufnahmen.
 
+**Vorschau „Pixel 2,5D“ (27.10., Vormittag):** `spiele/welt3d/probe25d.html` (three.js, niedrige Auflösung, Toon-Licht, 1-Pixel-Umrisse,
+Figuren mit großem Kopf) – nur Ansicht, ohne Kern. **In der Fragerunde klären:** Pixel flach (PixiJS, wie jetzt) behalten, auf 2,5D umstellen
+oder 2,5D als dritten Look? Details im PLAN-Nachtrag „Vorschau Pixel 2,5D“.
+
 ## 3. Ablauf dieser Sitzung
 1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug, sonst als kurze Liste), bevor du baust. Kläre mindestens:
    - Rückmeldung vom iPad 10 und Handy (in `/dev`, mit neuem Kind): Ankunft, Sonnenuhr, Erste Frucht, Einführung E4–E8, und vor allem die

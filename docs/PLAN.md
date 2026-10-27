@@ -985,3 +985,11 @@ Reihenfolge gilt (NA-26 zuerst); nichts ist gesperrt; Geschenke für NA-16 weite
   Figur (`meineFigur`) lokal verschmelzen. Bauplatz misst im Test nur den Startbildschirm. Danach `STRENG=1 sh tests/laufen.sh leistung` als Abnahme.
 - iPad 10 bitte in `/dev` prüfen: Sieht die runde Insel noch genauso aus (Kugeln etwas kantiger)? Läuft sie flüssiger?
 
+**Nachtrag 27.10.2026 (Vormittag, parallele Sitzung): Vorschau „Pixel 2,5D“** – Wunsch des Auftraggebers: den Pixel-Look als einfache
+2,5D-Ansicht im Stil der Handheld-Abenteuer um 2008–2010 sehen. Nur Vorschau: `spiele/welt3d/probe25d.html` (Quelle
+`quellen/welt3d/probe25d.js`, three.js): niedrige Auflösung (≈ 200 Zeilen, ganzzahlig vergrößert), Toon-Licht in drei Stufen,
+1-Pixel-Umrisse über die Tiefe (Nachbearbeitung), Kachelboden mit Klippen/Plateau, flaches Ufer mit wogendem Schaum, Haus mit Giebel nach vorn,
+Figuren als kleine 3D-Modelle mit großem Kopf und Pixel-Gesicht; ≈ 60 Zeichenaufrufe, ≈ 9.000 Dreiecke. Ohne Story, Stationen, Kern-Anbindung.
+**Offen (Frage an den Auftraggeber):** Bleibt „Pixel“ die flache Draufsicht (PixiJS, NA-26–28, fertig in /dev), oder soll der Pixel-Look auf diese
+2,5D-Ansicht umgestellt werden (oder als dritter Look dazukommen)? 2,5D würde three.js nutzen und könnte den Insel-Kern genauso lesen wie heimat.js.
+
