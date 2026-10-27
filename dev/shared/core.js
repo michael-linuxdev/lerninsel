@@ -216,7 +216,8 @@
     // Solange die Pixel-Insel entsteht (NA-26 bis NA-28), soll „Pixel“ nur in /dev und /dev/test wählbar sein; auf der Hauptseite gilt „Rund“.
     LOOKS: ["rund", "pixel"],
     // Seit NA-26 (Pixel-Insel spielbar) in /dev und /dev/test wählbar; auf der Hauptseite erst, wenn Figuren und Zimmer (NA-27/28) fertig sind.
-    lookWaehlbar() { return UMG !== "prod"; },
+    // Seit 27.10.2026 überall wählbar (Entscheidung des Auftraggebers: bis Weihnachten geht alles direkt auf die Hauptseite).
+    lookWaehlbar() { return true; },
     look() { if (!Spielwelt.lookWaehlbar()) return "rund"; return ((profil.daten.eltern || {}).insel || {}).look === "pixel" ? "pixel" : "rund"; },
     // Eltern können das Umschalten für das Kind sperren (eltern.insel.lookKind = false); Erwachsene (PIN) dürfen immer
     lookKindDarf() { return ((profil.daten.eltern || {}).insel || {}).lookKind !== false; },

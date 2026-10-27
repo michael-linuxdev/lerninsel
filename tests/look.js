@@ -1,5 +1,5 @@
 // Playwright-Test (NA-25): zwei Looks der Insel – „Rund“ (three.js) und „Pixel“ (PixiJS) – mit demselben Spielstand.
-// Hauptseite: nur „Rund“, kein Umschalter. /dev: Knopf auf der Insel und Elternkarte; Umschalten verliert nichts;
+// Seit 27.10.2026 auf Hauptseite und /dev wählbar: Knopf auf der Insel und Elternkarte; Umschalten verliert nichts;
 // Eltern können das Umschalten für das Kind sperren; alle Insel-Links (spiele/insel/) folgen dem gewählten Look.
 // Braucht ein aktuelles /dev (sh quellen/dev-bauen.sh). Aufruf: sh tests/laufen.sh look   (Screenshots mit BILDER=<ordner>)
 const { chromium } = require("playwright");
@@ -26,13 +26,15 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   }
   const stand = () => p.evaluate(() => ({ e: ["E1", "E2", "E3"].map(x => !!Story.etappe(x)), chronik: Story.chronik().length, sterne: Spielwelt.sterne(), name: Spielwelt.profil.name, look: Spielwelt.look() }));
 
-  // 1) Hauptseite: Pixel ist noch nicht wählbar
+  // 1) Hauptseite: Pixel ist wählbar (Freigabe 27.10.2026), Standard bleibt „Rund“
   await neuesKind(BASIS);
-  erwarte(await p.evaluate(() => !Spielwelt.lookWaehlbar() && Spielwelt.look() === "rund"), "Hauptseite: nur „Rund“");
-  await p.evaluate(() => Spielwelt.setzeLook("pixel"));
-  erwarte(await p.evaluate(() => Spielwelt.look() === "rund" && /welt3d\/heimat/.test(Spielwelt.inselUrl("../../"))), "Hauptseite: auch mit gespeichertem „pixel“ geht es zur runden Insel");
+  erwarte(await p.evaluate(() => Spielwelt.lookWaehlbar() && Spielwelt.look() === "rund"), "Hauptseite: Look wählbar, Standard „Rund“");
   await p.goto(BASIS + "spiele/welt3d/heimat.html?stunde=14"); await p.waitForTimeout(2000);
-  erwarte(await p.evaluate(() => document.getElementById("look").hidden), "Hauptseite: kein Look-Knopf auf der Insel");
+  await p.evaluate(() => { if (window.__szene && __szene.aktuell()) Szene.abbrechen(); });
+  erwarte(await p.evaluate(() => !document.getElementById("look").hidden), "Hauptseite: Look-Knopf auf der Insel");
+  await p.evaluate(() => Spielwelt.setzeLook("pixel"));
+  erwarte(await p.evaluate(() => Spielwelt.look() === "pixel" && /pixel\/insel/.test(Spielwelt.inselUrl("../../"))), "Hauptseite: mit „pixel“ geht es zur Pixel-Insel");
+  await p.evaluate(() => Spielwelt.setzeLook("rund"));
 
   // 2) /dev: neues Kind (eigener Spielstand), Knopf auf der runden Insel
   await neuesKind(DEV);
