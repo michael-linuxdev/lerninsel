@@ -80,6 +80,9 @@ oder 2,5D als dritten Look? Details im PLAN-Nachtrag „Vorschau Pixel 2,5D“.
    - Rückmeldung vom iPad 10 und Handy (in `/dev`, mit neuem Kind): Ankunft, Sonnenuhr, Erste Frucht, Einführung E4–E8, und vor allem die
      **Pixel-Insel** (Knopf „👾 Pixel“ auf der Insel): Laufen, Antippen, Zimmer einrichten, Figur/Kleiderschrank. Fehler zuerst beheben.
    - Soll „Pixel“ jetzt auch auf der Hauptseite wählbar werden? Wünsche zum DS-Look (Farben, Größe der Figuren, Details)?
+   - **Welcher Pixel-Look bleibt?** Die Kinder haben (Empfehlung: etwa eine Woche) Rund, Pixel flach (`/dev`, Knopf „👾 Pixel“) und die Vorschau
+     Pixel 2,5D (`/dev/spiele/welt3d/probe25d.html`) ausprobiert. **Rund + Pixel flach** (fertig) oder **Rund + Pixel 2,5D** (2,5D ersetzt dann flach,
+     eigenes Paket)? **Kein dritter Look.** Ohne Antwort: Rund + Pixel flach beibehalten.
    - Welche Geschenke soll es per QR-Code zu Weihnachten 2026 geben (für NA-16)? Neue Antworten auf die übrigen offenen Fragen im Plan?
    - Gilt die Reihenfolge noch (nächstes: **NA-29 Teil 2** Minispiele, dann NA-16/17/18); läuft die runde Insel auf dem iPad jetzt flüssiger?, oder soll etwas vorgezogen werden?
    - Was darf in dieser Sitzung keinesfalls angefasst werden?
@@ -96,13 +99,19 @@ oder 2,5D als dritten Look? Details im PLAN-Nachtrag „Vorschau Pixel 2,5D“.
 Grundsatz: **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js` (und gemeinsamen Bausteinen wie
 `shared/einrichten.js`); „Rund“ und „Pixel“ zeichnen dieselbe Welt. Nichts, was das Kind besitzt oder erlebt hat, hängt am Look.
 **Jede neue Figur, jedes Möbel, jedes Bauwerk, jede Szene in beiden Looks** (oder im Plan als offen vermerken).
-1. **Freigabe Pixel auf der Hauptseite** – nur nach Rückmeldung des Auftraggebers: `lookWaehlbar()` in `shared/core.js` auf `true`, Text in der
+1. **NA-29b Handy-Leistung** (S, gleich zu Beginn, unabhängig von der Look-Wahl; Messung in PLAN.md „Nachtrag … kleinen Smartphones“):
+   Pixel flach mit Auflösung ×1 (`quellen/pixel/insel.js`, Pixi `resolution`, Pixelkunst sieht gleich aus, ¼ der Pixel); Rund auf kleinen
+   Bildschirmen (kürzere Seite < 500 CSS-Pixel) beim ersten Start automatisch „einfach“, Eltern-Einstellung hat Vorrang.
+   Messen und Abnahme mit `sh tests/laufen.sh handy` (Pixel flach ≤ 0,3 Mio. Pixel pro Bild).
+2. Nur wenn der Auftraggeber **2,5D** wählt: Paket „Pixel 2,5D aus dem Insel-Kern“ planen (three.js wie Rund, Vorschau `quellen/welt3d/probe25d.js`
+   als Ausgangspunkt; Stationen, Szenen, Zimmer, Figuren aus dem Kern) – es **ersetzt** den flachen Pixel-Look, die Look-Wahl `pixel` bleibt.
+3. **Freigabe Pixel auf der Hauptseite** – nur nach Rückmeldung des Auftraggebers: `lookWaehlbar()` in `shared/core.js` auf `true`, Text in der
    Elternkarte („nur in der Testumgebung“) anpassen, `tests/look.js` umstellen.
-2. **NA-29 Teil 2: Minispiele ins Budget** (Plan in PLAN.md, letzter Eintrag): Helfer nach `quellen/welt3d/gemeinsam.js` verschieben, Strecken-Deko
+4. **NA-29 Teil 2: Minispiele ins Budget** (Plan in PLAN.md, letzter Eintrag): Helfer nach `quellen/welt3d/gemeinsam.js` verschieben, Strecken-Deko
    als `InstancedMesh`, Figur verschmelzen. Messen mit `sh tests/laufen.sh leistung`, Abnahme `STRENG=1 sh tests/laufen.sh leistung`.
-3. **NA-16** QR-Geschenk (wartet auf die Geschenk-Auswahl) → **NA-17** Kapitel 1–2 (inkl. E9 Atelier, E10 Mein Ich) → **NA-18** Chronik im Album
+5. **NA-16** QR-Geschenk (wartet auf die Geschenk-Auswahl) → **NA-17** Kapitel 1–2 (inkl. E9 Atelier, E10 Mein Ich) → **NA-18** Chronik im Album
    (Szenen nochmal ansehen, auch Tutorial-Etappen).
-4. **NA-03** Lehrplan-Kern → NA-40 → NA-30 → NA-32 → NA-31. Minispiele bleiben vorerst 3D (aus beiden Looks gestartet); „Meine Welt“ für Pixel offen.
+6. **Danach Grafik einfrieren, Inhalte bauen:** **NA-03** Lehrplan-Kern → NA-40 → NA-30 → NA-32 → NA-31. Minispiele bleiben vorerst 3D (aus beiden Looks gestartet); „Meine Welt“ für Pixel offen.
 
 ## 5. Wie die Story-Bausteine benutzt werden (Kurzreferenz)
 - Szene registrieren (nur Daten) in `shared/szenen.js`:
@@ -154,7 +163,7 @@ Grundsatz: **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `s
 - `sh tests/laufen.sh` = Node-Test `tests/story-migration.js` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.

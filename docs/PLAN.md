@@ -993,3 +993,24 @@ Figuren als kleine 3D-Modelle mit großem Kopf und Pixel-Gesicht; ≈ 60 Zeichen
 **Offen (Frage an den Auftraggeber):** Bleibt „Pixel“ die flache Draufsicht (PixiJS, NA-26–28, fertig in /dev), oder soll der Pixel-Look auf diese
 2,5D-Ansicht umgestellt werden (oder als dritter Look dazukommen)? 2,5D würde three.js nutzen und könnte den Insel-Kern genauso lesen wie heimat.js.
 
+**Nachtrag 27.10.2026 (Mittag): Rechenaufwand auf kleinen Smartphones** (`tests/handy.js`, Software-Grafik, CPU zusätzlich 4× gedrosselt;
+Werte iPhone SE hoch, 375×667 ×2):
+
+| Look | Zeichenaufrufe | Dreiecke | Pixel pro Bild | Hauptthread ms/Bild (4× gedrosselt) | JS-Download |
+|---|---:|---:|---:|---:|---:|
+| Rund „schön“ | 82 (quer 105) | 100 Tsd. (quer 123 Tsd.) | 0,56 Mio. | 13,7 (quer 17,5) | 0,9 MB |
+| Rund „einfach“ | 47 (quer 70) | 35 Tsd. | 0,25 Mio. | 9,7 | 0,9 MB |
+| Pixel flach | 1 | 150 | 1,0 Mio. | 3,4 | 1,2 MB |
+| Pixel 2,5D (Vorschau, ohne Stationen) | 65 | 8,8 Tsd. | 0,06 Mio. | 8,7 | 0,6 MB |
+
+Bewertung: Alle Looks sind auf kleinen Handys machbar. Grenzfall ist nur Rund „schön“ auf schwachen Geräten (quer über 16,7 ms → Ruckeln, Wärme).
+Pixel flach rechnet unnötig viele Pixel (volle Auflösung ×2). Empfehlung an den Auftraggeber: **keinen dritten Look**; Kinder testen etwa eine Woche
+Rund, Pixel flach und Pixel 2,5D. Bevorzugen sie 2,5D klar, **ersetzt** es den flachen Pixel-Look (eigenes Paket), sonst bleibt Rund + Pixel flach.
+Danach Grafik einfrieren und Inhalte bauen.
+
+Neues kleines Paket **NA-29b Handy-Leistung** (S, unabhängig von der Look-Wahl):
+- Pixel flach mit Auflösung ×1 rendern (Pixelkunst sieht gleich aus, ¼ der Pixel) – `quellen/pixel/insel.js`, Pixi `resolution`.
+- Rund auf kleinen Bildschirmen (kürzere Seite < 500 CSS-Pixel) beim ersten Start automatisch „einfach“; Eltern-Einstellung hat Vorrang.
+- Abnahme: `sh tests/laufen.sh handy` – Pixel flach ≤ 0,3 Mio. Pixel pro Bild, Rund auf Handy-Größe „einfach“ ohne Eingriff.
+- Wenn möglich einmal auf einem echten älteren Gerät gegenprüfen.
+
