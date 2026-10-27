@@ -1,113 +1,142 @@
 # Prompt für die nächste Arbeitssitzung (Umsetzung der Neuausrichtung)
 
-Diesen Text als erste Nachricht in eine neue Sitzung mit dem Repo `michael-linuxdev/lerninsel` kopieren.
+Diesen Text komplett als erste Nachricht in eine neue Sitzung kopieren – **auch in einem anderen Claude-Konto**.
+Er ist in sich vollständig: Die neue Sitzung braucht kein Vorwissen, keine Erinnerung und keinen alten Chat.
+Voraussetzung: Das Konto hat Lese- und Schreibzugriff auf das GitHub-Repo `michael-linuxdev/lerninsel`
+(GitHub in den Claude-Einstellungen unter „Connectors“ verbinden; ohne Schreibzugriff kann die Sitzung nicht pushen).
 
 ---
 
-Du arbeitest an der **Lerninsel** (Repo `michael-linuxdev/lerninsel`, Branch `main`, online unter lerninsel.micana.de):
-eine Offline-Lern-App (reines HTML/CSS/JS, three.js für 3D) für Grundschulkinder auf dem Tablet.
+Du arbeitest an der **Lerninsel**: einer Offline-Lern-App für Grundschulkinder auf dem Tablet (reines HTML/CSS/JS, three.js für 3D,
+kein Server). Repo `michael-linuxdev/lerninsel`, Branch `main`; was auf `main` liegt, ist sofort online unter lerninsel.micana.de
+(Hauptseite für die Kinder), `/dev` (neue Funktionen, eigener Spielstand) und `/dev/test` (Testmodus, alles frei).
+Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf **Deutsch**.
 
-## Auftrag: die Neuausrichtung vom 26.10.2026 umsetzen
-Die Planung ist fertig. Diese Sitzung **baut**, in der Reihenfolge aus `docs/PLAN.md`, Abschnitt
-„Neuausrichtung 26.10.2026“ → „Reihenfolge“ und „Arbeitspaket-Backlog“ (Pakete NA-xx mit Ziel, Dateien, Abnahme, Test, Größe).
+## 0. Einrichten (zuerst, ohne nachzufragen)
+1. Repo holen: `git clone https://github.com/michael-linuxdev/lerninsel` (bzw. das Repo der Sitzung hinzufügen, falls das Werkzeug dafür da ist).
+   Arbeite direkt auf `main`; vor jedem Push `git fetch origin main && git rebase origin/main`.
+2. Werkzeuge prüfen, nur fehlende nachinstallieren:
+   - **esbuild** (für 3D): `/opt/npm-tools/node_modules/esbuild/bin/esbuild`, sonst `npx --yes esbuild` oder `npm i -g esbuild` → `ESBUILD=esbuild`.
+   - **Playwright + Chromium**: `node -e "require('playwright')"` (ggf. vorher `export NODE_PATH=$(npm root -g)`); Browser unter `/opt/pw-browsers`
+     (`PLAYWRIGHT_BROWSERS_PATH`). Fehlt beides: `npm i -g playwright && npx playwright install chromium` und `PLAYWRIGHT_BROWSERS_PATH` weglassen.
+   - `python3` für den lokalen Server.
+3. Einmal `sh tests/laufen.sh` ausführen (Node-Test + Rauchtest). Muss grün sein, bevor du etwas änderst. Dauert ca. 2 Minuten.
 
-## Zuerst lesen
-1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** (am Ende) – er ist verbindlich. Ältere Abschnitte sind Historie;
-   die „Nachträge 26.10.2026“ davor beschreiben, was heute schon im Code steckt.
-2. `docs/KONZEPT.md` (Story-Rahmen, Begriffe, Kapitel, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
-3. Je nach Paket: `docs/LEHRPLAN.md` (Lernziel-IDs, Datenformat), `docs/SPRACHEN.md` (Sprachen, DaZ, RTL, Vorlesen, Prüfstatus),
-   `docs/GRAFIK.md` (Stil, Leistungsbudget iPad 10), `docs/MINISPIELE.md` (Katalog, Qualitätskriterien).
-4. `README.md` für den Aufbau des Repos.
+## 1. Zuerst lesen
+1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
+   Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
+   **„Stand 27.10.2026“** (was fertig ist, Abweichungen, nächste Schritte). Ältere Abschnitte sind Historie.
+2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
+3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10),
+   `docs/MINISPIELE.md`.
+4. `README.md` (Aufbau des Repos, Liste der Dateien in `shared/`).
 
-## Ablauf
-1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug), bevor du baust. Kläre mindestens:
-   - Gibt es Antworten auf die „Offenen Fragen an den Auftraggeber“ in `docs/PLAN.md` (Insel-Zugang, QR-Schlüssel, Grafik-Termin,
-     Muttersprachler/Lehrkräfte, Tonaufnahmen)?
-   - Gibt es neue Rückmeldungen vom iPad 10 oder von Kindern?
-   - Gilt die Reihenfolge noch, oder soll ein Paket vorgezogen werden?
+## 2. Stand (27.10.2026)
+**Fertig** (Einzelheiten in PLAN.md → „Stand 27.10.2026“):
+- **NA-01** `shared/ereignisse.js`: `Ereignisse.melde/hoere/offene/abholen` und `window.Story` (Kapitel, Etappen E1…, gesehene Szenen,
+  Chronik, Geschenke) in `profil.daten.story`, mit Migration alter Spielstände.
+- **NA-02** Profil: `stufe` (vs, 1–4, 5), `land` (sn, nw, by, bw, ni, bb), `muttersprache`, `deutschstand` (keine/wenig/alltag/gut);
+  Helfer `Spielwelt.stufe()`, `Spielwelt.land()`; `klasse` bleibt für alte Abfragen.
+- **NA-10** `shared/szene.js` (Sprechblasen-Folgen, höchstens 4, Vorlesen, Hilfesprache, Optionen `zeige`, `bis`, `beim`) und
+  `shared/zeige.js` (Zeigehand/Leuchten, auch für 3D-Punkte über `window.Insel.ort(name)`); Szenentexte in `shared/szenen.js`.
+- **NA-11** Prolog „Ankunft“ (E1) mit Steg und Pixels Boot; Robo Pixel wohnt am Steg („Wie ging das nochmal?“); Elternkarte „Geschichte und Einführung“.
+- **NA-12** Insel-Zugang: erste Lektion „Das Tablet bedienen“ öffnet die Insel (`Spielwelt.inselOffen()`), Elternschalter für die alte Regel;
+  Minispiele weiter nur mit komplettem Führerschein (`Spielwelt.minispieleOffen()`).
+- **NA-13** Sonnenuhr am Steg, E2 „Erst lernen“, Szene „Sonne geht auf“, E3 „Erste Frucht“ = Kapitel 1 mit weichendem Nebel;
+  höchstens 2 neue Etappen pro Tag (`Story.darfNeueEtappe()`).
+- **NA-15** Weihnachts-Sonderstart (Erststart 1.–26.12.): Paket am Steg (Tannenbaum fürs Zimmer, Schleife fürs Tier), Lichterkette im Dezember.
+
+**Antworten des Auftraggebers (26.10.2026):** Insel-Zugang über die erste Lektion – ja (umgesetzt). QR-Geschenke mit privatem Schlüssel nur
+beim Auftraggeber und Node-Skript – einverstanden; **welche Geschenke** es zu Weihnachten 2026 gibt, ist noch offen.
+Reihenfolge gilt unverändert. Grafik-Termin, Muttersprachler/Lehrkräfte, Tonaufnahmen: noch offen.
+
+**Bekannte Baustellen:** Insel liegt über dem Leistungsbudget (≈ 495 Zeichenaufrufe „schön“, ≈ 335 „einfach“; Budget 150/80 → NA-21/NA-20);
+zwei Kind-Figuren in 3D (NA-22); Deutsch-Bereiche in `shared/lehrplan.js` noch nach KMK 2004 (NA-03); alle russischen Szenentexte sind
+Entwürfe (`status: { ru: "entwurf" }`) und erscheinen nur in `/dev`.
+
+## 3. Ablauf dieser Sitzung
+1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug, sonst als kurze Liste), bevor du baust. Kläre mindestens:
+   - Rückmeldung vom iPad 10 zu Ankunft, Sonnenuhr, Erste Frucht, Weihnachts-Paket (in `/dev` mit neuem Kind getestet?) – Fehler zuerst beheben.
+   - Welche Geschenke soll es per QR-Code zu Weihnachten 2026 geben (für NA-16)? Neue Antworten auf die übrigen offenen Fragen im Plan?
+   - Gilt die Reihenfolge noch (nächstes: **NA-14**), oder soll etwas vorgezogen werden (z. B. NA-21/NA-20 Grafik, NA-16 QR-Geschenk)?
    - Was darf in dieser Sitzung keinesfalls angefasst werden?
-2. **Dann selbstständig arbeiten**, bis die Sitzung aufgebraucht ist. Lege eine Aufgabenliste an (ein Eintrag je Paket bzw. Schritt a/b/c)
-   und hake ab. Frag nur nach, wenn eine Entscheidung nicht rückgängig zu machen ist; sonst triff die vernünftigste Wahl und notiere sie im Plan.
-   Pakete mit Vermerk „wartet auf Antwort“ ohne Antwort überspringen.
-3. **Zwischendurch pushen:** nach jedem fertigen, getesteten Schritt (spätestens alle ~45 Minuten Arbeit). Lieber kleine fertige Schritte
-   als ein großer halbfertiger. Höchstens ein großes Paket gleichzeitig offen.
-4. **Am Ende** (oder wenn das Kontingent knapp wird): in `docs/PLAN.md` unter dem Abschnitt „Neuausrichtung 26.10.2026“ einen Eintrag
-   „Stand <Datum>“ ergänzen (erledigte Pakete, Abweichungen vom Plan, offene Punkte, nächstes Paket), in der Reihenfolge erledigte Pakete
-   durchstreichen, pushen und kurz berichten.
+2. **Dann selbstständig arbeiten**, bis die Sitzung aufgebraucht ist. Aufgabenliste anlegen (ein Eintrag je Paket bzw. Schritt a/b/c) und abhaken.
+   Nur nachfragen, wenn eine Entscheidung nicht rückgängig zu machen ist; sonst die vernünftigste Wahl treffen und im Plan notieren.
+   Pakete mit „wartet auf Antwort“ ohne Antwort überspringen.
+3. **Zwischendurch pushen:** nach jedem fertigen, getesteten Schritt. Lieber kleine fertige Schritte als ein großer halbfertiger.
+   Höchstens ein großes Paket gleichzeitig offen.
+4. **Am Ende:** in `docs/PLAN.md` unter „Neuausrichtung 26.10.2026“ einen Eintrag „Stand <Datum>“ ergänzen (erledigte Pakete, Abweichungen,
+   offene Punkte, nächstes Paket), in der „Reihenfolge“ erledigte Pakete durchstreichen, **diese Datei (`docs/SESSION-PROMPT.md`) auf den neuen
+   Stand bringen** (Abschnitte 2 und 4), pushen und kurz berichten.
 
-## Stand 27.10.2026
-NA-01, NA-02, NA-10, NA-11, NA-12, NA-13 und NA-15 sind fertig (siehe „Stand 27.10.2026“ in `docs/PLAN.md`). Nächstes Paket: **NA-14**
-(Tutorial E4–E8, `shared/tutorial.js`), daneben NA-21/NA-20. Die Fragerunde trotzdem machen (iPad-Rückmeldung zu Prolog/Tutorial, Geschenke für NA-16).
+## 4. Nächste Pakete (Reihenfolge laut Plan)
+1. **NA-14** Tutorial E4–E8 (M): neu `shared/tutorial.js` (Etappen-Liste, Auslöser, Tageslimit – das Limit steckt heute in
+   `Story.darfNeueEtappe()`), Szenen in `shared/szenen.js`, Auslöser in `quellen/welt3d/heimat.js` (Funktion `naechsteStory()`),
+   `spiele/tier/tier.js`, `shared/lernkartei.js`; Elternschalter „Tutorial überspringen“; bestehende Kinder bekommen nur Etappen,
+   deren Feature sie noch nie genutzt haben. Test-Haken `window.__tutorial`. Test: Uhr über drei Tage vorstellen (Muster: `tests/tutorial.js`).
+2. Daneben: **NA-21** Leistungs-Test (`tests/leistung.js`) → **NA-20** Probeszenen (Stilentscheidung).
+3. **NA-16** QR-Geschenk (sobald die Geschenk-Auswahl da ist; Liste eingelöster Geschenke: `Story.hatGeschenk/merkeGeschenk`),
+   **NA-17** Kapitel 1–2, **NA-18** Inselchronik im Album (Szenen aus `shared/szenen.js` per `Szene.spiele(id)` abspielen).
+4. Danach laut Plan: NA-03 Lehrplan-Kern → NA-40 Wortschatz/DaZ D0 → NA-30 Anlaute → NA-32 → NA-31.
 
-## (erledigt) Erster Schritt: NA-01 „Story-Zustand und Insel-Ereignisse“ (S), danach NA-02 und NA-10
-Konkret für NA-01 (Einzelheiten im Backlog):
-1. Neue Datei `shared/ereignisse.js`: `Ereignisse.melde(art, daten)` und `Ereignisse.hoere(art, fn)`; Arten `fund`, `bild`, `melodie`,
-   `bauwerk`, `kapitel`, `etappe`. Ereignisse, die eine andere Seite betreffen, werden im Spielstand als kurze Liste vorgemerkt
-   (höchstens 20 Einträge, ältere fallen weg).
-2. `shared/spielstand.js`: neues Feld `story: { kapitel: 0, etappen: {}, gesehen: [], chronik: [] }` mit Migration für alte Spielstände;
-   QR-Transfer darf höchstens ~200 Byte größer werden.
-3. Melden: `shared/lernfunde.js` (`fund`), `spiele/atelier/atelier.js` (`bild`), `spiele/atelier/musik.js` (`melodie`).
-4. Einbinden überall, wo `shared/core.js` geladen wird (Startseite, Spiele, Insel); `sw.js`-Liste ergänzen.
-5. Tests: Node-Test für die Migration, Playwright: Lernfund erzeugen → Ereignis und `story` im Spielstand; Rauchtest grün.
-Danach **NA-02** (Profil: Stufe, Deutschstand, Bundesland) und **NA-10** (Szenen-Baustein `shared/szene.js` + Zeigehand `shared/zeige.js`).
-**Meilenstein 15.12.2026:** Prolog, Tutorial E1–E3 und Weihnachts-Sonderstart (NA-11, NA-13, NA-15) laufen.
+## 5. Wie die Story-Bausteine benutzt werden (Kurzreferenz)
+- Szene registrieren (nur Daten) in `shared/szenen.js`:
+  `Szene.registriere("id", { titel, etappe: "E4", blasen: [ { wer: "biber", text: { de: "… {name} …", ru: "…", status: { ru: "entwurf" } } } ] })`.
+  `wer`: robo, eule, fipsi, biber, baer, papagei, tilda. Höchstens 4 Blasen, kurze Sätze, jede Zeile vorlesbar.
+- Auf der Insel abspielen: in `heimat.js` `spieleStory(id)` ergänzen (dort `zeige`/`bis`/`beim` je Blase setzen) und die Bedingung in
+  `naechsteStory()` einreihen. Am Ende `Story.etappeFertig(def.etappe)`; Szenen landen automatisch in der Chronik.
+- 3D-Ziele für die Zeigehand: `window.Insel.ort("haus" | "sonnenuhr" | "wissensbaum" | "eule" | "ich")`; neue Orte in `ORTE` in `heimat.js`.
+- Ereignisse: `Ereignisse.melde("bauwerk", { id })`; auf einer anderen Seite `Ereignisse.abholen("bauwerk")`.
 
-## Regeln (unverändert gültig)
+## 6. Regeln (unverändert gültig)
 - **Offline-first:** kein Server, keine Konten, keine Daten verlassen das Gerät (einzige Ausnahme: Wetter von Open-Meteo ohne GPS).
 - **„Erst lernen, dann spielen“** ist eine harte Regel. Elternbereich mit PIN. Bildschirmzeit nach DGKJ; Erwachsene (PIN) dürfen immer spielen, ohne Sterne.
 - **Nie Werbung, nie Käufe, keine süchtig machenden Mechaniken** (keine Lootboxen, kein Druck durch Serien, keine Ranglisten zwischen Kindern,
   keine Fristen in der Story, nichts geht verloren).
 - Mehrere Kinder pro Tablet; lokale Speicherung und QR-Übertragung bleiben (Spielstand klein halten; Bilder bleiben in der eigenen IndexedDB).
-- **Kein Bezug zu einem echten Kind** im Repo (keine Namen, kein Alter, keine Klasse). Beispielnamen sind ausgedacht.
+- **Kein Bezug zu einem echten Kind** im Repo (keine Namen, kein Alter, keine Klasse). Beispielnamen sind ausgedacht (in Tests z. B. „Mira“).
 - **Bestehende Funktionen nicht entfernen.** Wenn etwas ersetzt werden soll, im Plan begründen und per Eltern-Schalter die alte Variante anbieten.
 - Sprache: Deutsch, kindgerecht; alle neuen Texte als Sprachschlüssel `{ de, ru, … }`; Hilfesprache nur, wenn gewählt. Neue Übersetzungen
-  bekommen einen Prüfstatus (`entwurf`/`geprueft`/`kindgerecht`); **keine ungeprüfte Maschinenübersetzung im Kinder-UI**.
+  bekommen einen Prüfstatus (`entwurf`/`geprueft`/`kindgerecht`); **keine ungeprüfte Maschinenübersetzung im Kinder-UI** (Entwürfe nur in /dev).
 - Story- und Tutorial-Texte: höchstens 4 Sprechblasen je Szene, jede Zeile vorlesbar, ohne Lesen bedienbar (Zeigehand, Leuchten, Ton).
-- Grafik: **Bis zur Stilentscheidung (NA-20) keine Figuren neu bauen.** Neue 3D-Teile im Leistungsbudget aus `docs/GRAFIK.md`
-  (iPad 10: ≤ 150 Zeichenaufrufe in „schön“, ≤ 80 in „einfach“) und immer auch in Stufe „einfach“ prüfen.
+- Grafik: **Bis zur Stilentscheidung (NA-20) keine Figuren neu bauen.** Neue 3D-Teile sparsam (feste Deko in die Gruppe `deko` vor
+  `verschmelze(deko)`, dann kosten sie kaum Zeichenaufrufe) und immer auch in Stufe „einfach“ prüfen.
   Keine fremden urheberrechtlich geschützten Figuren; fremde Dateien nur CC0/OFL und dann in `docs/LIZENZEN.md`.
 - Lerninhalte nur zusammenfassen und Lernziel-IDs zuordnen, nie Lehrpläne wörtlich abschreiben.
 - Commits als `michael-linuxdev <336864235+michael-linuxdev@users.noreply.github.com>`, Nachricht auf Deutsch
   (`git -c user.name=michael-linuxdev -c user.email=336864235+michael-linuxdev@users.noreply.github.com commit …`).
 
-## Bauen
-- Wenn Dateien in `quellen/welt3d/` geändert wurden: 3D bauen mit
-  `ESBUILD=/opt/npm-tools/node_modules/esbuild/bin/esbuild sh quellen/bauen.sh` (falls der Pfad fehlt: `npx esbuild` bzw. `npm i -g esbuild`
-  und `ESBUILD=esbuild`). Das Skript aktualisiert auch die `gemeinsam-*.js`-Einträge in `sw.js`.
-- **Vor jedem Push** `sh quellen/dev-bauen.sh` (setzt die Cache-Version in `sw.js` automatisch, baut `/dev` und `/dev/test`).
-- Neue Dateien unter `shared/`, `spiele/` oder `inhalte/` in die Offline-Liste in `sw.js` eintragen.
+## 7. Bauen
+- Wenn Dateien in `quellen/welt3d/` geändert wurden: `ESBUILD=<pfad> sh quellen/bauen.sh` (baut `spiele/welt3d/*.js`, aktualisiert die
+  `gemeinsam-*.js`-Einträge in `sw.js`). **Nie** die gebauten Dateien in `spiele/welt3d/` von Hand ändern.
+- **Vor jedem Push** `sh quellen/dev-bauen.sh` (setzt die Cache-Version in `sw.js`, baut `/dev` und `/dev/test`; `dev/` nie von Hand ändern).
+- Neue Dateien unter `shared/`, `spiele/` oder `inhalte/` in die Offline-Liste in `sw.js` eintragen und in den HTML-Seiten einbinden
+  (`shared/ereignisse.js` steht überall direkt nach `shared/core.js`).
 
-## Testen (Pflicht vor jedem Push)
-- Rauchtest über alle Seiten: `sh tests/laufen.sh` (für /dev: `PFAD=dev/ sh tests/laufen.sh`). Neue Seiten in `tests/rauchtest.js`
-  aufnehmen (3D-Seiten in `SEITEN_3D`).
-- Eigene Tests: Server `python3 -m http.server 8766` im Repo-Ordner, im selben Befehl starten:
-  `(python3 -m http.server 8766 >/dev/null 2>&1 &) ; sleep 1; …` (Hintergrund-Server enden zwischen Befehlen).
-- Playwright: `PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers` (falls nicht vorhanden: vorinstalliertes Chromium/Playwright nutzen, nicht neu
-  installieren), für 3D Startoptionen `--enable-unsafe-swiftshader --use-angle=swiftshader`.
-- Ersteinrichtung ist Pflicht: im Test zuerst PIN `1234` zweimal, dann Vorname eingeben (nach NA-02 auch Stufe/Land/Deutschstand).
-- Uhr setzen: `addInitScript(() => { window.__jetzt = new Date(2026,9,25,15,0).getTime(); })`, sonst greift nachts die Ruhezeit.
-  Für Weihnachten `new Date(2026,11,10,15,0)`. Insel: Tag `heimat.html?stunde=14`, Jahreszeit `?monat=12`,
-  Wetter `?wetter=regen|schnee|nebel|gewitter|klar`, Welt `?biom=berge&groesse=gross&huegel=viel&see=1&seed=5`.
-- Jede geänderte Seite einmal öffnen, Konsole auf Fehler prüfen, Screenshots ansehen (Quer- und Hochformat; mit Hilfesprache Russisch;
-  RTL-Sprachen ab NA-44 zusätzlich).
-- Swiftshader läuft mit wenigen Bildern pro Sekunde: Bewegungen im Test langsam, zeitabhängige Logik mit Uhrzeit statt `dt` prüfen;
-  Leistung über Zählwerte (`renderer.info`, ab NA-21 `tests/leistung.js`), nicht über Bilder/s beurteilen.
-- Pulsierende Knöpfe (Aktionsknopf) mit `click(…, { force: true })`.
-- Test-Haken: `__heimat` (blick, ich, reingehen, rausgehen, laufeZu, tippe, station, laden, zimmerDaten, aktion, druecke, rennt, wetter),
-  `__atelier`, `__musik`, `__schach`, `__gefuehle`, `__lauf`, `__kart`, `__bau`, `__duell`, `__ich`, `__mathe`;
-  `__szene`, `__ereignisse` (neu), `__heimat.prolog/sonnenuhr/nebel/paket/oeffnePaket/bildschirm`; geplant: `__tutorial`. Jeder neue Baustein bekommt einen Test-Haken.
-- Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `weihnachten`.
-- Externe Seiten (Open-Meteo, Google Fonts) sind aus der Sandbox meist nicht erreichbar – mit Cache-Daten in localStorage testen.
+## 8. Testen (Pflicht vor jedem Push)
+- `sh tests/laufen.sh` = Node-Test `tests/story-migration.js` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
+  Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
+- Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `weihnachten`
+  (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
+- Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.
+- Ersteinrichtung im Test: PIN `1234` zweimal (`#pin1`, `#pin2`, `#pin-ok`), dann `#e-name` und `#e-ok` (Stufe, Land, Muttersprache,
+  Deutschstand haben Standardwerte; Felder `#e-stufe`, `#e-land`, `#e-mutter`, `#e-deutsch`, `#e-sprache`).
+  Insel öffnen: `medien.lektionen = { bedienung: 3 }` setzen; für Minispiele zusätzlich `medien.fuehrerschein`.
+- Uhr: `addInitScript(() => { window.__jetzt = new Date(2026,9,25,15,0).getTime(); })`, sonst greift nachts die Ruhezeit.
+  Tage vorstellen über localStorage `__testJetzt` (siehe `tests/tutorial.js`). Weihnachten: `new Date(2026,11,10,15,0)` und `?monat=12`.
+  Achtung: Ein Testlauf über Mitternacht kann wackeln (Teile der App nehmen das echte Datum) – dann einfach nochmal laufen lassen.
+- Insel-Parameter: `heimat.html?stunde=14`, `?monat=12`, `?wetter=regen|schnee|nebel|gewitter|klar`,
+  `?biom=berge&groesse=gross&huegel=viel&see=1&seed=5`, `?szene=probe` (Probeszene, auch auf der Startseite).
+- Playwright für 3D mit `--enable-unsafe-swiftshader --use-angle=swiftshader`. Swiftshader ist langsam: Bewegungen im Test per Teleport
+  (`__heimat.ich.position.set(…)`), zeitabhängige Logik mit Uhrzeit statt `dt`; Leistung über `__heimat.zeichnungen()`, nicht über Bilder/s.
+- Pulsierende Knöpfe (Aktionsknopf `#springen`, `#szene-weiter`) mit `click(…, { force: true })`.
+- Test-Haken: `__heimat` (blick, ich, reingehen, rausgehen, laufeZu, tippe, station, laden, zimmerDaten, aktion, druecke, rennt, wetter,
+  bildschirm, prolog, imProlog, steg, sonnenuhr, su, nebel, naechsteStory, paket, oeffnePaket, lichter, zeichnungen), `__szene`
+  (spiele, aktuell, weiter, abbrechen, szenen), `__ereignisse`, `__atelier`, `__musik`, `__schach`, `__gefuehle`, `__lauf`, `__kart`,
+  `__bau`, `__duell`, `__ich`, `__mathe`; geplant: `__tutorial`. Jeder neue Baustein bekommt einen Test-Haken.
+- Jede geänderte Seite einmal öffnen, Konsole auf Fehler prüfen, Screenshots ansehen (Quer- und Hochformat; mit Hilfesprache Russisch, in /dev).
+- Externe Seiten (Open-Meteo, Google Fonts) sind aus der Sandbox meist nicht erreichbar – Fehlermeldungen dazu ignorieren, mit Cache-Daten testen.
 
-## Stand zu Beginn (26.10.2026)
-- Fertig (siehe „Nachträge 26.10.2026“ im Plan): Zeitsystem, mehrere Kinder, Insel bzw. eigene Welten (Wünsche-Assistent), Zimmer,
-  Lernfunde/Wissensbaum/Pinnwand, Lernkartei in Mathe/Deutsch/Sachunterricht, Schatzkammer und Wochen-Challenge, Eltern als Mitspieler,
-  Echte-Welt-Aufgaben, Minispiele (Ballons, Schatz-Strand, Sternenlauf, Kart, Bauplatz), Bruni (Gefühle, Bewegung, Miteinander, Stärken),
-  Schach mit Tilda, Atelier mit Paula (Malen, Musik-Ecke, Insel-Bühne), Leistungsmodus fürs iPad.
-- Planung der Neuausrichtung: `KONZEPT.md`, `LEHRPLAN.md`, `SPRACHEN.md`, `GRAFIK.md`, `MINISPIELE.md`, `PLAN.md` (Neuausrichtung).
-- Bekannte Baustellen: zwei Kind-Figuren in 3D (`heimat.js` und `figur3d.js`, Paket NA-22), Deutsch-Bereiche in `shared/lehrplan.js`
-  noch nach KMK 2004 (NA-03), Insel nur mit komplettem Tablet-Führerschein (NA-12, wartet auf Antwort).
-
-## Berichten
+## 9. Berichten
 Kurz und auf Deutsch: welche Pakete fertig sind (mit Screenshots, wenn es etwas zu sehen gibt), was der Auftraggeber auf dem iPad 10
-testen soll, welche Entscheidungen du getroffen hast, was als Nächstes kommt.
+testen soll (Schritt für Schritt, in `/dev`), welche Entscheidungen du getroffen hast, was als Nächstes kommt.
