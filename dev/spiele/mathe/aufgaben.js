@@ -515,7 +515,20 @@
     { id: "k3zeit", stufe: "3", lz: ["ma.gm.08"], name: "Zeitspannen", icon: "⏱️",
       neu: () => { const h = r(7, 16), m = wahl([0, 15, 30, 45]), d = wahl([15, 30, 45, 60, 90]), e = h * 60 + m + d;
         const t = (x) => `${Math.floor(x / 60)}:${String(x % 60).padStart(2, "0")}`;
-        return zahl("", d, `Von ${t(h * 60 + m)} bis ${t(e)} Uhr: zähle die Minuten weiter. Das sind ${d} Minuten.`, { frage: `Der Film beginnt um ${t(h * 60 + m)} Uhr und endet um ${t(e)} Uhr. Wie viele Minuten dauert er?`, einheit: "min", nurLuecke: true }); } }
+        return zahl("", d, `Von ${t(h * 60 + m)} bis ${t(e)} Uhr: zähle die Minuten weiter. Das sind ${d} Minuten.`, { frage: `Der Film beginnt um ${t(h * 60 + m)} Uhr und endet um ${t(e)} Uhr. Wie viele Minuten dauert er?`, einheit: "min", nurLuecke: true }); } },
+    { id: "k3rest", stufe: "3", lz: ["ma.zo.11"], name: "Teilen mit Rest", icon: "÷",
+      neu: () => { const b = r(3, 9), q = r(2, 9), rest = r(1, b - 1), a = b * q + rest;
+        return zahl(`${a} : ${b} = ${q} Rest ?`, rest, `${q} · ${b} = ${q * b}. Bis ${a} fehlen noch ${rest}. Das ist der Rest.`); } },
+    { id: "k3bruch", stufe: "3", lz: ["ma.zo.14"], name: "Hälfte und Viertel", icon: "½",
+      neu: () => { const art = wahl([["die Hälfte", 2], ["ein Viertel", 4], ["drei Viertel", 4]]), n = art[1] * r(2, 25), teil = n / art[1], erg = art[0] === "drei Viertel" ? teil * 3 : teil;
+        return zahl("", erg, `${n} : ${art[1]} = ${teil}${art[0] === "drei Viertel" ? `, dreimal so viel: ${erg}` : ""}.`, { frage: `Wie viel ist ${art[0]} von ${n}?`, nurLuecke: true }); } },
+    { id: "k3laenge", stufe: "3", lz: ["ma.gm.05", "ma.gm.09"], name: "Meter und Kilometer", icon: "🛣️",
+      neu: () => {
+        if (Math.random() < 0.5) { const km = r(1, 9); return zahl("", km * 1000, `1 km sind 1000 m. ${km} km sind ${km * 1000} m.`, { frage: `Wie viele Meter sind ${km} km?`, einheit: "m", nurLuecke: true }); }
+        const d = wahl([["der Weg zur Nachbarstadt", "km"], ["die Länge eines Klassenzimmers", "m"], ["die Höhe eines Hauses", "m"], ["eine Fahrt mit dem Zug", "km"], ["ein Lauf um den Sportplatz", "m"]]);
+        return { text: "", frage: `Misst man ${d[0]} eher in m oder in km?`, antwort: d[1], art: "wahl", optionen: ["m", "km"], nurLuecke: true,
+          hilfe: d[1] === "km" ? `${d[0]} ist sehr lang – man misst in Kilometern.` : `${d[0]} – das misst man in Metern.` };
+      } }
   ];
 
   function malAufgabe(reihen) {
