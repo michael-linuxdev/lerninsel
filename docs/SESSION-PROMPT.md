@@ -32,14 +32,14 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 ## 1. Zuerst lesen
 1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
    Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, später Abend“**: Inhalte zuerst,
+   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Sitzungsende“**: Inhalte zuerst,
    NA-03, NA-40, NA-30, NA-32, NA-31, NA-35, NA-50). Ältere Abschnitte sind Historie.
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
    `docs/MINISPIELE.md`.
 4. `README.md` (Aufbau des Repos, Liste der Dateien in `shared/`).
 
-## 2. Stand (27.10.2026, später Abend)
+## 2. Stand (27.10.2026, Sitzungsende)
 **Früher fertig** (Einzelheiten in PLAN.md unter „Neuausrichtung 26.10.2026“): NA-01 Ereignisse/Story, NA-02 Profil, NA-10 Szenen + Zeigehand,
 NA-11 Prolog „Ankunft“ (E1), NA-12 Insel-Zugang, NA-13 Sonnenuhr/„Erst lernen“/Erste Frucht mit Nebel, NA-14 Tutorial E4–E8, NA-15
 Weihnachts-Sonderstart, NA-21 Leistungs-Test, NA-24 Welt-Kern `shared/insel-kern.js`, NA-25–28 Pixel-Look (Insel, Umschalter, Figuren, Zimmer),
@@ -67,7 +67,8 @@ NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
 - **NA-35 Schreiben** (ebenfalls `spiele/lesen/`, jetzt „Lesen und Schreiben“): Buchstaben mit dem Finger nachspuren (Strich-Daten
   `inhalte/deutsch/schreiben.js`, Startpunkt + Richtung, Prüfpunkte) und lautgetreue Bildwörter aus Buchstaben-Steinen legen.
 - **NA-50 Können je Lernziel:** `shared/koennen.js` (Stand 0–4 je Lernziel, Auswahl in der Zielzone 70–85 %, leichter nach zwei Fehlern);
-  Matheweg (Training, Bennos Empfehlung, leichtere Brückenaufgabe), Lesen/Schreiben und Ankommen melden; Elternkarte zeigt „Können: ●●○○“.
+  alle Lernspiele melden; Matheweg (Training, Bennos Empfehlung, leichtere Brückenaufgabe), Fipsis Empfehlung in „Lesen und Schreiben“,
+  „Mein Können“ (Pflanze je Fach) in Mein Ich, Elternkarte „Können: ●●○○“.
 - **NA-32 Matheweg Klasse 1 und Vorschule:** zweiter Weg mit Umschalter (Würfelbilder, Mengen, Zwanzigerfeld, Muster, Zerlegen, Plus/Minus bis
   10, Verdoppeln), `Mathe.STATIONEN_K1`, Fortschritt `mathe.k1`.
 - Tests neu: `tests/lehrplan.js`, `tests/wortschatz.js` (Node, im Gesamtlauf), `tests/daz.js`, `tests/lesen.js`, `tests/mathe1.js`.
@@ -105,9 +106,10 @@ Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `in
 Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
 Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
 beiden Looks oder im Plan als offen vermerken.
-1. **Können sichtbar machen** (S): „Lesen und Schreiben“ wählt Runden nach `Koennen.naechste()`; Mein Ich zeigt einen kindgerechten
-   Fortschritt je Fach (ohne Noten, z. B. wachsende Pflanze). Alle Lernspiele melden schon an `Koennen.melde(lz, richtig)`.
-2. Nach Rückmeldung: **NA-34 Sachunterricht** je Perspektive (Wasser, Verkehr, früher/heute, Bauen, Regeln), **NA-33 Mathe Kl. 3**, oder
+1. **NA-34 Sachunterricht** (M): je GDSU-Perspektive mindestens zwei Themen Kl. 1–2 im Format von `spiele/sachkunde/themen.js` (mit `lz`):
+   Wasser, Schulweg/Verkehr, früher und heute, Bauen/Brücken, Regeln und Streit; Lesetexte können verknüpft werden.
+2. **NA-33 Mathe Kl. 3** (M): ZR 1000, halbschriftlich/schriftlich, Gewichte, Zeitspannen – als dritter Weg im Matheweg (`STATIONEN_K3`).
+3. Nach Rückmeldung: **NA-34 Sachunterricht** je Perspektive (Wasser, Verkehr, früher/heute, Bauen, Regeln), **NA-33 Mathe Kl. 3**, oder
    Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)
    → **NA-17** Kapitel 1–2 → **NA-18** Chronik im Album.
 
@@ -172,7 +174,7 @@ beiden Looks oder im Plan als offen vermerken.
 - `sh tests/laufen.sh` = Node-Tests `story-migration`, `inselkern`, `lehrplan`, `wortschatz`, `koennen` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Klasse 1), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Klasse 1), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.

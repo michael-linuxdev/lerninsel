@@ -21,6 +21,11 @@
   @media (max-width: 860px) { .seite { grid-template-columns: 1fr; } }
   .karte { background: #fff; border-radius: 28px; padding: 20px; box-shadow: 0 8px 0 rgba(160,100,40,.12); }
   .karte h2 { margin: 0 0 12px; font-size: 1.45rem; }
+  .koennen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .kn-fach { background: #F4FBF6; border-radius: 18px; padding: 10px 6px; text-align: center; }
+  .kn-fach .pflanze { font-size: 2.6rem; line-height: 1.1; }
+  .kn-fach b { display: block; font-size: 1.05rem; }
+  .kn-fach small { color: #4a6a55; }
   .spalte { display: grid; gap: 18px; }
 
   /* Ich */
@@ -209,6 +214,10 @@
         <div class="tag-kopf"><h2>🌍 Echte Welt</h2><p>freiwillig</p></div>
         <div id="ew"></div>
       </div>
+      <div class="karte" id="koennen-karte" hidden>
+        <h2>🌳 Mein Können</h2>
+        <div class="koennen" id="koennen"></div>
+      </div>
       <div class="karte" id="heute-neu-karte">
         <h2>🌱 Heute neu</h2>
         <div id="heute-neu"></div>
@@ -311,6 +320,7 @@
 <script src="../../shared/tiere.js"></script>
 <script src="../../shared/tierpflege.js"></script>
 <script src="../medien/lektionen.js"></script>
+<script src="../../shared/koennen.js"></script>
 <script src="ich.js"></script>
 </body>
 </html>

@@ -49,8 +49,19 @@
     const vs = (S.stufe() || {}).code === "vs";
     const text = vs ? "Hör genau hin! Welche Wörter fangen gleich an? Fang mit „Gleicher Anfang“ an."
       : "Jedes Wort fängt mit einem Laut an. Hör genau hin und finde den Buchstaben!";
-    $("start-blase").textContent = text;
-    $("start-ton").onclick = () => sprich(text);
+    // NA-50: Fipsi empfiehlt den Weg, der gerade am besten passt (Zielzone), sobald schon etwas geübt wurde
+    document.querySelectorAll(".weg.tipp").forEach(b => b.classList.remove("tipp"));
+    let tipp = "";
+    if (window.Koennen) {
+      const d = Koennen.daten(), wege = [["gleich", "weg-gleich", "Gleicher Anfang"], ["bild", "weg-bild", "Finde das Bild"], ["buchstabe", "weg-buchstabe", "Welcher Buchstabe?"],
+        ["silben", "weg-silben", "Silben lesen"], ["legen", "weg-legen", "Wörter legen"]].filter(w => !vs || ["gleich", "bild"].includes(w[0]));
+      if (wege.some(w => LZ[w[0]].some(z => d[z]))) {
+        const w = Koennen.naechste(wege.map(x => ({ id: x[1], name: x[2], lz: LZ[x[0]] })), 1)[0];
+        if (w) { $(w.id).classList.add("tipp"); tipp = ` Heute passt gut: „${w.name}“.`; }
+      }
+    }
+    $("start-blase").textContent = text + tipp;
+    $("start-ton").onclick = () => sprich(text + tipp);
     const kann = Object.values(daten().b).filter(n => n >= 2).length;
     $("stand").textContent = `Du kennst schon ${kann} von ${HOERBAR.length} Buchstaben und Lauten.`;
   }

@@ -1138,3 +1138,11 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
   ebenfalls an `Koennen`. Offen: Können steuert noch nicht die Reihenfolge auf den Wegen selbst (nur Training/Empfehlung); Mein Ich zeigt es noch nicht.
 - Nächste Pakete nach Rückmeldung: NA-34 Sachunterricht, NA-33 Mathe Kl. 3, oder Grafik/Story (NA-29b, NA-29 Teil 2, NA-16/17/18).
 
+### Stand 27.10.2026, Sitzungsende (Können sichtbar)
+- **„Mein Können“ in Mein Ich:** je Fach (Mathe, Deutsch inkl. DaZ, Sachunterricht) eine Pflanze 🌰 🌱 🌿 🪴 🌳 nach dem mittleren Stand der geübten
+  Lernziele und „N Sachen kannst du schon sicher“ – keine Prozente, keine Noten; erst sichtbar, wenn geübt wurde.
+- **„Lesen und Schreiben“:** Fipsi empfiehlt den Weg, dessen Lernziele gerade in der Zielzone liegen („Heute passt gut: …“, Kachel umrandet);
+  Vorschule nur „Gleicher Anfang“ und „Finde das Bild“.
+- Test `tests/koennen-anzeige.js`.
+- **Nächstes:** nach iPad-Rückmeldung NA-34 Sachunterricht oder NA-33 Mathe Kl. 3; Grafik (NA-29b, NA-29 Teil 2) und Story (NA-16/17/18) warten.
+

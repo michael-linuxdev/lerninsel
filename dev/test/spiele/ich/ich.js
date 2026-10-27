@@ -50,7 +50,7 @@
       `<p class="klein">Jede Aufgabe: +1 ⭐. Alle drei: ein Stempel und +2 ⭐.</p>`;
     $("aufgaben").querySelectorAll('[data-id="wort"]').forEach(b => b.addEventListener("click", (e) => { e.preventDefault(); S.ton("tipp"); starteWort(); }));
 
-    zeichneFunde(); zeichneGemeinsam(); zeichneEchteWelt(); zeichneWoche(); zeichneStaerken();
+    zeichneFunde(); zeichneKoennen(); zeichneGemeinsam(); zeichneEchteWelt(); zeichneWoche(); zeichneStaerken();
 
     // Woche
     const montag = C.wocheVon(C.heute()), stempel = C.stempel();
@@ -83,6 +83,23 @@
   }
 
   // Heute neu: konkrete Lernfunde des Tages (shared/lernfunde.js)
+  // NA-50: Können je Fach als wachsende Pflanze – ohne Noten, ohne Prozentzahlen. Erst sichtbar, wenn etwas geübt wurde.
+  const PFLANZEN = ["🌰", "🌱", "🌿", "🪴", "🌳"];
+  const KN_FAECHER = [["Mathe", "🦫", ["ma."]], ["Deutsch", "🦊", ["de.", "daz."]], ["Sachunterricht", "🦉", ["su."]]];
+  function zeichneKoennen() {
+    const el = $("koennen"), K = window.Koennen; if (!el || !K) return;
+    const d = K.daten(), ids = Object.keys(d);
+    const faecher = KN_FAECHER.map(([name, e, vor]) => {
+      const meine = ids.filter(z => vor.some(v => z.startsWith(v)));
+      if (!meine.length) return null;
+      const st = meine.map(z => K.stand(d[z])), sicher = st.filter(x => x >= 3).length;
+      const mittel = Math.round(st.reduce((a, b) => a + b, 0) / st.length);
+      return `<div class="kn-fach" data-fach="${name}"><div class="pflanze" aria-hidden="true">${PFLANZEN[mittel]}</div><b>${e} ${name}</b>
+        <small>${sicher ? `${sicher} ${sicher === 1 ? "Sache kannst" : "Sachen kannst"} du schon sicher` : "wächst gerade"}</small></div>`;
+    }).filter(Boolean);
+    $("koennen-karte").hidden = !faecher.length;
+    el.innerHTML = faecher.join("");
+  }
   function zeichneFunde() {
     const el = $("heute-neu"); if (!el || !window.Lernfunde) return;
     const funde = Lernfunde.heute(), hl = S.hilfe(), F = Lernfunde.FAECHER;
