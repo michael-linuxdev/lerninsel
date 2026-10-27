@@ -12,10 +12,10 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (27.10.2026, 21:00)
+## 1. Stand (27.10.2026, spätabends)
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
-  Kl. 1/Vorschule 10 Stationen · Kl. 2 23 · Kl. 3 20 (u. a. schriftlich plus/minus, Würfelnetze, Würfelgebäude, Spiegeln, Diagramme, Glücksrad) ·
+  Kl. 1/Vorschule 10 Stationen · **Kl. 2 40 (Lehrplan Sachsen Kl. 1/2 vollständig geprüft, Freischalten je Lernbereich)** · Kl. 3 20 (u. a. schriftlich plus/minus, Würfelnetze, Würfelgebäude, Spiegeln, Diagramme, Glücksrad) ·
   Kl. 4 15 (Zahlen bis 1 Mio., schriftlich mal/geteilt, auch mehrstellig, Teilbarkeit 2/3/4/5/6/9/10/100, Primzahlen, römische Zahlen, Maßstab,
   Zeit/Datum, Liter, Flächen, Chancen) · **Übergang 5** 10 (Brüche, Kommazahlen, Klammern, Koordinaten, Winkel, Durchschnitt). Urkunden am Ende von Kl. 4 und Übergang 5.
 - **Deutsch:** Fipsis Abenteuer (5 Kapitel), Lesen und Schreiben (Anlaute, Silben, 20 Lesetexte, Nachspuren, Wörter legen), DaZ „Ankommen“,
@@ -53,10 +53,10 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Insel-Tests (`tutorial`, `prolog`) wackeln, wenn parallel andere Browser-Tests laufen** – allein laufen lassen; einmal gescheitert heißt nicht kaputt.
 
 ### Offene Fragen an den Auftraggeber
-- **iPad-10-Test** (in /dev) der Pakete vom 27.10.: **Werkstatt „Bildergeschichte schreiben“ (Tastatur, Hinweise), Aufnehmen (erst im Elternbereich
+- **iPad-10-Test** (in /dev) der Pakete vom 27.10.: **Matheweg Kl. 2 (neue Stationen 24–40, Freischalten je Lernbereich, Elternbereich „Was übt die App?“ aufklappen)**, **Werkstatt „Bildergeschichte schreiben“ (Tastatur, Hinweise), Aufnehmen (erst im Elternbereich
   einschalten, dann „Reime und Gedichte“; fragt Safari nach dem Mikrofon? Klingt die Aufnahme?)**, Werkstatt „Ordnen“/„Verbessern“, Mathe Kl. 3/4 inkl. Urkunde und „9 kg = 9000 g“, Bildaufgaben im
   Hochformat, Übergang 5, Englisch (spricht das iPad englisch?), Startseite mit Englisch-Tür, Sachthemen „Ich werde größer“ und „Unser Bundesland Sachsen“.
-- **Lehrplan Mathe Sachsen 2025 als PDF hochladen?** Dann lassen sich Kl. 4 „Größen und Messen“ und „Daten und Zufall“ genau nachtragen.
+- **Lehrplan-PDFs Kl. 1/2 für Deutsch (2025), Sachunterricht (2019), Kunst, Musik, Werken, Sport, Ethik hochladen** (Mathe 2025 liegt vor und ist für Kl. 1/2 und Kl. 4 eingearbeitet).
 - Deutsch: Sollen Kinder ihre eigenen Texte selbst wiederfinden („Mein Heft“)? Handschrift-Übung mit Finger/Stift (Schulausgangsschrift oder
   Vereinfachte Ausgangsschrift – je nach Schule als Eltern-Einstellung)?
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
@@ -66,9 +66,11 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 (jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr, Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten).
 Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen – siehe `CLAUDE.md`, Abschnitt 3.
 
-1. **Lehrplan-PDFs Kl. 1/2** (Mathe 2025, Deutsch 2025, Sachunterricht 2019, Kunst, Musik, Werken, Sport, Ethik) – lädt der Auftraggeber
-   hoch; fehlen sie, zuerst danach fragen. Dann die Prüfliste in `docs/SACHSEN-SCHULJAHR.md` je Inhaltspunkt genau ausfüllen (nur
-   zusammenfassen) und im Länderprofil je Lernbereich `punkte: [{ id, text, halbjahr, app, abdeckung }]` anlegen, Test je Punkt.
+1. **Mathe Kl. 1/2 ist fertig geprüft** (52 Inhaltspunkte in `sachsen-punkte.js`, 17 neue Stationen). **Als Nächstes Mathe Kl. 3** nach demselben
+   Muster – das PDF Mathematik 2025 enthält Kl. 3 (S. 19–27) und Kl. 4; wenn es nicht mehr in der Sitzung liegt, den Auftraggeber bitten, es
+   erneut hochzuladen. Offene Mathe-Kl.-2-Punkte: Tangram, eigene Baupläne, Entdeckerpäckchen, eigene Rechenwege, Rechengeschichten erfinden.
+   **Für Deutsch, Sachunterricht, Kunst, Musik, Werken, Sport, Ethik Kl. 1/2 fehlen die PDFs** – zuerst danach fragen; dann je Fach Punkte
+   in `sachsen-punkte.js` und Lücken schließen.
 2. **Schuljahres-Gerüst** (für alle Fächer): Pfad je Fach, Eltern-Einstellung „gerade in der Schule“, „Zeig, was du kannst“ je
    Lernbereich, Elternbericht je Punkt.
 3. **Lücken Kl. 2 schließen** je Fach (Mathe → Deutsch → Sachunterricht → Kunst/Musik → Werken/Sport/Ethik → Englisch Kl. 1/2).

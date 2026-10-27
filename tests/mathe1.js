@@ -82,7 +82,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     // Umschalten auf Klasse 2 und zurück; Wahl bleibt gespeichert
     await p.click('.weg-wahl[data-weg="k2"]'); await p.waitForTimeout(300);
     w = await wegInfo(p);
-    erwarte(w.an === "k2" && w.stationen === 23 && w.einstufung, `Umschalter: Klasse 2 mit 23 Stationen und Einstufungsangebot (${w.stationen})`);
+    erwarte(w.an === "k2" && w.stationen === 40 && w.einstufung, `Umschalter: Klasse 2 mit 40 Stationen und Einstufungsangebot (${w.stationen})`);
     await p.reload(); await p.waitForSelector("#karte .station");
     erwarte((await wegInfo(p)).an === "k2", "gewählter Weg bleibt nach dem Neuladen");
     // NA-33: dritter Weg Klasse 3
@@ -157,7 +157,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const { ctx, p } = await kind("2", 390, 760);
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     const w = await wegInfo(p);
-    erwarte(w.an === "k2" && w.stationen === 23, "Klasse 2: startet auf dem bisherigen Matheweg");
+    erwarte(w.an === "k2" && w.stationen === 40, "Klasse 2: startet auf dem Matheweg Kl. 2 (40 Stationen)");
     erwarte(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), "Hochformat 390 px: keine waagerechte Scrollleiste");
     await bild(p, "mathe1-hoch");
     await ctx.close();

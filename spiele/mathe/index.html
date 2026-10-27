@@ -129,6 +129,9 @@
   .wahl-tasten { flex: 1; display: grid; gap: 14px; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; }
   .wahl-tasten.drei { grid-template-columns: 1fr; }
   .wahl-tasten .taste { font-size: 2.6rem; }
+  .wahl-tasten.mittel .taste { font-size: 1.8rem; padding: 6px 8px; }
+  .wahl-tasten.lang .taste { font-size: 1.45rem; line-height: 1.2; padding: 6px 10px; }
+  .wahl-tasten .taste { min-width: 0; overflow-wrap: anywhere; }
   .weiter { min-height: 76px; font-size: 1.6rem; background: var(--pflaume); color: #fff; }
 
   @media (orientation: portrait) {

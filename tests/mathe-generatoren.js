@@ -8,7 +8,7 @@ const M = window.Mathe;
 let n = 0;
 const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
 
-for (const [weg, liste, anzahl] of [["Kl. 1", M.STATIONEN_K1, 10], ["Kl. 2", M.STATIONEN, 23], ["Kl. 3", M.STATIONEN_K3, 20], ["Kl. 4", M.STATIONEN_K4, 15], ["Übergang 5", M.STATIONEN_K5, 10]]) {
+for (const [weg, liste, anzahl] of [["Kl. 1", M.STATIONEN_K1, 10], ["Kl. 2", M.STATIONEN, 40], ["Kl. 3", M.STATIONEN_K3, 20], ["Kl. 4", M.STATIONEN_K4, 15], ["Übergang 5", M.STATIONEN_K5, 10]]) {
   pruefe(`${weg}: ${anzahl} Stationen, je 400 gültige Aufgaben`, () => {
     assert.strictEqual(liste.length, anzahl);
     for (const s of liste) {
@@ -32,5 +32,10 @@ pruefe("Primzahlen bis 50", () => {
 pruefe("Würfelgebäude: Türme werden nach vorn und rechts nie höher (alle sichtbar)", () => {
   for (let i = 0; i < 300; i++) { const h = M._k3.wuerfelGebaeude();
     h.forEach((z, y) => z.forEach((v, x) => { assert.ok(v >= 1 && v <= 3); if (y) assert.ok(v <= h[y - 1][x]); if (x) assert.ok(v <= z[x - 1]); })); }
+});
+pruefe("Kl. 2: jede Station hat einen Lernbereich (lb), die 17 neuen hängen am Ende", () => {
+  assert.ok(M.STATIONEN.every(s => ["zo", "rf", "gm", "dz"].includes(s.lb)), "lb fehlt");
+  assert.deepStrictEqual(M.STATIONEN.slice(0, 3).map(s => s.id), ["plus20", "minus20", "zehner"]);
+  assert.strictEqual(M.STATIONEN[23].id, "zahlen100");
 });
 console.log(`✅ Mathe-Generatoren: ${n} Prüfungen bestanden.`);

@@ -17,7 +17,7 @@ function lade(dateien) {
   return ctx;
 }
 const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js"];
-const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "inhalte/deutsch/schreiben.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan.js"];
+const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "inhalte/deutsch/schreiben.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan/laender/sachsen-punkte.js", "shared/lehrplan.js"];
 const w = lade(DATEN.concat(LEHRPLAN));
 const K = w.LernzielKern, I = w.Inhalte, L = w.LEHRPLAN;
 
@@ -60,6 +60,27 @@ pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung vo
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
+});
+
+pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2 hat Inhaltspunkte je Lernbereich, jede Zuordnung zeigt auf eine echte Station/Aufgabe", () => {
+  const lbs = L.laender.sachsen.faecher.mathe.stufen["1/2"], ids = new Set();
+  const stationen = new Set([].concat(w.Mathe.STATIONEN, w.Mathe.STATIONEN_K1, w.Mathe.STATIONEN_K3, w.Mathe.STATIONEN_K4, w.Mathe.STATIONEN_K5).map(s => s.id));
+  const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
+  let n = { ja: 0, teil: 0, nein: 0, aussen: 0 };
+  lbs.forEach(lb => {
+    assert.ok(lb.punkte && lb.punkte.length >= 6, "Punkte fehlen in " + lb.titel);
+    lb.punkte.forEach(p => {
+      assert.ok(!ids.has(p.id), "doppelt " + p.id); ids.add(p.id); n[p.abdeckung]++;
+      assert.ok(["1", "2", "1/2"].includes(p.kl) && p.text.length < 140, p.id);
+      p.app.forEach(a => { const [art, id] = a.split(":");
+        if (art === "mathe") assert.ok(stationen.has(id), `${p.id}: Station ${id} gibt es nicht`);
+        else if (art === "echtewelt") assert.ok(echt.includes(`["${id}", `), `${p.id}: Echte-Welt-Aufgabe ${id} gibt es nicht`);
+        else assert.fail(`${p.id}: unbekannte Zuordnung ${a}`); });
+      if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("mathe:")), p.id + " ist „ja“ ohne Station");
+    });
+  });
+  assert.strictEqual(ids.size, 52);
+  assert.deepStrictEqual(n, { ja: 38, teil: 11, nein: 1, aussen: 2 });
 });
 
 pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziele", () => {

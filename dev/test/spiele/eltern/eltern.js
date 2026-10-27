@@ -150,6 +150,14 @@
     const st = K.standListe(lz); if (st === null) return "";
     return `<br><span class="lp-koennen" data-stand="${st}">Können: ${"●".repeat(st)}${"○".repeat(4 - st)} ${K.NAMEN[st]}</span>`;
   }
+  // Sachsen in voller Tiefe: Inhaltspunkte eines Lernbereichs zum Aufklappen (sachsen-punkte.js)
+  const PUNKT_ZEICHEN = { ja: "✅", teil: "🟡", nein: "⭕", aussen: "🌍" };
+  function punkteHtml(punkte) {
+    if (!punkte || !punkte.length) return "";
+    const n = (a) => punkte.filter(p => p.abdeckung === a).length;
+    return `<details class="lp-punkte"><summary>${punkte.length} Inhaltspunkte: ${n("ja")} geübt, ${n("teil")} teilweise, ${n("nein")} fehlen${n("aussen") ? `, ${n("aussen")} draußen/auf Papier` : ""}</summary><ul>` +
+      punkte.map(p => `<li data-punkt="${p.id}"><span class="zeichen">${PUNKT_ZEICHEN[p.abdeckung]}</span>${p.text} <span class="klein">(Kl. ${p.kl})</span></li>`).join("") + `</ul></details>`;
+  }
   function lehrplanKarte(mathe) {
     const L = window.LEHRPLAN; if (!L) return "";
     // Nur Sachsen ist ausgearbeitet; andere Länder sehen vorerst Sachsen als Beispiel (ehrlicher Hinweis)
@@ -169,14 +177,14 @@
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
       return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span></h3><ul class="lp-liste">${lb.map(x =>
-        `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app)}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${koennenZeile(x.lz)}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
+        `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app)}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${punkteHtml(x.punkte)}${koennenZeile(x.lz)}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
     }).join("");
     return `<div class="karte">
       <h2>📘 Was übt die App? (Lehrplan ${lname}, ${k.klasse}. Klasse)</h2>
       ${la.lehrplan ? "" : `<p class="hinweis">Für ${la.name} ist der Lehrplan noch nicht ausgearbeitet. Gezeigt wird der sächsische Lehrplan als Beispiel; er folgt in großen Teilen den gemeinsamen KMK-Bildungsstandards.</p>`}
       ${stufe.wenig ? `<p class="hinweis">Stufe „${stufe.name}“: Gezeigt wird der Lehrplan der ${k.klasse}. Klasse${stufe.code === "5" ? "; dazu kommen eigene Übergangs-Inhalte (Matheweg „Übergang 5“, Fachbegriffe, Lesestrategien, Lernen lernen)" : ", bis eigene Inhalte da sind"}.</p>` : ""}
       <p>${n.ja} Lernbereiche gut abgedeckt, ${n.teil} teilweise, ${n.nein} noch nicht. Die App ergänzt den Unterricht, sie ersetzt ihn nicht. Was gerade in der Schule dran ist, weiß die Lehrkraft am besten.</p>
-      <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App</p>
+      <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App · 🌍 gehört nach draußen oder aufs Papier (dazu gibt es Echte-Welt-Aufgaben). In den aufklappbaren Inhaltspunkten: ✅ geübt · 🟡 teilweise · ⭕ fehlt noch.</p>
       ${L.zaehle ? (() => { const e = L.zaehle(land, k.klasse).errechnet; return `<p class="klein">Zum Vergleich, aus den Lernzielen der Inhalte errechnet (gut = mindestens drei Inhalte mit zusammen 30 Aufgaben und Wiederholung in der Lernkartei): ${e.ja} gut, ${e.teil} teilweise, ${e.nein} noch nicht.</p>`; })() : ""}
       ${faecher}
       <p class="klein">Quelle: Lehrpläne Grundschule des Freistaates Sachsen (schulportal.sachsen.de), KMK-Bildungsstandards Primarbereich.</p>

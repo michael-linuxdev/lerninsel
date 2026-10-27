@@ -1436,3 +1436,31 @@ die **Bildschirmtastatur des iPads**.
   Ortsplan, Rituale; Kunst/Musik nur teilweise; Werken/Sport nur außerhalb der App.
 - **Nächstes:** PDFs Kl. 1/2 einlesen → Prüfliste genau ausfüllen und Datenformat `punkte` ins Länderprofil → Schuljahres-Gerüst →
   Lücken Kl. 2 je Fach schließen.
+
+### Stand 27.10.2026, spätabends (Sachsen in voller Tiefe: Mathe Kl. 1/2 fertig geprüft und ausgebaut)
+Auftraggeber hat zwei PDFs hochgeladen: Übersicht der Lernbereiche (2019 → 2025) und **Lehrplan Mathematik 2025 (kommentiert)**.
+- **Prüfliste Mathe Kl. 1/2:** alle 52 Inhaltspunkte der vier Lernbereiche zusammengefasst (nicht abgeschrieben) in
+  `shared/lehrplan/laender/sachsen-punkte.js` mit Klasse, Zuordnung und Abdeckung; Elternbereich „Was übt die App?“ zeigt sie je Lernbereich
+  zum Aufklappen. Stand: **38 geübt, 11 teilweise, 1 fehlt, 2 auf Papier/draußen** (neue Kategorie `aussen` mit Echte-Welt-Aufgaben).
+- **17 neue Stationen im Matheweg Kl. 2** (jetzt 40, angehängt): Zahlen bis 100 (Zahlwort, Zahlenstrahl, Hunderterfeld, Nachbarzehner,
+  Schritte), Wo ist was? (Lagebeziehungen im Regal), Rechentricks (Tausch-, Umkehr-, Nachbaraufgaben, gleich-/gegensinnig, Mal-Zerlegen,
+  Aufgabenfamilie), Euro und Cent (Komma, Wechselgeld, Preise schätzen), Linien und Strecken (Strecke/Gerade/Strahl, parallel/senkrecht,
+  rechter Winkel, messen), Zahlenmauern und Rätsel (Zahlenmauern, Folgen, Zauberquadrat, Ungleichungen), mm/cm/dm/m, Wege gehen (Kästchenplan),
+  Quadratzahlen, Tabellen und Balken (Zeile/Spalte, Balkendiagramm, Strichliste, Säule ergänzen), Figuren und Körper genau (Vieleck, Kreis mit
+  Radius/Durchmesser, Ecken/Kanten/Flächen), Zeitspannen (Uhr auf 5 Minuten, Minuten/Stunden, Datum), Mathe-Wörter (Summe … Quotient),
+  Kombinieren, Spiegeln und Muster, Sachaufgaben-Detektiv (fehlende Angaben, passende Rechnung/Frage, Menge–Preis, Nim-Spiel), Würfelgebäude.
+- **Entscheidung: Freischalten je Lernbereich.** Jede Kl.-2-Station hat `lb` (zo/rf/gm/dz) und ist zusätzlich offen, wenn die vorige Station
+  desselben Lernbereichs geschafft ist. So laufen Raum und Form, Zahl und Operation, Größen und Messen, Daten und Zufall wie im Schuljahr
+  nebeneinander, statt dass neue Inhalte hinter 23 Stationen warten. Die alte Regel gilt weiter (nur zusätzliches Öffnen, nichts wird gesperrt).
+- **Fehler nebenbei behoben:** lange Wörter auf Wahl-Tasten (z. B. „Donnerstag“, „Subtrahend“) machten die Seite quer breiter als den
+  Bildschirm – jetzt automatisch kleinere Schrift (`mittel`/`lang`).
+- **Kl. 4 im Profil nachgetragen** (stand bisher „nicht lesbar“): Größen und Messen (Tonne, Volumen, komplexe Sachsituationen) und Daten und
+  Zufall (gestapelte Säulen, Baumdiagramm, gleich wahrscheinlich) – beide weiter „teilweise“.
+- **5 Echte-Welt-Aufgaben** für das, was aufs Papier gehört: Lineal-Zeichnen, Zirkel, Bauplan, Familien-Umfrage, Rechts-oder-links.
+- **Tests:** neu `tests/mathe2.js` (Freischalten je Lernbereich, alle 17 Stationen über die Tasten bis 3 Sterne, quer und 6 davon hoch,
+  Elternbereich mit 52 Punkten, Kl. 3 unverändert); `mathe-generatoren` (40 Stationen, lb), `lehrplan` (Punkte, Zuordnung, Zählung 38/11/1/2),
+  `mathe1` (40 Stationen).
+- **Offen Mathe Kl. 1/2:** Tangram/Figuren legen, eigene Baupläne, Entdeckerpäckchen, eigene Rechenwege begründen (offene Eingabe),
+  Rechengeschichten frei erfinden, rechts/links am Körper und vorn/hinten räumlich in der App.
+- **Nächstes:** Mathe Kl. 3 nach demselben Muster (PDF liegt vor); Deutsch/Sachunterricht/Kunst/Musik/Werken/Sport/Ethik Kl. 1/2, sobald
+  die PDFs da sind; Schuljahres-Gerüst (Eltern-Einstellung „gerade in der Schule“, „Zeig, was du kannst“ je Lernbereich).

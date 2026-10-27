@@ -18,7 +18,10 @@
   const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; d.k1 = d.k1 || {}; d.k3 = d.k3 || {}; d.k4 = d.k4 || {}; d.k5 = d.k5 || {}; return d; };
   const bestes = (id) => daten()[WEG][id] || 0;
   const startAb = () => WEG === "k2" ? (daten().einstufung || {}).startAb || 0 : 0;   // aus dem Einstufungstest (nur Klasse 2)
-  const istOffen = (i) => S.offen(i === 0 || i <= startAb() || bestes(ST[i - 1].id) > 0);
+  // Lernbereichs-Pfade (Sachsen Kl. 1/2 in voller Tiefe): Eine Station mit `lb` ist auch offen, wenn die vorige Station DESSELBEN Lernbereichs
+  // geschafft ist (oder es keine gibt). Das öffnet nur zusätzlich – was nach der alten Regel offen war, bleibt offen.
+  function lbOffen(i) { const lb = ST[i].lb; if (!lb) return false; for (let j = i - 1; j >= 0; j--) if (ST[j].lb === lb) return bestes(ST[j].id) > 0; return true; }
+  const istOffen = (i) => S.offen(i === 0 || i <= startAb() || bestes(ST[i - 1].id) > 0 || lbOffen(i));
   function merke(id, sterne) {
     const d = daten(); d[WEG][id] = Math.max(d[WEG][id] || 0, sterne); S.speichere("mathe", d);
   }
@@ -171,7 +174,7 @@
         b.innerHTML = `<span class="kreis">${offen ? k.s.icon : "🔒"}</span><span class="nr">${i + 1}</span><span class="name">${k.s.name}</span>` +
           `<span class="stern-reihe">${offen && best ? [1, 2, 3].map(n => `<span class="${n <= best ? "" : "leer"}">⭐</span>`).join("") : ""}</span>`;
         b.addEventListener("click", () => {
-          if (!offen) { S.ton("nein"); S.meldung("Schaffe zuerst die Station davor."); return; }
+          if (!offen) { S.ton("nein"); S.meldung(k.s.lb ? "Schaffe zuerst eine Station davor aus diesem Bereich." : "Schaffe zuerst die Station davor."); return; }
           S.ton("tipp"); starte(i);
         });
       }
@@ -328,7 +331,8 @@
   function zeigeEingabe(a) {
     const e = $("eingabe");
     if (a.art === "wahl") {
-      e.innerHTML = `<div class="wahl-tasten ${a.optionen.length === 3 ? "drei" : ""}">` +
+      const laenge = Math.max(...a.optionen.map(o => String(o).length)), gross = laenge > 12 ? " lang" : laenge > 7 ? " mittel" : "";
+      e.innerHTML = `<div class="wahl-tasten ${a.optionen.length === 3 ? "drei" : ""}${gross}">` +
         a.optionen.map(o => `<button class="taste" data-wert="${o}">${o}</button>`).join("") + `</div>`;
     } else {
       e.innerHTML = `<div class="tasten">` +

@@ -4,15 +4,15 @@ Auftrag (27.10.2026): Den sächsischen Lehrplan **Schritt für Schritt in voller
 in **allen Fächern**. „Volle Tiefe“ heißt laut Auftraggeber **„wie ein Schuljahr“**: jeder Inhaltspunkt geübt, in sinnvoller
 Reihenfolge, mit Wiederholung und einer Lernstands-Prüfung je Lernbereich.
 
-Dieses Dokument ist die Arbeitsliste dafür. Stand: **Bestandsaufnahme Klasse 2** – die Lehrplantexte (PDF) fehlen noch, darum sind die
-Inhaltspunkte unten **vorläufig** (aus dem Länderprofil `shared/lehrplan/laender/sachsen.js`) und müssen gegen das PDF geprüft werden.
+Dieses Dokument ist die Arbeitsliste dafür. Stand 27.10.2026 (spätabends): **Mathe Kl. 1/2 gegen das PDF geprüft und ausgebaut.** Deutsch, Sachunterricht und die übrigen Fächer sind noch **vorläufig**
+(aus dem Länderprofil) – dafür fehlen die PDFs.
 
 ## 1. Quellen (vom Auftraggeber hochzuladen)
 Die Seiten des Schulportals (`schulportal.sachsen.de/lplandb`) sind aus der Arbeitsumgebung gesperrt. Benötigt als PDF:
 
 | Fach | Fassung | Für Kl. 2 | Für Kl. 3 |
 |---|---|---|---|
-| Mathematik | 2025 (seit 1.8.2025) | Klassenstufen 1/2 | Klassenstufe 3 |
+| Mathematik | 2025 (seit 1.8.2025) | ✅ liegt vor | ✅ liegt vor |
 | Deutsch | 2025 | Klassenstufen 1/2 | Klassenstufe 3 |
 | Sachunterricht | 2019 | Klassenstufen 1/2 | Klassenstufe 3 |
 | Kunst | aktuell gültige | 1/2 | 3 |
@@ -45,31 +45,26 @@ von Klasse 2 sicher sitzen soll; wo der Lehrplan Kl. 1 und Kl. 2 nicht trennt, o
 ## 3. Bestandsaufnahme Klasse 2 (vorläufig, gegen PDF prüfen)
 Legende: ✅ geübt · 🟡 teilweise · ❌ fehlt · 🌍 außerhalb der App (Echte Welt / Eltern-Idee)
 
-### Mathematik (Lehrplan 2025, Kl. 1/2) – Matheweg Kl. 1 (10 Stationen) und Kl. 2 (23 Stationen)
-| Lernbereich | Inhaltspunkt (vorläufig) | Vorhanden | Stand |
+### Mathematik (Lehrplan 2025, Kl. 1/2) – ✅ gegen das PDF geprüft (27.10.2026, spätabends)
+Quelle: Lehrplan Mathematik 2025, vom Auftraggeber hochgeladen. **Alle 52 Inhaltspunkte** der vier Lernbereiche stehen zusammengefasst in
+`shared/lehrplan/laender/sachsen-punkte.js` (Zuordnung zu Stationen/Echte-Welt-Aufgaben, Klasse 1 / 2 / 1/2) und erscheinen im Elternbereich
+unter „Was übt die App?“ zum Aufklappen. Stand: **38 geübt, 11 teilweise, 1 fehlt (Tangram), 2 auf Papier** (Zeichnen mit Lineal/Zirkel).
+
+| Lernbereich | Punkte | Stand | Was noch fehlt |
 |---|---|---|---|
-| Zahl und Operation | Zahlen bis 100, Stellenwerte Z/E | `zehner`, `vergleich` | ✅ |
-| | Vergleichen, ordnen, Nachbarzahlen, gerade/ungerade | `vergleich`, `gerade`, `k1nachbar` | ✅ |
-| | Plus/Minus bis 20, bis 100, über den Zehner, Ergänzen | `plus20` … `ergaenzen` | ✅ |
-| | Rechenstrategien benennen und vergleichen, Rechengeschichten erfinden | – | ❌ |
-| | Verdoppeln/Halbieren | `doppelt` | ✅ |
-| | Einmaleins (Kernaufgaben), Geteilt, Umkehraufgaben | `mal1`, `mal2`, `mal3`, `geteilt` | ✅ |
-| | Quadratzahlen | – | ❌ |
-| | Hundertertafel, Zahlenstrahl, Rechenstrich | – | 🟡 |
-| | Sachaufgaben | `sachaufgaben` | ✅ |
-| Größen und Messen | Geld (Euro, Cent) | `geld` | ✅ |
-| | Längen (cm, m), messen und schätzen | `laenge` | 🟡 (Schätzen, mm/dm prüfen) |
-| | Uhrzeit, Zeitpunkt/Zeitspanne, Kalender | `uhr`, `kalender` | ✅ |
-| Raum und Form | Formen (Dreieck, Viereck, Kreis), Körper (Würfel, Quader, Kugel) | `formen` | 🟡 |
-| | Lagebeziehungen, Wege beschreiben | – | ❌ |
-| | Würfelgebäude, Baupläne | `k3wuerfelbau` (Kl. 3) | ❌ für Kl. 2 |
-| | Achsensymmetrie, Spiegeln, Muster | `k1muster`; `k3spiegel` (Kl. 3) | 🟡 |
-| | Strecke, gerade Linie, Zeichnen mit Lineal | – | ❌ |
-| Daten und Zufall | Strichlisten, Tabellen, Diagramme | `daten` | ✅ |
-| | sicher/möglich/unmöglich | `zufall` | ✅ |
-| | Einfache Kombinationen | `k3kombi` (Kl. 3) | 🟡 |
-| Prozessbezogen | Argumentieren, Darstellen, Problemlösen | Hilfe-Texte | 🟡 |
-| Lernstand | Prüfung je Lernbereich | Einstufungstest Kl. 2 (nur Zahl/Operation) | 🟡 |
+| Raum und Form | 15 | 9 ✅ 3 🟡 1 ⭕ 2 🌍 | Rechts/links am Körper, vorn/hinten räumlich, eigene Baupläne, Tangram; Zeichnen nur auf Papier |
+| Zahl und Operation | 21 | 16 ✅ 5 🟡 | Darstellungen selbst wechseln (Material), eigene Rechenwege begründen, Entdeckerpäckchen, Rechengeschichten frei erfinden, Spielstrategien vertiefen |
+| Größen und Messen | 10 | 9 ✅ 1 🟡 | echtes Messen mit Lineal/Maßband (Echte Welt) |
+| Daten und Zufall | 6 | 4 ✅ 2 🟡 | eigene Umfrage (Echte Welt), Tabelle selbst anlegen |
+
+Neu im Matheweg Kl. 2 (jetzt 40 Stationen, die neuen am Ende): Zahlen bis 100, Wo ist was?, Rechentricks, Euro und Cent, Linien und Strecken,
+Zahlenmauern und Rätsel, mm/cm/dm/m, Wege gehen, Quadratzahlen, Tabellen und Balken, Figuren und Körper genau, Zeitspannen, Mathe-Wörter,
+Kombinieren, Spiegeln und Muster, Sachaufgaben-Detektiv, Würfelgebäude. **Freischalten je Lernbereich:** Jede Station gehört zu einem
+Lernbereich (`lb`); sie ist auch offen, wenn die vorige Station desselben Lernbereichs geschafft ist – die vier Lernbereiche laufen wie im
+Schuljahr nebeneinander. Die alte Regel gilt zusätzlich, nichts wird gesperrt.
+
+Kl. 3 und Kl. 4 sind im selben PDF enthalten (Kl. 4 „Größen und Messen“/„Daten und Zufall“ jetzt im Profil nachgetragen); die Inhaltspunkte
+für Kl. 3 folgen als Nächstes.
 
 ### Deutsch (Lehrplan 2025, Kl. 1/2) – Abenteuer (5), Lesen und Schreiben, DaZ, Werkstatt (Kl. 1–2: 7 Kapitel)
 | Lernbereich | Inhaltspunkt (vorläufig) | Vorhanden | Stand |
