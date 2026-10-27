@@ -327,6 +327,21 @@
       <div class="knoepfe"><button class="knopf haupt" id="ew-speichern">Speichern</button></div>
     </div>`;
   }
+  // ---------- Mathe: Rechenverfahren wie in der Schule ----------
+  function matheKarte() {
+    const m = ((S.lade("eltern") || {}).mathe || {}).minus || "abziehen";
+    return `<div class="karte">
+      <h2>🧮 Mathe wie in der Schule</h2>
+      <div class="zeit-raster"><label>Schriftlich minus<select id="m-minus">
+        <option value="abziehen" ${m === "abziehen" ? "selected" : ""}>Abziehen mit Entbündeln („tausche einen Zehner“)</option>
+        <option value="ergaenzen" ${m === "ergaenzen" ? "selected" : ""}>Ergänzen („von 7 bis 13 sind 6, merke 1“)</option></select></label></div>
+      <p class="klein">Schulen bringen die schriftliche Subtraktion unterschiedlich bei. Fragt im Zweifel die Lehrkraft und stellt hier dasselbe Verfahren ein – die Hilfe im Matheweg erklärt dann genauso.</p>
+      <div class="knoepfe"><button class="knopf haupt" id="m-speichern">Speichern</button></div>
+    </div>`;
+  }
+  function matheKnoepfe() {
+    $("m-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.mathe = Object.assign({}, e.mathe || {}, { minus: $("m-minus").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+  }
   function echteWeltKnoepfe() {
     $("ew-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.echtewelt = { selbst: $("ew-selbst").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
@@ -471,6 +486,7 @@
       </div>
       ${zeitKarte()}
       ${inselKarte()}
+      ${matheKarte()}
       ${echteWeltKarte()}
       ${staerkenKarte()}
       ${storyKarte()}
@@ -500,7 +516,7 @@
     // Einführung E2–E8 überspringen (still: zählt nicht als neue Etappe); E3 öffnet Kapitel 1 wie in der Szene „Erste Frucht“
     if ($("tutorial-weg")) $("tutorial-weg").addEventListener("click", () => { TUTORIAL.forEach(e => window.Story.etappeFertig(e, true)); window.Story.setzeKapitel(1); S.meldung("Einführung übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
-    zeitKnoepfe(); inselKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
+    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";

@@ -265,5 +265,5 @@
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Vorlesen ist an." : "Vorlesen ist aus."); });
 
   zeichneListe();
-  window.__sachkunde = { starte, get lauf() { return lauf; } };
+  window.__sachkunde = { starte, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
 })();

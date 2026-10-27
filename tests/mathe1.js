@@ -101,6 +101,11 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       await p.evaluate((w) => __mathe.antworte(w), info.antwort); await p.waitForTimeout(250);
       erwarte(await p.evaluate(() => /\bgut\b/.test(document.getElementById("rueck").className)), `Kl. 3 ${name}: richtige Antwort wird angenommen`);
     }
+    // Elternbereich: Subtraktionsverfahren „Ergänzen“ ändert die Hilfe
+    await p.waitForTimeout(1100);
+    const ergaenzen = await p.evaluate(() => { const e = Spielwelt.lade("eltern") || {}; e.mathe = { minus: "ergaenzen" }; Spielwelt.speichere("eltern", e);
+      const h = Mathe.runde("k3schriftminus", 3).map(a => a.hilfe); e.mathe = {}; Spielwelt.speichere("eltern", e); return h.every(t => /^Einer: Von \d+ bis \d+/.test(t)) && Mathe.runde("k3schriftminus", 1)[0].hilfe.startsWith("Einer: ") ; });
+    erwarte(ergaenzen, "Schriftlich minus: Eltern-Einstellung „Ergänzen“ wird in der Hilfe genutzt");
     await p.evaluate(() => document.getElementById("zum-weg").click()); await p.waitForTimeout(300);
     await p.click('.weg-wahl[data-weg="k1"]'); await p.waitForTimeout(300);
     erwarte((await wegInfo(p)).an === "k1", "zurück zu Klasse 1");

@@ -514,8 +514,17 @@
       t.push(`${name[i]}: ${x[i]} + ${y[i]}${ue ? " + 1 (gemerkt)" : ""} = ${s}${s >= 10 && i > 0 ? ` – schreibe ${s % 10}, merke 1` : ""}.`); ue = s >= 10 ? 1 : 0; }
     return t.join(" ") + ` Ergebnis: ${a + b}.`;
   }
+  // Verfahren stellt der Elternbereich ein (Schulen nutzen unterschiedliche): "abziehen" (Abziehen mit Entbündeln) oder "ergaenzen" (Ergänzen mit Erweitern)
+  const minusVerfahren = () => { try { return ((window.Spielwelt && Spielwelt.lade("eltern")) || {}).mathe?.minus === "ergaenzen" ? "ergaenzen" : "abziehen"; } catch (e) { return "abziehen"; } };
   function schriftMinusHilfe(a, b) {
     const x = stellen(a), y = stellen(b), name = ["Hunderter", "Zehner", "Einer"]; const t = [];
+    if (minusVerfahren() === "ergaenzen") {
+      let merk = 0;
+      for (let i = 2; i >= 0; i--) { const unten = y[i] + merk, oben = unten > x[i] ? x[i] + 10 : x[i];
+        t.push(`${name[i]}: ${merk ? `${y[i]} + 1 (gemerkt) = ${unten}. ` : ""}Von ${unten} bis ${oben} ${oben - unten === 1 ? "ist" : "sind"} ${oben - unten}${oben > x[i] ? ` – schreibe ${oben - unten}, merke 1` : ""}.`);
+        merk = oben > x[i] ? 1 : 0; }
+      return t.join(" ") + ` Ergebnis: ${a - b}.`;
+    }
     for (let i = 2; i >= 0; i--) {
       if (x[i] < y[i]) { x[i] += 10; x[i - 1] -= 1; t.push(`${name[i]}: ${x[i] - 10} ${M} ${y[i]} geht nicht. Tausche einen ${name[i - 1]} in 10 ${name[i]}: ${x[i]} ${M} ${y[i]} = ${x[i] - y[i]}.`); }
       else t.push(`${name[i]}: ${x[i]} ${M} ${y[i]} = ${x[i] - y[i]}.`);

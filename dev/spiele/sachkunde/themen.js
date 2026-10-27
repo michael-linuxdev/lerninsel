@@ -476,5 +476,137 @@ window.THEMEN = [
         text: "Toll, {name}! Säe Kresse oder eine Bohne und schau jeden Tag nach. Auf der Insel wächst dein Wissensbaum auch jeden Tag ein bisschen.",
         ru: "Здорово, {name}! Посади кресс-салат или фасоль и смотри каждый день. На острове твоё дерево знаний тоже растёт каждый день." }
     ]
+  },
+  // ---------- NA-34 Teil 3: Themen für Klasse 3–4 ----------
+  {
+    id: "sinne", lz: ["su.na.02"], name: "Meine fünf Sinne", e: "👀", farbe: "#C2337A", grund: "#FDEAF3",
+    kurz: "Sehen, hören, riechen, schmecken, tasten",
+    schritte: [
+      { typ: "info", titel: "Fünf Sinne", bild: "🧒",
+        text: "Hallo {name}! Mit deinen Sinnen merkst du, was um dich herum passiert. Du hast fünf: sehen, hören, riechen, schmecken und tasten.",
+        ru: "Привет, {name}! С помощью органов чувств ты замечаешь, что происходит вокруг. Их пять: зрение, слух, обоняние, вкус и осязание.",
+        fakten: [["Augen 👀 sehen", "Глаза 👀 видят"], ["Ohren 👂 hören", "Уши 👂 слышат"], ["Nase 👃 riecht", "Нос 👃 чувствует запах"], ["Zunge 👅 schmeckt", "Язык 👅 чувствует вкус"], ["Haut ✋ tastet", "Кожа ✋ осязает"]] },
+      { typ: "zuordnen", frage: "Mit welchem Sinn merkst du das?", ru: "Каким чувством ты это замечаешь?",
+        gruppen: [{ id: "a", name: "Sehen", ru: "Зрение", bild: "👀" }, { id: "o", name: "Hören", ru: "Слух", bild: "👂" }, { id: "n", name: "Riechen", ru: "Обоняние", bild: "👃" }],
+        dinge: [
+          { t: "Regenbogen", ru: "Радуга", gruppe: "a" }, { t: "Ampel ist rot", ru: "Красный свет светофора", gruppe: "a" },
+          { t: "Vogelgezwitscher", ru: "Пение птиц", gruppe: "o" }, { t: "Klingel", ru: "Звонок", gruppe: "o" },
+          { t: "Frisches Brot", ru: "Свежий хлеб", gruppe: "n" }, { t: "Rauch", ru: "Дым", gruppe: "n" }] },
+      { typ: "wahl", frage: "Womit fühlst du, ob etwas heiß oder kalt ist?", ru: "Чем ты чувствуешь, горячее что-то или холодное?", bild: "✋", optionen: [
+        { t: "Mit der Haut", ru: "Кожей", ok: true, warum: "Richtig! In der Haut sitzen viele kleine Fühler für Wärme, Kälte, Druck und Schmerz.", warumRu: "Правильно! В коже много маленьких датчиков тепла, холода, давления и боли." },
+        { t: "Mit den Ohren", ru: "Ушами", ok: false, warum: "Mit den Ohren hörst du. Wärme und Kälte fühlt die Haut.", warumRu: "Ушами ты слышишь. Тепло и холод чувствует кожа." },
+        { t: "Mit der Nase", ru: "Носом", ok: false, warum: "Mit der Nase riechst du. Wärme und Kälte fühlt die Haut.", warumRu: "Носом ты чувствуешь запахи. Тепло и холод чувствует кожа." }] },
+      { typ: "daumen", satz: "Wenn die Nase verstopft ist, schmeckt das Essen nach weniger.", satzRu: "Когда нос заложен, еда кажется менее вкусной.", bild: "🤧", ok: true,
+        warum: "Stimmt! Riechen und Schmecken arbeiten zusammen. Mit Schnupfen schmeckt vieles fad.", warumRu: "Верно! Обоняние и вкус работают вместе. При насморке многое кажется пресным." },
+      { typ: "daumen", satz: "Man darf ruhig direkt in die Sonne schauen.", satzRu: "В солнце можно смотреть прямо.", bild: "☀️", ok: false,
+        warum: "Nein! Das helle Sonnenlicht kann die Augen schwer verletzen. Auch laute Musik direkt am Ohr schadet den Ohren.", warumRu: "Нет! Яркий солнечный свет может сильно повредить глаза. Громкая музыка прямо у уха тоже вредит ушам." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Probier mit geschlossenen Augen: Erkennst du Dinge nur durch Tasten, Riechen oder Hören?",
+        ru: "Здорово, {name}! Попробуй с закрытыми глазами: узнаешь ли ты вещи только на ощупь, по запаху или по звуку?" }
+    ]
+  },
+  {
+    id: "wald", lz: ["su.na.08"], name: "Lebensraum Wald und Wiese", e: "🌲", farbe: "#2E7D4F", grund: "#E3F3E8",
+    kurz: "Stockwerke des Waldes, wer frisst wen, Waldregeln",
+    schritte: [
+      { typ: "info", titel: "Der Wald hat Stockwerke", bild: "🌲",
+        text: "Hallo {name}! Ein Wald ist wie ein Haus mit Stockwerken. Ganz unten der Boden mit Moos und Pilzen, darüber Kräuter, dann Sträucher und ganz oben die Baumkronen.",
+        ru: "Привет, {name}! Лес как дом с этажами. Внизу почва с мхом и грибами, над ней травы, потом кустарники, а на самом верху кроны деревьев.",
+        fakten: [["Baumschicht 🌳", "Ярус деревьев 🌳"], ["Strauchschicht 🌿", "Ярус кустарников 🌿"], ["Krautschicht 🌱", "Травяной ярус 🌱"], ["Moos- und Bodenschicht 🍄", "Мох и почва 🍄"]] },
+      { typ: "zuordnen", frage: "Wo lebt das Tier am liebsten?", ru: "Где это животное любит жить больше всего?",
+        gruppen: [{ id: "w", name: "Im Wald", ru: "В лесу", bild: "🌲" }, { id: "i", name: "Auf der Wiese", ru: "На лугу", bild: "🌼" }],
+        dinge: [
+          { t: "Specht", ru: "Дятел", gruppe: "w" }, { t: "Eichhörnchen", ru: "Белка", gruppe: "w" }, { t: "Wildschwein", ru: "Кабан", gruppe: "w" },
+          { t: "Grashüpfer", ru: "Кузнечик", gruppe: "i" }, { t: "Feldhase", ru: "Заяц-русак", gruppe: "i" }, { t: "Biene an Blüten", ru: "Пчела на цветах", gruppe: "i" }] },
+      { typ: "wahl", frage: "Wer frisst wen? Was passt: Gras → Hase → …", ru: "Кто кого ест? Что подходит: трава → заяц → …", bild: "🐇", optionen: [
+        { t: "Fuchs", ru: "Лиса", ok: true, warum: "Richtig! Das ist eine Nahrungskette: Der Hase frisst Gras, der Fuchs frisst den Hasen.", warumRu: "Правильно! Это пищевая цепь: заяц ест траву, лиса ест зайца." },
+        { t: "Blume", ru: "Цветок", ok: false, warum: "Blumen fressen nicht – sie werden gefressen. Nach dem Hasen kommt ein Jäger wie der Fuchs.", warumRu: "Цветы не едят — их едят. После зайца идёт хищник, например лиса." },
+        { t: "Regenwurm", ru: "Дождевой червь", ok: false, warum: "Der Regenwurm frisst keine Hasen. Er frisst welke Blätter.", warumRu: "Дождевой червь не ест зайцев. Он ест опавшие листья." }] },
+      { typ: "daumen", satz: "Regenwürmer machen aus alten Blättern neue Erde.", satzRu: "Дождевые черви превращают старые листья в новую землю.", bild: "🍂", ok: true,
+        warum: "Stimmt! Würmer, Asseln und Pilze zerlegen Laub. So entsteht guter Boden für neue Pflanzen.", warumRu: "Верно! Черви, мокрицы и грибы разлагают листья. Так появляется хорошая почва для новых растений." },
+      { typ: "daumen", satz: "Im Wald darf man laut sein und Müll liegen lassen.", satzRu: "В лесу можно шуметь и оставлять мусор.", bild: "🦌", ok: false,
+        warum: "Nein! Im Wald sind wir Gäste: leise sein, auf den Wegen bleiben, Müll wieder mitnehmen.", warumRu: "Нет! В лесу мы гости: ведём себя тихо, остаёмся на тропинках, мусор забираем с собой." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Geh mal in den Wald oder auf eine Wiese und zähle, wie viele Tiere du entdeckst.",
+        ru: "Супер, {name}! Сходи в лес или на луг и посчитай, сколько животных ты увидишь." }
+    ]
+  },
+  {
+    id: "kompass", lz: ["su.ge.03"], name: "Himmelsrichtungen", e: "🧭", farbe: "#2F6FB8", grund: "#E5EFFB",
+    kurz: "Norden, Osten, Süden, Westen, Kompass und Karte",
+    schritte: [
+      { typ: "info", titel: "Vier Himmelsrichtungen", bild: "🧭",
+        text: "Hallo {name}! Es gibt vier Himmelsrichtungen: Norden, Osten, Süden und Westen. Merksatz im Uhrzeigersinn: Nie Ohne Seife Waschen.",
+        ru: "Привет, {name}! Есть четыре стороны света: север, восток, юг и запад. По часовой стрелке: север, восток, юг, запад.",
+        fakten: [["N – Norden", "С – север"], ["O – Osten", "В – восток"], ["S – Süden", "Ю – юг"], ["W – Westen", "З – запад"]] },
+      { typ: "wahl", frage: "Wohin zeigt die Nadel eines Kompasses?", ru: "Куда показывает стрелка компаса?", bild: "🧭", optionen: [
+        { t: "Nach Norden", ru: "На север", ok: true, warum: "Richtig! Die Kompassnadel ist ein kleiner Magnet und zeigt immer nach Norden.", warumRu: "Правильно! Стрелка компаса — маленький магнит, она всегда показывает на север." },
+        { t: "Nach Süden", ru: "На юг", ok: false, warum: "Die bunte Spitze der Nadel zeigt nach Norden. Süden ist genau gegenüber.", warumRu: "Цветной конец стрелки показывает на север. Юг — точно напротив." },
+        { t: "Zum nächsten Haus", ru: "К ближайшему дому", ok: false, warum: "Nein, die Nadel ist ein Magnet und zeigt nach Norden.", warumRu: "Нет, стрелка — магнит и показывает на север." }] },
+      { typ: "wahl", frage: "Wo geht die Sonne am Morgen auf?", ru: "Где утром встаёт солнце?", bild: "🌅", optionen: [
+        { t: "Im Osten", ru: "На востоке", ok: true, warum: "Genau! Im Osten geht sie auf, mittags steht sie bei uns im Süden, im Westen geht sie unter.", warumRu: "Точно! На востоке оно встаёт, в полдень у нас оно на юге, на западе садится." },
+        { t: "Im Westen", ru: "На западе", ok: false, warum: "Im Westen geht die Sonne abends unter. Auf geht sie im Osten.", warumRu: "На западе солнце садится вечером. Встаёт оно на востоке." },
+        { t: "Im Norden", ru: "На севере", ok: false, warum: "Im Norden steht die Sonne bei uns nie. Sie geht im Osten auf.", warumRu: "На севере у нас солнца не бывает. Оно встаёт на востоке." }] },
+      { typ: "daumen", satz: "Auf den meisten Landkarten ist Norden oben.", satzRu: "На большинстве карт север наверху.", bild: "🗺️", ok: true,
+        warum: "Stimmt! Darum ist auf der Karte rechts Osten, unten Süden und links Westen.", warumRu: "Верно! Поэтому на карте справа восток, внизу юг, слева запад." },
+      { typ: "zuordnen", frage: "Norden ist oben. Wo liegt das?", ru: "Север наверху. Где это находится?",
+        gruppen: [{ id: "o", name: "Rechts = Osten", ru: "Справа = восток", bild: "➡️" }, { id: "w", name: "Links = Westen", ru: "Слева = запад", bild: "⬅️" }],
+        dinge: [
+          { t: "Wo die Sonne aufgeht", ru: "Где встаёт солнце", gruppe: "o" }, { t: "Rechte Kartenseite", ru: "Правая сторона карты", gruppe: "o" },
+          { t: "Wo die Sonne untergeht", ru: "Где садится солнце", gruppe: "w" }, { t: "Linke Kartenseite", ru: "Левая сторона карты", gruppe: "w" }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Prima, {name}! Stell dich morgens so hin, dass die Sonne vor dir ist. Dann schaust du nach Osten – wo ist Norden?",
+        ru: "Отлично, {name}! Встань утром так, чтобы солнце было перед тобой. Тогда ты смотришь на восток — где север?" }
+    ]
+  },
+  {
+    id: "schwimmen", lz: ["su.na.07"], name: "Schwimmen und Sinken", e: "⛵", farbe: "#1F8FB8", grund: "#E2F4FB",
+    kurz: "Was schwimmt? Warum schwimmt ein Schiff aus Stahl?",
+    schritte: [
+      { typ: "info", titel: "Ab ins Wasser!", bild: "🛁",
+        text: "Hallo {name}! Manche Dinge schwimmen, andere gehen unter. Das hängt nicht nur davon ab, wie schwer sie sind, sondern auch vom Stoff und von der Form.",
+        ru: "Привет, {name}! Одни вещи плавают, другие тонут. Это зависит не только от веса, но и от материала и формы." },
+      { typ: "zuordnen", frage: "Schwimmt es oder sinkt es?", ru: "Плавает или тонет?",
+        gruppen: [{ id: "s", name: "Schwimmt", ru: "Плавает", bild: "🛟" }, { id: "u", name: "Sinkt", ru: "Тонет", bild: "⬇️" }],
+        dinge: [
+          { t: "Korken", ru: "Пробка", gruppe: "s" }, { t: "Holzstück", ru: "Кусок дерева", gruppe: "s" }, { t: "Apfel", ru: "Яблоко", gruppe: "s" },
+          { t: "Nagel", ru: "Гвоздь", gruppe: "u" }, { t: "Stein", ru: "Камень", gruppe: "u" }, { t: "Schlüssel", ru: "Ключ", gruppe: "u" }] },
+      { typ: "wahl", frage: "Ein Klumpen Knete sinkt. Wie kann er schwimmen?", ru: "Комок пластилина тонет. Как сделать, чтобы он плавал?", bild: "🥣", optionen: [
+        { t: "Zu einem Schiffchen formen", ru: "Слепить лодочку", ok: true, warum: "Richtig! Als Schiffchen drückt die Knete viel Wasser zur Seite. Das Wasser trägt sie.", warumRu: "Правильно! Лодочка отодвигает много воды. Вода её держит." },
+        { t: "Zu einer festen Kugel rollen", ru: "Скатать плотный шарик", ok: false, warum: "Eine Kugel sinkt sofort. Erst eine hohle Form mit Rand schwimmt.", warumRu: "Шарик сразу тонет. Плавает только полая форма с бортиками." },
+        { t: "Ganz fest drücken", ru: "Сильно сжать", ok: false, warum: "Dann bleibt sie ein Klumpen und sinkt. Die Form muss sich ändern.", warumRu: "Тогда он останется комком и утонет. Нужно изменить форму." }] },
+      { typ: "daumen", satz: "Ein großes Schiff aus Stahl kann schwimmen.", satzRu: "Большой корабль из стали может плавать.", bild: "🚢", ok: true,
+        warum: "Stimmt! Ein Schiff ist innen hohl und voller Luft. Es drückt so viel Wasser weg, dass das Wasser es trägt.", warumRu: "Верно! Корабль внутри пустой и полон воздуха. Он вытесняет столько воды, что вода его держит." },
+      { typ: "daumen", satz: "Alles, was schwer ist, geht unter.", satzRu: "Всё тяжёлое тонет.", bild: "🪵", ok: false,
+        warum: "Nein! Ein dicker Baumstamm ist sehr schwer und schwimmt trotzdem. Ein kleiner Nagel ist leicht und sinkt.", warumRu: "Нет! Толстое бревно очень тяжёлое и всё равно плавает. Маленький гвоздь лёгкий и тонет." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Klasse, {name}! Probier es mit einer Schüssel Wasser aus: Schätze erst, dann teste. Frag vorher, was du ins Wasser legen darfst.",
+        ru: "Класс, {name}! Попробуй с миской воды: сначала угадай, потом проверь. Спроси заранее, что можно класть в воду." }
+    ]
+  },
+  {
+    id: "feuer", lz: ["su.na.09"], name: "Feuer und Brandschutz", e: "🔥", farbe: "#D2502A", grund: "#FDECE4",
+    kurz: "Was ein Feuer braucht und was du im Notfall tust",
+    schritte: [
+      { typ: "info", titel: "Was braucht ein Feuer?", bild: "🔥",
+        text: "Hallo {name}! Ein Feuer brennt nur, wenn drei Dinge zusammenkommen: etwas, das brennt, Luft und genug Hitze. Fehlt eins davon, geht es aus.",
+        ru: "Привет, {name}! Огонь горит, только если есть три вещи: то, что горит, воздух и достаточно тепла. Если одного нет, огонь гаснет.",
+        fakten: [["Brennstoff 🪵", "Горючее 🪵"], ["Luft 🌬️", "Воздух 🌬️"], ["Hitze 🌡️", "Жар 🌡️"]] },
+      { typ: "wahl", frage: "Warum geht eine Kerze unter einem Glas aus?", ru: "Почему свеча под стаканом гаснет?", bild: "🕯️", optionen: [
+        { t: "Ihr fehlt die Luft", ru: "Ей не хватает воздуха", ok: true, warum: "Richtig! Unter dem Glas ist die Luft bald verbraucht. Ohne Luft kein Feuer.", warumRu: "Правильно! Под стаканом воздух быстро заканчивается. Без воздуха нет огня." },
+        { t: "Das Glas ist zu kalt", ru: "Стакан слишком холодный", ok: false, warum: "Nein, es liegt an der Luft. Unter dem Glas fehlt sie bald.", warumRu: "Нет, дело в воздухе. Под стаканом его скоро не хватает." },
+        { t: "Die Kerze ist müde", ru: "Свеча устала", ok: false, warum: "Kerzen werden nicht müde! Ihr fehlt die Luft.", warumRu: "Свечи не устают! Ей не хватает воздуха." }] },
+      { typ: "wahl", frage: "Es brennt! Welche Nummer rufst du an?", ru: "Пожар! По какому номеру ты звонишь?", bild: "🚒", optionen: [
+        { t: "112", ru: "112", ok: true, warum: "Genau! 112 ist die Nummer für Feuerwehr und Rettungsdienst – in ganz Europa.", warumRu: "Точно! 112 — номер пожарных и скорой помощи во всей Европе." },
+        { t: "110", ru: "110", ok: false, warum: "110 ist die Polizei. Bei Feuer rufst du 112.", warumRu: "110 — это полиция. При пожаре звонишь 112." },
+        { t: "123", ru: "123", ok: false, warum: "Diese Nummer gibt es nicht als Notruf. Bei Feuer: 112.", warumRu: "Такого номера экстренной помощи нет. При пожаре: 112." }] },
+      { typ: "daumen", satz: "Wenn es brennt, verstecke ich mich unter dem Bett.", satzRu: "Если пожар, я прячусь под кроватью.", bild: "🛏️", ok: false,
+        warum: "Nein! Nie verstecken. Raus aus dem Raum, Tür zumachen, Erwachsene rufen und 112 wählen. Bei Rauch tief am Boden bleiben.", warumRu: "Нет! Никогда не прячься. Выйди из комнаты, закрой дверь, позови взрослых и набери 112. При дыме держись низко у пола." },
+      { typ: "daumen", satz: "Ein Rauchmelder piept laut, wenn es nach Rauch riecht, und kann Leben retten.", satzRu: "Дымовой датчик громко пищит, если есть дым, и может спасти жизнь.", bild: "🚨", ok: true,
+        warum: "Stimmt! Er weckt alle auf, auch nachts. Frag zu Hause, wo eure Rauchmelder hängen.", warumRu: "Верно! Он будит всех, даже ночью. Спроси дома, где висят ваши дымовые датчики." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Gut gemacht, {name}! Streichhölzer und Feuerzeuge sind nur für Erwachsene. Übt zu Hause: Wie kommt ihr schnell nach draußen?",
+        ru: "Молодец, {name}! Спички и зажигалки — только для взрослых. Потренируйтесь дома: как быстро выйти на улицу?" }
+    ]
   }
 ];

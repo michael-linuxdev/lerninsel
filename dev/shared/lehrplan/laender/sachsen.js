@@ -77,17 +77,17 @@
         ],
         "3": [
           { nr: 1, lz: ["su.so.04", "su.hi.03"], titel: "Zusammen leben und lernen", inhalte: ["Menschen anderer Kulturen, kulturelle Verschiedenheit", "Leben auf dem Land früher und heute", "Medien als Informationsquelle"], app: ["sachkunde:geschenkebringer"], abdeckung: "teil", hinweis: "Feste in verschiedenen Kulturen (Weihnachten/Neujahr)." },
-          { nr: 2, lz: ["su.na.02"], titel: "Mein Körper und meine Gesundheit", inhalte: ["Sinnesorgane", "Gefahren durch Drogen, Gruppendruck"], app: [], abdeckung: "nein" },
-          { nr: 3, lz: ["su.na.08"], titel: "Pflanzen und Tiere", inhalte: ["Getreide und Kartoffel, vom Korn zum Brot", "Lebensraum Wiese"], app: [], abdeckung: "nein" },
-          { nr: 4, lz: ["su.na.04", "su.na.07"], titel: "Unbelebte Natur", inhalte: ["Wetterberichte, Wetterkarten", "Wasser: fest, flüssig, gasförmig, Wasserkreislauf", "Schwimmen und Sinken"], app: [], abdeckung: "nein" },
-          { nr: 5, lz: ["su.ge.02", "su.ge.03"], titel: "Raum und Zeit", inhalte: ["Himmelsrichtungen, Kompass", "Der eigene Landkreis", "Mit dem Fahrrad im Verkehr"], app: [], abdeckung: "nein" },
+          { nr: 2, lz: ["su.na.02"], titel: "Mein Körper und meine Gesundheit", inhalte: ["Sinnesorgane", "Gefahren durch Drogen, Gruppendruck"], app: ["sachkunde:sinne"], abdeckung: "teil", hinweis: "Fünf Sinne ja; Drogen und Gruppendruck fehlen." },
+          { nr: 3, lz: ["su.na.08"], titel: "Pflanzen und Tiere", inhalte: ["Getreide und Kartoffel, vom Korn zum Brot", "Lebensraum Wiese"], app: ["sachkunde:wald"], abdeckung: "teil", hinweis: "Lebensraum Wiese (mit Wald) ja; Getreide und Kartoffel fehlen." },
+          { nr: 4, lz: ["su.na.04", "su.na.07"], titel: "Unbelebte Natur", inhalte: ["Wetterberichte, Wetterkarten", "Wasser: fest, flüssig, gasförmig, Wasserkreislauf", "Schwimmen und Sinken"], app: ["sachkunde:wasser", "sachkunde:schwimmen"], abdeckung: "teil", hinweis: "Wasserkreislauf und Schwimmen/Sinken ja; Wetterkarten fehlen." },
+          { nr: 5, lz: ["su.ge.02", "su.ge.03"], titel: "Raum und Zeit", inhalte: ["Himmelsrichtungen, Kompass", "Der eigene Landkreis", "Mit dem Fahrrad im Verkehr"], app: ["sachkunde:kompass"], abdeckung: "teil", hinweis: "Himmelsrichtungen und Kompass ja; Landkreis und Fahrrad fehlen." },
           { nr: 6, lz: [], titel: "Experimentieren", inhalte: ["Ein Experiment planen, durchführen, auswerten"], app: [], abdeckung: "nein" }
         ],
         "4": [
           { nr: 1, lz: ["su.so.06", "su.hi.04", "me.sa.01"], titel: "Zusammen leben und lernen", inhalte: ["Schule früher, Kinderrechte", "Medien: Nutzen, Gefahren, Datenschutz, Urheberrecht", "Stadt früher und heute"], app: ["medien:alle"], abdeckung: "teil" },
           { nr: 2, lz: ["su.na.02"], titel: "Mein Körper und meine Gesundheit", inhalte: ["Pubertät", "Atmung und Herzschlag", "Sucht und Vorbeugung"], app: [], abdeckung: "nein" },
-          { nr: 3, lz: ["su.na.08"], titel: "Pflanzen und Tiere", inhalte: ["Wald als Lebensgemeinschaft", "Säugetiere", "Boden und Kompost", "Gewässer, Umweltschutz"], app: [], abdeckung: "nein" },
-          { nr: 4, lz: ["su.na.09"], titel: "Unbelebte Natur", inhalte: ["Feuer und Brandschutz", "Wärmeleitung und Dämmung"], app: [], abdeckung: "nein" },
+          { nr: 3, lz: ["su.na.08"], titel: "Pflanzen und Tiere", inhalte: ["Wald als Lebensgemeinschaft", "Säugetiere", "Boden und Kompost", "Gewässer, Umweltschutz"], app: ["sachkunde:wald"], abdeckung: "teil", hinweis: "Stockwerke des Waldes, Nahrungskette, Laub wird Erde; Säugetiere und Gewässer fehlen." },
+          { nr: 4, lz: ["su.na.09"], titel: "Unbelebte Natur", inhalte: ["Feuer und Brandschutz", "Wärmeleitung und Dämmung"], app: ["sachkunde:feuer"], abdeckung: "teil", hinweis: "Feuer und Brandschutz ja; Wärmeleitung fehlt." },
           { nr: 5, lz: ["su.ge.04", "su.hi.04", "su.hi.sn01"], titel: "Raum und Zeit", inhalte: ["Karte von Sachsen, Maßstab", "Dresden", "Sorbische Kultur", "Radfahrprüfung"], app: [], abdeckung: "nein" },
           { nr: 6, lz: ["me.pp.01", "me.sv.01"], titel: "Medien – Informationen beschaffen", inhalte: ["Präsentation erstellen", "Quellen, Urheberrecht, Datenschutz"], app: [], abdeckung: "nein" }
         ]

@@ -1181,3 +1181,16 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
 - **Offen in Mathe Kl. 3:** Würfelgebäude/Baupläne, Flächen/Umfang, Schiebe-/Drehsymmetrie, Zufallsexperimente, Teilbarkeit, schriftliche
   Multiplikation. **Frage an den Auftraggeber:** Welches Subtraktionsverfahren nutzt die Schule (Entbündeln/Abziehen oder Ergänzen)?
 - **Nächstes:** nach iPad-Rückmeldung NA-34 Sachunterricht (Kl. 3–4-Themen) oder NA-36 Deutsch Kl. 3–4; Grafik bleibt eingefroren.
+
+### Stand 27.10.2026, Spätnachmittag (Subtraktionsverfahren, NA-34 Teil 3)
+- **Schriftliche Subtraktion je nach Schule:** Die Verfahren sind in Deutschland nicht einheitlich (Länder/Schulen entscheiden). Neue Karte
+  „🧮 Mathe wie in der Schule“ im Elternbereich (`eltern.mathe.minus`): **Abziehen mit Entbündeln** (Standard) oder **Ergänzen**
+  („von 7 bis 13 sind 6, merke 1“). Die Hilfe in „Schriftlich minus“ erklärt im gewählten Verfahren. Test in `tests/mathe1.js`.
+  Offen: Abziehen mit Erweitern als drittes Verfahren, falls gewünscht.
+- **NA-34 Teil 3 – fünf Themen für Kl. 3–4** bei Eule Ella (je 6 Schritte, Russisch als Entwurf): „Meine fünf Sinne“ (`su.na.02`),
+  „Lebensraum Wald und Wiese“ (`su.na.08`), „Himmelsrichtungen“ (`su.ge.03`), „Schwimmen und Sinken“ (`su.na.07`), „Feuer und Brandschutz“
+  (`su.na.09`, Notruf 112). Jetzt 15 Themen. Sachsen: Kl. 3 Körper, Pflanzen/Tiere, Unbelebte Natur, Raum/Zeit → teil; Kl. 4 Pflanzen/Tiere,
+  Unbelebte Natur → teil (jetzt 9/22/18). Test-Haken `__sachkunde.schritt(n)`, neuer Test `tests/sachkunde.js`.
+- **Offen im Sachunterricht:** Fahrrad und Verkehr (`su.te.03`), Kinderrechte und Geld (`su.so.06`), Gemeinde/Mitbestimmen (`su.so.05`),
+  Getreide/vom Korn zum Brot, Wetterkarten, Experimentieren; Bundesland/Heimatort (`su.ge.04`, `su.hi.04`) brauchen Länderdaten.
+- **Nächstes:** NA-34 Teil 4 (Fahrrad, Kinderrechte) oder NA-36 Deutsch Kl. 3–4; Grafik bleibt eingefroren.
