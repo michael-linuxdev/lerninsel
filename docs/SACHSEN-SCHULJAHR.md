@@ -63,8 +63,16 @@ Kombinieren, Spiegeln und Muster, Sachaufgaben-Detektiv, Würfelgebäude. **Frei
 Lernbereich (`lb`); sie ist auch offen, wenn die vorige Station desselben Lernbereichs geschafft ist – die vier Lernbereiche laufen wie im
 Schuljahr nebeneinander. Die alte Regel gilt zusätzlich, nichts wird gesperrt.
 
-Kl. 3 und Kl. 4 sind im selben PDF enthalten (Kl. 4 „Größen und Messen“/„Daten und Zufall“ jetzt im Profil nachgetragen); die Inhaltspunkte
-für Kl. 3 folgen als Nächstes.
+### Mathematik Kl. 3 und Kl. 4 – ✅ gegen das PDF geprüft (27.10.2026, nachts)
+| Klasse | Punkte | Stand | Neue Stationen (am Ende des Wegs, `zusatz: true`) |
+|---|---|---|---|
+| 3 | 34 | 27 ✅ 5 🟡 2 🌍 | Zahlen bis 1000 genau, Mal und geteilt bis 1000, Rechenvorteile und Fehler, Zahlenfolgen/Mauern/Quersumme, Pyramide/Kegel/Zylinder, Parallelogramm und Dreiecke, Bandornamente, Würfelgebäude: Ansichten, Größen genauer, Fahrplan/Möglichkeiten/Zufall (Weg jetzt 30 Stationen) |
+| 4 | 31 | 24 ✅ 4 🟡 3 🌍 | Haus der Vierecke, Vergrößern und Verkleinern, Volumen und Flächen, Parkette und Drehungen, Tonne/kg/g, Reiseplanung, Diagramme/Baum/Würfel, Rechenmeister (figurierte Zahlen, Fehler finden, zwei Subtrahenden, Adam Ries) (Weg jetzt 23 Stationen) |
+
+Noch teilweise: Kl. 3 Perspektiven/Pläne, Umfang mit dem Faden, Quadernetze, Sachaufgaben mit eigenen Skizzen, Denk- und Legespiele;
+Kl. 4 Wegeskizzen, Schrägbilder lesen, Körpernetze vergleichen, römischer Abakus. Auf Papier/draußen: genaues Zeichnen, Schrägbilder skizzieren,
+Messen mit Waage und Messrad, eigene Umfragen. **Kl. 4-Urkunde** zählt nur die ursprünglichen 15 Stationen (keine verdiente Urkunde geht verloren).
+Lernbereiche Kl. 4 „Größen und Messen“ und „Daten und Zufall“ jetzt „gut“ – Sachsen gesamt (Mathe, Deutsch, SU) **22 gut, 23 teilweise, 0 fehlt**.
 
 ### Deutsch (Lehrplan 2025, Kl. 1/2) – Abenteuer (5), Lesen und Schreiben, DaZ, Werkstatt (Kl. 1–2: 7 Kapitel)
 | Lernbereich | Inhaltspunkt (vorläufig) | Vorhanden | Stand |

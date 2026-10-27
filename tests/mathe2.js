@@ -100,7 +100,7 @@ const NEU = ["zahlen100", "lage", "rechentricks", "euro", "linien", "zahlenmauer
     const { ctx, p } = await kind("3");
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     const n = await p.evaluate(() => document.querySelectorAll("#karte .station:not(.ziel)").length);
-    erwarte(n === 20, `Klasse 3 startet weiter auf dem Kl.-3-Weg mit 20 Stationen (${n})`);
+    erwarte(n === 30, `Klasse 3 startet auf dem Kl.-3-Weg (30 Stationen, ${n})`);
     await ctx.close();
   }
 

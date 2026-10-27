@@ -88,7 +88,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     // NA-33: dritter Weg Klasse 3
     await p.click('.weg-wahl[data-weg="k3"]'); await p.waitForTimeout(300);
     const w3 = await wegInfo(p);
-    erwarte(w3.an === "k3" && w3.stationen === 20 && w3.erste === "Zahlen bis 1000" && !w3.einstufung, `Klasse 3: 20 Stationen, beginnt mit „Zahlen bis 1000“ (${w3.stationen})`);
+    erwarte(w3.an === "k3" && w3.stationen === 30 && w3.erste === "Zahlen bis 1000" && !w3.einstufung, `Klasse 3: 30 Stationen, beginnt mit „Zahlen bis 1000“ (${w3.stationen})`);
     for (let s3 = 0; s3 < 20; s3++) { await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(120);
       if (!(await p.evaluate(() => __mathe.lauf.liste.length === 10))) fehler.push("Kl. 3 Station " + s3 + " hat keine 10 Aufgaben"); }
     // NA-33b: schriftlich plus/minus, Würfelnetze, Spiegeln, Diagramme – Bild sichtbar, richtige Antwort wird angenommen
@@ -106,7 +106,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.evaluate(() => document.getElementById("zum-weg") && document.getElementById("zum-weg").click()); await p.waitForTimeout(300);
     await p.click('.weg-wahl[data-weg="k4"]'); await p.waitForTimeout(300);
     const w4 = await wegInfo(p);
-    erwarte(w4.an === "k4" && w4.stationen === 15 && w4.erste === "Zahlen bis 1 Million", `Klasse 4: 15 Stationen, beginnt mit „Zahlen bis 1 Million“ (${w4.stationen})`);
+    erwarte(w4.an === "k4" && w4.stationen === 23 && w4.erste === "Zahlen bis 1 Million", `Klasse 4: 23 Stationen, beginnt mit „Zahlen bis 1 Million“ (${w4.stationen})`);
     for (let s4 = 0; s4 < 15; s4++) {
       await p.evaluate((n) => __mathe.starte(n), s4); await p.waitForTimeout(150);
       const info = await p.evaluate(() => { const a = __mathe.lauf.liste[0]; return { antwort: a.antwort, zahl: a.art === "zahl", passt: document.documentElement.scrollWidth <= innerWidth + 1, n: __mathe.lauf.liste.length }; });
@@ -133,7 +133,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.evaluate(() => { const d = Spielwelt.lade("mathe") || {}; d.k4 = d.k4 || {}; Mathe.STATIONEN_K4.forEach(s => { d.k4[s.id] = 3; }); Spielwelt.speichere("mathe", d); });
     await p.reload(); await p.waitForSelector("#urkunde-ziel");
     await p.click("#urkunde-ziel"); await p.waitForTimeout(300);
-    erwarte(await p.evaluate(() => { const u = document.getElementById("urkunde"); return !!u && /Mira/.test(u.textContent) && /4\. Klasse: 15 von 15/.test(u.textContent); }), "Urkunde zeigt Namen und 15 von 15 Stationen Kl. 4");
+    erwarte(await p.evaluate(() => { const u = document.getElementById("urkunde"); return !!u && /Mira/.test(u.textContent) && /4\. Klasse: 23 von 23/.test(u.textContent); }), "Urkunde zeigt Namen und 23 von 23 Stationen Kl. 4");
     await bild(p, "mathe4-urkunde");
     await p.click("#urkunde-zu");
     // Elternbereich: Subtraktionsverfahren „Ergänzen“ ändert die Hilfe

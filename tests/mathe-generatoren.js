@@ -8,7 +8,7 @@ const M = window.Mathe;
 let n = 0;
 const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
 
-for (const [weg, liste, anzahl] of [["Kl. 1", M.STATIONEN_K1, 10], ["Kl. 2", M.STATIONEN, 40], ["Kl. 3", M.STATIONEN_K3, 20], ["Kl. 4", M.STATIONEN_K4, 15], ["Übergang 5", M.STATIONEN_K5, 10]]) {
+for (const [weg, liste, anzahl] of [["Kl. 1", M.STATIONEN_K1, 10], ["Kl. 2", M.STATIONEN, 40], ["Kl. 3", M.STATIONEN_K3, 30], ["Kl. 4", M.STATIONEN_K4, 23], ["Übergang 5", M.STATIONEN_K5, 10]]) {
   pruefe(`${weg}: ${anzahl} Stationen, je 400 gültige Aufgaben`, () => {
     assert.strictEqual(liste.length, anzahl);
     for (const s of liste) {
@@ -37,5 +37,9 @@ pruefe("Kl. 2: jede Station hat einen Lernbereich (lb), die 17 neuen hängen am 
   assert.ok(M.STATIONEN.every(s => ["zo", "rf", "gm", "dz"].includes(s.lb)), "lb fehlt");
   assert.deepStrictEqual(M.STATIONEN.slice(0, 3).map(s => s.id), ["plus20", "minus20", "zehner"]);
   assert.strictEqual(M.STATIONEN[23].id, "zahlen100");
+});
+pruefe("Kl. 3 und 4: jede Station hat einen Lernbereich, neue hängen am Ende und sind als Zusatz markiert (Urkunde zählt nur die alten)", () => {
+  [[M.STATIONEN_K3, 20], [M.STATIONEN_K4, 15]].forEach(([l, alt]) => { assert.ok(l.every(s => ["zo", "rf", "gm", "dz"].includes(s.lb)));
+    assert.ok(l.slice(0, alt).every(s => !s.zusatz) && l.slice(alt).every(s => s.zusatz)); });
 });
 console.log(`✅ Mathe-Generatoren: ${n} Prüfungen bestanden.`);

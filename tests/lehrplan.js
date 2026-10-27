@@ -56,13 +56,13 @@ pruefe("Sachsen: alle 45 Lernbereiche (Mathe, Deutsch 2025, Sachunterricht) habe
 pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand 9 / 15 / 25, Stand NA-33a)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 20, teil: 25, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 22, teil: 23, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
 });
 
-pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2 hat Inhaltspunkte je Lernbereich, jede Zuordnung zeigt auf eine echte Station/Aufgabe", () => {
+pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 haben Inhaltspunkte je Lernbereich, jede Zuordnung zeigt auf eine echte Station/Aufgabe", () => {
   const lbs = L.laender.sachsen.faecher.mathe.stufen["1/2"], ids = new Set();
   const stationen = new Set([].concat(w.Mathe.STATIONEN, w.Mathe.STATIONEN_K1, w.Mathe.STATIONEN_K3, w.Mathe.STATIONEN_K4, w.Mathe.STATIONEN_K5).map(s => s.id));
   const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
@@ -81,6 +81,15 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2 hat Inhaltspunkte je Lernbereich,
   });
   assert.strictEqual(ids.size, 52);
   assert.deepStrictEqual(n, { ja: 38, teil: 11, nein: 1, aussen: 2 });
+  // Kl. 3 und 4 (gleiche Prüfung der Zuordnungen)
+  for (const [st, soll, zahl] of [["3", { ja: 27, teil: 5, nein: 0, aussen: 2 }, 34], ["4", { ja: 24, teil: 4, nein: 0, aussen: 3 }, 31]]) {
+    const m = { ja: 0, teil: 0, nein: 0, aussen: 0 }, ids2 = new Set();
+    L.laender.sachsen.faecher.mathe.stufen[st].forEach(lb => { assert.ok(lb.punkte && lb.punkte.length >= 4, `Kl. ${st} ${lb.titel}`);
+      lb.punkte.forEach(p => { assert.ok(!ids2.has(p.id) && p.kl === st, p.id); ids2.add(p.id); m[p.abdeckung]++;
+        p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
+        if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("mathe:")), p.id); }); });
+    assert.strictEqual(ids2.size, zahl, "Kl. " + st); assert.deepStrictEqual(m, soll, "Kl. " + st);
+  }
 });
 
 pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziele", () => {

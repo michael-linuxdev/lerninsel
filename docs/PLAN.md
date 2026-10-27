@@ -1464,3 +1464,28 @@ Auftraggeber hat zwei PDFs hochgeladen: Übersicht der Lernbereiche (2019 → 20
   Rechengeschichten frei erfinden, rechts/links am Körper und vorn/hinten räumlich in der App.
 - **Nächstes:** Mathe Kl. 3 nach demselben Muster (PDF liegt vor); Deutsch/Sachunterricht/Kunst/Musik/Werken/Sport/Ethik Kl. 1/2, sobald
   die PDFs da sind; Schuljahres-Gerüst (Eltern-Einstellung „gerade in der Schule“, „Zeig, was du kannst“ je Lernbereich).
+
+### Stand 27.10.2026, nachts (Sachsen in voller Tiefe: Mathe Kl. 3 und 4)
+Auftrag: „Mathe Klasse 3 und 4“ – aus demselben PDF (Lehrplan Mathematik 2025).
+- **Inhaltspunkte:** Kl. 3 34 (27 geübt, 5 teilweise, 2 Papier), Kl. 4 31 (24 geübt, 4 teilweise, 3 Papier/draußen) in `sachsen-punkte.js`;
+  Mathe Kl. 1–4 damit vollständig erfasst (117 Punkte).
+- **10 neue Stationen Kl. 3** (Weg jetzt 30): Zahlen bis 1000 genau (Zahlenstrahl, Zahlwort, Nachbarhunderter, Schritte), Mal und geteilt bis
+  1000 (Vielfache von 10, Nachbaraufgaben, Zerlegen, gleichsinnig, Rechenvorteil 25 · 4), Rechenvorteile und Fehler (Punkt vor Strich,
+  Überschlag, Umkehrprobe, Fehler erkennen), Zahlenfolgen/Mauern/Quersumme (Fibonacci, 4er-Mauer, Teilbarkeit durch 9, Zielzahl),
+  Pyramide/Kegel/Zylinder (mit Ansichten), Parallelogramm und Dreiecke, Bandornamente (verschoben, gespiegelt, gedreht; 5 Grundfiguren),
+  Würfelgebäude: Ansichten (von vorn, von oben, zum Quader ergänzen), Größen genauer (km/m und kg/g mit zwei Einheiten und Komma, Sekunden,
+  Viertelstunden, Stützpunkte), Fahrplan/Möglichkeiten/Zufall (Busfahrplan, Zahlenschloss nach dem Tachometer-Prinzip, Beutel).
+- **8 neue Stationen Kl. 4** (Weg jetzt 23): Haus der Vierecke (Trapez, Raute, Drachen, „jedes Quadrat ist auch …“), Vergrößern und
+  Verkleinern, Volumen und Flächen (Einheitswürfel, cm²/m²-Stützpunkte, Umfang), Parkette und Drehungen, Tonne/kg/g, Reiseplanung
+  (Fahrzeit über die volle Stunde, Preistafel, Wanderkarte, Bruchteile), Diagramme/Baum/Würfel (gestapelte Säulen, Fragen über die Daten
+  hinaus, Baumdiagramm, zwei Würfel, gleich wahrscheinlich), Rechenmeister (figurierte Zahlen, Fehler finden, zwei Subtrahenden, Adam Ries
+  mit Rechenschule in Annaberg, Verteilungsgesetz).
+- **Entscheidungen:** Freischalten je Lernbereich gilt jetzt auch für Kl. 3 und 4 (Feld `lb` an allen Stationen). Neue Stationen tragen
+  `zusatz: true`; die **Kl.-4-Urkunde zählt nur die ursprünglichen 15 Stationen**, damit keine verdiente Urkunde wieder gesperrt wird
+  (Regel „nichts geht verloren“); die Urkunde zeigt trotzdem „x von 23“.
+- **Sachsen-Profil:** Kl. 4 „Größen und Messen“ und „Daten und Zufall“ **teil → ja**; Mathe gesamt 9/3/0, Sachsen gesamt **22/23/0**.
+- **Gefunden und behoben:** Eine Station mit zu wenig Aufgaben-Vielfalt (Bandornamente: nur 3 verschiedene) hätte eine Runde mit weniger als
+  10 Aufgaben erzeugt – jetzt 5 Grundfiguren und eine zweite Frageart; alle 35 neuen Stationen liefern geprüft 10 verschiedene Aufgaben.
+- **Tests:** neu `tests/mathe34.js`; `mathe-generatoren` (30/23 Stationen, lb, zusatz), `lehrplan` (Punkte Kl. 3/4, 22/23/0), `mathe1`, `mathe2`.
+- **Nächstes:** Deutsch, Sachunterricht und die musischen Fächer Kl. 1/2 (PDFs fehlen noch); Schuljahres-Gerüst („gerade in der Schule“,
+  „Zeig, was du kannst“ je Lernbereich); offene Mathe-Punkte (Tangram, Quadernetze, Schrägbilder, Abakus).

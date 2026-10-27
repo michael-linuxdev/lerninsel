@@ -4,7 +4,7 @@
 // Punkt: [id, Text, Klasse ("1" | "2" | "1/2" | "3" | "4"), app[], abdeckung]
 //   abdeckung: "ja" = in der App geübt · "teil" = teilweise · "nein" = fehlt noch · "aussen" = gehört nach draußen/aufs Papier
 //   (Zeichnen mit Lineal und Zirkel, echtes Messen, Bauen) – dafür gibt es Echte-Welt-Aufgaben, die App übt es nicht selbst.
-// Quellen: Mathematik 2025 (Lehrplan Grundschule Sachsen, Fassung 2025, gültig ab 1.8.2025; vom Auftraggeber als PDF bereitgestellt).
+// Quellen: Mathematik 2025 (Lehrplan Grundschule Sachsen, Fassung 2025, gültig ab 1.8.2025; vom Auftraggeber als PDF bereitgestellt), Kl. 1/2, 3 und 4.
 (function () {
   const P = window.LehrplanLaender && window.LehrplanLaender.sn; if (!P) return;
   const PUNKTE = {
@@ -69,6 +69,91 @@
           ["sn.ma12.dz.04", "Werte aus Tabellen und Schaubildern ablesen und vergleichen", "1/2", ["mathe:daten", "mathe:tabelle"], "ja"],
           ["sn.ma12.dz.05", "Kombinationen finden und darstellen", "2", ["mathe:kombinieren2"], "ja"],
           ["sn.ma12.dz.06", "Einfache Zufallsexperimente: sicher, möglich, unmöglich", "2", ["mathe:zufall"], "ja"]
+        ]
+      },
+      "3": {
+        1: [ // Raum und Form
+          ["sn.ma3.rf.01", "Lagebeziehungen und Wege aus verschiedenen Blickwinkeln beschreiben, Pläne und Ansichten nutzen", "3", ["mathe:k3ansicht", "mathe:wege"], "teil"],
+          ["sn.ma3.rf.02", "Würfelgebäude nach Bauplan und umgekehrt, verändern, zum Quader ergänzen, Würfel zählen", "3", ["mathe:k3wuerfelbau", "mathe:k3ansicht", "echtewelt:bauplan"], "ja"],
+          ["sn.ma3.rf.03", "Parallele, senkrechte und sich schneidende Geraden millimetergenau zeichnen", "3", ["echtewelt:lineal"], "aussen"],
+          ["sn.ma3.rf.04", "Parallelogramm und weitere Drei- und Vierecke erkennen, beschreiben, ergänzen", "3", ["mathe:k3vierecke"], "ja"],
+          ["sn.ma3.rf.05", "Flächen vergleichen, zerlegen, auslegen, auszählen und schätzen; Umfang bestimmen", "3", ["mathe:k3flaeche", "mathe:k4flaeche"], "teil"],
+          ["sn.ma3.rf.06", "Pyramide, Kegel, Zylinder erkennen, vergleichen, aus verschiedenen Blickwinkeln erkennen", "3", ["mathe:k3koerper"], "ja"],
+          ["sn.ma3.rf.07", "Würfel- und Quadernetze herstellen, prüfen, beschreiben", "3", ["mathe:k3netz"], "teil"],
+          ["sn.ma3.rf.08", "Bandornamente fortsetzen; Achsen-, Schiebe- und Drehsymmetrie nutzen", "3", ["mathe:k3ornament", "mathe:k3spiegel"], "ja"]
+        ],
+        2: [ // Zahl und Operation
+          ["sn.ma3.zo.01", "Zahlen bis 1000 lesen, sprechen, schreiben, als Zahlwort", "3", ["mathe:k3stellen", "mathe:k3zahlen1000"], "ja"],
+          ["sn.ma3.zo.02", "Zahlen bis 1000 bilden, zerlegen, in Schritten zählen, vergleichen, Nachbarzehner und -hunderter, Doppeltes und Hälfte", "3", ["mathe:k3zahlen1000"], "ja"],
+          ["sn.ma3.zo.03", "Runden", "3", ["mathe:k3runden"], "ja"],
+          ["sn.ma3.zo.04", "Stellenwerte Tausender, Hunderter, Zehner, Einer; Bündeln, Bedeutung der Null", "3", ["mathe:k3stellen", "mathe:k3zahlen1000"], "ja"],
+          ["sn.ma3.zo.05", "Plus und Minus bis 1000 mit Strategien, Rechenwege vergleichen, Umkehrprobe", "3", ["mathe:k3plus", "mathe:k3minus", "mathe:k3vorteil"], "ja"],
+          ["sn.ma3.zo.06", "Zahlenfolgen untersuchen, Zahlenmauern mit Zielzahl, Zahlenketten, Rechendreiecke", "3", ["mathe:k3muster"], "ja"],
+          ["sn.ma3.zo.07", "Schriftliche Addition mit bis zu drei Summanden", "3", ["mathe:k3schriftplus", "mathe:k4plusviele"], "ja"],
+          ["sn.ma3.zo.08", "Schriftliche Subtraktion", "3", ["mathe:k3schriftminus"], "ja"],
+          ["sn.ma3.zo.09", "Mal und geteilt bis 1000: Vielfache von 10, Nachbaraufgaben, gleich-/gegensinnig verändern, Zerlegen", "3", ["mathe:k3malgeteilt", "mathe:k3sach"], "ja"],
+          ["sn.ma3.zo.10", "Teilbarkeit, Division mit Rest, Teilbarkeitsregeln 2, 3, 5, 9, 10, 100, Quersumme", "3", ["mathe:k3rest", "mathe:k4teilbar", "mathe:k3muster"], "ja"],
+          ["sn.ma3.zo.11", "Bruchteile bilden: Hälfte, Viertel, drei Viertel von …", "3", ["mathe:k3bruch"], "ja"],
+          ["sn.ma3.zo.12", "Einmaleins automatisiert", "3", ["mathe:mal2", "mathe:mal3"], "ja"],
+          ["sn.ma3.zo.13", "Rechenvorteile und Rechenfehler finden, Punkt vor Strich", "3", ["mathe:k3vorteil", "mathe:k4geschickt"], "ja"],
+          ["sn.ma3.zo.14", "Schriftliche Multiplikation (dreistellig mal einstellig)", "3", ["mathe:k4malschrift"], "ja"],
+          ["sn.ma3.zo.15", "Überschlag und Umkehrprobe bei schriftlichen Verfahren", "3", ["mathe:k3vorteil", "mathe:k4runden"], "ja"],
+          ["sn.ma3.zo.16", "Sachaufgaben: Lösungsansätze, Tabellen, Skizzen, Vermutungen, Ergebnisse prüfen", "3", ["mathe:k3sach", "mathe:k3geld"], "teil"],
+          ["sn.ma3.zo.17", "Zahlenspiele, Denk- und Legespiele, Lösungsstrategien beschreiben", "3", ["mathe:detektiv"], "teil"]
+        ],
+        3: [ // Größen und Messen
+          ["sn.ma3.gm.01", "Geld: Sachaufgaben, Tabellen und Diagramme", "3", ["mathe:k3geld"], "ja"],
+          ["sn.ma3.gm.02", "Länge: Kilometer, zwei Einheiten, Komma, ½ cm/m/km, Stützpunkt 1 km, umrechnen, Sachaufgaben", "3", ["mathe:k3laenge", "mathe:k3groessen"], "ja"],
+          ["sn.ma3.gm.03", "Zeit: Sekunde, minutengenau, ¼ h, ½ h, ¾ h, umrechnen, Sachaufgaben", "3", ["mathe:k3zeit", "mathe:k3groessen"], "ja"],
+          ["sn.ma3.gm.04", "Masse: Gramm und Kilogramm, zwei Einheiten, ½ kg, Stützpunkte, schätzen, umrechnen", "3", ["mathe:k3gewicht", "mathe:k3groessen"], "ja"],
+          ["sn.ma3.gm.05", "Messen mit Messrad, Waage und verschiedenen Uhren", "3", ["echtewelt:backen", "echtewelt:messen"], "aussen"]
+        ],
+        4: [ // Daten und Zufall
+          ["sn.ma3.dz.01", "Säulen- und Balkendiagramme anfertigen", "3", ["mathe:k3diagramm", "mathe:tabelle"], "ja"],
+          ["sn.ma3.dz.02", "Fragen an Daten stellen, Werte aus einem Fahrplan entnehmen", "3", ["mathe:k3daten", "mathe:k3diagramm"], "ja"],
+          ["sn.ma3.dz.03", "Kombinieren mit Strategien (Gegenpaare, Tachometer-Prinzip), alle Möglichkeiten finden", "3", ["mathe:k3kombi", "mathe:k3daten"], "ja"],
+          ["sn.ma3.dz.04", "Zufallsexperimente: vermuten, prüfen, nach Wahrscheinlichkeit ordnen", "3", ["mathe:k3zufall", "mathe:k3daten"], "ja"]
+        ]
+      },
+      "4": {
+        1: [ // Raum und Form
+          ["sn.ma4.rf.01", "Wegeskizzen erstellen, Entfernungen schätzen", "4", ["mathe:k4massstab"], "teil"],
+          ["sn.ma4.rf.02", "Schrägbilder aus verschiedenen Blickwinkeln lesen (verdeckte Teile, Ansichten)", "4", ["mathe:k3ansicht"], "teil"],
+          ["sn.ma4.rf.03", "Trapez erkennen, beschreiben, zeichnen, ergänzen", "4", ["mathe:k4vierecke"], "ja"],
+          ["sn.ma4.rf.04", "Vierecke ordnen und einteilen (Haus der Vierecke, Drachen, Raute)", "4", ["mathe:k4vierecke"], "ja"],
+          ["sn.ma4.rf.05", "Kreise, Dreiecke und Vierecke in Mustern genau zeichnen", "4", ["echtewelt:zirkel"], "aussen"],
+          ["sn.ma4.rf.06", "Dreiecke mit und ohne rechten Winkel unterscheiden", "4", ["mathe:k4vierecke"], "ja"],
+          ["sn.ma4.rf.07", "Figuren vergrößern und verkleinern", "4", ["mathe:k4vergroessern"], "ja"],
+          ["sn.ma4.rf.08", "Flächeninhalt mit Einheitsquadraten, Umfang messen und berechnen, cm² und m², Stützpunkte, schätzen", "4", ["mathe:k4flaeche", "mathe:k4volumen"], "ja"],
+          ["sn.ma4.rf.09", "Körper als Schrägbild skizzieren", "4", [], "aussen"],
+          ["sn.ma4.rf.10", "Volumen über Einheitswürfel in Quadern bestimmen", "4", ["mathe:k4volumen"], "ja"],
+          ["sn.ma4.rf.11", "Körpernetze zuordnen und vergleichen", "4", ["mathe:k3netz"], "teil"],
+          ["sn.ma4.rf.12", "Parkettierungen; Achsen-, Schiebe- und Drehsymmetrie beschreiben", "4", ["mathe:k4parkett"], "ja"]
+        ],
+        2: [ // Zahl und Operation
+          ["sn.ma4.zo.01", "Zahlen bis 1 Million und darüber lesen, schreiben, darstellen", "4", ["mathe:k4million"], "ja"],
+          ["sn.ma4.zo.02", "Zahlbeziehungen bis 1 Million: zerlegen, in Schritten zählen, vergleichen, Nachbarzahlen, runden", "4", ["mathe:k4million", "mathe:k4runden"], "ja"],
+          ["sn.ma4.zo.03", "Stellenwertsystem erweitern, Stellen verändern, Bedeutung der Null", "4", ["mathe:k4million"], "ja"],
+          ["sn.ma4.zo.04", "Adam Ries: römische Zahlzeichen, römischer Abakus, Leben und Wirken", "4", ["mathe:k4roemisch", "mathe:k4rechenmeister"], "teil"],
+          ["sn.ma4.zo.05", "Rechengesetze und Rechenvorteile, Rechenfehler finden und korrigieren", "4", ["mathe:k4geschickt", "mathe:k5klammer", "mathe:k4rechenmeister"], "ja"],
+          ["sn.ma4.zo.06", "Schriftlich addieren (bis drei Summanden) und subtrahieren (bis zwei Subtrahenden)", "4", ["mathe:k4plusviele", "mathe:k4rechenmeister"], "ja"],
+          ["sn.ma4.zo.07", "Schriftliche Multiplikation mit bis zu dreistelligem zweiten Faktor", "4", ["mathe:k4malschrift", "mathe:k4malmehr"], "ja"],
+          ["sn.ma4.zo.08", "Schriftliche Division (einstelliger Divisor), Teilbarkeit 4 und 6, Primzahlen, Überschlag", "4", ["mathe:k4geteilt", "mathe:k4teilbar", "mathe:k4primzahl", "mathe:k4runden"], "ja"],
+          ["sn.ma4.zo.09", "Zahlenmuster in geometrischen Mustern erkennen (figurierte Zahlen)", "4", ["mathe:k4rechenmeister"], "ja"],
+          ["sn.ma4.zo.10", "Funktionale Beziehungen: Maßstab, Menge und Preis, Tabellen", "4", ["mathe:k4massstab", "mathe:k4reise"], "ja"]
+        ],
+        3: [ // Größen und Messen
+          ["sn.ma4.gm.01", "Geld, Länge und Zeit in größeren Sachsituationen (Reiseplanung, Preistafeln, Fahrpläne, Wanderkarten)", "4", ["mathe:k4reise", "mathe:k4zeit"], "ja"],
+          ["sn.ma4.gm.02", "Bruchteile ¼, ½, ¾ von Größen", "4", ["mathe:k4reise", "mathe:k4tonne"], "ja"],
+          ["sn.ma4.gm.03", "Masse: Tonne, zwei Einheiten, Komma, Stützpunkte, schätzen, umrechnen, Sachaufgaben", "4", ["mathe:k4tonne"], "ja"],
+          ["sn.ma4.gm.04", "Volumen: Liter und Milliliter, Komma, messen, Stützpunkte, schätzen, umrechnen", "4", ["mathe:k4liter"], "ja"]
+        ],
+        4: [ // Daten und Zufall
+          ["sn.ma4.dz.01", "Daten selbst erheben, auswerten und dokumentieren (Umfragen)", "4", ["echtewelt:umfrage"], "aussen"],
+          ["sn.ma4.dz.02", "Balken- und gestapelte Säulendiagramme lesen und erstellen, Achsen", "4", ["mathe:k4diagramme", "mathe:k3diagramm"], "ja"],
+          ["sn.ma4.dz.03", "Fragen über den Datensatz hinaus, fehlende Informationen erkennen", "4", ["mathe:k4diagramme"], "ja"],
+          ["sn.ma4.dz.04", "Alle Möglichkeiten mit Multiplikation, Baumdiagramm und Tabelle finden (z. B. zwei Würfel)", "4", ["mathe:k4diagramme"], "ja"],
+          ["sn.ma4.dz.05", "Wahrscheinlichkeiten vergleichen und ordnen, gleich wahrscheinlich", "4", ["mathe:k4chance", "mathe:k4diagramme"], "ja"]
         ]
       }
     }

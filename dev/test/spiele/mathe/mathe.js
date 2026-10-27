@@ -135,7 +135,8 @@
       const b = document.createElement("button");
       b.style.left = pos[i][0] + "px"; b.style.top = pos[i][1] + "px";
       if (k.ziel) {
-        const alle = ST.every(s => bestes(s.id) > 0);
+        // Urkunde/Ziel: zählt nur die ursprünglichen Stationen (neue Zusatz-Stationen aus „Sachsen in voller Tiefe“ sperren keine verdiente Urkunde)
+        const alle = ST.filter(s => !s.zusatz).every(s => bestes(s.id) > 0);
         if (WEG === "k1") {
           // Klasse 1 → weiter auf dem Matheweg Klasse 2 (immer erreichbar, auch ohne alle Stationen)
           b.className = "station ziel";
@@ -158,7 +159,7 @@
             b.innerHTML = `<span class="kreis">${alle ? "🎓" : "🔒"}</span><span class="name">Urkunde</span><span class="stern-reihe"></span>`;
             b.addEventListener("click", () => {
               S.ton("tipp");
-              if (!alle) { const fehlt = ST.filter(s => !bestes(s.id)).length; S.meldung(`Noch ${fehlt} ${fehlt === 1 ? "Station" : "Stationen"}, dann bekommst du deine Mathe-Urkunde.`); return; }
+              if (!alle) { const fehlt = ST.filter(s => !s.zusatz && !bestes(s.id)).length; S.meldung(`Noch ${fehlt} ${fehlt === 1 ? "Station" : "Stationen"}, dann bekommst du deine Mathe-Urkunde.`); return; }
               zeigeUrkunde(WEG);
             });
           } else {
