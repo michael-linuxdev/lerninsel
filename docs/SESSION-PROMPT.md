@@ -12,7 +12,7 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (27.10.2026, 20:30)
+## 1. Stand (27.10.2026, 21:00)
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
   Kl. 1/Vorschule 10 Stationen · Kl. 2 23 · Kl. 3 20 (u. a. schriftlich plus/minus, Würfelnetze, Würfelgebäude, Spiegeln, Diagramme, Glücksrad) ·
@@ -61,21 +61,18 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
   Vereinfachte Ausgangsschrift – je nach Schule als Eltern-Einstellung)?
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
 
-## 2. Nächste Pakete (Vorschlag, nach Rückmeldung anpassen)
+## 2. Nächste Pakete – NEUE AUSRICHTUNG: Lehrplan Sachsen in voller Tiefe (Entscheidung 27.10.2026)
+**Arbeitsliste: `docs/SACHSEN-SCHULJAHR.md` – zuerst lesen.** Zuerst **Klasse 2**, dann **Klasse 3**, alle Fächer, Maßstab „wie ein Schuljahr“
+(jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr, Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten).
 Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen – siehe `CLAUDE.md`, Abschnitt 3.
 
-**Schritt D2 – Deutsch Teil 2 (M):** „Mein Heft“ (Kind sieht eigene Texte und Aufnahmen), Handschrift-Übung (Eltern-Wahl der Schrift),
-weitere Schreibanlässe (Glückwunsch, Tagebuch, Anleitung), einfache Rechtschreibhilfe über eine Wörterliste (keine KI). D1 (schreiben, aufnehmen,
-Gedichte) ist erledigt – siehe PLAN „Stand 27.10.2026, 20:30“.
+1. **Lehrplan-PDFs Kl. 1/2** (Mathe 2025, Deutsch 2025, Sachunterricht 2019, Kunst, Musik, Werken, Sport, Ethik) – lädt der Auftraggeber
+   hoch; fehlen sie, zuerst danach fragen. Dann die Prüfliste in `docs/SACHSEN-SCHULJAHR.md` je Inhaltspunkt genau ausfüllen (nur
+   zusammenfassen) und im Länderprofil je Lernbereich `punkte: [{ id, text, halbjahr, app, abdeckung }]` anlegen, Test je Punkt.
+2. **Schuljahres-Gerüst** (für alle Fächer): Pfad je Fach, Eltern-Einstellung „gerade in der Schule“, „Zeig, was du kannst“ je
+   Lernbereich, Elternbericht je Punkt.
+3. **Lücken Kl. 2 schließen** je Fach (Mathe → Deutsch → Sachunterricht → Kunst/Musik → Werken/Sport/Ethik → Englisch Kl. 1/2).
+4. Danach **Klasse 3** nach demselben Muster.
 
-**Schritt E2 – Englisch Teil 2 (M):** Lektionen „Let's go shopping“ (Zahlen bis 100, Preise in Pfund) und „Let's go on a trip“ (Verkehrsmittel,
-London), Wochentage/Uhrzeit in „At school“ ergänzen, Englisch-Wörter in die Lernkartei (fällige Wörter am Lektionsanfang wiederholen).
-
-**Schritt M3 – Mathe Kl. 4 Raum und Form (M):** Vierecke ordnen (Quadrat, Rechteck, Raute, Trapez, Drachen), Schrägbilder lesen, Volumen mit
-Einheitswürfeln, Figuren vergrößern. Danach – wenn der Lehrplan als PDF vorliegt – Kl. 4 „Größen und Messen“ und „Daten und Zufall“ nachtragen.
-**Neue Stationen immer ans Ende eines Wegs hängen.**
-
-**Schritt D – Länder (M):** NA-47 zweites Länderprofil (z. B. NRW oder Berlin/Brandenburg – nur Lernbereiche und Zuordnung zu `lz`, keine
-Lehrplantexte), Heimat-Thema für dieses Land über `land`.
-
-**Grafik/Story (nur nach Freigabe):** NA-29b Handy-Leistung, NA-29 Teil 2, NA-16 QR-Geschenk → NA-17 Kapitel 1–2 → NA-18 Chronik im Album.
+Zurückgestellt (nur wenn der Auftraggeber es will): D2 „Mein Heft“, E2 Englisch Teil 2, M3 Mathe Kl. 4, Länderprofil 2,
+Grafik/Story (eingefroren).

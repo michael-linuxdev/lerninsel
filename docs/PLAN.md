@@ -1422,3 +1422,17 @@ die **Bildschirmtastatur des iPads**.
   Handschrift-Übung (Schulausgangsschrift), Rechtschreibhilfe für eigene Texte (Wörterliste statt KI), Kinder sehen ihre Texte selbst
   (z. B. „Mein Heft“), weitere Schreibanlässe (Glückwunsch, Tagebuch, Anleitung).
 - **Nächstes:** E2 Englisch Teil 2, M3 Mathe Kl. 4 Raum und Form oder Länderprofil 2 – nach Rückmeldung.
+
+### Stand 27.10.2026, Abend (21:00: neue Ausrichtung „Lehrplan Sachsen in voller Tiefe“)
+- **Entscheidung des Auftraggebers:** Ab jetzt wird der sächsische Lehrplan **Schritt für Schritt in voller Tiefe** erarbeitet,
+  **zuerst Klasse 2, dann Klasse 3**, in **allen Fächern** (Mathe, Deutsch, Sachunterricht, Englisch freiwillig, Kunst, Musik, Werken,
+  Sport, Ethik/Religion). Maßstab: **„wie ein Schuljahr“** – jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr, Wiederholung,
+  Lernstands-Prüfung je Lernbereich. Die Lehrplan-PDFs lädt der Auftraggeber hoch (Schulportal aus der Arbeitsumgebung gesperrt).
+- **Neu `docs/SACHSEN-SCHULJAHR.md`:** Quellenliste, Konzept „wie ein Schuljahr“ im Rahmen der Grundregeln (Pfad als Empfehlung ohne
+  Fristen, Eltern-Einstellung „gerade in der Schule“, „Zeig, was du kannst“ ohne Noten, Ergebnis nur für Eltern), **Bestandsaufnahme
+  Klasse 2** je Fach und Inhaltspunkt (vorläufig, gegen PDF zu prüfen) und Reihenfolge der Arbeit.
+- **Größte Lücken Kl. 2 (vorläufig):** Mathe Raum und Form (Lage, Wege, Strecken, Würfelgebäude), Quadratzahlen, Rechenstrategien;
+  Deutsch Schulausgangsschrift, Glückwunsch/Überarbeiten, Märchen/Bilderbücher, Lautlesen; Sachunterricht Licht/Schatten, Luft/Schall,
+  Ortsplan, Rituale; Kunst/Musik nur teilweise; Werken/Sport nur außerhalb der App.
+- **Nächstes:** PDFs Kl. 1/2 einlesen → Prüfliste genau ausfüllen und Datenformat `punkte` ins Länderprofil → Schuljahres-Gerüst →
+  Lücken Kl. 2 je Fach schließen.

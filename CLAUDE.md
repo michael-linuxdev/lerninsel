@@ -30,6 +30,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 1. `docs/PLAN.md`, Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – verbindlich (Entscheidungen, Arbeitspakete NA-xx, offene Fragen),
    darin **„Zwei Looks (Entscheidung 27.10.2026)“** und die **neuesten „Stand …“-Einträge**. Ältere Abschnitte sind Historie.
    Den aktuellen Stand und die nächsten Pakete nennt `docs/SESSION-PROMPT.md`.
+   **Seit 27.10.2026 gilt die Ausrichtung „Lehrplan Sachsen in voller Tiefe, wie ein Schuljahr“: Arbeitsliste `docs/SACHSEN-SCHULJAHR.md`.**
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Figuren, Tutorial-Etappen E0–E10).
 3. Je nach Paket: `docs/LEHRPLAN.md` (Matrix, „Was die App heute abdeckt“), `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!),
    `docs/GRAFIK.md` (Leistungsbudget iPad 10, Pixel-Regeln), `docs/MINISPIELE.md`.
