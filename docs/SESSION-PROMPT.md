@@ -32,7 +32,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 ## 1. Zuerst lesen
 1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
    Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Abend (Sitzung 27.10., 18:30: Englisch-Einstieg)“**; davor „18:15: NA-39 Übergang Klasse 5“; „17:50: Schritt B … und
+   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Abend (Sitzung 27.10., 19:10: Sachsen-Profil geprüft und korrigiert)“**; davor „18:30: Englisch-Einstieg“; davor „18:15: NA-39 Übergang Klasse 5“; „17:50: Schritt B … und
    Schritt C …“: Mathe-Rest, Urkunde, Sachunterricht-Rest; „17:30: … Schritt A“: Schritt-Typen `ordnen`/`verbessern`, 6 Schreib-Kapitel). Ältere Abschnitte sind Historie.
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
@@ -62,7 +62,10 @@ Schreiben“ (Laute, Silben, 20 Lesetexte, Nachspuren, Wörter legen), NA-50 Kö
   formulieren; Sachsen ist nur das erste ausgearbeitete Länderprofil.
 - **„Weiter in größeren Schritten“** (27.10., 17:15): mehrere Pakete pro Schritt bündeln, dann einmal gesamt testen und pushen.
 
-### Was in der letzten Sitzung (27.10., ab 17:30) fertig und gepusht wurde – Schritte A, B, C, NA-39 und Englisch
+### Was in der letzten Sitzung (27.10., ab 17:30) fertig und gepusht wurde – Schritte A, B, C, NA-39, Englisch, Sachsen-Prüfung
+**Sachsen-Profil geprüft (19:10):** Deutsch auf **Lehrplan 2025** umgestellt (5 Lernbereiche je Stufe), Mathe Kl. 4 „Zahl und Operation“ auf „teil“
+(mehrstellige Multiplikation, Teilbarkeit 4/6, Adam Ries fehlen), Englisch (Lehrplan 2019, ab Kl. 3) neu im Profil, Sachunterricht korrigiert.
+Zählung jetzt **15 × ja, 29 × teil, 1 × nein** (Mathe/Deutsch/SU, 45 Bereiche) plus Englisch 2/10/8. Elternbereich zählt Mathe-Fortschritt aller Wege.
 **Englisch-Einstieg:** neue Seite `spiele/englisch/` „Englisch mit Papagei Paula“ mit 11 Lektionen (`spiele/englisch/lektionen.js`, Kl. 3: 6, Kl. 4: 4, Übergang 5: 1);
 Wortkarten, Hören (englische Gerätestimme; ohne Stimme Lesen), Lesen, Übersetzen, Satzbau, Wahl. Tür auf der Startseite (Raster 12 Spalten), Lernfach im
 Zeitsystem, Fähigkeit „Englisch-Ohr“, Kern-Fach `en` (7 Ziele), Eltern-Karte „Englisch wie in der Schule“ (Beginn ab Kl. 1 oder 3). Test `tests/englisch.js`.
@@ -78,7 +81,7 @@ Grundsatz: keine Bewertung der Schulform, keine Noten.
 - Fehler behoben: g/kg und m/km ließen nur 3 Ziffern zu; Mathe-Tafel schnitt im Hochformat die Frage ab; Titel/Punkte überlappten auf Handys.
 - Neuer Node-Test `tests/mathe-generatoren.js` (läuft in `sh tests/laufen.sh`). Keine Eltern-Einstellung Malkreuz (siehe PLAN).
 **Schritt C – Sachunterricht-Rest:** 5 neue Themen (jetzt **26**): Wärme und Dämmung, Tiere am und im Wasser, Ein Experiment planen, Erste Hilfe,
-Informationen finden. `tests/sachkunde.js` klickt sie echt durch. Sachsen jetzt **18 × ja, 30 × teil, 1 × nein**.
+Informationen finden. `tests/sachkunde.js` klickt sie echt durch. Sachsen damals 18 × ja, 30 × teil, 1 × nein (nach der Prüfung um 19:10: 15/29/1 bei 45 Bereichen).
 **Schritt A – Deutsch schreiben:**
 - Fragerunde: noch kein iPad-Test; nur Schritt A; Grafik/3D/Story weiter tabu; Kl.-3/4-Inhalte bleiben **ab der Klasse davor sichtbar** (entschieden).
 - **Neue Werkstatt-Schritt-Typen** in `spiele/deutsch/abenteuer.js`: **`ordnen`** (Karten der Reihe nach antippen, nummerierte Plätze, falsche Karten
@@ -110,7 +113,7 @@ Einzelheiten in PLAN.md, Einträge „Stand 27.10.2026, Abend (NA-33 … Schritt
   Himmelsrichtungen, Schwimmen und Sinken, Feuer und Brandschutz (112), Mein Fahrrad, Kinderrechte und Geld (Nummer gegen Kummer 116 111),
   Unsere Gemeinde, Vom Korn zum Brot, Die Wetterkarte, Strom. Seite bricht lange Wörter um.
 - **Lehrplan Sachsen** (`shared/lehrplan/laender/sachsen.js`, Einschätzung von Hand mit `app`/`hinweis`): damals 14 × ja, 26 × teil, 9 × nein
-  (Kl. 2–4, Mathe/Deutsch/SU; nach Schritt A 14/31/4).
+  (Kl. 2–4, Mathe/Deutsch/SU; nach Schritt A 14/31/4; aktuell siehe oben).
 - **Tests neu/erweitert:** `tests/sachkunde.js` (11 neue Themen, quer + hoch), `tests/deutsch34.js` (Sichtbarkeit je Klasse, 17 Kapitel, richtige
   Lücken, quer + hoch), `tests/mathe1.js` (Kl. 3 mit 18, Kl. 4 mit 9 Stationen, Eintippen großer Zahlen, Ergänzen-Hilfe), `tests/lehrplan.js` (Zählung 14/26/9).
   Test-Haken neu: `__sachkunde.schritt(n)`, `__deutsch.schritt(n)`.
@@ -189,6 +192,8 @@ kurze Dialoge, Englisch im Länderprofil Sachsen, Tonaufnahmen statt Gerätestim
 - Ereignisse: `Ereignisse.melde("bauwerk", { id })`; auf einer anderen Seite `Ereignisse.abholen("bauwerk")`.
 - Neue Tutorial-Etappe: Eintrag in `ETAPPEN` im Kern (`id`, `szene`, `faellig(st)`, `genutzt()`), Szene in `shared/szenen.js` mit `etappe: "E9"`,
   Zeigehand/Warten in `spieleStory(id)` beider Looks. Kinder, die die Funktion kennen, bekommen die Etappe still.
+- Sachsen-Profil: Mathe und Deutsch **Fassung 2025**, Sachunterricht und Englisch Fassung 2019; Fächer `mathe`, `deutsch`, `sachkunde`, `englisch`;
+  nach jeder Änderung die Zählung in `tests/lehrplan.js` anpassen (Mathe/Deutsch/SU und Englisch getrennt).
 - Lernziele: `LernzielKern.ziel("de.le.02")`, `LernzielKern.fach("de", "le")`; Länder-Abweichungen in `shared/lehrplan/laender/<land>.js`
   (`stufe`, `extra`, `quelle`). Inhalte: `Inhalte.registriere({...})`, `Inhalte.abdeckung(lz)`, `Inhalte.fuer({ stufe, land })`, `Inhalte.ohneInhalt()`.
   Seiten, die das brauchen, laden `kern.js` → `shared/inhalte.js` → `laender/*.js` → `shared/lehrplan.js` (siehe `spiele/eltern/index.html`).

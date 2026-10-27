@@ -41,7 +41,7 @@ pruefe("Kern: Deutsch hat die fünf Bereiche der KMK-Fassung 2022, Mathe fünf L
   ["1", "2", "3", "4"].forEach(s => ["ma", "de"].forEach(f => assert.ok(K.alle().some(z => z.fach === f && z.stufe === s), f + " Stufe " + s)));
 });
 
-pruefe("Sachsen: alle 49 Lernbereiche haben lz-Verweise auf existierende Ziele (Ausnahme: Experimentieren Kl. 3)", () => {
+pruefe("Sachsen: alle 45 Lernbereiche (Mathe, Deutsch 2025, Sachunterricht) haben lz-Verweise auf existierende Ziele (Ausnahme: Experimentieren Kl. 3)", () => {
   let lb = 0, leer = [];
   ["mathe", "deutsch", "sachkunde"].forEach(f => Object.entries(L.laender.sachsen.faecher[f].stufen).forEach(([st, liste]) => liste.forEach(x => {
     lb++;
@@ -49,14 +49,14 @@ pruefe("Sachsen: alle 49 Lernbereiche haben lz-Verweise auf existierende Ziele (
     if (!x.lz.length) leer.push(`${f} ${st} ${x.titel}`);
     x.lz.forEach(id => assert.ok(K.ziel(id), `${f} ${st} ${x.nr}: unbekanntes Ziel ${id}`));
   })));
-  assert.strictEqual(lb, 49);
+  assert.strictEqual(lb, 45);
   assert.deepStrictEqual(leer, ["sachkunde 3 Experimentieren"]);
 });
 
 pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand 9 / 15 / 25, Stand NA-33a)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 18, teil: 30, nein: 1 });
+  assert.deepStrictEqual({ ...n }, { ja: 15, teil: 29, nein: 1 });
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
@@ -83,8 +83,16 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten gut, Anlaute gut
   assert.strictEqual(I.abdeckung("de.sc.07"), "teil");   // Paket A: Geschichte ordnen, Satzanfänge (ohne Lernkartei)
   assert.strictEqual(I.abdeckung("de.sz.07"), "teil");   // Paket A: Vortrag vorbereiten
   const z = L.zaehle("sachsen", 2).errechnet;
-  assert.strictEqual(z.ja + z.teil + z.nein, 17, "Kl. 1/2: 17 Lernbereiche");
+  assert.strictEqual(z.ja + z.teil + z.nein, 15, "Kl. 1/2: 15 Lernbereiche (Deutsch 2025: fünf statt sieben)");
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
+});
+
+pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Lernbereiche je Klasse, Kl. 1/2 ohne Englisch, Zählung 2 / 10 / 8", () => {
+  const n = { ja: 0, teil: 0, nein: 0 };
+  [3, 4].forEach(k => { const lb = L.fuer("sachsen", "englisch", k); assert.strictEqual(lb.length, 10); lb.forEach(x => { n[x.abdeckung]++; x.lz.forEach(id => assert.ok(K.ziel(id), id)); }); });
+  assert.deepStrictEqual({ ...n }, { ja: 2, teil: 10, nein: 8 });
+  assert.strictEqual(L.fuer("sachsen", "englisch", 2).length, 0);
+  assert.strictEqual(L.laender.sachsen.faecher.deutsch.stand, "Lehrplan 2025, gültig ab 1.8.2025");
 });
 
 pruefe("Länder-Abweichung: Sachsen verschiebt einfache Kombinationen nach Kl. 2 und kennt ein Zusatz-Ziel", () => {

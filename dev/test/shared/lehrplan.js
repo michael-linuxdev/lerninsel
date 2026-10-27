@@ -29,7 +29,7 @@
       deutsch: K ? Object.values(K.FAECHER.de.bereiche) : []
     },
     laender,
-    // Lernbereiche für eine Klasse (1 und 2 teilen sich in Sachsen die Stufe „1/2“)
+    // Lernbereiche für eine Klasse (1 und 2 teilen sich in Sachsen die Stufe „1/2“; Fächer ohne diese Stufe, z. B. Englisch in Kl. 1/2, liefern [])
     fuer(land, fach, klasse) {
       const f = this.laender[land] && this.laender[land].faecher[fach]; if (!f) return [];
       const stufe = klasse <= 2 ? "1/2" : String(klasse);
@@ -38,7 +38,7 @@
     errechnet,
     zaehle(land, klasse) {
       const n = { hand: { ja: 0, teil: 0, nein: 0 }, errechnet: { ja: 0, teil: 0, nein: 0 } };
-      ["mathe", "deutsch", "sachkunde"].forEach(f => this.fuer(land, f, klasse).forEach(lb => {
+      Object.keys((this.laender[land] || {}).faecher || {}).forEach(f => this.fuer(land, f, klasse).forEach(lb => {
         n.hand[lb.abdeckung]++; n.errechnet[errechnet(lb)]++;
       }));
       return n;

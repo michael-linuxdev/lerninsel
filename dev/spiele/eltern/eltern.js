@@ -158,11 +158,14 @@
     const zeichen = { ja: "✅", teil: "◐", nein: "○" }, worte = { ja: "gut abgedeckt", teil: "teilweise", nein: "noch nicht" };
     const k2 = mathe.k2 || {};
     const fortschritt = (app) => {
-      const st = app.filter(a => a.startsWith("mathe:")).map(a => a.slice(6));
-      return st.length ? ` · Matheweg: ${st.filter(id => k2[id]).length} von ${st.length} Stationen geschafft` : "";
+      // Sterne aus allen Mathewegen (Kl. 1–4, Übergang 5) zählen, nicht nur aus Kl. 2
+      const st = app.filter(a => a.startsWith("mathe:")).map(a => a.slice(6)), geschafft = (id) => ["k1", "k2", "k3", "k4", "k5"].some(w => (mathe[w] || {})[id]);
+      const en = app.filter(a => a.startsWith("englisch:")).map(a => a.slice(9)), enD = (S.lade("englisch") || {}).lektionen || {};
+      return (st.length ? ` · Matheweg: ${st.filter(geschafft).length} von ${st.length} Stationen geschafft` : "") +
+        (en.length ? ` · Englisch: ${en.filter(id => enD[id]).length} von ${en.length} Lektionen geschafft` : "");
     };
     let n = { ja: 0, teil: 0, nein: 0 };
-    const faecher = ["mathe", "deutsch", "sachkunde"].map(f => {
+    const faecher = Object.keys(L.laender[land].faecher).filter(f => L.fuer(land, f, k.klasse).length).map(f => {
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
       return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span></h3><ul class="lp-liste">${lb.map(x =>

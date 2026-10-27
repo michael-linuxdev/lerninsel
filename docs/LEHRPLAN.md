@@ -89,7 +89,7 @@ Kurzform: Was ein Kind am Ende der Stufe ungefähr können soll (zusammengefasst
 | Ethik | Ethik (alternativ Religion) | **Praktische Philosophie** (neu seit 2021) | Ethik | Ethik (prüfen) | Werte und Normen (prüfen) | Lebenskunde/Ethik (prüfen) |
 | Werken/Technik | im Sachunterricht/Werken | im Sachunterricht | **Werken und Gestalten** | prüfen | prüfen | prüfen |
 | Englisch | ab Kl. 3 | ab Kl. 3 | ab Kl. 3 (prüfen) | prüfen | ab Kl. 3 (prüfen) | prüfen |
-| Lehrplan-Stand Mathe | 2025 | 2021 | LehrplanPLUS | **neu ab 2024/25** (Kl. 1/2 zuerst) | KC | RLP 1–10 |
+| Lehrplan-Stand Mathe | 2025 (Deutsch ebenfalls 2025; Sachunterricht und Englisch 2019) | 2021 | LehrplanPLUS | **neu ab 2024/25** (Kl. 1/2 zuerst) | KC | RLP 1–10 |
 | Einmaleins vollständig | eher Kl. 3 (Lehrplan 2025) | prüfen | prüfen | prüfen | prüfen | prüfen |
 | Heimatbezug | Sachsen, Dresden/Leipzig, Erzgebirge | NRW-Regionen | Bayern, Bezirke | BW | NI | Berlin/Brandenburg |
 

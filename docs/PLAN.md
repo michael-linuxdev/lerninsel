@@ -1346,3 +1346,26 @@ Auftrag: „Als Nächstes Englisch“. Englisch fehlte als Fach ganz. Grafik/3D 
   allein – gleiches Wackeln wie beim Prolog-Test; Ursache Swiftshader-Zeit, nicht Englisch. Insel-Tests am besten allein laufen lassen.
 - **Nächstes:** Schritt D (Länderprofile, NA-47) oder Englisch Teil 2 (Lernkartei, Wochentage/Uhrzeit, Dialoge), nach Rückfrage.
 
+### Stand 27.10.2026, Abend (Sitzung 27.10., 19:10: Sachsen-Profil geprüft und korrigiert)
+Auftrag: „Gesamtstand Lehrplanabdeckung Sachsen“ → veraltete Hinweise prüfen, Zählung korrigieren, Englisch aufnehmen.
+- **Deutsch auf Lehrplan 2025 umgestellt** (seit 1.8.2025 in Kraft; das Profil stand noch auf 2019): je Stufe fünf Lernbereiche nach KMK-Gliederung
+  (Sprechen und Zuhören, Schreiben, Lesen, Sich mit Texten und anderen Medien auseinandersetzen, Sprache und Sprachgebrauch untersuchen) statt
+  sechs/sieben. „Mit digitalen Medien umgehen“ steckt jetzt in Lernbereich 4. Inhalte nur zusammengefasst; Kl. 4 LB 5 war online nicht vollständig lesbar.
+- **Mathe nach Lehrplan 2025 nachgeschärft:** Kl. 4 „Zahl und Operation“ **ja → teil** (verlangt schriftlich mal mit mehrstelligem Faktor,
+  Teilbarkeit durch 4 und 6, Adam Ries – fehlen); Kl. 4 „Raum und Form“ Inhalte ergänzt (Dreiecke, Vergrößern, Symmetrie); Kl. 3 „Zahl und Operation“
+  verweist auf Teilbarkeit und schriftlich mal im Weg Kl. 4 (Sachsen verlangt beides schon in Kl. 3; Teilbarkeit durch 9/100 fehlt). Kl. 4 „Größen
+  und Messen“ und „Daten und Zufall“: Lehrplantext online nicht vollständig lesbar – Inhalte weiter nachzutragen.
+- **Sachunterricht (Lehrplan 2019 gilt weiter):** Erste Hilfe zu Kl. 1/2 (dort steht sie im Lehrplan); Kl. 4 „Mein Körper“ **teil → nein** (Pubertät,
+  Atmung/Herzschlag, Sucht fehlen – Erste Hilfe gehört nicht dazu); Kl. 4 „Raum und Zeit“ **nein → teil** (Fahrrad-Thema bereitet die Radfahrprüfung
+  vor); Kl. 3 „Zusammen leben“ um Medien und Landwirtschaft ergänzt.
+- **Englisch neu im Profil** (Sächsischer Lehrplan Englisch Grundschule 2019, ab Kl. 3; je Klasse zehn Lernbereiche, Portfolio und Wahlbereiche nicht
+  aufgenommen): Kl. 3: 2 ja, 4 teil, 4 nein; Kl. 4: 6 teil, 4 nein. Fehlend: At home, Let's go shopping, Let's go on a trip, Around the year.
+- **Zählung jetzt (Mathe, Deutsch, Sachunterricht, Kl. 1–4, 45 Lernbereiche): 15 × ja, 29 × teil, 1 × nein** (vorher 18/30/1 bei 49 Bereichen –
+  die alte Zahl war wegen Deutsch 2019 und Mathe Kl. 4 zu günstig). Dazu Englisch Kl. 3–4: 2 × ja, 10 × teil, 8 × nein.
+- **Fehler behoben im Elternbereich „Was übt die App?“:** „Matheweg: x von y Stationen“ zählte nur den Kl.-2-Weg (Kl.-3/4-Stationen immer 0) – jetzt alle
+  Wege; Englisch erscheint als eigenes Fach mit „Englisch: x von y Lektionen“. `LEHRPLAN.zaehle` zählt alle Fächer des Profils.
+- **Tests:** `tests/lehrplan.js` (45 Bereiche, 15/29/1, Kl. 1/2: 15, neuer Test Englisch 2/10/8, Deutsch-Stand 2025).
+- **Offen:** Kl. 4 Mathe „Größen und Messen“/„Daten und Zufall“ aus dem Lehrplantext nachtragen; Deutsch Kl. 4 LB 5 vollständig nachlesen;
+  Inhalte für die größten Lücken: Englisch (At home, Shopping, Around the year), Mathe Kl. 4 (schriftlich mal mehrstellig, Teilbarkeit 4/6/9),
+  Sachunterricht Kl. 4 (Körper, Sachsen-Karte), Deutsch (freies Schreiben, eigenes Sprechen).
+
