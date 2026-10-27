@@ -32,52 +32,55 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 ## 1. Zuerst lesen
 1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
    Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Mittag“**: Inhalte zuerst,
-   NA-03, NA-40). Ältere Abschnitte sind Historie.
+   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Nachmittag“**: Inhalte zuerst,
+   NA-03, NA-40, NA-30, NA-32, NA-31). Ältere Abschnitte sind Historie.
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
    `docs/MINISPIELE.md`.
 4. `README.md` (Aufbau des Repos, Liste der Dateien in `shared/`).
 
-## 2. Stand (27.10.2026, Mittag)
+## 2. Stand (27.10.2026, Nachmittag)
 **Früher fertig** (Einzelheiten in PLAN.md unter „Neuausrichtung 26.10.2026“): NA-01 Ereignisse/Story, NA-02 Profil, NA-10 Szenen + Zeigehand,
 NA-11 Prolog „Ankunft“ (E1), NA-12 Insel-Zugang, NA-13 Sonnenuhr/„Erst lernen“/Erste Frucht mit Nebel, NA-14 Tutorial E4–E8, NA-15
 Weihnachts-Sonderstart, NA-21 Leistungs-Test, NA-24 Welt-Kern `shared/insel-kern.js`, NA-25–28 Pixel-Look (Insel, Umschalter, Figuren, Zimmer),
 NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
 
 **Entscheidungen des Auftraggebers (27.10.2026, Mittag):**
-- **Grafik: „Rund“ (three.js) + „Pixel flach“ (PixiJS, DS-Stil)**, jederzeit umschaltbar. Die Vorschau Pixel 2,5D (`spiele/welt3d/probe25d.html`)
-  wird **nicht** weiterverfolgt (bleibt als Nachschlag liegen, kein dritter Look). **Grafik ist eingefroren** – erst Inhalte.
+- **Grafik: „Rund“ (three.js) + „Pixel flach“ (PixiJS, DS-Stil)**, jederzeit umschaltbar, **auch auf der Hauptseite**. Die Vorschau Pixel 2,5D
+  (`spiele/welt3d/probe25d.html`) wird **nicht** weiterverfolgt (bleibt als Nachschlag liegen, kein dritter Look). **Grafik ist eingefroren.**
 - **„Bis Weihnachten pushen wir alles auf Main. Kein Kind spielt hier bisher.“** Neue Funktionen sind sofort auf der Hauptseite sichtbar;
   `/dev` bleibt als zweiter Spielstand. Ausnahme bleibt: ungeprüfte Übersetzungen (`entwurf`) erscheinen nur in /dev.
-- **„Lieber Inhalte zuerst“** – Reihenfolge jetzt NA-03 → NA-40 → NA-30 → NA-32 → NA-31 (Abschnitt 4).
+- **„Lieber Inhalte zuerst“** – Inhalte Priorität 1 (Phase D) vor Grafik und Story.
 
-**In der letzten Sitzung fertig und gepusht** (PLAN.md → „Stand 27.10.2026, Mittag“):
+**In der letzten Sitzung fertig und gepusht** (PLAN.md → „Stand 27.10.2026, Mittag“ und „… Nachmittag“):
 - **Pixel auf der Hauptseite wählbar** (`Spielwelt.lookWaehlbar()` = immer wahr, `tests/look.js` umgestellt).
 - **NA-03 Lehrplan-Kern:** `shared/lehrplan/kern.js` (148 Lernziel-IDs `<fach>.<bereich>.<nr>`, Deutsch mit fünf KMK-2022-Bereichen
-  `de.sz/sc/le/tm/su`), `shared/lehrplan/laender/sachsen.js` (49 Lernbereiche mit `lz`), `shared/inhalte.js` (Inhalte-Verzeichnis,
-  errechnete Abdeckung, `Inhalte.fuer(kind)`), `shared/lehrplan.js` als Kompatibilitäts-Schicht (`window.LEHRPLAN` wie vorher, plus
-  `errechnet`/`zaehle`). Bestehende Inhalte haben nur ein Feld `lz` bekommen. Elternkarte zeigt die errechnete Abdeckung zum Vergleich.
-  Test `tests/lehrplan.js` (Node; `LUECKEN=1` listet Lernziele ohne Inhalt).
-- **NA-40 Wortschatz-Kern und DaZ D0:** `inhalte/woerter/bestand.js` (64 Wörter von „Wort des Tages“ + Silben/Wortfelder) und `d0.js`
-  (72 neue Wörter, 20 Sätze, ru/uk als Entwurf), `shared/woerter.js` → `window.Wortschatz` und weiter `window.WOERTER`. Neue Seite
-  **„Ankommen“** `spiele/daz/` (Wörter ansehen mit Artikel-Farbe und -Form, „Hören und zeigen“, „Sätze für jeden Tag“), Fortschritt in
-  `profil.daten.daz` (`shared/daz.js`), Deutschstand „keine“ leitet von der Deutsch-Seite dorthin um, „wenig“ bekommt einen Knopf.
-  Tests `tests/wortschatz.js` (Node) und `tests/daz.js`.
+  `de.sz/sc/le/tm/su`), `shared/lehrplan/laender/sachsen.js` (49 Lernbereiche mit `lz`), `shared/inhalte.js` (Inhalte-Verzeichnis, errechnete
+  Abdeckung, `Inhalte.fuer(kind)`), `shared/lehrplan.js` als Kompatibilitäts-Schicht. Elternkarte zeigt die errechnete Abdeckung zum Vergleich.
+- **NA-40 Wortschatz-Kern und DaZ D0:** `inhalte/woerter/*.js` (jetzt 167 Wörter, 20 Sätze), `shared/woerter.js` → `window.Wortschatz`
+  (und weiter `window.WOERTER` für „Wort des Tages“). Seite **„Ankommen“** `spiele/daz/` (Wörter ansehen, Hören und zeigen, Sätze),
+  Deutschstand „keine“ wird von der Deutsch-Seite dorthin geleitet, „wenig“ bekommt einen Knopf.
+- **NA-30 Laute und Buchstaben** und **NA-31 Silben lesen + 20 Lesetexte:** Seite `spiele/lesen/` (Kachel auf Fipsis Karte) mit
+  Buchstaben-Tafel, „Gleicher Anfang“, „Finde das Bild“, „Welcher Buchstabe?“, „Silben lesen“ (Silbenbögen blau/rot) und Lesetexten
+  (`inhalte/deutsch/anlaute.js`, `inhalte/deutsch/lesetexte.js`); Lernkartei-Fach `lesen`.
+- **NA-32 Matheweg Klasse 1 und Vorschule:** zweiter Weg mit Umschalter (Würfelbilder, Mengen, Zwanzigerfeld, Muster, Zerlegen, Plus/Minus bis
+  10, Verdoppeln), `Mathe.STATIONEN_K1`, Fortschritt `mathe.k1`.
+- Tests neu: `tests/lehrplan.js`, `tests/wortschatz.js` (Node, im Gesamtlauf), `tests/daz.js`, `tests/lesen.js`, `tests/mathe1.js`.
 
 **Bekannte Baustellen:** Grafik eingefroren mit offenen Paketen NA-29b (Handy-Leistung) und NA-29 Teil 2 (Minispiele über dem Budget);
 neue 3D-Objekte auf der Insel mit `starr.push([objekt, bewegliche Teile])` anmelden; `SPIELE` steht in `shared/insel-kern.js` und
-`quellen/welt3d/gemeinsam.js` (gleich halten); „Meine Welt“ (Welten erschaffen) gibt es nur in „Rund“; der Prolog-Test der runden Insel wackelt,
-wenn der Rechner ausgelastet ist – dann nochmal laufen lassen. Bilder im Wortschatz sind Emojis; Ton über die Gerätestimme (Aufnahmen: NA-43).
+`quellen/welt3d/gemeinsam.js` (gleich halten); „Meine Welt“ gibt es nur in „Rund“; der Prolog-Test der runden Insel wackelt, wenn der Rechner
+ausgelastet ist – dann nochmal laufen lassen. Bilder im Wortschatz sind Emojis (einige schwach: Ö, X); Ton über die Gerätestimme (Aufnahmen: NA-43).
+Die Einschätzung „Was übt die App?“ von Hand ist noch nicht an die neuen Inhalte angepasst (die errechnete Zeile schon).
 
-**Offene Fragen an den Auftraggeber:** iPad-/Handy-Test (Hauptseite): „Ankommen“ mit einem Kind ohne Deutsch, Pixel-Look, Ankunft, Sonnenuhr,
-Einführung E4–E8, Elternkarte „Was übt die App?“; Geschenke zu Weihnachten 2026 (NA-16); Muttersprachlerinnen für Russisch/Ukrainisch
-(D0-Texte sind Entwürfe), Lehrkräfte; Tonaufnahmen.
+**Offene Fragen an den Auftraggeber:** iPad-/Handy-Test (Hauptseite): „Ankommen“ (Kind ohne Deutsch), „Laute und Buchstaben“ (Kind in
+Kl. 1 und Vorschule), Matheweg Klasse 1, Lesetexte, Pixel-Look; Geschenke zu Weihnachten 2026 (NA-16); Muttersprachlerinnen für ru/uk
+(D0- und Anlaut-Übersetzungen sind Entwürfe); Lehrkräfte; Tonaufnahmen; Silbenfarben der Schule (blau/rot üblich?).
 
 ## 3. Ablauf dieser Sitzung
 1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug, sonst als kurze Liste), bevor du baust. Kläre mindestens:
-   - Rückmeldung vom iPad 10 und Handy (Hauptseite, mit neuem Kind): „Ankommen“ (Deutsch-Kenntnisse „keine“), Pixel-Look (Knopf „👾 Pixel“
-     auf der Insel), Ankunft, Sonnenuhr, Einführung E4–E8. Fehler zuerst beheben.
+   - Rückmeldung vom iPad 10 und Handy (Hauptseite, mit neuem Kind): „Ankommen“, „Laute und Buchstaben“, Lesetexte, Matheweg Klasse 1,
+     Pixel-Look, Einführung E4–E8. Fehler zuerst beheben.
    - Gilt „Inhalte zuerst“ weiter (nächstes Paket laut Abschnitt 4), oder soll Grafik/Story (NA-29b, NA-16/17/18) vorgezogen werden?
    - Welche Geschenke soll es per QR-Code zu Weihnachten 2026 geben (für NA-16)? Gibt es Muttersprachlerinnen zum Gegenlesen (ru, uk)?
    - Was darf in dieser Sitzung keinesfalls angefasst werden?
@@ -94,16 +97,17 @@ Einführung E4–E8, Elternkarte „Was übt die App?“; Geschenke zu Weihnacht
 Grundsatz Inhalte: **Inhalte als Daten** (LEHRPLAN.md „Inhalte als Daten“). Jeder neue Inhalt registriert sich mit `Inhalte.registriere({ id, fach,
 lz: [...], stufe, aufgaben, lernkartei })` (oder trägt bei Bestandsdaten ein Feld `lz`) und verweist auf Lernziele aus `shared/lehrplan/kern.js`;
 Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `inhalte/woerter/*.js`). Neue Übersetzungen mit Status `entwurf`.
+Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
 Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
 beiden Looks oder im Plan als offen vermerken.
-1. **NA-30 Anlaute und Buchstabe–Laut** (M, Deutsch Kl. 1 und Vorschule): `inhalte/deutsch/`, 26 Buchstaben + Umlaute mit Bild (aus dem
-   Wortschatz-Kern) und Ton, ohne Lesepflicht (Anlaut hören → Bild/Buchstabe wählen), Lernkartei, Lernziele `de.le.01`, `de.le.02`, `de.su.02`.
-2. **NA-32 Mathe Kl. 1 und Vorschule: Mengen** (M): Mengen bis 10/20 mit Material (Würfelbilder, Zwanzigerfeld), eigene Stufe statt der
-   Kl.-2-Stationen; Lernziele `ma.zo.01`–`ma.zo.04`, `ma.ms.01/02`.
-3. **NA-31 Silben lesen und erste Lesetexte** (M): Silbenbögen, 20 kurze Bildtexte mit Fragen (Kl. 1–2), `de.le.03`–`de.le.05`.
-4. Danach laut Plan Punkt 5 ff. (NA-35 Schreiben, Phase E NA-50 „Können je Lernziel“) oder – nach Rückmeldung – Grafik/Story:
-   **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl) → **NA-17** Kapitel 1–2
-   → **NA-18** Chronik im Album.
+1. **NA-35 Schreiben: Wörter nachspuren und tippen** (M): Buchstaben in Druckschrift mit dem Finger nachspuren (Startpunkt, Pfeile, Toleranz,
+   ohne Bewertung der Schönheit), Wörter aus dem Wortschatz-Kern mit Bild tippen (Buchstaben-Tastatur, nur die nötigen Buchstaben + Ablenker);
+   Lernziele `de.sc.02`, `de.sc.03`; am besten als weitere Wege in `spiele/lesen/` oder eigene Seite `spiele/schreiben/`.
+2. **NA-50 Können je Lernziel und nächste Aufgabe** (M, Phase E): Stand 0–4 je Lernziel-ID im Profil (kompakt), Auswahl der nächsten Aufgabe
+   (Ziel 70–85 % Treffer), leichter nach zwei Fehlern; zuerst im Matheweg. Node-Simulationstest.
+3. Danach nach Rückmeldung: **NA-34 Sachunterricht** je Perspektive (Wasser, Verkehr, früher/heute, Bauen, Regeln), **NA-33 Mathe Kl. 3**, oder
+   Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)
+   → **NA-17** Kapitel 1–2 → **NA-18** Chronik im Album.
 
 ## 5. Wie die Story-Bausteine benutzt werden (Kurzreferenz)
 - Szene registrieren (nur Daten) in `shared/szenen.js`:
@@ -124,6 +128,8 @@ beiden Looks oder im Plan als offen vermerken.
 - Wortschatz: `Wortschatz.wort("w.apfel")` (de, artikel, mehrzahl, silben[], bild, themen, wortart, daz, ru/uk + status), `Wortschatz.feld("essen")`,
   `Wortschatz.daz("d0")`, `Wortschatz.saetze("d0")`, `Wortschatz.hilfe(eintrag)` (Hilfetext nur wenn erlaubt), `Wortschatz.ARTIKEL` (Farbe + Form).
   Einbinden: `inhalte/woerter/*.js` vor `shared/woerter.js`. DaZ-Fortschritt: `DaZ.merke("wort"|"satz", id)`, `DaZ.stand()`, `DaZ.d0Fertig()`.
+- Lesen: `window.ANLAUTE` (Anlaut-Tabelle), `window.LESETEXTE` (Texte in Sprechsilben „Ba-na-ne“), Lernkartei-Fach `lesen` (Schritte `anlaut`, `silbenwort`);
+  Matheweg: `Mathe.STATIONEN` (Kl. 2, Fortschritt `mathe.k2`) und `Mathe.STATIONEN_K1` (Kl. 1/Vorschule, `mathe.k1`), Weg-Wahl in `mathe.weg`.
 - Pixel-Grafik: Zeichnung in `quellen/pixel/dinge.js` (Pixelpuffer mit `kugel/zylinder/vieleck/fuelle/rect`, nur Farben aus `PAL`), in
   `quellen/pixel/insel.js` vor `packe()` mit `merke()` in den Atlas, dann `new Sprite(e.tex)`; Dinge auf den Boden mit `stelle(e, x, z)`,
   antippbar mit `antippbar(sprite, x, z, tipp, aktion, nah, id)`.
@@ -161,7 +167,7 @@ beiden Looks oder im Plan als offen vermerken.
 - `sh tests/laufen.sh` = Node-Tests `story-migration`, `inselkern`, `lehrplan`, `wortschatz` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte), `mathe1` (Matheweg Klasse 1), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.

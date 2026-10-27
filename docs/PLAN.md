@@ -698,7 +698,7 @@ NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Vol
    (**Meilenstein 15.12.2026:** Prolog, E1–E3, Weihnachten – technisch erreicht am 27.10.2026, iPad-Test steht aus)
 3. **Vorgezogen (27.10.):** **NA-20** Probeszenen – Auswahl auf „Rund“ oder „Pixel“ eingegrenzt, Proben stehen, Entscheidung offen → **NA-21** Leistungs-Test (nur bei „Rund“ dringend)
 4. **NA-14** Tutorial E4–E8 → ~~**NA-12** Insel-Zugang~~ → **NA-16** QR-Geschenk → **NA-17** Kapitel 1–2 → **NA-18** Chronik
-5. ~~**NA-03** Lehrplan-Kern~~ → ~~**NA-40** Wortschatz-Kern/DaZ D0~~ → **NA-30** Anlaute → **NA-32** Mathe Kl. 1/Vorschule → **NA-31** Lesen
+5. ~~**NA-03** Lehrplan-Kern~~ → ~~**NA-40** Wortschatz-Kern/DaZ D0~~ → ~~**NA-30** Anlaute~~ → ~~**NA-32** Mathe Kl. 1/Vorschule~~ → ~~**NA-31** Lesen~~ → **NA-35** Schreiben
 6. **NA-22** eine Kind-Figur → **NA-23** Neubau nach Stilwahl (abwechselnd mit 7)
 7. **NA-50** Können je Lernziel → **NA-51** Bennos Brücke → **NA-52** Paulas Fest → NA-53/54/55
 8. **NA-44** RTL → **NA-43** Ton-Aufnahmen → **NA-42** Ukrainisch (sobald Muttersprachler bereitstehen, darf es vorgezogen werden)
@@ -1062,4 +1062,37 @@ eingefroren (NA-29b, NA-29 Teil 2 warten), Reihenfolge jetzt Punkt 5: NA-03 → 
 - iPad 10: Hauptseite → Eltern → neues Kind mit Deutsch-Kenntnissen „keine“ → Deutsch öffnen → „Ankommen“; Wörter ansehen, Hören und zeigen,
   Sätze. Elternbereich → „Was übt die App?“. Pixel-Look jetzt auch auf der Hauptseite (Knopf „👾 Pixel“ auf der Insel).
 - Nächstes Paket: **NA-30 Anlaute** → NA-32 → NA-31; Russisch/Ukrainisch der D0-Texte von Muttersprachlerinnen prüfen lassen.
+
+### Stand 27.10.2026, Nachmittag (Sitzung 27.10.: NA-30, NA-32, NA-31 fertig – Inhalte Priorität 1 für Kl. 1/Vorschule)
+**Fertig und gepusht** (alle auf der Hauptseite, Tests grün)
+- **NA-30 Laute und Buchstaben** – neue Seite `spiele/lesen/` (Kachel „🔤 Laute und Buchstaben“ auf Fipsis Karte neben der Werkstatt):
+  Buchstaben-Tafel (26 Buchstaben + Ä, Ö, Ü + Sch, Ei, Au; seltene C, V, X, Y mit Hinweis), „Gleicher Anfang“ (Vorschule, ohne Buchstaben),
+  „Finde das Bild“ und „Welcher Buchstabe?“ (Kl. 1). Anlaut-Tabelle als Inhalt `inhalte/deutsch/anlaute.js` (Format LEHRPLAN.md, registriert
+  im Inhalte-Verzeichnis), 31 neue Bildwörter `inhalte/woerter/anlaute.js`. Wörter werden **ohne Artikel** vorgelesen (sonst hört man „d…“);
+  Laute, die gleich klingen oder gleich aussehen (S/Sch, E/Ä/Ei, A/Au, K/Qu), stehen nie zusammen zur Wahl. Erster Fehler → Lernkartei (neues
+  Fach `lesen`), fällige Karten kommen in der nächsten Runde zuerst; neuer Buchstabe = Lernfund; richtige Antworten zählen als Lernaufgaben.
+- **NA-32 Matheweg Klasse 1 und Vorschule** – zweiter Weg im Matheweg mit Umschalter „🐣 Klasse 1 und Vorschule / 2. Klasse“ (Wahl wird
+  gespeichert, Kinder in Vorschule/Kl. 1 starten dort): Würfelbilder, Zählen bis 10, Wo sind mehr? (mit Pfeilen, ohne Lesen), Muster fortsetzen,
+  Zwanzigerfeld, Nachbarzahlen, Zahlen zerlegen, Plus/Minus bis 10 mit Bildern, Verdoppeln. Generatoren in `spiele/mathe/aufgaben.js`
+  (`STATIONEN_K1`, mit `lz` und `stufe`), Fortschritt in `mathe.k1` (Klasse 2 bleibt `mathe.k2`), Einstufungstest nur auf dem Klasse-2-Weg,
+  Zielknoten „2. Klasse“ wechselt den Weg. Elternbericht listet „Kl. 1: …“-Stationen. Stationen auf kleinen Handys schmaler (vorher Überlauf).
+- **NA-31 Silben lesen und erste Lesetexte** (in `spiele/lesen/`): „Silben lesen“ (Bildwort in Silbenbögen, blau/rot, Bild wählen; Vorlesen erst
+  nach einem Fehlversuch; Lernkarte `silbenwort`) und **20 Lesetexte** (`inhalte/deutsch/lesetexte.js`, 10 kurze für Kl. 1, 10 längere für Kl. 2,
+  je 1–2 Fragen mit Bildantworten, verknüpft mit Sachthemen: Igel, Zugvögel, Tanne, Trinken, Biene, Ampel, Streit, Pausen …). Texte in
+  Sprechsilben gespeichert, Silbenfarben abschaltbar (Bögen bleiben), Vorlesen per Knopf.
+- Tests: `tests/lesen.js` (Anlaute, Silben, Texte, Lernkartei, Hochformat), `tests/mathe1.js`; `tests/lehrplan.js` angepasst
+  (Lernziele ohne Inhalt jetzt 75 von 148; `de.le.02` und `ma.zo.03` errechnet „gut“).
+
+**Entscheidungen / Abweichungen**
+- „Laute und Buchstaben“ ist eine eigene Seite statt eines Fipsi-Kapitels (andere Bedienung: Bilder und Buchstaben statt Sätze); sie hängt als
+  Kachel an Fipsis Werkstatt. Die Lernkartei bekommt dafür ein eigenes Fach `lesen` (Fipsis Kapitel kennen die neuen Schritt-Typen nicht).
+- Lernfund bei „Laute“ schon beim ersten Treffer eines Buchstabens (bei zwei Treffern kamen in einer Runde fast keine zustande).
+- Lesetexte haben keine Lernkartei (eine Frage ohne Text lässt sich nicht wiederholen); sie zählen daher höchstens als „teilweise“.
+- Bilder weiter als Emojis; einige sind schwach (Ö = Ölfass, X = Noten für Xylofon). Beim Grafik-Neubau eigene Zeichnungen (GRAFIK.md).
+
+**Offen / als Nächstes**
+- iPad 10 (Hauptseite): Deutsch → Kachel „Laute und Buchstaben“ (alle sechs Wege), Matheweg mit einem Kind in Klasse 1 und in Vorschule,
+  Lesetexte vorlesen lassen. Rückmeldung: Sind die Texte für Kl. 1 kurz genug, passen Silbenfarben blau/rot zur Schule der Kinder?
+- Nächstes Inhalts-Paket: **NA-35 Schreiben** (Buchstaben nachspuren mit dem Finger, Wörter aus dem Wortschatz-Kern tippen); danach
+  Phase E **NA-50 Können je Lernziel**. Grafik (NA-29b, NA-29 Teil 2) und Story (NA-16/17/18) warten weiter.
 

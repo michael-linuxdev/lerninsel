@@ -105,8 +105,8 @@ Schulform passt, und zeigt keine Noten.
 ## Was die App heute abdeckt (ehrlich)
 | Fach | Was es gibt | Dateien | Einschätzung |
 |---|---|---|---|
-| Mathematik | Matheweg mit 21 Stationen (ZR 20/100, Zehner, Vergleich, gerade, Formen, Verdoppeln, Ergänzen, Sachaufgaben, Daten, Einmaleins 1–3, Geteilt, Geld, Länge, Zufall, Uhr, Kalender), Einstufung, Lernkartei, Duell, Bauplatz-Zählaufgaben | `spiele/mathe/aufgaben.js`, `mathe.js`, `spiele/familie/`, `quellen/welt3d/bau.js` | Kl. 2 gut, Kl. 1 teilweise (über Kl.-2-Stationen), Kl. 3 kaum, Kl. 4 und Vorschule nicht |
-| Deutsch | Fipsis Abenteuer (5 Kapitel: Wortschatz, Artikel, Lücken, Satzbau, Hören, Mehrzahl, Präpositionen), Wörter-Werkstatt (Verben, Adjektive, Wortarten, Verlängern, Silben), Wort des Tages (64 Wörter, jetzt aus dem Wortschatz-Kern), „Ankommen“ (DaZ D0: 100 Wörter, 20 Sätze) | `spiele/deutsch/`, `spiele/daz/`, `inhalte/woerter/`, `shared/woerter.js` | Sprache untersuchen Kl. 2 teilweise; **Lesen, Schreiben, Schriftspracherwerb fehlen fast ganz** |
+| Mathematik | Matheweg Klasse 1/Vorschule mit 10 Stationen (Würfelbilder, Mengen, Zwanzigerfeld, Muster, Zerlegen, Plus/Minus bis 10; NA-32) und Matheweg Klasse 2 mit 23 Stationen (ZR 20/100, Zehner, Vergleich, gerade, Formen, Verdoppeln, Ergänzen, Sachaufgaben, Daten, Einmaleins 1–3, Geteilt, Geld, Länge, Zufall, Uhr, Kalender), Einstufung, Lernkartei, Duell, Bauplatz-Zählaufgaben | `spiele/mathe/aufgaben.js`, `mathe.js`, `spiele/familie/`, `quellen/welt3d/bau.js` | Kl. 2 gut, Kl. 1 und Vorschule mit eigenem Weg (Mengen), Kl. 3 kaum, Kl. 4 nicht |
+| Deutsch | Fipsis Abenteuer (5 Kapitel: Wortschatz, Artikel, Lücken, Satzbau, Hören, Mehrzahl, Präpositionen), Wörter-Werkstatt (Verben, Adjektive, Wortarten, Verlängern, Silben), Wort des Tages (64 Wörter, jetzt aus dem Wortschatz-Kern), „Ankommen“ (DaZ D0: 100 Wörter, 20 Sätze) | `spiele/deutsch/`, `spiele/daz/`, `inhalte/woerter/`, `shared/woerter.js` | Sprache untersuchen Kl. 2 teilweise; Laute und Buchstaben, Silben lesen und 20 Lesetexte (NA-30/31, `spiele/lesen/`); **Schreiben fehlt noch** |
 | Sachunterricht | 4 Themen: Geschenkebringer, Familie, Gesund und munter, Bäume und Vögel; echtes Wetter auf der Insel | `spiele/sachkunde/themen.js`, `quellen/welt3d/heimat.js` | dünn: nur Ausschnitte aus 2 Perspektiven |
 | Kunst | Malen, Ausmalbilder, 14 Malaufträge | `spiele/atelier/atelier.js`, `vorlagen.js` | Kl. 1–2 teilweise |
 | Musik | Xylofon, 4 Lieder, Rhythmus, hoch/tief, laut/leise, eigene Melodie, Bühne | `spiele/atelier/musik.js` | Kl. 1–2 gut für den Anfang |
@@ -114,7 +114,7 @@ Schulform passt, und zeigt keine Noten.
 | Ethik/soziales Lernen | Gefühle erkennen, Barometer, Ruhe-Übungen, 8 Miteinander-Geschichten, Stärken | `spiele/gefuehle/`, `shared/staerken.js` | Kl. 1–2 teilweise |
 | Medienbildung | Tablet-Führerschein (6 Lektionen) | `spiele/medien/` | Bereiche Schützen und Analysieren gut, Produzieren/Problemlösen fehlen |
 | Denken | Schach (Lektionen, Matt in 1, KI) | `spiele/schach/` | Zusatz, kein Lehrplanfach |
-| Vorschule | – | – | fehlt |
+| Vorschule | „Gleicher Anfang“, Buchstaben-Tafel, Matheweg Klasse 1/Vorschule (Mengen, Würfel, Muster), „Ankommen“ | `spiele/lesen/`, `spiele/mathe/`, `spiele/daz/` | Anfang gemacht, kein eigener Pfad |
 | Übergang 5 | – | – | fehlt |
 
 ## Lücken nach Priorität
