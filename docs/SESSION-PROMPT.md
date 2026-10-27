@@ -32,8 +32,8 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 ## 1. Zuerst lesen
 1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
    Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Sitzungsende“**: Inhalte zuerst,
-   NA-03, NA-40, NA-30, NA-32, NA-31, NA-35, NA-50). Ältere Abschnitte sind Historie.
+   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Nacht – großer Schritt“**: NA-37 Mathe Kl. 4,
+   NA-36 Teil 3, NA-34 Teil 5; die „Stand 27.10.“-Einträge davor beschreiben NA-33, NA-34, NA-36 und die Eltern-Wahl der Subtraktion). Ältere Abschnitte sind Historie.
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
    `docs/MINISPIELE.md`.
