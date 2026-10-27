@@ -818,7 +818,7 @@ Neue Pakete (vor NA-14):
 - Minispiele bleiben vorerst 3D und werden aus beiden Looks gestartet; Pixel-Fassungen später je Spiel. NA-21 (Leistung „Rund“) bleibt wichtig.
 
 **Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** ~~**NA-24**~~ → ~~**NA-25**~~ (in /dev eingeschaltet) → ~~**NA-26**~~ → ~~**NA-27**~~ → ~~**NA-28**~~ → ~~**NA-14**~~ (in beiden Looks)
-→ **NA-21** → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 → Punkt 5 ff. wie oben.
+→ ~~**NA-21**~~ → **NA-29** Budget „Rund“ → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 → Punkt 5 ff. wie oben.
 
 ### Stand 27.10.2026, morgens (Sitzung 27.10. früh: DS-Look, NA-24 fertig, NA-25 vorbereitet, NA-26 begonnen)
 **Antworten des Auftraggebers (27.10.2026, 04:40):** „Pixel“ soll moderner sein – **Nintendo-DS-Zeit**, gewählt: **Draufsicht wie bei den
@@ -919,7 +919,7 @@ Reihenfolge gilt (NA-26 zuerst); nichts ist gesperrt; Geschenke für NA-16 weite
 - **iPad 10 und Handy testen** (in `/dev`): Insel öffnen → Knopf „👾 Pixel“ → laufen (Tippen), Ella antippen, Haus, Zimmer einrichten,
   Kleiderschrank ändern und wieder ansehen, zurück „🐾 Rund“. Neues Kind in `/dev`: Prolog in Pixel (Eltern → „Look der Insel: Pixel“ vor dem
   ersten Inselbesuch). Wenn alles passt: Pixel auch auf der Hauptseite wählbar machen (`lookWaehlbar()` → immer wahr) – Entscheidung des Auftraggebers.
-- Nächstes Paket: ~~NA-14~~ (siehe unten) → **NA-21** Leistungs-Test „Rund“ → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18.
+- Nächstes Paket: ~~NA-14~~, ~~NA-21~~ (beide siehe unten) → **Budget „Rund“** (neues Paket NA-29, siehe unten) → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18.
 
 **NA-14 Tutorial E4–E8 (fertig, beide Looks)**
 - Auslöser, Reihenfolge und „schon genutzt“ im Insel-Kern (`ETAPPEN` in `shared/insel-kern.js`, statt einer eigenen `shared/tutorial.js` –
@@ -934,3 +934,38 @@ Reihenfolge gilt (NA-26 zuerst); nichts ist gesperrt; Geschenke für NA-16 weite
 - Tests: Node `tests/inselkern.js` (24 Prüfungen, neu: E4–E8), Browser `tests/etappen.js` (drei Tage in Pixel, Sterne-Szene und Elternknopf in Rund).
 - Offen: „Wie ging das nochmal?“ bei Robo spielt weiter nur die Ankunft; einzelne Etappen lassen sich ab NA-18 über die Inselchronik im Album
   noch einmal ansehen. E9 (Atelier) und E10 (Mein Ich) gehören zu späteren Paketen (Kapitel 1–2, NA-17).
+
+**NA-21 Leistungs-Test (fertig)**
+- `tests/leistung.js` (`sh tests/laufen.sh leistung`, Tabelle mit `AUSGABE=<datei>`, mit `STRENG=1` scheitert er bei Budget-Überschreitung):
+  zählt Zeichenaufrufe, Dreiecke, Texturspeicher, Schatten und Pixeldichte je Szene, Landschaft und Grafik-Stufe und warnt nach GRAFIK.md Abschnitt 6.
+  Bilder/s werden bewusst nicht gemessen (Swiftshader). Das Test-Kind hat alle Spielorte offen (Wissensbaum Stufe 3).
+- Messung 27.10.2026 (Swiftshader, 1180×820, Pixeldichte 2; Bauplatz misst den Startbildschirm vor dem Bauen):
+
+| Szene | Grafik | Zeichenaufrufe | Dreiecke | Texturen MB | Schatten | Pixeldichte |
+|---|---|---|---|---|---|---|
+| Insel (erste Insel) | schoen | 521 | 390.524 | 0,7 | an | 1,5 |
+| Insel (erste Insel) | einfach | 347 | 73.902 | 0,7 | aus | 1 |
+| Insel Nacht, Winter | schoen | 521 | 406.226 | 0,7 | an | 1,5 |
+| Insel Regen | schoen | 522 | 390.524 | 0,7 | an | 1,5 |
+| Welt Wald, groß, Hügel | schoen | 387 | 898.644 | 0,7 | an | 1,5 |
+| Welt Wald, groß, Hügel | einfach | 211 | 157.796 | 0,7 | aus | 1 |
+| Welt Berge mit Teich | schoen | 455 | 261.272 | 0,7 | an | 1,5 |
+| Welt Strand | schoen | 545 | 321.680 | 0,7 | an | 1,5 |
+| Zimmer | schoen | 136 | 50.878 | 0,7 | an | 1,5 |
+| Zimmer | einfach | 100 | 13.332 | 0,7 | aus | 1 |
+| Ballon-Party | schoen | 43 | 5.858 | 0 | aus | 1,5 |
+| Schatz-Strand | schoen | 264 | 17.862 | 0 | an | 1,5 |
+| Sternenlauf | schoen | 247 | 72.700 | 0 | an | 1,5 |
+| Kart-Rennen | schoen | 293 | 46.776 | 0,1 | an | 1,5 |
+| Bauplatz | schoen | 3 | 4 | 0 | an | 1,5 |
+| Pixel-Insel | Pixel | 1 | – | – | aus | 2 |
+| Pixel-Insel Wald, groß | Pixel | 1 | – | – | aus | 2 |
+| Pixel-Zimmer | Pixel | 1 | – | – | aus | 2 |
+
+- **Ergebnis:** „Pixel“ liegt überall bei 1 Zeichenaufruf. „Rund“ liegt auf der Insel 3–4× über dem Budget (≈ 520 statt 150 Aufrufe, ≈ 390.000 statt
+  150.000 Dreiecke; Wald groß ≈ 900.000 Dreiecke), auch „einfach“ (≈ 350 statt 80). Zimmer und Minispiele sind näher dran (Schatz-Strand,
+  Sternenlauf, Kart ≈ 250–290 Aufrufe).
+- **Neues Paket NA-29 Budget „Rund“** (M–L, vor NA-16): Nachbarn, Spielorte, Wissensbaum und Figuren je Material verschmelzen (wie die Deko),
+  Bäume/Steine als `InstancedMesh`, Konturen nur für Figuren und große Dinge, Gras-Halme und Kugeln mit weniger Segmenten in „einfach“,
+  Schattenkamera enger. Ziel zuerst „einfach“ ≤ 80 / 60.000, dann „schön“ ≤ 150 / 150.000. Abnahme: `STRENG=1 sh tests/laufen.sh leistung` grün.
+

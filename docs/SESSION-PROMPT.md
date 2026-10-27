@@ -59,7 +59,9 @@ Umschalter: Knopf auf der Insel **und** Elternkarte; Kinder dürfen selbst umsch
   stilles Erledigen (`Story.etappeFertig(id, true)`), Elternknopf „Einführung überspringen“. Test `tests/etappen.js`.
 - Kern-Stationen neu: `nest`, `pinnwand`, `staffelei`, `bild`, `moebel`; Orte für die Zeigehand neu: `nest`, `ballons`, `fipsi`, `baer`.
 
-**Bekannte Baustellen:** Rund-Insel über dem Leistungsbudget (NA-21: ≈ 350 Aufrufe „schön“); Deutsch-Bereiche in `shared/lehrplan.js` nach KMK 2004 (NA-03);
+- **NA-21 Leistungs-Test** `tests/leistung.js`: Tabelle je Szene/Landschaft, Warnung über Budget (Pixel überall 1 Aufruf; Rund-Insel 3–4× darüber).
+
+**Bekannte Baustellen:** Rund-Insel über dem Leistungsbudget (→ NA-29); Deutsch-Bereiche in `shared/lehrplan.js` nach KMK 2004 (NA-03);
 `SPIELE` steht in `shared/insel-kern.js` und `quellen/welt3d/gemeinsam.js` (gleich halten); „Meine Welt“ (Welten erschaffen) gibt es nur in „Rund“;
 der Prolog-Test der runden Insel wackelt, wenn der Rechner nebenbei ausgelastet ist (Software-Rendering) – dann einfach nochmal laufen lassen.
 
@@ -72,7 +74,7 @@ soll „Pixel“ danach auch auf der Hauptseite wählbar sein? Geschenke zu Weih
      **Pixel-Insel** (Knopf „👾 Pixel“ auf der Insel): Laufen, Antippen, Zimmer einrichten, Figur/Kleiderschrank. Fehler zuerst beheben.
    - Soll „Pixel“ jetzt auch auf der Hauptseite wählbar werden? Wünsche zum DS-Look (Farben, Größe der Figuren, Details)?
    - Welche Geschenke soll es per QR-Code zu Weihnachten 2026 geben (für NA-16)? Neue Antworten auf die übrigen offenen Fragen im Plan?
-   - Gilt die Reihenfolge noch (nächstes: **NA-21** Leistung „Rund“, dann NA-16/17/18), oder soll etwas vorgezogen werden?
+   - Gilt die Reihenfolge noch (nächstes: **NA-29** Budget „Rund“, dann NA-16/17/18), oder soll etwas vorgezogen werden?
    - Was darf in dieser Sitzung keinesfalls angefasst werden?
 2. **Dann selbstständig arbeiten**, bis die Sitzung aufgebraucht ist. Aufgabenliste anlegen (ein Eintrag je Paket bzw. Schritt a/b/c) und abhaken.
    Nur nachfragen, wenn eine Entscheidung nicht rückgängig zu machen ist; sonst die vernünftigste Wahl treffen und im Plan notieren.
@@ -89,7 +91,8 @@ Grundsatz: **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `s
 **Jede neue Figur, jedes Möbel, jedes Bauwerk, jede Szene in beiden Looks** (oder im Plan als offen vermerken).
 1. **Freigabe Pixel auf der Hauptseite** – nur nach Rückmeldung des Auftraggebers: `lookWaehlbar()` in `shared/core.js` auf `true`, Text in der
    Elternkarte („nur in der Testumgebung“) anpassen, `tests/look.js` umstellen.
-2. **NA-21** Leistungs-Test „Rund“ (`tests/leistung.js`, `messe()` und `__heimat.info()` sind vorbereitet) und Budget nach GRAFIK.md.
+2. **NA-29 Budget „Rund“** (neu, Messung und Plan in PLAN.md unter „NA-21 Leistungs-Test (fertig)“): Insel heute ≈ 520 Aufrufe/390.000 Dreiecke
+   („schön“) bzw. ≈ 350/74.000 („einfach“), Budget 150/150.000 bzw. 80/60.000. Messen mit `sh tests/laufen.sh leistung`, Abnahme mit `STRENG=1`.
 3. **NA-16** QR-Geschenk (wartet auf die Geschenk-Auswahl) → **NA-17** Kapitel 1–2 (inkl. E9 Atelier, E10 Mein Ich) → **NA-18** Chronik im Album
    (Szenen nochmal ansehen, auch Tutorial-Etappen).
 4. **NA-03** Lehrplan-Kern → NA-40 → NA-30 → NA-32 → NA-31. Minispiele bleiben vorerst 3D (aus beiden Looks gestartet); „Meine Welt“ für Pixel offen.
@@ -144,7 +147,7 @@ Grundsatz: **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `s
 - `sh tests/laufen.sh` = Node-Test `tests/story-migration.js` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `probe` (Grafik-Proben, NUR=pixel|rund); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.
