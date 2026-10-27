@@ -422,4 +422,59 @@ window.THEMEN = [
         ru: "Здорово, {name}! Придумайте дома одно семейное правило, которое важно для всех." }
     ]
   }
+  ,
+  {
+    id: "bauen", lz: ["su.te.01", "su.te.02"], name: "Bauen und Brücken", e: "🌉", farbe: "#E8A33D", grund: "#FFF1D9",
+    kurz: "Was hält? Türme, Brücken und Dreiecke",
+    schritte: [
+      { typ: "info", titel: "Wir bauen!", bild: "🏗️",
+        text: "Hallo {name}! Benno der Biber baut Dämme. Menschen bauen Häuser, Türme und Brücken. Aber wie baut man etwas, das nicht umfällt?",
+        ru: "Привет, {name}! Бобёр Бенно строит плотины. Люди строят дома, башни и мосты. Но как построить то, что не упадёт?" },
+      { typ: "info", titel: "Ein Turm braucht einen festen Fuß", bild: "🗼",
+        text: "Ein Turm steht sicher, wenn er unten breit ist und oben schmal. Schwere Steine kommen nach unten, leichte nach oben.",
+        ru: "Башня стоит надёжно, если внизу она широкая, а наверху узкая. Тяжёлые камни — вниз, лёгкие — наверх." },
+      { typ: "wahl", frage: "Welcher Turm fällt am wenigsten um?", ru: "Какая башня падает меньше всего?", bild: "🧱", optionen: [
+        { t: "Unten breit, oben schmal", ru: "Внизу широкая, наверху узкая", ok: true, warum: "Richtig! Ein breiter Fuß macht den Turm standfest.", warumRu: "Правильно! Широкое основание делает башню устойчивой." },
+        { t: "Unten schmal, oben breit", ru: "Внизу узкая, наверху широкая", ok: false, warum: "Der kippt leicht um – oben ist zu viel Gewicht.", warumRu: "Она легко опрокинется — наверху слишком тяжело." },
+        { t: "Ganz dünn und sehr hoch", ru: "Очень тонкая и очень высокая", ok: false, warum: "Der wackelt schon beim kleinsten Stoß.", warumRu: "Она качается от малейшего толчка." }] },
+      { typ: "info", titel: "Das starke Dreieck", bild: "🔺",
+        text: "Ein Viereck aus Stäben lässt sich leicht zusammendrücken. Ein Dreieck nicht! Darum sieht man an Brücken und Kränen viele Dreiecke.",
+        ru: "Квадрат из палочек легко сжать. Треугольник — нет! Поэтому на мостах и кранах много треугольников." },
+      { typ: "daumen", satz: "Ein Blatt Papier trägt mehr, wenn man es zu einer Ziehharmonika faltet.", satzRu: "Лист бумаги выдержит больше, если сложить его гармошкой.", bild: "📄", ok: true,
+        warum: "Stimmt! Die Falten machen das Papier steif. Probier es aus: Leg ein gefaltetes Blatt zwischen zwei Bücher und stell etwas darauf.", warumRu: "Верно! Складки делают бумагу жёсткой. Попробуй: положи сложенный лист между двумя книгами и поставь сверху что-нибудь." },
+      { typ: "zuordnen", frage: "Was ist ein Bauwerk von Menschen, was hat die Natur gemacht?", ru: "Что построили люди, а что создала природа?",
+        gruppen: [{ id: "m", name: "Von Menschen gebaut", ru: "Построено людьми", bild: "👷" }, { id: "n", name: "Natur", ru: "Природа", bild: "🌿" }],
+        dinge: [
+          { t: "Brücke", ru: "Мост", gruppe: "m" }, { t: "Leuchtturm", ru: "Маяк", gruppe: "m" }, { t: "Hochhaus", ru: "Небоскрёб", gruppe: "m" },
+          { t: "Berg", ru: "Гора", gruppe: "n" }, { t: "Vogelnest", ru: "Птичье гнездо", gruppe: "n" }, { t: "Biberdamm", ru: "Бобровая плотина", gruppe: "n" }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦫",
+        text: "Super, {name}! Bau mit Bechern, Bauklötzen oder Papier einen Turm. Wie hoch schaffst du es? Auf der Insel wartet Bennos Bauplatz.",
+        ru: "Супер, {name}! Построй башню из стаканчиков, кубиков или бумаги. Насколько высокой она получится? На острове ждёт стройплощадка Бенно." }
+    ]
+  },
+  {
+    id: "pflanzen", lz: ["su.na.05"], name: "Pflanzen wachsen", e: "🌷", farbe: "#2E9C5A", grund: "#E3F7EF",
+    kurz: "Samen, Keimen, Frühblüher",
+    schritte: [
+      { typ: "info", titel: "Aus klein wird groß", bild: "🌱",
+        text: "Hallo {name}! Jede große Pflanze war einmal ein kleiner Samen. Wenn er Wasser, Wärme und Licht bekommt, beginnt er zu keimen.",
+        ru: "Привет, {name}! Каждое большое растение когда-то было маленьким семечком. Когда оно получает воду, тепло и свет, оно начинает прорастать." },
+      { typ: "info", titel: "Was braucht eine Pflanze?", bild: "☀️",
+        text: "Pflanzen brauchen Wasser, Licht, Luft und Erde. Ohne Licht werden sie blass und dünn.",
+        ru: "Растениям нужны вода, свет, воздух и земля. Без света они становятся бледными и тонкими.",
+        fakten: [["Wasser 💧", "Вода 💧"], ["Licht ☀️", "Свет ☀️"], ["Luft 🌬️", "Воздух 🌬️"], ["Erde 🪴", "Земля 🪴"]] },
+      { typ: "wahl", frage: "Was kommt zuerst aus dem Samen?", ru: "Что первым появляется из семечка?", bild: "🫘", optionen: [
+        { t: "Die Wurzel", ru: "Корень", ok: true, warum: "Genau! Zuerst wächst die Wurzel nach unten, dann der Spross nach oben.", warumRu: "Точно! Сначала корень растёт вниз, потом росток вверх." },
+        { t: "Die Blüte", ru: "Цветок", ok: false, warum: "Nein, die Blüte kommt ganz zum Schluss.", warumRu: "Нет, цветок появляется в самом конце." },
+        { t: "Die Frucht", ru: "Плод", ok: false, warum: "Nein, Früchte wachsen erst, wenn die Pflanze groß ist.", warumRu: "Нет, плоды появляются, когда растение уже большое." }] },
+      { typ: "info", titel: "Frühblüher", bild: "🌷",
+        text: "Schneeglöckchen, Krokusse und Tulpen blühen schon im Frühling, wenn die Bäume noch keine Blätter haben. Ihre Kraft haben sie in einer Zwiebel unter der Erde gespeichert.",
+        ru: "Подснежники, крокусы и тюльпаны цветут уже весной, когда на деревьях ещё нет листьев. Силу они запасли в луковице под землёй." },
+      { typ: "daumen", satz: "Eine Bohne keimt auch auf feuchter Watte.", satzRu: "Фасоль прорастает и на влажной вате.", bild: "🫘", ok: true,
+        warum: "Stimmt! Probier es aus: Leg eine Bohne auf feuchte Watte und halte sie ein paar Tage feucht.", warumRu: "Верно! Попробуй: положи фасолину на влажную вату и держи её влажной несколько дней." },
+      { typ: "info", titel: "Geschafft!", bild: "🪴",
+        text: "Toll, {name}! Säe Kresse oder eine Bohne und schau jeden Tag nach. Auf der Insel wächst dein Wissensbaum auch jeden Tag ein bisschen.",
+        ru: "Здорово, {name}! Посади кресс-салат или фасоль и смотри каждый день. На острове твоё дерево знаний тоже растёт каждый день." }
+    ]
+  }
 ];

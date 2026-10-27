@@ -1153,5 +1153,8 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
   **„Regeln und Streit“** (Melden, Streit lösen in 4 Schritten, nie schlagen – sozialwissenschaftlich, `su.so.03`, `et.mi.01`).
   Jetzt 8 Themen; jede GDSU-Perspektive außer „technisch“ hat mindestens zwei Kl.-1/2-Themen.
 - Sachsen Kl. 1/2 von Hand angepasst (jetzt 7 × ja, 15 × teil, 27 × nein): Zusammen leben → ja, Unbelebte Natur, Erste Schuljahre → teil.
-- **Offen (NA-34 Teil 2):** technische Perspektive (Bauen, Brücken, Hebel – passt zu Bennos Bauplatz), Frühblüher/Keimen, Haustiere.
+- **NA-34 Teil 2 (fertig):** „Bauen und Brücken“ (standfester Turm, starkes Dreieck, gefaltetes Papier, Bauwerk oder Natur – technisch,
+  `su.te.01`, `su.te.02`, Verweis auf Bennos Bauplatz) und „Pflanzen wachsen“ (Samen, Keimen, was Pflanzen brauchen, Frühblüher –
+  `su.na.05`). Jetzt 10 Themen, alle fünf GDSU-Perspektiven mit Kl.-1/2-Themen. Sachsen Kl. 1/2 „Pflanzen und Tiere“ → ja (8/14/27).
+- Offen im Sachunterricht: Haustierpflege als Thema (heute nur spielerisch mit dem eigenen Tier), Kl. 3–4-Themen.
 
