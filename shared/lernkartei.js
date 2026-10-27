@@ -2,7 +2,7 @@
 // Beim ersten Fehler wird der Schritt (reine Daten aus geschichte.js / werkstatt.js / themen.js) gemerkt.
 // Fällige Karten kommen als kurze Wiederholung an den Anfang des nächsten Kapitels/Themas:
 // falsch → morgen, dann nach 3 und 7 Tagen; dreimal (an verschiedenen Tagen) richtig = gemeistert → goldener Lernfund.
-// Daten: profil.daten.lernkartei = { deutsch: [karte], sachkunde: [karte] }
+// Daten: profil.daten.lernkartei = { deutsch: [karte], sachkunde: [karte], lesen: [karte] }
 // karte = { k: Schlüssel, s: Schritt, stufe, faellig }
 (function () {
   const S = window.Spielwelt; if (!S) return;
@@ -10,7 +10,8 @@
   const pad = (n) => String(n).padStart(2, "0");
   const tagIn = (n) => { const d = window.__heute ? new Date(window.__heute) : new Date(); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
   // Nur Schritte, die ohne ihr Kapitel verständlich sind
-  const GEEIGNET = { deutsch: ["artikel", "bild", "hoeren", "wort", "luecke", "wo", "wortart", "verlaengern", "silben", "satz"], sachkunde: ["wahl", "daumen"] };
+  const GEEIGNET = { deutsch: ["artikel", "bild", "hoeren", "wort", "luecke", "wo", "wortart", "verlaengern", "silben", "satz"], sachkunde: ["wahl", "daumen"],
+    lesen: ["anlaut"] };   // lesen: Laute und Buchstaben (spiele/lesen/, NA-30), Schritt { typ: "anlaut", wort, ziel, modus }
   const schluessel = (s) => [s.typ, s.wort, s.frage, s.satz, s.sag].filter(Boolean).join("|").slice(0, 120);
 
   function lade() { return Object.assign({ deutsch: [], sachkunde: [] }, S.lade("lernkartei") || {}); }

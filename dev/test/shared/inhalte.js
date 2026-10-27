@@ -1,6 +1,7 @@
 // Inhalte-Verzeichnis (NA-03c): jeder Lerninhalt einmal beschrieben, mit Lernziel-IDs aus dem Lehrplan-Kern (shared/lehrplan/kern.js).
 // Neue Inhalte: Inhalte.registriere({ id, fach, lz: ["de.le.02"], stufe?: ["vs","1"], laender?: null|["sn"], aufgaben: <Anzahl>,
-//   aufgabenJe?: { "<lz>": <Anzahl> }, lernkartei: true|false, ... }) – Format siehe docs/LEHRPLAN.md „Inhalte als Daten“.
+//   aufgabenJe?: { "<lz>": <Anzahl> }, lernkartei: true|false, ... }) – Format siehe docs/LEHRPLAN.md „Inhalte als Daten“;
+//   aufgaben darf eine Anzahl oder (wie in LEHRPLAN.md) die Liste der Aufgaben sein.
 // Bestehende Inhalte (Matheweg, Fipsi, Werkstatt, Sachthemen, Führerschein …) werden mit Inhalte.ausBestand() aus ihren Daten
 // gelesen, sofern die Datendateien auf der Seite geladen sind; sie tragen dafür nur ein Feld `lz` (nichts umgebaut).
 // Abdeckung je Lernziel wird errechnet: "ja" ab 3 Inhalten mit zusammen ≥ 30 Aufgaben und Lernkartei, "teil" ab 1 Inhalt, sonst "nein".
@@ -75,7 +76,8 @@
   function abdeckung(id) {
     const inh = zuLernziel(id);
     if (!inh.length) return "nein";
-    const aufgaben = inh.reduce((n, d) => n + (d.aufgabenJe && d.aufgabenJe[id] != null ? d.aufgabenJe[id] : d.aufgaben || 0), 0);
+    const zahl = (d) => Array.isArray(d.aufgaben) ? d.aufgaben.length : d.aufgaben || 0;   // aufgaben: Anzahl oder Liste (LEHRPLAN.md)
+    const aufgaben = inh.reduce((n, d) => n + (d.aufgabenJe && d.aufgabenJe[id] != null ? d.aufgabenJe[id] : zahl(d)), 0);
     return inh.length >= 3 && aufgaben >= 30 && inh.some(d => d.lernkartei) ? "ja" : "teil";
   }
 

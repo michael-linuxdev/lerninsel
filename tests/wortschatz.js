@@ -12,7 +12,7 @@ function lade(umgebung = "prod", hilfe = null) {
   const ctx = vm.createContext({ console });
   ctx.window = ctx;
   ctx.Spielwelt = { umgebung, hilfe: () => hilfe, profil: { name: "Mira" } };
-  ["inhalte/woerter/bestand.js", "inhalte/woerter/d0.js", "shared/woerter.js"].forEach(d =>
+  ["inhalte/woerter/bestand.js", "inhalte/woerter/d0.js", "inhalte/woerter/anlaute.js", "shared/woerter.js"].forEach(d =>
     vm.runInContext(fs.readFileSync(path.join(WURZEL, d), "utf8"), ctx, { filename: d }));
   return ctx;
 }
