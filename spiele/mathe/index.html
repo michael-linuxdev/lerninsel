@@ -81,6 +81,17 @@
   #tafel > :last-child { margin-bottom: auto; }
   .einstufung { max-width: 640px; margin: 10px auto 0; background: #fff; border-radius: 24px; padding: 16px 20px; box-shadow: 0 6px 0 rgba(0,0,0,.08); text-align: center; font-size: 1.2rem; }
   .einstufung p { margin: 6px 0 10px; }
+  /* Schuljahres-Gerüst: Lernbereiche mit „Zeig, was du kannst“ */
+  .schuljahr { max-width: 1100px; margin: 12px auto 0; padding: 0 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .schuljahr[hidden] { display: none; }
+  .lb-kachel { background: #fff; border-radius: 20px; padding: 10px 12px; box-shadow: 0 5px 0 rgba(0,0,0,.07); display: flex; flex-direction: column; gap: 4px; }
+  .lb-kachel.schule { box-shadow: 0 0 0 4px #FFC83D, 0 5px 0 rgba(0,0,0,.07); }
+  .lb-kopf { display: flex; align-items: center; gap: 6px; font-size: 1.05rem; line-height: 1.15; }
+  .lb-icon { font-size: 1.5rem; }
+  .lb-stand { font-size: .9rem; color: var(--pflaume-hell); }
+  .lb-schule { font-size: .9rem; font-weight: 700; color: #B36B00; }
+  .lb-zeig { min-height: 44px; font-size: 1rem; padding: 4px 10px; margin-top: auto; }
+  @media (max-width: 760px) { .schuljahr { grid-template-columns: 1fr 1fr; } }
   .knoepfe-e { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .tafel .frage { margin: 0; font-size: 1.5rem; font-weight: 600; color: #2E7D62; }
   .tafel .frage.gross { font-size: clamp(1.6rem, 3.2vw, 2.2rem); line-height: 1.35; max-width: 28ch; color: var(--pflaume); }
@@ -185,6 +196,7 @@
   <div class="benno-zeile"><div class="benno" id="benno" aria-hidden="true"></div><p class="benno-blase" id="benno-text"></p></div>
   <div class="klasse" id="klasse"></div>
   <div class="einstufung" id="einstufung" hidden></div>
+  <div class="schuljahr" id="schuljahr" hidden></div>
   <div class="karte-weg" id="karte"></div>
 </section>
 

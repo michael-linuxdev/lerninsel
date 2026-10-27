@@ -1531,3 +1531,14 @@ Auftrag: „Übergang Klasse 5 überspringen, weiter mit Klasse 1, um Mathe Grun
 - **Tests:** neu `tests/mathevoll.js`; Stationszahlen in `mathe1`, `mathe2`, `mathe34`, `mathe15`, `mathe-generatoren`, `deutsch34` (Werkstatt +1),
   `lehrplan` (54/34/32 Punkte, keine „teil“, 25/20/0).
 - **Nächstes:** nächstes Fach (Deutsch, Sachunterricht, Musik, Kunst …) – dafür die Lehrplan-PDFs; Schuljahres-Gerüst.
+
+### Stand 28.10.2026, früh (Schuljahres-Gerüst Mathe, erster Teil)
+- **Lernbereichs-Kacheln** über dem Matheweg (alle fünf Wege): Fortschritt je Lernbereich und **„Zeig, was du kannst“** – eine Aufgabe je
+  Station (höchstens 10), ohne Noten, ohne Stations-Sterne, keine Wiederholungsaufgabe; Ende mit „Das kannst du schon … / Das üben wir noch …“
+  und Knopf zur ersten offenen Übungsstation. Ergebnis in `mathe.lernstand`.
+- **Eltern-Einstellung „Gerade in der Schule“** (Lernbereich): markiert die Kachel und setzt den „Jetzt“-Marker auf die nächste offene Station
+  dieses Lernbereichs; ohne Einstellung alles wie bisher. **Elternbereich** zeigt die letzten Ergebnisse je Weg und Lernbereich mit „noch üben“.
+- **Entscheidung:** Kein eigener „Prüfungs“-Charakter – die Kinder sammeln dabei wie beim Üben Erfahrung (Fähigkeits-Stufen können Sterne
+  bringen), aber es gibt keine Stationssterne und keinen Abzug (Regel: kein Druck, nichts geht verloren).
+- **Test:** neu `tests/schuljahr.js` (quer und hoch, absichtlicher Fehler, Elternbereich, Rücksetzen der Einstellung).
+- **Nächstes:** Reihenfolge-Vorschlag je Halbjahr; Gerüst für die anderen Fächer, sobald deren Inhaltspunkte stehen (PDFs).

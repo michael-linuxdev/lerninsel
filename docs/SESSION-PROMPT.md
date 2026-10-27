@@ -54,7 +54,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Insel-Tests (`tutorial`, `prolog`) wackeln, wenn parallel andere Browser-Tests laufen** – allein laufen lassen; einmal gescheitert heißt nicht kaputt.
 
 ### Offene Fragen an den Auftraggeber
-- **iPad-10-Test** (in /dev) der Pakete vom 27.10.: **Matheweg Kl. 2 (neue Stationen 24–40), Kl. 3 (21–30), Kl. 4 (16–23), Freischalten je Lernbereich, Elternbereich „Was übt die App?“ aufklappen**, **Werkstatt „Bildergeschichte schreiben“ (Tastatur, Hinweise), Aufnehmen (erst im Elternbereich
+- **iPad-10-Test** (in /dev) der Pakete vom 27.10.: **Matheweg: neue Stationen aller Klassen, Lernbereichs-Kacheln mit „Zeig, was du kannst“, im Elternbereich „Gerade in der Schule“ einstellen und „Was übt die App?“ aufklappen**, **Werkstatt „Bildergeschichte schreiben“ (Tastatur, Hinweise), Aufnehmen (erst im Elternbereich
   einschalten, dann „Reime und Gedichte“; fragt Safari nach dem Mikrofon? Klingt die Aufnahme?)**, Werkstatt „Ordnen“/„Verbessern“, Mathe Kl. 3/4 inkl. Urkunde und „9 kg = 9000 g“, Bildaufgaben im
   Hochformat, Übergang 5, Englisch (spricht das iPad englisch?), Startseite mit Englisch-Tür, Sachthemen „Ich werde größer“ und „Unser Bundesland Sachsen“.
 - **Lehrplan-PDFs Mathematik Klasse 5 (Oberschule und Gymnasium)** für einen genauen Übergang 5.
@@ -68,7 +68,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 (jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr, Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten).
 Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen – siehe `CLAUDE.md`, Abschnitt 3.
 
-1. **Mathe Grundschule ist vollständig** (Kl. 1–4, 66 neue Stationen in dieser Ausrichtung). Übergang 5 bleibt vorläufig (Auftraggeber:
+1. **Mathe Grundschule ist vollständig** (Kl. 1–4, 66 neue Stationen in dieser Ausrichtung). **Schuljahres-Gerüst Mathe** steht (Lernbereichs-Kacheln,
+   „Zeig, was du kannst“, Eltern-Einstellung „gerade in der Schule“); offen: Reihenfolge-Vorschlag je Halbjahr. Übergang 5 bleibt vorläufig (Auftraggeber:
    „überspringen“). Nächstes Fach nach Wahl des Auftraggebers – für Deutsch/Sachunterricht/Musisches fehlen noch die PDFs.
    **Für Deutsch, Sachunterricht, Kunst, Musik, Werken, Sport, Ethik Kl. 1/2 fehlen die PDFs** – zuerst danach fragen; dann je Fach Punkte
    in `sachsen-punkte.js` und Lücken schließen.

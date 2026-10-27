@@ -340,13 +340,25 @@
     </div>`;
   }
   // ---------- Mathe: Rechenverfahren wie in der Schule ----------
+  const LB_NAMEN = { zo: "Zahl und Operation", rf: "Raum und Form", gm: "Größen und Messen", dz: "Daten und Zufall" };
+  const WEG_NAMEN = { k1: "Kl. 1", k2: "Kl. 2", k3: "Kl. 3", k4: "Kl. 4", k5: "Übergang 5" };
+  function lernstandHtml() {
+    const ls = (S.lade("mathe") || {}).lernstand || {}, M = window.Mathe || {}, alle = [].concat(M.STATIONEN || [], M.STATIONEN_K1 || [], M.STATIONEN_K3 || [], M.STATIONEN_K4 || [], M.STATIONEN_K5 || []);
+    const name = (id) => (alle.find(s => s.id === id) || {}).name || id, eintraege = Object.entries(ls).sort((a, b) => (b[1].am || "").localeCompare(a[1].am || ""));
+    if (!eintraege.length) return `<p class="klein">„Zeig, was du kannst“ (im Matheweg je Lernbereich): noch nicht gemacht.</p>`;
+    return `<h3>„Zeig, was du kannst“ – zuletzt</h3><ul class="liste" id="lernstand-liste">` + eintraege.map(([k, v]) => { const [w, lb] = k.split(":"), ueben = Object.keys(v.je).filter(id => !v.je[id]);
+      return `<li><b>${WEG_NAMEN[w] || w} · ${LB_NAMEN[lb] || lb}</b> (${v.am.split("-").reverse().join(".")}): ${v.richtig} von ${v.n} Stationen auf Anhieb${ueben.length ? ` · noch üben: ${ueben.map(name).join(", ")}` : " · alles sicher"}</li>`; }).join("") + `</ul>`;
+  }
   function matheKarte() {
-    const m = ((S.lade("eltern") || {}).mathe || {}).minus || "abziehen";
+    const m = ((S.lade("eltern") || {}).mathe || {}).minus || "abziehen", schule = ((S.lade("eltern") || {}).mathe || {}).schule || "";
     return `<div class="karte">
       <h2>🧮 Mathe wie in der Schule</h2>
       <div class="zeit-raster"><label>Schriftlich minus<select id="m-minus">
         <option value="abziehen" ${m === "abziehen" ? "selected" : ""}>Abziehen mit Entbündeln („tausche einen Zehner“)</option>
-        <option value="ergaenzen" ${m === "ergaenzen" ? "selected" : ""}>Ergänzen („von 7 bis 13 sind 6, merke 1“)</option></select></label></div>
+        <option value="ergaenzen" ${m === "ergaenzen" ? "selected" : ""}>Ergänzen („von 7 bis 13 sind 6, merke 1“)</option></select></label>
+        <label>Gerade in der Schule<select id="m-schule"><option value="" ${!schule ? "selected" : ""}>Keine Angabe (Matheweg der Reihe nach)</option>${Object.entries(LB_NAMEN).map(([k, n]) => `<option value="${k}" ${schule === k ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
+      <p class="klein">„Gerade in der Schule“: Der Matheweg markiert diesen Lernbereich und schlägt seine nächste Station zuerst vor. Alle anderen Stationen bleiben offen wie bisher.</p>
+      ${lernstandHtml()}
       <p class="klein">Schulen bringen die schriftliche Subtraktion unterschiedlich bei. Fragt im Zweifel die Lehrkraft und stellt hier dasselbe Verfahren ein – die Hilfe im Matheweg erklärt dann genauso.</p>
       <div class="knoepfe"><button class="knopf haupt" id="m-speichern">Speichern</button></div>
     </div>`;
@@ -399,7 +411,7 @@
     $("en-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.englisch = Object.assign({}, e.englisch || {}, { ab: $("en-ab").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
   function matheKnoepfe() {
-    $("m-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.mathe = Object.assign({}, e.mathe || {}, { minus: $("m-minus").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+    $("m-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.mathe = Object.assign({}, e.mathe || {}, { minus: $("m-minus").value, schule: $("m-schule").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
   function echteWeltKnoepfe() {
     $("ew-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.echtewelt = { selbst: $("ew-selbst").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });

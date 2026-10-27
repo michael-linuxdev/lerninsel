@@ -22,6 +22,9 @@
   // geschafft ist (oder es keine gibt). Das öffnet nur zusätzlich – was nach der alten Regel offen war, bleibt offen.
   function lbOffen(i) { const lb = ST[i].lb; if (!lb) return false; for (let j = i - 1; j >= 0; j--) if (ST[j].lb === lb) return bestes(ST[j].id) > 0; return true; }
   const istOffen = (i) => S.offen(i === 0 || i <= startAb() || bestes(ST[i - 1].id) > 0 || lbOffen(i));
+  // Schuljahres-Gerüst: Lernbereiche des Lehrplans; Eltern-Einstellung „gerade in der Schule“ (eltern.mathe.schule = zo|rf|gm|dz)
+  const LB = { zo: ["🔢", "Zahl und Operation"], rf: ["📐", "Raum und Form"], gm: ["📏", "Größen und Messen"], dz: ["📊", "Daten und Zufall"] };
+  const schuleLb = () => { const x = (((S.lade("eltern") || {}).mathe || {}).schule) || ""; return LB[x] && ST.some(s => s.lb === x) ? x : ""; };
   function merke(id, sterne) {
     const d = daten(); d[WEG][id] = Math.max(d[WEG][id] || 0, sterne); S.speichere("mathe", d);
   }
@@ -123,9 +126,12 @@
       if (y0 === y1) d += ` L${x1} ${y1}`;
       else { const bogen = x0 > breite / 2 ? dx * 0.9 : -dx * 0.9; d += ` C${x0 + bogen} ${y0} ${x1 + bogen} ${y1} ${x1} ${y1}`; }
     }
-    let jetzt = ST.findIndex((s, i) => i >= startAb() && istOffen(i) && !bestes(s.id));
+    let jetzt = -1;
+    if (schuleLb()) jetzt = ST.findIndex((s, i) => s.lb === schuleLb() && istOffen(i) && !bestes(s.id));
+    if (jetzt < 0) jetzt = ST.findIndex((s, i) => i >= startAb() && istOffen(i) && !bestes(s.id));
     if (jetzt < 0) jetzt = ST.findIndex((s, i) => istOffen(i) && !bestes(s.id));
     zeigeEinstufungAngebot();
+    zeichneSchuljahr();
 
     karte.innerHTML = `<svg class="pfad" viewBox="0 0 ${breite} ${hoehe}" preserveAspectRatio="none">
       <path d="${d}" stroke="#B8E6D4" stroke-width="30" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -269,6 +275,47 @@
     zeige("ende"); S.ton("juhu");
   }
 
+  // ---------- Schuljahres-Gerüst: Lernbereiche, „gerade in der Schule“, „Zeig, was du kannst“ ----------
+  function zeichneSchuljahr() {
+    const box = $("schuljahr"); if (!box) return;
+    const lbs = Object.keys(LB).filter(k => ST.some(s => s.lb === k)), d = daten(), schule = schuleLb();
+    box.hidden = !lbs.length; if (!lbs.length) return;
+    box.innerHTML = lbs.map(k => { const st = ST.filter(s => s.lb === k), fertig = st.filter(s => bestes(s.id) > 0).length, ls = (d.lernstand || {})[WEG + ":" + k];
+      return `<div class="lb-kachel${k === schule ? " schule" : ""}" data-lb="${k}"><div class="lb-kopf"><span class="lb-icon">${LB[k][0]}</span><b>${LB[k][1]}</b></div>` +
+        `<div class="lb-stand">${fertig} von ${st.length} Stationen${ls ? ` · zuletzt gezeigt: ${ls.richtig} von ${ls.n}` : ""}</div>` +
+        (k === schule ? `<div class="lb-schule">📌 Gerade in der Schule</div>` : "") +
+        `<button class="knopf lb-zeig" data-lb="${k}">🔍 Zeig, was du kannst</button></div>`; }).join("");
+    box.querySelectorAll(".lb-zeig").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); starteLernstand(b.dataset.lb); }));
+  }
+  function starteLernstand(lb) {
+    let st = ST.filter(s => s.lb === lb);
+    if (st.length > 10) st = st.map((s, i) => [s, i]).sort(() => Math.random() - 0.5).slice(0, 10).sort((a, b) => a[1] - b[1]).map(x => x[0]);
+    const liste = st.map(s => Object.assign(window.Mathe.runde(s.id, 1)[0], { station: s.id, wieder: false }));
+    lauf = { nr: -1, lernstand: lb, station: { name: "Zeig, was du kannst" }, liste, pos: 0, fehler: 0, versuch: 0, ergebnis: [], erst: [], eingabe: "", gesperrt: false };
+    $("station-name").textContent = `Zeig, was du kannst: ${LB[lb][1]}`;
+    zeige("rechnen");
+    zeigeAufgabe();
+  }
+  function beendeLernstand() {
+    const d = daten(), lb = lauf.lernstand, je = {};
+    lauf.liste.forEach((a, i) => { je[a.station] = lauf.erst[i] === true; });
+    const ids = Object.keys(je), gut = ids.filter(id => je[id]), ueben = ids.filter(id => !je[id]), name = (id) => (ST.find(s => s.id === id) || {}).name || id;
+    d.lernstand = d.lernstand || {}; d.lernstand[WEG + ":" + lb] = { am: tagIn(0), n: ids.length, richtig: gut.length, je };
+    S.speichere("mathe", d);
+    C() && C().gib("mathe", 3);
+    $("ende-titel").textContent = "Danke fürs Zeigen!";
+    $("ende-sterne").innerHTML = `<span style="animation-delay:180ms">🔍</span>`;
+    $("ende-text").textContent = (gut.length ? `Das kannst du schon: ${gut.slice(0, 4).map(name).join(", ")}${gut.length > 4 ? " und mehr" : ""}. ` : "") +
+      (ueben.length ? `Das üben wir noch zusammen: ${ueben.slice(0, 3).map(name).join(", ")}`.replace(/([^?!])$/, "$1.") : "Alles beim ersten Mal richtig – super!");
+    $("ende-gewinn").textContent = "Das war kein Test mit Noten – nur ein Blick, was schon klappt.";
+    const k = $("ende-knoepfe"); k.innerHTML = "";
+    const knopf = (text, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = text; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); k.appendChild(b); };
+    const erste = ueben.map(id => ST.findIndex(s => s.id === id)).find(i => i >= 0 && istOffen(i));
+    if (erste != null) knopf(`Üben: ${ST[erste].name}`, true, () => starte(erste));
+    knopf("Zum Matheweg", erste == null, () => { zeige("weg"); zeichneWeg(); });
+    zeige("ende"); S.ton("juhu");
+  }
+
   function starteTraining() {
     const d = daten(), stat = d.stat || {};
     const offen = ST.filter((s, i) => istOffen(i));
@@ -362,7 +409,7 @@
     if (antwort === a.antwort) {
       lauf.gesperrt = true;
       if (!lauf.ergebnis[lauf.pos]) lauf.ergebnis[lauf.pos] = "gut";
-      if (lauf.einstufung) lauf.erst[lauf.pos] = lauf.versuch === 0;
+      if (lauf.einstufung || lauf.lernstand) lauf.erst[lauf.pos] = lauf.versuch === 0;
       if (lauf.versuch === 0 && !a.wieder) { statistik(a, true); C() && C().gib("mathe", 1); if (KN()) KN().melde(lzVon(a.station), true); }
       if (luecke) luecke.className = "luecke richtig";
       markiereWahl(wert, true);
@@ -378,7 +425,7 @@
       if (KN()) {
         KN().melde(lzVon(a.station), false);
         // Zwei Fehler in Folge beim selben Lernziel: einmal je Runde eine leichtere Aufgabe von der Station davor einschieben
-        if (!lauf.bruecke && !lauf.einstufung && !lauf.training && lauf.nr > 0 && KN().brauchtLeichter(lzVon(a.station))) {
+        if (!lauf.bruecke && !lauf.einstufung && !lauf.lernstand && !lauf.training && lauf.nr > 0 && KN().brauchtLeichter(lzVon(a.station))) {
           const vorher = ST[lauf.nr - 1], leicht = window.Mathe.runde(vorher.id, 1)[0];
           if (leicht) { lauf.bruecke = true; lauf.liste.splice(lauf.pos + 1, 0, Object.assign(leicht, { station: vorher.id, wieder: true, bruecke: true })); }
         }
@@ -401,7 +448,7 @@
     // Zweiter Fehler: Lösung und Rechenweg zeigen, Aufgabe kommt am Ende nochmal
     lauf.gesperrt = true;
     if (!lauf.ergebnis[lauf.pos]) { lauf.ergebnis[lauf.pos] = "nochmal"; lauf.fehler++; }
-    if (!a.wieder && !lauf.einstufung) lauf.liste.push(Object.assign({}, a, { wieder: true }));
+    if (!a.wieder && !lauf.einstufung && !lauf.lernstand) lauf.liste.push(Object.assign({}, a, { wieder: true }));
     rueck.className = "rueck"; rueck.textContent = "";
     if (luecke) { luecke.className = "luecke loesung"; luecke.textContent = a.antwort; }
     $("hilfe-platz").innerHTML = `<div class="hilfe"><b>Die Lösung ist ${a.antwort}${a.einheit ? " " + a.einheit : ""}.</b>${a.hilfe}</div>`;
@@ -444,6 +491,7 @@
 
   function beende() {
     if (lauf.training) return beendeTraining();
+    if (lauf.lernstand) return beendeLernstand();
     const { station, nr, fehler } = lauf;
     const sterne = fehler === 0 ? 3 : fehler <= 2 ? 2 : 1;
     const vorher = bestes(station.id);
@@ -490,5 +538,5 @@
 
   zeichneWeg();
   if (new URLSearchParams(location.search).has("training")) starteTraining();
-  window.__mathe = { faellig, tagIn, starteEinstufung, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte, starteTraining, zeigeUrkunde, get lauf() { return lauf; } }; // für Tests
+  window.__mathe = { faellig, tagIn, starteEinstufung, starteLernstand, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte, starteTraining, zeigeUrkunde, get lauf() { return lauf; } }; // für Tests
 })();

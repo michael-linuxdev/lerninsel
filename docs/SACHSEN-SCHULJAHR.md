@@ -167,3 +167,12 @@ Entfernungen, Schrägbilder lesen, Adam Ries: Rechnen auf den Linien. Rechengesc
 (Kapitel „Rechengeschichten erfinden“, die App prüft, ob die Zahlen vorkommen und am Ende eine Frage steht).
 Alle 12 Mathe-Lernbereiche Kl. 1–4 stehen auf „gut“ – von Hand und nach den Lernzielen errechnet. Matheweg: Kl. 1 22, Kl. 2 45, Kl. 3 35,
 Kl. 4 26 Stationen (dazu Übergang 5: 16).
+
+### Schuljahres-Gerüst Mathe (28.10.2026, früh) – erster Teil gebaut
+- **Lernbereichs-Kacheln** über jedem Matheweg: je Lernbereich Fortschritt („x von y Stationen“) und **„🔍 Zeig, was du kannst“** – eine Aufgabe
+  je Station des Lernbereichs (höchstens 10), ohne Noten, ohne Stations-Sterne, ohne Wiederholung am Ende. Das Kind hört „Das kannst du schon …
+  Das üben wir noch zusammen …“ und bekommt einen Knopf zur ersten offenen Übungsstation. Gespeichert in `mathe.lernstand["<weg>:<lb>"]`.
+- **Eltern-Einstellung „Gerade in der Schule“** (Karte „Mathe wie in der Schule“, `eltern.mathe.schule` = `zo`|`rf`|`gm`|`dz`): Die Kachel wird
+  markiert, der „Jetzt“-Marker springt auf die nächste offene Station dieses Lernbereichs. Nichts wird gesperrt.
+- **Elternbereich:** „Zeig, was du kannst – zuletzt“ je Weg und Lernbereich mit Datum, Anzahl auf Anhieb richtig und „noch üben: …“.
+- **Offen:** Reihenfolge-Vorschlag je Halbjahr; dasselbe Gerüst für Deutsch, Sachunterricht, Englisch, sobald deren Inhaltspunkte stehen.
