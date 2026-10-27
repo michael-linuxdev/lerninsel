@@ -88,8 +88,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     // NA-33: dritter Weg Klasse 3
     await p.click('.weg-wahl[data-weg="k3"]'); await p.waitForTimeout(300);
     const w3 = await wegInfo(p);
-    erwarte(w3.an === "k3" && w3.stationen === 11 && w3.erste === "Zahlen bis 1000" && !w3.einstufung, `Klasse 3: 11 Stationen, beginnt mit „Zahlen bis 1000“ (${w3.stationen})`);
-    for (let s3 = 0; s3 < 11; s3++) { await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(120);
+    erwarte(w3.an === "k3" && w3.stationen === 12 && w3.erste === "Zahlen bis 1000" && !w3.einstufung, `Klasse 3: 12 Stationen, beginnt mit „Zahlen bis 1000“ (${w3.stationen})`);
+    for (let s3 = 0; s3 < 12; s3++) { await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(120);
       if (!(await p.evaluate(() => __mathe.lauf.liste.length === 10))) fehler.push("Kl. 3 Station " + s3 + " hat keine 10 Aufgaben"); }
     await p.evaluate(() => document.getElementById("zum-weg").click()); await p.waitForTimeout(300);
     await p.click('.weg-wahl[data-weg="k1"]'); await p.waitForTimeout(300);

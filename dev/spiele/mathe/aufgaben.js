@@ -537,7 +537,11 @@
     { id: "k3kombi", stufe: "3", lz: ["ma.dz.05"], name: "Kombinieren", icon: "👕",
       neu: () => { const n = wahl(NAMEN), d = wahl([["T-Shirts", "Hosen"], ["Eissorten", "Waffeln"], ["Brotsorten", "Beläge"], ["Mützen", "Schals"]]), a = r(2, 5), b = r(2, 4);
         return zahl("", a * b, `Zu jedem der ${a} ${d[0]} passen ${b} ${d[1]}: ${Array.from({ length: a }, () => b).join(" + ")} = ${a * b}.`,
-          { frage: `${n} hat ${a} ${d[0]} und ${b} ${d[1]}. Wie viele verschiedene Paare kann ${n} bilden?`, nurLuecke: true }); } }
+          { frage: `${n} hat ${a} ${d[0]} und ${b} ${d[1]}. Wie viele verschiedene Paare kann ${n} bilden?`, nurLuecke: true }); } },
+    { id: "k3sach", stufe: "3", lz: ["ma.zo.11", "ma.pk.04"], name: "Mal und geteilt im Alltag", icon: "📦",
+      neu: () => { const n = wahl(NAMEN), k = r(3, 9), j = r(3, 9);
+        if (Math.random() < 0.5) return zahl("", k * j, `${k} Kisten mit je ${j} Äpfeln: ${k} · ${j} = ${k * j}.`, { frage: `${n} trägt ${k} Kisten. In jeder Kiste sind ${j} Äpfel. Wie viele Äpfel sind es zusammen?`, nurLuecke: true });
+        return zahl("", j, `${k * j} Sticker gerecht auf ${k} Kinder verteilt: ${k * j} : ${k} = ${j}.`, { frage: `${n} verteilt ${k * j} Sticker gerecht an ${k} Kinder. Wie viele bekommt jedes Kind?`, nurLuecke: true }); } }
   ];
 
   function malAufgabe(reihen) {
