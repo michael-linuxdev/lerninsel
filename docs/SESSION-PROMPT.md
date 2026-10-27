@@ -69,7 +69,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen – siehe `CLAUDE.md`, Abschnitt 3.
 
 1. **Mathe Grundschule ist vollständig** (Kl. 1–4, 66 neue Stationen in dieser Ausrichtung). **Schuljahres-Gerüst Mathe** steht (Lernbereichs-Kacheln,
-   „Zeig, was du kannst“, Eltern-Einstellung „gerade in der Schule“); offen: Reihenfolge-Vorschlag je Halbjahr. Übergang 5 bleibt vorläufig (Auftraggeber:
+   „Zeig, was du kannst“, Eltern-Einstellung „gerade in der Schule“; bewusst kein fester Halbjahres-Plan, weil der Lehrplan die Reihenfolge der
+   Lehrkraft überlässt). Hochformat-Tafel ohne Scrollen (Test `tafel`). Übergang 5 bleibt vorläufig (Auftraggeber:
    „überspringen“). Nächstes Fach nach Wahl des Auftraggebers – für Deutsch/Sachunterricht/Musisches fehlen noch die PDFs.
    **Für Deutsch, Sachunterricht, Kunst, Musik, Werken, Sport, Ethik Kl. 1/2 fehlen die PDFs** – zuerst danach fragen; dann je Fach Punkte
    in `sachsen-punkte.js` und Lücken schließen.

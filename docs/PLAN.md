@@ -1550,3 +1550,6 @@ Auftrag: „Übergang Klasse 5 überspringen, weiter mit Klasse 1, um Mathe Grun
   kleinen Handys hochkant kleinere Frage-Schrift, Abstände und Tastatur; die längsten Sachtexte gekürzt. **Ergebnis: 0 Überläufe auf iPad
   hoch/quer und Handy 390 × 760.** Sehr kleine Handys (360 × 640) scrollen bei langen Sachtexten noch etwas.
 - **Neu `tests/tafel.js`** (432 Aufgaben je Gerätegröße) und Test-Haken `__mathe.zeige(n)`.
+- **Entscheidung (Halbjahres-Reihenfolge):** Kein fester Halbjahres-Plan für Mathe. Der Lehrplan 2025 lässt die zeitliche Reihenfolge und die
+  Gestaltung der Lernbereiche ausdrücklich in der Verantwortung der Lehrkraft (Hinweise zum Fachlehrplan). Stattdessen: Eltern-Einstellung
+  „Gerade in der Schule“ + Freischalten je Lernbereich + „Zeig, was du kannst“. Damit folgt die App dem tatsächlichen Unterricht.

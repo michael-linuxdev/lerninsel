@@ -175,4 +175,5 @@ Kl. 4 26 Stationen (dazu Übergang 5: 16).
 - **Eltern-Einstellung „Gerade in der Schule“** (Karte „Mathe wie in der Schule“, `eltern.mathe.schule` = `zo`|`rf`|`gm`|`dz`): Die Kachel wird
   markiert, der „Jetzt“-Marker springt auf die nächste offene Station dieses Lernbereichs. Nichts wird gesperrt.
 - **Elternbereich:** „Zeig, was du kannst – zuletzt“ je Weg und Lernbereich mit Datum, Anzahl auf Anhieb richtig und „noch üben: …“.
-- **Offen:** Reihenfolge-Vorschlag je Halbjahr; dasselbe Gerüst für Deutsch, Sachunterricht, Englisch, sobald deren Inhaltspunkte stehen.
+- **Entschieden:** kein fester Halbjahres-Plan (der Lehrplan überlässt die Reihenfolge der Lehrkraft) – „Gerade in der Schule“ ersetzt ihn.
+- **Offen:** dasselbe Gerüst für Deutsch, Sachunterricht, Englisch, sobald deren Inhaltspunkte stehen.
