@@ -53,7 +53,7 @@ NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
   alle anderen Sprachen (Ukrainisch …) erst später bzw. nur in /dev.
 - **„Lieber Inhalte zuerst“** – Inhalte Priorität 1 (Phase D) vor Grafik und Story.
 
-**In der letzten Sitzung fertig und gepusht** (zuletzt NA-34: sechs neue Sachthemen; NA-33a: Matheweg „3. Klasse“ mit 9 Stationen; PLAN.md → „Stand 27.10.2026, Mittag“, „… Nachmittag“, „… Abend“):
+**In der letzten Sitzung fertig und gepusht** (zuletzt NA-34: sechs neue Sachthemen; NA-33a: Matheweg „3. Klasse“ mit 10 Stationen; PLAN.md → „Stand 27.10.2026, Mittag“, „… Nachmittag“, „… Abend“):
 - **Pixel auf der Hauptseite wählbar** (`Spielwelt.lookWaehlbar()` = immer wahr, `tests/look.js` umgestellt).
 - **NA-03 Lehrplan-Kern:** `shared/lehrplan/kern.js` (148 Lernziel-IDs `<fach>.<bereich>.<nr>`, Deutsch mit fünf KMK-2022-Bereichen
   `de.sz/sc/le/tm/su`), `shared/lehrplan/laender/sachsen.js` (49 Lernbereiche mit `lz`), `shared/inhalte.js` (Inhalte-Verzeichnis, errechnete
@@ -106,8 +106,8 @@ Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `in
 Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
 Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
 beiden Looks oder im Plan als offen vermerken.
-1. **NA-33 Mathe Kl. 3, Schritt b** (M): Schritt a ist fertig (Weg „3. Klasse“ mit 9 Stationen in `Mathe.STATIONEN_K3`). Offen: schriftliche
-   Addition/Subtraktion mit Stellenwerttafel, Geld-Sachaufgaben, Würfelnetze/Symmetrie, Diagramme und
+1. **NA-33 Mathe Kl. 3, Schritt b** (M): Schritt a ist fertig (Weg „3. Klasse“ mit 10 Stationen in `Mathe.STATIONEN_K3`). Offen: schriftliche
+   Addition/Subtraktion mit Stellenwerttafel, Würfelnetze/Symmetrie, Diagramme und
    Kombinationen – je Station `lz` und `stufe: "3"`, Test in `tests/mathe1.js`.
 2. Nach Rückmeldung: **NA-34 Sachunterricht** je Perspektive (Wasser, Verkehr, früher/heute, Bauen, Regeln), **NA-33 Mathe Kl. 3**, oder
    Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)

@@ -528,7 +528,12 @@
         const d = wahl([["der Weg zur Nachbarstadt", "km"], ["die Länge eines Klassenzimmers", "m"], ["die Höhe eines Hauses", "m"], ["eine Fahrt mit dem Zug", "km"], ["ein Lauf um den Sportplatz", "m"]]);
         return { text: "", frage: `Misst man ${d[0]} eher in m oder in km?`, antwort: d[1], art: "wahl", optionen: ["m", "km"], nurLuecke: true,
           hilfe: d[1] === "km" ? `${d[0]} ist sehr lang – man misst in Kilometern.` : `${d[0]} – das misst man in Metern.` };
-      } }
+      } },
+    { id: "k3geld", stufe: "3", lz: ["ma.gm.04", "ma.zo.18", "ma.pk.04"], name: "Einkaufen", icon: "🛒",
+      neu: () => { const n = wahl(NAMEN), d = wahl([["Hefte", 2], ["Stifte", 3], ["Äpfel", 1], ["Brötchen", 1], ["Bücher", 8]]), k = r(2, 6);
+        const kosten = k * d[1], schein = kosten < 20 ? wahl([20, 50]) : 50;
+        return zahl("", schein - kosten, `${k} ${d[0]} kosten ${k} · ${d[1]} € = ${kosten} €. ${schein} € ${M} ${kosten} € = ${schein - kosten} €.`,
+          { frage: `${n} kauft ${k} ${d[0]} für je ${d[1]} € und bezahlt mit ${schein} €. Wie viel Geld bekommt ${n} zurück?`, einheit: "€", nurLuecke: true }); } }
   ];
 
   function malAufgabe(reihen) {

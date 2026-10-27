@@ -1163,7 +1163,7 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
   führt jetzt nach Klasse 3): Zahlen bis 1000 (Hunderter/Zehner/Einer-Bild), Runden auf Zehner, Plus und Minus bis 1000, Gramm und Kilogramm,
   Zeitspannen. Lernziele `ma.zo.12`, `ma.zo.13`, `ma.gm.08`; Sachsen Kl. 3 „Größen und Messen“ → teil (8/15/26).
 - Doppelte Aufgaben einer Runde werden jetzt auch über die Frage erkannt (vorher bekam „Zeitspannen“ nur 5 verschiedene Aufgaben).
-- Nachtrag: drei weitere Stationen – Teilen mit Rest (`ma.zo.11`), Hälfte und Viertel (`ma.zo.14`), Meter und Kilometer – jetzt 9 Stationen.
-- **Offen (Schritt b):** schriftliche Addition/Subtraktion mit Stellenwerttafel, Geld in Sachaufgaben,
+- Nachtrag: drei weitere Stationen – Teilen mit Rest (`ma.zo.11`), Hälfte und Viertel (`ma.zo.14`), Meter und Kilometer, Einkaufen (Geld-Sachaufgaben) – jetzt 10 Stationen; Sachsen Kl. 3 „Größen und Messen“ → ja (9/14/26).
+- **Offen (Schritt b):** schriftliche Addition/Subtraktion mit Stellenwerttafel,
   Raum und Form Kl. 3 (Würfelnetze, Symmetrie), Daten (Diagramme erstellen, Kombinationen).
 
