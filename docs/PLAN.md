@@ -698,7 +698,7 @@ NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Vol
    (**Meilenstein 15.12.2026:** Prolog, E1–E3, Weihnachten – technisch erreicht am 27.10.2026, iPad-Test steht aus)
 3. **Vorgezogen (27.10.):** **NA-20** Probeszenen – Auswahl auf „Rund“ oder „Pixel“ eingegrenzt, Proben stehen, Entscheidung offen → **NA-21** Leistungs-Test (nur bei „Rund“ dringend)
 4. **NA-14** Tutorial E4–E8 → ~~**NA-12** Insel-Zugang~~ → **NA-16** QR-Geschenk → **NA-17** Kapitel 1–2 → **NA-18** Chronik
-5. ~~**NA-03** Lehrplan-Kern~~ → ~~**NA-40** Wortschatz-Kern/DaZ D0~~ → ~~**NA-30** Anlaute~~ → ~~**NA-32** Mathe Kl. 1/Vorschule~~ → ~~**NA-31** Lesen~~ → **NA-35** Schreiben
+5. ~~**NA-03** Lehrplan-Kern~~ → ~~**NA-40** Wortschatz-Kern/DaZ D0~~ → ~~**NA-30** Anlaute~~ → ~~**NA-32** Mathe Kl. 1/Vorschule~~ → ~~**NA-31** Lesen~~ → ~~**NA-35** Schreiben~~ → **NA-50** Können je Lernziel
 6. **NA-22** eine Kind-Figur → **NA-23** Neubau nach Stilwahl (abwechselnd mit 7)
 7. **NA-50** Können je Lernziel → **NA-51** Bennos Brücke → **NA-52** Paulas Fest → NA-53/54/55
 8. **NA-44** RTL → **NA-43** Ton-Aufnahmen → **NA-42** Ukrainisch (sobald Muttersprachler bereitstehen, darf es vorgezogen werden)
@@ -1095,4 +1095,22 @@ eingefroren (NA-29b, NA-29 Teil 2 warten), Reihenfolge jetzt Punkt 5: NA-03 → 
   Lesetexte vorlesen lassen. Rückmeldung: Sind die Texte für Kl. 1 kurz genug, passen Silbenfarben blau/rot zur Schule der Kinder?
 - Nächstes Inhalts-Paket: **NA-35 Schreiben** (Buchstaben nachspuren mit dem Finger, Wörter aus dem Wortschatz-Kern tippen); danach
   Phase E **NA-50 Können je Lernziel**. Grafik (NA-29b, NA-29 Teil 2) und Story (NA-16/17/18) warten weiter.
+
+### Stand 27.10.2026, Abend (Sitzung 27.10.: NA-35 fertig)
+**Fertig und gepusht**
+- **NA-35 Schreiben** in der Seite `spiele/lesen/`, die jetzt **„Lesen und Schreiben“** heißt (Kachel auf Fipsis Karte):
+  - „Buchstaben nachspuren“: Druckschrift A–Z, a–z und Ä, Ö, Ü als Strich-Daten (`inhalte/deutsch/schreiben.js`, `window.SCHRIFT`;
+    Linien, Bögen, Punkte in einem Feld mit Mittel- und Grundlinie). Je Strich ein roter Startpunkt mit Nummer und Richtungspfeil; der Finger
+    muss die Prüfpunkte der Reihe nach berühren (Toleranz großzügig, keine Bewertung der Schönheit), fertige Striche werden grün.
+    Je Runde drei Buchstaben groß und klein in Fibel-Reihenfolge (M, A, O, I, L, E, S …), „Nochmal“ und „Weiter“ jederzeit.
+  - „Wörter legen“: Bild + Vorlesen, das Wort aus Buchstaben-Steinen legen (Wortbuchstaben + 3 Ablenker; der erste Stein ist groß →
+    Nomen groß schreiben). 72 lautgetreue Bildwörter aus dem Wortschatz-Kern (ohne ie, ch, ck, tz, Doppelkonsonanten, Dehnungs-h);
+    erster Fehler → Lernkarte `schreibwort`.
+  - Lernziele `de.sc.02` (Nachspuren), `de.sc.03`, `de.sc.05` (Wörter legen) im Inhalte-Verzeichnis; Test `tests/lesen.js` spurt mit der Maus
+    entlang der Striche (auch: Malen ohne Startpunkt zählt nicht) und legt Wörter.
+
+**Offen / als Nächstes**
+- iPad 10: Nachspuren mit dem Finger ausprobieren (Toleranz, Größe, Reihenfolge), Wörter legen.
+- Später: Schreibschrift/Grundschrift je Bundesland als weitere Schrift-Daten; eigene Bilder statt Emojis.
+- Nächstes Paket laut Plan: **NA-50 Können je Lernziel** (Phase E) – oder nach Rückmeldung NA-34 Sachunterricht / Grafik / Story.
 

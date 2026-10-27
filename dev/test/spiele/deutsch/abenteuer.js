@@ -100,10 +100,10 @@
         b.addEventListener("click", () => { S.ton("tipp"); starte(i, W); });
         wk.appendChild(b);
       });
-      // Laute und Buchstaben (NA-30): eigene Seite, hier als Kachel neben der Werkstatt
+      // Lesen und Schreiben (NA-30/31/35): eigene Seite, hier als Kachel neben der Werkstatt
       const lesen = document.createElement("a");
       lesen.className = "ort"; lesen.href = "../lesen/"; lesen.id = "zu-lesen"; lesen.style.textDecoration = "none"; lesen.style.color = "inherit";
-      lesen.innerHTML = `<span class="emoji">🔤</span><span>Laute und Buchstaben</span><span class="stern-reihe"></span>`;
+      lesen.innerHTML = `<span class="emoji">🔤</span><span>Lesen und Schreiben</span><span class="stern-reihe"></span>`;
       wk.appendChild(lesen);
     }
     $("schatz-titel").textContent = anzahl === 5 ? "Die Schatzkarte ist komplett!" : `Die Schatzkarte: ${anzahl} von 5 Teilen`;

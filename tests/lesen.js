@@ -43,7 +43,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   {
     const { ctx, p } = await kind("1");
     await p.goto(BASIS + "spiele/deutsch/"); await p.waitForSelector("#zu-lesen");
-    erwarte(true, "Fipsis Karte hat die Kachel „Laute und Buchstaben“");
+    erwarte(true, "Fipsis Karte hat die Kachel „Lesen und Schreiben“");
     await p.click("#zu-lesen"); await p.waitForURL(/spiele\/lesen\//); await p.waitForFunction(() => !!window.__lesen);
     await bild(p, "lesen-start");
 

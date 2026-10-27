@@ -32,14 +32,14 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 ## 1. Zuerst lesen
 1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
    Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Nachmittag“**: Inhalte zuerst,
-   NA-03, NA-40, NA-30, NA-32, NA-31). Ältere Abschnitte sind Historie.
+   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Abend“**: Inhalte zuerst,
+   NA-03, NA-40, NA-30, NA-32, NA-31, NA-35). Ältere Abschnitte sind Historie.
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
    `docs/MINISPIELE.md`.
 4. `README.md` (Aufbau des Repos, Liste der Dateien in `shared/`).
 
-## 2. Stand (27.10.2026, Nachmittag)
+## 2. Stand (27.10.2026, Abend)
 **Früher fertig** (Einzelheiten in PLAN.md unter „Neuausrichtung 26.10.2026“): NA-01 Ereignisse/Story, NA-02 Profil, NA-10 Szenen + Zeigehand,
 NA-11 Prolog „Ankunft“ (E1), NA-12 Insel-Zugang, NA-13 Sonnenuhr/„Erst lernen“/Erste Frucht mit Nebel, NA-14 Tutorial E4–E8, NA-15
 Weihnachts-Sonderstart, NA-21 Leistungs-Test, NA-24 Welt-Kern `shared/insel-kern.js`, NA-25–28 Pixel-Look (Insel, Umschalter, Figuren, Zimmer),
@@ -52,7 +52,7 @@ NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
   `/dev` bleibt als zweiter Spielstand. Ausnahme bleibt: ungeprüfte Übersetzungen (`entwurf`) erscheinen nur in /dev.
 - **„Lieber Inhalte zuerst“** – Inhalte Priorität 1 (Phase D) vor Grafik und Story.
 
-**In der letzten Sitzung fertig und gepusht** (PLAN.md → „Stand 27.10.2026, Mittag“ und „… Nachmittag“):
+**In der letzten Sitzung fertig und gepusht** (PLAN.md → „Stand 27.10.2026, Mittag“, „… Nachmittag“, „… Abend“):
 - **Pixel auf der Hauptseite wählbar** (`Spielwelt.lookWaehlbar()` = immer wahr, `tests/look.js` umgestellt).
 - **NA-03 Lehrplan-Kern:** `shared/lehrplan/kern.js` (148 Lernziel-IDs `<fach>.<bereich>.<nr>`, Deutsch mit fünf KMK-2022-Bereichen
   `de.sz/sc/le/tm/su`), `shared/lehrplan/laender/sachsen.js` (49 Lernbereiche mit `lz`), `shared/inhalte.js` (Inhalte-Verzeichnis, errechnete
@@ -63,6 +63,8 @@ NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
 - **NA-30 Laute und Buchstaben** und **NA-31 Silben lesen + 20 Lesetexte:** Seite `spiele/lesen/` (Kachel auf Fipsis Karte) mit
   Buchstaben-Tafel, „Gleicher Anfang“, „Finde das Bild“, „Welcher Buchstabe?“, „Silben lesen“ (Silbenbögen blau/rot) und Lesetexten
   (`inhalte/deutsch/anlaute.js`, `inhalte/deutsch/lesetexte.js`); Lernkartei-Fach `lesen`.
+- **NA-35 Schreiben** (ebenfalls `spiele/lesen/`, jetzt „Lesen und Schreiben“): Buchstaben mit dem Finger nachspuren (Strich-Daten
+  `inhalte/deutsch/schreiben.js`, Startpunkt + Richtung, Prüfpunkte) und lautgetreue Bildwörter aus Buchstaben-Steinen legen.
 - **NA-32 Matheweg Klasse 1 und Vorschule:** zweiter Weg mit Umschalter (Würfelbilder, Mengen, Zwanzigerfeld, Muster, Zerlegen, Plus/Minus bis
   10, Verdoppeln), `Mathe.STATIONEN_K1`, Fortschritt `mathe.k1`.
 - Tests neu: `tests/lehrplan.js`, `tests/wortschatz.js` (Node, im Gesamtlauf), `tests/daz.js`, `tests/lesen.js`, `tests/mathe1.js`.
@@ -79,7 +81,7 @@ Kl. 1 und Vorschule), Matheweg Klasse 1, Lesetexte, Pixel-Look; Geschenke zu Wei
 
 ## 3. Ablauf dieser Sitzung
 1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug, sonst als kurze Liste), bevor du baust. Kläre mindestens:
-   - Rückmeldung vom iPad 10 und Handy (Hauptseite, mit neuem Kind): „Ankommen“, „Laute und Buchstaben“, Lesetexte, Matheweg Klasse 1,
+   - Rückmeldung vom iPad 10 und Handy (Hauptseite, mit neuem Kind): „Ankommen“, „Lesen und Schreiben“ (Nachspuren!), Lesetexte, Matheweg Klasse 1,
      Pixel-Look, Einführung E4–E8. Fehler zuerst beheben.
    - Gilt „Inhalte zuerst“ weiter (nächstes Paket laut Abschnitt 4), oder soll Grafik/Story (NA-29b, NA-16/17/18) vorgezogen werden?
    - Welche Geschenke soll es per QR-Code zu Weihnachten 2026 geben (für NA-16)? Gibt es Muttersprachlerinnen zum Gegenlesen (ru, uk)?
@@ -100,12 +102,9 @@ Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `in
 Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
 Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
 beiden Looks oder im Plan als offen vermerken.
-1. **NA-35 Schreiben: Wörter nachspuren und tippen** (M): Buchstaben in Druckschrift mit dem Finger nachspuren (Startpunkt, Pfeile, Toleranz,
-   ohne Bewertung der Schönheit), Wörter aus dem Wortschatz-Kern mit Bild tippen (Buchstaben-Tastatur, nur die nötigen Buchstaben + Ablenker);
-   Lernziele `de.sc.02`, `de.sc.03`; am besten als weitere Wege in `spiele/lesen/` oder eigene Seite `spiele/schreiben/`.
-2. **NA-50 Können je Lernziel und nächste Aufgabe** (M, Phase E): Stand 0–4 je Lernziel-ID im Profil (kompakt), Auswahl der nächsten Aufgabe
+1. **NA-50 Können je Lernziel und nächste Aufgabe** (M, Phase E): Stand 0–4 je Lernziel-ID im Profil (kompakt), Auswahl der nächsten Aufgabe
    (Ziel 70–85 % Treffer), leichter nach zwei Fehlern; zuerst im Matheweg. Node-Simulationstest.
-3. Danach nach Rückmeldung: **NA-34 Sachunterricht** je Perspektive (Wasser, Verkehr, früher/heute, Bauen, Regeln), **NA-33 Mathe Kl. 3**, oder
+2. Danach nach Rückmeldung: **NA-34 Sachunterricht** je Perspektive (Wasser, Verkehr, früher/heute, Bauen, Regeln), **NA-33 Mathe Kl. 3**, oder
    Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)
    → **NA-17** Kapitel 1–2 → **NA-18** Chronik im Album.
 
@@ -128,7 +127,8 @@ beiden Looks oder im Plan als offen vermerken.
 - Wortschatz: `Wortschatz.wort("w.apfel")` (de, artikel, mehrzahl, silben[], bild, themen, wortart, daz, ru/uk + status), `Wortschatz.feld("essen")`,
   `Wortschatz.daz("d0")`, `Wortschatz.saetze("d0")`, `Wortschatz.hilfe(eintrag)` (Hilfetext nur wenn erlaubt), `Wortschatz.ARTIKEL` (Farbe + Form).
   Einbinden: `inhalte/woerter/*.js` vor `shared/woerter.js`. DaZ-Fortschritt: `DaZ.merke("wort"|"satz", id)`, `DaZ.stand()`, `DaZ.d0Fertig()`.
-- Lesen: `window.ANLAUTE` (Anlaut-Tabelle), `window.LESETEXTE` (Texte in Sprechsilben „Ba-na-ne“), Lernkartei-Fach `lesen` (Schritte `anlaut`, `silbenwort`);
+- Lesen/Schreiben: `window.ANLAUTE` (Anlaut-Tabelle), `window.LESETEXTE` (Texte in Sprechsilben „Ba-na-ne“), `window.SCHRIFT` (Strich-Daten),
+  Lernkartei-Fach `lesen` (Schritte `anlaut`, `silbenwort`, `schreibwort`);
   Matheweg: `Mathe.STATIONEN` (Kl. 2, Fortschritt `mathe.k2`) und `Mathe.STATIONEN_K1` (Kl. 1/Vorschule, `mathe.k1`), Weg-Wahl in `mathe.weg`.
 - Pixel-Grafik: Zeichnung in `quellen/pixel/dinge.js` (Pixelpuffer mit `kugel/zylinder/vieleck/fuelle/rect`, nur Farben aus `PAL`), in
   `quellen/pixel/insel.js` vor `packe()` mit `merke()` in den Atlas, dann `new Sprite(e.tex)`; Dinge auf den Boden mit `stelle(e, x, z)`,
@@ -167,7 +167,7 @@ beiden Looks oder im Plan als offen vermerken.
 - `sh tests/laufen.sh` = Node-Tests `story-migration`, `inselkern`, `lehrplan`, `wortschatz` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte), `mathe1` (Matheweg Klasse 1), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Klasse 1), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.
