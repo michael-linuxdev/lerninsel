@@ -27,7 +27,7 @@ const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-
   }
   const kacheln = (p) => p.evaluate(() => [...document.querySelectorAll("#werkstatt button.ort")].map(b => b.getAttribute("aria-label")));
   // Sichtbarkeit je Klasse
-  for (const [stufe, anzahl] of [["1", 8], ["2", 27], ["3", 34]]) {
+  for (const [stufe, anzahl] of [["1", 32], ["2", 71], ["3", 86]]) {
     const { ctx, p } = await kind(stufe, 1180, 820);
     const k = await kacheln(p);
     erwarte(k.length === anzahl, `Klasse ${stufe}: ${anzahl} Werkstatt-Kapitel sichtbar (${k.length})`);

@@ -38,7 +38,13 @@
   @media (max-width: 760px) { .orte { grid-template-columns: repeat(3, 1fr); } }
   .werk-titel { text-align: center; margin: 26px 0 4px; font-size: 1.8rem; }
   .werk-text { text-align: center; margin: 0 16px; font-size: 1.1rem; }
-  .orte.werkstatt { padding-bottom: 40px; }
+  .werkstatt { padding-bottom: 40px; }
+  .werk-gruppe { max-width: 1100px; margin: 0 auto; }
+  .werk-gruppe h3 { margin: 22px 16px 0; font-size: 1.4rem; }
+  .werk-gruppe .orte { padding-top: 12px; }
+  .frueher { margin: 0 16px; }
+  .frueher summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; padding: 10px 14px; background: #fff; border-radius: 16px; display: inline-block; box-shadow: 0 4px 0 rgba(0,0,0,.06); }
+  .frueher .orte { padding-left: 0; padding-right: 0; }
   .klatsch { min-height: 60px; font-size: 1.5rem; padding: 0 26px; margin-bottom: 8px; }
   .silbe { background: #FFE08A; border-radius: 10px; padding: 0 6px; }
   .trenn { color: var(--pflaume-hell); margin: 0 4px; }
@@ -158,6 +164,12 @@
   .pruefen { min-height: 64px; font-size: 1.4rem; padding: 0 34px; }
   .hoeren-knopf { width: 140px; height: 140px; border-radius: 50%; font-size: 4rem; background: var(--grund); box-shadow: 0 8px 0 rgba(0,0,0,.12); }
   .hoeren-knopf:active { transform: translateY(4px); }
+  /* Schuljahr Deutsch: Hörtext und Blitzlesen */
+  .hoertext { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; }
+  .hoertext .hoeren-knopf { width: 110px; height: 110px; font-size: 3.2rem; }
+  .hoertext-text { background: #FFFBEF; border-radius: 18px; padding: 12px 18px; box-shadow: inset 0 0 0 3px #F3E3B5; font-size: 1.25rem; line-height: 1.4; max-width: 620px; text-align: left; margin: 0; }
+  .blitz-feld { min-height: 110px; display: grid; place-items: center; }
+  .blitz-wort { font-size: clamp(2.6rem, 8vw, 4.2rem); font-weight: 700; background: #fff; border-radius: 20px; padding: 6px 28px; box-shadow: 0 6px 0 rgba(0,0,0,.08); visibility: hidden; }
   .weiter { min-height: 76px; font-size: 1.6rem; padding: 0 44px; background: var(--pflaume); color: #fff; }
   .hinweis { margin: 0; font-size: 1.3rem; font-weight: 600; min-height: 1.5em; }
   .hinweis.gut { color: #1F8A63; }
@@ -211,8 +223,8 @@
   <div class="orte" id="orte"></div>
   <div class="schatz"><h2 id="schatz-titel">Die Schatzkarte</h2><div id="schatz"></div></div>
   <h2 class="werk-titel">🛠️ Fipsis Wörter-Werkstatt</h2>
-  <p class="werk-text">Hier übst du Tunwörter, Wiewörter, Silben, schwierige Buchstaben, Reime und eigene Texte – so oft du willst.</p>
-  <div class="orte werkstatt" id="werkstatt"></div>
+  <p class="werk-text">Alles aus dem Deutschunterricht – sortiert wie in der Schule. Üb, so oft du willst!</p>
+  <div class="werkstatt" id="werkstatt"></div>
 </section>
 
 <section class="ansicht" id="kapitel-ansicht" hidden>

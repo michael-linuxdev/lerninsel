@@ -169,7 +169,10 @@
       // Sterne aus allen Mathewegen (Kl. 1–4, Übergang 5) zählen, nicht nur aus Kl. 2
       const st = app.filter(a => a.startsWith("mathe:")).map(a => a.slice(6)), geschafft = (id) => ["k1", "k2", "k3", "k4", "k5"].some(w => (mathe[w] || {})[id]);
       const en = app.filter(a => a.startsWith("englisch:")).map(a => a.slice(9)), enD = (S.lade("englisch") || {}).lektionen || {};
+      // Schuljahr Deutsch: Werkstatt-Kapitel des Lernbereichs (aus den Inhaltspunkten), geschafft = mindestens ein Stern
+      const wk = [...new Set(app.filter(a => a.startsWith("werkstatt:")).map(a => a.slice(10)))], wkD = (S.lade("deutsch") || {}).kapitel || {};
       return (st.length ? ` · Matheweg: ${st.filter(geschafft).length} von ${st.length} Stationen geschafft` : "") +
+        (wk.length ? ` · Werkstatt: <span class="lp-werkstatt">${wk.filter(id => wkD[id]).length} von ${wk.length}</span> Kapiteln geschafft` : "") +
         (en.length ? ` · Englisch: ${en.filter(id => enD[id]).length} von ${en.length} Lektionen geschafft` : "");
     };
     let n = { ja: 0, teil: 0, nein: 0 };
@@ -177,7 +180,7 @@
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
       return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span></h3><ul class="lp-liste">${lb.map(x =>
-        `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app)}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${punkteHtml(x.punkte)}${koennenZeile(x.lz)}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
+        `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app.filter(a => !a.startsWith("werkstatt:")).concat((x.punkte || []).flatMap(p => p.app).filter(a => a.startsWith("werkstatt:"))))}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${punkteHtml(x.punkte)}${koennenZeile(x.lz)}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
     }).join("");
     return `<div class="karte">
       <h2>📘 Was übt die App? (Lehrplan ${lname}, ${k.klasse}. Klasse)</h2>

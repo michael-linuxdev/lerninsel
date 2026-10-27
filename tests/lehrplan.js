@@ -53,10 +53,10 @@ pruefe("Sachsen: alle 45 Lernbereiche (Mathe, Deutsch 2025, Sachunterricht) habe
   assert.deepStrictEqual(leer, ["sachkunde 3 Experimentieren"]);
 });
 
-pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand 9 / 15 / 25, Stand NA-33a)", () => {
+pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand; Stand Schuljahr Deutsch 28.10.2026: 31 gut, 14 teilweise)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 25, teil: 20, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 31, teil: 14, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
@@ -97,6 +97,42 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder I
   assert.deepStrictEqual(u, { ja: 13, teil: 1, nein: 0, aussen: 1 });
 });
 
+pruefe("Sachsen in voller Tiefe: Deutsch Kl. 1/2, 3 und 4 – jeder Inhaltspunkt zugeordnet, Zuordnungen zeigen auf echte Kapitel, LB-Abdeckung passt zu den Punkten", () => {
+  const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
+  const LESEN = ["anlaute", "silben", "texte", "spuren", "legen", "tafel"];
+  const gibt = (a) => { const [art, id] = a.split(":");
+    if (art === "werkstatt") return w.WERKSTATT.some(k => k.id === id);
+    if (art === "deutsch") return w.GESCHICHTE.some(k => k.id === id);
+    if (art === "lesen") return LESEN.includes(id);
+    if (art === "medien") return w.LEKTIONEN.some(k => k.id === id);
+    if (art === "sachkunde") return w.THEMEN.some(k => k.id === id);
+    if (art === "echtewelt") return echt.includes(`["${id}", `);
+    return false; };
+  const ids = new Set(), soll = { "1/2": [69, { ja: 63, teil: 2, nein: 0, aussen: 4 }], "3": [63, { ja: 59, teil: 3, nein: 0, aussen: 1 }], "4": [47, { ja: 44, teil: 2, nein: 0, aussen: 1 }] };
+  const kl = { "1/2": ["1", "2", "1/2"], "3": ["3"], "4": ["4"] };
+  Object.entries(soll).forEach(([st, [zahl, verteilung]]) => {
+    const n = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
+    L.laender.sachsen.faecher.deutsch.stufen[st].forEach(lb => {
+      assert.ok(lb.punkte && lb.punkte.length >= 4, `Deutsch ${st} ${lb.titel}: Punkte fehlen`);
+      lb.punkte.forEach(p => {
+        z++; n[p.abdeckung]++;
+        assert.ok(!ids.has(p.id), "doppelt " + p.id); ids.add(p.id);
+        assert.ok(kl[st].includes(p.kl) && p.text.length < 140, p.id);
+        p.app.forEach(a => assert.ok(gibt(a), `${p.id}: Zuordnung ${a} gibt es nicht`));
+        if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(werkstatt|deutsch|lesen|medien):/.test(a)), p.id + " ist „ja“ ohne Übung");
+      });
+      // LB „ja“ genau dann, wenn kein Punkt „teil“ oder „nein“ ist (draußen/Papier zählt nicht dagegen)
+      const offen = lb.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein");
+      assert.strictEqual(lb.abdeckung, offen ? "teil" : "ja", `Deutsch ${st} ${lb.titel}: Abdeckung passt nicht zu den Punkten`);
+    });
+    assert.strictEqual(z, zahl, "Deutsch Kl. " + st); assert.deepStrictEqual(n, verteilung, "Deutsch Kl. " + st);
+  });
+  // Jedes Werkstatt-Kapitel gehört zu einem Lernbereich und kommt in mindestens einem Inhaltspunkt vor
+  const benutzt = new Set(); Object.values(L.laender.sachsen.faecher.deutsch.stufen).forEach(lbs => lbs.forEach(lb => lb.punkte.forEach(p => p.app.forEach(a => benutzt.add(a)))));
+  w.WERKSTATT.forEach(k => { assert.ok(["sz", "sc", "le", "tm", "su"].includes(k.lb), k.id + ": lb fehlt");
+    if (k.id !== "w-rechengeschichten" && k.stufe !== 5) assert.ok(benutzt.has("werkstatt:" + k.id), k.id + " kommt in keinem Inhaltspunkt vor"); });
+});
+
 pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziele", () => {
   const leer = [];
   w.Mathe.STATIONEN.forEach(s => (s.lz && s.lz.length) || leer.push("mathe:" + s.id));
@@ -106,16 +142,16 @@ pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziel
   assert.ok(I.alle().length >= 23 + 5 + 5 + 4 + 6 + 5, "Inhalte: " + I.alle().length);
 });
 
-pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten gut, Anlaute gut, Lesetexte und Nachspuren teilweise, Texte planen teilweise", () => {
+pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten gut, Anlaute gut, Lesetexte und Texte planen gut, Nachspuren teilweise", () => {
   assert.strictEqual(I.abdeckung("ma.zo.07"), "ja");    // vier Stationen
   assert.strictEqual(I.abdeckung("de.su.04"), "ja");    // NA-36: mit Steigerung und Pronomen genug Aufgaben
   assert.strictEqual(I.abdeckung("ma.zo.03"), "ja");    // Plus/Minus bis 20 und bis 10 (Klasse-1-Weg)
   assert.strictEqual(I.abdeckung("ma.zo.05"), "ja");    // Zehner und Einer, Zahlen bis 100, Bild/Zahl/Rechnung (Sachsen in voller Tiefe)
   assert.strictEqual(I.abdeckung("me.ph.01"), "teil");  // ohne Lernkartei
   assert.strictEqual(I.abdeckung("de.le.02"), "ja");    // NA-30: Tafel, Finde das Bild, Welcher Buchstabe (mit Lernkartei)
-  assert.strictEqual(I.abdeckung("de.le.05"), "teil");   // NA-31: Lesetexte Kl. 2 (ohne Lernkartei)
+  assert.strictEqual(I.abdeckung("de.le.05"), "ja");     // Schuljahr Deutsch: Lesetexte, Laut lesen, Lese-Detektiv
   assert.strictEqual(I.abdeckung("de.sc.02"), "teil");   // NA-35: Nachspuren (ohne Lernkartei)
-  assert.strictEqual(I.abdeckung("de.sc.07"), "teil");   // Paket A: Geschichte ordnen, Satzanfänge (ohne Lernkartei)
+  assert.strictEqual(I.abdeckung("de.sc.07"), "ja");     // Schuljahr Deutsch: Geschichte ordnen, Satzanfänge, Überarbeiten, Textlupe, Weiterschreiben …
   assert.strictEqual(I.abdeckung("de.sz.07"), "teil");   // Paket A: Vortrag vorbereiten
   const z = L.zaehle("sachsen", 2).errechnet;
   assert.strictEqual(z.ja + z.teil + z.nein, 15, "Kl. 1/2: 15 Lernbereiche (Deutsch 2025: fünf statt sieben)");
@@ -127,7 +163,7 @@ pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Lernbereiche je Klasse, K
   [3, 4].forEach(k => { const lb = L.fuer("sachsen", "englisch", k); assert.strictEqual(lb.length, 10); lb.forEach(x => { n[x.abdeckung]++; x.lz.forEach(id => assert.ok(K.ziel(id), id)); }); });
   assert.deepStrictEqual({ ...n }, { ja: 2, teil: 14, nein: 4 });
   assert.strictEqual(L.fuer("sachsen", "englisch", 2).length, 0);
-  assert.strictEqual(L.laender.sachsen.faecher.deutsch.stand, "Lehrplan 2025, gültig ab 1.8.2025");
+  assert.ok(L.laender.sachsen.faecher.deutsch.stand.startsWith("Lehrplan 2025, gültig ab 1.8.2025"));
 });
 
 pruefe("Länder-Abweichung: Sachsen verschiebt einfache Kombinationen nach Kl. 2 und kennt ein Zusatz-Ziel", () => {
@@ -148,7 +184,7 @@ pruefe("Inhalte.fuer(kind): passende Stufe oder eine darunter, Vorschule nur Vor
   I.registriere({ id: "test:nurby", lz: ["de.sc.07"], stufe: ["1"], laender: ["by"] });
   assert.ok(ids({ stufe: "1", land: "by" }).includes("test:nurby"));
   assert.ok(!ids({ stufe: "1", land: "sn" }).includes("test:nurby"));
-  assert.strictEqual(I.abdeckung("de.sc.07"), "teil");
+  assert.strictEqual(I.abdeckung("de.sc.07"), "ja");
 });
 
 // Übersicht: Lernziele ohne Inhalt (Abnahme NA-03: „tests/lehrplan.js listet Lernziele ohne Inhalt“)

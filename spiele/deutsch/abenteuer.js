@@ -8,6 +8,7 @@
   const mitName = (t) => (t || "").replace(/\{name\}/g, name());
 
   // ---------- Einstellungen und Fortschritt ----------
+  const WERK_LB = [["sz", "🗣️ Sprechen und Zuhören"], ["sc", "✏️ Schreiben"], ["le", "📖 Lesen"], ["tm", "📚 Texte und Medien"], ["su", "🔍 Sprache untersuchen"]];
   function daten() { const d = Object.assign({ kapitel: {}, vorlesen: true, ru: true }, S.lade("deutsch") || {}); if (!S.hilfeRu()) d.ru = false; return d; }
   function setze(feld, wert) { const d = daten(); d[feld] = wert; S.speichere("deutsch", d); }
   const bestes = (id) => daten().kapitel[id] || 0;
@@ -94,19 +95,38 @@
     if (wk) {
       wk.innerHTML = "";
       const klasse = ((S.stufe && S.stufe()) || {}).klasse || 2;
-      W.forEach((k, i) => {
-        if (k.stufe && klasse < k.stufe - 1) return; // NA-36: Kl.-3/4-Kapitel erst ab der Klasse davor
+      // Schuljahr Deutsch (28.10.2026): Kapitel nach den fünf Lernbereichen des Lehrplans gruppiert; Kapitel aus früheren
+      // Klassen (Kl. 1/2 zählt als eine Stufe) liegen eingeklappt unter „Wiederholen“ – nichts verschwindet
+      const kachel = (k, i) => {
         const best = bestes(k.id), b = document.createElement("button");
-        b.className = "ort"; b.setAttribute("aria-label", k.name);
+        b.className = "ort"; b.setAttribute("aria-label", k.name); b.dataset.id = k.id;
         b.innerHTML = `<span class="emoji">${k.ort}</span><span>${k.name}</span><span class="stern-reihe">${best ? [1, 2, 3].map(n => `<span class="${n <= best ? "" : "leer"}">⭐</span>`).join("") : ""}</span>`;
         b.addEventListener("click", () => { S.ton("tipp"); starte(i, W); });
-        wk.appendChild(b);
+        return b;
+      };
+      const stufeVon = (k) => Math.max(2, k.stufe || 2);
+      WERK_LB.forEach(([lb, titel]) => {
+        const alle = W.map((k, i) => [k, i]).filter(([k]) => (k.lb || "su") === lb && !(k.stufe && klasse < k.stufe - 1))
+          .sort((a, b) => stufeVon(a[0]) - stufeVon(b[0]) || a[1] - b[1]);
+        const frueher = alle.filter(([k]) => klasse >= 3 && stufeVon(k) < klasse), jetzt = alle.filter(x => !frueher.includes(x));
+        const g = document.createElement("section"); g.className = "werk-gruppe"; g.dataset.lb = lb;
+        g.innerHTML = `<h3>${titel}</h3><div class="orte"></div>`;
+        jetzt.forEach(([k, i]) => g.querySelector(".orte").appendChild(kachel(k, i)));
+        if (lb === "le") {
+          // Lesen und Schreiben (NA-30/31/35): eigene Seite, hier als Kachel im Lernbereich Lesen
+          const lesen = document.createElement("a");
+          lesen.className = "ort"; lesen.href = "../lesen/"; lesen.id = "zu-lesen"; lesen.style.textDecoration = "none"; lesen.style.color = "inherit";
+          lesen.innerHTML = `<span class="emoji">🔤</span><span>Lesen und Schreiben</span><span class="stern-reihe"></span>`;
+          g.querySelector(".orte").prepend(lesen);
+        }
+        if (frueher.length) {
+          const d = document.createElement("details"); d.className = "frueher";
+          d.innerHTML = `<summary>Wiederholen aus früheren Klassen (${frueher.length})</summary><div class="orte"></div>`;
+          frueher.forEach(([k, i]) => d.querySelector(".orte").appendChild(kachel(k, i)));
+          g.appendChild(d);
+        }
+        wk.appendChild(g);
       });
-      // Lesen und Schreiben (NA-30/31/35): eigene Seite, hier als Kachel neben der Werkstatt
-      const lesen = document.createElement("a");
-      lesen.className = "ort"; lesen.href = "../lesen/"; lesen.id = "zu-lesen"; lesen.style.textDecoration = "none"; lesen.style.color = "inherit";
-      lesen.innerHTML = `<span class="emoji">🔤</span><span>Lesen und Schreiben</span><span class="stern-reihe"></span>`;
-      wk.appendChild(lesen);
     }
     $("schatz-titel").textContent = anzahl === 5 ? "Die Schatzkarte ist komplett!" : `Die Schatzkarte: ${anzahl} von 5 Teilen`;
     $("schatz").innerHTML = schatzkarte(gefunden);
@@ -193,6 +213,34 @@
           antwort(b, o.richtig, () => {
             A.querySelectorAll(".option").forEach((x, n) => x.querySelector(".name").textContent = opts[n].t);
             return hoeren ? s.sag : o.t;
+          });
+        }));
+        break;
+      }
+      case "hoertext": case "blitz": {
+        // Schuljahr Deutsch: hoertext = längerer Text (Durchsage, kleine Geschichte) wird vorgelesen, dann eine Frage dazu
+        // (ohne Stimme steht der Text zum Lesen da); blitz = ein Wort blitzt kurz auf, dann wählt das Kind, welches es war (Blitzlesen)
+        const opts = mische(s.optionen.map((t, idx) => ({ t, richtig: idx === 0 })));
+        const stimme = SP.verfuegbar() && daten().vorlesen && SP.hat("de-DE"), blitz = s.typ === "blitz";
+        const frage = blitz ? (s.frage || "Schau genau hin! Welches Wort hast du gesehen?") : s.frage;
+        // Hörtext mit Stimme: erst den Text vorlesen, danach die Frage (ohne Stimme liest das Kind beides)
+        if (!blitz && stimme) { blase(frage, "", S.ht(s)); const jetzt = lauf; setTimeout(() => { if (lauf === jetzt) SP.sprich(s.text, "de-DE", () => { if (lauf === jetzt) sprich(frage); }); }, 400); }
+        else blase(frage, frage, S.ht(s));
+        const oben = blitz ? `<div class="blitz-feld"><span class="blitz-wort" id="blitz-wort">${s.wort}</span></div><button class="klein-knopf" id="blitz-nochmal">⚡ Noch einmal blitzen</button>`
+          : `<div class="hoertext">${s.e ? `<span class="gross-emoji klein" aria-hidden="true">${s.e}</span>` : ""}` +
+            (stimme ? `<button class="hoeren-knopf" id="hoeren" aria-label="Anhören">🔊</button><p class="hoertext-text" id="hoertext-text" hidden>${s.text}</p>` : `<p class="hoertext-text">${s.text}</p>`) + `</div>`;
+        A.innerHTML = oben + `<div class="optionen texte">` + opts.map((o, n) => `<button class="option" data-n="${n}">${o.t}</button>`).join("") + `</div>` + hinweis;
+        if (blitz) {
+          const w = $("blitz-wort"), zeigeKurz = () => { w.style.visibility = "visible"; setTimeout(() => { w.style.visibility = "hidden"; }, s.ms || 900); };
+          setTimeout(zeigeKurz, 700); $("blitz-nochmal").addEventListener("click", () => { S.ton("tipp"); zeigeKurz(); });
+        }
+        if ($("hoeren")) $("hoeren").addEventListener("click", () => SP.sprich(s.text, "de-DE"));
+        A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
+          const o = opts[+b.dataset.n];
+          antwort(b, o.richtig, () => {
+            if (blitz) $("blitz-wort").style.visibility = "visible";
+            else if ($("hoertext-text")) $("hoertext-text").hidden = false;
+            return blitz ? s.wort : s.optionen[0];
           });
         }));
         break;
@@ -402,7 +450,8 @@
       { id: "zeichen", ok: /[.!?][“"»«]?$/.test(t), text: "Am Ende steht . ! oder ?" }
     ];
     (s.pflicht || []).forEach(w => punkte.push({ id: "w:" + w, ok: t.toLowerCase().includes(w.toLowerCase()), text: `Das Wort „${w}“ kommt vor` }));
-    return punkte;
+    // Schuljahr Deutsch: Listen und Gedichtformen (Einkaufszettel, Elfchen) brauchen keine Sätze mit Satzzeichen
+    return s.liste ? punkte.filter(p => !["saetze", "gross", "zeichen"].includes(p.id)) : punkte;
   }
   const TIPP = { laenge: "Schreib noch ein bisschen mehr.", saetze: "Schreib noch einen Satz dazu.", gross: "Schau mal: Fängt jeder Satz mit einem großen Buchstaben an?",
     zeichen: "Am Satzende fehlt noch ein Punkt, ein Fragezeichen oder ein Ausrufezeichen." };
@@ -553,7 +602,7 @@
       }
       setTimeout(() => sprich(satz), 350);
       const dieser = lauf, an = lauf.pos; // nur weiterblättern, wenn noch derselbe Schritt offen ist
-      setTimeout(() => { if (lauf !== dieser || lauf.pos !== an) return; lauf.gesperrt = false; weiter(); }, 2300);
+      setTimeout(() => { if (lauf !== dieser || lauf.pos !== an) return; lauf.gesperrt = false; weiter(); }, window.__testSchnell ? 150 : 2300);   // Test-Haken __testSchnell: kurze Pause, damit Tests viele Kapitel echt durchspielen können
       return;
     }
     lauf.versuche++;
