@@ -4,7 +4,7 @@ const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;
-const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-kurz-lang"];
+const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-kurz-lang", "w-ableiten", "w-dehnung", "w-rede", "w-textsorten", "w-lesen-igel", "w-lesen-vergleich"];
 
 (async () => {
   const browser = await chromium.launch();
@@ -25,7 +25,7 @@ const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-
   }
   const kacheln = (p) => p.evaluate(() => [...document.querySelectorAll("#werkstatt button.ort")].map(b => b.getAttribute("aria-label")));
   // Sichtbarkeit je Klasse
-  for (const [stufe, anzahl] of [["1", 5], ["2", 8], ["3", 10]]) {
+  for (const [stufe, anzahl] of [["1", 5], ["2", 13], ["3", 16]]) {
     const { ctx, p } = await kind(stufe, 1180, 820);
     const k = await kacheln(p);
     erwarte(k.length === anzahl, `Klasse ${stufe}: ${anzahl} Werkstatt-Kapitel sichtbar (${k.length})`);
@@ -36,7 +36,7 @@ const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-
     const idx = await p.evaluate((neu) => neu.map(id => WERKSTATT.findIndex(k => k.id === id)), NEU);
     if (art === "quer") {
       const lz = await p.evaluate((neu) => WERKSTATT.filter(k => neu.includes(k.id)).every(k => k.lz.length && k.stufe && k.schritte.every(s => s.ru)), NEU);
-      erwarte(idx.every(i => i >= 0) && lz, "fünf neue Kapitel mit Lernziel, Klasse und russischem Entwurf");
+      erwarte(idx.every(i => i >= 0) && lz, "neue Kapitel mit Lernziel, Klasse und russischem Entwurf");
     }
     for (let n = 0; n < NEU.length; n++) {
       await p.evaluate((i) => __deutsch.starte(i, WERKSTATT), idx[n]); await p.waitForTimeout(200);

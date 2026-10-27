@@ -53,7 +53,7 @@ NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
   alle anderen Sprachen (Ukrainisch …) erst später bzw. nur in /dev.
 - **„Lieber Inhalte zuerst“** – Inhalte Priorität 1 (Phase D) vor Grafik und Story.
 
-**In den letzten Sitzungen fertig und gepusht** (zuletzt **NA-36 Teil 1**: fünf Werkstatt-Kapitel Kl. 3–4 – Präteritum, Perfekt/Futur, Subjekt/Prädikat, Satzzeichen, ck/tz/ss/ß; davor **NA-34 Teil 3+4**: acht Sachthemen Kl. 3–4 – Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer, Fahrrad, Kinderrechte und Geld, Gemeinde (jetzt 18 Themen); Eltern-Wahl des Subtraktionsverfahrens; davor **NA-33 Schritt b**: Matheweg „3. Klasse“ jetzt 17 Stationen mit schriftlich plus/minus, Würfelnetzen, Spiegeln, Diagrammen; davor NA-34 Sachthemen, NA-33a; PLAN.md → „Stand 27.10.2026, Abend (NA-33 … Schritt b)“ „… Spätnachmittag“ und „… Abend (NA-34 Teil 4)“, „… später Abend (NA-36 …)“):
+**In den letzten Sitzungen fertig und gepusht** (zuletzt **NA-36 Teil 1+2**: elf Werkstatt-Kapitel Kl. 3–4 – Präteritum, Perfekt/Futur, Subjekt/Prädikat, Satzzeichen, ck/tz/ss/ß, Ableiten ä/äu, Dehnungs-h, wörtliche Rede, Textsorten, zwei Sachtexte mit Fragen; davor **NA-34 Teil 3+4**: acht Sachthemen Kl. 3–4 – Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer, Fahrrad, Kinderrechte und Geld, Gemeinde (jetzt 18 Themen); Eltern-Wahl des Subtraktionsverfahrens; davor **NA-33 Schritt b**: Matheweg „3. Klasse“ jetzt 17 Stationen mit schriftlich plus/minus, Würfelnetzen, Spiegeln, Diagrammen; davor NA-34 Sachthemen, NA-33a; PLAN.md → „Stand 27.10.2026, Abend (NA-33 … Schritt b)“ „… Spätnachmittag“ und „… Abend (NA-34 Teil 4)“, „… später Abend (NA-36 …)“, „… Nacht (NA-36 Teil 2)“):
 - **Pixel auf der Hauptseite wählbar** (`Spielwelt.lookWaehlbar()` = immer wahr, `tests/look.js` umgestellt).
 - **NA-03 Lehrplan-Kern:** `shared/lehrplan/kern.js` (148 Lernziel-IDs `<fach>.<bereich>.<nr>`, Deutsch mit fünf KMK-2022-Bereichen
   `de.sz/sc/le/tm/su`), `shared/lehrplan/laender/sachsen.js` (49 Lernbereiche mit `lz`), `shared/inhalte.js` (Inhalte-Verzeichnis, errechnete
@@ -106,10 +106,10 @@ Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `in
 Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
 Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
 beiden Looks oder im Plan als offen vermerken.
-1. **NA-36 Teil 2** (M): längere Lesetexte mit Verständnisfragen (`de.le.06`, `de.le.07`), Ableiten ä/äu und Wortfamilien, Dehnungs-h,
-   wörtliche Rede, Märchen/Fabel/Gedicht (`de.tm.04`) – Werkstatt-Kapitel mit `stufe` und `lz` in `spiele/deutsch/werkstatt.js`
-   (vorhandene Schritt-Typen), Lesetexte ggf. in `inhalte/deutsch/lesetexte.js`; `tests/deutsch34.js` (Liste `NEU`, Kachelzahlen) und
-   `tests/lehrplan.js` nachziehen. Vorher Rückmeldung zum iPad-Test abfragen. Grafik/3D nicht ohne Rückfrage anfassen.
+1. **NA-36 Teil 3** (M): Steigerung von Adjektiven, Personalpronomen, Komma bei Aufzählung, Vor-/Nachsilben, Satzglieder umstellen
+   – Werkstatt-Kapitel mit `stufe` und `lz` in `spiele/deutsch/werkstatt.js` (Schritt-Typen luecke/satz/sag); Schreiben/Überarbeiten (`de.sc.07`)
+   braucht einen neuen Schritt-Typ. `tests/deutsch34.js` (Liste `NEU`, Kachelzahlen 5/13/16) und `tests/lehrplan.js` (10/25/14) nachziehen.
+   Vorher Rückmeldung zum iPad-Test abfragen. Grafik/3D nicht ohne Rückfrage anfassen.
 2. Danach: restliche Sachthemen (Korn zum Brot, Wetterkarten, Experimentieren), Rest Mathe Kl. 3 (Würfelgebäude, Flächen, Zufall, Teilbarkeit), oder
    Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)
    → **NA-17** Kapitel 1–2 → **NA-18** Chronik im Album.

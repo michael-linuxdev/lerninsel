@@ -159,5 +159,84 @@ window.WERKSTATT = [
       { typ: "luecke", e: "😘", satz: "Mama gibt mir einen Ku___.", optionen: ["ss", "ß"], ru: "Мама меня целует." },
       { typ: "sag", text: "Toll! Nach l, n, r – das merke ja – steht nie tz und nie ck: Holz, Bank, Herz.", ru: "Здорово! После l, n, r никогда не пишут tz и ck: Holz, Bank, Herz." }
     ]
+  },
+  // ---------- NA-36 Teil 2: Rechtschreiben, Textsorten, Lesen mit Fragen ----------
+  {
+    id: "w-ableiten", stufe: 3, lz: ["de.sc.04"], name: "ä oder e? äu oder eu?", ort: "🌳", farbe: "#5DB84A", grund: "#E3F5DC",
+    schritte: [
+      { typ: "sag", text: "Hallo {name}! Bei ä und äu hilft ein verwandtes Wort: Bäume kommt von Baum, Hände von Hand. Gibt es kein Wort mit a oder au, schreibst du meist e oder eu.", ru: "Привет, {name}! С ä и äu помогает родственное слово: Bäume от Baum, Hände от Hand. Если слова с a или au нет, обычно пишут e или eu." },
+      { typ: "luecke", e: "🌳", satz: "Die B___me sind hoch. (Baum)", optionen: ["äu", "eu"], ru: "Деревья высокие." },
+      { typ: "luecke", e: "🍂", satz: "Die Bl___tter fallen. (Blatt)", optionen: ["ä", "e"], ru: "Листья падают." },
+      { typ: "luecke", e: "🏠", satz: "In der Straße stehen viele H___ser. (Haus)", optionen: ["äu", "eu"], ru: "На улице много домов." },
+      { typ: "luecke", e: "👫", satz: "Viele L___te warten am Bus.", optionen: ["eu", "äu"], ru: "Много людей ждут автобус." },
+      { typ: "luecke", e: "🙌", satz: "Ich wasche meine H___nde. (Hand)", optionen: ["ä", "e"], ru: "Я мою руки." },
+      { typ: "luecke", e: "🌾", satz: "Der Bauer arbeitet auf dem F___ld.", optionen: ["e", "ä"], ru: "Фермер работает в поле." },
+      { typ: "luecke", e: "🐭", satz: "Im Keller wohnen zwei M___se. (Maus)", optionen: ["äu", "eu"], ru: "В подвале живут две мыши." },
+      { typ: "sag", text: "Toll! Frag dich immer: Gibt es ein verwandtes Wort mit a oder au? Dann schreibst du ä oder äu.", ru: "Здорово! Всегда спрашивай себя: есть ли родственное слово с a или au? Тогда пишешь ä или äu." }
+    ]
+  },
+  {
+    id: "w-dehnung", stufe: 3, lz: ["de.sc.08"], name: "Mit h oder ohne?", ort: "🐄", farbe: "#8A6E2F", grund: "#F7F0DD",
+    schritte: [
+      { typ: "sag", text: "Manchmal zeigt ein h, dass der Vokal davor lang klingt: Kuh, Zahn, fahren. Es heißt Dehnungs-h. Leider nicht immer – viele Wörter musst du dir merken.", ru: "Иногда буква h показывает, что гласный перед ней долгий: Kuh, Zahn, fahren. Это „Dehnungs-h“. Но не всегда — многие слова нужно запомнить." },
+      { typ: "luecke", e: "🐄", satz: "Die ___ gibt Milch.", optionen: ["Kuh", "Ku"], ru: "Корова даёт молоко." },
+      { typ: "luecke", e: "🦷", satz: "Mein ___ wackelt.", optionen: ["Zahn", "Zan"], ru: "Мой зуб шатается." },
+      { typ: "luecke", e: "🚲", satz: "Ich ___ mit dem Rad.", optionen: ["fahre", "fare"], ru: "Я еду на велосипеде." },
+      { typ: "luecke", e: "🏫", satz: "Die ___ beginnt um acht.", optionen: ["Schule", "Schuhle"], ru: "Школа начинается в восемь." },
+      { typ: "luecke", e: "⏰", satz: "Die ___ tickt laut.", optionen: ["Uhr", "Ur"], ru: "Часы громко тикают." },
+      { typ: "luecke", e: "🪑", satz: "Ich sitze auf dem ___.", optionen: ["Stuhl", "Stul"], ru: "Я сижу на стуле." },
+      { typ: "luecke", e: "🌙", satz: "Am Abend scheint der ___.", optionen: ["Mond", "Mohnd"], ru: "Вечером светит луна." },
+      { typ: "sag", text: "Super! Ein Dehnungs-h steht oft vor l, m, n oder r: Stuhl, nehmen, Zahn, Uhr. Schlag im Zweifel im Wörterbuch nach.", ru: "Супер! „Dehnungs-h“ часто стоит перед l, m, n или r: Stuhl, nehmen, Zahn, Uhr. Если сомневаешься — посмотри в словаре." }
+    ]
+  },
+  {
+    id: "w-rede", stufe: 3, lz: ["de.sc.08", "de.sc.05"], name: "Wörtliche Rede", ort: "💬", farbe: "#3AA0E0", grund: "#E1F3FF",
+    schritte: [
+      { typ: "sag", text: "Was jemand sagt, steht in Anführungszeichen: unten „ am Anfang, oben “ am Ende. Davor steht ein Doppelpunkt: Mia ruft: „Komm schnell!“", ru: "То, что кто-то говорит, ставят в кавычки: внизу „ в начале, вверху “ в конце. Перед этим — двоеточие: Mia ruft: „Komm schnell!“" },
+      { typ: "luecke", e: "🗣️", satz: "Mia ruft___ „Komm schnell!“", optionen: [":", ".", "?"], ru: "Мия кричит: «Иди скорее!»" },
+      { typ: "luecke", e: "⚽", satz: "Ben fragt: ___Wo ist mein Ball?“", optionen: ["„", ":", "!"], ru: "Бен спрашивает: «Где мой мяч?»" },
+      { typ: "luecke", e: "👵", satz: "Oma sagt: „Das Essen ist fertig.___", optionen: ["“", "„", ":"], ru: "Бабушка говорит: «Еда готова»." },
+      { typ: "luecke", e: "🐶", satz: "Der Junge ___: „Darf ich den Hund streicheln?“", optionen: ["fragt", "lacht", "rennt"], ru: "Мальчик спрашивает: «Можно погладить собаку?»" },
+      { typ: "satz", e: "💬", woerter: ["Lena", "sagt:", "„Ich", "habe", "Hunger.“"], ru: "Лена говорит: «Я голодна»." },
+      { typ: "sag", text: "Prima! Statt immer „sagt“ kannst du auch rufen, fragen, flüstern oder antworten schreiben.", ru: "Отлично! Вместо „sagt“ можно писать rufen, fragen, flüstern или antworten." }
+    ]
+  },
+  {
+    id: "w-textsorten", stufe: 3, lz: ["de.tm.04"], name: "Märchen, Fabel, Gedicht", ort: "📚", farbe: "#7B55B8", grund: "#EFE6FF",
+    schritte: [
+      { typ: "sag", text: "Texte haben verschiedene Sorten. Ein Märchen beginnt oft mit „Es war einmal“ und hat Zauber. In einer Fabel sprechen Tiere, und am Ende steht eine Lehre. Ein Gedicht hat Verse, Strophen und oft Reime.", ru: "Тексты бывают разные. Сказка часто начинается с „Es war einmal“ и в ней есть волшебство. В басне говорят животные, а в конце — мораль. В стихотворении есть строки, строфы и часто рифмы." },
+      { typ: "luecke", e: "👑", satz: "„Es war einmal eine Königin, die hatte einen sprechenden Spiegel.“ Das ist ein ___.", optionen: ["Märchen", "Gedicht", "Sachtext"], ru: "«Жила-была королева, у которой было говорящее зеркало». Это сказка." },
+      { typ: "luecke", e: "🦊🐦", satz: "Der Fuchs lobt den Raben, bis der Rabe den Käse fallen lässt. Lehre: Trau keinem Schmeichler. Das ist eine ___.", optionen: ["Fabel", "Märchen", "Einladung"], ru: "Лиса хвалит ворону, пока та не роняет сыр. Мораль: не верь льстецу. Это басня." },
+      { typ: "luecke", e: "🌧️", satz: "„Tropfen fallen auf das Dach, / klopfen leise, machen Krach.“ Das ist ein ___.", optionen: ["Gedicht", "Märchen", "Brief"], ru: "«Капли падают на крышу, стучат тихо, шумят.» Это стихотворение." },
+      { typ: "luecke", e: "🦔", satz: "„Igel fressen Käfer und Würmer. Im Winter halten sie Winterschlaf.“ Das ist ein ___.", optionen: ["Sachtext", "Märchen", "Gedicht"], ru: "«Ежи едят жуков и червей. Зимой они спят.» Это научно-познавательный текст." },
+      { typ: "luecke", e: "🔁", satz: "Dach und Krach klingen am Ende gleich. Das nennt man ___.", optionen: ["Reim", "Lehre", "Titel"], ru: "Dach и Krach звучат в конце одинаково. Это рифма." },
+      { typ: "luecke", e: "🐢🐇", satz: "Die Schildkröte gewinnt gegen den Hasen, weil sie nicht aufgibt. Die Lehre steht am Ende einer ___.", optionen: ["Fabel", "Einkaufsliste", "Uhr"], ru: "Черепаха побеждает зайца, потому что не сдаётся. Мораль стоит в конце басни." },
+      { typ: "sag", text: "Klasse! Ein Sachtext erklärt die echte Welt. Märchen und Fabeln sind ausgedacht.", ru: "Класс! Научный текст объясняет реальный мир. Сказки и басни — выдуманные." }
+    ]
+  },
+  {
+    id: "w-lesen-igel", stufe: 3, lz: ["de.le.06"], name: "Lesen: Der Igel", ort: "🦔", farbe: "#B5701A", grund: "#FFF1D9",
+    schritte: [
+      { typ: "sag", text: "Lies genau, {name}! Igel sind in der Nacht unterwegs. Am Tag schlafen sie unter Hecken oder in Laubhaufen. Ihr Rücken hat etwa 7000 Stacheln. Bei Gefahr rollt sich der Igel zu einer Kugel zusammen. Igel fressen Käfer, Würmer und Schnecken. Von November bis März halten sie Winterschlaf.", ru: "Читай внимательно, {name}! Ежи активны ночью. Днём они спят под кустами или в кучах листьев. На спине у них около 7000 иголок. При опасности ёж сворачивается в клубок. Ежи едят жуков, червей и улиток. С ноября по март у них зимняя спячка." },
+      { typ: "luecke", e: "🌙", satz: "Igel sind vor allem ___ unterwegs.", optionen: ["nachts", "mittags", "morgens"], ru: "Ежи активны в основном ночью." },
+      { typ: "luecke", e: "🍂", satz: "Am Tag schlafen sie unter Hecken oder in ___.", optionen: ["Laubhaufen", "Bäumen", "Teichen"], ru: "Днём они спят под кустами или в кучах листьев." },
+      { typ: "luecke", e: "🟤", satz: "Bei Gefahr rollt sich der Igel zu einer ___ zusammen.", optionen: ["Kugel", "Schlange", "Brücke"], ru: "При опасности ёж сворачивается в клубок." },
+      { typ: "luecke", e: "🐌", satz: "Was frisst ein Igel? ___", optionen: ["Käfer und Schnecken", "Nüsse und Gras", "Fische"], ru: "Что ест ёж? Жуков и улиток." },
+      { typ: "luecke", e: "❄️", satz: "Im Winter halten Igel ___.", optionen: ["Winterschlaf", "Wache", "Ausflüge"], ru: "Зимой ежи впадают в спячку." },
+      { typ: "sag", text: "Super gelesen! Tipp: Bei Sachtexten erst die Fragen lesen, dann im Text die Antwort suchen.", ru: "Отлично прочитано! Совет: в научных текстах сначала прочитай вопросы, потом ищи ответ в тексте." }
+    ]
+  },
+  {
+    id: "w-lesen-vergleich", stufe: 4, lz: ["de.le.07"], name: "Lesen: Biber und Otter", ort: "🦫", farbe: "#1F8FB8", grund: "#E2F4FB",
+    schritte: [
+      { typ: "sag", text: "Zwei Texte, {name}! Erster Text: Der Biber frisst Rinde, Blätter und Wasserpflanzen. Er fällt Bäume mit seinen Zähnen und baut Dämme. Er wird bis zu 30 Kilogramm schwer.", ru: "Два текста, {name}! Первый: бобр ест кору, листья и водные растения. Он валит деревья зубами и строит плотины. Он весит до 30 килограммов." },
+      { typ: "sag", text: "Zweiter Text: Der Fischotter frisst Fische, Frösche und Krebse. Er baut keine Dämme, sondern wohnt in Höhlen am Ufer. Er wiegt bis zu 12 Kilogramm.", ru: "Второй текст: выдра ест рыбу, лягушек и раков. Она не строит плотин, а живёт в норах на берегу. Она весит до 12 килограммов." },
+      { typ: "luecke", e: "🪵", satz: "Wer baut Dämme? Der ___.", optionen: ["Biber", "Otter", "Frosch"], ru: "Кто строит плотины? Бобр." },
+      { typ: "luecke", e: "🐟", satz: "Wer frisst Fische? Der ___.", optionen: ["Otter", "Biber", "Krebs"], ru: "Кто ест рыбу? Выдра." },
+      { typ: "luecke", e: "⚖️", satz: "Wer ist schwerer? Der ___.", optionen: ["Biber", "Otter", "Fisch"], ru: "Кто тяжелее? Бобр." },
+      { typ: "luecke", e: "➖", satz: "Um wie viele Kilogramm? 30 − 12 = ___ Kilogramm.", optionen: ["18", "12", "42"], ru: "На сколько килограммов? 30 − 12 = 18." },
+      { typ: "luecke", e: "💧", satz: "Was haben beide gemeinsam? Beide leben am ___.", optionen: ["Wasser", "Berg", "Strand im Süden"], ru: "Что у них общего? Оба живут у воды." },
+      { typ: "sag", text: "Klasse verglichen! Beim Vergleichen suchst du in beiden Texten dieselbe Sache: Futter, Wohnung, Gewicht.", ru: "Отлично сравнил! При сравнении ищи в обоих текстах одно и то же: еду, жильё, вес." }
+    ]
   }
 ];

@@ -683,7 +683,7 @@ Alle Pakete: kein Bezug zu einem echten Kind, Texte mit Sprachschlüsseln, Rauch
 Jedes Spiel: Prüffragen aus `MINISPIELE.md` Abschnitt 1, Test-Haken, Eintrag in `SEITEN_3D`, Leistungs-Test.
 
 #### Phase G – Breite (2027)
-~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1, 5 Werkstatt-Kapitel) · NA-37 Mathe Kl. 4 · NA-38 Medienbildung
+~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1+2, 11 Werkstatt-Kapitel) · NA-37 Mathe Kl. 4 · NA-38 Medienbildung
 „Produzieren/Problemlösen“ (Roboter-Weg) · NA-39 Übergang 5 · NA-41 Vorschul-Pfad · NA-46 Arabisch, Türkisch und weitere Sprachen ·
 NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Volkslied-Melodien (Noten prüfen).
 
@@ -1217,3 +1217,14 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
 - Sachsen Deutsch: Kl. 3 „Richtig schreiben“ und „Sprache untersuchen“, Kl. 4 „Sprache untersuchen“ → teil (jetzt 9/25/15). Neuer Test `tests/deutsch34.js`.
 - **Offen in NA-36:** Rechtschreibstrategien Ableiten (ä/äu) und Wortfamilien, Dehnungs-h, wörtliche Rede, Steigerung, Pronomen, Vor-/Nachsilben,
   längere Lesetexte mit Verständnisfragen (`de.le.06`, `de.le.07`), Textsorten Märchen/Fabel/Gedicht (`de.tm.04`).
+
+### Stand 27.10.2026, Nacht (NA-36 Deutsch Kl. 3–4, Teil 2)
+- Sechs weitere Werkstatt-Kapitel (jetzt 16): **„ä oder e? äu oder eu?“** (Ableiten, `de.sc.04`), **„Mit h oder ohne?“** (Dehnungs-h, `de.sc.08`),
+  **„Wörtliche Rede“** (Doppelpunkt, Anführungszeichen unten/oben, `de.sc.08`, `de.sc.05`), **„Märchen, Fabel, Gedicht“** (mit Sachtext und Reim,
+  `de.tm.04`; Fabeln nur nacherzählt), **„Lesen: Der Igel“** (Sachtext mit 5 Fragen, `de.le.06`) – alle Kl. 3; **„Lesen: Biber und Otter“**
+  (zwei Sachtexte vergleichen, `de.le.07`) – Kl. 4. Alle Texte selbst geschrieben.
+- Sichtbar: Kl. 1 → 5, Kl. 2 → 13, ab Kl. 3 → 16 Kapitel. Deutsch-Seite bricht lange Wörter im Hochformat um.
+- Sachsen Deutsch: Kl. 3 „Lesen/Mit Medien umgehen“ → ja, Kl. 4 → teil (jetzt 10/25/14).
+- **Offen in NA-36:** Komma bei Aufzählung, Steigerung, Pronomen, Vor-/Nachsilben, Fälle, Texte planen/überarbeiten (`de.sc.07`), Bericht/Brief
+  (`de.sc.09`), Sprechen (Meinung begründen, präsentieren) – braucht teils neue Schritt-Typen (Text schreiben/ordnen).
+- **Nächstes:** nach iPad-Rückmeldung NA-36 Teil 3 (Steigerung, Pronomen, Komma, Satzglieder umstellen) oder restliche Sachthemen.
