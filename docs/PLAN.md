@@ -1386,3 +1386,9 @@ Auftrag: „Gesamtstand Lehrplanabdeckung Sachsen“ → veraltete Hinweise prü
 - **Offen:** Deutsch bleibt die schwächste Stelle (3 von 15 „ja“): freies Schreiben, eigenes Sprechen/Aufnehmen, Handschrift; Englisch Shopping/Trip;
   Heimat-Themen für andere Bundesländer (Muster `land`).
 
+### Stand 27.10.2026, Abend (19:50: CLAUDE.md eingeführt)
+- Dauerhafte Arbeitsanweisungen (Einrichtung, Arbeitsweise, Regeln, Bauen, Testen, Kurzreferenz, Berichten) stehen jetzt in **`CLAUDE.md`** im
+  Repo-Stamm – Claude Code liest sie automatisch. **`docs/SESSION-PROMPT.md`** enthält nur noch Stand, Entscheidungen, Baustellen, offene Fragen und
+  nächste Pakete und verweist auf `CLAUDE.md`. `quellen/dev-bauen.sh` kopiert `CLAUDE.md` nicht nach `/dev` und rechnet sie nicht in die Cache-Version.
+- Pflege: Formate/Regeln ändern → `CLAUDE.md`; Stand/nächste Pakete → `docs/SESSION-PROMPT.md`.
+

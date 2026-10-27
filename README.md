@@ -1,5 +1,7 @@
 # Spielwelt – erst lernen, dann spielen
 
+> Arbeitsanweisungen für Claude: `CLAUDE.md` (dauerhaft) und `docs/SESSION-PROMPT.md` (aktueller Stand und nächste Pakete).
+
 Lern- und Spiele-App für Tablets (iPad / Android) für Grundschulkinder (1.–4. Klasse), auch für Kinder mit
 anderer Muttersprache (zuerst Russisch). Reines HTML/CSS/JavaScript, läuft offline,
 keine Werbung, keine Käufe, kein Server, keine Daten ins Internet.
