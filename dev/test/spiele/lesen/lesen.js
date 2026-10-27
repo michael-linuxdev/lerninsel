@@ -36,7 +36,7 @@
 
   function sprich(text, fertig) { if (SP) SP.sprich(text, "de-DE", fertig); else if (fertig) fertig(); }
   let ansicht = "start";
-  function zeige(n) { ansicht = n; ["start", "tafel", "uebung", "texte", "text"].forEach(v => $(v + "-ansicht").hidden = v !== n); scrollTo(0, 0); if (SP) SP.stopp(); }
+  function zeige(n) { ansicht = n; ["start", "tafel", "uebung", "texte", "text", "spuren", "legen"].forEach(v => $(v + "-ansicht").hidden = v !== n); scrollTo(0, 0); if (SP) SP.stopp(); }
   document.querySelectorAll(".zurueck").forEach(b => b.addEventListener("click", () => start()));
 
   // ---------- Start ----------
@@ -57,6 +57,8 @@
   $("weg-buchstabe").addEventListener("click", () => runde("buchstabe"));
   $("weg-silben").addEventListener("click", () => runde("silben"));
   $("weg-texte").addEventListener("click", texte);
+  $("weg-spuren").addEventListener("click", () => spurenRunde());
+  $("weg-legen").addEventListener("click", () => legenRunde());
 
   // ---------- Buchstaben-Tafel ----------
   function tafel() {
@@ -294,6 +296,186 @@
   }
   $("text-zurueck").addEventListener("click", texte);
 
+  // ---------- Nachspuren (NA-35) ----------
+  // Jeder Strich wird in Prüfpunkte zerlegt; der Finger muss sie der Reihe nach berühren (großzügige Toleranz, keine Schönheitsnote).
+  const SCHRIFT = window.SCHRIFT || {};
+  const NS = "http://www.w3.org/2000/svg";
+  const REIHE = "MAOILESRTNUHDFBKGWPZJCVQXYÄÖÜ".split("");   // grobe Fibel-Reihenfolge
+  const TOLERANZ = 13, ABSTAND = 6;
+  function strichPunkte(st) {
+    const p = [];
+    st.forEach(s => {
+      if (s[0] === "L") { const [, a, b, x, y] = s, n = Math.max(2, Math.ceil(Math.hypot(x - a, y - b) / 2)); for (let i = 0; i <= n; i++) p.push([a + (x - a) * i / n, b + (y - b) * i / n]); }
+      else if (s[0] === "B") { const [, cx, cy, rx, ry, w0, w1] = s, n = Math.max(4, Math.ceil(Math.abs(w1 - w0) / 5)); for (let i = 0; i <= n; i++) { const w = (w0 + (w1 - w0) * i / n) * Math.PI / 180; p.push([cx + rx * Math.cos(w), cy + ry * Math.sin(w)]); } }
+      else p.push([s[1], s[2]]);
+    });
+    return p;
+  }
+  function pruefpunkte(p) {
+    if (p.length === 1) return p.slice();
+    const out = [p[0]]; let weg = 0;
+    for (let i = 1; i < p.length; i++) { weg += Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]); if (weg >= ABSTAND) { out.push(p[i]); weg = 0; } }
+    const l = p[p.length - 1]; if (out[out.length - 1] !== l) out.push(l);
+    return out;
+  }
+  let spur = null;
+  function spurenRunde() {
+    const sp = daten().sp || {};
+    const wahl = REIHE.filter(b => SCHRIFT[b]).sort((x, y) => Math.min(2, sp[x] || 0) - Math.min(2, sp[y] || 0) || REIHE.indexOf(x) - REIHE.indexOf(y)).slice(0, 3);
+    const zeichen = [];
+    wahl.forEach(b => { zeichen.push(b); if (SCHRIFT[b.toLowerCase()]) zeichen.push(b.toLowerCase()); });
+    spur = { zeichen, i: 0, fertig: 0 };
+    zeige("spuren"); $("spuren-ende").hidden = true; $("spuren").style.display = "";
+    spurZeichen();
+  }
+  function spurZeichen() {
+    const z = spur.zeichen[spur.i];
+    spur.striche = SCHRIFT[z].map(st => { const p = strichPunkte(st); return { p, cp: pruefpunkte(p), k: 0 }; });
+    spur.s = 0;
+    const gross = z.toUpperCase(), a = A.find(x => x.b === gross || x.b === gross[0]), w = a ? wort(a.w[0]) : null;
+    $("spuren-bild").textContent = w ? w.bild : "";
+    $("spuren-wort").textContent = w ? `${z} wie ${w.de}` : z;
+    $("spuren-balken").style.width = Math.round(100 * spur.i / spur.zeichen.length) + "%";
+    $("spuren-rueck").textContent = "";
+    spurZeichnen();
+    sprich(w ? `${z.toUpperCase() === z ? "Großes" : "Kleines"} ${gross} wie ${w.de}. Fang beim Punkt an.` : "Fang beim Punkt an.");
+  }
+  const linie = (p) => p.map(q => q[0].toFixed(1) + "," + q[1].toFixed(1)).join(" ");
+  function spurZeichnen() {
+    const svg = $("spuren"); let h = "";
+    h += `<line x1="2" y1="45" x2="98" y2="45" stroke="#D9E8F5" stroke-width="1" stroke-dasharray="3 3"/><line x1="2" y1="90" x2="98" y2="90" stroke="#9CC9EA" stroke-width="1.5"/>`;
+    spur.striche.forEach(st => { h += st.p.length === 1 ? `<circle cx="${st.p[0][0]}" cy="${st.p[0][1]}" r="5" fill="#E6E1F0"/>` : `<polyline points="${linie(st.p)}" fill="none" stroke="#E6E1F0" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>`; });
+    spur.striche.forEach((st, i) => {
+      if (i < spur.s) h += st.p.length === 1 ? `<circle cx="${st.p[0][0]}" cy="${st.p[0][1]}" r="4.5" fill="#2E9C5A"/>` : `<polyline points="${linie(st.p)}" fill="none" stroke="#2E9C5A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>`;
+    });
+    const st = spur.striche[spur.s];
+    if (st) {
+      if (st.p.length > 1) h += `<polyline points="${linie(st.p)}" fill="none" stroke="#7B55B8" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/>`;
+      if (st.k > 0 && st.p.length > 1) h += `<polyline id="spur-gruen" points="${linie(st.cp.slice(0, st.k))}" fill="none" stroke="#2E9C5A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>`;
+      const [x, y] = st.cp[Math.min(st.k, st.cp.length - 1)];
+      if (st.k === 0 && st.cp.length > 1) {   // Pfeil in Schreibrichtung
+        const [x2, y2] = st.cp[Math.min(2, st.cp.length - 1)], w = Math.atan2(y2 - y, x2 - x);
+        h += `<path d="M${x + Math.cos(w) * 9} ${y + Math.sin(w) * 9} l${Math.cos(w + 2.5) * 5} ${Math.sin(w + 2.5) * 5} M${x + Math.cos(w) * 9} ${y + Math.sin(w) * 9} l${Math.cos(w - 2.5) * 5} ${Math.sin(w - 2.5) * 5}" stroke="#E8463B" stroke-width="2" stroke-linecap="round"/>`;
+      }
+      h += `<circle cx="${x}" cy="${y}" r="5.5" fill="#E8463B" class="startpunkt"><animate attributeName="r" values="5.5;7;5.5" dur="1.2s" repeatCount="indefinite"/></circle>`;
+      h += `<text x="${x}" y="${y + 2.2}" font-size="6" text-anchor="middle" fill="#fff" font-weight="700">${spur.s + 1}</text>`;
+    }
+    svg.innerHTML = h;
+  }
+  function spurPunkt(e) {
+    const svg = $("spuren"), m = svg.getScreenCTM(); if (!m) return null;
+    const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    const q = pt.matrixTransform(m.inverse()); return [q.x, q.y];
+  }
+  function spurBewegung(p) {
+    const st = spur && spur.striche[spur.s]; if (!st || !p) return;
+    const nah = (i) => i < st.cp.length && Math.hypot(p[0] - st.cp[i][0], p[1] - st.cp[i][1]) < TOLERANZ;
+    let weiter = false;
+    while (nah(st.k) || (st.k > 0 && nah(st.k + 1))) { st.k += nah(st.k) ? 1 : 2; weiter = true; }
+    if (!weiter) return;
+    if (st.k >= st.cp.length) {
+      spur.s++; if (S.ton) S.ton("tipp");
+      if (spur.s >= spur.striche.length) return spurFertig();
+    }
+    spurZeichnen();
+  }
+  let malt = false;
+  $("spuren").addEventListener("pointerdown", (e) => { malt = true; try { $("spuren").setPointerCapture(e.pointerId); } catch (x) { /* egal */ } spurBewegung(spurPunkt(e)); e.preventDefault(); });
+  $("spuren").addEventListener("pointermove", (e) => { if (malt) spurBewegung(spurPunkt(e)); });
+  ["pointerup", "pointercancel"].forEach(t => $("spuren").addEventListener(t, () => { malt = false; }));
+  function spurFertig() {
+    spurZeichnen();
+    const z = spur.zeichen[spur.i];
+    const d = daten(); d.sp = d.sp || {}; d.sp[z.toUpperCase()] = Math.min(9, (d.sp[z.toUpperCase()] || 0) + (z === z.toLowerCase() ? 1 : 0)); S.speichere("lesen", d);
+    spur.fertig++;
+    if (C) C.gib("deutsch", 1);
+    const lob = LOB[Math.floor(Math.random() * LOB.length)];
+    $("spuren-rueck").textContent = `${lob} Das ist ${z}.`;
+    if (S.ton) S.ton("juhu");
+    sprich(lob);
+    setTimeout(spurNaechstes, 1000);
+  }
+  function spurNaechstes() {
+    spur.i++;
+    if (spur.i < spur.zeichen.length) { spurZeichen(); return; }
+    $("spuren-balken").style.width = "100%";
+    const b = spur.zeichen.filter(z => z === z.toUpperCase()).join(", ");
+    if (window.Lernfunde) Lernfunde.merke({ fach: "deutsch", art: "schreiben", e: "✍️", text: `Geschrieben: ${b}`, schluessel: "spur:" + b });
+    $("spuren").style.display = "none"; $("spuren-rueck").textContent = "";
+    $("spuren-ende").hidden = false;
+    $("spuren-ende").innerHTML = `<div class="gross">✍️</div><p>Du hast ${spur.fertig} Buchstaben geschrieben: ${spur.zeichen.join(" ")}</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="knopf haupt" id="spuren-mehr">🔁 Noch mehr</button><button class="knopf" id="spuren-start">🔤 Übersicht</button></div>`;
+    $("spuren-mehr").onclick = spurenRunde; $("spuren-start").onclick = start;
+  }
+  $("spuren-nochmal").addEventListener("click", () => { if (spur) spurZeichen(); });
+  $("spuren-weiter").addEventListener("click", () => { if (spur && spur.i < spur.zeichen.length) spurNaechstes(); });
+
+  // ---------- Wörter legen (NA-35) ----------
+  // Lautgetreue Bildwörter (jeder Laut ein Buchstabe): keine Doppelkonsonanten, kein ie/ch/ck/tz/ß/Dehnungs-h, 3–6 Buchstaben
+  const LEGEWOERTER = W.alle().filter(w => w.wortart === "nomen" && w.stufe.includes("1") && /^[A-Za-zÄÖÜäöü]{3,6}$/.test(w.de)
+    && !/(ie|ch|ck|tz|qu|ph|eu|äu|[aeiouäöü]h|([a-z])\2)/i.test(w.de) && !/[vxyß]/i.test(w.de))
+    .filter((w, i, l) => l.findIndex(x => x.bild === w.bild) === i);
+  let leg = null;
+  function legenRunde() {
+    const sw = daten().sw || {};
+    const karten = LK ? LK.faellige("lesen", 2).filter(k => k.typ === "schreibwort" && LEGEWOERTER.some(w => w.id === k.wort)) : [];
+    const rest = mische(LEGEWOERTER.filter(w => !karten.some(k => k.wort === w.id))).sort((x, y) => Math.min(2, sw[x.id] || 0) - Math.min(2, sw[y.id] || 0) || x.de.length - y.de.length);
+    leg = { ziele: karten.concat(rest.slice(0, 8 - karten.length).map(w => ({ typ: "schreibwort", wort: w.id }))), i: 0, richtig: 0 };
+    zeige("legen"); $("legen-ende").hidden = true;
+    legAufgabe();
+  }
+  function legAufgabe() {
+    const z = leg.ziele[leg.i], w = wort(z.wort);
+    leg.pos = 0; leg.fehler = 0;
+    const buchst = w.de.split("");
+    const ablenker = mische("aeimnorstlu".split("").filter(b => !w.de.toLowerCase().includes(b))).slice(0, 3);
+    leg.steine = mische(buchst.concat(ablenker).map((b, i) => ({ b, id: i })));
+    $("legen-bild").textContent = w.bild;
+    $("legen-faecher").innerHTML = buchst.map(() => `<span class="fach"></span>`).join("");
+    $("legen-steine").innerHTML = leg.steine.map((s, i) => `<button class="stein" data-i="${i}">${esc(s.b)}</button>`).join("");
+    $("legen-steine").querySelectorAll(".stein").forEach(b => b.addEventListener("click", () => legTippe(+b.dataset.i)));
+    $("legen-rueck").textContent = "";
+    $("legen-balken").style.width = Math.round(100 * leg.i / leg.ziele.length) + "%";
+    $("legen-ton").onclick = () => sprich(w.de);
+    setTimeout(() => sprich(w.de), 250);
+  }
+  function legTippe(i) {
+    if (!leg || !$("legen-ende").hidden) return;
+    const z = leg.ziele[leg.i], w = wort(z.wort), s = leg.steine[i], k = $("legen-steine").querySelector(`[data-i="${i}"]`);
+    if (!s || k.classList.contains("weg")) return;
+    if (s.b !== w.de[leg.pos]) {
+      if (leg.fehler === 0 && LK) LK.falsch("lesen", { typ: "schreibwort", wort: z.wort });
+      leg.fehler++; k.classList.remove("wackel"); void k.offsetWidth; k.classList.add("wackel"); setTimeout(() => k.classList.remove("wackel"), 450);
+      $("legen-rueck").textContent = leg.pos === 0 && s.b.toLowerCase() === w.de[0].toLowerCase() ? "Nomen schreibt man am Anfang groß!" : "Hör nochmal genau hin.";
+      if (S.ton) S.ton("tipp"); sprich(w.de); return;
+    }
+    k.classList.add("weg");
+    const fach = $("legen-faecher").children[leg.pos]; fach.textContent = s.b; fach.classList.add("voll");
+    leg.pos++;
+    if (leg.pos < w.de.length) return;
+    const lob = LOB[Math.floor(Math.random() * LOB.length)];
+    $("legen-rueck").textContent = `${lob} ${W.mitArtikel(w)}`;
+    if (S.ton) S.ton("juhu");
+    if (leg.fehler === 0) {
+      leg.richtig++;
+      if (C) C.gib("deutsch", 1);
+      const d = daten(); d.sw = d.sw || {}; d.sw[z.wort] = Math.min(9, (d.sw[z.wort] || 0) + 1); S.speichere("lesen", d);
+      if (z.__karte && LK && LK.richtig("lesen", { typ: "schreibwort", wort: z.wort }) && window.Lernfunde)
+        Lernfunde.merke({ fach: "deutsch", art: "gemeistert", e: "🧩", text: `Gemeistert: ${w.de} geschrieben`, schluessel: "legen:" + z.wort });
+    }
+    sprich(`${lob} ${w.de}.`);
+    setTimeout(() => {
+      leg.i++;
+      if (leg.i < leg.ziele.length) { legAufgabe(); return; }
+      $("legen-balken").style.width = "100%";
+      $("legen-faecher").innerHTML = ""; $("legen-steine").innerHTML = ""; $("legen-rueck").textContent = ""; $("legen-bild").textContent = "";
+      $("legen-ende").hidden = false;
+      $("legen-ende").innerHTML = `<div class="gross">🧩</div><p>${leg.richtig} von ${leg.ziele.length} Wörtern ohne Fehler gelegt.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="knopf haupt" id="legen-mehr">🔁 Noch eine Runde</button><button class="knopf" id="legen-start">🔤 Übersicht</button></div>`;
+      $("legen-mehr").onclick = legenRunde; $("legen-start").onclick = start;
+    }, 1200);
+  }
+
   function weiter() {
     lauf.i++;
     if (lauf.i < lauf.ziele.length) { aufgabe(); return; }
@@ -313,7 +495,13 @@
     richtigIndex: () => lauf ? lauf.richtig_i : -1, aufgabeNr: () => lauf ? lauf.i : -1, anzahl: () => lauf ? lauf.ziele.length : 0,
     ziel: () => lauf && lauf.ziele[lauf.i], stand: () => daten(),
     texte, text, textAntworte, textRichtig: () => tlauf ? tlauf.optionen.findIndex(o => o.richtig) : -1, textFrageNr: () => tlauf ? tlauf.f : -1,
-    silbenWoerter: () => SILBENWOERTER.length
+    silbenWoerter: () => SILBENWOERTER.length,
+    spurenRunde, spurZeichen: () => spur && spur.zeichen[spur.i], spurNr: () => spur ? spur.i : -1,
+    // Prüfpunkte des aktuellen Strichs in Bildschirm-Koordinaten (für den Test: Finger entlangführen)
+    spurPunkte: () => { const st = spur && spur.striche[spur.s]; if (!st) return []; const svg = $("spuren"), m = svg.getScreenCTM();
+      return st.cp.map(([x, y]) => { const pt = svg.createSVGPoint(); pt.x = x; pt.y = y; const q = pt.matrixTransform(m); return [q.x, q.y]; }); },
+    legenRunde, legeWoerter: () => LEGEWOERTER.map(w => w.de), legenZiel: () => leg && wort(leg.ziele[leg.i].wort).de, legenNr: () => leg ? leg.i : -1,
+    legenStein: (b) => leg ? leg.steine.findIndex((s, i) => s.b === b && !$("legen-steine").querySelector(`[data-i="${i}"]`).classList.contains("weg")) : -1
   };
   start();
 })();

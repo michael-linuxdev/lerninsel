@@ -140,6 +140,52 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.click("#silbenfarbe"); await p.waitForTimeout(200);
     await p.click('.text-karte[data-id="lt.11"]'); await p.waitForTimeout(200);
     erwarte(await p.evaluate(() => !document.querySelector("#text-text .farbig") && document.querySelectorAll("#text-text .sb").length > 20), "Silbenfarben abschaltbar, Bögen bleiben");
+
+    // NA-35 Nachspuren: Finger (Maus) entlang der Striche führen; falscher Start zählt nicht
+    await p.evaluate(() => __lesen.spurenRunde()); await p.waitForTimeout(300);
+    const erstesZeichen = await p.evaluate(() => __lesen.spurZeichen());
+    erwarte(erstesZeichen === "M", `Nachspuren beginnt mit „M“ (${erstesZeichen})`);
+    await bild(p, "lesen-spuren");
+    // falsch: irgendwo in der Mitte anfangen → nichts passiert
+    const box = await p.evaluate(() => { const r = document.getElementById("spuren").getBoundingClientRect(); return [r.x + r.width * 0.9, r.y + r.height * 0.15]; });
+    await p.mouse.move(box[0], box[1]); await p.mouse.down(); await p.mouse.move(box[0] - 5, box[1] + 40, { steps: 5 }); await p.mouse.up();
+    erwarte(await p.evaluate(() => __lesen.spurNr() === 0 && __lesen.spurZeichen() === "M"), "Malen ohne den Startpunkt zählt nicht");
+    for (let z = 0; z < 6; z++) {
+      const zeichen = await p.evaluate(() => __lesen.spurZeichen());
+      for (let s = 0; s < 8 && await p.evaluate((zz) => __lesen.spurZeichen() === zz && __lesen.spurNr() >= 0, zeichen); s++) {
+        const punkte = await p.evaluate(() => __lesen.spurPunkte());
+        if (!punkte.length) break;
+        await p.mouse.move(punkte[0][0], punkte[0][1]); await p.mouse.down();
+        for (const [x, y] of punkte.slice(1)) await p.mouse.move(x + 2, y - 1, { steps: 2 });
+        await p.mouse.up(); await p.waitForTimeout(60);
+      }
+      await p.waitForTimeout(1150);
+    }
+    await p.waitForSelector("#spuren-ende:not([hidden])", { timeout: 5000 }).catch(() => fehler.push("Nachspuren: Runde nicht beendet"));
+    const sp = await p.evaluate(() => __lesen.stand().sp || {});
+    erwarte(sp.M === 1 && sp.A === 1 && sp.O === 1, `M m, A a, O o nachgespurt (${JSON.stringify(sp)})`);
+    await bild(p, "lesen-spuren-ende");
+
+    // NA-35 Wörter legen: Großbuchstabe am Anfang, zuerst ein falscher Stein
+    const lw = await p.evaluate(() => __lesen.legeWoerter());
+    erwarte(lw.length >= 25 && lw.every(w => !/(ie|ch|ck|ll|mm|nn|ss|tt|ah|eh|oh|uh)/i.test(w)), `${lw.length} lautgetreue Wörter zum Legen (z. B. ${lw.slice(0, 5).join(", ")})`);
+    await p.evaluate(() => __lesen.legenRunde()); await p.waitForTimeout(300);
+    for (let i = 0; i < 8; i++) {
+      await p.waitForFunction((k) => __lesen.legenNr() === k, i);
+      const ziel = await p.evaluate(() => __lesen.legenZiel());
+      if (i === 0) {
+        const klein = await p.evaluate((b) => __lesen.legenStein(b), ziel[0].toLowerCase());
+        const falsch = await p.evaluate((w) => { const andere = [...document.querySelectorAll("#legen-steine .stein")].findIndex(b => !w.includes(b.textContent)); return andere; }, ziel);
+        await p.click(`#legen-steine [data-i="${falsch}"]`); await p.waitForTimeout(100);
+        if (klein >= 0) fehler.push("Wörter legen: kleiner Anfangsbuchstabe als Stein vorhanden");
+      }
+      for (const b of ziel) { const k = await p.evaluate((x) => __lesen.legenStein(x), b); await p.click(`#legen-steine [data-i="${k}"]`); await p.waitForTimeout(80); }
+      if (i === 0) await bild(p, "lesen-legen");
+      await p.waitForTimeout(1300);
+    }
+    await p.waitForSelector("#legen-ende:not([hidden])");
+    const legenStand = await p.evaluate(() => ({ sw: Object.keys(__lesen.stand().sw || {}).length, k: (Spielwelt.lade("lernkartei").lesen || []).filter(k => k.s.typ === "schreibwort").length }));
+    erwarte(legenStand.sw === 7 && legenStand.k === 1, `Wörter legen: 7 ohne Fehler, 1 Lernkarte „schreibwort“ (${JSON.stringify(legenStand)})`);
     await ctx.close();
   }
 

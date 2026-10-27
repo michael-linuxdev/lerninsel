@@ -80,6 +80,23 @@
   .wahl.antworten button { font-size: 1.25rem; font-weight: 600; padding: 12px 6px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .wahl.antworten button span { font-size: 2.6rem; }
   @media (max-width: 640px) { .wahl.antworten { grid-template-columns: 1fr; } .wahl.antworten button { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 8px 14px; text-align: left; } }
+  /* Nachspuren */
+  .spuren-main { display: flex; gap: 20px; align-items: center; justify-content: center; }
+  .spuren-seite { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 160px; }
+  .spuren-bild { font-size: 5rem; }
+  #spuren-wort { font-size: 1.4rem; font-weight: 600; margin: 0; text-align: center; }
+  .spuren { width: min(62vh, 78vw); height: auto; background: #fff; border-radius: 28px; box-shadow: 0 7px 0 rgba(58,160,224,.22); touch-action: none; user-select: none; -webkit-user-select: none; }
+  @media (max-width: 640px) { .spuren-main { flex-direction: column-reverse; } .spuren-seite { flex-direction: row; flex-wrap: wrap; justify-content: center; } .spuren-bild { font-size: 3rem; } .spuren { width: 92vw; } }
+  /* Wörter legen */
+  .faecher { display: flex; justify-content: center; gap: 8px; margin: 10px 0 18px; flex-wrap: wrap; }
+  .fach { width: 58px; height: 68px; border-radius: 14px; background: #fff; border: 3px dashed #9CC9EA; display: grid; place-items: center; font-size: 2.4rem; font-weight: 700; }
+  .fach.voll { border-style: solid; border-color: #2E9C5A; background: #E3F7EF; }
+  .steine { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; max-width: 640px; margin: 0 auto; }
+  .stein { width: 64px; height: 64px; border: 0; border-radius: 16px; background: #fff; font: inherit; font-size: 2.2rem; font-weight: 700; color: inherit; cursor: pointer; box-shadow: 0 6px 0 rgba(58,160,224,.25); }
+  .stein.weg { visibility: hidden; }
+  .stein.wackel { animation: wackel .35s; background: #FFE1DD; }
+  @keyframes wackel { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  @media (max-width: 640px) { .fach { width: 44px; height: 54px; font-size: 1.9rem; } .stein { width: 54px; height: 54px; font-size: 1.9rem; } }
 </style>
 </head>
 <body>
@@ -95,6 +112,8 @@
       <button class="weg" id="weg-buchstabe"><span class="emoji">🅰️</span>Welcher Buchstabe?<small>Hör den Anfang und wähle</small></button>
       <button class="weg" id="weg-silben"><span class="emoji">🌈</span>Silben lesen<small>Lies das Wort und finde das Bild</small></button>
       <button class="weg" id="weg-texte"><span class="emoji">📖</span>Lesetexte<small>Kurze Geschichten mit Fragen</small></button>
+      <button class="weg" id="weg-spuren"><span class="emoji">✍️</span>Buchstaben nachspuren<small>Mit dem Finger schreiben</small></button>
+      <button class="weg" id="weg-legen"><span class="emoji">🧩</span>Wörter legen<small>Hör das Wort und lege es</small></button>
     </div>
     <p class="stand" id="stand"></p>
   </main>
@@ -120,6 +139,28 @@
     <div class="wahl antworten" id="text-wahl"></div>
     <p class="rueck" id="text-rueck" aria-live="polite"></p>
     <div id="text-ende" hidden class="runde-ende"></div>
+  </main>
+</section>
+
+<section class="ansicht" id="spuren-ansicht" hidden>
+  <div class="oben"><button class="knopf rund zurueck" aria-label="Zurück">⬅️</button><h1>✍️ Nachspuren</h1><div class="fortschritt" aria-hidden="true"><span id="spuren-balken"></span></div></div>
+  <main class="spuren-main">
+    <div class="spuren-seite"><div class="spuren-bild" id="spuren-bild" aria-hidden="true"></div><p id="spuren-wort"></p>
+      <button class="knopf" id="spuren-nochmal">🔁 Nochmal</button><button class="knopf" id="spuren-weiter">⏭️ Weiter</button></div>
+    <svg id="spuren" class="spuren" viewBox="0 -10 100 130" role="img" aria-label="Buchstabe zum Nachspuren"></svg>
+  </main>
+  <p class="rueck" id="spuren-rueck" aria-live="polite"></p>
+  <div id="spuren-ende" hidden class="runde-ende"></div>
+</section>
+
+<section class="ansicht" id="legen-ansicht" hidden>
+  <div class="oben"><button class="knopf rund zurueck" aria-label="Zurück">⬅️</button><h1>🧩 Wörter legen</h1><div class="fortschritt" aria-hidden="true"><span id="legen-balken"></span></div></div>
+  <main>
+    <div class="frage"><button class="ton" id="legen-ton" aria-label="Wort hören">🔊</button><span class="vorlage" id="legen-bild" aria-hidden="true"></span></div>
+    <div class="faecher" id="legen-faecher"></div>
+    <div class="steine" id="legen-steine"></div>
+    <p class="rueck" id="legen-rueck" aria-live="polite"></p>
+    <div id="legen-ende" hidden class="runde-ende"></div>
   </main>
 </section>
 
@@ -150,6 +191,7 @@
 <script src="../../shared/woerter.js"></script>
 <script src="../../inhalte/deutsch/anlaute.js"></script>
 <script src="../../inhalte/deutsch/lesetexte.js"></script>
+<script src="../../inhalte/deutsch/schreiben.js"></script>
 <script src="lesen.js"></script>
 </body>
 </html>

@@ -11,7 +11,7 @@
   const tagIn = (n) => { const d = window.__heute ? new Date(window.__heute) : new Date(); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
   // Nur Schritte, die ohne ihr Kapitel verständlich sind
   const GEEIGNET = { deutsch: ["artikel", "bild", "hoeren", "wort", "luecke", "wo", "wortart", "verlaengern", "silben", "satz"], sachkunde: ["wahl", "daumen"],
-    lesen: ["anlaut", "silbenwort"] };   // lesen: spiele/lesen/ (NA-30/31), Schritte { typ: "anlaut", wort, ziel } und { typ: "silbenwort", wort }
+    lesen: ["anlaut", "silbenwort", "schreibwort"] };   // lesen: spiele/lesen/ (NA-30/31), Schritte { typ: "anlaut", wort, ziel } und { typ: "silbenwort", wort }
   const schluessel = (s) => [s.typ, s.wort, s.frage, s.satz, s.sag].filter(Boolean).join("|").slice(0, 120);
 
   function lade() { return Object.assign({ deutsch: [], sachkunde: [] }, S.lade("lernkartei") || {}); }
