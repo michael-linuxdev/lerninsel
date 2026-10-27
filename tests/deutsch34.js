@@ -1,10 +1,12 @@
-// Test NA-36: Wörter-Werkstatt Klasse 3–4 (Präteritum, Perfekt/Futur, Satzglieder, Satzzeichen, ck/tz/ss/ß)
+// Test NA-36 + Paket A: Wörter-Werkstatt Klasse 3–4 (Präteritum, Perfekt/Futur, Satzglieder, … Geschichte, Brief, Bericht, Wörterbuch, Vortrag)
 // Sichtbarkeit je Klasse, jeder Schritt lässt sich anzeigen, richtige Lücke wird angenommen, keine Scrollleiste, keine Konsolenfehler.
+// Paket A: Schritt-Typen „ordnen“ und „verbessern“ werden echt angetippt (Karten der Reihe nach, störendes Wort, bessere Variante).
 const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;
-const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-kurz-lang", "w-ableiten", "w-dehnung", "w-rede", "w-textsorten", "w-lesen-igel", "w-lesen-vergleich", "w-steigerung", "w-pronomen", "w-komma", "w-vornach", "w-faelle", "w-meinung"];
+const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-kurz-lang", "w-ableiten", "w-dehnung", "w-rede", "w-textsorten", "w-lesen-igel", "w-lesen-vergleich", "w-steigerung", "w-pronomen", "w-komma", "w-vornach", "w-faelle", "w-meinung",
+  "w-geschichte-ordnen", "w-satzanfaenge", "w-brief", "w-bericht", "w-woerterbuch", "w-vortrag"];
 
 (async () => {
   const browser = await chromium.launch();
@@ -25,7 +27,7 @@ const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-
   }
   const kacheln = (p) => p.evaluate(() => [...document.querySelectorAll("#werkstatt button.ort")].map(b => b.getAttribute("aria-label")));
   // Sichtbarkeit je Klasse
-  for (const [stufe, anzahl] of [["1", 5], ["2", 18], ["3", 22]]) {
+  for (const [stufe, anzahl] of [["1", 5], ["2", 22], ["3", 28]]) {
     const { ctx, p } = await kind(stufe, 1180, 820);
     const k = await kacheln(p);
     erwarte(k.length === anzahl, `Klasse ${stufe}: ${anzahl} Werkstatt-Kapitel sichtbar (${k.length})`);
@@ -38,20 +40,48 @@ const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-
       const lz = await p.evaluate((neu) => WERKSTATT.filter(k => neu.includes(k.id)).every(k => k.lz.length && k.stufe && k.schritte.every(s => s.ru)), NEU);
       erwarte(idx.every(i => i >= 0) && lz, "neue Kapitel mit Lernziel, Klasse und russischem Entwurf");
     }
+    let falschGeprueft = false;
     for (let n = 0; n < NEU.length; n++) {
       await p.evaluate((i) => __deutsch.starte(i, WERKSTATT), idx[n]); await p.waitForTimeout(200);
       const anz = await p.evaluate(() => __deutsch.lauf.k.schritte.length);
       let ok = true, angenommen = true;
       for (let s = 0; s < anz; s++) {
-        const r = await p.evaluate((s) => { __deutsch.schritt(s); return { passt: document.documentElement.scrollWidth <= innerWidth + 1, typ: __deutsch.lauf.k.schritte[s].typ, richtig: (__deutsch.lauf.k.schritte[s].optionen || [])[0] }; }, s);
+        const r = await p.evaluate((s) => { __deutsch.schritt(s); const x = __deutsch.lauf.k.schritte[s]; return { passt: document.documentElement.scrollWidth <= innerWidth + 1, typ: x.typ, richtig: (x.optionen || [])[0], teile: x.teile, satz: x.satz, falsch: x.falsch, stelle: x.stelle }; }, s);
         if (!r.passt) { ok = false; console.log(`    Scrollleiste: ${NEU[n]} Schritt ${s}`); }
+        if (r.typ === "ordnen") {
+          // Erste Ordnen-Aufgabe im Querformat: einmal falsch herum legen – richtige Karten vorn bleiben, Rest geht zurück
+          if (art === "quer" && !falschGeprueft) {
+            falschGeprueft = true;
+            for (const t of r.teile.slice().reverse()) await p.click(`#ordnen-karten .okarte:not(.weg) >> text="${t}"`);
+            await p.click("#pruefen");
+            const nachFehler = await p.evaluate(() => ({ nein: document.querySelector("#hinweis").classList.contains("nein"), liegen: __deutsch.lauf.gewaehlt.length }));
+            erwarte(nachFehler.nein && nachFehler.liegen === 0, "ordnen: falsche Reihenfolge wird erkannt, Karten gehen zurück");
+          }
+          for (const t of r.teile) await p.click(`#ordnen-karten .okarte:not(.weg) >> text="${t}"`);
+          await p.click("#pruefen"); await p.waitForTimeout(80);
+          const gut = await p.evaluate(() => document.querySelector("#ordnen-liste").classList.contains("richtig") && document.querySelector("#hinweis").classList.contains("gut"));
+          if (!gut) { angenommen = false; console.log(`    ordnen nicht angenommen: ${NEU[n]} Schritt ${s}`); }
+          const passtNoch = await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
+          if (!passtNoch) { ok = false; console.log(`    Scrollleiste nach dem Ordnen: ${NEU[n]} Schritt ${s}`); }
+        }
+        if (r.typ === "verbessern") {
+          const woerter = r.satz.split(" "), kern = (w) => w.replace(/[.,!?:;„“"]/g, "");
+          const ziel = r.stelle != null ? r.stelle : woerter.findIndex(w => kern(w) === r.falsch);
+          const anderes = woerter.findIndex((w, i) => i !== ziel && kern(w) !== r.falsch);
+          await p.click(`.vb-wort[data-n="${anderes}"]`);
+          const erstFalsch = await p.evaluate(() => document.querySelector("#vb-optionen").hidden && document.querySelector("#hinweis").classList.contains("nein"));
+          await p.click(`.vb-wort[data-n="${ziel}"]`);
+          await p.click(`#vb-optionen .option >> text="${r.richtig}"`); await p.waitForTimeout(80);
+          const gut = await p.evaluate((w) => !!document.querySelector("#vb-optionen .option.richtig") && document.querySelector(".vb-wort.gefunden").textContent.includes(w), r.richtig);
+          if (!(erstFalsch && gut)) { angenommen = false; console.log(`    verbessern nicht angenommen: ${NEU[n]} Schritt ${s}`); }
+        }
         if (r.typ === "luecke") {
           await p.evaluate((t) => [...document.querySelectorAll(".optionen .option")].find(b => b.textContent === t).click(), r.richtig); await p.waitForTimeout(80);
           const gut = await p.evaluate(() => !!document.querySelector(".option.richtig"));
           if (!gut) angenommen = false;
         }
       }
-      erwarte(ok && angenommen, `${art}: „${NEU[n]}“ – ${anz} Schritte, richtige Lücken angenommen, keine Scrollleiste`);
+      erwarte(ok && angenommen, `${art}: „${NEU[n]}“ – ${anz} Schritte, richtige Antworten angenommen, keine Scrollleiste`);
       if (BILDER) { await p.evaluate(() => __deutsch.schritt(1)); await p.screenshot({ path: `${BILDER}/deutsch34-${NEU[n]}-${art}.png` }); }
     }
     await ctx.close();

@@ -4,6 +4,8 @@
 //   wortart     { wort, e?, richtig: "nomen"|"verb"|"adjektiv", ru }
 //   verlaengern { wort: "Hun_", lang: "Hunde", richtig: "d", falsch: "t", e, ru }
 //   silben      { wort, teile: ["Ba","na","ne"], e, ru }
+//   ordnen      { frage?, teile: [...in richtiger Reihenfolge], e?, ru }   (Paket A: Sätze/Bausteine als Karten ordnen)
+//   verbessern  { frage?, satz, falsch, stelle?, optionen: [besser, ...], tipp?, e?, ru }   (Paket A: störendes Wort antippen, ersetzen)
 window.WERKSTATT = [
   {
     id: "w-verben", lz: ["de.su.04"], name: "Tunwörter", ort: "🏃", farbe: "#E0574A", grund: "#FFECE8",
@@ -314,6 +316,86 @@ window.WERKSTATT = [
       { typ: "luecke", e: "🐶", satz: "Ich möchte einen Hund, ___ ich viel mit ihm spazieren gehen würde.", optionen: ["weil", "oder", "und dann aber"], ru: "Я хочу собаку, потому что я бы много с ней гулял." },
       { typ: "satz", e: "📚", woerter: ["Ich", "lese", "gern,", "weil", "Bücher", "spannend", "sind."], ru: "Я люблю читать, потому что книги интересные." },
       { typ: "sag", text: "Prima! Im Gespräch gilt auch: zuhören, ausreden lassen und andere Meinungen respektieren.", ru: "Отлично! В разговоре важно слушать, давать договорить и уважать чужое мнение." }
+    ]
+  },
+  {
+    id: "w-geschichte-ordnen", stufe: 3, lz: ["de.sc.07"], name: "Eine Geschichte ordnen", ort: "📖", farbe: "#C2337A", grund: "#FDEAF3",
+    schritte: [
+      { typ: "sag", text: "Eine gute Geschichte hat drei Teile: Die Einleitung sagt, wer, wann und wo. Im Hauptteil passiert das Spannende. Der Schluss erzählt, wie alles ausgeht.", ru: "У хорошего рассказа три части: вступление говорит, кто, когда и где. В основной части происходит самое интересное. Концовка рассказывает, чем всё закончилось." },
+      { typ: "ordnen", e: "🎈", frage: "Bring die Geschichte in die richtige Reihenfolge!", teile: ["Am Sonntag war Lena mit Opa im Park.", "Plötzlich flog ihr roter Luftballon davon.", "Opa kletterte auf eine Bank und fing die Schnur.", "Lena lachte und hielt den Ballon ganz fest."], ru: "Расставь части истории по порядку." },
+      { typ: "luecke", e: "🏰", satz: "„Es war einmal ein kleiner Drache.“ Dieser Satz gehört in die ___.", optionen: ["Einleitung", "Hauptteil", "Schluss"], ru: "«Жил-был маленький дракон». Это предложение — из вступления." },
+      { typ: "ordnen", e: "🐱", frage: "Was passiert zuerst? Ordne die Geschichte!", teile: ["Eines Morgens saß eine Katze auf unserem Dach.", "Sie miaute laut und traute sich nicht herunter.", "Papa holte die lange Leiter aus dem Keller.", "Vorsichtig trug er die Katze nach unten.", "Seitdem besucht sie uns jeden Tag."], ru: "Что случилось сначала? Расставь историю по порядку." },
+      { typ: "luecke", e: "⚡", satz: "Im ___ passiert das Spannendste.", optionen: ["Hauptteil", "Schluss", "Datum"], ru: "Самое интересное происходит в основной части." },
+      { typ: "ordnen", e: "📝", frage: "So schreibst du eine Geschichte. Was machst du zuerst?", teile: ["Ideen sammeln", "Reihenfolge planen", "Geschichte schreiben", "Text noch einmal lesen und verbessern"], ru: "Так пишут рассказ. Что делать сначала? Собрать идеи, спланировать порядок, написать, перечитать и исправить." },
+      { typ: "luecke", e: "🔚", satz: "„Müde, aber glücklich gingen alle nach Hause.“ Das ist ein guter ___.", optionen: ["Schluss", "Anfang", "Titel"], ru: "«Усталые, но счастливые, все пошли домой». Это хорошая концовка." },
+      { typ: "sag", text: "Super, {name}! Erst planen, dann schreiben, dann überarbeiten – so machen es auch echte Autorinnen und Autoren.", ru: "Супер! Сначала спланировать, потом написать, потом исправить — так делают и настоящие писатели." }
+    ]
+  },
+  {
+    id: "w-satzanfaenge", stufe: 3, lz: ["de.sc.07"], name: "Abwechslungsreiche Satzanfänge", ort: "✏️", farbe: "#2E9C5A", grund: "#E3F7EF",
+    schritte: [
+      { typ: "sag", text: "Wenn jeder Satz mit „Dann“ anfängt, wird es langweilig. Besser klingen: Danach, Plötzlich, Später, Zum Schluss, Am Abend.", ru: "Если каждое предложение начинается с «Dann», становится скучно. Лучше звучат: Danach, Plötzlich, Später, Zum Schluss, Am Abend." },
+      { typ: "verbessern", e: "🍰", frage: "Hier steht zweimal „dann“. Tippe das zweite „dann“ an!", satz: "Wir aßen Kuchen. Dann spielten wir Fangen und dann gingen wir nach Hause.", falsch: "dann", stelle: 8, optionen: ["danach", "weil", "oder"], tipp: "Genau, das „dann“ wiederholt sich. Welches Wort klingt besser?", ru: "Здесь дважды «dann». Найди второе и замени его." },
+      { typ: "verbessern", e: "⛈️", frage: "Welches Wort am Satzanfang kannst du spannender machen?", satz: "Dann fing es an zu donnern.", falsch: "Dann", optionen: ["Plötzlich", "Und", "Aber"], tipp: "Richtig! Mit welchem Wort wird es spannender?", ru: "Какое слово в начале можно сделать интереснее? «Plötzlich» — «вдруг»." },
+      { typ: "verbessern", e: "🌙", satz: "Wir spielten den ganzen Tag. Dann gingen wir müde ins Bett.", falsch: "Dann", optionen: ["Am Abend", "Gestern früh", "Weil"], tipp: "Genau! Sag lieber, wann es war.", ru: "Найди скучное начало и скажи лучше, когда это было: «Am Abend» — «вечером»." },
+      { typ: "verbessern", e: "🎨", frage: "Ein Name kommt zu oft vor. Tippe den letzten an!", satz: "Mia malt ein Bild. Mia malt einen Baum. Mia malt eine Sonne.", falsch: "Mia", stelle: 8, optionen: ["Sie", "Er", "Es"], tipp: "Genau! Statt „Mia“ kannst du ein Fürwort nehmen.", ru: "Имя повторяется слишком часто. Вместо «Mia» можно сказать «Sie» — «она»." },
+      { typ: "luecke", e: "🏁", satz: "Am Ende der Geschichte passt gut: „___ waren alle froh.“", optionen: ["Zum Schluss", "Zuerst", "Am Anfang"], ru: "В конце истории подходит: «В конце все были рады»." },
+      { typ: "luecke", e: "🔍", satz: "Wenn du deinen Text überarbeitest, suchst du nach Wörtern, die sich ___.", optionen: ["wiederholen", "reimen", "verstecken"], ru: "Когда исправляешь текст, ищешь слова, которые повторяются." },
+      { typ: "sag", text: "Klasse! Lies deinen Text immer noch einmal durch und ersetze Wörter, die zu oft vorkommen.", ru: "Класс! Всегда перечитывай свой текст и заменяй слова, которые встречаются слишком часто." }
+    ]
+  },
+  {
+    id: "w-brief", stufe: 3, lz: ["de.sc.06", "de.sc.09"], name: "Einen Brief schreiben", ort: "✉️", farbe: "#E8A33D", grund: "#FFF1D9",
+    schritte: [
+      { typ: "sag", text: "Ein Brief hat feste Teile: oben rechts Ort und Datum, dann die Anrede mit Komma, dann dein Text, zum Schluss ein Gruß und dein Name.", ru: "У письма есть постоянные части: вверху справа место и дата, потом обращение с запятой, потом твой текст, в конце прощание и твоё имя." },
+      { typ: "ordnen", e: "✉️", frage: "Bring die Teile des Briefes in die richtige Reihenfolge!", teile: ["Dresden, 3. Mai", "Liebe Oma,", "vielen Dank für das tolle Buch!", "Viele Grüße", "deine Mia"], ru: "Расставь части письма по порядку: место и дата, обращение, текст, прощание, имя." },
+      { typ: "luecke", e: "👵", satz: "Nach der Anrede „Liebe Oma“ steht ein ___.", optionen: ["Komma", "Fragezeichen", "Ausrufezeichen und Smiley"], ru: "После обращения «Liebe Oma» ставится запятая." },
+      { typ: "verbessern", e: "✏️", frage: "In der Anrede ist ein Fehler. Tippe das Wort an!", satz: "lieber Tom, wie geht es dir?", falsch: "lieber", optionen: ["Lieber", "Liber", "Leiber"], tipp: "Richtig! Die Anrede beginnt groß.", ru: "В обращении ошибка: первое слово пишется с большой буквы." },
+      { typ: "luecke", e: "👩‍🏫", satz: "An die Lehrerin schreibst du höflich: „Können ___ mir bitte helfen?“", optionen: ["Sie", "du", "ihr"], ru: "Учительнице пишут вежливо: «Können Sie mir bitte helfen?»" },
+      { typ: "luecke", e: "🤝", satz: "Ein passender Gruß am Ende: „Viele ___“", optionen: ["Grüße", "Hallo", "Tschüss Anfang"], ru: "Подходящее прощание в конце: «Viele Grüße»." },
+      { typ: "ordnen", e: "🎉", frage: "Ordne die Einladung!", teile: ["Liebe Jana,", "ich lade dich zu meinem Geburtstag ein.", "Wir feiern am Samstag um 15 Uhr bei mir zu Hause.", "Bitte sag mir bis Freitag Bescheid.", "Dein Paul"], ru: "Расставь приглашение по порядку." },
+      { typ: "sag", text: "Prima, {name}! Mit Ort, Datum, Anrede, Text, Gruß und Namen ist dein Brief komplett.", ru: "Отлично! С местом, датой, обращением, текстом, прощанием и именем твоё письмо готово." }
+    ]
+  },
+  {
+    id: "w-bericht", stufe: 4, lz: ["de.sc.09"], name: "Ein Bericht: W-Fragen", ort: "📰", farbe: "#2F6FB8", grund: "#E5EFFB",
+    schritte: [
+      { typ: "sag", text: "Ein Bericht erzählt genau und sachlich, was passiert ist. Er beantwortet die W-Fragen: Wer? Was? Wann? Wo? Wie? Warum? Er steht in der Vergangenheit.", ru: "Отчёт (Bericht) точно и по делу рассказывает, что произошло. Он отвечает на вопросы: кто? что? когда? где? как? почему? Пишется в прошедшем времени." },
+      { typ: "luecke", e: "🕗", satz: "„Am Montag um 8 Uhr“ beantwortet die Frage ___", optionen: ["Wann?", "Wo?", "Wer?"], ru: "«В понедельник в 8 часов» отвечает на вопрос «Когда?»." },
+      { typ: "luecke", e: "🏫", satz: "„Auf dem Schulhof“ beantwortet die Frage ___", optionen: ["Wo?", "Warum?", "Wie?"], ru: "«На школьном дворе» отвечает на вопрос «Где?»." },
+      { typ: "luecke", e: "🧊", satz: "„Weil der Boden glatt war“ beantwortet die Frage ___", optionen: ["Warum?", "Wann?", "Wer?"], ru: "«Потому что пол был скользким» отвечает на вопрос «Почему?»." },
+      { typ: "verbessern", e: "🚲", frage: "Ein Bericht steht in der Vergangenheit. Welches Wort passt nicht?", satz: "Gestern stürzt ein Junge mit dem Fahrrad.", falsch: "stürzt", optionen: ["stürzte", "stürzen", "stürzend"], tipp: "Richtig! Das war gestern, also Vergangenheit.", ru: "Отчёт пишется в прошедшем времени. Какое слово не подходит? Правильно: «stürzte»." },
+      { typ: "verbessern", e: "🧐", frage: "Ein Bericht ist sachlich. Welches Wort ist zu übertrieben?", satz: "Das Fenster war mega-super-kaputt.", falsch: "mega-super-kaputt", optionen: ["zerbrochen", "toll", "langweilig"], tipp: "Genau! Im Bericht schreibst du ohne Übertreibung.", ru: "Отчёт пишется по делу. Какое слово преувеличивает? Лучше: «zerbrochen» — «разбито»." },
+      { typ: "ordnen", e: "📰", frage: "Ordne den Bericht in der Reihenfolge, wie es passiert ist!", teile: ["Am Dienstag fand unser Sportfest statt.", "Zuerst liefen alle Klassen um die Wette.", "Danach gab es Weitsprung und Ballwerfen.", "Am Ende bekamen alle Kinder eine Urkunde."], ru: "Расставь отчёт по порядку событий." },
+      { typ: "luecke", e: "💭", satz: "Gefühle wie „Ich fand es so schön!“ gehören ___ in einen Bericht.", optionen: ["nicht", "immer", "zuerst"], ru: "Чувства вроде «Мне было так здорово!» в отчёт не пишут." },
+      { typ: "sag", text: "Super! Ein Bericht beantwortet die W-Fragen, ist in der richtigen Reihenfolge und bleibt sachlich.", ru: "Супер! Отчёт отвечает на вопросы, идёт по порядку и остаётся деловым." }
+    ]
+  },
+  {
+    id: "w-woerterbuch", stufe: 3, lz: ["de.sc.09", "de.sc.04"], name: "Im Wörterbuch suchen", ort: "🔤", farbe: "#7B55B8", grund: "#EFE6FF",
+    schritte: [
+      { typ: "sag", text: "Im Wörterbuch stehen die Wörter nach dem ABC. Zuerst zählt der erste Buchstabe. Ist er gleich, schaust du auf den zweiten, dann auf den dritten.", ru: "В словаре слова стоят по алфавиту. Сначала смотрят на первую букву. Если она одинаковая — на вторую, потом на третью." },
+      { typ: "ordnen", e: "🍎", frage: "Ordne nach dem ABC! Schau auf den ersten Buchstaben.", teile: ["Apfel", "Birne", "Kirsche", "Pflaume", "Zitrone"], ru: "Расставь по алфавиту: смотри на первую букву." },
+      { typ: "ordnen", e: "🏠", frage: "Alle beginnen mit H. Schau auf den zweiten Buchstaben!", teile: ["Hase", "Hemd", "Himmel", "Hose", "Hund"], ru: "Все начинаются на H. Смотри на вторую букву." },
+      { typ: "ordnen", e: "🐟", frage: "Jetzt wird es knifflig: erster und zweiter Buchstabe sind gleich!", teile: ["Bach", "Ball", "Bank", "Baum"], ru: "Теперь сложно: первая и вторая буквы одинаковые. Смотри на третью." },
+      { typ: "luecke", e: "🏃", satz: "„lief“ findest du im Wörterbuch unter ___.", optionen: ["laufen", "lief", "Lauf"], ru: "«lief» ищут в словаре под словом «laufen» (неопределённая форма)." },
+      { typ: "luecke", e: "🌳", satz: "„Bäume“ findest du im Wörterbuch unter ___.", optionen: ["Baum", "Bäume", "bäumen"], ru: "«Bäume» ищут под словом «Baum» (единственное число)." },
+      { typ: "luecke", e: "🌡️", satz: "„kälter“ findest du im Wörterbuch unter ___.", optionen: ["kalt", "kälter", "Kälte am"], ru: "«kälter» ищут под словом «kalt» (основная форма)." },
+      { typ: "luecke", e: "📘", satz: "Welches Wort steht im Wörterbuch weiter vorn? ___", optionen: ["Maus", "Mund", "Mutter"], ru: "Какое слово стоит в словаре раньше? «Maus»." },
+      { typ: "sag", text: "Klasse, {name}! Verben suchst du in der Grundform, Nomen in der Einzahl und Wiewörter in der Grundstufe.", ru: "Класс! Глаголы ищут в неопределённой форме, существительные — в единственном числе, прилагательные — в основной форме." }
+    ]
+  },
+  {
+    id: "w-vortrag", stufe: 4, lz: ["de.sz.07", "de.sz.05"], name: "Einen Vortrag vorbereiten", ort: "🎤", farbe: "#E0574A", grund: "#FFECE8",
+    schritte: [
+      { typ: "sag", text: "Bei einem Vortrag erzählst du anderen etwas, das du weißt. Auf einen Stichwortzettel schreibst du nur wichtige Wörter, keine ganzen Sätze.", ru: "Во время доклада ты рассказываешь другим то, что знаешь. На листок-шпаргалку пишут только важные слова, а не целые предложения." },
+      { typ: "ordnen", e: "🦊", frage: "Ordne den Stichwortzettel für einen Vortrag über den Fuchs!", teile: ["Thema: der Fuchs", "Aussehen: rotes Fell, buschiger Schwanz", "Nahrung: Mäuse, Beeren, Käfer", "Wohnung: Bau unter der Erde", "Schluss: Habt ihr Fragen?"], ru: "Расставь шпаргалку для доклада о лисе по порядку." },
+      { typ: "luecke", e: "🗒️", satz: "Auf den Stichwortzettel schreibst du ___.", optionen: ["nur wichtige Wörter", "den ganzen Text", "gar nichts"], ru: "На шпаргалку пишут только важные слова." },
+      { typ: "luecke", e: "👀", satz: "Beim Vortrag schaust du ___.", optionen: ["die Zuhörer an", "auf den Boden", "aus dem Fenster"], ru: "Во время доклада смотрят на слушателей." },
+      { typ: "verbessern", e: "🗣️", frage: "Ein Tipp ist falsch. Tippe das Wort an!", satz: "Sprich laut und schnell.", falsch: "schnell", optionen: ["langsam", "leise", "flüsternd"], tipp: "Richtig! Was ist besser beim Vortragen?", ru: "Один совет неправильный: говори громко и медленно." },
+      { typ: "luecke", e: "🖼️", satz: "Ein Bild oder ein Plakat hilft, weil die Zuhörer etwas ___ können.", optionen: ["sehen", "essen", "verlieren"], ru: "Картинка или плакат помогают, потому что слушатели могут что-то увидеть." },
+      { typ: "ordnen", e: "🎤", frage: "So bereitest du einen Vortrag vor. Was kommt zuerst?", teile: ["Thema wählen", "Informationen sammeln", "Stichwortzettel schreiben", "Zu Hause laut üben", "Vortrag halten"], ru: "Как готовить доклад: выбрать тему, собрать информацию, написать шпаргалку, потренироваться вслух, выступить." },
+      { typ: "sag", text: "Toll! Übe deinen Vortrag vorher laut, zum Beispiel vor deiner Familie oder vor dem Spiegel.", ru: "Здорово! Потренируй доклад заранее вслух, например перед семьёй или перед зеркалом." }
     ]
   }
 ];

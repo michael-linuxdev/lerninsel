@@ -110,6 +110,26 @@
   .chip { min-height: 60px; padding: 0 20px; border-radius: 18px; background: #fff; font-size: 1.6rem; font-weight: 600; color: var(--pflaume); box-shadow: 0 5px 0 rgba(0,0,0,.12), inset 0 0 0 3px #E6DDF5; }
   .chip.weg { visibility: hidden; }
   .chip.falsch { background: #FFE1DD; }
+  /* Paket A: ordnen (Karten in Reihenfolge) und verbessern (Wort finden und ersetzen) */
+  .aufgabe.lang { justify-content: flex-start; }
+  .ordnen-liste { list-style: none; margin: 0; padding: 10px; width: 100%; max-width: 720px; display: flex; flex-direction: column; gap: 8px; border-radius: 22px; background: var(--himmel); box-shadow: inset 0 0 0 3px #C9D9F5; }
+  .ordnen-liste.kurz { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .ordnen-liste.richtig { background: #CFF3E4; box-shadow: inset 0 0 0 3px var(--minze); }
+  .ordnen-liste .platz { display: flex; align-items: center; gap: 10px; min-height: 56px; }
+  .ordnen-liste .platz.leer::after { content: ""; flex: 1; min-width: 4em; height: 48px; border-radius: 14px; border: 3px dashed #B9CBEA; }
+  .ordnen-liste .nr { flex: none; width: 34px; height: 34px; border-radius: 50%; background: #fff; color: var(--pflaume); font-weight: 700; display: grid; place-items: center; font-size: 1.1rem; }
+  .ordnen-karten { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 720px; }
+  .ordnen-karten.kurz { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .okarte { min-height: 56px; padding: 8px 16px; border-radius: 16px; background: #fff; font-size: 1.25rem; font-weight: 600; line-height: 1.3; color: var(--pflaume); text-align: left; overflow-wrap: anywhere; box-shadow: 0 5px 0 rgba(0,0,0,.12), inset 0 0 0 3px #E6DDF5; }
+  .kurz .okarte { font-size: 1.5rem; text-align: center; }
+  .okarte.drin { flex: 1; box-shadow: inset 0 0 0 3px var(--akzent); }
+  .okarte.weg { display: none; }
+  .vb-satz { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 720px; }
+  .vb-wort { min-height: 56px; padding: 0 14px; border-radius: 14px; background: #fff; font-size: 1.5rem; font-weight: 600; color: var(--pflaume); box-shadow: 0 4px 0 rgba(0,0,0,.1), inset 0 0 0 3px #E6DDF5; }
+  .vb-wort:disabled { cursor: default; }
+  .vb-wort.falsch { background: #FFE1DD; opacity: .6; }
+  .vb-wort.zeig { box-shadow: 0 0 0 5px #FFD15C; }
+  .vb-wort.gefunden { background: #FFF1C9; box-shadow: 0 0 0 5px var(--akzent); color: var(--pflaume); opacity: 1; }
   .pruefen { min-height: 64px; font-size: 1.4rem; padding: 0 34px; }
   .hoeren-knopf { width: 140px; height: 140px; border-radius: 50%; font-size: 4rem; background: var(--grund); box-shadow: 0 8px 0 rgba(0,0,0,.12); }
   .hoeren-knopf:active { transform: translateY(4px); }
@@ -124,6 +144,7 @@
     .erzaehler { flex-direction: row; align-items: flex-end; }
     .erzaehler .fipsi { width: 110px; flex: none; order: -1; }
     .erzaehler .texte-box { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .aufgabe.lang .gross-emoji { display: none; }
     .blase::after { left: -14px; bottom: 26px; border: 10px solid transparent; border-right: 14px solid #fff; border-left: 0; }
   }
 

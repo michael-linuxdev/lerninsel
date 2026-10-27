@@ -163,6 +163,7 @@
     const s = k.schritte[lauf.pos];
     lauf.versuche = 0;
     const A = $("aufgabe");
+    A.classList.toggle("lang", s.typ === "ordnen" || s.typ === "verbessern"); A.scrollTop = 0;   // Paket A: hohe Inhalte oben beginnen, sonst schneidet die Zentrierung oben ab
     const hinweis = `<p class="hinweis" id="hinweis"></p>`;
 
     switch (s.typ) {
@@ -293,6 +294,86 @@
             zeichneZeile();
           }, () => { lauf.gewaehlt = s.woerter.map((_, pos) => chips.findIndex(c => c.idx === pos)); zeichneZeile(); zeile.classList.add("richtig"); });
         });
+        break;
+      }
+      case "ordnen": {
+        // Paket A: ganze Sätze/Bausteine als Karten in die richtige Reihenfolge tippen (Geschichte, Brief, Stichwortzettel, ABC)
+        const frage = s.frage || "Bring die Teile in die richtige Reihenfolge! Tippe sie der Reihe nach an.";
+        blase(frage, frage, S.ht(s));
+        lauf.gewaehlt = [];
+        let karten = mische(s.teile.map((t, idx) => ({ t, idx })));
+        if (karten.every((c, n) => c.idx === n)) karten = karten.reverse();
+        const kurz = s.teile.every(t => t.length <= 16);
+        A.innerHTML = (s.e ? `<div class="gross-emoji" aria-hidden="true" style="font-size:clamp(3rem,8vw,4.6rem)">${s.e}</div>` : "") +
+          `<ol class="ordnen-liste${kurz ? " kurz" : ""}" id="ordnen-liste" aria-label="Deine Reihenfolge"></ol>` +
+          `<div class="ordnen-karten${kurz ? " kurz" : ""}" id="ordnen-karten">` +
+          karten.map((c, n) => `<button class="okarte" data-n="${n}">${c.t}</button>`).join("") + `</div>` +
+          `<button class="knopf haupt pruefen" id="pruefen" disabled>Fertig</button>` + hinweis;
+        const liste = $("ordnen-liste"), pruefen = $("pruefen");
+        const zeichne = () => {
+          liste.innerHTML = s.teile.map((_, pos) => {
+            const n = lauf.gewaehlt[pos];
+            return n == null ? `<li class="platz leer"><span class="nr">${pos + 1}</span></li>`
+              : `<li class="platz"><span class="nr">${pos + 1}</span><button class="okarte drin" data-pos="${pos}">${karten[n].t}</button></li>`;
+          }).join("");
+          A.querySelectorAll("#ordnen-karten .okarte").forEach(c => c.classList.toggle("weg", lauf.gewaehlt.includes(+c.dataset.n)));
+          pruefen.disabled = lauf.gewaehlt.length !== karten.length;
+          liste.querySelectorAll(".okarte").forEach(c => c.addEventListener("click", () => { if (lauf.gesperrt) return; lauf.gewaehlt.splice(+c.dataset.pos, 1); S.ton("tipp"); zeichne(); }));
+        };
+        A.querySelectorAll("#ordnen-karten .okarte").forEach(c => c.addEventListener("click", () => {
+          if (lauf.gesperrt || lauf.gewaehlt.includes(+c.dataset.n)) return;
+          lauf.gewaehlt.push(+c.dataset.n); S.ton("tipp"); SP.verfuegbar() && daten().vorlesen && SP.sprich(karten[+c.dataset.n].t);
+          zeichne();
+        }));
+        zeichne();
+        pruefen.addEventListener("click", () => {
+          const richtig = lauf.gewaehlt.every((n, pos) => karten[n].idx === pos);
+          if (richtig) liste.classList.add("richtig");
+          antwort(null, richtig, () => s.teile.join(" "), () => {
+            // Falsch: die richtigen Karten vorn bleiben liegen, der Rest geht zurück
+            const erste = lauf.gewaehlt.findIndex((n, pos) => karten[n].idx !== pos);
+            lauf.gewaehlt = lauf.gewaehlt.slice(0, Math.max(0, erste));
+            zeichne();
+          }, () => { lauf.gewaehlt = s.teile.map((_, pos) => karten.findIndex(c => c.idx === pos)); zeichne(); liste.classList.add("richtig"); });
+        });
+        break;
+      }
+      case "verbessern": {
+        // Paket A: Text überarbeiten – erst das störende Wort finden, dann eine bessere Variante wählen
+        const woerter = s.satz.split(" ");
+        const kern = (w) => w.replace(/[.,!?:;„“"]/g, "");
+        const ziel = s.stelle != null ? s.stelle : woerter.findIndex(w => kern(w) === s.falsch);
+        const frage = s.frage || "Ein Wort passt hier nicht gut. Tippe es an!";
+        blase(frage, `${frage} ${s.satz}`, S.ht(s));
+        A.innerHTML = (s.e ? `<div class="gross-emoji" aria-hidden="true" style="font-size:clamp(3rem,8vw,4.6rem)">${s.e}</div>` : "") +
+          `<div class="vb-satz" id="vb-satz">` + woerter.map((w, n) => `<button class="vb-wort" data-n="${n}">${w}</button>`).join("") + `</div>` +
+          `<div class="optionen texte" id="vb-optionen" hidden></div>` + hinweis;
+        const besser = () => woerter.map((w, n) => n === ziel ? w.replace(kern(w), s.optionen[0]) : w).join(" ");
+        let gefunden = false;
+        A.querySelectorAll(".vb-wort").forEach(b => b.addEventListener("click", () => {
+          if (gefunden || lauf.gesperrt) return;
+          const n = +b.dataset.n;
+          const passt = s.stelle != null ? n === ziel : kern(woerter[n]) === s.falsch;
+          if (!passt) {
+            antwort(b, false);
+            if (lauf.versuche >= 2) A.querySelectorAll(".vb-wort")[ziel].classList.add("zeig");
+            return;
+          }
+          gefunden = true; S.ton("tipp");
+          A.querySelectorAll(".vb-wort").forEach((x, k) => { x.disabled = true; if (k === +b.dataset.n) x.classList.add("gefunden"); });
+          const h = $("hinweis"); h.className = "hinweis gut"; h.textContent = s.tipp || "Gefunden! Was passt besser?";
+          if (s.tipp) sprich(s.tipp);
+          const opts = mische(s.optionen.map((t, idx) => ({ t, richtig: idx === 0 })));
+          const box = $("vb-optionen"); box.hidden = false;
+          box.innerHTML = opts.map((o, k) => `<button class="option" data-n="${k}">${o.t}</button>`).join("");
+          box.querySelectorAll(".option").forEach(o => o.addEventListener("click", () => {
+            const wahl = opts[+o.dataset.n];
+            antwort(o, wahl.richtig, () => {
+              A.querySelector(".vb-wort.gefunden").textContent = woerter[ziel].replace(kern(woerter[ziel]), s.optionen[0]);
+              return besser();
+            });
+          }));
+        }));
         break;
       }
     }

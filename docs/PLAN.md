@@ -683,7 +683,7 @@ Alle Pakete: kein Bezug zu einem echten Kind, Texte mit Sprachschlüsseln, Rauch
 Jedes Spiel: Prüffragen aus `MINISPIELE.md` Abschnitt 1, Test-Haken, Eintrag in `SEITEN_3D`, Leistungs-Test.
 
 #### Phase G – Breite (2027)
-~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1–3, 17 Werkstatt-Kapitel) · ~~NA-37 Mathe Kl. 4~~ (27.10.: Weg mit 9 Stationen) · NA-38 Medienbildung
+~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1–4, 23 Werkstatt-Kapitel für Kl. 3–4; Teil 4 = Schritt A „Deutsch schreiben“) · ~~NA-37 Mathe Kl. 4~~ (27.10.: Weg mit 9 Stationen) · NA-38 Medienbildung
 „Produzieren/Problemlösen“ (Roboter-Weg) · NA-39 Übergang 5 · NA-41 Vorschul-Pfad · NA-46 Arabisch, Türkisch und weitere Sprachen ·
 NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Volkslied-Melodien (Noten prüfen).
 
@@ -1245,3 +1245,26 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
   Deutsch: Texte planen/überarbeiten (`de.sc.07`), Bericht/Brief (`de.sc.09`), präsentieren (`de.sz.07`) – brauchen einen Schreib-Schritt.
   SU: Wärmeleitung, Säugetiere/Gewässer, Experimentieren, Landkreis/Bundesland.
 - **Nächstes:** neuer Schritt-Typ „Text schreiben/ordnen“ für Deutsch Kl. 3–4, oder Übergang Kl. 5 (NA-39), oder Grafik/Story nach Rückfrage.
+
+### Stand 27.10.2026, Abend (Sitzung 27.10., 17:30: NA-36 Teil 4 = Schritt A „Deutsch schreiben“)
+Fragerunde: noch kein iPad-Test; nur Schritt A; Grafik/3D und Story weiter tabu; Kl.-3/4-Inhalte bleiben ab der Klasse davor sichtbar (wie bisher).
+- **Zwei neue Werkstatt-Schritt-Typen** in `spiele/deutsch/abenteuer.js` (Stil in `spiele/deutsch/index.html`):
+  - `ordnen { frage?, teile: [...richtige Reihenfolge], e?, ru }`: Karten der Reihe nach antippen, sie landen auf nummerierten Plätzen; Antippen
+    eines gelegten Teils nimmt es zurück; „Fertig“ prüft. Falsch → richtige Karten vorn bleiben liegen, Rest geht zurück; nach dem 2. Fehler Lösung.
+    Kurze Teile (≤ 16 Zeichen, z. B. Wörter fürs ABC) liegen nebeneinander, lange Sätze untereinander (Hochformat lesbar).
+  - `verbessern { frage?, satz, falsch, stelle?, optionen: [besser, …], tipp?, e?, ru }`: erst das störende Wort im Satz antippen (falsches Wort =
+    Fehlversuch, nach zwei Fehlern leuchtet das richtige), dann die bessere Variante wählen (erste Option richtig). `stelle` = Wortnummer, wenn das
+    Wort mehrfach vorkommt. Satzzeichen am Wort bleiben beim Ersetzen erhalten.
+  - Lange Aufgaben (`ordnen`, `verbessern`) beginnen oben statt zentriert (sonst schnitt die Zentrierung oben ab); im Hochformat ohne großes Emoji.
+- **Sechs neue Kapitel** (`spiele/deutsch/werkstatt.js`, je mit russischem Entwurf): „Eine Geschichte ordnen“ (Kl. 3, `de.sc.07`), „Abwechslungsreiche
+  Satzanfänge“ (Kl. 3, `de.sc.07`), „Einen Brief schreiben“ (Kl. 3, `de.sc.06`/`de.sc.09`, auch Einladung), „Ein Bericht: W-Fragen“ (Kl. 4, `de.sc.09`),
+  „Im Wörterbuch suchen“ (Kl. 3, `de.sc.09`/`de.sc.04`: ABC nach 1./2./3. Buchstaben, Grundform), „Einen Vortrag vorbereiten“ (Kl. 4, `de.sz.07`/`de.sz.05`).
+  Werkstatt jetzt 28 Kapitel (Kl. 1: 5, Kl. 2: 22, ab Kl. 3: 28).
+- **Sachsen** (Einschätzung von Hand): Kl. 2 „Für sich und andere schreiben“, Kl. 3 „Für sich und andere schreiben“, Kl. 4 „Sprechen und Zuhören“,
+  „Für sich und andere schreiben“, „Richtig schreiben“ → teil. Gesamt jetzt 14 × ja, 31 × teil, 4 × nein. Errechnet: `de.sc.07`, `de.sz.07` → teil.
+- **Tests:** `tests/deutsch34.js` tippt `ordnen` und `verbessern` echt an (Karten der Reihe nach, falsche Reihenfolge einmal geprüft, falsches Wort,
+  richtiges Wort, bessere Variante), Kachelzahlen 5/22/28; `tests/lehrplan.js` Zählung 14/31/4 und `de.sc.07`/`de.sz.07` = teil.
+- **Entscheidungen:** Wörterbuch schon Kl. 3 (wie in vielen Lehrplänen), Bericht und Vortrag Kl. 4. Freies Schreiben (Tastatur/Handschrift) bewusst
+  nicht gebaut – Ordnen und Überarbeiten decken Planen/Überarbeiten ab, eigenes Schreiben bleibt als „fehlt“ im Hinweis.
+- **Offen:** freies Schreiben mit eigener Eingabe, E-Mail, Streit schlichten, Medienabsichten; Ukrainisch für die neuen Kapitel.
+- **Nächstes:** Schritt B (Mathe-Rest), C (Sachunterricht-Rest) oder D (Länderprofile) – nach Rückmeldung; Grafik bleibt eingefroren.

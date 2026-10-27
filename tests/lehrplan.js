@@ -56,7 +56,7 @@ pruefe("Sachsen: alle 49 Lernbereiche haben lz-Verweise auf existierende Ziele (
 pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand 9 / 15 / 25, Stand NA-33a)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 14, teil: 26, nein: 9 });
+  assert.deepStrictEqual({ ...n }, { ja: 14, teil: 31, nein: 4 });
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
@@ -71,7 +71,7 @@ pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziel
   assert.ok(I.alle().length >= 23 + 5 + 5 + 4 + 6 + 5, "Inhalte: " + I.alle().length);
 });
 
-pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten gut, Anlaute gut, Lesetexte und Nachspuren teilweise, Texte planen noch nicht", () => {
+pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten gut, Anlaute gut, Lesetexte und Nachspuren teilweise, Texte planen teilweise", () => {
   assert.strictEqual(I.abdeckung("ma.zo.07"), "ja");    // vier Stationen
   assert.strictEqual(I.abdeckung("de.su.04"), "ja");    // NA-36: mit Steigerung und Pronomen genug Aufgaben
   assert.strictEqual(I.abdeckung("ma.zo.03"), "ja");    // Plus/Minus bis 20 und bis 10 (Klasse-1-Weg)
@@ -80,7 +80,8 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten gut, Anlaute gut
   assert.strictEqual(I.abdeckung("de.le.02"), "ja");    // NA-30: Tafel, Finde das Bild, Welcher Buchstabe (mit Lernkartei)
   assert.strictEqual(I.abdeckung("de.le.05"), "teil");   // NA-31: Lesetexte Kl. 2 (ohne Lernkartei)
   assert.strictEqual(I.abdeckung("de.sc.02"), "teil");   // NA-35: Nachspuren (ohne Lernkartei)
-  assert.strictEqual(I.abdeckung("de.sc.07"), "nein");
+  assert.strictEqual(I.abdeckung("de.sc.07"), "teil");   // Paket A: Geschichte ordnen, Satzanfänge (ohne Lernkartei)
+  assert.strictEqual(I.abdeckung("de.sz.07"), "teil");   // Paket A: Vortrag vorbereiten
   const z = L.zaehle("sachsen", 2).errechnet;
   assert.strictEqual(z.ja + z.teil + z.nein, 17, "Kl. 1/2: 17 Lernbereiche");
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
