@@ -67,7 +67,12 @@ const TX = {
   wolke: merke(wolkeBild(), false),
   // Zimmer
   bett: merke(D.bett()), schrank: merke(D.schrank()), spiegel: merke(D.spiegel()), album: merke(D.album()), teppich: merke(D.teppich(), false),
-  tannenbaum: [merke(D.tannenbaum(0)), merke(D.tannenbaum(1))]
+  tannenbaum: [merke(D.tannenbaum(0)), merke(D.tannenbaum(1))],
+  moebel: Object.fromEntries(Object.entries(D.MOEBEL_BILD).filter(([id]) => id !== "tannenbaum").map(([id, f]) => [id, merke(f())])),
+  fisch: [merke(D.fisch("orange")), merke(D.fisch("gelb"))],
+  staffelei: merke(D.MOEBEL_BILD.staffelei(false)), rahmen: merke(D.rahmen(18, 15, "gelb")),
+  pinnwand: merke(D.pinnwand(K.pinnwandZettel())),
+  ring: merke(D.marke(1), false)
 };
 // Spielorte (gesperrt in Grau mit Schloss)
 const ORT_BILD = { lauf: D.startbogen, kart: D.kart, bau: D.bausteine };
@@ -90,7 +95,7 @@ const MIT_TIER = !!(tierDaten && tierDaten.phase === "tier" && TIERE && TIERE.AR
 let TIER_TX = null, NEST_TX;
 if (MIT_TIER) {
   const A = TIERE.ARTEN[tierDaten.art], f = A.farben[tierDaten.farbe] || A.farben[0], F = D.tierFarben(f), st = TP.stufe ? TP.stufe(tierDaten) : 0;
-  TIER_TX = [merke(D.tier(tierDaten.art, F, 0, st)), merke(D.tier(tierDaten.art, F, 1, st))];
+  TIER_TX = { seite: [0, 1].map(i => merke(D.tier(tierDaten.art, F, i, st))), vorn: [0, 1].map(i => merke(D.tierVorn(tierDaten.art, F, i, st))), hinten: [0, 1].map(i => merke(D.tierHinten(tierDaten.art, F, i, st))) };
   NEST_TX = merke(D.nest(null));
 } else if (tierDaten && tierDaten.phase === "ei" && TIERE) {
   const e = TIERE.EIER[tierDaten.ei] || { a: "#FFFFFF", b: "#E0457B" };
@@ -312,9 +317,9 @@ const ich = { x: P.start[0], z: P.start[1] + 0.6, richtung: "vorn", spiegeln: 1,
 const ichS = new Sprite(KIND.vorn[0].tex); ichS.anchor.set(0.5, 1); dinge.addChild(ichS);
 const ichSchatten = schattenUnter("k", 0, 0);
 let tierS = null, tierSchatten = null, schleifeS = null;
-const tier = MIT_TIER ? { x: P.tier[0], z: P.tier[1] } : null;
+const tier = MIT_TIER ? { x: P.tier[0], z: P.tier[1], richtung: "seite", spiegeln: 1 } : null;
 if (tier) {
-  tierS = new Sprite(TIER_TX[0].tex); tierS.anchor.set(0.5, 1); dinge.addChild(tierS); tierSchatten = schattenUnter("k", 0, 0);
+  tierS = new Sprite(TIER_TX.seite[0].tex); tierS.anchor.set(0.5, 1); dinge.addChild(tierS); tierSchatten = schattenUnter("k", 0, 0);
   if (tierDaten.traegt && tierDaten.traegt.schleife) { schleifeS = new Sprite(TX.schleife.tex); schleifeS.anchor.set(0.5); dinge.addChild(schleifeS); }
 }
 const markeS = new Sprite(TX.marke[0].tex); markeS.anchor.set(0.5); markeS.visible = false; unten.addChild(markeS);
@@ -327,13 +332,14 @@ const wolkenListe = [[-10, -12], [6, 4], [16, -18]].map(([x, z]) => { const s = 
 // ======================================================================================================
 const ZIM = { x0: KARTE + 6 * T, y0: 4 * T, b: Math.round(8.4 * T), h: Math.round(9.6 * T) };   // Pixel auf der Weltebene
 const zimmerC = new Container(); zimmerC.visible = false; welt.addChild(zimmerC);
+const FENSTER_X = 0.42;   // Fenster in der Rückwand (links davon Pinnwand und ein gemaltes Bild)
 const WAND_REIHE = { rosa: "rosa", mint: "gruen", himmel: "blau", sonne: "gelb", lila: "lila" };
 function zimmerBild(wandId) {
   const wr = WAND_REIHE[wandId] || "rosa", WH = 2.4 * T;
   return Texture.from(leinwand(ZIM.b, ZIM.h, (x, y) => {
     if (x < 4 || x >= ZIM.b - 4) return farbe(wr, x < 2 || x >= ZIM.b - 2 ? 1 : 2);   // Seitenwände
     if (y < WH) {                                                                   // Rückwand mit Fenster und Leiste
-      const fx = x - (ZIM.b / 2 - 0.7 * T - 14), fy = y - 8;
+      const fx = x - (ZIM.b / 2 + FENSTER_X * T - 14), fy = y - 8;
       if (fx >= 0 && fx < 28 && fy >= 0 && fy < 20) return fx < 2 || fx > 25 || fy < 2 || fy > 17 || fx === 13 || fy === 9 ? farbe("weiss", 4) : farbe(NACHT ? "blau" : "glas", NACHT ? 1 : (fx - fy + 30) % 11 < 2 ? 4 : 3);
       if (y >= WH - 3) return farbe("holz", y === WH - 1 ? 1 : 3);
       return farbe(wr, raster(y < 3 ? 2.6 : 3.6 - (y / WH) * 0.6 + ((x >> 3) % 2 ? 0.25 : 0), x, y));
@@ -347,27 +353,74 @@ const zimmerBoden = new Sprite(); zimmerBoden.position.set(ZIM.x0, ZIM.y0); zimm
 const zimmerDinge = new Container(); zimmerDinge.sortableChildren = true; zimmerC.addChild(zimmerDinge);
 // Zimmer-Koordinaten wie „Rund“ (x −4.2 … 4.2, z −3.7 … 3.7 um die Mitte), Rückwand oben
 const zx = (x) => ZIM.x0 + ZIM.b / 2 + x * T, zz = (z) => ZIM.y0 + 2.4 * T + (z + 3.7) * T * (7.2 / 7.4);
-const zimmerTipp = [];
-let moebelS = [];
+const wandY = (y) => ZIM.y0 + y;   // Pixelhöhe an der Rückwand
+const zimmerTipp = [], zimmerHindernisse = [];
+let moebelS = [], fischeS = [];
+const setzeZ = (e, x, z, anker = 1) => { const s = new Sprite(e.tex); s.anchor.set(0.5, anker); s.position.set(Math.round(zx(x)), Math.round(zz(z))); s.zIndex = s.y; zimmerDinge.addChild(s); return s; };
+const tippZ = (id, x, z, nah, s, tipp, aktion = K.aktionFuer(id)[0]) => zimmerTipp.push({ id, x, z, nah, s, tipp, aktion });
+// Gemaltes Bild aus dem Atelier im Pixel-Look: verkleinert und auf die Farben der Palette gebracht
+function pixelBild(url, b, h) {
+  return new Promise((ok) => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas"); c.width = b; c.height = h; const g = c.getContext("2d");
+      const k = Math.max(b / img.width, h / img.height); g.imageSmoothingEnabled = true;
+      g.drawImage(img, (b - img.width * k) / 2, (h - img.height * k) / 2, img.width * k, img.height * k);
+      const d = g.getImageData(0, 0, b, h), p = d.data;
+      for (let i = 0; i < p.length; i += 4) {
+        let best = 0, bd = 1e9;
+        for (let f = 0; f < RGB.length; f++) { const [r, gg, bb] = RGB[f], e = (r - p[i]) ** 2 + (gg - p[i + 1]) ** 2 + (bb - p[i + 2]) ** 2; if (e < bd) { bd = e; best = f; } }
+        [p[i], p[i + 1], p[i + 2]] = RGB[best]; p[i + 3] = 255;
+      }
+      g.putImageData(d, 0, 0); ok(Texture.from(c));
+    };
+    img.onerror = () => ok(null); img.src = url;
+  });
+}
+// Feste Einrichtung: Bett mit Album, Schrank, Spiegel, Teppich, Pinnwand, Wandbild, Staffelei
+{
+  const tep = setzeZ(TX.teppich, 0, 0.6, 0.5); tep.zIndex = -1;
+  const bett = setzeZ(TX.bett, -2.9, -0.5); const albumS = setzeZ(TX.album, -2.5, -1.4); albumS.zIndex = bett.zIndex + 1;
+  const schrank = setzeZ(TX.schrank, 2.8, -2.9); const spiegel = setzeZ(TX.spiegel, 3.65, 2.4);
+  tippZ("bett", -2.9, -1.2, 2.0, bett, () => zeigeAntwort(K.antwort("bett", { tier: tier ? tierDaten.name || "dein Tier" : null })));
+  tippZ("album", -2.2, -1.8, 1.4, albumS, () => zeigeAntwort(K.antwort("album")));
+  tippZ("schrank", 2.8, -2.6, 1.9, schrank, () => zeigeAntwort(K.antwort("schrank")));
+  tippZ("spiegel", 3.65, 2.2, 1.6, spiegel, () => zeigeAntwort(K.antwort("spiegel")));
+  const pinn = new Sprite(TX.pinnwand.tex); pinn.anchor.set(0.5, 0); pinn.position.set(Math.round(zx(-2.9)), wandY(6)); pinn.zIndex = -2; zimmerDinge.addChild(pinn);
+  tippZ("pinnwand", -2.6, -2.2, 1.6, pinn, () => zeigeAntwort(K.antwort("pinnwand")), ["📌", "Ansehen"]);
+  const staff = setzeZ(TX.staffelei, -2.1, 2.5); let neuestes = null;
+  tippZ("staffelei", -2.1, 2.2, 2.0, staff, () => zeigeAntwort(K.antwort("staffelei", { bild: !!neuestes })), ["🎨", "Malen"]);
+  zimmerHindernisse.push({ x: -2.1, z: 2.3, r: 0.55 }, { x: 3.65, z: 2.2, r: 0.5 });
+  if (window.Bilder) {
+    window.Bilder.alle().then(l => { neuestes = l[0] || null; if (neuestes) return pixelBild(neuestes.url, 12, 13).then(t => { if (!t) return; const b = new Sprite(t); b.anchor.set(0.5, 0); b.position.set(staff.x, staff.y - staff.height + 6); b.zIndex = staff.zIndex + 0.1; zimmerDinge.addChild(b); }); }).catch(() => {});
+    window.Bilder.wandBilder().then(l => { const w = l[0]; if (!w) return; return pixelBild(w.url, 14, 11).then(t => {
+      if (!t) return; const r = new Sprite(TX.rahmen.tex); r.anchor.set(0.5, 0); r.position.set(Math.round(zx(-1.12)), wandY(8)); r.zIndex = -2; zimmerDinge.addChild(r);
+      const b = new Sprite(t); b.anchor.set(0.5, 0); b.position.set(r.x, r.y + 2); b.zIndex = -1.9; zimmerDinge.addChild(b);
+      tippZ("bild", -1.0, -2.2, 1.4, r, () => zeigeAntwort(K.antwort("bild", { t: w.t })), ["🖼️", "Ansehen"]);
+    }); }).catch(() => {});
+  }
+}
+// Plätze zum Einrichten: Ringe zeigen beim Aussuchen, wo die Möbel hinkommen
+const platzRinge = K.PLAETZE.map(pl => { const r = new Sprite(TX.ring.tex); r.anchor.set(0.5); r.position.set(Math.round(zx(pl.x)), Math.round(zz(pl.z + 0.4))); r.zIndex = -0.5; r.visible = false; zimmerDinge.addChild(r); return r; });
+// Möbel auf den Plätzen (Daten aus dem Kern; gleiche Möbel wie bei „Rund“)
 function stelleZimmer() {
   const d = K.zimmerDaten();
   zimmerBoden.texture = zimmerBild(d.wand);
-  zimmerDinge.removeChildren(); zimmerTipp.length = 0; moebelS = [];
-  const setzeZ = (e, x, z, anker = 1) => { const s = new Sprite(e.tex); s.anchor.set(0.5, anker); s.position.set(Math.round(zx(x)), Math.round(zz(z))); s.zIndex = s.y; zimmerDinge.addChild(s); return s; };
-  const tep = setzeZ(TX.teppich, 0, 0.6, 0.5); tep.zIndex = -1;
-  const bett = setzeZ(TX.bett, -2.9, -0.5); const albumS = setzeZ(TX.album, -2.5, -1.4); albumS.zIndex = bett.zIndex + 1;
-  const schrank = setzeZ(TX.schrank, 2.8, -2.9); const spiegel = setzeZ(TX.spiegel, 1.0, -3.0);
-  zimmerTipp.push({ id: "bett", x: -2.9, z: -1.2, nah: 2.0, s: bett, tipp: () => zeigeAntwort(K.antwort("bett", { tier: tier ? tierDaten.name || "dein Tier" : null })), aktion: K.aktionFuer("bett")[0] });
-  zimmerTipp.push({ id: "album", x: -2.2, z: -1.8, nah: 1.4, s: albumS, tipp: () => zeigeAntwort(K.antwort("album")), aktion: K.aktionFuer("album")[0] });
-  zimmerTipp.push({ id: "schrank", x: 2.8, z: -2.6, nah: 1.9, s: schrank, tipp: () => zeigeAntwort(K.antwort("schrank")), aktion: K.aktionFuer("schrank")[0] });
-  zimmerTipp.push({ id: "spiegel", x: 1.0, z: -3.0, nah: 1.6, s: spiegel, tipp: () => zeigeAntwort(K.antwort("spiegel")), aktion: K.aktionFuer("spiegel")[0] });
-  // Möbel auf den Plätzen: in Pixel gibt es bisher den Tannenbaum (übrige Möbel folgen mit NA-28)
+  moebelS.forEach(m => m.destroy()); fischeS.forEach(f => f.destroy()); moebelS = []; fischeS = [];
+  for (let i = zimmerTipp.length - 1; i >= 0; i--) if (zimmerTipp[i].moebel) zimmerTipp.splice(i, 1);
+  for (let i = zimmerHindernisse.length - 1; i >= 0; i--) if (zimmerHindernisse[i].moebel) zimmerHindernisse.splice(i, 1);
   K.PLAETZE.forEach(pl => {
-    const id = d.plaetze[pl.id]; if (!id || !K.besitzt(id, (K.MOEBEL.find(m => m.id === id) || {}).preis)) return;
-    if (id === "tannenbaum") { const s = setzeZ(TX.tannenbaum[0], pl.x, pl.z + 0.8); moebelS.push(s); }
+    const id = d.plaetze[pl.id], m = K.MOEBEL.find(x => x.id === id); if (!m || !K.besitzt("moebel-" + id, m.preis)) return;
+    const e = id === "tannenbaum" ? TX.tannenbaum[0] : TX.moebel[id], halb = e.b / 2 / T + 0.3, x = Math.max(-4.2 + halb, Math.min(4.2 - halb, pl.x));   // innerhalb der Wände
+    const s = setzeZ(e, x, pl.z + 0.5); s.moebel = id; moebelS.push(s);
+    if (id === "aquarium") TX.fisch.forEach((f, i) => { const fs = new Sprite(f.tex); fs.anchor.set(0.5); fs.zIndex = s.zIndex + 0.1; fs.basis = { x: s.x, y: s.y - 16 + i * 5 }; fs.i = i; zimmerDinge.addChild(fs); fischeS.push(fs); });
+    zimmerTipp.push({ id: "moebel-" + id, x, z: pl.z, nah: 1.6, s, moebel: true, tipp: () => zeigeAntwort(K.antwort("moebel", { id })), aktion: ["👀", "Ansehen"] });
+    zimmerHindernisse.push({ x, z: pl.z + 0.2, r: 0.55, moebel: true });
   });
 }
 stelleZimmer();
+window.Einrichten.verbinde({ neu: () => stelleZimmer(), ringe: (an, besetzt) => platzRinge.forEach((r, i) => { r.visible = an; r.tint = besetzt[i] ? 0xF592BC : 0xFFFFFF; }) });
+$("einrichten").addEventListener("click", () => { S.ton("tipp"); window.Einrichten.oeffne(); });
 const ZIMMER_GRENZE = { x0: -3.8, x1: 3.8, z0: -2.2, z1: 3.55 };
 
 // ======================================================================================================
@@ -502,6 +555,7 @@ function wegVonHindernissen(p, r) {
     p.x = Math.max(ZIMMER_GRENZE.x0, Math.min(ZIMMER_GRENZE.x1, p.x)); p.z = Math.max(ZIMMER_GRENZE.z0, Math.min(ZIMMER_GRENZE.z1, p.z));
     // Bett und Schrank
     for (const [x0, z0, x1, z1] of [[-4.2, -3.7, -1.85, -0.6], [1.7, -3.7, 3.9, -2.4]]) schiebeAusKiste(p, r, x0, z0, x1, z1);
+    for (const h of zimmerHindernisse) { const dx = p.x - h.x, dz = p.z - h.z, d = Math.hypot(dx, dz), m = h.r + r; if (d < m && d > 0.001) { p.x = h.x + dx / d * m; p.z = h.z + dz / d * m; } }
     return;
   }
   for (const h of hindernisse) {
@@ -519,7 +573,7 @@ function markiere(x, z) { markeS.position.set(Math.round(drinnen ? zx(x) : px(x)
 // Antippen: oberstes antippbares Ding unter dem Finger, sonst Boden
 app.stage.eventMode = "static"; app.stage.hitArea = app.screen;
 app.stage.on("pointertap", (e) => {
-  if (!$("blase").hidden) return;
+  if (!$("blase").hidden || !$("laden").hidden) return;
   const l = welt.toLocal(e.global);
   const liste = drinnen ? zimmerTipp.map(t => ({ ...t, sprite: t.s })) : tippbar;
   let treffer = null;
@@ -541,7 +595,7 @@ app.stage.on("pointertap", (e) => {
 function springe() { if (ich.hoehe <= 0) { ich.vy = 70; S.ton("tipp"); } }
 function pruefeNaehe() {
   let best = null, bestD = Infinity;
-  if ($("blase").hidden && ich.hoehe <= 0) for (const t of (drinnen ? zimmerTipp : tippbar)) {
+  if ($("blase").hidden && $("laden").hidden && ich.hoehe <= 0) for (const t of (drinnen ? zimmerTipp : tippbar)) {
     if (prolog && t.id !== "haus") continue;   // im Prolog führt der Aktionsknopf nur ins Haus
     const d = Math.hypot(t.x - ich.x, t.z - ich.z);
     if (d < t.nah && d < bestD) { best = t; bestD = d; }
@@ -577,7 +631,7 @@ function streichle() {
 function spielOrt(fn) { if (K.spielZeit()) { fn(); return; } sprechblase(...K.schlaeftText(), null); }
 let draussen = null, besuche = 0;
 function reingehen() {
-  drinnen = true; besuche++; $("raus").hidden = false; $("blase").hidden = true;
+  drinnen = true; besuche++; $("raus").hidden = false; $("einrichten").hidden = false; $("blase").hidden = true;
   draussen = { x: ich.x, z: ich.z };
   ich.x = 0; ich.z = 2.6; ich.richtung = "hinten"; ziel = null; ankunft = null; markeS.visible = false;
   zimmerC.visible = true; boden.visible = unten.visible = schatten.visible = dinge.visible = nebelC.visible = wolkenC.visible = glanz.visible = false;
@@ -590,7 +644,7 @@ function reingehen() {
   S.ton("tipp");
 }
 function rausgehen() {
-  drinnen = false; $("raus").hidden = true;
+  drinnen = false; $("raus").hidden = true; $("einrichten").hidden = true; window.Einrichten.zu();
   ich.x = TUER.x; ich.z = TUER.z + 0.2; ich.richtung = "vorn"; ziel = null; ankunft = null; markeS.visible = false;
   zimmerC.visible = false; boden.visible = unten.visible = schatten.visible = dinge.visible = nebelC.visible = wolkenC.visible = glanz.visible = true; himmel.visible = true; app.renderer.background.color = 0x2459B8;
   zimmerDinge.removeChild(ichS); dinge.addChild(ichS); schatten.addChild(ichSchatten); unten.addChild(markeS);
@@ -665,13 +719,16 @@ app.ticker.add((tk) => {
   // Tier folgt
   if (tier) {
     const fx = ich.x - (ich.richtung === "seite" ? ich.spiegeln : 0) * 0.9 - tier.x, fz = ich.z + 0.15 - tier.z, fd = Math.hypot(fx, fz), laeuft = fd > 0.8;
-    if (laeuft) { const s = Math.min(fd - 0.8, (fd > 3 ? 7 : 4.2) * dt); tier.x += fx / fd * s; tier.z += fz / fd * s; if (Math.abs(fx) > 0.05) tierS.scale.x = Math.sign(fx); }
+    if (laeuft) {
+      const s = Math.min(fd - 0.8, (fd > 3 ? 7 : 4.2) * dt); tier.x += fx / fd * s; tier.z += fz / fd * s;
+      if (Math.abs(fx) > Math.abs(fz) * 0.8) { tier.richtung = "seite"; tier.spiegeln = Math.sign(fx) || 1; } else tier.richtung = fz < 0 ? "hinten" : "vorn";
+    }
     const tanz = performance.now() < tanzBis ? Math.round(Math.abs(Math.sin(t * 9)) * 4) : 0;
-    tierS.texture = TIER_TX[laeuft ? Math.floor(t * 10) % 2 : 0].tex;
+    tierS.texture = TIER_TX[tier.richtung][laeuft ? Math.floor(t * 10) % 2 : 0].tex; tierS.scale.x = tier.richtung === "seite" ? tier.spiegeln : 1;
     const tpx = drinnen ? zx(tier.x) : px(tier.x), tpy = drinnen ? zz(tier.z) : py(tier.z);
     tierS.position.set(Math.round(tpx), Math.round(tpy) - tanz); tierS.zIndex = Math.round(tpy);
     tierSchatten.position.set(Math.round(tpx), Math.round(tpy) - 1);
-    if (schleifeS) { schleifeS.position.set(tierS.x + tierS.scale.x * 6, tierS.y - 14); schleifeS.zIndex = tierS.zIndex + 0.1; }
+    if (schleifeS) { schleifeS.position.set(tierS.x + (tier.richtung === "seite" ? tierS.scale.x * 6 : 0), tierS.y - (tier.richtung === "seite" ? 14 : 12)); schleifeS.zIndex = tierS.zIndex + (tier.richtung === "hinten" ? -0.1 : 0.1); }
   }
   // Nachbarn: schauen zum Kind, hüpfen, wenn sie sich freuen oder zur Musik tanzen; einfache Zwei-Bild-Animation
   NACHBARN.forEach((n, i) => {
@@ -694,7 +751,10 @@ app.ticker.add((tk) => {
   if (!RUHIG) { wTakt += dt; if (wTakt > 0.55) { wTakt = 0; bildNr ^= 1; boden.texture = BODEN[bildNr]; bootS.y = Math.round(py(STEG.z1 - 0.6)) + bildNr; } }
   wolkenListe.forEach(w => { w.ox += dt * 4; if (w.ox > KARTE + 4 * T) w.ox = -8 * T; w.x = Math.round(w.ox); });
   if (lichter.length) { const n = Math.floor(performance.now() / 600); lichter.forEach((l, i) => { l.texture = TX.licht[(i + n) % 4].tex; }); }
-  if (drinnen && moebelS.length) moebelS.forEach(m => { m.texture = TX.tannenbaum[Math.floor(performance.now() / 700) % 2].tex; });
+  if (drinnen) {
+    moebelS.forEach(m => { if (m.moebel === "tannenbaum") m.texture = TX.tannenbaum[Math.floor(performance.now() / 700) % 2].tex; });
+    fischeS.forEach(f => { const v = Math.sin(t * (0.8 + f.i * 0.3) + f.i * 2); f.position.set(Math.round(f.basis.x + v * 7), f.basis.y); f.scale.x = Math.cos(t * (0.8 + f.i * 0.3) + f.i * 2) > 0 ? -1 : 1; });
+  }
   // Regen/Schnee (auf dem Bildschirm), Blitz
   if (!drinnen) teilchen.forEach(p => { p.y += p.v * dt; p.x += (wetter && wetter.art === "schnee" ? Math.sin(t + p.p) * 12 : -40) * dt; if (p.y > app.screen.height) { p.y = -8; p.x = Math.random() * app.screen.width; } });
   if (wetter && wetter.art === "gewitter" && !drinnen && !RUHIG) { blitz -= dt; if (blitz < -6 - Math.random() * 6) blitz = 0.12; blitzS.alpha = blitz > 0 ? 0.55 : 0; }
@@ -791,6 +851,7 @@ window.__pixel = {
   get aktion() { return naechstes ? naechstes.aktion[1] : null; }, druecke: () => aktion(),
   get paket() { return paket ? { x: PAKET_POS.x, z: PAKET_POS.z } : null; }, oeffnePaket, lichter: () => lichter.length,
   nebel: () => ({ stufe: nebelJetzt, alpha: nebelS ? nebelS.alpha : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; },
-  steg: STEG, su: SU, tuer: TUER, zimmerDaten: K.zimmerDaten, moebel: () => moebelS.length, get wetter() { return wetter; }, get tanzt() { return performance.now() < tanzBis; },
-  zeichnungen: () => zaehler.letzt, info: () => ({ zeichnungen: zaehler.letzt, skala, karte: KARTE, sprites: dinge.children.length }), SAISON, NACHT, MONAT, skala: () => skala, zoom: (z) => { festSkala = z || null; layout(); }
+  steg: STEG, su: SU, tuer: TUER, zimmerDaten: K.zimmerDaten, moebel: () => moebelS.map(m => m.moebel), einrichten: () => window.Einrichten.oeffne(), get ringe() { return platzRinge.filter(r => r.visible).length; }, get wetter() { return wetter; }, get tanzt() { return performance.now() < tanzBis; },
+  zeichnungen: () => zaehler.letzt, info: () => ({ zeichnungen: zaehler.letzt, skala, karte: KARTE, sprites: dinge.children.length }), SAISON, NACHT, MONAT, skala: () => skala, zoom: (z) => { festSkala = z || null; layout(); },
+  figur: () => KF, get tierRichtung() { return tier ? tier.richtung : null; }
 };

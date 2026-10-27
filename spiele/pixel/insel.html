@@ -43,6 +43,21 @@
   .blase-knoepfe { grid-column: 1 / -1; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 6px; }
   .blase-knoepfe .knopf { min-height: 54px; font-size: 1.15rem; }
   .blase-knoepfe [hidden] { display: none; }
+  #einrichten { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(220px, calc(env(safe-area-inset-bottom) + 210px)); z-index: 2; min-height: 56px; font-size: 1.15rem; }
+  #einrichten[hidden], #laden[hidden] { display: none; }
+  #laden { position: fixed; top: calc(max(12px, env(safe-area-inset-top)) + 64px); right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); width: min(440px, calc(100% - 28px)); box-sizing: border-box; padding: 16px 18px; z-index: 4; overflow-y: auto; }
+  .laden-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .laden-kopf h2 { margin: 0; font-size: 1.3rem; }
+  #laden-text { margin: 8px 0 10px; font-weight: 600; }
+  #laden h3 { margin: 12px 0 8px; font-size: 1.05rem; }
+  #laden .waren { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+  #laden .ware { display: flex; flex-direction: column; align-items: center; gap: 4px; border: 3px solid #4A4058; background: #F4F8FC; border-radius: 10px; padding: 10px 8px; font: inherit; color: #30283A; min-height: 64px; width: 100%; margin-bottom: 8px; text-align: center; }
+  #laden .waren .ware { margin: 0; }
+  #laden .ware.hat { border-color: #2FA37C; background: #E6F8EF; }
+  #laden .ware.weg { background: #FFF6D6; border-color: #B88A22; }
+  #laden .ware .e { font-size: 2rem; line-height: 1.1; }
+  #laden .ware .e i { display: inline-block; width: 36px; height: 36px; border-radius: 6px; box-shadow: inset 0 0 0 3px rgba(0,0,0,.12); }
+  #laden .ware span:last-child { font-size: .95rem; font-weight: 600; opacity: .85; }
   #laden-an { position: fixed; inset: 0; display: grid; place-items: center; font-weight: 700; color: #fff; z-index: 1; }
   @media (max-width: 600px) { .leiste .knopf { min-height: 46px; font-size: .95rem; padding: 0 12px; } #info { max-width: calc(100% - 150px); font-size: .9rem; } }
 </style>
@@ -58,6 +73,12 @@
 <div id="info" class="ds"></div>
 <div id="lern-hinweis" hidden></div>
 <button class="knopf" id="raus" hidden>🚪 Nach draußen</button>
+<button class="knopf" id="einrichten" hidden>🛋️ Einrichten</button>
+<div id="laden" class="ds" hidden role="dialog" aria-label="Zimmer einrichten">
+  <div class="laden-kopf"><h2 id="laden-titel">🛋️ Zimmer einrichten</h2><button class="knopf" id="laden-zu" aria-label="Schließen">✖</button></div>
+  <p id="laden-text"></p>
+  <div id="laden-liste"></div>
+</div>
 <button id="springen" aria-label="Springen"><span>⬆️</span>Springen</button>
 <div id="blase" class="ds" hidden role="dialog" aria-live="polite">
   <div id="blase-e"></div>
@@ -89,7 +110,9 @@
 <script src="../../shared/zeige.js"></script>
 <script src="../../shared/szene.js"></script>
 <script src="../../shared/szenen.js"></script>
+<script src="../../shared/bilder.js"></script>
 <script src="../../shared/insel-kern.js"></script>
+<script src="../../shared/einrichten.js"></script>
 <script type="module">
   import("./insel.js").then(() => { const l = document.getElementById("laden-an"); if (l) l.remove(); }, (f) => { document.getElementById("laden-an").textContent = "Fehler: " + f.message; console.error(f); });
 </script>

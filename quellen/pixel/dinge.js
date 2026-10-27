@@ -344,56 +344,125 @@ export function paula(f = 0) {
 // Liefert die Farbreihen; kind(F, richtung, schritt) zeichnet eins von 3×3 Bildern (vorn/hinten/seite × stehen/links/rechts)
 export function kindFarben(look) {
   const lk = look || {}, f = (o, d) => (o && o.farbe) || d;
-  const kurz = lk.haare && /kurz|bob|dutt|spacebuns/.test(lk.haare.id || "");
+  const frisur = (lk.haare && lk.haare.id) || (lk.haare === null ? "kurz" : "lang");
+  const extras = {};
+  Object.entries(lk.extras || {}).forEach(([id, e]) => { extras[id] = naechsteReihe((e && e.farbe) || "#FF6F91", ["rosa", "lila", "blau", "gelb", "orange", "rot", "weiss", "gruen", "dunkel", "haar"]); });
   return {
     haut: naechsteReihe(f(lk.figur, "#F8D2B8"), ["haut", "haut2", "haut3"]),
     haar: naechsteReihe(f(lk.haare, "#8A5232"), ["haar", "gelb", "dunkel", "orange", "rot", "rosa", "lila", "blau", "weiss"]),
     oben: naechsteReihe(lk.kleid ? f(lk.kleid, "#FF9BC8") : f(lk.oberteil, "#FF9BC8")),
     unten: naechsteReihe(lk.kleid ? f(lk.kleid, "#FF9BC8") : f(lk.unterteil, "#7B55B8")),
     schuhe: naechsteReihe(f(lk.schuhe, "#E0574A"), ["rot", "blau", "weiss", "dunkel", "rosa", "gelb", "gruen", "lila", "orange"]),
-    lang: !kurz,
-    rock: !!lk.kleid || /rock|kleid/.test((lk.unterteil && lk.unterteil.id) || "")
+    frisur, lang: ["lang", "wellen"].includes(frisur),
+    rock: !!lk.kleid || /rock|kleid|tuell/.test((lk.unterteil && lk.unterteil.id) || ""),
+    extras
   };
 }
+// Kind: 3 Ansichten (vorn, hinten, seite = nach rechts) × 3 Bilder (stehen, linker Schritt, rechter Schritt).
+// Bild 22×34: über dem Kopf ist Platz für Dutt, Hüte, Ohren und Kronen. Füße unten in der Mitte.
 export function kind(F, r, s) {
-  const B = bild(18, 29);
-  const l = s === 1, rr = s === 2, haut = F.haut, schuh = F.schuhe;
+  const B = bild(22, 34), ox = 2, oy = 5;
+  const R = (x, y, b, h, f, st) => rect(B, x + ox, y + oy, b, h, f, st), P = (x, y, f, st) => setze(B, x + ox, y + oy, f, st);
+  const KU = (cx, cy, rx, ry, f, lo, hi) => kugel(B, cx + ox, cy + oy, rx, ry, f, lo, hi);
+  const FU = (x0, y0, x1, y1, drin, f, licht) => fuelle(B, x0 + ox, y0 + oy, x1 + ox, y1 + oy, (x, y) => drin(x - ox, y - oy), f, typeof licht === "function" ? (x, y) => licht(x - ox, y - oy) : licht);
+  const VI = (pkt, f, licht) => vieleck(B, pkt.map(([x, y]) => [x + ox, y + oy]), f, typeof licht === "function" ? (x, y) => licht(x - ox, y - oy) : licht);
+  const l = s === 1, rr = s === 2, haut = F.haut, schuh = F.schuhe, hr = F.haar, X = F.extras || {}, fr = F.frisur;
   const beinFarbe = F.rock ? haut : F.unten;
+  // Rücken-Extras hinter dem Körper
+  if (X.umhang && r !== "seite") VI([[3, 13], [15, 13], [r === "hinten" ? 17 : 16, 24], [r === "hinten" ? 1 : 2, 24]], X.umhang, r === "hinten" ? 3.2 : 1.6);
+  if (X.fluegel) { const st = r === "hinten" ? 3.6 : 2.6; KU(r === "seite" ? 4 : 2, 14, 3, 4.5, X.fluegel, 2, st + 0.4); if (r !== "seite") KU(16, 14, 3, 4.5, X.fluegel, 2, st); }
+  // Beine und Schuhe
   if (r === "seite") {
     const hx = l ? 6 : rr ? 9 : 7, vx = l ? 10 : rr ? 7 : 9;
-    rect(B, hx, 21, 2, 4, beinFarbe, 2); rect(B, hx - 1, 25, 3, 2, schuh, 1);
-    rect(B, vx, 21, 2, 4, beinFarbe, 3); rect(B, vx, 25, 3, 2, schuh, 2); setze(B, vx + 1, 25, schuh, 3);
+    R(hx, 21, 2, 4, beinFarbe, 2); R(hx - 1, 25, 3, 2, schuh, 1);
+    R(vx, 21, 2, 4, beinFarbe, 3); R(vx, 25, 3, 2, schuh, 2); P(vx + 1, 25, schuh, 3);
   } else {
-    rect(B, 6, 21, 2, l ? 3 : 4, beinFarbe, 3); rect(B, 6, l ? 24 : 25, 2, 2, schuh, 2); setze(B, 6, l ? 24 : 25, schuh, 3);
-    rect(B, 10, 21, 2, rr ? 3 : 4, beinFarbe, 2); rect(B, 10, rr ? 24 : 25, 2, 2, schuh, 2);
+    R(6, 21, 2, l ? 3 : 4, beinFarbe, 3); R(6, l ? 24 : 25, 2, 2, schuh, 2); P(6, l ? 24 : 25, schuh, 3);
+    R(10, 21, 2, rr ? 3 : 4, beinFarbe, 2); R(10, rr ? 24 : 25, 2, 2, schuh, 2);
   }
-  if (F.rock) vieleck(B, [[4, 21.5], [6, 16], [12, 16], [14, 21.5]], F.unten, (x, y) => (y > 20 ? 3.8 : 3.4) - (x - 4) / 10 * 1.8);
-  else fuelle(B, 5, 16, 12, 21, (x, y) => !(y > 19 && x > 8 && x < 10), F.unten, x => 3.4 - (x - 5) / 8 * 1.6);
-  fuelle(B, 5, 13, 12, 16, () => true, F.oben, x => 3.6 - (x - 5) / 8 * 1.6); rect(B, 6, 16, 6, 1, F.oben, 1);
-  if (r === "seite") { const ax = l ? 10 : rr ? 7 : 8; rect(B, ax, 14, 2, 4, F.oben, 2); rect(B, ax, 18, 2, 1, haut, 3); }
-  else { rect(B, 3, 13, 2, 4, F.oben, 3); rect(B, 13, 13, 2, 4, F.oben, 2); rect(B, 3, rr ? 16 : 17, 2, 1, haut, 3); rect(B, 13, l ? 16 : 17, 2, 1, haut, 2); }
-  const hr = F.haar;
+  // Rock/Kleid oder Hose, Oberteil, Arme
+  if (F.rock) VI([[4, 21.5], [6, 16], [12, 16], [14, 21.5]], F.unten, (x, y) => (y > 20 ? 3.8 : 3.4) - (x - 4) / 10 * 1.8);
+  else FU(5, 16, 12, 21, (x, y) => !(y > 19 && x > 8 && x < 10), F.unten, x => 3.4 - (x - 5) / 8 * 1.6);
+  FU(5, 13, 12, 16, () => true, F.oben, x => 3.6 - (x - 5) / 8 * 1.6); R(6, 16, 6, 1, F.oben, 1);
+  if (r === "seite") { const ax = l ? 10 : rr ? 7 : 8; R(ax, 14, 2, 4, F.oben, 2); R(ax, 18, 2, 1, haut, 3); }
+  else { R(3, 13, 2, 4, F.oben, 3); R(13, 13, 2, 4, F.oben, 2); R(3, rr ? 16 : 17, 2, 1, haut, 3); R(13, l ? 16 : 17, 2, 1, haut, 2); }
+  // Hals-Extras
+  if (X.schal) { R(5, 12, 8, 2, X.schal, 3); if (r !== "hinten") R(r === "seite" ? 9 : 10, 14, 2, 3, X.schal, 2); }
+  if (X.kette && r !== "hinten") for (let i = 0; i < 4; i++) P(r === "seite" ? 10 + i * 0.5 : 7 + i, 13 + (i % 3 ? 1 : 0), X.kette, 4);
+  // Hand-Extras (rechte Hand von vorn = Bildseite rechts)
+  const hx = r === "seite" ? (l ? 10 : rr ? 7 : 8) : 13, hy = 18;
+  if (X.teddy && r !== "hinten") KU(hx + 1, hy + 1, 1.8, 2, "orange", 1.4, 3.6);
+  if (X.zauberstab && r !== "hinten") { R(hx + 1, hy - 4, 1, 4, "holz", 2); P(hx + 1, hy - 5, "gelb", 4); P(hx, hy - 5, "gelb", 3); P(hx + 2, hy - 5, "gelb", 3); P(hx + 1, hy - 6, "gelb", 3); }
+  if (X.tasche && r !== "hinten") FU(hx - 1, hy, hx + 2, hy + 3, () => true, X.tasche, 3);
+  // Haare hinter dem Kopf (je Frisur)
+  const zopf = (x, y, rich) => { KU(x, y, 2.2, 2.6, hr, 1, 3.4); KU(x + rich, y + 3.5, 1.8, 2.4, hr, 1, 3); KU(x + rich * 1.4, y + 6.5, 1.4, 2, hr, 1, 3); };
   if (r === "vorn") {
-    if (F.lang) { rect(B, 2, 7, 3, 8, hr, 1); rect(B, 13, 7, 3, 8, hr, 1); }
-    kugel(B, 9, 6.5, 7.2, 6.4, hr, 1, 4);
-    fuelle(B, 3, 6, 15, 13, (x, y) => ((x - 9) / 5.6) ** 2 + ((y - 8.6) / 4.6) ** 2 <= 1 && y > 6 + (Math.floor(x) % 3 === 0 ? 1 : 0), haut, x => 3.7 - (x - 3) / 12 * 1.2);
-    [[6, 8], [11, 8]].forEach(([x, y]) => { setze(B, x, y, "dunkel", 0); setze(B, x, y + 1, "blau", 1); setze(B, x + 1, y, "weiss", 4); setze(B, x + 1, y + 1, "dunkel", 0); });
-    setze(B, 5, 11, "rosa", 3); setze(B, 13, 11, "rosa", 3); setze(B, 9, 11, "rot", 2);
+    if (F.lang) { R(2, 7, 3, 8, hr, 1); R(13, 7, 3, 8, hr, 1); if (fr === "wellen") { P(1, 10, hr, 1); P(16, 12, hr, 1); P(1, 14, hr, 1); } }
+    if (fr === "zoepfe") { zopf(1, 6, -0.6); zopf(17, 6, 0.6); }
+    if (fr === "seitenzopf") zopf(17, 7, 0.4);
+    if (fr === "bob") { R(2, 7, 3, 6, hr, 1); R(13, 7, 3, 6, hr, 1); }
+    if (fr === "puffs") { KU(1.5, 8, 2.8, 3, hr, 1, 3.6); KU(16.5, 8, 2.8, 3, hr, 1, 3.6); }
   } else if (r === "hinten") {
-    if (F.lang) rect(B, 3, 8, 12, 8, hr, 1);
-    kugel(B, 9, 7, 7.2, 6.8, hr, 1, 4);
-    if (F.lang) fuelle(B, 3, 9, 15, 16, (x, y) => y < 16 - Math.abs(x - 9) * 0.3, hr, x => 2.8 - (x - 3) / 12 * 1.4);
+    if (F.lang) R(3, 8, 12, 8, hr, 1);
+    if (fr === "zoepfe") { zopf(1, 6, -0.6); zopf(17, 6, 0.6); }
+    if (fr === "seitenzopf") zopf(17, 7, 0.4);
+    if (fr === "bob") R(3, 8, 12, 5, hr, 1);
+    if (fr === "puffs") { KU(1.5, 8, 2.8, 3, hr, 1, 3.6); KU(16.5, 8, 2.8, 3, hr, 1, 3.6); }
   } else {
-    if (F.lang) rect(B, 3, 7, 4, 9, hr, 1);
-    kugel(B, 8.5, 6.5, 6.8, 6.4, hr, 1, 4);
-    fuelle(B, 8, 5, 16, 13, (x, y) => ((x - 10.8) / 4) ** 2 + ((y - 8.8) / 4.4) ** 2 <= 1 && y > 6, haut, x => 3.8 - (x - 8) / 8);
-    rect(B, 7, 6, 3, F.lang ? 7 : 4, hr, 2);
-    setze(B, 13, 8, "dunkel", 0); setze(B, 13, 9, "blau", 1); setze(B, 15, 10, haut, 3); setze(B, 12, 11, "rosa", 3);
+    if (F.lang) R(3, 7, 4, 9, hr, 1);
+    if (fr === "zoepfe" || fr === "seitenzopf" || fr === "pferd") zopf(2.5, 6, -0.5);
+    if (fr === "bob") R(3, 7, 4, 6, hr, 1);
+    if (fr === "puffs") KU(2.5, 7, 2.8, 3, hr, 1, 3.6);
   }
-  for (let x = 4; x < 14; x++) { const y = Math.round(3 + ((x - 8.5) / 6) ** 2 * 3); const f = B.p[y * B.b + x]; if (f >= 0 && REIHE[f] === hr) setze(B, x, y, hr, 4); }
+  if (fr === "pferd" && r === "hinten") zopf(9, 7, 0);
+  // Dutt und Space-Buns oben auf dem Kopf
+  if (fr === "dutt") KU(r === "seite" ? 6 : 9, -1, 3, 2.6, hr, 1.4, 4);
+  if (fr === "spacebuns") { if (r !== "seite") KU(4, 0.5, 2.6, 2.4, hr, 1.4, 4); KU(r === "seite" ? 8 : 14, 0.5, 2.6, 2.4, hr, 1.4, 4); }
+  // Kopf: Haare als Kugel, dann Gesicht
+  const locken = fr === "locken";
+  if (r === "vorn") {
+    KU(9, 6.5, 7.2, 6.4, hr, 1, 4);
+    if (locken) for (let i = 0; i < 7; i++) KU(3 + i * 2, 1.5 + Math.abs(i - 3) * 0.6, 1.6, 1.4, hr, 2, 4);
+    FU(3, 6, 15, 13, (x, y) => ((x - 9) / 5.6) ** 2 + ((y - 8.6) / 4.6) ** 2 <= 1 && y > 6 + (Math.floor(x) % 3 === 0 ? 1 : 0), haut, x => 3.7 - (x - 3) / 12 * 1.2);
+    [[6, 8], [11, 8]].forEach(([x, y]) => { P(x, y, "dunkel", 0); P(x, y + 1, "blau", 1); P(x + 1, y, "weiss", 4); P(x + 1, y + 1, "dunkel", 0); });
+    P(5, 11, "rosa", 3); P(13, 11, "rosa", 3); P(9, 11, "rot", 2);
+  } else if (r === "hinten") {
+    KU(9, 7, 7.2, 6.8, hr, 1, 4);
+    if (locken) for (let i = 0; i < 7; i++) KU(3 + i * 2, 2 + Math.abs(i - 3) * 0.6, 1.6, 1.4, hr, 2, 4);
+    if (F.lang) FU(3, 9, 15, 16, (x, y) => y < 16 - Math.abs(x - 9) * 0.3, hr, x => 2.8 - (x - 3) / 12 * 1.4);
+  } else {
+    KU(8.5, 6.5, 6.8, 6.4, hr, 1, 4);
+    if (locken) for (let i = 0; i < 6; i++) KU(3 + i * 2, 1.5 + Math.abs(i - 2.5) * 0.6, 1.6, 1.4, hr, 2, 4);
+    FU(8, 5, 16, 13, (x, y) => ((x - 10.8) / 4) ** 2 + ((y - 8.8) / 4.4) ** 2 <= 1 && y > 6, haut, x => 3.8 - (x - 8) / 8);
+    R(7, 6, 3, F.lang ? 7 : 4, hr, 2);
+    P(13, 8, "dunkel", 0); P(13, 9, "blau", 1); P(15, 10, haut, 3); P(12, 11, "rosa", 3);
+  }
+  // Glanzbogen im Haar
+  for (let x = 4; x < 14; x++) { const y = Math.round(3 + ((x - 8.5) / 6) ** 2 * 3) + oy, xx = x + ox, f = B.p[y * B.b + xx]; if (f >= 0 && REIHE[f] === hr) setze(B, xx, y, hr, 4); }
+  // Kopf-Extras
+  const vorn = r === "vorn", seite = r === "seite", mitte = seite ? 9 : 9;
+  if (X.brille || X.pixelbrille || X.sonnenbrille) {
+    const f = X.sonnenbrille ? "dunkel" : X.pixelbrille || X.brille, st = X.sonnenbrille ? 1 : 0;
+    if (vorn) { [5, 10].forEach(x => { R(x, 7, 4, 3, f, st); if (!X.sonnenbrille) { R(x + 1, 8, 2, 1, "glas", 4); } }); R(9, 8, 1, 1, f, st); }
+    if (seite) { R(12, 7, 4, 3, f, st); if (!X.sonnenbrille) R(13, 8, 2, 1, "glas", 4); R(9, 8, 3, 1, f, st); }
+  }
+  if (X.kopfhoerer) { for (let x = 3; x <= 15; x++) P(x, Math.round(0.5 + ((x - 9) / 6) ** 2 * 3), X.kopfhoerer, 2); if (!seite) { KU(2.5, 8, 1.6, 2.2, X.kopfhoerer, 1, 3); KU(15.5, 8, 1.6, 2.2, X.kopfhoerer, 1, 3); } else KU(8, 8, 2, 2.4, X.kopfhoerer, 1, 3); }
+  if (X.katzenohren || X.fuchsohren) { const f = X.fuchsohren ? "orange" : X.katzenohren; [[4, -1], [14, -1]].forEach(([x], i) => { if (seite && i === 0) return; VI([[x - 2.5, 2.5], [x, -2.5], [x + 2.5, 2.5]], f, 3); P(x, 0, "rosa", 3); }); }
+  if (X.einhorn && !(r === "hinten")) VI([[mitte + (seite ? 3 : 0) - 1.5, 1.5], [mitte + (seite ? 4 : 0), -5], [mitte + (seite ? 3 : 0) + 1.5, 1.5]], "gelb", (x, y) => ((Math.round(y) % 2) ? 4 : 3));
+  if (X.krone || X.rechenkrone) { const f = X.krone ? "gelb" : "gelb"; R(4, -1, 10, 3, f, 3); [4, 8, 12].forEach(x => VI([[x - 0.5, -0.5], [x + 1, -4], [x + 2.5, -0.5]], f, 3.6)); P(8.5, 0, X.rechenkrone ? "blau" : "rot", 3); }
+  if (X.muetze || X.weihnachtsmuetze) {
+    const f = X.weihnachtsmuetze ? "rot" : X.muetze;
+    FU(2, -3, 16, 3, (x, y) => ((x - 9) / 7.4) ** 2 + ((y - 3) / 6) ** 2 <= 1 && y < 3, f, (x) => 3.6 - (x - 2) / 14 * 1.4);
+    R(2, 2, 14, 2, X.weihnachtsmuetze ? "weiss" : f, X.weihnachtsmuetze ? 4 : 2);
+    KU(X.weihnachtsmuetze ? 15 : 9, X.weihnachtsmuetze ? -1 : -4, 1.8, 1.8, "weiss", 3, 4);
+  }
+  if (X.hut || X.entdeckerhut) { const f = X.entdeckerhut ? "sand" : X.hut; FU(-1, 1, 19, 4, (x, y) => ((x - 9) / 10) ** 2 + ((y - 2.5) / 1.8) ** 2 <= 1, f, 2.6); FU(4, -3, 14, 2, () => true, f, (x) => 3.8 - (x - 4) / 10); R(4, 0, 11, 1, X.entdeckerhut ? "holz" : "rosa", 2); }
+  if (X.schleife) { const x = seite ? 6 : 14; KU(x - 1.6, 1, 1.6, 1.4, X.schleife, 2, 4); KU(x + 1.6, 1, 1.6, 1.4, X.schleife, 2, 4); P(x, 1, X.schleife, 1); }
+  if (X.blume) { const x = seite ? 6 : 14; KU(x, 2, 1.8, 1.8, X.blume, 2.6, 4); P(x, 2, "gelb", 4); }
+  if (X.ballon) { const bx = hx + 3; for (let y = hy - 9; y < hy; y++) P(bx - (y - hy + 9 > 6 ? 2 : 0), y, "weiss", 2); KU(bx, hy - 12, 2.6, 3, X.ballon, 1.5, 4); }
+  if (X.haarreif) for (let x = 3; x <= 15; x += 3) { KU(x, 1 + Math.round(((x - 9) / 6) ** 2 * 2), 1.2, 1.2, ["rosa", "gelb", "weiss"][x % 3], 3, 4); }
   return B;
 }
-
 // ---------- Haustier (Fuchs, Kätzchen, Drache), 2 Bilder ----------
 // farben = Reihen { h: Fell, l: hell, d: dunkel }; stufe 0…2 = Größe
 export function tierFarben(f) {
@@ -483,3 +552,31 @@ export function pinnwand(zettel) {
 }
 // Rahmen für ein gemaltes Bild (Poster); das Bild selbst wird auf die Palette verkleinert (bildAusFoto)
 export function rahmen(b, h, reihe) { const B = bild(b, h); fuelle(B, 0, 0, b - 1, h - 1, (x, y) => x < 2 || y < 2 || x >= b - 2 || y >= h - 2, reihe, (x, y) => (x + y < b / 2 ? 4 : 2.6)); return B; }
+
+// Haustier von vorn und von hinten (für Laufen nach unten/oben), je 2 Bilder; gleiche Größe wie die Seitenansicht
+export function tierVorn(art, F, s, stufe = 2) {
+  const k = [0.75, 0.88, 1][Math.max(0, Math.min(2, stufe))];
+  const B = bild(24, 20), sx = (v) => 12 + (v - 12) * k, sy = (v) => 19 - (19 - v) * k;
+  [[9, s ? 17 : 18], [15, s ? 18 : 17]].forEach(([x, y]) => rect(B, sx(x), sy(15), 2, (y - 15) * k + 1, F.d, 2));
+  kugel(B, sx(12), sy(14), 5 * k, 4 * k, F.h, 1, 4); ellipse(B, sx(12), sy(15), 2.8 * k, 2.4 * k, F.l, 3.6);
+  if (art === "drache") [[9.5, 4], [14.5, 4]].forEach(([x, y]) => vieleck(B, [[sx(x - 1), sy(y + 2)], [sx(x), sy(y - 2)], [sx(x + 1), sy(y + 2)]], "creme", 3.6));
+  else { vieleck(B, [[sx(7), sy(7)], [sx(7.5), sy(1.5)], [sx(10.5), sy(5.5)]], F.h, 3.4); vieleck(B, [[sx(13.5), sy(5.5)], [sx(16.5), sy(1.5)], [sx(17), sy(7)]], F.h, 2.6); setze(B, sx(8), sy(4.5), "rosa", 3); setze(B, sx(16), sy(4.5), "rosa", 3); }
+  kugel(B, sx(12), sy(8), 5 * k, 4.4 * k, F.h, 1.2, 4);
+  ellipse(B, sx(12), sy(10), 2.6 * k, 1.8 * k, F.l, 4);
+  setze(B, sx(12), sy(9.5), art === "katze" ? "rosa" : "dunkel", art === "katze" ? 3 : 0);
+  [sx(10), sx(14)].forEach(x => { setze(B, x, sy(7.5), "dunkel", 0); setze(B, x + 0.6, sy(7), "weiss", 4); });
+  return B;
+}
+export function tierHinten(art, F, s, stufe = 2) {
+  const k = [0.75, 0.88, 1][Math.max(0, Math.min(2, stufe))];
+  const B = bild(24, 20), sx = (v) => 12 + (v - 12) * k, sy = (v) => 19 - (19 - v) * k;
+  [[9, s ? 17 : 18], [15, s ? 18 : 17]].forEach(([x, y]) => rect(B, sx(x), sy(15), 2, (y - 15) * k + 1, F.d, 1));
+  kugel(B, sx(12), sy(13), 5.4 * k, 4.4 * k, F.h, 1, 3.6);
+  if (art === "drache") { [[12, 9.5], [12, 12.5]].forEach(([x, y]) => vieleck(B, [[sx(x - 1.5), sy(y + 1)], [sx(x), sy(y - 2)], [sx(x + 1.5), sy(y + 1)]], F.d, 3)); vieleck(B, [[sx(10.5), sy(16)], [sx(12), sy(19.5)], [sx(13.5), sy(16)]], F.h, 2.4); }
+  else if (art === "katze") for (let i = 0; i < 6; i++) setze(B, sx(12 + Math.sin(i + s) * 1.5), sy(14 - i * 1.2), F.h, 2);
+  else { kugel(B, sx(12 + (s ? 1 : -1)), sy(13), 2.8 * k, 3.6 * k, F.h, 1.4, 4); kugel(B, sx(12 + (s ? 1 : -1)), sy(10.5), 1.8 * k, 1.6 * k, F.l, 2.4, 4); }
+  if (art !== "drache") { vieleck(B, [[sx(7), sy(7)], [sx(7.5), sy(1.5)], [sx(10.5), sy(5.5)]], F.h, 2.8); vieleck(B, [[sx(13.5), sy(5.5)], [sx(16.5), sy(1.5)], [sx(17), sy(7)]], F.h, 2.2); }
+  else [[9.5, 4], [14.5, 4]].forEach(([x, y]) => vieleck(B, [[sx(x - 1), sy(y + 2)], [sx(x), sy(y - 2)], [sx(x + 1), sy(y + 2)]], "creme", 3));
+  kugel(B, sx(12), sy(7.5), 5 * k, 4.2 * k, F.h, 1, 3.4);
+  return B;
+}

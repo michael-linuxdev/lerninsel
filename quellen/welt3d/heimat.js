@@ -896,13 +896,7 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
     const wand = new Group(); wand.position.set(4.06, 1.95, 0.9); wand.rotation.y = -Math.PI / 2; zimmer.add(wand);
     wand.add(teil(new BoxGeometry(1.72, 1.1, 0.06), "#8A5A34", { dicke: 1.03 }));
     wand.add(setze(new Mesh(new PlaneGeometry(1.6, 1.0), new MeshBasicMaterial({ map: tex })), 0, 0, 0.035));
-    const liste = () => {
-      if (!funde.length) return ["Hier hängst du auf, was du diese Woche Neues lernst. Jeder Lernfund bekommt einen Zettel!", "Здесь висит всё новое, что ты узнаёшь за неделю."];
-      const de = `Diese Woche ${funde.length === 1 ? "1 Zettel" : `${funde.length} Zettel`}${heute ? `, ${heute} von heute (golden umrandet)` : ""}: ` +
-        funde.slice(0, 4).map(f => f.t.replace(/^Neues Wort: /, "").replace(/ – (war|jetzt).*$/, "")).join(" · ") + (funde.length > 4 ? " …" : "");
-      return [de, `На этой неделе ты узнаёшь много нового: ${funde.length}!`];
-    };
-    antippbar(wand, () => { const [de, ru] = liste(); sprechblase("📌", "Deine Pinnwand", de, S.paar(["", ru])[1], "../ich/"); }, ["📌", "Ansehen"], 1.9);
+    antippbar(wand, () => zeigeAntwort(K.antwort("pinnwand")), ["📌", "Ansehen"], 1.9);
   }
   // Atelier: Staffelei mit dem neuesten Bild und bis zu drei gemalten Bildern als Poster an den Wänden (shared/bilder.js)
   {
@@ -929,10 +923,10 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
         const [x, y, z, r] = PLATZ[i], p = new Group(); p.position.set(x, y, z); p.rotation.y = r; zimmer.add(p);
         p.add(teil(new BoxGeometry(0.9, 0.7, 0.05), ["#FFC83D", "#5EC3E6", "#FF7FB0"][i], { dicke: 1.03 }));
         p.add(setze(new Mesh(new PlaneGeometry(0.8, 0.6), new MeshBasicMaterial({ map: t })), 0, 0, 0.03));
-        antippbar(p, () => sprechblase("papagei", "Dein Bild", `Das hast du am ${new Date(b.t).toLocaleDateString("de-DE")} gemalt. Es hängt hier, bis du ein anderes aufhängst.`, S.paar(["", "Это ты нарисовал(а)! Красиво!"])[1], "../atelier/"), ["🖼️", "Ansehen"], 2.4);
+        antippbar(p, () => zeigeAntwort(K.antwort("bild", { t: b.t })), ["🖼️", "Ansehen"], 2.4);
       }))).catch(() => {});
     }
-    antippbar(staffelei, () => sprechblase("papagei", "Deine Staffelei", neuestes ? "Hier steht dein neuestes Bild. Papagei Paula hat schon Farben bereitgelegt – malst du noch eins?" : "Eine leere Leinwand! Mit Papagei Paula kannst du im Atelier malen, was du willst.", S.paar(["", "Здесь можно рисовать с попугаем Паулой!"])[1], "../atelier/"), ["🎨", "Malen"], 2.0);
+    antippbar(staffelei, () => zeigeAntwort(K.antwort("staffelei", { bild: !!neuestes })), ["🎨", "Malen"], 2.0);
   }
   // Pflanze und Lampe
   const topf = new Group(); topf.position.set(3.4, 0.25, 2.4); zimmer.add(topf);
@@ -979,7 +973,7 @@ function stelleMoebel() {
     const m = MOEBEL.find(x => x.id === id); if (!m) return;
     const o = m.bau(); o.userData.id = id; o.position.set(pl.x, 0.25, pl.z); o.rotation.y = Math.atan2(-pl.x, 0.8 - pl.z); zimmer.add(o); moebelObj[pl.id] = o;
     platzHindernis[pl.id] = { x: ZX + pl.x, z: pl.z, r: 0.6 }; hindernisse.push(platzHindernis[pl.id]);
-    antippbar(o, () => sprechblase(m.e, m.name, m.text, "", null));
+    antippbar(o, () => zeigeAntwort(K.antwort("moebel", { id })));
   });
   const w = WANDFARBEN.find(x => x.id === d.wand) || WANDFARBEN[0];
   WAND_HINTEN.color.set(w.farbe[0]); WAND_SEITE.color.set(w.farbe[1]);
@@ -987,40 +981,13 @@ function stelleMoebel() {
 stelleMoebel();
 // Ringe zeigen beim Aussuchen, wo die Plätze sind
 const platzRinge = PLAETZE.map(pl => { const r = new Mesh(new TorusGeometry(0.55, 0.05, 6, 28), new MeshBasicMaterial({ color: "#FF6F91" })); r.rotation.x = Math.PI / 2; r.position.set(pl.x, 0.3, pl.z); r.visible = false; zimmer.add(r); return r; });
-let ladenWahl = null;
-function laden(text) {
-  const d = zimmerDaten(), L = $("laden-liste"); $("laden").hidden = false; $("blase").hidden = true;
-  platzRinge.forEach(r => r.visible = !!ladenWahl);
-  if (ladenWahl) {
-    const m = MOEBEL.find(x => x.id === ladenWahl), steht = Object.keys(d.plaetze).find(k => d.plaetze[k] === m.id);
-    $("laden-titel").textContent = `${m.e} ${m.name}: Wohin?`;
-    $("laden-text").textContent = text || "Die rosa Ringe im Zimmer zeigen die Plätze.";
-    L.innerHTML = PLAETZE.map((pl, i) => { const da = MOEBEL.find(x => x.id === d.plaetze[pl.id]); return `<button class="ware" data-platz="${pl.id}"><b>${i + 1}. ${pl.name}</b><span>${da ? (da.id === m.id ? "✓ steht hier" : `${da.e} ${da.name}`) : "frei"}</span></button>`; }).join("")
-      + (steht ? `<button class="ware weg" data-weg="1"><b>📦 Wegräumen</b><span>in den Keller</span></button>` : "") + `<button class="ware weg" data-zurueck="1"><b>⬅️ Zurück</b></button>`;
-    platzRinge.forEach((r, i) => r.material.color.set(d.plaetze[PLAETZE[i].id] ? "#FFB0C8" : "#FF6F91"));
-    return;
-  }
-  $("laden-titel").textContent = "🛋️ Zimmer einrichten"; $("laden-text").textContent = text || "Kaufe Möbel mit deinen Sternen und stell sie auf. Gekauftes bleibt für immer deins.";
-  const karte = (id, e, name, preis, info, extra) => `<button class="ware${besitzt(id, preis) ? " hat" : ""}" ${extra}><span class="e">${e}</span><b>${name}</b><span>${besitzt(id, preis) ? info : `⭐ ${preis}`}</span></button>`;
-  L.innerHTML = `<h3>Möbel</h3><div class="waren">` + MOEBEL.filter(m => !m.geschenk || S.istFrei("moebel-" + m.id)).map(m => { const steht = PLAETZE.find(pl => d.plaetze[pl.id] === m.id); return karte("moebel-" + m.id, m.e, m.name, m.preis, steht ? `✓ ${steht.name}` : "✓ Hinstellen", `data-moebel="${m.id}"`); }).join("")
-    + `</div><h3>Wandfarbe</h3><div class="waren">` + WANDFARBEN.map(w => karte("wand-" + w.id, `<i style="background:${w.farbe[0]}"></i>`, w.name, w.preis, d.wand === w.id ? "✓ an der Wand" : "✓ Streichen", `data-wand="${w.id}"`)).join("") + `</div>`;
-}
-function kaufe(id, preis) {
-  if (besitzt(id, preis)) return true;
-  if (S.schalteFrei(id, preis)) { $("sterne").textContent = S.sterne(); S.ton("juhu"); return true; }
-  S.ton("nein"); laden(`Dafür brauchst du ${preis} Sterne. Dir fehlen noch ${preis - S.sterne()}. Beim Lernen sammelst du neue!`); return false;
-}
-$("laden-liste").addEventListener("click", (ev) => {
-  const b = ev.target.closest("button"); if (!b) return; const d = zimmerDaten();
-  if (b.dataset.moebel) { const m = MOEBEL.find(x => x.id === b.dataset.moebel); if (kaufe("moebel-" + m.id, m.preis)) { ladenWahl = m.id; laden(); } return; }
-  if (b.dataset.wand) { const w = WANDFARBEN.find(x => x.id === b.dataset.wand); if (kaufe("wand-" + w.id, w.preis)) { d.wand = w.id; S.speichere("zimmer", d); stelleMoebel(); laden("Frisch gestrichen!"); } return; }
-  if (b.dataset.zurueck) { ladenWahl = null; laden(); return; }
-  const raus = () => Object.keys(d.plaetze).forEach(k => { if (d.plaetze[k] === ladenWahl) delete d.plaetze[k]; });
-  if (b.dataset.weg) { raus(); S.speichere("zimmer", d); stelleMoebel(); ladenWahl = null; laden("Weggeräumt. Du kannst es jederzeit wieder hinstellen."); return; }
-  if (b.dataset.platz) { raus(); d.plaetze[b.dataset.platz] = ladenWahl; S.speichere("zimmer", d); stelleMoebel(); S.ton("tipp"); const pl = PLAETZE.find(x => x.id === b.dataset.platz); const m = MOEBEL.find(x => x.id === ladenWahl); ladenWahl = null; laden(`${m.e} ${m.name} steht jetzt ${pl.name}.`); }
+// Laden (Kaufen, Hinstellen, Wegräumen, Wandfarbe) im gemeinsamen Baustein shared/einrichten.js – gleich für beide Looks
+window.Einrichten.verbinde({
+  neu: () => stelleMoebel(),
+  ringe: (an, besetzt) => platzRinge.forEach((r, i) => { r.visible = an; if (an) r.material.color.set(besetzt[i] ? "#FFB0C8" : "#FF6F91"); })
 });
-$("einrichten").addEventListener("click", () => { ladenWahl = null; laden(); });
-$("laden-zu").addEventListener("click", () => { $("laden").hidden = true; ladenWahl = null; platzRinge.forEach(r => r.visible = false); });
+const laden = (text) => window.Einrichten.oeffne(text);
+$("einrichten").addEventListener("click", () => laden());
 
 let draussenPos = new Vector3(), besuche = 0;
 function reingehen() {
@@ -1034,7 +1001,7 @@ function reingehen() {
   S.ton("tipp");
 }
 function rausgehen() {
-  drinnen = false; $("raus").hidden = true; $("einrichten").hidden = true; $("laden").hidden = true;
+  drinnen = false; $("raus").hidden = true; $("einrichten").hidden = true; window.Einrichten.zu();
   const { x: tx, z: tz, dreh: hr } = KI.vorDerTuer();
   ich.position.set(tx, bodenY(tx, tz), tz); ich.rotation.y = hr;
   if (tier) tier.position.set(tx + 1.1, bodenY(tx + 1.1, tz + 0.4), tz + 0.4);

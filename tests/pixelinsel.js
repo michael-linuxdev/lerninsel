@@ -168,8 +168,55 @@ const TAG1 = new Date(2026, 9, 25, 15, 0).getTime(), TAG2 = new Date(2026, 9, 26
     erwarte(auf.g && auf.steht && !auf.paket && !auf.szene && /Weihnachtspaket/.test(auf.titel), "Paket geöffnet: Geschenk gemerkt, Tannenbaum im Zimmer, Szene fertig");
     await zu(p);
     await p.evaluate(() => __pixel.reingehen()); await p.waitForTimeout(600);
-    erwarte(await p.evaluate(() => __pixel.moebel() === 1), "der Tannenbaum steht im Pixel-Zimmer");
+    erwarte(await p.evaluate(() => __pixel.moebel().includes("tannenbaum")), "der Tannenbaum steht im Pixel-Zimmer");
     await bild(p, "pixel-weihnachten-zimmer");
+    await ctx.close();
+  }
+
+  // 7) Pixel-Zimmer (NA-28): Einrichten mit dem gemeinsamen Laden, Möbel, Wandfarbe, Pinnwand, Staffelei
+  {
+    const { ctx, p } = await neuesKind(TAG1);
+    await p.evaluate(() => { Story.etappeFertig("E1"); Story.etappeFertig("E2"); for (let i = 0; i < 12; i++) Zeit.aufgabe(); Spielwelt.schalteFrei("moebel-lampe", 0); Spielwelt.schalteFrei("wand-mint", 0);
+      Lernfunde.merke({ fach: "mathe", art: "gemeistert", text: "7 + 8 = 15", schluessel: "t:7+8" }); });
+    await p.goto(BASIS + "spiele/pixel/insel.html?stunde=14&drinnen=1"); await p.waitForFunction(() => window.__pixel && __pixel.drinnen, null, { timeout: 20000 });
+    await p.evaluate(() => { if (__szene.aktuell()) Szene.abbrechen(); });
+    erwarte(await p.evaluate(() => !document.getElementById("einrichten").hidden), "im Zimmer gibt es den Knopf „Einrichten“");
+    await p.click("#einrichten"); await p.waitForTimeout(300);
+    await p.click('[data-moebel="lampe"]'); await p.waitForTimeout(300);
+    erwarte(await p.evaluate(() => __pixel.ringe === 6), "Möbel gewählt: sechs Ringe zeigen die Plätze");
+    await p.click('[data-platz="links"]'); await p.waitForTimeout(300);
+    const m = await p.evaluate(() => ({ moebel: __pixel.moebel(), daten: __pixel.zimmerDaten().plaetze.links, ringe: __pixel.ringe }));
+    erwarte(m.moebel.includes("lampe") && m.daten === "lampe" && m.ringe === 0, "Stehlampe steht an der linken Wand (gleiche Daten wie „Rund“)");
+    await p.click('[data-wand="mint"]'); await p.waitForTimeout(300);
+    erwarte(await p.evaluate(() => __pixel.zimmerDaten().wand === "mint"), "Wandfarbe Mint gestrichen");
+    await bild(p, "pixel-zimmer-einrichten");
+    await p.click("#laden-zu"); await p.waitForTimeout(200);
+    for (const [id, re] of [["moebel-lampe", /Stehlampe/], ["pinnwand", /Pinnwand/], ["staffelei", /Staffelei/], ["spiegel", /Spiegel/]]) {
+      await p.evaluate((id) => __pixel.tippe(id), id); const bl = await blase(p);
+      erwarte(bl.offen && re.test(bl.titel), `Zimmer: ${id} antwortet (${bl.titel})`); await zu(p);
+    }
+    await bild(p, "pixel-zimmer-moebel");
+    await ctx.close();
+  }
+
+  // 8) Figuren (NA-27): Kind trägt Frisur und Extras aus dem Kleiderschrank, das Tier läuft in vier Richtungen
+  {
+    const { ctx, p } = await neuesKind(TAG1);
+    await p.evaluate(() => { Story.etappeFertig("E1"); Story.etappeFertig("E2");
+      const a = Spielwelt.lade("anziehen") || {}; a.aktuell = Object.assign(Figur.STANDARD(), { haare: { id: "zoepfe", farbe: "#2E2240" }, extras: { krone: { farbe: "#FFC83D" }, brille: { farbe: "#E0574A" } } }); Spielwelt.speichere("anziehen", a);
+      Spielwelt.speichere("tier", Object.assign({}, Spielwelt.lade("tier") || {}, { phase: "tier", art: "fuchs", farbe: 0, name: "Flocke", traegt: { schleife: true }, besitz: { schleife: true } })); });
+    await p.goto(BASIS + "spiele/pixel/insel.html?stunde=14"); await p.waitForFunction(() => !!window.__pixel, null, { timeout: 20000 });
+    await p.evaluate(() => { if (__szene.aktuell()) Szene.abbrechen(); });
+    const f = await p.evaluate(() => __pixel.figur());
+    erwarte(f.frisur === "zoepfe" && f.extras.krone && f.extras.brille && f.haar === "dunkel", `Figur aus dem Kleiderschrank: Zöpfe, Krone, Brille (${f.frisur}, Haar ${f.haar})`);
+    erwarte(await p.evaluate(() => !!__pixel.tier), "das Haustier läuft mit");
+    const richtungen = new Set();
+    for (const [dx, dz] of [[0, 3], [0, -3], [3, 0], [-3, 0]]) {
+      await p.evaluate(([dx, dz]) => { const i = __pixel.ich; __pixel.teleport(i.x + dx, i.z + dz); }, [dx, dz]); await p.waitForTimeout(500);
+      richtungen.add(await p.evaluate(() => __pixel.tierRichtung));
+    }
+    erwarte(richtungen.has("vorn") && richtungen.has("hinten") && richtungen.has("seite"), `Tier zeigt vorn, hinten und Seite (${[...richtungen].join(", ")})`);
+    await bild(p, "pixel-figuren");
     await ctx.close();
   }
 

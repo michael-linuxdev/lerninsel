@@ -817,7 +817,7 @@ Neue Pakete (vor NA-14):
 - **NA-28 Pixel-Zimmer** (M): Zimmer und Möbel in Pixel, gleiche Möbel-Daten.
 - Minispiele bleiben vorerst 3D und werden aus beiden Looks gestartet; Pixel-Fassungen später je Spiel. NA-21 (Leistung „Rund“) bleibt wichtig.
 
-**Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** ~~**NA-24**~~ → ~~**NA-25**~~ (in /dev eingeschaltet) → ~~**NA-26**~~ → **NA-27** → **NA-28** → **NA-14** (in beiden Looks)
+**Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** ~~**NA-24**~~ → ~~**NA-25**~~ (in /dev eingeschaltet) → ~~**NA-26**~~ → ~~**NA-27**~~ → ~~**NA-28**~~ → **NA-14** (in beiden Looks)
 → **NA-21** → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 → Punkt 5 ff. wie oben.
 
 ### Stand 27.10.2026, morgens (Sitzung 27.10. früh: DS-Look, NA-24 fertig, NA-25 vorbereitet, NA-26 begonnen)
@@ -865,7 +865,7 @@ Geschenke für NA-16: weiter offen.
   (Prolog/Story/Paket in Pixel) und `tests/look.js` (Umschalten in /dev, gleicher Spielstand); dann `lookWaehlbar()` auf `UMG !== "prod"`.
 - Danach NA-27 (Figuren), NA-28 (Zimmer mit Möbeln), NA-14 (Tutorial in beiden Looks), NA-21.
 
-### Stand 27.10.2026, Vormittag (Sitzung 27.10.: NA-26 Pixel-Insel fertig, NA-25 in /dev eingeschaltet)
+### Stand 27.10.2026, Vormittag (Sitzung 27.10.: NA-25, NA-26, NA-27, NA-28 fertig – Pixel-Look in /dev komplett)
 **Antworten des Auftraggebers (27.10.2026, 05:40):** iPad-Test von Ankunft/Sonnenuhr/Frucht/Paket: noch nicht; DS-Probe noch nicht angesehen;
 Reihenfolge gilt (NA-26 zuerst); nichts ist gesperrt; Geschenke für NA-16 weiter offen.
 
@@ -895,12 +895,28 @@ Reihenfolge gilt (NA-26 zuerst); nichts ist gesperrt; Geschenke für NA-16 weite
 **Entscheidungen / Abweichungen**
 - In Pixel zeigt die Haustür immer nach Süden (Draufsicht); Tür und Reingehen-Punkt liegen 2 Einheiten südlich vom Hausplatz (`__pixel.tuer`).
 - Laufen in Pixel nur per Tippen und Tasten (kein Joystick); im Prolog gilt deshalb immer der Tippen-Text.
-- Das Zimmer in Pixel zeigt bisher nur Bett, Album, Schrank, Spiegel, Teppich und den Tannenbaum; übrige Möbel, Pinnwand, Staffelei, Bilder und
-  „Einrichten“ folgen mit **NA-28** (bis dahin über „Rund“). „Meine Welt“ (Welten wechseln/erschaffen) gibt es vorerst nur in „Rund“.
+- „Meine Welt“ (Welten wechseln/erschaffen) gibt es vorerst nur in „Rund“ (Pixel zeigt die gewählte Welt).
 - Wie bei „Rund“ schickt die Insel ein Kind ohne Spielzeit nach dem Prolog nach spätestens 10 Sekunden wieder aus dem Haus (Zeit-Regel).
-- Figuren sind einfache, eigene Pixelzeichnungen; Feinschliff und vier Blickrichtungen für Tier und Nachbarn folgen mit NA-27.
+
+**Danach in derselben Sitzung fertig und gepusht (NA-28, NA-27)**
+- **NA-28 Pixel-Zimmer:** alle Möbel aus `K.MOEBEL` in Pixel (Lampe, Kuschelbär, Sitzsack, Spielzeugkiste, Tierkörbchen, Globus, Regal, Staffelei,
+  Schreibtisch, Aquarium mit schwimmenden Fischen, Tannenbaum blinkend), Wandfarbe aus den Zimmer-Daten, Pinnwand mit Zetteln der Lernfunde
+  (Farbe je Fach, heute golden umrandet, gemeistert gelb), feste Staffelei mit dem **neuesten gemalten Bild** und ein gemaltes Bild an der Wand –
+  beide werden verkleinert und auf die Farben der Palette gebracht (bleiben DS-Look). Platz-Ringe beim Aussuchen, Möbel bleiben innerhalb der Wände.
+  **„Einrichten“** ist jetzt ein gemeinsamer Baustein `shared/einrichten.js` (Kaufen, Hinstellen, Wegräumen, Wandfarbe) – „Rund“ benutzt ihn auch.
+  Neue Kern-Stationen `pinnwand`, `staffelei`, `bild`, `moebel` und `K.pinnwandZettel()`; die runde Insel liest diese Texte jetzt ebenfalls aus dem Kern.
+- **NA-27 Pixel-Figuren:** Kind mit allen Frisuren des Kleiderschranks (lang, Wellen, Zöpfe, Seitenzopf, Dutt, Space-Buns, Bob, kurz, Locken, Puffs,
+  Pferdeschwanz) und Extras (Kronen, Schleife, Blüte, Haarreif, Katzen-/Fuchsohren, Einhorn, Mützen, Hüte, Kopfhörer, Brillen, Schal, Kette, Umhang,
+  Flügel, Luftballon, Teddy, Zauberstab, Tasche); Bild jetzt 22×34 (Platz über dem Kopf). Haustier mit Vorder- und Rückansicht (vier Richtungen),
+  Schleife wandert mit. Nachbarn hatten schon eigene Sprites mit Zwei-Bild-Animation; sie bleiben so.
+- Tests: `tests/pixelinsel.js` um Zimmer/Einrichten (Abschnitt 7) und Figuren (Abschnitt 8) erweitert; Test-Haken `__pixel.einrichten()`, `ringe`,
+  `moebel()`, `figur()`, `tierRichtung`.
+- Abweichung von der Reihenfolge: NA-28 vor NA-27 erledigt (der Laden-Baustein war schon vorbereitet). Nicht in Pixel: Ohrringe und Armband
+  (zu klein für 16-px-Figuren), Kleidungsmuster (nur Farben). Hinweis: Der Prolog-Test der runden Insel wackelt, wenn der Rechner nebenbei
+  ausgelastet ist (Software-Rendering); er hat jetzt längere Wartezeiten und zählt Hausbesuche.
 
 **Offen / als Nächstes**
-- **iPad 10 und Handy testen** (in `/dev`): Insel öffnen → Knopf „👾 Pixel“ → laufen (Tippen), Ella antippen, Haus, Zimmer, zurück „🐾 Rund“.
-  Neues Kind in `/dev`: Prolog in Pixel (Eltern → „Look der Insel: Pixel“ vor dem ersten Inselbesuch).
-- Nächstes Paket: **NA-27 Pixel-Figuren**, dann **NA-28 Pixel-Zimmer**, dann NA-14 in beiden Looks.
+- **iPad 10 und Handy testen** (in `/dev`): Insel öffnen → Knopf „👾 Pixel“ → laufen (Tippen), Ella antippen, Haus, Zimmer einrichten,
+  Kleiderschrank ändern und wieder ansehen, zurück „🐾 Rund“. Neues Kind in `/dev`: Prolog in Pixel (Eltern → „Look der Insel: Pixel“ vor dem
+  ersten Inselbesuch). Wenn alles passt: Pixel auch auf der Hauptseite wählbar machen (`lookWaehlbar()` → immer wahr) – Entscheidung des Auftraggebers.
+- Nächstes Paket: **NA-14** Tutorial E4–E8 in beiden Looks → NA-21 → NA-16 (wartet auf Geschenk-Auswahl).

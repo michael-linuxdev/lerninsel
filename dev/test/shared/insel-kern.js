@@ -268,6 +268,12 @@
     { id: "lila", name: "Lavendel", farbe: ["#E3D6FF", "#F3EDFF"], preis: 3 }
   ];
   const zimmerDaten = () => Object.assign({ plaetze: {}, wand: "rosa" }, S().lade("zimmer") || {});
+  // Zettel der Pinnwand: Lernfunde der letzten 7 Tage (gezeigt werden höchstens 8), neu = von heute
+  function pinnwandZettel() {
+    const L = W.Lernfunde; if (!L) return [];
+    const funde = L.letzteTage(7), heute = L.heute().length;
+    return funde.map((f, i) => ({ t: f.t, e: f.e, fach: f.f, gemeistert: f.a === "gemeistert", neu: i < heute }));
+  }
   const besitzt = (id, preis) => !preis || S().offen(S().istFrei(id));
 
   // ======================================================================================================
@@ -462,6 +468,16 @@
       case "bett": return blase("🛏️", "Dein Bett", lage.tier ? `Hier kuschelt ${lage.tier}, wenn es müde ist.` : "Ein gemütliches Bett. Mit dem Knopf „Einrichten“ machst du dein Zimmer schön.", "Уютная кровать.");
       case "schrank": return blase("👗", "Dein Kleiderschrank", "Such dir etwas Schönes zum Anziehen aus. Auf der Insel trägst du es dann!", "Выбери что-нибудь красивое из одежды!", "../anziehen/?von=insel");
       case "spiegel": return blase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, was du gut kannst, und deine Pokale.", "Посмотри, как ты выросла!", "../ich/");
+      // Pinnwand: Lernfunde der letzten 7 Tage als Zettel (die Looks zeichnen sie aus pinnwandZettel())
+      case "pinnwand": {
+        const z = pinnwandZettel(), heute = z.filter(x => x.neu).length;
+        if (!z.length) return blase("📌", "Deine Pinnwand", "Hier hängst du auf, was du diese Woche Neues lernst. Jeder Lernfund bekommt einen Zettel!", "Здесь висит всё новое, что ты узнаёшь за неделю.", "../ich/");
+        return blase("📌", "Deine Pinnwand", `Diese Woche ${z.length === 1 ? "1 Zettel" : `${z.length} Zettel`}${heute ? `, ${heute} von heute (golden umrandet)` : ""}: ` +
+          z.slice(0, 4).map(f => f.t.replace(/^Neues Wort: /, "").replace(/ – (war|jetzt).*$/, "")).join(" · ") + (z.length > 4 ? " …" : ""), `На этой неделе ты узнаёшь много нового: ${z.length}!`, "../ich/");
+      }
+      case "staffelei": return blase("papagei", "Deine Staffelei", lage.bild ? "Hier steht dein neuestes Bild. Papagei Paula hat schon Farben bereitgelegt – malst du noch eins?" : "Eine leere Leinwand! Mit Papagei Paula kannst du im Atelier malen, was du willst.", "Здесь можно рисовать с попугаем Паулой!", "../atelier/");
+      case "bild": return blase("papagei", "Dein Bild", `Das hast du am ${new Date(lage.t || Date.now()).toLocaleDateString("de-DE")} gemalt. Es hängt hier, bis du ein anderes aufhängst.`, "Это ты нарисовал(а)! Красиво!", "../atelier/");
+      case "moebel": { const m = MOEBEL.find(x => x.id === lage.id); return m ? { blase: [m.e, m.name, m.text, "", null] } : null; }
       case "lauf": case "kart": case "bau": {
         const info = SPIELE[id], [titel, de, ru, ziel] = ORT_TEXT[id];
         if (!istFrei(id)) {
@@ -490,7 +506,7 @@
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
     weihnachtsPaket, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude,
     // Zimmer
-    PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt,
+    PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel,
     // Wetter
     WETTER_KEY, WETTER_ART, WETTER_TEXT, wetterCache, wetterSatz, wetterSticker, holeWetter, startWetter
   };
