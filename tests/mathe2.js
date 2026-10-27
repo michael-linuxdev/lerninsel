@@ -51,7 +51,7 @@ const NEU = ["zahlen100", "lage", "rechentricks", "euro", "linien", "zahlenmauer
     const { ctx, p } = await kind("2");
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     const st = await p.evaluate(() => ({ n: document.querySelectorAll("#karte .station:not(.ziel)").length, ids: Mathe.STATIONEN.map(s => s.id) }));
-    erwarte(st.n === 40, `Matheweg Kl. 2 hat 40 Stationen (${st.n})`);
+    erwarte(st.n === 45, `Matheweg Kl. 2 hat 45 Stationen (${st.n})`);
     let o = await offen(p);
     const idx = (id) => st.ids.indexOf(id);
     erwarte(o[idx("plus20")] && o[idx("formen")] && o[idx("daten")] && o[idx("geld")] && !o[idx("minus20")] && !o[idx("lage")] && !o[idx("zahlen100")],
@@ -89,7 +89,7 @@ const NEU = ["zahlen100", "lage", "rechentricks", "euro", "linien", "zahlenmauer
       if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); }
       await p.waitForSelector(".lp-punkte");
       const lp = await p.evaluate(() => ({ n: document.querySelectorAll(".lp-punkte").length, punkte: document.querySelectorAll(".lp-punkte li").length, text: document.querySelector(".lp-punkte summary").textContent }));
-      erwarte(lp.n === 4 && lp.punkte === 52, `Elternbereich: 4 Lernbereiche Mathe mit 52 Inhaltspunkten zum Aufklappen (${lp.n}, ${lp.punkte}; „${lp.text}“)`);
+      erwarte(lp.n === 4 && lp.punkte === 54, `Elternbereich: 4 Lernbereiche Mathe mit 54 Inhaltspunkten zum Aufklappen (${lp.n}, ${lp.punkte}; „${lp.text}“)`);
       if (BILDER) { await p.evaluate(() => { document.querySelectorAll(".lp-punkte").forEach(d => d.open = true); document.querySelector(".lp-punkte").scrollIntoView(); }); await p.screenshot({ path: `${BILDER}/mathe2-eltern.png` }); }
     }
     await ctx.close();
@@ -100,7 +100,7 @@ const NEU = ["zahlen100", "lage", "rechentricks", "euro", "linien", "zahlenmauer
     const { ctx, p } = await kind("3");
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     const n = await p.evaluate(() => document.querySelectorAll("#karte .station:not(.ziel)").length);
-    erwarte(n === 30, `Klasse 3 startet auf dem Kl.-3-Weg (30 Stationen, ${n})`);
+    erwarte(n === 35, `Klasse 3 startet auf dem Kl.-3-Weg (35 Stationen, ${n})`);
     await ctx.close();
   }
 

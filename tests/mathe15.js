@@ -46,7 +46,7 @@ const NEU5 = ["k5grosszahl", "k5teiler", "k5terme", "k5geometrie", "k5raum", "k5
     return { sterne, passt };
   }
 
-  for (const [stufe, weg, neu, anzahl, ersteJeLb] of [["1", "k1", NEU1, 19, ["k1wuerfel", "k1muster", "k1geld", "k1daten"]], ["5", "k5", NEU5, 16, ["k5fit", "k5komma", "k5koordinaten", "k5mittel"]]]) {
+  for (const [stufe, weg, neu, anzahl, ersteJeLb] of [["1", "k1", NEU1, 22, ["k1wuerfel", "k1muster", "k1geld", "k1daten"]], ["5", "k5", NEU5, 16, ["k5fit", "k5komma", "k5koordinaten", "k5mittel"]]]) {
     const { ctx, p } = await kind(stufe);
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     const ids = await p.evaluate((w) => Mathe[w].map(s => s.id), weg === "k1" ? "STATIONEN_K1" : "STATIONEN_K5");
@@ -77,7 +77,7 @@ const NEU5 = ["k5grosszahl", "k5teiler", "k5terme", "k5geometrie", "k5raum", "k5
       if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); }
       await p.waitForSelector(".lp-punkte");
       const lp = await p.evaluate(() => document.querySelectorAll("li[data-punkt^='sn.ma12']").length);
-      erwarte(lp === 52, `Elternbereich Kl. 1: 52 Mathe-Inhaltspunkte Kl. 1/2 zum Aufklappen (${lp})`);
+      erwarte(lp === 54, `Elternbereich Kl. 1: 54 Mathe-Inhaltspunkte Kl. 1/2 zum Aufklappen (${lp})`);
       if (BILDER) { await p.evaluate(() => { document.querySelectorAll(".lp-punkte").forEach(d => d.open = true); document.querySelector(".lp-punkte").scrollIntoView(); }); await p.screenshot({ path: `${BILDER}/mathe15-eltern.png` }); }
     }
     await ctx.close();

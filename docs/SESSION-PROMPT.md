@@ -12,11 +12,11 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (27.10.2026, nachts)
+## 1. Stand (28.10.2026, früh)
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
-  **Kl. 1/Vorschule 19** (Lehrplan Sachsen geprüft) · **Kl. 2 40 (Lehrplan Sachsen Kl. 1/2 vollständig geprüft, Freischalten je Lernbereich)** · **Kl. 3 30** (Lehrplan Sachsen geprüft; u. a. schriftlich plus/minus, Würfelnetze, Würfelgebäude, Spiegeln, Diagramme, Glücksrad) ·
-  **Kl. 4 23** (Lehrplan Sachsen geprüft; Zahlen bis 1 Mio., schriftlich mal/geteilt, auch mehrstellig, Teilbarkeit 2/3/4/5/6/9/10/100, Primzahlen, römische Zahlen, Maßstab,
+  **Kl. 1/Vorschule 22** · **Kl. 2 45** (Freischalten je Lernbereich) · **Kl. 3 35** (u. a. schriftlich plus/minus, Würfelnetze, Würfelgebäude, Spiegeln, Diagramme, Glücksrad) ·
+  **Kl. 4 26** (Zahlen bis 1 Mio., schriftlich mal/geteilt, auch mehrstellig, Teilbarkeit 2/3/4/5/6/9/10/100, Primzahlen, römische Zahlen, Maßstab,
   Zeit/Datum, Liter, Flächen, Chancen) · **Übergang 5** 16 (vorläufig ohne Kl.-5-Lehrplantext; Brüche, große Zahlen, Teiler, Terme, Flächen/Volumen, Kommazahlen, Klammern, Koordinaten, Winkel, Durchschnitt). Urkunden am Ende von Kl. 4 und Übergang 5.
 - **Deutsch:** Fipsis Abenteuer (5 Kapitel), Lesen und Schreiben (Anlaute, Silben, 20 Lesetexte, Nachspuren, Wörter legen), DaZ „Ankommen“,
   **Wörter-Werkstatt 35 Kapitel** (Kl. 1–2: 7, Kl. 3–4: 26 inkl. Geschichte ordnen, Satzanfänge, Brief, Bericht, Wörterbuch, Vortrag; Übergang 5:
@@ -31,8 +31,9 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 
 ### Lehrplan Sachsen (Einschätzung von Hand, `shared/lehrplan/laender/sachsen.js`)
 - **Mathe und Deutsch nach Fassung 2025** (in Kraft seit 1.8.2025), Sachunterricht und Englisch nach Fassung 2019.
-- **Mathe, Deutsch, Sachunterricht (Kl. 1–4, 45 Lernbereiche): 22 × gut, 23 × teilweise, 0 × fehlt.** Mathe 9/3/0, Deutsch 3/12/0, SU 10/8/0.
-- **Mathe Kl. 1–4 und Übergang 5 in voller Tiefe:** 117 Inhaltspunkte Grundschule + 15 Übergangs-Punkte (vorläufig); in `sachsen-punkte.js` (Kl. 1/2: 52, Kl. 3: 34, Kl. 4: 31) – 89 geübt, 20 teilweise, 1 fehlt, 7 auf Papier/draußen.
+- **✅ MATHE GRUNDSCHULE VOLLSTÄNDIG:** jeder Inhaltspunkt Kl. 1–4 (120) in der App geübt (110) oder als draußen/Papier markiert (10); alle 12 Lernbereiche „gut“.
+- **Mathe, Deutsch, Sachunterricht (Kl. 1–4, 45 Lernbereiche): 25 × gut, 20 × teilweise, 0 × fehlt.** Mathe 12/0/0, Deutsch 3/12/0, SU 10/8/0.
+- Inhaltspunkte in `sachsen-punkte.js`: Kl. 1/2 54, Kl. 3 34, Kl. 4 32 (alle geübt oder draußen/Papier), dazu 15 Übergangs-Punkte (vorläufig, ohne Lehrplantext Kl. 5).
 - **Englisch (Kl. 3–4, 20 Lernbereiche): 2 × gut, 14 × teilweise, 4 × fehlt** (Let's go shopping, Let's go on a trip, je Kl. 3 und 4).
 
 ### Entscheidungen des Auftraggebers (gelten weiter)
@@ -67,9 +68,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 (jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr, Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten).
 Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen – siehe `CLAUDE.md`, Abschnitt 3.
 
-1. **Mathe Kl. 1–4 ist fertig geprüft, Übergang 5 vorläufig** (117 + 15 Punkte, 50 neue Stationen; für Übergang 5 die Lehrpläne Kl. 5 Oberschule/Gymnasium erbitten). Offene Mathe-Punkte (teilweise): Kl. 2 Tangram, eigene
-   Baupläne, Entdeckerpäckchen, eigene Rechenwege, Rechengeschichten erfinden; Kl. 3 Perspektiven, Quadernetze, Umfang mit dem Faden;
-   Kl. 4 Wegeskizzen, Schrägbilder, Körpernetze vergleichen, römischer Abakus.
+1. **Mathe Grundschule ist vollständig** (Kl. 1–4, 66 neue Stationen in dieser Ausrichtung). Übergang 5 bleibt vorläufig (Auftraggeber:
+   „überspringen“). Nächstes Fach nach Wahl des Auftraggebers – für Deutsch/Sachunterricht/Musisches fehlen noch die PDFs.
    **Für Deutsch, Sachunterricht, Kunst, Musik, Werken, Sport, Ethik Kl. 1/2 fehlen die PDFs** – zuerst danach fragen; dann je Fach Punkte
    in `sachsen-punkte.js` und Lücken schließen.
 2. **Schuljahres-Gerüst** (für alle Fächer): Pfad je Fach, Eltern-Einstellung „gerade in der Schule“, „Zeig, was du kannst“ je

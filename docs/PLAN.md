@@ -1507,3 +1507,27 @@ Auftrag: „Sowie Übergang Klasse 5, dann Klasse 1“.
   passiert und hätte still eine alte Bildfunktion überschrieben) und dass jede Station 10 verschiedene Aufgaben liefert.
 - **Tests:** neu `tests/mathe15.js`; `mathe1` (19 Stationen Kl. 1), `uebergang5` (16 Stationen, Urkunde 16 von 16), `lehrplan` (Übergangs-Punkte).
 - **Nächstes:** Lehrplan Kl. 5 als PDF → Übergang genau nachziehen; Deutsch/Sachunterricht/musische Fächer Kl. 1/2 (PDFs); Schuljahres-Gerüst.
+
+### Stand 28.10.2026, früh (Nacht durchgebaut: Mathe Grundschule vollständig)
+Auftrag: „Übergang Klasse 5 überspringen, weiter mit Klasse 1, um Mathe Grundschule endlich vollständig abzudecken. Bau die ganze Nacht durch.“
+- **Ergebnis:** Jeder Inhaltspunkt des sächsischen Mathe-Lehrplans 2025 für Kl. 1–4 wird in der App geübt (110 Punkte) oder ist ehrlich als
+  „draußen/auf Papier“ markiert (10: Zeichnen mit Lineal/Geodreieck/Zirkel, selbst messen, eigene Umfragen, Skizzen zeichnen). Kein Punkt mehr
+  „teilweise“ oder „fehlt“. Alle 12 Mathe-Lernbereiche „gut“ (von Hand und errechnet). Sachsen gesamt jetzt 25 gut / 20 teilweise / 0 fehlt.
+- **16 neue Stationen:** Kl. 1 Rechts und links (Kind von hinten und von vorn – Perspektivwechsel), Vorn und hinten (Tiefe, Warteschlange),
+  Figuren legen (Teile benennen, zählen, fehlendes Teil); Kl. 2 Baupläne finden (passender Bauplan, umbauen), Rechenwege und
+  Entdeckerpäckchen (Wege anderer Kinder verstehen, prüfen, geschickten Weg wählen, Muster in Päckchen), Bild/Zahl/Rechnung (Punktefeld,
+  Zehnerbild, Geschichte, Hunderterfeld), Knobeln und Strategiespiele (Nim mit 1–3, Würfelsummen, Zahlen denken, Waage, Logik),
+  Tabellen ausfüllen (fortsetzen, fehlender Wert, aus Liste eintragen); Kl. 3 Pläne und Blickrichtungen (links/rechts je nach Blickrichtung,
+  Entfernungen im Plan, kürzerer Weg), Fläche und Umfang vergleichen (Umfang zählen, gleiche Fläche – anderer Umfang, zerlegen),
+  Würfel-/Quader-/Körpernetze (gegenüberliegende Flächen, Netz zum Körper), Sachaufgaben mit Skizze und Tabelle (Baum-/Zaunaufgabe,
+  Sparen in Wochen, Vermutungen prüfen, Ergebnis sinnvoll runden), Knobeln und Legespiele; Kl. 4 Wegeskizzen und Entfernungen, Schrägbilder
+  lesen (verdeckte Würfel), Adam Ries: Rechnen auf den Linien (Rechenbrett mit Rechenpfennigen, Bündeln).
+- **Rechengeschichten erfinden:** neues Werkstatt-Kapitel (Deutsch, Kl. 2) mit drei Schreib-Schritten – die Kinder schreiben eigene
+  Geschichten zu 4 + 3, 12 − 5 und 3 · 5; die App prüft Zahlen, Sätze und das Fragezeichen. Punkte dürfen jetzt auch `werkstatt:<kapitel>` zuordnen.
+- **Ehrlich getrennt:** „Längen messen“ und „Daten sammeln“ sind jetzt je ein App-Punkt (am Lineal ablesen, Strichlisten auswerten) und ein
+  Draußen-Punkt (selbst messen, eigene Umfrage). Neue Echte-Welt-Aufgabe „Wegskizze“.
+- **Lernziel-Kennungen nachgeschärft:** Stationen tragen jetzt alle Ziele, die sie üben (z. B. Umkehraufgaben, Teilen, Münzen, Tagesablauf) –
+  dadurch stimmt auch die errechnete Abdeckung.
+- **Tests:** neu `tests/mathevoll.js`; Stationszahlen in `mathe1`, `mathe2`, `mathe34`, `mathe15`, `mathe-generatoren`, `deutsch34` (Werkstatt +1),
+  `lehrplan` (54/34/32 Punkte, keine „teil“, 25/20/0).
+- **Nächstes:** nächstes Fach (Deutsch, Sachunterricht, Musik, Kunst …) – dafür die Lehrplan-PDFs; Schuljahres-Gerüst.

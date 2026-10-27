@@ -499,5 +499,17 @@ window.WERKSTATT = [
       { typ: "aufnehmen", e: "🎤", frage: "Stell dein Buch jetzt als kleinen Vortrag vor! Sprich langsam und deutlich – du kannst deinen Text dabei ablesen.", ru: "Теперь представь свою книгу как маленький доклад! Говори медленно и чётко – можно читать свой текст." },
       { typ: "sag", text: "Prima, {name}! Mit so einem Buchtipp findest du in der Klasse bestimmt Leute, die dein Buch auch lesen wollen.", ru: "Отлично! С таким советом ты наверняка найдёшь в классе ребят, которые тоже захотят прочитать твою книгу." }
     ]
+  },
+  {
+    id: "w-rechengeschichten", stufe: 2, lz: ["ma.zo.18", "de.sc.06"], name: "Rechengeschichten erfinden", ort: "🧮", farbe: "#2F6FB8", grund: "#E5EFFB",
+    schritte: [
+      { typ: "sag", text: "Heute erfindest du Rechengeschichten, {name}! Eine Rechengeschichte erzählt, was passiert – und am Ende steht eine Frage, die man ausrechnen kann.", ru: "Сегодня ты придумываешь задачи-истории! История рассказывает, что происходит, а в конце стоит вопрос, который можно посчитать." },
+      { typ: "luecke", e: "🐦", satz: "Auf dem Dach sitzen 4 Vögel. 3 kommen dazu. ___", optionen: ["Wie viele Vögel sind es jetzt?", "Wie heißen die Vögel?", "Wo wohnen die Vögel?"], ru: "На крыше сидят 4 птицы. Прилетают ещё 3. Сколько птиц теперь?" },
+      { typ: "luecke", e: "➖", satz: "Zu 10 − 2 passt: Tom hat 10 Murmeln. ___", optionen: ["Er verliert 2.", "Er bekommt 2 dazu.", "Er hat 2 Hosen."], ru: "К 10 − 2 подходит: у Тома 10 шариков. Он теряет 2." },
+      { typ: "schreiben", e: "➕", frage: "Erfinde eine Rechengeschichte zu 4 + 3! Schreib zwei Sätze: was passiert – und eine Frage am Ende.", woerter: 10, saetze: 2, pflicht: ["4", "3"], karten: ["kommen dazu", "bekommt", "Wie viele", "sind es jetzt?"], ru: "Придумай историю к 4 + 3! Два предложения: что происходит – и вопрос в конце." },
+      { typ: "schreiben", e: "➖", frage: "Jetzt eine Minus-Geschichte zu 12 − 5! Denk daran: Bei Minus wird es weniger.", woerter: 10, saetze: 2, pflicht: ["12", "5"], karten: ["gehen weg", "verliert", "isst", "Wie viele", "bleiben übrig?"], ru: "Теперь история с минусом к 12 − 5! При минусе становится меньше." },
+      { typ: "schreiben", e: "✖️", frage: "Und eine Mal-Geschichte zu 3 · 5 – zum Beispiel mit Tellern, Tüten oder Reihen.", woerter: 10, saetze: 2, pflicht: ["3", "5"], karten: ["je", "Teller", "Tüten", "Wie viele", "sind es zusammen?"], ru: "И история на умножение к 3 · 5 – например, с тарелками, пакетами или рядами." },
+      { typ: "sag", text: "Super, {name}! Lies deine Geschichten jemandem vor – kann er die Frage ausrechnen?", ru: "Супер! Прочитай свои истории кому-нибудь – сможет ли он посчитать ответ?" }
+    ]
   }
 ];

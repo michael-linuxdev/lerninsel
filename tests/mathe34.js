@@ -46,7 +46,7 @@ const NEU4 = ["k4vierecke", "k4vergroessern", "k4volumen", "k4parkett", "k4tonne
     return { sterne, passt };
   }
 
-  for (const [stufe, weg, neu, anzahl, ersteJeLb] of [["3", "k3", NEU3, 30, ["k3stellen", "k3gewicht", "k3kombi", "k3netz"]], ["4", "k4", NEU4, 23, ["k4million", "k4liter", "k4flaeche", "k4chance"]]]) {
+  for (const [stufe, weg, neu, anzahl, ersteJeLb] of [["3", "k3", NEU3, 35, ["k3stellen", "k3gewicht", "k3kombi", "k3netz"]], ["4", "k4", NEU4, 26, ["k4million", "k4liter", "k4flaeche", "k4chance"]]]) {
     const { ctx, p } = await kind(stufe);
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     const ids = await p.evaluate((w) => Mathe[w].map(s => s.id), weg === "k3" ? "STATIONEN_K3" : "STATIONEN_K4");
@@ -65,7 +65,7 @@ const NEU4 = ["k4vierecke", "k4vergroessern", "k4volumen", "k4parkett", "k4tonne
       const zu = await p.evaluate(() => document.getElementById("urkunde-ziel").classList.contains("zu"));
       await p.click("#urkunde-ziel"); await p.waitForTimeout(300);
       const u = await p.evaluate(() => { const x = document.getElementById("urkunde"); return x ? x.textContent : ""; });
-      erwarte(!zu && /4\. Klasse: 15 von 23/.test(u), `Urkunde Kl. 4 bleibt mit den ursprünglichen 15 Stationen erreichbar (${(u.match(/4\. Klasse: [^,]*/) || [""])[0]})`);
+      erwarte(!zu && /4\. Klasse: 15 von 26/.test(u), `Urkunde Kl. 4 bleibt mit den ursprünglichen 15 Stationen erreichbar (${(u.match(/4\. Klasse: [^,]*/) || [""])[0]})`);
     } else {
       await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(300);
       if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); }

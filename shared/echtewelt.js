@@ -19,6 +19,7 @@
     ["zirkel", "mathe", "⭕", "Zeichne mit einem Erwachsenen einen Kreis mit dem Zirkel. Wo ist der Mittelpunkt? Miss den Radius.", "Нарисуй со взрослым круг циркулем. Где центр? Измерь радиус.", 2],
     ["bauplan", "mathe", "🧱", "Bau mit Bausteinen oder Würfeln ein Gebäude und mal den Bauplan von oben: Wie viele stehen auf jedem Feld?", "Построй из кубиков дом и нарисуй план сверху: сколько кубиков на каждом поле?", 2],
     ["umfrage", "mathe", "📊", "Mach eine kleine Umfrage in der Familie (Lieblingsessen) und führ eine Strichliste.", "Проведи опрос в семье (любимая еда) и отмечай чёрточками.", 2],
+    ["wegskizze", "mathe", "🗺️", "Zeichne eine Skizze von deinem Schulweg mit drei wichtigen Punkten. Schätze, wie weit es ungefähr ist.", "Нарисуй схему пути в школу с тремя важными точками. Оцени, какое примерно расстояние.", 4],
     ["rechtslinks", "mathe", "🫲", "Spiel „Rechts oder links?“: Jemand sagt „Rechte Hand aufs linke Knie!“ – du machst es.", "Игра «Право или лево?»: кто-то говорит «Правую руку на левое колено!» – ты делаешь.", 1],
     ["blaetter", "natur", "🍂", "Sammle draußen 5 verschiedene Blätter. Weißt du, von welchen Bäumen sie sind?", "Собери на улице 5 разных листьев. Знаешь, с каких они деревьев?", 1],
     ["vogel", "natur", "🐦", "Beobachte draußen einen Vogel. Wie sieht er aus? Was macht er?", "Понаблюдай за птицей. Как она выглядит? Что она делает?", 1],

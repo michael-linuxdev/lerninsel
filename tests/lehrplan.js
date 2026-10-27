@@ -56,13 +56,13 @@ pruefe("Sachsen: alle 45 Lernbereiche (Mathe, Deutsch 2025, Sachunterricht) habe
 pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand 9 / 15 / 25, Stand NA-33a)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 22, teil: 23, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 25, teil: 20, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
 });
 
-pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 haben Inhaltspunkte je Lernbereich, jede Zuordnung zeigt auf eine echte Station/Aufgabe", () => {
+pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder Inhaltspunkt geübt oder ehrlich als „draußen/Papier“ markiert je Lernbereich, jede Zuordnung zeigt auf eine echte Station/Aufgabe", () => {
   const lbs = L.laender.sachsen.faecher.mathe.stufen["1/2"], ids = new Set();
   const stationen = new Set([].concat(w.Mathe.STATIONEN, w.Mathe.STATIONEN_K1, w.Mathe.STATIONEN_K3, w.Mathe.STATIONEN_K4, w.Mathe.STATIONEN_K5).map(s => s.id));
   const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
@@ -74,20 +74,21 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 haben Inhaltspunkte je L
       assert.ok(["1", "2", "1/2"].includes(p.kl) && p.text.length < 140, p.id);
       p.app.forEach(a => { const [art, id] = a.split(":");
         if (art === "mathe") assert.ok(stationen.has(id), `${p.id}: Station ${id} gibt es nicht`);
+        else if (art === "werkstatt") assert.ok(w.WERKSTATT.some(k => k.id === id), `${p.id}: Werkstatt-Kapitel ${id} gibt es nicht`);
         else if (art === "echtewelt") assert.ok(echt.includes(`["${id}", `), `${p.id}: Echte-Welt-Aufgabe ${id} gibt es nicht`);
         else assert.fail(`${p.id}: unbekannte Zuordnung ${a}`); });
-      if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("mathe:")), p.id + " ist „ja“ ohne Station");
+      if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(mathe|werkstatt):/.test(a)), p.id + " ist „ja“ ohne Station");
     });
   });
-  assert.strictEqual(ids.size, 52);
-  assert.deepStrictEqual(n, { ja: 38, teil: 11, nein: 1, aussen: 2 });
+  assert.strictEqual(ids.size, 54);
+  assert.deepStrictEqual(n, { ja: 50, teil: 0, nein: 0, aussen: 4 });
   // Kl. 3 und 4 (gleiche Prüfung der Zuordnungen)
-  for (const [st, soll, zahl] of [["3", { ja: 27, teil: 5, nein: 0, aussen: 2 }, 34], ["4", { ja: 24, teil: 4, nein: 0, aussen: 3 }, 31]]) {
+  for (const [st, soll, zahl] of [["3", { ja: 32, teil: 0, nein: 0, aussen: 2 }, 34], ["4", { ja: 28, teil: 0, nein: 0, aussen: 4 }, 32]]) {
     const m = { ja: 0, teil: 0, nein: 0, aussen: 0 }, ids2 = new Set();
     L.laender.sachsen.faecher.mathe.stufen[st].forEach(lb => { assert.ok(lb.punkte && lb.punkte.length >= 4, `Kl. ${st} ${lb.titel}`);
       lb.punkte.forEach(p => { assert.ok(!ids2.has(p.id) && p.kl === st, p.id); ids2.add(p.id); m[p.abdeckung]++;
-        p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
-        if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("mathe:")), p.id); }); });
+        p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id) : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
+        if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(mathe|werkstatt):/.test(a)), p.id); }); });
     assert.strictEqual(ids2.size, zahl, "Kl. " + st); assert.deepStrictEqual(m, soll, "Kl. " + st);
   }  // Übergang 5 (vorläufig, eigene Liste)
   const ue = L.laender.sachsen.uebergang, u = { ja: 0, teil: 0, nein: 0, aussen: 0 };
@@ -105,11 +106,11 @@ pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziel
   assert.ok(I.alle().length >= 23 + 5 + 5 + 4 + 6 + 5, "Inhalte: " + I.alle().length);
 });
 
-pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten gut, Anlaute gut, Lesetexte und Nachspuren teilweise, Texte planen teilweise", () => {
+pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten gut, Anlaute gut, Lesetexte und Nachspuren teilweise, Texte planen teilweise", () => {
   assert.strictEqual(I.abdeckung("ma.zo.07"), "ja");    // vier Stationen
   assert.strictEqual(I.abdeckung("de.su.04"), "ja");    // NA-36: mit Steigerung und Pronomen genug Aufgaben
   assert.strictEqual(I.abdeckung("ma.zo.03"), "ja");    // Plus/Minus bis 20 und bis 10 (Klasse-1-Weg)
-  assert.strictEqual(I.abdeckung("ma.zo.05"), "teil");  // nur eine Station
+  assert.strictEqual(I.abdeckung("ma.zo.05"), "ja");    // Zehner und Einer, Zahlen bis 100, Bild/Zahl/Rechnung (Sachsen in voller Tiefe)
   assert.strictEqual(I.abdeckung("me.ph.01"), "teil");  // ohne Lernkartei
   assert.strictEqual(I.abdeckung("de.le.02"), "ja");    // NA-30: Tafel, Finde das Bild, Welcher Buchstabe (mit Lernkartei)
   assert.strictEqual(I.abdeckung("de.le.05"), "teil");   // NA-31: Lesetexte Kl. 2 (ohne Lernkartei)

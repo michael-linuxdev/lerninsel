@@ -370,7 +370,7 @@
         const wuerfel = `<svg viewBox="0 0 180 180" class="bild-uhr" role="img" aria-label="Würfel"><rect x="12" y="12" width="156" height="156" rx="30" fill="#fff" stroke="${D}" stroke-width="7"/>${augen}</svg>`;
         return { text: "", frage: `Du würfelst einmal mit einem normalen Würfel. Dass du ${satz[0]} würfelst, ist …`, antwort: satz[1], art: "wahl", optionen: OPT, bild: wuerfel, nurLuecke: true, hilfe: satz[2] };
       } },
-    { id: "uhr", lz: ["ma.gm.06"], name: "Uhrzeit", icon: "🕒",
+    { id: "uhr", lz: ["ma.gm.06", "ma.gm.03"], name: "Uhrzeit", icon: "🕒",
       neu: () => {
         const h = r(1, 12), m = wahl([0, 0, 30, 30, 15, 45]);
         const f = (hh, mm) => `${((hh - 1 + 12) % 12) + 1}:${String(mm).padStart(2, "0")}`;
@@ -1174,7 +1174,7 @@
         const orte = [["oben links", 0, 0], ["oben rechts", 0, 2], ["unten links", 2, 0], ["unten rechts", 2, 2], ["in der Mitte", 1, 1]], o = wahl(orte);
         return wahlAufgabe(`Wo steht ${g[o[1]][o[2]]}?`, o[0], mische(orte.map(x => x[0])), "Schau zuerst: oben, Mitte oder unten? Dann: links oder rechts?", { bild: regalBild(g) });
       } },
-    { id: "rechentricks", lb: "zo", lz: ["ma.zo.07", "ma.zo.08", "ma.ms.03"], name: "Rechentricks", icon: "💡",
+    { id: "rechentricks", lb: "zo", lz: ["ma.zo.07", "ma.zo.08", "ma.zo.10", "ma.ms.03"], name: "Rechentricks", icon: "💡",
       neu: () => {
         const art = r(1, 10);
         if (art === 1) { const a = r(2, 9), b = r(21, 89); return zahl(`${a} + ${b} = ${b} + ?`, a, `Tauschaufgabe: Beim Plus darfst du die Zahlen tauschen. Rechne lieber ${b} + ${a}.`); }
@@ -1191,7 +1191,7 @@
         const a = r(3, 9), b = r(11, 15 - a + 6), s = a + b;
         return wahlAufgabe(`Welche Aufgabe gehört NICHT zur Familie ${a}, ${b}, ${s}?`, `${s} + ${a} = ${s + a}`, [`${a} + ${b} = ${s}`, `${b} + ${a} = ${s}`, `${s} ${M} ${b} = ${a}`], `Zur Aufgabenfamilie gehören nur Aufgaben mit genau den Zahlen ${a}, ${b} und ${s}.`);
       } },
-    { id: "euro", lb: "gm", lz: ["ma.gm.04"], name: "Euro und Cent", icon: "💶",
+    { id: "euro", lb: "gm", lz: ["ma.gm.04", "ma.gm.02"], name: "Euro und Cent", icon: "💶",
       neu: () => {
         const art = r(1, 7);
         if (art === 1) { const e = r(1, 9); return zahl(`${e} € = ? ct`, e * 100, `1 € sind 100 ct, also sind ${e} € ${e * 100} ct.`); }
@@ -1312,7 +1312,7 @@
           ? wahlAufgabe("Welche Flächen hat ein Würfel?", "nur Quadrate", ["Kreise", "Dreiecke"], "Ein Würfel hat 6 gleich große Quadrate.", { bild: formBild("wuerfel") })
           : wahlAufgabe("Ist ein Würfel ein besonderer Quader?", "ja", ["nein"], "Ja: Ein Würfel ist ein Quader, bei dem alle Kanten gleich lang sind.", { bild: formBild("wuerfel") });
       } },
-    { id: "zeitspanne", lb: "gm", lz: ["ma.gm.06", "ma.gm.07"], name: "Zeitspannen", icon: "⏱️",
+    { id: "zeitspanne", lb: "gm", lz: ["ma.gm.06", "ma.gm.07", "ma.gm.03"], name: "Zeitspannen", icon: "⏱️",
       neu: () => {
         const art = r(1, 8);
         if (art === 1) { const h = r(1, 12), m = r(1, 11) * 5, f = (hh, mm) => `${((hh - 1 + 12) % 12) + 1}:${String(mm).padStart(2, "0")}`;
@@ -1457,7 +1457,7 @@
           return zahl(`${f.join(", ")}, ?`, rueck ? st - 4 * k : st + 4 * k, `Immer ${rueck ? "minus" : "plus"} ${k}.`, { frage: `Zähle in ${k}er-Schritten ${rueck ? "rückwärts" : "weiter"}:` }); }
         if (art === 6) { const h = Math.floor(n / 100), z = Math.floor(n / 10) % 10, e = n % 10; return zahl(`${h * 100} + ${z * 10} + ${e}`, n, `${h} Hunderter, ${z} Zehner, ${e} Einer: ${n}.`); }
         const x = r(51, 499); return Math.random() < 0.5 ? zahl("", 2 * x, `Das Doppelte: ${x} + ${x} = ${2 * x}.`, { frage: `Wie viel ist das Doppelte von ${x}?`, nurLuecke: true }) : zahl("", x, `Halbiere Hunderter, Zehner und Einer: ${x}.`, { frage: `Wie viel ist die Hälfte von ${2 * x}?`, nurLuecke: true }); } },
-    { id: "k3malgeteilt", lb: "zo", zusatz: true, stufe: "3", lz: ["ma.zo.11", "ma.zo.16"], name: "Mal und geteilt bis 1000", icon: "✖️",
+    { id: "k3malgeteilt", lb: "zo", zusatz: true, stufe: "3", lz: ["ma.zo.11", "ma.zo.16", "ma.zo.10"], name: "Mal und geteilt bis 1000", icon: "✖️",
       neu: () => { const art = r(1, 6), a = r(2, 9), b = r(2, 9);
         if (art === 1) return zahl(`${a * 10} · ${b}`, a * b * 10, `Kernaufgabe ${a} · ${b} = ${a * b}, dann mal 10: ${a * b * 10}.`);
         if (art === 2) return zahl(`${a * b * 10} : ${b}`, a * 10, `Denk an ${a * b} : ${b} = ${a} – also ${a * 10}.`);
@@ -1638,7 +1638,7 @@
         if (art === 2) { const z = mische(Array.from({ length: 20 }, (_, i) => i + 1)).slice(0, 3), gross = Math.random() < 0.5, ziel = gross ? Math.max(...z) : Math.min(...z);
           return wahlAufgabe(`Welche Zahl ist am ${gross ? "größten" : "kleinsten"}?`, ziel, z, `Denk an den Zahlenstrahl: Weiter rechts ist größer.`); }
         const a = r(1, 18); return zahl(`${a} < ? < ${a + 2}`, a + 1, `Zwischen ${a} und ${a + 2} liegt nur die ${a + 1}.`, { frage: "Welche Zahl liegt dazwischen?" }); } },
-    { id: "k1plus20", lb: "zo", zusatz: true, stufe: "1", lz: ["ma.zo.03", "ma.zo.04"], name: "Plus und minus bis 20", icon: "➕",
+    { id: "k1plus20", lb: "zo", zusatz: true, stufe: "1", lz: ["ma.zo.03", "ma.zo.04", "ma.zo.08"], name: "Plus und minus bis 20", icon: "➕",
       neu: () => { const art = r(1, 8);
         if (art === 1) { const a = r(10, 15), b = r(1, 19 - a); return zahl(`${a} + ${b}`, a + b, `Die Zehn bleibt, rechne nur die Einer: ${a - 10} + ${b} = ${a - 10 + b}, also ${a + b}.`); }
         if (art === 2) { const a = r(6, 9), b = r(11 - a, 9); return zahl(`${a} + ${b}`, a + b, `Erst bis 10: ${a} + ${10 - a} = 10, dann noch ${b - (10 - a)}: ${a + b}.`); }
@@ -1652,7 +1652,7 @@
           : zahl("", a + b - b, `${a + b} ${M} ${b} = ${a}.`, { frage: `${a + b} ${t} sind da. ${b} gehen weg. Wie viele bleiben?`, bild: emojiReihe(Array(a + b).fill(t), 40), nurLuecke: true }); } },
     { id: "k1lage", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.01", "ma.rf.02"], name: "Oben, unten, links, rechts", icon: "↔️",
       neu: () => STATIONEN.find(s => s.id === "lage").neu() },
-    { id: "k1formen", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.03", "ma.rf.04"], name: "Formen entdecken", icon: "🔷",
+    { id: "k1formen", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.03", "ma.rf.04", "ma.zo.01"], name: "Formen entdecken", icon: "🔷",
       neu: () => { const art = r(1, 4);
         if (art === 1) { const f = wahl(["🔺", "🟦", "🔵"]), anders = wahl(["🔺", "🟦", "🔵"].filter(x => x !== f)), reihe = Array(5).fill(f); reihe[r(0, 4)] = anders;
           return wahlAufgabe("Welche Form passt nicht dazu?", anders, ["🔺", "🟦", "🔵"], "Vergleiche die Formen: Eine ist anders.", { bild: emojiReihe(reihe) }); }
@@ -1669,7 +1669,7 @@
         if (art === 2) { let st, s; do { st = Array.from({ length: r(2, 4) }, () => wahl([1, 2, 5, 10])).sort((a, b) => b - a); s = st.reduce((a, b) => a + b, 0); } while (s > 20);
           return zahl("", s, st.join(" ct + ") + " ct = " + s + " ct", { frage: "Wie viele Cent sind das?", bild: geldBild(st, "ct"), einheit: "ct", nurLuecke: true }); }
         const a = wahl([1, 2, 5, 10, 20]), b = wahl([1, 2, 5, 10, 20].filter(x => x !== a)); return wahlAufgabe("Was ist mehr wert?", `${Math.max(a, b)} €`, [`${Math.min(a, b)} €`], `${Math.max(a, b)} € sind mehr als ${Math.min(a, b)} €.`); } },
-    { id: "k1zeit", lb: "gm", zusatz: true, stufe: "1", lz: ["ma.gm.03", "su.hi.02"], name: "Uhr und Tag", icon: "🌞",
+    { id: "k1zeit", lb: "gm", zusatz: true, stufe: "1", lz: ["ma.gm.03", "ma.gm.06", "su.hi.02"], name: "Uhr und Tag", icon: "🌞",
       neu: () => { const art = r(1, 4);
         if (art === 1) { const h = r(1, 12); return wahlAufgabe("Wie spät ist es?", `${h} Uhr`, [`${(h % 12) + 1} Uhr`, `${((h + 10) % 12) + 1} Uhr`, `${((h + 5) % 12) + 1} Uhr`], `Der große Zeiger zeigt nach oben auf die 12 – volle Stunde. Der kleine zeigt auf die ${h}.`, { bild: uhrBild(h, 0) }); }
         if (art === 2) { const s = wahl([["Frühstück", "morgens"], ["Mittagessen", "mittags"], ["Schlafen gehen", "abends"], ["Zähne putzen vor der Schule", "morgens"], ["Abendbrot", "abends"]]);
@@ -1684,7 +1684,7 @@
           return wahlAufgabe(`Was ist ${schwer ? "schwerer" : "leichter"}?`, schwer ? s[0] : s[1], s, "Stell dir vor, du hebst beides hoch."); }
         const z = mische([r(2, 4), r(5, 7), r(8, 11)]), i = z.indexOf(Math.max(...z));
         return wahlAufgabe("Welcher Turm ist am höchsten?", ["A", "B", "C"][i], ["A", "B", "C"], "Vergleiche die Höhe: Wer reicht am weitesten nach oben?", { bild: `<svg viewBox="0 0 220 160" style="max-height:170px" role="img" aria-label="Türme">${z.map((h, k) => Array.from({ length: h }, (_, j) => `<rect x="${20 + k * 70}" y="${140 - (j + 1) * 12}" width="40" height="12" fill="${["#FFB03B", "#5CCBA6", "#7B9BFF"][k]}" stroke="${D}" stroke-width="1.5"/>`).join("") + `<text x="${40 + k * 70}" y="156" text-anchor="middle" font-size="15" font-weight="700" fill="${D}">${"ABC"[k]}</text>`).join("")}</svg>` }); } },
-    { id: "k1daten", lb: "dz", zusatz: true, stufe: "1", lz: ["ma.dz.01", "ma.dz.02"], name: "Zählen und Strichliste", icon: "✏️",
+    { id: "k1daten", lb: "dz", zusatz: true, stufe: "1", lz: ["ma.dz.01", "ma.dz.02", "ma.zo.01"], name: "Zählen und Strichliste", icon: "✏️",
       neu: () => { const art = r(1, 3), k = ["🍎", "🍌", "🍐"];
         if (art === 1) { const n = r(1, 10); return zahl("", n, `Ein Bündel mit Querstrich ist 5. ${Math.floor(n / 5)} Bündel und ${n % 5} Striche: ${n}.`, { frage: "Wie viele Striche sind es?", bild: strichBild("🍎", n), nurLuecke: true }); }
         const liste = Array.from({ length: r(6, 10) }, () => wahl(k)); k.forEach((f, i) => { if (!liste.includes(f)) liste[i] = f; });
@@ -1748,6 +1748,231 @@
         const t = r(2, 5), kg = r(1, 9) * 100; return zahl(`${t} t ${kg} kg = ? kg`, t * 1000 + kg, `1 t = 1000 kg.`, { max: 4 }); } }
   ];
   STATIONEN_K5.push(...STATIONEN_K5_NEU);
+
+  // ---------- Mathe Grundschule vollständig (Kl. 1/2): letzte Lücken ----------
+  // Kind von hinten (seine linke Hand ist links im Bild) oder von vorn (gespiegelt); arm = "links" | "rechts" aus Sicht des Kindes
+  function kindBild(arm, vonVorn, was = "🎈") {
+    const bildLinks = vonVorn ? arm === "rechts" : arm === "links", hoch = (l) => l === bildLinks;
+    const armPfad = (l) => { const x = l ? 70 : 130, dx = l ? -1 : 1; return hoch(l) ? `M${x} 100 L${x + dx * 26} 52` : `M${x} 100 L${x + dx * 22} 150`; };
+    const ding = (l) => hoch(l) ? `<text x="${l ? 36 : 164}" y="50" text-anchor="middle" font-size="34">${was}</text>` : "";
+    const gesicht = vonVorn ? `<circle cx="90" cy="54" r="4" fill="${D}"/><circle cx="110" cy="54" r="4" fill="${D}"/><path d="M90 66 Q100 74 110 66" fill="none" stroke="${D}" stroke-width="3"/>` : `<circle cx="100" cy="54" r="26" fill="#8A5A34"/><path d="M80 70 Q100 82 120 70" fill="none" stroke="#6B4426" stroke-width="3"/>`;
+    return `<svg viewBox="0 0 200 230" style="max-height:220px" role="img" aria-label="Kind ${vonVorn ? "von vorn" : "von hinten"}">` +
+      `<path d="${armPfad(true)}" stroke="${D}" stroke-width="12" stroke-linecap="round"/><path d="${armPfad(false)}" stroke="${D}" stroke-width="12" stroke-linecap="round"/>` +
+      `<rect x="68" y="88" width="64" height="80" rx="18" fill="${vonVorn ? "#7B9BFF" : "#5A7BD8"}" stroke="${D}" stroke-width="4"/><path d="M84 168 L80 214 M116 168 L120 214" stroke="${D}" stroke-width="12" stroke-linecap="round"/>` +
+      `<circle cx="100" cy="56" r="28" fill="#F7C9A9" stroke="${D}" stroke-width="4"/>${gesicht}${ding(true)}${ding(false)}</svg>`;
+  }
+  // Szene mit Tiefe: hinten groß und oben, vorn kleiner und davor (überdeckt)
+  function tiefeBild(hinten, vorn) {
+    return `<svg viewBox="0 0 240 200" style="max-height:210px" role="img" aria-label="Szene"><rect x="0" y="150" width="240" height="50" fill="#BDE7A8"/>` +
+      `<text x="120" y="150" text-anchor="middle" font-size="120">${hinten}</text><text x="${wahl([80, 160])}" y="194" text-anchor="middle" font-size="70">${vorn}</text></svg>`;
+  }
+  // Figuren aus Teilen: Teile als Polygone (Punkte in einem 200×200-Feld), fehlt = Index eines leeren Teils
+  const LEGEFIGUREN = [
+    { name: "Quadrat", teile: [["Dreieck", "0,0 200,0 0,200"], ["Dreieck", "200,0 200,200 0,200"]], aus: "2 Dreiecke" },
+    { name: "Rechteck", teile: [["Quadrat", "0,50 100,50 100,150 0,150"], ["Quadrat", "100,50 200,50 200,150 100,150"]], aus: "2 Quadrate" },
+    { name: "Quadrat", teile: [["Quadrat", "0,0 100,0 100,100 0,100"], ["Quadrat", "100,0 200,0 200,100 100,100"], ["Quadrat", "0,100 100,100 100,200 0,200"], ["Quadrat", "100,100 200,100 200,200 100,200"]], aus: "4 Quadrate" },
+    { name: "Dreieck", teile: [["Dreieck", "100,0 150,100 50,100"], ["Dreieck", "50,100 100,200 0,200"], ["Dreieck", "150,100 200,200 100,200"], ["Dreieck", "50,100 150,100 100,200"]], aus: "4 Dreiecke" },
+    { name: "Haus", teile: [["Dreieck", "0,90 100,10 200,90"], ["Quadrat", "30,90 170,90 170,200 30,200"]], aus: "1 Dreieck und 1 Rechteck" },
+    { name: "Rechteck", teile: [["Dreieck", "0,50 200,50 0,150"], ["Dreieck", "200,50 200,150 0,150"]], aus: "2 Dreiecke" },
+    { name: "Trapez", teile: [["Dreieck", "0,180 50,40 50,180"], ["Quadrat", "50,40 150,40 150,180 50,180"], ["Dreieck", "150,40 200,180 150,180"]], aus: "2 Dreiecke und 1 Rechteck" }
+  ];
+  function legeBild(f, fehlt = -1) {
+    const farben = ["#FFB03B", "#5CCBA6", "#7B9BFF", "#F27BAA"];
+    return `<svg viewBox="-6 -6 212 212" style="max-height:210px" role="img" aria-label="Legefigur">` + f.teile.map(([_, p], i) => i === fehlt
+      ? `<polygon points="${p}" fill="#fff" stroke="#E5484D" stroke-width="3" stroke-dasharray="8 6"/><text x="${p.split(" ").reduce((a, q) => a + +q.split(",")[0], 0) / p.split(" ").length}" y="${p.split(" ").reduce((a, q) => a + +q.split(",")[1], 0) / p.split(" ").length + 10}" text-anchor="middle" font-size="30" fill="#E5484D">?</text>`
+      : `<polygon points="${p}" fill="${farben[i % 4]}" stroke="${D}" stroke-width="3" stroke-linejoin="round"/>`).join("") + `</svg>`;
+  }
+  const planText = (h) => `hinten ${h[0].join(" ")} · vorn ${h[1].join(" ")}`;
+  function punktRechteck(z, s) { let t = ""; for (let i = 0; i < z; i++) for (let j = 0; j < s; j++) t += `<circle cx="${20 + j * 30}" cy="${20 + i * 30}" r="11" fill="#FFB03B" stroke="${D}" stroke-width="1.5"/>`;
+    return `<svg viewBox="0 0 ${s * 30 + 10} ${z * 30 + 10}" style="max-height:200px" role="img" aria-label="Punktefeld">${t}</svg>`; }
+
+  const STATIONEN_K1_VOLL = [
+    { id: "k1rechtslinks", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.01", "ma.rf.02"], name: "Rechts und links", icon: "🫲",
+      neu: () => { const art = r(1, 3), arm = wahl(["links", "rechts"]), was = wahl(["🎈", "🌸", "⭐", "🍦", "🚩"]);
+        if (art === 1) return wahlAufgabe(`Du siehst das Kind von hinten. In welcher Hand hält es ${was} hoch?`, arm, ["links", "rechts"], "Von hinten ist es wie bei dir: Die linke Hand des Kindes ist auch links im Bild.", { bild: kindBild(arm, false, was) });
+        if (art === 2) return wahlAufgabe(`Das Kind schaut dich an. In welcher Hand hält es ${was} hoch – in seiner linken oder rechten?`, arm, ["links", "rechts"], "Achtung, es schaut dich an: Seine rechte Hand ist auf DEINER linken Seite. Stell dich in Gedanken umgedreht hin.", { bild: kindBild(arm, true, was) });
+        const p = wahl([["⬅️", "links"], ["➡️", "rechts"], ["⬆️", "oben"], ["⬇️", "unten"]]); return wahlAufgabe("Wohin zeigt der Pfeil?", p[1], ["links", "rechts", "oben", "unten"], `Der Pfeil zeigt nach ${p[1]}.`, { bild: emojiReihe([p[0]], 90) }); } },
+    { id: "k1vornhinten", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.01", "ma.rf.02"], name: "Vorn und hinten", icon: "🏡",
+      neu: () => { if (Math.random() < 0.5) { const p = wahl([["🏠", "🌳"], ["⛰️", "🐄"], ["🏰", "🐴"], ["🚌", "🚲"], ["🌳", "🐇"]]), frage = Math.random() < 0.5;
+          return frage ? wahlAufgabe(`Was ist vor ${p[0]}?`, p[1], [p[0], "🌙"], "Was vorn ist, verdeckt ein Stück von dem, was dahinter ist.", { bild: tiefeBild(p[0], p[1]) })
+            : wahlAufgabe(`Was ist hinter ${p[1]}?`, p[0], [p[1], "🌙"], "Was hinten ist, wird teilweise verdeckt.", { bild: tiefeBild(p[0], p[1]) }); }
+        // Schlange von links nach rechts, die Kasse ist rechts: „vor“ = rechter Nachbar (näher an der Kasse), „hinter“ = linker Nachbar
+        const reihe = mische(TIERE).slice(0, 4), vor = Math.random() < 0.5, i = vor ? r(0, 2) : r(1, 3), ziel = vor ? reihe[i + 1] : reihe[i - 1];
+        return wahlAufgabe(`Die Tiere stehen an der Kasse 🛒 an. Wer steht direkt ${vor ? "vor" : "hinter"} ${reihe[i]}?`, ziel, reihe.filter(x => x !== ziel), "Vorn ist bei der Kasse. Wer vor dir steht, ist näher an der Kasse.", { bild: emojiReihe([...reihe, "🛒"], 52) }); } },
+    { id: "k1legen", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.03"], name: "Figuren legen", icon: "🧩",
+      neu: () => { const f = wahl(LEGEFIGUREN), art = r(1, 3), alle = [...new Set(LEGEFIGUREN.map(x => x.aus))];
+        if (art === 1) return wahlAufgabe(`Aus welchen Teilen ist die Figur (${f.name}) gelegt?`, f.aus, alle, "Folge den dunklen Linien und zähle die Teile.", { bild: legeBild(f) });
+        if (art === 2) return zahl("", f.teile.length, `Zähle die Teile: ${f.teile.length}.`, { frage: `Aus wie vielen Teilen ist die Figur gelegt?`, bild: legeBild(f), nurLuecke: true });
+        const i = r(0, f.teile.length - 1); return wahlAufgabe("Welches Teil fehlt noch?", f.teile[i][0], ["Dreieck", "Quadrat", "Kreis"], `Schau dir die Lücke an: Sie hat ${f.teile[i][0] === "Dreieck" ? "3" : "4"} Ecken.`, { bild: legeBild(f, i) }); } }
+  ];
+  STATIONEN_K1.push(...STATIONEN_K1_VOLL);
+
+  const STATIONEN_K2_VOLL = [
+    { id: "bauplaene", lb: "rf", zusatz: true, lz: ["ma.rf.06"], name: "Baupläne finden", icon: "📐",
+      neu: () => { const h = wuerfelGebaeude(), art = r(1, 2);
+        if (art === 1) { const tausch = [h[1], h[0]], spiegel = h.map(z => z.slice().reverse()), plus = h.map((z, y) => z.map((v, x) => v + (x === 0 && y === 1 ? 1 : 0)));
+          return wahlAufgabe("Welcher Bauplan passt zum Gebäude? (Zahl = Würfel übereinander)", planText(h), [planText(tausch), planText(spiegel), planText(plus)], "Hinten stehen die hohen Türme. Zähle Feld für Feld, wie viele Würfel übereinander stehen.", { bild: gebaeudeBild(h, false) }); }
+        const ziel = 3, fehlt = h.flat().reduce((a, v) => a + (ziel - v), 0);
+        return zahl("", fehlt, `Auf jedem Feld sollen 3 stehen: ${h.flat().map(v => `${ziel} ${M} ${v}`).join(", ")} – zusammen ${fehlt}.`, { frage: "Du baust um: Auf jedem Feld sollen 3 Würfel stehen. Wie viele Würfel brauchst du noch?", bild: gebaeudeBild(h, true), nurLuecke: true }); } },
+    { id: "rechenwege", lb: "zo", zusatz: true, lz: ["ma.zo.07", "ma.pk.02", "ma.ms.03"], name: "Rechenwege und Entdeckerpäckchen", icon: "🧭",
+      neu: () => { const art = r(1, 6);
+        if (art === 1) { const a = r(21, 68), e = 10 - a % 10 || 10, b = r(e + 11, 99 - a); if (a % 10 === 0) return zahl(`${a} + ${b}`, a + b, wegPlus(a, b));
+          const n = wahl(NAMEN); return wahlAufgabe(`${n} rechnet ${a} + ${b} so: ${a} + ${e} = ${a + e}, dann ${a + e} + ${b - e} = ${a + b}. Was macht ${n} zuerst?`, "erst bis zum Zehner", ["erst die Zehner", "verdoppeln", "tauschen"], `${n} füllt zuerst bis zum vollen Zehner (${a + e}) auf.`); }
+        if (art === 2) { const a = r(41, 95), b = wahl([19, 29, 39, 18, 28]), n = wahl(NAMEN), z = b + (10 - b % 10);
+          return wahlAufgabe(`${n} rechnet ${a} ${M} ${b} so: ${a} ${M} ${z} = ${a - z}, dann + ${z - b} = ${a - b}. Welchen Trick nutzt ${n}?`, "zu viel abziehen und zurückgeben", ["tauschen", "verdoppeln", "erst bis zum Zehner"], `${z} ist leichter als ${b}. ${n} zieht ${z - b} zu viel ab und gibt sie danach zurück.`); }
+        if (art === 3) { const a = r(21, 69), b = r(11, 29), z = Math.floor(a / 10) * 10 + Math.floor(b / 10) * 10, e = a % 10 + b % 10, falsch = Math.random() < 0.5;
+          return wahlAufgabe(`Stimmt der Rechenweg? ${a} + ${b}: ${Math.floor(a / 10) * 10} + ${Math.floor(b / 10) * 10} = ${z}, ${a % 10} + ${b % 10} = ${e}, ${z} + ${e} = ${falsch ? z + e + 10 : z + e}`, falsch ? "nein" : "ja", ["ja", "nein"], `Zehner und Einer getrennt: ${z} + ${e} = ${z + e}.`); }
+        if (art === 4) { const b = r(21, 68); return wahlAufgabe(`Welcher Weg ist für 99 + ${b} am geschicktesten?`, `100 + ${b} ${M} 1`, [`99 + ${Math.floor(b / 10) * 10} + ${b % 10}`, "in Einerschritten zählen"], `99 ist fast 100: Rechne 100 + ${b} = ${100 + b} und nimm 1 weg.`); }
+        if (art === 5) { const typ = r(1, 3), a = r(2, 9), b = r(10, 30); let p, ant, w;
+          if (typ === 1) { p = [0, 1, 2].map(i => [a + i, b - i]); ant = "Das Ergebnis bleibt gleich"; w = "Die erste Zahl wird um 1 größer, die zweite um 1 kleiner – die Summe bleibt."; }
+          else if (typ === 2) { p = [0, 1, 2].map(i => [a + i, b + i]); ant = "Das Ergebnis wird immer um 2 größer"; w = "Beide Zahlen werden um 1 größer – die Summe also um 2."; }
+          else { p = [0, 1, 2].map(i => [a + 10 * i, b]); ant = "Das Ergebnis wird immer um 10 größer"; w = "Nur die erste Zahl wächst um 10 – das Ergebnis auch."; }
+          return wahlAufgabe(`Entdeckerpäckchen: ${p.map(([x, y]) => `${x} + ${y} = ${x + y}`).join("   ")}. Was fällt dir auf?`, ant, ["Das Ergebnis bleibt gleich", "Das Ergebnis wird immer um 2 größer", "Das Ergebnis wird immer um 10 größer"], w); }
+        const s = r(1, 4) * 5, k = wahl([10, 5]), f = [0, 1, 2].map(i => [s + i * k, 5]); return zahl(`${f.map(([x, y]) => `${x} + ${y} = ${x + y}`).join(",  ")},  ? + 5 = ${s + 3 * k + 5}`, s + 3 * k, `Die erste Zahl wächst immer um ${k}: ${s + 3 * k}.`, { frage: "Setze das Päckchen fort:" }); } },
+    { id: "darstellungen", lb: "zo", zusatz: true, lz: ["ma.zo.05", "ma.zo.09", "ma.pk.05"], name: "Bild, Zahl und Rechnung", icon: "🖼️",
+      neu: () => { const art = r(1, 4);
+        if (art === 1) { const z = r(2, 5), s = r(2, 6); return wahlAufgabe("Welche Rechnung passt zum Punktefeld?", `${z} · ${s}`, [`${z} + ${s}`, `${s} ${M} ${z}`, `${z + s} · ${z}`], `${z} Reihen mit je ${s} Punkten: ${z} · ${s} = ${z * s}.`, { bild: punktRechteck(z, s) }); }
+        if (art === 2) { const n = r(21, 98); if (n % 10 === Math.floor(n / 10)) return zahl("", n, `${Math.floor(n / 10)} Zehner, ${n % 10} Einer.`, { frage: "Welche Zahl ist das?", bild: zehnerBild(n), nurLuecke: true });
+          return wahlAufgabe("Was zeigt das Bild?", `${Math.floor(n / 10)} Z + ${n % 10} E`, [`${n % 10} Z + ${Math.floor(n / 10)} E`, `${Math.floor(n / 10)} Z + ${(n % 10) + 1} E`], "Die Stangen sind Zehner, die Würfelchen Einer.", { bild: zehnerBild(n) }); }
+        if (art === 3) { const a = r(8, 15), b = r(2, a - 2), t = wahl(["Vögel", "Enten", "Kinder"]);
+          return wahlAufgabe(`Welche Geschichte passt zu ${a} ${M} ${b}?`, `${a} ${t}, ${b} gehen weg`, [`${a} ${t}, ${b} kommen dazu`, `${b} ${t}, ${a} gehen weg`], "Minus heißt: Es wird weniger – einige gehen weg."); }
+        const n = r(23, 87), dreh = (n % 10) * 10 + Math.floor(n / 10); return wahlAufgabe("Wie viele Punkte sind rot?", n, [dreh === n ? n + 10 : dreh, n + 10 > 99 ? n - 10 : n + 10], "Erst die vollen Zehnerreihen zählen, dann die einzelnen.", { bild: hunderterBild(n) }); } },
+    { id: "strategie", lb: "zo", zusatz: true, lz: ["ma.pk.01", "ma.dz.04", "ma.zo.10"], name: "Knobeln und Strategiespiele", icon: "♟️",
+      neu: () => { const art = r(1, 5);
+        if (art === 1) { const st = wahl([5, 6, 7, 9, 10, 11]); return zahl("", st % 4, `Lass immer ein Vielfaches von 4 übrig (4, 8, …): ${st} ${M} ${st % 4} = ${st - st % 4}.`, { frage: `Spiel: Ihr nehmt abwechselnd 1, 2 oder 3 Steine. Wer den letzten nimmt, gewinnt. Es liegen ${st} Steine, du bist dran. Wie viele nimmst du?`, bild: emojiReihe(Array(st).fill("🪨"), 34), nurLuecke: true }); }
+        if (art === 2) return Math.random() < 0.5 ? zahl("", 7, "Die 7 kann man am öftesten bilden: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1.", { frage: "Du würfelst mit zwei Würfeln und zählst zusammen. Welche Summe kommt am häufigsten?", nurLuecke: true })
+          : wahlAufgabe("Du würfelst mit zwei Würfeln. Welche Summe ist unmöglich?", "1", ["7", "12", "2"], "Jeder Würfel zeigt mindestens 1 – zusammen also mindestens 2.");
+        if (art === 3) { const x = r(3, 15), k = r(2, 9), op = wahl(["plus", "mal2"]); return op === "plus" ? zahl("", x, `Rückwärts rechnen: ${x + k} ${M} ${k} = ${x}.`, { frage: `Ich denke mir eine Zahl. Ich rechne plus ${k} und erhalte ${x + k}. Welche Zahl habe ich mir gedacht?`, nurLuecke: true })
+          : zahl("", x, `Rückwärts: die Hälfte von ${2 * x} ist ${x}.`, { frage: `Ich denke mir eine Zahl und verdopple sie. Ich erhalte ${2 * x}. Welche Zahl habe ich mir gedacht?`, nurLuecke: true }); }
+        if (art === 4) { const a = wahl([2, 3]), w = a * r(2, 6); return zahl("", w / a, `${a} 🍎 wiegen so viel wie 1 🍐 = ${w} Würfel. 1 🍎 = ${w} : ${a} = ${w / a}.`, { frage: `Auf der Waage: ${a} Äpfel 🍎 wiegen so viel wie 1 Birne 🍐. Die Birne wiegt so viel wie ${w} Würfel. Wie viele Würfel wiegt ein Apfel?`, nurLuecke: true }); }
+        const n = mische(NAMEN).slice(0, 3); return wahlAufgabe(`${n[0]} ist größer als ${n[1]}. ${n[1]} ist größer als ${n[2]}. Wer ist am kleinsten?`, n[2], n, `Ordne der Reihe nach: ${n[0]}, ${n[1]}, ${n[2]}.`); } },
+    { id: "tabelle2", lb: "dz", zusatz: true, lz: ["ma.dz.02", "ma.dz.03"], name: "Tabellen ausfüllen", icon: "🗒️",
+      neu: () => { const art = r(1, 3);
+        if (art === 1) { const p = r(2, 5), z = r(3, 5); return zahl("", z * p, `Immer ${p} € mehr: ${z} Eis kosten ${z} · ${p} = ${z * p} €.`, { frage: "Setze die Tabelle fort. Was steht im leeren Feld?", bild: tabelleBild(["1", "2", "3", String(z)].map(x => x + " 🍦"), [["€", p, 2 * p, 3 * p, "?"]]), nurLuecke: true, einheit: "€" }); }
+        if (art === 2) { const sp = ["⚽", "🏊", "🚴"], w = sp.map(() => r(2, 9)), i = r(0, 2), s = w.reduce((a, b) => a + b, 0), zeige = w.map((v, k) => k === i ? "?" : v);
+          return zahl("", w[i], `${s} ${M} ${w.filter((_, k) => k !== i).join(` ${M} `)} = ${w[i]}.`, { frage: `In der Klasse sind ${s} Kinder. Jedes hat einen Lieblingssport. Welche Zahl fehlt in der Tabelle?`, bild: tabelleBild(sp, [["2a", ...zeige]]), nurLuecke: true }); }
+        const k = ["🍎", "🍌", "🍐"], liste = Array.from({ length: r(7, 11) }, () => wahl(k)), f = wahl(k); if (!liste.includes(f)) liste[0] = f;
+        return zahl("", liste.filter(x => x === f).length, "Mach für jedes Obst einen Strich und zähle – das kommt in die Tabelle.", { frage: `Du legst eine Tabelle an. Welche Zahl trägst du bei ${f} ein?`, bild: emojiReihe(liste, 40), nurLuecke: true }); } }
+  ];
+  STATIONEN.push(...STATIONEN_K2_VOLL);
+
+  // ---------- Mathe Grundschule vollständig (Kl. 3 und 4): letzte Lücken ----------
+  // Ortsplan n × n, y = 0 unten (Norden ist oben); orte [[x, y, Emoji]], wege [[[x, y], …], Farbe]
+  function ortsplanBild(n, orte, wege = []) {
+    const g = 48, P = (x, y) => [6 + x * g + g / 2, 6 + (n - 1 - y) * g + g / 2]; let s = "";
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) s += `<rect x="${6 + x * g}" y="${6 + y * g}" width="${g}" height="${g}" fill="#F4FBEF" stroke="#cfe3c4" stroke-width="1.5"/>`;
+    wege.forEach(([pf, f]) => { s += `<polyline points="${pf.map(p => P(...p).join(",")).join(" ")}" fill="none" stroke="${f}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/>`; });
+    orte.forEach(([x, y, e]) => { const [cx, cy] = P(x, y); s += `<text x="${cx}" y="${cy + 13}" text-anchor="middle" font-size="34">${e}</text>`; });
+    s += `<text x="${n * g + 2}" y="22" text-anchor="end" font-size="16" font-weight="700" fill="${D}">N ↑</text>`;
+    return `<svg viewBox="0 0 ${n * g + 12} ${n * g + 12}" style="max-height:240px" role="img" aria-label="Ortsplan">${s}</svg>`;
+  }
+  const umfangVon = (z) => { const da = new Set(z.map(p => p.join(","))); return z.reduce((u, [a, b]) => u + [[0, 1], [0, -1], [1, 0], [-1, 0]].filter(([d, e]) => !da.has(`${a + d},${b + e}`)).length, 0); };
+  function zweiFlaechenBild(z1, z2) {
+    const g = 26, zeichne = (z, ox, f) => z.map(([a, b]) => `<rect x="${ox + b * g}" y="${30 + a * g}" width="${g}" height="${g}" fill="${f}" stroke="${D}" stroke-width="1.5"/>`).join("");
+    const b1 = (Math.max(...z1.map(p => p[1])) + 1) * g;
+    return `<svg viewBox="0 0 ${b1 + 60 + (Math.max(...z2.map(p => p[1])) + 1) * g + 10} ${30 + 4 * g + 10}" style="max-height:200px" role="img" aria-label="Zwei Flächen">` +
+      `<text x="8" y="22" font-size="20" font-weight="700" fill="${D}">A</text>${zeichne(z1, 8, "#7B9BFF")}<text x="${b1 + 48}" y="22" font-size="20" font-weight="700" fill="${D}">B</text>${zeichne(z2, b1 + 48, "#F27BAA")}</svg>`;
+  }
+  // Würfel- bzw. Quadernetz in Kreuzform; Felder: 0 = oben (hinten), 1 = links, 2 = Mitte (Boden), 3 = rechts, 4 = unten (vorn), 5 = ganz unten (Deckel)
+  const KREUZ_GEGEN = { 0: 4, 4: 0, 1: 3, 3: 1, 2: 5, 5: 2 };
+  function kreuzNetzBild(beschr, l = 1, b = 1, h = 1) {
+    const s = 34, W = [h * s, l * s, h * s], H = [h * s, b * s, h * s, b * s], x0 = [0, W[0], W[0] + W[1]], y0 = [0, H[0], H[0] + H[1], H[0] + H[1] + H[2]];
+    const felder = [[0, 1], [1, 0], [1, 1], [1, 2], [2, 1], [3, 1]];
+    return `<svg viewBox="-4 -4 ${W[0] + W[1] + W[2] + 8} ${y0[3] + H[3] + 8}" style="max-height:230px" role="img" aria-label="Netz">` + felder.map(([zei, sp], i) =>
+      `<rect x="${x0[sp]}" y="${y0[zei]}" width="${W[sp]}" height="${H[zei]}" fill="${["#FFD36B", "#A9C6EC", "#CFF3DD", "#A9C6EC", "#FFD36B", "#CFF3DD"][i]}" stroke="${D}" stroke-width="2.5"/>` +
+      `<text x="${x0[sp] + W[sp] / 2}" y="${y0[zei] + H[zei] / 2 + 9}" text-anchor="middle" font-size="24" font-weight="700" fill="${D}">${beschr[i]}</text>`).join("") + `</svg>`;
+  }
+  function koerpernetzBild(k) {
+    const f = `stroke="${D}" stroke-width="3" stroke-linejoin="round"`;
+    const g = {
+      pyramide: `<rect x="70" y="70" width="60" height="60" fill="#FFD36B" ${f}/><path d="M70 70 L100 20 L130 70 Z M130 70 L180 100 L130 130 Z M130 130 L100 180 L70 130 Z M70 130 L20 100 L70 70 Z" fill="#F2A93B" ${f}/>`,
+      zylinder: `<rect x="40" y="60" width="120" height="80" fill="#A3E0B8" ${f}/><circle cx="100" cy="33" r="27" fill="#CFF3DD" ${f}/><circle cx="100" cy="167" r="27" fill="#CFF3DD" ${f}/>`,
+      kegel: `<path d="M100 20 L170 110 A90 90 0 0 1 30 110 Z" fill="#7BC4EE" ${f}/><circle cx="100" cy="160" r="28" fill="#CDEBFF" ${f}/>`,
+      wuerfel: `<path d="M70 10 h40 v40 h40 v40 h-40 v40 h-40 v-40 h-40 v-40 h40 Z M70 50 h40 v40 h-40 Z" fill="#FFC83D" ${f}/><path d="M70 130 h40 v40 h-40 Z" fill="#FFC83D" ${f}/>`
+    }[k];
+    return `<svg viewBox="0 0 200 200" style="max-height:210px" role="img" aria-label="Körpernetz">${g}</svg>`;
+  }
+  function gitterQuadrateBild(n) { const g = 40; let s = ""; for (let i = 0; i <= n; i++) s += `<line x1="10" y1="${10 + i * g}" x2="${10 + n * g}" y2="${10 + i * g}" stroke="${D}" stroke-width="3"/><line x1="${10 + i * g}" y1="10" x2="${10 + i * g}" y2="${10 + n * g}" stroke="${D}" stroke-width="3"/>`;
+    return `<svg viewBox="0 0 ${n * g + 20} ${n * g + 20}" style="max-height:170px" role="img" aria-label="Gitter">${s}</svg>`; }
+  // Rechenbrett nach Adam Ries: Linien für 1, 10, 100, 1000; ein Pfennig im Zwischenraum darüber zählt 5 der Linie
+  function rechenbrettBild(n) {
+    const werte = [1000, 100, 10, 1], namen = ["1000", "100", "10", "1"], dz = String(n).padStart(4, "0").split("").map(Number); let s = "";
+    werte.forEach((_, i) => { const y = 40 + i * 54; s += `<line x1="70" y1="${y}" x2="330" y2="${y}" stroke="${D}" stroke-width="3"/><text x="60" y="${y + 6}" text-anchor="end" font-size="18" font-weight="700" fill="${D}">${namen[i]}</text>`;
+      const d = dz[i], unten = d >= 5 ? d - 5 : d; for (let k = 0; k < unten; k++) s += `<circle cx="${110 + k * 34}" cy="${y}" r="13" fill="#E8A33D" stroke="${D}" stroke-width="2"/>`;
+      if (d >= 5) s += `<circle cx="${250}" cy="${y - 27}" r="13" fill="#E5484D" stroke="${D}" stroke-width="2"/>`; });
+    return `<svg viewBox="0 0 340 230" style="max-height:230px" role="img" aria-label="Rechenbrett"><rect x="2" y="2" width="336" height="226" rx="10" fill="#FFF3D6" stroke="#8A5A34" stroke-width="4"/>${s}</svg>`;
+  }
+
+  const STATIONEN_K3_VOLL = [
+    { id: "k3plaene", lb: "rf", zusatz: true, stufe: "3", lz: ["ma.rf.02", "su.ge.03"], name: "Pläne und Blickrichtungen", icon: "🧭",
+      neu: () => { const art = r(1, 3), n = 6, frei = mische(Array.from({ length: n * n }, (_, i) => [i % n, Math.floor(i / n)]));
+        if (art === 1) { const [sx, sy] = frei[0], ziel = frei.slice(1).find(([x, y]) => x !== sx && y !== sy), blick = wahl(["Norden", "Süden"]);
+          const rechts = blick === "Norden" ? ziel[0] > sx : ziel[0] < sx, orte = [[sx, sy, "🧒"], [ziel[0], ziel[1], "🌳"]];
+          return wahlAufgabe(`Das Kind 🧒 schaut nach ${blick} (${blick === "Norden" ? "oben" : "unten"} im Plan). Liegt der Baum 🌳 links oder rechts von ihm?`, rechts ? "rechts" : "links", ["links", "rechts"], blick === "Norden" ? "Wer nach oben schaut, hat rechts dieselbe Seite wie du beim Lesen des Plans." : "Wer nach unten (Süden) schaut, hat links und rechts vertauscht – dreh den Plan in Gedanken um.", { bild: ortsplanBild(n, orte) }); }
+        if (art === 2) { const [ax, ay] = frei[0], [bx, by] = frei.find(([x, y]) => Math.abs(x - ax) + Math.abs(y - ay) >= 3); const d = Math.abs(bx - ax) + Math.abs(by - ay), m = wahl([10, 50, 100]);
+          return zahl("", d * m, `${d} Kästchen auf den Straßen, jedes ${m} m: ${d} · ${m} = ${d * m} m.`, { frage: `Plan: 1 Kästchen = ${m} m. Wie weit ist es mindestens von 🏠 zur 🏫, wenn du nur auf den Linien (nicht schräg) gehst?`, bild: ortsplanBild(n, [[ax, ay, "🏠"], [bx, by, "🏫"]]), nurLuecke: true, einheit: "m", max: 4 }); }
+        let w1, w2, l1, l2; do { const a = [r(0, 1), r(0, 1)], z = [r(3, 5), r(3, 5)], ue1 = [a[0], z[1]], ue2 = [z[0], a[1]], um = [r(1, 4), r(1, 4)];
+          w1 = [a, ue1, z]; w2 = [a, [a[0], um[1]], [um[0], um[1]], [um[0], z[1]], z]; l1 = Math.abs(z[1] - a[1]) + Math.abs(z[0] - a[0]);
+          l2 = w2.slice(1).reduce((s2, p, i) => s2 + Math.abs(p[0] - w2[i][0]) + Math.abs(p[1] - w2[i][1]), 0); } while (l1 === l2);
+        return wahlAufgabe("Welcher Weg von 🏠 zur 🏫 ist kürzer?", l1 < l2 ? "der blaue" : "der rote", ["der blaue", "der rote"], `Zähle die Kästchen: blau ${l1}, rot ${l2}.`, { bild: ortsplanBild(6, [[w1[0][0], w1[0][1], "🏠"], [w1[2][0], w1[2][1], "🏫"]], [[w1, "#3A7BE0"], [w2, "#E5484D"]]) }); } },
+    { id: "k3umfang", lb: "rf", zusatz: true, stufe: "3", lz: ["ma.rf.08"], name: "Fläche und Umfang vergleichen", icon: "🔲",
+      neu: () => { const art = r(1, 4);
+        if (art === 1) { const z = formAus(r(4, 8)); return zahl("", umfangVon(z), "Fahre den Rand entlang und zähle jede Kästchenkante.", { frage: "Wie lang ist der Rand der Fläche (der Umfang) in Kästchenlängen?", bild: kaestchenBild(z), nurLuecke: true }); }
+        if (art === 2) { const a = r(4, 8), b = Math.random() < 0.25 ? a : r(4, 8), z1 = formAus(a), z2 = formAus(b);
+          return wahlAufgabe("Welche Fläche ist größer?", a > b ? "A" : a < b ? "B" : "gleich groß", ["A", "B", "gleich groß"], `Zähle die Kästchen: A hat ${a}, B hat ${b}.`, { bild: zweiFlaechenBild(z1, z2) }); }
+        if (art === 3) { const p = wahl([[[1, 12], [3, 4]], [[2, 8], [4, 4]], [[1, 9], [3, 3]], [[1, 8], [2, 4]]]);
+          return wahlAufgabe(`Zwei Rechtecke haben gleich viele Kästchen: ${p[0][0]} × ${p[0][1]} und ${p[1][0]} × ${p[1][1]}. Welches hat den größeren Umfang?`, `${p[0][0]} × ${p[0][1]}`, [`${p[1][0]} × ${p[1][1]}`, "beide gleich"], `Umfang: ${2 * (p[0][0] + p[0][1])} und ${2 * (p[1][0] + p[1][1])}. Lange, schmale Formen haben einen größeren Umfang.`); }
+        const a = r(2, 6), b = 2 * r(2, 5); return zahl("", a * b / 2, `${a} · ${b} = ${a * b} Kästchen, halbiert: ${a * b / 2}.`, { frage: `Ein Rechteck aus ${a} × ${b} Kästchen wird in zwei gleich große Teile zerlegt. Wie viele Kästchen hat jedes Teil?`, nurLuecke: true }); } },
+    { id: "k3netze", lb: "rf", zusatz: true, stufe: "3", lz: ["ma.rf.07"], name: "Würfel-, Quader- und Körpernetze", icon: "📦",
+      neu: () => { const art = r(1, 4);
+        if (art === 1) { const z = mische([1, 2, 3, 4, 5, 6]), i = r(0, 5); return zahl("", z[KREUZ_GEGEN[i]], `Im Kreuz-Netz liegen sich gegenüber: oben und das vierte Feld darunter, links und rechts, die Mitte und das unterste Feld. Gegenüber der ${z[i]} liegt die ${z[KREUZ_GEGEN[i]]}.`, { frage: `Faltet man das Netz zum Würfel: Welche Zahl liegt der ${z[i]} gegenüber?`, bild: kreuzNetzBild(z), nurLuecke: true }); }
+        if (art === 2) { const l = r(2, 3), b = r(1, 2), h = r(1, 2), bu = mische(["A", "B", "C", "D", "E", "F"]), i = r(0, 5);
+          return wahlAufgabe(`Das ist ein Quadernetz. Welche Fläche liegt nach dem Falten ${bu[i]} gegenüber?`, bu[KREUZ_GEGEN[i]], bu.filter(x => x !== bu[i]), `Gegenüberliegende Flächen eines Quaders sind gleich groß: ${bu[i]} und ${bu[KREUZ_GEGEN[i]]}.`, { bild: kreuzNetzBild(bu, l, b, h) }); }
+        if (art === 3) { const k = wahl(["pyramide", "zylinder", "kegel", "wuerfel"]), N = { pyramide: "Pyramide", zylinder: "Zylinder", kegel: "Kegel", wuerfel: "Würfel" };
+          return wahlAufgabe("Zu welchem Körper gehört das Netz?", N[k], Object.values(N), { pyramide: "Ein Quadrat mit vier Dreiecken – die Dreiecke treffen sich oben in der Spitze.", zylinder: "Zwei Kreise und ein Rechteck, das sich zum Mantel rollt.", kegel: "Ein Kreis und ein Kreisstück, das sich zur Spitze rollt.", wuerfel: "Sechs gleich große Quadrate." }[k], { bild: koerpernetzBild(k) }); }
+        const s = wahl([["Wie viele Flächen hat ein Quadernetz?", 6], ["Wie viele Paare gleich großer Flächen hat ein Quader?", 3], ["Bei einem Spielwürfel ergeben gegenüberliegende Augen zusammen 7. Was liegt der 2 gegenüber?", 5], ["Bei einem Spielwürfel ergeben gegenüberliegende Augen zusammen 7. Was liegt der 6 gegenüber?", 1]]);
+        return zahl("", s[1], "Denk an den gefalteten Körper.", { frage: s[0], nurLuecke: true }); } },
+    { id: "k3skizze", lb: "zo", zusatz: true, stufe: "3", lz: ["ma.zo.18", "ma.pk.04", "ma.pk.03"], name: "Sachaufgaben mit Skizze und Tabelle", icon: "📝",
+      neu: () => { const art = r(1, 5), n = wahl(NAMEN);
+        if (art === 1) { const d = wahl([2, 3, 5, 10]), k = r(3, 8), L = d * k; return zahl("", k + 1, `Skizze: Strecke in ${k} Abschnitte zu ${d} m – an jedem Ende ein Baum, also ${k} + 1 = ${k + 1}.`, { frage: `Ein Weg ist ${L} m lang. Alle ${d} m steht ein Baum – auch am Anfang und am Ende. Wie viele Bäume sind es? (Zeichne eine Skizze!)`, bild: emojiReihe(["🌳", "—", "—", "🌳", "…"], 36), nurLuecke: true }); }
+        if (art === 2) { const start = r(2, 10), rate = r(2, 6), w = r(4, 6); return zahl("", start + w * rate, `Tabelle: Woche 0: ${start} €, dann immer + ${rate} € … Woche ${w}: ${start + w * rate} €.`, { frage: `${n} hat ${start} € und spart jede Woche ${rate} €. Wie viel hat ${n} nach ${w} Wochen?`, bild: tabelleBild(["0", "1", "2", "…", String(w)].map(x => "W" + x), [["€", start, start + rate, start + 2 * rate, "…", "?"]]), nurLuecke: true, einheit: "€" }); }
+        if (art === 3) { const s = wahl([["Zwei ungerade Zahlen zusammen ergeben immer eine gerade Zahl.", "ja"], ["Eine gerade und eine ungerade Zahl zusammen ergeben eine gerade Zahl.", "nein"], ["Zwei gerade Zahlen zusammen ergeben immer eine gerade Zahl.", "ja"], ["Drei ungerade Zahlen zusammen ergeben eine gerade Zahl.", "nein"]]);
+          return wahlAufgabe(`Stimmt die Vermutung? ${s[0]}`, s[1], ["ja", "nein"], "Probiere mit Beispielen: 3 + 5 = 8, 3 + 4 = 7, 1 + 3 + 5 = 9."); }
+        if (art === 4) { const k = r(41, 130), p = wahl([20, 25, 30, 45]); return zahl("", Math.ceil(k / p), `${k} : ${p} = ${Math.floor(k / p)} Rest ${k % p || 0} – für den Rest braucht man noch einen Bus: ${Math.ceil(k / p)}.`, { frage: `${k} Kinder fahren ins Schullandheim. In einen Bus passen ${p} Kinder. Wie viele Busse braucht man? (Prüfe: Ist dein Ergebnis sinnvoll?)`, nurLuecke: true }); }
+        const L = r(2, 9) * 100; return zahl("", L / 2, `Skizze: 🏠 —— 📚 —— 🏫. Halber Weg: ${L} : 2 = ${L / 2} m.`, { frage: `${n} wohnt ${L} m von der Schule entfernt. Die Bücherei liegt genau auf halbem Weg. Wie weit ist es von zu Hause zur Bücherei?`, nurLuecke: true, einheit: "m" }); } },
+    { id: "k3knobeln", lb: "zo", zusatz: true, stufe: "3", lz: ["ma.pk.01", "ma.ms.04"], name: "Knobeln und Legespiele", icon: "🧠",
+      neu: () => { const art = r(1, 5);
+        if (art === 1) { let st; do st = r(13, 21); while (st % 4 === 0); return zahl("", st % 4, `Lass immer ein Vielfaches von 4 übrig: ${st} ${M} ${st % 4} = ${st - st % 4}.`, { frage: `Spiel: Ihr nehmt abwechselnd 1, 2 oder 3 Hölzchen. Wer das letzte nimmt, gewinnt. Es liegen ${st} Hölzchen, du bist dran. Wie viele nimmst du, um sicher zu gewinnen?`, nurLuecke: true }); }
+        if (art === 2) { const n = wahl([2, 3]); return zahl("", n === 2 ? 5 : 14, n === 2 ? "4 kleine Quadrate und 1 großes: 5." : "9 kleine, 4 mittlere (2 × 2) und 1 großes: 14.", { frage: "Wie viele Quadrate siehst du insgesamt (alle Größen)?", bild: gitterQuadrateBild(n), nurLuecke: true }); }
+        if (art === 3) { const x = r(2, 12), m = r(2, 5), a = r(1, 9); return zahl("", x, `Rückwärts rechnen: ${x * m + a} ${M} ${a} = ${x * m}, dann : ${m} = ${x}.`, { frage: `Ich denke mir eine Zahl. Ich nehme sie mal ${m} und addiere ${a}. Ich erhalte ${x * m + a}. Welche Zahl habe ich mir gedacht?`, nurLuecke: true }); }
+        if (art === 4) { const k = mische(NAMEN).slice(0, 3); return wahlAufgabe(`${k[0]} sitzt links von ${k[1]}. ${k[2]} sitzt rechts von ${k[1]}. Wer sitzt in der Mitte?`, k[1], k, `Von links nach rechts: ${k[0]}, ${k[1]}, ${k[2]}.`); }
+        const s = wahl([["Was erklärst du in einer Spielanleitung zuerst?", "Was man zum Spielen braucht", ["Wer gewonnen hat", "Wie spät es ist"]], ["Was gehört in eine Spielanleitung?", "Die Regeln, wer wann dran ist", ["Die Lieblingsfarbe", "Das Wetter"]]]);
+        return wahlAufgabe(s[0], s[1], s[2], "Eine gute Anleitung: Material, Ziel, Ablauf, Regeln, wer gewinnt."); } }
+  ];
+  STATIONEN_K3.push(...STATIONEN_K3_VOLL);
+
+  const STATIONEN_K4_VOLL = [
+    { id: "k4wegeskizze", lb: "rf", zusatz: true, stufe: "4", lz: ["ma.rf.09", "ma.gm.09"], name: "Wegeskizzen und Entfernungen", icon: "🗺️",
+      neu: () => { const art = r(1, 3), a = r(3, 18) * 100, b = r(3, 18) * 100, c = r(5, 25) * 100;
+        const bild = `<svg viewBox="0 0 320 160" style="max-height:170px" role="img" aria-label="Wegeskizze"><path d="M30 130 L160 30 L290 130" fill="none" stroke="#3A7BE0" stroke-width="5"/><path d="M30 130 L290 130" fill="none" stroke="#E5484D" stroke-width="5" stroke-dasharray="10 7"/>` +
+          `<text x="20" y="152" font-size="28">🏠</text><text x="148" y="30" font-size="28">⛰️</text><text x="280" y="152" font-size="28">🏫</text>` +
+          `<text x="70" y="70" font-size="15" font-weight="700" fill="#3A7BE0">${tz(a)} m</text><text x="215" y="70" font-size="15" font-weight="700" fill="#3A7BE0">${tz(b)} m</text><text x="160" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#E5484D">${tz(c)} m</text></svg>`;
+        if (art === 1) return zahl("", a + b, `${tz(a)} m + ${tz(b)} m = ${tz(a + b)} m.`, { frage: "Wegeskizze: Wie lang ist der blaue Weg über den Berg?", bild, nurLuecke: true, einheit: "m", max: 4 });
+        if (art === 2) { const C = a + b === c ? c - 100 : c; return wahlAufgabe("Wegeskizze: Welcher Weg ist kürzer?", a + b < C ? "der blaue über den Berg" : "der rote unten herum", ["der blaue über den Berg", "der rote unten herum"], `Blau: ${tz(a + b)} m, rot: ${tz(C)} m.`, { bild: bild.replace(`${tz(c)} m</text></svg>`, `${tz(C)} m</text></svg>`) }); }
+        const km = r(2, 6), min = wahl([12, 15, 20]); return zahl("", km * min, `1 km ≈ ${min} min, ${km} km ≈ ${km} · ${min} = ${km * min} min.`, { frage: `Schätze: Zu Fuß brauchst du für 1 km etwa ${min} Minuten. Wie lange etwa für ${km} km?`, nurLuecke: true, einheit: "min" }); } },
+    { id: "k4schraegbild", lb: "rf", zusatz: true, stufe: "4", lz: ["ma.rf.09", "ma.rf.07"], name: "Schrägbilder lesen", icon: "🧊",
+      neu: () => { const zeilen = r(2, 3), sp = r(2, 4), h = r(2, 3), H = Array.from({ length: zeilen }, () => Array.from({ length: sp }, () => h)), alle = zeilen * sp * h, verdeckt = (zeilen - 1) * (sp - 1) * (h - 1), art = r(1, 3);
+        if (art === 1) return zahl("", verdeckt, `Ganz verdeckt sind die Würfel, die weder oben, noch vorn, noch rechts liegen: ${zeilen - 1} · ${sp - 1} · ${h - 1} = ${verdeckt}.`, { frage: "Der Quader ist innen voll. Wie viele Würfel kannst du von außen gar nicht sehen?", bild: gebaeudeBild(H, false), nurLuecke: true });
+        if (art === 2) return zahl("", alle - verdeckt, `Alle ${alle} Würfel minus ${verdeckt} verdeckte = ${alle - verdeckt}.`, { frage: "Der Quader ist innen voll. Wie viele Würfel kannst du (mindestens mit einer Seite) sehen?", bild: gebaeudeBild(H, false), nurLuecke: true });
+        return zahl("", zeilen * sp, `Oben liegt eine Schicht aus ${zeilen} Reihen mit je ${sp} Würfeln: ${zeilen * sp} Quadrate.`, { frage: "Du schaust genau von oben auf den Quader. Wie viele Quadrate siehst du?", bild: gebaeudeBild(H, false), nurLuecke: true }); } },
+    { id: "k4rechenbrett", lb: "zo", zusatz: true, stufe: "4", lz: ["ma.zo.15"], name: "Adam Ries: Rechnen auf den Linien", icon: "🪙",
+      neu: () => { const art = r(1, 3);
+        if (art === 1) { const n = r(1, 9999); return zahl("", n, `Jeder Pfennig auf einer Linie zählt den Wert der Linie, ein roter Pfennig darüber zählt 5-mal so viel. Zusammen: ${n}.`, { frage: "Rechenbrett nach Adam Ries: Welche Zahl liegt auf den Linien?", bild: rechenbrettBild(n), nurLuecke: true, max: 4 }); }
+        if (art === 2) { const n = r(10, 9999), stelle = wahl([[0, "Tausenderlinie"], [1, "Hunderterlinie"], [2, "Zehnerlinie"], [3, "Einerlinie"]]), d = +String(n).padStart(4, "0")[stelle[0]];
+          return zahl("", d >= 5 ? d - 5 : d, `Auf der Linie liegen die Pfennige für ${d >= 5 ? `${d} − 5` : d}; die 5 liegt als roter Pfennig darüber.`, { frage: `Du legst ${tz(n)} auf das Rechenbrett. Wie viele Pfennige liegen direkt auf der ${stelle[1]}?`, nurLuecke: true }); }
+        return wahlAufgabe(wahl(["Auf einer Linie liegen 5 Pfennige. Was macht man nach Adam Ries?", "Im Zwischenraum liegen 2 rote Pfennige. Was macht man?"]), "Bündeln: tauschen und eine Stelle höher legen", ["Liegen lassen", "Alle wegnehmen"], "Wie beim Bündeln: 5 auf der Linie werden zu 1 im Zwischenraum, 2 im Zwischenraum werden zu 1 auf der nächsten Linie."); } }
+  ];
+  STATIONEN_K4.push(...STATIONEN_K4_VOLL);
 
   // Eine Runde: verschiedene Aufgaben ohne Doppelte
   function runde(station, anzahl = 10) {

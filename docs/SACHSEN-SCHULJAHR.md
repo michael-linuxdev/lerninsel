@@ -149,3 +149,21 @@ Lernbereiche Kl. 4 „Größen und Messen“ und „Daten und Zufall“ jetzt �
   Der Lehrplantext Kl. 5 (Oberschule/Gymnasium) liegt nicht vor; Grundlage sind der Grundschul-Lehrplan Kl. 4 und die üblichen Startthemen
   der 5. Klasse. Mit dem PDF Kl. 5 lässt sich das genau nachziehen. Urkunde „Fit für Klasse 5“ zählt weiter die ursprünglichen 10 Stationen.
 - **Mathe gesamt:** Inhaltspunkte Kl. 1/2: 52, Kl. 3: 34, Kl. 4: 31, Übergang 5: 15. Matheweg: Kl. 1 19, Kl. 2 40, Kl. 3 30, Kl. 4 23, Übergang 16 = 128 Stationen.
+
+### ✅ Mathematik Grundschule vollständig (27./28.10.2026, Nacht)
+Jeder Inhaltspunkt des Lehrplans Mathematik 2025 (Kl. 1/2, 3, 4) wird in der App geübt – oder ist ehrlich als 🌍 „draußen/auf Papier“
+markiert (dafür gibt es Echte-Welt-Aufgaben). Keine Punkte mehr „teilweise“ oder „fehlt“.
+
+| Klasse | Punkte | ✅ in der App | 🌍 draußen/Papier |
+|---|---|---|---|
+| 1/2 | 54 | 50 | 4 (Zeichnen mit Lineal/Geodreieck, Kreise mit Zirkel, selbst messen, eigene Umfrage) |
+| 3 | 34 | 32 | 2 (millimetergenau zeichnen, Messen mit Waage und Messrad) |
+| 4 | 32 | 28 | 4 (Muster zeichnen, Schrägbilder skizzieren, eigene Wegeskizze, eigene Umfrage) |
+
+Letzte Stationen dazu: Kl. 1 Rechts und links (Kind von hinten/vorn), Vorn und hinten, Figuren legen; Kl. 2 Baupläne finden, Rechenwege
+und Entdeckerpäckchen, Bild/Zahl/Rechnung, Knobeln und Strategiespiele, Tabellen ausfüllen; Kl. 3 Pläne und Blickrichtungen, Fläche und
+Umfang vergleichen, Würfel-/Quader-/Körpernetze, Sachaufgaben mit Skizze und Tabelle, Knobeln und Legespiele; Kl. 4 Wegeskizzen und
+Entfernungen, Schrägbilder lesen, Adam Ries: Rechnen auf den Linien. Rechengeschichten erfinden die Kinder schreibend in der Wörter-Werkstatt
+(Kapitel „Rechengeschichten erfinden“, die App prüft, ob die Zahlen vorkommen und am Ende eine Frage steht).
+Alle 12 Mathe-Lernbereiche Kl. 1–4 stehen auf „gut“ – von Hand und nach den Lernzielen errechnet. Matheweg: Kl. 1 22, Kl. 2 45, Kl. 3 35,
+Kl. 4 26 Stationen (dazu Übergang 5: 16).
