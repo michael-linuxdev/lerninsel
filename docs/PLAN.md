@@ -698,9 +698,9 @@ NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Vol
    (**Meilenstein 15.12.2026:** Prolog, E1–E3, Weihnachten – technisch erreicht am 27.10.2026, iPad-Test steht aus)
 3. **Vorgezogen (27.10.):** **NA-20** Probeszenen – Auswahl auf „Rund“ oder „Pixel“ eingegrenzt, Proben stehen, Entscheidung offen → **NA-21** Leistungs-Test (nur bei „Rund“ dringend)
 4. **NA-14** Tutorial E4–E8 → ~~**NA-12** Insel-Zugang~~ → **NA-16** QR-Geschenk → **NA-17** Kapitel 1–2 → **NA-18** Chronik
-5. ~~**NA-03** Lehrplan-Kern~~ → ~~**NA-40** Wortschatz-Kern/DaZ D0~~ → ~~**NA-30** Anlaute~~ → ~~**NA-32** Mathe Kl. 1/Vorschule~~ → ~~**NA-31** Lesen~~ → ~~**NA-35** Schreiben~~ → **NA-50** Können je Lernziel
+5. ~~**NA-03** Lehrplan-Kern~~ → ~~**NA-40** Wortschatz-Kern/DaZ D0~~ → ~~**NA-30** Anlaute~~ → ~~**NA-32** Mathe Kl. 1/Vorschule~~ → ~~**NA-31** Lesen~~ → ~~**NA-35** Schreiben~~ → ~~**NA-50** Können je Lernziel~~
 6. **NA-22** eine Kind-Figur → **NA-23** Neubau nach Stilwahl (abwechselnd mit 7)
-7. **NA-50** Können je Lernziel → **NA-51** Bennos Brücke → **NA-52** Paulas Fest → NA-53/54/55
+7. ~~**NA-50** Können je Lernziel~~ → **NA-51** Bennos Brücke → **NA-52** Paulas Fest → NA-53/54/55
 8. **NA-44** RTL → **NA-43** Ton-Aufnahmen → **NA-42** Ukrainisch (sobald Muttersprachler bereitstehen, darf es vorgezogen werden)
 9. Minispiele **NA-60**, **NA-61**, **NA-62**, **NA-64**, dann der Rest; Phase G
 
@@ -1113,4 +1113,27 @@ eingefroren (NA-29b, NA-29 Teil 2 warten), Reihenfolge jetzt Punkt 5: NA-03 → 
 - iPad 10: Nachspuren mit dem Finger ausprobieren (Toleranz, Größe, Reihenfolge), Wörter legen.
 - Später: Schreibschrift/Grundschrift je Bundesland als weitere Schrift-Daten; eigene Bilder statt Emojis.
 - Nächstes Paket laut Plan: **NA-50 Können je Lernziel** (Phase E) – oder nach Rückmeldung NA-34 Sachunterricht / Grafik / Story.
+
+### Stand 27.10.2026, später Abend (Sitzung 27.10.: Russisch frei, NA-50 fertig)
+**Antwort des Auftraggebers (13:18):** „Nein, alles auf Main. Vorerst nur russisch. Andere Sprachen folgen später.“
+→ **Russische Entwürfe erscheinen jetzt auch auf der Hauptseite** (`Spielwelt.ENTWURF_FREI = ["ru"]`, `Spielwelt.entwurfErlaubt(code)` in
+`shared/core.js`, genutzt von `shared/szene.js` und `shared/woerter.js`); Ukrainisch und alle anderen Entwürfe weiter nur in /dev.
+SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz` umgestellt.
+
+**NA-50 Können je Lernziel (fertig)**
+- `shared/koennen.js` (`window.Koennen`, reine Logik auch in Node): je Lernziel `[q, n, f]` in `profil.daten.koennen` (q = Trefferquote beim
+  ersten Versuch, anfangs Mittelwert ab Startwert 70, dann gleitend über ≈ 12 Antworten; n = Anzahl; f = Fehler in Folge). Stand 0–4
+  (neu, angefangen, übt, sicher, gemeistert). `waehle()` nimmt die Stationen, deren Lernziele am nächsten an der Zielzone 70–85 % liegen;
+  gemeisterte nach hinten. `leichter()` nach zwei Fehlern in Folge.
+- Matheweg: jede Antwort beim ersten Versuch wird gemeldet; nach zwei Fehlern in Folge kommt einmal je Runde eine leichtere Aufgabe der Station
+  davor („Eine leichtere Aufgabe zwischendurch 🙂“, zählt nicht in die Wertung); das Mathe-Training wählt seine zwei Themen nach der Zielzone;
+  Benno empfiehlt „Heute passt gut: …“. „Lesen und Schreiben“ und „Ankommen“ melden ihre Lernziele ebenfalls.
+- Elternkarte „Was übt die App?“: je Lernbereich „Können: ●●○○ übt“ (Durchschnitt der geübten Lernziele). Sachsen Kl. 1/2 „Zahl und Operation“
+  umfasst jetzt auch `ma.zo.01` (Mengen erfassen).
+- Tests: `tests/koennen.js` (Node, Simulation mit 400 Aufgaben: 83 % der Übung in der Zielzone, Treffer ≈ 70 %), `tests/mathe1.js` und
+  `tests/lesen.js` erweitert.
+
+**Offen / als Nächstes**
+- Können steuert noch nicht die Reihenfolge auf den Wegen selbst (nur Training/Empfehlung); Fipsis Kapitel und Sachthemen melden noch nichts.
+- Nächste Pakete nach Rückmeldung: NA-34 Sachunterricht, NA-33 Mathe Kl. 3, oder Grafik/Story (NA-29b, NA-29 Teil 2, NA-16/17/18).
 
