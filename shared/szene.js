@@ -31,7 +31,7 @@
   function hilfeText(text) {
     const h = S.hilfe(); if (!h || !text || !text[h.code]) return null;
     const st = (text.status || {})[h.code] || "geprueft";
-    if (st === "entwurf" && S.umgebung === "prod") return null;
+    if (st === "entwurf" && !(S.entwurfErlaubt ? S.entwurfErlaubt(h.code) : S.umgebung !== "prod")) return null;
     return { text: ersetze(text[h.code]), sprache: h, entwurf: st === "entwurf" };
   }
   const hilfeSofort = () => ["keine", "wenig"].includes(S.kind().deutschstand);

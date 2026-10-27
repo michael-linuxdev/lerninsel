@@ -35,7 +35,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(true, "Deutschstand „keine“: Deutsch-Seite leitet zu „Ankommen“ weiter");
     erwarte(await p.evaluate(() => __daz.woerter() === 100 && __daz.saetze() === 20), "„Ankommen“ hat 100 Wörter und 20 Sätze");
     erwarte(await p.evaluate(() => /0 von 100 Wörtern/.test(document.getElementById("stand").textContent)), "Startseite zeigt den Fortschritt");
-    erwarte(await p.evaluate(() => !document.querySelector("#start-blase .hilfe")), "Hauptseite: ungeprüfte Begrüßung auf Russisch wird nicht gezeigt");
+    erwarte(await p.evaluate(() => !!document.querySelector("#start-blase .hilfe")), "Hauptseite: russische Begrüßung (Entwurf, freigegeben) wird gezeigt");
     await bild(p, "daz-start");
 
     // Wörter ansehen: Feld Schule → Karte mit Artikel (Farbe + Form), Silben, Mehrzahl
@@ -47,7 +47,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const k = await p.evaluate(() => ({ id: __daz.karteWort(), art: document.querySelector("#karte .art").textContent, silben: document.querySelectorAll("#karte .silben b").length,
       mz: (document.querySelector("#karte .mehrzahl") || {}).textContent || "", hilfe: !!document.querySelector("#karte .hilfe") }));
     erwarte(k.id === "w.schule" && /●\s*die/.test(k.art) && k.silben === 2 && /Schulen/.test(k.mz), `Karte „die Schule“: Artikel mit Form (${k.art}), Silben, Mehrzahl`);
-    erwarte(!k.hilfe, "Hauptseite: Entwurf-Übersetzung „школа“ ist versteckt");
+    erwarte(k.hilfe, "Hauptseite: russischer Entwurf „школа“ wird gezeigt");
     await bild(p, "daz-karte");
     erwarte(erstes && erstes !== "w.schule", "▶ blättert durch das Wortfeld");
     // Bestandswort mit geprüftem Russisch: Hilfe sichtbar

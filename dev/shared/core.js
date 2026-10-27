@@ -218,6 +218,10 @@
     // Seit NA-26 (Pixel-Insel spielbar) in /dev und /dev/test wählbar; auf der Hauptseite erst, wenn Figuren und Zimmer (NA-27/28) fertig sind.
     // Seit 27.10.2026 überall wählbar (Entscheidung des Auftraggebers: bis Weihnachten geht alles direkt auf die Hauptseite).
     lookWaehlbar() { return true; },
+    // Übersetzungs-Entwürfe (Status „entwurf“): auf der Hauptseite nur für die freigegebenen Sprachen (Entscheidung 27.10.2026:
+    // Russisch ja, alle anderen erst nach Prüfung); in /dev und /dev/test immer.
+    ENTWURF_FREI: ["ru"],
+    entwurfErlaubt(code) { return UMG !== "prod" || Spielwelt.ENTWURF_FREI.includes(code); },
     look() { if (!Spielwelt.lookWaehlbar()) return "rund"; return ((profil.daten.eltern || {}).insel || {}).look === "pixel" ? "pixel" : "rund"; },
     // Eltern können das Umschalten für das Kind sperren (eltern.insel.lookKind = false); Erwachsene (PIN) dürfen immer
     lookKindDarf() { return ((profil.daten.eltern || {}).insel || {}).lookKind !== false; },

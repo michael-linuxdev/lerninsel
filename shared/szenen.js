@@ -1,7 +1,7 @@
 // Texte der Story- und Tutorial-Szenen (NA-11 ff.). Nur Daten: die Insel ergänzt Zeigehand und „warten auf“.
 // So kann die Inselchronik (Album, NA-18) jede Szene auch ohne Insel noch einmal abspielen.
 // Jede Blase: { wer, text: { de, ru, …, status: { ru: "entwurf" } }, alt?: { tippen: {…} } }
-// Neue Übersetzungen bleiben "entwurf", bis ein Muttersprachler sie geprüft hat (docs/SPRACHEN.md); Entwürfe erscheinen nur in /dev.
+// Neue Übersetzungen bleiben "entwurf", bis ein Muttersprachler sie geprüft hat (docs/SPRACHEN.md); Entwürfe erscheinen in /dev und – für freigegebene Sprachen (Spielwelt.ENTWURF_FREI, zurzeit Russisch) – auch auf der Hauptseite.
 // Nach szene.js laden.
 (function () {
   const Sz = window.Szene; if (!Sz) return;

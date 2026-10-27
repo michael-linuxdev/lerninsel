@@ -110,6 +110,8 @@ Danach ist das Kind im normalen Deutsch-Pfad; DaZ-Hilfen bleiben auf Wunsch.
    `kindgerecht` (zweiter Muttersprachler mit Kind-Erfahrung, z. B. Lehrkraft oder Elternteil). Gespeichert im Inhalt
    (`status: { uk: "geprueft" }`) oder in einer Statusdatei je Sprache.
 2. **Im Kinder-UI** erscheinen nur `geprueft` und `kindgerecht`. Fehlt die Prüfung, wird keine Hilfe angezeigt (lieber keine als eine falsche).
+   **Ausnahme (Entscheidung des Auftraggebers 27.10.2026):** Russische Entwürfe erscheinen auch auf der Hauptseite (`Spielwelt.ENTWURF_FREI = ["ru"]`
+   in `shared/core.js`); sie bleiben im Status `entwurf` (gestrichelt markiert) und werden später geprüft. Alle anderen Sprachen erst nach Prüfung bzw. nur in /dev.
 3. Eine Sprache wird im Elternbereich wählbar (`fertig: true` in `shared/core.js`), wenn **Tutorial, Story-Prolog, Wortschatz D0 und
    alle Oberflächentexte** geprüft sind. Fächer können nachziehen; der Elternbereich zeigt „Hilfe in Mathe: 80 %“.
 4. **Glossar je Sprache** (`docs/glossar/<code>.md`): feste Übersetzung für Inselbegriffe (Lernfund, Wissensbaum, Sterne …),

@@ -35,12 +35,12 @@
     das: { farbe: "#2E9C5A", form: "▲", name: "das" }
   };
 
-  // Hilfe in der Sprache des Kindes; Entwürfe nur außerhalb der Hauptseite (wie bei den Szenen)
+  // Hilfe in der Sprache des Kindes; Entwürfe nur, wo Spielwelt.entwurfErlaubt(code) es zulässt (wie bei den Szenen)
   function hilfe(eintrag) {
     const S = window.Spielwelt; const h = S && S.hilfe && S.hilfe();
     if (!h || !eintrag || !eintrag[h.code]) return null;
     const st = (eintrag.status || {})[h.code] || "entwurf";
-    if (st === "entwurf" && S.umgebung === "prod") return null;
+    if (st === "entwurf" && !(S.entwurfErlaubt ? S.entwurfErlaubt(h.code) : S.umgebung !== "prod")) return null;
     const name = (S.profil && S.profil.name) || "";
     return { text: String(eintrag[h.code]).replace(/\{name\}/g, name), sprache: h, entwurf: st === "entwurf" };
   }

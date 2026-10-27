@@ -11,7 +11,7 @@ const WURZEL = path.join(__dirname, "..");
 function lade(umgebung = "prod", hilfe = null) {
   const ctx = vm.createContext({ console });
   ctx.window = ctx;
-  ctx.Spielwelt = { umgebung, hilfe: () => hilfe, profil: { name: "Mira" } };
+  ctx.Spielwelt = { umgebung, hilfe: () => hilfe, profil: { name: "Mira" }, ENTWURF_FREI: ["ru"], entwurfErlaubt: (c) => umgebung !== "prod" || ["ru"].includes(c) };
   ["inhalte/woerter/bestand.js", "inhalte/woerter/d0.js", "inhalte/woerter/anlaute.js", "shared/woerter.js"].forEach(d =>
     vm.runInContext(fs.readFileSync(path.join(WURZEL, d), "utf8"), ctx, { filename: d }));
   return ctx;
@@ -52,12 +52,13 @@ pruefe("DaZ D0 „Ankommen“: genau 100 Wörter und 20 Sätze, alle mit Russisc
   ["w.schule", "w.toilette", "w.hunger", "w.hilfe", "w.name", "w.eins", "w.zehn"].forEach(id => assert.strictEqual(W.wort(id).daz, "d0", id));
 });
 
-pruefe("Übersetzungs-Status: Bestand-Russisch geprüft, neue Texte Entwurf; Entwürfe nur außerhalb der Hauptseite", () => {
+pruefe("Übersetzungs-Status: Bestand-Russisch geprüft, neue Texte Entwurf; Russisch-Entwürfe überall, andere nur außerhalb der Hauptseite", () => {
   assert.strictEqual(W.wort("w.apfel").status.ru, "geprueft");
   assert.strictEqual(W.wort("w.apfel").status.uk, "entwurf");
   assert.strictEqual(W.wort("w.schule").status.ru, "entwurf");
   const RU = { code: "ru" };
-  assert.strictEqual(lade("prod", RU).Wortschatz.hilfe(W.wort("w.schule")), null, "Entwurf nicht auf der Hauptseite");
+  assert.strictEqual(lade("prod", RU).Wortschatz.hilfe(W.wort("w.schule")).text, "школа", "russischer Entwurf auf der Hauptseite freigegeben");
+  assert.strictEqual(lade("prod", { code: "uk" }).Wortschatz.hilfe(W.wort("w.schule")), null, "ukrainischer Entwurf nicht auf der Hauptseite");
   assert.strictEqual(lade("prod", RU).Wortschatz.hilfe(W.wort("w.apfel")).text, "яблоко");
   assert.strictEqual(lade("dev", RU).Wortschatz.hilfe(W.wort("w.schule")).entwurf, true);
   assert.strictEqual(lade("dev", { code: "uk" }).Wortschatz.hilfe(W.saetze("d0")[0]).text, "Привіт, мене звати Mira.");

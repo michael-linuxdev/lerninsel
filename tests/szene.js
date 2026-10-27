@@ -36,7 +36,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await s.goto(BASIS + "?szene=probe"); await s.waitForFunction(() => window.__szene && window.__szene.aktuell(), null, { timeout: 5000 });
     let a = await s.evaluate(() => __szene.aktuell());
     erwarte(a.nr === 0 && a.anzahl === 3 && /Mira/.test(a.text), `Startseite: Probeszene beginnt mit Namen (${lage})`);
-    erwarte(DEV ? !!a.hilfe : !a.hilfe, DEV ? `Entwurf der Hilfesprache in /dev verfügbar (${lage})` : `ungeprüfter Entwurf erscheint nicht auf der Hauptseite (${lage})`);
+    erwarte(!!a.hilfe, DEV ? `Entwurf der Hilfesprache in /dev verfügbar (${lage})` : `russischer Entwurf ist auf der Hauptseite freigegeben (${lage})`);
     erwarte(!a.hilfeSichtbar, `bei Deutschstand „Alltag“ ist die Hilfe erst auf Knopfdruck sichtbar (${lage})`);
     if (DEV) { await s.click("#szene-hk"); await s.waitForTimeout(150); }
     const ueber = await s.evaluate(() => { const r = document.getElementById("szene").getBoundingClientRect(); return r.left < 0 || r.right > innerWidth || r.bottom > innerHeight || document.documentElement.scrollWidth > innerWidth; });
