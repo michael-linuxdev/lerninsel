@@ -89,7 +89,11 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 haben Inhaltspunkte je L
         p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
         if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("mathe:")), p.id); }); });
     assert.strictEqual(ids2.size, zahl, "Kl. " + st); assert.deepStrictEqual(m, soll, "Kl. " + st);
-  }
+  }  // Übergang 5 (vorläufig, eigene Liste)
+  const ue = L.laender.sachsen.uebergang, u = { ja: 0, teil: 0, nein: 0, aussen: 0 };
+  assert.ok(ue && /vorläufig/.test(ue.stand));
+  ue.mathe.forEach(p => { u[p.abdeckung]++; p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : echt.includes(`["${id}", `), `${p.id}: ${a}`); }); });
+  assert.deepStrictEqual(u, { ja: 13, teil: 1, nein: 0, aussen: 1 });
 });
 
 pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziele", () => {

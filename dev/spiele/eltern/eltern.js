@@ -187,6 +187,7 @@
       <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App · 🌍 gehört nach draußen oder aufs Papier (dazu gibt es Echte-Welt-Aufgaben). In den aufklappbaren Inhaltspunkten: ✅ geübt · 🟡 teilweise · ⭕ fehlt noch.</p>
       ${L.zaehle ? (() => { const e = L.zaehle(land, k.klasse).errechnet; return `<p class="klein">Zum Vergleich, aus den Lernzielen der Inhalte errechnet (gut = mindestens drei Inhalte mit zusammen 30 Aufgaben und Wiederholung in der Lernkartei): ${e.ja} gut, ${e.teil} teilweise, ${e.nein} noch nicht.</p>`; })() : ""}
       ${faecher}
+      ${stufe.code === "5" && L.laender[land].uebergang ? `<h3 class="lp-fach">🎒 Übergang in Klasse 5 – Mathe <span class="klein">(${L.laender[land].uebergang.stand})</span></h3><p class="klein">Was die 5. Klasse voraussetzt und womit sie üblicherweise beginnt (Matheweg „Übergang 5“).</p>${punkteHtml(L.laender[land].uebergang.mathe)}` : ""}
       <p class="klein">Quelle: Lehrpläne Grundschule des Freistaates Sachsen (schulportal.sachsen.de), KMK-Bildungsstandards Primarbereich.</p>
     </div>`;
   }

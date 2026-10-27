@@ -32,7 +32,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const { ctx, p } = await kind("1");
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     let w = await wegInfo(p);
-    erwarte(w.an === "k1" && w.stationen === 10 && w.erste === "Würfelbilder", `Klasse 1: Weg „Klasse 1 und Vorschule“ mit 10 Stationen (${w.an}, ${w.stationen}, ${w.erste})`);
+    erwarte(w.an === "k1" && w.stationen === 19 && w.erste === "Würfelbilder", `Klasse 1: Weg „Klasse 1 und Vorschule“ mit 19 Stationen (${w.an}, ${w.stationen}, ${w.erste})`);
     erwarte(w.zweiteZu && !w.einstufung, "zweite Station noch zu, kein Einstufungstest auf dem Klasse-1-Weg");
     await bild(p, "mathe1-weg");
 

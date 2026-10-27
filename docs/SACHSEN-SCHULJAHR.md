@@ -138,3 +138,14 @@ Lernbereiche Kl. 4 „Größen und Messen“ und „Daten und Zufall“ jetzt �
    Deutsch (Glückwunsch/Überarbeiten, Schulausgangsschrift, Märchen/Bilderbuch, Lautlesen) → Sachunterricht (Licht/Schatten, Luft/Schall,
    Ortsplan, Rituale, Haustiere) → Kunst/Musik → Werken/Sport/Ethik (Echte Welt) → Englisch Kl. 1/2 (freiwillig).
 4. Danach dasselbe für **Klasse 3**.
+
+### Mathematik Klasse 1 und Übergang 5 (27.10.2026, nachts)
+- **Klasse 1** (Teil der Doppelklasse 1/2): Weg „Klasse 1 und Vorschule“ jetzt 19 Stationen (+9: Zahlen bis 20, Größer/kleiner/gleich,
+  Plus und minus bis 20 mit Zehnerübergang, Tausch- und Umkehraufgaben, Rechengeschichten, Oben/unten/links/rechts, Formen entdecken,
+  Geld bis 20 €, Uhr und Tag, Länger/kürzer/schwerer, Zählen und Strichliste). Die Kl.-1/2-Punkte verweisen jetzt auch auf diese Stationen,
+  ein Kind in Kl. 1 übt damit die Kl.-1-Anteile im eigenen Weg statt erst im Kl.-2-Weg.
+- **Übergang 5:** Weg jetzt 16 Stationen (+6: Große Zahlen und Potenzen, Teiler und Primfaktoren, Terme und Gleichungen, Grad und
+  Symmetrieachsen, Flächen- und Rauminhalt, Größen umrechnen und Maßstab). 15 Übergangs-Punkte (13 geübt, 1 teilweise, 1 Papier) – **vorläufig**:
+  Der Lehrplantext Kl. 5 (Oberschule/Gymnasium) liegt nicht vor; Grundlage sind der Grundschul-Lehrplan Kl. 4 und die üblichen Startthemen
+  der 5. Klasse. Mit dem PDF Kl. 5 lässt sich das genau nachziehen. Urkunde „Fit für Klasse 5“ zählt weiter die ursprünglichen 10 Stationen.
+- **Mathe gesamt:** Inhaltspunkte Kl. 1/2: 52, Kl. 3: 34, Kl. 4: 31, Übergang 5: 15. Matheweg: Kl. 1 19, Kl. 2 40, Kl. 3 30, Kl. 4 23, Übergang 16 = 128 Stationen.

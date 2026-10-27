@@ -1489,3 +1489,21 @@ Auftrag: „Mathe Klasse 3 und 4“ – aus demselben PDF (Lehrplan Mathematik 2
 - **Tests:** neu `tests/mathe34.js`; `mathe-generatoren` (30/23 Stationen, lb, zusatz), `lehrplan` (Punkte Kl. 3/4, 22/23/0), `mathe1`, `mathe2`.
 - **Nächstes:** Deutsch, Sachunterricht und die musischen Fächer Kl. 1/2 (PDFs fehlen noch); Schuljahres-Gerüst („gerade in der Schule“,
   „Zeig, was du kannst“ je Lernbereich); offene Mathe-Punkte (Tangram, Quadernetze, Schrägbilder, Abakus).
+
+### Stand 27.10.2026, nachts (Sachsen in voller Tiefe: Mathe Übergang 5 und Klasse 1)
+Auftrag: „Sowie Übergang Klasse 5, dann Klasse 1“.
+- **Übergang 5:** +6 Stationen (Weg jetzt 16): Große Zahlen und Potenzen (Milliarde, Zehnerpotenzen, Stellen, runden), Teiler und
+  Primfaktoren (Teileranzahl, Primfaktorzerlegung, ggT, kgV, Vielfache), Terme und Gleichungen (x + a = b, Term einsetzen, Term zum Text,
+  Rechengesetze benennen), Grad und Symmetrieachsen (Winkel schätzen, Winkelarten bis Vollwinkel, Achsen zählen, Abstand), Flächen- und
+  Rauminhalt (A, U, Flächeneinheiten, Quader-Volumen, Würfel-Oberfläche, 1 dm³ = 1 l), Größen umrechnen und Maßstab.
+  **Entscheidung:** Der Lehrplan Kl. 5 (Oberschule/Gymnasium) war aus der Arbeitsumgebung nicht erreichbar (Suche findet nur Links).
+  Darum ist die Übergangs-Liste (15 Punkte, `P.uebergang` in `sachsen-punkte.js`) ausdrücklich **vorläufig**: Grundlage sind der Kl.-4-Lehrplan
+  und die üblichen Startthemen Kl. 5. Elternbereich zeigt sie nur bei Stufe „Übergang 5“. Urkunde „Fit für Klasse 5“ zählt die alten 10.
+- **Klasse 1:** +9 Stationen im Weg „Klasse 1 und Vorschule“ (jetzt 19): Zahlen bis 20 (Zahlwort, Zahlenstrahl, Ordnungszahl, Schritte),
+  Größer/kleiner/gleich, Plus und minus bis 20 (mit Zehnerübergang, Tausch/Umkehr, Platzhalter, Bildgeschichten), Oben/unten/links/rechts,
+  Formen entdecken, Geld bis 20 €, Uhr und Tag (volle Stunden, Tagesablauf, Wochentage), Länger/kürzer/schwerer, Zählen und Strichliste.
+  Die Kl.-1/2-Punkte verweisen zusätzlich auf diese Stationen. Freischalten je Lernbereich gilt jetzt in allen fünf Wegen.
+- **Absicherung:** `tests/mathe-generatoren.js` prüft jetzt auch, dass keine Funktion in `aufgaben.js` doppelt benannt ist (ist zweimal
+  passiert und hätte still eine alte Bildfunktion überschrieben) und dass jede Station 10 verschiedene Aufgaben liefert.
+- **Tests:** neu `tests/mathe15.js`; `mathe1` (19 Stationen Kl. 1), `uebergang5` (16 Stationen, Urkunde 16 von 16), `lehrplan` (Übergangs-Punkte).
+- **Nächstes:** Lehrplan Kl. 5 als PDF → Übergang genau nachziehen; Deutsch/Sachunterricht/musische Fächer Kl. 1/2 (PDFs); Schuljahres-Gerüst.
