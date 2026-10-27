@@ -626,7 +626,7 @@
       neu: () => { const a = r(300, 999), b = r(110, a - 50); return zahl(`${a} ${M} ${b}`, a - b, `Erst die Hunderter abziehen: ${a} ${M} ${Math.floor(b / 100) * 100} = ${a - Math.floor(b / 100) * 100}. Dann den Rest: ${a - b}.`); } },
     { id: "k3gewicht", stufe: "3", lz: ["ma.gm.08"], name: "Gramm und Kilogramm", icon: "⚖️",
       neu: () => {
-        if (Math.random() < 0.5) { const kg = r(1, 9); return zahl("", kg * 1000, `1 kg sind 1000 g. ${kg} kg sind ${kg * 1000} g.`, { frage: `Wie viel Gramm sind ${kg} kg?`, einheit: "g", nurLuecke: true }); }
+        if (Math.random() < 0.5) { const kg = r(1, 9); return zahl("", kg * 1000, `1 kg sind 1000 g. ${kg} kg sind ${kg * 1000} g.`, { frage: `Wie viel Gramm sind ${kg} kg?`, einheit: "g", nurLuecke: true, max: 7 }); }
         const d = wahl([["eine Feder", "g"], ["ein Apfel", "g"], ["ein Fahrrad", "kg"], ["ein Hund", "kg"], ["ein Brief", "g"], ["ein Kind", "kg"]]);
         return { text: "", frage: `Wiegt man ${d[0]} eher in g oder in kg?`, antwort: d[1], art: "wahl", optionen: ["g", "kg"], nurLuecke: true,
           hilfe: d[1] === "g" ? `${d[0]} ist leicht – man wiegt in Gramm.` : `${d[0]} ist schwer – man wiegt in Kilogramm.` };
@@ -643,7 +643,7 @@
         return zahl("", erg, `${n} : ${art[1]} = ${teil}${art[0] === "drei Viertel" ? `, dreimal so viel: ${erg}` : ""}.`, { frage: `Wie viel ist ${art[0]} von ${n}?`, nurLuecke: true }); } },
     { id: "k3laenge", stufe: "3", lz: ["ma.gm.05", "ma.gm.09"], name: "Meter und Kilometer", icon: "🛣️",
       neu: () => {
-        if (Math.random() < 0.5) { const km = r(1, 9); return zahl("", km * 1000, `1 km sind 1000 m. ${km} km sind ${km * 1000} m.`, { frage: `Wie viele Meter sind ${km} km?`, einheit: "m", nurLuecke: true }); }
+        if (Math.random() < 0.5) { const km = r(1, 9); return zahl("", km * 1000, `1 km sind 1000 m. ${km} km sind ${km * 1000} m.`, { frage: `Wie viele Meter sind ${km} km?`, einheit: "m", nurLuecke: true, max: 7 }); }
         const d = wahl([["der Weg zur Nachbarstadt", "km"], ["die Länge eines Klassenzimmers", "m"], ["die Höhe eines Hauses", "m"], ["eine Fahrt mit dem Zug", "km"], ["ein Lauf um den Sportplatz", "m"]]);
         return { text: "", frage: `Misst man ${d[0]} eher in m oder in km?`, antwort: d[1], art: "wahl", optionen: ["m", "km"], nurLuecke: true,
           hilfe: d[1] === "km" ? `${d[0]} ist sehr lang – man misst in Kilometern.` : `${d[0]} – das misst man in Metern.` };
@@ -757,6 +757,135 @@
           bild: kugelBild([["#E5484D", rot], ["#4B6FC8", blau]]), hilfe: `Von ${sieger === "Rot" ? "den roten" : "den blauen"} Kugeln gibt es mehr (${Math.max(rot, blau)} gegen ${Math.min(rot, blau)}). Darum ist ${sieger} wahrscheinlicher – sicher ist es aber nicht.` }; } }
   ];
 
+  // ---------- Schritt B (28.10.): Kl. 3 Würfelgebäude und Zufall, Kl. 4 römische Zahlen, Primzahlen, Maßstab, Zeit, mehrere Zahlen addieren ----------
+  // Würfelgebäude: Höhen h[zeile][spalte], Zeile 0 = hinten. Damit jeder Turm sichtbar bleibt, werden die Türme nach vorn und nach rechts nie höher.
+  function wuerfelGebaeude() {
+    const zeilen = 2, spalten = r(2, 3), h = [];
+    for (let y = 0; y < zeilen; y++) { h.push([]); for (let x = 0; x < spalten; x++) {
+      const grenze = Math.min(3, y ? h[y - 1][x] : 3, x ? h[y][x - 1] : 3); h[y].push(x + y === 0 ? r(2, 3) : r(Math.max(1, grenze - 1), grenze)); } }
+    return h;
+  }
+  function gebaeudeBild(h, mitPlan) {
+    const a = 30, b = 17, c = 34, zeilen = h.length, spalten = h[0].length;
+    const ox = zeilen * a + 6, oy = 3 * c + 6, breiteIso = (spalten + zeilen) * a + 12, hoeheIso = oy + (spalten + zeilen) * b + c + 6;
+    const pt = (x, y, z) => [ox + (x - y) * a, oy + (x + y) * b - z * c];
+    const poly = (p, d, f) => `<polygon points="${d.map(([dx, dy]) => `${p[0] + dx},${p[1] + dy}`).join(" ")}" fill="${f}" stroke="#3b1f63" stroke-width="1.5" stroke-linejoin="round"/>`;
+    const teile = [];
+    for (let y = 0; y < zeilen; y++) for (let x = 0; x < spalten; x++) for (let z = 0; z < h[y][x]; z++) teile.push([x, y, z]);
+    teile.sort((p, q) => (p[0] + p[1]) - (q[0] + q[1]) || p[2] - q[2]);
+    let s = teile.map(([x, y, z]) => { const p = pt(x, y, z);
+      return poly(p, [[0, 0], [a, b], [0, 2 * b], [-a, b]], "#FFD36B") + poly(p, [[-a, b], [0, 2 * b], [0, 2 * b + c], [-a, b + c]], "#F2A93B") + poly(p, [[0, 2 * b], [a, b], [a, b + c], [0, 2 * b + c]], "#D9822B"); }).join("");
+    let breite = breiteIso, hoehe = hoeheIso;
+    if (mitPlan) { // Bauplan von oben: hintere Reihe oben
+      const g = 46, x0 = breiteIso + 20, y0 = 22;
+      s += `<text x="${x0 + spalten * g / 2}" y="14" text-anchor="middle" font-size="14" fill="#3b1f63">Bauplan</text>`;
+      for (let y = 0; y < zeilen; y++) for (let x = 0; x < spalten; x++)
+        s += `<rect x="${x0 + x * g}" y="${y0 + y * g}" width="${g}" height="${g}" fill="#FFF3D6" stroke="#3b1f63" stroke-width="2"/><text x="${x0 + x * g + g / 2}" y="${y0 + y * g + 32}" text-anchor="middle" font-size="26" font-weight="700" fill="#3b1f63">${h[y][x]}</text>`;
+      s += `<text x="${x0 + spalten * g / 2}" y="${y0 + zeilen * g + 18}" text-anchor="middle" font-size="12" fill="#6b5a86">vorne</text>`;
+      breite = x0 + spalten * g + 6; hoehe = Math.max(hoeheIso, y0 + zeilen * g + 26);
+    }
+    return `<svg viewBox="0 0 ${breite} ${hoehe}" style="width:min(100%,420px);max-height:240px" role="img" aria-label="Gebäude aus Würfeln${mitPlan ? " mit Bauplan" : ""}">${s}</svg>`;
+  }
+  // Glücksrad mit farbigen Feldern und Zeiger oben
+  const RAD_FARBEN = { Rot: "#E5484D", Blau: "#4B6FC8", Gelb: "#FFC83D", Grün: "#4CB782" };
+  function radBild(felder) {
+    const n = felder.length, R = 80, cx = 90, cy = 98; let s = "";
+    felder.forEach((f, i) => { const w0 = (i / n) * 2 * Math.PI - Math.PI / 2, w1 = ((i + 1) / n) * 2 * Math.PI - Math.PI / 2;
+      const p = (w) => `${(cx + R * Math.cos(w)).toFixed(1)} ${(cy + R * Math.sin(w)).toFixed(1)}`;
+      s += `<path d="M${cx} ${cy} L${p(w0)} A${R} ${R} 0 0 1 ${p(w1)} Z" fill="${RAD_FARBEN[f]}" stroke="#fff" stroke-width="3"/>`; });
+    s += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#3b1f63" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="9" fill="#3b1f63"/>`;
+    s += `<path d="M${cx - 11} 4 L${cx + 11} 4 L${cx} 26 Z" fill="#3b1f63"/>`;
+    return `<svg viewBox="0 0 180 184" style="max-height:200px" role="img" aria-label="Glücksrad mit ${n} Feldern: ${felder.join(", ")}">${s}</svg>`;
+  }
+  // Römische Zahlen bis 100
+  function roemisch(n) { let s = ""; [[100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]].forEach(([w, z]) => { while (n >= w) { s += z; n -= w; } }); return s; }
+  function roemErklaerung(n) { const teile = []; [[100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]].forEach(([w, z]) => { while (n >= w) { teile.push(`${z} = ${w}`); n -= w; } }); return teile.join(", "); }
+  const istPrim = (n) => { if (n < 2) return false; for (let t = 2; t * t <= n; t++) if (n % t === 0) return false; return true; };
+  // Karte mit Weg und Maßstabsleiste (1 cm auf der Karte = 30 px im Bild)
+  function karteBild(cm, massstab) {
+    const g = 30, w = Math.max(cm, 4) * g + 40; let s = `<rect x="2" y="2" width="${w - 4}" height="118" rx="10" fill="#EAF6E3" stroke="#9cc58a" stroke-width="2"/>`;
+    s += `<circle cx="20" cy="46" r="8" fill="#E5484D"/><circle cx="${20 + cm * g}" cy="46" r="8" fill="#4B6FC8"/><line x1="20" y1="46" x2="${20 + cm * g}" y2="46" stroke="#3b1f63" stroke-width="4" stroke-dasharray="8 5"/>`;
+    for (let i = 0; i <= cm; i++) s += `<line x1="${20 + i * g}" y1="74" x2="${20 + i * g}" y2="${i % 5 ? 82 : 88}" stroke="#3b1f63" stroke-width="2"/>`;
+    s += `<line x1="20" y1="74" x2="${20 + cm * g}" y2="74" stroke="#3b1f63" stroke-width="2"/><rect x="20" y="96" width="${g}" height="8" fill="#3b1f63"/><text x="${28 + g}" y="105" font-size="13" fill="#3b1f63">1 cm ≙ ${massstab}</text>`;
+    return `<svg viewBox="0 0 ${w} 122" style="max-height:150px" role="img" aria-label="Karte mit einem Weg und Lineal">${s}</svg>`;
+  }
+  // Schriftlich addieren mit mehreren Zahlen (bis Tausender)
+  const vierStellen = (n) => [Math.floor(n / 1000), Math.floor(n / 100) % 10, Math.floor(n / 10) % 10, n % 10];
+  function schriftBildViele(zahlen) {
+    const sp = [60, 104, 148, 192], kopf = ["T", "H", "Z", "E"], farbe = ["#C9A7F5", "#7B9BFF", "#5CCBA6", "#FFB03B"];
+    let s = sp.map((x, i) => `<rect x="${x - 20}" y="4" width="40" height="32" rx="6" fill="${farbe[i]}"/><text x="${x}" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#3b1f63">${kopf[i]}</text>`).join("");
+    zahlen.forEach((n, k) => { const y = 70 + k * 36, d = vierStellen(n), erste = d.findIndex(v => v > 0);
+      s += d.map((v, i) => i >= erste ? `<text x="${sp[i]}" y="${y}" text-anchor="middle" font-size="28" fill="#3b1f63">${v}</text>` : "").join("");
+      if (k === zahlen.length - 1) s += `<text x="20" y="${y}" text-anchor="middle" font-size="28" font-weight="700" fill="#3b1f63">+</text>`; });
+    const yl = 70 + (zahlen.length - 1) * 36 + 14;
+    s += `<line x1="8" y1="${yl}" x2="216" y2="${yl}" stroke="#3b1f63" stroke-width="3"/>` + sp.map(x => `<rect x="${x - 17}" y="${yl + 8}" width="34" height="38" rx="5" fill="none" stroke="#9b8bb5" stroke-width="2" stroke-dasharray="5 4"/>`).join("");
+    return `<svg viewBox="0 0 224 ${yl + 52}" style="max-height:240px" role="img" aria-label="Stellenwerttafel mit ${zahlen.length} Zahlen">${s}</svg>`;
+  }
+  function schriftVieleHilfe(zahlen) {
+    const name = ["Tausender", "Hunderter", "Zehner", "Einer"], st = zahlen.map(vierStellen); let ue = 0; const t = [];
+    for (let i = 3; i >= 0; i--) { const summe = st.reduce((x, d) => x + d[i], 0) + ue;
+      t.push(`${name[i]}: ${st.map(d => d[i]).join(" + ")}${ue ? ` + ${ue} (gemerkt)` : ""} = ${summe}${summe >= 10 && i > 0 ? ` – schreibe ${summe % 10}, merke ${Math.floor(summe / 10)}` : ""}.`);
+      ue = i > 0 ? Math.floor(summe / 10) : 0; }
+    return t.join(" ") + ` Ergebnis: ${zahlen.reduce((x, y) => x + y, 0)}.`;
+  }
+  const uhr = (x) => `${Math.floor(x / 60)}:${String(x % 60).padStart(2, "0")}`;
+  const MONATE_LANG = [["Januar", 31], ["März", 31], ["April", 30], ["Mai", 31], ["Juni", 30], ["Juli", 31], ["August", 31], ["September", 30], ["Oktober", 31], ["November", 30]];
+  const NACH = { Januar: "Februar", März: "April", April: "Mai", Mai: "Juni", Juni: "Juli", Juli: "August", August: "September", September: "Oktober", Oktober: "November", November: "Dezember" };
+
+  STATIONEN_K3.push(
+    { id: "k3wuerfelbau", stufe: "3", lz: ["ma.rf.06", "ma.rf.07"], name: "Würfelgebäude", icon: "🧊",
+      neu: () => { const h = wuerfelGebaeude(), summe = h.flat().reduce((x, y) => x + y, 0), mitPlan = Math.random() < 0.5;
+        return zahl("", summe, mitPlan ? `Zähle die Zahlen im Bauplan zusammen: ${h.flat().join(" + ")} = ${summe}.`
+          : `Zähle Turm für Turm, wie hoch er ist: ${h.flat().join(" + ")} = ${summe}. Unter jedem oberen Würfel stehen auch Würfel, die man nicht ganz sieht.`,
+          { frage: mitPlan ? "Wie viele Würfel braucht man für dieses Gebäude?" : "Wie viele Würfel hat das Gebäude? (Es gibt keine Lücken.)", bild: gebaeudeBild(h, mitPlan), nurLuecke: true }); } },
+    { id: "k3zufall", stufe: "3", lz: ["ma.dz.04", "ma.dz.07"], name: "Sicher, möglich, unmöglich", icon: "🎡",
+      neu: () => { const n = wahl([4, 6, 8]), farben = Object.keys(RAD_FARBEN), art = wahl(["sicher", "möglich", "unmöglich"]);
+        let felder, gefragt;
+        if (art === "sicher") { gefragt = wahl(farben); felder = Array(n).fill(gefragt); }
+        else { const zwei = mische(farben).slice(0, wahl([2, 3])); felder = Array.from({ length: n }, (_, i) => zwei[i % zwei.length]); felder = mische(felder);
+          gefragt = art === "möglich" ? wahl(zwei) : wahl(farben.filter(f => !zwei.includes(f))); }
+        const anzahl = felder.filter(f => f === gefragt).length;
+        return { text: "", frage: `Das Rad wird gedreht. Der Zeiger bleibt auf ${gefragt} stehen. Ist das sicher, möglich oder unmöglich?`, antwort: art, art: "wahl", optionen: ["sicher", "möglich", "unmöglich"], nurLuecke: true, bild: radBild(felder),
+          hilfe: art === "sicher" ? `Alle ${n} Felder sind ${gefragt}. Der Zeiger muss auf ${gefragt} stehen bleiben – das ist sicher.`
+            : art === "möglich" ? `${anzahl} von ${n} Feldern sind ${gefragt}. Es kann passieren, muss aber nicht – das ist möglich.`
+            : `Kein Feld ist ${gefragt}. Das kann nie passieren – das ist unmöglich.` }; } }
+  );
+
+  STATIONEN_K4.push(
+    { id: "k4roemisch", stufe: "4", lz: ["ma.zo.15"], name: "Römische Zahlen", icon: "🏛️",
+      neu: () => { const n = Math.random() < 0.3 ? wahl([4, 9, 14, 19, 24, 29, 40, 44, 49, 90, 94, 99]) : r(2, 100), z = roemisch(n);
+        const regel = "Steht ein kleineres Zeichen vor einem größeren, wird es abgezogen (IV = 4, IX = 9, XL = 40, XC = 90).";
+        if (Math.random() < 0.5) return zahl("", n, `${roemErklaerung(n)}. Zusammen ${n}. ${regel}`, { frage: `Welche Zahl ist ${z}?`, nurLuecke: true });
+        const falsch = new Set([roemisch(n + 1), roemisch(Math.max(1, n - 1)), roemisch(n + 10 <= 100 ? n + 10 : n - 10), z.split("").reverse().join("")]);
+        falsch.delete(z); const opts = mische([z, ...mische([...falsch]).slice(0, 2)]);
+        return { text: "", frage: `Wie schreibt man ${n} mit römischen Zahlzeichen?`, antwort: z, art: "wahl", optionen: opts, nurLuecke: true,
+          hilfe: `I = 1, V = 5, X = 10, L = 50, C = 100. ${n}: ${roemErklaerung(n)} → ${z}.` }; } },
+    { id: "k4primzahl", stufe: "4", lz: ["ma.zo.17"], name: "Primzahlen", icon: "🔑",
+      neu: () => { const soll = Math.random() < 0.5; let n; do n = r(2, 50); while (istPrim(n) !== soll);
+        let t = 2; while (!soll && n % t) t++;
+        return { text: "", frage: `Ist ${n} eine Primzahl?`, antwort: soll ? "ja" : "nein", art: "wahl", optionen: ["ja", "nein"], nurLuecke: true,
+          hilfe: soll ? `${n} lässt sich nur durch 1 und durch ${n} teilen. Also ist ${n} eine Primzahl.` : `${n} = ${t} · ${n / t}. ${n} hat also noch andere Teiler als 1 und ${n} – keine Primzahl.` }; } },
+    { id: "k4massstab", stufe: "4", lz: ["ma.rf.09"], name: "Maßstab", icon: "🗺️",
+      neu: () => { const [mz, me, text] = wahl([[1, "km", "1 km"], [100, "m", "100 m"], [10, "km", "10 km"], [50, "m", "50 m"]]), cm = r(2, 9), echt = cm * mz;
+        if (Math.random() < 0.6) return zahl("", echt, `Jeder Zentimeter auf der Karte sind ${text} in Wirklichkeit. ${cm} cm sind also ${cm} · ${mz} ${me} = ${echt} ${me}.`,
+          { frage: `Der Weg auf der Karte ist ${cm} cm lang. Maßstab: 1 cm ≙ ${text}. Wie lang ist der Weg in Wirklichkeit?`, einheit: me, bild: karteBild(cm, text), nurLuecke: true });
+        return zahl("", cm, `${echt} ${me} : ${mz} ${me} = ${cm}. Auf der Karte sind es ${cm} cm.`,
+          { frage: `Ein Weg ist in Wirklichkeit ${echt} ${me} lang. Maßstab: 1 cm ≙ ${text}. Wie viele Zentimeter ist er auf der Karte lang?`, einheit: "cm", nurLuecke: true }); } },
+    { id: "k4zeit", stufe: "4", lz: ["ma.gm.08", "ma.gm.09", "ma.gm.07"], name: "Zeit und Datum", icon: "📅",
+      neu: () => { const art = r(0, 2);
+        if (art === 0) { const s = r(10, 11) * 60 + 5 * r(1, 11), e = r(12, 14) * 60 + 5 * r(0, 11), d = e - s, bisVoll = 60 - (s % 60), mitte = Math.floor(e / 60) - Math.ceil(s / 60);
+          return zahl("", d, `Von ${uhr(s)} bis ${uhr(Math.ceil(s / 60) * 60)} sind es ${bisVoll} min${mitte ? `, dann ${mitte} ${mitte === 1 ? "Stunde" : "Stunden"} = ${mitte * 60} min` : ""}${e % 60 ? `, dann noch ${e % 60} min` : ""}. Zusammen ${d} min.`,
+            { frage: `Der Ausflug beginnt um ${uhr(s)} Uhr und endet um ${uhr(e)} Uhr. Wie viele Minuten dauert er?`, einheit: "min", nurLuecke: true }); }
+        if (art === 1) { const h = r(1, 4), m = wahl([5, 10, 15, 20, 30, 45, 50]);
+          return zahl("", h * 60 + m, `1 Stunde hat 60 Minuten. ${h} h = ${h * 60} min, dazu ${m} min: ${h * 60 + m} min.`, { frage: `Wie viele Minuten sind ${h} h ${m} min?`, einheit: "min", nurLuecke: true }); }
+        const [mon, laenge] = wahl(MONATE_LANG), tag = r(laenge - 8, laenge - 1), n = r(laenge - tag + 1, laenge - tag + 12), neu = tag + n - laenge;
+        return zahl("", neu, `Der ${mon} hat ${laenge} Tage. Bis zum ${laenge}. ${mon} sind es ${laenge - tag} Tage. Es bleiben noch ${n - (laenge - tag)} Tage im ${NACH[mon]}: der ${neu}. ${NACH[mon]}.`,
+          { frage: `Heute ist der ${tag}. ${mon}. Der wievielte ${NACH[mon]} ist in ${n} Tagen?`, nurLuecke: true }); } },
+    { id: "k4plusviele", stufe: "4", lz: ["ma.zo.13", "ma.zo.16"], name: "Mehrere Zahlen addieren", icon: "➕",
+      neu: () => { const k = wahl([3, 3, 4]); let z; do z = Array.from({ length: k }, () => r(k === 4 ? 105 : 120, k === 4 ? 1999 : 2999)); while (z.reduce((x, y) => x + y, 0) > 9999);
+        return zahl("", z.reduce((x, y) => x + y, 0), schriftVieleHilfe(z), { frage: "Rechne schriftlich: Fang bei den Einern an. Der Übertrag kann auch 2 sein.", bild: schriftBildViele(z), nurLuecke: true, max: 7 }); } }
+  );
+
   function malAufgabe(reihen) {
     const n = wahl(reihen), k = r(1, 10);
     const [a, b] = Math.random() < 0.5 ? [k, n] : [n, k];
@@ -777,5 +906,5 @@
     return liste;
   }
 
-  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, runde, _k3: { istWuerfelnetz, zufallsNetz }, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
+  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, runde, _k3: { istWuerfelnetz, zufallsNetz, roemisch, istPrim, wuerfelGebaeude }, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
 })();

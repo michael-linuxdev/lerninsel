@@ -148,6 +148,15 @@
             b.className = "station ziel";
             b.innerHTML = `<span class="kreis">${alle ? "🎓" : "➡️"}</span><span class="name">4. Klasse</span><span class="stern-reihe"></span>`;
             b.addEventListener("click", () => { S.ton("tipp"); setzeWeg("k4"); zeichneWeg(); scrollTo(0, 0); });
+          } else if (WEG === "k4") {
+            // Schritt B: Abschluss der Grundschul-Mathematik mit Urkunde (statt „Mehr kommt bald“)
+            b.className = "station ziel" + (alle ? "" : " zu"); b.id = "urkunde-ziel";
+            b.innerHTML = `<span class="kreis">${alle ? "🎓" : "🔒"}</span><span class="name">Urkunde</span><span class="stern-reihe"></span>`;
+            b.addEventListener("click", () => {
+              S.ton("tipp");
+              if (!alle) { const fehlt = ST.filter(s => !bestes(s.id)).length; S.meldung(`Noch ${fehlt} ${fehlt === 1 ? "Station" : "Stationen"}, dann bekommst du deine Mathe-Urkunde.`); return; }
+              zeigeUrkunde();
+            });
           } else {
             b.className = "station ziel" + (alle ? "" : " zu");
             b.innerHTML = `<span class="kreis">${alle ? "🎓" : "🔒"}</span><span class="name">Mehr kommt bald</span><span class="stern-reihe"></span>`;
@@ -172,6 +181,22 @@
       const el = karte.querySelector(".jetzt");
       if (el) setTimeout(() => el.scrollIntoView({ block: "center" }), 50);
     }
+  }
+
+  // Mathe-Urkunde am Ende des Wegs „4. Klasse“: alle Wege mit Sternen, zum Ansehen (nichts zu kaufen, nichts geht verloren)
+  function zeigeUrkunde() {
+    const d = daten(), name = (S.profil && S.profil.name) || "Du";
+    const zeile = (titel, w) => { const st = WEGE[w] || [], fertig = st.filter(s => (d[w] || {})[s.id] > 0).length, sterne = st.reduce((x, s) => x + ((d[w] || {})[s.id] || 0), 0);
+      return st.length ? `<li><b>${titel}</b>: ${fertig} von ${st.length} Stationen, ${sterne} ⭐</li>` : ""; };
+    const el = document.createElement("div"); el.className = "urkunde-schleier"; el.id = "urkunde";
+    el.innerHTML = `<div class="urkunde" role="dialog" aria-label="Mathe-Urkunde"><div class="urkunde-siegel" aria-hidden="true">🎓</div>
+      <h2>Mathe-Urkunde</h2><p class="urkunde-name">${name}</p>
+      <p>hat den ganzen Matheweg der 4. Klasse geschafft: große Zahlen, schriftlich rechnen, Maßstab, Zeit, Zufall und vieles mehr.</p>
+      <ul>${zeile("1. Klasse", "k1")}${zeile("2. Klasse", "k2")}${zeile("3. Klasse", "k3")}${zeile("4. Klasse", "k4")}</ul>
+      <p class="urkunde-weiter">Du kannst jede Station jederzeit wiederholen. Bald geht es weiter mit dem Übergang in die 5. Klasse.</p>
+      <button class="knopf haupt" id="urkunde-zu">Toll!</button></div>`;
+    document.body.appendChild(el); S.ton("juhu");
+    el.querySelector("#urkunde-zu").addEventListener("click", () => { S.ton("tipp"); el.remove(); });
   }
 
   // ---------- Runde ----------
@@ -456,5 +481,5 @@
 
   zeichneWeg();
   if (new URLSearchParams(location.search).has("training")) starteTraining();
-  window.__mathe = { faellig, tagIn, starteEinstufung, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte, starteTraining, get lauf() { return lauf; } }; // für Tests
+  window.__mathe = { faellig, tagIn, starteEinstufung, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte, starteTraining, zeigeUrkunde, get lauf() { return lauf; } }; // für Tests
 })();
