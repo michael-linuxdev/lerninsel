@@ -38,81 +38,127 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
    `docs/MINISPIELE.md`.
 4. `README.md` (Aufbau des Repos, Liste der Dateien in `shared/`).
+5. Für Inhalts-Pakete die Datendateien selbst überfliegen, bevor du Neues schreibst (Stil, Länge, Schritt-Typen): `spiele/mathe/aufgaben.js`
+   (Abschnitte Klasse 3 und 4), `spiele/deutsch/werkstatt.js` (Kapitel ab `w-praeteritum`), `spiele/sachkunde/themen.js` (ab `sinne`),
+   `shared/lehrplan/kern.js` (Lernziel-IDs) und `shared/lehrplan/laender/sachsen.js` (Zuordnung `app`, `abdeckung`, `hinweis`).
 
-## 2. Stand (27.10.2026, Sitzungsende)
+## 2. Stand (27.10.2026, Sitzungsende Abend)
 **Früher fertig** (Einzelheiten in PLAN.md unter „Neuausrichtung 26.10.2026“): NA-01 Ereignisse/Story, NA-02 Profil, NA-10 Szenen + Zeigehand,
 NA-11 Prolog „Ankunft“ (E1), NA-12 Insel-Zugang, NA-13 Sonnenuhr/„Erst lernen“/Erste Frucht mit Nebel, NA-14 Tutorial E4–E8, NA-15
 Weihnachts-Sonderstart, NA-21 Leistungs-Test, NA-24 Welt-Kern `shared/insel-kern.js`, NA-25–28 Pixel-Look (Insel, Umschalter, Figuren, Zimmer),
-NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
+NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe), NA-03 Lehrplan-Kern, NA-40 Wortschatz-Kern und DaZ D0 („Ankommen“), NA-30/31/35 „Lesen und
+Schreiben“ (Laute, Silben, 20 Lesetexte, Nachspuren, Wörter legen), NA-50 Können je Lernziel, NA-32 Matheweg Klasse 1/Vorschule.
 
-**Entscheidungen des Auftraggebers (27.10.2026, Mittag):**
-- **Grafik: „Rund“ (three.js) + „Pixel flach“ (PixiJS, DS-Stil)**, jederzeit umschaltbar, **auch auf der Hauptseite**. Die Vorschau Pixel 2,5D
-  (`spiele/welt3d/probe25d.html`) wird **nicht** weiterverfolgt (bleibt als Nachschlag liegen, kein dritter Look). **Grafik ist eingefroren.**
-- **„Bis Weihnachten pushen wir alles auf Main. Kein Kind spielt hier bisher.“** Neue Funktionen sind sofort auf der Hauptseite sichtbar;
-  `/dev` bleibt als zweiter Spielstand. Übersetzungen: **russische Entwürfe auch auf der Hauptseite** (`Spielwelt.ENTWURF_FREI`, 13:18),
-  alle anderen Sprachen (Ukrainisch …) erst später bzw. nur in /dev.
-- **„Lieber Inhalte zuerst“** – Inhalte Priorität 1 (Phase D) vor Grafik und Story.
+### Entscheidungen des Auftraggebers (gelten weiter)
+- **Grafik: „Rund“ (three.js) + „Pixel flach“ (PixiJS, DS-Stil)**, jederzeit umschaltbar, auch auf der Hauptseite. Pixel 2,5D wird nicht
+  weiterverfolgt. **Grafik ist eingefroren** – und wurde in der letzten Sitzung ausdrücklich **nicht** angefasst („Grafik/3D tabu“). Vor jeder
+  Grafik-Arbeit nachfragen.
+- **„Bis Weihnachten pushen wir alles auf Main. Kein Kind spielt hier bisher.“** `/dev` bleibt zweiter Spielstand. Russische Entwürfe auch auf
+  der Hauptseite (`Spielwelt.ENTWURF_FREI`), andere Sprachen erst später bzw. nur in /dev.
+- **„Lieber Inhalte zuerst“** – Inhalte (Phase D/G) vor Grafik und Story.
+- **„Die App soll für alle Grundschulkinder in Deutschland gleichermaßen funktionieren“** (27.10., zur Subtraktion). Folge: Wo Schulen oder
+  Länder unterschiedlich vorgehen (Rechenverfahren, Schrift, Silbenfarben, Lehrplan-Reihenfolge), **nicht raten, sondern eine Eltern-Einstellung
+  mit sinnvollem Standard anbieten** (Muster: Karte „🧮 Mathe wie in der Schule“, `eltern.mathe.minus`). Inhalte nach KMK-Bildungsstandards
+  formulieren; Sachsen ist nur das erste ausgearbeitete Länderprofil.
+- **„Weiter in größeren Schritten“** (27.10., 17:15): mehrere Pakete pro Schritt bündeln, dann einmal gesamt testen und pushen.
 
-**In den letzten Sitzungen fertig und gepusht** (zuletzt der große Schritt vom 27.10. nachts: **NA-37** Matheweg „4. Klasse“ mit 9 Stationen, Kl.-3-Station „Flächen vergleichen“, **NA-36 Teil 3** (Werkstatt jetzt 22 Kapitel), **NA-34 Teil 5** (21 Sachthemen); davor NA-36 Teil 1+2, **NA-34 Teil 3+4**: acht Sachthemen Kl. 3–4 – Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer, Fahrrad, Kinderrechte und Geld, Gemeinde (jetzt 18 Themen); Eltern-Wahl des Subtraktionsverfahrens; davor **NA-33 Schritt b**: Matheweg „3. Klasse“ jetzt 17 Stationen mit schriftlich plus/minus, Würfelnetzen, Spiegeln, Diagrammen; davor NA-34 Sachthemen, NA-33a; PLAN.md → „Stand 27.10.2026, Abend (NA-33 … Schritt b)“ „… Spätnachmittag“ und „… Abend (NA-34 Teil 4)“, „… später Abend (NA-36 …)“, „… Nacht (NA-36 Teil 2)“, „… Nacht – großer Schritt“):
-- **Pixel auf der Hauptseite wählbar** (`Spielwelt.lookWaehlbar()` = immer wahr, `tests/look.js` umgestellt).
-- **NA-03 Lehrplan-Kern:** `shared/lehrplan/kern.js` (148 Lernziel-IDs `<fach>.<bereich>.<nr>`, Deutsch mit fünf KMK-2022-Bereichen
-  `de.sz/sc/le/tm/su`), `shared/lehrplan/laender/sachsen.js` (49 Lernbereiche mit `lz`), `shared/inhalte.js` (Inhalte-Verzeichnis, errechnete
-  Abdeckung, `Inhalte.fuer(kind)`), `shared/lehrplan.js` als Kompatibilitäts-Schicht. Elternkarte zeigt die errechnete Abdeckung zum Vergleich.
-- **NA-40 Wortschatz-Kern und DaZ D0:** `inhalte/woerter/*.js` (jetzt 167 Wörter, 20 Sätze), `shared/woerter.js` → `window.Wortschatz`
-  (und weiter `window.WOERTER` für „Wort des Tages“). Seite **„Ankommen“** `spiele/daz/` (Wörter ansehen, Hören und zeigen, Sätze),
-  Deutschstand „keine“ wird von der Deutsch-Seite dorthin geleitet, „wenig“ bekommt einen Knopf.
-- **NA-30 Laute und Buchstaben** und **NA-31 Silben lesen + 20 Lesetexte:** Seite `spiele/lesen/` (Kachel auf Fipsis Karte) mit
-  Buchstaben-Tafel, „Gleicher Anfang“, „Finde das Bild“, „Welcher Buchstabe?“, „Silben lesen“ (Silbenbögen blau/rot) und Lesetexten
-  (`inhalte/deutsch/anlaute.js`, `inhalte/deutsch/lesetexte.js`); Lernkartei-Fach `lesen`.
-- **NA-35 Schreiben** (ebenfalls `spiele/lesen/`, jetzt „Lesen und Schreiben“): Buchstaben mit dem Finger nachspuren (Strich-Daten
-  `inhalte/deutsch/schreiben.js`, Startpunkt + Richtung, Prüfpunkte) und lautgetreue Bildwörter aus Buchstaben-Steinen legen.
-- **NA-50 Können je Lernziel:** `shared/koennen.js` (Stand 0–4 je Lernziel, Auswahl in der Zielzone 70–85 %, leichter nach zwei Fehlern);
-  alle Lernspiele melden; Matheweg (Training, Bennos Empfehlung, leichtere Brückenaufgabe), Fipsis Empfehlung in „Lesen und Schreiben“,
-  „Mein Können“ (Pflanze je Fach) in Mein Ich, Elternkarte „Können: ●●○○“.
-- **NA-32 Matheweg Klasse 1 und Vorschule:** zweiter Weg mit Umschalter (Würfelbilder, Mengen, Zwanzigerfeld, Muster, Zerlegen, Plus/Minus bis
-  10, Verdoppeln), `Mathe.STATIONEN_K1`, Fortschritt `mathe.k1`.
-- Tests neu: `tests/lehrplan.js`, `tests/wortschatz.js` (Node, im Gesamtlauf), `tests/daz.js`, `tests/lesen.js`, `tests/mathe1.js`.
+### Was in der letzten Sitzung (27.10., Nachmittag/Abend) fertig und gepusht wurde
+Einzelheiten in PLAN.md, Einträge „Stand 27.10.2026, Abend (NA-33 … Schritt b)“, „… Spätnachmittag“, „… Abend (NA-34 Teil 4)“,
+„… später Abend (NA-36 …)“, „… Nacht (NA-36 Teil 2)“, „… Nacht – großer Schritt“.
+- **Mathe** (`spiele/mathe/aufgaben.js`, `spiele/mathe/mathe.js`):
+  - Weg **„3. Klasse“ jetzt 18 Stationen** (`Mathe.STATIONEN_K3`): neu schriftlich plus und minus mit Stellenwerttafel-Bild, Würfelnetze (eingebaute
+    Faltprüfung `Mathe._k3.istWuerfelnetz` erkennt genau die 11 Netze), Spiegeln, Diagramme (Säule aus Strichliste, ablesen, vergleichen), Flächen vergleichen.
+  - **Neuer Weg „4. Klasse“ (NA-37, 9 Stationen, `Mathe.STATIONEN_K4`, Fortschritt `mathe.k4`)**: Zahlen bis 1 Million, Runden/Überschlagen,
+    schriftlich mal (einstellig), schriftlich geteilt (einstellig, mit Probe), Teilbarkeit (2/3/5/10), geschickt rechnen, Liter/Milliliter,
+    Flächeninhalt/Umfang, Gewinnchancen. Kinder in Kl. 4/5 starten dort; Zielknoten Kl. 1 → 2 → 3 → 4; Kl. 4 endet mit „Mehr kommt bald“.
+  - Aufgabenfeld **`max`** = erlaubte Ziffern (Standard 3, große Zahlen bis 7), wird auch in der Lernkartei gespeichert.
+  - **Eltern-Einstellung Subtraktionsverfahren**: „Abziehen mit Entbündeln“ (Standard) oder „Ergänzen“ – die Hilfe in „Schriftlich minus“ erklärt
+    im gewählten Verfahren.
+  - Elternbericht listet Kl.-3/4-Stationen, wenn das Kind dort übt oder in der Klasse ist.
+  - Fehlerbehebung: Nach richtiger Antwort blättert der Zeitgeber nur weiter, wenn noch dieselbe Runde läuft.
+- **Deutsch – Fipsis Wörter-Werkstatt** (`spiele/deutsch/werkstatt.js`): **22 Kapitel** (5 alte + 17 neue für Kl. 3–4). Neues Kapitelfeld **`stufe`**
+  (Klasse); sichtbar ab der Klasse davor (Kl. 1: 5, Kl. 2: 18, ab Kl. 3: 22). Neu: Präteritum, Perfekt/Futur, Subjekt/Prädikat, Satzzeichen/Satzarten,
+  ck/tz/ss/ß, Ableiten ä/äu, Dehnungs-h, wörtliche Rede, Märchen/Fabel/Gedicht/Sachtext, zwei Lesetexte mit Fragen (Igel; Biber und Otter
+  vergleichen), Steigerung, Personalpronomen, Komma bei Aufzählungen, Vor-/Nachsilben, Wer/Wen/Wem, Meinung mit „weil“. Nur vorhandene
+  Schritt-Typen (`sag`, `luecke`, `satz`). Zeitgeber im Abenteuer ebenfalls abgesichert. Seite bricht lange Wörter im Hochformat um.
+- **Sachunterricht – Eule Ella** (`spiele/sachkunde/themen.js`): **21 Themen** (10 alte + 11 neue für Kl. 3–4): Meine fünf Sinne, Wald und Wiese,
+  Himmelsrichtungen, Schwimmen und Sinken, Feuer und Brandschutz (112), Mein Fahrrad, Kinderrechte und Geld (Nummer gegen Kummer 116 111),
+  Unsere Gemeinde, Vom Korn zum Brot, Die Wetterkarte, Strom. Seite bricht lange Wörter um.
+- **Lehrplan Sachsen** (`shared/lehrplan/laender/sachsen.js`, Einschätzung von Hand mit `app`/`hinweis`): jetzt **14 × ja, 26 × teil, 9 × nein**
+  (Kl. 2–4, Mathe/Deutsch/SU).
+- **Tests neu/erweitert:** `tests/sachkunde.js` (11 neue Themen, quer + hoch), `tests/deutsch34.js` (Sichtbarkeit je Klasse, 17 Kapitel, richtige
+  Lücken, quer + hoch), `tests/mathe1.js` (Kl. 3 mit 18, Kl. 4 mit 9 Stationen, Eintippen großer Zahlen, Ergänzen-Hilfe), `tests/lehrplan.js` (Zählung 14/26/9).
+  Test-Haken neu: `__sachkunde.schritt(n)`, `__deutsch.schritt(n)`.
 
-**Bekannte Baustellen:** Grafik eingefroren mit offenen Paketen NA-29b (Handy-Leistung) und NA-29 Teil 2 (Minispiele über dem Budget);
-neue 3D-Objekte auf der Insel mit `starr.push([objekt, bewegliche Teile])` anmelden; `SPIELE` steht in `shared/insel-kern.js` und
-`quellen/welt3d/gemeinsam.js` (gleich halten); „Meine Welt“ gibt es nur in „Rund“; der Prolog-Test der runden Insel wackelt, wenn der Rechner
-ausgelastet ist – dann nochmal laufen lassen. Bilder im Wortschatz sind Emojis (einige schwach: Ö, X); Ton über die Gerätestimme (Aufnahmen: NA-43).
-Die Einschätzung „Was übt die App?“ von Hand ist noch nicht an die neuen Inhalte angepasst (die errechnete Zeile schon).
+### Bekannte Baustellen
+- Grafik eingefroren mit offenen Paketen NA-29b (Handy-Leistung) und NA-29 Teil 2 (Minispiele über dem Budget); „Meine Welt“ nur in „Rund“;
+  `SPIELE` steht in `shared/insel-kern.js` und `quellen/welt3d/gemeinsam.js` (gleich halten); Prolog-Test der runden Insel wackelt bei Last.
+- Die neuen Inhalte haben **nur russische Entwürfe**; Ukrainisch u. a. fehlen. Bilder sind meist Emojis; Ton über die Gerätestimme (NA-43 Aufnahmen offen).
+- Die Werkstatt hat keinen Schritt-Typ für **freies Schreiben/Ordnen** – deshalb fehlen `de.sc.07` (Texte planen/überarbeiten), `de.sc.09`
+  (Bericht/Brief, Wörterbuch) und `de.sz.07` (präsentieren).
+- Länderprofile außer Sachsen fehlen (NA-47); `su.ge.04`/`su.hi.04` (Bundesland, Heimatort) brauchen Länderdaten.
+- `tests/sachkunde.js` und `tests/deutsch34.js` setzen Schritte direkt per Test-Haken; ein echtes Durchklicken (Weiter-Knöpfe, Zuordnen per Ziehen)
+  prüfen nur die älteren Tests.
 
-**Offene Fragen an den Auftraggeber:** iPad-/Handy-Test (Hauptseite): „Ankommen“ (Kind ohne Deutsch), „Laute und Buchstaben“ (Kind in
-Kl. 1 und Vorschule), Matheweg Klasse 1, Lesetexte, Pixel-Look; Geschenke zu Weihnachten 2026 (NA-16); Muttersprachlerinnen für ru/uk
-(D0- und Anlaut-Übersetzungen sind Entwürfe); Lehrkräfte; Tonaufnahmen; Silbenfarben der Schule (blau/rot üblich?).
+### Offene Fragen an den Auftraggeber
+- **iPad-/Handy-Test** (Hauptseite und /dev, mit neuem Kind je Klasse): „Ankommen“, „Lesen und Schreiben“ (Nachspuren), Lesetexte, Matheweg Kl. 1,
+  Pixel-Look, Einführung E4–E8 – **und neu**: Matheweg Kl. 3 (Stationen 13–18) und Kl. 4 (große Zahlen tippen, Kästchen- und Kugelbilder),
+  die 17 neuen Werkstatt-Kapitel (Kl. 3), die 11 neuen Sachthemen (bes. Zuordnen mit drei Gruppen im Hochformat), Eltern-Karte „Mathe wie in der Schule“.
+- Geschenke zu Weihnachten 2026 (NA-16); Muttersprachlerinnen für ru/uk; Lehrkräfte; Tonaufnahmen; Silbenfarben der Schule.
+- Soll **Ergänzen** zusätzlich als „Ergänzen mit Erweitern“ vs. „mit Entbündeln“ unterschieden werden, oder ein drittes Verfahren (Abziehen mit Erweitern)?
+- Sollen Kl.-3/4-Inhalte für jüngere Kinder ganz verborgen bleiben (heute: ab der Klasse davor sichtbar)?
 
 ## 3. Ablauf dieser Sitzung
 1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug, sonst als kurze Liste), bevor du baust. Kläre mindestens:
-   - Rückmeldung vom iPad 10 und Handy (Hauptseite, mit neuem Kind): „Ankommen“, „Lesen und Schreiben“ (Nachspuren!), Lesetexte, Matheweg Klasse 1,
-     Pixel-Look, Einführung E4–E8. Fehler zuerst beheben.
-   - Gilt „Inhalte zuerst“ weiter (nächstes Paket laut Abschnitt 4), oder soll Grafik/Story (NA-29b, NA-16/17/18) vorgezogen werden?
-   - Welche Geschenke soll es per QR-Code zu Weihnachten 2026 geben (für NA-16)? Gibt es Muttersprachlerinnen zum Gegenlesen (ru, uk)?
-   - Was darf in dieser Sitzung keinesfalls angefasst werden?
-2. **Dann selbstständig arbeiten**, bis die Sitzung aufgebraucht ist. Aufgabenliste anlegen (ein Eintrag je Paket bzw. Schritt a/b/c) und abhaken.
-   Nur nachfragen, wenn eine Entscheidung nicht rückgängig zu machen ist; sonst die vernünftigste Wahl treffen und im Plan notieren.
-   Pakete mit „wartet auf Antwort“ ohne Antwort überspringen.
-3. **Zwischendurch pushen:** nach jedem fertigen, getesteten Schritt. Lieber kleine fertige Schritte als ein großer halbfertiger.
-   Höchstens ein großes Paket gleichzeitig offen.
-4. **Am Ende:** in `docs/PLAN.md` unter „Neuausrichtung 26.10.2026“ einen Eintrag „Stand <Datum>“ ergänzen (erledigte Pakete, Abweichungen,
-   offene Punkte, nächstes Paket), in der „Reihenfolge“ erledigte Pakete durchstreichen, **diese Datei (`docs/SESSION-PROMPT.md`) auf den neuen
-   Stand bringen** (Abschnitte 2 und 4), pushen und kurz berichten.
+   - Rückmeldung vom iPad 10 und Handy (siehe „Offene Fragen“). **Gemeldete Fehler zuerst beheben**, jeweils mit Test.
+   - Welche Pakete aus Abschnitt 4 (Reihenfolge-Vorschlag oder andere)? Gilt „Inhalte zuerst“ weiter, oder Grafik/Story vorziehen?
+   - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen.
+   - Was darf in dieser Sitzung keinesfalls angefasst werden? (Letzte Sitzung: Grafik/3D.)
+2. **Dann selbstständig in größeren Schritten arbeiten**, bis die Sitzung aufgebraucht ist (Wunsch des Auftraggebers). Ein Schritt = 2–4 zusammenpassende
+   Pakete oder ein M-Paket mit Inhalten. Aufgabenliste anlegen (ein Eintrag je Paket), abhaken. Nur nachfragen, wenn eine Entscheidung nicht
+   rückgängig zu machen ist; sonst die vernünftigste Wahl treffen und im Plan notieren. Unterschiede zwischen Schulen/Ländern → Eltern-Einstellung.
+3. **Nach jedem Schritt:** `sh quellen/dev-bauen.sh`, `sh tests/laufen.sh` (gesamt) plus die betroffenen Einzeltests (parallel mit `PORT=…`),
+   dann committen und pushen. Kein Push mit rotem Test. Höchstens ein großes Paket gleichzeitig offen.
+4. **Am Ende:** in `docs/PLAN.md` einen Eintrag „Stand <Datum>“ ergänzen (erledigt, Abweichungen, offen, nächstes Paket), in der Reihenfolge
+   erledigte Pakete durchstreichen, **diese Datei auf den neuen Stand bringen** (Abschnitte 1.1-Verweis, 2, 4, Kurzreferenz in 5), pushen,
+   kurz berichten (Abschnitt 9).
 
-## 4. Nächste Pakete (Reihenfolge laut Plan)
-Grundsatz Inhalte: **Inhalte als Daten** (LEHRPLAN.md „Inhalte als Daten“). Jeder neue Inhalt registriert sich mit `Inhalte.registriere({ id, fach,
-lz: [...], stufe, aufgaben, lernkartei })` (oder trägt bei Bestandsdaten ein Feld `lz`) und verweist auf Lernziele aus `shared/lehrplan/kern.js`;
-Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `inhalte/woerter/*.js`). Neue Übersetzungen mit Status `entwurf`.
-Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
-Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
-beiden Looks oder im Plan als offen vermerken.
-1. **Neuer Schritt-Typ „Text schreiben/ordnen“** (M) für Deutsch Kl. 3–4: Sätze einer Geschichte in die richtige Reihenfolge bringen,
-   Brief/Bericht-Bausteine zuordnen, einen Text mit Tipps überarbeiten (`de.sc.07`, `de.sc.09`, `de.sz.07`) – in `spiele/deutsch/abenteuer.js`
-   (neuer `case`) plus Kapitel in `werkstatt.js`. Tests: `tests/deutsch34.js` (Kachelzahlen 5/18/22), `tests/lehrplan.js` (14/26/9).
-   Vorher Rückmeldung zum iPad-Test abfragen. Grafik/3D nicht ohne Rückfrage anfassen.
-2. Danach: Mathe Kl. 4 Rest (römische Zahlen, Primzahlen, Maßstab), NA-39 Übergang Kl. 5, SU Wärmeleitung/Säugetiere/Experimentieren, Rest Mathe Kl. 3 (Würfelgebäude, Flächen, Zufall, Teilbarkeit), oder
-   Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)
-   → **NA-17** Kapitel 1–2 → **NA-18** Chronik im Album.
+## 4. Nächste Pakete (Vorschlag, Reihenfolge nach Rückmeldung anpassen)
+Grundsatz Inhalte: **Inhalte als Daten** (LEHRPLAN.md „Inhalte als Daten“). Jeder neue Inhalt trägt `lz: [...]` mit Lernzielen aus
+`shared/lehrplan/kern.js` (Bestandsdaten Mathe/Werkstatt/Themen werden in `shared/inhalte.js` automatisch registriert) und – wo sinnvoll – `stufe`.
+Wörter über den Wortschatz-Kern (`w.<wort>`). Neue Übersetzungen als Entwurf. Neue Dateien in `sw.js`, `spiele/eltern/index.html` (Abdeckung) und
+`tests/lehrplan.js` (`DATEN`) eintragen. Lerninhalte nur zusammenfassen und eigene Texte schreiben (keine Lehrbuch-/Lehrplantexte abschreiben;
+alte Fabeln/Märchen nur nacherzählen). Nach jeder Änderung an `sachsen.js` die Zählung in `tests/lehrplan.js` anpassen.
+Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.**
+
+**Schritt A – Deutsch schreiben (M–L), Lernziele `de.sc.07`, `de.sc.09`, `de.sz.07`, `de.sz.05`:**
+1. Neuer Werkstatt-Schritt-Typ **`ordnen`** in `spiele/deutsch/abenteuer.js` (`case "ordnen"`): 3–5 Sätze/Bausteine antippen in richtiger
+   Reihenfolge (ähnlich `satz`, aber ganze Sätze als Karten, auch im Hochformat lesbar). Daten: `{ typ: "ordnen", frage, teile: [...richtige Reihenfolge], ru }`.
+2. Neuer Schritt-Typ **`verbessern`**: Ein Satz mit einem Fehler (Wiederholung „und dann“, fehlender Satzanfang groß, falsches Wort); das Kind
+   tippt das störende Wort an und wählt eine bessere Variante. Daten: `{ typ: "verbessern", satz, falsch, optionen: [besser, …], tipp, ru }`.
+3. Kapitel (je `stufe`, `lz`): „Eine Geschichte ordnen“ (Einleitung–Hauptteil–Schluss), „Abwechslungsreiche Satzanfänge“, „Einen Brief schreiben“
+   (Anrede, Datum, Gruß – Bausteine ordnen), „Ein Bericht: W-Fragen“ (wer, was, wann, wo, wie, warum), „Im Wörterbuch suchen“ (Alphabet,
+   erster/zweiter Buchstabe), „Einen Vortrag vorbereiten“ (Stichwortzettel ordnen, Tipps fürs Vortragen).
+4. Tests: `tests/deutsch34.js` um die neuen Typen erweitern (echtes Antippen in richtiger Reihenfolge), Kachelzahlen anpassen; Sachsen Kl. 3 „Für sich
+   und andere schreiben“, Kl. 4 „Schreiben“/„Sprechen“ nachziehen.
+
+**Schritt B – Mathe-Rest (M):**
+1. Kl. 4 (`STATIONEN_K4`): römische Zahlen (I, V, X, L, C bis 100), Primzahlen bis 50 (ja/nein), Maßstab (1 cm auf der Karte = 1 km), Zeit und Datum
+   (Zeitspannen über Mittag, Kalender), schriftliche Addition mehrerer Zahlen; Sachsen Kl. 4 „Zahl und Operation“ ggf. → ja.
+2. Kl. 3 (`STATIONEN_K3`): Würfelgebäude (Bauplan: Zahl der Würfel zählen, isometrisches Bild als SVG), Zufall „sicher/möglich/unmöglich“ mit Glücksrad.
+3. Weg-Abschluss Kl. 4 statt „Mehr kommt bald“: Brücke zu „Übergang Kl. 5“ (NA-39) vorbereiten oder Abschlussurkunde.
+4. Eltern-Einstellung prüfen: weitere Schulunterschiede (z. B. Malkreuz vs. Zeilenmethode bei schriftlicher Multiplikation – nur, wenn sinnvoll).
+5. Tests: `tests/mathe1.js` (Stationenzahlen, Annahme richtiger Antworten, Bilder sichtbar), Node-Probe aller Generatoren (keine NaN, `max` passt).
+
+**Schritt C – Sachunterricht-Rest (S–M):** Wärme und Dämmung (`su.na.09`), Säugetiere und Gewässer/Umweltschutz (`su.na.08`), „Ein Experiment
+planen“ (Vermutung – Versuch – Beobachtung – Ergebnis, Sachsen Kl. 3 „Experimentieren“), Erste Hilfe/Unfälle vermeiden (`su.na.02`),
+Medien als Informationsquelle. `tests/sachkunde.js` (Liste `NEU`, Anzahl) nachziehen.
+
+**Schritt D – Länder und Übergreifendes (M):** NA-47 Länderprofile (zuerst die Struktur für ein zweites Land, z. B. NRW oder Berlin/Brandenburg –
+nur Lernbereiche und Zuordnung zu `lz`, keine Lehrplantexte), Elternbereich „Was übt die App?“ je Land; ggf. NA-39 Übergang Kl. 5.
+
+**Grafik/Story (nur nach ausdrücklicher Freigabe):** NA-29b Handy-Leistung (S), NA-29 Teil 2 Minispiele ins Budget, NA-16 QR-Geschenk
+(wartet auf Geschenk-Auswahl) → NA-17 Kapitel 1–2 → NA-18 Chronik im Album.
 
 ## 5. Wie die Story-Bausteine benutzt werden (Kurzreferenz)
 - Szene registrieren (nur Daten) in `shared/szenen.js`:
@@ -139,6 +185,17 @@ beiden Looks oder im Plan als offen vermerken.
 - Lesen/Schreiben: `window.ANLAUTE` (Anlaut-Tabelle), `window.LESETEXTE` (Texte in Sprechsilben „Ba-na-ne“), `window.SCHRIFT` (Strich-Daten),
   Lernkartei-Fach `lesen` (Schritte `anlaut`, `silbenwort`, `schreibwort`);
   Matheweg: `Mathe.STATIONEN` (Kl. 2, `mathe.k2`), `Mathe.STATIONEN_K1` (Kl. 1/Vorschule, `mathe.k1`), `Mathe.STATIONEN_K3` (Kl. 3, 18 Stationen, `mathe.k3`), `Mathe.STATIONEN_K4` (Kl. 4, 9 Stationen, `mathe.k4`; Aufgabenfeld `max` = erlaubte Ziffern; `Mathe._k3.istWuerfelnetz(zellen)`), Weg-Wahl in `mathe.weg`.
+- Mathe-Generatoren (`spiele/mathe/aufgaben.js`): Station `{ id, stufe, lz, name, icon, neu: () => Aufgabe }`; Aufgabe über `zahl(text, antwort, hilfe,
+  { frage, bild, einheit, nurLuecke, max })` oder `{ art: "wahl", optionen, antwort, frage, bild, hilfe }`. Bilder sind SVG-Strings
+  (`stellenBild`, `schriftBild`, `netzBild`, `spiegelBild`, `saeulenBild`, `kaestchenBild`, `kugelBild`). Neuer Weg: `WEGE` in `mathe.js`,
+  `daten()`, Umschalter, Zielknoten, `shared/inhalte.js` (concat), Elternbericht.
+- Werkstatt-Kapitel (`spiele/deutsch/werkstatt.js`): `{ id: "w-…", stufe, lz, name, ort, farbe, grund, schritte: [...] }`; Schritt-Typen `sag`,
+  `luecke` (`satz` mit `___`, erste Option richtig), `satz` (Wörter in Reihenfolge), `wortart`, `verlaengern`, `silben`, `artikel`, `bild`, `wort`, `wo`.
+  Renderer in `spiele/deutsch/abenteuer.js` (`schritt()`/`switch`), Antwort über `antwort(knopf, richtig, beiRichtig)`.
+- Sachthemen (`spiele/sachkunde/themen.js`): `{ id, lz, name, e, farbe, grund, kurz, schritte }`; Typen `info` (mit `fakten`), `wahl` (`ok`, `warum`),
+  `daumen` (`ok`), `zuordnen` (2–3 Gruppen, je 2–3 Dinge), `baum`. Jede Zeile mit russischem Entwurf (`ru`, `satzRu`, `warumRu`).
+- Eltern-Einstellungen für Schulunterschiede: `Spielwelt.lade("eltern").mathe` (z. B. `minus: "abziehen" | "ergaenzen"`), Karte in
+  `spiele/eltern/eltern.js` (`matheKarte`, `matheKnoepfe`); neue Unterschiede nach diesem Muster.
 - Pixel-Grafik: Zeichnung in `quellen/pixel/dinge.js` (Pixelpuffer mit `kugel/zylinder/vieleck/fuelle/rect`, nur Farben aus `PAL`), in
   `quellen/pixel/insel.js` vor `packe()` mit `merke()` in den Atlas, dann `new Sprite(e.tex)`; Dinge auf den Boden mit `stelle(e, x, z)`,
   antippbar mit `antippbar(sprite, x, z, tipp, aktion, nah, id)`.
