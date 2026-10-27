@@ -9,9 +9,12 @@
 //   baum     { frage, ru, ziel, warum, warumRu }  (auf die richtige Person im Stammbaum tippen)
 // baum: [ids] statt bild zeigt den Stammbaum des Themas mit diesen Personen hervorgehoben.
 // bild: Name einer Zeichnung aus bilder.js oder ein Emoji.
+// lb (Schuljahr SU, 28.10.2026): Lernbereich – "zl" Zusammen leben · "kg" Körper und Gesundheit · "pt" Pflanzen und Tiere · "un" Unbelebte Natur ·
+//   "rz" Raum und Zeit · "ex" Forschen, Medien, Schuljahre; die Themenliste ist danach gruppiert. kl: Klasse, zu der ein Thema ohne stufe gehört
+//   (nur für „Wiederholen aus früheren Klassen“, ändert die Sichtbarkeit nicht).
 window.THEMEN = [
   {
-    id: "geschenkebringer", lz: ["su.so.04"], name: "Wer bringt die Geschenke?", e: "🎅", farbe: "#D7263D", grund: "#FFEDEF",
+    id: "geschenkebringer", lb: "zl", kl: 2, lz: ["su.so.04"], name: "Wer bringt die Geschenke?", e: "🎅", farbe: "#D7263D", grund: "#FFEDEF",
     kurz: "Nikolaus, Weihnachtsmann, Santa Claus und Ded Moros",
     schritte: [
       { typ: "info", titel: "Bald ist Weihnachten!", bild: "baum",
@@ -111,7 +114,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "familie", lz: ["su.so.02"], name: "Meine Familie", e: "👨‍👩‍👧‍👦", farbe: "#7B55B8", grund: "#F1EAFF",
+    id: "familie", lb: "zl", kl: 2, lz: ["su.so.02"], name: "Meine Familie", e: "👨‍👩‍👧‍👦", farbe: "#7B55B8", grund: "#F1EAFF",
     kurz: "Oma, Opa, Tante, Cousine, Uroma, Schwager …",
     stammbaum: {
       personen: [
@@ -210,7 +213,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "gesundheit", lz: ["su.na.02"], name: "Gesund und munter", e: "🦷", farbe: "#2E9C5A", grund: "#E3F7EF",
+    id: "gesundheit", lb: "kg", kl: 2, lz: ["su.na.02"], name: "Gesund und munter", e: "🦷", farbe: "#2E9C5A", grund: "#E3F7EF",
     kurz: "Zähne putzen, Frühstück, Trinken, Erste Hilfe",
     schritte: [
       { typ: "info", titel: "Gesund und munter", bild: "🦷",
@@ -260,7 +263,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "baeume-voegel", lz: ["su.na.03"], name: "Bäume und Vögel", e: "🌳", farbe: "#8A6E2F", grund: "#F7F0DD",
+    id: "baeume-voegel", lb: "pt", kl: 2, lz: ["su.na.03"], name: "Bäume und Vögel", e: "🌳", farbe: "#8A6E2F", grund: "#F7F0DD",
     kurz: "Laub- und Nadelbäume, Zugvögel und Wintervögel",
     schritte: [
       { typ: "info", titel: "Draußen in der Natur", bild: "🌳",
@@ -305,7 +308,7 @@ window.THEMEN = [
   ,
   // ---------- NA-34: je GDSU-Perspektive weitere Themen für Kl. 1–2 ----------
   {
-    id: "schulweg", lz: ["su.ge.02"], name: "Mein Schulweg", e: "🚦", farbe: "#D7263D", grund: "#FFEDEF",
+    id: "schulweg", lb: "rz", kl: 2, lz: ["su.ge.02"], name: "Mein Schulweg", e: "🚦", farbe: "#D7263D", grund: "#FFEDEF",
     kurz: "Ampel, Zebrastreifen, sicher über die Straße",
     schritte: [
       { typ: "info", titel: "Sicher zur Schule", bild: "🎒",
@@ -336,7 +339,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "wasser", lz: ["su.na.01", "su.na.07"], name: "Wasser", e: "💧", farbe: "#3AA0E0", grund: "#E1F3FF",
+    id: "wasser", lb: "un", kl: 2, lz: ["su.na.01", "su.na.07"], name: "Wasser", e: "💧", farbe: "#3AA0E0", grund: "#E1F3FF",
     kurz: "Eis, Wasser, Dampf und Wasser sparen",
     schritte: [
       { typ: "info", titel: "Überall Wasser", bild: "💧",
@@ -367,7 +370,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "frueher", lz: ["su.hi.03", "su.hi.02"], name: "Früher und heute", e: "🕰️", farbe: "#8A6E2F", grund: "#F7F0DD",
+    id: "frueher", lb: "ex", kl: 2, lz: ["su.hi.03", "su.hi.02"], name: "Früher und heute", e: "🕰️", farbe: "#8A6E2F", grund: "#F7F0DD",
     kurz: "Wie Kinder früher gelebt haben",
     schritte: [
       { typ: "info", titel: "Als Oma klein war", bild: "👵",
@@ -397,7 +400,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "regeln", lz: ["su.so.03", "et.mi.01"], name: "Regeln und Streit", e: "🤝", farbe: "#7B55B8", grund: "#EFE6FF",
+    id: "regeln", lb: "zl", kl: 2, lz: ["su.so.03", "et.mi.01"], name: "Regeln und Streit", e: "🤝", farbe: "#7B55B8", grund: "#EFE6FF",
     kurz: "Warum es Regeln gibt und wie man Streit löst",
     schritte: [
       { typ: "info", titel: "Wozu Regeln?", bild: "📋",
@@ -426,7 +429,7 @@ window.THEMEN = [
   }
   ,
   {
-    id: "bauen", lz: ["su.te.01", "su.te.02"], name: "Bauen und Brücken", e: "🌉", farbe: "#E8A33D", grund: "#FFF1D9",
+    id: "bauen", lb: "un", kl: 2, lz: ["su.te.01", "su.te.02"], name: "Bauen und Brücken", e: "🌉", farbe: "#E8A33D", grund: "#FFF1D9",
     kurz: "Was hält? Türme, Brücken und Dreiecke",
     schritte: [
       { typ: "info", titel: "Wir bauen!", bild: "🏗️",
@@ -455,7 +458,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "pflanzen", lz: ["su.na.05"], name: "Pflanzen wachsen", e: "🌷", farbe: "#2E9C5A", grund: "#E3F7EF",
+    id: "pflanzen", lb: "pt", kl: 2, lz: ["su.na.05"], name: "Pflanzen wachsen", e: "🌷", farbe: "#2E9C5A", grund: "#E3F7EF",
     kurz: "Samen, Keimen, Frühblüher",
     schritte: [
       { typ: "info", titel: "Aus klein wird groß", bild: "🌱",
@@ -481,7 +484,7 @@ window.THEMEN = [
   },
   // ---------- NA-34 Teil 3: Themen für Klasse 3–4 ----------
   {
-    id: "sinne", lz: ["su.na.02"], name: "Meine fünf Sinne", e: "👀", farbe: "#C2337A", grund: "#FDEAF3",
+    id: "sinne", lb: "kg", kl: 3, lz: ["su.na.02"], name: "Meine fünf Sinne", e: "👀", farbe: "#C2337A", grund: "#FDEAF3",
     kurz: "Sehen, hören, riechen, schmecken, tasten",
     schritte: [
       { typ: "info", titel: "Fünf Sinne", bild: "🧒",
@@ -508,7 +511,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "wald", lz: ["su.na.08"], name: "Lebensraum Wald und Wiese", e: "🌲", farbe: "#2E7D4F", grund: "#E3F3E8",
+    id: "wald", lb: "pt", kl: 3, lz: ["su.na.08"], name: "Lebensraum Wald und Wiese", e: "🌲", farbe: "#2E7D4F", grund: "#E3F3E8",
     kurz: "Stockwerke des Waldes, wer frisst wen, Waldregeln",
     schritte: [
       { typ: "info", titel: "Der Wald hat Stockwerke", bild: "🌲",
@@ -534,7 +537,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "kompass", lz: ["su.ge.03"], name: "Himmelsrichtungen", e: "🧭", farbe: "#2F6FB8", grund: "#E5EFFB",
+    id: "kompass", lb: "rz", kl: 3, lz: ["su.ge.03"], name: "Himmelsrichtungen", e: "🧭", farbe: "#2F6FB8", grund: "#E5EFFB",
     kurz: "Norden, Osten, Süden, Westen, Kompass und Karte",
     schritte: [
       { typ: "info", titel: "Vier Himmelsrichtungen", bild: "🧭",
@@ -562,7 +565,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "schwimmen", lz: ["su.na.07"], name: "Schwimmen und Sinken", e: "⛵", farbe: "#1F8FB8", grund: "#E2F4FB",
+    id: "schwimmen", lb: "un", kl: 3, lz: ["su.na.07"], name: "Schwimmen und Sinken", e: "⛵", farbe: "#1F8FB8", grund: "#E2F4FB",
     kurz: "Was schwimmt? Warum schwimmt ein Schiff aus Stahl?",
     schritte: [
       { typ: "info", titel: "Ab ins Wasser!", bild: "🛁",
@@ -587,7 +590,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "feuer", lz: ["su.na.09"], name: "Feuer und Brandschutz", e: "🔥", farbe: "#D2502A", grund: "#FDECE4",
+    id: "feuer", lb: "un", kl: 4, lz: ["su.na.09"], name: "Feuer und Brandschutz", e: "🔥", farbe: "#D2502A", grund: "#FDECE4",
     kurz: "Was ein Feuer braucht und was du im Notfall tust",
     schritte: [
       { typ: "info", titel: "Was braucht ein Feuer?", bild: "🔥",
@@ -613,7 +616,7 @@ window.THEMEN = [
   },
   // ---------- NA-34 Teil 4: Fahrrad, Kinderrechte, Gemeinde ----------
   {
-    id: "fahrrad", lz: ["su.te.03", "su.ge.02"], name: "Mein Fahrrad", e: "🚲", farbe: "#2F86C8", grund: "#E5F1FB",
+    id: "fahrrad", lb: "rz", kl: 3, lz: ["su.te.03", "su.ge.02"], name: "Mein Fahrrad", e: "🚲", farbe: "#2F86C8", grund: "#E5F1FB",
     kurz: "Sicheres Fahrrad, Helm, Zeichen geben, wie die Kette antreibt",
     schritte: [
       { typ: "info", titel: "Ein Fahrrad ist eine Maschine", bild: "🚲",
@@ -642,7 +645,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "kinderrechte", lz: ["su.so.06"], name: "Kinderrechte und Geld", e: "🧒", farbe: "#7B55B8", grund: "#F1EAFF",
+    id: "kinderrechte", lb: "zl", kl: 4, lz: ["su.so.06"], name: "Kinderrechte und Geld", e: "🧒", farbe: "#7B55B8", grund: "#F1EAFF",
     kurz: "Welche Rechte haben Kinder? Wünsche, Bedürfnisse und Taschengeld",
     schritte: [
       { typ: "info", titel: "Kinder haben Rechte", bild: "🌍",
@@ -670,7 +673,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "gemeinde", lz: ["su.so.05"], name: "Unsere Gemeinde", e: "🏛️", farbe: "#8A6E2F", grund: "#F7F0DD",
+    id: "gemeinde", lb: "zl", kl: 3, lz: ["su.so.05"], name: "Unsere Gemeinde", e: "🏛️", farbe: "#8A6E2F", grund: "#F7F0DD",
     kurz: "Wer kümmert sich um den Ort? Wie Kinder mitbestimmen",
     schritte: [
       { typ: "info", titel: "Viele leben zusammen", bild: "🏘️",
@@ -696,7 +699,7 @@ window.THEMEN = [
   },
   // ---------- NA-34 Teil 5: Korn und Brot, Wetterkarte, Strom ----------
   {
-    id: "brot", lz: ["su.na.08", "su.te.01"], name: "Vom Korn zum Brot", e: "🌾", farbe: "#C79A2E", grund: "#FBF3DD",
+    id: "brot", lb: "pt", kl: 3, lz: ["su.na.08", "su.te.01"], name: "Vom Korn zum Brot", e: "🌾", farbe: "#C79A2E", grund: "#FBF3DD",
     kurz: "Getreide, Mühle, Bäckerei – und die Kartoffel",
     schritte: [
       { typ: "info", titel: "Getreide auf dem Feld", bild: "🌾",
@@ -723,7 +726,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "wetterkarte", lz: ["su.na.04"], name: "Die Wetterkarte", e: "🗺️", farbe: "#2F86C8", grund: "#E5F1FB",
+    id: "wetterkarte", lb: "un", kl: 3, lz: ["su.na.04"], name: "Die Wetterkarte", e: "🗺️", farbe: "#2F86C8", grund: "#E5F1FB",
     kurz: "Wetterzeichen lesen, Temperatur, Wind",
     schritte: [
       { typ: "info", titel: "Wetterzeichen", bild: "🌦️",
@@ -748,7 +751,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "strom", lz: ["su.na.09"], name: "Strom – nützlich und gefährlich", e: "💡", farbe: "#E0A800", grund: "#FFF7D6",
+    id: "strom", lb: "un", kl: 4, lz: ["su.na.09"], name: "Strom – nützlich und gefährlich", e: "💡", farbe: "#E0A800", grund: "#FFF7D6",
     kurz: "Stromkreis, Leiter und Nichtleiter, sicher mit Strom",
     schritte: [
       { typ: "info", titel: "Der Stromkreis", bild: "🔋",
@@ -773,7 +776,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "waerme", lz: ["su.na.09"], name: "Wärme und Dämmung", e: "🧤", farbe: "#D2502A", grund: "#FDECE4",
+    id: "waerme", lb: "un", kl: 4, lz: ["su.na.09"], name: "Wärme und Dämmung", e: "🧤", farbe: "#D2502A", grund: "#FDECE4",
     kurz: "Wärme wandert, Leiter und Dämmstoffe, warm bleiben",
     schritte: [
       { typ: "info", titel: "Wärme wandert", bild: "🌡️",
@@ -803,7 +806,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "gewaesser", lz: ["su.na.08"], name: "Tiere am und im Wasser", e: "🦦", farbe: "#1F8FB8", grund: "#E2F4FB",
+    id: "gewaesser", lb: "pt", kl: 4, lz: ["su.na.08"], name: "Tiere am und im Wasser", e: "🦦", farbe: "#1F8FB8", grund: "#E2F4FB",
     kurz: "Säugetiere und Fische, Leben am Bach, Gewässer schützen",
     schritte: [
       { typ: "info", titel: "Säugetiere", bild: "🦫",
@@ -833,7 +836,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "experiment", lz: ["su.na.07"], name: "Ein Experiment planen", e: "🔬", farbe: "#2E9C5A", grund: "#E3F7EF",
+    id: "experiment", lb: "ex", kl: 3, lz: ["su.na.07"], name: "Ein Experiment planen", e: "🔬", farbe: "#2E9C5A", grund: "#E3F7EF",
     kurz: "Frage, Vermutung, Versuch, Beobachtung, Ergebnis",
     schritte: [
       { typ: "info", titel: "Wie Forscher arbeiten", bild: "🔬",
@@ -863,7 +866,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "erstehilfe", lz: ["su.na.02"], name: "Erste Hilfe", e: "🩹", farbe: "#E0574A", grund: "#FFECE8",
+    id: "erstehilfe", lb: "kg", kl: 2, lz: ["su.na.02"], name: "Erste Hilfe", e: "🩹", farbe: "#E0574A", grund: "#FFECE8",
     kurz: "Hilfe holen, Notruf 112, kleine Wunden, Unfälle vermeiden",
     schritte: [
       { typ: "info", titel: "Helfen kann jeder", bild: "🩹",
@@ -893,7 +896,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "medien-info", lz: ["me.sv.01", "me.ar.02", "me.ar.01"], name: "Informationen finden", e: "🔎", farbe: "#7B55B8", grund: "#F1EAFF",
+    id: "medien-info", lb: "ex", kl: 3, lz: ["me.sv.01", "me.ar.02", "me.ar.01"], name: "Informationen finden", e: "🔎", farbe: "#7B55B8", grund: "#F1EAFF",
     kurz: "Bücher, Kinderseiten, Werbung erkennen, Quellen prüfen",
     schritte: [
       { typ: "info", titel: "Wo steht das Wissen?", bild: "📚",
@@ -923,7 +926,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "lernen-lernen", stufe: 5, lz: ["su.so.07"], name: "Lernen lernen", e: "🧠", farbe: "#2E9C5A", grund: "#E3F7EF",
+    id: "lernen-lernen", lb: "zl", stufe: 5, lz: ["su.so.07"], name: "Lernen lernen", e: "🧠", farbe: "#2E9C5A", grund: "#E3F7EF",
     kurz: "Kurz und oft üben, Pausen, sich selbst abfragen, Hausaufgaben planen",
     schritte: [
       { typ: "info", titel: "So lernt dein Kopf gut", bild: "🧠",
@@ -953,7 +956,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "neue-schule", stufe: 5, lz: ["su.so.07"], name: "Neue Schule", e: "🏫", farbe: "#2F86C8", grund: "#E5F1FB",
+    id: "neue-schule", lb: "zl", stufe: 5, lz: ["su.so.07"], name: "Neue Schule", e: "🏫", farbe: "#2F86C8", grund: "#E5F1FB",
     kurz: "Stundenplan, neue Fächer und Lehrkräfte, Schulweg, Hilfe holen",
     schritte: [
       { typ: "info", titel: "Was ist anders?", bild: "🏫",
@@ -983,7 +986,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "herz-lunge", stufe: 4, lz: ["su.na.02"], name: "Herz und Lunge", e: "❤️", farbe: "#E0574A", grund: "#FFECE8",
+    id: "herz-lunge", lb: "kg", stufe: 4, lz: ["su.na.02"], name: "Herz und Lunge", e: "❤️", farbe: "#E0574A", grund: "#FFECE8",
     kurz: "Atmen, Herzschlag, Puls fühlen, was dem Herzen gut tut",
     schritte: [
       { typ: "info", titel: "Dein Motor und deine Luftpumpe", bild: "🫀",
@@ -1010,7 +1013,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "gross-werden", stufe: 4, lz: ["su.na.02"], name: "Ich werde größer", e: "🌱", farbe: "#2E9C5A", grund: "#E3F7EF",
+    id: "gross-werden", lb: "kg", stufe: 4, lz: ["su.na.02"], name: "Ich werde größer", e: "🌱", farbe: "#2E9C5A", grund: "#E3F7EF",
     kurz: "Pubertät: Körper und Gefühle verändern sich, Hygiene, darüber reden",
     schritte: [
       { typ: "info", titel: "Der Körper verändert sich", bild: "🌱",
@@ -1037,7 +1040,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "nein-sagen", stufe: 3, lz: ["su.na.02", "et.mi.01"], name: "Stark sein – Nein sagen", e: "🛡️", farbe: "#7B55B8", grund: "#EFE6FF",
+    id: "nein-sagen", lb: "kg", stufe: 3, lz: ["su.na.02", "et.mi.01"], name: "Stark sein – Nein sagen", e: "🛡️", farbe: "#7B55B8", grund: "#EFE6FF",
     kurz: "Sucht vorbeugen, Rauchen und Alkohol, zu viel Bildschirm, Gruppendruck",
     schritte: [
       { typ: "info", titel: "Was ist Sucht?", bild: "🛡️",
@@ -1063,7 +1066,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "sachsen", stufe: 4, land: "sn", lz: ["su.ge.04", "su.hi.sn01"], name: "Unser Bundesland Sachsen", e: "🗺️", farbe: "#2E7D62", grund: "#E3F7EF",
+    id: "sachsen", lb: "rz", stufe: 4, land: "sn", lz: ["su.ge.04", "su.hi.sn01"], name: "Unser Bundesland Sachsen", e: "🗺️", farbe: "#2E7D62", grund: "#E3F7EF",
     kurz: "Karte, Dresden und andere Städte, Elbe, Erzgebirge, Sorben, Nachbarn",
     schritte: [
       { typ: "info", titel: "Sachsen auf der Karte", bild: "sachsen",
@@ -1095,3 +1098,887 @@ window.THEMEN = [
     ]
   }
 ];
+// ---------- Schuljahr Sachunterricht (Lehrplan Sachsen 2019, Kl. 1/2): ein Thema je Lücke aus der Bestandsaufnahme (28.10.2026) ----------
+window.THEMEN.push(
+  {
+    id: "zusammen-lernen", lb: "zl", kl: 2, lz: ["su.so.03", "su.hi.02"], name: "Zusammen lernen", e: "🧑‍🤝‍🧑", farbe: "#7B55B8", grund: "#EFE6FF",
+    kurz: "Morgenkreis, Rituale, Klassendienste, aus Fehlern lernen",
+    schritte: [
+      { typ: "info", titel: "Unser Schultag hat einen Rhythmus", bild: "🔔",
+        text: "Hallo {name}! In der Schule wechseln sich Lernen, Bewegung, Essen und Ruhe ab. Viele Klassen beginnen mit einem Morgenkreis. Solche festen Abläufe heißen Rituale – sie helfen, dass sich alle sicher fühlen.",
+        ru: "Привет, {name}! В школе чередуются учёба, движение, еда и отдых. Многие классы начинают с утреннего круга. Такие постоянные действия называются ритуалами — они помогают всем чувствовать себя уверенно.",
+        fakten: [["Morgenkreis ⭕", "Утренний круг ⭕"], ["Bewegungspause 🤸", "Разминка 🤸"], ["Frühstück 🍎", "Завтрак 🍎"], ["Stillarbeit 🤫", "Тихая работа 🤫"]] },
+      { typ: "wahl", frage: "Nach einer langen Rechenstunde sind alle zappelig. Was hilft?", ru: "После долгого урока математики все ёрзают. Что поможет?", bild: "🤸", optionen: [
+        { t: "Eine kurze Bewegungspause", ru: "Короткая разминка", ok: true, warum: "Genau! Nach dem Sitzen braucht der Körper Bewegung. Danach kann man wieder besser lernen.", warumRu: "Точно! После сидения телу нужно движение. Потом снова лучше учиться." },
+        { t: "Noch eine Stunde rechnen", ru: "Ещё час считать", ok: false, warum: "Das wird schwer. Ruhe und Bewegung sollten sich abwechseln.", warumRu: "Будет трудно. Отдых и движение должны чередоваться." },
+        { t: "Laut durcheinander schreien", ru: "Громко кричать", ok: false, warum: "Das stört alle. Eine Bewegungspause ist besser.", warumRu: "Это всем мешает. Лучше разминка." }] },
+      { typ: "zuordnen", frage: "Allein, zu zweit oder in der Gruppe? Ordne zu!", ru: "Одному, вдвоём или в группе? Распредели!", gruppen: [
+        { id: "allein", name: "Allein", ru: "Одному", bild: "🧒" }, { id: "partner", name: "Zu zweit", ru: "Вдвоём", bild: "👫" }, { id: "gruppe", name: "In der Gruppe", ru: "В группе", bild: "👨‍👩‍👧‍👦" }], dinge: [
+        { t: "Ein Arbeitsblatt still lösen", ru: "Тихо решать лист", gruppe: "allein" },
+        { t: "Sich gegenseitig abfragen", ru: "Спрашивать друг друга", gruppe: "partner" },
+        { t: "Gemeinsam ein Plakat gestalten", ru: "Вместе делать плакат", gruppe: "gruppe" }] },
+      { typ: "daumen", satz: "Wer einen Fehler macht, ist dumm.", satzRu: "Кто ошибается, тот глупый.", bild: "🤔", ok: false,
+        warum: "Nein! Aus Fehlern lernt man. Jeder Fehler zeigt dir, was du noch üben kannst – das geht allen so.", warumRu: "Нет! На ошибках учатся. Каждая ошибка показывает, что ещё нужно потренировать, — так у всех." },
+      { typ: "wahl", frage: "Wozu gibt es Klassendienste wie Tafeldienst oder Blumendienst?", ru: "Зачем нужны дежурства в классе — у доски или с цветами?", bild: "🧹", optionen: [
+        { t: "Jeder übernimmt Verantwortung für die Klasse", ru: "Каждый отвечает за класс", ok: true, warum: "Richtig! Wenn jeder eine Aufgabe hat, ist der Klassenraum schön und alle helfen mit.", warumRu: "Правильно! Если у каждого есть задача, в классе красиво и все помогают." },
+        { t: "Damit die Lehrerin nichts tun muss", ru: "Чтобы учительница ничего не делала", ok: false, warum: "Nein, es geht um die Gemeinschaft. Jeder kümmert sich um ein Stück Klasse.", warumRu: "Нет, речь о сообществе. Каждый заботится о своей части класса." },
+        { t: "Als Strafe", ru: "В наказание", ok: false, warum: "Nein! Dienste sind keine Strafe. Sie zeigen: Wir gehören zusammen.", warumRu: "Нет! Дежурство — не наказание. Оно показывает, что мы вместе." }] },
+      { typ: "daumen", satz: "Die Sachen der anderen Kinder darf ich einfach nehmen, wenn ich sie brauche.", satzRu: "Вещи других детей можно просто брать, когда нужно.", bild: "✏️", ok: false,
+        warum: "Nein. Man fragt vorher und gibt die Sachen heil zurück. So achten wir das Eigentum der anderen.", warumRu: "Нет. Сначала спрашивают и возвращают вещи целыми. Так мы уважаем чужое." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Ein Tipp zum Merken: Jeder lernt anders – manche mit Bildern, manche durch Sprechen, manche durch Bewegung. Probier aus, was dir hilft!",
+        ru: "Отлично, {name}! Совет: каждый учится по-своему — кто-то с картинками, кто-то проговаривая, кто-то в движении. Попробуй, что помогает тебе!" }
+    ]
+  },
+  {
+    id: "gesund-essen", lb: "kg", kl: 2, lz: ["su.na.02"], name: "Essen, trinken, bewegen", e: "🥕", farbe: "#5DB84A", grund: "#E3F5DC",
+    kurz: "Ernährungspyramide, Trinken, Kräuter, Bewegung und Schlaf",
+    schritte: [
+      { typ: "info", titel: "Die Ernährungspyramide", bild: "🔺",
+        text: "Unten in der Pyramide steht, wovon du viel essen und trinken darfst: Wasser, Obst, Gemüse und Brot. Weiter oben wird es weniger: Milch, Fleisch, Fisch, Fett. Ganz oben: Süßes – nur ein bisschen.",
+        ru: "Внизу пирамиды — то, чего можно много: вода, фрукты, овощи и хлеб. Выше — меньше: молоко, мясо, рыба, жир. На самом верху — сладкое, совсем немного.",
+        fakten: [["viel: Wasser 💧 Obst 🍎 Gemüse 🥦", "много: вода 💧 фрукты 🍎 овощи 🥦"], ["mittel: Milch 🥛 Fisch 🐟", "средне: молоко 🥛 рыба 🐟"], ["wenig: Süßes 🍬", "мало: сладкое 🍬"]] },
+      { typ: "zuordnen", frage: "Viel oder wenig? Ordne zu!", ru: "Много или мало? Распредели!", gruppen: [
+        { id: "viel", name: "Davon viel", ru: "Этого много", bild: "🥦" }, { id: "wenig", name: "Davon wenig", ru: "Этого мало", bild: "🍬" }], dinge: [
+        { t: "Äpfel und Möhren", ru: "Яблоки и морковь", gruppe: "viel" },
+        { t: "Gummibärchen", ru: "Мармелад", gruppe: "wenig" },
+        { t: "Vollkornbrot", ru: "Цельнозерновой хлеб", gruppe: "viel" },
+        { t: "Pommes mit viel Fett", ru: "Картошка фри в жире", gruppe: "wenig" }] },
+      { typ: "wahl", frage: "Wie viel solltest du ungefähr am Tag trinken?", ru: "Сколько примерно нужно пить в день?", bild: "💧", optionen: [
+        { t: "Etwa 6 Gläser, am besten Wasser", ru: "Около 6 стаканов, лучше воды", ok: true, warum: "Genau! Der Körper braucht Wasser zum Denken und Bewegen. Leitungswasser ist bei uns gut und günstig.", warumRu: "Точно! Телу нужна вода, чтобы думать и двигаться. Вода из-под крана у нас хорошая и дешёвая." },
+        { t: "Ein Glas reicht", ru: "Хватит одного стакана", ok: false, warum: "Das ist zu wenig. Etwa 6 Gläser am Tag sind gut.", warumRu: "Это слишком мало. Хорошо около 6 стаканов в день." },
+        { t: "Nur Limo", ru: "Только лимонад", ok: false, warum: "Limo hat viel Zucker. Wasser ist das beste Getränk.", warumRu: "В лимонаде много сахара. Вода — лучший напиток." }] },
+      { typ: "daumen", satz: "Petersilie, Schnittlauch und Basilikum sind Kräuter, die man selbst im Topf ziehen kann.", satzRu: "Петрушку, лук и базилик можно вырастить самому в горшке.", bild: "🌿", ok: true,
+        warum: "Stimmt! Kräuter riechen und schmecken stark. Schnittlauch auf dem Brot – lecker und gesund.", warumRu: "Верно! Травы сильно пахнут и имеют яркий вкус. Лук на хлебе — вкусно и полезно." },
+      { typ: "daumen", satz: "Was in der Werbung lecker aussieht, ist immer gesund.", satzRu: "Что в рекламе выглядит вкусно, всегда полезно.", bild: "📺", ok: false,
+        warum: "Nein! Werbung will verkaufen. Viele beworbene Snacks haben viel Zucker und Fett.", warumRu: "Нет! Реклама хочет продать. В рекламируемых закусках часто много сахара и жира." },
+      { typ: "wahl", frage: "Was braucht dein Körper außer gutem Essen noch, um fit zu sein?", ru: "Что ещё нужно телу, кроме хорошей еды, чтобы быть бодрым?", bild: "😴", optionen: [
+        { t: "Bewegung und genug Schlaf", ru: "Движение и достаточно сна", ok: true, warum: "Richtig! Kinder brauchen etwa 10 Stunden Schlaf und jeden Tag Bewegung, am besten draußen.", warumRu: "Правильно! Детям нужно около 10 часов сна и каждый день движение, лучше на улице." },
+        { t: "Möglichst lange am Tablet sitzen", ru: "Как можно дольше сидеть за планшетом", ok: false, warum: "Nein. Lange sitzen macht müde. Bewegung und Schlaf machen fit.", warumRu: "Нет. Долгое сидение утомляет. Движение и сон дают силы." },
+        { t: "Nachts lange wach bleiben", ru: "Долго не спать ночью", ok: false, warum: "Dann bist du am nächsten Tag müde. Genug Schlaf ist wichtig.", warumRu: "Тогда на следующий день будешь уставшим. Сон важен." }] },
+      { typ: "daumen", satz: "Bananen wachsen nicht in Deutschland. Sie haben einen langen Weg hinter sich.", satzRu: "Бананы не растут в Германии. Они проделали долгий путь.", bild: "🍌", ok: true,
+        warum: "Stimmt! Bananen kommen mit dem Schiff aus warmen Ländern. Äpfel, Möhren und Erdbeeren wachsen auch bei uns. Fair gehandelte Waren sorgen dafür, dass die Bauern gerecht bezahlt werden.", warumRu: "Верно! Бананы привозят на кораблях из тёплых стран. Яблоки, морковь и клубника растут и у нас. Товары «справедливой торговли» помогают честно платить фермерам." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Und noch ein Tipp: Gerade sitzen, beide Füße auf dem Boden – das tut deinem Rücken gut.",
+        ru: "Супер, {name}! Ещё совет: сиди прямо, обе ноги на полу — это полезно для спины." }
+    ]
+  },
+  {
+    id: "mein-koerper", lb: "kg", kl: 2, lz: ["su.na.02"], name: "Mein Körper gehört mir", e: "🙋", farbe: "#C2337A", grund: "#FDEAF3",
+    kurz: "Körperteile richtig benennen, Nein sagen, Hilfe holen",
+    schritte: [
+      { typ: "info", titel: "Jungen und Mädchen", bild: "🧒👧",
+        text: "Jungen und Mädchen haben vieles gemeinsam – und ein paar Unterschiede. Jungen haben einen Penis, Mädchen haben eine Scheide (Vulva). Das sind die richtigen Namen. Es ist gut, sie zu kennen.",
+        ru: "У мальчиков и девочек много общего — и несколько различий. У мальчиков есть пенис, у девочек — влагалище (вульва). Это правильные названия. Хорошо их знать." },
+      { typ: "daumen", satz: "Die Körperstellen, die die Badehose oder der Badeanzug bedeckt, sind privat.", satzRu: "Места, которые закрывают плавки или купальник, — личные.", bild: "🩱", ok: true,
+        warum: "Stimmt! Niemand darf dich dort einfach anfassen oder Fotos davon machen. Ausnahme: Ärztin oder Arzt, wenn deine Eltern dabei sind.", warumRu: "Верно! Никто не имеет права просто так трогать тебя там или фотографировать. Исключение: врач, когда рядом родители." },
+      { typ: "wahl", frage: "Jemand will dich anfassen und du fühlst dich unwohl. Was darfst du tun?", ru: "Кто-то хочет тебя трогать, и тебе неприятно. Что ты можешь сделать?", bild: "✋", optionen: [
+        { t: "Laut Nein sagen und weggehen", ru: "Громко сказать «нет» и уйти", ok: true, warum: "Genau! Dein Körper gehört dir. Du darfst Nein sagen – auch zu Erwachsenen und Menschen, die du kennst.", warumRu: "Точно! Твоё тело принадлежит тебе. Ты можешь сказать «нет» — и взрослым, и знакомым." },
+        { t: "Still sein, weil es ein Erwachsener ist", ru: "Молчать, потому что это взрослый", ok: false, warum: "Nein! Auch Erwachsenen darfst du Nein sagen, wenn sich etwas falsch anfühlt.", warumRu: "Нет! И взрослым можно сказать «нет», если что-то кажется неправильным." },
+        { t: "Es aushalten", ru: "Терпеть", ok: false, warum: "Nein. Du musst nichts aushalten. Sag Nein und erzähl es einem Erwachsenen, dem du vertraust.", warumRu: "Нет. Ничего терпеть не нужно. Скажи «нет» и расскажи взрослому, которому доверяешь." }] },
+      { typ: "zuordnen", frage: "Gutes oder schlechtes Geheimnis?", ru: "Хороший или плохой секрет?", gruppen: [
+        { id: "gut", name: "Gutes Geheimnis", ru: "Хороший секрет", bild: "🎁" }, { id: "schlecht", name: "Schlechtes Geheimnis – erzählen!", ru: "Плохой секрет — рассказать!", bild: "😟" }], dinge: [
+        { t: "Ein Geschenk für Mama", ru: "Подарок для мамы", gruppe: "gut" },
+        { t: "Eine Überraschungsparty", ru: "Вечеринка-сюрприз", gruppe: "gut" },
+        { t: "Jemand hat mich angefasst und sagt: Verrat es nicht!", ru: "Меня трогали и сказали: никому не говори!", gruppe: "schlecht" },
+        { t: "Etwas macht mir Angst oder Bauchweh", ru: "Что-то пугает меня", gruppe: "schlecht" }] },
+      { typ: "daumen", satz: "Wenn ich ein schlechtes Geheimnis weitererzähle, bin ich eine Petze.", satzRu: "Если я рассказываю плохой секрет, я ябеда.", bild: "🗣️", ok: false,
+        warum: "Nein! Hilfe holen ist kein Petzen. Schlechte Geheimnisse darfst und sollst du erzählen – du bist nie schuld.", warumRu: "Нет! Позвать на помощь — не ябедничать. Плохие секреты можно и нужно рассказывать — ты никогда не виноват." },
+      { typ: "wahl", frage: "Wem kannst du etwas erzählen, das dich bedrückt?", ru: "Кому можно рассказать то, что тебя тревожит?", bild: "📞", optionen: [
+        { t: "Eltern, Lehrerin, Vertrauensperson – oder der Nummer gegen Kummer: 116 111", ru: "Родителям, учительнице, доверенному человеку — или по номеру 116 111", ok: true, warum: "Richtig! Die Nummer gegen Kummer ist kostenlos und du musst deinen Namen nicht sagen.", warumRu: "Правильно! Телефон доверия бесплатный, и называть имя не нужно." },
+        { t: "Niemandem", ru: "Никому", ok: false, warum: "Doch! Du bist nicht allein. Erzähl es jemandem, dem du vertraust, oder ruf 116 111 an.", warumRu: "Нет! Ты не один. Расскажи тому, кому доверяешь, или позвони 116 111." },
+        { t: "Nur einem Fremden im Internet", ru: "Только незнакомцу в интернете", ok: false, warum: "Lieber nicht. Erzähl es einer Vertrauensperson oder ruf die Nummer gegen Kummer an.", warumRu: "Лучше не надо. Расскажи доверенному человеку или позвони по телефону доверия." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Gut gemacht, {name}! Merk dir: Mein Körper gehört mir. Ich darf Nein sagen. Und ich darf mir immer Hilfe holen – Nummer gegen Kummer: 116 111.",
+        ru: "Молодец, {name}! Запомни: моё тело принадлежит мне. Я могу сказать «нет». И я всегда могу попросить помощи — телефон доверия: 116 111." }
+    ]
+  },
+  {
+    id: "jahreszeiten", lb: "pt", kl: 2, lz: ["su.na.03", "su.hi.02"], name: "Durch das Jahr", e: "🍂", farbe: "#E8A33D", grund: "#FFF1D9",
+    kurz: "Frühling, Sommer, Herbst, Winter – Natur, Vögel und Feste",
+    schritte: [
+      { typ: "info", titel: "Vier Jahreszeiten", bild: "🌸☀️🍂❄️",
+        text: "Im Frühling blühen die ersten Blumen und die Vögel bauen Nester. Im Sommer ist es warm und das Obst reift. Im Herbst färben sich die Blätter und fallen ab. Im Winter ruhen viele Pflanzen und Tiere.",
+        ru: "Весной цветут первые цветы, а птицы вьют гнёзда. Летом тепло и зреют фрукты. Осенью листья желтеют и опадают. Зимой многие растения и животные отдыхают." },
+      { typ: "zuordnen", frage: "Wann passiert das? Ordne zu!", ru: "Когда это бывает? Распредели!", gruppen: [
+        { id: "fruehling", name: "Frühling", ru: "Весна", bild: "🌸" }, { id: "herbst", name: "Herbst", ru: "Осень", bild: "🍂" }, { id: "winter", name: "Winter", ru: "Зима", bild: "❄️" }], dinge: [
+        { t: "Vögel brüten im Nest", ru: "Птицы высиживают птенцов", gruppe: "fruehling" },
+        { t: "Bunte Blätter fallen", ru: "Падают цветные листья", gruppe: "herbst" },
+        { t: "Der Igel hält Winterschlaf", ru: "Ёж впадает в спячку", gruppe: "winter" }] },
+      { typ: "wahl", frage: "Was machen Vogeleltern im Frühling?", ru: "Что делают птицы-родители весной?", bild: "🪺", optionen: [
+        { t: "Nest bauen, Eier ausbrüten, Junge füttern", ru: "Вьют гнездо, высиживают яйца, кормят птенцов", ok: true, warum: "Genau! Das heißt Brutpflege. Darum soll man brütende Vögel nicht stören.", warumRu: "Точно! Это забота о потомстве. Поэтому гнездящихся птиц нельзя беспокоить." },
+        { t: "In den Süden fliegen", ru: "Улетают на юг", ok: false, warum: "Nein, im Frühling kommen die Zugvögel zurück und brüten bei uns.", warumRu: "Нет, весной перелётные птицы возвращаются и гнездятся у нас." },
+        { t: "Winterschlaf halten", ru: "Впадают в спячку", ok: false, warum: "Vögel halten keinen Winterschlaf. Im Frühling brüten sie.", warumRu: "Птицы не впадают в спячку. Весной они высиживают птенцов." }] },
+      { typ: "daumen", satz: "Im Herbst fliegen Schwalben und Störche in warme Länder.", satzRu: "Осенью ласточки и аисты улетают в тёплые страны.", bild: "🕊️", ok: true,
+        warum: "Stimmt! Im Winter finden sie bei uns keine Insekten. Amsel, Meise und Spatz bleiben hier.", warumRu: "Верно! Зимой им у нас не найти насекомых. Дрозд, синица и воробей остаются." },
+      { typ: "zuordnen", frage: "Welches Fest feiern viele Menschen wann?", ru: "Какой праздник когда отмечают многие люди?", gruppen: [
+        { id: "fruehling", name: "Frühling", ru: "Весна", bild: "🌷" }, { id: "herbst", name: "Herbst", ru: "Осень", bild: "🎃" }, { id: "winter", name: "Winter", ru: "Зима", bild: "🎄" }], dinge: [
+        { t: "Ostern", ru: "Пасха", gruppe: "fruehling" },
+        { t: "Erntedank und Laternenumzug", ru: "Праздник урожая и шествие с фонариками", gruppe: "herbst" },
+        { t: "Weihnachten", ru: "Рождество", gruppe: "winter" }] },
+      { typ: "daumen", satz: "Die Natur verändert sich jedes Jahr wieder in derselben Reihenfolge.", satzRu: "Природа каждый год меняется в одном и том же порядке.", bild: "🔄", ok: true,
+        warum: "Stimmt! Frühling, Sommer, Herbst, Winter – das ist der Jahreskreis. Im Kalender kannst du sehen, wann eine neue Jahreszeit beginnt.", warumRu: "Верно! Весна, лето, осень, зима — это годовой круг. В календаре видно, когда начинается новое время года." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Beobachte einen Baum vor deinem Fenster das ganze Jahr: Mach jeden Monat ein Bild – wie verändert er sich?",
+        ru: "Отлично, {name}! Наблюдай за деревом у окна весь год: каждый месяц рисуй его — как оно меняется?" }
+    ]
+  },
+  {
+    id: "baeume", lb: "pt", kl: 2, lz: ["su.na.03"], name: "Bäume genau kennen", e: "🌳", farbe: "#2E9C5A", grund: "#E3F7EF",
+    kurz: "Eiche, Buche, Ahorn, Linde, Kastanie, Fichte, Kiefer, Tanne – und wie alt ein Baum ist",
+    schritte: [
+      { typ: "info", titel: "Teile eines Baumes", bild: "🌳",
+        text: "Ein Baum hat Wurzeln, einen Stamm, Äste und Zweige. Alle Äste zusammen mit den Blättern bilden die Krone. Laubbäume haben flache Blätter, Nadelbäume haben Nadeln und Zapfen mit den Samen.",
+        ru: "У дерева есть корни, ствол, ветви и веточки. Все ветви с листьями образуют крону. У лиственных деревьев плоские листья, у хвойных — иголки и шишки с семенами.",
+        fakten: [["Wurzel", "Корень"], ["Stamm", "Ствол"], ["Ast, Zweig", "Ветвь, веточка"], ["Krone", "Крона"]] },
+      { typ: "wahl", frage: "Welcher Baum hat Eicheln?", ru: "У какого дерева жёлуди?", bild: "🌰", optionen: [
+        { t: "Die Eiche", ru: "Дуб", ok: true, warum: "Richtig! Eichenblätter haben runde Buchten. Eichhörnchen und Wildschweine lieben Eicheln.", warumRu: "Правильно! У дуба листья с округлыми выемками. Белки и кабаны любят жёлуди." },
+        { t: "Die Buche", ru: "Бук", ok: false, warum: "Die Buche hat kleine dreieckige Bucheckern. Eicheln wachsen an der Eiche.", warumRu: "У бука маленькие трёхгранные орешки. Жёлуди растут на дубе." },
+        { t: "Die Fichte", ru: "Ель", ok: false, warum: "Die Fichte ist ein Nadelbaum mit Zapfen. Eicheln wachsen an der Eiche.", warumRu: "Ель — хвойное дерево с шишками. Жёлуди растут на дубе." }] },
+      { typ: "zuordnen", frage: "Welche Frucht gehört zu welchem Baum?", ru: "Какой плод у какого дерева?", gruppen: [
+        { id: "ahorn", name: "Ahorn", ru: "Клён", bild: "🍁" }, { id: "kastanie", name: "Kastanie", ru: "Каштан", bild: "🌰" }, { id: "linde", name: "Linde", ru: "Липа", bild: "🌳" }], dinge: [
+        { t: "Fliegt wie ein kleiner Propeller", ru: "Летает как пропеллер", gruppe: "ahorn" },
+        { t: "Glänzend braun in stacheliger Schale", ru: "Блестящий коричневый в колючей кожуре", gruppe: "kastanie" },
+        { t: "Kleine Kugeln an einem Flügelblatt, Blätter wie ein Herz", ru: "Шарики на крылышке, листья как сердечко", gruppe: "linde" }] },
+      { typ: "zuordnen", frage: "Fichte, Kiefer oder Tanne?", ru: "Ель, сосна или пихта?", gruppen: [
+        { id: "fichte", name: "Fichte", ru: "Ель", bild: "🌲" }, { id: "kiefer", name: "Kiefer", ru: "Сосна", bild: "🌲" }, { id: "tanne", name: "Tanne", ru: "Пихта", bild: "🎄" }], dinge: [
+        { t: "Spitze Nadeln, Zapfen hängen nach unten", ru: "Острые иголки, шишки висят вниз", gruppe: "fichte" },
+        { t: "Lange Nadeln, immer zu zweit", ru: "Длинные иголки, всегда по две", gruppe: "kiefer" },
+        { t: "Weiche Nadeln, Zapfen stehen aufrecht", ru: "Мягкие иголки, шишки стоят вверх", gruppe: "tanne" }] },
+      { typ: "wahl", frage: "Wie kannst du an einem gefällten Baum sehen, wie alt er ist?", ru: "Как по спиленному дереву узнать его возраст?", bild: "🪵", optionen: [
+        { t: "Die Jahresringe zählen", ru: "Посчитать годовые кольца", ok: true, warum: "Genau! Jedes Jahr wächst ein neuer Ring. 30 Ringe – 30 Jahre alt.", warumRu: "Точно! Каждый год растёт новое кольцо. 30 колец — 30 лет." },
+        { t: "Die Blätter zählen", ru: "Посчитать листья", ok: false, warum: "Die Blätter wechseln jedes Jahr. Zähl die Jahresringe im Stamm.", warumRu: "Листья меняются каждый год. Считай годовые кольца в стволе." },
+        { t: "Messen, wie hoch er ist", ru: "Измерить высоту", ok: false, warum: "Bäume wachsen verschieden schnell. Die Jahresringe verraten das Alter.", warumRu: "Деревья растут с разной скоростью. Возраст показывают кольца." }] },
+      { typ: "daumen", satz: "Die Buche hat glatte, graue Rinde und Blätter mit glattem Rand.", satzRu: "У бука гладкая серая кора и листья с ровным краем.", bild: "🌳", ok: true,
+        warum: "Stimmt! Daran erkennst du die Buche. Ihre Früchte heißen Bucheckern.", warumRu: "Верно! По этому узнаёшь бук. Его плоды называются буковыми орешками." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Sammle beim nächsten Spaziergang Blätter und Früchte, kleb sie auf und schreib den Baumnamen dazu – so entsteht deine Baumsammlung.",
+        ru: "Супер, {name}! На следующей прогулке собери листья и плоды, наклей их и подпиши название дерева — получится твоя коллекция." }
+    ]
+  },
+  {
+    id: "obst-garten", lb: "pt", kl: 2, lz: ["su.na.05"], name: "Obst und Garten", e: "🍒", farbe: "#E0574A", grund: "#FFECE8",
+    kurz: "Kernobst, Steinobst, Beerenobst – säen, pflegen, ernten",
+    schritte: [
+      { typ: "info", titel: "Aus der Blüte wird die Frucht", bild: "🌸➡️🍎",
+        text: "Nach der Blüte wächst die Frucht – darin sind die Samen. Beim Apfel liegen viele Kerne im Kerngehäuse: Kernobst. Die Kirsche hat einen harten Stein: Steinobst. Erdbeeren und Johannisbeeren sind Beerenobst.",
+        ru: "После цветения растёт плод — в нём семена. В яблоке много семечек в сердцевине: семечковые. У вишни твёрдая косточка: косточковые. Клубника и смородина — ягоды.",
+        fakten: [["Kernobst: Apfel, Birne 🍎🍐", "Семечковые: яблоко, груша 🍎🍐"], ["Steinobst: Kirsche, Pflaume 🍒", "Косточковые: вишня, слива 🍒"], ["Beerenobst: Erdbeere, Johannisbeere 🍓", "Ягоды: клубника, смородина 🍓"]] },
+      { typ: "zuordnen", frage: "Kern, Stein oder Beere?", ru: "Семечковые, косточковые или ягоды?", gruppen: [
+        { id: "kern", name: "Kernobst", ru: "Семечковые", bild: "🍎" }, { id: "stein", name: "Steinobst", ru: "Косточковые", bild: "🍒" }, { id: "beere", name: "Beerenobst", ru: "Ягоды", bild: "🍓" }], dinge: [
+        { t: "Birne", ru: "Груша", gruppe: "kern" },
+        { t: "Pflaume", ru: "Слива", gruppe: "stein" },
+        { t: "Himbeere", ru: "Малина", gruppe: "beere" }] },
+      { typ: "wahl", frage: "Du säst Kressesamen. Was brauchen sie zum Keimen?", ru: "Ты сеешь кресс-салат. Что нужно семенам, чтобы прорасти?", bild: "🌱", optionen: [
+        { t: "Wasser, Wärme und Luft", ru: "Вода, тепло и воздух", ok: true, warum: "Richtig! Danach brauchen die Pflänzchen auch Licht zum Wachsen.", warumRu: "Правильно! Потом ростки нуждаются и в свете для роста." },
+        { t: "Nur Dunkelheit", ru: "Только темнота", ok: false, warum: "Ohne Wasser keimt nichts. Samen brauchen Wasser, Wärme und Luft.", warumRu: "Без воды ничего не прорастёт. Семенам нужны вода, тепло и воздух." },
+        { t: "Kälte und Trockenheit", ru: "Холод и сухость", ok: false, warum: "So bleiben die Samen schlafen. Sie brauchen Wasser und Wärme.", warumRu: "Так семена «спят». Им нужны вода и тепло." }] },
+      { typ: "zuordnen", frage: "Was tut man im Garten wann?", ru: "Что делают в саду и когда?", gruppen: [
+        { id: "saeen", name: "Säen und pflanzen", ru: "Сеять и сажать", bild: "🌱" }, { id: "pflegen", name: "Pflegen", ru: "Ухаживать", bild: "💧" }, { id: "ernten", name: "Ernten", ru: "Собирать урожай", bild: "🧺" }], dinge: [
+        { t: "Bohnen in die Erde legen", ru: "Класть фасоль в землю", gruppe: "saeen" },
+        { t: "Gießen und Unkraut zupfen", ru: "Поливать и полоть", gruppe: "pflegen" },
+        { t: "Reife Tomaten pflücken", ru: "Срывать спелые помидоры", gruppe: "ernten" }] },
+      { typ: "daumen", satz: "Harke und Spaten legt man mit den Zinken nach oben auf den Boden.", satzRu: "Грабли и лопату кладут на землю зубьями вверх.", bild: "🧑‍🌾", ok: false,
+        warum: "Nein! Sonst tritt jemand drauf und verletzt sich. Gartengeräte immer mit den Zinken nach unten ablegen oder anlehnen.", warumRu: "Нет! Иначе кто-то наступит и поранится. Садовые инструменты кладут зубьями вниз или прислоняют." },
+      { typ: "daumen", satz: "Aus Äpfeln kann man Apfelmus, Saft oder Kuchen machen.", satzRu: "Из яблок можно сделать пюре, сок или пирог.", bild: "🥧", ok: true,
+        warum: "Stimmt! So kann man Obst verarbeiten und länger aufbewahren.", warumRu: "Верно! Так фрукты перерабатывают и дольше хранят." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Prima, {name}! Säe doch Kresse auf feuchter Watte. Nach ein paar Tagen kannst du sie ernten und aufs Brot streuen.",
+        ru: "Отлично, {name}! Посей кресс-салат на влажной вате. Через несколько дней его можно срезать и посыпать на хлеб." }
+    ]
+  },
+  {
+    id: "kleintiere", lb: "pt", kl: 2, lz: ["su.na.01", "su.na.08"], name: "Kleine Tiere ganz groß", e: "🐞", farbe: "#B5701A", grund: "#FFF1D9",
+    kurz: "Regenwurm, Marienkäfer, Schnecke, Ameise und Biene – und vier Vögel",
+    schritte: [
+      { typ: "info", titel: "Kleine Tiere vor der Haustür", bild: "🐞🐌🐜",
+        text: "Unter Steinen, in der Wiese und im Garten leben viele kleine Tiere. Jedes hat eine wichtige Aufgabe: Regenwürmer lockern die Erde, Bienen bestäuben Blüten, Marienkäfer fressen Blattläuse.",
+        ru: "Под камнями, в траве и в саду живёт много маленьких животных. У каждого важная задача: черви рыхлят землю, пчёлы опыляют цветы, божьи коровки едят тлю." },
+      { typ: "zuordnen", frage: "Wer tut was?", ru: "Кто что делает?", gruppen: [
+        { id: "wurm", name: "Regenwurm", ru: "Червь", bild: "🪱" }, { id: "biene", name: "Biene", ru: "Пчела", bild: "🐝" }, { id: "kaefer", name: "Marienkäfer", ru: "Божья коровка", bild: "🐞" }], dinge: [
+        { t: "Lockert die Erde", ru: "Рыхлит землю", gruppe: "wurm" },
+        { t: "Bestäubt Blüten und macht Honig", ru: "Опыляет цветы и делает мёд", gruppe: "biene" },
+        { t: "Frisst Blattläuse", ru: "Ест тлю", gruppe: "kaefer" }] },
+      { typ: "wahl", frage: "Wie viele Beine hat ein Insekt wie die Ameise?", ru: "Сколько ног у насекомого, например у муравья?", bild: "🐜", optionen: [
+        { t: "Sechs", ru: "Шесть", ok: true, warum: "Richtig! Alle Insekten haben sechs Beine. Spinnen haben acht – sie sind keine Insekten.", warumRu: "Правильно! У всех насекомых шесть ног. У пауков восемь — они не насекомые." },
+        { t: "Acht", ru: "Восемь", ok: false, warum: "Acht Beine haben Spinnen. Insekten haben sechs.", warumRu: "Восемь ног у пауков. У насекомых шесть." },
+        { t: "Vier", ru: "Четыре", ok: false, warum: "Insekten haben sechs Beine.", warumRu: "У насекомых шесть ног." }] },
+      { typ: "zuordnen", frage: "Erkennst du die Vögel?", ru: "Узнаёшь птиц?", gruppen: [
+        { id: "amsel", name: "Amsel", ru: "Чёрный дрозд", bild: "🐦‍⬛" }, { id: "meise", name: "Kohlmeise", ru: "Большая синица", bild: "🐤" }, { id: "rotkehlchen", name: "Rotkehlchen", ru: "Зарянка", bild: "🐦" }], dinge: [
+        { t: "Schwarz mit gelbem Schnabel (Männchen)", ru: "Чёрный с жёлтым клювом (самец)", gruppe: "amsel" },
+        { t: "Gelber Bauch, schwarzer Kopf", ru: "Жёлтое брюшко, чёрная голова", gruppe: "meise" },
+        { t: "Orangerote Brust", ru: "Оранжево-красная грудка", gruppe: "rotkehlchen" }] },
+      { typ: "daumen", satz: "Der Spatz ist ein kleiner, brauner Vogel, der oft in der Stadt lebt.", satzRu: "Воробей — маленькая коричневая птица, которая часто живёт в городе.", bild: "🐦", ok: true,
+        warum: "Stimmt! Spatzen leben gern in der Nähe von Menschen und baden sogar im Sand.", warumRu: "Верно! Воробьи любят жить рядом с людьми и даже купаются в песке." },
+      { typ: "daumen", satz: "Kleine Tiere darf ich fangen und in ein Glas ohne Luftlöcher stecken.", satzRu: "Маленьких животных можно ловить и сажать в банку без дырок.", bild: "🫙", ok: false,
+        warum: "Nein! Beobachte sie lieber vorsichtig mit der Becherlupe und lass sie danach wieder frei, wo du sie gefunden hast.", warumRu: "Нет! Лучше осторожно наблюдай через лупу-стаканчик и потом отпусти там, где нашёл." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Wenn viele verschiedene Tiere leben, nennt man das Artenvielfalt. Eine wilde Ecke mit Blumen im Garten hilft ihnen.",
+        ru: "Отлично, {name}! Когда живёт много разных животных, это называется биоразнообразием. Дикий уголок с цветами в саду им помогает." }
+    ]
+  },
+  {
+    id: "haustiere", lb: "pt", kl: 2, lz: ["su.na.06"], name: "Heimtiere und Bauernhof", e: "🐶", farbe: "#3AA0E0", grund: "#E1F3FF",
+    kurz: "Tiere pflegen, ihre Körpersprache verstehen, was der Bauernhof uns gibt",
+    schritte: [
+      { typ: "info", titel: "Ein Tier braucht dich", bild: "🐹",
+        text: "Ein Heimtier wie Hund, Katze, Hamster oder Wellensittich braucht jeden Tag frisches Futter und Wasser, einen sauberen Platz, Bewegung – und Ruhe. Vorher informiert man sich gut, was das Tier braucht.",
+        ru: "Домашнему питомцу — собаке, кошке, хомяку или попугаю — каждый день нужны свежий корм и вода, чистое место, движение и покой. Заранее надо хорошо узнать, что нужно животному." },
+      { typ: "wahl", frage: "Ein Hund klemmt den Schwanz ein, legt die Ohren an und knurrt. Was bedeutet das?", ru: "Собака поджала хвост, прижала уши и рычит. Что это значит?", bild: "🐕", optionen: [
+        { t: "Er hat Angst – lass ihn in Ruhe", ru: "Ей страшно — оставь её в покое", ok: true, warum: "Genau! Tiere sprechen mit dem Körper. Ein ängstlicher Hund kann zuschnappen. Abstand halten!", warumRu: "Точно! Животные говорят телом. Испуганная собака может укусить. Держи дистанцию!" },
+        { t: "Er will spielen", ru: "Она хочет играть", ok: false, warum: "Nein. Eingeklemmter Schwanz und Knurren zeigen Angst oder Ärger.", warumRu: "Нет. Поджатый хвост и рычание — это страх или злость." },
+        { t: "Er ist müde", ru: "Она устала", ok: false, warum: "Nein. Er zeigt Angst. Lass ihn in Ruhe.", warumRu: "Нет. Она боится. Оставь её в покое." }] },
+      { typ: "daumen", satz: "Eine Katze, die schnurrt und sich an dich schmiegt, fühlt sich wohl.", satzRu: "Кошка, которая мурлычет и трётся о тебя, чувствует себя хорошо.", bild: "🐈", ok: true,
+        warum: "Stimmt! Aber auch eine zufriedene Katze möchte manchmal ihre Ruhe haben.", warumRu: "Верно! Но и довольная кошка иногда хочет покоя." },
+      { typ: "daumen", satz: "Nach dem Streicheln von Tieren wäscht man sich die Hände.", satzRu: "После того как гладил животных, моют руки.", bild: "🧼", ok: true,
+        warum: "Richtig! Tiere können Krankheitskeime tragen. Händewaschen schützt dich.", warumRu: "Правильно! Животные могут переносить микробы. Мытьё рук защищает." },
+      { typ: "zuordnen", frage: "Was bekommen wir von den Tieren auf dem Bauernhof?", ru: "Что мы получаем от животных на ферме?", gruppen: [
+        { id: "kuh", name: "Kuh", ru: "Корова", bild: "🐄" }, { id: "huhn", name: "Huhn", ru: "Курица", bild: "🐔" }, { id: "schaf", name: "Schaf", ru: "Овца", bild: "🐑" }], dinge: [
+        { t: "Milch, Käse, Butter", ru: "Молоко, сыр, масло", gruppe: "kuh" },
+        { t: "Eier", ru: "Яйца", gruppe: "huhn" },
+        { t: "Wolle", ru: "Шерсть", gruppe: "schaf" }] },
+      { typ: "wahl", frage: "Wo haben Kühe es besonders gut?", ru: "Где коровам особенно хорошо?", bild: "🐄", optionen: [
+        { t: "Auf der Weide mit viel Platz und Gras", ru: "На пастбище с простором и травой", ok: true, warum: "Richtig! Auf der Weide können sie laufen und fressen. Im Winter stehen sie im Stall. Manche Kühe leben in sehr großen Ställen mit wenig Platz – darüber sprechen viele Menschen.", warumRu: "Правильно! На пастбище они могут ходить и есть траву. Зимой стоят в хлеву. Некоторые коровы живут в очень больших фермах с малым местом — об этом многие спорят." },
+        { t: "In einem dunklen, engen Raum", ru: "В тёмной тесной комнате", ok: false, warum: "Nein. Kühe brauchen Platz, Licht und frisches Futter.", warumRu: "Нет. Коровам нужны простор, свет и свежий корм." },
+        { t: "Im Wohnzimmer", ru: "В гостиной", ok: false, warum: "Kühe sind Nutztiere, sie leben auf der Weide oder im Stall.", warumRu: "Коровы — сельскохозяйственные животные, они живут на пастбище или в хлеву." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Prima, {name}! Ein Tier ist kein Spielzeug. Wer eins möchte, überlegt mit der Familie gut, ob alle genug Zeit und Platz dafür haben.",
+        ru: "Отлично, {name}! Животное — не игрушка. Кто хочет питомца, обдумывает с семьёй, хватит ли у всех времени и места." }
+    ]
+  },
+  {
+    id: "licht-schatten", lb: "un", kl: 2, lz: ["su.na.04"], name: "Licht und Schatten", e: "🔦", farbe: "#E8A33D", grund: "#FFF1D9",
+    kurz: "Sonne, Lampe, Schatten, durchsichtig oder undurchsichtig",
+    schritte: [
+      { typ: "info", titel: "Woher kommt das Licht?", bild: "☀️",
+        text: "Die Sonne gibt Licht und Wärme. Lampe, Kerze und Taschenlampe sind künstliche Lichtquellen. Der Mond leuchtet nicht selbst – er wirft das Sonnenlicht zurück wie ein Spiegel.",
+        ru: "Солнце даёт свет и тепло. Лампа, свеча и фонарик — искусственные источники света. Луна сама не светится — она отражает солнечный свет, как зеркало." },
+      { typ: "zuordnen", frage: "Leuchtet es selbst oder nicht?", ru: "Светится само или нет?", gruppen: [
+        { id: "selbst", name: "Leuchtet selbst", ru: "Светится само", bild: "💡" }, { id: "nicht", name: "Wirft Licht nur zurück", ru: "Только отражает свет", bild: "🪞" }], dinge: [
+        { t: "Sonne", ru: "Солнце", gruppe: "selbst" },
+        { t: "Kerze", ru: "Свеча", gruppe: "selbst" },
+        { t: "Mond", ru: "Луна", gruppe: "nicht" },
+        { t: "Katzenauge am Fahrrad", ru: "Катафот на велосипеде", gruppe: "nicht" }] },
+      { typ: "zuordnen", frage: "Lässt es Licht durch?", ru: "Пропускает ли свет?", gruppen: [
+        { id: "durch", name: "Durchsichtig", ru: "Прозрачное", bild: "🪟" }, { id: "un", name: "Undurchsichtig", ru: "Непрозрачное", bild: "🧱" }], dinge: [
+        { t: "Fensterglas", ru: "Оконное стекло", gruppe: "durch" },
+        { t: "Holzbrett", ru: "Доска", gruppe: "un" },
+        { t: "Klarsichtfolie", ru: "Прозрачная плёнка", gruppe: "durch" },
+        { t: "Pappe", ru: "Картон", gruppe: "un" }] },
+      { typ: "wahl", frage: "Die Sonne steht hoch am Mittag. Wie ist dein Schatten?", ru: "В полдень солнце высоко. Какая у тебя тень?", bild: "🧍", optionen: [
+        { t: "Kurz", ru: "Короткая", ok: true, warum: "Genau! Steht die Lichtquelle hoch, ist der Schatten kurz. Morgens und abends ist er lang.", warumRu: "Точно! Если источник света высоко, тень короткая. Утром и вечером она длинная." },
+        { t: "Ganz lang", ru: "Очень длинная", ok: false, warum: "Lange Schatten gibt es morgens und abends, wenn die Sonne tief steht.", warumRu: "Длинные тени утром и вечером, когда солнце низко." },
+        { t: "Es gibt gar keinen Schatten", ru: "Тени совсем нет", ok: false, warum: "Doch, aber er ist kurz, weil die Sonne hoch steht.", warumRu: "Есть, но короткая, потому что солнце высоко." }] },
+      { typ: "daumen", satz: "Der Schatten ist immer auf der Seite, die von der Lampe abgewandt ist.", satzRu: "Тень всегда с той стороны, которая отвёрнута от лампы.", bild: "🔦", ok: true,
+        warum: "Stimmt! Licht – Gegenstand – Schatten liegen auf einer Linie. Danach funktioniert auch eine Sonnenuhr.", warumRu: "Верно! Свет — предмет — тень на одной линии. Так работают и солнечные часы." },
+      { typ: "daumen", satz: "Im Dunkeln sehen Autofahrer ein Kind mit heller Kleidung und Reflektoren viel früher.", satzRu: "В темноте водители гораздо раньше видят ребёнка в светлой одежде со светоотражателями.", bild: "🦺", ok: true,
+        warum: "Richtig! Reflektoren werfen das Scheinwerferlicht zurück. Darum trägt man im Herbst und Winter Leuchtstreifen.", warumRu: "Правильно! Светоотражатели отражают свет фар. Поэтому осенью и зимой носят светящиеся полоски." },
+      { typ: "daumen", satz: "Mit Sonnencreme, Mütze und Sonnenbrille schützt du dich im Sommer.", satzRu: "Кремом от солнца, кепкой и очками ты защищаешься летом.", bild: "🧴", ok: true,
+        warum: "Stimmt! Sonnenlicht ist gut, aber zu viel schadet Haut und Augen. Nie direkt in die Sonne schauen!", warumRu: "Верно! Солнце полезно, но слишком много вредит коже и глазам. Никогда не смотри прямо на солнце!" },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Probier zu Hause Schattenspiele mit der Taschenlampe: Kannst du einen Hasen an die Wand zaubern?",
+        ru: "Супер, {name}! Попробуй дома театр теней с фонариком: сможешь показать зайца на стене?" }
+    ]
+  },
+  {
+    id: "luft-schall", lb: "un", kl: 2, lz: ["su.na.04"], name: "Luft, Wind und Schall", e: "🎈", farbe: "#3AA0E0", grund: "#E1F3FF",
+    kurz: "Luft braucht Platz, Wind ist bewegte Luft, Töne reisen durch die Luft",
+    schritte: [
+      { typ: "info", titel: "Luft ist überall", bild: "🎈",
+        text: "Luft kann man nicht sehen, aber sie ist da: Sie braucht Platz, sie bremst, und wenn sie warm wird, dehnt sie sich aus. Bewegte Luft ist Wind. Und wenn Luft schwingt, hören wir Töne.",
+        ru: "Воздух не видно, но он есть: ему нужно место, он тормозит, а при нагревании расширяется. Движущийся воздух — это ветер. А когда воздух колеблется, мы слышим звуки." },
+      { typ: "wahl", frage: "Du drückst ein umgedrehtes Glas unter Wasser. Warum kommt kein Wasser hinein?", ru: "Ты погружаешь перевёрнутый стакан в воду. Почему вода не заходит внутрь?", bild: "🥛", optionen: [
+        { t: "Im Glas ist Luft, die Platz braucht", ru: "В стакане воздух, которому нужно место", ok: true, warum: "Richtig! Die Luft im Glas lässt das Wasser nicht hinein. Kippst du das Glas, blubbert die Luft heraus.", warumRu: "Правильно! Воздух в стакане не пускает воду. Если наклонить стакан, воздух выйдет пузырями." },
+        { t: "Das Glas ist verzaubert", ru: "Стакан заколдован", ok: false, warum: "Es ist keine Zauberei, sondern Luft. Sie braucht Platz.", warumRu: "Это не волшебство, а воздух. Ему нужно место." },
+        { t: "Wasser mag kein Glas", ru: "Вода не любит стекло", ok: false, warum: "Nein, im Glas ist Luft. Die braucht Platz.", warumRu: "Нет, в стакане воздух. Ему нужно место." }] },
+      { typ: "daumen", satz: "Ein Fallschirm fällt langsam, weil die Luft ihn bremst.", satzRu: "Парашют падает медленно, потому что воздух его тормозит.", bild: "🪂", ok: true,
+        warum: "Stimmt! Das nennt man Luftwiderstand. Auf dem Fahrrad spürst du ihn als Fahrtwind.", warumRu: "Верно! Это сопротивление воздуха. На велосипеде ты чувствуешь его как встречный ветер." },
+      { typ: "daumen", satz: "Ein Luftballon in der warmen Sonne wird ein bisschen dicker.", satzRu: "Воздушный шарик на тёплом солнце становится немного больше.", bild: "☀️", ok: true,
+        warum: "Richtig! Warme Luft dehnt sich aus. In der Kälte zieht sie sich zusammen.", warumRu: "Правильно! Тёплый воздух расширяется. На холоде сжимается." },
+      { typ: "zuordnen", frage: "Wind kann nützen und schaden. Ordne zu!", ru: "Ветер может помогать и вредить. Распредели!", gruppen: [
+        { id: "nutzen", name: "Nutzen", ru: "Польза", bild: "🌬️" }, { id: "gefahr", name: "Gefahr", ru: "Опасность", bild: "🌪️" }], dinge: [
+        { t: "Windrad macht Strom", ru: "Ветряк делает электричество", gruppe: "nutzen" },
+        { t: "Wäsche trocknet", ru: "Бельё сохнет", gruppe: "nutzen" },
+        { t: "Sturm wirft Bäume um", ru: "Буря валит деревья", gruppe: "gefahr" },
+        { t: "Dachziegel fliegen herunter", ru: "Слетает черепица", gruppe: "gefahr" }] },
+      { typ: "wahl", frage: "Du rufst laut gegen eine Felswand und hörst deine Stimme zurück. Wie heißt das?", ru: "Ты громко кричишь в сторону скалы и слышишь свой голос. Как это называется?", bild: "⛰️", optionen: [
+        { t: "Echo", ru: "Эхо", ok: true, warum: "Genau! Der Schall reist durch die Luft, prallt an der Wand ab und kommt zurück. Fledermäuse finden so im Dunkeln ihren Weg.", warumRu: "Точно! Звук летит по воздуху, отражается от стены и возвращается. Так летучие мыши находят путь в темноте." },
+        { t: "Wind", ru: "Ветер", ok: false, warum: "Nein, das ist ein Echo – der Schall kommt zurück.", warumRu: "Нет, это эхо — звук возвращается." },
+        { t: "Donner", ru: "Гром", ok: false, warum: "Donner kommt vom Gewitter. Deine zurückkommende Stimme ist ein Echo.", warumRu: "Гром бывает при грозе. Твой вернувшийся голос — эхо." }] },
+      { typ: "daumen", satz: "Erst sieht man den Blitz, dann hört man den Donner, weil Licht schneller ist als Schall.", satzRu: "Сначала видна молния, потом слышен гром, потому что свет быстрее звука.", bild: "⛈️", ok: true,
+        warum: "Stimmt! Zähl die Sekunden zwischen Blitz und Donner – je weniger, desto näher ist das Gewitter.", warumRu: "Верно! Считай секунды между молнией и громом — чем меньше, тем ближе гроза." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Bau aus zwei Bechern und einer Schnur ein Dosentelefon – der Schall reist dann durch die Schnur.",
+        ru: "Отлично, {name}! Сделай телефон из двух стаканчиков и нитки — звук побежит по нитке." }
+    ]
+  },
+  {
+    id: "wetter", lb: "un", kl: 2, lz: ["su.na.04"], name: "Wetter beobachten", e: "🌡️", farbe: "#2F86C8", grund: "#E5F1FB",
+    kurz: "Wettertabelle, Thermometer, die richtige Kleidung, sicher bei Nebel und Regen",
+    schritte: [
+      { typ: "info", titel: "Wetterforscher werden", bild: "🌦️",
+        text: "Wetterforscher schauen jeden Tag: Scheint die Sonne? Regnet es? Wie warm ist es? Das tragen sie mit Zeichen in eine Wettertabelle ein. Die Temperatur misst man mit dem Thermometer in Grad Celsius (°C).",
+        ru: "Исследователи погоды каждый день смотрят: светит ли солнце? Идёт ли дождь? Насколько тепло? Это записывают значками в таблицу погоды. Температуру измеряют термометром в градусах Цельсия (°C).",
+        fakten: [["☀️ sonnig", "☀️ солнечно"], ["🌧️ Regen", "🌧️ дождь"], ["🌫️ Nebel", "🌫️ туман"], ["❄️ Schnee", "❄️ снег"]] },
+      { typ: "wahl", frage: "Das Thermometer zeigt 0 °C. Was passiert mit Wasser draußen?", ru: "Термометр показывает 0 °C. Что происходит с водой на улице?", bild: "🧊", optionen: [
+        { t: "Es gefriert zu Eis", ru: "Она замерзает в лёд", ok: true, warum: "Richtig! 0 °C ist der Gefrierpunkt. Darüber schmilzt Eis wieder.", warumRu: "Правильно! 0 °C — точка замерзания. Выше лёд снова тает." },
+        { t: "Es kocht", ru: "Она кипит", ok: false, warum: "Wasser kocht erst bei 100 °C. Bei 0 °C gefriert es.", warumRu: "Вода кипит при 100 °C. При 0 °C она замерзает." },
+        { t: "Nichts", ru: "Ничего", ok: false, warum: "Bei 0 °C gefriert Wasser – das ist der Gefrierpunkt.", warumRu: "При 0 °C вода замерзает — это точка замерзания." }] },
+      { typ: "zuordnen", frage: "Welche Kleidung passt zu welchem Wetter?", ru: "Какая одежда к какой погоде?", gruppen: [
+        { id: "regen", name: "Regen", ru: "Дождь", bild: "🌧️" }, { id: "sonne", name: "Hitze", ru: "Жара", bild: "☀️" }, { id: "kalt", name: "Frost", ru: "Мороз", bild: "❄️" }], dinge: [
+        { t: "Gummistiefel und Regenjacke", ru: "Резиновые сапоги и дождевик", gruppe: "regen" },
+        { t: "Sonnenhut und leichtes T-Shirt", ru: "Панама и лёгкая футболка", gruppe: "sonne" },
+        { t: "Mütze, Schal und Handschuhe", ru: "Шапка, шарф и перчатки", gruppe: "kalt" }] },
+      { typ: "daumen", satz: "Bei Nebel und Dunkelheit sehen Autofahrer Kinder schlechter – helle Kleidung hilft.", satzRu: "В туман и темноту водители хуже видят детей — светлая одежда помогает.", bild: "🌫️", ok: true,
+        warum: "Stimmt! Und bei regennasser Straße brauchen Autos einen längeren Bremsweg. Darum besonders vorsichtig über die Straße gehen.", warumRu: "Верно! А на мокрой дороге машинам нужно больше места для торможения. Поэтому переходи улицу особенно осторожно." },
+      { typ: "wahl", frage: "Montag 12 °C, Dienstag 15 °C, Mittwoch 9 °C. Wann war es am wärmsten?", ru: "Понедельник 12 °C, вторник 15 °C, среда 9 °C. Когда было теплее всего?", bild: "📊", optionen: [
+        { t: "Am Dienstag", ru: "Во вторник", ok: true, warum: "Genau! 15 °C ist die höchste Zahl. So wertet man eine Wettertabelle aus.", warumRu: "Точно! 15 °C — самое большое число. Так читают таблицу погоды." },
+        { t: "Am Mittwoch", ru: "В среду", ok: false, warum: "9 °C war am kältesten. Am wärmsten war der Dienstag mit 15 °C.", warumRu: "9 °C — самое холодное. Теплее всего во вторник: 15 °C." },
+        { t: "Am Montag", ru: "В понедельник", ok: false, warum: "12 °C ist weniger als 15 °C. Dienstag war am wärmsten.", warumRu: "12 °C меньше 15 °C. Теплее всего было во вторник." }] },
+      { typ: "daumen", satz: "Die Wettervorhersage im Radio oder in der App sagt, wie das Wetter morgen wahrscheinlich wird.", satzRu: "Прогноз по радио или в приложении говорит, какая погода, вероятно, будет завтра.", bild: "📻", ok: true,
+        warum: "Richtig! „Wahrscheinlich“ – manchmal kommt es anders. Vergleich die Vorhersage mit deiner eigenen Beobachtung!", warumRu: "Правильно! «Вероятно» — иногда бывает иначе. Сравни прогноз со своим наблюдением!" },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Prima, {name}! Führ eine Woche lang eine Wettertabelle: jeden Morgen ein Zeichen und die Temperatur. Auf der Insel kannst du das Wetter auch sehen.",
+        ru: "Отлично, {name}! Веди неделю таблицу погоды: каждое утро значок и температура. Погоду можно увидеть и на острове." }
+    ]
+  },
+  {
+    id: "loesen-trennen", lb: "un", kl: 2, lz: ["su.na.04", "su.na.07"], name: "Lösen und trennen", e: "🧂", farbe: "#7B55B8", grund: "#EFE6FF",
+    kurz: "Was löst sich in Wasser? Filtern, verdunsten – und Vorsicht bei Putzmitteln",
+    schritte: [
+      { typ: "info", titel: "Wasser als Lösungsmittel", bild: "🥄",
+        text: "Rührst du Salz oder Zucker in Wasser, ist es bald nicht mehr zu sehen – es hat sich gelöst. Sand oder Kieselsteine lösen sich nicht. In warmem Wasser und beim Umrühren löst sich vieles schneller.",
+        ru: "Если размешать соль или сахар в воде, вскоре их не видно — они растворились. Песок и галька не растворяются. В тёплой воде и при помешивании многое растворяется быстрее." },
+      { typ: "zuordnen", frage: "Löst es sich in Wasser oder nicht?", ru: "Растворяется ли в воде?", gruppen: [
+        { id: "ja", name: "Löst sich", ru: "Растворяется", bild: "✨" }, { id: "nein", name: "Löst sich nicht", ru: "Не растворяется", bild: "🪨" }], dinge: [
+        { t: "Salz", ru: "Соль", gruppe: "ja" },
+        { t: "Zucker", ru: "Сахар", gruppe: "ja" },
+        { t: "Sand", ru: "Песок", gruppe: "nein" },
+        { t: "Murmel", ru: "Стеклянный шарик", gruppe: "nein" }] },
+      { typ: "wahl", frage: "Wie bekommst du Sand wieder aus dem Wasser?", ru: "Как отделить песок от воды?", bild: "☕", optionen: [
+        { t: "Durch einen Kaffeefilter gießen", ru: "Пропустить через фильтр", ok: true, warum: "Richtig! Das Wasser läuft durch, der Sand bleibt im Filter hängen. Oder du wartest, bis der Sand sich unten absetzt.", warumRu: "Правильно! Вода проходит, песок остаётся в фильтре. Или подожди, пока песок осядет на дно." },
+        { t: "Kräftig umrühren", ru: "Сильно помешать", ok: false, warum: "Dann wirbelt der Sand nur herum. Filtern oder absetzen lassen hilft.", warumRu: "Тогда песок только кружится. Помогает фильтр или отстаивание." },
+        { t: "Gar nicht", ru: "Никак", ok: false, warum: "Doch! Mit einem Filter geht es.", warumRu: "Можно! С помощью фильтра." }] },
+      { typ: "wahl", frage: "Salzwasser steht ein paar Tage in einer flachen Schale am Fenster. Was bleibt übrig?", ru: "Солёная вода несколько дней стоит в плоской миске у окна. Что останется?", bild: "🧂", optionen: [
+        { t: "Kleine Salzkristalle", ru: "Маленькие кристаллы соли", ok: true, warum: "Genau! Das Wasser ist verdunstet, das Salz bleibt zurück und bildet Kristalle.", warumRu: "Точно! Вода испарилась, соль осталась и образовала кристаллы." },
+        { t: "Gar nichts", ru: "Ничего", ok: false, warum: "Das Wasser verdunstet, aber das Salz bleibt als Kristalle zurück.", warumRu: "Вода испаряется, а соль остаётся кристаллами." },
+        { t: "Süßer Sirup", ru: "Сладкий сироп", ok: false, warum: "Es war Salz – es bleiben Salzkristalle.", warumRu: "Это была соль — остаются кристаллы соли." }] },
+      { typ: "daumen", satz: "Eine Flasche mit klarer Flüssigkeit aus dem Putzschrank kann man trinken, wenn sie wie Wasser aussieht.", satzRu: "Бутылку с прозрачной жидкостью из шкафа с моющими средствами можно пить, если она похожа на воду.", bild: "🧴", ok: false,
+        warum: "Nein! Putzmittel können giftig oder ätzend sein, auch wenn sie wie Wasser aussehen. Nie probieren – und solche Mittel nie in Trinkflaschen füllen.", warumRu: "Нет! Моющие средства могут быть ядовитыми или едкими, даже если похожи на воду. Никогда не пробуй — и никогда не наливай их в бутылки для питья." },
+      { typ: "wahl", frage: "Was bedeutet ein Warnzeichen mit Totenkopf auf einer Flasche?", ru: "Что означает знак с черепом на бутылке?", bild: "☠️", optionen: [
+        { t: "Giftig – nicht anfassen, Erwachsenen geben", ru: "Ядовито — не трогать, отдать взрослым", ok: true, warum: "Richtig! Solche Flaschen gehören verschlossen und für Kinder unerreichbar aufbewahrt.", warumRu: "Правильно! Такие бутылки хранят закрытыми и недоступными для детей." },
+        { t: "Piratenschatz", ru: "Пиратский клад", ok: false, warum: "Nein! Der Totenkopf warnt vor Gift.", warumRu: "Нет! Череп предупреждает о яде." },
+        { t: "Besonders lecker", ru: "Особенно вкусно", ok: false, warum: "Nein! Das Zeichen heißt: giftig.", warumRu: "Нет! Знак означает «ядовито»." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Mach mit einem Erwachsenen den Salz-Versuch: Salzwasser in eine Schale, ans Fenster stellen und jeden Tag nachsehen.",
+        ru: "Супер, {name}! Сделай со взрослым опыт с солью: солёную воду в миску, на окно, и смотри каждый день." }
+    ]
+  },
+  {
+    id: "schule-ort", lb: "rz", kl: 2, lz: ["su.ge.01", "su.ge.02", "su.hi.04"], name: "Schule und Heimatort", e: "🏘️", farbe: "#5DB84A", grund: "#E3F5DC",
+    kurz: "Räume der Schule, Fluchtweg, wichtige Orte, Ortsplan, Bus und Bahn",
+    schritte: [
+      { typ: "info", titel: "Mein Schulhaus", bild: "🏫",
+        text: "In der Schule gibt es viele Räume: Klassenzimmer, Turnhalle, Sekretariat, Speisesaal, Toiletten und vielleicht eine Bibliothek. Grüne Schilder mit einem laufenden Männchen zeigen den Fluchtweg nach draußen.",
+        ru: "В школе много помещений: классы, спортзал, секретариат, столовая, туалеты и, может быть, библиотека. Зелёные знаки с бегущим человечком показывают путь эвакуации наружу." },
+      { typ: "wahl", frage: "Der Feueralarm schrillt. Was machst du?", ru: "Звенит пожарная тревога. Что ты делаешь?", bild: "🚨", optionen: [
+        { t: "Ruhig mit der Klasse dem Fluchtweg nach draußen folgen", ru: "Спокойно идти с классом по пути эвакуации наружу", ok: true, warum: "Genau! Nichts mitnehmen, nicht rennen, bei der Lehrerin bleiben und am Sammelplatz warten.", warumRu: "Точно! Ничего не брать, не бежать, держаться учительницы и ждать на месте сбора." },
+        { t: "Meinen Ranzen packen", ru: "Собрать рюкзак", ok: false, warum: "Nein! Sachen bleiben liegen. Schnell und ruhig raus.", warumRu: "Нет! Вещи оставляют. Быстро и спокойно наружу." },
+        { t: "Mich in der Toilette verstecken", ru: "Спрятаться в туалете", ok: false, warum: "Nein! Nie verstecken. Mit der Klasse raus zum Sammelplatz.", warumRu: "Нет! Никогда не прятаться. С классом наружу к месту сбора." }] },
+      { typ: "zuordnen", frage: "Wer hilft mir wo?", ru: "Кто где мне поможет?", gruppen: [
+        { id: "arzt", name: "Arztpraxis", ru: "Врач", bild: "🩺" }, { id: "biblio", name: "Bibliothek", ru: "Библиотека", bild: "📚" }, { id: "rathaus", name: "Rathaus", ru: "Ратуша", bild: "🏛️" }], dinge: [
+        { t: "Ich habe Halsschmerzen", ru: "У меня болит горло", gruppe: "arzt" },
+        { t: "Ich suche ein Buch über Pferde", ru: "Ищу книгу о лошадях", gruppe: "biblio" },
+        { t: "Ich brauche einen Kinderausweis", ru: "Нужен детский паспорт", gruppe: "rathaus" }] },
+      { typ: "wahl", frage: "Auf einem Ortsplan ist die Kirche als Kreuz eingezeichnet. Wo steht, was die Zeichen bedeuten?", ru: "На плане посёлка церковь отмечена крестиком. Где написано, что значат значки?", bild: "🗺️", optionen: [
+        { t: "In der Legende", ru: "В легенде (условных обозначениях)", ok: true, warum: "Richtig! Die Legende erklärt alle Zeichen eines Plans.", warumRu: "Правильно! Легенда объясняет все значки плана." },
+        { t: "Auf der Rückseite der Kirche", ru: "На обратной стороне церкви", ok: false, warum: "Nein, die Zeichen erklärt die Legende auf dem Plan.", warumRu: "Нет, значки объясняет легенда на плане." },
+        { t: "Nirgends", ru: "Нигде", ok: false, warum: "Doch – in der Legende.", warumRu: "Есть — в легенде." }] },
+      { typ: "daumen", satz: "Straßennamen, alte Häuser und Museen erzählen etwas über die Geschichte meines Ortes.", satzRu: "Названия улиц, старые дома и музеи рассказывают об истории моего места.", bild: "🏛️", ok: true,
+        warum: "Stimmt! Frag Oma, Opa oder Nachbarn, wie es früher bei euch aussah – das sind Spuren der Vergangenheit.", warumRu: "Верно! Спроси бабушку, дедушку или соседей, как раньше всё выглядело, — это следы прошлого." },
+      { typ: "wahl", frage: "Du wartest an der Bushaltestelle. Wo stehst du?", ru: "Ты ждёшь на автобусной остановке. Где ты стоишь?", bild: "🚌", optionen: [
+        { t: "Mit Abstand zur Bordsteinkante", ru: "На расстоянии от края тротуара", ok: true, warum: "Genau! Erst wenn der Bus steht und die Tür offen ist, steigst du ein – ohne Drängeln.", warumRu: "Точно! Садишься только когда автобус остановился и дверь открыта — без толкотни." },
+        { t: "Direkt an der Straße", ru: "Прямо у дороги", ok: false, warum: "Zu gefährlich! Bleib mit Abstand zur Bordsteinkante.", warumRu: "Слишком опасно! Стой подальше от края." },
+        { t: "Auf der Fahrbahn", ru: "На проезжей части", ok: false, warum: "Nein! Nie auf die Fahrbahn. Warte mit Abstand.", warumRu: "Нет! Никогда на дорогу. Жди на расстоянии." }] },
+      { typ: "daumen", satz: "Ein freundlicher Fremder bietet an, mich mit dem Auto nach Hause zu fahren. Ich steige ein.", satzRu: "Дружелюбный незнакомец предлагает отвезти меня домой. Я сажусь в машину.", bild: "🚗", ok: false,
+        warum: "Nein! Geh nie mit Fremden mit und steig nie zu ihnen ins Auto. Lauf weg und erzähl es einem Erwachsenen, dem du vertraust.", warumRu: "Нет! Никогда не уходи с незнакомцами и не садись к ним в машину. Убеги и расскажи взрослому, которому доверяешь." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Mal eine Wegskizze von deiner Schule nach Hause: Welche wichtigen Orte kommen unterwegs vorbei?",
+        ru: "Отлично, {name}! Нарисуй схему пути от школы домой: какие важные места по дороге?" }
+    ]
+  },
+  {
+    id: "meine-schulzeit", lb: "ex", kl: 2, lz: ["su.hi.03"], name: "Meine ersten Schuljahre", e: "🎒", farbe: "#C2337A", grund: "#FDEAF3",
+    kurz: "Zeitleiste, schönste Momente, Portfolio, Steckbrief zu meinem Lieblingstier",
+    schritte: [
+      { typ: "info", titel: "Rückschau", bild: "📅",
+        text: "Erinnerst du dich an deinen ersten Schultag? An die Zuckertüte, das erste Wort, das du lesen konntest? In einem Portfolio sammelst du deine besten Arbeiten – so siehst du, was du alles gelernt hast.",
+        ru: "Помнишь свой первый школьный день? Кулёк со сладостями, первое прочитанное слово? В портфолио собирают лучшие работы — так видно, сколькому ты научился." },
+      { typ: "wahl", frage: "Was gehört in eine Zeitleiste deiner Schulzeit ganz nach vorn?", ru: "Что ставят в самое начало временной ленты твоей учёбы?", bild: "➡️", optionen: [
+        { t: "Der erste Schultag", ru: "Первый школьный день", ok: true, warum: "Richtig! Eine Zeitleiste ordnet Ereignisse nach der Zeit: erst der erste Schultag, dann das erste Zeugnis und so weiter.", warumRu: "Правильно! Временная лента упорядочивает события: сначала первый день, потом первый табель и так далее." },
+        { t: "Die Sommerferien nach Klasse 2", ru: "Летние каникулы после 2 класса", ok: false, warum: "Die kommen später. Ganz vorn steht der erste Schultag.", warumRu: "Они позже. В начале — первый школьный день." },
+        { t: "Das Zeugnis der 2. Klasse", ru: "Табель 2 класса", ok: false, warum: "Das ist später. Vorn steht der erste Schultag.", warumRu: "Это позже. В начале — первый день." }] },
+      { typ: "daumen", satz: "Etwas, das mir am Anfang schwerfiel und das ich jetzt kann, ist ein echter Erfolg.", satzRu: "То, что сначала было трудно, а теперь получается, — настоящий успех.", bild: "🏆", ok: true,
+        warum: "Stimmt! Gerade gemeisterte Schwierigkeiten zeigen, wie viel du gelernt hast. Darauf darfst du stolz sein.", warumRu: "Верно! Преодолённые трудности показывают, сколько ты научился. Этим можно гордиться." },
+      { typ: "zuordnen", frage: "Was gehört in einen Tier-Steckbrief?", ru: "Что входит в анкету животного?", gruppen: [
+        { id: "ja", name: "Gehört hinein", ru: "Входит", bild: "📋" }, { id: "nein", name: "Gehört nicht hinein", ru: "Не входит", bild: "🚫" }], dinge: [
+        { t: "Name des Tieres", ru: "Название животного", gruppe: "ja" },
+        { t: "Was es frisst und wo es lebt", ru: "Что ест и где живёт", gruppe: "ja" },
+        { t: "Was es im Laden kostet", ru: "Сколько стоит в магазине", gruppe: "nein" },
+        { t: "Mein Lieblingsessen", ru: "Моя любимая еда", gruppe: "nein" }] },
+      { typ: "wahl", frage: "Wie kannst du deine gelungenen Arbeiten anderen zeigen?", ru: "Как показать другим свои удачные работы?", bild: "🖼️", optionen: [
+        { t: "Als Plakat, Mappe oder kleine Ausstellung", ru: "Плакатом, папкой или маленькой выставкой", ok: true, warum: "Genau! Es gibt viele Präsentationsformen – auch Fotos am Tablet.", warumRu: "Точно! Есть много способов показать — и фото на планшете." },
+        { t: "Gar nicht, das ist peinlich", ru: "Никак, это стыдно", ok: false, warum: "Doch! Zeig ruhig, was du geschafft hast. Das macht Mut.", warumRu: "Можно! Покажи, что ты сделал. Это придаёт смелости." },
+        { t: "Wegwerfen", ru: "Выбросить", ok: false, warum: "Lieber aufheben! Später freust du dich darüber.", warumRu: "Лучше сохранить! Потом будешь рад." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Wunderbar, {name}! Mach dir mit deiner Familie eine Schatzkiste: das erste Lesebuch-Blatt, ein schönes Bild, ein Foto vom ersten Schultag.",
+        ru: "Чудесно, {name}! Сделай с семьёй шкатулку-сокровищницу: первый лист из букваря, красивый рисунок, фото первого школьного дня." }
+    ]
+  }
+);
+// ---------- Schuljahr Sachunterricht (Lehrplan Sachsen 2019, Kl. 3 und 4) ----------
+window.THEMEN.push(
+  {
+    id: "kulturen", lb: "zl", stufe: 3, lz: ["su.so.04"], name: "Kinder der Welt", e: "🌏", farbe: "#2F86C8", grund: "#E5F1FB",
+    kurz: "Andere Länder, Feste und Gewohnheiten – und was uns verbindet",
+    schritte: [
+      { typ: "info", titel: "Viele Kulturen", bild: "🌍",
+        text: "Kinder auf der ganzen Welt spielen, lernen und feiern – aber oft auf unterschiedliche Weise. Vielleicht kommen Kinder in deiner Klasse aus anderen Ländern. Auf dem Globus und im Atlas findest du, wo diese Länder liegen.",
+        ru: "Дети по всему миру играют, учатся и празднуют — но часто по-разному. Может быть, в твоём классе есть дети из других стран. На глобусе и в атласе можно найти, где эти страны." },
+      { typ: "zuordnen", frage: "Welches Fest gehört zu wem?", ru: "Какой праздник чей?", gruppen: [
+        { id: "licht", name: "Lichterfeste", ru: "Праздники огней", bild: "🪔" }, { id: "fasten", name: "Fest nach dem Fasten", ru: "Праздник после поста", bild: "🌙" }], dinge: [
+        { t: "Diwali (Hinduismus)", ru: "Дивали (индуизм)", gruppe: "licht" },
+        { t: "Chanukka (Judentum)", ru: "Ханука (иудаизм)", gruppe: "licht" },
+        { t: "Zuckerfest (Islam)", ru: "Ураза-байрам (ислам)", gruppe: "fasten" },
+        { t: "Ostern (Christentum)", ru: "Пасха (христианство)", gruppe: "fasten" }] },
+      { typ: "wahl", frage: "In Japan begrüßen sich viele Menschen mit einer Verbeugung. Was zeigt das?", ru: "В Японии многие здороваются поклоном. Что это показывает?", bild: "🙇", optionen: [
+        { t: "Es gibt verschiedene Arten, höflich zu sein", ru: "Вежливость бывает разной", ok: true, warum: "Genau! Händeschütteln, Verbeugung, Wangenkuss – alles heißt: Schön, dich zu sehen.", warumRu: "Точно! Рукопожатие, поклон, поцелуй в щёку — всё значит: рад тебя видеть." },
+        { t: "Japaner sind unhöflich", ru: "Японцы невежливы", ok: false, warum: "Nein! Die Verbeugung ist dort sehr höflich – nur anders als bei uns.", warumRu: "Нет! Поклон там очень вежлив — просто иначе, чем у нас." },
+        { t: "Sie haben Rückenschmerzen", ru: "У них болит спина", ok: false, warum: "Nein, das ist eine höfliche Begrüßung.", warumRu: "Нет, это вежливое приветствие." }] },
+      { typ: "daumen", satz: "Wer mit Stäbchen isst, isst falsch.", satzRu: "Кто ест палочками, ест неправильно.", bild: "🥢", ok: false,
+        warum: "Nein! In vielen Ländern isst man mit Stäbchen, anderswo mit Besteck oder mit der Hand. Nichts davon ist falsch.", warumRu: "Нет! Во многих странах едят палочками, где-то приборами или руками. Ничто из этого не ошибка." },
+      { typ: "daumen", satz: "Kinder überall auf der Welt spielen gern Fangen und Verstecken.", satzRu: "Дети во всём мире любят догонялки и прятки.", bild: "🙈", ok: true,
+        warum: "Stimmt! Vieles ist anders, vieles ist gleich. Im Fremden entdeckt man oft Eigenes.", warumRu: "Верно! Многое разное, многое одинаковое. В чужом часто находишь своё." },
+      { typ: "wahl", frage: "Ein neues Kind kommt aus einem anderen Land in deine Klasse. Was ist eine gute Idee?", ru: "В класс пришёл новый ребёнок из другой страны. Что будет хорошей идеей?", bild: "🤝", optionen: [
+        { t: "Es fragen, wie man in seiner Sprache „Hallo“ sagt", ru: "Спросить, как на его языке «привет»", ok: true, warum: "Toll! So zeigst du Interesse und das Kind fühlt sich willkommen.", warumRu: "Здорово! Так ты показываешь интерес, и ребёнку приятно." },
+        { t: "Es nicht beachten", ru: "Не обращать внимания", ok: false, warum: "Lieber nicht. Jeder möchte dazugehören.", warumRu: "Лучше не надо. Каждый хочет быть своим." },
+        { t: "Über seine Kleidung lachen", ru: "Смеяться над его одеждой", ok: false, warum: "Nein, das verletzt. Sei neugierig und freundlich.", warumRu: "Нет, это обидно. Будь любопытным и дружелюбным." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Such mit deiner Familie auf dem Globus ein Land, das du nicht kennst, und finde drei Dinge darüber heraus.",
+        ru: "Супер, {name}! Найди с семьёй на глобусе незнакомую страну и узнай о ней три вещи." }
+    ]
+  },
+  {
+    id: "land-frueher", lb: "zl", stufe: 3, lz: ["su.hi.03", "su.hi.04"], name: "Leben auf dem Land – früher und heute", e: "🚜", farbe: "#8A6E2F", grund: "#F7F0DD",
+    kurz: "Pferd und Pflug, Traktor und Mähdrescher, Berufe und Freizeit im Dorf",
+    schritte: [
+      { typ: "info", titel: "Ein Dorf vor 100 Jahren", bild: "🐴",
+        text: "Früher arbeiteten fast alle Menschen auf dem Dorf in der Landwirtschaft. Pferde zogen den Pflug, man drosch das Korn mit dem Dreschflegel und holte Wasser vom Brunnen. Auch Kinder mussten viel mithelfen.",
+        ru: "Раньше почти все жители деревни работали в сельском хозяйстве. Лошади тянули плуг, зерно молотили цепом, воду носили из колодца. Дети тоже много помогали." },
+      { typ: "zuordnen", frage: "Früher oder heute?", ru: "Раньше или сейчас?", gruppen: [
+        { id: "frueher", name: "Früher", ru: "Раньше", bild: "🕰️" }, { id: "heute", name: "Heute", ru: "Сейчас", bild: "📱" }], dinge: [
+        { t: "Pferd vor dem Pflug", ru: "Лошадь с плугом", gruppe: "frueher" },
+        { t: "Mähdrescher erntet das Korn", ru: "Комбайн убирает зерно", gruppe: "heute" },
+        { t: "Wasser vom Dorfbrunnen holen", ru: "Носить воду из колодца", gruppe: "frueher" },
+        { t: "Melkroboter im Kuhstall", ru: "Доильный робот в коровнике", gruppe: "heute" }] },
+      { typ: "wahl", frage: "Warum arbeiten heute viel weniger Menschen in der Landwirtschaft?", ru: "Почему сейчас гораздо меньше людей работает в сельском хозяйстве?", bild: "🚜", optionen: [
+        { t: "Maschinen erledigen viel Arbeit", ru: "Машины делают много работы", ok: true, warum: "Richtig! Ein Mähdrescher schafft an einem Tag, wofür früher viele Menschen Wochen brauchten.", warumRu: "Правильно! Комбайн за день делает то, на что раньше много людей тратили недели." },
+        { t: "Weil niemand mehr Brot isst", ru: "Потому что никто не ест хлеб", ok: false, warum: "Doch, Brot essen wir noch. Maschinen machen die Arbeit.", warumRu: "Хлеб едят. Работу делают машины." },
+        { t: "Weil es keine Felder mehr gibt", ru: "Потому что нет полей", ok: false, warum: "Felder gibt es noch. Aber Maschinen helfen.", warumRu: "Поля есть. Но помогают машины." }] },
+      { typ: "daumen", satz: "Früher waren die Aufgaben meist fest verteilt: Frauen im Haus, Männer auf dem Feld. Heute ist das viel freier.", satzRu: "Раньше обязанности были обычно чётко разделены: женщины дома, мужчины в поле. Сейчас это гораздо свободнее.", bild: "👩‍🌾", ok: true,
+        warum: "Stimmt! Heute kann jeder jeden Beruf lernen – auch Bäuerin oder Landwirt.", warumRu: "Верно! Сейчас каждый может выучить любую профессию — и фермера тоже." },
+      { typ: "wahl", frage: "Wie kannst du herausfinden, wie man früher in deinem Ort lebte?", ru: "Как узнать, как раньше жили в твоём посёлке?", bild: "🏛️", optionen: [
+        { t: "Ältere Menschen befragen, alte Fotos und Gegenstände im Museum ansehen", ru: "Расспросить пожилых, посмотреть старые фото и вещи в музее", ok: true, warum: "Genau! Das sind Quellen. Mit ihnen kann man die Vergangenheit erforschen.", warumRu: "Точно! Это источники. С ними можно исследовать прошлое." },
+        { t: "Raten", ru: "Угадывать", ok: false, warum: "Besser sind echte Quellen: Menschen, Fotos, Museen.", warumRu: "Лучше настоящие источники: люди, фото, музеи." },
+        { t: "Einen Zeichentrickfilm schauen", ru: "Посмотреть мультфильм", ok: false, warum: "Filme sind oft ausgedacht. Echte Quellen sind besser.", warumRu: "Фильмы часто выдуманы. Настоящие источники лучше." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Prima, {name}! Frag Oma oder Opa: Womit habt ihr als Kinder gespielt, und wie sah euer Dorf oder eure Stadt aus?",
+        ru: "Отлично, {name}! Спроси бабушку или дедушку: во что вы играли в детстве и как выглядела ваша деревня или город?" }
+    ]
+  },
+  {
+    id: "sinne-genau", lb: "kg", stufe: 3, lz: ["su.na.02"], name: "Auge und Ohr genauer", e: "👁️", farbe: "#3AA0E0", grund: "#E1F3FF",
+    kurz: "Wie Auge und Ohr arbeiten, Sinnestäuschungen, Schutz und Hilfe für Menschen mit Behinderung",
+    schritte: [
+      { typ: "info", titel: "So sieht das Auge", bild: "👁️",
+        text: "Licht fällt durch das schwarze Loch in der Mitte – die Pupille. Die farbige Iris drumherum macht sie größer oder kleiner. Hinten im Auge entsteht das Bild, und der Sehnerv bringt es zum Gehirn.",
+        ru: "Свет проходит через чёрное отверстие в центре — зрачок. Цветная радужка вокруг делает его больше или меньше. Внутри глаза возникает изображение, а зрительный нерв передаёт его в мозг.",
+        fakten: [["Pupille ⚫", "Зрачок ⚫"], ["Iris 🟤", "Радужка 🟤"], ["Linse 🔍", "Хрусталик 🔍"], ["Sehnerv 🧠", "Зрительный нерв 🧠"]] },
+      { typ: "wahl", frage: "Du kommst aus dem Dunkeln ins helle Licht. Was macht deine Pupille?", ru: "Ты выходишь из темноты на яркий свет. Что делает зрачок?", bild: "💡", optionen: [
+        { t: "Sie wird kleiner", ru: "Становится меньше", ok: true, warum: "Richtig! So kommt weniger Licht ins Auge. Im Dunkeln wird sie groß.", warumRu: "Правильно! Так в глаз попадает меньше света. В темноте он расширяется." },
+        { t: "Sie wird größer", ru: "Становится больше", ok: false, warum: "Im Hellen wird sie kleiner, damit nicht zu viel Licht hineinfällt.", warumRu: "На свету он уменьшается, чтобы не попадало слишком много света." },
+        { t: "Sie verschwindet", ru: "Исчезает", ok: false, warum: "Nein, sie wird nur kleiner.", warumRu: "Нет, он только уменьшается." }] },
+      { typ: "daumen", satz: "Das Trommelfell im Ohr schwingt, wenn Schall darauf trifft.", satzRu: "Барабанная перепонка в ухе колеблется, когда на неё попадает звук.", bild: "👂", ok: true,
+        warum: "Stimmt! Die Ohrmuschel fängt den Schall, das Trommelfell schwingt, und Nerven melden es dem Gehirn.", warumRu: "Верно! Ушная раковина ловит звук, перепонка колеблется, а нервы сообщают мозгу." },
+      { typ: "daumen", satz: "Manchmal täuschen uns die Augen: Zwei gleich lange Linien sehen verschieden lang aus.", satzRu: "Иногда глаза обманывают: две одинаковые линии кажутся разной длины.", bild: "↔️", ok: true,
+        warum: "Richtig! Das ist eine Sinnestäuschung. Mit dem Lineal kann man nachprüfen.", warumRu: "Правильно! Это обман чувств. Линейкой можно проверить." },
+      { typ: "zuordnen", frage: "Wie schützt du Augen und Ohren?", ru: "Как защитить глаза и уши?", gruppen: [
+        { id: "auge", name: "Augen", ru: "Глаза", bild: "👓" }, { id: "ohr", name: "Ohren", ru: "Уши", bild: "🎧" }], dinge: [
+        { t: "Sonnenbrille im Sommer", ru: "Солнечные очки летом", gruppe: "auge" },
+        { t: "Beim Lesen gutes Licht", ru: "Хороший свет при чтении", gruppe: "auge" },
+        { t: "Kopfhörer nicht zu laut", ru: "Наушники не слишком громко", gruppe: "ohr" },
+        { t: "Gehörschutz bei Lärm", ru: "Защита ушей при шуме", gruppe: "ohr" }] },
+      { typ: "wahl", frage: "Wie lesen blinde Menschen?", ru: "Как читают слепые люди?", bild: "⠃", optionen: [
+        { t: "Mit den Fingern in Blindenschrift (Punkte zum Ertasten)", ru: "Пальцами по шрифту Брайля (точки на ощупь)", ok: true, warum: "Genau! Andere Sinne helfen aus. Ein Blindenhund oder ein weißer Stock helfen beim Gehen. Gehörlose sprechen oft in Gebärdensprache.", warumRu: "Точно! Помогают другие чувства. При ходьбе помогают собака-поводырь или белая трость. Глухие часто говорят на жестовом языке." },
+        { t: "Gar nicht", ru: "Никак", ok: false, warum: "Doch! Mit der Blindenschrift ertasten sie die Buchstaben.", warumRu: "Читают! Шрифтом Брайля на ощупь." },
+        { t: "Mit einer Lupe", ru: "С лупой", ok: false, warum: "Eine Lupe hilft Menschen, die schlecht sehen. Blinde lesen mit den Fingern.", warumRu: "Лупа помогает тем, кто плохо видит. Слепые читают пальцами." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Wenn du einen Menschen mit Behinderung triffst: Frag freundlich, ob er Hilfe möchte – und hilf nur, wenn er Ja sagt.",
+        ru: "Отлично, {name}! Если встретишь человека с инвалидностью: вежливо спроси, нужна ли помощь, — и помогай, только если он скажет «да»." }
+    ]
+  },
+  {
+    id: "getreide", lb: "pt", stufe: 3, lz: ["su.na.08"], name: "Getreide genau", e: "🌾", farbe: "#E8A33D", grund: "#FFF1D9",
+    kurz: "Weizen, Roggen, Gerste, Hafer, Mais – Ähre, Rispe, Kolben, Brot wertschätzen",
+    schritte: [
+      { typ: "info", titel: "Fünf Getreidearten", bild: "🌾",
+        text: "Weizen, Roggen und Gerste tragen ihre Körner in einer Ähre. Beim Hafer hängen die Körner an einer lockeren Rispe. Der Mais hat einen dicken Kolben. Getreide ist eine der ältesten Kulturpflanzen der Menschen.",
+        ru: "У пшеницы, ржи и ячменя зёрна в колосе. У овса зёрна висят на рыхлой метёлке. У кукурузы толстый початок. Зерновые — одни из древнейших культур человека.",
+        fakten: [["Ähre: Weizen, Roggen, Gerste", "Колос: пшеница, рожь, ячмень"], ["Rispe: Hafer", "Метёлка: овёс"], ["Kolben: Mais 🌽", "Початок: кукуруза 🌽"]] },
+      { typ: "zuordnen", frage: "Ähre, Rispe oder Kolben?", ru: "Колос, метёлка или початок?", gruppen: [
+        { id: "aehre", name: "Ähre", ru: "Колос", bild: "🌾" }, { id: "rispe", name: "Rispe", ru: "Метёлка", bild: "🌿" }, { id: "kolben", name: "Kolben", ru: "Початок", bild: "🌽" }], dinge: [
+        { t: "Weizen", ru: "Пшеница", gruppe: "aehre" },
+        { t: "Gerste mit langen Grannen", ru: "Ячмень с длинными остями", gruppe: "aehre" },
+        { t: "Hafer", ru: "Овёс", gruppe: "rispe" },
+        { t: "Mais", ru: "Кукуруза", gruppe: "kolben" }] },
+      { typ: "wahl", frage: "Aus welchem Getreide backt man das typische dunkle Brot?", ru: "Из какого зерна пекут типичный тёмный хлеб?", bild: "🍞", optionen: [
+        { t: "Roggen", ru: "Рожь", ok: true, warum: "Richtig! Roggenbrot ist dunkel und kräftig. Für helle Brötchen nimmt man meist Weizen.", warumRu: "Правильно! Ржаной хлеб тёмный и сытный. Для светлых булочек обычно берут пшеницу." },
+        { t: "Mais", ru: "Кукуруза", ok: false, warum: "Mais nimmt man eher für Popcorn und Cornflakes. Dunkles Brot ist meist aus Roggen.", warumRu: "Кукурузу берут для попкорна и хлопьев. Тёмный хлеб обычно ржаной." },
+        { t: "Hafer", ru: "Овёс", ok: false, warum: "Aus Hafer macht man Haferflocken. Dunkles Brot ist meist aus Roggen.", warumRu: "Из овса делают хлопья. Тёмный хлеб обычно ржаной." }] },
+      { typ: "daumen", satz: "Die grünen Beeren der Kartoffelpflanze kann man essen.", satzRu: "Зелёные ягоды картофеля можно есть.", bild: "🥔", ok: false,
+        warum: "Nein! Die Beeren sind giftig. Essen kann man nur die Knollen, die unter der Erde an den Ausläufern wachsen – und zwar gekocht.", warumRu: "Нет! Ягоды ядовиты. Едят только клубни, которые растут под землёй на побегах, — и в варёном виде." },
+      { typ: "daumen", satz: "Der Kartoffelkäfer ist ein Schädling, der die Blätter der Kartoffel frisst.", satzRu: "Колорадский жук — вредитель, который ест листья картофеля.", bild: "🪲", ok: true,
+        warum: "Stimmt! Er ist gelb-schwarz gestreift. Die Bauern müssen ihre Felder schützen.", warumRu: "Верно! Он в жёлто-чёрную полоску. Фермерам приходится защищать поля." },
+      { typ: "wahl", frage: "In manchen Ländern haben Menschen nicht genug zu essen. Was kannst du tun?", ru: "В некоторых странах людям не хватает еды. Что можешь сделать ты?", bild: "🌍", optionen: [
+        { t: "Lebensmittel nicht wegwerfen und wertschätzen", ru: "Не выбрасывать еду и ценить её", ok: true, warum: "Genau! Brot vom Vortag kann man toasten oder zu Semmelbröseln machen. Jedes Stück Brot steckt voller Arbeit.", warumRu: "Точно! Вчерашний хлеб можно поджарить или сделать сухари. В каждом куске хлеба много труда." },
+        { t: "Möglichst viel kaufen", ru: "Покупать как можно больше", ok: false, warum: "Dann wird oft zu viel weggeworfen. Besser: wertschätzen und nichts verschwenden.", warumRu: "Тогда часто много выбрасывают. Лучше ценить и не тратить зря." },
+        { t: "Nichts", ru: "Ничего", ok: false, warum: "Doch! Nichts verschwenden ist ein guter Anfang.", warumRu: "Можно! Ничего не тратить зря — хорошее начало." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Schau beim nächsten Spaziergang an einem Feld: Ist es Weizen, Gerste oder Mais?",
+        ru: "Супер, {name}! На следующей прогулке посмотри на поле: это пшеница, ячмень или кукуруза?" }
+    ]
+  },
+  {
+    id: "wiese", lb: "pt", stufe: 3, lz: ["su.na.08"], name: "Lebensraum Wiese", e: "🌼", farbe: "#5DB84A", grund: "#E3F5DC",
+    kurz: "Stockwerke der Wiese, vom Ei zum Schmetterling, Wiesenpflanzen bestimmen",
+    schritte: [
+      { typ: "info", titel: "Die Wiese hat Stockwerke", bild: "🌼",
+        text: "Unten im Boden leben Regenwürmer und Käfer. Zwischen den Gräsern springen Heuschrecken und kriechen Schnecken. Oben auf den Blüten summen Bienen und gaukeln Schmetterlinge.",
+        ru: "Внизу в почве живут черви и жуки. Между травами прыгают кузнечики и ползут улитки. Наверху на цветах жужжат пчёлы и порхают бабочки." },
+      { typ: "zuordnen", frage: "Wo lebt das Tier am liebsten?", ru: "Где животное любит жить?", gruppen: [
+        { id: "boden", name: "Im Boden", ru: "В почве", bild: "🟫" }, { id: "gras", name: "Zwischen den Gräsern", ru: "Между травами", bild: "🌱" }, { id: "bluete", name: "Auf den Blüten", ru: "На цветах", bild: "🌸" }], dinge: [
+        { t: "Regenwurm", ru: "Червь", gruppe: "boden" },
+        { t: "Heuschrecke", ru: "Кузнечик", gruppe: "gras" },
+        { t: "Biene", ru: "Пчела", gruppe: "bluete" },
+        { t: "Schmetterling", ru: "Бабочка", gruppe: "bluete" }] },
+      { typ: "wahl", frage: "Wie entwickelt sich ein Schmetterling?", ru: "Как развивается бабочка?", bild: "🦋", optionen: [
+        { t: "Ei – Raupe – Puppe – Schmetterling", ru: "Яйцо — гусеница — куколка — бабочка", ok: true, warum: "Richtig! Die Raupe frisst viel, verpuppt sich, und in der Puppe wird sie zum Falter.", warumRu: "Правильно! Гусеница много ест, окукливается, и в куколке превращается в бабочку." },
+        { t: "Ei – Schmetterling – Raupe", ru: "Яйцо — бабочка — гусеница", ok: false, warum: "Die Reihenfolge stimmt nicht: Ei, Raupe, Puppe, Schmetterling.", warumRu: "Порядок неверный: яйцо, гусеница, куколка, бабочка." },
+        { t: "Raupe – Ei – Puppe", ru: "Гусеница — яйцо — куколка", ok: false, warum: "Zuerst kommt das Ei. Dann Raupe, Puppe, Schmetterling.", warumRu: "Сначала яйцо. Потом гусеница, куколка, бабочка." }] },
+      { typ: "zuordnen", frage: "Welche Wiesenpflanze ist das?", ru: "Какое это луговое растение?", gruppen: [
+        { id: "loewenzahn", name: "Löwenzahn", ru: "Одуванчик", bild: "🌼" }, { id: "gaensebluemchen", name: "Gänseblümchen", ru: "Маргаритка", bild: "🌸" }, { id: "klee", name: "Klee", ru: "Клевер", bild: "☘️" }], dinge: [
+        { t: "Gelbe Blüte, später eine Pusteblume", ru: "Жёлтый цветок, потом пушистый шар", gruppe: "loewenzahn" },
+        { t: "Klein, weiße Blütenblätter, gelbe Mitte", ru: "Маленький, белые лепестки, жёлтая серединка", gruppe: "gaensebluemchen" },
+        { t: "Drei runde Blättchen an einem Stiel", ru: "Три круглых листочка на стебле", gruppe: "klee" }] },
+      { typ: "daumen", satz: "Wenn eine Wiese oft gemäht wird, finden Insekten weniger Blüten.", satzRu: "Если луг часто косят, насекомые находят меньше цветов.", bild: "🐝", ok: true,
+        warum: "Stimmt! Darum lassen viele Gemeinden Blühstreifen stehen – das schützt Bienen und Schmetterlinge.", warumRu: "Верно! Поэтому многие общины оставляют цветущие полосы — это защищает пчёл и бабочек." },
+      { typ: "daumen", satz: "Geschützte Wildblumen darf man in großen Sträußen pflücken.", satzRu: "Охраняемые дикие цветы можно собирать большими букетами.", bild: "💐", ok: false,
+        warum: "Nein! Geschützte Pflanzen bleiben stehen. Fotografiere sie lieber oder zeichne sie.", warumRu: "Нет! Охраняемые растения не рвут. Лучше сфотографируй или нарисуй их." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Prima, {name}! Leg auf einer Wiese einen Reifen hin und zähl, wie viele verschiedene Pflanzen und Tiere du darin findest.",
+        ru: "Отлично, {name}! Положи на лугу обруч и посчитай, сколько разных растений и животных внутри." }
+    ]
+  },
+  {
+    id: "wasserkreislauf", lb: "un", stufe: 3, lz: ["su.na.07"], name: "Der Kreislauf des Wassers", e: "🔄", farbe: "#1F8FB8", grund: "#E2F4FB",
+    kurz: "Gefrieren, schmelzen, verdunsten, kondensieren – und warum die Sonne alles antreibt",
+    schritte: [
+      { typ: "info", titel: "Wasser verwandelt sich", bild: "🧊💧☁️",
+        text: "Wasser gibt es fest (Eis), flüssig (Wasser) und gasförmig (Wasserdampf). Eis schmilzt, Wasser gefriert. Wasser verdunstet langsam oder verdampft beim Kochen. Kühlt Wasserdampf ab, kondensiert er wieder zu Tröpfchen.",
+        ru: "Вода бывает твёрдой (лёд), жидкой (вода) и газообразной (пар). Лёд тает, вода замерзает. Вода медленно испаряется или выкипает. Когда пар остывает, он снова конденсируется в капли.",
+        fakten: [["schmelzen: Eis → Wasser", "таять: лёд → вода"], ["gefrieren: Wasser → Eis", "замерзать: вода → лёд"], ["verdunsten: Wasser → Dampf", "испаряться: вода → пар"], ["kondensieren: Dampf → Tropfen", "конденсироваться: пар → капли"]] },
+      { typ: "zuordnen", frage: "Wie heißt das?", ru: "Как это называется?", gruppen: [
+        { id: "verdunsten", name: "Verdunsten", ru: "Испарение", bild: "☀️" }, { id: "kondensieren", name: "Kondensieren", ru: "Конденсация", bild: "🪞" }, { id: "gefrieren", name: "Gefrieren", ru: "Замерзание", bild: "❄️" }], dinge: [
+        { t: "Eine Pfütze trocknet in der Sonne", ru: "Лужа высыхает на солнце", gruppe: "verdunsten" },
+        { t: "Der Badezimmerspiegel beschlägt", ru: "Зеркало в ванной запотевает", gruppe: "kondensieren" },
+        { t: "Der See wird im Winter zu Eis", ru: "Озеро зимой замерзает", gruppe: "gefrieren" }] },
+      { typ: "wahl", frage: "Wer treibt den Wasserkreislauf an?", ru: "Что приводит в движение круговорот воды?", bild: "☀️", optionen: [
+        { t: "Die Sonne", ru: "Солнце", ok: true, warum: "Richtig! Die Sonne erwärmt Meere, Seen und Böden. Das Wasser verdunstet und steigt nach oben.", warumRu: "Правильно! Солнце нагревает моря, озёра и землю. Вода испаряется и поднимается вверх." },
+        { t: "Der Mond", ru: "Луна", ok: false, warum: "Der Mond bewegt Ebbe und Flut. Den Kreislauf treibt die Sonne an.", warumRu: "Луна вызывает приливы. Круговорот движет Солнце." },
+        { t: "Die Wolken allein", ru: "Только облака", ok: false, warum: "Wolken entstehen erst, weil die Sonne Wasser verdunsten lässt.", warumRu: "Облака появляются, потому что солнце испаряет воду." }] },
+      { typ: "wahl", frage: "Was passiert, wenn feuchte, warme Luft hoch oben abkühlt?", ru: "Что происходит, когда влажный тёплый воздух наверху остывает?", bild: "☁️", optionen: [
+        { t: "Es bilden sich Wolken – und dann Regen oder Schnee", ru: "Образуются облака — потом дождь или снег", ok: true, warum: "Genau! Der Dampf kondensiert zu Tröpfchen. Werden sie schwer, fallen sie als Regen. Das Wasser fließt in Bäche, Flüsse und ins Meer – der Kreislauf beginnt von vorn.", warumRu: "Точно! Пар конденсируется в капли. Когда они тяжелеют, выпадают дождём. Вода течёт в ручьи, реки и море — круговорот начинается сначала." },
+        { t: "Die Luft wird heißer", ru: "Воздух становится горячее", ok: false, warum: "Nein, sie kühlt ab und der Dampf wird zu Wolkentröpfchen.", warumRu: "Нет, он остывает, и пар превращается в капли облаков." },
+        { t: "Nichts", ru: "Ничего", ok: false, warum: "Doch: Es entstehen Wolken.", warumRu: "Нет: образуются облака." }] },
+      { typ: "daumen", satz: "Wasserdampf aus dem Kochtopf ist unsichtbar – erst die kleine Wolke darüber kann man sehen.", satzRu: "Пар из кастрюли невидим — видно только облачко над ней.", bild: "♨️", ok: true,
+        warum: "Stimmt! Die sichtbare Wolke sind schon wieder winzige Wassertröpfchen. Vorsicht, heißer Dampf verbrüht!", warumRu: "Верно! Видимое облачко — уже снова крошечные капли. Осторожно, горячий пар обжигает!" },
+      { typ: "daumen", satz: "Wenn es durch den Klimawandel wärmer wird, verändert sich auch der Wasserkreislauf: Es gibt mehr Trockenheit und mehr Starkregen.", satzRu: "Если из-за изменения климата становится теплее, меняется и круговорот воды: больше засухи и ливней.", bild: "🌡️", ok: true,
+        warum: "Richtig! Darum ist es wichtig, Wasser zu schützen und sparsam damit umzugehen.", warumRu: "Правильно! Поэтому важно беречь воду и расходовать её экономно." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Mal den Wasserkreislauf als Kreis mit Pfeilen: Meer → Wolke → Regen → Fluss → Meer.",
+        ru: "Отлично, {name}! Нарисуй круговорот воды кругом со стрелками: море → облако → дождь → река → море." }
+    ]
+  },
+  {
+    id: "karten-lesen", lb: "rz", stufe: 3, lz: ["su.ge.03"], name: "Pläne und Karten lesen", e: "🗺️", farbe: "#2E9C5A", grund: "#E3F5DC",
+    kurz: "Grundriss, Legende, Nordpfeil, Nebenhimmelsrichtungen, Karte einnorden",
+    schritte: [
+      { typ: "info", titel: "Von oben gesehen", bild: "🦅",
+        text: "Ein Plan zeigt die Welt von oben, viel kleiner – wie ein Vogel sie sieht. Ein Zimmer von oben heißt Grundriss. Auf jeder Karte zeigt der Nordpfeil nach Norden, und die Legende erklärt die Zeichen.",
+        ru: "План показывает мир сверху, намного меньше — как его видит птица. Комната сверху называется планом помещения. На каждой карте стрелка показывает север, а легенда объясняет значки." },
+      { typ: "wahl", frage: "Zwischen Norden und Osten liegt …", ru: "Между севером и востоком находится …", bild: "🧭", optionen: [
+        { t: "Nordosten", ru: "Северо-восток", ok: true, warum: "Richtig! Dazu gibt es Südosten, Südwesten und Nordwesten. Das sind die Nebenhimmelsrichtungen.", warumRu: "Правильно! Есть ещё юго-восток, юго-запад и северо-запад. Это промежуточные стороны света." },
+        { t: "Südwesten", ru: "Юго-запад", ok: false, warum: "Südwesten liegt gegenüber. Zwischen Norden und Osten ist Nordosten.", warumRu: "Юго-запад напротив. Между севером и востоком — северо-восток." },
+        { t: "Westen", ru: "Запад", ok: false, warum: "Westen liegt gegenüber vom Osten. Gesucht ist Nordosten.", warumRu: "Запад напротив востока. Ищем северо-восток." }] },
+      { typ: "wahl", frage: "Wie nordest du eine Karte ein?", ru: "Как сориентировать карту по сторонам света?", bild: "🧭", optionen: [
+        { t: "Kompass auf die Karte legen und drehen, bis Nordpfeil und Kompassnadel in dieselbe Richtung zeigen", ru: "Положить компас на карту и поворачивать, пока стрелка севера и стрелка компаса не совпадут", ok: true, warum: "Genau! Dann liegt alles auf der Karte so wie in der Wirklichkeit.", warumRu: "Точно! Тогда всё на карте расположено как в реальности." },
+        { t: "Die Karte umdrehen", ru: "Перевернуть карту", ok: false, warum: "Das reicht nicht. Nordpfeil und Kompassnadel müssen übereinstimmen.", warumRu: "Этого мало. Стрелка севера и стрелка компаса должны совпасть." },
+        { t: "Sie in die Sonne halten", ru: "Подержать на солнце", ok: false, warum: "Nein, man nimmt den Kompass zu Hilfe.", warumRu: "Нет, используют компас." }] },
+      { typ: "zuordnen", frage: "Was bedeuten die Farben auf einer Landkarte meistens?", ru: "Что обычно означают цвета на карте?", gruppen: [
+        { id: "blau", name: "Blau", ru: "Синий", bild: "🟦" }, { id: "gruen", name: "Grün", ru: "Зелёный", bild: "🟩" }, { id: "braun", name: "Braun", ru: "Коричневый", bild: "🟫" }], dinge: [
+        { t: "Flüsse und Seen", ru: "Реки и озёра", gruppe: "blau" },
+        { t: "Tiefland, flaches Land", ru: "Низменность", gruppe: "gruen" },
+        { t: "Gebirge", ru: "Горы", gruppe: "braun" }] },
+      { typ: "daumen", satz: "„Pirna liegt südöstlich von Dresden“ heißt: Von Dresden aus muss ich Richtung Südosten fahren.", satzRu: "«Пирна лежит к юго-востоку от Дрездена» значит: из Дрездена нужно ехать на юго-восток.", bild: "🚆", ok: true,
+        warum: "Stimmt! So beschreibt man die Lage von Orten: nördlich von …, grenzt im Süden an …", warumRu: "Верно! Так описывают положение мест: к северу от…, на юге граничит с…" },
+      { typ: "wahl", frage: "Auf der Karte steht 1 : 100 000. Was bedeutet das?", ru: "На карте написано 1 : 100 000. Что это значит?", bild: "📏", optionen: [
+        { t: "1 cm auf der Karte sind 1 km in Wirklichkeit", ru: "1 см на карте — 1 км в реальности", ok: true, warum: "Richtig! 100 000 cm sind 1 km. Das ist der Maßstab.", warumRu: "Правильно! 100 000 см — это 1 км. Это масштаб." },
+        { t: "Die Karte ist 100 000 Jahre alt", ru: "Карте 100 000 лет", ok: false, warum: "Nein, das ist der Maßstab: 1 cm entspricht 1 km.", warumRu: "Нет, это масштаб: 1 см соответствует 1 км." },
+        { t: "Es wohnen dort 100 000 Menschen", ru: "Там живут 100 000 человек", ok: false, warum: "Nein, das ist der Maßstab.", warumRu: "Нет, это масштаб." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Zeichne einen Grundriss von deinem Zimmer mit Bett, Tisch und Schrank – und vergiss den Nordpfeil nicht.",
+        ru: "Супер, {name}! Нарисуй план своей комнаты с кроватью, столом и шкафом — и не забудь стрелку севера." }
+    ]
+  },
+  {
+    id: "landkreis", lb: "rz", stufe: 3, land: "sn", lz: ["su.ge.04", "su.so.05"], name: "Mein Landkreis", e: "🏞️", farbe: "#7B55B8", grund: "#EFE6FF",
+    kurz: "Landkreise und kreisfreie Städte in Sachsen, Kreisstadt, Bräuche und Sagen",
+    schritte: [
+      { typ: "info", titel: "Was ist ein Landkreis?", bild: "🗺️",
+        text: "Sachsen ist in 10 Landkreise und 3 kreisfreie Städte eingeteilt: Dresden, Leipzig und Chemnitz. Jeder Landkreis hat eine Kreisstadt – dort sitzt die Kreisverwaltung mit dem Landrat oder der Landrätin.",
+        ru: "Саксония разделена на 10 районов и 3 города районного значения: Дрезден, Лейпциг и Хемниц. В каждом районе есть районный центр — там находится администрация с ландратом." },
+      { typ: "wahl", frage: "Welche dieser Städte ist kreisfrei – gehört also zu keinem Landkreis?", ru: "Какой из этих городов не входит ни в один район?", bild: "🏙️", optionen: [
+        { t: "Chemnitz", ru: "Хемниц", ok: true, warum: "Richtig! Chemnitz, Dresden und Leipzig sind die drei kreisfreien Städte in Sachsen.", warumRu: "Правильно! Хемниц, Дрезден и Лейпциг — три самостоятельных города Саксонии." },
+        { t: "Pirna", ru: "Пирна", ok: false, warum: "Pirna ist Kreisstadt im Landkreis Sächsische Schweiz-Osterzgebirge.", warumRu: "Пирна — центр района Саксонская Швейцария — Восточные Рудные горы." },
+        { t: "Bautzen", ru: "Баутцен", ok: false, warum: "Bautzen ist die Kreisstadt des Landkreises Bautzen.", warumRu: "Баутцен — центр района Баутцен." }] },
+      { typ: "zuordnen", frage: "Was gehört zu einem Landkreis?", ru: "Что относится к району?", gruppen: [
+        { id: "landschaft", name: "Landschaft", ru: "Природа", bild: "⛰️" }, { id: "wirtschaft", name: "Wirtschaft", ru: "Экономика", bild: "🏭" }, { id: "kultur", name: "Kultur", ru: "Культура", bild: "🎭" }], dinge: [
+        { t: "Berge, Flüsse und Wälder", ru: "Горы, реки и леса", gruppe: "landschaft" },
+        { t: "Fabriken und Betriebe", ru: "Фабрики и предприятия", gruppe: "wirtschaft" },
+        { t: "Sagen, Bräuche und Denkmale", ru: "Легенды, обычаи и памятники", gruppe: "kultur" }] },
+      { typ: "daumen", satz: "Wer eine Frage an den Landrat hat, kann ihm einen höflichen Brief oder eine E-Mail schreiben.", satzRu: "Кто хочет спросить ландрата, может написать ему вежливое письмо или e-mail.", bild: "✉️", ok: true,
+        warum: "Stimmt! Viele Kreisverwaltungen freuen sich über Fragen von Schulklassen. Mit „Sehr geehrte …“ und „Mit freundlichen Grüßen“.", warumRu: "Верно! Многие администрации рады вопросам школьников. С «Уважаемый…» и «С уважением»." },
+      { typ: "wahl", frage: "Wie findest du heraus, in welchem Landkreis du wohnst?", ru: "Как узнать, в каком районе ты живёшь?", bild: "🔍", optionen: [
+        { t: "Auf einer Karte von Sachsen nachsehen oder die Eltern fragen", ru: "Посмотреть на карте Саксонии или спросить родителей", ok: true, warum: "Genau! Oft steht es auch auf dem Autokennzeichen: PIR, BZ, MEI, ERZ …", warumRu: "Точно! Часто это видно и на автомобильном номере: PIR, BZ, MEI, ERZ…" },
+        { t: "Gar nicht", ru: "Никак", ok: false, warum: "Doch! Eine Karte oder deine Eltern helfen.", warumRu: "Можно! Помогут карта или родители." },
+        { t: "Raten", ru: "Угадать", ok: false, warum: "Besser nachsehen: auf der Karte oder am Autokennzeichen.", warumRu: "Лучше проверить: на карте или по номеру машины." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Finde mit deiner Familie heraus: Wie heißt eure Kreisstadt, welcher Fluss fließt durch euren Landkreis, und welche Sage erzählt man sich dort?",
+        ru: "Отлично, {name}! Узнай с семьёй: как называется ваш районный центр, какая река течёт через район и какую легенду там рассказывают?" }
+    ]
+  },
+  // ---------- Klasse 4 ----------
+  {
+    id: "schule-frueher", lb: "zl", stufe: 4, lz: ["su.hi.04", "su.so.06"], name: "Schule früher und anderswo", e: "🖊️", farbe: "#8A6E2F", grund: "#F7F0DD",
+    kurz: "Schiefertafel und Griffel, große Klassen, das Recht auf Bildung",
+    schritte: [
+      { typ: "info", titel: "Schule vor 100 Jahren", bild: "🏫",
+        text: "Früher saßen oft 50 Kinder in einer Klasse, in festen Holzbänken. Geschrieben wurde mit dem Griffel auf einer Schiefertafel. Die Lehrer waren meist sehr streng, und viele Kinder mussten nach der Schule auf dem Feld oder in der Fabrik arbeiten.",
+        ru: "Раньше в классе часто сидело 50 детей на жёстких деревянных партах. Писали грифелем на сланцевой доске. Учителя были обычно очень строгими, и многие дети после школы работали в поле или на фабрике." },
+      { typ: "zuordnen", frage: "Schule früher oder heute?", ru: "Школа раньше или сейчас?", gruppen: [
+        { id: "frueher", name: "Früher", ru: "Раньше", bild: "🕰️" }, { id: "heute", name: "Heute", ru: "Сейчас", bild: "💻" }], dinge: [
+        { t: "Schiefertafel und Griffel", ru: "Сланцевая доска и грифель", gruppe: "frueher" },
+        { t: "Gruppenarbeit und Tablets", ru: "Работа в группах и планшеты", gruppe: "heute" },
+        { t: "Kinder mussten still in Reihen sitzen", ru: "Дети тихо сидели рядами", gruppe: "frueher" },
+        { t: "Kinder dürfen mitbestimmen, z. B. im Klassenrat", ru: "Дети участвуют в решениях, например в совете класса", gruppe: "heute" }] },
+      { typ: "daumen", satz: "Alle Kinder auf der Welt haben das Recht, zur Schule zu gehen.", satzRu: "Все дети мира имеют право ходить в школу.", bild: "📜", ok: true,
+        warum: "Stimmt! Das steht in der UN-Kinderrechtskonvention. Trotzdem können viele Millionen Kinder noch nicht zur Schule gehen – oft wegen Armut oder Krieg.", warumRu: "Верно! Это записано в Конвенции ООН о правах ребёнка. И всё же миллионы детей пока не могут ходить в школу — часто из-за бедности или войны." },
+      { typ: "wahl", frage: "In manchen Ländern gehen Kinder stundenlang zu Fuß zur Schule. Was zeigt das?", ru: "В некоторых странах дети часами идут пешком в школу. Что это показывает?", bild: "🚶", optionen: [
+        { t: "Wie wertvoll Bildung für sie ist", ru: "Как ценно для них образование", ok: true, warum: "Genau! Lernen öffnet Türen für die Zukunft.", warumRu: "Точно! Учёба открывает двери в будущее." },
+        { t: "Dass sie gern wandern", ru: "Что они любят ходить в походы", ok: false, warum: "Es gibt dort oft keinen Bus. Trotzdem wollen sie lernen.", warumRu: "Там часто нет автобуса. И всё же они хотят учиться." },
+        { t: "Dass Schule unwichtig ist", ru: "Что школа не важна", ok: false, warum: "Im Gegenteil: Sie nehmen den Weg auf sich, weil Schule wichtig ist.", warumRu: "Наоборот: они идут так далеко, потому что школа важна." }] },
+      { typ: "daumen", satz: "Die alte Schrift, die Uroma vielleicht noch gelernt hat, heißt Sütterlin.", satzRu: "Старый почерк, которому, может быть, училась прабабушка, называется зюттерлин.", bild: "✒️", ok: true,
+        warum: "Richtig! Viele alte Briefe sind in dieser Schrift geschrieben. Vielleicht kann jemand in deiner Familie sie noch lesen.", warumRu: "Правильно! Многие старые письма написаны этим почерком. Может, кто-то в семье ещё умеет его читать." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Mach ein kleines Interview mit Oma oder Opa: Wie war eure Schule? Was war streng, was war schön?",
+        ru: "Супер, {name}! Возьми маленькое интервью у бабушки или дедушки: какой была ваша школа? Что было строгим, что приятным?" }
+    ]
+  },
+  {
+    id: "medien-welt", lb: "zl", stufe: 4, lz: ["me.ar.01", "me.ar.02", "me.sa.01"], name: "Medien und ich", e: "📡", farbe: "#C2337A", grund: "#FDEAF3",
+    kurz: "Wie Nachrichten entstehen, wer Medien bezahlt, wie Medien Gefühle und Wünsche beeinflussen",
+    schritte: [
+      { typ: "info", titel: "Woher kommen Nachrichten?", bild: "📰",
+        text: "Journalistinnen und Journalisten recherchieren: Sie fragen nach, prüfen Quellen und schreiben dann einen Bericht für Zeitung, Radio, Fernsehen oder Internet. Viele Medien verdienen Geld mit Werbung – darum wollen sie, dass wir lange schauen.",
+        ru: "Журналисты собирают сведения: расспрашивают, проверяют источники и пишут репортаж для газеты, радио, ТВ или интернета. Многие медиа зарабатывают на рекламе — поэтому хотят, чтобы мы смотрели подольше." },
+      { typ: "wahl", frage: "Ein kostenloses Spiel zeigt ständig Werbung. Warum?", ru: "Бесплатная игра постоянно показывает рекламу. Почему?", bild: "🎮", optionen: [
+        { t: "Die Firma verdient so Geld", ru: "Так компания зарабатывает", ok: true, warum: "Richtig! „Kostenlos“ heißt oft: Du bezahlst mit deiner Zeit und deinen Daten.", warumRu: "Правильно! «Бесплатно» часто значит: ты платишь своим временем и данными." },
+        { t: "Aus Langeweile", ru: "От скуки", ok: false, warum: "Nein, Werbung bringt der Firma Geld.", warumRu: "Нет, реклама приносит компании деньги." },
+        { t: "Weil Werbung Pflicht ist", ru: "Потому что реклама обязательна", ok: false, warum: "Nein, die Firma verdient damit.", warumRu: "Нет, компания на этом зарабатывает." }] },
+      { typ: "zuordnen", frage: "Telefon, E-Mail oder Chat – was ist gut, was ist schwierig?", ru: "Телефон, e-mail или чат — что хорошо, что сложно?", gruppen: [
+        { id: "vorteil", name: "Vorteil", ru: "Плюс", bild: "👍" }, { id: "nachteil", name: "Nachteil", ru: "Минус", bild: "👎" }], dinge: [
+        { t: "Beim Telefonieren hört man die Stimme", ru: "По телефону слышно голос", gruppe: "vorteil" },
+        { t: "Eine E-Mail kann man in Ruhe schreiben", ru: "Письмо можно спокойно написать", gruppe: "vorteil" },
+        { t: "Im Chat werden Witze leicht falsch verstanden", ru: "В чате шутки легко понять неправильно", gruppe: "nachteil" },
+        { t: "Fotos im Chat können weitergeschickt werden", ru: "Фото в чате могут переслать", gruppe: "nachteil" }] },
+      { typ: "daumen", satz: "Ein Gruselfilm am Abend kann dazu führen, dass man schlecht schläft.", satzRu: "Фильм ужасов вечером может привести к плохому сну.", bild: "😱", ok: true,
+        warum: "Stimmt! Medien wirken auf unsere Gefühle. Achte auf Altersfreigaben und sprich über Dinge, die dir Angst machen.", warumRu: "Верно! Медиа влияют на наши чувства. Обращай внимание на возрастные ограничения и говори о том, что тебя пугает." },
+      { typ: "daumen", satz: "Wenn ein Influencer einen Saft trinkt, ist das nie Werbung.", satzRu: "Если блогер пьёт сок, это никогда не реклама.", bild: "🤳", ok: false,
+        warum: "Nein! Oft wird er dafür bezahlt. Dann muss „Werbung“ oder „Anzeige“ dabeistehen. Medien beeinflussen, was wir kaufen und essen.", warumRu: "Нет! Часто ему за это платят. Тогда должно быть написано «реклама». Медиа влияют на то, что мы покупаем и едим." },
+      { typ: "wahl", frage: "Du hast ein tolles Bild im Internet gefunden und willst es für dein Plakat nutzen. Was ist richtig?", ru: "Ты нашёл в интернете отличную картинку для плаката. Как правильно?", bild: "©️", optionen: [
+        { t: "Nur Bilder nutzen, die man nutzen darf, und angeben, woher sie sind", ru: "Брать только разрешённые картинки и указывать источник", ok: true, warum: "Genau! Bilder gehören dem, der sie gemacht hat – das ist das Urheberrecht.", warumRu: "Точно! Картинка принадлежит автору — это авторское право." },
+        { t: "Einfach nehmen und als eigenes ausgeben", ru: "Просто взять и выдать за своё", ok: false, warum: "Nein! Das verletzt das Urheberrecht.", warumRu: "Нет! Это нарушает авторское право." },
+        { t: "Ein Foto von der Klassenkameradin ohne Fragen nehmen", ru: "Взять фото одноклассницы без спроса", ok: false, warum: "Nein! Fotos von Menschen nur mit deren Erlaubnis – das ist ihr Persönlichkeitsrecht.", warumRu: "Нет! Фото людей — только с их разрешения." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Stark, {name}! Schreib eine Woche lang auf, welche Medien du nutzt und wie lange – das ist dein Medientagebuch.",
+        ru: "Сильно, {name}! Неделю записывай, какими медиа пользуешься и сколько времени, — это твой медиадневник." }
+    ]
+  },
+  {
+    id: "stadt-frueher", lb: "zl", stufe: 4, lz: ["su.hi.04"], name: "Die Stadt – früher, heute, morgen", e: "🏙️", farbe: "#2F6FB8", grund: "#E5EFFB",
+    kurz: "Familienleben, Arbeit und Verkehr in 100 Jahren – und wie wir die Zukunft mitgestalten",
+    schritte: [
+      { typ: "info", titel: "Vor 100 Jahren in der Stadt", bild: "🚋",
+        text: "Vor 100 Jahren heizten die Menschen mit Kohleöfen, wuschen Wäsche auf dem Waschbrett und hatten meist kein Telefon. Viele arbeiteten in Fabriken, oft sehr lange am Tag. Auf den Straßen fuhren Straßenbahnen, Pferdewagen und nur wenige Autos.",
+        ru: "100 лет назад люди топили печи углём, стирали на стиральной доске и обычно не имели телефона. Многие работали на фабриках, часто очень долго. По улицам ездили трамваи, повозки и лишь немного машин." },
+      { typ: "zuordnen", frage: "Früher oder heute?", ru: "Раньше или сейчас?", gruppen: [
+        { id: "frueher", name: "Früher", ru: "Раньше", bild: "🕰️" }, { id: "heute", name: "Heute", ru: "Сейчас", bild: "🏙️" }], dinge: [
+        { t: "Kohleofen in jeder Wohnung", ru: "Угольная печь в каждой квартире", gruppe: "frueher" },
+        { t: "Waschmaschine", ru: "Стиральная машина", gruppe: "heute" },
+        { t: "Kinder spielen auf der fast leeren Straße", ru: "Дети играют на почти пустой улице", gruppe: "frueher" },
+        { t: "Viele Autos, Staus und Ampeln", ru: "Много машин, пробки и светофоры", gruppe: "heute" }] },
+      { typ: "wahl", frage: "Warum gibt es heute viele Berufe, die es früher nicht gab?", ru: "Почему сейчас много профессий, которых раньше не было?", bild: "💻", optionen: [
+        { t: "Durch neue Technik wie Computer entstehen neue Aufgaben", ru: "Новая техника, например компьютеры, создаёт новые задачи", ok: true, warum: "Richtig! Programmiererin oder Windkraft-Techniker gab es vor 100 Jahren nicht. Andere Berufe, wie Kutscher, sind fast verschwunden.", warumRu: "Правильно! Программистов и техников ветряков 100 лет назад не было. Другие профессии, например извозчик, почти исчезли." },
+        { t: "Weil die Menschen früher faul waren", ru: "Потому что раньше люди были ленивыми", ok: false, warum: "Nein! Früher arbeiteten viele sehr hart. Die Technik hat sich verändert.", warumRu: "Нет! Раньше многие очень тяжело работали. Изменилась техника." },
+        { t: "Zufall", ru: "Случайно", ok: false, warum: "Nein, neue Technik bringt neue Berufe.", warumRu: "Нет, новая техника приносит новые профессии." }] },
+      { typ: "daumen", satz: "Früher hatten Familien oft mehr Kinder und mehrere Generationen wohnten zusammen.", satzRu: "Раньше в семьях часто было больше детей и несколько поколений жили вместе.", bild: "👨‍👩‍👧‍👦", ok: true,
+        warum: "Stimmt! Heute gibt es viele verschiedene Familienformen – alle sind Familie.", warumRu: "Верно! Сейчас много разных форм семьи — все они семья." },
+      { typ: "wahl", frage: "In einer Zukunftswerkstatt überlegt die Klasse: Wie soll unsere Stadt in 20 Jahren sein? Welche Idee hilft Menschen und Umwelt?", ru: "В «мастерской будущего» класс думает: каким должен быть наш город через 20 лет? Какая идея помогает людям и природе?", bild: "🌳", optionen: [
+        { t: "Mehr Radwege, Bäume und Spielplätze", ru: "Больше велодорожек, деревьев и площадок", ok: true, warum: "Super Idee! Kinder dürfen mitbestimmen – zum Beispiel im Kinder- und Jugendparlament.", warumRu: "Отличная идея! Дети могут участвовать — например, в детском парламенте." },
+        { t: "Alle Parks zu Parkplätzen machen", ru: "Все парки превратить в парковки", ok: false, warum: "Dann fehlt Platz zum Spielen und für die Natur.", warumRu: "Тогда не будет места для игр и природы." },
+        { t: "Gar nichts ändern", ru: "Ничего не менять", ok: false, warum: "Städte verändern sich immer. Gut, wenn wir mitdenken!", warumRu: "Города всегда меняются. Хорошо, когда мы участвуем!" }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Vergleich ein altes Foto deiner Straße oder Stadt mit heute: Was ist geblieben, was ist neu?",
+        ru: "Отлично, {name}! Сравни старое фото своей улицы или города с сегодняшним: что осталось, что новое?" }
+    ]
+  },
+  {
+    id: "waldtiere", lb: "pt", stufe: 4, lz: ["su.na.08"], name: "Der Wald und seine Säugetiere", e: "🦌", farbe: "#2E9C5A", grund: "#E3F7EF",
+    kurz: "Reh, Wildschwein, Fuchs: Nahrung, Spuren, Junge – und warum wir den Wald brauchen",
+    schritte: [
+      { typ: "info", titel: "Säugetiere im Wald", bild: "🦌",
+        text: "Reh, Wildschwein, Fuchs und Eichhörnchen sind Säugetiere: Sie haben ein Fell, atmen mit Lungen und säugen ihre Jungen mit Milch. Manche fressen nur Pflanzen, manche Fleisch, manche alles.",
+        ru: "Косуля, кабан, лиса и белка — млекопитающие: у них шерсть, они дышат лёгкими и кормят детёнышей молоком. Одни едят только растения, другие мясо, третьи всё." },
+      { typ: "zuordnen", frage: "Wer frisst was?", ru: "Кто что ест?", gruppen: [
+        { id: "pflanze", name: "Pflanzenfresser", ru: "Травоядные", bild: "🌿" }, { id: "fleisch", name: "Fleischfresser", ru: "Хищники", bild: "🥩" }, { id: "alles", name: "Allesfresser", ru: "Всеядные", bild: "🍽️" }], dinge: [
+        { t: "Reh – Gras, Knospen, Blätter", ru: "Косуля — трава, почки, листья", gruppe: "pflanze" },
+        { t: "Luchs – Mäuse, Rehe", ru: "Рысь — мыши, косули", gruppe: "fleisch" },
+        { t: "Wildschwein – Eicheln, Würmer, Wurzeln", ru: "Кабан — жёлуди, черви, корни", gruppe: "alles" }] },
+      { typ: "wahl", frage: "Im Schnee findest du Abdrücke von zwei schmalen Hufhälften. Wer war das?", ru: "На снегу отпечатки двух узких половинок копыта. Кто это был?", bild: "👣", optionen: [
+        { t: "Ein Reh", ru: "Косуля", ok: true, warum: "Richtig! Rehe hinterlassen schmale, herzförmige Trittsiegel. Füchse hinterlassen Pfotenabdrücke mit Krallen.", warumRu: "Правильно! Косули оставляют узкие следы-сердечки. Лисы — следы лап с когтями." },
+        { t: "Ein Fuchs", ru: "Лиса", ok: false, warum: "Füchse haben Pfoten mit Ballen und Krallen. Zwei Hufhälften gehören zum Reh.", warumRu: "У лисы лапы с подушечками и когтями. Две половинки копыта — у косули." },
+        { t: "Ein Eichhörnchen", ru: "Белка", ok: false, warum: "Eichhörnchen haben kleine Pfoten mit Fingern. Das war ein Reh.", warumRu: "У белки маленькие лапки с пальцами. Это была косуля." }] },
+      { typ: "daumen", satz: "Ein zahmes Wildtier oder ein totes Tier im Wald darf man anfassen.", satzRu: "Ручное дикое или мёртвое животное в лесу можно трогать.", bild: "🦊", ok: false,
+        warum: "Nein! Wildtiere, die zutraulich wirken, können krank sein – zum Beispiel an Tollwut. Abstand halten und Erwachsenen Bescheid sagen.", warumRu: "Нет! Дикие животные, которые кажутся ручными, могут быть больны, например бешенством. Держись подальше и скажи взрослым." },
+      { typ: "zuordnen", frage: "Was gibt uns der Wald – und was schadet ihm?", ru: "Что даёт нам лес — и что ему вредит?", gruppen: [
+        { id: "gibt", name: "Der Wald gibt uns", ru: "Лес даёт нам", bild: "🌳" }, { id: "schadet", name: "Das schadet dem Wald", ru: "Это вредит лесу", bild: "⚠️" }], dinge: [
+        { t: "Saubere Luft und Holz", ru: "Чистый воздух и древесину", gruppe: "gibt" },
+        { t: "Er speichert Wasser und schützt den Boden", ru: "Он хранит воду и защищает почву", gruppe: "gibt" },
+        { t: "Lange Trockenheit und Borkenkäfer", ru: "Долгая засуха и короед", gruppe: "schadet" },
+        { t: "Zu viel abholzen", ru: "Слишком много вырубать", gruppe: "schadet" }] },
+      { typ: "daumen", satz: "Pilze und Beeren aus dem Wald darf man nur essen, wenn ein Erwachsener, der sich auskennt, sie sicher bestimmt hat.", satzRu: "Грибы и ягоды из леса можно есть, только если знающий взрослый точно их определил.", bild: "🍄", ok: true,
+        warum: "Stimmt! Manche Pilze und Beeren sind sehr giftig und sehen essbaren ähnlich.", warumRu: "Верно! Некоторые грибы и ягоды очень ядовиты и похожи на съедобные." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Geh mit deiner Familie in den Wald und sucht Spuren: Trittsiegel, angeknabberte Zapfen, Wühlstellen von Wildschweinen.",
+        ru: "Супер, {name}! Сходите с семьёй в лес и поищите следы: отпечатки копыт, обгрызенные шишки, места, где рылись кабаны." }
+    ]
+  },
+  {
+    id: "boden", lb: "pt", stufe: 4, lz: ["su.na.08"], name: "Der Boden lebt", e: "🪱", farbe: "#8A6E2F", grund: "#F7F0DD",
+    kurz: "Humus, Kompost, kleine Bodentiere, Grundwasser und wie man Boden pflegt",
+    schritte: [
+      { typ: "info", titel: "Was ist im Boden?", bild: "🟫",
+        text: "Boden besteht aus Sand, Lehm, Steinchen, Wasser, Luft – und Humus. Humus ist die dunkle Erde, die aus verrotteten Blättern und Pflanzen entsteht. Darin leben unzählige kleine Tiere: In einer Handvoll Boden mehr Lebewesen als Menschen auf der Erde!",
+        ru: "Почва состоит из песка, глины, камешков, воды, воздуха — и перегноя. Перегной — тёмная земля из перегнивших листьев и растений. В ней живёт бесчисленное множество маленьких животных: в горсти земли больше живых существ, чем людей на Земле!" },
+      { typ: "wahl", frage: "Wer macht aus alten Blättern neue Erde?", ru: "Кто превращает старые листья в новую землю?", bild: "🍂", optionen: [
+        { t: "Regenwürmer, Asseln und winzige Lebewesen", ru: "Черви, мокрицы и крошечные существа", ok: true, warum: "Richtig! Sie fressen und zersetzen die Blätter. So entsteht Humus.", warumRu: "Правильно! Они едят и разлагают листья. Так образуется перегной." },
+        { t: "Die Sonne allein", ru: "Только солнце", ok: false, warum: "Die Arbeit machen Bodentiere wie Regenwürmer und Asseln.", warumRu: "Работу делают почвенные животные — черви и мокрицы." },
+        { t: "Der Wind", ru: "Ветер", ok: false, warum: "Nein, das schaffen die Bodentiere.", warumRu: "Нет, это делают почвенные животные." }] },
+      { typ: "zuordnen", frage: "Was darf auf den Kompost?", ru: "Что можно класть в компост?", gruppen: [
+        { id: "ja", name: "Auf den Kompost", ru: "В компост", bild: "♻️" }, { id: "nein", name: "Nicht auf den Kompost", ru: "Не в компост", bild: "🚫" }], dinge: [
+        { t: "Apfelreste und Kartoffelschalen", ru: "Огрызки и картофельные очистки", gruppe: "ja" },
+        { t: "Laub und Rasenschnitt", ru: "Листья и скошенная трава", gruppe: "ja" },
+        { t: "Plastiktüte", ru: "Пластиковый пакет", gruppe: "nein" },
+        { t: "Batterie", ru: "Батарейка", gruppe: "nein" }] },
+      { typ: "wahl", frage: "Du gießt Wasser auf Sand und auf Lehm. Wo läuft es schneller durch?", ru: "Ты льёшь воду на песок и на глину. Где она протекает быстрее?", bild: "🧪", optionen: [
+        { t: "Durch den Sand", ru: "Через песок", ok: true, warum: "Genau! Sand hat große Lücken. Lehm hält das Wasser länger fest.", warumRu: "Точно! В песке большие промежутки. Глина дольше удерживает воду." },
+        { t: "Durch den Lehm", ru: "Через глину", ok: false, warum: "Lehm hält Wasser fest. Durch Sand läuft es schneller.", warumRu: "Глина удерживает воду. Через песок быстрее." },
+        { t: "Gleich schnell", ru: "Одинаково", ok: false, warum: "Nein: Sand lässt Wasser schneller durch.", warumRu: "Нет: песок пропускает воду быстрее." }] },
+      { typ: "daumen", satz: "Der Boden filtert Regenwasser, bevor es zum Grundwasser wird – daraus kommt oft unser Trinkwasser.", satzRu: "Почва фильтрует дождевую воду, прежде чем она станет грунтовой, — из неё часто наше питьё.", bild: "💧", ok: true,
+        warum: "Stimmt! Darum dürfen Öl, Farbe oder Gift nie in den Boden gelangen.", warumRu: "Верно! Поэтому масло, краска или яд никогда не должны попадать в почву." },
+      { typ: "daumen", satz: "Mulchen heißt: Den Boden mit Rasenschnitt oder Laub bedecken, damit er feucht bleibt.", satzRu: "Мульчирование — укрывать почву скошенной травой или листьями, чтобы она оставалась влажной.", bild: "🌱", ok: true,
+        warum: "Richtig! Auch Lockern und Kompost machen den Boden besser.", warumRu: "Правильно! Рыхление и компост тоже улучшают почву." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Heb einen Stein im Garten an und schau, wer darunter wohnt – danach den Stein vorsichtig zurücklegen.",
+        ru: "Отлично, {name}! Подними камень в саду и посмотри, кто под ним живёт, — потом осторожно положи камень обратно." }
+    ]
+  },
+  {
+    id: "sachsen-entdecken", lb: "rz", stufe: 4, land: "sn", lz: ["su.ge.04", "su.hi.sn01"], name: "Sachsen entdecken", e: "🏰", farbe: "#C2337A", grund: "#FDEAF3",
+    kurz: "Erzgebirge, Vogtland, Oberlausitz, Dresden mit Landtag und Frauenkirche, sorbische Bräuche",
+    schritte: [
+      { typ: "info", titel: "Ein Land mit vielen Gesichtern", bild: "⛰️",
+        text: "In Sachsen leben etwa 4 Millionen Menschen. Im Süden liegen das Erzgebirge und das Vogtland, im Osten die Oberlausitz und die Sächsische Schweiz, im Norden flaches Land. Der höchste Berg ist der Fichtelberg mit 1215 Metern.",
+        ru: "В Саксонии живёт около 4 миллионов человек. На юге — Рудные горы и Фогтланд, на востоке — Верхняя Лужица и Саксонская Швейцария, на севере — равнина. Самая высокая гора — Фихтельберг, 1215 метров." },
+      { typ: "zuordnen", frage: "Was passt zu welcher Region?", ru: "Что к какому региону?", gruppen: [
+        { id: "erz", name: "Erzgebirge", ru: "Рудные горы", bild: "⛏️" }, { id: "lausitz", name: "Oberlausitz", ru: "Верхняя Лужица", bild: "🥚" }, { id: "schweiz", name: "Sächsische Schweiz", ru: "Саксонская Швейцария", bild: "🧗" }], dinge: [
+        { t: "Bergbau, Schwibbogen und Nussknacker", ru: "Горное дело, швиббоген и щелкунчик", gruppe: "erz" },
+        { t: "Sorbische Ostereier und zweisprachige Schilder", ru: "Сорбские яйца и двуязычные указатели", gruppe: "lausitz" },
+        { t: "Bizarre Sandsteinfelsen an der Elbe", ru: "Причудливые песчаниковые скалы у Эльбы", gruppe: "schweiz" }] },
+      { typ: "wahl", frage: "Wo treffen sich die Abgeordneten, die Gesetze für Sachsen beschließen?", ru: "Где собираются депутаты, принимающие законы Саксонии?", bild: "🏛️", optionen: [
+        { t: "Im Landtag in Dresden", ru: "В ландтаге в Дрездене", ok: true, warum: "Richtig! Dresden ist die Landeshauptstadt. Dort sitzen Landtag und Landesregierung.", warumRu: "Правильно! Дрезден — столица земли. Там находятся ландтаг и правительство." },
+        { t: "Im Rathaus von Leipzig", ru: "В ратуше Лейпцига", ok: false, warum: "Leipzig ist die größte Stadt, aber der Landtag ist in Dresden.", warumRu: "Лейпциг — самый большой город, но ландтаг в Дрездене." },
+        { t: "Auf dem Fichtelberg", ru: "На Фихтельберге", ok: false, warum: "Nein, im Landtag in Dresden.", warumRu: "Нет, в ландтаге в Дрездене." }] },
+      { typ: "daumen", satz: "Die Frauenkirche in Dresden wurde im Krieg zerstört und mit Spenden aus aller Welt wieder aufgebaut.", satzRu: "Фрауэнкирхе в Дрездене была разрушена в войну и восстановлена на пожертвования со всего мира.", bild: "⛪", ok: true,
+        warum: "Stimmt! Sie wurde 2005 wieder eingeweiht. Auch der Zwinger und die Semperoper gehören zu Dresdens bekannten Bauwerken.", warumRu: "Верно! Её снова освятили в 2005 году. Цвингер и Земперопер тоже знаменитые здания Дрездена." },
+      { typ: "wahl", frage: "Welcher Brauch gehört zu den Sorben?", ru: "Какой обычай относится к сорбам?", bild: "🐦", optionen: [
+        { t: "Die Vogelhochzeit am 25. Januar", ru: "Птичья свадьба 25 января", ok: true, warum: "Genau! Kinder stellen einen Teller raus und finden am Morgen Gebäck in Vogelform. Auch das Osterreiten und kunstvoll verzierte Ostereier sind sorbische Bräuche.", warumRu: "Точно! Дети выставляют тарелку и утром находят выпечку в форме птиц. Пасхальные всадники и расписные яйца — тоже сорбские обычаи." },
+        { t: "Der Karneval in Rio", ru: "Карнавал в Рио", ok: false, warum: "Der ist in Brasilien. Die Sorben feiern zum Beispiel die Vogelhochzeit.", warumRu: "Он в Бразилии. Сорбы празднуют, например, птичью свадьбу." },
+        { t: "Halloween", ru: "Хэллоуин", ok: false, warum: "Halloween kommt aus Irland und Amerika. Sorbisch ist die Vogelhochzeit.", warumRu: "Хэллоуин из Ирландии и Америки. Сорбский — птичья свадьба." }] },
+      { typ: "daumen", satz: "In Sachsen spricht man je nach Gegend ein bisschen anders – zum Beispiel Erzgebirgisch oder Vogtländisch.", satzRu: "В Саксонии в разных местах говорят немного по-разному — например, по-рудногорски или по-фогтландски.", bild: "🗣️", ok: true,
+        warum: "Richtig! Dialekte gehören zur Heimat. Und in der Lausitz hörst du auch Sorbisch.", warumRu: "Правильно! Диалекты — часть родины. А в Лужице можно услышать и сорбский." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Wunderbar, {name}! Such dir eine Sehenswürdigkeit in Sachsen aus und halte einen kleinen Vortrag darüber – mit Bild und drei Stichwörtern.",
+        ru: "Чудесно, {name}! Выбери достопримечательность Саксонии и сделай о ней маленький доклад — с картинкой и тремя ключевыми словами." }
+    ]
+  },
+  {
+    id: "radfahrpruefung", lb: "rz", stufe: 4, lz: ["su.ge.02", "su.te.03"], name: "Fit für die Radfahrprüfung", e: "🚴", farbe: "#E0574A", grund: "#FFECE8",
+    kurz: "Rechts vor links, Linksabbiegen in Schritten, Überholen, Verkehrszeichen",
+    schritte: [
+      { typ: "info", titel: "Die Radfahrprüfung", bild: "🚴",
+        text: "In Klasse 4 lernst du, sicher auf der Straße Rad zu fahren. Wichtig sind die Vorfahrtsregeln, das Linksabbiegen und die Verkehrszeichen. Am Ende gibt es eine Prüfung – oft mit der Polizei.",
+        ru: "В 4 классе учатся безопасно ездить на велосипеде по дороге. Важны правила приоритета, левый поворот и дорожные знаки. В конце — экзамен, часто с полицией." },
+      { typ: "wahl", frage: "An einer Kreuzung ohne Schilder und Ampel: Wer darf zuerst fahren?", ru: "На перекрёстке без знаков и светофора: кто едет первым?", bild: "✖️", optionen: [
+        { t: "Wer von rechts kommt", ru: "Тот, кто справа", ok: true, warum: "Richtig! „Rechts vor links“ – du lässt Fahrzeuge von rechts zuerst fahren.", warumRu: "Правильно! «Правый первый» — пропускаешь тех, кто справа." },
+        { t: "Wer am schnellsten ist", ru: "Кто быстрее", ok: false, warum: "Nein! Es gilt rechts vor links.", warumRu: "Нет! Действует правило «правый первый»." },
+        { t: "Immer die Radfahrer", ru: "Всегда велосипедисты", ok: false, warum: "Nein, auch für Radfahrer gilt rechts vor links.", warumRu: "Нет, и для велосипедистов действует «правый первый»." }] },
+      { typ: "zuordnen", frage: "Was bedeutet das Verkehrszeichen?", ru: "Что означает дорожный знак?", gruppen: [
+        { id: "warten", name: "Ich muss warten", ru: "Я должен уступить", bild: "🔻" }, { id: "vorfahrt", name: "Ich habe Vorfahrt", ru: "У меня приоритет", bild: "🔶" }], dinge: [
+        { t: "Rot-weißes Dreieck, Spitze nach unten", ru: "Красно-белый треугольник вершиной вниз", gruppe: "warten" },
+        { t: "Rotes Achteck mit STOP", ru: "Красный восьмиугольник STOP", gruppe: "warten" },
+        { t: "Gelbe Raute mit weißem Rand", ru: "Жёлтый ромб с белой каймой", gruppe: "vorfahrt" }] },
+      { typ: "wahl", frage: "Du willst links abbiegen. Was kommt zuerst?", ru: "Ты хочешь повернуть налево. Что сначала?", bild: "↩️", optionen: [
+        { t: "Umschauen nach hinten", ru: "Оглянуться назад", ok: true, warum: "Genau! Dann: Handzeichen links, zur Mitte einordnen, Gegenverkehr vorlassen, nochmal umschauen und abbiegen.", warumRu: "Точно! Потом: знак рукой налево, перестроиться к середине, пропустить встречных, ещё раз оглянуться и повернуть." },
+        { t: "Sofort abbiegen", ru: "Сразу повернуть", ok: false, warum: "Viel zu gefährlich! Erst umschauen und Handzeichen geben.", warumRu: "Слишком опасно! Сначала оглянись и подай знак." },
+        { t: "Klingeln und losfahren", ru: "Позвонить и ехать", ok: false, warum: "Nein. Erst umschauen, Zeichen geben, einordnen.", warumRu: "Нет. Сначала оглянуться, подать знак, перестроиться." }] },
+      { typ: "daumen", satz: "Ein parkendes Auto überholt man links mit genug Abstand – erst nach dem Umschauen.", satzRu: "Припаркованную машину объезжают слева с достаточным расстоянием — только оглянувшись.", bild: "🚗", ok: true,
+        warum: "Stimmt! Achte auch darauf, dass sich keine Autotür öffnet.", warumRu: "Верно! Следи и за тем, чтобы не открылась дверь машины." },
+      { typ: "daumen", satz: "Mit dem Handy in der Hand Rad zu fahren ist in Ordnung, wenn man langsam fährt.", satzRu: "Ехать на велосипеде с телефоном в руке можно, если ехать медленно.", bild: "📱", ok: false,
+        warum: "Nein! Beim Radfahren braucht man beide Augen und Hände für den Verkehr. Handy ist verboten.", warumRu: "Нет! На велосипеде нужны оба глаза и руки для дороги. Телефон запрещён." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Üb mit einem Erwachsenen auf einem ruhigen Platz: einhändig fahren für das Handzeichen, umschauen ohne zu wackeln, sicher bremsen.",
+        ru: "Супер, {name}! Потренируйся со взрослым на тихой площадке: ехать одной рукой для знака, оглядываться не виляя, уверенно тормозить." }
+    ]
+  }
+);

@@ -37,6 +37,11 @@
   .lek.zu .emoji { filter: grayscale(1); opacity: .5; }
   .lek.jetzt { box-shadow: 0 0 0 5px var(--pflaume-hell), 0 7px 0 rgba(75,35,128,.18); }
   @media (max-width: 760px) { .lektionen { grid-template-columns: 1fr 1fr; } }
+  .su-gruppe { max-width: 900px; margin: 0 auto; }
+  .su-gruppe h3 { margin: 24px 16px 0; font-size: 1.35rem; }
+  .su-gruppe .frueher { margin: 14px 16px 0; }
+  .su-gruppe .frueher summary { cursor: pointer; font-weight: 600; padding: 10px 14px; background: #fff; border-radius: 16px; display: inline-block; box-shadow: 0 4px 0 rgba(0,0,0,.06); }
+  .su-gruppe .frueher .lektionen { padding: 0; }
   .fs-knopf { display: block; margin: 22px auto 0; min-height: 66px; font-size: 1.35rem; }
 
   /* Lektion */
@@ -139,7 +144,7 @@
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
   <div class="intro"><span id="eule-klein"></span><p id="intro-text"></p></div>
-  <div class="lektionen" id="themen"></div>
+  <div class="themen" id="themen"></div>
 </section>
 
 <section class="ansicht" id="lektion-ansicht" hidden>

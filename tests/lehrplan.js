@@ -53,10 +53,10 @@ pruefe("Sachsen: alle 45 Lernbereiche (Mathe, Deutsch 2025, Sachunterricht) habe
   assert.deepStrictEqual(leer, ["sachkunde 3 Experimentieren"]);
 });
 
-pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand; Stand Schuljahr Deutsch 28.10.2026: 31 gut, 14 teilweise)", () => {
+pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand; Stand Schuljahr Deutsch und SU 28.10.2026: 37 gut, 8 teilweise)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 31, teil: 14, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 37, teil: 8, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
@@ -131,6 +131,36 @@ pruefe("Sachsen in voller Tiefe: Deutsch Kl. 1/2, 3 und 4 – jeder Inhaltspunkt
   const benutzt = new Set(); Object.values(L.laender.sachsen.faecher.deutsch.stufen).forEach(lbs => lbs.forEach(lb => lb.punkte.forEach(p => p.app.forEach(a => benutzt.add(a)))));
   w.WERKSTATT.forEach(k => { assert.ok(["sz", "sc", "le", "tm", "su"].includes(k.lb), k.id + ": lb fehlt");
     if (k.id !== "w-rechengeschichten" && k.stufe !== 5) assert.ok(benutzt.has("werkstatt:" + k.id), k.id + " kommt in keinem Inhaltspunkt vor"); });
+});
+
+pruefe("Sachsen in voller Tiefe: Sachunterricht Kl. 1/2, 3 und 4 (Pflicht-Lernbereiche) – jeder Inhaltspunkt zugeordnet, Zuordnungen echt, LB-Abdeckung passt", () => {
+  const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
+  const stationen = new Set([].concat(w.Mathe.STATIONEN, w.Mathe.STATIONEN_K1, w.Mathe.STATIONEN_K3, w.Mathe.STATIONEN_K4).map(s => s.id));
+  const gibt = (a) => { const [art, id] = a.split(":");
+    return art === "sachkunde" ? w.THEMEN.some(t => t.id === id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id)
+      : art === "medien" ? w.LEKTIONEN.some(k => k.id === id) : art === "mathe" ? stationen.has(id) : art === "echtewelt" ? echt.includes(`["${id}", `) : false; };
+  const ids = new Set(), soll = { "1/2": [47, { ja: 46, teil: 0, nein: 0, aussen: 1 }], "3": [24, { ja: 22, teil: 1, nein: 0, aussen: 1 }], "4": [28, { ja: 26, teil: 1, nein: 0, aussen: 1 }] };
+  const kl = { "1/2": ["1", "2", "1/2"], "3": ["3"], "4": ["4"] };
+  Object.entries(soll).forEach(([st, [zahl, verteilung]]) => {
+    const n = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
+    L.laender.sachsen.faecher.sachkunde.stufen[st].forEach(lb => {
+      assert.ok(lb.punkte && lb.punkte.length >= 1, `SU ${st} ${lb.titel}: Punkte fehlen`);
+      lb.punkte.forEach(p => {
+        z++; n[p.abdeckung]++;
+        assert.ok(!ids.has(p.id), "doppelt " + p.id); ids.add(p.id);
+        assert.ok(kl[st].includes(p.kl) && p.text.length < 140, p.id);
+        p.app.forEach(a => assert.ok(gibt(a), `${p.id}: Zuordnung ${a} gibt es nicht`));
+        if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(sachkunde|werkstatt|medien|mathe):/.test(a)), p.id + " ist „ja“ ohne Übung");
+      });
+      const offen = lb.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein");
+      assert.strictEqual(lb.abdeckung, offen ? "teil" : "ja", `SU ${st} ${lb.titel}: Abdeckung passt nicht zu den Punkten`);
+    });
+    assert.strictEqual(z, zahl, "SU Kl. " + st); assert.deepStrictEqual(n, verteilung, "SU Kl. " + st);
+  });
+  // Jedes Sachthema gehört zu einem Lernbereich; alle außer den Zusatzthemen (Familie, Bauen, Strom, Übergang) kommen in einem Inhaltspunkt vor
+  const benutzt = new Set(); Object.values(L.laender.sachsen.faecher.sachkunde.stufen).forEach(lbs => lbs.forEach(lb => lb.punkte.forEach(p => p.app.forEach(a => benutzt.add(a)))));
+  w.THEMEN.forEach(t => { assert.ok(["zl", "kg", "pt", "un", "rz", "ex"].includes(t.lb), t.id + ": lb fehlt");
+    if (!["familie", "bauen", "strom", "lernen-lernen"].includes(t.id)) assert.ok(benutzt.has("sachkunde:" + t.id), t.id + " kommt in keinem Inhaltspunkt vor"); });
 });
 
 pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziele", () => {

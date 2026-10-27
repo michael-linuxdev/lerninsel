@@ -28,7 +28,7 @@ const DURCH = ["waerme", "gewaesser", "experiment", "erstehilfe", "medien-info",
       idx: neu.map(id => THEMEN.findIndex(t => t.id === id)),
       ohneRu: THEMEN.filter(t => neu.includes(t.id)).flatMap(t => t.schritte.filter(s => !(s.ru || s.satzRu)).map(() => t.id)) }), NEU);
     if (art === "quer") {
-      erwarte(daten.alle === 32, `32 Themen bei Eule Ella (${daten.alle})`);
+      erwarte(daten.alle === 61, `61 Themen bei Eule Ella (${daten.alle})`);
       erwarte(!daten.ohneLz.length && daten.idx.every(i => i >= 0), "alle Themen haben Lernziele, die neuen sind da");
       erwarte(!daten.ohneRu.length, "jeder neue Schritt hat einen russischen Entwurf");
     }

@@ -5,12 +5,157 @@
 //   abdeckung: "ja" = in der App geübt · "teil" = teilweise · "nein" = fehlt noch · "aussen" = gehört nach draußen/aufs Papier
 //   (Zeichnen mit Lineal und Zirkel, echtes Messen, Bauen) – dafür gibt es Echte-Welt-Aufgaben, die App übt es nicht selbst.
 // Quellen: Mathematik 2025 (Lehrplan Grundschule Sachsen, Fassung 2025, gültig ab 1.8.2025; vom Auftraggeber als PDF bereitgestellt), Kl. 1/2, 3 und 4;
-//   Deutsch 2025 (Fachlehrplan Deutsch, gültig ab 1.8.2025, kommentierte Fassung; PDF vom Auftraggeber, 28.10.2026), Kl. 1/2, 3 und 4.
+//   Deutsch 2025 (Fachlehrplan Deutsch, gültig ab 1.8.2025, kommentierte Fassung; PDF vom Auftraggeber, 28.10.2026), Kl. 1/2, 3 und 4;
+//   Sachunterricht 2019 (Lehrplan Grundschule, gültig ab 1.8.2019; PDF vom Auftraggeber, 28.10.2026), Kl. 1/2, 3 und 4 – nur die Pflicht-Lernbereiche,
+//   die Wahlbereiche (z. B. Abfall, Steine, Himmelsraum) sind freiwillig und nicht gezählt.
 // app-Zuordnungen: mathe:<station>, werkstatt:<kapitel>, deutsch:<abenteuer-kapitel>, lesen:<anlaute|silben|texte|spuren|legen|tafel>,
 //   medien:<lektion>, sachkunde:<thema>, echtewelt:<id>
 (function () {
   const P = window.LehrplanLaender && window.LehrplanLaender.sn; if (!P) return;
   const PUNKTE = {
+    sachkunde: {
+      "1/2": {
+        1: [ // Zusammen leben und lernen
+          ["sn.su12.zl.01", "Tagesrhythmus in der Schule: Morgenkreis, Lernen und Bewegung im Wechsel, Mahlzeiten, Rituale", "1/2", ["sachkunde:zusammen-lernen"], "ja"],
+          ["sn.su12.zl.02", "Voneinander und miteinander lernen: allein, zu zweit, in der Gruppe; aus Fehlern lernen, eigene Gedächtnisstützen", "1/2", ["sachkunde:zusammen-lernen"], "ja"],
+          ["sn.su12.zl.03", "Lerngemeinschaft mitgestalten: Rechte und Pflichten, Dienste, Eigentum achten, Konflikte gemeinsam lösen", "1/2", ["sachkunde:zusammen-lernen", "sachkunde:regeln"], "ja"],
+          ["sn.su12.zl.04", "Unter Anleitung in Büchern und digitalen Medien Informationen suchen", "2", ["sachkunde:medien-info", "medien:bedienung"], "ja"]
+        ],
+        2: [ // Mein Körper und meine Gesundheit
+          ["sn.su12.kg.01", "Körperhygiene und Zahnpflege, Ansteckung vermeiden, Abhärtung", "1/2", ["sachkunde:gesundheit"], "ja"],
+          ["sn.su12.kg.02", "Passende Kleidung, gute Sitzhaltung, genug Bewegung", "1/2", ["sachkunde:gesund-essen", "sachkunde:wetter"], "ja"],
+          ["sn.su12.kg.03", "Gesunde Ernährung: Grundnahrungsmittel, genug trinken, Kräuter, Werbung kritisch sehen", "1/2", ["sachkunde:gesund-essen", "sachkunde:gesundheit"], "ja"],
+          ["sn.su12.kg.04", "Ernährung, Bewegung, Ruhe und Schlaf hängen zusammen", "1/2", ["sachkunde:gesund-essen"], "ja"],
+          ["sn.su12.kg.05", "Ein gesundes Frühstück; Obst und Gemüse von nah und fern, fairer Handel", "1/2", ["sachkunde:gesund-essen", "sachkunde:gesundheit"], "ja"],
+          ["sn.su12.kg.06", "Körperteile von Jungen und Mädchen mit den richtigen Namen kennen, Intimsphäre", "1/2", ["sachkunde:mein-koerper"], "ja"],
+          ["sn.su12.kg.07", "Schutz vor Missbrauch: Nein sagen, gute und schlechte Geheimnisse, Hilfe holen (Nummer gegen Kummer)", "1/2", ["sachkunde:mein-koerper"], "ja"],
+          ["sn.su12.kg.08", "Erste Hilfe bei kleinen Verletzungen: Verbrennung, Wunde, Nasenbluten", "1/2", ["sachkunde:erstehilfe", "sachkunde:gesundheit"], "ja"],
+          ["sn.su12.kg.09", "Unfälle vermeiden in Schule, Wohnung und Wohngebiet; Notruf und Rettungskette", "1/2", ["sachkunde:erstehilfe"], "ja"]
+        ],
+        3: [ // Begegnungen mit Pflanzen und Tieren
+          ["sn.su12.pt.01", "Jahreszeitliche Veränderungen in der Natur beobachten, die Natur achten", "1/2", ["sachkunde:jahreszeiten", "sachkunde:baeume-voegel"], "ja"],
+          ["sn.su12.pt.02", "Vögel im Jahreslauf: Vogelzug, Nestbau, Brutpflege", "1/2", ["sachkunde:jahreszeiten", "sachkunde:baeume-voegel"], "ja"],
+          ["sn.su12.pt.03", "Fünf Laubbäume und drei Nadelbäume unterscheiden; Wurzel, Stamm, Ast, Zweig, Krone; Jahresringe", "1/2", ["sachkunde:baeume", "sachkunde:baeume-voegel"], "ja"],
+          ["sn.su12.pt.04", "Frühblüher unterscheiden", "1/2", ["sachkunde:pflanzen"], "ja"],
+          ["sn.su12.pt.05", "Keimen und Wachsen; Wurzel, Stängel, Blatt, Blüte, Frucht, Samen", "1/2", ["sachkunde:pflanzen", "sachkunde:obst-garten"], "ja"],
+          ["sn.su12.pt.06", "Obst: Kern-, Stein- und Beerenobst, Frucht und Samen, Früchte verarbeiten", "2", ["sachkunde:obst-garten"], "ja"],
+          ["sn.su12.pt.07", "Gärtnern: säen, pflanzen, pflegen, ernten, Gartengeräte sicher benutzen", "2", ["sachkunde:obst-garten", "echtewelt:pflanze"], "ja"],
+          ["sn.su12.pt.08", "Vier Vogelarten unterscheiden", "1/2", ["sachkunde:kleintiere", "sachkunde:baeume-voegel"], "ja"],
+          ["sn.su12.pt.09", "Frei lebende Kleintiere der Region beobachten, Artenvielfalt", "1/2", ["sachkunde:kleintiere"], "ja"],
+          ["sn.su12.pt.10", "Heimtiere pflegen: Futter, Körpersprache, Gefahren", "1/2", ["sachkunde:haustiere"], "ja"],
+          ["sn.su12.pt.11", "Haustiere auf dem Bauernhof, Haltung, Erzeugnisse (Milch, Eier, Wolle)", "2", ["sachkunde:haustiere", "sachkunde:brot"], "ja"]
+        ],
+        4: [ // Begegnung mit Phänomenen der unbelebten Natur
+          ["sn.su12.un.01", "Sonnenlicht: Licht und Wärme, Schatten, Sonnenschutz; Mond und Sterne", "1/2", ["sachkunde:licht-schatten"], "ja"],
+          ["sn.su12.un.02", "Künstliche Lichtquellen; durchsichtige, undurchsichtige und spiegelnde Stoffe (Reflektoren)", "2", ["sachkunde:licht-schatten"], "ja"],
+          ["sn.su12.un.03", "Schatten: Lichtquelle, Gegenstand und Schatten, Lage und Form des Schattens", "2", ["sachkunde:licht-schatten"], "ja"],
+          ["sn.su12.un.04", "Luft braucht Platz, bremst (Luftwiderstand) und dehnt sich bei Wärme aus", "2", ["sachkunde:luft-schall"], "ja"],
+          ["sn.su12.un.05", "Töne durch bewegte Luft, Schall, Echo", "2", ["sachkunde:luft-schall"], "ja"],
+          ["sn.su12.un.06", "Wind als bewegte Luft: Nutzen und Gefahren", "1/2", ["sachkunde:luft-schall"], "ja"],
+          ["sn.su12.un.07", "Wetter beobachten und in eine Tabelle eintragen, Thermometer, Gefrierpunkt", "2", ["sachkunde:wetter", "sachkunde:wetterkarte"], "ja"],
+          ["sn.su12.un.08", "Sich dem Wetter anpassen: Kleidung, Nebel und Dunkelheit, nasse Straße", "1/2", ["sachkunde:wetter"], "ja"],
+          ["sn.su12.un.09", "Wasser als Lösungsmittel: lösen, trennen, verdunsten, Kristalle", "2", ["sachkunde:loesen-trennen", "sachkunde:wasser"], "ja"],
+          ["sn.su12.un.10", "Gefährliche Flüssigkeiten im Haushalt, Warnzeichen, richtig aufbewahren", "2", ["sachkunde:loesen-trennen"], "ja"],
+          ["sn.su12.un.11", "Bedeutung des Wassers, Wassermangel, Wasser sparen", "1/2", ["sachkunde:wasser"], "ja"],
+          ["sn.su12.un.12", "Selbst experimentieren: Vermutung, Versuch, Beobachtung festhalten", "2", ["sachkunde:experiment", "echtewelt:versuch"], "aussen"]
+        ],
+        5: [ // Begegnung mit Raum und Zeit
+          ["sn.su12.rz.01", "Sich im Schulhaus und Gelände orientieren, Fluchtweg und Brandschutz", "1", ["sachkunde:schule-ort"], "ja"],
+          ["sn.su12.rz.02", "Zeit: Tagesablauf, gestern und vorgestern, Uhr, Kalender, Woche und Jahr", "1/2", ["mathe:uhr", "mathe:kalender", "mathe:k1zeit", "sachkunde:jahreszeiten"], "ja"],
+          ["sn.su12.rz.03", "Öffentliche Einrichtungen im Wohnort, Wegskizze, Ortsplan mit Legende", "2", ["sachkunde:schule-ort", "sachkunde:gemeinde", "echtewelt:wegskizze"], "ja"],
+          ["sn.su12.rz.04", "Feste und Höhepunkte im Jahreskreis", "1/2", ["sachkunde:jahreszeiten", "sachkunde:geschenkebringer"], "ja"],
+          ["sn.su12.rz.05", "Spuren der Vergangenheit im Ort: Museum, Straßennamen, Menschen befragen", "2", ["sachkunde:schule-ort", "sachkunde:frueher"], "ja"],
+          ["sn.su12.rz.06", "Wichtige Verkehrswege und Nahverkehr", "2", ["sachkunde:schule-ort", "sachkunde:schulweg"], "ja"],
+          ["sn.su12.rz.07", "Sicher über die Straße gehen", "1", ["sachkunde:schulweg"], "ja"],
+          ["sn.su12.rz.08", "An der Haltestelle und in Bus und Bahn; nicht mit Fremden mitgehen", "1/2", ["sachkunde:schule-ort", "sachkunde:schulweg"], "ja"]
+        ],
+        6: [ // Durch unsere ersten Schuljahre
+          ["sn.su12.ss.01", "Rückschau: erster Schultag, erstes Zeugnis; Zeitleiste und Portfolio", "2", ["sachkunde:meine-schulzeit", "sachkunde:frueher"], "ja"],
+          ["sn.su12.ss.02", "Höhepunkte und gemeisterte Schwierigkeiten, gelungene Arbeiten vorstellen", "2", ["sachkunde:meine-schulzeit"], "ja"],
+          ["sn.su12.ss.03", "Steckbriefe zu Lieblingspflanzen und -tieren", "2", ["sachkunde:meine-schulzeit", "werkstatt:w-beschreiben"], "ja"]
+        ]
+      },
+      "3": {
+        1: [
+          ["sn.su3.zl.01", "Menschen anderer Kulturen begegnen, Feste und Gewohnheiten, Globus und Atlas", "3", ["sachkunde:kulturen", "sachkunde:geschenkebringer"], "ja"],
+          ["sn.su3.zl.02", "Leben auf dem Land früher und heute: Arbeit, Geräte, Berufe, Rollen, Freizeit", "3", ["sachkunde:land-frueher"], "ja"],
+          ["sn.su3.zl.03", "Bücher, Lexika, Kindersuchmaschinen und Nachrichten als Informationsquelle", "3", ["sachkunde:medien-info", "werkstatt:w-buch-finden"], "ja"]
+        ],
+        2: [
+          ["sn.su3.kg.01", "Sinnesorgane, Sinnestäuschungen, Hilfe für Menschen mit Behinderung", "3", ["sachkunde:sinne", "sachkunde:sinne-genau"], "ja"],
+          ["sn.su3.kg.02", "Aufbau und Leistung eines Sinnesorgans (Auge, Ohr)", "3", ["sachkunde:sinne-genau"], "ja"],
+          ["sn.su3.kg.03", "Sinnesorgane schützen", "3", ["sachkunde:sinne-genau", "sachkunde:sinne"], "ja"],
+          ["sn.su3.kg.04", "Gefahren durch Rauchen, Alkohol, Medikamente; Nein sagen, Gruppendruck", "3", ["sachkunde:nein-sagen"], "ja"]
+        ],
+        3: [
+          ["sn.su3.pt.01", "Drei Getreidearten unterscheiden; Ähre, Rispe, Kolben", "3", ["sachkunde:getreide", "sachkunde:brot"], "ja"],
+          ["sn.su3.pt.02", "Vom Korn zum Brot", "3", ["sachkunde:brot"], "ja"],
+          ["sn.su3.pt.03", "Die Kartoffel: Anbau, Knollen, giftige Beeren, Kartoffelkäfer", "3", ["sachkunde:getreide", "sachkunde:brot"], "ja"],
+          ["sn.su3.pt.04", "Lebensmittel wertschätzen, Hunger in der Welt", "3", ["sachkunde:getreide"], "ja"],
+          ["sn.su3.pt.05", "Lebensraum Wiese: Stockwerke, Kleintiere und ihre Entwicklung", "3", ["sachkunde:wiese", "sachkunde:wald"], "ja"],
+          ["sn.su3.pt.06", "Wiesenpflanzen bestimmen, Artenschutz", "3", ["sachkunde:wiese"], "ja"]
+        ],
+        4: [
+          ["sn.su3.un.01", "Wettervorhersage, Wetterkarten, Bauernregeln, Wetter-Apps", "3", ["sachkunde:wetterkarte", "sachkunde:wetter"], "ja"],
+          ["sn.su3.un.02", "Wasser fest, flüssig, gasförmig; gefrieren, schmelzen, verdampfen, verdunsten, kondensieren", "3", ["sachkunde:wasserkreislauf", "sachkunde:wasser"], "ja"],
+          ["sn.su3.un.03", "Kreislauf des Wassers, die Sonne als Antrieb, Wasser schützen", "3", ["sachkunde:wasserkreislauf"], "ja"],
+          ["sn.su3.un.04", "Schwimmen und Sinken: Material, Form, Salzwasser", "3", ["sachkunde:schwimmen"], "ja"]
+        ],
+        5: [
+          ["sn.su3.rz.01", "Haupt- und Nebenhimmelsrichtungen, Tagbogen der Sonne", "3", ["sachkunde:kompass", "sachkunde:karten-lesen"], "ja"],
+          ["sn.su3.rz.02", "Mit Plan und Kompass orientieren, Grundriss, Karte einnorden", "3", ["sachkunde:karten-lesen", "sachkunde:kompass"], "ja"],
+          ["sn.su3.rz.03", "Karten lesen: Nordpfeil, Legende, Lage beschreiben", "3", ["sachkunde:karten-lesen"], "ja"],
+          ["sn.su3.rz.04", "Den eigenen Landkreis kennen: Lage, Städte, Gewässer, Wirtschaft, Kreisstadt, Bräuche", "3", ["sachkunde:landkreis"], "teil"],
+          ["sn.su3.rz.05", "Verkehrsregeln für Fußgänger und Radfahrer, verkehrssicheres Fahrrad", "3", ["sachkunde:fahrrad"], "ja"],
+          ["sn.su3.rz.06", "Rad fahren üben, Helm", "3", ["sachkunde:fahrrad", "echtewelt:radfahren"], "aussen"]
+        ],
+        6: [
+          ["sn.su3.ex.01", "Ein Experiment planen, durchführen, auswerten und darauf zurückblicken", "3", ["sachkunde:experiment"], "ja"]
+        ]
+      },
+      "4": {
+        1: [
+          ["sn.su4.zl.01", "Schule früher und in anderen Ländern, Recht auf Bildung, Kinderrechte", "4", ["sachkunde:schule-frueher", "sachkunde:kinderrechte"], "ja"],
+          ["sn.su4.zl.02", "Bildungswege nach der Grundschule, Befragung vorbereiten", "4", ["sachkunde:neue-schule", "werkstatt:w-interview"], "ja"],
+          ["sn.su4.zl.03", "Medien zum Informieren und Lernen: Vor- und Nachteile, Nachrichten, Finanzierung", "4", ["sachkunde:medien-welt", "sachkunde:medien-info"], "ja"],
+          ["sn.su4.zl.04", "Digitale Kommunikation: Vor- und Nachteile, Regeln", "4", ["sachkunde:medien-welt", "werkstatt:w-email"], "ja"],
+          ["sn.su4.zl.05", "Urheber- und Persönlichkeitsrechte, Datenschutz", "4", ["sachkunde:medien-welt", "medien:daten"], "ja"],
+          ["sn.su4.zl.06", "Wie Medien Gefühle, Freizeit, Kaufen und Essen beeinflussen", "4", ["sachkunde:medien-welt", "medien:werbung"], "ja"],
+          ["sn.su4.zl.07", "Leben in einer Stadt früher und heute: Familie, Arbeit, Berufe", "4", ["sachkunde:stadt-frueher"], "ja"],
+          ["sn.su4.zl.08", "Veränderungen in der Stadt, Zukunft mitgestalten", "4", ["sachkunde:stadt-frueher", "sachkunde:gemeinde"], "ja"]
+        ],
+        2: [
+          ["sn.su4.kg.01", "Pubertät, Hygiene, Schutz vor sexueller Gewalt, gegenseitige Achtung", "4", ["sachkunde:gross-werden"], "ja"],
+          ["sn.su4.kg.02", "Atmung und Herzschlag, Puls in Ruhe und nach Anstrengung", "4", ["sachkunde:herz-lunge"], "ja"],
+          ["sn.su4.kg.03", "Sucht: Ursachen, Wirkung, Vorbeugung", "4", ["sachkunde:nein-sagen"], "ja"]
+        ],
+        3: [
+          ["sn.su4.pt.01", "Wald als Lebensgemeinschaft; Pflanzen bestimmen, giftige Pilze und Beeren", "4", ["sachkunde:wald", "sachkunde:waldtiere"], "ja"],
+          ["sn.su4.pt.02", "Säugetiere des Waldes: Körperbau, Nahrung, Spuren, Junge, Tollwut", "4", ["sachkunde:waldtiere"], "ja"],
+          ["sn.su4.pt.03", "Bedeutung und Gefährdung des Waldes", "4", ["sachkunde:waldtiere"], "ja"],
+          ["sn.su4.pt.04", "Boden: Leben im Boden, Humus, Kompost, Grundwasser, Boden pflegen", "4", ["sachkunde:boden"], "ja"],
+          ["sn.su4.pt.05", "Gewässer: fließend und stehend, Pflanzen und Tiere, Angepasstheit", "4", ["sachkunde:gewaesser"], "ja"],
+          ["sn.su4.pt.06", "Natur schützen: Arten, Klima, Wald und Gewässer", "4", ["sachkunde:gewaesser", "sachkunde:waldtiere", "sachkunde:boden"], "ja"]
+        ],
+        4: [
+          ["sn.su4.un.01", "Feuer: Nutzen, Gefahren, Brandschutz", "4", ["sachkunde:feuer"], "ja"],
+          ["sn.su4.un.02", "Was ein Feuer braucht, Brennbarkeit verschiedener Stoffe", "4", ["sachkunde:feuer"], "ja"],
+          ["sn.su4.un.03", "Gute und schlechte Wärmeleiter, Dämmung im Haushalt", "4", ["sachkunde:waerme"], "ja"]
+        ],
+        5: [
+          ["sn.su4.rz.01", "Karte von Sachsen: Himmelsrichtungen, Farben, Entfernungen mit dem Maßstab", "4", ["sachkunde:sachsen", "sachkunde:karten-lesen", "mathe:k4massstab"], "ja"],
+          ["sn.su4.rz.02", "Sachsen: Lage, Größe, Einwohner, Gebirge, Flüsse, Regionen und Städte", "4", ["sachkunde:sachsen", "sachkunde:sachsen-entdecken"], "ja"],
+          ["sn.su4.rz.03", "Dresden: Sitz der Landesregierung, Kunst und Kultur", "4", ["sachkunde:sachsen-entdecken", "sachkunde:sachsen"], "ja"],
+          ["sn.su4.rz.04", "Sorbische Kultur: Zweisprachigkeit, Bräuche", "4", ["sachkunde:sachsen-entdecken", "sachkunde:sachsen"], "ja"],
+          ["sn.su4.rz.05", "Radfahrprüfung: Vorfahrt, Linksabbiegen, Überholen, Verkehrszeichen", "4", ["sachkunde:radfahrpruefung", "sachkunde:fahrrad"], "ja"],
+          ["sn.su4.rz.06", "Abschlusskontrollfahrt mit dem Rad", "4", ["echtewelt:radfahren"], "aussen"]
+        ],
+        6: [
+          ["sn.su4.me.01", "Informationen aus verschiedenen Quellen auswählen, Urheberrecht beachten", "4", ["sachkunde:medien-info", "sachkunde:medien-welt"], "ja"],
+          ["sn.su4.me.02", "Eine Präsentation zu einem Thema gestalten und vortragen, Kriterien zur Bewertung", "4", ["werkstatt:w-vortrag", "werkstatt:w-rueckmeldung"], "teil"]
+        ]
+      }
+    },
     deutsch: {
       "1/2": {
         1: [ // Sprechen und Zuhören

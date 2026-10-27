@@ -47,6 +47,7 @@
   }
 
   // ---------- Übersicht ----------
+  const SU_LB = [["zl", "🤝 Zusammen leben und lernen"], ["kg", "💪 Mein Körper und meine Gesundheit"], ["pt", "🌳 Pflanzen und Tiere"], ["un", "🔬 Unbelebte Natur"], ["rz", "🗺️ Raum und Zeit"], ["ex", "🧪 Forschen, Medien, meine Schulzeit"]];
   function zeige(n) { ["liste", "lektion", "ende"].forEach(v => $(v + "-ansicht").hidden = v !== n); scrollTo(0, 0); }
   function zeichneListe() {
     const d = daten();
@@ -59,17 +60,36 @@
       : `Du hast schon ${fertig} ${fertig === 1 ? "Thema" : "Themen"} entdeckt. Bald kommen neue dazu!`;
     $("themen").innerHTML = "";
     const klasse = ((S.stufe && S.stufe()) || {}).klasse || 2;
-    TH.forEach((t, i) => {
-      if (t.stufe && klasse < t.stufe - 1) return; // NA-39: Übergangs-Themen (stufe 5) erst ab Klasse 4 zeigen
-      if (t.land && (S.land() || {}).code !== t.land) return; // Heimatkunde nur für Kinder aus diesem Bundesland
+    const kachel = (t, i) => {
       const best = bestes(t.id);
       const b = document.createElement("button");
       b.className = "lek" + (!best ? " jetzt" : "");
+      b.dataset.id = t.id;
       b.style.setProperty("--f", t.grund);
       b.innerHTML = `<span class="emoji">${t.e}</span><span>${t.name}</span>` +
         `<span class="stern-reihe">${best ? [1, 2, 3].map(n => `<span class="${n <= best ? "" : "leer"}">⭐</span>`).join("") : ""}</span>`;
       b.addEventListener("click", () => { S.ton("tipp"); starte(i); });
-      $("themen").appendChild(b);
+      return b;
+    };
+    // Schuljahr SU (28.10.2026): Themen nach den Lernbereichen des Lehrplans gruppiert; Themen früherer Klassen eingeklappt
+    const stufeVon = (t) => Math.max(2, t.stufe || t.kl || 2);
+    SU_LB.forEach(([lb, titel]) => {
+      const alle = TH.map((t, i) => [t, i]).filter(([t]) => (t.lb || "zl") === lb
+        && !(t.stufe && klasse < t.stufe - 1)                   // NA-39: Übergangs-Themen (stufe 5) erst ab Klasse 4 zeigen
+        && !(t.land && (S.land() || {}).code !== t.land))       // Heimatkunde nur für Kinder aus diesem Bundesland
+        .sort((a, b) => stufeVon(a[0]) - stufeVon(b[0]) || a[1] - b[1]);
+      if (!alle.length) return;
+      const frueher = alle.filter(([t]) => klasse >= 3 && stufeVon(t) < klasse), jetzt = alle.filter(x => !frueher.includes(x));
+      const g = document.createElement("section"); g.className = "su-gruppe"; g.dataset.lb = lb;
+      g.innerHTML = `<h3>${titel}</h3><div class="lektionen"></div>`;
+      jetzt.forEach(([t, i]) => g.querySelector(".lektionen").appendChild(kachel(t, i)));
+      if (frueher.length) {
+        const d = document.createElement("details"); d.className = "frueher";
+        d.innerHTML = `<summary>Wiederholen aus früheren Klassen (${frueher.length})</summary><div class="lektionen"></div>`;
+        frueher.forEach(([t, i]) => d.querySelector(".lektionen").appendChild(kachel(t, i)));
+        g.appendChild(d);
+      }
+      $("themen").appendChild(g);
     });
   }
 
