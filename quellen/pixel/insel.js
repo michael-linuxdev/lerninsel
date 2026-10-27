@@ -827,8 +827,15 @@ function spieleStory(id) {
   if (id === "sonne") { b[0].zeige = I.ort("sonnenuhr"); b[0].beim = zeigeSonnenuhr; }
   if (id === "weihnachtspaket") { b.forEach(x => { x.zeige = () => (paket ? bildschirm(PAKET_POS.x, PAKET_POS.z, 1) : null); }); b[1].bis = (weiter) => { const tt = setInterval(() => { if (!paket) { clearInterval(tt); weiter(); } }, 200); return () => clearInterval(tt); }; }
   if (id === "erste-frucht") { b[0].zeige = I.ort("wissensbaum"); b[2].beim = () => { St.setzeKapitel(1); nebelWeicht(); }; }
+  // E4–E8 (NA-14): Zeigehand und Warten; Auslöser und Texte kommen aus Kern und shared/szenen.js
+  const warte = (pruef) => (weiter) => { const tt = setInterval(() => { if (pruef()) { clearInterval(tt); weiter(); } }, 200); return () => clearInterval(tt); };
+  if (id === "sterne") { b[0].zeige = "#sterne"; b[1].zeige = I.ort("haus"); b[1].bis = warte(() => drinnen); b[2].zeige = "#einrichten"; b[2].bis = warte(() => window.Einrichten && window.Einrichten.offen); }
+  if (id === "ei") b.forEach(x => { x.zeige = I.ort("nest"); });
+  if (id === "spielorte") b[0].zeige = I.ort("ballons");
+  if (id === "merkkiste") { const wer = K.merkkisteBei(); b.forEach(x => { x.wer = wer; x.zeige = I.ort(wer === "eule" ? "eule" : "fipsi"); }); }
+  if (id === "gefuehle") b.forEach(x => { x.zeige = I.ort("baer"); });
   storyLaeuft = true;
-  Sz.spiele(def).then(() => { storyLaeuft = false; K.storyFertig(def); nebelWeicht(); setTimeout(naechsteStory, 1200); });
+  Sz.spiele(def).then(() => { storyLaeuft = false; K.storyFertig(def); nebelWeicht(); if (id === "ei" && !tier && $("blase").hidden) zeigeAntwort(K.antwort("nest")); setTimeout(naechsteStory, 1200); });
 }
 function naechsteStory() {
   const id = K.naechsteStory({ paket: !!paket, prolog: !!prolog, drinnen, laeuft: storyLaeuft, test: q.has("szene") });

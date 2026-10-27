@@ -9,7 +9,7 @@ let n = 0;
 const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
 
 // ---------- Attrappen ----------
-function neueUmgebung({ story = {}, zeit = null, funde = 0, speicher = {}, jetzt, heuteFach = {} } = {}) {
+function neueUmgebung({ story = {}, zeit = null, funde = 0, speicher = {}, jetzt, heuteFach = {}, sterne = 0, tier = null, karten = 0 } = {}) {
   const daten = JSON.parse(JSON.stringify(speicher)), frei = new Set(), geschenkeTier = [];
   const st = Object.assign({ kapitel: 0, etappen: {}, gesehen: [], geschenke: [] }, story);
   let neueHeute = 0;
@@ -20,10 +20,10 @@ function neueUmgebung({ story = {}, zeit = null, funde = 0, speicher = {}, jetzt
       lade: (k) => (k in daten ? JSON.parse(JSON.stringify(daten[k])) : null),
       speichere: (k, v) => { daten[k] = JSON.parse(JSON.stringify(v)); },
       offen: (x) => !!x, istFrei: (id) => frei.has(id), schalteFrei: (id) => { frei.add(id); return true; },
-      paar: (x) => [x[0], ""], ht: () => "", kind: () => ({ ort: null })
+      paar: (x) => [x[0], ""], ht: () => "", kind: () => ({ ort: null }), sterne: () => sterne
     },
     Story: {
-      etappe: (e) => !!st.etappen[e], etappeFertig: (e) => { if (!st.etappen[e]) { st.etappen[e] = "2026-10-27"; neueHeute++; } },
+      etappe: (e) => !!st.etappen[e], etappeFertig: (e, still) => { if (!st.etappen[e]) { st.etappen[e] = still ? 1 : "2026-10-27"; if (!still) neueHeute++; } },
       kapitel: () => st.kapitel, setzeKapitel: (k) => { st.kapitel = Math.max(st.kapitel, k); },
       gesehen: (id) => st.gesehen.includes(id), darfNeueEtappe: () => neueHeute < 2,
       zustand: () => st, hatGeschenk: (id) => st.geschenke.includes(id), merkeGeschenk: (id) => { if (!st.geschenke.includes(id)) st.geschenke.push(id); }
@@ -31,7 +31,8 @@ function neueUmgebung({ story = {}, zeit = null, funde = 0, speicher = {}, jetzt
     Szene: { laeuft: false },
     Lernfunde: { gesamt: () => funde, STUFEN: [1, 5, 15, 30], baum: () => ({ stufe: funde >= 15 ? 3 : funde >= 5 ? 2 : funde >= 1 ? 1 : 0, summe: funde, naechste: funde < 1 ? 1 : funde < 5 ? 5 : funde < 15 ? 15 : 30 }),
       heute: () => [], heuteFach: (f) => (heuteFach[f] || null) },
-    TierPflege: { schenke: (x) => geschenkeTier.push(x) }
+    TierPflege: { schenke: (x) => geschenkeTier.push(x), lade: () => tier || { phase: null } },
+    Lernkartei: { anzahlFaellig: (f) => (f === "deutsch" ? karten : 0) }
   };
   if (zeit) window.Zeit = { status: () => zeit };
   // im selben Realm laden (sonst vergleicht assert Arrays aus zwei Welten als ungleich); window ist hier ein Parameter
@@ -135,7 +136,7 @@ pruefe("nach E2: Sonne geht auf (einmal), dann erste Frucht ab dem ersten Lernfu
   assert.strictEqual(v.K.naechsteStory({}), "erste-frucht");
   v.K.storyFertig({ etappe: "E3", kapitel: 1 });
   assert.ok(v.st.etappen.E3); assert.strictEqual(v.st.kapitel, 1);
-  assert.strictEqual(v.K.naechsteStory({}), null);
+  assert.strictEqual(v.K.naechsteStory({}), "ei", "nach E3 (erste neue Etappe heute) darf eine zweite kommen: das Ei");
 });
 
 pruefe("höchstens zwei neue Etappen am Tag", () => {
@@ -253,6 +254,35 @@ pruefe("Paula, Wetterstation, Wissensbaum, Sonnenuhr antworten", () => {
   assert.ok(u.K.antwort("wissensbaum").blase[2].startsWith("Schon 3 Dinge gelernt!"));
   assert.strictEqual(u.K.antwort("sonnenuhr").blase[1], "Die Sonnenuhr");
   assert.strictEqual(u.K.fruchtFarbe({ f: "mathe" }), "#2FA37C");
+});
+
+pruefe("E4–E8 (NA-14): Auslöser, Reihenfolge, höchstens zwei am Tag, schon Genutztes wird still erledigt", () => {
+  const SP = { spielen: true, frei: false };
+  const basis = { etappen: { E1: "2026-10-20", E2: "2026-10-20", E3: "2026-10-21" }, gesehen: ["sonne"] };
+  // Sterne (mind. 4) und Spielzeit → Benno erklärt die Sterne
+  let u = neueUmgebung({ zeit: SP, sterne: 5, story: JSON.parse(JSON.stringify(basis)) });
+  assert.strictEqual(u.K.naechsteStory({}), "sterne");
+  u.K.storyFertig({ etappe: "E4" });
+  assert.strictEqual(u.K.naechsteStory({}), "ei", "danach das Ei");
+  u.K.storyFertig({ etappe: "E5" });
+  assert.strictEqual(u.K.naechsteStory({}), null, "dritte Etappe wartet bis morgen");
+  // ohne Sterne: gleich das Ei; wer schon ein Tier hat, bekommt E5 still
+  u = neueUmgebung({ zeit: SP, tier: { phase: "tier" }, story: JSON.parse(JSON.stringify(basis)) });
+  const id = u.K.naechsteStory({});
+  assert.strictEqual(u.st.etappen.E5, 1, "E5 still erledigt (Tier schon da)");
+  assert.notStrictEqual(id, "ei");
+  // Spielorte nur mit Führerschein und Spielzeit; Merkkiste bei fälliger Karte; Bruni ab Tag 2
+  u = neueUmgebung({ zeit: SP, tier: { phase: "ei" }, karten: 2, jetzt: new Date(2026, 9, 22, 15).getTime(), story: JSON.parse(JSON.stringify(basis)) });
+  assert.strictEqual(u.K.naechsteStory({}), "merkkiste", "ohne Führerschein: E6 übersprungen, E7 fällig");
+  u.daten.medien = { fuehrerschein: "2026-10-01" };
+  assert.strictEqual(u.K.naechsteStory({}), "spielorte");
+  u.K.storyFertig({ etappe: "E6" }); u.K.storyFertig({ etappe: "E7" });
+  const w = neueUmgebung({ zeit: SP, tier: { phase: "ei" }, jetzt: new Date(2026, 9, 22, 15).getTime(), story: { gesehen: ["sonne"], etappen: Object.assign({}, basis.etappen, { E4: 1, E6: 1, E7: 1 }) } });
+  assert.strictEqual(w.K.naechsteStory({}), "gefuehle", "Bruni ab dem zweiten Tag nach der Ankunft");
+  const x = neueUmgebung({ zeit: SP, tier: { phase: "ei" }, jetzt: new Date(2026, 9, 20, 15).getTime(), story: { gesehen: ["sonne"], etappen: Object.assign({}, basis.etappen, { E4: 1, E6: 1, E7: 1 }) } });
+  assert.strictEqual(x.K.naechsteStory({}), null, "am Ankunftstag noch nicht");
+  // Merkkiste bei Ella, wenn nur Sachunterricht fällig ist
+  assert.strictEqual(u.K.merkkisteBei(), "fipsi");
 });
 
 console.log(`✅ Insel-Kern: ${n} Prüfungen bestanden.`);

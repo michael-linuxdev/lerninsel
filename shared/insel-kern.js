@@ -228,8 +228,30 @@
     }
     if (St.etappe("E2") && st.spielen && !frei && !St.gesehen("sonne")) return "sonne";
     if (!St.etappe("E3") && W.Lernfunde && W.Lernfunde.gesamt() >= 1 && St.darfNeueEtappe()) return "erste-frucht";
+    // E4–E8 (NA-14): erst nach der ersten Frucht, je Etappe ein Auslöser; wer die Funktion schon kennt, bekommt sie still erledigt
+    if (!St.etappe("E3")) return null;
+    for (const e of ETAPPEN) {
+      if (St.etappe(e.id)) continue;
+      if (e.genutzt()) { St.etappeFertig(e.id, true); continue; }
+      if (St.darfNeueEtappe() && e.faellig(st)) return e.szene;
+    }
     return null;
   }
+  // Tutorial-Etappen E4–E8 (KONZEPT „Etappen“): Szene, Auslöser, „schon genutzt“ (für Kinder, die das schon kennen)
+  const tageSeitE1 = () => { const e1 = W.Story.zustand().etappen.E1; if (typeof e1 !== "string") return 99; return Math.round((new Date(isoJetzt()) - new Date(e1)) / 86400000); };
+  const tierDaten = () => (W.TierPflege ? W.TierPflege.lade() : null);
+  const faelligeKarten = () => (W.Lernkartei ? W.Lernkartei.anzahlFaellig("deutsch") + W.Lernkartei.anzahlFaellig("sachkunde") : 0);
+  const ETAPPEN = [
+    { id: "E4", szene: "sterne", faellig: (st) => st.spielen && S().sterne() >= 4,
+      genutzt: () => { const d = zimmerDaten(); return Object.keys(d.plaetze).length > 0 || d.wand !== "rosa"; } },
+    { id: "E5", szene: "ei", faellig: () => !!W.TierPflege, genutzt: () => { const d = tierDaten(); return !!d && (d.phase === "ei" || d.phase === "tier"); } },
+    { id: "E6", szene: "spielorte", faellig: (st) => st.spielen && !st.frei && profi(), genutzt: () => W.Story.zustand().etappen.E1 === 1 },
+    { id: "E7", szene: "merkkiste", faellig: () => faelligeKarten() > 0,
+      genutzt: () => { const k = S().lade("lernkartei") || {}; return ["deutsch", "sachkunde"].some(f => (k[f] || []).some(c => c.stufe >= 2)); } },
+    { id: "E8", szene: "gefuehle", faellig: () => tageSeitE1() >= 1, genutzt: () => Object.keys((S().lade("gefuehle") || {}).tage || {}).length > 0 }
+  ];
+  // Wer spricht in der Merkkisten-Szene? Fipsi (Deutsch) oder Ella (Sachunterricht)
+  const merkkisteBei = () => (W.Lernkartei && W.Lernkartei.anzahlFaellig("deutsch") === 0 && W.Lernkartei.anzahlFaellig("sachkunde") > 0 ? "eule" : "fipsi");
   // nach dem Ende einer Story-Szene
   function storyFertig(def) { const St = W.Story; if (!St || !def) return; if (def.etappe) St.etappeFertig(def.etappe); if (def.kapitel) St.setzeKapitel(def.kapitel); }
   // Soll beim Öffnen der Insel die Ankunft starten?
@@ -354,7 +376,11 @@
       wissensbaum: { x: P.wissensbaum[0], z: P.wissensbaum[1], h: 1.6 },
       eule: { x: P.eule[0], z: P.eule[1], h: 1.6 },
       steg: { x: STEG.x, z: (STEG.z0 + STEG.z1) / 2, h: 0.4 },
-      paket: { x: PAKET_POS.x, z: PAKET_POS.z, h: 0.8 }
+      paket: { x: PAKET_POS.x, z: PAKET_POS.z, h: 0.8 },
+      nest: { x: P.nest[0], z: P.nest[1], h: 0.8 },
+      ballons: { x: P.ballons[0], z: P.ballons[1], h: 2.4 },
+      fipsi: { x: P.fipsi[0], z: P.fipsi[1], h: 1.4 },
+      baer: { x: P.baer[0], z: P.baer[1], h: 1.6 }
     };
     return { WELT, P, ZX, ZX_GRENZE, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, HAUS_DREH, vorDerTuer, NEBEL, nachbarn, ORTE };
   }
@@ -504,7 +530,7 @@
     BIOME, GROESSEN, HUEGEL, STANDARD, FARBEN, erzeuge, neuerSeed, wunsch, zeit, erstelle,
     // Regeln und Zustände
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
-    weihnachtsPaket, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude,
+    weihnachtsPaket, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
     // Zimmer
     PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel,
     // Wetter

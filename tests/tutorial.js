@@ -70,7 +70,8 @@ const TAG1 = new Date(2026, 9, 25, 15, 0).getTime(), TAG2 = new Date(2026, 9, 26
   const ende = await p.evaluate(() => ({ e3: Story.etappe("E3"), chronik: Story.chronik().map(x => x.s) }));
   erwarte(ende.e3 && ["prolog", "erst-lernen", "sonne", "erste-frucht"].every(x => x === "prolog" || ende.chronik.includes(x)), `E3 erledigt, Chronik: ${ende.chronik.join(", ")}`);
   await p.goto(INSEL); await p.waitForTimeout(2500);
-  erwarte(!(await szene()), "danach keine Szene mehr bei jedem Besuch");
+  const danach = await szene();
+  erwarte(!danach || !["prolog", "erst-lernen", "sonne", "erste-frucht"].includes(danach.id), `danach keine der Szenen E1–E3 mehr (höchstens die nächste Etappe: ${danach ? danach.id : "keine"})`);
   const zeichen = await p.evaluate(() => __heimat.zeichnungen());
   console.log(`    Zeichenaufrufe Insel („schön“, Nebel Stufe 1): ${zeichen}`);
 
@@ -78,7 +79,8 @@ const TAG1 = new Date(2026, 9, 25, 15, 0).getTime(), TAG2 = new Date(2026, 9, 26
   await p.evaluate(() => { const k = Spielwelt.vorsilbe + "profil.v1", pr = JSON.parse(localStorage.getItem(k)); delete pr.daten.story; pr.daten.medien.fuehrerschein = "2026-10-01"; pr.stand = Date.now() + 60000; localStorage.setItem(k, JSON.stringify(pr)); });
   await p.goto(INSEL); await p.waitForTimeout(3000);
   const alt = await p.evaluate(() => ({ e: ["E1", "E2", "E3"].map(x => Story.etappe(x)), k: Story.kapitel(), szene: __szene.aktuell(), nebel: __heimat.nebel().stufe }));
-  erwarte(alt.e.every(Boolean) && alt.k === 1 && !alt.szene && alt.nebel >= 1, `Kind von früher: E1–E3 erledigt, keine Szene, Nebel-Stufe ${alt.nebel} (${JSON.stringify(alt)})`);
+  // E4–E8 (NA-14) gelten auch für Kinder von früher, wenn sie die Funktion noch nie genutzt haben (z. B. das Nest ohne Ei)
+  erwarte(alt.e.every(Boolean) && alt.k === 1 && (!alt.szene || !["prolog", "erst-lernen", "sonne", "erste-frucht"].includes(alt.szene.id)) && alt.nebel >= 1, `Kind von früher: E1–E3 erledigt, keine Szene davon, Nebel-Stufe ${alt.nebel} (${JSON.stringify(alt)})`);
 
   await browser.close();
   if (fehler.length) { console.log("❌ Fehler:\n" + fehler.map(f => "  - " + f).join("\n")); process.exit(1); }

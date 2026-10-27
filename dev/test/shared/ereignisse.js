@@ -111,10 +111,11 @@
     // Höchstens zwei neue Etappen am Tag (KONZEPT, Tutorial-Grundsatz 4) – die ersten Tage sollen nicht zu voll werden
     neuHeute: () => Object.values(lade().etappen).filter(x => x === heute()).length,
     darfNeueEtappe: () => Story.neuHeute() < 2,
-    etappeFertig(id) {
+    // still = true: Etappe gilt als übernommen (Wert 1), z. B. weil das Kind die Funktion schon kennt – zählt nicht zum Tageslimit
+    etappeFertig(id, still) {
       if (!/^E\d{1,2}$/.test(id)) return false;
       const st = lade(); if (st.etappen[id]) return false;
-      st.etappen[id] = heute(); speichere(st); melde("etappe", { id }); return true;
+      st.etappen[id] = still ? 1 : heute(); speichere(st); if (!still) melde("etappe", { id }); return true;
     },
     // Eltern: eine Etappe zurücksetzen (z. B. Prolog neu starten); die Chronik bleibt
     etappeZuruecksetzen(id) { const st = lade(); if (!st.etappen[id]) return false; delete st.etappen[id]; speichere(st); return true; },

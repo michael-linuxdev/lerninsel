@@ -141,7 +141,8 @@ const TAG1 = new Date(2026, 9, 25, 15, 0).getTime(), TAG2 = new Date(2026, 9, 26
     // Minispiel-Ort mit Spielzeit
     await p.evaluate(() => { const m = Spielwelt.lade("medien"); m.fuehrerschein = "2026-10-01"; Spielwelt.speichere("medien", m); });
     await p.goto(INSEL); await p.waitForTimeout(2000);
-    await p.evaluate(() => { if (__szene.aktuell()) Szene.abbrechen(); __pixel.tippe("ballons"); });
+    await p.evaluate(() => { if (__szene.aktuell()) Szene.abbrechen(); }); await p.waitForTimeout(400);
+    await p.evaluate(() => { if (__szene.aktuell()) Szene.abbrechen(); document.getElementById("blase").hidden = true; __pixel.tippe("ballons"); });
     const bl = await blase(p);
     erwarte(/Ballon/.test(bl.titel) && bl.los, "mit Spielzeit und Führerschein führt die Ballon-Wiese zum Minispiel");
     await ctx.close();

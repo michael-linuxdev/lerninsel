@@ -32,42 +32,47 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 ## 1. Zuerst lesen
 1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
    Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Zwei Looks (Entscheidung 27.10.2026)“** und **„Stand 27.10.2026, morgens“** (was fertig ist, Abweichungen, Plan für NA-26 a/b/c). Ältere Abschnitte sind Historie.
+   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten Eintrag **„Stand 27.10.2026, Vormittag“** (was fertig ist, Abweichungen, NA-14). Ältere Abschnitte sind Historie.
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
    `docs/MINISPIELE.md`.
 4. `README.md` (Aufbau des Repos, Liste der Dateien in `shared/`).
 
-## 2. Stand (27.10.2026, Sitzungsende 05 Uhr)
-**Früher fertig** (Einzelheiten in PLAN.md → „Stand 27.10.2026“): NA-01 Ereignisse/Story, NA-02 Profil (stufe, land, muttersprache, deutschstand),
-NA-10 Szenen + Zeigehand (`shared/szene.js`, `shared/zeige.js`, Texte `shared/szenen.js`), NA-11 Prolog „Ankunft“ (E1), NA-12 Insel-Zugang,
-NA-13 Sonnenuhr/„Erst lernen“/Erste Frucht mit Nebel, NA-15 Weihnachts-Sonderstart. Alle russischen Szenentexte sind Entwürfe (nur in `/dev`).
+## 2. Stand (27.10.2026, Sitzung bis mittags)
+**Früher fertig** (Einzelheiten in PLAN.md unter „Neuausrichtung 26.10.2026“): NA-01 Ereignisse/Story, NA-02 Profil, NA-10 Szenen + Zeigehand,
+NA-11 Prolog „Ankunft“ (E1), NA-12 Insel-Zugang, NA-13 Sonnenuhr/„Erst lernen“/Erste Frucht mit Nebel, NA-15 Weihnachts-Sonderstart,
+NA-24 Welt-Kern `shared/insel-kern.js`. Alle russischen Szenentexte sind Entwürfe (nur in `/dev`).
 
 **Grafik – Entscheidungen des Auftraggebers (27.10.2026):** zwei gleichwertige Looks, jederzeit umschaltbar: **„Rund“** (three.js, wie Animal
 Crossing, `quellen/welt3d/heimat.js`) und **„Pixel“** im **DS-Stil** (Draufsicht wie Handheld-Abenteuer um 2010, eigener Stil, PixiJS 8.22).
 Umschalter: Knopf auf der Insel **und** Elternkarte; Kinder dürfen selbst umschalten, Eltern können sperren.
 
-**In dieser Sitzung fertig und gepusht** (PLAN.md → „Stand 27.10.2026, morgens“):
-- **DS-Look** der Pixel-Probe (`/dev/spiele/probe/`), Zeichenweg jetzt gemeinsam in `quellen/pixel/zeichnen.js` (Farbreihen `PAL` mit 5 Stufen,
-  `kugel/zylinder/vieleck/fuelle`, `raster`, farbiger `umriss`, `atlas()` → 1 Zeichenaufruf, `grau`, `naechsteReihe`, `leinwand`).
-- **NA-24 Welt-Kern** `shared/insel-kern.js` (`window.InselKern`): Welt, Orte, Nachbarn, Sonnenuhr, Nebel, Paket, Story-Auswahl, Zimmer-Daten,
-  Wetter und **Stationen** (`K.antwort(id)`, `K.nachbarAntwort(n)`, `K.aktionFuer(id)`). `heimat.js` zeichnet nur noch. Test `tests/inselkern.js`.
-- **NA-25 vorbereitet, aber AUS:** `Spielwelt.look()/setzeLook()/lookKindDarf()/inselUrl()`, Einstieg `spiele/insel/` (alle Insel-Links laufen
-  darüber), Knopf `#look` auf der Rund-Insel, Elternkarte. `Spielwelt.lookWaehlbar()` in `shared/core.js` gibt **false** zurück, bis
-  `spiele/pixel/insel.html` spielbar ist – dann auf `UMG !== "prod"` stellen (Pixel zuerst nur in /dev).
+**In der letzten Sitzung fertig und gepusht** (PLAN.md → „Stand 27.10.2026, Vormittag“):
+- **NA-26 Pixel-Insel** `spiele/pixel/insel.html` (Quelle `quellen/pixel/insel.js`, Grafiken `quellen/pixel/dinge.js`, Zeichenweg `quellen/pixel/zeichnen.js`):
+  Boden und alle Orte aus dem Kern, Nachbarn, Stationen, Aktionsknopf, Prolog, Story-Szenen, Nebelring, Nacht/Wetter, Lichterkette, Weihnachtspaket.
+  **1 Zeichenaufruf**, 0,9 MB. Test-Haken `__pixel`, Test `tests/pixelinsel.js`.
+- **NA-25 Umschalter eingeschaltet – nur in /dev und /dev/test** (`Spielwelt.lookWaehlbar()` = `UMG !== "prod"`), Test `tests/look.js` (braucht /dev).
+- **NA-28 Pixel-Zimmer:** alle Möbel, Wandfarbe, Pinnwand (Lernfund-Zettel), Staffelei und Wandbild mit eigenen gemalten Bildern (auf die Palette
+  gebracht), „Einrichten“ als gemeinsamer Baustein `shared/einrichten.js` (auch „Rund“ benutzt ihn).
+- **NA-27 Pixel-Figuren:** Kind mit allen Frisuren und Extras aus dem Kleiderschrank (Bild 22×34), Haustier in vier Richtungen.
+- **NA-14 Tutorial E4–E8** in beiden Looks: Auslöser/Reihenfolge/„schon genutzt“ in `ETAPPEN` im Kern, Texte in `shared/szenen.js`,
+  stilles Erledigen (`Story.etappeFertig(id, true)`), Elternknopf „Einführung überspringen“. Test `tests/etappen.js`.
+- Kern-Stationen neu: `nest`, `pinnwand`, `staffelei`, `bild`, `moebel`; Orte für die Zeigehand neu: `nest`, `ballons`, `fipsi`, `baer`.
 
-**Bekannte Baustellen:** Rund-Insel über dem Leistungsbudget (NA-21); Deutsch-Bereiche in `shared/lehrplan.js` nach KMK 2004 (NA-03);
-`SPIELE` steht in `shared/insel-kern.js` und `quellen/welt3d/gemeinsam.js` (gleich halten).
+**Bekannte Baustellen:** Rund-Insel über dem Leistungsbudget (NA-21: ≈ 350 Aufrufe „schön“); Deutsch-Bereiche in `shared/lehrplan.js` nach KMK 2004 (NA-03);
+`SPIELE` steht in `shared/insel-kern.js` und `quellen/welt3d/gemeinsam.js` (gleich halten); „Meine Welt“ (Welten erschaffen) gibt es nur in „Rund“;
+der Prolog-Test der runden Insel wackelt, wenn der Rechner nebenbei ausgelastet ist (Software-Rendering) – dann einfach nochmal laufen lassen.
 
-**Offene Fragen an den Auftraggeber:** Geschenke zu Weihnachten 2026 (NA-16); iPad-Test von Ankunft, Sonnenuhr, Erste Frucht, Paket;
-Muttersprachler/Lehrkräfte; Tonaufnahmen.
+**Offene Fragen an den Auftraggeber:** iPad-/Handy-Test von Pixel-Look, Ankunft, Sonnenuhr, Erste Frucht, Paket, Einführung E4–E8 (in `/dev`);
+soll „Pixel“ danach auch auf der Hauptseite wählbar sein? Geschenke zu Weihnachten 2026 (NA-16); Muttersprachler/Lehrkräfte; Tonaufnahmen.
 
 ## 3. Ablauf dieser Sitzung
 1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug, sonst als kurze Liste), bevor du baust. Kläre mindestens:
-   - Rückmeldung vom iPad 10 zu Ankunft, Sonnenuhr, Erste Frucht, Weihnachts-Paket (in `/dev` mit neuem Kind getestet?) – Fehler zuerst beheben.
+   - Rückmeldung vom iPad 10 und Handy (in `/dev`, mit neuem Kind): Ankunft, Sonnenuhr, Erste Frucht, Einführung E4–E8, und vor allem die
+     **Pixel-Insel** (Knopf „👾 Pixel“ auf der Insel): Laufen, Antippen, Zimmer einrichten, Figur/Kleiderschrank. Fehler zuerst beheben.
+   - Soll „Pixel“ jetzt auch auf der Hauptseite wählbar werden? Wünsche zum DS-Look (Farben, Größe der Figuren, Details)?
    - Welche Geschenke soll es per QR-Code zu Weihnachten 2026 geben (für NA-16)? Neue Antworten auf die übrigen offenen Fragen im Plan?
-   - Gefällt der DS-Look der Probe auf iPad und Handy (`/dev/spiele/probe/`)? Wünsche (Farben, Größe der Figuren, mehr/weniger Details)?
-   - Gilt die Reihenfolge noch (nächstes: **NA-26** Pixel-Insel a/b/c, dann NA-25 einschalten), oder soll etwas vorgezogen werden?
+   - Gilt die Reihenfolge noch (nächstes: **NA-21** Leistung „Rund“, dann NA-16/17/18), oder soll etwas vorgezogen werden?
    - Was darf in dieser Sitzung keinesfalls angefasst werden?
 2. **Dann selbstständig arbeiten**, bis die Sitzung aufgebraucht ist. Aufgabenliste anlegen (ein Eintrag je Paket bzw. Schritt a/b/c) und abhaken.
    Nur nachfragen, wenn eine Entscheidung nicht rückgängig zu machen ist; sonst die vernünftigste Wahl treffen und im Plan notieren.
@@ -79,20 +84,15 @@ Muttersprachler/Lehrkräfte; Tonaufnahmen.
    Stand bringen** (Abschnitte 2 und 4), pushen und kurz berichten.
 
 ## 4. Nächste Pakete (Reihenfolge laut Plan)
-Grundsatz: **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; „Rund“ und „Pixel“ zeichnen dieselbe Welt.
-Nichts, was das Kind besitzt oder erlebt hat, hängt am Look. Umschalten verliert nichts.
-1. **NA-26 Pixel-Insel** (L, Schritte a/b/c – genauer Plan in PLAN.md → „Stand 27.10.2026, morgens“):
-   a) `spiele/pixel/insel.html` + `quellen/pixel/insel.js` (Grafiken gern in `quellen/pixel/dinge.js`): Boden und alle Orte aus `K.erstelle(q)`,
-      1 Welteinheit = 1 Kachel = 16 px, DS-Regeln aus GRAFIK.md, Laufen per Tippen/Pfeiltasten, Aktionsknopf `#springen`, Sprechblase `#blase`,
-      Antworten über `K.antwort` / `K.nachbarAntwort`. Bauen: `ENGINES=~/eng node quellen/probe/bauen.js insel`.
-   b) Story: Prolog, `K.naechsteStory`, Szenen + Zeigehand (`window.Insel.bildschirm/ort` für Pixel), Nebelring, Nacht-Tönung, Lichterkette.
-   c) Minimales Zimmer (Bett, Schrank, Spiegel, Album), `sw.js`, `docs/LIZENZEN.md`, Tests `tests/pixelinsel.js` und `tests/look.js`;
-      dann `lookWaehlbar()` einschalten (nur /dev) = **NA-25 fertig**. Abnahme: Prolog E1–E3 und Weihnachts-Paket in beiden Looks spielbar.
-2. **NA-27 Pixel-Figuren** (M): Kind aus den Kleiderschrank-Daten in vier Richtungen, Tier-Begleiter, Insel-Figuren als Sprites.
-   Ab jetzt: **jede neue Figur, jedes Möbel, jedes Bauwerk in beiden Looks**.
-3. **NA-28 Pixel-Zimmer** (M): Möbel (inkl. Tannenbaum), Pinnwand, Staffelei, Einrichten – gleiche Daten aus dem Kern.
-4. **NA-14** Tutorial E4–E8 in beiden Looks → **NA-21** Leistungs-Test „Rund“ → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 →
-   NA-03 → NA-40 → NA-30 → NA-32 → NA-31. Minispiele bleiben vorerst 3D (aus beiden Looks gestartet).
+Grundsatz: **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js` (und gemeinsamen Bausteinen wie
+`shared/einrichten.js`); „Rund“ und „Pixel“ zeichnen dieselbe Welt. Nichts, was das Kind besitzt oder erlebt hat, hängt am Look.
+**Jede neue Figur, jedes Möbel, jedes Bauwerk, jede Szene in beiden Looks** (oder im Plan als offen vermerken).
+1. **Freigabe Pixel auf der Hauptseite** – nur nach Rückmeldung des Auftraggebers: `lookWaehlbar()` in `shared/core.js` auf `true`, Text in der
+   Elternkarte („nur in der Testumgebung“) anpassen, `tests/look.js` umstellen.
+2. **NA-21** Leistungs-Test „Rund“ (`tests/leistung.js`, `messe()` und `__heimat.info()` sind vorbereitet) und Budget nach GRAFIK.md.
+3. **NA-16** QR-Geschenk (wartet auf die Geschenk-Auswahl) → **NA-17** Kapitel 1–2 (inkl. E9 Atelier, E10 Mein Ich) → **NA-18** Chronik im Album
+   (Szenen nochmal ansehen, auch Tutorial-Etappen).
+4. **NA-03** Lehrplan-Kern → NA-40 → NA-30 → NA-32 → NA-31. Minispiele bleiben vorerst 3D (aus beiden Looks gestartet); „Meine Welt“ für Pixel offen.
 
 ## 5. Wie die Story-Bausteine benutzt werden (Kurzreferenz)
 - Szene registrieren (nur Daten) in `shared/szenen.js`:
@@ -105,6 +105,11 @@ Nichts, was das Kind besitzt oder erlebt hat, hängt am Look. Umschalten verlier
 - Neue Station (antippbarer Ort): Text/Ziel/Regel in `K.antwort(id)`, Knopf-Aufschrift in `AKTION`/`K.aktionFuer(id)`; die Looks rufen nur
   `zeigeAntwort(K.antwort(id))` auf.
 - Ereignisse: `Ereignisse.melde("bauwerk", { id })`; auf einer anderen Seite `Ereignisse.abholen("bauwerk")`.
+- Neue Tutorial-Etappe: Eintrag in `ETAPPEN` im Kern (`id`, `szene`, `faellig(st)`, `genutzt()`), Szene in `shared/szenen.js` mit `etappe: "E9"`,
+  Zeigehand/Warten in `spieleStory(id)` beider Looks. Kinder, die die Funktion kennen, bekommen die Etappe still.
+- Pixel-Grafik: Zeichnung in `quellen/pixel/dinge.js` (Pixelpuffer mit `kugel/zylinder/vieleck/fuelle/rect`, nur Farben aus `PAL`), in
+  `quellen/pixel/insel.js` vor `packe()` mit `merke()` in den Atlas, dann `new Sprite(e.tex)`; Dinge auf den Boden mit `stelle(e, x, z)`,
+  antippbar mit `antippbar(sprite, x, z, tipp, aktion, nah, id)`.
 
 ## 6. Regeln (unverändert gültig)
 - **Offline-first:** kein Server, keine Konten, keine Daten verlassen das Gerät (einzige Ausnahme: Wetter von Open-Meteo ohne GPS).
@@ -138,7 +143,8 @@ Nichts, was das Kind besitzt oder erlebt hat, hängt am Look. Umschalten verlier
 ## 8. Testen (Pflicht vor jedem Push)
 - `sh tests/laufen.sh` = Node-Test `tests/story-migration.js` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
-- Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `weihnachten`, `probe` (Grafik-Proben, NUR=pixel|rund);
+- Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
+  `look` (braucht frisch gebautes /dev), `probe` (Grafik-Proben, NUR=pixel|rund); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.
@@ -155,7 +161,8 @@ Nichts, was das Kind besitzt oder erlebt hat, hängt am Look. Umschalten verlier
 - Pulsierende Knöpfe (Aktionsknopf `#springen`, `#szene-weiter`) mit `click(…, { force: true })`.
 - Test-Haken: `__heimat` (blick, ich, reingehen, rausgehen, laufeZu, tippe, station, laden, zimmerDaten, aktion, druecke, rennt, wetter,
   bildschirm, prolog, imProlog, steg, sonnenuhr, su, nebel, naechsteStory, paket, oeffnePaket, lichter, zeichnungen), `__szene`
-  (spiele, aktuell, weiter, abbrechen, szenen), `__ereignisse`, `__atelier`, `__musik`, `__schach`, `__gefuehle`, `__lauf`, `__kart`,
+  (spiele, aktuell, weiter, abbrechen, szenen), `__pixel` (ich, teleport, laufeZu, tippe(id), orte, nachbarn, aktion, druecke, reingehen,
+  rausgehen, drinnen, besuche, paket, oeffnePaket, lichter, nebel, zimmerDaten, moebel, einrichten, ringe, figur, tierRichtung, zeichnungen, zoom), `__ereignisse`, `__atelier`, `__musik`, `__schach`, `__gefuehle`, `__lauf`, `__kart`,
   `__bau`, `__duell`, `__ich`, `__mathe`; geplant: `__tutorial`. Jeder neue Baustein bekommt einen Test-Haken.
 - Jede geänderte Seite einmal öffnen, Konsole auf Fehler prüfen, Screenshots ansehen (Quer- und Hochformat; mit Hilfesprache Russisch, in /dev).
 - Externe Seiten (Open-Meteo, Google Fonts) sind aus der Sandbox meist nicht erreichbar – Fehlermeldungen dazu ignorieren, mit Cache-Daten testen.

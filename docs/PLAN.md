@@ -817,7 +817,7 @@ Neue Pakete (vor NA-14):
 - **NA-28 Pixel-Zimmer** (M): Zimmer und Möbel in Pixel, gleiche Möbel-Daten.
 - Minispiele bleiben vorerst 3D und werden aus beiden Looks gestartet; Pixel-Fassungen später je Spiel. NA-21 (Leistung „Rund“) bleibt wichtig.
 
-**Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** ~~**NA-24**~~ → ~~**NA-25**~~ (in /dev eingeschaltet) → ~~**NA-26**~~ → ~~**NA-27**~~ → ~~**NA-28**~~ → **NA-14** (in beiden Looks)
+**Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** ~~**NA-24**~~ → ~~**NA-25**~~ (in /dev eingeschaltet) → ~~**NA-26**~~ → ~~**NA-27**~~ → ~~**NA-28**~~ → ~~**NA-14**~~ (in beiden Looks)
 → **NA-21** → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 → Punkt 5 ff. wie oben.
 
 ### Stand 27.10.2026, morgens (Sitzung 27.10. früh: DS-Look, NA-24 fertig, NA-25 vorbereitet, NA-26 begonnen)
@@ -919,4 +919,18 @@ Reihenfolge gilt (NA-26 zuerst); nichts ist gesperrt; Geschenke für NA-16 weite
 - **iPad 10 und Handy testen** (in `/dev`): Insel öffnen → Knopf „👾 Pixel“ → laufen (Tippen), Ella antippen, Haus, Zimmer einrichten,
   Kleiderschrank ändern und wieder ansehen, zurück „🐾 Rund“. Neues Kind in `/dev`: Prolog in Pixel (Eltern → „Look der Insel: Pixel“ vor dem
   ersten Inselbesuch). Wenn alles passt: Pixel auch auf der Hauptseite wählbar machen (`lookWaehlbar()` → immer wahr) – Entscheidung des Auftraggebers.
-- Nächstes Paket: **NA-14** Tutorial E4–E8 in beiden Looks → NA-21 → NA-16 (wartet auf Geschenk-Auswahl).
+- Nächstes Paket: ~~NA-14~~ (siehe unten) → **NA-21** Leistungs-Test „Rund“ → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18.
+
+**NA-14 Tutorial E4–E8 (fertig, beide Looks)**
+- Auslöser, Reihenfolge und „schon genutzt“ im Insel-Kern (`ETAPPEN` in `shared/insel-kern.js`, statt einer eigenen `shared/tutorial.js` –
+  so gilt es für beide Looks ohne doppelte Logik): erst nach E3; **E4 Sterne** (Spielzeit und mind. 4 Sterne: Benno zeigt die Sterne, Haus,
+  „Einrichten“), **E5 Ei** (Nest, Ei wärmen, „Dein Tier ist nie böse“; danach Nest-Blase mit Weg zur Tier-Seite), **E6 Spielorte** (Spielzeit
+  und kompletter Führerschein: Ballon-Wiese, Spielzeit läuft ab), **E7 Merkkiste** (erste fällige Karte der Lernkartei: Fipsi, bei nur
+  Sachunterricht Ella), **E8 Gefühle** (ab dem Tag nach der Ankunft: Bruni). Höchstens zwei neue Etappen am Tag.
+- Kinder, die eine Funktion schon kennen (Möbel/Wandfarbe gekauft, Ei/Tier, Kinder von vor der Neuausrichtung, Karte schon einmal richtig
+  wiederholt, Gefühle-Tagebuch benutzt), bekommen die Etappe **still** (`Story.etappeFertig(id, true)` = Wert 1, zählt nicht zum Tageslimit).
+- Elternbereich, Karte „Geschichte und Einführung“: Fortschritt der Einführung und Knopf **„Einführung überspringen“** (E2–E8 still, Kapitel 1).
+- Texte in `shared/szenen.js` (russisch als Entwurf, nur in /dev); neue Orte für die Zeigehand: `nest`, `ballons`, `fipsi`, `baer`.
+- Tests: Node `tests/inselkern.js` (24 Prüfungen, neu: E4–E8), Browser `tests/etappen.js` (drei Tage in Pixel, Sterne-Szene und Elternknopf in Rund).
+- Offen: „Wie ging das nochmal?“ bei Robo spielt weiter nur die Ankunft; einzelne Etappen lassen sich ab NA-18 über die Inselchronik im Album
+  noch einmal ansehen. E9 (Atelier) und E10 (Mein Ich) gehören zu späteren Paketen (Kapitel 1–2, NA-17).

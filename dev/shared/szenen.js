@@ -48,3 +48,32 @@
     { wer: "eule", text: { de: "Dein Baum vertreibt den Nebel. Je mehr du lernst, desto mehr von der Insel wacht auf.", ru: "Твоё дерево прогоняет туман. Чем больше ты учишься, тем больше острова просыпается.", status: E } }
   ] });
 })();
+
+// ---------- Tutorial E4–E8 (NA-14): Sterne, Ei, Spielorte, Merkkiste, Gefühle ----------
+// Auslöser und Reihenfolge im Insel-Kern (ETAPPEN in shared/insel-kern.js); Zeigehand und Warten setzt jeder Look.
+(function () {
+  const Sz = window.Szene; if (!Sz) return;
+  const E = { ru: "entwurf" };
+  Sz.registriere("sterne", { titel: "Sterne fürs Zuhause", etappe: "E4", blasen: [
+    { wer: "biber", text: { de: "Schau mal, {name}: Du hast schon Sterne gesammelt!", ru: "Смотри, {name}: ты уже собрал(а) звёзды!", status: E } },
+    { wer: "biber", text: { de: "Mit Sternen kaufst du schöne Sachen für dein Zimmer. Geh in dein Haus!", ru: "За звёзды можно купить красивые вещи для комнаты. Иди в свой дом!", status: E } },
+    { wer: "biber", text: { de: "Tippe auf „Einrichten“ und such dir etwas aus. Was du kaufst, bleibt für immer deins.", ru: "Нажми «Обустроить» и выбери что-нибудь. Купленное останется твоим навсегда.", status: E } }
+  ] });
+  Sz.registriere("ei", { titel: "Das Nest", etappe: "E5", blasen: [
+    { wer: "robo", text: { de: "Siehst du das Nest neben deinem Haus? Dort kann ein Haustier wohnen.", ru: "Видишь гнездо рядом с домом? Там может жить питомец.", status: E } },
+    { wer: "robo", text: { de: "Such dir ein Ei aus und wärme es jeden Tag ein bisschen. Dann schlüpft dein Tier!", ru: "Выбери яйцо и каждый день немного согревай его. Тогда вылупится твой питомец!", status: E } },
+    { wer: "robo", text: { de: "Dein Tier ist nie böse, wenn du mal keine Zeit hast. Es freut sich einfach, wenn du kommst.", ru: "Твой питомец никогда не обижается, если у тебя нет времени. Он просто радуется, когда ты приходишь.", status: E } }
+  ] });
+  Sz.registriere("spielorte", { titel: "Die Spielorte sind wach", etappe: "E6", blasen: [
+    { wer: "robo", text: { de: "Die Sonne scheint, die Spielorte sind wach! Die Ballon-Wiese wartet auf dich.", ru: "Солнце светит, места для игр проснулись! Поляна с шариками ждёт тебя.", status: E } },
+    { wer: "robo", text: { de: "Spiel eine Runde! Wenn die Sonne untergeht, ist die Spielzeit für heute vorbei – morgen geht es weiter.", ru: "Сыграй раунд! Когда солнце сядет, время игры на сегодня закончится – завтра продолжим.", status: E } }
+  ] });
+  Sz.registriere("merkkiste", { titel: "Die Merkkiste", etappe: "E7", blasen: [
+    { wer: "fipsi", text: { de: "Psst, {name}! In meiner Merkkiste liegt etwas, das du schon einmal geübt hast.", ru: "Псс, {name}! В моём сундучке лежит то, что ты уже упражнял(а).", status: E } },
+    { wer: "fipsi", text: { de: "Wiederholen macht dein Gedächtnis stark. Komm zu mir, dann üben wir es kurz!", ru: "Повторение делает память сильной. Иди ко мне, и мы быстро повторим!", status: E } }
+  ] });
+  Sz.registriere("gefuehle", { titel: "Wie geht es dir?", etappe: "E8", blasen: [
+    { wer: "baer", text: { de: "Hallo {name}! Ich bin Bruni. Wie geht es dir heute?", ru: "Привет, {name}! Я Бруни. Как ты сегодня?", status: E } },
+    { wer: "baer", text: { de: "Bei mir kannst du zeigen, wie du dich fühlst. Und wenn du müde bist, machen wir zusammen eine Pause.", ru: "У меня можно показать, что ты чувствуешь. А если устанешь, мы вместе сделаем перерыв.", status: E } }
+  ] });
+})();
