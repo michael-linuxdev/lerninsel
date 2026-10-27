@@ -12,15 +12,17 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (27.10.2026, 19:45)
+## 1. Stand (27.10.2026, 20:30)
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
   Kl. 1/Vorschule 10 Stationen · Kl. 2 23 · Kl. 3 20 (u. a. schriftlich plus/minus, Würfelnetze, Würfelgebäude, Spiegeln, Diagramme, Glücksrad) ·
   Kl. 4 15 (Zahlen bis 1 Mio., schriftlich mal/geteilt, auch mehrstellig, Teilbarkeit 2/3/4/5/6/9/10/100, Primzahlen, römische Zahlen, Maßstab,
   Zeit/Datum, Liter, Flächen, Chancen) · **Übergang 5** 10 (Brüche, Kommazahlen, Klammern, Koordinaten, Winkel, Durchschnitt). Urkunden am Ende von Kl. 4 und Übergang 5.
 - **Deutsch:** Fipsis Abenteuer (5 Kapitel), Lesen und Schreiben (Anlaute, Silben, 20 Lesetexte, Nachspuren, Wörter legen), DaZ „Ankommen“,
-  **Wörter-Werkstatt 30 Kapitel** (Kl. 1–2: 5, Kl. 3–4: 23 inkl. Geschichte ordnen, Satzanfänge, Brief, Bericht, Wörterbuch, Vortrag; Übergang 5:
-  Fachbegriffe, Lesestrategien). Schritt-Typen u. a. `ordnen` und `verbessern`.
+  **Wörter-Werkstatt 35 Kapitel** (Kl. 1–2: 7, Kl. 3–4: 26 inkl. Geschichte ordnen, Satzanfänge, Brief, Bericht, Wörterbuch, Vortrag; Übergang 5:
+  Fachbegriffe, Lesestrategien). Schritt-Typen u. a. `ordnen`, `verbessern`, **`schreiben`** (frei schreiben, einfache Prüfung ohne KI) und
+  **`aufnehmen`** (sich selbst aufnehmen, nur mit Eltern-Schalter). Neu: Reime und Gedichte, Einladung, Bildergeschichte, Gedicht vortragen, Buchtipp.
+  Eigene Texte und Aufnahmen liegen in einer eigenen IndexedDB (`shared/eigenes.js`), Eltern lesen/hören sie im Elternbereich.
 - **Sachunterricht (Eule Ella): 32 Themen**, u. a. Wasser, Wetterkarte, Strom, Wärme, Gewässer, Experiment, Erste Hilfe, Medien, Herz und Lunge,
   Pubertät („Ich werde größer“), Nein sagen, Lernen lernen, Neue Schule, **„Unser Bundesland Sachsen“ (nur für Kinder aus Sachsen, Feld `land`)**.
 - **Englisch (Papagei Paula): 13 Lektionen** (Kl. 3: Hello, Colours, Numbers, Animals, Body, Food, At home, Around the year; Kl. 4: Family, School,
@@ -42,7 +44,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - Kl.-3/4-Inhalte bleiben **ab der Klasse davor** sichtbar (Werkstatt, Sachthemen, Englisch).
 
 ### Bekannte Baustellen
-- **Deutsch ist am schwächsten** (3 von 15 gut): kein freies Schreiben, kein eigenes Sprechen/Aufnehmen, keine Handschrift-Übung, kaum Gedichte/Bilderbücher.
+- **Deutsch ist am schwächsten** (3 von 15 gut): freies Schreiben und Aufnehmen gibt es jetzt (D1), es fehlen Handschrift-Übung (Schulausgangsschrift),
+  Rechtschreibhilfe für eigene Texte, Gespräche, Bilderbücher; Kinder sehen ihre eigenen Texte noch nicht selbst.
 - Englisch: Shopping, Trip, Wochentage, Uhrzeit, Zahlen bis 100, keine Lernkartei.
 - Nur russische Übersetzungs-Entwürfe; Ukrainisch u. a. fehlen. Ton über die Gerätestimme (echte Aufnahmen NA-43 offen).
 - Länderprofile außer Sachsen fehlen (NA-47); Heimat-Themen für andere Länder fehlen.
@@ -50,24 +53,20 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Insel-Tests (`tutorial`, `prolog`) wackeln, wenn parallel andere Browser-Tests laufen** – allein laufen lassen; einmal gescheitert heißt nicht kaputt.
 
 ### Offene Fragen an den Auftraggeber
-- **iPad-10-Test** (in /dev) der Pakete vom 27.10.: Werkstatt „Ordnen“/„Verbessern“, Mathe Kl. 3/4 inkl. Urkunde und „9 kg = 9000 g“, Bildaufgaben im
+- **iPad-10-Test** (in /dev) der Pakete vom 27.10.: **Werkstatt „Bildergeschichte schreiben“ (Tastatur, Hinweise), Aufnehmen (erst im Elternbereich
+  einschalten, dann „Reime und Gedichte“; fragt Safari nach dem Mikrofon? Klingt die Aufnahme?)**, Werkstatt „Ordnen“/„Verbessern“, Mathe Kl. 3/4 inkl. Urkunde und „9 kg = 9000 g“, Bildaufgaben im
   Hochformat, Übergang 5, Englisch (spricht das iPad englisch?), Startseite mit Englisch-Tür, Sachthemen „Ich werde größer“ und „Unser Bundesland Sachsen“.
 - **Lehrplan Mathe Sachsen 2025 als PDF hochladen?** Dann lassen sich Kl. 4 „Größen und Messen“ und „Daten und Zufall“ genau nachtragen.
-- Für Deutsch: Darf das Kind **die eigene Stimme aufnehmen** (bleibt nur auf dem Gerät, Eltern können anhören)? Soll **freies Schreiben** über die
-  Bildschirmtastatur laufen (die App prüft nur einfache Regeln, keine KI)?
+- Deutsch: Sollen Kinder ihre eigenen Texte selbst wiederfinden („Mein Heft“)? Handschrift-Übung mit Finger/Stift (Schulausgangsschrift oder
+  Vereinfachte Ausgangsschrift – je nach Schule als Eltern-Einstellung)?
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (Vorschlag, nach Rückmeldung anpassen)
 Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen – siehe `CLAUDE.md`, Abschnitt 3.
 
-**Schritt D1 – Deutsch schreiben und sprechen (L, größte Lücke):**
-1. Neuer Werkstatt-Schritt-Typ **`schreiben`**: Kind schreibt 1–3 Sätze zu einem Bild oder einer Bildergeschichte (Bildschirmtastatur). Die App
-   prüft nur Einfaches ohne KI: Satzanfang groß, Satzzeichen am Ende, Pflichtwörter aus einer Liste, Mindestlänge; freundliche Hinweise statt „falsch“.
-   Texte bleiben auf dem Gerät; Eltern sehen sie im Elternbereich. Kapitel: Bildergeschichte (Kl. 2/3), Einladung schreiben (Kl. 2), Buchtipp/Meinung (Kl. 4).
-2. Neuer Schritt-Typ **`aufnehmen`** (nur nach Zustimmung des Auftraggebers): Gedicht vortragen, nacherzählen, Vortrag üben – Aufnahme mit
-   `MediaRecorder`, nur in der eigenen IndexedDB, nie hochgeladen, Kind kann sich anhören, Eltern auch. Ohne Mikrofon-Erlaubnis still überspringen.
-3. Gedichte und Reime (eigene Texte oder gemeinfreie nacherzählt), Kl. 1/2 „Sich mit Texten auseinandersetzen“.
-4. Tests mit echtem Tippen (Playwright `fill`) und mit einem Fake-Mikrofon (`--use-fake-device-for-media-stream`); Sachsen Deutsch nachziehen.
+**Schritt D2 – Deutsch Teil 2 (M):** „Mein Heft“ (Kind sieht eigene Texte und Aufnahmen), Handschrift-Übung (Eltern-Wahl der Schrift),
+weitere Schreibanlässe (Glückwunsch, Tagebuch, Anleitung), einfache Rechtschreibhilfe über eine Wörterliste (keine KI). D1 (schreiben, aufnehmen,
+Gedichte) ist erledigt – siehe PLAN „Stand 27.10.2026, 20:30“.
 
 **Schritt E2 – Englisch Teil 2 (M):** Lektionen „Let's go shopping“ (Zahlen bis 100, Preise in Pfund) und „Let's go on a trip“ (Verkehrsmittel,
 London), Wochentage/Uhrzeit in „At school“ ergänzen, Englisch-Wörter in die Lernkartei (fällige Wörter am Lektionsanfang wiederholen).

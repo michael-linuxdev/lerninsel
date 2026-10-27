@@ -127,8 +127,10 @@
     return karten.length ? Object.assign({}, k, { schritte: [WIEDER_INTRO, ...karten, ...k.schritte] }) : k;
   }
 
+  // Paket D1: Aufnahme-Schritte nur, wenn die Eltern es erlaubt haben und das Gerät aufnehmen kann – sonst still weglassen
+  const ohneAufnahme = (k) => window.Eigenes && Eigenes.darfAufnehmen() ? k : Object.assign({}, k, { schritte: k.schritte.filter(x => x.typ !== "aufnehmen") });
   function starte(i, liste = G) {
-    const k = mitWiederholung(liste[i]);
+    const k = mitWiederholung(ohneAufnahme(liste[i]));
     lauf = { i, k, liste, werk: liste !== G, pos: 0, fehler: 0, stufe: 0 };
     document.body.style.setProperty("--grund", k.grund);
     document.body.style.setProperty("--akzent", k.farbe);
@@ -163,14 +165,17 @@
     const s = k.schritte[lauf.pos];
     lauf.versuche = 0;
     const A = $("aufgabe");
-    A.classList.toggle("lang", s.typ === "ordnen" || s.typ === "verbessern"); A.scrollTop = 0;   // Paket A: hohe Inhalte oben beginnen, sonst schneidet die Zentrierung oben ab
+    A.classList.toggle("lang", ["ordnen", "verbessern", "schreiben", "aufnehmen"].includes(s.typ) || !!s.gedicht); A.scrollTop = 0;   // Paket A: hohe Inhalte oben beginnen, sonst schneidet die Zentrierung oben ab
     const hinweis = `<p class="hinweis" id="hinweis"></p>`;
 
     switch (s.typ) {
       case "sag": {
         const t = mitName(s.text);
         blase(t, t, S.ht(s));
-        A.innerHTML = `<div class="gross-emoji" aria-hidden="true">${k.ort}</div><button class="knopf weiter" id="weiter">Weiter</button>`;
+        // Paket D1: Gedicht oder Reim zeilenweise zeigen, mit eigenem Vorlese-Knopf
+        A.innerHTML = (s.gedicht ? gedichtHtml(s) + (SP.verfuegbar() ? `<button class="knopf" id="gedicht-hoeren">🔊 Gedicht anhören</button>` : "")
+          : `<div class="gross-emoji" aria-hidden="true">${k.ort}</div>`) + `<button class="knopf weiter" id="weiter">Weiter</button>`;
+        if ($("gedicht-hoeren")) $("gedicht-hoeren").addEventListener("click", () => SP.sprich(s.gedicht.filter(Boolean).join(" … "), "de-DE"));
         $("weiter").addEventListener("click", () => { S.ton("tipp"); weiter(); });
         break;
       }
@@ -376,7 +381,139 @@
         }));
         break;
       }
+      case "schreiben": schreibSchritt(s, A, hinweis); break;
+      case "aufnehmen": aufnahmeSchritt(s, A, hinweis); break;
     }
+  }
+
+  // ---------- Paket D1: frei schreiben und sich selbst aufnehmen ----------
+  const gedichtHtml = (s) => `<div class="gedicht">${s.titel ? `<b>${s.titel}</b>` : ""}${s.gedicht.map(z => z ? `<span>${z}</span>` : `<span class="leer"></span>`).join("")}</div>`;
+  const bildfolgeHtml = (s) => `<div class="bildfolge" aria-hidden="true">${s.bilder.map((b, n) => `<div><span class="nr">${n + 1}</span>${b}</div>`).join("")}</div>`;
+  // Einfache Prüfung ohne KI: Länge, Satzzahl, Großschreibung am Satzanfang, Satzzeichen am Ende, Pflichtwörter. Ergebnis: Liste von Punkten.
+  function pruefeText(text, s) {
+    const t = text.trim().replace(/\s+/g, " ");
+    const woerter = t ? t.split(" ").filter(w => /[A-Za-zÄÖÜäöüß]/.test(w)) : [];
+    const saetze = t ? (t.match(/[^.!?]+[.!?]*/g) || []).map(x => x.trim()).filter(x => /[A-Za-zÄÖÜäöüß]/.test(x)) : [];
+    const minW = s.woerter || 5, minS = s.saetze || 1;
+    const punkte = [
+      { id: "laenge", ok: woerter.length >= minW, text: `Mindestens ${minW} Wörter (${woerter.length})` },
+      { id: "saetze", ok: saetze.length >= minS, text: minS === 1 ? "Ein ganzer Satz" : `Mindestens ${minS} Sätze (${saetze.length})` },
+      { id: "gross", ok: saetze.length > 0 && saetze.every(x => /^[^A-Za-zÄÖÜäöüß]*[A-ZÄÖÜ]/.test(x)), text: "Jeder Satz beginnt groß" },
+      { id: "zeichen", ok: /[.!?][“"»«]?$/.test(t), text: "Am Ende steht . ! oder ?" }
+    ];
+    (s.pflicht || []).forEach(w => punkte.push({ id: "w:" + w, ok: t.toLowerCase().includes(w.toLowerCase()), text: `Das Wort „${w}“ kommt vor` }));
+    return punkte;
+  }
+  const TIPP = { laenge: "Schreib noch ein bisschen mehr.", saetze: "Schreib noch einen Satz dazu.", gross: "Schau mal: Fängt jeder Satz mit einem großen Buchstaben an?",
+    zeichen: "Am Satzende fehlt noch ein Punkt, ein Fragezeichen oder ein Ausrufezeichen." };
+  const tippFuer = (p) => TIPP[p.id] || `Kannst du das Wort „${p.id.slice(2)}“ noch einbauen?`;
+
+  function schreibSchritt(s, A, hinweis) {
+    const frage = mitName(s.frage);
+    blase(frage, frage, S.ht(s));
+    const karten = (s.pflicht || []).concat(s.karten || []);
+    A.innerHTML = (s.bilder ? bildfolgeHtml(s) : s.e ? `<div class="gross-emoji klein" aria-hidden="true">${s.e}</div>` : "") +
+      (karten.length ? `<div class="wortkarten" aria-label="Wörter zum Einfügen">${karten.map(w => `<button class="chip wk" data-w="${w}">${w}</button>`).join("")}</div>` : "") +
+      `<textarea id="schreibfeld" class="schreibfeld" rows="4" lang="de" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="${s.anfang ? "" : "Hier schreibst du …"}" aria-label="Dein Text"></textarea>` +
+      `<ul class="pruefliste" id="pruefliste"></ul>` +
+      `<div class="schreib-knoepfe">${SP.verfuegbar() ? `<button class="knopf" id="vorlesen-eigen">🔊 Vorlesen</button>` : ""}<button class="knopf haupt pruefen" id="pruefen" disabled>Fertig</button></div>` + hinweis;
+    const feld = $("schreibfeld"), liste = $("pruefliste"), pruefen = $("pruefen");
+    if (s.anfang) feld.value = s.anfang;
+    const zeichne = () => {
+      const p = pruefeText(feld.value, s);
+      liste.innerHTML = p.map(x => `<li class="${x.ok ? "ok" : ""}">${x.ok ? "✅" : "⬜"} ${x.text}</li>`).join("");
+      pruefen.disabled = !feld.value.trim() || feld.value.trim() === (s.anfang || "").trim();
+      return p;
+    };
+    feld.addEventListener("input", zeichne);
+    A.querySelectorAll(".wk").forEach(b => b.addEventListener("click", () => {
+      if (lauf.gesperrt) return;
+      const a = feld.selectionStart ?? feld.value.length, e = feld.selectionEnd ?? a, v = feld.value;
+      const vor = a > 0 && !/\s$/.test(v.slice(0, a)) ? " " : "";
+      feld.value = v.slice(0, a) + vor + b.dataset.w + " " + v.slice(e);
+      const pos = a + vor.length + b.dataset.w.length + 1; feld.setSelectionRange(pos, pos); S.ton("tipp"); zeichne();
+    }));
+    const ve = $("vorlesen-eigen"); if (ve) ve.addEventListener("click", () => { if (feld.value.trim()) SP.sprich(feld.value.trim(), "de-DE"); });
+    zeichne();
+    pruefen.addEventListener("click", () => {
+      if (lauf.gesperrt) return;
+      const p = zeichne(), offen = p.filter(x => !x.ok), h = $("hinweis");
+      const ersterVersuch = lauf.versuche === 0;
+      if (offen.length && lauf.versuche === 0) {
+        // Erst ein freundlicher Hinweis statt „falsch“; zählt nicht gegen die Sterne
+        lauf.versuche++;
+        if (window.Koennen) Koennen.melde(lzSchritt(s), false);
+        h.className = "hinweis tipp"; h.textContent = tippFuer(offen[0]) + " Dann tippe nochmal auf Fertig.";
+        sprich(tippFuer(offen[0])); S.ton("tipp"); feld.focus();
+        return;
+      }
+      lauf.gesperrt = true; feld.readOnly = true; feld.blur();
+      A.querySelectorAll(".wk").forEach(b => b.disabled = true);
+      if (ersterVersuch) { if (window.Charakter) Charakter.gib("deutsch", 2); if (window.Koennen) Koennen.melde(lzSchritt(s), true); }
+      const text = feld.value.trim();
+      const lob = offen.length ? `Gut gemacht! Tipp fürs nächste Mal: ${tippFuer(offen[0])}` : LOB[Math.floor(Math.random() * LOB.length)] + " Ein schöner Text!";
+      h.className = "hinweis gut"; h.textContent = lob; S.ton("juhu"); sprich(lob);
+      const gespeichert = window.Eigenes ? Eigenes.speichere({ art: "text", kapitel: lauf.k.id, aufgabe: frage, text }).catch(() => null) : Promise.resolve(null);
+      gespeichert.then(id => {
+        if (lauf && lauf.k.schritte[lauf.pos] === s) h.insertAdjacentHTML("afterend", `<p class="klein-info" id="gespeichert">${id ? "📒 Gespeichert – deine Eltern können deinen Text lesen." : ""}</p>`);
+      });
+      pruefen.remove();
+      A.insertAdjacentHTML("beforeend", `<button class="knopf weiter" id="weiter">Weiter</button>`);
+      $("weiter").addEventListener("click", () => { lauf.gesperrt = false; S.ton("tipp"); weiter(); });
+      $("weiter").scrollIntoView({ block: "nearest" });
+    });
+  }
+
+  let aufnahmeEnde = null;   // stoppt Mikrofon und Wiedergabe, wenn das Kind den Schritt verlässt
+  function aufnahmeSchritt(s, A, hinweis) {
+    const frage = mitName(s.frage);
+    blase(frage, frage, S.ht(s));
+    A.innerHTML = (s.gedicht ? gedichtHtml(s) : s.bilder ? bildfolgeHtml(s) : s.e ? `<div class="gross-emoji klein" aria-hidden="true">${s.e}</div>` : "") +
+      `<button class="aufnahme-knopf" id="aufnahme" aria-label="Aufnehmen">🎙️</button><p class="aufnahme-zeit" id="aufnahme-zeit">Tippe aufs Mikrofon und leg los!</p>` +
+      `<div class="schreib-knoepfe" id="nach-aufnahme" hidden><button class="knopf" id="anhoeren">▶️ Anhören</button><button class="knopf" id="nochmal">🔁 Nochmal</button><button class="knopf haupt" id="aufnahme-fertig">Fertig</button></div>` +
+      `<button class="knopf leise" id="ohne-aufnahme">Lieber ohne Aufnahme weiter</button>` + hinweis;
+    let rec = null, erg = null, adresse = null, uhr = null, spieler = null;
+    aufnahmeEnde = () => { if (rec) rec.stopp(); aufraeumen(); };
+    const knopf = $("aufnahme"), zeit = $("aufnahme-zeit"), dieser = lauf, an = lauf.pos;
+    const nochDa = () => lauf === dieser && lauf.pos === an;
+    const aufraeumen = () => { clearInterval(uhr); if (spieler) spieler.pause(); if (adresse) URL.revokeObjectURL(adresse); adresse = null; };
+    knopf.addEventListener("click", async () => {
+      if (rec) { rec.stopp(); return; }
+      SP.stopp(); aufraeumen(); $("nach-aufnahme").hidden = true;
+      try {
+        rec = await Eigenes.starteAufnahme((x) => {
+          rec = null; clearInterval(uhr); knopf.classList.remove("laeuft"); knopf.textContent = "🎙️"; knopf.setAttribute("aria-label", "Nochmal aufnehmen");
+          if (!nochDa()) return;
+          erg = x;
+          zeit.textContent = x ? `Aufgenommen: ${x.dauer} Sekunden. Hör dich an!` : "Da war nichts zu hören. Probier es nochmal!";
+          $("nach-aufnahme").hidden = !x;
+          if (x) $("nach-aufnahme").scrollIntoView({ block: "nearest" });
+        });
+      } catch (e) {
+        // Keine Erlaubnis oder kein Mikrofon: freundlich weiter ohne Aufnahme
+        zeit.textContent = "Das Mikrofon ist gerade aus. Sag es einfach laut – das ist auch Üben!";
+        knopf.disabled = true; $("ohne-aufnahme").textContent = "Weiter"; $("ohne-aufnahme").classList.remove("leise");
+        return;
+      }
+      knopf.classList.add("laeuft"); knopf.textContent = "⏹️"; knopf.setAttribute("aria-label", "Aufnahme stoppen");
+      const start = Date.now();
+      zeit.textContent = "Ich höre zu … 0 s";
+      uhr = setInterval(() => { zeit.textContent = `Ich höre zu … ${Math.round((Date.now() - start) / 1000)} s – tippe auf Stopp, wenn du fertig bist.`; }, 500);
+    });
+    $("anhoeren").addEventListener("click", () => {
+      if (!erg) return;
+      if (spieler) spieler.pause();
+      if (!adresse) adresse = Eigenes.url(erg);
+      spieler = new Audio(adresse); spieler.play().catch(() => {});
+    });
+    $("nochmal").addEventListener("click", () => { S.ton("tipp"); knopf.click(); });
+    $("aufnahme-fertig").addEventListener("click", () => {
+      if (!erg) return;
+      if (window.Charakter) Charakter.gib("deutsch", 2);
+      Eigenes.speichere({ art: "ton", kapitel: lauf.k.id, aufgabe: frage, ton: erg.ton, typ: erg.typ, dauer: erg.dauer }).catch(() => null);
+      aufraeumen(); S.ton("juhu"); weiter();
+    });
+    $("ohne-aufnahme").addEventListener("click", () => { if (rec) rec.stopp(); aufraeumen(); S.ton("tipp"); weiter(); });
   }
 
   // Szene für auf / unter / neben / in
@@ -444,7 +581,7 @@
     beiFalsch && beiFalsch();
   }
 
-  function weiter() { SP.stopp(); lauf.pos++; schritt(); }
+  function weiter() { SP.stopp(); if (aufnahmeEnde) { aufnahmeEnde(); aufnahmeEnde = null; } lauf.pos++; schritt(); }
 
   // ---------- Ende eines Kapitels ----------
   function beende() {
@@ -501,8 +638,8 @@
   $("test-de").addEventListener("click", () => SP.sprich(`Hallo ${name()}! Ich bin Fipsi, der kleine Fuchs.`, "de-DE"));
   $("test-ru").addEventListener("click", () => { const g = S.paar({ de: "", ru: `Привет, ${name()}! Я Фипси, маленький лисёнок.` })[1]; SP.sprich(g || `Hallo ${name()}!`, g ? HL().tts : "de-DE"); });
 
-  $("zur-karte").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); lauf = null; zeige("karte"); zeichneKarte(); });
+  $("zur-karte").addEventListener("click", () => { SP.stopp(); if (aufnahmeEnde) { aufnahmeEnde(); aufnahmeEnde = null; } S.ton("tipp"); lauf = null; zeige("karte"); zeichneKarte(); });
 
   zeichneKarte();
-  window.__deutsch = { starte, schritt: (n) => { lauf.pos = n; lauf.gesperrt = false; lauf.versuche = 0; schritt(); }, get lauf() { return lauf; } };
+  window.__deutsch = { starte, pruefeText, schritt: (n) => { lauf.pos = n; lauf.gesperrt = false; lauf.versuche = 0; schritt(); }, get lauf() { return lauf; } };
 })();

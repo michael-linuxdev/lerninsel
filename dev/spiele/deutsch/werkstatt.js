@@ -6,6 +6,12 @@
 //   silben      { wort, teile: ["Ba","na","ne"], e, ru }
 //   ordnen      { frage?, teile: [...in richtiger Reihenfolge], e?, ru }   (Paket A: Sätze/Bausteine als Karten ordnen)
 //   verbessern  { frage?, satz, falsch, stelle?, optionen: [besser, ...], tipp?, e?, ru }   (Paket A: störendes Wort antippen, ersetzen)
+//   sag + gedicht { text, titel?, gedicht: ["Zeile", "", …] }   (Paket D1: Gedicht zeilenweise zeigen und vorlesen; "" = Strophenpause)
+//   schreiben   { frage, e? | bilder?: ["🐶⚽", …], woerter?: min. Wörter, saetze?: min. Sätze, pflicht?: [Wörter], karten?: [Wörter zum Einfügen], anfang?, ru }
+//               (Paket D1: freies Schreiben über die Bildschirmtastatur; die App prüft nur Länge, Satzanfang groß, Satzzeichen, Pflichtwörter –
+//                ohne KI, mit freundlichen Hinweisen; der Text bleibt auf dem Gerät, Eltern sehen ihn im Elternbereich)
+//   aufnehmen   { frage, gedicht? | bilder? | e?, titel?, ru }   (Paket D1: sich selbst aufnehmen und anhören; nur wenn die Eltern es erlauben,
+//               sonst wird der Schritt still weggelassen; Aufnahme nur in der eigenen IndexedDB, nie hochgeladen)
 window.WERKSTATT = [
   {
     id: "w-verben", lz: ["de.su.04"], name: "Tunwörter", ort: "🏃", farbe: "#E0574A", grund: "#FFECE8",
@@ -425,6 +431,73 @@ window.WERKSTATT = [
       { typ: "luecke", e: "🍎", satz: "Welche Überschrift passt zum letzten Satz? „___“", optionen: ["Bienen helfen den Früchten", "Bienen schlafen im Winter", "Wie ein Stock gebaut ist"], ru: "Какой заголовок подходит к последнему предложению? «Пчёлы помогают плодам»." },
       { typ: "verbessern", e: "📝", frage: "In dieser Zusammenfassung steht etwas Falsches. Tippe das Wort an!", satz: "Honigbienen leben allein und sammeln Nektar.", falsch: "allein", optionen: ["im Volk", "im Wasser", "im Winter"], tipp: "Richtig! Was steht im Text?", ru: "В пересказе ошибка: пчёлы живут не поодиночке, а семьёй." },
       { typ: "sag", text: "Klasse, {name}! Mit dieser Strategie schaffst du auch lange Texte in Erdkunde, Biologie und Geschichte.", ru: "Класс! С этой стратегией ты справишься и с длинными текстами по географии, биологии и истории." }
+    ]
+  },
+  // ---------- Paket D1: Reime, Gedichte, frei schreiben, sich selbst aufnehmen ----------
+  {
+    id: "w-reime", lz: ["de.su.01", "de.tm.03", "de.sz.05"], name: "Reime und Gedichte", ort: "🎵", farbe: "#C2337A", grund: "#FDEAF3",
+    schritte: [
+      { typ: "sag", text: "Reimwörter klingen am Ende gleich: Haus und Maus, Hund und rund. Hör genau hin, {name}!", ru: "Рифмы звучат в конце одинаково: Haus и Maus, Hund и rund. Слушай внимательно!" },
+      { typ: "luecke", e: "🏠", satz: "Haus reimt sich auf ___.", optionen: ["Maus", "Hund", "Baum"], ru: "Haus рифмуется с Maus." },
+      { typ: "luecke", e: "🌹", satz: "Rose reimt sich auf ___.", optionen: ["Hose", "Hase", "Tisch"], ru: "Rose рифмуется с Hose." },
+      { typ: "luecke", e: "🎂", satz: "Kuchen reimt sich auf ___.", optionen: ["suchen", "Kirsche", "Kanne"], ru: "Kuchen рифмуется с suchen." },
+      { typ: "luecke", e: "🌙", satz: "Der Mond scheint hell, die Katze rennt ___.", optionen: ["schnell", "langsam", "weg"], ru: "Луна светит ярко, кошка бежит быстро (hell – schnell)." },
+      { typ: "sag", text: "Hör dir mein Gedicht an! Am Ende der Zeilen reimt es sich.", titel: "Der Igel", gedicht: ["Ein Igel geht spazieren,", "er will sich nicht verlieren.", "Er schnuppert hier, er schnuppert dort –", "und schwupp, der Apfel ist gleich fort!"], ru: "Послушай моё стихотворение! В конце строк есть рифма. «Ёжик гуляет, не хочет потеряться. Нюхает тут и там – и хоп, яблока уже нет!»" },
+      { typ: "luecke", e: "🦔", satz: "Im Gedicht reimt sich „spazieren“ auf ___.", optionen: ["verlieren", "Apfel", "schnuppert"], ru: "В стихотворении «spazieren» рифмуется с «verlieren»." },
+      { typ: "ordnen", e: "🦔", frage: "Bring das Gedicht in die richtige Reihenfolge!", teile: ["Ein Igel geht spazieren,", "er will sich nicht verlieren.", "Er schnuppert hier, er schnuppert dort –", "und schwupp, der Apfel ist gleich fort!"], ru: "Расставь строки стихотворения по порядку." },
+      { typ: "aufnehmen", frage: "Jetzt bist du dran! Sag das Gedicht laut auf. Tippe aufs Mikrofon – danach kannst du dich anhören.", titel: "Der Igel", gedicht: ["Ein Igel geht spazieren,", "er will sich nicht verlieren.", "Er schnuppert hier, er schnuppert dort –", "und schwupp, der Apfel ist gleich fort!"], ru: "Теперь ты! Прочитай стихотворение вслух. Нажми на микрофон – потом сможешь себя послушать." },
+      { typ: "sag", text: "Super, {name}! Gedichte klingen schön, wenn man langsam spricht und am Ende jeder Zeile kurz Luft holt.", ru: "Супер! Стихи звучат красиво, если говорить медленно и в конце каждой строки делать короткий вдох." }
+    ]
+  },
+  {
+    id: "w-einladung", stufe: 2, lz: ["de.sc.06", "de.sc.05"], name: "Eine Einladung schreiben", ort: "🎈", farbe: "#E8A33D", grund: "#FFF1D9",
+    schritte: [
+      { typ: "sag", text: "Du feierst ein Fest? Dann schreib eine Einladung! Darin steht: Wozu lädst du ein? Wann ist das Fest? Wo ist es? Und am Ende ein Gruß.", ru: "У тебя праздник? Тогда напиши приглашение! В нём написано: на что ты приглашаешь? Когда праздник? Где? А в конце – привет." },
+      { typ: "ordnen", e: "🎂", frage: "Bring die Einladung in die richtige Reihenfolge!", teile: ["Liebe Lena,", "ich lade dich zu meinem Geburtstag ein.", "Wir feiern am Samstag um 15 Uhr.", "Wir treffen uns bei mir zu Hause.", "Viele Grüße, Tom"], ru: "Расставь части приглашения по порядку." },
+      { typ: "luecke", e: "⏰", satz: "Wann ist das Fest? ___", optionen: ["Am Samstag um 15 Uhr.", "Bei mir zu Hause.", "Viele Grüße."], ru: "Когда праздник? В субботу в 15 часов." },
+      { typ: "luecke", e: "📍", satz: "Wo ist das Fest? ___", optionen: ["Bei mir zu Hause.", "Am Samstag.", "Liebe Lena."], ru: "Где праздник? У меня дома." },
+      { typ: "luecke", e: "✉️", satz: "Am Ende der Einladung steht ___.", optionen: ["ein Gruß und dein Name", "die Uhrzeit", "eine Frage"], ru: "В конце приглашения – привет и твоё имя." },
+      { typ: "schreiben", e: "🎈", frage: "Jetzt du, {name}! Schreib zwei Sätze für deine Einladung: Wozu lädst du ein? Wann ist das Fest – mit Uhrzeit?", woerter: 8, saetze: 2, pflicht: ["Uhr"], karten: ["Ich lade dich", "Geburtstag", "Fest", "am Samstag", "am Sonntag", "um"], ru: "Теперь ты! Напиши два предложения для приглашения: на что ты приглашаешь? Когда праздник – со временем?" },
+      { typ: "sag", text: "Toll! Vergiss nicht: Oben steht die Anrede, zum Beispiel „Liebe Lena,“ – und unten ein Gruß mit deinem Namen.", ru: "Отлично! Не забудь: вверху – обращение, например «Liebe Lena,», а внизу – привет и твоё имя." }
+    ]
+  },
+  {
+    id: "w-bildergeschichte", stufe: 3, lz: ["de.sc.07", "de.sc.05", "de.sz.01"], name: "Eine Bildergeschichte schreiben", ort: "🖼️", farbe: "#2E9C5A", grund: "#E3F7EF",
+    schritte: [
+      { typ: "sag", text: "Eine Geschichte hat einen Anfang, eine Mitte und ein Ende. Heute schreibst du eine Geschichte zu vier Bildern – über Bello, den Hund, und Lina.", ru: "У истории есть начало, середина и конец. Сегодня ты напишешь историю по четырём картинкам – про собаку Белло и Лину." },
+      { typ: "ordnen", e: "🐶", frage: "Was passiert zuerst, was danach? Bring die Sätze in die richtige Reihenfolge!", teile: ["Bello spielt im Garten mit seinem Ball.", "Plötzlich fliegt der Ball in den Baum.", "Bello bellt traurig. Lina hört ihn.", "Lina holt den Ball mit einer Leiter.", "Am Ende freut sich Bello sehr."], ru: "Что происходит сначала, а что потом? Расставь предложения по порядку." },
+      { typ: "luecke", e: "⚽", satz: "___ fliegt der Ball in den Baum.", optionen: ["Plötzlich", "Ende", "Weil"], ru: "Вдруг мяч улетает на дерево." },
+      { typ: "luecke", e: "😊", satz: "___ freut sich Bello sehr.", optionen: ["Am Ende", "Am Anfang", "Gestern"], ru: "В конце Белло очень радуется." },
+      { typ: "schreiben", bilder: ["🐶⚽🌳", "⚽🌳❗", "🐶😢👧", "👧🪜⚽"], frage: "Schreib die Geschichte jetzt mit eigenen Worten! Zu jedem Bild mindestens ein Satz. Die Wörter oben helfen dir.", woerter: 20, saetze: 4, pflicht: ["Ball", "Baum"], karten: ["Bello", "Lina", "Leiter", "Plötzlich", "Dann", "Am Ende"], ru: "Напиши историю своими словами! К каждой картинке хотя бы одно предложение. Слова сверху помогут." },
+      { typ: "aufnehmen", bilder: ["🐶⚽🌳", "⚽🌳❗", "🐶😢👧", "👧🪜⚽"], frage: "Erzähl die Geschichte jetzt laut – so, als würdest du sie einem Freund erzählen!", ru: "Теперь расскажи историю вслух – как будто рассказываешь другу!" },
+      { typ: "sag", text: "Klasse, {name}! Gute Geschichten haben abwechslungsreiche Satzanfänge: zuerst, dann, plötzlich, zum Schluss.", ru: "Класс! В хороших историях предложения начинаются по-разному: сначала, потом, вдруг, в конце." }
+    ]
+  },
+  {
+    id: "w-gedicht-vortragen", stufe: 3, lz: ["de.sz.05", "de.tm.04"], name: "Ein Gedicht vortragen", ort: "🎭", farbe: "#7B55B8", grund: "#EFE6FF",
+    schritte: [
+      { typ: "sag", text: "Ein Gedicht vortragen heißt: langsam sprechen, am Ende der Zeile kurz Pause machen, wichtige Wörter betonen und die Zuhörer ansehen.", ru: "Читать стихи наизусть – значит говорить медленно, в конце строки делать паузу, выделять важные слова и смотреть на слушателей." },
+      { typ: "sag", text: "Hör dir das Gedicht an. Welche Wörter reimen sich?", titel: "Herbstwind", gedicht: ["Der Herbstwind pustet kalt und laut,", "er hat die Blätter fortgeklaut.", "Sie tanzen rot und gelb im Kreis", "und flüstern leise: Bald wird's weiß!"], ru: "Послушай стихотворение. Какие слова рифмуются? «Осенний ветер дует холодно и громко, он унёс листья. Они кружатся красные и жёлтые и тихо шепчут: скоро будет белым!»" },
+      { typ: "luecke", e: "🍂", satz: "„laut“ reimt sich im Gedicht auf ___.", optionen: ["fortgeklaut", "Kreis", "Blätter"], ru: "«laut» рифмуется с «fortgeklaut»." },
+      { typ: "luecke", e: "❄️", satz: "„Kreis“ reimt sich auf ___.", optionen: ["weiß", "rot", "leise"], ru: "«Kreis» рифмуется с «weiß»." },
+      { typ: "luecke", e: "⏸️", satz: "Am Ende einer Zeile machst du ___.", optionen: ["eine kleine Pause", "ganz schnell weiter", "ein Geräusch"], ru: "В конце строки делаешь маленькую паузу." },
+      { typ: "luecke", e: "🤫", satz: "Die Worte „flüstern leise“ sprichst du ___.", optionen: ["leise", "sehr laut", "gar nicht"], ru: "Слова «тихо шепчут» говоришь тихо." },
+      { typ: "ordnen", e: "🍂", frage: "Bring das Gedicht in die richtige Reihenfolge!", teile: ["Der Herbstwind pustet kalt und laut,", "er hat die Blätter fortgeklaut.", "Sie tanzen rot und gelb im Kreis", "und flüstern leise: Bald wird's weiß!"], ru: "Расставь строки стихотворения по порядку." },
+      { typ: "aufnehmen", frage: "Trag das Gedicht vor! Denk an die Pausen und sprich „leise“ wirklich leise. Danach hörst du dich an.", titel: "Herbstwind", gedicht: ["Der Herbstwind pustet kalt und laut,", "er hat die Blätter fortgeklaut.", "Sie tanzen rot und gelb im Kreis", "und flüstern leise: Bald wird's weiß!"], ru: "Прочитай стихотворение! Помни о паузах и говори «leise» по-настоящему тихо. Потом послушай себя." },
+      { typ: "sag", text: "Wunderbar, {name}! Auch Profis üben ein Gedicht viele Male. Probier es ruhig noch einmal vor deiner Familie.", ru: "Чудесно! Даже профессионалы много раз репетируют стихотворение. Попробуй ещё раз перед своей семьёй." }
+    ]
+  },
+  {
+    id: "w-buchtipp", stufe: 4, lz: ["de.tm.05", "de.sz.06", "de.sc.07"], name: "Mein Buchtipp", ort: "📕", farbe: "#E0574A", grund: "#FFECE8",
+    schritte: [
+      { typ: "sag", text: "Ein Buchtipp verrät: Wie heißt das Buch? Worum geht es – ohne das Ende zu verraten? Und wie findest du es – und warum?", ru: "Совет о книге рассказывает: как называется книга? О чём она – не раскрывая конца? И как она тебе – и почему?" },
+      { typ: "ordnen", e: "📕", frage: "Bring den Buchtipp in eine gute Reihenfolge!", teile: ["Mein Buchtipp: „Der Leuchtturm-Hund“", "Darin geht es um einen Hund, der auf einer Insel wohnt.", "Mir gefällt das Buch, weil es spannend und lustig ist.", "Ich empfehle es allen, die Tiere mögen."], ru: "Расставь части совета о книге в хорошем порядке." },
+      { typ: "luecke", e: "🤐", satz: "In einen Buchtipp gehört NICHT ___.", optionen: ["das ganze Ende", "der Titel", "deine Meinung"], ru: "В совет о книге НЕ входит весь конец истории." },
+      { typ: "verbessern", e: "🔍", frage: "Ein Wort sagt zu wenig. Tippe es an und wähle ein genaueres!", satz: "Das Buch ist gut.", falsch: "gut", optionen: ["spannend", "grün", "laut"], tipp: "Genau! „Gut“ sagt wenig. Was ist das Buch genau?", ru: "Слово «gut» (хорошая) говорит мало. Выбери более точное: «spannend» (захватывающая)." },
+      { typ: "luecke", e: "💭", satz: "Ich finde das Buch toll, ___ die Heldin so mutig ist.", optionen: ["weil", "aber", "oder"], ru: "Мне нравится книга, потому что героиня такая смелая." },
+      { typ: "schreiben", e: "📕", frage: "Schreib deinen eigenen Buchtipp! Nenne den Titel, sag kurz, worum es geht, und begründe deine Meinung mit „weil“.", woerter: 15, saetze: 3, pflicht: ["weil"], karten: ["Mein Buchtipp:", "Darin geht es um", "Mir gefällt das Buch,", "spannend", "lustig", "Ich empfehle es"], ru: "Напиши свой совет о книге! Назови книгу, коротко скажи, о чём она, и объясни своё мнение со словом «weil» (потому что)." },
+      { typ: "aufnehmen", e: "🎤", frage: "Stell dein Buch jetzt als kleinen Vortrag vor! Sprich langsam und deutlich – du kannst deinen Text dabei ablesen.", ru: "Теперь представь свою книгу как маленький доклад! Говори медленно и чётко – можно читать свой текст." },
+      { typ: "sag", text: "Prima, {name}! Mit so einem Buchtipp findest du in der Klasse bestimmt Leute, die dein Buch auch lesen wollen.", ru: "Отлично! С таким советом ты наверняка найдёшь в классе ребят, которые тоже захотят прочитать твою книгу." }
     ]
   }
 ];

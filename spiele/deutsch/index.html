@@ -130,6 +130,31 @@
   .vb-wort.falsch { background: #FFE1DD; opacity: .6; }
   .vb-wort.zeig { box-shadow: 0 0 0 5px #FFD15C; }
   .vb-wort.gefunden { background: #FFF1C9; box-shadow: 0 0 0 5px var(--akzent); color: var(--pflaume); opacity: 1; }
+  /* Paket D1: Gedicht, frei schreiben, aufnehmen */
+  .gedicht { background: #FFFBEF; border-radius: 22px; padding: 16px 24px; box-shadow: inset 0 0 0 3px #F3E3B5; display: flex; flex-direction: column; gap: 2px; font-size: 1.45rem; line-height: 1.4; text-align: left; max-width: 620px; }
+  .gedicht b { font-size: 1.5rem; margin-bottom: 6px; }
+  .gedicht .leer { height: .6em; }
+  .gross-emoji.klein { font-size: clamp(3rem, 8vw, 4.6rem); }
+  .bildfolge { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 720px; }
+  .bildfolge > div { position: relative; background: var(--grund); border-radius: 18px; font-size: clamp(2rem, 5.5vw, 3.2rem); padding: 14px 4px 10px; line-height: 1.15; }
+  .bildfolge .nr { position: absolute; top: 4px; left: 8px; font-size: .95rem; font-weight: 700; color: var(--pflaume); }
+  .wortkarten { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 720px; }
+  .wortkarten .chip { min-height: 50px; font-size: 1.3rem; padding: 0 16px; }
+  .schreibfeld { width: 100%; max-width: 720px; min-height: 140px; border-radius: 20px; border: 0; padding: 14px 16px; font: inherit; font-size: 1.5rem; line-height: 1.4; color: var(--pflaume); background: #FFFBEF; box-shadow: inset 0 0 0 3px var(--akzent); resize: vertical; }
+  .schreibfeld:focus { outline: 4px solid #FFD15C; }
+  .pruefliste { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; font-size: 1.1rem; color: var(--pflaume-hell); max-width: 720px; }
+  .pruefliste li.ok { color: #1F8A63; }
+  .schreib-knoepfe { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .schreib-knoepfe .knopf { min-height: 64px; font-size: 1.3rem; }
+  .hinweis.tipp { color: #B36B00; }
+  .klein-info { margin: 0; font-size: 1.05rem; color: var(--pflaume-hell); }
+  .aufnahme-knopf { width: 130px; height: 130px; border-radius: 50%; font-size: 3.6rem; background: #FFE1DD; box-shadow: 0 8px 0 rgba(0,0,0,.12); flex: none; }
+  .aufnahme-knopf.laeuft { background: #E0574A; animation: puls 1s ease-in-out infinite alternate; }
+  .aufnahme-knopf:disabled { opacity: .4; }
+  @keyframes puls { to { transform: scale(1.07); } }
+  .aufnahme-zeit { margin: 0; font-size: 1.2rem; font-weight: 600; }
+  .knopf.leise { background: transparent; box-shadow: none; text-decoration: underline; font-size: 1.05rem; min-height: 48px; }
+  @media (max-width: 560px) { .bildfolge { grid-template-columns: repeat(2, 1fr); } .gedicht { font-size: 1.25rem; padding: 12px 16px; } }
   .pruefen { min-height: 64px; font-size: 1.4rem; padding: 0 34px; }
   .hoeren-knopf { width: 140px; height: 140px; border-radius: 50%; font-size: 4rem; background: var(--grund); box-shadow: 0 8px 0 rgba(0,0,0,.12); }
   .hoeren-knopf:active { transform: translateY(4px); }
@@ -186,7 +211,7 @@
   <div class="orte" id="orte"></div>
   <div class="schatz"><h2 id="schatz-titel">Die Schatzkarte</h2><div id="schatz"></div></div>
   <h2 class="werk-titel">🛠️ Fipsis Wörter-Werkstatt</h2>
-  <p class="werk-text">Hier übst du Tunwörter, Wiewörter, Silben und schwierige Buchstaben – so oft du willst.</p>
+  <p class="werk-text">Hier übst du Tunwörter, Wiewörter, Silben, schwierige Buchstaben, Reime und eigene Texte – so oft du willst.</p>
   <div class="orte werkstatt" id="werkstatt"></div>
 </section>
 
@@ -248,6 +273,7 @@
 <script src="geschichte.js"></script>
 <script src="werkstatt.js"></script>
 <script src="../../shared/koennen.js"></script>
+<script src="../../shared/eigenes.js"></script>
 <script src="abenteuer.js"></script>
 </body>
 </html>

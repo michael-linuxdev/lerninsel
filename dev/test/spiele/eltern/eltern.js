@@ -354,6 +354,38 @@
       <div class="knoepfe"><button class="knopf haupt" id="en-speichern">Speichern</button></div>
     </div>`;
   }
+  // Deutsch (Paket D1): eigene Texte lesen, Aufnahmen anhören, Aufnehmen erlauben. Alles liegt nur in der IndexedDB dieses Geräts.
+  function deutschKarte() {
+    const an = !!(((S.lade("eltern") || {}).deutsch || {}).aufnehmen);
+    return `<div class="karte" id="deutsch-karte">
+      <h2>✏️ Deutsch: eigene Texte und Aufnahmen</h2>
+      <label class="schalter-z"><input type="checkbox" id="d-aufnehmen" ${an ? "checked" : ""}> Mein Kind darf sich in der Wörter-Werkstatt selbst aufnehmen (Gedicht vortragen, Geschichte nacherzählen, Buchtipp)</label>
+      <p class="klein">Die Aufnahmen bleiben nur auf diesem Gerät, werden nie hochgeladen und nicht mit dem Spielstand übertragen. Das Gerät fragt beim ersten Mal nach dem Mikrofon. Ist der Schalter aus, fallen die Aufnahme-Schritte still weg.${window.Eigenes && !Eigenes.kannAufnehmen() ? " <b>Dieser Browser kann nicht aufnehmen.</b>" : ""}</p>
+      <div class="knoepfe"><button class="knopf haupt" id="d-speichern">Speichern</button></div>
+      <h3>Geschriebene Texte</h3><div id="eigene-texte"><p class="klein">Wird geladen …</p></div>
+      <h3>Aufnahmen</h3><div id="eigene-toene"><p class="klein">Wird geladen …</p></div>
+      <p class="klein">Die App prüft beim Schreiben nur Einfaches (Satzanfang groß, Satzzeichen, Länge, bestimmte Wörter) und gibt freundliche Hinweise – Rechtschreibung im Einzelnen prüft sie nicht. Lest die Texte gern gemeinsam.</p>
+    </div>`;
+  }
+  const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const kapitelName = (id) => ((window.WERKSTATT || []).find(k => k.id === id) || {}).name || id;
+  const datum = (t) => { const d = new Date(t); return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}, ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`; };
+  function deutschKnoepfe() {
+    $("d-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.deutsch = Object.assign({}, e.deutsch || {}, { aufnehmen: $("d-aufnehmen").checked }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+    if (!window.Eigenes) return;
+    const urls = [];
+    const fuelle = () => Eigenes.alle().then(liste => {
+      urls.forEach(u => URL.revokeObjectURL(u)); urls.length = 0;
+      const texte = liste.filter(x => x.art === "text"), toene = liste.filter(x => x.art === "ton");
+      $("eigene-texte").innerHTML = texte.length ? `<ul class="liste eigene">${texte.map(x => `<li><span class="klein">${datum(x.t)} · ${esc(kapitelName(x.kapitel))}</span><br><b class="eigener-text">${esc(x.text)}</b> <button class="knopf klein-k" data-eigen-weg="${x.id}">Löschen</button></li>`).join("")}</ul>` : `<p class="klein">Noch keine Texte.</p>`;
+      $("eigene-toene").innerHTML = toene.length ? `<ul class="liste eigene">${toene.map(x => { const u = Eigenes.url(x); urls.push(u); return `<li><span class="klein">${datum(x.t)} · ${esc(kapitelName(x.kapitel))} · ${x.dauer || "?"} s</span><br><audio controls preload="none" src="${u}"></audio> <button class="knopf klein-k" data-eigen-weg="${x.id}">Löschen</button></li>`; }).join("")}</ul>` : `<p class="klein">Noch keine Aufnahmen.</p>`;
+      $("deutsch-karte").querySelectorAll("[data-eigen-weg]").forEach(b => b.addEventListener("click", () => {
+        if (!confirm("Wirklich löschen? Das lässt sich nicht rückgängig machen.")) return;
+        Eigenes.loesche(b.dataset.eigenWeg).then(fuelle);
+      }));
+    }).catch(() => { $("eigene-texte").innerHTML = $("eigene-toene").innerHTML = `<p class="klein">Auf diesem Gerät nicht verfügbar.</p>`; });
+    fuelle();
+  }
   function englischKnoepfe() {
     $("en-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.englisch = Object.assign({}, e.englisch || {}, { ab: $("en-ab").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
@@ -510,6 +542,7 @@
       ${inselKarte()}
       ${matheKarte()}
       ${englischKarte()}
+      ${deutschKarte()}
       ${echteWeltKarte()}
       ${staerkenKarte()}
       ${storyKarte()}
@@ -539,7 +572,7 @@
     // Einführung E2–E8 überspringen (still: zählt nicht als neue Etappe); E3 öffnet Kapitel 1 wie in der Szene „Erste Frucht“
     if ($("tutorial-weg")) $("tutorial-weg").addEventListener("click", () => { TUTORIAL.forEach(e => window.Story.etappeFertig(e, true)); window.Story.setzeKapitel(1); S.meldung("Einführung übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
-    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
+    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); deutschKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";
@@ -548,7 +581,7 @@
     inhalt.querySelectorAll("[data-weg]").forEach(b => b.addEventListener("click", () => {
       const k = S.kinder().find(x => x.id === b.dataset.weg);
       if (!confirm(`${k.name || "Dieses Kind"} und den ganzen Spielstand wirklich löschen? Das lässt sich nicht rückgängig machen.`)) return;
-      const weg = window.Bilder ? window.Bilder.loescheKind(k.id).catch(() => {}) : Promise.resolve(); S.entferneKind(k.id); weg.then(() => location.reload());
+      const weg = Promise.all([window.Bilder ? window.Bilder.loescheKind(k.id).catch(() => {}) : null, window.Eigenes ? window.Eigenes.loescheKind(k.id).catch(() => {}) : null]); S.entferneKind(k.id); weg.then(() => location.reload());
     }));
     $("neu-laden").addEventListener("click", neuLaden);
     $("abmelden").addEventListener("click", () => { sessionStorage.removeItem(SITZUNG); location.href = "../ich/"; });

@@ -84,7 +84,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 - `sh tests/laufen.sh` = Node-Tests `story-migration`, `inselkern`, `lehrplan`, `wortschatz`, `koennen`, `mathe-generatoren` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1, 3 und 4, Urkunde, Eltern-Wahl Subtraktion), `sachkunde` (32 Themen, die neun neuesten echt durchgeklickt, Landesfilter), `deutsch34` (Werkstatt Kl. 3–4 inkl. echtem Antippen von `ordnen`/`verbessern`), `uebergang5` (Übergang Kl. 5: Matheweg, Urkunden, Deutsch und Sachthemen echt durchgeklickt), `englisch` (Englisch: Tür, Sichtbarkeit, alle 13 Lektionen echt durchgeklickt), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1, 3 und 4, Urkunde, Eltern-Wahl Subtraktion), `sachkunde` (32 Themen, die neun neuesten echt durchgeklickt, Landesfilter), `deutsch34` (Werkstatt Kl. 3–4 inkl. echtem Antippen von `ordnen`/`verbessern`), `uebergang5` (Übergang Kl. 5: Matheweg, Urkunden, Deutsch und Sachthemen echt durchgeklickt), `englisch` (Englisch: Tür, Sichtbarkeit, alle 13 Lektionen echt durchgeklickt), `schreiben` (Werkstatt frei schreiben mit echtem Tippen, sich aufnehmen mit Fake-Mikrofon, Eltern-Schalter, Elternbereich), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen – **mit echtem Durchklicken bis zum Ende**
@@ -130,7 +130,8 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 - Wortschatz: `Wortschatz.wort("w.apfel")` (de, artikel, mehrzahl, silben[], bild, themen, wortart, daz, ru/uk + status), `Wortschatz.feld("essen")`,
   `Wortschatz.daz("d0")`, `Wortschatz.saetze("d0")`, `Wortschatz.hilfe(eintrag)` (Hilfetext nur wenn erlaubt), `Wortschatz.ARTIKEL` (Farbe + Form).
   Einbinden: `inhalte/woerter/*.js` vor `shared/woerter.js`. DaZ-Fortschritt: `DaZ.merke("wort"|"satz", id)`, `DaZ.stand()`, `DaZ.d0Fertig()`.
-- Eltern-Einstellungen: `eltern.mathe.minus` = `abziehen` | `ergaenzen` (Hilfe „Schriftlich minus“), `eltern.englisch.ab` = `"3"` | `"1"`.
+- Eltern-Einstellungen: `eltern.mathe.minus` = `abziehen` | `ergaenzen` (Hilfe „Schriftlich minus“), `eltern.englisch.ab` = `"3"` | `"1"`,
+  `eltern.deutsch.aufnehmen` = `true` | `false` (Standard aus; sich selbst aufnehmen in der Werkstatt).
 - Neue Fachseite anbinden (Muster Englisch): Tür in `index.html` (Raster 12 Spalten), `LERN_FAECHER` und „Erst lernen“-Knöpfe in `shared/zeit.js`,
   Fähigkeit in `shared/charakter.js` (`FAEHIGKEITEN`, `BELOHNUNGEN`, `LECKERLI`), Fach in `shared/lernfunde.js`, Register in `shared/inhalte.js`,
   Kern-Fach in `shared/lehrplan/kern.js`, `sw.js`, `tests/rauchtest.js`, Elternbereich (Karte, „Was übt die App?“ zeigt alle Fächer des Profils).
@@ -145,8 +146,13 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
   `daten()`, Umschalter, Zielknoten, `shared/inhalte.js` (concat), Elternbericht.
 - Werkstatt-Kapitel (`spiele/deutsch/werkstatt.js`): `{ id: "w-…", stufe, lz, name, ort, farbe, grund, schritte: [...] }`; Schritt-Typen `sag`,
   `luecke` (`satz` mit `___`, erste Option richtig), `satz` (Wörter in Reihenfolge), `wortart`, `verlaengern`, `silben`, `artikel`, `bild`, `wort`, `wo`,
-  `ordnen` (`{ frage?, teile: [richtige Reihenfolge], e?, ru }`, Teile ≤ 16 Zeichen liegen nebeneinander) und `verbessern`
-  (`{ frage?, satz, falsch, stelle?, optionen: [besser, …], tipp?, e?, ru }`, `stelle` = Wortnummer bei Mehrfachvorkommen).
+  `ordnen` (`{ frage?, teile: [richtige Reihenfolge], e?, ru }`, Teile ≤ 16 Zeichen liegen nebeneinander), `verbessern`
+  (`{ frage?, satz, falsch, stelle?, optionen: [besser, …], tipp?, e?, ru }`, `stelle` = Wortnummer bei Mehrfachvorkommen),
+  `schreiben` (`{ frage, e? | bilder?: ["🐶⚽", …], woerter?, saetze?, pflicht?: [Wörter], karten?: [Wörter zum Einfügen], anfang?, ru }` – freies
+  Schreiben, Prüfung ohne KI: Länge, Satzanfang groß, Satzzeichen am Ende, Pflichtwörter; erster Versuch mit Lücken = freundlicher Hinweis,
+  zählt nicht als Fehler) und `aufnehmen` (`{ frage, gedicht? | bilder? | e?, titel?, ru }` – fällt still weg ohne Eltern-Erlaubnis/Mikrofon);
+  `sag` mit `gedicht: [Zeilen]` (+ `titel`) zeigt ein Gedicht zeilenweise. Eigene Texte/Aufnahmen: `Eigenes.speichere/alle/loesche/url`
+  (`shared/eigenes.js`, eigene IndexedDB, nie im Spielstand), `Eigenes.darfAufnehmen()`, `__deutsch.pruefeText(text, schritt)`.
   Renderer in `spiele/deutsch/abenteuer.js` (`schritt()`/`switch`), Antwort über `antwort(knopf, richtig, beiRichtig)`.
 - Englisch (`spiele/englisch/lektionen.js`): `{ id, stufe, lz, name, e, farbe, grund, intro: { de, ru }, woerter: [{ en, de, ru, e }], extra: [satz|wahl], ende }`;
   Schritte entstehen in `englisch.js` (`baue(k)`) aus den Wörtern; jedes Wort braucht ein eigenes Emoji. Test-Haken `__englisch` (starte, schritt, lauf, sichtbar).

@@ -1392,3 +1392,33 @@ Auftrag: „Gesamtstand Lehrplanabdeckung Sachsen“ → veraltete Hinweise prü
   nächste Pakete und verweist auf `CLAUDE.md`. `quellen/dev-bauen.sh` kopiert `CLAUDE.md` nicht nach `/dev` und rechnet sie nicht in die Cache-Version.
 - Pflege: Formate/Regeln ändern → `CLAUDE.md`; Stand/nächste Pakete → `docs/SESSION-PROMPT.md`.
 
+
+### Stand 27.10.2026, Abend (Sitzung 27.10., 20:30: Paket D1 – Deutsch schreiben und sprechen)
+Rückfrage: iPad-Test noch nicht gemacht; Paket D1 gewählt; **Aufnehmen erlaubt, aber nur per Eltern-Schalter (Standard aus)**; Schreiben über
+die **Bildschirmtastatur des iPads**.
+- **Neuer Werkstatt-Schritt `schreiben`:** Das Kind schreibt Sätze zu einem Bild oder einer Bildergeschichte. Die App prüft ohne KI nur
+  Einfaches – Mindestlänge, Anzahl Sätze, Satzanfang groß, Satzzeichen am Ende, Pflichtwörter – und zeigt das als Häkchen-Liste beim Tippen.
+  Erster „Fertig“ mit Lücken: freundlicher Hinweis (gelb, kein „falsch“, zählt nicht gegen die Sterne; Können bekommt „noch nicht“);
+  zweiter: angenommen mit „Tipp fürs nächste Mal“. Wortkarten fügen Wörter an der Schreibstelle ein, „🔊 Vorlesen“ liest den eigenen Text.
+  **Entscheidung:** Schreibfeld mit `autocapitalize="off"`, ohne Autokorrektur – sonst nimmt das iPad dem Kind die Großschreibung ab.
+- **Neuer Schritt `aufnehmen`:** Gedicht vortragen, Geschichte nacherzählen, Buch vorstellen – `MediaRecorder` (iPad: audio/mp4), höchstens
+  90 s, anhören, nochmal, fertig; „Lieber ohne Aufnahme weiter“ jederzeit. Ohne Eltern-Erlaubnis oder ohne `MediaRecorder` fällt der Schritt
+  still weg; verweigert das Kind/Gerät das Mikrofon, kommt ein Hinweis und es geht ohne Aufnahme weiter. Mikrofon stoppt beim Verlassen.
+- **Neu `shared/eigenes.js`:** eigene IndexedDB `lerninsel-eigenes` (je Kind und Umgebung, höchstens 60 Texte und 30 Aufnahmen je Kind),
+  **nie im Spielstand** (QR bleibt klein), nichts verlässt das Gerät. Erwachsene (PIN-Modus) speichern nichts.
+- **Elternbereich:** neue Karte „✏️ Deutsch: eigene Texte und Aufnahmen“ – Schalter `eltern.deutsch.aufnehmen`, alle Texte lesen, Aufnahmen
+  anhören, einzeln löschen; beim Entfernen eines Kindes werden seine Texte/Aufnahmen mit gelöscht.
+- **Gedichte:** `sag` kann `gedicht: [Zeilen]` zeigen (mit „🔊 Gedicht anhören“). Nur eigene Gedichte („Der Igel“, „Herbstwind“).
+- **Fünf neue Werkstatt-Kapitel** (jetzt 35): „Reime und Gedichte“ (alle Klassen), „Eine Einladung schreiben“ (Kl. 2), „Eine Bildergeschichte
+  schreiben“ (Kl. 3, mit Nacherzählen), „Ein Gedicht vortragen“ (Kl. 3), „Mein Buchtipp“ (Kl. 4, Meinung mit „weil“, Mini-Vortrag).
+  Alle Zeilen mit russischem Entwurf.
+- **Sachsen:** Zuordnung und Hinweise in Deutsch nachgezogen (LB 1, 2, 4, 5 in Kl. 1/2; LB 1, 2, 4 in Kl. 3; LB 1, 2 in Kl. 4). Einstufung bleibt
+  ehrlich **„teilweise“** – Handschrift/Schulausgangsschrift, Gespräche, Rechtschreibprüfung eigener Texte, Bilderbücher fehlen. Zählung
+  unverändert 20/25/0.
+- **Tests:** neu `tests/schreiben.js` (Prüfregeln, Sichtbarkeit je Klasse, echtes Tippen mit Hinweis und Wortkarten, alle 5 Kapitel bis zum Ende
+  quer, zwei hoch, Fake-Mikrofon, verweigertes Mikrofon, IndexedDB statt Spielstand, Elternbereich mit Anhören und Löschen); `deutsch34`
+  Kapitelzahlen 7/26/33.
+- **Offen:** iPad-Test (spricht die Tastatur-Eingabe gut mit dem Layout zusammen? Mikrofon-Abfrage in Safari/Home-Bildschirm-App);
+  Handschrift-Übung (Schulausgangsschrift), Rechtschreibhilfe für eigene Texte (Wörterliste statt KI), Kinder sehen ihre Texte selbst
+  (z. B. „Mein Heft“), weitere Schreibanlässe (Glückwunsch, Tagebuch, Anleitung).
+- **Nächstes:** E2 Englisch Teil 2, M3 Mathe Kl. 4 Raum und Form oder Länderprofil 2 – nach Rückmeldung.
