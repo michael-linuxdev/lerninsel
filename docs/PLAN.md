@@ -683,7 +683,7 @@ Alle Pakete: kein Bezug zu einem echten Kind, Texte mit Sprachschlüsseln, Rauch
 Jedes Spiel: Prüffragen aus `MINISPIELE.md` Abschnitt 1, Test-Haken, Eintrag in `SEITEN_3D`, Leistungs-Test.
 
 #### Phase G – Breite (2027)
-~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1–4, 23 Werkstatt-Kapitel für Kl. 3–4; Teil 4 = Schritt A „Deutsch schreiben“) · ~~NA-37 Mathe Kl. 4~~ (27.10.: Weg mit 9 Stationen) · NA-38 Medienbildung
+~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1–4, 23 Werkstatt-Kapitel für Kl. 3–4; Teil 4 = Schritt A „Deutsch schreiben“) · ~~NA-37 Mathe Kl. 4~~ (27.10.: Weg mit 14 Stationen und Urkunde) · NA-38 Medienbildung
 „Produzieren/Problemlösen“ (Roboter-Weg) · NA-39 Übergang 5 · NA-41 Vorschul-Pfad · NA-46 Arabisch, Türkisch und weitere Sprachen ·
 NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Volkslied-Melodien (Noten prüfen).
 
@@ -1268,3 +1268,32 @@ Fragerunde: noch kein iPad-Test; nur Schritt A; Grafik/3D und Story weiter tabu;
   nicht gebaut – Ordnen und Überarbeiten decken Planen/Überarbeiten ab, eigenes Schreiben bleibt als „fehlt“ im Hinweis.
 - **Offen:** freies Schreiben mit eigener Eingabe, E-Mail, Streit schlichten, Medienabsichten; Ukrainisch für die neuen Kapitel.
 - **Nächstes:** Schritt B (Mathe-Rest), C (Sachunterricht-Rest) oder D (Länderprofile) – nach Rückmeldung; Grafik bleibt eingefroren.
+
+### Stand 27.10.2026, Abend (Sitzung 27.10., 17:50: Schritt B Mathe-Rest und Schritt C Sachunterricht-Rest)
+Auftrag: „B und C“; Grafik/3D/Story weiter tabu.
+- **Schritt B – Mathe** (`spiele/mathe/aufgaben.js`, `spiele/mathe/mathe.js`):
+  - Kl. 3 jetzt **20 Stationen**: „Würfelgebäude“ (`ma.rf.06`, isometrisches Bild aus Höhen; Türme werden nach vorn/rechts nie höher, damit jeder
+    Würfel zählbar ist; halb mit Bauplan), „Sicher, möglich, unmöglich“ (`ma.dz.04`, Glücksrad-SVG).
+  - Kl. 4 jetzt **14 Stationen**: „Römische Zahlen“ (bis 100, lesen und schreiben, Ablenker mit typischen Fehlern), „Primzahlen“ (bis 50, Hilfe nennt
+    einen Teiler), „Maßstab“ (1 cm ≙ 1 km/100 m/10 km/50 m, Karte mit Lineal), „Zeit und Datum“ (Zeitspannen über Mittag, h in min, Datum über das
+    Monatsende), „Mehrere Zahlen addieren“ (3–4 Zahlen bis 9 999, Stellenwerttafel T/H/Z/E, Übertrag bis 2).
+  - Ende des Wegs Kl. 4: **Urkunde** statt „Mehr kommt bald“ (gesperrt, bis alle 14 Stationen Sterne haben; zeigt alle Wege mit Sternen; Haken `__mathe.zeigeUrkunde`).
+  - **Fehler behoben:** „Gramm und Kilogramm“ und „Meter und Kilometer“ verlangten 4-stellige Antworten (z. B. 9000 g), die Eingabe ließ nur 3 Ziffern
+    zu – jetzt `max: 7`. Mathe-Tafel schnitt im Hochformat bei Bildaufgaben die Frage oben ab (zentriert + Überlauf, Inline-Höhen der Bilder übersteuerten
+    die Hochformat-Grenze) – jetzt zentriert per Auto-Rand und scrollbar ab oben, Bilder im Hochformat höchstens 24dvh. Auf schmalen Handys
+    überlappten Titel und Fortschrittspunkte – Punkte brechen jetzt in eine eigene Zeile um.
+  - Neuer Node-Test **`tests/mathe-generatoren.js`** (in `sh tests/laufen.sh`): alle Stationen Kl. 1–4 je 400 Aufgaben ohne NaN/undefined,
+    Antwortlänge passt zu `max`, Wahl-Antworten unter den Optionen; römische Zahlen, Primzahlen, Würfelgebäude.
+  - Entscheidung: **keine** Eltern-Einstellung Malkreuz/Zeilenmethode – „Schriftlich mal“ nutzt das Normalverfahren, das Malkreuz ist halbschriftlich
+    und gehört in eine eigene Station, falls gewünscht.
+- **Schritt C – Sachunterricht** (`spiele/sachkunde/themen.js`, jetzt **26 Themen**): „Wärme und Dämmung“ (`su.na.09`), „Tiere am und im Wasser“
+  (Säugetiere/Fische, Gewässerschutz, `su.na.08`), „Ein Experiment planen“ (Frage–Vermutung–Versuch–Beobachtung–Ergebnis, fairer Vergleich, `su.na.07`),
+  „Erste Hilfe“ (112/110/116 111, Wunden, Nasenbluten, Unfälle vermeiden, `su.na.02`), „Informationen finden“ (Kinder-Suchmaschinen, Werbung, Quellen
+  prüfen, `me.sv.01`/`me.ar.02`/`me.ar.01`). Alle mit russischem Entwurf.
+  - `tests/sachkunde.js` klickt die fünf neuen Themen jetzt **echt durch** (Weiter, richtige Wahl, Daumen, Zuordnen) bis „Thema geschafft“ ohne Fehler.
+- **Sachsen** jetzt **18 × ja, 30 × teil, 1 × nein** (Mathe Kl. 3 Daten/Zufall und Kl. 4 Zahl/Operation → ja; SU Kl. 3 Experimentieren → teil (ohne
+  Kern-Lernziel); SU Kl. 4 Körper/Gesundheit, Medien → teil, Pflanzen/Tiere und Unbelebte Natur → ja). Einziges „nein“: SU Kl. 4 „Raum und Zeit“ (Bundesland, Heimatgeschichte – braucht Länderdaten, NA-47).
+- **Offen:** Mathe Kl. 4 Schrägbilder, Vierecke, Volumen, Klammerregel; Kl. 3 Schiebe-/Drehsymmetrie, Zeichnen. SU: Bundesland/Heimatort (NA-47),
+  Ernährung/Pubertät. Ukrainisch für alle neuen Inhalte.
+- **Nächstes:** Schritt D (Länderprofile, NA-47) – damit auch SU Kl. 4 „Raum und Zeit“; oder NA-39 Übergang Kl. 5 (die Urkunde verweist schon darauf).
+

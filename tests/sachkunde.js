@@ -1,10 +1,13 @@
 // Test NA-34 Teil 3+4: Sachkunde-Themen für Klasse 3–4 (Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer, Fahrrad, Kinderrechte, Gemeinde)
+// Schritt C: Wärme, Gewässer, Experiment, Erste Hilfe, Informationen finden – diese werden echt durchgeklickt.
 // Jedes neue Thema startet, jeder Schritt lässt sich anzeigen, alle Themen haben Lernziele, keine Konsolenfehler, keine Scrollleiste.
 const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;
-const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer", "fahrrad", "kinderrechte", "gemeinde", "brot", "wetterkarte", "strom"];
+const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer", "fahrrad", "kinderrechte", "gemeinde", "brot", "wetterkarte", "strom",
+  "waerme", "gewaesser", "experiment", "erstehilfe", "medien-info"];
+const DURCH = ["waerme", "gewaesser", "experiment", "erstehilfe", "medien-info"];
 
 (async () => {
   const browser = await chromium.launch();
@@ -25,7 +28,7 @@ const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer", "fahrrad", "kinde
       idx: neu.map(id => THEMEN.findIndex(t => t.id === id)),
       ohneRu: THEMEN.filter(t => neu.includes(t.id)).flatMap(t => t.schritte.filter(s => !(s.ru || s.satzRu)).map(() => t.id)) }), NEU);
     if (art === "quer") {
-      erwarte(daten.alle === 21, `21 Themen bei Eule Ella (${daten.alle})`);
+      erwarte(daten.alle === 26, `26 Themen bei Eule Ella (${daten.alle})`);
       erwarte(!daten.ohneLz.length && daten.idx.every(i => i >= 0), "alle Themen haben Lernziele, die neuen sind da");
       erwarte(!daten.ohneRu.length, "jeder neue Schritt hat einen russischen Entwurf");
     }
@@ -39,6 +42,30 @@ const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer", "fahrrad", "kinde
       }
       erwarte(ok, `${art}: „${NEU[k]}“ startet ohne waagerechte Scrollleiste (${schritte} Schritte)`);
       if (BILDER) await p.screenshot({ path: `${BILDER}/sachkunde-${NEU[k]}-${art}.png` });
+    }
+    // Schritt C: die fünf neuesten Themen einmal echt durchklicken (Weiter, richtige Wahl, Daumen, Zuordnen per Antippen) – ohne Fehler bis „Thema geschafft“
+    for (const id of DURCH) {
+      const i = daten.idx[NEU.indexOf(id)];
+      await p.evaluate((i) => __sachkunde.starte(i), i); await p.waitForTimeout(200);
+      let runden = 0, haengt = false;
+      while (runden++ < 60) {
+        const lage = await p.evaluate(() => { const l = __sachkunde.lauf; const s = l && l.t.schritte[l.pos];
+          return { ende: !document.getElementById("ende-ansicht").hidden, typ: s && s.typ, schritt: s, weiter: !!document.getElementById("weiter"),
+            karte: (document.querySelector(".sortier-karte") || {}).innerText || "" }; });
+        if (lage.ende) break;
+        if (lage.weiter) { await p.click("#weiter"); await p.waitForTimeout(120); continue; }
+        if (lage.typ === "wahl") await p.locator(".optionen .option", { hasText: lage.schritt.optionen.find(o => o.ok).t }).first().click();
+        else if (lage.typ === "daumen") await p.locator(".daumen .option").nth(lage.schritt.ok ? 0 : 1).click();
+        else if (lage.typ === "zuordnen") {
+          const ding = lage.schritt.dinge.find(d => lage.karte.includes(d.t));
+          if (!ding) { haengt = true; break; }
+          await p.click(`.gruppen .option[data-g="${ding.gruppe}"]`); await p.waitForTimeout(900);
+        } else { haengt = true; break; }
+        await p.waitForTimeout(150);
+      }
+      const ende = await p.evaluate(() => ({ titel: document.getElementById("ende-titel").textContent, text: document.getElementById("ende-text").textContent }));
+      erwarte(!haengt && /geschafft/.test(ende.titel) && /beim ersten Mal richtig/.test(ende.text), `${art}: „${id}“ echt durchgeklickt, ohne Fehler bis zum Ende`);
+      if (BILDER && id === "erstehilfe") await p.screenshot({ path: `${BILDER}/sachkunde-ende-${art}.png` });
     }
     await ctx.close();
   }

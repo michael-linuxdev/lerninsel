@@ -769,5 +769,155 @@ window.THEMEN = [
         text: "Klasse, {name}! Strom kann man sparen: Licht aus, wenn du den Raum verlässt. Das schont auch die Umwelt.",
         ru: "Класс, {name}! Электричество можно экономить: выключай свет, когда выходишь из комнаты. Это бережёт и природу." }
     ]
+  },
+  {
+    id: "waerme", lz: ["su.na.09"], name: "Wärme und Dämmung", e: "🧤", farbe: "#D2502A", grund: "#FDECE4",
+    kurz: "Wärme wandert, Leiter und Dämmstoffe, warm bleiben",
+    schritte: [
+      { typ: "info", titel: "Wärme wandert", bild: "🌡️",
+        text: "Hallo {name}! Wärme wandert immer vom Warmen zum Kalten. Darum wird heißer Tee mit der Zeit kalt. Manche Stoffe lassen Wärme schnell durch, andere halten sie fest.",
+        ru: "Привет, {name}! Тепло всегда переходит от тёплого к холодному. Поэтому горячий чай со временем остывает. Одни материалы быстро пропускают тепло, другие его удерживают.",
+        fakten: [["Metall leitet Wärme gut.", "Металл хорошо проводит тепло."], ["Holz, Wolle und Luft leiten Wärme schlecht – sie dämmen.", "Дерево, шерсть и воздух плохо проводят тепло — они утепляют."]] },
+      { typ: "zuordnen", frage: "Leitet es Wärme gut oder hält es Wärme fest?", ru: "Хорошо проводит тепло или удерживает его?",
+        gruppen: [{ id: "l", name: "Leitet gut", ru: "Хорошо проводит", bild: "🔥" }, { id: "d", name: "Dämmt", ru: "Утепляет", bild: "🧶" }],
+        dinge: [
+          { t: "Metalllöffel", ru: "Металлическая ложка", gruppe: "l" }, { t: "Kochtopf", ru: "Кастрюля", gruppe: "l" }, { t: "Heizkörper", ru: "Батарея отопления", gruppe: "l" },
+          { t: "Wollpullover", ru: "Шерстяной свитер", gruppe: "d" }, { t: "Holzlöffel", ru: "Деревянная ложка", gruppe: "d" }, { t: "Styropor", ru: "Пенопласт", gruppe: "d" }] },
+      { typ: "wahl", frage: "Im heißen Tee stehen ein Metalllöffel und ein Holzlöffel. Welcher wird am Griff schnell heiß?", ru: "В горячем чае стоят металлическая и деревянная ложки. Какая быстро нагреется у ручки?", bild: "🥄", optionen: [
+        { t: "Der Metalllöffel", ru: "Металлическая", ok: true, warum: "Richtig! Metall leitet die Wärme schnell bis zum Griff.", warumRu: "Правильно! Металл быстро проводит тепло до ручки." },
+        { t: "Der Holzlöffel", ru: "Деревянная", ok: false, warum: "Holz leitet Wärme schlecht. Darum nimmt man beim Kochen gern Holzlöffel.", warumRu: "Дерево плохо проводит тепло. Поэтому при готовке часто берут деревянные ложки." },
+        { t: "Beide gleich", ru: "Обе одинаково", ok: false, warum: "Nein – Metall leitet Wärme viel besser als Holz.", warumRu: "Нет — металл проводит тепло гораздо лучше дерева." }] },
+      { typ: "wahl", frage: "Warum bleibt Tee in einer Thermoskanne lange warm?", ru: "Почему чай в термосе долго остаётся тёплым?", bild: "🫖", optionen: [
+        { t: "Ihre Wände lassen kaum Wärme durch", ru: "Её стенки почти не пропускают тепло", ok: true, warum: "Genau! Die Kanne ist gut gedämmt. So kann die Wärme kaum nach draußen wandern.", warumRu: "Точно! Термос хорошо утеплён. Тепло почти не может выйти наружу." },
+        { t: "Sie heizt den Tee auf", ru: "Он подогревает чай", ok: false, warum: "Nein, eine Thermoskanne hat keine Heizung. Sie hält nur die Wärme fest.", warumRu: "Нет, в термосе нет нагрева. Он только удерживает тепло." },
+        { t: "Weil sie bunt ist", ru: "Потому что он цветной", ok: false, warum: "Die Farbe ist egal. Wichtig sind die dämmenden Wände.", warumRu: "Цвет не важен. Важны утепляющие стенки." }] },
+      { typ: "daumen", satz: "Ein Pullover macht von allein Wärme.", satzRu: "Свитер сам по себе вырабатывает тепло.", bild: "🧥", ok: false,
+        warum: "Nein! Dein Körper macht die Wärme. Der Pullover hält sie fest, damit sie nicht so schnell wegwandert.", warumRu: "Нет! Тепло вырабатывает твоё тело. Свитер удерживает его, чтобы оно не уходило так быстро." },
+      { typ: "daumen", satz: "Häuser werden gedämmt, damit man weniger heizen muss.", satzRu: "Дома утепляют, чтобы меньше топить.", bild: "🏠", ok: true,
+        warum: "Stimmt! Dämmung in Wänden, Dach und Fenstern spart Energie und schont die Umwelt.", warumRu: "Верно! Утепление стен, крыши и окон экономит энергию и бережёт природу." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Ausprobieren mit einem Erwachsenen: Zwei Gläser mit warmem Wasser, eines in einen Schal gewickelt. Fühl nach 20 Minuten – welches ist wärmer geblieben?",
+        ru: "Супер, {name}! Попробуй вместе со взрослым: два стакана тёплой воды, один завернуть в шарф. Через 20 минут потрогай — какой остался теплее?" }
+    ]
+  },
+  {
+    id: "gewaesser", lz: ["su.na.08"], name: "Tiere am und im Wasser", e: "🦦", farbe: "#1F8FB8", grund: "#E2F4FB",
+    kurz: "Säugetiere und Fische, Leben am Bach, Gewässer schützen",
+    schritte: [
+      { typ: "info", titel: "Säugetiere", bild: "🦫",
+        text: "Hallo {name}! Säugetiere haben meist ein Fell, atmen mit Lungen, und ihre Jungen trinken Milch bei der Mutter. Auch Biber, Otter und sogar Wale sind Säugetiere.",
+        ru: "Привет, {name}! У млекопитающих обычно есть шерсть, они дышат лёгкими, а детёныши пьют молоко матери. Бобры, выдры и даже киты — тоже млекопитающие.",
+        fakten: [["Fische atmen mit Kiemen und legen Eier.", "Рыбы дышат жабрами и откладывают икру."], ["Ein Biber baut Dämme aus Ästen und Schlamm.", "Бобр строит плотины из веток и ила."]] },
+      { typ: "zuordnen", frage: "Säugetier oder Fisch?", ru: "Млекопитающее или рыба?",
+        gruppen: [{ id: "s", name: "Säugetier", ru: "Млекопитающее", bild: "🍼" }, { id: "f", name: "Fisch", ru: "Рыба", bild: "🐟" }],
+        dinge: [
+          { t: "Biber", ru: "Бобр", gruppe: "s" }, { t: "Fischotter", ru: "Выдра", gruppe: "s" }, { t: "Delfin", ru: "Дельфин", gruppe: "s" },
+          { t: "Forelle", ru: "Форель", gruppe: "f" }, { t: "Hecht", ru: "Щука", gruppe: "f" }, { t: "Karpfen", ru: "Карп", gruppe: "f" }] },
+      { typ: "wahl", frage: "Woran erkennst du sicher ein Säugetier?", ru: "По какому признаку точно узнать млекопитающее?", bild: "🍼", optionen: [
+        { t: "Die Jungen trinken Milch", ru: "Детёныши пьют молоко", ok: true, warum: "Richtig! Daher kommt der Name: Die Mutter säugt ihre Jungen.", warumRu: "Правильно! Отсюда и название: мать кормит детёнышей молоком." },
+        { t: "Es kann schwimmen", ru: "Оно умеет плавать", ok: false, warum: "Schwimmen können auch Fische, Frösche und Enten.", warumRu: "Плавать умеют и рыбы, и лягушки, и утки." },
+        { t: "Es lebt im Wasser", ru: "Оно живёт в воде", ok: false, warum: "Im Wasser leben viele Tiere. Wale sind Säugetiere, Fische nicht.", warumRu: "В воде живут многие животные. Киты — млекопитающие, рыбы — нет." }] },
+      { typ: "daumen", satz: "Ein Delfin ist ein Fisch.", satzRu: "Дельфин — это рыба.", bild: "🐬", ok: false,
+        warum: "Nein! Ein Delfin atmet Luft mit der Lunge und säugt seine Jungen. Er ist ein Säugetier.", warumRu: "Нет! Дельфин дышит воздухом и кормит детёнышей молоком. Он млекопитающее." },
+      { typ: "daumen", satz: "Brot ist ein gutes Futter für Enten im Teich.", satzRu: "Хлеб — хороший корм для уток в пруду.", bild: "🦆", ok: false,
+        warum: "Nein! Brot macht Enten krank, und Reste verschmutzen das Wasser. Enten finden selbst Futter.", warumRu: "Нет! От хлеба утки болеют, а остатки загрязняют воду. Утки сами находят корм." },
+      { typ: "wahl", frage: "Wie kannst du einen Bach schützen?", ru: "Как ты можешь защитить ручей?", bild: "🏞️", optionen: [
+        { t: "Müll wieder mitnehmen", ru: "Забирать мусор с собой", ok: true, warum: "Genau! Müll im Wasser schadet Fischen und Vögeln.", warumRu: "Точно! Мусор в воде вредит рыбам и птицам." },
+        { t: "Steine ins Wasser werfen", ru: "Бросать камни в воду", ok: false, warum: "Das stört die Tiere und kann Nester am Ufer zerstören.", warumRu: "Это пугает животных и может разрушить гнёзда на берегу." },
+        { t: "Die Uferpflanzen ausreißen", ru: "Вырывать растения на берегу", ok: false, warum: "Uferpflanzen sind Verstecke und Futter für viele Tiere.", warumRu: "Прибрежные растения — укрытие и корм для многих животных." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Klasse, {name}! Wenn du an einem Bach bist: leise sein, gut beobachten und nichts mitnehmen außer deinem Müll.",
+        ru: "Класс, {name}! Когда будешь у ручья: веди себя тихо, внимательно наблюдай и ничего не забирай, кроме своего мусора." }
+    ]
+  },
+  {
+    id: "experiment", lz: ["su.na.07"], name: "Ein Experiment planen", e: "🔬", farbe: "#2E9C5A", grund: "#E3F7EF",
+    kurz: "Frage, Vermutung, Versuch, Beobachtung, Ergebnis",
+    schritte: [
+      { typ: "info", titel: "Wie Forscher arbeiten", bild: "🔬",
+        text: "Hallo {name}! Forscherinnen und Forscher gehen Schritt für Schritt vor. Wir probieren es mit der Frage: Trocknet nasse Wäsche in der Sonne schneller als im Schatten?",
+        ru: "Привет, {name}! Исследователи действуют шаг за шагом. Попробуем с вопросом: высыхает ли мокрое бельё на солнце быстрее, чем в тени?",
+        fakten: [["1. Frage  2. Vermutung  3. Versuch", "1. Вопрос  2. Предположение  3. Опыт"], ["4. Beobachtung  5. Ergebnis", "4. Наблюдение  5. Результат"]] },
+      { typ: "wahl", frage: "Was ist eine Vermutung?", ru: "Что из этого — предположение?", bild: "🤔", optionen: [
+        { t: "Ich glaube, in der Sonne trocknet es schneller.", ru: "Я думаю, на солнце высохнет быстрее.", ok: true, warum: "Richtig! Eine Vermutung sagst du, bevor du es ausprobierst.", warumRu: "Правильно! Предположение высказывают до того, как проверят." },
+        { t: "Das Tuch in der Sonne ist trocken.", ru: "Платок на солнце сухой.", ok: false, warum: "Das ist schon eine Beobachtung – die machst du erst beim Versuch.", warumRu: "Это уже наблюдение — его делают во время опыта." },
+        { t: "Wäsche ist nass.", ru: "Бельё мокрое.", ok: false, warum: "Das stimmt zwar, sagt aber nichts über die Frage voraus.", warumRu: "Это правда, но это не ответ на вопрос заранее." }] },
+      { typ: "wahl", frage: "Wie wird der Versuch fair?", ru: "Как сделать опыт честным?", bild: "⚖️", optionen: [
+        { t: "Zwei gleiche nasse Tücher, eins in die Sonne, eins in den Schatten", ru: "Два одинаковых мокрых платка: один на солнце, другой в тень", ok: true, warum: "Genau! Nur eine Sache ist anders: Sonne oder Schatten. So ist der Vergleich gerecht.", warumRu: "Точно! Отличается только одно: солнце или тень. Так сравнение честное." },
+        { t: "Ein kleines Tuch in die Sonne, ein großes Handtuch in den Schatten", ru: "Маленький платок на солнце, большое полотенце в тень", ok: false, warum: "Dann weißt du nicht, ob es an der Sonne oder an der Größe lag.", warumRu: "Тогда непонятно, дело в солнце или в размере." },
+        { t: "Nur ein Tuch in die Sonne hängen", ru: "Повесить только один платок на солнце", ok: false, warum: "Ohne zweites Tuch kannst du nichts vergleichen.", warumRu: "Без второго платка нечего сравнивать." }] },
+      { typ: "zuordnen", frage: "Vermutung oder Beobachtung?", ru: "Предположение или наблюдение?",
+        gruppen: [{ id: "v", name: "Vermutung", ru: "Предположение", bild: "💭" }, { id: "b", name: "Beobachtung", ru: "Наблюдение", bild: "👀" }],
+        dinge: [
+          { t: "Vielleicht schwimmt der Apfel.", ru: "Может быть, яблоко плавает.", gruppe: "v" }, { t: "Ich glaube, das Eis schmilzt schnell.", ru: "Думаю, лёд быстро растает.", gruppe: "v" },
+          { t: "Der Nagel ist untergegangen.", ru: "Гвоздь утонул.", gruppe: "b" }, { t: "Nach 10 Minuten ist das Eis geschmolzen.", ru: "Через 10 минут лёд растаял.", gruppe: "b" }] },
+      { typ: "daumen", satz: "Wenn meine Vermutung falsch war, habe ich schlecht geforscht.", satzRu: "Если моё предположение оказалось неверным, я плохо исследовал.", bild: "🙂", ok: false,
+        warum: "Nein! Auch eine falsche Vermutung bringt dich weiter. Das Ergebnis zeigt, wie es wirklich ist.", warumRu: "Нет! Даже неверное предположение полезно. Результат показывает, как на самом деле." },
+      { typ: "daumen", satz: "Bei Versuchen mit Feuer oder heißem Wasser ist immer ein Erwachsener dabei.", satzRu: "При опытах с огнём или горячей водой всегда рядом взрослый.", bild: "⚠️", ok: true,
+        warum: "Stimmt! Sicherheit geht vor. Und mit Strom aus der Steckdose wird nie experimentiert.", warumRu: "Верно! Безопасность прежде всего. А с током из розетки опыты не проводят никогда." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Schreib beim nächsten Versuch alles auf: Frage, Vermutung, was du gemacht und gesehen hast – und dein Ergebnis.",
+        ru: "Супер, {name}! В следующий раз записывай всё: вопрос, предположение, что ты делал и видел — и свой результат." }
+    ]
+  },
+  {
+    id: "erstehilfe", lz: ["su.na.02"], name: "Erste Hilfe", e: "🩹", farbe: "#E0574A", grund: "#FFECE8",
+    kurz: "Hilfe holen, Notruf 112, kleine Wunden, Unfälle vermeiden",
+    schritte: [
+      { typ: "info", titel: "Helfen kann jeder", bild: "🩹",
+        text: "Hallo {name}! Wenn jemand verletzt ist: Ruhe bewahren, Hilfe holen und die Person trösten. Lass sie nicht allein. Den Notruf 112 darfst du auch als Kind wählen.",
+        ru: "Привет, {name}! Если кто-то пострадал: сохраняй спокойствие, позови помощь и утешай. Не оставляй человека одного. Номер экстренной помощи 112 можно набирать и детям.",
+        fakten: [["Beim Notruf: Wo ist es passiert? Was ist passiert?", "При звонке: где это случилось? Что случилось?"], ["Dann warten – die Leitstelle stellt noch Fragen.", "Потом жди — диспетчер задаст ещё вопросы."]] },
+      { typ: "wahl", frage: "Welche Nummer rufst du für Rettungsdienst und Feuerwehr?", ru: "По какому номеру вызывают скорую помощь и пожарных?", bild: "📞", optionen: [
+        { t: "112", ru: "112", ok: true, warum: "Richtig! 112 ist der Notruf für Rettungsdienst und Feuerwehr – in ganz Europa.", warumRu: "Правильно! 112 — номер скорой помощи и пожарных по всей Европе." },
+        { t: "110", ru: "110", ok: false, warum: "110 ist die Polizei. Für Verletzte und Feuer wählst du 112.", warumRu: "110 — это полиция. При травмах и пожаре звони 112." },
+        { t: "116 111", ru: "116 111", ok: false, warum: "Das ist die Nummer gegen Kummer, wenn du reden möchtest. Im Notfall: 112.", warumRu: "Это телефон доверия, если хочется поговорить. В экстренном случае — 112." }] },
+      { typ: "wahl", frage: "Ein Kind ist auf dem Schulhof gestürzt und weint. Was tust du?", ru: "Ребёнок упал на школьном дворе и плачет. Что ты сделаешь?", bild: "🧒", optionen: [
+        { t: "Trösten und eine Lehrerin holen", ru: "Утешить и позвать учительницу", ok: true, warum: "Genau! Trösten hilft, und ein Erwachsener kümmert sich um die Wunde.", warumRu: "Точно! Утешение помогает, а взрослый позаботится о ране." },
+        { t: "Schnell weiterspielen", ru: "Быстро играть дальше", ok: false, warum: "Das Kind braucht jetzt Hilfe. Bleib kurz da und hol einen Erwachsenen.", warumRu: "Ребёнку сейчас нужна помощь. Побудь рядом и позови взрослого." },
+        { t: "Das Kind hochziehen und rennen lassen", ru: "Поднять ребёнка и заставить бежать", ok: false, warum: "Nicht drängen – vielleicht tut etwas weh. Erst trösten und Hilfe holen.", warumRu: "Не торопи — может быть, что-то болит. Сначала утешь и позови помощь." }] },
+      { typ: "daumen", satz: "Eine kleine Schürfwunde spült man mit sauberem Wasser und klebt ein Pflaster darauf.", satzRu: "Маленькую ссадину промывают чистой водой и заклеивают пластырем.", bild: "🩹", ok: true,
+        warum: "Stimmt! So kommt kein Schmutz in die Wunde.", warumRu: "Верно! Так в рану не попадёт грязь." },
+      { typ: "daumen", satz: "Bei Nasenbluten legt man den Kopf weit nach hinten.", satzRu: "При кровотечении из носа голову запрокидывают назад.", bild: "👃", ok: false,
+        warum: "Nein! Kopf leicht nach vorn beugen, die Nase vorn zusammendrücken und den Nacken kühlen.", warumRu: "Нет! Наклони голову немного вперёд, зажми нос спереди и охлади затылок." },
+      { typ: "zuordnen", frage: "Sicher oder gefährlich?", ru: "Безопасно или опасно?",
+        gruppen: [{ id: "s", name: "Sicher", ru: "Безопасно", bild: "✅" }, { id: "g", name: "Gefährlich", ru: "Опасно", bild: "⚠️" }],
+        dinge: [
+          { t: "Mit Helm Rad fahren", ru: "Кататься на велосипеде в шлеме", gruppe: "s" }, { t: "Schuhe gut zubinden", ru: "Хорошо завязать шнурки", gruppe: "s" },
+          { t: "Am nassen Beckenrand rennen", ru: "Бегать по мокрому бортику бассейна", gruppe: "g" }, { t: "Auf hohe Regale klettern", ru: "Залезать на высокие полки", gruppe: "g" }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Frag deine Familie, wo bei euch der Verbandskasten ist. Viele Unfälle kann man vermeiden, wenn man vorher kurz nachdenkt.",
+        ru: "Здорово, {name}! Спроси у семьи, где у вас аптечка. Многих несчастных случаев можно избежать, если сначала немного подумать." }
+    ]
+  },
+  {
+    id: "medien-info", lz: ["me.sv.01", "me.ar.02", "me.ar.01"], name: "Informationen finden", e: "🔎", farbe: "#7B55B8", grund: "#F1EAFF",
+    kurz: "Bücher, Kinderseiten, Werbung erkennen, Quellen prüfen",
+    schritte: [
+      { typ: "info", titel: "Wo steht das Wissen?", bild: "📚",
+        text: "Hallo {name}! Wissen findest du in Sachbüchern, im Lexikon, in Kinder-Nachrichten und auf Kinderseiten im Internet. Kinder-Suchmaschinen zeigen nur Seiten, die für Kinder geprüft sind.",
+        ru: "Привет, {name}! Знания можно найти в научно-популярных книгах, в энциклопедии, в детских новостях и на детских сайтах. Детские поисковики показывают только проверенные для детей страницы.",
+        fakten: [["Gute Suchwörter sind kurz: „Igel Winterschlaf“.", "Хорошие слова для поиска короткие: «ёж зимняя спячка»."], ["Schreib auf, woher du dein Wissen hast.", "Записывай, откуда ты узнал информацию."]] },
+      { typ: "wahl", frage: "Du willst wissen, wie lange Igel Winterschlaf halten. Wo suchst du am besten?", ru: "Ты хочешь узнать, сколько длится зимняя спячка ежей. Где лучше искать?", bild: "🦔", optionen: [
+        { t: "Im Tierbuch oder mit einer Kinder-Suchmaschine", ru: "В книге о животных или в детском поисковике", ok: true, warum: "Richtig! Dort stehen geprüfte Sachinformationen für Kinder.", warumRu: "Правильно! Там проверенная информация для детей." },
+        { t: "In einem Werbeprospekt", ru: "В рекламном проспекте", ok: false, warum: "Werbung will etwas verkaufen – Sachwissen über Igel findest du dort nicht.", warumRu: "Реклама хочет что-то продать — знаний о ежах там нет." },
+        { t: "Einen Fremden im Chat fragen", ru: "Спросить незнакомца в чате", ok: false, warum: "Fremden im Netz schreibst du nicht. Frag lieber Familie oder Lehrerin.", warumRu: "Незнакомцам в интернете не пишут. Лучше спроси семью или учительницу." }] },
+      { typ: "wahl", frage: "Woran erkennst du Werbung?", ru: "Как узнать рекламу?", bild: "📢", optionen: [
+        { t: "Sie will, dass du etwas kaufst", ru: "Она хочет, чтобы ты что-то купил", ok: true, warum: "Genau! Oft steht „Anzeige“ oder „Werbung“ dabei.", warumRu: "Точно! Часто там написано «Anzeige» или «Werbung»." },
+        { t: "Sie erklärt etwas genau", ru: "Она что-то подробно объясняет", ok: false, warum: "Erklären tun Sachtexte. Werbung will vor allem verkaufen.", warumRu: "Объясняют научные тексты. Реклама хочет прежде всего продать." },
+        { t: "Sie steht immer in Büchern", ru: "Она всегда в книгах", ok: false, warum: "Werbung gibt es überall: im Fernsehen, im Internet, auf Plakaten.", warumRu: "Реклама есть везде: по телевизору, в интернете, на плакатах." }] },
+      { typ: "daumen", satz: "Alles, was im Internet steht, ist wahr.", satzRu: "Всё, что написано в интернете, — правда.", bild: "🌐", ok: false,
+        warum: "Nein! Jeder kann etwas ins Internet schreiben. Prüfe es in einer zweiten guten Quelle.", warumRu: "Нет! Любой может написать что-то в интернете. Проверь в другом хорошем источнике." },
+      { typ: "zuordnen", frage: "Gute Quelle oder Vorsicht?", ru: "Хороший источник или осторожно?",
+        gruppen: [{ id: "g", name: "Gute Quelle", ru: "Хороший источник", bild: "👍" }, { id: "v", name: "Vorsicht", ru: "Осторожно", bild: "✋" }],
+        dinge: [
+          { t: "Sachbuch aus der Bücherei", ru: "Научно-популярная книга из библиотеки", gruppe: "g" }, { t: "Kinder-Nachrichten", ru: "Детские новости", gruppe: "g" },
+          { t: "Video: „Unglaublich! Klick hier!“", ru: "Видео: «Невероятно! Жми сюда!»", gruppe: "v" }, { t: "Kettenbrief im Chat", ru: "Письмо-цепочка в чате", gruppe: "v" }] },
+      { typ: "daumen", satz: "Zum Suchen gibst du deinen Namen und deine Adresse ein.", satzRu: "Для поиска вводят своё имя и адрес.", bild: "🔒", ok: false,
+        warum: "Nein! Zum Suchen brauchst du nur Suchwörter. Deine Daten bleiben geheim.", warumRu: "Нет! Для поиска нужны только слова. Свои данные держи в секрете." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Prima, {name}! Für einen Vortrag: zwei gute Quellen suchen, Stichworte aufschreiben und sagen, woher du es weißt.",
+        ru: "Отлично, {name}! Для доклада: найди два хороших источника, запиши ключевые слова и скажи, откуда ты это знаешь." }
+    ]
   }
 ];
