@@ -4,8 +4,9 @@ Auftrag (27.10.2026): Den sächsischen Lehrplan **Schritt für Schritt in voller
 in **allen Fächern**. „Volle Tiefe“ heißt laut Auftraggeber **„wie ein Schuljahr“**: jeder Inhaltspunkt geübt, in sinnvoller
 Reihenfolge, mit Wiederholung und einer Lernstands-Prüfung je Lernbereich.
 
-Dieses Dokument ist die Arbeitsliste dafür. Stand 27.10.2026 (spätabends): **Mathe Kl. 1/2 gegen das PDF geprüft und ausgebaut.** Deutsch, Sachunterricht und die übrigen Fächer sind noch **vorläufig**
-(aus dem Länderprofil) – dafür fehlen die PDFs.
+Dieses Dokument ist die Arbeitsliste dafür. Stand 28.10.2026 (vormittags): **Mathe, Deutsch, Sachunterricht und Englisch gegen die PDFs geprüft
+und ausgebaut** (alle Inhaltspunkte in `shared/lehrplan/laender/sachsen-punkte.js`). Kunst, Musik, Werken, Sport und Ethik sind noch
+**vorläufig** – dafür fehlen die PDFs.
 
 ## 1. Quellen (vom Auftraggeber hochzuladen)
 Die Seiten des Schulportals (`schulportal.sachsen.de/lplandb`) sind aus der Arbeitsumgebung gesperrt. Benötigt als PDF:
@@ -13,14 +14,14 @@ Die Seiten des Schulportals (`schulportal.sachsen.de/lplandb`) sind aus der Arbe
 | Fach | Fassung | Für Kl. 2 | Für Kl. 3 |
 |---|---|---|---|
 | Mathematik | 2025 (seit 1.8.2025) | ✅ liegt vor | ✅ liegt vor |
-| Deutsch | 2025 | Klassenstufen 1/2 | Klassenstufe 3 |
-| Sachunterricht | 2019 | Klassenstufen 1/2 | Klassenstufe 3 |
+| Deutsch | 2025 | ✅ liegt vor | ✅ liegt vor |
+| Sachunterricht | 2019 | ✅ liegt vor | ✅ liegt vor |
 | Kunst | aktuell gültige | 1/2 | 3 |
 | Musik | aktuell gültige | 1/2 | 3 |
 | Werken | aktuell gültige | 1/2 | 3 |
 | Sport | aktuell gültige | 1/2 | 3 |
 | Ethik (oder ev./kath. Religion) | aktuell gültige | 1/2 | 3 |
-| Englisch | 2019 | – (Pflicht erst ab Kl. 3) | 3 |
+| Englisch | 2019 | – (Pflicht erst ab Kl. 3) | ✅ liegt vor |
 
 Regel bleibt: Lehrplantexte **nur zusammenfassen**, nie wörtlich übernehmen; jeder Punkt bekommt eine Lernziel-ID.
 
@@ -74,49 +75,29 @@ Kl. 4 Wegeskizzen, Schrägbilder lesen, Körpernetze vergleichen, römischer Aba
 Messen mit Waage und Messrad, eigene Umfragen. **Kl. 4-Urkunde** zählt nur die ursprünglichen 15 Stationen (keine verdiente Urkunde geht verloren).
 Lernbereiche Kl. 4 „Größen und Messen“ und „Daten und Zufall“ jetzt „gut“ – Sachsen gesamt (Mathe, Deutsch, SU) **22 gut, 23 teilweise, 0 fehlt**.
 
-### Deutsch (Lehrplan 2025, Kl. 1/2) – Abenteuer (5), Lesen und Schreiben, DaZ, Werkstatt (Kl. 1–2: 7 Kapitel)
-| Lernbereich | Inhaltspunkt (vorläufig) | Vorhanden | Stand |
-|---|---|---|---|
-| Sprechen und Zuhören | Erzählen, informieren, erklären | Bildergeschichte nacherzählen (Aufnahme, Kl. 3) | 🟡 |
-| | Gesprächsregeln, Konflikte mit Worten lösen | Gefühle (Streit), SU „Regeln“ | 🟡 |
-| | Vortragen, eigene Stimme aufnehmen | `w-reime` (Aufnahme mit Eltern-Schalter) | ✅ |
-| | Verstehend zuhören | Hör-Aufgaben, Vorlesen | ✅ |
-| Schreiben | Druckschrift, Buchstaben formen | Lesen: Nachspuren | ✅ |
-| | Schulausgangsschrift (verbundene Schrift) | – | ❌ |
-| | Lautgetreu schreiben, Rechtschreibstrategien | Wörter legen, `w-verlaengern` | ✅ |
-| | Großschreibung, Satzschlusszeichen | `w-einladung` (Prüfung) | 🟡 |
-| | Kurze Texte schreiben (Einladung, Glückwunsch), überarbeiten | `w-einladung` | 🟡 (Glückwunsch, Überarbeiten fehlen) |
-| | Wörterbuch/Wörterliste nutzen | `w-woerterbuch` (Kl. 3) | 🟡 |
-| Lesen | Laute, Buchstaben, Silben, Wörter, Sätze | Anlaute, Silben, Lesetexte | ✅ |
-| | Flüssig lesen, Fragen zum Text | 20 Lesetexte | ✅ |
-| | Lautlesen mit Rückmeldung | – | ❌ (Aufnahme könnte helfen) |
-| Texte und Medien | Bilderbücher, Märchen, Gedichte | Abenteuer, `w-reime` | 🟡 (Bilderbücher, Märchen fehlen) |
-| | Bibliothek, Hörtexte | – | ❌ |
-| | Digitale Geräte, Chancen und Risiken | Tablet-Führerschein | ✅ |
-| Sprache untersuchen | Wortarten, Artikel, Mehrzahl, Lagewörter | Werkstatt, Abenteuer | ✅ |
-| | Silben, Reime, Wortfamilien, zusammengesetzte Nomen | `w-silben`, `w-reime`; `w-vornach` (Kl. 3) | 🟡 |
-| | Satzarten, Sätze umstellen | `satz`-Schritte | 🟡 |
-| | Mehrsprachigkeit, Dialekt | DaZ, Hilfesprache | 🟡 |
+### Deutsch (Lehrplan 2025, Kl. 1/2, 3, 4) – ✅ gegen das PDF geprüft (28.10.2026)
+179 Inhaltspunkte (Kl. 1/2 69, Kl. 3 63, Kl. 4 47): **166 geübt, 7 teilweise, 6 draußen/Papier.** Werkstatt jetzt 88 Kapitel, nach Lernbereichen gruppiert.
 
-### Sachunterricht (Lehrplan 2019, Kl. 1/2) – 26 Themen ohne Stufe
-| Lernbereich | Inhaltspunkt (vorläufig) | Vorhanden | Stand |
-|---|---|---|---|
-| Zusammen leben und lernen | Rituale, Tagesrhythmus | – | ❌ |
-| | Regeln, Konflikte lösen | `familie`, `regeln` | ✅ |
-| | Informieren in Medien | `medien-info` | 🟡 |
-| Körper und Gesundheit | Hygiene, Zähne, Bewegung, Ernährung, Erste Hilfe | `gesundheit`, `erstehilfe` | ✅ |
-| Pflanzen und Tiere | Jahreszeiten, Vogelzug, Laub-/Nadelbäume | `baeume-voegel` | ✅ |
-| | Frühblüher, Keimen | `pflanzen` | ✅ |
-| | Haustiere und Pflege | eigenes Tier (spielerisch) | 🟡 (kein Sachthema) |
-| Unbelebte Natur | Licht und Schatten | – | ❌ |
-| | Luft, Wind, Schall | – | ❌ |
-| | Wetter beobachten, Thermometer | `wetterkarte` (eher Kl. 3), Insel-Wetter | 🟡 |
-| | Wasser: lösen, trennen, schützen | `wasser` | 🟡 |
-| Raum und Zeit | Schule, Heimatort, Ortsplan | – | ❌ |
-| | Uhr, Kalender | Mathe `uhr`, `kalender` | ✅ |
-| | Schulweg, Verkehr | `schulweg` | ✅ |
-| Erste Schuljahre | Zeitleiste, Portfolio, Steckbrief | `frueher` | 🟡 |
-| Technik (falls im LP 1/2) | Bauen, stabile Türme | `bauen` | ✅ (zu prüfen) |
+| Klasse | Sprechen und Zuhören | Schreiben | Lesen | Texte und Medien | Sprache untersuchen |
+|---|---|---|---|---|---|
+| 1/2 | ✅ | 🟡 Texte am Gerät gestalten nur erklärt; Schreibhaltung, Schulausgangsschrift 🌍 | 🟡 Lautlesen ohne Rückmeldung | ✅ (Bibliothek, Faltbuch 🌍) | ✅ |
+| 3 | ✅ | 🟡 Formatieren und Rechtschreibprüfung am Gerät nur erklärt; Handschrift 🌍 | 🟡 Lautlesen/Lesetheater ohne Rückmeldung | ✅ | ✅ |
+| 4 | ✅ | ✅ (Handschrift 🌍) | 🟡 Laut- und Vielleseverfahren | 🟡 Präsentationen/Podcasts ohne Werkzeug | ✅ |
+
+### Sachunterricht (Lehrplan 2019, Kl. 1/2, 3, 4) – ✅ gegen das PDF geprüft (28.10.2026)
+99 Pflicht-Inhaltspunkte (Kl. 1/2 47, Kl. 3 24, Kl. 4 28): **94 geübt, 2 teilweise, 3 draußen.** Die Wahlbereiche (Abfall, Schulgarten,
+Steine, Himmelsraum, Schlösser …) sind freiwillig und nicht gezählt. Sachthemen jetzt 61, nach sechs Lernbereichen gruppiert.
+
+| Klasse | Zusammen leben | Körper | Pflanzen und Tiere | Unbelebte Natur | Raum und Zeit | LB 6 |
+|---|---|---|---|---|---|---|
+| 1/2 | ✅ | ✅ | ✅ | ✅ (eigene Versuche 🌍) | ✅ | ✅ Erste Schuljahre |
+| 3 | ✅ | ✅ | ✅ | ✅ | 🟡 eigener Landkreis mit der Familie; Rad fahren 🌍 | ✅ Experimentieren |
+| 4 | ✅ | ✅ | ✅ | ✅ | ✅ (Kontrollfahrt 🌍) | 🟡 Präsentation ohne Werkzeug |
+
+### Englisch (Lehrplan 2019, Kl. 3 und 4) – ✅ gegen das PDF geprüft (28.10.2026)
+73 Inhaltspunkte (Kl. 3 40, Kl. 4 33) in zehn Themen-Lernbereichen und „My Portfolio“: **65 geübt, 5 teilweise, 3 draußen.** 27 Lektionen.
+Teilweise: Lieder/Reime zum Mitsingen (Kl. 3 LB 1 und 10), Mimik/Gestik (Kl. 4 LB 1), englische Kinderbücher (LB 7), längere Sachtexte (LB 8).
+Draußen: Sprachenmappe/Dossier, Speisekarte gestalten.
 
 ### Weitere Fächer Kl. 2
 | Fach | Vorhanden | Stand |
@@ -126,7 +107,7 @@ Lernbereiche Kl. 4 „Größen und Messen“ und „Daten und Zufall“ jetzt �
 | Werken | – | 🌍 (Papier falten, schneiden, kleben – Echte-Welt-Ideen; evtl. Faltanleitungen in der App) |
 | Sport | Bewegungspausen (Zeitsystem) | 🌍 (Bewegungsaufgaben, keine Bewertung) |
 | Ethik / Religion | Gefühle (erkennen, Streit, Ruhe), SU „Regeln“, „Kinderrechte“ (Kl. 4) | 🟡 (Ethik-Lehrplan prüfen; Religion nur als Eltern-Wahl, neutral) |
-| Englisch (freiwillig Kl. 1/2) | Eltern-Einstellung „ab Kl. 1“, Kl.-3-Lektionen | 🟡 (keine eigenen Kl.-1/2-Lektionen: Lieder, Reime, Begrüßung) |
+| Englisch (freiwillig Kl. 1/2) | Eltern-Einstellung „ab Kl. 1“, 15 Kl.-3-Lektionen | 🟡 (keine eigenen Kl.-1/2-Lektionen: Lieder, Reime) |
 | Medienbildung (fachübergreifend) | Tablet-Führerschein | ✅ |
 
 ## 4. Reihenfolge der Arbeit

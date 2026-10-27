@@ -1553,3 +1553,43 @@ Auftrag: „Übergang Klasse 5 überspringen, weiter mit Klasse 1, um Mathe Grun
 - **Entscheidung (Halbjahres-Reihenfolge):** Kein fester Halbjahres-Plan für Mathe. Der Lehrplan 2025 lässt die zeitliche Reihenfolge und die
   Gestaltung der Lernbereiche ausdrücklich in der Verantwortung der Lehrkraft (Hinweise zum Fachlehrplan). Stattdessen: Eltern-Einstellung
   „Gerade in der Schule“ + Freischalten je Lernbereich + „Zeig, was du kannst“. Damit folgt die App dem tatsächlichen Unterricht.
+
+### Stand 28.10.2026, vormittags (Sachsen in voller Tiefe: Deutsch, Sachunterricht und Englisch gegen die PDFs geprüft und ausgebaut)
+Quellen: vom Auftraggeber hochgeladen – Lehrplan Grundschule **Deutsch 2025** (kommentierte Fassung), **Sachunterricht 2019**, **Englisch 2019**.
+Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachsen-punkte.js`.
+- **Deutsch (179 Inhaltspunkte: Kl. 1/2 69, Kl. 3 63, Kl. 4 47; 166 geübt, 7 teilweise, 6 draußen/Papier):** **52 neue Werkstatt-Kapitel**
+  (jetzt 88), u. a. Erzählen, Deutlich sprechen und fragen, Gut miteinander reden, Auswendig lernen, Gut zuhören, Laute/ABC, ie oder doppelt,
+  Wortfamilien/Wortfelder, Satzarten, Rechtschreib-Detektiv, Blitz- und Merkwörter, Glückwunsch/Einkaufszettel, Tier beschreiben, Elfchen,
+  Texte überarbeiten, Laut lesen, Lese-Detektiv, Märchen, Sachtexte, Bücher/Bibliothek, Teekesselchen, Verbformen, Treppensätze; Kl. 3: Dialekt/
+  Gebärden/Anglizismen, Rückmeldung, Pro und Kontra, Lesetheater, Zuhören wie ein Profi, Nomen erkennen, Trennstrich/Doppelpunkt, Merkwörter,
+  E-Mail, Gefühle, Anleitung, Weiterschreiben, Textlupe, Schreiben am Gerät, Lesen: Fledermaus, Fabeln, Hörspiel, Bücher finden, Gesagt und
+  gemeint, Proben; Kl. 4: Überzeugen/Werbung, Interview/Streitschlichtung, Fair reden (mit Nummer gegen Kummer), Rechtschreib-Profi, Lesen: Bienen
+  (mit Link), Sage/Schwank/Comic, Medien prüfen, Ergänzungen/Würfelsätze. **Neue Schritt-Typen** `hoertext` (Text wird vorgelesen, dann Frage;
+  ohne Stimme zum Lesen) und `blitz` (Blitzlesen); `schreiben` mit `liste: true` (Einkaufszettel, Elfchen). **Werkstatt nach den fünf
+  Lernbereichen gruppiert**, Kapitel früherer Klassen eingeklappt unter „Wiederholen aus früheren Klassen“ (nichts verschwindet).
+- **Sachunterricht (99 Pflicht-Inhaltspunkte: Kl. 1/2 47, Kl. 3 24, Kl. 4 28; 94 geübt, 2 teilweise, 3 draußen):** **29 neue Themen** (jetzt 61):
+  Zusammen lernen, Essen/Trinken/Bewegen, **Mein Körper gehört mir** (richtige Namen, Nein sagen, gute/schlechte Geheimnisse, 116 111),
+  Durch das Jahr, Bäume genau, Obst und Garten, Kleintiere/Vögel, Heimtiere/Bauernhof, Licht und Schatten, Luft/Wind/Schall, Wetter beobachten,
+  Lösen und Trennen, Schule und Heimatort, Meine ersten Schuljahre; Kl. 3: Kinder der Welt, Land früher und heute, Auge und Ohr, Getreide,
+  Wiese, Wasserkreislauf, Pläne und Karten, **Mein Landkreis** (nur Sachsen); Kl. 4: Schule früher, Medien und ich, Stadt früher/heute/morgen,
+  Waldtiere, Boden, **Sachsen entdecken** (nur Sachsen), Radfahrprüfung. Themenliste nach den sechs Lernbereichen gruppiert (Feld `lb`,
+  für alte Themen ohne `stufe` zusätzlich `kl` nur für das Einklappen – Sichtbarkeit unverändert). Wahlbereiche zählen nicht (freiwillig).
+- **Englisch (73 Inhaltspunkte: Kl. 3 40, Kl. 4 33; 65 geübt, 5 teilweise, 3 draußen):** **14 neue Lektionen** (jetzt 27): Gefühle, Zahlen bis 100,
+  Einkaufen, Fächer/Tage/Uhrzeit, Ausflug, Glückwünsche, Englisch im Alltag; Möbel, Zootiere, London, Café, Feste und Datum, Sportarten,
+  Sprachenpass. Neuer Lernbereich **„My Portfolio“** je Klasse (Lehrplan: verbindlich). Wetter- und Farben-Lektion um Kl.-4-Inhalte ergänzt.
+- **Zählung Sachsen (Mathe, Deutsch, SU; 45 Lernbereiche): 37 gut, 8 teilweise, 0 fehlt** (vorher 25/20). Deutsch 9/6, SU 16/2, Mathe 12/0.
+  **Englisch (22 Lernbereiche): 17 gut, 5 teilweise, 0 fehlt** (vorher 2/14/4).
+- **Ehrlich „teilweise“ bleibt:** Lautlesen mit Rückmeldung (braucht einen Menschen), Texte am Gerät formatieren und Rechtschreibprüfung
+  (nur erklärt), Präsentationen/Podcasts gestalten (kein Werkzeug), eigener Landkreis (Erkundung mit der Familie), Lieder und Reime zum
+  Mitsingen und Mimik/Gestik in Englisch, englische Kinderbücher und längere Sachtexte. **Draußen/Papier:** Schreibhaltung, Schulausgangsschrift
+  und Handschrift, Bibliothek, Faltbuch, eigene Versuche, Rad fahren, Sprachenmappe, Speisekarte (neue Echte-Welt-Aufgaben).
+- **Elternbereich:** je Lernbereich „Werkstatt: x von y Kapiteln“, „Sachthemen: x von y entdeckt“; Inhaltspunkte aller Fächer aufklappbar.
+- **Tests:** neu `deutschvoll` (alle 52 Kapitel über die Kacheln echt durchgespielt, quer und hoch) und `sachkundevoll` (alle 29 Themen echt
+  durchgeklickt, Landesfilter); `englisch` klickt jetzt alle 27 Lektionen durch; `lehrplan` prüft Punkte und Zuordnungen für Deutsch, SU und
+  Englisch; Zählungen in `deutsch34`, `sachkunde`, `mathe2` angepasst. Test-Haken `window.__testSchnell` (kurze Pause nach richtigen Antworten).
+- **Entscheidungen:** (1) Die Inhaltspunkte für **Mein Körper gehört mir** folgen dem Lehrplan Kl. 1/2 (äußere Geschlechtsteile mit
+  Fachbegriffen, Schutz vor Missbrauch) – sachlich, ohne Details darüber hinaus, mit Vertrauenspersonen und 116 111. (2) Werkstatt und
+  Sachthemen **nach Lernbereichen gruppiert** statt einer langen Liste; ältere Klassen eingeklappt, nichts entfernt. (3) Englisch „My Portfolio“
+  als eigener Lernbereich gezählt (Lehrplan: verbindlich, in die Themen integriert).
+- **Offen / nächstes Paket:** Schuljahres-Gerüst („Zeig, was du kannst“, „gerade in der Schule“) für Deutsch, SU und Englisch; Kunst, Musik,
+  Werken, Sport, Ethik (PDFs fehlen); „Mein Heft“ (eigene Texte für Kinder); Handschrift-Übung; ukrainische Übersetzungen.
