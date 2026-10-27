@@ -608,5 +608,88 @@ window.THEMEN = [
         text: "Gut gemacht, {name}! Streichhölzer und Feuerzeuge sind nur für Erwachsene. Übt zu Hause: Wie kommt ihr schnell nach draußen?",
         ru: "Молодец, {name}! Спички и зажигалки — только для взрослых. Потренируйтесь дома: как быстро выйти на улицу?" }
     ]
+  },
+  // ---------- NA-34 Teil 4: Fahrrad, Kinderrechte, Gemeinde ----------
+  {
+    id: "fahrrad", lz: ["su.te.03", "su.ge.02"], name: "Mein Fahrrad", e: "🚲", farbe: "#2F86C8", grund: "#E5F1FB",
+    kurz: "Sicheres Fahrrad, Helm, Zeichen geben, wie die Kette antreibt",
+    schritte: [
+      { typ: "info", titel: "Ein Fahrrad ist eine Maschine", bild: "🚲",
+        text: "Hallo {name}! Wenn du in die Pedale trittst, dreht sich vorn ein Zahnrad. Die Kette überträgt die Kraft auf das Zahnrad am Hinterrad – und das Rad dreht sich.",
+        ru: "Привет, {name}! Когда ты крутишь педали, спереди вращается зубчатое колесо. Цепь передаёт силу на зубчатое колесо у заднего колеса — и оно крутится." },
+      { typ: "info", titel: "Ist mein Fahrrad sicher?", bild: "🔦",
+        text: "Ein sicheres Fahrrad hat zwei Bremsen, eine Klingel, vorn ein weißes und hinten ein rotes Licht und Rückstrahler, die im Dunkeln leuchten.",
+        ru: "У безопасного велосипеда две тормоза, звонок, спереди белый и сзади красный фонарь и катафоты, которые светятся в темноте.",
+        fakten: [["2 Bremsen 🛑", "2 тормоза 🛑"], ["Klingel 🔔", "Звонок 🔔"], ["Licht vorn weiß, hinten rot 💡", "Фонарь спереди белый, сзади красный 💡"], ["Rückstrahler ✨", "Катафоты ✨"]] },
+      { typ: "zuordnen", frage: "Was gehört zu einem verkehrssicheren Fahrrad?", ru: "Что нужно безопасному велосипеду?",
+        gruppen: [{ id: "j", name: "Muss dran sein", ru: "Обязательно", bild: "✅" }, { id: "n", name: "Nur Schmuck", ru: "Только украшение", bild: "🎀" }],
+        dinge: [
+          { t: "Bremsen", ru: "Тормоза", gruppe: "j" }, { t: "Klingel", ru: "Звонок", gruppe: "j" }, { t: "Rotes Rücklicht", ru: "Красный задний фонарь", gruppe: "j" },
+          { t: "Wimpel", ru: "Флажок", gruppe: "n" }, { t: "Glitzer-Aufkleber", ru: "Блестящие наклейки", gruppe: "n" }, { t: "Bunte Lenkerbänder", ru: "Цветные ленточки на руле", gruppe: "n" }] },
+      { typ: "wahl", frage: "Du willst nach links abbiegen. Was machst du vorher?", ru: "Ты хочешь повернуть налево. Что ты делаешь сначала?", bild: "↩️", optionen: [
+        { t: "Umschauen und den linken Arm ausstrecken", ru: "Оглянуться и вытянуть левую руку", ok: true, warum: "Richtig! Erst nach hinten schauen, dann Zeichen geben. Wenn es zu schwierig ist: absteigen und schieben.", warumRu: "Правильно! Сначала оглянуться, потом подать знак. Если трудно — слезть и вести велосипед." },
+        { t: "Einfach schnell rüberfahren", ru: "Просто быстро проехать", ok: false, warum: "Gefährlich! Die Autos wissen nicht, was du vorhast. Immer umschauen und Zeichen geben.", warumRu: "Опасно! Машины не знают, что ты задумал. Всегда оглядывайся и подавай знак." },
+        { t: "Laut klingeln", ru: "Громко позвонить", ok: false, warum: "Die Klingel warnt andere, zeigt aber nicht die Richtung. Dafür streckst du den Arm aus.", warumRu: "Звонок предупреждает, но не показывает направление. Для этого вытягивают руку." }] },
+      { typ: "daumen", satz: "Ein Fahrradhelm schützt den Kopf bei einem Sturz.", satzRu: "Велосипедный шлем защищает голову при падении.", bild: "⛑️", ok: true,
+        warum: "Stimmt! Setz den Helm bei jeder Fahrt auf und mach den Riemen zu – er soll gerade auf der Stirn sitzen.", warumRu: "Верно! Надевай шлем каждый раз и застёгивай ремешок — он должен ровно сидеть на лбу." },
+      { typ: "daumen", satz: "Kinder bis 8 Jahre fahren mit dem Fahrrad auf dem Gehweg.", satzRu: "Дети до 8 лет ездят на велосипеде по тротуару.", bild: "🚸", ok: true,
+        warum: "Stimmt! Bis 8 Jahre müssen Kinder auf dem Gehweg fahren, bis 10 dürfen sie es. Fußgänger haben dort Vorrang.", warumRu: "Верно! До 8 лет дети обязаны ездить по тротуару, до 10 — могут. Пешеходы там главнее." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Prüf mit einem Erwachsenen dein Fahrrad: Bremsen, Klingel, Licht. In Klasse 4 gibt es oft die Radfahrprüfung.",
+        ru: "Супер, {name}! Проверь со взрослым свой велосипед: тормоза, звонок, фонари. В 4 классе часто бывает экзамен по езде на велосипеде." }
+    ]
+  },
+  {
+    id: "kinderrechte", lz: ["su.so.06"], name: "Kinderrechte und Geld", e: "🧒", farbe: "#7B55B8", grund: "#F1EAFF",
+    kurz: "Welche Rechte haben Kinder? Wünsche, Bedürfnisse und Taschengeld",
+    schritte: [
+      { typ: "info", titel: "Kinder haben Rechte", bild: "🌍",
+        text: "Hallo {name}! Fast alle Länder der Welt haben versprochen, die Rechte von Kindern zu schützen. Das steht in der Kinderrechtskonvention der Vereinten Nationen von 1989.",
+        ru: "Привет, {name}! Почти все страны мира пообещали защищать права детей. Это записано в Конвенции ООН о правах ребёнка 1989 года.",
+        fakten: [["Recht auf Bildung 📚", "Право на образование 📚"], ["Recht auf Gesundheit 🩺", "Право на здоровье 🩺"], ["Recht auf Spiel und Freizeit ⚽", "Право на игру и отдых ⚽"], ["Schutz vor Gewalt 🛡️", "Защита от насилия 🛡️"], ["Recht, gehört zu werden 💬", "Право быть услышанным 💬"]] },
+      { typ: "wahl", frage: "Welches ist ein Kinderrecht?", ru: "Что из этого — право ребёнка?", bild: "📜", optionen: [
+        { t: "In die Schule gehen und lernen", ru: "Ходить в школу и учиться", ok: true, warum: "Richtig! Jedes Kind hat ein Recht auf Bildung.", warumRu: "Правильно! У каждого ребёнка есть право на образование." },
+        { t: "Jeden Tag Eis essen", ru: "Каждый день есть мороженое", ok: false, warum: "Das wäre lecker, ist aber kein Recht. Kinder haben ein Recht auf gesundes Essen.", warumRu: "Это было бы вкусно, но это не право. У детей есть право на здоровую еду." },
+        { t: "Immer bestimmen, was alle tun", ru: "Всегда решать, что делают все", ok: false, warum: "Nein. Kinder dürfen ihre Meinung sagen und werden gehört – aber andere haben auch Rechte.", warumRu: "Нет. Дети могут высказывать мнение, и их слушают — но у других тоже есть права." }] },
+      { typ: "daumen", satz: "Wenn mich jemand schlägt oder mir Angst macht, darf ich mir Hilfe holen.", satzRu: "Если меня бьют или пугают, я могу попросить о помощи.", bild: "🤝", ok: true,
+        warum: "Stimmt! Erzähl es einem Erwachsenen, dem du vertraust. Kostenlos und anonym hilft auch die Nummer gegen Kummer: 116 111.", warumRu: "Верно! Расскажи взрослому, которому доверяешь. Бесплатно и анонимно помогает телефон доверия для детей в Германии: 116 111." },
+      { typ: "zuordnen", frage: "Brauche ich das zum Leben oder wünsche ich es mir nur?", ru: "Это нужно для жизни или это просто желание?",
+        gruppen: [{ id: "b", name: "Brauche ich", ru: "Нужно", bild: "🏠" }, { id: "w", name: "Wunsch", ru: "Желание", bild: "🎁" }],
+        dinge: [
+          { t: "Wasser zum Trinken", ru: "Вода для питья", gruppe: "b" }, { t: "Warme Jacke im Winter", ru: "Тёплая куртка зимой", gruppe: "b" }, { t: "Ein Bett", ru: "Кровать", gruppe: "b" },
+          { t: "Neue Spielkonsole", ru: "Новая игровая приставка", gruppe: "w" }, { t: "Fünftes Kuscheltier", ru: "Пятая мягкая игрушка", gruppe: "w" }, { t: "Glitzerstifte", ru: "Блестящие ручки", gruppe: "w" }] },
+      { typ: "wahl", frage: "Du bekommst 2 € Taschengeld pro Woche und wünschst dir ein Buch für 8 €. Was tust du?", ru: "Ты получаешь 2 € карманных денег в неделю и хочешь книгу за 8 €. Что ты делаешь?", bild: "🐷", optionen: [
+        { t: "4 Wochen lang sparen", ru: "Копить 4 недели", ok: true, warum: "Genau! 4 · 2 € = 8 €. Sparen braucht Geduld – dafür kaufst du dir selbst etwas, das du wirklich willst.", warumRu: "Точно! 4 · 2 € = 8 €. Копить нужно терпение — зато ты сам купишь то, что действительно хочешь." },
+        { t: "Jede Woche Süßigkeiten kaufen", ru: "Каждую неделю покупать сладости", ok: false, warum: "Dann ist das Geld jede Woche weg und das Buch kommt nie.", warumRu: "Тогда деньги каждую неделю заканчиваются, и книги не будет." },
+        { t: "Gar nichts, das klappt nie", ru: "Ничего, это не получится", ok: false, warum: "Doch! In 4 Wochen hast du 8 € gespart.", warumRu: "Получится! За 4 недели ты накопишь 8 €." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Am 20. September ist in Deutschland Weltkindertag, in vielen Ländern feiert man am 1. Juni den Kindertag.",
+        ru: "Здорово, {name}! 20 сентября в Германии Всемирный день детей, а во многих странах День защиты детей празднуют 1 июня." }
+    ]
+  },
+  {
+    id: "gemeinde", lz: ["su.so.05"], name: "Unsere Gemeinde", e: "🏛️", farbe: "#8A6E2F", grund: "#F7F0DD",
+    kurz: "Wer kümmert sich um den Ort? Wie Kinder mitbestimmen",
+    schritte: [
+      { typ: "info", titel: "Viele leben zusammen", bild: "🏘️",
+        text: "Hallo {name}! In einem Dorf oder einer Stadt leben viele Menschen zusammen. Die Gemeinde kümmert sich um Dinge, die alle brauchen.",
+        ru: "Привет, {name}! В деревне или городе вместе живёт много людей. Община (муниципалитет) заботится о том, что нужно всем." },
+      { typ: "zuordnen", frage: "Wer kümmert sich darum?", ru: "Кто об этом заботится?",
+        gruppen: [{ id: "g", name: "Die Gemeinde", ru: "Муниципалитет", bild: "🏛️" }, { id: "f", name: "Die Familie", ru: "Семья", bild: "🏠" }],
+        dinge: [
+          { t: "Spielplatz", ru: "Детская площадка", gruppe: "g" }, { t: "Straßen und Ampeln", ru: "Улицы и светофоры", gruppe: "g" }, { t: "Müllabfuhr", ru: "Вывоз мусора", gruppe: "g" },
+          { t: "Mein Zimmer aufräumen", ru: "Убрать мою комнату", gruppe: "f" }, { t: "Abendessen kochen", ru: "Готовить ужин", gruppe: "f" }, { t: "Kinderzimmer streichen", ru: "Покрасить детскую", gruppe: "f" }] },
+      { typ: "wahl", frage: "Wer leitet eine Stadt oder ein Dorf?", ru: "Кто руководит городом или деревней?", bild: "👩‍💼", optionen: [
+        { t: "Die Bürgermeisterin oder der Bürgermeister", ru: "Бургомистр (глава города)", ok: true, warum: "Richtig! Sie oder er wird gewählt und arbeitet mit dem Gemeinderat oder Stadtrat zusammen.", warumRu: "Правильно! Его или её выбирают, и они работают вместе с городским советом." },
+        { t: "Die Lehrerin", ru: "Учительница", ok: false, warum: "Die Lehrerin leitet eine Klasse. Den Ort leitet die Bürgermeisterin oder der Bürgermeister.", warumRu: "Учительница руководит классом. Городом руководит бургомистр." },
+        { t: "Der Schulbusfahrer", ru: "Водитель школьного автобуса", ok: false, warum: "Er fährt euch sicher zur Schule. Den Ort leitet die Bürgermeisterin oder der Bürgermeister.", warumRu: "Он безопасно везёт вас в школу. Городом руководит бургомистр." }] },
+      { typ: "daumen", satz: "Wenn alle abstimmen, gewinnt, was die meisten wollen.", satzRu: "Если все голосуют, побеждает то, чего хочет большинство.", bild: "🙋", ok: true,
+        warum: "Stimmt! Das heißt Mehrheit. Wichtig ist trotzdem, dass man den anderen zuhört.", warumRu: "Верно! Это называется большинство. Но всё равно важно слушать других." },
+      { typ: "daumen", satz: "Kinder können in ihrem Ort nicht mitreden.", satzRu: "Дети не могут ничего решать в своём городе.", bild: "💬", ok: false,
+        warum: "Doch! Im Klassenrat, im Schülerrat und in manchen Orten im Kinder- und Jugendparlament. Man kann auch Briefe an die Bürgermeisterin schreiben.", warumRu: "Могут! В совете класса, школьном совете, а в некоторых городах — в детском и молодёжном парламенте. Можно и написать письмо бургомистру." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Prima, {name}! Was würdest du in deinem Ort verbessern? Überleg dir einen Vorschlag und erzähl ihn deiner Familie oder deiner Klasse.",
+        ru: "Отлично, {name}! Что бы ты улучшил в своём городе? Придумай предложение и расскажи семье или классу." }
+    ]
   }
 ];

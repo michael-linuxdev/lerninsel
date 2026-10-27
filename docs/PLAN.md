@@ -1194,3 +1194,15 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
 - **Offen im Sachunterricht:** Fahrrad und Verkehr (`su.te.03`), Kinderrechte und Geld (`su.so.06`), Gemeinde/Mitbestimmen (`su.so.05`),
   Getreide/vom Korn zum Brot, Wetterkarten, Experimentieren; Bundesland/Heimatort (`su.ge.04`, `su.hi.04`) brauchen Länderdaten.
 - **Nächstes:** NA-34 Teil 4 (Fahrrad, Kinderrechte) oder NA-36 Deutsch Kl. 3–4; Grafik bleibt eingefroren.
+
+### Stand 27.10.2026, Abend (NA-34 Teil 4)
+- Drei weitere Themen bei Eule Ella (jetzt **18**): „Mein Fahrrad“ (`su.te.03`, `su.ge.02`: Kette und Zahnräder, verkehrssicheres Fahrrad,
+  Zeichen geben, Helm, Gehweg bis 8/10 Jahre), „Kinderrechte und Geld“ (`su.so.06`: UN-Kinderrechtskonvention, Hilfe holen mit Nummer gegen
+  Kummer 116 111, Bedürfnis/Wunsch, Taschengeld sparen) und „Unsere Gemeinde“ (`su.so.05`: Aufgaben der Gemeinde, Bürgermeister/in,
+  Mehrheit, Kinder reden mit). Russisch als Entwurf.
+- Sachsen Kl. 3 „Raum und Zeit“ und Kl. 4 „Zusammen leben und lernen“ verweisen jetzt auf die Themen (Zählung unverändert 9/22/18).
+- Sachkunde-Seite: lange Wörter brechen im Hochformat um (vorher waagerechte Scrollleiste bei „Kinderrechtskonvention“).
+- `tests/sachkunde.js` prüft jetzt 8 neue Themen in Quer- und Hochformat.
+- **Offen im Sachunterricht:** Getreide/vom Korn zum Brot, Wetterkarten, Experimentieren, Säugetiere/Gewässer, Wärmeleitung;
+  Bundesland/Heimatort (`su.ge.04`, `su.hi.04`) brauchen Länderdaten.
+- **Nächstes:** NA-36 Deutsch Kl. 3–4 (Wortarten, Zeitformen, Rechtschreibstrategien, längere Lesetexte mit Fragen).

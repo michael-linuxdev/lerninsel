@@ -1,10 +1,10 @@
-// Test NA-34 Teil 3: Sachkunde-Themen für Klasse 3–4 (Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer)
+// Test NA-34 Teil 3+4: Sachkunde-Themen für Klasse 3–4 (Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer, Fahrrad, Kinderrechte, Gemeinde)
 // Jedes neue Thema startet, jeder Schritt lässt sich anzeigen, alle Themen haben Lernziele, keine Konsolenfehler, keine Scrollleiste.
 const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;
-const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer"];
+const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer", "fahrrad", "kinderrechte", "gemeinde"];
 
 (async () => {
   const browser = await chromium.launch();
@@ -25,8 +25,8 @@ const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer"];
       idx: neu.map(id => THEMEN.findIndex(t => t.id === id)),
       ohneRu: THEMEN.filter(t => neu.includes(t.id)).flatMap(t => t.schritte.filter(s => !(s.ru || s.satzRu)).map(() => t.id)) }), NEU);
     if (art === "quer") {
-      erwarte(daten.alle === 15, `15 Themen bei Eule Ella (${daten.alle})`);
-      erwarte(!daten.ohneLz.length && daten.idx.every(i => i >= 0), "alle Themen haben Lernziele, die fünf neuen sind da");
+      erwarte(daten.alle === 18, `18 Themen bei Eule Ella (${daten.alle})`);
+      erwarte(!daten.ohneLz.length && daten.idx.every(i => i >= 0), "alle Themen haben Lernziele, die neuen sind da");
       erwarte(!daten.ohneRu.length, "jeder neue Schritt hat einen russischen Entwurf");
     }
     for (let k = 0; k < NEU.length; k++) {
@@ -35,7 +35,7 @@ const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer"];
       let ok = true;
       for (let s = 0; s < schritte; s++) {
         const info = await p.evaluate((s) => { __sachkunde.schritt(s); return { pos: __sachkunde.lauf.pos, text: document.body.innerText.length, passt: document.documentElement.scrollWidth <= innerWidth + 1 }; }, s);
-        if (!info.passt) ok = false;
+        if (!info.passt) { ok = false; console.log("    Scrollleiste bei Schritt " + s); }
       }
       erwarte(ok, `${art}: „${NEU[k]}“ startet ohne waagerechte Scrollleiste (${schritte} Schritte)`);
       if (BILDER) await p.screenshot({ path: `${BILDER}/sachkunde-${NEU[k]}-${art}.png` });
