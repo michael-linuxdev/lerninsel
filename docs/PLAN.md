@@ -1146,3 +1146,12 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
 - Test `tests/koennen-anzeige.js`.
 - **Nächstes:** nach iPad-Rückmeldung NA-34 Sachunterricht oder NA-33 Mathe Kl. 3; Grafik (NA-29b, NA-29 Teil 2) und Story (NA-16/17/18) warten.
 
+### Stand 27.10.2026, Nachtrag (NA-34 Sachunterricht, Teil 1)
+- Vier neue Themen bei Eule Ella (`spiele/sachkunde/themen.js`, mit `lz`, Russisch als Entwurf): **„Mein Schulweg“** (Ampel, Zebrastreifen,
+  sicher/gefährlich – geographisch, `su.ge.02`), **„Wasser“** (Eis/Wasser/Dampf, Wasserkreislauf, Wasser sparen – naturwissenschaftlich,
+  `su.na.01`, `su.na.07`), **„Früher und heute“** (Telefon, Schule, Waschen, eigene Lebensgeschichte – historisch, `su.hi.03`, `su.hi.02`),
+  **„Regeln und Streit“** (Melden, Streit lösen in 4 Schritten, nie schlagen – sozialwissenschaftlich, `su.so.03`, `et.mi.01`).
+  Jetzt 8 Themen; jede GDSU-Perspektive außer „technisch“ hat mindestens zwei Kl.-1/2-Themen.
+- Sachsen Kl. 1/2 von Hand angepasst (jetzt 7 × ja, 15 × teil, 27 × nein): Zusammen leben → ja, Unbelebte Natur, Erste Schuljahre → teil.
+- **Offen (NA-34 Teil 2):** technische Perspektive (Bauen, Brücken, Hebel – passt zu Bennos Bauplatz), Frühblüher/Keimen, Haustiere.
+

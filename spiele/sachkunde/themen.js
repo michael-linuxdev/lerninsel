@@ -300,4 +300,126 @@ window.THEMEN = [
         ru: "Отлично, {name}! На следующей прогулке собери три разных листа. Знаешь, с какого они дерева?" }
     ]
   }
+  ,
+  // ---------- NA-34: je GDSU-Perspektive weitere Themen für Kl. 1–2 ----------
+  {
+    id: "schulweg", lz: ["su.ge.02"], name: "Mein Schulweg", e: "🚦", farbe: "#D7263D", grund: "#FFEDEF",
+    kurz: "Ampel, Zebrastreifen, sicher über die Straße",
+    schritte: [
+      { typ: "info", titel: "Sicher zur Schule", bild: "🎒",
+        text: "Hallo {name}! Auf dem Weg zur Schule gibt es Autos, Fahrräder und Ampeln. Mit ein paar Regeln kommst du immer sicher an.",
+        ru: "Привет, {name}! По дороге в школу есть машины, велосипеды и светофоры. С несколькими правилами ты всегда дойдёшь безопасно." },
+      { typ: "info", titel: "Die Ampel", bild: "🚦",
+        text: "Bei Rot bleibst du stehen. Bei Grün darfst du gehen – aber schau trotzdem nach links und rechts.",
+        ru: "На красный свет стой. На зелёный можно идти — но всё равно посмотри налево и направо.",
+        fakten: [["Rot: stehen bleiben.", "Красный: стоять."], ["Grün: gehen, aber vorher schauen.", "Зелёный: идти, но сначала посмотреть."]] },
+      { typ: "wahl", frage: "Die Fußgänger-Ampel ist rot. Was machst du?", ru: "Светофор для пешеходов красный. Что ты делаешь?", bild: "🔴", optionen: [
+        { t: "Ich bleibe stehen.", ru: "Я стою.", ok: true, warum: "Richtig! Auch wenn kein Auto kommt.", warumRu: "Правильно! Даже если машин нет." },
+        { t: "Ich renne schnell rüber.", ru: "Я быстро перебегаю.", ok: false, warum: "Nein, das ist gefährlich. Bei Rot bleibst du stehen.", warumRu: "Нет, это опасно. На красный свет стой." },
+        { t: "Ich gehe, wenn andere gehen.", ru: "Я иду, если идут другие.", ok: false, warum: "Nein, schau auf die Ampel, nicht auf die anderen.", warumRu: "Нет, смотри на светофор, а не на других." }] },
+      { typ: "info", titel: "Der Zebrastreifen", bild: "🦓",
+        text: "Am Zebrastreifen müssen Autos anhalten. Warte am Rand, bis die Autos wirklich stehen. Dann gehst du zügig hinüber.",
+        ru: "У «зебры» машины должны остановиться. Подожди у края, пока машины действительно остановятся. Потом быстро переходи." },
+      { typ: "daumen", satz: "Zwischen parkenden Autos kann man gut über die Straße gehen.", satzRu: "Между припаркованными машинами удобно переходить улицу.", bild: "🚗", ok: false,
+        warum: "Nein! Zwischen parkenden Autos sehen dich die Fahrer nicht. Geh lieber an der Ampel oder am Zebrastreifen.", warumRu: "Нет! Между машинами водители тебя не видят. Лучше иди на светофоре или по «зебре»." },
+      { typ: "zuordnen", frage: "Was macht dich auf dem Schulweg sicher?", ru: "Что делает тебя безопасным на дороге в школу?",
+        gruppen: [{ id: "ja", name: "Sicher", ru: "Безопасно", bild: "✅" }, { id: "nein", name: "Gefährlich", ru: "Опасно", bild: "⚠️" }],
+        dinge: [
+          { t: "Helle Jacke mit Reflektoren", ru: "Светлая куртка с отражателями", gruppe: "ja" }, { t: "An der Ampel warten", ru: "Ждать у светофора", gruppe: "ja" },
+          { t: "Auf dem Gehweg gehen", ru: "Идти по тротуару", gruppe: "ja" }, { t: "Mit Kopfhörern über die Straße", ru: "Переходить в наушниках", gruppe: "nein" },
+          { t: "Auf der Straße Ball spielen", ru: "Играть в мяч на дороге", gruppe: "nein" }, { t: "Hinter dem Bus hervorlaufen", ru: "Выбегать из-за автобуса", gruppe: "nein" }] },
+      { typ: "info", titel: "Geschafft!", bild: "🏫",
+        text: "Super, {name}! Geh deinen Schulweg einmal mit einem Erwachsenen ab und zeig ihm die sicheren Stellen.",
+        ru: "Супер, {name}! Пройди свой путь в школу вместе со взрослым и покажи ему безопасные места." }
+    ]
+  },
+  {
+    id: "wasser", lz: ["su.na.01", "su.na.07"], name: "Wasser", e: "💧", farbe: "#3AA0E0", grund: "#E1F3FF",
+    kurz: "Eis, Wasser, Dampf und Wasser sparen",
+    schritte: [
+      { typ: "info", titel: "Überall Wasser", bild: "💧",
+        text: "Hallo {name}! Wasser ist im Meer, im Regen, im Schnee und sogar in dir. Ohne Wasser können Menschen, Tiere und Pflanzen nicht leben.",
+        ru: "Привет, {name}! Вода есть в море, в дожде, в снеге и даже в тебе. Без воды не могут жить люди, животные и растения." },
+      { typ: "info", titel: "Fest, flüssig, gasförmig", bild: "🧊",
+        text: "Wird Wasser sehr kalt, wird es zu Eis. Wird es sehr heiß, wird es zu Dampf. Dazwischen ist es flüssig.",
+        ru: "Когда вода очень холодная, она становится льдом. Когда очень горячая — паром. Между ними она жидкая.",
+        fakten: [["Eis ist fest.", "Лёд — твёрдый."], ["Wasser ist flüssig.", "Вода — жидкая."], ["Dampf ist gasförmig.", "Пар — газообразный."]] },
+      { typ: "wahl", frage: "Was passiert mit einem Eiswürfel in der Sonne?", ru: "Что происходит с кубиком льда на солнце?", bild: "🧊", optionen: [
+        { t: "Er schmilzt zu Wasser.", ru: "Он тает и становится водой.", ok: true, warum: "Genau! Wärme macht aus Eis wieder Wasser.", warumRu: "Точно! Тепло превращает лёд снова в воду." },
+        { t: "Er wird größer.", ru: "Он становится больше.", ok: false, warum: "Nein, in der Wärme schmilzt er.", warumRu: "Нет, в тепле он тает." },
+        { t: "Er wird zu Stein.", ru: "Он превращается в камень.", ok: false, warum: "Nein, Eis wird in der Wärme zu Wasser.", warumRu: "Нет, лёд в тепле становится водой." }] },
+      { typ: "info", titel: "Der Weg des Wassers", bild: "🌧️",
+        text: "Die Sonne wärmt das Wasser im Meer. Es steigt als Dampf auf und bildet Wolken. Aus den Wolken fällt Regen. Der Regen fließt wieder ins Meer.",
+        ru: "Солнце нагревает воду в море. Она поднимается паром и образует облака. Из облаков идёт дождь. Дождь снова стекает в море." },
+      { typ: "daumen", satz: "Wolken bestehen aus winzigen Wassertröpfchen.", satzRu: "Облака состоят из крошечных капелек воды.", bild: "☁️", ok: true,
+        warum: "Stimmt! Wenn die Tröpfchen zu schwer werden, fällt Regen.", warumRu: "Верно! Когда капельки становятся тяжёлыми, идёт дождь." },
+      { typ: "zuordnen", frage: "Spart das Wasser?", ru: "Это экономит воду?",
+        gruppen: [{ id: "ja", name: "Spart Wasser", ru: "Экономит", bild: "👍" }, { id: "nein", name: "Verschwendet Wasser", ru: "Тратит зря", bild: "👎" }],
+        dinge: [
+          { t: "Beim Zähneputzen den Hahn zudrehen", ru: "Закрывать кран, когда чистишь зубы", gruppe: "ja" }, { t: "Duschen statt baden", ru: "Принимать душ вместо ванны", gruppe: "ja" },
+          { t: "Blumen mit Regenwasser gießen", ru: "Поливать цветы дождевой водой", gruppe: "ja" }, { t: "Wasser laufen lassen beim Spielen", ru: "Оставлять воду течь во время игры", gruppe: "nein" },
+          { t: "Tropfenden Hahn nicht melden", ru: "Не сказать про капающий кран", gruppe: "nein" }] },
+      { typ: "info", titel: "Geschafft!", bild: "🌊",
+        text: "Toll, {name}! Lege zu Hause einen Eiswürfel auf einen Teller und schau, wie lange er braucht, bis er geschmolzen ist.",
+        ru: "Здорово, {name}! Положи дома кубик льда на тарелку и посмотри, сколько времени он будет таять." }
+    ]
+  },
+  {
+    id: "frueher", lz: ["su.hi.03", "su.hi.02"], name: "Früher und heute", e: "🕰️", farbe: "#8A6E2F", grund: "#F7F0DD",
+    kurz: "Wie Kinder früher gelebt haben",
+    schritte: [
+      { typ: "info", titel: "Als Oma klein war", bild: "👵",
+        text: "Hallo {name}! Deine Großeltern waren auch einmal Kinder. Damals war vieles anders als heute. Lass uns vergleichen!",
+        ru: "Привет, {name}! Твои бабушка и дедушка тоже когда-то были детьми. Тогда многое было иначе, чем сегодня. Давай сравним!" },
+      { typ: "info", titel: "Telefon früher und heute", bild: "☎️",
+        text: "Früher hatte das Telefon eine Wählscheibe und hing mit einem Kabel an der Wand. Heute haben viele ein Handy in der Tasche.",
+        ru: "Раньше у телефона был диск, и он висел на стене с проводом. Сегодня у многих телефон в кармане." },
+      { typ: "zuordnen", frage: "Früher oder heute?", ru: "Раньше или сегодня?",
+        gruppen: [{ id: "f", name: "Früher", ru: "Раньше", bild: "🕰️" }, { id: "h", name: "Heute", ru: "Сегодня", bild: "📱" }],
+        dinge: [
+          { t: "Tafel und Kreide in jeder Klasse", ru: "Доска и мел в каждом классе", gruppe: "f" }, { t: "Wäsche mit dem Waschbrett waschen", ru: "Стирать бельё на стиральной доске", gruppe: "f" },
+          { t: "Briefe mit der Post schicken, um zu reden", ru: "Посылать письма, чтобы поговорить", gruppe: "f" }, { t: "Videoanruf mit dem Tablet", ru: "Видеозвонок с планшета", gruppe: "h" },
+          { t: "Waschmaschine", ru: "Стиральная машина", gruppe: "h" }, { t: "Musik aus dem Handy", ru: "Музыка из телефона", gruppe: "h" }] },
+      { typ: "daumen", satz: "Manche Dinge machen Kinder früher und heute gleich: zum Beispiel Fangen spielen.", satzRu: "Некоторые вещи дети делали раньше и делают сегодня одинаково: например, играют в догонялки.", bild: "🏃", ok: true,
+        warum: "Stimmt! Fangen, Verstecken und Seilspringen gibt es schon sehr lange.", warumRu: "Верно! Догонялки, прятки и прыжки через скакалку существуют уже очень давно." },
+      { typ: "info", titel: "Meine eigene Geschichte", bild: "👶",
+        text: "Auch du hast schon eine Geschichte: Erst warst du ein Baby, dann ein Kindergartenkind, jetzt gehst du zur Schule.",
+        ru: "У тебя тоже уже есть своя история: сначала ты был(а) малышом, потом ходил(а) в садик, а теперь ходишь в школу." },
+      { typ: "wahl", frage: "Was kommt zuerst?", ru: "Что было сначала?", bild: "👶", optionen: [
+        { t: "Baby", ru: "Малыш", ok: true, warum: "Genau! Zuerst ist jeder ein Baby, dann ein Kindergartenkind, dann ein Schulkind.", warumRu: "Точно! Сначала каждый малыш, потом ребёнок в садике, потом школьник." },
+        { t: "Schulkind", ru: "Школьник", ok: false, warum: "Nein, Schulkind kommt erst nach dem Kindergarten.", warumRu: "Нет, школьником становятся после садика." },
+        { t: "Kindergartenkind", ru: "Ребёнок в садике", ok: false, warum: "Fast! Davor warst du ein Baby.", warumRu: "Почти! До этого ты был(а) малышом." }] },
+      { typ: "info", titel: "Geschafft!", bild: "📷",
+        text: "Super, {name}! Frag einen Erwachsenen: Womit hast du gespielt, als du so alt warst wie ich?",
+        ru: "Супер, {name}! Спроси взрослого: «Во что ты играл(а), когда был(а) в моём возрасте?»" }
+    ]
+  },
+  {
+    id: "regeln", lz: ["su.so.03", "et.mi.01"], name: "Regeln und Streit", e: "🤝", farbe: "#7B55B8", grund: "#EFE6FF",
+    kurz: "Warum es Regeln gibt und wie man Streit löst",
+    schritte: [
+      { typ: "info", titel: "Wozu Regeln?", bild: "📋",
+        text: "Hallo {name}! In der Klasse, beim Spielen und zu Hause gibt es Regeln. Sie helfen, dass sich alle wohlfühlen und niemand verletzt wird.",
+        ru: "Привет, {name}! В классе, в игре и дома есть правила. Они помогают, чтобы всем было хорошо и никто не пострадал." },
+      { typ: "wahl", frage: "Warum meldet man sich im Unterricht?", ru: "Зачем на уроке поднимают руку?", bild: "🙋", optionen: [
+        { t: "Damit nicht alle gleichzeitig reden.", ru: "Чтобы все не говорили одновременно.", ok: true, warum: "Richtig! So kann jeder gehört werden.", warumRu: "Правильно! Так каждого могут услышать." },
+        { t: "Weil die Arme müde sind.", ru: "Потому что руки устали.", ok: false, warum: "Nein, das Melden hilft, dass alle drankommen.", warumRu: "Нет, поднятая рука помогает, чтобы все могли сказать." },
+        { t: "Damit es lauter wird.", ru: "Чтобы стало громче.", ok: false, warum: "Nein, es wird dadurch ruhiger.", warumRu: "Нет, так становится тише." }] },
+      { typ: "info", titel: "Wenn es Streit gibt", bild: "🗣️",
+        text: "Streit passiert jedem. Wichtig ist, wie man ihn löst: erst durchatmen, dann sagen, was man fühlt, zuhören und zusammen eine Lösung suchen.",
+        ru: "Ссоры бывают у всех. Важно, как их решать: сначала выдохнуть, потом сказать, что чувствуешь, выслушать и вместе найти решение.",
+        fakten: [["1. Stopp sagen und durchatmen.", "1. Сказать «стоп» и выдохнуть."], ["2. Sagen, was ich fühle.", "2. Сказать, что я чувствую."],
+          ["3. Dem anderen zuhören.", "3. Выслушать другого."], ["4. Eine Lösung suchen, die für beide passt.", "4. Найти решение, которое подходит обоим."]] },
+      { typ: "daumen", satz: "Wenn mich jemand ärgert, darf ich ihn schlagen.", satzRu: "Если меня кто-то дразнит, я могу его ударить.", bild: "✋", ok: false,
+        warum: "Nein! Schlagen ist nie eine Lösung. Sag deutlich „Stopp!“ und hol dir Hilfe bei einem Erwachsenen.", warumRu: "Нет! Драка — никогда не решение. Скажи чётко «Стоп!» и позови взрослого." },
+      { typ: "zuordnen", frage: "Hilft das bei einem Streit?", ru: "Это помогает при ссоре?",
+        gruppen: [{ id: "ja", name: "Hilft", ru: "Помогает", bild: "🤝" }, { id: "nein", name: "Macht es schlimmer", ru: "Делает хуже", bild: "💥" }],
+        dinge: [
+          { t: "Zuhören", ru: "Слушать", gruppe: "ja" }, { t: "Abwechseln", ru: "Делать по очереди", gruppe: "ja" }, { t: "Sich entschuldigen", ru: "Извиниться", gruppe: "ja" },
+          { t: "Anschreien", ru: "Кричать", gruppe: "nein" }, { t: "Auslachen", ru: "Высмеивать", gruppe: "nein" }, { t: "Spielzeug wegnehmen", ru: "Отнимать игрушку", gruppe: "nein" }] },
+      { typ: "info", titel: "Geschafft!", bild: "🌈",
+        text: "Toll, {name}! Überlegt euch zu Hause eine Familienregel, die allen wichtig ist.",
+        ru: "Здорово, {name}! Придумайте дома одно семейное правило, которое важно для всех." }
+    ]
+  }
 ];
