@@ -4,6 +4,7 @@ Diesen Text komplett als erste Nachricht in eine neue Sitzung kopieren – **auc
 Er ist in sich vollständig: Die neue Sitzung braucht kein Vorwissen, keine Erinnerung und keinen alten Chat.
 Voraussetzung: Das Konto hat Lese- und Schreibzugriff auf das GitHub-Repo `michael-linuxdev/lerninsel`
 (GitHub in den Claude-Einstellungen unter „Connectors“ verbinden; ohne Schreibzugriff kann die Sitzung nicht pushen).
+Geht in einer Claude-Sitzung mit Shell und Git ebenso wie in Claude Code (dann direkt im geklonten Repo starten; Abschnitt 0 gilt sinngemäß).
 
 ---
 
@@ -27,161 +28,99 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
      cd dep && for r in primus/eventemitter3 mapbox/earcut kaimallea/isMobile xmldom/xmldom pixijs/colord avoidwork/tiny-lru jkroso/parse-svg-path; do git clone -q --depth 1 https://github.com/$r; done
      ```
      Bauen dann mit `ENGINES=~/eng node quellen/probe/bauen.js` (Ausgabe `spiele/probe/pixel.js`). Geht `npm i pixi.js`, reicht das statt der Klone.
-3. Einmal `sh tests/laufen.sh` ausführen (Node-Tests story-migration + inselkern, dann Rauchtest). Muss grün sein, bevor du etwas änderst. Dauert ca. 2 Minuten.
+3. Einmal `sh tests/laufen.sh` ausführen (Node-Tests, dann Rauchtest über 52 Seitenaufrufe). Muss grün sein, bevor du etwas änderst. Dauert ca. 2–3 Minuten.
 
 ## 1. Zuerst lesen
-1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
-   Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Abend (Sitzung 27.10., 19:30: größte Sachsen-Lücken geschlossen)“**; davor „19:10: Sachsen-Profil geprüft und korrigiert“; davor „18:30: Englisch-Einstieg“; davor „18:15: NA-39 Übergang Klasse 5“; „17:50: Schritt B … und
-   Schritt C …“: Mathe-Rest, Urkunde, Sachunterricht-Rest; „17:30: … Schritt A“: Schritt-Typen `ordnen`/`verbessern`, 6 Schreib-Kapitel). Ältere Abschnitte sind Historie.
-2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
-3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
-   `docs/MINISPIELE.md`.
-4. `README.md` (Aufbau des Repos, Liste der Dateien in `shared/`).
-5. Für Inhalts-Pakete die Datendateien selbst überfliegen, bevor du Neues schreibst (Stil, Länge, Schritt-Typen): `spiele/mathe/aufgaben.js`
-   (Abschnitte Klasse 3 und 4), `spiele/deutsch/werkstatt.js` (Kapitel ab `w-praeteritum`), `spiele/sachkunde/themen.js` (ab `sinne`),
-   `shared/lehrplan/kern.js` (Lernziel-IDs) und `shared/lehrplan/laender/sachsen.js` (Zuordnung `app`, `abdeckung`, `hinweis`).
+1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Arbeitspakete NA-xx,
+   offene Fragen). Wichtig darin: **„Zwei Looks (Entscheidung 27.10.2026)“** und die „Stand 27.10.2026“-Einträge ab **„Abend (NA-36 Teil 4 = Schritt A)“**
+   bis zum letzten **„19:30: größte Sachsen-Lücken geschlossen“**. Ältere Abschnitte sind Historie.
+2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Figuren, Tutorial-Etappen E0–E10).
+3. Je nach Paket: `docs/LEHRPLAN.md` (Matrix, „Was die App heute abdeckt“), `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!),
+   `docs/GRAFIK.md` (Leistungsbudget iPad 10, Pixel-Regeln), `docs/MINISPIELE.md`.
+4. `README.md` (Aufbau des Repos).
+5. Vor neuen Inhalten die passende Datendatei überfliegen (Stil, Länge, Schritt-Typen): `spiele/mathe/aufgaben.js`, `spiele/deutsch/werkstatt.js`,
+   `spiele/sachkunde/themen.js`, `spiele/englisch/lektionen.js`, `shared/lehrplan/kern.js` (Lernziel-IDs), `shared/lehrplan/laender/sachsen.js`.
 
-## 2. Stand (27.10.2026, nach Schritt A, B, C, NA-39 Übergang 5 und Englisch)
-**Früher fertig** (Einzelheiten in PLAN.md unter „Neuausrichtung 26.10.2026“): NA-01 Ereignisse/Story, NA-02 Profil, NA-10 Szenen + Zeigehand,
-NA-11 Prolog „Ankunft“ (E1), NA-12 Insel-Zugang, NA-13 Sonnenuhr/„Erst lernen“/Erste Frucht mit Nebel, NA-14 Tutorial E4–E8, NA-15
-Weihnachts-Sonderstart, NA-21 Leistungs-Test, NA-24 Welt-Kern `shared/insel-kern.js`, NA-25–28 Pixel-Look (Insel, Umschalter, Figuren, Zimmer),
-NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe), NA-03 Lehrplan-Kern, NA-40 Wortschatz-Kern und DaZ D0 („Ankommen“), NA-30/31/35 „Lesen und
-Schreiben“ (Laute, Silben, 20 Lesetexte, Nachspuren, Wörter legen), NA-50 Können je Lernziel, NA-32 Matheweg Klasse 1/Vorschule.
+## 2. Stand (27.10.2026, 19:45)
+### Was es gibt (Inhalte)
+- **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
+  Kl. 1/Vorschule 10 Stationen · Kl. 2 23 · Kl. 3 20 (u. a. schriftlich plus/minus, Würfelnetze, Würfelgebäude, Spiegeln, Diagramme, Glücksrad) ·
+  Kl. 4 15 (Zahlen bis 1 Mio., schriftlich mal/geteilt, auch mehrstellig, Teilbarkeit 2/3/4/5/6/9/10/100, Primzahlen, römische Zahlen, Maßstab,
+  Zeit/Datum, Liter, Flächen, Chancen) · **Übergang 5** 10 (Brüche, Kommazahlen, Klammern, Koordinaten, Winkel, Durchschnitt). Urkunden am Ende von Kl. 4 und Übergang 5.
+- **Deutsch:** Fipsis Abenteuer (5 Kapitel), Lesen und Schreiben (Anlaute, Silben, 20 Lesetexte, Nachspuren, Wörter legen), DaZ „Ankommen“,
+  **Wörter-Werkstatt 30 Kapitel** (Kl. 1–2: 5, Kl. 3–4: 23 inkl. Geschichte ordnen, Satzanfänge, Brief, Bericht, Wörterbuch, Vortrag; Übergang 5:
+  Fachbegriffe, Lesestrategien). Schritt-Typen u. a. `ordnen` und `verbessern`.
+- **Sachunterricht (Eule Ella): 32 Themen**, u. a. Wasser, Wetterkarte, Strom, Wärme, Gewässer, Experiment, Erste Hilfe, Medien, Herz und Lunge,
+  Pubertät („Ich werde größer“), Nein sagen, Lernen lernen, Neue Schule, **„Unser Bundesland Sachsen“ (nur für Kinder aus Sachsen, Feld `land`)**.
+- **Englisch (Papagei Paula): 13 Lektionen** (Kl. 3: Hello, Colours, Numbers, Animals, Body, Food, At home, Around the year; Kl. 4: Family, School,
+  Clothes, Weather; Übergang 5: Hobbies). Englische Gerätestimme, ohne Stimme Lesen statt Hören. Eltern-Einstellung Beginn ab Kl. 1 oder 3.
+- Weiter: Medien (Tablet-Führerschein), Gefühle, Atelier (Malen, Musik), Schach, Insel in zwei Looks, Story/Tutorial E1–E8, Können je Lernziel, Elternbericht.
+
+### Lehrplan Sachsen (Einschätzung von Hand, `shared/lehrplan/laender/sachsen.js`)
+- **Mathe und Deutsch nach Fassung 2025** (in Kraft seit 1.8.2025), Sachunterricht und Englisch nach Fassung 2019.
+- **Mathe, Deutsch, Sachunterricht (Kl. 1–4, 45 Lernbereiche): 20 × gut, 25 × teilweise, 0 × fehlt.** Mathe 7/5/0, Deutsch 3/12/0, SU 10/8/0.
+- **Englisch (Kl. 3–4, 20 Lernbereiche): 2 × gut, 14 × teilweise, 4 × fehlt** (Let's go shopping, Let's go on a trip, je Kl. 3 und 4).
+- Mathe Kl. 4 „Größen und Messen“ und „Daten und Zufall“: Lehrplantext 2025 online nicht vollständig lesbar – Inhalte noch nachzutragen.
 
 ### Entscheidungen des Auftraggebers (gelten weiter)
-- **Grafik: „Rund“ (three.js) + „Pixel flach“ (PixiJS, DS-Stil)**, jederzeit umschaltbar, auch auf der Hauptseite. Pixel 2,5D wird nicht
-  weiterverfolgt. **Grafik ist eingefroren** – und wurde in der letzten Sitzung ausdrücklich **nicht** angefasst („Grafik/3D tabu“). Vor jeder
-  Grafik-Arbeit nachfragen.
-- **„Bis Weihnachten pushen wir alles auf Main. Kein Kind spielt hier bisher.“** `/dev` bleibt zweiter Spielstand. Russische Entwürfe auch auf
-  der Hauptseite (`Spielwelt.ENTWURF_FREI`), andere Sprachen erst später bzw. nur in /dev.
-- **„Lieber Inhalte zuerst“** – Inhalte (Phase D/G) vor Grafik und Story.
-- **„Die App soll für alle Grundschulkinder in Deutschland gleichermaßen funktionieren“** (27.10., zur Subtraktion). Folge: Wo Schulen oder
-  Länder unterschiedlich vorgehen (Rechenverfahren, Schrift, Silbenfarben, Lehrplan-Reihenfolge), **nicht raten, sondern eine Eltern-Einstellung
-  mit sinnvollem Standard anbieten** (Muster: Karte „🧮 Mathe wie in der Schule“, `eltern.mathe.minus`). Inhalte nach KMK-Bildungsstandards
-  formulieren; Sachsen ist nur das erste ausgearbeitete Länderprofil.
-- **„Weiter in größeren Schritten“** (27.10., 17:15): mehrere Pakete pro Schritt bündeln, dann einmal gesamt testen und pushen.
-
-### Was in der letzten Sitzung (27.10., ab 17:30) fertig und gepusht wurde – Schritte A, B, C, NA-39, Englisch, Sachsen-Prüfung
-**Sachsen-Profil geprüft (19:10):** Deutsch auf **Lehrplan 2025** umgestellt (5 Lernbereiche je Stufe), Mathe Kl. 4 „Zahl und Operation“ auf „teil“
-(mehrstellige Multiplikation, Teilbarkeit 4/6, Adam Ries fehlen), Englisch (Lehrplan 2019, ab Kl. 3) neu im Profil, Sachunterricht korrigiert.
-Danach (19:30) Lücken geschlossen: Mathe Kl. 4 „Schriftlich mal mehrstellig“ (15. Station, am Ende angehängt) und Teilbarkeit 4/6/9/100; Englisch
-„At home“, „Around the year“ (13 Lektionen); Sachthemen „Herz und Lunge“, „Ich werde größer“, „Stark sein – Nein sagen“, „Unser Bundesland Sachsen“
-(nur mit Bundesland Sachsen, neues Themen-Feld `land`; 32 Themen). **Sachsen jetzt 20 × ja, 25 × teil, 0 × nein** plus Englisch 2/14/4.
-**Englisch-Einstieg:** neue Seite `spiele/englisch/` „Englisch mit Papagei Paula“ mit 11 Lektionen (`spiele/englisch/lektionen.js`, Kl. 3: 6, Kl. 4: 4, Übergang 5: 1);
-Wortkarten, Hören (englische Gerätestimme; ohne Stimme Lesen), Lesen, Übersetzen, Satzbau, Wahl. Tür auf der Startseite (Raster 12 Spalten), Lernfach im
-Zeitsystem, Fähigkeit „Englisch-Ohr“, Kern-Fach `en` (7 Ziele), Eltern-Karte „Englisch wie in der Schule“ (Beginn ab Kl. 1 oder 3). Test `tests/englisch.js`.
-**NA-39 Übergang Klasse 5:** fünfter Matheweg „🎒 Übergang 5“ (`Mathe.STATIONEN_K5`, `mathe.k5`, 10 Stationen: Fit aus Kl. 4, Brüche ×3, Kommazahlen bei
-Größen, Klammer/Punkt vor Strich, Koordinaten, Winkel, Durchschnitt, Sachaufgaben in Schritten; Urkunde „Fit für Klasse 5!“, Kl.-4-Urkunde führt dorthin);
-Werkstatt „Fachbegriffe für Klasse 5“ und „Lesestrategien“ (`stufe: 5`, jetzt 30 Kapitel); Eule Ella „Lernen lernen“ und „Neue Schule“ (Themen
-können jetzt `stufe` haben, jetzt 28 Themen); 7 neue Kern-Lernziele der Stufe 5 (Kern: 155); Elternhinweis ehrlich angepasst; neuer Test `tests/uebergang5.js`.
-Grundsatz: keine Bewertung der Schulform, keine Noten.
-**Schritt B – Mathe-Rest:**
-- Weg „3. Klasse“ jetzt **20 Stationen** (neu: Würfelgebäude mit isometrischem Bild/Bauplan, „Sicher, möglich, unmöglich“ am Glücksrad).
-- Weg „4. Klasse“ jetzt **14 Stationen** (später 15 mit „Schriftlich mal mehrstellig“) (neu: römische Zahlen, Primzahlen, Maßstab, Zeit und Datum, mehrere Zahlen addieren) und am Ende eine
-  **Urkunde** statt „Mehr kommt bald“.
-- Fehler behoben: g/kg und m/km ließen nur 3 Ziffern zu; Mathe-Tafel schnitt im Hochformat die Frage ab; Titel/Punkte überlappten auf Handys.
-- Neuer Node-Test `tests/mathe-generatoren.js` (läuft in `sh tests/laufen.sh`). Keine Eltern-Einstellung Malkreuz (siehe PLAN).
-**Schritt C – Sachunterricht-Rest:** 5 neue Themen (jetzt **26**): Wärme und Dämmung, Tiere am und im Wasser, Ein Experiment planen, Erste Hilfe,
-Informationen finden. `tests/sachkunde.js` klickt sie echt durch. Sachsen damals 18 × ja, 30 × teil, 1 × nein (nach der Prüfung um 19:10: 15/29/1 bei 45 Bereichen).
-**Schritt A – Deutsch schreiben:**
-- Fragerunde: noch kein iPad-Test; nur Schritt A; Grafik/3D/Story weiter tabu; Kl.-3/4-Inhalte bleiben **ab der Klasse davor sichtbar** (entschieden).
-- **Neue Werkstatt-Schritt-Typen** in `spiele/deutsch/abenteuer.js`: **`ordnen`** (Karten der Reihe nach antippen, nummerierte Plätze, falsche Karten
-  gehen zurück) und **`verbessern`** (störendes Wort im Satz antippen, dann bessere Variante wählen). Lange Aufgaben beginnen oben (Klasse `.aufgabe.lang`).
-- **6 neue Kapitel** (Werkstatt jetzt **28**; Kl. 1: 5, Kl. 2: 22, ab Kl. 3: 28): Geschichte ordnen, Abwechslungsreiche Satzanfänge, Brief schreiben
-  (mit Einladung), Wörterbuch (alle Kl. 3); Bericht mit W-Fragen, Vortrag vorbereiten (Kl. 4). Lernziele `de.sc.07`, `de.sc.09`, `de.sz.07`, `de.sz.05`.
-- **Sachsen:** 5 Lernbereiche nein → teil; jetzt **14 × ja, 31 × teil, 4 × nein**. Tests `deutsch34` (echtes Antippen) und `lehrplan` nachgezogen.
-
-### Was davor (27.10., Nachmittag/Abend) fertig und gepusht wurde
-Einzelheiten in PLAN.md, Einträge „Stand 27.10.2026, Abend (NA-33 … Schritt b)“, „… Spätnachmittag“, „… Abend (NA-34 Teil 4)“,
-„… später Abend (NA-36 …)“, „… Nacht (NA-36 Teil 2)“, „… Nacht – großer Schritt“.
-- **Mathe** (`spiele/mathe/aufgaben.js`, `spiele/mathe/mathe.js`):
-  - Weg **„3. Klasse“ jetzt 18 Stationen** (`Mathe.STATIONEN_K3`): neu schriftlich plus und minus mit Stellenwerttafel-Bild, Würfelnetze (eingebaute
-    Faltprüfung `Mathe._k3.istWuerfelnetz` erkennt genau die 11 Netze), Spiegeln, Diagramme (Säule aus Strichliste, ablesen, vergleichen), Flächen vergleichen.
-  - **Neuer Weg „4. Klasse“ (NA-37, 9 Stationen, `Mathe.STATIONEN_K4`, Fortschritt `mathe.k4`)**: Zahlen bis 1 Million, Runden/Überschlagen,
-    schriftlich mal (einstellig), schriftlich geteilt (einstellig, mit Probe), Teilbarkeit (2/3/5/10), geschickt rechnen, Liter/Milliliter,
-    Flächeninhalt/Umfang, Gewinnchancen. Kinder in Kl. 4/5 starten dort; Zielknoten Kl. 1 → 2 → 3 → 4; Kl. 4 endet mit „Mehr kommt bald“.
-  - Aufgabenfeld **`max`** = erlaubte Ziffern (Standard 3, große Zahlen bis 7), wird auch in der Lernkartei gespeichert.
-  - **Eltern-Einstellung Subtraktionsverfahren**: „Abziehen mit Entbündeln“ (Standard) oder „Ergänzen“ – die Hilfe in „Schriftlich minus“ erklärt
-    im gewählten Verfahren.
-  - Elternbericht listet Kl.-3/4-Stationen, wenn das Kind dort übt oder in der Klasse ist.
-  - Fehlerbehebung: Nach richtiger Antwort blättert der Zeitgeber nur weiter, wenn noch dieselbe Runde läuft.
-- **Deutsch – Fipsis Wörter-Werkstatt** (`spiele/deutsch/werkstatt.js`): **22 Kapitel** (5 alte + 17 neue für Kl. 3–4). Neues Kapitelfeld **`stufe`**
-  (Klasse); sichtbar ab der Klasse davor (Kl. 1: 5, Kl. 2: 18, ab Kl. 3: 22). Neu: Präteritum, Perfekt/Futur, Subjekt/Prädikat, Satzzeichen/Satzarten,
-  ck/tz/ss/ß, Ableiten ä/äu, Dehnungs-h, wörtliche Rede, Märchen/Fabel/Gedicht/Sachtext, zwei Lesetexte mit Fragen (Igel; Biber und Otter
-  vergleichen), Steigerung, Personalpronomen, Komma bei Aufzählungen, Vor-/Nachsilben, Wer/Wen/Wem, Meinung mit „weil“. Nur vorhandene
-  Schritt-Typen (`sag`, `luecke`, `satz`). Zeitgeber im Abenteuer ebenfalls abgesichert. Seite bricht lange Wörter im Hochformat um.
-- **Sachunterricht – Eule Ella** (`spiele/sachkunde/themen.js`): **21 Themen** (10 alte + 11 neue für Kl. 3–4): Meine fünf Sinne, Wald und Wiese,
-  Himmelsrichtungen, Schwimmen und Sinken, Feuer und Brandschutz (112), Mein Fahrrad, Kinderrechte und Geld (Nummer gegen Kummer 116 111),
-  Unsere Gemeinde, Vom Korn zum Brot, Die Wetterkarte, Strom. Seite bricht lange Wörter um.
-- **Lehrplan Sachsen** (`shared/lehrplan/laender/sachsen.js`, Einschätzung von Hand mit `app`/`hinweis`): damals 14 × ja, 26 × teil, 9 × nein
-  (Kl. 2–4, Mathe/Deutsch/SU; nach Schritt A 14/31/4; aktuell siehe oben).
-- **Tests neu/erweitert:** `tests/sachkunde.js` (11 neue Themen, quer + hoch), `tests/deutsch34.js` (Sichtbarkeit je Klasse, 17 Kapitel, richtige
-  Lücken, quer + hoch), `tests/mathe1.js` (Kl. 3 mit 18, Kl. 4 mit 9 Stationen, Eintippen großer Zahlen, Ergänzen-Hilfe), `tests/lehrplan.js` (Zählung 14/26/9).
-  Test-Haken neu: `__sachkunde.schritt(n)`, `__deutsch.schritt(n)`.
+- **Grafik/3D und Story sind eingefroren** – nur nach ausdrücklicher Freigabe anfassen. (2D-Seiten wie Startseite und Fachseiten sind keine Grafik in diesem Sinn.)
+- **Inhalte zuerst.** **Bis Weihnachten geht alles direkt auf `main`**; `/dev` ist zweiter Spielstand. Russische Entwürfe auch auf der Hauptseite.
+- **Für alle Grundschulkinder in Deutschland gleich:** Wo Schulen oder Länder verschieden vorgehen, **Eltern-Einstellung mit sinnvollem Standard**
+  (bisher: Subtraktionsverfahren, Englisch-Beginn). Länderspezifisches (Heimatkunde) über das Feld `land`.
+- **In größeren Schritten arbeiten:** mehrere Pakete bündeln, dann einmal gesamt testen und pushen.
+- Kl.-3/4-Inhalte bleiben **ab der Klasse davor** sichtbar (Werkstatt, Sachthemen, Englisch).
 
 ### Bekannte Baustellen
-- Grafik eingefroren mit offenen Paketen NA-29b (Handy-Leistung) und NA-29 Teil 2 (Minispiele über dem Budget); „Meine Welt“ nur in „Rund“;
-  `SPIELE` steht in `shared/insel-kern.js` und `quellen/welt3d/gemeinsam.js` (gleich halten); Prolog-Test der runden Insel wackelt bei Last.
-- Die neuen Inhalte haben **nur russische Entwürfe**; Ukrainisch u. a. fehlen. Bilder sind meist Emojis; Ton über die Gerätestimme (NA-43 Aufnahmen offen).
-- Die Werkstatt kann jetzt ordnen und überarbeiten, aber **kein freies Schreiben** (eigene Eingabe per Tastatur/Hand) – `de.sc.07`, `de.sc.09`,
-  `de.sz.07` sind deshalb nur „teil“; E-Mail, Streit schlichten, Medienabsichten fehlen.
-- Länderprofile außer Sachsen fehlen (NA-47); `su.ge.04`/`su.hi.04` (Bundesland, Heimatort) brauchen Länderdaten – das ist das letzte „nein“ in Sachsen.
-- `tests/sachkunde.js` klickt nur die fünf neuesten Themen echt durch, die 11 von NA-34 nur per Test-Haken; `tests/deutsch34.js` klickt `ordnen`/`verbessern`
-  echt, Lücken per DOM-Klick.
-- Mathe offen: Schrägbilder, Vierecke, Volumen, Klammerregel (Kl. 4); Schiebe-/Drehsymmetrie, Zeichnen (Kl. 3).
+- **Deutsch ist am schwächsten** (3 von 15 gut): kein freies Schreiben, kein eigenes Sprechen/Aufnehmen, keine Handschrift-Übung, kaum Gedichte/Bilderbücher.
+- Englisch: Shopping, Trip, Wochentage, Uhrzeit, Zahlen bis 100, keine Lernkartei.
+- Nur russische Übersetzungs-Entwürfe; Ukrainisch u. a. fehlen. Ton über die Gerätestimme (echte Aufnahmen NA-43 offen).
+- Länderprofile außer Sachsen fehlen (NA-47); Heimat-Themen für andere Länder fehlen.
+- Grafik eingefroren mit offenen Paketen NA-29b (Handy-Leistung) und NA-29 Teil 2.
+- **Insel-Tests (`tutorial`, `prolog`) wackeln, wenn parallel andere Browser-Tests laufen** – allein laufen lassen; einmal gescheitert heißt nicht kaputt.
 
 ### Offene Fragen an den Auftraggeber
-- **iPad-/Handy-Test** (Hauptseite und /dev, mit neuem Kind je Klasse): „Ankommen“, „Lesen und Schreiben“ (Nachspuren), Lesetexte, Matheweg Kl. 1,
-  Pixel-Look, Einführung E4–E8 – **und neu**: Matheweg Kl. 3 (Stationen 13–18) und Kl. 4 (große Zahlen tippen, Kästchen- und Kugelbilder),
-  die 23 neuen Werkstatt-Kapitel (Kl. 3), **bes. „Ordnen“ und „Verbessern“ im Hochformat (Brief, Satzanfänge, Wörterbuch)**, die 16 neuen Sachthemen
-  (bes. Zuordnen mit drei Gruppen im Hochformat), Eltern-Karte „Mathe wie in der Schule“, **Mathe Kl. 3 Stationen 19–20 (Würfelgebäude, Glücksrad),
-  Kl. 4 Stationen 10–14 und die Urkunde, Bildaufgaben im Hochformat (Frage jetzt sichtbar?), „9 kg = 9000 g“ eintippen, Kind mit Stufe „Übergang 5“:
-  Matheweg „Übergang 5“ (Brüche, Koordinaten, Winkel), „Fachbegriffe“, „Lesestrategien“, „Lernen lernen“, „Neue Schule“; Englisch: spricht das iPad die
-  englischen Wörter (britische Stimme)? Startseite quer und hoch mit der neuen Tür**.
-- Geschenke zu Weihnachten 2026 (NA-16); Muttersprachlerinnen für ru/uk; Lehrkräfte; Tonaufnahmen; Silbenfarben der Schule.
-- Soll **Ergänzen** zusätzlich als „Ergänzen mit Erweitern“ vs. „mit Entbündeln“ unterschieden werden, oder ein drittes Verfahren (Abziehen mit Erweitern)?
+- **iPad-10-Test** (in /dev) der Pakete vom 27.10.: Werkstatt „Ordnen“/„Verbessern“, Mathe Kl. 3/4 inkl. Urkunde und „9 kg = 9000 g“, Bildaufgaben im
+  Hochformat, Übergang 5, Englisch (spricht das iPad englisch?), Startseite mit Englisch-Tür, Sachthemen „Ich werde größer“ und „Unser Bundesland Sachsen“.
+- **Lehrplan Mathe Sachsen 2025 als PDF hochladen?** Dann lassen sich Kl. 4 „Größen und Messen“ und „Daten und Zufall“ genau nachtragen.
+- Für Deutsch: Darf das Kind **die eigene Stimme aufnehmen** (bleibt nur auf dem Gerät, Eltern können anhören)? Soll **freies Schreiben** über die
+  Bildschirmtastatur laufen (die App prüft nur einfache Regeln, keine KI)?
+- Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
 
 ## 3. Ablauf dieser Sitzung
-1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug, sonst als kurze Liste), bevor du baust. Kläre mindestens:
-   - Rückmeldung vom iPad 10 und Handy (siehe „Offene Fragen“). **Gemeldete Fehler zuerst beheben**, jeweils mit Test.
-   - Welche Pakete aus Abschnitt 4 (Reihenfolge-Vorschlag oder andere)? Gilt „Inhalte zuerst“ weiter, oder Grafik/Story vorziehen?
-   - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen.
-   - Was darf in dieser Sitzung keinesfalls angefasst werden? (Letzte Sitzung: Grafik/3D.)
-2. **Dann selbstständig in größeren Schritten arbeiten**, bis die Sitzung aufgebraucht ist (Wunsch des Auftraggebers). Ein Schritt = 2–4 zusammenpassende
-   Pakete oder ein M-Paket mit Inhalten. Aufgabenliste anlegen (ein Eintrag je Paket), abhaken. Nur nachfragen, wenn eine Entscheidung nicht
-   rückgängig zu machen ist; sonst die vernünftigste Wahl treffen und im Plan notieren. Unterschiede zwischen Schulen/Ländern → Eltern-Einstellung.
-3. **Nach jedem Schritt:** `sh quellen/dev-bauen.sh`, `sh tests/laufen.sh` (gesamt) plus die betroffenen Einzeltests (parallel mit `PORT=…`),
-   dann committen und pushen. Kein Push mit rotem Test. Höchstens ein großes Paket gleichzeitig offen.
-4. **Am Ende:** in `docs/PLAN.md` einen Eintrag „Stand <Datum>“ ergänzen (erledigt, Abweichungen, offen, nächstes Paket), in der Reihenfolge
-   erledigte Pakete durchstreichen, **diese Datei auf den neuen Stand bringen** (Abschnitte 1.1-Verweis, 2, 4, Kurzreferenz in 5), pushen,
-   kurz berichten (Abschnitt 9).
+1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug): iPad-Rückmeldung (**gemeldete Fehler zuerst beheben, je mit Test**), welche
+   Pakete aus Abschnitt 4, was keinesfalls angefasst werden darf (bisher: Grafik/3D/Story), offene Fragen oben.
+2. **Dann selbstständig in größeren Schritten** (2–4 Pakete oder ein großes), Aufgabenliste anlegen und abhaken. Nur bei nicht umkehrbaren
+   Entscheidungen nachfragen, sonst die vernünftigste Wahl treffen und im Plan notieren.
+3. **Nach jedem Schritt:** `sh quellen/dev-bauen.sh`, `sh tests/laufen.sh`, betroffene Einzeltests (parallel mit `PORT=…`, Insel-Tests allein),
+   Screenshots quer und hoch ansehen, dann committen und pushen. Kein Push mit rotem Test.
+4. **Bei Lehrplan-Änderungen:** `sachsen.js` und die Zählung in `tests/lehrplan.js` nachziehen; ehrlich bleiben („teilweise“, wenn etwas fehlt,
+   und im `hinweis` sagen, was fehlt). Lehrplantexte nur zusammenfassen.
+5. **Am Ende:** in `docs/PLAN.md` einen Eintrag „Stand <Datum>“ (erledigt, Entscheidungen, offen, nächstes Paket), **diese Datei neu auf den Stand
+   bringen** (Abschnitte 1–4 und die Kurzreferenz), pushen, kurz berichten (Abschnitt 9).
 
-## 4. Nächste Pakete (Vorschlag, Reihenfolge nach Rückmeldung anpassen)
-Grundsatz Inhalte: **Inhalte als Daten** (LEHRPLAN.md „Inhalte als Daten“). Jeder neue Inhalt trägt `lz: [...]` mit Lernzielen aus
-`shared/lehrplan/kern.js` (Bestandsdaten Mathe/Werkstatt/Themen werden in `shared/inhalte.js` automatisch registriert) und – wo sinnvoll – `stufe`.
-Wörter über den Wortschatz-Kern (`w.<wort>`). Neue Übersetzungen als Entwurf. Neue Dateien in `sw.js`, `spiele/eltern/index.html` (Abdeckung) und
-`tests/lehrplan.js` (`DATEN`) eintragen. Lerninhalte nur zusammenfassen und eigene Texte schreiben (keine Lehrbuch-/Lehrplantexte abschreiben;
-alte Fabeln/Märchen nur nacherzählen). Nach jeder Änderung an `sachsen.js` die Zählung in `tests/lehrplan.js` anpassen.
-Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.**
+## 4. Nächste Pakete (Vorschlag, nach Rückmeldung anpassen)
+**Schritt D1 – Deutsch schreiben und sprechen (L, größte Lücke):**
+1. Neuer Werkstatt-Schritt-Typ **`schreiben`**: Kind schreibt 1–3 Sätze zu einem Bild oder einer Bildergeschichte (Bildschirmtastatur). Die App
+   prüft nur Einfaches ohne KI: Satzanfang groß, Satzzeichen am Ende, Pflichtwörter aus einer Liste, Mindestlänge; freundliche Hinweise statt „falsch“.
+   Texte bleiben auf dem Gerät; Eltern sehen sie im Elternbereich. Kapitel: Bildergeschichte (Kl. 2/3), Einladung schreiben (Kl. 2), Buchtipp/Meinung (Kl. 4).
+2. Neuer Schritt-Typ **`aufnehmen`** (nur nach Zustimmung des Auftraggebers): Gedicht vortragen, nacherzählen, Vortrag üben – Aufnahme mit
+   `MediaRecorder`, nur in der eigenen IndexedDB, nie hochgeladen, Kind kann sich anhören, Eltern auch. Ohne Mikrofon-Erlaubnis still überspringen.
+3. Gedichte und Reime (eigene Texte oder gemeinfreie nacherzählt), Kl. 1/2 „Sich mit Texten auseinandersetzen“.
+4. Tests mit echtem Tippen (Playwright `fill`) und mit einem Fake-Mikrofon (`--use-fake-device-for-media-stream`); Sachsen Deutsch nachziehen.
 
-~~**Schritt A – Deutsch schreiben**~~ (erledigt 27.10. abends, siehe Abschnitt 2). Möglicher Nachfolger (A2, nur nach Rückfrage): freies Schreiben
-mit eigener Eingabe (Bildergeschichte schreiben, Elternansicht zum Vorlesen/Ansehen – nichts verlässt das Gerät), weitere `verbessern`-Kapitel
-(Rechtschreibfehler im eigenen Text finden), E-Mail.
+**Schritt E2 – Englisch Teil 2 (M):** Lektionen „Let's go shopping“ (Zahlen bis 100, Preise in Pfund) und „Let's go on a trip“ (Verkehrsmittel,
+London), Wochentage/Uhrzeit in „At school“ ergänzen, Englisch-Wörter in die Lernkartei (fällige Wörter am Lektionsanfang wiederholen).
 
-~~**Schritt B – Mathe-Rest**~~ und ~~**Schritt C – Sachunterricht-Rest**~~ (erledigt 27.10. abends, siehe Abschnitt 2). Mögliche Nachfolger (nur nach
-Rückfrage): Mathe Kl. 4 Schrägbilder/Vierecke/Volumen/Klammerregel, Kl. 3 Schiebe-/Drehsymmetrie; SU Ernährung/Pubertät; Ukrainisch-Entwürfe.
+**Schritt M3 – Mathe Kl. 4 Raum und Form (M):** Vierecke ordnen (Quadrat, Rechteck, Raute, Trapez, Drachen), Schrägbilder lesen, Volumen mit
+Einheitswürfeln, Figuren vergrößern. Danach – wenn der Lehrplan als PDF vorliegt – Kl. 4 „Größen und Messen“ und „Daten und Zufall“ nachtragen.
+**Neue Stationen immer ans Ende eines Wegs hängen.**
 
-**Schritt D – Länder und Übergreifendes (M):** NA-47 Länderprofile (zuerst die Struktur für ein zweites Land, z. B. NRW oder Berlin/Brandenburg –
-nur Lernbereiche und Zuordnung zu `lz`, keine Lehrplantexte), Elternbereich „Was übt die App?“ je Land. (~~NA-39 Übergang Kl. 5~~ erledigt 27.10.)
+**Schritt D – Länder (M):** NA-47 zweites Länderprofil (z. B. NRW oder Berlin/Brandenburg – nur Lernbereiche und Zuordnung zu `lz`, keine
+Lehrplantexte), Heimat-Thema für dieses Land über `land`.
 
-~~**Schritt E – Englisch-Einstieg**~~ (erledigt 27.10.). **Englisch Teil 2 (M, nach Rückfrage):** Lernkartei für Englisch, Wochentage/Monate/Uhrzeit,
-kurze Dialoge, Englisch im Länderprofil Sachsen, Tonaufnahmen statt Gerätestimme (NA-43).
+**Grafik/Story (nur nach Freigabe):** NA-29b Handy-Leistung, NA-29 Teil 2, NA-16 QR-Geschenk → NA-17 Kapitel 1–2 → NA-18 Chronik im Album.
 
-**Grafik/Story (nur nach ausdrücklicher Freigabe):** NA-29b Handy-Leistung (S), NA-29 Teil 2 Minispiele ins Budget, NA-16 QR-Geschenk
-(wartet auf Geschenk-Auswahl) → NA-17 Kapitel 1–2 → NA-18 Chronik im Album.
-
-## 5. Wie die Story-Bausteine benutzt werden (Kurzreferenz)
+## 5. Kurzreferenz (Story-Bausteine, Datenformate, Schnittstellen)
 - Szene registrieren (nur Daten) in `shared/szenen.js`:
   `Szene.registriere("id", { titel, etappe: "E4", blasen: [ { wer: "biber", text: { de: "… {name} …", ru: "…", status: { ru: "entwurf" } } } ] })`.
   `wer`: robo, eule, fipsi, biber, baer, papagei, tilda. Höchstens 4 Blasen, kurze Sätze, jede Zeile vorlesbar.
@@ -202,7 +141,10 @@ kurze Dialoge, Englisch im Länderprofil Sachsen, Tonaufnahmen statt Gerätestim
 - Wortschatz: `Wortschatz.wort("w.apfel")` (de, artikel, mehrzahl, silben[], bild, themen, wortart, daz, ru/uk + status), `Wortschatz.feld("essen")`,
   `Wortschatz.daz("d0")`, `Wortschatz.saetze("d0")`, `Wortschatz.hilfe(eintrag)` (Hilfetext nur wenn erlaubt), `Wortschatz.ARTIKEL` (Farbe + Form).
   Einbinden: `inhalte/woerter/*.js` vor `shared/woerter.js`. DaZ-Fortschritt: `DaZ.merke("wort"|"satz", id)`, `DaZ.stand()`, `DaZ.d0Fertig()`.
-- Eltern-Einstellung Mathe: `eltern.mathe.minus` = `abziehen` | `ergaenzen` (Hilfe „Schriftlich minus“).
+- Eltern-Einstellungen: `eltern.mathe.minus` = `abziehen` | `ergaenzen` (Hilfe „Schriftlich minus“), `eltern.englisch.ab` = `"3"` | `"1"`.
+- Neue Fachseite anbinden (Muster Englisch): Tür in `index.html` (Raster 12 Spalten), `LERN_FAECHER` und „Erst lernen“-Knöpfe in `shared/zeit.js`,
+  Fähigkeit in `shared/charakter.js` (`FAEHIGKEITEN`, `BELOHNUNGEN`, `LECKERLI`), Fach in `shared/lernfunde.js`, Register in `shared/inhalte.js`,
+  Kern-Fach in `shared/lehrplan/kern.js`, `sw.js`, `tests/rauchtest.js`, Elternbereich (Karte, „Was übt die App?“ zeigt alle Fächer des Profils).
 - Können: `Koennen.melde(lz, richtig)` (nur erster Versuch), `Koennen.standVon(lz)`, `Koennen.standListe(lz[])`, `Koennen.naechste(stationen, n)`,
   `Koennen.brauchtLeichter(lz)`; Seiten laden `shared/koennen.js`.
 - Lesen/Schreiben: `window.ANLAUTE` (Anlaut-Tabelle), `window.LESETEXTE` (Texte in Sprechsilben „Ba-na-ne“), `window.SCHRIFT` (Strich-Daten),
@@ -236,6 +178,8 @@ kurze Dialoge, Englisch im Länderprofil Sachsen, Tonaufnahmen statt Gerätestim
 - Mehrere Kinder pro Tablet; lokale Speicherung und QR-Übertragung bleiben (Spielstand klein halten; Bilder bleiben in der eigenen IndexedDB).
 - **Kein Bezug zu einem echten Kind** im Repo (keine Namen, kein Alter, keine Klasse). Beispielnamen sind ausgedacht (in Tests z. B. „Mira“).
 - **Bestehende Funktionen nicht entfernen.** Wenn etwas ersetzt werden soll, im Plan begründen und per Eltern-Schalter die alte Variante anbieten.
+- Sensible Themen (Körper, Pubertät, Sucht, Gefühle): altersgerecht, sachlich, ohne Details über die Lehrplan-Inhalte hinaus; immer auf
+  Vertrauenspersonen und die Nummer gegen Kummer (116 111) verweisen; „Mein Körper gehört mir“.
 - Sprache: Deutsch, kindgerecht; alle neuen Texte als Sprachschlüssel `{ de, ru, … }`; Hilfesprache nur, wenn gewählt. Neue Übersetzungen
   bekommen einen Prüfstatus (`entwurf`/`geprueft`/`kindgerecht`); **keine ungeprüfte Maschinenübersetzung im Kinder-UI** (Entwürfe nur in /dev).
 - Story- und Tutorial-Texte: höchstens 4 Sprechblasen je Szene, jede Zeile vorlesbar, ohne Lesen bedienbar (Zeigehand, Leuchten, Ton).
@@ -261,10 +205,12 @@ kurze Dialoge, Englisch im Länderprofil Sachsen, Tonaufnahmen statt Gerätestim
 - `sh tests/laufen.sh` = Node-Tests `story-migration`, `inselkern`, `lehrplan`, `wortschatz`, `koennen`, `mathe-generatoren` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1, 3 und 4, Urkunde, Eltern-Wahl Subtraktion), `sachkunde` (Themen Kl. 3–4, die fünf neuesten echt durchgeklickt), `deutsch34` (Werkstatt Kl. 3–4 inkl. echtem Antippen von `ordnen`/`verbessern`), `uebergang5` (Übergang Kl. 5: Matheweg, Urkunden, Deutsch und Sachthemen echt durchgeklickt), `englisch` (Englisch: Tür, Sichtbarkeit, alle Lektionen echt durchgeklickt), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1, 3 und 4, Urkunde, Eltern-Wahl Subtraktion), `sachkunde` (32 Themen, die neun neuesten echt durchgeklickt, Landesfilter), `deutsch34` (Werkstatt Kl. 3–4 inkl. echtem Antippen von `ordnen`/`verbessern`), `uebergang5` (Übergang Kl. 5: Matheweg, Urkunden, Deutsch und Sachthemen echt durchgeklickt), `englisch` (Englisch: Tür, Sichtbarkeit, alle 13 Lektionen echt durchgeklickt), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
-- Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.
+- Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen – **mit echtem Durchklicken bis zum Ende**
+  (Muster: `tests/englisch.js`, `tests/uebergang5.js`), nicht nur Schritte per Test-Haken setzen.
+- `tests/tutorial.js` und `tests/prolog.js` (3D-Insel) allein laufen lassen; unter Last wackeln sie.
 - Ersteinrichtung im Test: PIN `1234` zweimal (`#pin1`, `#pin2`, `#pin-ok`), dann `#e-name` und `#e-ok` (Stufe, Land, Muttersprache,
   Deutschstand haben Standardwerte; Felder `#e-stufe`, `#e-land`, `#e-mutter`, `#e-deutsch`, `#e-sprache`).
   Insel öffnen: `medien.lektionen = { bedienung: 3 }` setzen; für Minispiele zusätzlich `medien.fuehrerschein`.
