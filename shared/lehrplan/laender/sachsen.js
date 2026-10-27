@@ -49,9 +49,9 @@
         "3": [
           { nr: 1, lz: ["de.sz.06"], titel: "Sprechen und Zuhören", kmk: "Sprechen und Zuhören", inhalte: ["Erzählen, Beschreiben", "Gespräche, Pro und Kontra"], app: [], abdeckung: "nein" },
           { nr: 2, lz: ["de.sc.07"], titel: "Für sich und andere schreiben", kmk: "Schreiben", inhalte: ["Erzählen und Beschreiben schreiben", "Stichwortzettel", "Texte überarbeiten, E-Mail"], app: [], abdeckung: "nein" },
-          { nr: 3, lz: ["de.sc.08"], titel: "Richtig schreiben", kmk: "Schreiben", inhalte: ["Lange und kurze Vokale, Dehnungs-h, ck/tz, ss/ß", "Wörtliche Rede, Komma bei Aufzählung"], app: [], abdeckung: "nein" },
+          { nr: 3, lz: ["de.sc.08"], titel: "Richtig schreiben", kmk: "Schreiben", inhalte: ["Lange und kurze Vokale, Dehnungs-h, ck/tz, ss/ß", "Wörtliche Rede, Komma bei Aufzählung"], app: ["werkstatt:w-kurz-lang"], abdeckung: "teil", hinweis: "ck/tz, ss/ß nach kurzem und langem Vokal ja; Dehnungs-h, wörtliche Rede und Komma fehlen." },
           { nr: 4, lz: ["de.tm.04", "de.le.06"], titel: "Lesen/Mit Medien umgehen", kmk: "Lesen – mit Texten und Medien umgehen", inhalte: ["Erzählung, Märchen, Gedicht, Fabel", "Sachtexte, Informationen erschließen"], app: ["sachkunde:alle"], abdeckung: "teil" },
-          { nr: 5, lz: ["de.su.09", "de.su.10"], titel: "Sprache untersuchen", kmk: "Sprache und Sprachgebrauch untersuchen", inhalte: ["Präsens, Präteritum", "Steigerung von Adjektiven, Personalpronomen", "Vor- und Nachsilben", "Subjekt, Prädikat"], app: [], abdeckung: "nein" },
+          { nr: 5, lz: ["de.su.09", "de.su.10"], titel: "Sprache untersuchen", kmk: "Sprache und Sprachgebrauch untersuchen", inhalte: ["Präsens, Präteritum", "Steigerung von Adjektiven, Personalpronomen", "Vor- und Nachsilben", "Subjekt, Prädikat"], app: ["werkstatt:w-praeteritum", "werkstatt:w-satzglieder"], abdeckung: "teil", hinweis: "Präsens/Präteritum, Subjekt und Prädikat ja; Steigerung, Pronomen, Vor-/Nachsilben fehlen." },
           { nr: 6, lz: ["me.sv.01", "me.sa.01"], titel: "Mit digitalen Medien umgehen", kmk: "Lesen – mit Texten und Medien umgehen", inhalte: ["Texte speichern und wiederfinden", "Suchstrategien, Schutz persönlicher Daten"], app: ["medien:alle"], abdeckung: "teil" }
         ],
         "4": [
@@ -59,7 +59,7 @@
           { nr: 2, lz: ["de.sc.07", "de.sc.09"], titel: "Für sich und andere schreiben", kmk: "Schreiben", inhalte: ["Texte planen, schreiben, überarbeiten", "Notizen, Merktexte"], app: [], abdeckung: "nein" },
           { nr: 3, lz: ["de.sc.09"], titel: "Richtig schreiben", kmk: "Schreiben", inhalte: ["Rechtschreibregeln anwenden", "Wörterbuch nutzen"], app: [], abdeckung: "nein" },
           { nr: 4, lz: ["de.tm.04", "de.tm.05"], titel: "Lesen/Mit Medien umgehen", kmk: "Lesen – mit Texten und Medien umgehen", inhalte: ["Fabel, Märchen, Gedicht unterscheiden", "auch herkunftssprachliche Texte", "eigene Medienbeiträge"], app: [], abdeckung: "nein" },
-          { nr: 5, lz: ["de.su.11", "de.su.12"], titel: "Sprache untersuchen", kmk: "Sprache und Sprachgebrauch untersuchen", inhalte: ["Perfekt und Futur", "Substantiv im Satz, Subjekt", "Satzglieder, Ergänzungen"], app: [], abdeckung: "nein" },
+          { nr: 5, lz: ["de.su.11", "de.su.12"], titel: "Sprache untersuchen", kmk: "Sprache und Sprachgebrauch untersuchen", inhalte: ["Perfekt und Futur", "Substantiv im Satz, Subjekt", "Satzglieder, Ergänzungen"], app: ["werkstatt:w-perfekt", "werkstatt:w-satzzeichen"], abdeckung: "teil", hinweis: "Perfekt/Futur und Satzarten mit Satzzeichen ja; Fälle und Ergänzungen fehlen." },
           { nr: 6, lz: ["me.sv.01", "me.ar.02", "me.sa.01"], titel: "Mit digitalen Medien umgehen", kmk: "Lesen – mit Texten und Medien umgehen", inhalte: ["Formatieren", "Informationen beschaffen und bewerten", "Datenschutz, Urheberrecht"], app: ["medien:alle"], abdeckung: "teil" }
         ]
       }

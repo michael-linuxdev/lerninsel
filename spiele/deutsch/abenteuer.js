@@ -93,7 +93,9 @@
     const wk = $("werkstatt");
     if (wk) {
       wk.innerHTML = "";
+      const klasse = ((S.stufe && S.stufe()) || {}).klasse || 2;
       W.forEach((k, i) => {
+        if (k.stufe && klasse < k.stufe - 1) return; // NA-36: Kl.-3/4-Kapitel erst ab der Klasse davor
         const best = bestes(k.id), b = document.createElement("button");
         b.className = "ort"; b.setAttribute("aria-label", k.name);
         b.innerHTML = `<span class="emoji">${k.ort}</span><span>${k.name}</span><span class="stern-reihe">${best ? [1, 2, 3].map(n => `<span class="${n <= best ? "" : "leer"}">⭐</span>`).join("") : ""}</span>`;
@@ -332,7 +334,8 @@
         Lernfunde.merke({ fach: "deutsch", art: "gemeistert", e: "💪", text: t.length > 50 ? t : `${t} – war knifflig, jetzt kannst du es!`, schluessel: "dk:" + t, melden: true });
       }
       setTimeout(() => sprich(satz), 350);
-      setTimeout(() => { lauf.gesperrt = false; weiter(); }, 2300);
+      const dieser = lauf, an = lauf.pos; // nur weiterblättern, wenn noch derselbe Schritt offen ist
+      setTimeout(() => { if (lauf !== dieser || lauf.pos !== an) return; lauf.gesperrt = false; weiter(); }, 2300);
       return;
     }
     lauf.versuche++;
@@ -420,5 +423,5 @@
   $("zur-karte").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); lauf = null; zeige("karte"); zeichneKarte(); });
 
   zeichneKarte();
-  window.__deutsch = { starte, get lauf() { return lauf; } };
+  window.__deutsch = { starte, schritt: (n) => { lauf.pos = n; lauf.gesperrt = false; lauf.versuche = 0; schritt(); }, get lauf() { return lauf; } };
 })();

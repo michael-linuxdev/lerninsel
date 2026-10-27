@@ -53,7 +53,7 @@ NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
   alle anderen Sprachen (Ukrainisch …) erst später bzw. nur in /dev.
 - **„Lieber Inhalte zuerst“** – Inhalte Priorität 1 (Phase D) vor Grafik und Story.
 
-**In den letzten Sitzungen fertig und gepusht** (zuletzt **NA-34 Teil 3+4**: acht Sachthemen Kl. 3–4 – Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer, Fahrrad, Kinderrechte und Geld, Gemeinde (jetzt 18 Themen); Eltern-Wahl des Subtraktionsverfahrens; davor **NA-33 Schritt b**: Matheweg „3. Klasse“ jetzt 17 Stationen mit schriftlich plus/minus, Würfelnetzen, Spiegeln, Diagrammen; davor NA-34 Sachthemen, NA-33a; PLAN.md → „Stand 27.10.2026, Abend (NA-33 … Schritt b)“ „… Spätnachmittag“ und „… Abend (NA-34 Teil 4)“):
+**In den letzten Sitzungen fertig und gepusht** (zuletzt **NA-36 Teil 1**: fünf Werkstatt-Kapitel Kl. 3–4 – Präteritum, Perfekt/Futur, Subjekt/Prädikat, Satzzeichen, ck/tz/ss/ß; davor **NA-34 Teil 3+4**: acht Sachthemen Kl. 3–4 – Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer, Fahrrad, Kinderrechte und Geld, Gemeinde (jetzt 18 Themen); Eltern-Wahl des Subtraktionsverfahrens; davor **NA-33 Schritt b**: Matheweg „3. Klasse“ jetzt 17 Stationen mit schriftlich plus/minus, Würfelnetzen, Spiegeln, Diagrammen; davor NA-34 Sachthemen, NA-33a; PLAN.md → „Stand 27.10.2026, Abend (NA-33 … Schritt b)“ „… Spätnachmittag“ und „… Abend (NA-34 Teil 4)“, „… später Abend (NA-36 …)“):
 - **Pixel auf der Hauptseite wählbar** (`Spielwelt.lookWaehlbar()` = immer wahr, `tests/look.js` umgestellt).
 - **NA-03 Lehrplan-Kern:** `shared/lehrplan/kern.js` (148 Lernziel-IDs `<fach>.<bereich>.<nr>`, Deutsch mit fünf KMK-2022-Bereichen
   `de.sz/sc/le/tm/su`), `shared/lehrplan/laender/sachsen.js` (49 Lernbereiche mit `lz`), `shared/inhalte.js` (Inhalte-Verzeichnis, errechnete
@@ -106,9 +106,10 @@ Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `in
 Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
 Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
 beiden Looks oder im Plan als offen vermerken.
-1. **NA-36 Deutsch Kl. 3–4** (M): Wortarten (Nomen/Verb/Adjektiv), Zeitformen (Präsens/Präteritum/Perfekt), Rechtschreibstrategien
-   (verlängern, ableiten, Wortfamilien), längere Lesetexte mit Verständnisfragen – als Daten mit `lz` (`de.sz/sc/le/su`, `stufe` 3/4),
-   Wörter über den Wortschatz-Kern. Vorher Rückmeldung zum iPad-Test abfragen. Grafik/3D nicht ohne Rückfrage anfassen.
+1. **NA-36 Teil 2** (M): längere Lesetexte mit Verständnisfragen (`de.le.06`, `de.le.07`), Ableiten ä/äu und Wortfamilien, Dehnungs-h,
+   wörtliche Rede, Märchen/Fabel/Gedicht (`de.tm.04`) – Werkstatt-Kapitel mit `stufe` und `lz` in `spiele/deutsch/werkstatt.js`
+   (vorhandene Schritt-Typen), Lesetexte ggf. in `inhalte/deutsch/lesetexte.js`; `tests/deutsch34.js` (Liste `NEU`, Kachelzahlen) und
+   `tests/lehrplan.js` nachziehen. Vorher Rückmeldung zum iPad-Test abfragen. Grafik/3D nicht ohne Rückfrage anfassen.
 2. Danach: restliche Sachthemen (Korn zum Brot, Wetterkarten, Experimentieren), Rest Mathe Kl. 3 (Würfelgebäude, Flächen, Zufall, Teilbarkeit), oder
    Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)
    → **NA-17** Kapitel 1–2 → **NA-18** Chronik im Album.
@@ -175,7 +176,7 @@ beiden Looks oder im Plan als offen vermerken.
 - `sh tests/laufen.sh` = Node-Tests `story-migration`, `inselkern`, `lehrplan`, `wortschatz`, `koennen` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1 und 3, Eltern-Wahl Subtraktion), `sachkunde` (Themen Kl. 3–4), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1 und 3, Eltern-Wahl Subtraktion), `sachkunde` (Themen Kl. 3–4), `deutsch34` (Werkstatt Kl. 3–4), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.
@@ -194,7 +195,7 @@ beiden Looks oder im Plan als offen vermerken.
   bildschirm, prolog, imProlog, steg, sonnenuhr, su, nebel, naechsteStory, paket, oeffnePaket, lichter, zeichnungen), `__szene`
   (spiele, aktuell, weiter, abbrechen, szenen), `__pixel` (ich, teleport, laufeZu, tippe(id), orte, nachbarn, aktion, druecke, reingehen,
   rausgehen, drinnen, besuche, paket, oeffnePaket, lichter, nebel, zimmerDaten, moebel, einrichten, ringe, figur, tierRichtung, zeichnungen, zoom), `__ereignisse`, `__atelier`, `__musik`, `__schach`, `__gefuehle`, `__lauf`, `__kart`,
-  `__bau`, `__duell`, `__ich`, `__mathe`, `__sachkunde` (starte, schritt); geplant: `__tutorial`. Jeder neue Baustein bekommt einen Test-Haken.
+  `__bau`, `__duell`, `__ich`, `__mathe`, `__sachkunde` (starte, schritt), `__deutsch` (starte, schritt); geplant: `__tutorial`. Jeder neue Baustein bekommt einen Test-Haken.
 - Jede geänderte Seite einmal öffnen, Konsole auf Fehler prüfen, Screenshots ansehen (Quer- und Hochformat; mit Hilfesprache Russisch, in /dev).
 - Externe Seiten (Open-Meteo, Google Fonts) sind aus der Sandbox meist nicht erreichbar – Fehlermeldungen dazu ignorieren, mit Cache-Daten testen.
 

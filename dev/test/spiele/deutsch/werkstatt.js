@@ -1,4 +1,5 @@
-// Fipsis Wörter-Werkstatt: Übungskapitel nach Lehrplan (Sachsen Kl. 1/2: Sprache untersuchen, Richtig schreiben).
+// Fipsis Wörter-Werkstatt: Übungskapitel nach Lehrplan (Sachsen Kl. 1/2: Sprache untersuchen, Richtig schreiben; NA-36: Kl. 3–4).
+// stufe (optional): Klasse, für die das Kapitel gedacht ist; angezeigt wird es ab der Klasse davor (Kl. 3-Kapitel also ab Kl. 2).
 // Gleiche Schritt-Typen wie die Geschichte, dazu:
 //   wortart     { wort, e?, richtig: "nomen"|"verb"|"adjektiv", ru }
 //   verlaengern { wort: "Hun_", lang: "Hunde", richtig: "d", falsch: "t", e, ru }
@@ -86,6 +87,77 @@ window.WERKSTATT = [
       { typ: "silben", e: "⚽", wort: "Ball", teile: ["Ball"], ru: "мяч" },
       { typ: "silben", e: "🐞", wort: "Marienkäfer", teile: ["Ma", "ri", "en", "kä", "fer"], ru: "божья коровка" },
       { typ: "sag", text: "Prima geklatscht! Silben helfen beim Lesen und Schreiben langer Wörter.", ru: "Отлично! Слоги помогают читать и писать длинные слова." }
+    ]
+  },
+  // ---------- NA-36: Klasse 3–4 (stufe = ab welcher Klasse; sichtbar ab der Klasse davor) ----------
+  {
+    id: "w-praeteritum", stufe: 3, lz: ["de.su.09"], name: "Heute oder gestern?", ort: "⏳", farbe: "#C2337A", grund: "#FDEAF3",
+    schritte: [
+      { typ: "sag", text: "Hallo {name}! Verben zeigen auch, wann etwas passiert. Heute: ich spiele (Gegenwart). Gestern: ich spielte (Vergangenheit).", ru: "Привет, {name}! Глаголы показывают, когда что-то происходит. Сегодня: я играю (настоящее). Вчера: я играл (прошедшее)." },
+      { typ: "luecke", e: "⚽", satz: "Gestern ___ ich Fußball.", optionen: ["spielte", "spiele", "spielen"], ru: "Вчера я играл в футбол." },
+      { typ: "luecke", e: "🎬", satz: "Gestern ___ wir ins Kino.", optionen: ["gingen", "gehen", "geht"], ru: "Вчера мы ходили в кино." },
+      { typ: "luecke", e: "🍕", satz: "Heute ___ Mama Pizza.", optionen: ["backt", "backte", "backen"], ru: "Сегодня мама печёт пиццу." },
+      { typ: "luecke", e: "🐕", satz: "Letzte Woche ___ der Hund laut.", optionen: ["bellte", "bellt", "bellen"], ru: "На прошлой неделе собака громко лаяла." },
+      { typ: "luecke", e: "🏊", satz: "Im Sommer ___ Ben im See.", optionen: ["schwamm", "schwimmt", "schwimmen"], ru: "Летом Бен плавал в озере." },
+      { typ: "luecke", e: "📖", satz: "Jetzt ___ Aylin ein Buch.", optionen: ["liest", "las", "lesen"], ru: "Сейчас Айлин читает книгу." },
+      { typ: "luecke", e: "🎂", satz: "Vor einem Jahr ___ ich sieben Jahre alt.", optionen: ["war", "bin", "sind"], ru: "Год назад мне было семь лет." },
+      { typ: "sag", text: "Super! Manche Verben ändern sich in der Vergangenheit ganz: gehen – ging, schwimmen – schwamm, sein – war.", ru: "Супер! Некоторые глаголы в прошедшем времени меняются полностью: gehen – ging, schwimmen – schwamm, sein – war." }
+    ]
+  },
+  {
+    id: "w-perfekt", stufe: 4, lz: ["de.su.12"], name: "Habe gespielt, werde spielen", ort: "🗓️", farbe: "#2F6FB8", grund: "#E5EFFB",
+    schritte: [
+      { typ: "sag", text: "Wenn wir erzählen, sagen wir oft: Ich habe gespielt. Ich bin gelaufen. Das ist das Perfekt. Für morgen sagen wir: Ich werde spielen – das ist die Zukunft (Futur).", ru: "Когда мы рассказываем, мы часто говорим: Ich habe gespielt. Ich bin gelaufen. Это Perfekt. Про завтра говорим: Ich werde spielen — это будущее время (Futur)." },
+      { typ: "luecke", e: "🎨", satz: "Ich habe ein Bild ___.", optionen: ["gemalt", "malen", "male"], ru: "Я нарисовал картину." },
+      { typ: "luecke", e: "🏃", satz: "Wir sind schnell ___.", optionen: ["gelaufen", "laufen", "lief"], ru: "Мы быстро бежали." },
+      { typ: "luecke", e: "🍪", satz: "Mia ___ Kekse gebacken.", optionen: ["hat", "ist", "wird"], ru: "Мия испекла печенье." },
+      { typ: "luecke", e: "🚌", satz: "Der Bus ___ pünktlich gekommen.", optionen: ["ist", "hat", "wird"], ru: "Автобус пришёл вовремя." },
+      { typ: "luecke", e: "🌧️", satz: "Morgen ___ es regnen.", optionen: ["wird", "hat", "ist"], ru: "Завтра будет дождь." },
+      { typ: "luecke", e: "✈️", satz: "In den Ferien werden wir nach Polen ___.", optionen: ["fliegen", "geflogen", "flog"], ru: "На каникулах мы полетим в Польшу." },
+      { typ: "luecke", e: "📚", satz: "Gestern habe ich viel ___.", optionen: ["gelernt", "lernen", "lerne"], ru: "Вчера я много учился." },
+      { typ: "sag", text: "Klasse! Bei Bewegung wie laufen, fahren, kommen sagt man meist „bin“: Ich bin gelaufen.", ru: "Класс! С глаголами движения (laufen, fahren, kommen) обычно говорят „bin“: Ich bin gelaufen." }
+    ]
+  },
+  {
+    id: "w-satzglieder", stufe: 3, lz: ["de.su.10"], name: "Wer tut was?", ort: "🧩", farbe: "#2E9C5A", grund: "#E3F7EF",
+    schritte: [
+      { typ: "sag", text: "Jeder Satz hat einen Satzkern. Wer oder was tut etwas? Das ist das Subjekt. Was tut es? Das ist das Prädikat.", ru: "В каждом предложении есть основа. Кто или что делает? Это подлежащее. Что делает? Это сказуемое." },
+      { typ: "luecke", e: "🐕", satz: "Wer bellt? ___ bellt laut.", optionen: ["Der Hund", "Laut", "Bellt"], ru: "Кто лает? Собака громко лает." },
+      { typ: "luecke", e: "🐦", satz: "Wer singt? Am Morgen singt ___.", optionen: ["die Amsel", "der Morgen", "am"], ru: "Кто поёт? Утром поёт чёрный дрозд." },
+      { typ: "luecke", e: "🚂", satz: "Was macht der Zug? Der Zug ___ in den Bahnhof.", optionen: ["fährt", "Bahnhof", "schnell"], ru: "Что делает поезд? Поезд въезжает на вокзал." },
+      { typ: "luecke", e: "👧", satz: "Was macht Lena? Lena ___ ihrer Oma einen Brief.", optionen: ["schreibt", "Oma", "Brief"], ru: "Что делает Лена? Лена пишет бабушке письмо." },
+      { typ: "luecke", e: "🌻", satz: "Wer wächst? Im Garten wächst ___.", optionen: ["eine Sonnenblume", "im Garten", "wächst"], ru: "Что растёт? В саду растёт подсолнух." },
+      { typ: "satz", e: "🐱🐟", woerter: ["Die", "Katze", "frisst", "einen", "Fisch."], ru: "Кошка ест рыбу." },
+      { typ: "sag", text: "Prima! Das Prädikat ist ein Verb und steht im Aussagesatz an zweiter Stelle.", ru: "Отлично! Сказуемое — это глагол, в повествовательном предложении оно стоит на втором месте." }
+    ]
+  },
+  {
+    id: "w-satzzeichen", stufe: 4, lz: ["de.su.11"], name: "Punkt, Fragezeichen, Ausrufezeichen", ort: "❗", farbe: "#E0574A", grund: "#FFECE8",
+    schritte: [
+      { typ: "sag", text: "Es gibt drei Satzarten: Aussagesatz mit Punkt. Fragesatz mit Fragezeichen. Ausrufesatz oder Aufforderung mit Ausrufezeichen.", ru: "Есть три вида предложений: повествовательное с точкой, вопросительное с вопросительным знаком, восклицательное или побудительное с восклицательным знаком." },
+      { typ: "luecke", e: "❓", satz: "Wie heißt du___", optionen: ["?", ".", "!"], ru: "Как тебя зовут?" },
+      { typ: "luecke", e: "🌞", satz: "Die Sonne scheint___", optionen: [".", "?", "!"], ru: "Солнце светит." },
+      { typ: "luecke", e: "🚨", satz: "Pass auf___", optionen: ["!", "?", "."], ru: "Осторожно!" },
+      { typ: "luecke", e: "🏫", satz: "Gehst du morgen in die Schule___", optionen: ["?", ".", "!"], ru: "Ты завтра пойдёшь в школу?" },
+      { typ: "luecke", e: "🐢", satz: "Die Schildkröte läuft langsam___", optionen: [".", "?", "!"], ru: "Черепаха идёт медленно." },
+      { typ: "luecke", e: "🎉", satz: "Hurra, wir haben gewonnen___", optionen: ["!", "?", "."], ru: "Ура, мы победили!" },
+      { typ: "luecke", e: "🕰️", satz: "Wann beginnt der Film___", optionen: ["?", ".", "!"], ru: "Когда начинается фильм?" },
+      { typ: "sag", text: "Super! Ein Fragewort wie wer, wie, wann, wo am Anfang verrät oft eine Frage.", ru: "Супер! Вопросительное слово в начале — wer, wie, wann, wo — часто показывает, что это вопрос." }
+    ]
+  },
+  {
+    id: "w-kurz-lang", stufe: 3, lz: ["de.sc.08"], name: "ck, tz, ss oder ß?", ort: "🔊", farbe: "#E8A33D", grund: "#FFF1D9",
+    schritte: [
+      { typ: "sag", text: "Hör genau auf den Vokal! Klingt er kurz, wie in Katze, Brücke, Wasser, folgt oft tz, ck oder ss. Klingt er lang, wie in Straße, folgt ß.", ru: "Слушай гласный! Если он короткий, как в Katze, Brücke, Wasser, после него часто tz, ck или ss. Если долгий, как в Straße, — ß." },
+      { typ: "luecke", e: "🐱", satz: "Die Ka___e schläft.", optionen: ["tz", "z"], ru: "Кошка спит." },
+      { typ: "luecke", e: "🌉", satz: "Wir gehen über die Brü___e.", optionen: ["ck", "k"], ru: "Мы идём по мосту." },
+      { typ: "luecke", e: "💧", satz: "Ich trinke Wa___er.", optionen: ["ss", "ß"], ru: "Я пью воду." },
+      { typ: "luecke", e: "🛣️", satz: "Die Stra___e ist lang.", optionen: ["ß", "ss"], ru: "Улица длинная." },
+      { typ: "luecke", e: "🦶", satz: "Mein Fu___ tut weh.", optionen: ["ß", "ss"], ru: "У меня болит нога." },
+      { typ: "luecke", e: "🍰", satz: "Ich esse ein Stü___ Kuchen.", optionen: ["ck", "k"], ru: "Я ем кусок торта." },
+      { typ: "luecke", e: "🔥", satz: "Die Sonne gibt Hi___e.", optionen: ["tz", "z"], ru: "Солнце даёт жару." },
+      { typ: "luecke", e: "😘", satz: "Mama gibt mir einen Ku___.", optionen: ["ss", "ß"], ru: "Мама меня целует." },
+      { typ: "sag", text: "Toll! Nach l, n, r – das merke ja – steht nie tz und nie ck: Holz, Bank, Herz.", ru: "Здорово! После l, n, r никогда не пишут tz и ck: Holz, Bank, Herz." }
     ]
   }
 ];

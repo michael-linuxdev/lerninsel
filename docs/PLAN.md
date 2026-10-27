@@ -683,7 +683,7 @@ Alle Pakete: kein Bezug zu einem echten Kind, Texte mit Sprachschlüsseln, Rauch
 Jedes Spiel: Prüffragen aus `MINISPIELE.md` Abschnitt 1, Test-Haken, Eintrag in `SEITEN_3D`, Leistungs-Test.
 
 #### Phase G – Breite (2027)
-~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 · NA-37 Mathe Kl. 4 · NA-38 Medienbildung
+~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1, 5 Werkstatt-Kapitel) · NA-37 Mathe Kl. 4 · NA-38 Medienbildung
 „Produzieren/Problemlösen“ (Roboter-Weg) · NA-39 Übergang 5 · NA-41 Vorschul-Pfad · NA-46 Arabisch, Türkisch und weitere Sprachen ·
 NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Volkslied-Melodien (Noten prüfen).
 
@@ -1206,3 +1206,14 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
 - **Offen im Sachunterricht:** Getreide/vom Korn zum Brot, Wetterkarten, Experimentieren, Säugetiere/Gewässer, Wärmeleitung;
   Bundesland/Heimatort (`su.ge.04`, `su.hi.04`) brauchen Länderdaten.
 - **Nächstes:** NA-36 Deutsch Kl. 3–4 (Wortarten, Zeitformen, Rechtschreibstrategien, längere Lesetexte mit Fragen).
+
+### Stand 27.10.2026, später Abend (NA-36 Deutsch Kl. 3–4, Teil 1)
+- Fünf neue Kapitel in Fipsis Wörter-Werkstatt (`spiele/deutsch/werkstatt.js`, neues Feld `stufe`): **„Heute oder gestern?“** (Präsens/Präteritum,
+  `de.su.09`), **„Wer tut was?“** (Subjekt/Prädikat, `de.su.10`), **„ck, tz, ss oder ß?“** (kurzer/langer Vokal, `de.sc.08`) – Kl. 3;
+  **„Habe gespielt, werde spielen“** (Perfekt/Futur, `de.su.12`), **„Punkt, Fragezeichen, Ausrufezeichen“** (Satzarten, `de.su.11`) – Kl. 4.
+  Nur vorhandene Schritt-Typen (luecke, satz, sag), Russisch als Entwurf.
+- Sichtbarkeit: Ein Kapitel mit `stufe` erscheint ab der Klasse davor (Kl. 1: 5 Kapitel wie bisher, Kl. 2: 8, ab Kl. 3: 10).
+- Deutsch-Abenteuer: Der Zeitgeber nach einer richtigen Antwort blättert nur noch weiter, wenn noch derselbe Schritt offen ist. Test-Haken `__deutsch.schritt(n)`.
+- Sachsen Deutsch: Kl. 3 „Richtig schreiben“ und „Sprache untersuchen“, Kl. 4 „Sprache untersuchen“ → teil (jetzt 9/25/15). Neuer Test `tests/deutsch34.js`.
+- **Offen in NA-36:** Rechtschreibstrategien Ableiten (ä/äu) und Wortfamilien, Dehnungs-h, wörtliche Rede, Steigerung, Pronomen, Vor-/Nachsilben,
+  längere Lesetexte mit Verständnisfragen (`de.le.06`, `de.le.07`), Textsorten Märchen/Fabel/Gedicht (`de.tm.04`).
