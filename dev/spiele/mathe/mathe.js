@@ -2,12 +2,12 @@
   const S = window.Spielwelt;
   // Zwei Wege (NA-32): „k1“ = Klasse 1 und Vorschule (Mengen mit Material), „k2“ = der bisherige Matheweg Klasse 2.
   // Fortschritt je Weg in mathe.k1 bzw. mathe.k2; der Einstufungstest gehört nur zu Klasse 2.
-  const WEGE = { k1: window.Mathe.STATIONEN_K1 || [], k2: window.Mathe.STATIONEN };
+  const WEGE = { k1: window.Mathe.STATIONEN_K1 || [], k2: window.Mathe.STATIONEN, k3: window.Mathe.STATIONEN_K3 || [] };
   const ersterWeg = () => { const d = S.lade("mathe") || {}; if (d.weg && WEGE[d.weg]) return d.weg;
-    const st = (S.stufe && S.stufe()) || {}; return ["vs", "1"].includes(st.code) && WEGE.k1.length ? "k1" : "k2"; };
+    const st = (S.stufe && S.stufe()) || {}; return ["vs", "1"].includes(st.code) && WEGE.k1.length ? "k1" : ["3", "4", "5"].includes(st.code) && WEGE.k3.length ? "k3" : "k2"; };
   let WEG = ersterWeg(), ST = WEGE[WEG];
   // Können je Lernziel (NA-50): Lernziele einer Station (beide Wege)
-  const stationVon = (id) => WEGE.k1.find(s => s.id === id) || WEGE.k2.find(s => s.id === id);
+  const stationVon = (id) => WEGE.k1.find(s => s.id === id) || WEGE.k2.find(s => s.id === id) || WEGE.k3.find(s => s.id === id);
   const lzVon = (id) => (stationVon(id) || {}).lz || [];
   const KN = () => window.Koennen;
   function setzeWeg(w) { if (!WEGE[w] || !WEGE[w].length) return; WEG = w; ST = WEGE[w]; const d = daten(); d.weg = w; S.speichere("mathe", d); }
@@ -15,7 +15,7 @@
   const LOB = ["Richtig!", "Super!", "Klasse!", "Genau!", "Toll gerechnet!", "Spitze!", "Prima!"];
 
   // ---------- Fortschritt ----------
-  const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; d.k1 = d.k1 || {}; return d; };
+  const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; d.k1 = d.k1 || {}; d.k3 = d.k3 || {}; return d; };
   const bestes = (id) => daten()[WEG][id] || 0;
   const startAb = () => WEG === "k2" ? (daten().einstufung || {}).startAb || 0 : 0;   // aus dem Einstufungstest (nur Klasse 2)
   const istOffen = (i) => S.offen(i === 0 || i <= startAb() || bestes(ST[i - 1].id) > 0);
@@ -95,7 +95,8 @@
     const kl = $("klasse");
     if (kl) {
       kl.innerHTML = `<button class="weg-wahl${WEG === "k1" ? " an" : ""}" data-weg="k1" aria-pressed="${WEG === "k1"}">🐣 Klasse 1 und Vorschule</button>` +
-        `<button class="weg-wahl${WEG === "k2" ? " an" : ""}" data-weg="k2" aria-pressed="${WEG === "k2"}">2. Klasse</button>`;
+        `<button class="weg-wahl${WEG === "k2" ? " an" : ""}" data-weg="k2" aria-pressed="${WEG === "k2"}">2. Klasse</button>` +
+        `<button class="weg-wahl${WEG === "k3" ? " an" : ""}" data-weg="k3" aria-pressed="${WEG === "k3"}">3. Klasse</button>`;
       kl.querySelectorAll(".weg-wahl").forEach(b => b.addEventListener("click", () => { if (b.dataset.weg === WEG) return; S.ton("tipp"); setzeWeg(b.dataset.weg); zeichneWeg(); }));
     }
     const karte = $("karte");
@@ -136,9 +137,16 @@
           b.innerHTML = `<span class="kreis">${alle ? "🎓" : "➡️"}</span><span class="name">2. Klasse</span><span class="stern-reihe"></span>`;
           b.addEventListener("click", () => { S.ton("tipp"); setzeWeg("k2"); zeichneWeg(); scrollTo(0, 0); });
         } else {
-          b.className = "station ziel" + (alle ? "" : " zu");
-          b.innerHTML = `<span class="kreis">${alle ? "🎓" : "🔒"}</span><span class="name">3. Klasse</span><span class="stern-reihe"></span>`;
-          b.addEventListener("click", () => { S.ton("tipp"); S.meldung(alle ? "Die 3. Klasse wird gerade gebaut." : "Schaffe alle Stationen, dann geht es in die 3. Klasse."); });
+          if (WEG === "k2") {
+            // Klasse 2 → Klasse 3 (immer erreichbar, wie bei Klasse 1 → 2)
+            b.className = "station ziel";
+            b.innerHTML = `<span class="kreis">${alle ? "🎓" : "➡️"}</span><span class="name">3. Klasse</span><span class="stern-reihe"></span>`;
+            b.addEventListener("click", () => { S.ton("tipp"); setzeWeg("k3"); zeichneWeg(); scrollTo(0, 0); });
+          } else {
+            b.className = "station ziel" + (alle ? "" : " zu");
+            b.innerHTML = `<span class="kreis">${alle ? "🎓" : "🔒"}</span><span class="name">Mehr kommt bald</span><span class="stern-reihe"></span>`;
+            b.addEventListener("click", () => { S.ton("tipp"); S.meldung("Weitere Stationen für die 3. Klasse werden gerade gebaut."); });
+          }
         }
       } else {
         const offen = istOffen(i), best = bestes(k.s.id);

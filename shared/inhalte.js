@@ -36,7 +36,7 @@
   ];
 
   function ausBestand() {
-    if (window.Mathe && Mathe.STATIONEN) Mathe.STATIONEN.concat(Mathe.STATIONEN_K1 || []).forEach(s => s.lz && registriere({
+    if (window.Mathe && Mathe.STATIONEN) Mathe.STATIONEN.concat(Mathe.STATIONEN_K1 || [], Mathe.STATIONEN_K3 || []).forEach(s => s.lz && registriere({
       id: "mathe:" + s.id, fach: "mathe", lz: s.lz, aufgaben: 50, lernkartei: true, titel: s.name, quelle: "bestand",
       stufe: s.stufe ? (s.stufe === "vs" ? ["vs", "1"] : [s.stufe]) : undefined }));
     (window.GESCHICHTE || []).forEach(k => {

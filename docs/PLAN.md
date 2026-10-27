@@ -1158,3 +1158,11 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
   `su.na.05`). Jetzt 10 Themen, alle fünf GDSU-Perspektiven mit Kl.-1/2-Themen. Sachsen Kl. 1/2 „Pflanzen und Tiere“ → ja (8/14/27).
 - Offen im Sachunterricht: Haustierpflege als Thema (heute nur spielerisch mit dem eigenen Tier), Kl. 3–4-Themen.
 
+### Stand 27.10.2026, Nachtrag (NA-33 Mathe Kl. 3, Schritt a)
+- Dritter Weg im Matheweg **„3. Klasse“** (`Mathe.STATIONEN_K3`, Fortschritt `mathe.k3`, Kinder in Kl. 3–5 starten dort; Zielknoten von Klasse 2
+  führt jetzt nach Klasse 3): Zahlen bis 1000 (Hunderter/Zehner/Einer-Bild), Runden auf Zehner, Plus und Minus bis 1000, Gramm und Kilogramm,
+  Zeitspannen. Lernziele `ma.zo.12`, `ma.zo.13`, `ma.gm.08`; Sachsen Kl. 3 „Größen und Messen“ → teil (8/15/26).
+- Doppelte Aufgaben einer Runde werden jetzt auch über die Frage erkannt (vorher bekam „Zeitspannen“ nur 5 verschiedene Aufgaben).
+- **Offen (Schritt b):** schriftliche Addition/Subtraktion mit Stellenwerttafel, Teilen mit Rest, Bruchteile, Kilometer, Geld in Sachaufgaben,
+  Raum und Form Kl. 3 (Würfelnetze, Symmetrie), Daten (Diagramme erstellen, Kombinationen).
+

@@ -85,6 +85,13 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(w.an === "k2" && w.stationen === 23 && w.einstufung, `Umschalter: Klasse 2 mit 23 Stationen und Einstufungsangebot (${w.stationen})`);
     await p.reload(); await p.waitForSelector("#karte .station");
     erwarte((await wegInfo(p)).an === "k2", "gewählter Weg bleibt nach dem Neuladen");
+    // NA-33: dritter Weg Klasse 3
+    await p.click('.weg-wahl[data-weg="k3"]'); await p.waitForTimeout(300);
+    const w3 = await wegInfo(p);
+    erwarte(w3.an === "k3" && w3.stationen === 6 && w3.erste === "Zahlen bis 1000" && !w3.einstufung, `Klasse 3: 6 Stationen, beginnt mit „Zahlen bis 1000“ (${w3.stationen})`);
+    for (let s3 = 0; s3 < 6; s3++) { await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(120);
+      if (!(await p.evaluate(() => __mathe.lauf.liste.length === 10))) fehler.push("Kl. 3 Station " + s3 + " hat keine 10 Aufgaben"); }
+    await p.evaluate(() => document.getElementById("zum-weg").click()); await p.waitForTimeout(300);
     await p.click('.weg-wahl[data-weg="k1"]'); await p.waitForTimeout(300);
     erwarte((await wegInfo(p)).an === "k1", "zurück zu Klasse 1");
 

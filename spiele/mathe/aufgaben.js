@@ -487,6 +487,37 @@
       } }
   ];
 
+  // ---------- Klasse 3 (NA-33, erster Schritt): ZR 1000, schriftlich addieren, Gewichte, Zeitspannen ----------
+  function stellenBild(n) {
+    const h = Math.floor(n / 100), z = Math.floor(n / 10) % 10, e = n % 10;
+    let s = "", x = 6;
+    for (let i = 0; i < h; i++) { s += `<rect x="${x}" y="6" width="56" height="56" fill="#7B9BFF" stroke="#3b1f63" stroke-width="2"/>`; x += 62; }
+    for (let i = 0; i < z; i++) { s += `<rect x="${x}" y="6" width="10" height="56" fill="#5CCBA6" stroke="#2E7D62" stroke-width="2"/>`; x += 15; }
+    for (let i = 0; i < e; i++) { s += `<rect x="${x}" y="52" width="10" height="10" fill="#FFB03B" stroke="#B5701A" stroke-width="2"/>`; x += 15; }
+    return `<svg viewBox="0 0 ${Math.max(x, 60) + 6} 70" role="img" aria-label="Hunderter, Zehner und Einer">${s}</svg>`;
+  }
+  const STATIONEN_K3 = [
+    { id: "k3stellen", stufe: "3", lz: ["ma.zo.12"], name: "Zahlen bis 1000", icon: "💯",
+      neu: () => { const n = r(101, 999); return zahl("", n, `${Math.floor(n / 100)} Hunderter, ${Math.floor(n / 10) % 10} Zehner und ${n % 10} Einer sind ${n}.`, { frage: "Welche Zahl ist das?", bild: stellenBild(n), nurLuecke: true }); } },
+    { id: "k3runden", stufe: "3", lz: ["ma.zo.12"], name: "Runden", icon: "≈",
+      neu: () => { const n = r(101, 989), z = Math.round(n / 10) * 10; return zahl("", z, `Schau auf die Einer: ${n % 10}. ${n % 10 >= 5 ? "Ab 5 wird aufgerundet" : "Unter 5 wird abgerundet"} → ${z}.`, { frage: `Runde ${n} auf Zehner.`, nurLuecke: true }); } },
+    { id: "k3plus", stufe: "3", lz: ["ma.zo.13"], name: "Plus bis 1000", icon: "+",
+      neu: () => { const a = r(120, 600), b = r(110, 999 - a); return zahl(`${a} + ${b}`, a + b, `Erst die Hunderter: ${Math.floor(a / 100) * 100} + ${Math.floor(b / 100) * 100}. Dann Zehner und Einer dazu. Ergebnis: ${a + b}.`); } },
+    { id: "k3minus", stufe: "3", lz: ["ma.zo.13"], name: "Minus bis 1000", icon: M,
+      neu: () => { const a = r(300, 999), b = r(110, a - 50); return zahl(`${a} ${M} ${b}`, a - b, `Erst die Hunderter abziehen: ${a} ${M} ${Math.floor(b / 100) * 100} = ${a - Math.floor(b / 100) * 100}. Dann den Rest: ${a - b}.`); } },
+    { id: "k3gewicht", stufe: "3", lz: ["ma.gm.08"], name: "Gramm und Kilogramm", icon: "⚖️",
+      neu: () => {
+        if (Math.random() < 0.5) { const kg = r(1, 9); return zahl("", kg * 1000, `1 kg sind 1000 g. ${kg} kg sind ${kg * 1000} g.`, { frage: `Wie viel Gramm sind ${kg} kg?`, einheit: "g", nurLuecke: true }); }
+        const d = wahl([["eine Feder", "g"], ["ein Apfel", "g"], ["ein Fahrrad", "kg"], ["ein Hund", "kg"], ["ein Brief", "g"], ["ein Kind", "kg"]]);
+        return { text: "", frage: `Wiegt man ${d[0]} eher in g oder in kg?`, antwort: d[1], art: "wahl", optionen: ["g", "kg"], nurLuecke: true,
+          hilfe: d[1] === "g" ? `${d[0]} ist leicht – man wiegt in Gramm.` : `${d[0]} ist schwer – man wiegt in Kilogramm.` };
+      } },
+    { id: "k3zeit", stufe: "3", lz: ["ma.gm.08"], name: "Zeitspannen", icon: "⏱️",
+      neu: () => { const h = r(7, 16), m = wahl([0, 15, 30, 45]), d = wahl([15, 30, 45, 60, 90]), e = h * 60 + m + d;
+        const t = (x) => `${Math.floor(x / 60)}:${String(x % 60).padStart(2, "0")}`;
+        return zahl("", d, `Von ${t(h * 60 + m)} bis ${t(e)} Uhr: zähle die Minuten weiter. Das sind ${d} Minuten.`, { frage: `Der Film beginnt um ${t(h * 60 + m)} Uhr und endet um ${t(e)} Uhr. Wie viele Minuten dauert er?`, einheit: "min", nurLuecke: true }); } }
+  ];
+
   function malAufgabe(reihen) {
     const n = wahl(reihen), k = r(1, 10);
     const [a, b] = Math.random() < 0.5 ? [k, n] : [n, k];
@@ -495,17 +526,17 @@
 
   // Eine Runde: verschiedene Aufgaben ohne Doppelte
   function runde(station, anzahl = 10) {
-    const s = STATIONEN.find(x => x.id === station) || STATIONEN_K1.find(x => x.id === station);
+    const s = STATIONEN.find(x => x.id === station) || STATIONEN_K1.find(x => x.id === station) || STATIONEN_K3.find(x => x.id === station);
     const liste = [], gesehen = new Set();
     let versuche = 0;
     while (liste.length < anzahl && versuche++ < 400) {
       const a = s.neu();
-      const schluessel = a.text + "|" + a.antwort + "|" + (a.bild || "").length;
+      const schluessel = a.text + "|" + (a.frage || "") + "|" + a.antwort + "|" + (a.bild || "").length;
       if (gesehen.has(schluessel)) continue;
       gesehen.add(schluessel); liste.push(a);
     }
     return liste;
   }
 
-  window.Mathe = { STATIONEN, STATIONEN_K1, runde, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
+  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, runde, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
 })();
