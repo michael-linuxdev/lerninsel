@@ -46,6 +46,13 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
   höchstens 2 neue Etappen pro Tag (`Story.darfNeueEtappe()`).
 - **NA-15** Weihnachts-Sonderstart (Erststart 1.–26.12.): Paket am Steg (Tannenbaum fürs Zimmer, Schleife fürs Tier), Lichterkette im Dezember.
 
+**Grafik (Sitzung 27.10.2026, nachts):** Eine andere Engine ist erlaubt, Smartphones zählen mit. Zur Wahl stehen nur noch zwei Looks:
+**„Rund“ wie Animal Crossing** (heutiger Stil B, three.js, `spiele/welt3d/probe.html?stil=b`) und **„Pixel“** (Draufsicht, 16×16-Kacheln,
+PixiJS, `spiele/probe/`, Quelle `quellen/probe/pixel.js`, Bau `ENGINES=<ordner> node quellen/probe/bauen.js` – npm/CDN sind gesperrt,
+PixiJS kommt als Quellcode von GitHub, Anleitung im Kopf von `bauen.js`). Test `sh tests/laufen.sh probe` (Handy + iPad, quer + hoch).
+Messhaken für NA-21: `messe()` in `gemeinsam.js`, `__heimat.info()`, `__welt3d.info()`, `__probe.info()`, `window.__keinSparen`.
+Fremde Bestandteile stehen in `docs/LIZENZEN.md`. **Die Stil-Entscheidung des Auftraggebers steht noch aus.**
+
 **Antworten des Auftraggebers (26.10.2026):** Insel-Zugang über die erste Lektion – ja (umgesetzt). QR-Geschenke mit privatem Schlüssel nur
 beim Auftraggeber und Node-Skript – einverstanden; **welche Geschenke** es zu Weihnachten 2026 gibt, ist noch offen.
 Reihenfolge gilt unverändert. Grafik-Termin, Muttersprachler/Lehrkräfte, Tonaufnahmen: noch offen.
@@ -70,11 +77,14 @@ Entwürfe (`status: { ru: "entwurf" }`) und erscheinen nur in `/dev`.
    Stand bringen** (Abschnitte 2 und 4), pushen und kurz berichten.
 
 ## 4. Nächste Pakete (Reihenfolge laut Plan)
+0. **Zuerst fragen: Rund oder Pixel?** (Vergleich auf iPad 10 und Handy in `/dev`). Bei „Pixel“: neues Paket „Insel in 2D“ planen
+   (Spiel-Logik, Story, Spielstand bleiben; Figuren als Pixel-Sprites) und GRAFIK.md neu fassen. Bei „Rund“: **NA-21** `tests/leistung.js`
+   bauen (Haken sind vorbereitet) und das Budget angehen.
 1. **NA-14** Tutorial E4–E8 (M): neu `shared/tutorial.js` (Etappen-Liste, Auslöser, Tageslimit – das Limit steckt heute in
    `Story.darfNeueEtappe()`), Szenen in `shared/szenen.js`, Auslöser in `quellen/welt3d/heimat.js` (Funktion `naechsteStory()`),
    `spiele/tier/tier.js`, `shared/lernkartei.js`; Elternschalter „Tutorial überspringen“; bestehende Kinder bekommen nur Etappen,
    deren Feature sie noch nie genutzt haben. Test-Haken `window.__tutorial`. Test: Uhr über drei Tage vorstellen (Muster: `tests/tutorial.js`).
-2. Daneben: **NA-21** Leistungs-Test (`tests/leistung.js`) → **NA-20** Probeszenen (Stilentscheidung).
+2. Daneben (nur bei „Rund“): **NA-21** Leistungs-Test (`tests/leistung.js`).
 3. **NA-16** QR-Geschenk (sobald die Geschenk-Auswahl da ist; Liste eingelöster Geschenke: `Story.hatGeschenk/merkeGeschenk`),
    **NA-17** Kapitel 1–2, **NA-18** Inselchronik im Album (Szenen aus `shared/szenen.js` per `Szene.spiele(id)` abspielen).
 4. Danach laut Plan: NA-03 Lehrplan-Kern → NA-40 Wortschatz/DaZ D0 → NA-30 Anlaute → NA-32 → NA-31.
@@ -116,7 +126,7 @@ Entwürfe (`status: { ru: "entwurf" }`) und erscheinen nur in `/dev`.
 ## 8. Testen (Pflicht vor jedem Push)
 - `sh tests/laufen.sh` = Node-Test `tests/story-migration.js` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
-- Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `weihnachten`
+- Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `weihnachten`, `probe` (Grafik-Proben, NUR=pixel|rund)
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.
 - Ersteinrichtung im Test: PIN `1234` zweimal (`#pin1`, `#pin2`, `#pin-ok`), dann `#e-name` und `#e-ok` (Stufe, Land, Muttersprache,

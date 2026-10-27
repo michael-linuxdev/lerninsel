@@ -15,6 +15,11 @@
   automatischer Sparmodus unter 30 Bildern/s, Pixeldichte höchstens 1,5, Schatten 1024² nur in „schön“.
 
 ## 2. Weg zum neuen Stil
+> **Stand 27.10.2026 (nachts):** Der Auftraggeber hat die Auswahl auf zwei Looks eingegrenzt – **„Rund“ wie Animal Crossing**
+> (heutiger Stil B mit three.js) oder **„Pixel“** (Draufsicht aus 16×16-Kacheln, PixiJS, Probe `spiele/probe/`). Andere Engines sind erlaubt,
+> Smartphones zählen mit. Die Varianten B+, C und D unten sind damit Historie. Kinder wählen den Stil nicht selbst (doppelter Zeichenaufwand);
+> sie stimmen beim Vergleich mit ab.
+
 1. **Drei Probeszenen** (Erweiterung von `spiele/welt3d/probe.html`, gleiche Szene: Kind, Fipsi, Baum, Haus, Wasser, Wiese):
    - **B+ „Toon verbessert“:** wie heute, aber einheitliche Proportionen, weichere Konturen, Farbverlauf-Licht (Gradient-Map), Randlicht.
    - **C „Bilderbuch“:** keine Konturen, flache Flächen mit gemalten Verläufen in Scheitelfarben, warmes Streulicht, Papier-Körnung im Himmel.

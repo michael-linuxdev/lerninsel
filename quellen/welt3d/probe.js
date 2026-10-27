@@ -8,6 +8,7 @@ import {
   LatheGeometry, ExtrudeGeometry, Shape, Vector2, Vector3, DataTexture, RedFormat, NearestFilter, InstancedMesh,
   Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils
 } from "../three/three.module.js";
+import { messe } from "./gemeinsam.js";
 
 const STIL = new URLSearchParams(location.search).get("stil") === "b" ? "b" : "a";
 const RUND = STIL === "b";
@@ -369,4 +370,4 @@ function bild() {
   requestAnimationFrame(bild);
 }
 requestAnimationFrame(bild);
-window.__probe = { ich, tier, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, stil: STIL };
+window.__probe = { ich, tier, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, stil: STIL, stile: ["a", "b"], info: () => messe(renderer, scene), blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; } };

@@ -696,7 +696,7 @@ NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Vol
 1. ~~**NA-01** Story-Zustand und Ereignisse~~ → ~~**NA-02** Profil erweitern~~
 2. ~~**NA-10** Szenen-Baustein~~ → ~~**NA-11** Prolog~~ → ~~**NA-13** Erst lernen/erste Frucht~~ → ~~**NA-15** Weihnachts-Sonderstart~~
    (**Meilenstein 15.12.2026:** Prolog, E1–E3, Weihnachten – technisch erreicht am 27.10.2026, iPad-Test steht aus)
-3. Daneben, sobald eine Sitzung Luft hat: **NA-21** Leistungs-Test → **NA-20** Probeszenen (Stilentscheidung im November)
+3. **Vorgezogen (27.10.):** **NA-20** Probeszenen – Auswahl auf „Rund“ oder „Pixel“ eingegrenzt, Proben stehen, Entscheidung offen → **NA-21** Leistungs-Test (nur bei „Rund“ dringend)
 4. **NA-14** Tutorial E4–E8 → ~~**NA-12** Insel-Zugang~~ → **NA-16** QR-Geschenk → **NA-17** Kapitel 1–2 → **NA-18** Chronik
 5. **NA-03** Lehrplan-Kern → **NA-40** Wortschatz-Kern/DaZ D0 → **NA-30** Anlaute → **NA-32** Mathe Kl. 1/Vorschule → **NA-31** Lesen
 6. **NA-22** eine Kind-Figur → **NA-23** Neubau nach Stilwahl (abwechselnd mit 7)
@@ -766,3 +766,36 @@ Keine neuen Rückmeldungen vom iPad 10; Reihenfolge gilt unverändert; nichts is
   Weihnachten: im Testmodus `/dev/test` mit Uhr im Dezember nicht direkt einstellbar → am besten am 1.12. mit einem neuen Kind ansehen.
 - Nächstes Paket: **NA-14** Tutorial E4–E8 (`shared/tutorial.js`), daneben **NA-21** Leistungs-Test → **NA-20** Probeszenen.
 - NA-16 braucht die Geschenk-Auswahl für Weihnachten 2026; NA-18 (Chronik im Album) kann die Szenen aus `shared/szenen.js` direkt abspielen.
+
+### Stand 27.10.2026, Nacht (Sitzung 27.10.: Grafik-Entscheidung vorbereitet, NA-20 neu gefasst)
+**Antworten des Auftraggebers (27.10.2026):** iPad-Test von Ankunft/Sonnenuhr/Erste Frucht/Weihnachts-Paket steht noch aus;
+Geschenke für NA-16 noch offen; **Grafik zuerst** (vor NA-14); nichts gesperrt. Neu: **eine ganz andere Engine ist erlaubt**,
+**Smartphones zählen** (Gewicht entscheidet er nach dem Vergleich), und zur Wahl stehen am Ende nur noch zwei Looks:
+**„Rund“ wie Animal Crossing** (heutiger Stil B, three.js) oder **„Pixel“** (Draufsicht mit 16×16-Kacheln wie Handheld-Abenteuer
+der 2000er – eigener Stil, keine fremden Figuren/Kacheln).
+
+**Gemacht (gepusht, Test `tests/probe.js` grün, Rauchtest grün)**
+- Vergleich mehrerer Engines mit derselben Insel (PixiJS 2D-Bilderbuch und isometrisch, Babylon.js 9.32, PlayCanvas 2.23, three.js) –
+  nach der Eingrenzung wieder entfernt; Messwerte zum Nachlesen: Pixi 2D 25 Aufrufe/0,84 MB, Pixi isometrisch 15/0,84 MB,
+  Babylon 82 Aufrufe (feste Deko je Material verschmolzen)/1,7 MB, PlayCanvas 82 (Batching)/2,3 MB.
+- **Pixel-Probe** `spiele/probe/` (Quelle `quellen/probe/pixel.js`, gebaut mit `quellen/probe/bauen.js`): PixiJS 8.22, Karte 40×30
+  Kacheln, Wasser in zwei Bildern, Kind mit vier Blickrichtungen und Schrittbildern, Fipsi folgt, Textfeld im Retro-Stil; alles im Code
+  gezeichnet (Formen → feste Palette → automatischer Umriss). Ganzzahlige Vergrößerung (iPad ×4, Handy ×2) hält die Pixel scharf.
+  Messwerte: **1 Zeichenaufruf, ≈ 5.000 Dreiecke, 0,84 MB** – mit Abstand am sparsamsten, ideal fürs Handy.
+- „Rund“-Probe `spiele/welt3d/probe.html?stil=b` (unverändert) hat jetzt einen Knopf „👾 Pixel“ und umgekehrt – zum direkten Vergleich.
+  Messwerte rund: 230–400 Aufrufe, 150–260 Tsd. Dreiecke (ohne Verschmelzen; heimat.js verschmilzt Deko bereits).
+- Vorbereitung NA-21: `messe()` in `quellen/welt3d/gemeinsam.js`, `__heimat.info()`, `__welt3d.info()`, `__probe.info()`;
+  `window.__keinSparen` schaltet im Test den automatischen Sparmodus der Insel ab. `tests/leistung.js` selbst ist noch nicht gebaut.
+- `docs/LIZENZEN.md` angelegt (three.js, PixiJS und dessen Bausteine; Lizenztexte in `spiele/probe/LIZENZEN.txt`).
+
+**Entscheidungen / Abweichungen**
+- In der Arbeitsumgebung sind npm und CDNs gesperrt; PixiJS wird aus dem GitHub-Quellcode gebündelt (Anleitung im Kopf von `bauen.js`).
+- Kinder sollen den Stil **nicht** frei wählen können (jede Figur/jedes Möbel müsste doppelt gezeichnet werden). Vorschlag an den Auftraggeber:
+  Kinder stimmen beim Vergleich ab; später höchstens zwei Looks mit gemeinsamer Spiel-Logik.
+- Pixel heißt praktisch: Insel und Minispiele würden in 2D neu gebaut (Spiel-Logik, Story, Spielstand bleiben). Rund heißt: three.js bleibt,
+  Budget-Arbeit (NA-21, Verschmelzen) und Figuren-Feinschliff.
+
+**Offen / als Nächstes**
+- **Auftraggeber + Kinder vergleichen auf iPad 10 und Handy:** `/dev/spiele/probe/` (Pixel) und `/dev/spiele/welt3d/probe.html?stil=b` (Rund).
+- Danach: Stil festlegen und GRAFIK.md anpassen; bei „Pixel“ neues Paket „Insel in 2D“ planen, bei „Rund“ **NA-21** → Budget.
+- Dann **NA-14** Tutorial E4–E8; NA-16 wartet weiter auf die Geschenk-Auswahl.

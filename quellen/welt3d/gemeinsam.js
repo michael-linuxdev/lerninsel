@@ -3,6 +3,27 @@ import { WebGLRenderer, Scene, PerspectiveCamera, Color, Fog, HemisphereLight, D
 
 export const S = window.Spielwelt;
 
+// Zählwerte des letzten Bildes für den Leistungs-Test (tests/leistung.js); Budget steht in docs/GRAFIK.md Abschnitt 6.
+// Texturspeicher ist eine Schätzung (Breite × Höhe × 4 Byte je Textur, ohne Mipmaps).
+export function messe(renderer, scene) {
+  const i = renderer.info, gesehen = new Set();
+  let bytes = 0;
+  scene && scene.traverse(o => {
+    const ms = !o.material ? [] : Array.isArray(o.material) ? o.material : [o.material];
+    ms.forEach(m => Object.values(m).forEach(v => {
+      if (v && v.isTexture && !gesehen.has(v)) {
+        gesehen.add(v);
+        const b = v.image || {}; bytes += (b.width || 0) * (b.height || 0) * 4;
+      }
+    }));
+  });
+  if (scene && scene.background && scene.background.isTexture && !gesehen.has(scene.background)) { const b = scene.background.image || {}; bytes += (b.width || 0) * (b.height || 0) * 4; }
+  return {
+    zeichnungen: i.render.calls, dreiecke: i.render.triangles, geometrien: i.memory.geometries, texturen: i.memory.textures,
+    texturMB: Math.round(bytes / 1048576 * 10) / 10, schatten: !!renderer.shadowMap.enabled, pixel: renderer.getPixelRatio()
+  };
+}
+
 export function welt({ himmel = "#BFE6FF", nebelVon = 30, nebelBis = 80, fov = 55, schatten = false } = {}) {
   const renderer = new WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
@@ -52,6 +73,7 @@ export function welt({ himmel = "#BFE6FF", nebelVon = 30, nebelBis = 80, fov = 5
     zeichne() { renderer.render(scene, camera); }
   };
   document.addEventListener("visibilitychange", () => { if (document.hidden) w.pause(); else w.weiter(); });
+  window.__welt3d = { info: () => messe(renderer, scene) };
   return w;
 }
 
