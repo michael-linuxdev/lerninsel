@@ -25,7 +25,7 @@
     sp: { name: "Bewegung", quelle: "Länderpläne", bereiche: { be: "Sich bewegen" } },
     et: { name: "Ethik und soziales Lernen", quelle: "Länderpläne", bereiche: { ge: "Gefühle", mi: "Miteinander", we: "Werte" } },
     en: { name: "Englisch", quelle: "Länderpläne Fremdsprache Grundschule (GeR A1 angebahnt)", bereiche: {
-      hv: "Hörverstehen", sp: "Sprechen", ws: "Wortschatz", le: "Lesen und Schreiben" } },
+      hv: "Hörverstehen", sp: "Sprechen", ws: "Wortschatz", le: "Lesen und Schreiben", ik: "Interkulturelles Lernen" } },
     daz: { name: "Deutsch als Zweitsprache", quelle: "SPRACHEN.md", bereiche: { d0: "D0 Ankommen", d1: "D1 Erste Sätze" } }
   };
 
@@ -200,6 +200,7 @@
     ["en.ws.02", "4", "Wortschatz: Familie, Schule, Kleidung, Wetter, Hobbys"],
     ["en.le.01", "4", "Bekannte Wörter und kurze Sätze lesen"],
     ["en.sp.03", "5", "Über sich erzählen: Alter, Herkunft, Hobbys"],
+    ["en.ik.01", "3", "Feste und Jahreslauf in englischsprachigen Ländern"],
 
     // ---------- Deutsch als Zweitsprache ----------
     ["daz.d0.01", "1", "Erste Wörter für Schule und Alltag verstehen"],

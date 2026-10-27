@@ -46,7 +46,8 @@
       registriere({ id: "deutsch:" + k.id, fach: "deutsch", lz, aufgabenJe: je, aufgaben: 0, lernkartei: true, titel: k.name, quelle: "bestand" });
     });
     const kapitel = (arr, vors, fach, lk) => (arr || []).forEach(k => k.lz && registriere({
-      id: vors + k.id, fach, lz: k.lz, aufgaben: (k.schritte || []).filter(UEBUNG).length, lernkartei: lk, titel: k.name, quelle: "bestand" }));
+      id: vors + k.id, fach, lz: k.lz, aufgaben: (k.schritte || []).filter(UEBUNG).length, lernkartei: lk, titel: k.name, quelle: "bestand",
+      laender: k.land ? [k.land] : undefined }));
     kapitel(window.WERKSTATT, "werkstatt:", "deutsch", true);
     kapitel(window.THEMEN, "sachkunde:", "sachkunde", true);
     kapitel(window.LEKTIONEN, "medien:", "medien", false);

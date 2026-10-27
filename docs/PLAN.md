@@ -1369,3 +1369,20 @@ Auftrag: „Gesamtstand Lehrplanabdeckung Sachsen“ → veraltete Hinweise prü
   Inhalte für die größten Lücken: Englisch (At home, Shopping, Around the year), Mathe Kl. 4 (schriftlich mal mehrstellig, Teilbarkeit 4/6/9),
   Sachunterricht Kl. 4 (Körper, Sachsen-Karte), Deutsch (freies Schreiben, eigenes Sprechen).
 
+### Stand 27.10.2026, Abend (Sitzung 27.10., 19:30: größte Sachsen-Lücken geschlossen)
+- **Mathe Kl. 4:** neue Station „Schriftlich mal mehrstellig“ (`k4malmehr`, zweistelliger oder dreistelliger Faktor, Schema-Bild mit Teilergebnis-Zeilen,
+  Hilfe über Teilergebnisse) – **am Ende des Wegs angehängt**, weil eine Station erst nach der vorherigen frei wird (Einfügen in der Mitte hätte bei
+  Kindern mit Fortschritt Stationen gesperrt). „Teilbar?“ kennt jetzt 2, 3, 4, 5, 6, 9, 10 und 100 mit Regel je Teiler. Weg Kl. 4: 15 Stationen.
+- **Englisch:** Lektionen „At home – Zuhause“ (Zimmer, Tür, Fenster, in/on/under) und „Around the year – Das Jahr“ (Jahreszeiten, Feste, Geburtstag,
+  Monate) – jetzt 13 Lektionen; Kern-Ziel `en.ik.01` (Feste und Jahreslauf, Bereich „Interkulturelles Lernen“).
+- **Sachunterricht:** „Herz und Lunge“ (Kl. 4, Puls fühlen), „Ich werde größer“ (Pubertät altersgerecht: Wachstum, Hygiene, Gefühle, eigenes Tempo,
+  „Mein Körper gehört mir“, Nummer gegen Kummer), „Stark sein – Nein sagen“ (Kl. 3, Sucht und Gruppendruck), „Unser Bundesland Sachsen“ (vereinfachte
+  Karte als SVG in `spiele/sachkunde/bilder.js`, Dresden, Leipzig, Elbe, Erzgebirge, Sorben, Nachbarn, Maßstab). **Neu: Themen-Feld `land`** – das
+  Sachsen-Thema sehen nur Kinder mit Bundesland Sachsen (auch im Inhalte-Register als `laender`). Jetzt 32 Themen.
+- **Sachsen jetzt (Mathe/Deutsch/SU, 45 Bereiche): 20 × ja, 25 × teil, 0 × nein.** Englisch Kl. 3–4: 2 × ja, 14 × teil, 4 × nein (fehlt noch:
+  Let's go shopping, Let's go on a trip).
+- **Tests:** `mathe1` (15 Stationen Kl. 4), `mathe-generatoren` (15), `englisch` (13 Lektionen, Handy mit den neuen), `sachkunde` (32 Themen, die neuen
+  echt durchgeklickt, Landesfilter), `lehrplan` (20/25/0, Englisch 2/14/4).
+- **Offen:** Deutsch bleibt die schwächste Stelle (3 von 15 „ja“): freies Schreiben, eigenes Sprechen/Aufnehmen, Handschrift; Englisch Shopping/Trip;
+  Heimat-Themen für andere Bundesländer (Muster `land`).
+

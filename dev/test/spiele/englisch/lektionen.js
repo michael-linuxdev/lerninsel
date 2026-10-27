@@ -81,6 +81,33 @@ window.ENGLISCH = [
     ende: { de: "Lecker! Sag beim Essen heute einmal „I like …“.", ru: "Вкусно! Скажи сегодня за едой «I like …»." }
   },
   {
+    id: "en-home", stufe: 3, lz: ["en.ws.01", "en.sp.02"], name: "At home – Zuhause", e: "🏠", farbe: "#C2337A", grund: "#FDEAF3",
+    intro: { de: "Komm mit in Paulas Haus! Heute lernst du Zimmer und Sachen im Haus – und wo etwas ist: in, on, under.", ru: "Пойдём в дом Паулы! Сегодня — комнаты и вещи в доме, и где что находится: in, on, under." },
+    woerter: [
+      { en: "house", de: "Haus", ru: "дом", e: "🏠" }, { en: "kitchen", de: "Küche", ru: "кухня", e: "🍳" }, { en: "bathroom", de: "Badezimmer", ru: "ванная", e: "🛁" },
+      { en: "bedroom", de: "Schlafzimmer", ru: "спальня", e: "🛏️" }, { en: "living room", de: "Wohnzimmer", ru: "гостиная", e: "🛋️" }, { en: "garden", de: "Garten", ru: "сад", e: "🌷" },
+      { en: "door", de: "Tür", ru: "дверь", e: "🚪" }, { en: "window", de: "Fenster", ru: "окно", e: "🪟" }],
+    extra: [
+      { typ: "satz", de: "Bau den Satz: „Die Katze ist in der Küche.“", ru: "Составь предложение: «Кошка на кухне».", woerter: ["The", "cat", "is", "in", "the", "kitchen."], e: "🐱" },
+      { typ: "wahl", frage: "Die Katze liegt unter dem Tisch: „The cat is ___ the table.“", ru: "Кошка лежит под столом: «The cat is ___ the table.»", optionen: ["under", "on", "in"], e: "🐈", warum: "„under“ heißt „unter“, „on“ heißt „auf“, „in“ heißt „in“." },
+      { typ: "wahl", frage: "Wo schläfst du?", ru: "Где ты спишь?", optionen: ["in the bedroom", "in the kitchen", "in the garden"], e: "😴" }],
+    ende: { de: "Super! Geh heute durch deine Wohnung und sag die Zimmer auf Englisch.", ru: "Супер! Пройдись сегодня по квартире и назови комнаты по-английски." }
+  },
+  {
+    id: "en-year", stufe: 3, lz: ["en.ik.01", "en.ws.02"], name: "Around the year – Das Jahr", e: "🎃", farbe: "#E8A33D", grund: "#FFF1D9",
+    intro: { de: "Durch das Jahr! Jahreszeiten und Feste auf Englisch. In England feiert man Halloween, Christmas und Easter – und natürlich Geburtstag.", ru: "Круглый год! Времена года и праздники по-английски. В Англии празднуют Halloween, Christmas и Easter — и, конечно, день рождения." },
+    woerter: [
+      { en: "spring", de: "Frühling", ru: "весна", e: "🌱" }, { en: "summer", de: "Sommer", ru: "лето", e: "🏖️" }, { en: "autumn", de: "Herbst", ru: "осень", e: "🍂" },
+      { en: "winter", de: "Winter", ru: "зима", e: "⛄" }, { en: "birthday", de: "Geburtstag", ru: "день рождения", e: "🎂" }, { en: "Christmas", de: "Weihnachten", ru: "Рождество", e: "🎄" },
+      { en: "Easter", de: "Ostern", ru: "Пасха", e: "🐣" }, { en: "Halloween", de: "Halloween", ru: "Хэллоуин", e: "🎃" }],
+    extra: [
+      { typ: "satz", de: "Sing mit: „Happy birthday to you!“", ru: "Спой вместе: «Happy birthday to you!»", woerter: ["Happy", "birthday", "to", "you!"], e: "🎂" },
+      { typ: "wahl", frage: "Welcher Monat kommt nach January?", ru: "Какой месяц идёт после January?", optionen: ["February", "December", "June"], e: "📅", warum: "Die Monate: January, February, March, April, May, June, July, August, September, October, November, December." },
+      { typ: "wahl", frage: "In welchem Monat ist Christmas?", ru: "В каком месяце Рождество?", optionen: ["December", "July", "March"], e: "🎄" },
+      { typ: "wahl", frage: "Was sagst du am Geburtstag?", ru: "Что говорят в день рождения?", optionen: ["Happy birthday!", "Good night!", "Thank you, goodbye!"], e: "🎁" }],
+    ende: { de: "Klasse! Welches Fest kommt als Nächstes? Sag es auf Englisch!", ru: "Класс! Какой праздник будет следующим? Скажи по-английски!" }
+  },
+  {
     id: "en-family", stufe: 4, lz: ["en.ws.02", "en.sp.02"], name: "Family – Familie", e: "👨‍👩‍👧", farbe: "#2F86C8", grund: "#E5F1FB",
     intro: { de: "Heute geht es um die Familie. Mit „This is my …“ kannst du jemanden vorstellen.", ru: "Сегодня — семья. С фразой «This is my …» можно кого-то представить." },
     woerter: [

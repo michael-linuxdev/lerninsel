@@ -32,7 +32,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 ## 1. Zuerst lesen
 1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
    Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Abend (Sitzung 27.10., 19:10: Sachsen-Profil geprüft und korrigiert)“**; davor „18:30: Englisch-Einstieg“; davor „18:15: NA-39 Übergang Klasse 5“; „17:50: Schritt B … und
+   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Abend (Sitzung 27.10., 19:30: größte Sachsen-Lücken geschlossen)“**; davor „19:10: Sachsen-Profil geprüft und korrigiert“; davor „18:30: Englisch-Einstieg“; davor „18:15: NA-39 Übergang Klasse 5“; „17:50: Schritt B … und
    Schritt C …“: Mathe-Rest, Urkunde, Sachunterricht-Rest; „17:30: … Schritt A“: Schritt-Typen `ordnen`/`verbessern`, 6 Schreib-Kapitel). Ältere Abschnitte sind Historie.
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
@@ -65,7 +65,9 @@ Schreiben“ (Laute, Silben, 20 Lesetexte, Nachspuren, Wörter legen), NA-50 Kö
 ### Was in der letzten Sitzung (27.10., ab 17:30) fertig und gepusht wurde – Schritte A, B, C, NA-39, Englisch, Sachsen-Prüfung
 **Sachsen-Profil geprüft (19:10):** Deutsch auf **Lehrplan 2025** umgestellt (5 Lernbereiche je Stufe), Mathe Kl. 4 „Zahl und Operation“ auf „teil“
 (mehrstellige Multiplikation, Teilbarkeit 4/6, Adam Ries fehlen), Englisch (Lehrplan 2019, ab Kl. 3) neu im Profil, Sachunterricht korrigiert.
-Zählung jetzt **15 × ja, 29 × teil, 1 × nein** (Mathe/Deutsch/SU, 45 Bereiche) plus Englisch 2/10/8. Elternbereich zählt Mathe-Fortschritt aller Wege.
+Danach (19:30) Lücken geschlossen: Mathe Kl. 4 „Schriftlich mal mehrstellig“ (15. Station, am Ende angehängt) und Teilbarkeit 4/6/9/100; Englisch
+„At home“, „Around the year“ (13 Lektionen); Sachthemen „Herz und Lunge“, „Ich werde größer“, „Stark sein – Nein sagen“, „Unser Bundesland Sachsen“
+(nur mit Bundesland Sachsen, neues Themen-Feld `land`; 32 Themen). **Sachsen jetzt 20 × ja, 25 × teil, 0 × nein** plus Englisch 2/14/4.
 **Englisch-Einstieg:** neue Seite `spiele/englisch/` „Englisch mit Papagei Paula“ mit 11 Lektionen (`spiele/englisch/lektionen.js`, Kl. 3: 6, Kl. 4: 4, Übergang 5: 1);
 Wortkarten, Hören (englische Gerätestimme; ohne Stimme Lesen), Lesen, Übersetzen, Satzbau, Wahl. Tür auf der Startseite (Raster 12 Spalten), Lernfach im
 Zeitsystem, Fähigkeit „Englisch-Ohr“, Kern-Fach `en` (7 Ziele), Eltern-Karte „Englisch wie in der Schule“ (Beginn ab Kl. 1 oder 3). Test `tests/englisch.js`.
@@ -76,7 +78,7 @@ können jetzt `stufe` haben, jetzt 28 Themen); 7 neue Kern-Lernziele der Stufe 5
 Grundsatz: keine Bewertung der Schulform, keine Noten.
 **Schritt B – Mathe-Rest:**
 - Weg „3. Klasse“ jetzt **20 Stationen** (neu: Würfelgebäude mit isometrischem Bild/Bauplan, „Sicher, möglich, unmöglich“ am Glücksrad).
-- Weg „4. Klasse“ jetzt **14 Stationen** (neu: römische Zahlen, Primzahlen, Maßstab, Zeit und Datum, mehrere Zahlen addieren) und am Ende eine
+- Weg „4. Klasse“ jetzt **14 Stationen** (später 15 mit „Schriftlich mal mehrstellig“) (neu: römische Zahlen, Primzahlen, Maßstab, Zeit und Datum, mehrere Zahlen addieren) und am Ende eine
   **Urkunde** statt „Mehr kommt bald“.
 - Fehler behoben: g/kg und m/km ließen nur 3 Ziffern zu; Mathe-Tafel schnitt im Hochformat die Frage ab; Titel/Punkte überlappten auf Handys.
 - Neuer Node-Test `tests/mathe-generatoren.js` (läuft in `sh tests/laufen.sh`). Keine Eltern-Einstellung Malkreuz (siehe PLAN).
@@ -205,7 +207,7 @@ kurze Dialoge, Englisch im Länderprofil Sachsen, Tonaufnahmen statt Gerätestim
   `Koennen.brauchtLeichter(lz)`; Seiten laden `shared/koennen.js`.
 - Lesen/Schreiben: `window.ANLAUTE` (Anlaut-Tabelle), `window.LESETEXTE` (Texte in Sprechsilben „Ba-na-ne“), `window.SCHRIFT` (Strich-Daten),
   Lernkartei-Fach `lesen` (Schritte `anlaut`, `silbenwort`, `schreibwort`);
-  Matheweg: `Mathe.STATIONEN` (Kl. 2, `mathe.k2`), `Mathe.STATIONEN_K1` (Kl. 1/Vorschule, `mathe.k1`), `Mathe.STATIONEN_K3` (Kl. 3, 20 Stationen, `mathe.k3`), `Mathe.STATIONEN_K4` (Kl. 4, 14 Stationen, `mathe.k4`, Ende mit Urkunde), `Mathe.STATIONEN_K5` (Übergang 5, 10 Stationen, `mathe.k5`, Urkunde über `zeigeUrkunde(weg)`; Aufgabenfeld `max` = erlaubte Ziffern – **jede Antwort mit mehr als 3 Ziffern braucht `max`**, das prüft `tests/mathe-generatoren.js`; `Mathe._k3.istWuerfelnetz(zellen)`, `roemisch(n)`, `istPrim(n)`, `wuerfelGebaeude()`), Weg-Wahl in `mathe.weg`.
+  Matheweg: `Mathe.STATIONEN` (Kl. 2, `mathe.k2`), `Mathe.STATIONEN_K1` (Kl. 1/Vorschule, `mathe.k1`), `Mathe.STATIONEN_K3` (Kl. 3, 20 Stationen, `mathe.k3`), `Mathe.STATIONEN_K4` (Kl. 4, 15 Stationen – **neue Stationen immer ans Ende hängen**, sonst sperrt das Freischalten vorhandene, `mathe.k4`, Ende mit Urkunde), `Mathe.STATIONEN_K5` (Übergang 5, 10 Stationen, `mathe.k5`, Urkunde über `zeigeUrkunde(weg)`; Aufgabenfeld `max` = erlaubte Ziffern – **jede Antwort mit mehr als 3 Ziffern braucht `max`**, das prüft `tests/mathe-generatoren.js`; `Mathe._k3.istWuerfelnetz(zellen)`, `roemisch(n)`, `istPrim(n)`, `wuerfelGebaeude()`), Weg-Wahl in `mathe.weg`.
 - Mathe-Generatoren (`spiele/mathe/aufgaben.js`): Station `{ id, stufe, lz, name, icon, neu: () => Aufgabe }`; Aufgabe über `zahl(text, antwort, hilfe,
   { frage, bild, einheit, nurLuecke, max })` oder `{ art: "wahl", optionen, antwort, frage, bild, hilfe }`. Bilder sind SVG-Strings
   (`stellenBild`, `schriftBild`, `schriftBildViele`, `netzBild`, `spiegelBild`, `saeulenBild`, `kaestchenBild`, `kugelBild`, `gebaeudeBild`, `radBild`, `karteBild`). Neuer Weg: `WEGE` in `mathe.js`,
@@ -218,7 +220,7 @@ kurze Dialoge, Englisch im Länderprofil Sachsen, Tonaufnahmen statt Gerätestim
 - Englisch (`spiele/englisch/lektionen.js`): `{ id, stufe, lz, name, e, farbe, grund, intro: { de, ru }, woerter: [{ en, de, ru, e }], extra: [satz|wahl], ende }`;
   Schritte entstehen in `englisch.js` (`baue(k)`) aus den Wörtern; jedes Wort braucht ein eigenes Emoji. Test-Haken `__englisch` (starte, schritt, lauf, sichtbar).
   Eltern-Einstellung `eltern.englisch.ab` = `"3"` | `"1"`.
-- Sachthemen (`spiele/sachkunde/themen.js`): `{ id, stufe?, lz, name, e, farbe, grund, kurz, schritte }` (`stufe` wie in der Werkstatt: sichtbar ab der Klasse davor); Typen `info` (mit `fakten`), `wahl` (`ok`, `warum`),
+- Sachthemen (`spiele/sachkunde/themen.js`): `{ id, stufe?, land?, lz, name, e, farbe, grund, kurz, schritte }` (`stufe` wie in der Werkstatt: sichtbar ab der Klasse davor; `land: "sn"` = nur für Kinder aus Sachsen; benannte SVG-Bilder wie `sachsen` in `bilder.js`); Typen `info` (mit `fakten`), `wahl` (`ok`, `warum`),
   `daumen` (`ok`), `zuordnen` (2–3 Gruppen, je 2–3 Dinge), `baum`. Jede Zeile mit russischem Entwurf (`ru`, `satzRu`, `warumRu`).
 - Eltern-Einstellungen für Schulunterschiede: `Spielwelt.lade("eltern").mathe` (z. B. `minus: "abziehen" | "ergaenzen"`), Karte in
   `spiele/eltern/eltern.js` (`matheKarte`, `matheKnoepfe`); neue Unterschiede nach diesem Muster.

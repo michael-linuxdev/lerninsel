@@ -106,8 +106,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.evaluate(() => document.getElementById("zum-weg") && document.getElementById("zum-weg").click()); await p.waitForTimeout(300);
     await p.click('.weg-wahl[data-weg="k4"]'); await p.waitForTimeout(300);
     const w4 = await wegInfo(p);
-    erwarte(w4.an === "k4" && w4.stationen === 14 && w4.erste === "Zahlen bis 1 Million", `Klasse 4: 14 Stationen, beginnt mit „Zahlen bis 1 Million“ (${w4.stationen})`);
-    for (let s4 = 0; s4 < 14; s4++) {
+    erwarte(w4.an === "k4" && w4.stationen === 15 && w4.erste === "Zahlen bis 1 Million", `Klasse 4: 15 Stationen, beginnt mit „Zahlen bis 1 Million“ (${w4.stationen})`);
+    for (let s4 = 0; s4 < 15; s4++) {
       await p.evaluate((n) => __mathe.starte(n), s4); await p.waitForTimeout(150);
       const info = await p.evaluate(() => { const a = __mathe.lauf.liste[0]; return { antwort: a.antwort, zahl: a.art === "zahl", passt: document.documentElement.scrollWidth <= innerWidth + 1, n: __mathe.lauf.liste.length }; });
       if (info.zahl) { for (const z of info.antwort) await p.click(`.taste[data-ziffer="${z}"]`); await p.click('.taste[data-tun="ok"]'); }
@@ -120,7 +120,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     }
     erwarte(!fehler.some(f => f.startsWith("Kl. 4")), "Klasse 4: in jeder Station wird die richtige Antwort (auch 4–6 Ziffern über die Tasten) angenommen");
     // Schritt B: Bilder der neuen Kl.-4-Stationen (Maßstab, Rechnen mit mehreren Zahlen) sichtbar
-    for (const [s4, name] of [[11, "massstab"], [13, "plusviele"]]) {
+    for (const [s4, name] of [[11, "massstab"], [13, "plusviele"], [14, "malmehr"]]) {
       let sichtbar = false;
       for (let v = 0; v < 6 && !sichtbar; v++) { await p.evaluate((n) => __mathe.starte(n), s4); await p.waitForTimeout(150);
         sichtbar = await p.evaluate(() => { const svg = document.querySelector(".bild svg"), r = svg && svg.getBoundingClientRect(); return !!svg && r.width > 60 && r.height > 40 && document.documentElement.scrollWidth <= innerWidth + 1; }); }
@@ -133,7 +133,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.evaluate(() => { const d = Spielwelt.lade("mathe") || {}; d.k4 = d.k4 || {}; Mathe.STATIONEN_K4.forEach(s => { d.k4[s.id] = 3; }); Spielwelt.speichere("mathe", d); });
     await p.reload(); await p.waitForSelector("#urkunde-ziel");
     await p.click("#urkunde-ziel"); await p.waitForTimeout(300);
-    erwarte(await p.evaluate(() => { const u = document.getElementById("urkunde"); return !!u && /Mira/.test(u.textContent) && /4\. Klasse: 14 von 14/.test(u.textContent); }), "Urkunde zeigt Namen und 14 von 14 Stationen Kl. 4");
+    erwarte(await p.evaluate(() => { const u = document.getElementById("urkunde"); return !!u && /Mira/.test(u.textContent) && /4\. Klasse: 15 von 15/.test(u.textContent); }), "Urkunde zeigt Namen und 15 von 15 Stationen Kl. 4");
     await bild(p, "mathe4-urkunde");
     await p.click("#urkunde-zu");
     // Elternbereich: Subtraktionsverfahren „Ergänzen“ ändert die Hilfe

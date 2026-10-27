@@ -56,7 +56,7 @@ pruefe("Sachsen: alle 45 Lernbereiche (Mathe, Deutsch 2025, Sachunterricht) habe
 pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand 9 / 15 / 25, Stand NA-33a)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 15, teil: 29, nein: 1 });
+  assert.deepStrictEqual({ ...n }, { ja: 20, teil: 25, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
@@ -87,10 +87,10 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten gut, Anlaute gut
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
 });
 
-pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Lernbereiche je Klasse, Kl. 1/2 ohne Englisch, Zählung 2 / 10 / 8", () => {
+pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Lernbereiche je Klasse, Kl. 1/2 ohne Englisch, Zählung 2 / 14 / 4", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [3, 4].forEach(k => { const lb = L.fuer("sachsen", "englisch", k); assert.strictEqual(lb.length, 10); lb.forEach(x => { n[x.abdeckung]++; x.lz.forEach(id => assert.ok(K.ziel(id), id)); }); });
-  assert.deepStrictEqual({ ...n }, { ja: 2, teil: 10, nein: 8 });
+  assert.deepStrictEqual({ ...n }, { ja: 2, teil: 14, nein: 4 });
   assert.strictEqual(L.fuer("sachsen", "englisch", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.faecher.deutsch.stand, "Lehrplan 2025, gültig ab 1.8.2025");
 });

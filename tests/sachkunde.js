@@ -6,8 +6,8 @@ const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;
 const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer", "fahrrad", "kinderrechte", "gemeinde", "brot", "wetterkarte", "strom",
-  "waerme", "gewaesser", "experiment", "erstehilfe", "medien-info"];
-const DURCH = ["waerme", "gewaesser", "experiment", "erstehilfe", "medien-info"];
+  "waerme", "gewaesser", "experiment", "erstehilfe", "medien-info", "herz-lunge", "gross-werden", "nein-sagen", "sachsen"];
+const DURCH = ["waerme", "gewaesser", "experiment", "erstehilfe", "medien-info", "herz-lunge", "gross-werden", "nein-sagen", "sachsen"];
 
 (async () => {
   const browser = await chromium.launch();
@@ -28,7 +28,7 @@ const DURCH = ["waerme", "gewaesser", "experiment", "erstehilfe", "medien-info"]
       idx: neu.map(id => THEMEN.findIndex(t => t.id === id)),
       ohneRu: THEMEN.filter(t => neu.includes(t.id)).flatMap(t => t.schritte.filter(s => !(s.ru || s.satzRu)).map(() => t.id)) }), NEU);
     if (art === "quer") {
-      erwarte(daten.alle === 28, `28 Themen bei Eule Ella (${daten.alle})`);
+      erwarte(daten.alle === 32, `32 Themen bei Eule Ella (${daten.alle})`);
       erwarte(!daten.ohneLz.length && daten.idx.every(i => i >= 0), "alle Themen haben Lernziele, die neuen sind da");
       erwarte(!daten.ohneRu.length, "jeder neue Schritt hat einen russischen Entwurf");
     }
@@ -66,6 +66,15 @@ const DURCH = ["waerme", "gewaesser", "experiment", "erstehilfe", "medien-info"]
       const ende = await p.evaluate(() => ({ titel: document.getElementById("ende-titel").textContent, text: document.getElementById("ende-text").textContent }));
       erwarte(!haengt && /geschafft/.test(ende.titel) && /beim ersten Mal richtig/.test(ende.text), `${art}: „${id}“ echt durchgeklickt, ohne Fehler bis zum Ende`);
       if (BILDER && id === "erstehilfe") await p.screenshot({ path: `${BILDER}/sachkunde-ende-${art}.png` });
+    }
+    if (art === "quer") { // Landesfilter: „Unser Bundesland Sachsen“ nur mit Bundesland Sachsen
+      await p.goto(BASIS + "spiele/sachkunde/"); await p.waitForTimeout(300);
+      const mitSn = await p.evaluate(() => [...document.querySelectorAll("#themen button")].some(b => b.textContent.includes("Unser Bundesland Sachsen")));
+      await p.evaluate(() => { const e = Spielwelt.lade("eltern"); e.kind.land = "nw"; Spielwelt.speichere("eltern", e); }); await p.reload(); await p.waitForTimeout(300);
+      const mitNw = await p.evaluate(() => [...document.querySelectorAll("#themen button")].some(b => b.textContent.includes("Unser Bundesland Sachsen")));
+      erwarte(mitSn && !mitNw, "„Unser Bundesland Sachsen“ nur für Kinder aus Sachsen sichtbar");
+      if (BILDER) { await p.evaluate(() => { const e = Spielwelt.lade("eltern"); e.kind.land = "sn"; Spielwelt.speichere("eltern", e); }); await p.reload(); await p.waitForTimeout(300);
+        await p.evaluate(() => __sachkunde.starte(THEMEN.findIndex(t => t.id === "sachsen"))); await p.waitForTimeout(300); await p.screenshot({ path: `${BILDER}/sachkunde-sachsen-karte.png` }); }
     }
     await ctx.close();
   }

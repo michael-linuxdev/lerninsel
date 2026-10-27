@@ -37,7 +37,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   }
 
   // ---------- Sichtbarkeit je Klasse ----------
-  for (const [stufe, anzahl] of [["1", 0], ["2", 6], ["3", 10], ["4", 11], ["5", 11]]) {
+  for (const [stufe, anzahl] of [["1", 0], ["2", 8], ["3", 12], ["4", 13], ["5", 13]]) {
     const { ctx, p } = await kind(stufe);
     await p.goto(BASIS + "spiele/englisch/"); await p.waitForTimeout(400);
     const n = await sichtbar(p), hinweis = await p.evaluate(() => document.getElementById("intro-text").textContent);
@@ -45,7 +45,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     if (stufe === "1") {
       await p.evaluate(() => { const e = Spielwelt.lade("eltern") || {}; e.englisch = { ab: "1" }; Spielwelt.speichere("eltern", e); });
       await p.reload(); await p.waitForTimeout(400);
-      erwarte(await sichtbar(p) === 6, "Klasse 1 mit Eltern-Einstellung „ab Klasse 1“: die 6 Lektionen der Stufe 3 sichtbar");
+      erwarte(await sichtbar(p) === 8, "Klasse 1 mit Eltern-Einstellung „ab Klasse 1“: die 8 Lektionen der Stufe 3 sichtbar");
     }
     await ctx.close();
   }
@@ -91,7 +91,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const ids = await p.evaluate(() => ENGLISCH.map(k => k.id));
     const daten = await p.evaluate(() => ENGLISCH.every(k => k.lz.length && k.stufe && k.intro.ru && k.ende.ru && k.woerter.length >= 6 && k.woerter.every(w => w.en && w.de && w.ru && w.e) &&
       new Set(k.woerter.map(w => w.e)).size === k.woerter.length && (k.extra || []).every(s => s.ru)));
-    erwarte(ids.length === 11 && daten, "11 Lektionen: Lernziel, Stufe, russische Entwürfe, je Wort ein eigenes Bild");
+    erwarte(ids.length === 13 && daten, "13 Lektionen: Lernziel, Stufe, russische Entwürfe, je Wort ein eigenes Bild");
     let alleOk = true;
     for (const [n, id] of ids.entries()) {
       const r = await spiele(p, id, "quer", n === 0);
@@ -99,9 +99,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       if (n === 0) erwarte(r.ok && /zweiten Versuch/.test(r.ende.text), "„Hello!“ mit einem Fehler bis zum Ende, Fehler wird angezeigt");
       else if (!/beim ersten Mal richtig/.test(r.ende.text)) { alleOk = false; console.log(`    ${id}: ${r.ende.text}`); }
     }
-    erwarte(alleOk, "quer: alle 11 Lektionen echt durchgeklickt bis zum Ende");
+    erwarte(alleOk, "quer: alle 13 Lektionen echt durchgeklickt bis zum Ende");
     const stand = await p.evaluate(() => ({ lek: Object.keys((Spielwelt.lade("englisch") || {}).lektionen || {}).length, xp: Charakter.stufe ? Charakter.stufe("englisch") : 0 }));
-    erwarte(stand.lek === 11 && stand.xp >= 1, `Fortschritt gespeichert (11 Lektionen) und Fähigkeit „Englisch-Ohr“ gewachsen (Stufe ${stand.xp})`);
+    erwarte(stand.lek === 13 && stand.xp >= 1, `Fortschritt gespeichert (13 Lektionen) und Fähigkeit „Englisch-Ohr“ gewachsen (Stufe ${stand.xp})`);
     await bild(p, "englisch-ende");
     // Hören: mit simulierter englischer Stimme gibt es Hör-Aufgaben, und die Wörter werden auf Englisch gesprochen
     await p.evaluate(() => { window.__gesprochen = []; Sprache.verfuegbar = () => true; Sprache.hat = () => true;
@@ -124,8 +124,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(await passt(p), "Handy: Übersicht ohne Scrollleiste");
     await bild(p, "englisch-liste-hoch");
     let ok = true;
-    for (const id of ["en-hello", "en-numbers", "en-weather"]) { const r = await spiele(p, id, "hoch", false); if (!r.ok || !/beim ersten Mal/.test(r.ende.text)) { ok = false; console.log("    hoch: " + id); } }
-    erwarte(ok, "Handy hoch: drei Lektionen echt durchgeklickt, ohne Scrollleiste");
+    for (const id of ["en-hello", "en-home", "en-year", "en-weather"]) { const r = await spiele(p, id, "hoch", false); if (!r.ok || !/beim ersten Mal/.test(r.ende.text)) { ok = false; console.log("    hoch: " + id); } }
+    erwarte(ok, "Handy hoch: vier Lektionen (mit „At home“ und „Around the year“) echt durchgeklickt, ohne Scrollleiste");
     await ctx.close();
   }
   await browser.close();

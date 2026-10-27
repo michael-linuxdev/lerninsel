@@ -615,6 +615,18 @@
     for (let i = 2; i >= 0; i--) { const p = x[i] * b + ue; t.push(`${name[i]}: ${b} · ${x[i]}${ue ? ` + ${ue} (gemerkt)` : ""} = ${p}${i > 0 && p >= 10 ? ` – schreibe ${p % 10}, merke ${Math.floor(p / 10)}` : ""}.`); ue = Math.floor(p / 10); }
     return t.join(" ") + ` Ergebnis: ${a * b}.`; }
 
+  // Schema der schriftlichen Multiplikation: Aufgabe oben, je Stelle des zweiten Faktors eine leere Zeile (eingerückt), Strich, Ergebniszeile
+  function malMehrBild(a, b) {
+    const zeilen = String(b).length, breite = String(a * b).length + 1, g = 24, w = (String(a).length + String(b).length + 3) * g, x0 = Math.max(w, (breite + 1) * g) + 10;
+    let s = `<text x="${x0 - 6}" y="30" text-anchor="end" font-size="26" fill="#3b1f63" font-family="monospace">${a} · ${b}</text><line x1="10" y1="42" x2="${x0}" y2="42" stroke="#3b1f63" stroke-width="2.5"/>`;
+    for (let i = 0; i < zeilen; i++) { const rechts = x0 - 6 - (zeilen - 1 - i) * g;
+      for (let k = 0; k < String(a).length + 1; k++) s += `<rect x="${rechts - (k + 1) * g + 2}" y="${52 + i * 34}" width="${g - 4}" height="28" rx="4" fill="none" stroke="#9b8bb5" stroke-width="1.5" stroke-dasharray="4 3"/>`; }
+    const yl = 56 + zeilen * 34;
+    s += `<line x1="10" y1="${yl}" x2="${x0}" y2="${yl}" stroke="#3b1f63" stroke-width="2.5"/>`;
+    for (let k = 0; k < breite; k++) s += `<rect x="${x0 - 6 - (k + 1) * g + 2}" y="${yl + 8}" width="${g - 4}" height="30" rx="4" fill="none" stroke="#3b1f63" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+    return `<svg viewBox="0 0 ${x0 + 10} ${yl + 46}" style="max-height:230px" role="img" aria-label="Schema für schriftliches Malnehmen">${s}</svg>`;
+  }
+
   const STATIONEN_K3 = [
     { id: "k3stellen", stufe: "3", lz: ["ma.zo.12"], name: "Zahlen bis 1000", icon: "💯",
       neu: () => { const n = r(101, 999); return zahl("", n, `${Math.floor(n / 100)} Hunderter, ${Math.floor(n / 10) % 10} Zehner und ${n % 10} Einer sind ${n}.`, { frage: "Welche Zahl ist das?", bild: stellenBild(n), nurLuecke: true }); } },
@@ -728,12 +740,17 @@
         x.forEach((d, i) => { const z = rest * 10 + d, e = Math.floor(z / b); rest = z - e * b; if (i === 0 && e === 0) { t.push(`${d} : ${b} geht nicht, nimm die nächste Stelle dazu.`); return; } t.push(`${z} : ${b} = ${e}${rest ? `, Rest ${rest}` : ""}.`); });
         return zahl(`${a} : ${b}`, q, t.join(" ") + ` Ergebnis: ${q}. Probe: ${q} · ${b} = ${a}.`, { frage: "Teile schriftlich von links nach rechts.", max: 7 }); } },
     { id: "k4teilbar", stufe: "4", lz: ["ma.zo.17"], name: "Teilbar?", icon: "🔍",
-      neu: () => { const t = wahl([2, 3, 5, 10]), soll = Math.random() < 0.5; let n;
-        do n = r(100, 999); while ((n % t === 0) !== soll);
-        const qs = String(n).split("").reduce((x, y) => x + +y, 0);
+      // Teilbarkeitsregeln für 2, 3, 4, 5, 6, 9, 10 und 100 (Sachsen 2025: 2/3/5/9/10/100 in Kl. 3, 4 und 6 in Kl. 4)
+      neu: () => { const t = wahl([2, 3, 4, 5, 6, 9, 10, 100]), soll = Math.random() < 0.5; let n;
+        do n = t === 100 && soll ? 100 * r(1, 9) + (Math.random() < 0.5 ? 0 : 1000 * r(1, 8)) : r(100, 999); while ((n % t === 0) !== soll);
+        const z = String(n).split(""), qs = z.reduce((x, y) => x + +y, 0), zwei = n % 100;
         const regel = { 2: `Durch 2 teilbar sind gerade Zahlen (letzte Ziffer 0, 2, 4, 6, 8). ${n} endet auf ${n % 10}.`,
           5: `Durch 5 teilbar ist eine Zahl mit 0 oder 5 am Ende. ${n} endet auf ${n % 10}.`, 10: `Durch 10 teilbar ist eine Zahl mit 0 am Ende. ${n} endet auf ${n % 10}.`,
-          3: `Rechne die Quersumme: ${String(n).split("").join(" + ")} = ${qs}. Ist sie durch 3 teilbar, dann auch die Zahl.` }[t];
+          100: `Durch 100 teilbar ist eine Zahl mit 00 am Ende. ${n} endet auf ${String(zwei).padStart(2, "0")}.`,
+          3: `Rechne die Quersumme: ${z.join(" + ")} = ${qs}. Ist sie durch 3 teilbar, dann auch die Zahl.`,
+          9: `Rechne die Quersumme: ${z.join(" + ")} = ${qs}. Ist sie durch 9 teilbar, dann auch die Zahl.`,
+          4: `Schau auf die letzten beiden Ziffern: ${String(zwei).padStart(2, "0")}. Ist diese Zahl durch 4 teilbar, dann auch ${n}.`,
+          6: `Durch 6 teilbar ist eine Zahl, die durch 2 und durch 3 teilbar ist. ${n} ist ${n % 2 ? "ungerade" : "gerade"}, Quersumme ${qs}${qs % 3 ? " (nicht durch 3)" : " (durch 3)"}.` }[t];
         return { text: "", frage: `Ist ${n} durch ${t} teilbar?`, antwort: soll ? "ja" : "nein", art: "wahl", optionen: ["ja", "nein"], nurLuecke: true, hilfe: regel + (soll ? " Also ja." : " Also nein.") }; } },
     { id: "k4geschickt", stufe: "4", lz: ["ma.zo.17"], name: "Geschickt rechnen", icon: "💡",
       neu: () => { const art = r(0, 2);
@@ -883,7 +900,15 @@
           { frage: `Heute ist der ${tag}. ${mon}. Der wievielte ${NACH[mon]} ist in ${n} Tagen?`, nurLuecke: true }); } },
     { id: "k4plusviele", stufe: "4", lz: ["ma.zo.13", "ma.zo.16"], name: "Mehrere Zahlen addieren", icon: "➕",
       neu: () => { const k = wahl([3, 3, 4]); let z; do z = Array.from({ length: k }, () => r(k === 4 ? 105 : 120, k === 4 ? 1999 : 2999)); while (z.reduce((x, y) => x + y, 0) > 9999);
-        return zahl("", z.reduce((x, y) => x + y, 0), schriftVieleHilfe(z), { frage: "Rechne schriftlich: Fang bei den Einern an. Der Übertrag kann auch 2 sein.", bild: schriftBildViele(z), nurLuecke: true, max: 7 }); } }
+        return zahl("", z.reduce((x, y) => x + y, 0), schriftVieleHilfe(z), { frage: "Rechne schriftlich: Fang bei den Einern an. Der Übertrag kann auch 2 sein.", bild: schriftBildViele(z), nurLuecke: true, max: 7 }); } },
+    { id: "k4malmehr", stufe: "4", lz: ["ma.zo.16"], name: "Schriftlich mal mehrstellig", icon: "🧮",
+      // mehrstelliger Faktor (Sachsen 2025, Kl. 4); am Ende des Wegs angehängt, damit vorhandener Fortschritt keine Station sperrt: erst mit jeder Stelle des zweiten Faktors malnehmen, dann die Teilergebnisse addieren
+      neu: () => { const drei = Math.random() < 0.3, a = drei ? r(12, 98) : r(102, 989), b = drei ? r(102, 499) : r(12, 98);
+        const st = String(b).split("").map(Number), teile = st.map((d, i) => a * d * 10 ** (st.length - 1 - i));
+        const namen = ["Hunderter", "Zehner", "Einer"].slice(3 - st.length);
+        return zahl(`${a} · ${b}`, a * b, `Zerlege ${b} nach Stellen: ` + st.map((d, i) => `${a} · ${d * 10 ** (st.length - 1 - i)} = ${teile[i]}`).join(", ") +
+          `. Dann die Teilergebnisse addieren: ${teile.join(" + ")} = ${a * b}. Schriftlich schreibst du jede Zeile eine Stelle weiter nach rechts (${namen.join(", ")}).`,
+          { frage: "Rechne schriftlich. Tipp: Nimm mit jeder Stelle des zweiten Faktors mal und addiere dann.", bild: malMehrBild(a, b), max: 7 }); } }
   );
 
   // ---------- Übergang 5 (NA-39): Wiederholung Kl. 4, Brüche, Kommazahlen bei Größen, Klammern, Koordinaten, Winkel, Durchschnitt ----------
@@ -924,7 +949,7 @@
       `<line x1="${cx}" y1="${cy}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" stroke="#3b1f63" stroke-width="4" stroke-linecap="round"/><line x1="${cx}" y1="${cy}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="#3b1f63" stroke-width="4" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="5" fill="#3b1f63"/></svg>`;
   }
   const komma = (cent, stellen = 2) => { const s = String(cent).padStart(stellen + 1, "0"); return s.slice(0, -stellen) + "," + s.slice(-stellen); };
-  const K4_FIT = ["k4million", "k4runden", "k4malschrift", "k4geteilt", "k4teilbar", "k4flaeche", "k4liter", "k4massstab", "k4zeit", "k4plusviele", "k4chance"];
+  const K4_FIT = ["k4million", "k4runden", "k4malschrift", "k4geteilt", "k4teilbar", "k4flaeche", "k4liter", "k4massstab", "k4zeit", "k4plusviele", "k4chance", "k4malmehr"];
 
   const STATIONEN_K5 = [
     { id: "k5fit", stufe: "5", lz: ["ma.zo.15", "ma.zo.16"], name: "Fit aus Klasse 4", icon: "💪",

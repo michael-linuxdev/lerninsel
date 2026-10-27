@@ -61,6 +61,7 @@
     const klasse = ((S.stufe && S.stufe()) || {}).klasse || 2;
     TH.forEach((t, i) => {
       if (t.stufe && klasse < t.stufe - 1) return; // NA-39: Übergangs-Themen (stufe 5) erst ab Klasse 4 zeigen
+      if (t.land && (S.land() || {}).code !== t.land) return; // Heimatkunde nur für Kinder aus diesem Bundesland
       const best = bestes(t.id);
       const b = document.createElement("button");
       b.className = "lek" + (!best ? " jetzt" : "");

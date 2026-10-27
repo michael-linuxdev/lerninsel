@@ -2,6 +2,7 @@
 // Schritt-Typen:
 //   info     { titel, bild?, text, ru, fakten?: [[de, ru], ...] }
 // Thema mit stufe (optional, NA-39): erst ab der Klasse davor sichtbar (stufe 5 = Übergang, sichtbar ab Kl. 4).
+// Thema mit land (optional, z. B. "sn"): nur für Kinder aus diesem Bundesland (Heimatkunde wie „Unser Bundesland Sachsen“).
 //   wahl     { frage, ru, bild?, optionen: [{ t, ru, ok, warum, warumRu }] }
 //   daumen   { satz, satzRu, bild?, ok, warum, warumRu }
 //   zuordnen { frage, ru, gruppen: [{ id, name, ru, bild }], dinge: [{ t, ru, gruppe }] }
@@ -979,6 +980,118 @@ window.THEMEN = [
       { typ: "info", titel: "Geschafft!", bild: "🦉",
         text: "Prima, {name}! Viele Schulen haben einen Tag der offenen Tür. Schau dir die Schule vorher mit deiner Familie an.",
         ru: "Отлично, {name}! Во многих школах бывает день открытых дверей. Посмотри школу заранее вместе с семьёй." }
+    ]
+  },
+  {
+    id: "herz-lunge", stufe: 4, lz: ["su.na.02"], name: "Herz und Lunge", e: "❤️", farbe: "#E0574A", grund: "#FFECE8",
+    kurz: "Atmen, Herzschlag, Puls fühlen, was dem Herzen gut tut",
+    schritte: [
+      { typ: "info", titel: "Dein Motor und deine Luftpumpe", bild: "🫀",
+        text: "Hallo {name}! Dein Herz ist ein Muskel. Es pumpt Tag und Nacht Blut durch deinen Körper. Die Lunge holt beim Einatmen Luft mit Sauerstoff herein, beim Ausatmen geht verbrauchte Luft wieder hinaus.",
+        ru: "Привет, {name}! Сердце — это мышца. Оно днём и ночью качает кровь по телу. Лёгкие при вдохе набирают воздух с кислородом, а при выдохе выпускают использованный воздух.",
+        fakten: [["Das Blut bringt Sauerstoff aus der Lunge in jeden Teil des Körpers.", "Кровь несёт кислород из лёгких во все части тела."], ["Den Herzschlag spürst du als Puls am Handgelenk oder am Hals.", "Сердцебиение можно почувствовать как пульс на запястье или на шее."]] },
+      { typ: "wahl", frage: "Du rennst eine Runde um den Schulhof. Was passiert mit deinem Herzen?", ru: "Ты пробежал круг по школьному двору. Что происходит с сердцем?", bild: "🏃", optionen: [
+        { t: "Es schlägt schneller", ru: "Оно бьётся быстрее", ok: true, warum: "Genau! Die Muskeln brauchen mehr Sauerstoff, also pumpt das Herz schneller – und du atmest schneller.", warumRu: "Точно! Мышцам нужно больше кислорода, поэтому сердце бьётся быстрее — и ты чаще дышишь." },
+        { t: "Es bleibt stehen", ru: "Оно останавливается", ok: false, warum: "Nein, das Herz arbeitet immer – beim Rennen sogar schneller.", warumRu: "Нет, сердце работает всегда — при беге даже быстрее." },
+        { t: "Es schlägt langsamer", ru: "Оно бьётся медленнее", ok: false, warum: "Langsamer schlägt es in Ruhe, zum Beispiel beim Schlafen.", warumRu: "Медленнее оно бьётся в покое, например во сне." }] },
+      { typ: "info", titel: "Puls fühlen", bild: "⏱️",
+        text: "Leg zwei Finger an dein Handgelenk unter den Daumen. Zähle 15 Sekunden lang die Schläge und nimm die Zahl mal 4 – so weißt du deinen Puls pro Minute. Probier es in Ruhe und nach zehn Hampelmännern!",
+        ru: "Приложи два пальца к запястью под большим пальцем. Считай удары 15 секунд и умножь на 4 — так узнаешь пульс в минуту. Попробуй в покое и после десяти прыжков!" },
+      { typ: "zuordnen", frage: "Tut das Herz und Lunge gut?", ru: "Это полезно для сердца и лёгких?",
+        gruppen: [{ id: "g", name: "Tut gut", ru: "Полезно", bild: "💪" }, { id: "s", name: "Schadet", ru: "Вредно", bild: "🚫" }],
+        dinge: [
+          { t: "Fahrrad fahren", ru: "Кататься на велосипеде", gruppe: "g" }, { t: "Draußen toben", ru: "Бегать на улице", gruppe: "g" },
+          { t: "Zigarettenrauch einatmen", ru: "Вдыхать сигаретный дым", gruppe: "s" }, { t: "Den ganzen Tag nur sitzen", ru: "Весь день только сидеть", gruppe: "s" }] },
+      { typ: "daumen", satz: "Beim Einatmen hebt sich der Brustkorb.", satzRu: "При вдохе грудная клетка поднимается.", bild: "🫁", ok: true,
+        warum: "Stimmt! Die Lunge füllt sich mit Luft. Leg die Hand auf deinen Bauch und den Brustkorb und spür es.", warumRu: "Верно! Лёгкие наполняются воздухом. Положи руку на живот и грудь и почувствуй это." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Jeden Tag eine Stunde Bewegung hält Herz und Lunge fit.",
+        ru: "Супер, {name}! Час движения каждый день держит сердце и лёгкие в форме." }
+    ]
+  },
+  {
+    id: "gross-werden", stufe: 4, lz: ["su.na.02"], name: "Ich werde größer", e: "🌱", farbe: "#2E9C5A", grund: "#E3F7EF",
+    kurz: "Pubertät: Körper und Gefühle verändern sich, Hygiene, darüber reden",
+    schritte: [
+      { typ: "info", titel: "Der Körper verändert sich", bild: "🌱",
+        text: "Hallo {name}! Irgendwann zwischen etwa 9 und 16 Jahren beginnt die Pubertät. Der Körper wird langsam erwachsen. Das passiert bei jedem Kind zu einer anderen Zeit – früher oder später ist beides normal.",
+        ru: "Привет, {name}! Примерно между 9 и 16 годами начинается половое созревание. Тело постепенно становится взрослым. У каждого это происходит в своё время — раньше или позже, оба варианта нормальны.",
+        fakten: [["Man wächst schneller, bei Jungen wird die Stimme tiefer.", "Растёшь быстрее, у мальчиков голос становится ниже."], ["Man schwitzt mehr, die Haut kann Pickel bekommen.", "Больше потеешь, на коже могут появляться прыщики."]] },
+      { typ: "wahl", frage: "Du schwitzt nach dem Sport mehr als früher. Was hilft?", ru: "После спорта ты потеешь больше, чем раньше. Что поможет?", bild: "🚿", optionen: [
+        { t: "Duschen und frische Sachen anziehen", ru: "Принять душ и надеть чистую одежду", ok: true, warum: "Genau! Regelmäßig waschen und ein Deo helfen. Das gehört jetzt einfach dazu.", warumRu: "Точно! Помогают регулярное мытьё и дезодорант. Теперь это просто часть жизни." },
+        { t: "Weniger trinken", ru: "Меньше пить", ok: false, warum: "Trinken ist wichtig, gerade beim Sport. Gegen Schweißgeruch hilft Waschen.", warumRu: "Пить важно, особенно при спорте. От запаха пота помогает мытьё." },
+        { t: "Gar keinen Sport mehr machen", ru: "Совсем не заниматься спортом", ok: false, warum: "Bewegung ist gesund. Danach einfach duschen.", warumRu: "Движение полезно. После него просто прими душ." }] },
+      { typ: "daumen", satz: "In der Pubertät können Gefühle schneller wechseln – mal fröhlich, mal genervt.", satzRu: "В переходном возрасте чувства могут меняться быстрее — то весело, то всё раздражает.", bild: "🎭", ok: true,
+        warum: "Stimmt! Das kommt auch von den Veränderungen im Körper. Darüber reden hilft.", warumRu: "Верно! Это тоже связано с изменениями в теле. Помогает поговорить об этом." },
+      { typ: "daumen", satz: "Wer später in die Pubertät kommt, mit dem stimmt etwas nicht.", satzRu: "С тем, кто позже начинает взрослеть, что-то не так.", bild: "⏳", ok: false,
+        warum: "Nein! Jeder Körper hat sein eigenes Tempo. Niemand muss sich vergleichen.", warumRu: "Нет! У каждого тела свой темп. Никому не нужно сравнивать себя с другими." },
+      { typ: "wahl", frage: "Du hast eine Frage zu deinem Körper. Mit wem kannst du reden?", ru: "У тебя вопрос о своём теле. С кем можно поговорить?", bild: "💬", optionen: [
+        { t: "Mit Eltern, Ärztin oder Lehrkraft, der ich vertraue", ru: "С родителями, врачом или учителем, которому доверяю", ok: true, warum: "Richtig! Solche Fragen sind normal. Du kannst auch die Nummer gegen Kummer anrufen: 116 111.", warumRu: "Правильно! Такие вопросы нормальны. Можно позвонить и по телефону доверия: 116 111." },
+        { t: "Mit niemandem, das ist peinlich", ru: "Ни с кем, это стыдно", ok: false, warum: "Das muss dir nicht peinlich sein. Alle Erwachsenen haben das auch erlebt.", warumRu: "Не нужно стесняться. Все взрослые тоже через это прошли." },
+        { t: "Mit einem Fremden im Internet", ru: "С незнакомцем в интернете", ok: false, warum: "Fremden im Netz erzählst du nichts Persönliches. Frag lieber jemanden, den du kennst.", warumRu: "Незнакомцам в интернете ничего личного не рассказывают. Лучше спроси того, кого знаешь." }] },
+      { typ: "daumen", satz: "Mein Körper gehört mir. Ich darf Nein sagen, wenn mich jemand anfassen will und ich das nicht möchte.", satzRu: "Моё тело принадлежит мне. Я могу сказать «нет», если кто-то хочет меня трогать, а я не хочу.", bild: "✋", ok: true,
+        warum: "Stimmt! Und du darfst es immer einem Erwachsenen erzählen, dem du vertraust.", warumRu: "Верно! И об этом всегда можно рассказать взрослому, которому ты доверяешь." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Größer werden ist spannend. Frag ruhig nach, wenn dich etwas beschäftigt.",
+        ru: "Здорово, {name}! Взрослеть интересно. Спрашивай, если тебя что-то волнует." }
+    ]
+  },
+  {
+    id: "nein-sagen", stufe: 3, lz: ["su.na.02", "et.mi.01"], name: "Stark sein – Nein sagen", e: "🛡️", farbe: "#7B55B8", grund: "#EFE6FF",
+    kurz: "Sucht vorbeugen, Rauchen und Alkohol, zu viel Bildschirm, Gruppendruck",
+    schritte: [
+      { typ: "info", titel: "Was ist Sucht?", bild: "🛡️",
+        text: "Hallo {name}! Sucht heißt: Man kann mit etwas nicht mehr aufhören, obwohl es schadet. Zigaretten und Alkohol machen süchtig und sind für Kinder besonders schädlich. Auch zu viel Handy oder Spielen kann zur Gewohnheit werden, die man kaum stoppen kann.",
+        ru: "Привет, {name}! Зависимость — это когда невозможно остановиться, хотя это вредно. Сигареты и алкоголь вызывают зависимость и особенно вредны для детей. И слишком много телефона или игр может стать привычкой, которую трудно прекратить.",
+        fakten: [["Rauchen und Alkohol sind für Kinder verboten – zum Schutz ihres Körpers.", "Курение и алкоголь детям запрещены — чтобы защитить их организм."], ["Wer Nein sagt, ist stark – nicht langweilig.", "Кто говорит «нет», тот сильный, а не скучный."]] },
+      { typ: "wahl", frage: "Ältere Kinder bieten dir eine Zigarette an: „Sei kein Baby!“ Was tust du?", ru: "Старшие дети предлагают тебе сигарету: «Не будь малышом!» Что ты сделаешь?", bild: "🚭", optionen: [
+        { t: "Klar Nein sagen und weggehen", ru: "Чётко сказать «нет» и уйти", ok: true, warum: "Genau! Du musst niemandem etwas beweisen. Erzähl es danach einem Erwachsenen.", warumRu: "Точно! Тебе не нужно никому ничего доказывать. Потом расскажи об этом взрослому." },
+        { t: "Mitmachen, damit sie mich mögen", ru: "Согласиться, чтобы они меня любили", ok: false, warum: "Echte Freunde mögen dich auch, wenn du Nein sagst.", warumRu: "Настоящие друзья любят тебя, даже если ты говоришь «нет»." },
+        { t: "Heimlich probieren", ru: "Тайком попробовать", ok: false, warum: "Auch heimlich schadet Rauchen deiner Lunge. Nein sagen ist mutiger.", warumRu: "И тайком курение вредит лёгким. Сказать «нет» — смелее." }] },
+      { typ: "zuordnen", frage: "Hilft das, wenn es dir schlecht geht – oder schadet es?", ru: "Помогает это, когда тебе плохо, или вредит?",
+        gruppen: [{ id: "h", name: "Hilft", ru: "Помогает", bild: "💚" }, { id: "s", name: "Schadet", ru: "Вредит", bild: "🚫" }],
+        dinge: [
+          { t: "Mit Freunden reden", ru: "Поговорить с друзьями", gruppe: "h" }, { t: "Rausgehen und sich bewegen", ru: "Выйти на улицу и подвигаться", gruppe: "h" },
+          { t: "Stundenlang am Handy bleiben", ru: "Часами сидеть в телефоне", gruppe: "s" }, { t: "Süßes statt Abendessen", ru: "Сладкое вместо ужина", gruppe: "s" }] },
+      { typ: "daumen", satz: "Wenn ich merke, dass ich nicht mehr vom Spiel loskomme, darf ich Hilfe holen.", satzRu: "Если я замечаю, что не могу оторваться от игры, я могу попросить о помощи.", bild: "🎮", ok: true,
+        warum: "Stimmt! Ein Erwachsener kann helfen, Pausen festzulegen. Darum hat auch diese App feste Spielzeiten.", warumRu: "Верно! Взрослый поможет договориться о перерывах. Поэтому и в этом приложении есть время для игр." },
+      { typ: "daumen", satz: "Wer Nein sagt, verliert alle Freunde.", satzRu: "Кто говорит «нет», теряет всех друзей.", bild: "🤝", ok: false,
+        warum: "Nein! Gute Freunde respektieren dein Nein. Oft sagen andere dann auch mutig Nein.", warumRu: "Нет! Хорошие друзья уважают твоё «нет». Часто другие тогда тоже смело говорят «нет»." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Stark, {name}! Übe mit deiner Familie einen Satz zum Neinsagen, zum Beispiel: „Nein danke, das will ich nicht.“",
+        ru: "Сильно, {name}! Потренируй с семьёй фразу для отказа, например: «Нет, спасибо, я не хочу»." }
+    ]
+  },
+  {
+    id: "sachsen", stufe: 4, land: "sn", lz: ["su.ge.04", "su.hi.sn01"], name: "Unser Bundesland Sachsen", e: "🗺️", farbe: "#2E7D62", grund: "#E3F7EF",
+    kurz: "Karte, Dresden und andere Städte, Elbe, Erzgebirge, Sorben, Nachbarn",
+    schritte: [
+      { typ: "info", titel: "Sachsen auf der Karte", bild: "sachsen",
+        text: "Hallo {name}! Du lebst in Sachsen. Die Landeshauptstadt ist Dresden an der Elbe. Die größte Stadt ist Leipzig. Im Süden liegt das Erzgebirge mit dem Fichtelberg, dem höchsten Berg Sachsens.",
+        ru: "Привет, {name}! Ты живёшь в Саксонии. Столица земли — Дрезден на Эльбе. Самый большой город — Лейпциг. На юге — Рудные горы с горой Фихтельберг, самой высокой в Саксонии.",
+        fakten: [["Nachbarländer: Polen im Osten, Tschechien im Süden.", "Соседние страны: Польша на востоке, Чехия на юге."], ["Nachbar-Bundesländer: Bayern, Thüringen, Sachsen-Anhalt, Brandenburg.", "Соседние федеральные земли: Бавария, Тюрингия, Саксония-Анхальт, Бранденбург."]] },
+      { typ: "wahl", frage: "Wie heißt die Landeshauptstadt von Sachsen?", ru: "Как называется столица Саксонии?", bild: "sachsen", optionen: [
+        { t: "Dresden", ru: "Дрезден", ok: true, warum: "Richtig! In Dresden arbeiten die Landesregierung und der Landtag. Dort stehen auch die Frauenkirche und der Zwinger.", warumRu: "Правильно! В Дрездене работают правительство и парламент земли. Там же Фрауэнкирхе и Цвингер." },
+        { t: "Leipzig", ru: "Лейпциг", ok: false, warum: "Leipzig ist die größte Stadt, aber nicht die Hauptstadt. Hauptstadt ist Dresden.", warumRu: "Лейпциг — самый большой город, но не столица. Столица — Дрезден." },
+        { t: "Berlin", ru: "Берлин", ok: false, warum: "Berlin ist die Hauptstadt von Deutschland. Sachsens Hauptstadt ist Dresden.", warumRu: "Берлин — столица Германии. Столица Саксонии — Дрезден." }] },
+      { typ: "wahl", frage: "Welcher Fluss fließt durch Dresden?", ru: "Какая река течёт через Дрезден?", bild: "🌊", optionen: [
+        { t: "die Elbe", ru: "Эльба", ok: true, warum: "Genau! Die Elbe kommt aus Tschechien und fließt durch Dresden weiter nach Norden bis zur Nordsee.", warumRu: "Точно! Эльба течёт из Чехии через Дрезден на север, до Северного моря." },
+        { t: "der Rhein", ru: "Рейн", ok: false, warum: "Der Rhein fließt im Westen Deutschlands. Durch Dresden fließt die Elbe.", warumRu: "Рейн течёт на западе Германии. Через Дрезден течёт Эльба." },
+        { t: "die Donau", ru: "Дунай", ok: false, warum: "Die Donau fließt durch Süddeutschland. Durch Dresden fließt die Elbe.", warumRu: "Дунай течёт по югу Германии. Через Дрезден течёт Эльба." }] },
+      { typ: "zuordnen", frage: "Wohin gehört das?", ru: "К чему это относится?",
+        gruppen: [{ id: "e", name: "Erzgebirge", ru: "Рудные горы", bild: "⛰️" }, { id: "l", name: "Lausitz (Sorben)", ru: "Лужица (сорбы)", bild: "🥚" }],
+        dinge: [
+          { t: "Räuchermännchen und Nussknacker", ru: "Курительные человечки и щелкунчики", gruppe: "e" }, { t: "Schwibbogen im Fenster", ru: "Светильник-арка в окне", gruppe: "e" },
+          { t: "Kunstvoll verzierte Ostereier", ru: "Искусно расписанные пасхальные яйца", gruppe: "l" }, { t: "Vogelhochzeit am 25. Januar", ru: "Птичья свадьба 25 января", gruppe: "l" }] },
+      { typ: "daumen", satz: "Die Sorben haben eine eigene Sprache. In der Lausitz stehen viele Ortsschilder auf Deutsch und Sorbisch.", satzRu: "У сорбов свой язык. В Лужице многие таблички с названиями мест на немецком и сорбском.", bild: "🪧", ok: true,
+        warum: "Stimmt! Zum Beispiel Bautzen heißt auf Sorbisch Budyšin.", warumRu: "Верно! Например, Бауцен по-сорбски — Будышин." },
+      { typ: "wahl", frage: "Auf einer Karte ist 1 cm so lang wie 10 km. Leipzig und Dresden sind auf der Karte etwa 10 cm voneinander entfernt. Wie weit ist das ungefähr?", ru: "На карте 1 см — это 10 км. Лейпциг и Дрезден на карте примерно в 10 см друг от друга. Это сколько примерно?", bild: "📏", optionen: [
+        { t: "etwa 100 km", ru: "около 100 км", ok: true, warum: "Richtig! 10 · 10 km = 100 km. In echt sind es rund 100 km Luftlinie.", warumRu: "Правильно! 10 · 10 км = 100 км. В реальности около 100 км по прямой." },
+        { t: "etwa 10 km", ru: "около 10 км", ok: false, warum: "Jeder Zentimeter sind 10 km. 10 cm sind also 10 · 10 km = 100 km.", warumRu: "Каждый сантиметр — 10 км. Значит, 10 см — это 10 · 10 км = 100 км." },
+        { t: "etwa 1000 km", ru: "около 1000 км", ok: false, warum: "Das wäre viel zu weit – so weit ist es bis nach Italien. 10 cm sind 100 km.", warumRu: "Это слишком далеко — это как до Италии. 10 см — это 100 км." }] },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Klasse, {name}! Such auf einer Karte deinen Wohnort. Wie weit ist es bis Dresden?",
+        ru: "Класс, {name}! Найди на карте свой город. Как далеко до Дрездена?" }
     ]
   }
 ];
