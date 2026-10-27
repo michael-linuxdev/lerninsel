@@ -1,4 +1,5 @@
-// Baut die Pixel-Probe (PixiJS) nach spiele/probe/ (eine Datei mit eingebündelter Engine).
+// Baut die Pixel-Probe (spiele/probe/) und die Pixel-Insel (spiele/pixel/) mit PixiJS (je eine Datei mit eingebündelter Engine).
+// Aufruf: ENGINES=<ordner> node quellen/probe/bauen.js [pixel|insel]
 // Verglichen wurden am 27.10.2026 auch PixiJS 2D/isometrisch, Babylon.js und PlayCanvas; der Auftraggeber hat auf
 // „rund wie heute (three.js)“ oder „Pixel“ eingegrenzt, die anderen Proben wurden deshalb wieder entfernt.
 // Die Engines liegen NICHT im Repo; sie werden als Quellcode von GitHub geholt (npm ist in der Arbeitsumgebung gesperrt):
@@ -32,14 +33,16 @@ export default class W { constructor() { url = url || URL.createObjectURL(new Bl
 };
 const nur = process.argv[2];
 (async () => {
-  for (const name of ["pixel"]) {
+  // Ziele: Pixel-Probe (Vergleich der Looks) und Pixel-Insel (NA-26); beide nutzen quellen/pixel/zeichnen.js
+  const ZIELE = { pixel: ["quellen/probe/pixel.js", "spiele/probe/pixel.js"], insel: ["quellen/pixel/insel.js", "spiele/pixel/insel.js"] };
+  for (const [name, [quelle, ziel]] of Object.entries(ZIELE)) {
     if (nur && nur !== name) continue;
-    const ein = path.join(__dirname, name + (fs.existsSync(path.join(__dirname, name + ".ts")) ? ".ts" : ".js"));
+    const ein = path.join(WURZEL, quelle);
     const r = await esbuild.build({
-      entryPoints: [ein], bundle: true, format: "esm", minify: true, target: "es2022", outfile: path.join(WURZEL, "spiele/probe", name + ".js"),
+      entryPoints: [ein], bundle: true, format: "esm", minify: true, target: "es2022", outfile: path.join(WURZEL, ziel),
       loader: LOADER, alias: ALIAS, plugins: [worker], legalComments: "none", metafile: true, ignoreAnnotations: !!E, logLevel: "warning"   // ignoreAnnotations: Pixis „sideEffects“-Liste passt nur zum npm-Paket, nicht zum Quellcode
     });
     const groesse = Object.values(r.metafile.outputs)[0].bytes;
-    console.log(`${name}.js  ${(groesse / 1048576).toFixed(2)} MB`);
+    console.log(`${ziel}  ${(groesse / 1048576).toFixed(2)} MB`);
   }
-})().catch(() => process.exit(1));
+})().catch((f) => { console.error(f.message || f); process.exit(1); });

@@ -211,6 +211,22 @@
     minispieleOffen() { return Spielwelt.offen((profil.daten.medien || {}).fuehrerschein); },
     stufe() { return STUFEN.find(x => x.code === Spielwelt.kind().stufe); },
     land() { return LAENDER.find(x => x.code === Spielwelt.kind().land); },
+    // Zwei Looks der Insel (NA-25): "rund" (three.js) und "pixel" (PixiJS) zeichnen dieselbe Welt – umschalten verliert nichts.
+    // Gemerkt bei den Insel-Einstellungen des Kindes (eltern.insel.look); fehlt der Wert, gilt "rund".
+    // Solange die Pixel-Insel entsteht (NA-26 bis NA-28), soll „Pixel“ nur in /dev und /dev/test wählbar sein; auf der Hauptseite gilt „Rund“.
+    LOOKS: ["rund", "pixel"],
+    // AUS bis zur ersten spielbaren Pixel-Insel (NA-26, spiele/pixel/insel.html); dann auf UMG !== "prod" stellen.
+    lookWaehlbar() { return false; },
+    look() { if (!Spielwelt.lookWaehlbar()) return "rund"; return ((profil.daten.eltern || {}).insel || {}).look === "pixel" ? "pixel" : "rund"; },
+    // Eltern können das Umschalten für das Kind sperren (eltern.insel.lookKind = false); Erwachsene (PIN) dürfen immer
+    lookKindDarf() { return ((profil.daten.eltern || {}).insel || {}).lookKind !== false; },
+    setzeLook(l) {
+      const e = Spielwelt.lade("eltern") || {};
+      e.insel = Object.assign({}, e.insel || {}, { look: l === "pixel" ? "pixel" : "rund" });
+      Spielwelt.speichere("eltern", e); return Spielwelt.look();
+    },
+    // Adresse der Insel im gewählten Look (wurzel = Weg zur Startseite, z. B. "../../")
+    inselUrl(wurzel = "", suche = "") { return wurzel + (Spielwelt.look() === "pixel" ? "spiele/pixel/insel.html" : "spiele/welt3d/heimat.html") + suche; },
     // Hilfesprachen: Inhalte tragen Hilfetexte als Felder je Sprache, z. B. { text, ru, uk } oder { warum, warumRu, warumUk }
     SPRACHEN,
     hilfe() { const c = Spielwelt.kind().hilfesprache; return SPRACHEN.find(x => x.code === c && x.fertig) || null; },

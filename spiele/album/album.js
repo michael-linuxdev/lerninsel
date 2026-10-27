@@ -3,7 +3,7 @@
   const S = window.Spielwelt, ST = window.Sticker, SP = window.Sprache;
   const $ = (id) => document.getElementById(id);
   const q = new URLSearchParams(location.search);
-  if (q.get("von") === "insel") $("zurueck").href = "../welt3d/heimat.html?drinnen=1";
+  if (q.get("von") === "insel") $("zurueck").href = "../insel/?drinnen=1";
   ST.feste();
   const d = ST.daten(), neu = new Set(d.neu);
   ST.gesehen(); // Markierung nur bei diesem Besuch zeigen

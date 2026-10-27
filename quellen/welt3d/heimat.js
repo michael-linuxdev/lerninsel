@@ -10,32 +10,17 @@ import {
   Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, BufferAttribute, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
 } from "../three/three.module.js";
 import { S, SPIELE, istFrei, baumStufe, messe } from "./gemeinsam.js";
-import { erzeuge, BIOME, FARBEN, neuerSeed } from "./welt.js";
+import { BIOME, FARBEN, neuerSeed } from "./welt.js";
 
 const $ = (id) => document.getElementById(id);
 const SP = window.Sprache;
 const q = new URLSearchParams(location.search);
-const jetzt = new Date();
-const STUNDE = q.has("stunde") ? +q.get("stunde") : jetzt.getHours() + jetzt.getMinutes() / 60;
-const MONAT = q.has("monat") ? +q.get("monat") : jetzt.getMonth() + 1;
-const SAISON = [12, 1, 2].includes(MONAT) ? "winter" : [3, 4, 5].includes(MONAT) ? "fruehling" : [9, 10, 11].includes(MONAT) ? "herbst" : "sommer";
-// ---------- Eigene Welt (Wünsche + seed, siehe welt.js); ohne gespeicherte Welt: die bisherige Insel ----------
-// Test: ?biom=wald&groesse=gross&huegel=viel&see=1&seed=7
-const WELT_DATEN = S.lade("welt") || {};
-const WUNSCH = q.has("biom") ? { biom: q.get("biom"), groesse: q.get("groesse") || "mittel", huegel: q.get("huegel") || "mittel", see: q.get("see") === "1", blumen: q.get("blumen") !== "0", farbe: q.get("farbe") ? "#" + q.get("farbe") : undefined, seed: +q.get("seed") || 1 }
-  : (WELT_DATEN.welten || [])[WELT_DATEN.aktiv] || null;
-const WELT = erzeuge(WUNSCH), P = WELT.plaetze;
-const ZX_GRENZE = 40;   // ab hier liegt das Zimmer (x ≈ 60), dort ist der Boden immer flach
-// Bodenhöhe für Figuren und Dinge (bisherige Insel: überall 0.25)
-function bodenY(x, z) {
-  if (WELT.insel || x > ZX_GRENZE) return 0.25;
-  const d = Math.hypot(x, z);
-  if (d <= WELT.rand) return 0.25 + WELT.hoehe(x, z);
-  if (d <= WELT.R) { const t = (d - WELT.rand) / (WELT.R - WELT.rand); return 0.25 - t * t * 0.35; }
-  return -0.1 - Math.min(1.1, (d - WELT.R) * 1.4);
-}
+// ---------- Insel-Kern (NA-24): Welt, Orte, Regeln und Story kommen aus shared/insel-kern.js; diese Datei zeichnet nur ----------
+// Eigene Welt: Wünsche + seed (Test: ?biom=wald&groesse=gross&huegel=viel&see=1&seed=7); ohne gespeicherte Welt die bisherige Insel.
+const K = window.InselKern, KI = K.erstelle(q);
+const { STUNDE, MONAT, SAISON, NACHT, DAEMMER } = K.zeit(q);
+const { WELT, P, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, ZX } = KI;
 const WINTERLICH = SAISON === "winter" || WELT.biom === "schnee";
-const NACHT = STUNDE >= 20 || STUNDE < 6.5, DAEMMER = !NACHT && (STUNDE >= 18 || STUNDE < 8);
 const GRAFIK_KEY = "lerninsel.grafik";
 const lies = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 // Insel-Einstellungen (Grafik, Steuerung, Kamera) werden pro Kind bei den Eltern-Daten gemerkt.
@@ -94,13 +79,10 @@ const tippbar = [];     // Object3D mit userData.tipp()
 const block = (x, z, r) => hindernisse.push({ x, z, r });
 // Zeitsystem: ohne Spielzeit ist die Insel im Lernmodus (Lern-Nachbarn gehen, Spielorte schlafen)
 const Z = window.Zeit;
-const spielZeit = () => !Z || Z.status().spielen;
-const profi = () => S.offen((S.lade("medien") || {}).fuehrerschein);
+const spielZeit = K.spielZeit, profi = K.profi;
 function spielOrt(fn) {
   if (spielZeit()) { fn(); return; }
-  const st = Z.status();
-  sprechblase("💤", "Schläft noch", st.genug ? "Für heute ist genug gespielt. Morgen geht es weiter!" : `Erst lernen, dann spielen! Noch ${st.fehltMin} Minuten oder ${st.fehltAufgaben} Aufgaben. Ella, Fipsi und Biber Benno helfen dir.`,
-    S.paar(["", "Сначала учиться, потом играть! Элла, Фипси и бобр Бенно помогут тебе."])[1], null);
+  sprechblase(...K.schlaeftText(), null);
 }
 // aktion = Beschriftung des Aktionsknopfs, wenn die Figur nah davor steht; nah = Reichweite
 function antippbar(obj, fn, aktion = ["👀", "Ansehen"], nah = 1.9) { Object.assign(obj.userData, { tipp: fn, aktion, nah }); tippbar.push(obj); }
@@ -248,8 +230,6 @@ function verschmelze(gruppe) {
 }
 // ---------- Steg mit Pixels Boot (Ankunft im Prolog, NA-11) ----------
 // Liegt am Südufer (zur Kamera hin), damit die Ankunft gleich zu sehen ist. Wird mit der Deko verschmolzen.
-const UFER = WELT.insel ? 15.2 : WELT.R, RMAX_LAUF = WELT.insel ? 14.6 : WELT.R - 0.6;
-const STEG = { x: 3.2, z0: UFER - 2.2, z1: UFER + 2.4 };
 {
   const laenge = STEG.z1 - STEG.z0, mz = (STEG.z0 + STEG.z1) / 2;
   deko.add(setze(teil(new BoxGeometry(1.4, 0.14, laenge), "#C8955B"), STEG.x, 0.2, mz));
@@ -262,7 +242,6 @@ const STEG = { x: 3.2, z0: UFER - 2.2, z1: UFER + 2.4 };
 }
 // ---------- Sonnenuhr am Steg (NA-13): dunkel ohne Spielzeit, hell mit Spielzeit ----------
 // „Die Sonne für die Spielorte – sie geht auf, wenn du gelernt hast.“ Fortschritt des Lernblocks färbt die Sonne langsam gelb.
-const SU = { x: STEG.x + 2.1, z: Math.min(RMAX_LAUF - 1.1, STEG.z0 + 0.6) };
 {
   const y = bodenY(SU.x, SU.z);
   deko.add(setze(teil(new CylinderGeometry(0.42, 0.5, 0.7, 14), "#D9CDB8"), SU.x, y + 0.35, SU.z));
@@ -275,25 +254,14 @@ verschmelze(deko);
 const sonnenMat = new MeshBasicMaterial({ color: "#7E7A92" });
 const uhrSonne = setze(new Mesh(kugel(0.22, 16, 12), sonnenMat), SU.x - 0.5, bodenY(SU.x, SU.z) + 1.6, SU.z); scene.add(uhrSonne);
 const SONNE_DUNKEL = new Color("#7E7A92"), SONNE_HELL = new Color("#FFC83D");
-// Zustand für die Sonnenuhr: hell 0…1 (1 = Spielzeit), genug = für heute genug gespielt
-function sonnenuhr() {
-  const Zt = window.Zeit; if (!Zt) return { hell: 1, spielen: true, genug: false };
-  const st = Zt.status();
-  return { hell: st.spielen ? 1 : st.genug ? 0 : Math.round(st.fortschritt * 100) / 100, spielen: st.spielen, genug: st.genug };
-}
+const sonnenuhr = K.sonnenuhr;   // Zustand: hell 0…1 (1 = Spielzeit), genug = für heute genug gespielt
 function zeigeSonnenuhr() { const u = sonnenuhr(); sonnenMat.color.copy(SONNE_DUNKEL).lerp(SONNE_HELL, u.spielen ? 1 : u.hell * 0.6); uhrSonne.scale.setScalar(u.spielen ? 1.25 : 1); }
 zeigeSonnenuhr(); setInterval(zeigeSonnenuhr, 5000);
 
 // ---------- Nebelrand (NA-13): die Insel liegt im Nebel, der Wissensbaum vertreibt ihn ----------
 // Stufe = höchstes von Kapitel und Lernfunden (1 / 5 / 15 Funde) → bestehende Kinder mit vielen Funden sehen keinen Nebel.
 // Kostet höchstens 1 Zeichenaufruf (ein Nebelband über dem Wasser) plus die Szene-Fog-Werte.
-const NEBEL = [ { near: 16, far: 44, r: UFER + 3.2, a: 0.85 }, { near: 21, far: 54, r: UFER + 7, a: 0.6 }, { near: 26, far: 66, r: UFER + 12, a: 0.35 }, { near: 32, far: 80, r: 0, a: 0 } ];
-function nebelStufe() {
-  const St = window.Story; if (!St) return 3;
-  // Lernfunde zählen erst, wenn Ella den Wissensbaum erklärt hat (E3) – so sieht ein neues Kind den Nebel weichen
-  const n = St.etappe("E3") && window.Lernfunde ? window.Lernfunde.gesamt() : 0;
-  return Math.min(3, Math.max(St.kapitel(), n >= 15 ? 3 : n >= 5 ? 2 : n >= 1 ? 1 : 0));
-}
+const NEBEL = KI.NEBEL, nebelStufe = K.nebelStufe;
 let nebelJetzt = nebelStufe(), nebelBasis = { near: 32, far: 80 }, nebelDrinnen = false;
 const nebelBand = (() => {
   const g = new CylinderGeometry(1, 1, 1.6, EINFACH ? 32 : 64, 1, true), farben = [];
@@ -339,7 +307,7 @@ const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" :
   h.add(setze(teil(new BoxGeometry(0.8, 1.3, 0.12), "#9A6A3F", { dicke: 1.08 }), 0, 0.65, 1.7));
   [0.95, -0.95].forEach(x => h.add(setze(teil(new BoxGeometry(0.7, 0.7, 0.1), fensterMat, { dicke: 1.1 }), x, 1.5, 1.7)));
   h.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.9, 16), "#B9584A"), 0.9, 3.5, -0.5));
-  h.position.set(P.haus[0], bodenY(P.haus[0], P.haus[1]), P.haus[1]); h.rotation.y = WELT.insel ? 0.35 : P.haus[2]; scene.add(h); block(P.haus[0], P.haus[1], 2.3);
+  h.position.set(P.haus[0], bodenY(P.haus[0], P.haus[1]), P.haus[1]); h.rotation.y = KI.HAUS_DREH; scene.add(h); block(P.haus[0], P.haus[1], 2.3);
   antippbar(h, () => prolog ? reingehen() : spielOrt(() => reingehen()), ["🚪", "Reingehen"], 3.4);
   hausObj = h;
 }
@@ -366,11 +334,8 @@ if (WINTERLICH && !EINFACH) {
 
 // ---------- Echtes Wetter (Open-Meteo, Ort aus dem Elternbereich, kein GPS) ----------
 // Cache 30 Minuten in localStorage; offline bleibt das Jahreszeiten-Wetter. Test: ?wetter=regen|schnee|nebel|wolken|gewitter|klar
-const WETTER_KEY = "lerninsel.wetter", ORT = S.kind().ort;
-const WETTER_ART = (c) => c == null ? null : c === 0 ? "klar" : c <= 3 ? (c === 3 ? "wolken" : "heiter") : c <= 48 ? "nebel" : c <= 67 || (c >= 80 && c <= 82) ? "regen" : c <= 77 || c === 85 || c === 86 ? "schnee" : c >= 95 ? "gewitter" : "wolken";
-const WETTER_TEXT = { klar: ["☀️", "Sonne pur", "солнечно"], heiter: ["🌤️", "ein paar Wolken", "немного облаков"], wolken: ["☁️", "bewölkt", "облачно"], nebel: ["🌫️", "Nebel", "туман"], regen: ["🌧️", "Regen", "дождь"], schnee: ["❄️", "Schnee", "снег"], gewitter: ["⛈️", "Gewitter", "гроза"] };
+// Abruf, Cache und Texte im Insel-Kern; hier nur das Einfärben von Himmel, Licht, Wolken, Regen und Schnee.
 let wetter = null, regen = null, blitz = 0; const SONNE_BASIS = sonne.intensity;
-function wetterCache() { try { const w = JSON.parse(lies(WETTER_KEY)); return w && ORT && w.lat === ORT.lat && w.lon === ORT.lon ? w : null; } catch (e) { return null; } }
 function wendeWetterAn(w) {
   wetter = w; const art = w.art;
   sonne.intensity = SONNE_BASIS * ({ wolken: 0.7, nebel: 0.6, regen: 0.5, gewitter: 0.4, schnee: 0.75 }[art] || 1);
@@ -392,28 +357,13 @@ function wendeWetterAn(w) {
   }
   if (art !== "schnee" && art !== "regen" && schnee && SAISON === "winter" && w.temp > 3) { scene.remove(schnee); schnee = null; } // kein Schneefall bei Plusgraden ohne Schnee-Wetter
 }
-function wetterSticker(w) { if (window.Sticker && w && w.art) { window.Sticker.entdecke("w-" + (w.art === "heiter" ? "wolken" : w.art)); if (NACHT) window.Sticker.entdecke("w-mond"); } }
-function wetterSatz() {
-  if (!wetter) return null;
-  const [e, txt] = WETTER_TEXT[wetter.art] || WETTER_TEXT.wolken;
-  return `${e} In ${wetter.ort}: ${Math.round(wetter.temp)} °C, ${txt}`;
-}
-async function holeWetter() {
-  if (!ORT || ORT.lat == null || !navigator.onLine) return;
-  try {
-    const st = new AbortController(); setTimeout(() => st.abort(), 6000);
-    const a = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${ORT.lat}&longitude=${ORT.lon}&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto`, { signal: st.signal });
-    const c = (await a.json()).current; if (!c) return;
-    const w = { lat: ORT.lat, lon: ORT.lon, ort: ORT.name, zeit: Date.now(), temp: c.temperature_2m, wind: c.wind_speed_10m, code: c.weather_code, art: WETTER_ART(c.weather_code) };
-    try { localStorage.setItem(WETTER_KEY, JSON.stringify(w)); } catch (e) {}
-    wendeWetterAn(w); zeigeWetterInfo(); wetterSticker(w);
-  } catch (e) { /* offline: Jahreszeiten-Wetter bleibt */ }
-}
+const wetterSticker = (w) => K.wetterSticker(w, NACHT);
+const wetterSatz = () => K.wetterSatz(wetter);
+async function holeWetter() { const w = await K.holeWetter(); if (w) { wendeWetterAn(w); zeigeWetterInfo(); wetterSticker(w); } }
 {
-  const test = q.get("wetter"), c = wetterCache();
-  if (test) wendeWetterAn({ ort: (ORT && ORT.name) || "Testhausen", temp: test === "schnee" ? -2 : 14, wind: 12, art: test });
-  else if (c) { wendeWetterAn(c); setTimeout(() => wetterSticker(c), 1500); if (Date.now() - c.zeit > 30 * 60000) holeWetter(); }
-  else holeWetter();
+  const st = K.startWetter(q);
+  if (st.sofort) { wendeWetterAn(st.sofort); if (st.cache) setTimeout(() => wetterSticker(st.sofort), 1500); }
+  if (st.holen) holeWetter();
 }
 
 // Wetterstation neben dem Haus: Hütte, Thermometer, Windrad
@@ -427,13 +377,7 @@ station.add(setze(new Mesh(kugel(0.06, 10, 8), mat("#E0574A")), 0.5, 1.62, 0.05)
 const windrad = new Group(); windrad.position.set(0, 2.75, 0); station.add(windrad);
 windrad.add(setze(teil(new CylinderGeometry(0.02, 0.02, 0.4, 6), "#6B6B7A"), 0, -0.2, 0));
 [0, 1, 2].forEach(i => { const b = new Group(); b.rotation.y = i * Math.PI * 2 / 3; const sch = teil(kugel(0.1, 12, 8), ["#FFD84D", "#5CCBA6", "#7B9BFF"][i], { dicke: 1.1 }); sch.scale.set(1, 0.6, 1); b.add(setze(sch, 0.24, 0, 0)); b.add(setze(new Mesh(new BoxGeometry(0.22, 0.02, 0.02), mat("#6B6B7A")), 0.12, 0, 0)); windrad.add(b); });
-antippbar(station, () => {
-  if (!ORT || ORT.lat == null) return sprechblase("🌦️", "Die Wetterstation", "Hier siehst du das echte Wetter bei dir zu Hause. Frag deine Eltern, ob sie im Elternbereich euren Ort eintragen.", S.paar(["", "Здесь видно настоящую погоду у тебя дома. Попроси родителей вписать ваш город в разделе для родителей."])[1], null);
-  if (!wetter) return sprechblase("🌦️", "Die Wetterstation", `Die Station hat noch keine Nachricht aus ${ORT.name}. Mit Internet klappt es beim nächsten Mal.`, S.paar(["", "Станция ещё не получила данные. С интернетом получится в следующий раз."])[1], null);
-  const [, txt, ru] = WETTER_TEXT[wetter.art] || WETTER_TEXT.wolken, tp = Math.round(wetter.temp);
-  const tipp = wetter.art === "regen" || wetter.art === "gewitter" ? "Nimm draußen eine Regenjacke mit!" : tp <= 3 ? "Brr! Mütze und Handschuhe nicht vergessen." : tp >= 26 ? "Heiß! Trink viel Wasser und denk an die Sonnencreme." : wetter.art === "klar" ? "Ein schöner Tag zum Rausgehen!" : "Zieh dich passend an, wenn du rausgehst.";
-  sprechblase("🌦️", `Wetter in ${wetter.ort}`, `Draußen sind es ${tp} Grad, ${txt}. Wind: ${Math.round(wetter.wind || 0)} km/h. ${tipp}`, S.paar(["", `На улице ${tp} градусов, ${ru}.`])[1], null);
-}, ["🌦️", "Ansehen"]);
+antippbar(station, () => zeigeAntwort(K.antwort("station", { wetter })), ...K.aktionFuer("station"));
 
 // ---------- Wehendes Gras ----------
 let halme = null; const halmDaten = [];
@@ -706,35 +650,22 @@ function tafel(text, farbe) {
   return g;
 }
 const name = S.profil.name || "du";
-const NACHBARN = [
-  { bau: eule, x: P.eule[0], z: P.eule[1], dreh: P.eule[2], e: "eule", titel: "Eule Ella", text: `Hallo ${name}! Ich weiß spannende Dinge über die Welt. Kommst du mit?`, ru: "Привет! Я знаю много интересного о мире. Пойдёшь со мной?", ziel: "../sachkunde/" },
-  { bau: fipsi, x: P.fipsi[0], z: P.fipsi[1], dreh: P.fipsi[2], e: "fipsi", titel: "Fipsi", text: `Hallo ${name}! Hilfst du mir, meine Schatzkarte zu finden?`, ru: "Привет! Поможешь мне найти мою карту сокровищ?", ziel: "../deutsch/" },
-  // Robo Pixel wohnt am Steg bei seinem Boot: Er hat das Kind hergebracht (Prolog) und begleitet den Tablet-Führerschein.
-  { bau: robo, x: STEG.x - 1.5, z: Math.min(RMAX_LAUF - 0.9, STEG.z0 + 0.9), dreh: 0.3, e: "robo", titel: "Robo Pixel", text: `Piep! Hallo ${name}! Mit meinem Boot habe ich dich hergebracht. Willst du ein Tablet-Profi werden?`, ru: "Пип! Привет! Я привёз тебя на своей лодке. Хочешь стать мастером планшета?", ziel: "../medien/" },
-  { bau: baer, x: P.baer[0], z: P.baer[1], dreh: P.baer[2], e: "baer", titel: "Bärin Bruni", text: `Hallo ${name}! Ich bin Bruni. Bei mir geht es um Gefühle – und ums Bewegen. Kommst du?`, ru: "Привет! Я медведица Бруни. У меня – про чувства и движение. Пойдёшь?", ziel: "../gefuehle/" },
-  { bau: biber, x: P.biber[0], z: P.biber[1], dreh: P.biber[2], e: "biber", titel: "Biber Benno", text: `Hallo ${name}! Ich bin Benno. Ich baue Dämme und zähle jeden Stamm. Rechnest du mit mir auf dem Matheweg?`, ru: "Привет! Я бобр Бенно. Я строю плотины и считаю каждое бревно. Посчитаешь со мной на математической тропе?", ziel: "../mathe/" }
-];
+// Platz und Texte der Nachbarn aus dem Kern; hier nur, wie sie in 3D aussehen
+const BAU_NACHBAR = { eule, fipsi, robo, baer, biber };
+const NACHBARN = KI.nachbarn().map(n => Object.assign(n, { bau: BAU_NACHBAR[n.e] }));
 { const t = tafel("Mathe", "#5CCBA6"), [x, z, d] = P.schild; t.position.set(x, bodenY(x, z), z); t.rotation.y = d; scene.add(t); block(x, z, 0.4); }
 
 // Lernfunde des Tages: Wer heute etwas Neues im Fach gelernt hat, wird vom passenden Nachbarn begrüßt.
 // Die Nachbarn hüpfen dann ab und zu, bis man mit ihnen gesprochen hat (shared/lernfunde.js).
-const FACH = { eule: "sachkunde", fipsi: "deutsch", robo: "tablet", biber: "mathe" };
-const FREUDE = {
-  sachkunde: (f) => [`${name}, heute hast du etwas Neues entdeckt: ${f.t}. Ich bin stolz auf dich! Erzählst du es nachher deiner Familie?`, "Сегодня у тебя новое открытие! Расскажешь потом об этом своей семье?"],
-  deutsch: (f) => [`Juhu, ${name}! Du kennst jetzt: ${f.t.replace(/^Neues Wort: /, "")}. Sag es einmal ganz laut!`, f.r ? `Ура! Теперь ты знаешь: ${f.r}. Скажи это вслух по-немецки!` : "Ура! Ты знаешь новые слова. Скажи их вслух!"],
-  tablet: (f) => [`Piep! Neu in deinem Kopf: ${f.t}. Du wirst ein echter Tablet-Profi!`, "Пип! Ты узнаёшь всё больше о планшете!"],
-  mathe: (f) => [`Super, ${name}! Das hast du heute geschafft: ${f.t.replace(/^Neu geschafft: /, "")}. Ich zähle mit dir weiter!`, "Супер! Сегодня у тебя получилось новое. Считаем дальше вместе!"]
-};
 NACHBARN.forEach(n => {
   const o = n.bau(); n.y = bodenY(n.x, n.z); o.position.set(n.x, n.y, n.z); o.rotation.y = n.dreh; if (n.e !== "🧮") o.scale.multiplyScalar(1.3); scene.add(o); block(n.x, n.z, 0.8);
   n.obj = o;
-  const fach = FACH[n.e], fund = window.Lernfunde && fach ? window.Lernfunde.heuteFach(fach) : null;
+  const fund = K.fundFuer(n.e);
   n.freut = !!fund && n.e !== "🧮";
   const aktion = fund ? ["🌱", n.e === "🧮" ? "Lesen" : "Reden"] : n.e === "🧮" ? ["🧮", "Lesen"] : ["💬", "Reden"];
   antippbar(o, () => {
     o.userData.huepf = 1; n.freut = false;
-    if (fund) { const [de, ru] = FREUDE[fach](fund); sprechblase(n.e, `${n.titel} freut sich`, de, S.paar(["", ru])[1], n.ziel); }
-    else sprechblase(n.e, n.titel, n.text, S.ht(n), n.ziel, n.e === "robo" && window.Story && window.Story.etappe("E1") ? ["🔁 Wie ging das nochmal?", () => starteProlog(true)] : null);
+    zeigeAntwort(K.nachbarAntwort(n));
   }, aktion, 2.3);
 });
 
@@ -742,7 +673,6 @@ NACHBARN.forEach(n => {
 // Wächst mit allen Lernfunden seit Beginn (shared/lernfunde.js), jeder Fund von heute hängt als leuchtende Frucht daran.
 // Ohne Lernen passiert nichts Schlimmes: der Baum bleibt einfach, wie er ist (kein Welken, keine Strafe).
 const WB = new Vector3(P.wissensbaum[0], bodenY(P.wissensbaum[0], P.wissensbaum[1]), P.wissensbaum[1]);
-const FRUCHT = { mathe: "#2FA37C", deutsch: "#E0574A", sachkunde: "#1F8F8A", tablet: "#2F86C8", welt: "#8BC34A", schach: "#7B55B8", kunst: "#FF8A3D", musik: "#3DB8E0" };
 const wissen = (() => {
   const L = window.Lernfunde; if (!L) return null;
   const info = L.baum(), funde = L.heute();
@@ -774,20 +704,12 @@ const wissen = (() => {
   // Richtungen vom Kronen-Mittelpunkt aus, Früchte sitzen knapp außen auf der Krone (vorne zuerst)
   const PL = [[0.6, -0.1, 0.8], [-0.6, 0.15, 0.8], [0.1, 0.65, 0.75], [0.9, 0.25, -0.3], [-0.85, -0.05, -0.4]].map(v => new Vector3(...v).normalize());
   const fruechte = funde.slice(0, PL.length).map((f, i) => {
-    const farbe = f.x ? "#FF5C8A" : f.a === "gemeistert" ? "#FFC83D" : FRUCHT[f.f] || "#FF7A6B";   // einem Erwachsenen erklärt: rosa Herzfrucht
+    const farbe = K.fruchtFarbe(f);
     const m = new Mesh(kugel(0.2, 14, 10), new MeshBasicMaterial({ color: farbe }));
     const v = PL[i], r = 1.0 * k + 0.06; setze(m, v.x * r, 2.15 * k + v.y * r, v.z * r); m.scale.setScalar(0.001); m.userData.verz = 0.6 + i * 0.35; g.add(m);
     return m;
   });
-  const text = () => {
-    const b = L.baum(), h = L.heute();
-    const de = b.summe === 0 ? "Hier wächst dein Wissensbaum. Mit allem, was du Neues lernst, wird er größer!"
-      : `Schon ${b.summe} ${b.summe === 1 ? "Ding" : "Dinge"} gelernt!` + (h.length ? ` Heute ${h.length === 1 ? "hängt eine neue Frucht" : `hängen ${h.length} neue Früchte`} dran: ${h.slice(-2).map(x => x.t.replace(/^Neues Wort: /, "")).join(" · ")}`
-        : " Heute ist noch keine Frucht dazugekommen. Lern etwas Neues, dann wächst eine!") + (b.naechste ? ` Noch ${b.naechste - b.summe} bis der Baum wieder wächst.` : "");
-    const ru = b.summe === 0 ? "Здесь растёт твоё дерево знаний. Чем больше ты узнаёшь, тем больше оно становится!" : `Ты уже узнаёшь так много: ${b.summe}! Каждая новая вещь — новый плод.`;
-    return [de, ru];
-  };
-  antippbar(g, () => { const [de, ru] = text(); sprechblase("🌳", "Dein Wissensbaum", de, S.paar(["", ru])[1], "../ich/"); }, ["🌳", "Ansehen"], 2.2);
+  antippbar(g, () => zeigeAntwort(K.antwort("wissensbaum")), ...K.aktionFuer("wissensbaum"));
   return {
     info, fruechte,
     tick(t) {
@@ -813,13 +735,12 @@ const ballons = new Group(); ballons.position.set(P.ballons[0], bodenY(P.ballons
   b.position.set(Math.cos(a) * 0.45, 2.3 + (i % 2) * 0.35, Math.sin(a) * 0.45); b.userData.p = i; ballons.add(b);
 });
 ballons.add(setze(teil(new CylinderGeometry(0.12, 0.16, 0.5, 12), "#9A6A3F"), 0, 0.25, 0));
-const fuehrerscheinFehlt = () => sprechblase("🪪", "Noch gesperrt", "Mach zuerst den Tablet-Führerschein bei Robo Pixel. Dann darfst du hier spielen!", S.paar(["", "Сначала получи права на планшет у Робо Пикселя."])[1], "../medien/");
-antippbar(ballons, () => spielOrt(() => profi() ? sprechblase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", S.paar(["", "Лопни как можно больше шариков!"])[1], "ballons.html") : fuehrerscheinFehlt()), ["🎈", "Spielen"]);
+antippbar(ballons, () => zeigeAntwort(K.antwort("ballons")), ...K.aktionFuer("ballons"));
 const truhe = new Group(); truhe.position.set(P.truhe[0], WELT.insel ? 0.05 : bodenY(P.truhe[0], P.truhe[1]) - 0.15, P.truhe[1]); truhe.rotation.y = WELT.insel ? 0 : Math.atan2(-P.truhe[0], -P.truhe[1]); scene.add(truhe);
 truhe.add(setze(teil(new BoxGeometry(0.9, 0.5, 0.6), "#B9732E"), 0, 0.25, 0));
 const deckel = teil(new CylinderGeometry(0.3, 0.3, 0.9, 16, 1, false, 0, Math.PI), "#C98A3E"); deckel.rotation.z = Math.PI / 2; setze(deckel, 0, 0.5, 0); truhe.add(deckel);
 truhe.add(setze(teil(new BoxGeometry(0.16, 0.2, 0.05), "#FFC83D", { dicke: 1.1 }), 0, 0.45, 0.32));
-antippbar(truhe, () => spielOrt(() => profi() ? sprechblase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", S.paar(["", "На острове сокровищ ждёт сундук. Найдёшь его?"])[1], "insel.html") : fuehrerscheinFehlt()), ["🔓", "Öffnen"]);
+antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe"));
 
 // ---------- Schachtisch mit Schildkröte Tilda (Lernen, daher auch ohne Spielzeit) ----------
 {
@@ -834,7 +755,7 @@ antippbar(truhe, () => spielOrt(() => profi() ? sprechblase("🏝️", "Schatz-S
   t.add(setze(teil(new CylinderGeometry(0.43, 0.43, 0.08, 18), "#E8D9A0"), 0, 0.17, 0));
   const kopf = new Group(); kopf.position.set(0, 0.32, 0.5); t.add(kopf); kopf.add(teil(kugel(0.17, 14, 10), "#8FD06A")); augen(kopf, 0.07, 0.04, 0.14, 0.035);
   [[-0.3, 0.35], [0.3, 0.35], [-0.3, -0.35], [0.3, -0.35]].forEach(([fx, fz]) => t.add(setze(teil(kugel(0.1, 10, 8), "#8FD06A"), fx, 0.07, fz)));
-  antippbar(g, () => sprechblase("🐢", "Tilda am Schachtisch", `Hallo ${name}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, S.paar(["", "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?"])[1], "../schach/"), ["♟️", "Schach"], 2.4);
+  antippbar(g, () => zeigeAntwort(K.antwort("schach")), ...K.aktionFuer("schach"));
 }
 
 // ---------- Bühne mit Papagei Paula: spielt die eigene Melodie aus dem Atelier, alle tanzen ----------
@@ -864,28 +785,13 @@ const paula = (() => {
   });
   const note = schildSprite("🎵"); note.position.set(0, 2.3, 0); g.add(note); g.userData.note = note;
   paula.position.set(0, 0.3, 0); g.add(paula);
-  let ctx = null;
-  const TOENE = [523.25, 587.33, 659.25, 698.46, 783.99, 880.0, 987.77, 1046.5];
-  function klang(f, wann) {
-    try { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === "suspended") ctx.resume(); } catch (e) { return; }
-    const t = ctx.currentTime + wann, o = ctx.createOscillator(), v = ctx.createGain(); o.type = "sine"; o.frequency.value = f;
-    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(0.4, t + 0.01); v.gain.exponentialRampToValueAtTime(0.0001, t + 0.8);
-    o.connect(v).connect(ctx.destination); o.start(t); o.stop(t + 0.85);
-  }
-  const SCHRITT = 380;
-  function spiele(mel) {
-    const runden = 2; tanzBis = performance.now() + mel.length * runden * SCHRITT + 400;
-    for (let r = 0; r < runden; r++) mel.forEach((ton, i) => {
-      const w = (r * mel.length + i) * SCHRITT;
-      if (ton >= 0) klang(TOENE[ton], w / 1000);
-      setTimeout(() => { NACHBARN.forEach(n => { if (n.obj) n.obj.userData.huepf = 1; }); paula.userData.huepf = 1; }, w);
-    });
-  }
+  // Melodie und Texte aus dem Insel-Kern; hier tanzen alle mit
   antippbar(g, () => {
-    const m = ((S.lade("atelier") || {}).musik || {}).melodien || [];
-    if (m.length) { spiele(m[0]); sprechblase("papagei", "Paula auf der Bühne", `Hör mal, ${name}! Das ist deine eigene Melodie – und alle tanzen dazu!`, S.paar(["", "Послушай! Это твоя мелодия – и все танцуют!"])[1], "../atelier/?musik"); if (SP && SP.stopp) setTimeout(() => SP.stopp(), 10); }
-    else sprechblase("papagei", "Paula auf der Bühne", `Hallo ${name}! Erfinde im Atelier deine eigene Melodie. Dann spiele ich sie hier – und alle tanzen dazu!`, S.paar(["", "Придумай свою мелодию в ателье – и все будут танцевать!"])[1], "../atelier/?musik");
-  }, ["🎵", "Musik"], 2.6);
+    const a = K.antwort("buehne");
+    if (a.melodie) { tanzBis = performance.now() + K.spieleMelodie(a.melodie, () => { NACHBARN.forEach(n => { if (n.obj) n.obj.userData.huepf = 1; }); paula.userData.huepf = 1; }); }
+    zeigeAntwort(a);
+    if (a.melodie && SP && SP.stopp) setTimeout(() => SP.stopp(), 10);
+  }, ...K.aktionFuer("buehne"));
 }
 
 // ---------- Neue Minispiel-Orte: öffnen sich, wenn der Wissensbaum wächst ----------
@@ -920,32 +826,16 @@ const ORT_BAU = {
     return g;
   }
 };
-const BALD = new Set([]);   // Spiele, die noch entstehen
-const ORT_TEXT = {
-  lauf: ["Der Sternenlauf", "Lauf so schnell du kannst und sammle Sterne! Wische, um auszuweichen.", "Беги и собирай звёзды!", "lauf.html"],
-  kart: ["Die Kart-Bahn", "Fahr ein Rennen mit deinem Kart!", "Гонка на карте!", "kart.html"],
-  bau: ["Der Bauplatz", "Bau mit bunten Steinen, was du willst!", "Строй из цветных кубиков что хочешь!", "bau.html"]
-};
 ["lauf", "kart", "bau"].forEach(id => {
   const [x, z] = P[id], o = ORT_BAU[id](); o.position.set(x, bodenY(x, z), z); o.rotation.y = Math.atan2(-x, -z); scene.add(o); block(x, z, 1.2);
   const frei = istFrei(id), info = SPIELE[id];
   if (!frei) { const sp = schildSprite("🔒"); sp.position.set(0, 3.2, 0); o.add(sp); o.traverse(m => { if (m.material && m.material.color && !m.isSprite) { m.material = m.material.clone(); m.material.color.lerp(new Color("#B9B4C6"), 0.55); } }); }
-  const [titel, de, ru, ziel] = ORT_TEXT[id];
-  antippbar(o, () => {
-    if (!frei) {
-      const brauch = window.Lernfunde ? window.Lernfunde.STUFEN[info.stufe - 1] : 0, hat = window.Lernfunde ? window.Lernfunde.gesamt() : 0;
-      sprechblase("🌳", `${info.e} ${info.name} – noch zu`, `Dieser Ort öffnet sich, wenn dein Wissensbaum wächst. Noch ${Math.max(1, brauch - hat)} ${brauch - hat === 1 ? "Lernfund" : "Lernfunde"} – lern etwas Neues bei Ella, Fipsi oder Benno!`,
-        S.paar(["", "Это место откроется, когда вырастет твоё дерево знаний. Узнай что-нибудь новое!"])[1], null);
-      return;
-    }
-    if (BALD.has(id)) { sprechblase("🚧", titel, "Hier wird noch gebaut! Bald kannst du hier spielen.", S.paar(["", "Здесь ещё строят! Скоро можно будет играть."])[1], null); return; }
-    spielOrt(() => profi() ? sprechblase(info.e, titel, de, S.paar(["", ru])[1], ziel) : fuehrerscheinFehlt());
-  }, frei ? [info.e, "Spielen"] : ["🔒", "Ansehen"], 2.4);
+  antippbar(o, () => zeigeAntwort(K.antwort(id)), ...K.aktionFuer(id));
 });
 
 
 // ---------- Zimmer im Haus (eigener Bereich weit weg von der Insel) ----------
-const ZX = 60; // Mitte des Zimmers
+// ZX (Mitte des Zimmers) kommt aus dem Kern
 let drinnen = false;
 const zimmer = new Group(); zimmer.position.set(ZX, 0, 0); scene.add(zimmer);
 const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlauf }), WAND_SEITE = new MeshToonMaterial({ color: "#FFE9C2", gradientMap: verlauf });
@@ -968,20 +858,20 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
   album.add(setze(teil(new BoxGeometry(0.62, 0.1, 0.48), "#E0457B", { dicke: 1.05 }), 0, 0, 0));
   album.add(setze(new Mesh(new BoxGeometry(0.56, 0.11, 0.42), mat("#FFF6E8")), 0.02, 0, 0));
   album.add(setze(new Mesh(kugel(0.07, 10, 8), mat("#FFD84D")), 0.05, 0.07, 0.02));
-  antippbar(album, () => { const s = window.Sticker && window.Sticker.stand(); sprechblase("📒", "Dein Stickeralbum", s ? `Du hast schon ${s.hat} von ${s.gesamt} Stickern${s.neu ? ` – ${s.neu} neue warten auf dich` : ""}!` : "Hier sammelst du deine Sticker.", S.paar(["", "Здесь ты собираешь наклейки."])[1], "../album/?von=insel"); }, ["📒", "Album"], 1.6);
-  antippbar(bett, () => sprechblase("🛏️", "Dein Bett", tier ? `Hier kuschelt ${tierDaten.name || "dein Tier"}, wenn es müde ist.` : "Ein gemütliches Bett. Mit dem Knopf „Einrichten“ machst du dein Zimmer schön.", S.paar(["", "Уютная кровать."])[1], null), ["🛏️", "Ansehen"], 2.2);
+  antippbar(album, () => zeigeAntwort(K.antwort("album")), ...K.aktionFuer("album"));
+  antippbar(bett, () => zeigeAntwort(K.antwort("bett", { tier: tier ? tierDaten.name || "dein Tier" : null })), ...K.aktionFuer("bett"));
   // Kleiderschrank
   const schrank = new Group(); schrank.position.set(2.8, 0.25, -3.0); zimmer.add(schrank);
   schrank.add(setze(teil(new BoxGeometry(2.0, 2.6, 0.9), "#C2337A", { dicke: 1.03 }), 0, 1.3, 0));
   [-0.48, 0.48].forEach(x => { schrank.add(setze(teil(new BoxGeometry(0.9, 2.3, 0.06), "#E0579A", { dicke: 1.02 }), x, 1.3, 0.47)); schrank.add(setze(teil(kugel(0.07), "#FFC83D", { dicke: 1.15 }), x * 0.25, 1.35, 0.53)); });
   schrank.add(setze(teil(new BoxGeometry(0.5, 0.3, 0.05), "#FFFFFF", { dicke: 1.08 }), 0, 2.35, 0.52));
   block(ZX + 2.8, -3.0, 1.2);
-  antippbar(schrank, () => sprechblase("👗", "Dein Kleiderschrank", "Such dir etwas Schönes zum Anziehen aus. Auf der Insel trägst du es dann!", S.paar(["", "Выбери что-нибудь красивое из одежды!"])[1], "../anziehen/?von=insel"), ["🚪", "Öffnen"], 2.0);
+  antippbar(schrank, () => zeigeAntwort(K.antwort("schrank")), ...K.aktionFuer("schrank"));
   // Spiegel
   const spiegel = new Group(); spiegel.position.set(-4.05, 1.7, 1.0); spiegel.rotation.y = Math.PI / 2; zimmer.add(spiegel);
   const rahmen = teil(new TorusGeometry(0.55, 0.08, 10, 30), "#FFC83D"); rahmen.scale.y = 1.4; spiegel.add(rahmen);
   const glas = new Mesh(new CircleGeometry(0.52, 30), new MeshBasicMaterial({ color: "#CFEFFF" })); glas.scale.y = 1.4; glas.position.z = 0.02; spiegel.add(glas);
-  antippbar(spiegel, () => sprechblase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, was du gut kannst, und deine Pokale.", S.paar(["", "Посмотри, как ты выросла!"])[1], "../ich/"), ["🪞", "Reinschauen"], 1.6);
+  antippbar(spiegel, () => zeigeAntwort(K.antwort("spiegel")), ...K.aktionFuer("spiegel"));
   // Pinnwand: Lernfunde der letzten 7 Tage als Zettel (heute mit Glanz), Antippen zeigt die Liste
   {
     const L = window.Lernfunde, funde = L ? L.letzteTage(7) : [], heute = L ? L.heute().length : 0;
@@ -1051,29 +941,23 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
   block(ZX + 3.4, 2.4, 0.5);
 }
 // ---------- Zimmer einrichten: Möbel mit Sternen kaufen und auf Plätze stellen ----------
-const PLAETZE = [
-  { id: "fenster", name: "am Fenster", x: -0.2, z: -3.0 },
-  { id: "bett", name: "neben dem Bett", x: -1.5, z: -3.0 },
-  { id: "links", name: "an der linken Wand", x: -3.5, z: 0.0 },
-  { id: "vornlinks", name: "vorne links", x: -3.4, z: 2.5 },
-  { id: "rechts", name: "an der rechten Wand", x: 3.5, z: -1.0 },
-  { id: "mitterechts", name: "rechts beim Teppich", x: 2.2, z: 0.9 }
-];
+// Plätze, Möbel (Name, Preis, Text) und Wandfarben aus dem Kern; hier nur das 3D-Aussehen je Möbel-id
+const PLAETZE = K.PLAETZE, WANDFARBEN = K.WANDFARBEN;
 const holz = "#B07A48";
-const MOEBEL = [
-  { id: "lampe", name: "Stehlampe", e: "💡", preis: 4, text: "Sie macht dein Zimmer gemütlich.", bau() { const g = new Group(); g.add(setze(teil(new CylinderGeometry(0.28, 0.32, 0.08, 18), "#6B6B7A"), 0, 0.04, 0)); g.add(setze(teil(new CylinderGeometry(0.04, 0.04, 1.6, 8), "#6B6B7A"), 0, 0.84, 0)); g.add(setze(teil(new CylinderGeometry(0.22, 0.38, 0.45, 18, 1, true), "#FFD84D"), 0, 1.75, 0)); g.add(setze(new Mesh(kugel(0.12, 10, 8), new MeshBasicMaterial({ color: "#FFF4C2" })), 0, 1.65, 0)); return g; } },
-  { id: "baer", name: "Kuschelbär", e: "🧸", preis: 4, text: "Er passt auf dein Zimmer auf.", bau() { const g = new Group(), f = "#C98A50"; const k = teil(kugel(0.32), f); k.scale.y = 1.1; g.add(setze(k, 0, 0.35, 0)); g.add(setze(teil(kugel(0.24), f), 0, 0.85, 0)); [-1, 1].forEach(sx => { g.add(setze(teil(kugel(0.09), f), sx * 0.17, 1.05, 0)); g.add(setze(teil(kugel(0.1), f), sx * 0.3, 0.42, 0.1)); g.add(setze(teil(kugel(0.11), f), sx * 0.17, 0.1, 0.15)); }); g.add(setze(teil(kugel(0.09), "#F2D2A8", { umriss: false }), 0, 0.8, 0.2)); augen(g, 0.08, 0.9, 0.21, 0.035); return g; } },
-  { id: "sitzsack", name: "Sitzsack", e: "🫘", preis: 5, text: "Perfekt zum Lesen und Ausruhen.", bau() { const g = new Group(); const s1 = teil(kugel(0.6), "#5CCBA6"); s1.scale.set(1, 0.6, 1); g.add(setze(s1, 0, 0.35, 0)); const s2 = teil(kugel(0.4), "#5CCBA6"); s2.scale.set(1.1, 0.9, 0.6); g.add(setze(s2, 0, 0.7, -0.3)); return g; } },
-  { id: "kiste", name: "Spielzeugkiste", e: "🧩", preis: 5, text: "Darin ist Platz für alle Spielsachen.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.0, 0.6, 0.6), "#7B9BFF"), 0, 0.3, 0)); g.add(setze(teil(kugel(0.14), "#FF6F91"), -0.25, 0.68, 0)); g.add(setze(teil(new BoxGeometry(0.22, 0.22, 0.22), "#FFD84D"), 0.1, 0.68, 0.05)); g.add(setze(teil(new ConeGeometry(0.12, 0.3, 4), "#5CCBA6"), 0.33, 0.72, -0.05)); return g; } },
-  { id: "korb", name: "Tierkörbchen", e: "🧺", preis: 6, text: "Ein weiches Bett für dein Tier.", bau() { const g = new Group(); g.add(setze(teil(new CylinderGeometry(0.55, 0.45, 0.3, 24), "#D9A066"), 0, 0.15, 0)); g.add(setze(new Mesh(new CylinderGeometry(0.47, 0.47, 0.06, 24), mat("#FF9EC4")), 0, 0.3, 0)); g.add(setze(teil(new TorusGeometry(0.5, 0.08, 8, 24), "#C88A50"), 0, 0.3, 0).rotateX(Math.PI / 2)); return g; } },
-  { id: "globus", name: "Globus", e: "🌍", preis: 7, text: "Die ganze Welt in deinem Zimmer. Ella liebt ihn!", bau() { const g = new Group(); g.add(setze(teil(new CylinderGeometry(0.4, 0.45, 0.6, 16), holz), 0, 0.3, 0)); g.add(setze(teil(new CylinderGeometry(0.03, 0.03, 0.3, 6), "#FFC83D"), 0, 0.75, 0)); const k = teil(kugel(0.32), "#5EC3E6"); setze(k, 0, 1.15, 0); k.rotation.z = 0.4; [[0.15, 0.1, 0.2], [-0.2, -0.05, 0.15], [0.05, 0.2, -0.22]].forEach(([x, y, z]) => k.add(setze(new Mesh(kugel(0.13, 10, 8), mat("#7CCB5B")), x, y, z))); g.add(k); g.userData.dreh = k; return g; } },
-  { id: "regal", name: "Bücherregal", e: "📚", preis: 8, text: "Hier wohnen deine Lieblingsbücher.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.3, 1.9, 0.45), holz, { dicke: 1.03 }), 0, 0.95, 0)); [0.5, 1.1, 1.65].forEach((y, j) => { let x = -0.5; ["#E0574A", "#5CCBA6", "#7B9BFF", "#FFD84D", "#C27BFF"].forEach((c, i) => { if ((i + j) % 4 === 3) { x += 0.2; return; } const b = new Mesh(new BoxGeometry(0.14, 0.4 - (i % 2) * 0.06, 0.32), mat(c)); b.position.set(x, y - 0.1 + 0.05, 0.1); x += 0.19; g.add(b); }); }); return g; } },
-  { id: "staffelei", name: "Mal-Staffelei", e: "🎨", preis: 9, text: "Für große Künstlerinnen und Künstler.", bau() { const g = new Group(); [[-0.3, 0.12], [0.3, -0.12]].forEach(([x, rz]) => { const b = teil(new BoxGeometry(0.06, 1.7, 0.06), holz); b.rotation.z = rz; g.add(setze(b, x, 0.85, 0)); }); const h = teil(new BoxGeometry(0.06, 1.6, 0.06), holz); h.rotation.x = -0.3; g.add(setze(h, 0, 0.8, -0.25)); g.add(setze(teil(new BoxGeometry(0.9, 0.7, 0.04), "#FFFFFF"), 0, 1.15, 0.06)); [["#FF6F91", -0.2, 1.25], ["#FFD84D", 0.15, 1.1], ["#5CCBA6", 0, 0.98]].forEach(([c, x, y]) => { const f = new Mesh(kugel(0.1, 10, 8), mat(c)); f.scale.set(1, 1, 0.2); g.add(setze(f, x, y, 0.09)); }); return g; } },
-  { id: "tisch", name: "Schreibtisch", e: "✏️", preis: 10, text: "Hier kannst du malen und schreiben.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.4, 0.08, 0.75), holz), 0, 0.8, 0)); [[-0.6, -0.3], [0.6, -0.3], [-0.6, 0.3], [0.6, 0.3]].forEach(([x, z]) => g.add(setze(teil(new BoxGeometry(0.08, 0.8, 0.08), holz), x, 0.4, z))); g.add(setze(teil(new BoxGeometry(0.4, 0.04, 0.3), "#FFFFFF"), -0.2, 0.86, 0.05)); g.add(setze(teil(new CylinderGeometry(0.08, 0.08, 0.22, 10), "#E0574A"), 0.45, 0.95, -0.15)); const st = new Group(); st.add(setze(teil(new BoxGeometry(0.5, 0.06, 0.5), "#7B9BFF"), 0, 0.5, 0)); st.add(setze(teil(new BoxGeometry(0.5, 0.5, 0.06), "#7B9BFF"), 0, 0.78, 0.24)); [[-0.2, -0.2], [0.2, -0.2], [-0.2, 0.2], [0.2, 0.2]].forEach(([x, z]) => st.add(setze(new Mesh(new BoxGeometry(0.05, 0.5, 0.05), mat("#6B6B7A")), x, 0.25, z))); st.position.z = 0.7; g.add(st); return g; } },
-  { id: "aquarium", name: "Aquarium", e: "🐠", preis: 12, text: "Blub, blub! Die Fische winken dir zu.", bau() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.2, 0.7, 0.6), holz), 0, 0.35, 0)); g.add(setze(new Mesh(new BoxGeometry(1.1, 0.7, 0.5), new MeshToonMaterial({ color: "#7FD3F0", gradientMap: verlauf, transparent: true, opacity: 0.6 })), 0, 1.05, 0)); g.add(setze(new Mesh(new BoxGeometry(1.1, 0.1, 0.5), mat("#F2D9A2")), 0, 0.75, 0)); const fische = new Group(); ["#FF9E5E", "#FFD84D"].forEach((c, i) => { const f = new Mesh(kugel(0.09, 10, 8), mat(c)); f.scale.set(1.5, 1, 0.6); f.position.set(i ? 0.2 : -0.2, 1.0 + i * 0.15, 0); f.add(setze(new Mesh(new ConeGeometry(0.06, 0.12, 4), mat(c)), -0.12, 0, 0).rotateZ(Math.PI / 2)); fische.add(f); }); g.add(fische); g.userData.fische = fische; [-0.35, 0.4].forEach(x => g.add(setze(new Mesh(new ConeGeometry(0.05, 0.35, 5), mat("#3E9E5A")), x, 0.95, -0.1))); return g; } }
-];
-// Geschenke (nicht im Laden zu kaufen, erscheinen nur, wenn das Kind sie bekommen hat)
-MOEBEL.push({ id: "tannenbaum", name: "Tannenbaum", e: "🎄", preis: 0, geschenk: true, text: "Ein Geschenk von Robo Pixel. Frohe Weihnachten! Mit „Einrichten“ kannst du ihn wegräumen.", bau() {
+const BAU_MOEBEL = {
+  lampe() { const g = new Group(); g.add(setze(teil(new CylinderGeometry(0.28, 0.32, 0.08, 18), "#6B6B7A"), 0, 0.04, 0)); g.add(setze(teil(new CylinderGeometry(0.04, 0.04, 1.6, 8), "#6B6B7A"), 0, 0.84, 0)); g.add(setze(teil(new CylinderGeometry(0.22, 0.38, 0.45, 18, 1, true), "#FFD84D"), 0, 1.75, 0)); g.add(setze(new Mesh(kugel(0.12, 10, 8), new MeshBasicMaterial({ color: "#FFF4C2" })), 0, 1.65, 0)); return g; },
+  baer() { const g = new Group(), f = "#C98A50"; const k = teil(kugel(0.32), f); k.scale.y = 1.1; g.add(setze(k, 0, 0.35, 0)); g.add(setze(teil(kugel(0.24), f), 0, 0.85, 0)); [-1, 1].forEach(sx => { g.add(setze(teil(kugel(0.09), f), sx * 0.17, 1.05, 0)); g.add(setze(teil(kugel(0.1), f), sx * 0.3, 0.42, 0.1)); g.add(setze(teil(kugel(0.11), f), sx * 0.17, 0.1, 0.15)); }); g.add(setze(teil(kugel(0.09), "#F2D2A8", { umriss: false }), 0, 0.8, 0.2)); augen(g, 0.08, 0.9, 0.21, 0.035); return g; },
+  sitzsack() { const g = new Group(); const s1 = teil(kugel(0.6), "#5CCBA6"); s1.scale.set(1, 0.6, 1); g.add(setze(s1, 0, 0.35, 0)); const s2 = teil(kugel(0.4), "#5CCBA6"); s2.scale.set(1.1, 0.9, 0.6); g.add(setze(s2, 0, 0.7, -0.3)); return g; },
+  kiste() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.0, 0.6, 0.6), "#7B9BFF"), 0, 0.3, 0)); g.add(setze(teil(kugel(0.14), "#FF6F91"), -0.25, 0.68, 0)); g.add(setze(teil(new BoxGeometry(0.22, 0.22, 0.22), "#FFD84D"), 0.1, 0.68, 0.05)); g.add(setze(teil(new ConeGeometry(0.12, 0.3, 4), "#5CCBA6"), 0.33, 0.72, -0.05)); return g; },
+  korb() { const g = new Group(); g.add(setze(teil(new CylinderGeometry(0.55, 0.45, 0.3, 24), "#D9A066"), 0, 0.15, 0)); g.add(setze(new Mesh(new CylinderGeometry(0.47, 0.47, 0.06, 24), mat("#FF9EC4")), 0, 0.3, 0)); g.add(setze(teil(new TorusGeometry(0.5, 0.08, 8, 24), "#C88A50"), 0, 0.3, 0).rotateX(Math.PI / 2)); return g; },
+  globus() { const g = new Group(); g.add(setze(teil(new CylinderGeometry(0.4, 0.45, 0.6, 16), holz), 0, 0.3, 0)); g.add(setze(teil(new CylinderGeometry(0.03, 0.03, 0.3, 6), "#FFC83D"), 0, 0.75, 0)); const k = teil(kugel(0.32), "#5EC3E6"); setze(k, 0, 1.15, 0); k.rotation.z = 0.4; [[0.15, 0.1, 0.2], [-0.2, -0.05, 0.15], [0.05, 0.2, -0.22]].forEach(([x, y, z]) => k.add(setze(new Mesh(kugel(0.13, 10, 8), mat("#7CCB5B")), x, y, z))); g.add(k); g.userData.dreh = k; return g; },
+  regal() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.3, 1.9, 0.45), holz, { dicke: 1.03 }), 0, 0.95, 0)); [0.5, 1.1, 1.65].forEach((y, j) => { let x = -0.5; ["#E0574A", "#5CCBA6", "#7B9BFF", "#FFD84D", "#C27BFF"].forEach((c, i) => { if ((i + j) % 4 === 3) { x += 0.2; return; } const b = new Mesh(new BoxGeometry(0.14, 0.4 - (i % 2) * 0.06, 0.32), mat(c)); b.position.set(x, y - 0.1 + 0.05, 0.1); x += 0.19; g.add(b); }); }); return g; },
+  staffelei() { const g = new Group(); [[-0.3, 0.12], [0.3, -0.12]].forEach(([x, rz]) => { const b = teil(new BoxGeometry(0.06, 1.7, 0.06), holz); b.rotation.z = rz; g.add(setze(b, x, 0.85, 0)); }); const h = teil(new BoxGeometry(0.06, 1.6, 0.06), holz); h.rotation.x = -0.3; g.add(setze(h, 0, 0.8, -0.25)); g.add(setze(teil(new BoxGeometry(0.9, 0.7, 0.04), "#FFFFFF"), 0, 1.15, 0.06)); [["#FF6F91", -0.2, 1.25], ["#FFD84D", 0.15, 1.1], ["#5CCBA6", 0, 0.98]].forEach(([c, x, y]) => { const f = new Mesh(kugel(0.1, 10, 8), mat(c)); f.scale.set(1, 1, 0.2); g.add(setze(f, x, y, 0.09)); }); return g; },
+  tisch() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.4, 0.08, 0.75), holz), 0, 0.8, 0)); [[-0.6, -0.3], [0.6, -0.3], [-0.6, 0.3], [0.6, 0.3]].forEach(([x, z]) => g.add(setze(teil(new BoxGeometry(0.08, 0.8, 0.08), holz), x, 0.4, z))); g.add(setze(teil(new BoxGeometry(0.4, 0.04, 0.3), "#FFFFFF"), -0.2, 0.86, 0.05)); g.add(setze(teil(new CylinderGeometry(0.08, 0.08, 0.22, 10), "#E0574A"), 0.45, 0.95, -0.15)); const st = new Group(); st.add(setze(teil(new BoxGeometry(0.5, 0.06, 0.5), "#7B9BFF"), 0, 0.5, 0)); st.add(setze(teil(new BoxGeometry(0.5, 0.5, 0.06), "#7B9BFF"), 0, 0.78, 0.24)); [[-0.2, -0.2], [0.2, -0.2], [-0.2, 0.2], [0.2, 0.2]].forEach(([x, z]) => st.add(setze(new Mesh(new BoxGeometry(0.05, 0.5, 0.05), mat("#6B6B7A")), x, 0.25, z))); st.position.z = 0.7; g.add(st); return g; },
+  aquarium() { const g = new Group(); g.add(setze(teil(new BoxGeometry(1.2, 0.7, 0.6), holz), 0, 0.35, 0)); g.add(setze(new Mesh(new BoxGeometry(1.1, 0.7, 0.5), new MeshToonMaterial({ color: "#7FD3F0", gradientMap: verlauf, transparent: true, opacity: 0.6 })), 0, 1.05, 0)); g.add(setze(new Mesh(new BoxGeometry(1.1, 0.1, 0.5), mat("#F2D9A2")), 0, 0.75, 0)); const fische = new Group(); ["#FF9E5E", "#FFD84D"].forEach((c, i) => { const f = new Mesh(kugel(0.09, 10, 8), mat(c)); f.scale.set(1.5, 1, 0.6); f.position.set(i ? 0.2 : -0.2, 1.0 + i * 0.15, 0); f.add(setze(new Mesh(new ConeGeometry(0.06, 0.12, 4), mat(c)), -0.12, 0, 0).rotateZ(Math.PI / 2)); fische.add(f); }); g.add(fische); g.userData.fische = fische; [-0.35, 0.4].forEach(x => g.add(setze(new Mesh(new ConeGeometry(0.05, 0.35, 5), mat("#3E9E5A")), x, 0.95, -0.1))); return g; },
+};
+// Geschenk-Möbel (nur sichtbar, wenn das Kind es bekommen hat)
+BAU_MOEBEL.tannenbaum = function () {
   const g = new Group();
   g.add(setze(teil(new CylinderGeometry(0.1, 0.12, 0.3, 10), "#8A5A35"), 0, 0.15, 0));
   [[0.62, 0.7, 0.55], [0.48, 0.6, 1.0], [0.32, 0.5, 1.4]].forEach(([r, h, y]) => g.add(setze(teil(new ConeGeometry(r, h, 14), "#2E8B57"), 0, y, 0)));
@@ -1081,16 +965,9 @@ MOEBEL.push({ id: "tannenbaum", name: "Tannenbaum", e: "🎄", preis: 0, geschen
   [[0.38, 0.55, 0.2, "#E2604F"], [-0.3, 0.7, 0.25, "#FFC83D"], [0.1, 0.95, 0.38, "#5EC3E6"], [-0.2, 1.1, -0.2, "#E2604F"], [0.25, 1.2, 0.05, "#FFC83D"], [-0.4, 0.5, -0.1, "#5EC3E6"]]
     .forEach(([x, y, z, f]) => g.add(setze(new Mesh(kugel(0.07, 8, 6), mat(f)), x, y, z)));
   return g;
-} });
-const WANDFARBEN = [
-  { id: "rosa", name: "Rosa", farbe: ["#FFD9E6", "#FFE9C2"], preis: 0 },
-  { id: "mint", name: "Mint", farbe: ["#C9F2E3", "#EAF8F1"], preis: 3 },
-  { id: "himmel", name: "Himmelblau", farbe: ["#CFE6FF", "#EEF5FF"], preis: 3 },
-  { id: "sonne", name: "Sonnengelb", farbe: ["#FFE9A8", "#FFF5D6"], preis: 3 },
-  { id: "lila", name: "Lavendel", farbe: ["#E3D6FF", "#F3EDFF"], preis: 3 }
-];
-const zimmerDaten = () => Object.assign({ plaetze: {}, wand: "rosa" }, S.lade("zimmer") || {});
-const besitzt = (id, preis) => !preis || S.offen(S.istFrei(id));
+};
+const MOEBEL = K.MOEBEL.map(m => Object.assign({}, m, { bau: BAU_MOEBEL[m.id] }));
+const zimmerDaten = K.zimmerDaten, besitzt = K.besitzt;
 const moebelObj = {}; const platzHindernis = {};
 function stelleMoebel() {
   const d = zimmerDaten();
@@ -1158,7 +1035,7 @@ function reingehen() {
 }
 function rausgehen() {
   drinnen = false; $("raus").hidden = true; $("einrichten").hidden = true; $("laden").hidden = true;
-  const hr = WELT.insel ? 0.35 : P.haus[2], tx = P.haus[0] + Math.sin(hr) * 2.75, tz = P.haus[1] + Math.cos(hr) * 2.75;
+  const { x: tx, z: tz, dreh: hr } = KI.vorDerTuer();
   ich.position.set(tx, bodenY(tx, tz), tz); ich.rotation.y = hr;
   if (tier) tier.position.set(tx + 1.1, bodenY(tx + 1.1, tz + 0.4), tz + 0.4);
   scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true);
@@ -1189,6 +1066,11 @@ function sprechblase(e, titel, text, ru, ziel, extra) {
   $("blase-los").hidden = !ziel; blaseZiel = ziel;
   $("blase").hidden = false; S.ton("tipp");
   if (SP && SP.sprich) SP.sprich(text, "de-DE");
+}
+// Antwort einer Station aus dem Insel-Kern zeigen ({ blase: [e, titel, text, hilfe, ziel], extra })
+function zeigeAntwort(a) {
+  if (!a) return;
+  sprechblase(...a.blase, a.extra === "prolog" ? ["🔁 Wie ging das nochmal?", () => starteProlog(true)] : null);
 }
 $("blase-zu").addEventListener("click", () => { $("blase").hidden = true; if (SP && SP.stopp) SP.stopp(); });
 $("blase-los").addEventListener("click", () => { if (blaseZiel) location.href = blaseZiel; });
@@ -1323,6 +1205,11 @@ $("kamera").addEventListener("click", () => {
 });
 // Eltern können die Einstellungs-Knöpfe ausblenden (Erwachsene sehen sie immer)
 if (!EIN.kindDarf && !(S.erwachsen && S.erwachsen())) ["grafik", "steuerung", "kamera"].forEach(id => { $(id).hidden = true; });
+// Look umschalten (NA-25): dieselbe Welt in Pixel – Spielstand, Story und Zimmer bleiben, nichts geht verloren
+if (S.lookWaehlbar && S.lookWaehlbar() && (S.lookKindDarf() || S.erwachsen())) {
+  $("look").hidden = false;
+  $("look").addEventListener("click", () => { S.ton("tipp"); S.setzeLook("pixel"); location.href = "../pixel/insel.html" + location.search.replace(/[?&]szene=[^&]*/, ""); });
+}
 $("grafik").textContent = EINFACH ? "✨ einfach" : "✨ schön";
 // Steuerung: Joystick oder Tippen (jederzeit umschaltbar, das Tablet merkt es sich)
 let STEUERUNG = EIN.steuerung === "tippen" ? "tippen" : "joystick";
@@ -1554,16 +1441,9 @@ $("welt-zu").addEventListener("click", () => { S.ton("tipp"); $("welt").hidden =
 // Wer die Insel zwischen dem 1. und 26. Dezember zum ersten Mal betritt (Etappe E1 mit diesem Datum), findet am Steg ein Paket:
 // einen Tannenbaum fürs Zimmer und eine Schleife fürs Tier. Das Paket wartet, bis es geöffnet wird (auch nach Weihnachten).
 // Im Dezember trägt Pixels Boot eine Lichterkette. Außerhalb des Dezembers ist der Prolog gleich, nur ohne Paket.
-const isoJetzt = () => { const d = new Date(window.__jetzt || Date.now()); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
-function weihnachtsPaket() {
-  const St = window.Story; if (!St) return null;
-  const e1 = St.zustand().etappen.E1, datum = typeof e1 === "string" ? e1 : !e1 ? isoJetzt() : null;   // 1 = übernommen → kein Sonderstart
-  if (!datum) return null;
-  const [y, m, t] = datum.split("-").map(Number); if (m !== 12 || t > 26) return null;
-  const id = "weihnachten-" + y; return St.hatGeschenk(id) ? null : id;
-}
+// Regeln (wann es ein Paket gibt, was beim Öffnen passiert) im Insel-Kern; hier Aussehen und Wegnehmen.
+const weihnachtsPaket = K.weihnachtsPaket;
 let paket = null;
-const PAKET_POS = { x: STEG.x + 0.95, z: STEG.z0 + 0.15 };
 if (weihnachtsPaket()) {
   paket = new Group(); const y = bodenY(PAKET_POS.x, PAKET_POS.z);
   paket.add(setze(teil(new BoxGeometry(0.62, 0.5, 0.62), "#E2604F"), 0, 0.25, 0));
@@ -1575,20 +1455,12 @@ if (weihnachtsPaket()) {
   antippbar(paket, () => oeffnePaket(), ["🎁", "Öffnen"], 1.8);
 }
 function oeffnePaket() {
-  const id = weihnachtsPaket(); if (!id || !paket) return;
-  window.Story.merkeGeschenk(id);
-  S.schalteFrei("moebel-tannenbaum", 0);
-  // Tannenbaum gleich auf einen freien Platz im Zimmer stellen (kann mit „Einrichten“ weggeräumt werden)
-  const d = zimmerDaten();
-  if (!Object.values(d.plaetze).includes("tannenbaum")) {
-    const frei = ["vornlinks", "links", "rechts", "mitterechts", "fenster", "bett"].find(k => !d.plaetze[k]);
-    if (frei) { d.plaetze[frei] = "tannenbaum"; S.speichere("zimmer", d); stelleMoebel(); }
-  }
-  if (window.TierPflege && window.TierPflege.schenke) window.TierPflege.schenke("schleife");
+  if (!paket || !weihnachtsPaket()) return;
+  const r = K.oeffnePaket(); if (!r) return;
+  if (r.zimmer) stelleMoebel();
   scene.remove(paket); tippbar.splice(tippbar.indexOf(paket), 1); paket = null; naechstes = null;
   S.ton("juhu");
-  sprechblase("robo", "Dein Weihnachtspaket", "Darin sind ein Tannenbaum für dein Zimmer und eine rote Schleife für dein Tier. Der Baum steht schon in deinem Haus!",
-    S.paar(["", "Внутри ёлка для твоей комнаты и красный бантик для твоего питомца. Ёлка уже стоит в твоём доме!"])[1], null);
+  sprechblase(...r.blase, null);
 }
 // Lichterkette am Boot und am Steg (nur im Dezember): eine Instanz-Gruppe = 1 Zeichenaufruf, Funkeln über Farben
 let lichter = null;
@@ -1637,7 +1509,7 @@ function starteProlog(wiederholen) {
   return true;
 }
 // Neues Kind: beim ersten Besuch (nicht wenn die Seite direkt im Zimmer startet)
-if (window.Story && !window.Story.etappe("E1") && q.get("drinnen") !== "1" && !q.has("szene")) setTimeout(() => starteProlog(false), 700);
+if (K.prologFaellig(q)) setTimeout(() => starteProlog(false), 700);
 
 // ---------- Tutorial E2 „Erst lernen“, Szene „Sonne geht auf“, E3 „Erste Frucht“ (= Kapitel 1) (NA-13) ----------
 // Reihenfolge und Auslöser aus KONZEPT „Etappen“; höchstens zwei neue Etappen am Tag; nur draußen auf der Insel.
@@ -1651,32 +1523,20 @@ function spieleStory(id) {
   storyLaeuft = true;
   Sz.spiele(def).then(() => {
     storyLaeuft = false;
-    if (def.etappe) St.etappeFertig(def.etappe);
-    if (def.kapitel) St.setzeKapitel(def.kapitel);
+    K.storyFertig(def);
     nebelWeicht();
     setTimeout(naechsteStory, 1200);
   });
 }
 let storyLaeuft = false;
+// Welche Szene dran ist, entscheidet der Insel-Kern (gleich für beide Looks)
 function naechsteStory() {
-  const St = window.Story, Sz = window.Szene;
-  if (!St || !Sz || prolog || drinnen || storyLaeuft || Sz.laeuft || !St.etappe("E1") || q.has("szene")) return;
-  const Zt = window.Zeit, st = Zt ? Zt.status() : { frei: true, spielen: true }, frei = st.frei;
-  if (paket && !St.gesehen("weihnachtspaket")) return spieleStory("weihnachtspaket");
-  if (!St.etappe("E2")) {
-    if (frei) St.etappeFertig("E2");   // ohne Zeit-Regeln gibt es nichts zu erklären
-    else if (St.darfNeueEtappe()) return spieleStory(st.spielen ? "sonne" : "erst-lernen");
-  }
-  if (St.etappe("E2") && st.spielen && !frei && !St.gesehen("sonne")) return spieleStory("sonne");
-  if (!St.etappe("E3") && window.Lernfunde && window.Lernfunde.gesamt() >= 1 && St.darfNeueEtappe()) return spieleStory("erste-frucht");
+  const id = K.naechsteStory({ paket: !!paket, prolog: !!prolog, drinnen, laeuft: storyLaeuft, test: q.has("szene") });
+  if (id) spieleStory(id);
 }
 setTimeout(naechsteStory, 900);
 setInterval(naechsteStory, 5000);   // z. B. wenn die Spielzeit beginnt, während das Kind auf der Insel ist
-antippbar(uhrSonne, () => {
-  const u = sonnenuhr();
-  sprechblase("robo", "Die Sonnenuhr", u.spielen ? "Die Sonne scheint: Jetzt ist Spielzeit! Die Spielorte sind wach." : u.genug ? "Die Sonne ist untergegangen. Für heute ist genug gespielt – morgen geht sie wieder auf." : `Die Sonne ist noch dunkel. Lerne bei Ella, Fipsi oder Benno – dann geht sie auf. Schon ${Math.round(u.hell * 100)} Prozent geschafft!`,
-    S.paar(["", u.spielen ? "Солнце светит: сейчас время игры!" : u.genug ? "Солнце село. На сегодня хватит игр – завтра оно снова встанет." : "Солнце ещё тёмное. Поучись у Эллы, Фипси или Бенно – и оно встанет."])[1], null);
-}, ["☀️", "Ansehen"], 1.9);
+antippbar(uhrSonne, () => zeigeAntwort(K.antwort("sonnenuhr")), ...K.aktionFuer("sonnenuhr"));
 
 // ---------- Bildschirm-Punkte für Szenen und Zeigehand (NA-10) ----------
 const _bp = new Vector3();
@@ -1685,13 +1545,9 @@ function bildschirm(x, y, z) {
   const r = renderer.domElement.getBoundingClientRect();
   return { x: r.left + (_bp.x + 1) / 2 * r.width, y: r.top + (1 - _bp.y) / 2 * r.height, sichtbar: _bp.z < 1 && Math.abs(_bp.x) <= 1.05 && Math.abs(_bp.y) <= 1.05, hinten: _bp.z >= 1 };
 }
-const ORTE = {
-  ich: () => [ich.position.x, ich.position.y + 1.4, ich.position.z],
-  sonnenuhr: () => [uhrSonne.position.x, uhrSonne.position.y, uhrSonne.position.z],
-  wissensbaum: () => [WB.x, WB.y + 1.6, WB.z],
-  eule: () => { const n = NACHBARN.find(x => x.e === "eule"); return [n.obj.position.x, n.obj.position.y + 1.6, n.obj.position.z]; },
-  haus: () => [P.haus[0], bodenY(P.haus[0], P.haus[1]) + 1.2, P.haus[1]]
-};
+// Orte aus dem Insel-Kern (Bodenpunkt + Höhe), dazu die eigene Figur
+const ORTE = { ich: () => [ich.position.x, ich.position.y + 1.4, ich.position.z] };
+Object.entries(KI.ORTE).forEach(([k, o]) => { ORTE[k] = () => [o.x, bodenY(o.x, o.z) + o.h, o.z]; });
 // Insel.ort("haus") liefert eine Funktion für Zeige.auf(); Insel.bildschirm(x, y, z) rechnet einen 3D-Punkt um
 window.Insel = { bildschirm, ort: (name) => () => (ORTE[name] && !drinnen ? bildschirm(...ORTE[name]()) : null), ORTE: Object.keys(ORTE) };
 window.__heimat = { bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };

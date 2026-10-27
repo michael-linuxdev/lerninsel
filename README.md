@@ -87,6 +87,9 @@ shared/ereignisse.js    Insel-Ereignisse (fund, bild, melodie …) und Story-Zus
 shared/szene.js         Szenen-Baustein: Sprechblasen-Folgen für Story und Tutorial (vorgelesen, Hilfesprache, Zeigehand)
 shared/szenen.js        Texte der Story- und Tutorial-Szenen (Prolog, Erst lernen, Erste Frucht, Weihnachtspaket)
 shared/zeige.js         Zeigehand und Leuchten auf Knöpfe oder 3D-Punkte
+shared/insel-kern.js    Insel-Kern (NA-24): Welt, Orte, Nachbarn, Stationen, Story-Auswahl, Paket, Nebel, Zimmer-Daten, Wetter – für beide Looks
+spiele/insel/           Einstieg zur Insel: leitet je nach Look zu „Rund“ (welt3d/heimat.html) oder „Pixel“ (pixel/insel.html)
+quellen/pixel/          Pixel-Look (DS-Stil): zeichnen.js = gemeinsamer Zeichenweg, insel.js = Pixel-Insel (im Aufbau)
 shared/style.css        Farben, Schrift, Knöpfe
 spiele/anziehen/        Anziehspiel (teile.js = Zeichnungen, spiel.js = Logik)
 spiele/mathe/           Mathe (aufgaben.js = Aufgaben und Rechenwege, mathe.js = Matheweg und Runden)

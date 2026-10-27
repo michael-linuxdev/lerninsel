@@ -344,7 +344,7 @@
     $("ende-gewinn").textContent = gewinn ? `+${gewinn} ${gewinn === 1 ? "Stern" : "Sterne"} für den Kleiderschrank. Du hast jetzt ${S.sterne()}.` : `Du hast ${S.sterne()} Sterne.`;
     const kn = $("ende-knoepfe"); kn.innerHTML = "";
     const knopf = (t, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = t; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
-    if (inselNeu) knopf("🏝️ Zur Insel", true, () => { location.href = "../welt3d/heimat.html"; });
+    if (inselNeu) knopf("🏝️ Zur Insel", true, () => { location.href = "../insel/"; });
     if (neuFuehrerschein) knopf("🪪 Führerschein ansehen", true, zeigeFuehrerschein);
     else if (i + 1 < L.length) knopf(`Weiter: ${L[i + 1].name}`, !inselNeu, () => starte(i + 1));
     knopf("Zur Übersicht", false, () => { zeige("liste"); zeichneListe(); });

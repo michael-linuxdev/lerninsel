@@ -89,7 +89,7 @@ if (pruefeZugang("kart")) {
     karte({
       titel: p === 1 ? "🏆 Gewonnen!" : `${p}. Platz – stark!`, sterne: r.stufe,
       text: `Zeit ${zeitText(zeit)}${bestzeit ? " – neue Bestzeit!" : ""} · ${gesammelt} Münzen.${r.neu ? ` +${r.neu} ⭐ für den Kleiderschrank.` : r.stufe < 3 ? ` Nächstes Ziel: ${[8, 16, 24][r.stufe]} Münzen.` : ""}`,
-      knoepfe: [{ text: "🔁 Nochmal fahren", haupt: true, fn: beginne }, { text: "🏝️ Zurück zur Insel", fn: () => { location.href = "heimat.html"; } }]
+      knoepfe: [{ text: "🔁 Nochmal fahren", haupt: true, fn: beginne }, { text: "🏝️ Zurück zur Insel", fn: () => { location.href = "../insel/"; } }]
     });
   }
 

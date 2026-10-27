@@ -817,5 +817,50 @@ Neue Pakete (vor NA-14):
 - **NA-28 Pixel-Zimmer** (M): Zimmer und Möbel in Pixel, gleiche Möbel-Daten.
 - Minispiele bleiben vorerst 3D und werden aus beiden Looks gestartet; Pixel-Fassungen später je Spiel. NA-21 (Leistung „Rund“) bleibt wichtig.
 
-**Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** **NA-24** → **NA-25** → **NA-26** → **NA-27** → **NA-28** → **NA-14** (in beiden Looks)
+**Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** ~~**NA-24**~~ → **NA-25** (vorbereitet, eingeschaltet mit NA-26) → **NA-26** → **NA-27** → **NA-28** → **NA-14** (in beiden Looks)
 → **NA-21** → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 → Punkt 5 ff. wie oben.
+
+### Stand 27.10.2026, morgens (Sitzung 27.10. früh: DS-Look, NA-24 fertig, NA-25 vorbereitet, NA-26 begonnen)
+**Antworten des Auftraggebers (27.10.2026, 04:40):** „Pixel“ soll moderner sein – **Nintendo-DS-Zeit**, gewählt: **Draufsicht wie bei den
+Handheld-Abenteuern um 2010** (nicht 2,5D, nicht Low-Poly). Umschalter: Knopf auf der Insel **und** Karte im Elternbereich, **Kinder dürfen
+selbst umschalten** (Eltern können es sperren). Reihenfolge: erst DS-Probe, dann NA-24 ff. iPad-Test von Ankunft/Sonnenuhr/Frucht/Paket: noch nicht.
+Geschenke für NA-16: weiter offen.
+
+**Fertig und gepusht**
+- **DS-Look der Pixel-Probe** (`quellen/probe/pixel.js`, `/dev/spiele/probe/`): Farbreihen mit 5 Stufen, Licht von oben links, schmale Rasterung,
+  farbige Umrisse, weiche Bodenübergänge (Graskante, Schatten, Schaum, Wassertiefe), Schatten unter allem, Wolkenschatten, ein Bildatlas,
+  DS-Textfeld. Weiter **1 Zeichenaufruf**, 0,85 MB. Stilregeln in `docs/GRAFIK.md` Abschnitt 2.
+- **NA-24 Welt-Kern** `shared/insel-kern.js` (`window.InselKern`, klassisches Skript, auch in Node lauffähig): Welterzeugung (aus `welt.js`,
+  das jetzt nur weiterleitet – bitgenau gleich, geprüft mit 72 Kombinationen), Zeit/Saison, Bodenhöhe, Steg/Sonnenuhr/Paketplatz, Nachbarn mit
+  Texten, Orte für die Zeigehand (`ORTE` mit x/z/h, neu auch `steg`, `paket`), Sonnenuhr, Nebelstufen, Weihnachtspaket (Regeln + Öffnen),
+  Story-Auswahl `naechsteStory(lage)` + `storyFertig`, `prologFaellig`, Zimmer-Daten (Plätze, Möbel ohne 3D-Bau, Wandfarben), Wetter (Abruf,
+  Cache, Texte), **Stationen** `antwort(id)` / `nachbarAntwort(n)` / `aktionFuer(id)` (Spielorte, Tilda, Paula inkl. `spieleMelodie`,
+  Wetterstation, Wissensbaum, Sonnenuhr, Album, Bett, Schrank, Spiegel). `heimat.js` zeichnet nur noch und liest alles aus dem Kern.
+  Test `tests/inselkern.js` (23 Prüfungen, läuft im Standardlauf); alle Browser-Tests grün.
+- **NA-25 vorbereitet, noch ausgeschaltet:** `Spielwelt.look()`, `lookWaehlbar()` (zurzeit **false**), `lookKindDarf()`, `setzeLook()`,
+  `inselUrl()`; Einstieg `spiele/insel/` leitet je nach Look weiter (alle Insel-Links – Startseite, Medien, Album, Kleiderschrank, Minispiele –
+  gehen jetzt über `spiele/insel/`); Knopf `#look` auf der Rund-Insel und Elternkarte (Look + „Kind darf umschalten“) erscheinen erst,
+  wenn `lookWaehlbar()` wahr ist. Die Elternkarte überschreibt beim Speichern keine weiteren Insel-Werte mehr.
+- **NA-26 begonnen:** `quellen/pixel/zeichnen.js` (gemeinsamer DS-Zeichenweg, von der Probe schon benutzt; neue Farbreihen `herbst`, `schnee`,
+  `gruen`; `grau()`, `naechsteReihe()`, `leinwand()`); `quellen/probe/bauen.js` baut zusätzlich `quellen/pixel/insel.js` → `spiele/pixel/insel.js`
+  (Aufruf `… bauen.js insel`). `quellen/pixel/insel.js` und `spiele/pixel/insel.html` gibt es **noch nicht**.
+
+**Entscheidungen / Abweichungen**
+- Ziele in den Stationen sind relativ zu einer Seite in `spiele/<ordner>/` (z. B. `../welt3d/ballons.html`) – gilt für beide Looks.
+- `SPIELE` (Freischaltstufen der Minispiele) steht im Kern und in `quellen/welt3d/gemeinsam.js` – beide gleich halten.
+- „Pixel“ wird zunächst nur in /dev wählbar (Schalter `lookWaehlbar`), bis Pixel-Insel, Figuren und Zimmer (NA-26–28) fertig sind.
+
+**Offen / als Nächstes – Plan für NA-26 (Pixel-Insel)**
+- a) `spiele/pixel/insel.html` (Leiste mit 🏠, ⭐, `#look` „🐾 Rund“; `#info`, `#lern-hinweis`, `#springen` Aktionsknopf, `#blase`-Sprechblase
+  wie in `heimat.html`, im DS-Stil; Skripte wie `heimat.html` inkl. `shared/insel-kern.js`, Insel-Zugang prüfen) und `quellen/pixel/insel.js`:
+  Boden aus `KI.WELT` (1 Welteinheit = 1 Kachel = 16 px; Gras/Sand/Wasser/Teich/Pfad Haus→Mitte→Steg; Biom- und Jahreszeit-Farbreihen;
+  Hügel heller, Berge mit Fels), Dinge aus Kern (Bäume je `typ`, Steine, Haus, Station, Nest, Mathe-Schild, Nachbarn, Wissensbaum je Stufe mit
+  Früchten `fruchtFarbe`, Ballons, Truhe, Lauf/Kart/Bau – gesperrt mit `grau()` + Schloss, Schach mit Tilda, Bühne mit Paula, Steg + Boot,
+  Sonnenuhr mit Sonne (Farbe dunkel→gelb), Paket), Hindernisse als Kreise, Laufen per Tippen und Pfeiltasten, Aktionsknopf mit
+  `K.aktionFuer`, Antippen → `K.antwort`/`K.nachbarAntwort`. Kind-Figur zunächst aus Kleiderschrank-Farben (`look.figur.farbe`,
+  `haare.farbe/id`, `oberteil/unterteil/kleid/schuhe.farbe` → `naechsteReihe`).
+- b) Story in Pixel: Prolog (Tippen-Variante), `naechsteStory`, Szenen mit Zeigehand über `window.Insel.bildschirm/ort` (Weltpunkt → Bildschirm),
+  Nebelring je Stufe (weicht in 3 s), Nacht/Dämmerung als Tönung, Lichterkette im Dezember. Test-Haken `__pixel` wie `__heimat`.
+- c) Minimales Pixel-Zimmer (Bett, Schrank, Spiegel, Album, Raus), `sw.js`-Einträge (`spiele/pixel/…`, Lizenzen), Tests `tests/pixelinsel.js`
+  (Prolog/Story/Paket in Pixel) und `tests/look.js` (Umschalten in /dev, gleicher Spielstand); dann `lookWaehlbar()` auf `UMG !== "prod"`.
+- Danach NA-27 (Figuren), NA-28 (Zimmer mit Möbeln), NA-14 (Tutorial in beiden Looks), NA-21.

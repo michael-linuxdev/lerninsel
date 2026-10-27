@@ -299,6 +299,9 @@
         <label>Kamera${wahl("i-kamera", e.kamera, [["fest", "🎥 Fest (folgt der Figur)"], ["frei", "🎥 Frei (drehen und zoomen)"]])}</label>
       </div>
       <label class="schalter-z"><input type="checkbox" id="i-kind" ${e.kindDarf ? "checked" : ""}> Das Kind darf diese Einstellungen auf der Insel selbst umschalten</label>
+      ${S.lookWaehlbar() ? `<div class="zeit-raster"><label>Look der Insel${wahl("i-look", S.look(), [["rund", "🐾 Rund (3D)"], ["pixel", "👾 Pixel (wie Handheld-Abenteuer)"]])}</label></div>
+      <label class="schalter-z"><input type="checkbox" id="i-lookkind" ${S.lookKindDarf() ? "checked" : ""}> Das Kind darf den Look auf der Insel selbst umschalten</label>
+      <p class="klein">Beide Looks zeigen dieselbe Insel: Spielstand, Geschichte, Zimmer und Tier bleiben beim Umschalten erhalten. „Pixel“ braucht sehr wenig Rechenleistung (gut für Handys und ältere Tablets). Noch im Aufbau – nur in der Testumgebung.</p>` : ""}
       <label class="schalter-z"><input type="checkbox" id="i-zugang" ${e.zugang === "fuehrerschein" ? "checked" : ""}> Insel erst nach dem kompletten Tablet-Führerschein (alte Regel)</label>
       <p class="klein">Ohne Haken öffnet die erste Lektion „Das Tablet bedienen“ die Insel; die übrigen Lektionen bleiben Aufgaben bei Robo Pixel. Die Minispiele (Ballons, Schatz-Strand, Sternenlauf, Kart, Bauplatz) brauchen in beiden Fällen den kompletten Führerschein.</p>
       <p class="klein">Ist der Haken aus, sind die drei Knöpfe auf der Insel ausgeblendet und es gilt, was hier eingestellt ist. Änderungen des Kindes werden gemerkt.</p>
@@ -356,7 +359,9 @@
   function inselKnoepfe() {
     $("i-speichern").addEventListener("click", () => {
       const e = S.lade("eltern") || {};
-      e.insel = { grafik: $("i-grafik").value, steuerung: $("i-steuerung").value, kamera: $("i-kamera").value, kindDarf: $("i-kind").checked, zugang: $("i-zugang").checked ? "fuehrerschein" : "bedienung" };
+      // weitere gemerkte Insel-Werte (z. B. der Look) bleiben erhalten
+      e.insel = Object.assign({}, e.insel || {}, { grafik: $("i-grafik").value, steuerung: $("i-steuerung").value, kamera: $("i-kamera").value, kindDarf: $("i-kind").checked, zugang: $("i-zugang").checked ? "fuehrerschein" : "bedienung" });
+      if ($("i-look")) Object.assign(e.insel, { look: $("i-look").value === "pixel" ? "pixel" : "rund", lookKind: $("i-lookkind").checked });
       S.speichere("eltern", e); try { localStorage.removeItem("lerninsel.sparen"); } catch (er) { /* egal */ } S.meldung("Insel-Einstellungen gespeichert.");
     });
   }

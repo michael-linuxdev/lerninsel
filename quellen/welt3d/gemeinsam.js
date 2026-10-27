@@ -99,8 +99,8 @@ export function speichere(d) { S.speichere("welt3d", d); }
 
 // Minispiele brauchen den kompletten Tablet-Führerschein; ohne geht es zurück auf die Insel (oder zu Robo Pixel)
 export function pruefeZugang(spiel) {
-  if (!S.minispieleOffen()) { location.replace(S.inselOffen() ? "heimat.html" : "../../?robo=1"); return false; }
-  if (spiel && !istFrei(spiel)) { location.replace("heimat.html"); return false; }
+  if (!S.minispieleOffen()) { location.replace(S.inselOffen() ? "../insel/" : "../../?robo=1"); return false; }
+  if (spiel && !istFrei(spiel)) { location.replace("../insel/"); return false; }
   return true;
 }
 

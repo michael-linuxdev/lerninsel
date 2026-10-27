@@ -84,7 +84,7 @@ if (pruefeZugang("lauf")) {
     karte({
       titel: punkte >= 40 ? "Wahnsinn!" : punkte >= 25 ? "Super gelaufen!" : "Geschafft!", sterne: r.stufe,
       text: `${punkte} Sterne gesammelt.${r.rekord ? " 🏆 Neuer Rekord!" : ` Dein Rekord: ${r.bisher}.`}${r.neu ? ` +${r.neu} ⭐ für den Kleiderschrank.` : r.stufe < 3 ? ` Nächstes Ziel: ${[10, 25, 40][r.stufe]} Sterne.` : ""}`,
-      knoepfe: [{ text: "🔁 Nochmal laufen", haupt: true, fn: beginne }, { text: "🏝️ Zurück zur Insel", fn: () => { location.href = "heimat.html"; } }]
+      knoepfe: [{ text: "🔁 Nochmal laufen", haupt: true, fn: beginne }, { text: "🏝️ Zurück zur Insel", fn: () => { location.href = "../insel/"; } }]
     });
   }
 

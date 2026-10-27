@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Insel</title>
+<!-- Einstieg zur Insel (NA-25): leitet je nach gewähltem Look weiter – „Rund“ (three.js) oder „Pixel“ (PixiJS).
+     Parameter (z. B. ?drinnen=1, ?stunde=14) werden weitergegeben. -->
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+</head>
+<body style="margin:0;background:#A8DDF5">
+<script>location.replace(Spielwelt.inselUrl("../../", location.search));</script>
+</body>
+</html>
