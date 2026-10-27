@@ -45,7 +45,7 @@ werden im Elternbereich festgelegt und bleiben nur auf dem Tablet.
 - **Einstufungstest** auf dem Matheweg: je 2 Aufgaben wichtiger Stationen, setzt den Startpunkt
 - **Fipsis Wörter-Werkstatt** (Deutsch): Tunwörter, Wiewörter, Wortarten, Verlängern, Silben
 - **Lernkartei:** falsch gelöste Mathe-Aufgaben kommen nach 1, 3 und 7 Tagen im Mathe-Training wieder, dreimal richtig = gelernt
-- **Lehrplan-Gerüst:** KMK-Bildungsstandards und Lehrplan Sachsen (Klasse 1–4) in `shared/lehrplan.js`; der Elternbereich zeigt, welche Lernbereiche die App schon übt (`docs/LEHRPLAN.md`)
+- **Lehrplan-Kern:** Lernziel-IDs nach KMK-Bildungsstandards (`shared/lehrplan/kern.js`) und Lehrplan Sachsen (`shared/lehrplan/laender/sachsen.js`), Inhalte-Verzeichnis mit errechneter Abdeckung (`shared/inhalte.js`); der Elternbereich zeigt, welche Lernbereiche die App schon übt (`docs/LEHRPLAN.md`)
 - **Für Eltern (PIN):** Wochenbericht (Lern- und Spielminuten je Tag, Aufgaben, Tipps für den Alltag), Ersteinrichtung und Kind-Einstellungen (mit der Bildschirmzeit-Empfehlung der DGKJ fürs Alter),
   „App neu laden“ (holt die neueste Version, Spielstand bleibt), Übersicht über Fähigkeiten, Tagesaufgaben-Kalender, Trefferquote pro Matheweg-Station,
   zuletzt falsch gelöste Aufgaben und den Stand in Abenteuer, Sachkunde, Führerschein, Haustier und 3D-Welt
@@ -102,10 +102,19 @@ shared/sprache.js       Vorlesen mit den Stimmen des Geräts
 spiele/ich/             Mein Ich: Figur, Fähigkeiten, Tagesaufgaben, Wort des Tages, Wochentruhe
 spiele/eltern/          Elternbereich mit PIN
 shared/charakter.js     Fähigkeiten, Stufen, Belohnungen, Tagesaufgaben, Kalender
-shared/woerter.js       Wortschatz für das Wort des Tages
+shared/woerter.js       Wortschatz (window.Wortschatz aus inhalte/woerter/*.js; WOERTER für das Wort des Tages)
 shared/tiere.js         Haustier-Zeichnungen (Arten, Farben, Stufen, Zubehör, Eier)
 shared/tierpflege.js    Haustier-Pflege (Ei, Wärme, Werte, Leckerli, Wachstum)
 spiele/tier/            Haustier-Seite
+shared/lehrplan/kern.js Lehrplan-Kern: Lernziel-IDs <fach>.<bereich>.<nr> (KMK, GDSU, Medienbildung, DaZ)
+shared/lehrplan/laender/ Länderprofile (sachsen.js: Lernbereiche mit lz-Verweisen und Abweichungen)
+shared/lehrplan.js      Kompatibilitäts-Schicht window.LEHRPLAN und errechnete Abdeckung
+shared/inhalte.js       Inhalte-Verzeichnis (registriere, abdeckung, fuer(kind)) – liest auch die Bestandsinhalte
+shared/daz.js           DaZ-Fortschritt („Ankommen“) und Einstieg für Kinder ohne/mit wenig Deutsch
+inhalte/woerter/        Wortschatz-Kern (bestand.js, d0.js, anlaute.js)
+inhalte/deutsch/        Deutsch-Inhalte als Daten (anlaute.js, lesetexte.js)
+spiele/daz/             „Ankommen“ (DaZ D0): Wörter ansehen, Hören und zeigen, Sätze
+spiele/lesen/           Laute und Buchstaben, Silben lesen, Lesetexte
 spiele/anziehen/figur.js Zeichnet die Figur (auch für Startseite und Mein Ich)
 spiele/welt3d/          3D-Spiele (gebaut, nicht von Hand ändern)
 quellen/welt3d/         Quellcode der 3D-Spiele, quellen/three/ = three.js (MIT); bauen mit quellen/bauen.sh (esbuild)
