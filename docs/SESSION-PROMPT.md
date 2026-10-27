@@ -53,7 +53,7 @@ NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
   alle anderen Sprachen (Ukrainisch …) erst später bzw. nur in /dev.
 - **„Lieber Inhalte zuerst“** – Inhalte Priorität 1 (Phase D) vor Grafik und Story.
 
-**In den letzten Sitzungen fertig und gepusht** (zuletzt **NA-36 Teil 1+2**: elf Werkstatt-Kapitel Kl. 3–4 – Präteritum, Perfekt/Futur, Subjekt/Prädikat, Satzzeichen, ck/tz/ss/ß, Ableiten ä/äu, Dehnungs-h, wörtliche Rede, Textsorten, zwei Sachtexte mit Fragen; davor **NA-34 Teil 3+4**: acht Sachthemen Kl. 3–4 – Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer, Fahrrad, Kinderrechte und Geld, Gemeinde (jetzt 18 Themen); Eltern-Wahl des Subtraktionsverfahrens; davor **NA-33 Schritt b**: Matheweg „3. Klasse“ jetzt 17 Stationen mit schriftlich plus/minus, Würfelnetzen, Spiegeln, Diagrammen; davor NA-34 Sachthemen, NA-33a; PLAN.md → „Stand 27.10.2026, Abend (NA-33 … Schritt b)“ „… Spätnachmittag“ und „… Abend (NA-34 Teil 4)“, „… später Abend (NA-36 …)“, „… Nacht (NA-36 Teil 2)“):
+**In den letzten Sitzungen fertig und gepusht** (zuletzt der große Schritt vom 27.10. nachts: **NA-37** Matheweg „4. Klasse“ mit 9 Stationen, Kl.-3-Station „Flächen vergleichen“, **NA-36 Teil 3** (Werkstatt jetzt 22 Kapitel), **NA-34 Teil 5** (21 Sachthemen); davor NA-36 Teil 1+2, **NA-34 Teil 3+4**: acht Sachthemen Kl. 3–4 – Sinne, Wald und Wiese, Himmelsrichtungen, Schwimmen und Sinken, Feuer, Fahrrad, Kinderrechte und Geld, Gemeinde (jetzt 18 Themen); Eltern-Wahl des Subtraktionsverfahrens; davor **NA-33 Schritt b**: Matheweg „3. Klasse“ jetzt 17 Stationen mit schriftlich plus/minus, Würfelnetzen, Spiegeln, Diagrammen; davor NA-34 Sachthemen, NA-33a; PLAN.md → „Stand 27.10.2026, Abend (NA-33 … Schritt b)“ „… Spätnachmittag“ und „… Abend (NA-34 Teil 4)“, „… später Abend (NA-36 …)“, „… Nacht (NA-36 Teil 2)“, „… Nacht – großer Schritt“):
 - **Pixel auf der Hauptseite wählbar** (`Spielwelt.lookWaehlbar()` = immer wahr, `tests/look.js` umgestellt).
 - **NA-03 Lehrplan-Kern:** `shared/lehrplan/kern.js` (148 Lernziel-IDs `<fach>.<bereich>.<nr>`, Deutsch mit fünf KMK-2022-Bereichen
   `de.sz/sc/le/tm/su`), `shared/lehrplan/laender/sachsen.js` (49 Lernbereiche mit `lz`), `shared/inhalte.js` (Inhalte-Verzeichnis, errechnete
@@ -106,11 +106,11 @@ Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `in
 Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
 Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
 beiden Looks oder im Plan als offen vermerken.
-1. **NA-36 Teil 3** (M): Steigerung von Adjektiven, Personalpronomen, Komma bei Aufzählung, Vor-/Nachsilben, Satzglieder umstellen
-   – Werkstatt-Kapitel mit `stufe` und `lz` in `spiele/deutsch/werkstatt.js` (Schritt-Typen luecke/satz/sag); Schreiben/Überarbeiten (`de.sc.07`)
-   braucht einen neuen Schritt-Typ. `tests/deutsch34.js` (Liste `NEU`, Kachelzahlen 5/13/16) und `tests/lehrplan.js` (10/25/14) nachziehen.
+1. **Neuer Schritt-Typ „Text schreiben/ordnen“** (M) für Deutsch Kl. 3–4: Sätze einer Geschichte in die richtige Reihenfolge bringen,
+   Brief/Bericht-Bausteine zuordnen, einen Text mit Tipps überarbeiten (`de.sc.07`, `de.sc.09`, `de.sz.07`) – in `spiele/deutsch/abenteuer.js`
+   (neuer `case`) plus Kapitel in `werkstatt.js`. Tests: `tests/deutsch34.js` (Kachelzahlen 5/18/22), `tests/lehrplan.js` (14/26/9).
    Vorher Rückmeldung zum iPad-Test abfragen. Grafik/3D nicht ohne Rückfrage anfassen.
-2. Danach: restliche Sachthemen (Korn zum Brot, Wetterkarten, Experimentieren), Rest Mathe Kl. 3 (Würfelgebäude, Flächen, Zufall, Teilbarkeit), oder
+2. Danach: Mathe Kl. 4 Rest (römische Zahlen, Primzahlen, Maßstab), NA-39 Übergang Kl. 5, SU Wärmeleitung/Säugetiere/Experimentieren, Rest Mathe Kl. 3 (Würfelgebäude, Flächen, Zufall, Teilbarkeit), oder
    Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)
    → **NA-17** Kapitel 1–2 → **NA-18** Chronik im Album.
 
@@ -138,7 +138,7 @@ beiden Looks oder im Plan als offen vermerken.
   `Koennen.brauchtLeichter(lz)`; Seiten laden `shared/koennen.js`.
 - Lesen/Schreiben: `window.ANLAUTE` (Anlaut-Tabelle), `window.LESETEXTE` (Texte in Sprechsilben „Ba-na-ne“), `window.SCHRIFT` (Strich-Daten),
   Lernkartei-Fach `lesen` (Schritte `anlaut`, `silbenwort`, `schreibwort`);
-  Matheweg: `Mathe.STATIONEN` (Kl. 2, `mathe.k2`), `Mathe.STATIONEN_K1` (Kl. 1/Vorschule, `mathe.k1`), `Mathe.STATIONEN_K3` (Kl. 3, 17 Stationen, `mathe.k3`; `Mathe._k3.istWuerfelnetz(zellen)`), Weg-Wahl in `mathe.weg`.
+  Matheweg: `Mathe.STATIONEN` (Kl. 2, `mathe.k2`), `Mathe.STATIONEN_K1` (Kl. 1/Vorschule, `mathe.k1`), `Mathe.STATIONEN_K3` (Kl. 3, 18 Stationen, `mathe.k3`), `Mathe.STATIONEN_K4` (Kl. 4, 9 Stationen, `mathe.k4`; Aufgabenfeld `max` = erlaubte Ziffern; `Mathe._k3.istWuerfelnetz(zellen)`), Weg-Wahl in `mathe.weg`.
 - Pixel-Grafik: Zeichnung in `quellen/pixel/dinge.js` (Pixelpuffer mit `kugel/zylinder/vieleck/fuelle/rect`, nur Farben aus `PAL`), in
   `quellen/pixel/insel.js` vor `packe()` mit `merke()` in den Atlas, dann `new Sprite(e.tex)`; Dinge auf den Boden mit `stelle(e, x, z)`,
   antippbar mit `antippbar(sprite, x, z, tipp, aktion, nah, id)`.
@@ -176,7 +176,7 @@ beiden Looks oder im Plan als offen vermerken.
 - `sh tests/laufen.sh` = Node-Tests `story-migration`, `inselkern`, `lehrplan`, `wortschatz`, `koennen` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1 und 3, Eltern-Wahl Subtraktion), `sachkunde` (Themen Kl. 3–4), `deutsch34` (Werkstatt Kl. 3–4), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1, 3 und 4, Eltern-Wahl Subtraktion), `sachkunde` (Themen Kl. 3–4), `deutsch34` (Werkstatt Kl. 3–4), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.

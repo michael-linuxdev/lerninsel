@@ -691,5 +691,83 @@ window.THEMEN = [
         text: "Prima, {name}! Was würdest du in deinem Ort verbessern? Überleg dir einen Vorschlag und erzähl ihn deiner Familie oder deiner Klasse.",
         ru: "Отлично, {name}! Что бы ты улучшил в своём городе? Придумай предложение и расскажи семье или классу." }
     ]
+  },
+  // ---------- NA-34 Teil 5: Korn und Brot, Wetterkarte, Strom ----------
+  {
+    id: "brot", lz: ["su.na.08", "su.te.01"], name: "Vom Korn zum Brot", e: "🌾", farbe: "#C79A2E", grund: "#FBF3DD",
+    kurz: "Getreide, Mühle, Bäckerei – und die Kartoffel",
+    schritte: [
+      { typ: "info", titel: "Getreide auf dem Feld", bild: "🌾",
+        text: "Hallo {name}! Brot wird aus Getreide gemacht. Bei uns wachsen vor allem Weizen, Roggen, Gerste und Hafer. Die Körner sitzen oben in der Ähre.",
+        ru: "Привет, {name}! Хлеб делают из зерна. У нас растут в основном пшеница, рожь, ячмень и овёс. Зёрна сидят наверху, в колосе.",
+        fakten: [["Weizen 🌾", "Пшеница 🌾"], ["Roggen", "Рожь"], ["Gerste", "Ячмень"], ["Hafer 🥣", "Овёс 🥣"]] },
+      { typ: "zuordnen", frage: "Bring die Arbeit in die richtige Gruppe.", ru: "Распредели работу по группам.",
+        gruppen: [{ id: "f", name: "Auf dem Feld", ru: "В поле", bild: "🚜" }, { id: "m", name: "In der Mühle", ru: "На мельнице", bild: "🏭" }, { id: "b", name: "In der Bäckerei", ru: "В пекарне", bild: "🥖" }],
+        dinge: [
+          { t: "Säen", ru: "Сеять", gruppe: "f" }, { t: "Ernten mit dem Mähdrescher", ru: "Убирать комбайном", gruppe: "f" },
+          { t: "Körner zu Mehl mahlen", ru: "Молоть зерно в муку", gruppe: "m" }, { t: "Mehl in Säcke füllen", ru: "Насыпать муку в мешки", gruppe: "m" },
+          { t: "Teig kneten", ru: "Месить тесто", gruppe: "b" }, { t: "Brot backen", ru: "Печь хлеб", gruppe: "b" }] },
+      { typ: "wahl", frage: "Was braucht man für einen einfachen Brotteig?", ru: "Что нужно для простого хлебного теста?", bild: "🥣", optionen: [
+        { t: "Mehl, Wasser, Salz und Hefe", ru: "Мука, вода, соль и дрожжи", ok: true, warum: "Richtig! Die Hefe lässt den Teig aufgehen, dann wird das Brot locker.", warumRu: "Правильно! Дрожжи поднимают тесто, и хлеб становится пышным." },
+        { t: "Zucker, Butter und Schokolade", ru: "Сахар, масло и шоколад", ok: false, warum: "Das klingt nach Kuchen. Für Brot reichen Mehl, Wasser, Salz und Hefe.", warumRu: "Это скорее торт. Для хлеба хватит муки, воды, соли и дрожжей." },
+        { t: "Kartoffeln und Milch", ru: "Картофель и молоко", ok: false, warum: "Daraus wird eher Kartoffelbrei. Brot macht man aus Mehl.", warumRu: "Из этого получится пюре. Хлеб делают из муки." }] },
+      { typ: "daumen", satz: "Kartoffeln wachsen unter der Erde.", satzRu: "Картофель растёт под землёй.", bild: "🥔", ok: true,
+        warum: "Stimmt! Wir essen die Knollen. Die grünen Teile und Beeren der Kartoffelpflanze sind giftig.", warumRu: "Верно! Мы едим клубни. Зелёные части и ягоды картофеля ядовиты." },
+      { typ: "daumen", satz: "Vollkornbrot enthält das ganze Korn mit der Schale.", satzRu: "Цельнозерновой хлеб содержит всё зерно вместе с оболочкой.", bild: "🍞", ok: true,
+        warum: "Stimmt! Darum macht es lange satt und ist besonders gesund.", warumRu: "Верно! Поэтому он надолго насыщает и особенно полезен." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Toll, {name}! Vom Feld bis zum Brötchen arbeiten viele Menschen zusammen. Auf der Insel backt Benno auch gern.",
+        ru: "Здорово, {name}! От поля до булочки вместе работают много людей. На острове Бенно тоже любит печь." }
+    ]
+  },
+  {
+    id: "wetterkarte", lz: ["su.na.04"], name: "Die Wetterkarte", e: "🗺️", farbe: "#2F86C8", grund: "#E5F1FB",
+    kurz: "Wetterzeichen lesen, Temperatur, Wind",
+    schritte: [
+      { typ: "info", titel: "Wetterzeichen", bild: "🌦️",
+        text: "Hallo {name}! Im Wetterbericht siehst du eine Karte mit Zeichen. Sie zeigen, wo die Sonne scheint, wo es regnet und wie warm es wird.",
+        ru: "Привет, {name}! В прогнозе погоды есть карта со значками. Они показывают, где светит солнце, где идёт дождь и как будет тепло.",
+        fakten: [["☀️ Sonne", "☀️ Солнце"], ["⛅ Sonne und Wolken", "⛅ Солнце и облака"], ["🌧️ Regen", "🌧️ Дождь"], ["⛈️ Gewitter", "⛈️ Гроза"], ["❄️ Schnee", "❄️ Снег"]] },
+      { typ: "wahl", frage: "Auf der Karte steht bei Dresden ⛈️. Was nimmst du mit?", ru: "На карте у Дрездена ⛈️. Что ты возьмёшь?", bild: "⛈️", optionen: [
+        { t: "Regenjacke – und bei Blitzen drinnen bleiben", ru: "Дождевик — а при молнии оставаться дома", ok: true, warum: "Richtig! Bei Gewitter sucht man Schutz in einem Haus oder Auto.", warumRu: "Правильно! В грозу прячутся в доме или машине." },
+        { t: "Sonnenbrille und Badehose", ru: "Солнечные очки и плавки", ok: false, warum: "Das Zeichen zeigt Gewitter, nicht Sonne.", warumRu: "Значок показывает грозу, а не солнце." },
+        { t: "Schlitten", ru: "Санки", ok: false, warum: "Für einen Schlitten brauchst du ❄️ Schnee.", warumRu: "Для санок нужен ❄️ снег." }] },
+      { typ: "wahl", frage: "In Berlin sind 25 °C, in Leipzig 18 °C. Wo ist es wärmer?", ru: "В Берлине 25 °C, в Лейпциге 18 °C. Где теплее?", bild: "🌡️", optionen: [
+        { t: "In Berlin", ru: "В Берлине", ok: true, warum: "Genau! 25 Grad sind mehr als 18 Grad – 7 Grad wärmer.", warumRu: "Точно! 25 градусов больше, чем 18 — на 7 градусов теплее." },
+        { t: "In Leipzig", ru: "В Лейпциге", ok: false, warum: "18 ist weniger als 25. In Berlin ist es wärmer.", warumRu: "18 меньше, чем 25. В Берлине теплее." },
+        { t: "Überall gleich", ru: "Везде одинаково", ok: false, warum: "Die Zahlen sind verschieden: 25 °C und 18 °C.", warumRu: "Числа разные: 25 °C и 18 °C." }] },
+      { typ: "daumen", satz: "Unter 0 °C kann Wasser zu Eis gefrieren.", satzRu: "Ниже 0 °C вода может замёрзнуть.", bild: "🧊", ok: true,
+        warum: "Stimmt! Dann gibt es Frost und manchmal Glätte auf den Wegen.", warumRu: "Верно! Тогда бывает мороз, а иногда гололёд." },
+      { typ: "daumen", satz: "Ein Pfeil auf der Wetterkarte zeigt, woher der Wind weht.", satzRu: "Стрелка на карте погоды показывает, откуда дует ветер.", bild: "💨", ok: true,
+        warum: "Stimmt! Der Pfeil zeigt die Richtung, in die der Wind weht. Westwind kommt aus dem Westen.", warumRu: "Верно! Стрелка показывает, куда дует ветер. Западный ветер дует с запада." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Super, {name}! Schau heute mit deiner Familie den Wetterbericht an. Auf der Insel ändert sich das Wetter übrigens auch.",
+        ru: "Супер, {name}! Посмотри сегодня с семьёй прогноз погоды. На острове погода тоже меняется." }
+    ]
+  },
+  {
+    id: "strom", lz: ["su.na.09"], name: "Strom – nützlich und gefährlich", e: "💡", farbe: "#E0A800", grund: "#FFF7D6",
+    kurz: "Stromkreis, Leiter und Nichtleiter, sicher mit Strom",
+    schritte: [
+      { typ: "info", titel: "Der Stromkreis", bild: "🔋",
+        text: "Hallo {name}! Eine Lampe leuchtet nur, wenn der Strom im Kreis fließen kann: von der Batterie durch den Draht zur Lampe und wieder zurück. Ein Schalter öffnet oder schließt den Kreis.",
+        ru: "Привет, {name}! Лампочка горит, только если ток идёт по кругу: от батарейки по проводу к лампочке и обратно. Выключатель размыкает или замыкает цепь." },
+      { typ: "zuordnen", frage: "Leitet das den Strom?", ru: "Проводит ли это ток?",
+        gruppen: [{ id: "l", name: "Leiter", ru: "Проводник", bild: "⚡" }, { id: "n", name: "Nichtleiter", ru: "Непроводник", bild: "🚫" }],
+        dinge: [
+          { t: "Kupferdraht", ru: "Медная проволока", gruppe: "l" }, { t: "Büroklammer aus Metall", ru: "Металлическая скрепка", gruppe: "l" }, { t: "Alufolie", ru: "Фольга", gruppe: "l" },
+          { t: "Holzstab", ru: "Деревянная палочка", gruppe: "n" }, { t: "Gummiband", ru: "Резинка", gruppe: "n" }, { t: "Plastiklineal", ru: "Пластиковая линейка", gruppe: "n" }] },
+      { typ: "wahl", frage: "Warum hat ein Kabel eine Hülle aus Kunststoff?", ru: "Зачем у кабеля оболочка из пластика?", bild: "🔌", optionen: [
+        { t: "Damit der Strom nicht in uns fließt", ru: "Чтобы ток не прошёл через нас", ok: true, warum: "Richtig! Kunststoff ist ein Nichtleiter und schützt uns.", warumRu: "Правильно! Пластик — непроводник, он нас защищает." },
+        { t: "Damit es schön bunt ist", ru: "Чтобы было красиво", ok: false, warum: "Die Farbe ist egal – die Hülle schützt vor Strom.", warumRu: "Цвет не важен — оболочка защищает от тока." },
+        { t: "Damit der Strom schneller fließt", ru: "Чтобы ток шёл быстрее", ok: false, warum: "Nein, die Hülle isoliert. Sie schützt uns vor dem Strom.", warumRu: "Нет, оболочка изолирует. Она защищает нас от тока." }] },
+      { typ: "daumen", satz: "Mit einer kleinen Batterie darf man experimentieren, mit der Steckdose nie.", satzRu: "С маленькой батарейкой можно экспериментировать, с розеткой — никогда.", bild: "⚠️", ok: true,
+        warum: "Stimmt! Strom aus der Steckdose ist lebensgefährlich. Nie etwas hineinstecken, kaputte Kabel nicht anfassen.", warumRu: "Верно! Ток из розетки опасен для жизни. Ничего туда не вставляй и не трогай повреждённые провода." },
+      { typ: "daumen", satz: "Elektrische Geräte darf man mit nassen Händen ruhig anfassen.", satzRu: "Электроприборы можно трогать мокрыми руками.", bild: "💧", ok: false,
+        warum: "Nein! Wasser leitet Strom. Föhn und Radio gehören nie in die Nähe der Badewanne.", warumRu: "Нет! Вода проводит ток. Фен и радио никогда не должны быть рядом с ванной." },
+      { typ: "info", titel: "Geschafft!", bild: "🦉",
+        text: "Klasse, {name}! Strom kann man sparen: Licht aus, wenn du den Raum verlässt. Das schont auch die Umwelt.",
+        ru: "Класс, {name}! Электричество можно экономить: выключай свет, когда выходишь из комнаты. Это бережёт и природу." }
+    ]
   }
 ];

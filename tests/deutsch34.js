@@ -4,7 +4,7 @@ const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;
-const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-kurz-lang", "w-ableiten", "w-dehnung", "w-rede", "w-textsorten", "w-lesen-igel", "w-lesen-vergleich"];
+const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-kurz-lang", "w-ableiten", "w-dehnung", "w-rede", "w-textsorten", "w-lesen-igel", "w-lesen-vergleich", "w-steigerung", "w-pronomen", "w-komma", "w-vornach", "w-faelle", "w-meinung"];
 
 (async () => {
   const browser = await chromium.launch();
@@ -25,7 +25,7 @@ const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-
   }
   const kacheln = (p) => p.evaluate(() => [...document.querySelectorAll("#werkstatt button.ort")].map(b => b.getAttribute("aria-label")));
   // Sichtbarkeit je Klasse
-  for (const [stufe, anzahl] of [["1", 5], ["2", 13], ["3", 16]]) {
+  for (const [stufe, anzahl] of [["1", 5], ["2", 18], ["3", 22]]) {
     const { ctx, p } = await kind(stufe, 1180, 820);
     const k = await kacheln(p);
     erwarte(k.length === anzahl, `Klasse ${stufe}: ${anzahl} Werkstatt-Kapitel sichtbar (${k.length})`);

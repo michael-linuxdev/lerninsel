@@ -594,6 +594,27 @@
     ["Lieblingsobst", ["🍎", "🍌", "🍓", "🍐"], ["Apfel", "Banane", "Erdbeere", "Birne"], (a) => `Wie viele Kinder haben ${a} gewählt?`, (a, b) => `Wie viele Kinder mehr haben ${a} gewählt als ${b}?`, "Welches Obst haben die meisten gewählt?"],
     ["Wetter im Monat", ["☀️", "☁️", "🌧️", "❄️"], ["Sonne", "Wolken", "Regen", "Schnee"], (a) => `An wie vielen Tagen gab es ${a}?`, (a, b) => `An wie vielen Tagen mehr gab es ${a} als ${b}?`, "Welches Wetter gab es am häufigsten?"]];
 
+  // ---------- Klasse 3/4: Flächen, große Zahlen, Gewinnchancen (NA-33 Rest, NA-37) ----------
+  const tausend = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " "); // 345678 → „345 678“
+  function kaestchenBild(zellen, rand = false) {
+    const g = 30, zr = Math.max(...zellen.map(p => p[0])) + 1, sp = Math.max(...zellen.map(p => p[1])) + 1; let s = "";
+    for (let i = 0; i <= zr + 1; i++) for (let j = 0; j <= sp + 1; j++) s += `<rect x="${4 + j * g}" y="${4 + i * g}" width="${g}" height="${g}" fill="#fff" stroke="#e3dcef" stroke-width="1"/>`;
+    s += zellen.map(p => `<rect x="${4 + (p[1] + 1) * g}" y="${4 + (p[0] + 1) * g}" width="${g}" height="${g}" fill="#5CCBA6" stroke="${rand ? "#5CCBA6" : "#2E7D62"}" stroke-width="1.5"/>`).join("");
+    if (rand) s += `<rect x="${4 + g}" y="${4 + g}" width="${sp * g}" height="${zr * g}" fill="none" stroke="#3b1f63" stroke-width="4"/>`;
+    return `<svg viewBox="0 0 ${(sp + 2) * g + 8} ${(zr + 2) * g + 8}" style="max-height:220px" role="img" aria-label="Fläche aus Kästchen">${s}</svg>`;
+  }
+  function formAus(n) { const z = [[0, 0]], da = new Set(["0,0"]);
+    while (z.length < n) { const [a, b] = wahl(z), d = wahl([[0, 1], [0, -1], [1, 0], [-1, 0]]), m = [a + d[0], b + d[1]];
+      if (m[0] < 0 || m[1] < 0 || m[0] > 3 || m[1] > 5 || da.has(m.join(","))) continue; da.add(m.join(",")); z.push(m); }
+    return z; }
+  function kugelBild(farben) { // farben: [["#E5484D", n], ...]
+    let s = "", i = 0; farben.forEach(([f, n]) => { for (let k = 0; k < n; k++, i++) s += `<circle cx="${30 + (i % 6) * 40}" cy="${30 + Math.floor(i / 6) * 40}" r="16" fill="${f}" stroke="#3b1f63" stroke-width="2"/>`; });
+    return `<svg viewBox="0 0 250 ${30 + Math.ceil(i / 6) * 40}" style="max-height:170px" role="img" aria-label="Kugeln in einem Beutel">${s}</svg>`;
+  }
+  function malSchriftHilfe(a, b) { const x = stellen(a), name = ["Hunderter", "Zehner", "Einer"]; let ue = 0; const t = [];
+    for (let i = 2; i >= 0; i--) { const p = x[i] * b + ue; t.push(`${name[i]}: ${b} · ${x[i]}${ue ? ` + ${ue} (gemerkt)` : ""} = ${p}${i > 0 && p >= 10 ? ` – schreibe ${p % 10}, merke ${Math.floor(p / 10)}` : ""}.`); ue = Math.floor(p / 10); }
+    return t.join(" ") + ` Ergebnis: ${a * b}.`; }
+
   const STATIONEN_K3 = [
     { id: "k3stellen", stufe: "3", lz: ["ma.zo.12"], name: "Zahlen bis 1000", icon: "💯",
       neu: () => { const n = r(101, 999); return zahl("", n, `${Math.floor(n / 100)} Hunderter, ${Math.floor(n / 10) % 10} Zehner und ${n % 10} Einer sind ${n}.`, { frage: "Welche Zahl ist das?", bild: stellenBild(n), nurLuecke: true }); } },
@@ -679,7 +700,61 @@
           return zahl("", werte[i] - werte[j], `${namen[i]}: ${werte[i]}, ${namen[j]}: ${werte[j]}. ${werte[i]} ${M} ${werte[j]} = ${werte[i] - werte[j]}.`, { frage: `${thema}: ${fMehr(namen[i], namen[j])}`, bild: saeulenBild(kat, werte), nurLuecke: true }); }
         const max = Math.max(...werte), sieger = werte.indexOf(max); werte.forEach((w, k) => { if (k !== sieger && w === max) werte[k] = max - 1; });
         return { text: "", frage: `${thema}: ${fMeist}`, antwort: kat[sieger], art: "wahl", optionen: kat.slice(), nurLuecke: true, bild: saeulenBild(kat, werte),
-          hilfe: `Die höchste Säule gewinnt: ${namen[sieger]} mit ${werte[sieger]}.` }; } }
+          hilfe: `Die höchste Säule gewinnt: ${namen[sieger]} mit ${werte[sieger]}.` }; } },
+    { id: "k3flaeche", stufe: "3", lz: ["ma.rf.08"], name: "Flächen vergleichen", icon: "🟩",
+      neu: () => { const n = r(5, 13), z = formAus(n);
+        return zahl("", n, `Zähle jedes grüne Kästchen genau einmal, am besten Reihe für Reihe. Die Fläche ist ${n} Kästchen groß.`,
+          { frage: "Wie viele Kästchen groß ist die grüne Fläche?", bild: kaestchenBild(z), nurLuecke: true }); } }
+  ];
+
+  // ---------- Klasse 4 (NA-37): Zahlen bis 1 Million, schriftlich mal und geteilt, Teilbarkeit, Hohlmaße, Flächen, Chancen ----------
+  const STATIONEN_K4 = [
+    { id: "k4million", stufe: "4", lz: ["ma.zo.15"], name: "Zahlen bis 1 Million", icon: "🔢",
+      neu: () => { const n = r(100000, 999999), st = wahl([["Hunderttausender", 100000], ["Zehntausender", 10000], ["Tausender", 1000], ["Hunderter", 100]]), d = Math.floor(n / st[1]) % 10;
+        if (Math.random() < 0.5) return zahl("", d, `${tausend(n)}: Von rechts gelesen Einer, Zehner, Hunderter, Tausender, Zehntausender, Hunderttausender. An der ${st[0]}stelle steht ${d}.`, { frage: `Welche Ziffer steht in ${tausend(n)} an der ${st[0]}stelle?`, nurLuecke: true });
+        const schritt = wahl([1, 10, 100, 1000]), m = Math.ceil(r(20000, 989999) / (schritt * 10)) * schritt * 10;
+        return zahl("", m, `Eins weiter in ${schritt === 1 ? "Einern" : schritt + "er-Schritten"}: ${tausend(m - schritt)} + ${schritt} = ${tausend(m)}.`, { frage: `Welche Zahl kommt nach ${tausend(m - schritt)}, wenn du in ${schritt === 1 ? "Einer" : schritt + "er"}-Schritten zählst?`, nurLuecke: true, max: 7 }); } },
+    { id: "k4runden", stufe: "4", lz: ["ma.zo.15", "ma.zo.16"], name: "Runden und Überschlagen", icon: "≈",
+      neu: () => { if (Math.random() < 0.5) { const n = r(10000, 989999), z = Math.round(n / 1000) * 1000;
+          return zahl("", z, `Schau auf die Hunderter: ${Math.floor(n / 100) % 10}. ${Math.floor(n / 100) % 10 >= 5 ? "Ab 5 wird aufgerundet" : "Unter 5 wird abgerundet"} → ${tausend(z)}.`, { frage: `Runde ${tausend(n)} auf Tausender.`, nurLuecke: true, max: 7 }); }
+        const a = r(110, 590), b = r(110, 390), ra = Math.round(a / 100) * 100, rb = Math.round(b / 100) * 100;
+        return zahl("", ra + rb, `Erst runden: ${a} ≈ ${ra}, ${b} ≈ ${rb}. Dann rechnen: ${ra} + ${rb} = ${ra + rb}. Das genaue Ergebnis (${a + b}) liegt in der Nähe.`, { frage: `Überschlage auf Hunderter: ${a} + ${b} ≈ ?`, nurLuecke: true, max: 7 }); } },
+    { id: "k4malschrift", stufe: "4", lz: ["ma.zo.16"], name: "Schriftlich mal", icon: "✖️",
+      neu: () => { const b = r(3, 9), a = r(112, 999);
+        return zahl(`${a} · ${b}`, a * b, malSchriftHilfe(a, b), { frage: "Rechne schriftlich: Fang bei den Einern an.", max: 7 }); } },
+    { id: "k4geteilt", stufe: "4", lz: ["ma.zo.16"], name: "Schriftlich geteilt", icon: "➗",
+      neu: () => { const b = r(2, 9), q = r(Math.ceil(100 / b) + 1, Math.floor(999 / b)), a = q * b, x = stellen(a);
+        let rest = 0; const t = [];
+        x.forEach((d, i) => { const z = rest * 10 + d, e = Math.floor(z / b); rest = z - e * b; if (i === 0 && e === 0) { t.push(`${d} : ${b} geht nicht, nimm die nächste Stelle dazu.`); return; } t.push(`${z} : ${b} = ${e}${rest ? `, Rest ${rest}` : ""}.`); });
+        return zahl(`${a} : ${b}`, q, t.join(" ") + ` Ergebnis: ${q}. Probe: ${q} · ${b} = ${a}.`, { frage: "Teile schriftlich von links nach rechts.", max: 7 }); } },
+    { id: "k4teilbar", stufe: "4", lz: ["ma.zo.17"], name: "Teilbar?", icon: "🔍",
+      neu: () => { const t = wahl([2, 3, 5, 10]), soll = Math.random() < 0.5; let n;
+        do n = r(100, 999); while ((n % t === 0) !== soll);
+        const qs = String(n).split("").reduce((x, y) => x + +y, 0);
+        const regel = { 2: `Durch 2 teilbar sind gerade Zahlen (letzte Ziffer 0, 2, 4, 6, 8). ${n} endet auf ${n % 10}.`,
+          5: `Durch 5 teilbar ist eine Zahl mit 0 oder 5 am Ende. ${n} endet auf ${n % 10}.`, 10: `Durch 10 teilbar ist eine Zahl mit 0 am Ende. ${n} endet auf ${n % 10}.`,
+          3: `Rechne die Quersumme: ${String(n).split("").join(" + ")} = ${qs}. Ist sie durch 3 teilbar, dann auch die Zahl.` }[t];
+        return { text: "", frage: `Ist ${n} durch ${t} teilbar?`, antwort: soll ? "ja" : "nein", art: "wahl", optionen: ["ja", "nein"], nurLuecke: true, hilfe: regel + (soll ? " Also ja." : " Also nein.") }; } },
+    { id: "k4geschickt", stufe: "4", lz: ["ma.zo.17"], name: "Geschickt rechnen", icon: "💡",
+      neu: () => { const art = r(0, 2);
+        if (art === 0) { const [x, y] = wahl([[25, 4], [5, 2], [20, 5], [50, 2]]), z = r(3, 9); return zahl(`${x} · ${z} · ${y}`, x * y * z, `Tausche die Faktoren: ${x} · ${y} = ${x * y}, dann ${x * y} · ${z} = ${x * y * z}.`, { max: 7 }); }
+        if (art === 1) { const c = r(110, 480), s1 = r(21, 79), s2 = 100 - s1; return zahl(`${s1} + ${c} + ${s2}`, s1 + s2 + c, `Erst die Partner zu 100: ${s1} + ${s2} = 100. Dann 100 + ${c} = ${100 + c}.`, { max: 7 }); }
+        const a = r(3, 9), b = r(11, 19); return zahl(`${a} · ${b}`, a * b, `Zerlege: ${a} · 10 = ${a * 10} und ${a} · ${b - 10} = ${a * (b - 10)}. Zusammen ${a * b}.`); } },
+    { id: "k4liter", stufe: "4", lz: ["ma.gm.09"], name: "Liter und Milliliter", icon: "🧃",
+      neu: () => { if (Math.random() < 0.5) { const l = r(1, 9), halb = Math.random() < 0.3; const ml = l * 1000 + (halb ? 500 : 0);
+          return zahl("", ml, `1 l sind 1000 ml. ${l}${halb ? ",5" : ""} l sind ${ml} ml.`, { frage: `Wie viele Milliliter sind ${l}${halb ? ",5" : ""} l?`, einheit: "ml", nurLuecke: true, max: 7 }); }
+        const d = wahl([["ein Löffel Saft", "ml"], ["eine Badewanne voll Wasser", "l"], ["ein Glas Milch", "ml"], ["ein Eimer Wasser", "l"], ["eine Flasche Medizin-Tropfen", "ml"], ["ein Aquarium", "l"]]);
+        return { text: "", frage: `Misst man ${d[0]} eher in ml oder in l?`, antwort: d[1], art: "wahl", optionen: ["ml", "l"], nurLuecke: true,
+          hilfe: (d[1] === "l" ? `${d[0]} – das ist viel, man misst in Litern.` : `${d[0]} – das ist wenig, man misst in Millilitern.`).replace(/^./, c => c.toUpperCase()) }; } },
+    { id: "k4flaeche", stufe: "4", lz: ["ma.rf.09", "ma.rf.08"], name: "Flächeninhalt und Umfang", icon: "📐",
+      neu: () => { const a = r(2, 6), b = r(2, 4), z = []; for (let i = 0; i < b; i++) for (let j = 0; j < a; j++) z.push([i, j]);
+        if (Math.random() < 0.5) return zahl("", a * b, `${b} Reihen mit je ${a} Kästchen: ${b} · ${a} = ${a * b}. Der Flächeninhalt ist ${a * b} Kästchen.`, { frage: "Wie viele Kästchen hat das Rechteck? (Flächeninhalt)", bild: kaestchenBild(z, true), nurLuecke: true });
+        return zahl("", 2 * (a + b), `Lauf einmal um den Rand: ${a} + ${b} + ${a} + ${b} = ${2 * (a + b)} Kästchenlängen.`, { frage: "Wie viele Kästchenlängen ist der dicke Rand lang? (Umfang)", bild: kaestchenBild(z, true), nurLuecke: true }); } },
+    { id: "k4chance", stufe: "4", lz: ["ma.dz.07"], name: "Gewinnchancen", icon: "🎲",
+      neu: () => { const rot = r(1, 7), blau = r(1, 7); if (rot === blau) return { text: "", frage: `Im Beutel liegen Kugeln: ${rot} × rot, ${blau} × blau. Ist Rot oder Blau wahrscheinlicher?`, antwort: "gleich", art: "wahl", optionen: ["Rot", "Blau", "gleich"], nurLuecke: true, bild: kugelBild([["#E5484D", rot], ["#4B6FC8", blau]]), hilfe: `Von beiden Farben gibt es gleich viele (${rot}). Die Chancen sind gleich.` };
+        const sieger = rot > blau ? "Rot" : "Blau";
+        return { text: "", frage: `Im Beutel liegen Kugeln: ${rot} × rot, ${blau} × blau. Du ziehst eine, ohne hinzusehen. Was ist wahrscheinlicher?`, antwort: sieger, art: "wahl", optionen: ["Rot", "Blau", "gleich"], nurLuecke: true,
+          bild: kugelBild([["#E5484D", rot], ["#4B6FC8", blau]]), hilfe: `Von ${sieger === "Rot" ? "den roten" : "den blauen"} Kugeln gibt es mehr (${Math.max(rot, blau)} gegen ${Math.min(rot, blau)}). Darum ist ${sieger} wahrscheinlicher – sicher ist es aber nicht.` }; } }
   ];
 
   function malAufgabe(reihen) {
@@ -690,7 +765,7 @@
 
   // Eine Runde: verschiedene Aufgaben ohne Doppelte
   function runde(station, anzahl = 10) {
-    const s = STATIONEN.find(x => x.id === station) || STATIONEN_K1.find(x => x.id === station) || STATIONEN_K3.find(x => x.id === station);
+    const s = STATIONEN.find(x => x.id === station) || STATIONEN_K1.find(x => x.id === station) || STATIONEN_K3.find(x => x.id === station) || STATIONEN_K4.find(x => x.id === station);
     const liste = [], gesehen = new Set();
     let versuche = 0;
     while (liste.length < anzahl && versuche++ < 400) {
@@ -702,5 +777,5 @@
     return liste;
   }
 
-  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, runde, _k3: { istWuerfelnetz, zufallsNetz }, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
+  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, runde, _k3: { istWuerfelnetz, zufallsNetz }, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
 })();

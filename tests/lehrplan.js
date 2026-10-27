@@ -56,7 +56,7 @@ pruefe("Sachsen: alle 49 Lernbereiche haben lz-Verweise auf existierende Ziele (
 pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand 9 / 15 / 25, Stand NA-33a)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 10, teil: 25, nein: 14 });
+  assert.deepStrictEqual({ ...n }, { ja: 14, teil: 26, nein: 9 });
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
@@ -71,9 +71,9 @@ pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziel
   assert.ok(I.alle().length >= 23 + 5 + 5 + 4 + 6 + 5, "Inhalte: " + I.alle().length);
 });
 
-pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten knapp teilweise, Anlaute gut, Lesetexte und Nachspuren teilweise, Texte planen noch nicht", () => {
+pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten gut, Anlaute gut, Lesetexte und Nachspuren teilweise, Texte planen noch nicht", () => {
   assert.strictEqual(I.abdeckung("ma.zo.07"), "ja");    // vier Stationen
-  assert.strictEqual(I.abdeckung("de.su.04"), "teil");  // drei Werkstatt-Kapitel, aber nur 28 Aufgaben
+  assert.strictEqual(I.abdeckung("de.su.04"), "ja");    // NA-36: mit Steigerung und Pronomen genug Aufgaben
   assert.strictEqual(I.abdeckung("ma.zo.03"), "ja");    // Plus/Minus bis 20 und bis 10 (Klasse-1-Weg)
   assert.strictEqual(I.abdeckung("ma.zo.05"), "teil");  // nur eine Station
   assert.strictEqual(I.abdeckung("me.ph.01"), "teil");  // ohne Lernkartei

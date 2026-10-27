@@ -434,7 +434,11 @@
     // Klasse-1-Weg (NA-32) mit anzeigen, wenn das Kind dort übt oder in Vorschule/Klasse 1 ist
     const k1 = mathe.k1 || {}, mitK1 = Object.keys(k1).length || ["vs", "1"].includes((S.stufe() || {}).code);
     const alleSt = (mitK1 ? (window.Mathe.STATIONEN_K1 || []).map(s => ({ s, st: k1[s.id], vor: "Kl. 1: " })) : [])
-      .concat(window.Mathe.STATIONEN.map(s => ({ s, st: k2[s.id], vor: "" })));
+      .concat(window.Mathe.STATIONEN.map(s => ({ s, st: k2[s.id], vor: "" })))
+      // Klasse 3/4 (NA-33/37), wenn das Kind dort übt oder in der Klasse ist
+      .concat(...[["k3", "STATIONEN_K3", "3", "Kl. 3: "], ["k4", "STATIONEN_K4", "4", "Kl. 4: "]].map(([w, liste, kl, vor]) => {
+        const d = mathe[w] || {}, mit = Object.keys(d).length || (S.stufe() || {}).code === kl;
+        return mit ? (window.Mathe[liste] || []).map(s => ({ s, st: d[s.id], vor })) : []; }));
     const stationen = alleSt.map(({ s, st, vor }) => {
       const x = stat[s.id], n = x ? x.r + x.f : 0, q = n ? x.r / n : null;
       return `<tr><td>${vor}${s.name}</td><td class="zahl-r">${st ? "⭐".repeat(st) : "–"}</td><td class="zahl-r">${n || "–"}</td><td class="zahl-r"><span class="quote ${quoteKlasse(n >= 3 ? q : null)}">${prozent(q)}</span></td></tr>`;

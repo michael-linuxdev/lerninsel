@@ -683,7 +683,7 @@ Alle Pakete: kein Bezug zu einem echten Kind, Texte mit Sprachschlüsseln, Rauch
 Jedes Spiel: Prüffragen aus `MINISPIELE.md` Abschnitt 1, Test-Haken, Eintrag in `SEITEN_3D`, Leistungs-Test.
 
 #### Phase G – Breite (2027)
-~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1+2, 11 Werkstatt-Kapitel) · NA-37 Mathe Kl. 4 · NA-38 Medienbildung
+~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 (27.10.: Teil 1–3, 17 Werkstatt-Kapitel) · ~~NA-37 Mathe Kl. 4~~ (27.10.: Weg mit 9 Stationen) · NA-38 Medienbildung
 „Produzieren/Problemlösen“ (Roboter-Weg) · NA-39 Übergang 5 · NA-41 Vorschul-Pfad · NA-46 Arabisch, Türkisch und weitere Sprachen ·
 NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Volkslied-Melodien (Noten prüfen).
 
@@ -1228,3 +1228,20 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
 - **Offen in NA-36:** Komma bei Aufzählung, Steigerung, Pronomen, Vor-/Nachsilben, Fälle, Texte planen/überarbeiten (`de.sc.07`), Bericht/Brief
   (`de.sc.09`), Sprechen (Meinung begründen, präsentieren) – braucht teils neue Schritt-Typen (Text schreiben/ordnen).
 - **Nächstes:** nach iPad-Rückmeldung NA-36 Teil 3 (Steigerung, Pronomen, Komma, Satzglieder umstellen) oder restliche Sachthemen.
+
+### Stand 27.10.2026, Nacht – großer Schritt (NA-37 Mathe Kl. 4, NA-33 Rest, NA-36 Teil 3, NA-34 Teil 5)
+- **NA-37 Matheweg „4. Klasse“** (`Mathe.STATIONEN_K4`, Fortschritt `mathe.k4`; Kinder in Kl. 4/5 starten dort, Zielknoten Kl. 3 → Kl. 4):
+  Zahlen bis 1 Million (Stellen, Zählen in Schritten), Runden und Überschlagen, schriftlich mal (dreistellig · einstellig, Hilfe Stelle für Stelle),
+  schriftlich geteilt (einstellig, mit Probe), Teilbar? (2, 3 mit Quersumme, 5, 10), Geschickt rechnen (Tausch, Partner zu 100, Zerlegen),
+  Liter und Milliliter, Flächeninhalt und Umfang (Kästchen-Rechteck), Gewinnchancen (Kugeln im Beutel). Eingabe bis 7 Ziffern (Feld `max`, auch in der Lernkartei).
+  Elternbericht listet Kl.-3/4-Stationen, wenn das Kind dort übt.
+- **NA-33 Rest:** Station „Flächen vergleichen“ (Kästchen zählen, `ma.rf.08`) – Weg „3. Klasse“ jetzt 18 Stationen.
+- **NA-36 Teil 3:** sechs Werkstatt-Kapitel – Steigerung (`de.su.04`), Personalpronomen, Komma bei Aufzählungen (`de.sc.05`), Vor-/Nachsilben (`de.su.08`),
+  Meinung mit „weil“ (`de.sz.06`) – Kl. 3; Wer/Wen/Wem (`de.su.11`) – Kl. 4. Werkstatt jetzt 22 Kapitel (Kl. 1: 5, Kl. 2: 18, ab Kl. 3: 22).
+- **NA-34 Teil 5:** Sachthemen „Vom Korn zum Brot“, „Die Wetterkarte“, „Strom – nützlich und gefährlich“ – jetzt 21 Themen.
+- Sachsen gesamt jetzt 14 × ja, 26 × teil, 9 × nein (u. a. Deutsch Kl. 3 „Richtig schreiben“, „Sprache untersuchen“, SU Kl. 3 „Pflanzen und Tiere“,
+  „Unbelebte Natur“ → ja; Mathe Kl. 4 alle vier Bereiche → teil).
+- **Offen:** Mathe Kl. 4: römische Zahlen, Primzahlen, Maßstab, Schrägbilder, Vierecke, Volumen; Kl. 3: Würfelgebäude, Schiebe-/Drehsymmetrie.
+  Deutsch: Texte planen/überarbeiten (`de.sc.07`), Bericht/Brief (`de.sc.09`), präsentieren (`de.sz.07`) – brauchen einen Schreib-Schritt.
+  SU: Wärmeleitung, Säugetiere/Gewässer, Experimentieren, Landkreis/Bundesland.
+- **Nächstes:** neuer Schritt-Typ „Text schreiben/ordnen“ für Deutsch Kl. 3–4, oder Übergang Kl. 5 (NA-39), oder Grafik/Story nach Rückfrage.

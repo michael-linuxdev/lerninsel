@@ -238,5 +238,82 @@ window.WERKSTATT = [
       { typ: "luecke", e: "💧", satz: "Was haben beide gemeinsam? Beide leben am ___.", optionen: ["Wasser", "Berg", "Strand im Süden"], ru: "Что у них общего? Оба живут у воды." },
       { typ: "sag", text: "Klasse verglichen! Beim Vergleichen suchst du in beiden Texten dieselbe Sache: Futter, Wohnung, Gewicht.", ru: "Отлично сравнил! При сравнении ищи в обоих текстах одно и то же: еду, жильё, вес." }
     ]
+  },
+  // ---------- NA-36 Teil 3: Steigerung, Pronomen, Komma, Vor-/Nachsilben, Fälle, Meinung ----------
+  {
+    id: "w-steigerung", stufe: 3, lz: ["de.su.04"], name: "groß, größer, am größten", ort: "📏", farbe: "#3AA0E0", grund: "#E1F3FF",
+    schritte: [
+      { typ: "sag", text: "Mit Adjektiven kann man vergleichen: Die Maus ist klein. Der Käfer ist kleiner. Die Ameise ist am kleinsten.", ru: "С прилагательными можно сравнивать: мышь маленькая, жук меньше, муравей самый маленький." },
+      { typ: "luecke", e: "🐘🦒", satz: "Die Giraffe ist ___ als der Elefant.", optionen: ["größer", "groß", "am größten"], ru: "Жираф выше слона." },
+      { typ: "luecke", e: "🐆", satz: "Der Gepard ist von allen Tieren am ___.", optionen: ["schnellsten", "schneller", "schnell"], ru: "Гепард самый быстрый из всех животных." },
+      { typ: "luecke", e: "🍫", satz: "Schokolade schmeckt mir ___ als Spinat.", optionen: ["besser", "guter", "am gutesten"], ru: "Шоколад мне нравится больше, чем шпинат." },
+      { typ: "luecke", e: "🏔️", satz: "Der Berg ist hoch, der Turm ist ___.", optionen: ["höher", "hocher", "am hoch"], ru: "Гора высокая, башня выше." },
+      { typ: "luecke", e: "🐌", satz: "Die Schnecke ist ___ als die Katze.", optionen: ["langsamer", "langsam", "am langsamsten"], ru: "Улитка медленнее кошки." },
+      { typ: "luecke", e: "🍰", satz: "Ich esse Kuchen gern, Eis esse ich am ___.", optionen: ["liebsten", "gernsten", "lieber"], ru: "Я люблю торт, а мороженое больше всего." },
+      { typ: "sag", text: "Super! Aufpassen bei gut – besser – am besten und gern – lieber – am liebsten. Die musst du dir merken.", ru: "Супер! Внимание: gut – besser – am besten и gern – lieber – am liebsten. Их нужно запомнить." }
+    ]
+  },
+  {
+    id: "w-pronomen", stufe: 3, lz: ["de.su.04", "de.su.06"], name: "er, sie, es", ort: "👥", farbe: "#C2337A", grund: "#FDEAF3",
+    schritte: [
+      { typ: "sag", text: "Damit ein Text nicht langweilig klingt, ersetzen wir Nomen durch Pronomen: der Hund → er, die Katze → sie, das Pferd → es, die Kinder → sie.", ru: "Чтобы текст не звучал скучно, существительные заменяют местоимениями: der Hund → er, die Katze → sie, das Pferd → es, die Kinder → sie." },
+      { typ: "luecke", e: "🐕", satz: "Der Hund bellt. ___ will spielen.", optionen: ["Er", "Sie", "Es"], ru: "Собака лает. Она хочет играть." },
+      { typ: "luecke", e: "🐈", satz: "Die Katze schläft. ___ ist müde.", optionen: ["Sie", "Er", "Es"], ru: "Кошка спит. Она устала." },
+      { typ: "luecke", e: "🐎", satz: "Das Pferd läuft. ___ ist schnell.", optionen: ["Es", "Er", "Sie"], ru: "Лошадь бежит. Она быстрая." },
+      { typ: "luecke", e: "👧👦", satz: "Lena und Ben spielen. ___ lachen laut.", optionen: ["Sie", "Er", "Wir"], ru: "Лена и Бен играют. Они громко смеются." },
+      { typ: "luecke", e: "🙋", satz: "Mein Bruder und ich gehen schwimmen. ___ freuen uns.", optionen: ["Wir", "Ihr", "Sie"], ru: "Мы с братом идём плавать. Мы радуемся." },
+      { typ: "luecke", e: "🎁", satz: "Mia, hast ___ dein Geschenk schon ausgepackt?", optionen: ["du", "er", "ich"], ru: "Мия, ты уже распаковала подарок?" },
+      { typ: "sag", text: "Prima! Ich, du, er, sie, es, wir, ihr, sie – das sind die Personalpronomen.", ru: "Отлично! Ich, du, er, sie, es, wir, ihr, sie — это личные местоимения." }
+    ]
+  },
+  {
+    id: "w-komma", stufe: 3, lz: ["de.sc.05"], name: "Komma bei Aufzählungen", ort: "📝", farbe: "#E8A33D", grund: "#FFF1D9",
+    schritte: [
+      { typ: "sag", text: "Zählst du Dinge auf, kommt zwischen sie ein Komma. Vor „und“ und „oder“ steht kein Komma: Ich esse Äpfel, Birnen und Bananen.", ru: "При перечислении между словами ставят запятую. Перед „und“ и „oder“ запятой нет: Ich esse Äpfel, Birnen und Bananen." },
+      { typ: "luecke", e: "🍎🍐🍌", satz: "Ich kaufe Äpfel___ Birnen und Bananen.", optionen: [",", ".", "!"], ru: "Я покупаю яблоки, груши и бананы." },
+      { typ: "luecke", e: "🐶🐱🐰", satz: "Wir haben einen Hund, eine Katze ___ einen Hasen.", optionen: ["und", ",", "."], ru: "У нас есть собака, кошка и кролик." },
+      { typ: "luecke", e: "🎨", satz: "Ich male mit Rot, Gelb___ Grün und Blau.", optionen: [",", "und", "."], ru: "Я рисую красным, жёлтым, зелёным и синим." },
+      { typ: "luecke", e: "🍦", satz: "Möchtest du Erdbeere, Vanille ___ Schokolade?", optionen: ["oder", ",", "."], ru: "Хочешь клубничное, ванильное или шоколадное?" },
+      { typ: "luecke", e: "📅", satz: "Am Montag___ Dienstag und Freitag habe ich Sport.", optionen: [",", "!", "?"], ru: "В понедельник, вторник и пятницу у меня спорт." },
+      { typ: "sag", text: "Toll! Merke: Komma zwischen die Glieder der Aufzählung – aber nicht vor und, oder.", ru: "Здорово! Запомни: запятая между частями перечисления — но не перед und, oder." }
+    ]
+  },
+  {
+    id: "w-vornach", stufe: 3, lz: ["de.su.08"], name: "Vorsilben und Nachsilben", ort: "🧱", farbe: "#5DB84A", grund: "#E3F5DC",
+    schritte: [
+      { typ: "sag", text: "Mit Bausteinen entstehen neue Wörter. Vorsilben stehen vorn: un-, ver-, vor-. Nachsilben stehen hinten: -ung, -heit, -keit. Wörter mit -ung, -heit, -keit sind Nomen und werden großgeschrieben.", ru: "Из «кирпичиков» получаются новые слова. Приставки стоят спереди: un-, ver-, vor-. Суффиксы сзади: -ung, -heit, -keit. Слова с -ung, -heit, -keit — существительные, их пишут с большой буквы." },
+      { typ: "luecke", e: "😢", satz: "Das Gegenteil von glücklich ist ___glücklich.", optionen: ["un", "ver", "vor"], ru: "Противоположность «счастливый» — «несчастный» (unglücklich)." },
+      { typ: "luecke", e: "🤞", satz: "hoffen → die Hoff___", optionen: ["nung", "heit", "keit"], ru: "надеяться → надежда (die Hoffnung)." },
+      { typ: "luecke", e: "🕊️", satz: "frei → die Frei___", optionen: ["heit", "ung", "keit"], ru: "свободный → свобода (die Freiheit)." },
+      { typ: "luecke", e: "😊", satz: "freundlich → die Freundlich___", optionen: ["keit", "heit", "ung"], ru: "дружелюбный → дружелюбие (die Freundlichkeit)." },
+      { typ: "luecke", e: "📖", satz: "Die Lehrerin ___liest eine Geschichte.", optionen: ["vor", "un", "heit"], ru: "Учительница читает вслух историю." },
+      { typ: "luecke", e: "🔑", satz: "Ich habe meinen Schlüssel ___loren.", optionen: ["ver", "un", "vor"], ru: "Я потерял ключ." },
+      { typ: "sag", text: "Klasse! Wer die Bausteine kennt, kann lange Wörter leichter lesen und richtig schreiben.", ru: "Класс! Кто знает «кирпичики», тот легче читает длинные слова и пишет их правильно." }
+    ]
+  },
+  {
+    id: "w-faelle", stufe: 4, lz: ["de.su.11"], name: "Wer, wen, wem?", ort: "❔", farbe: "#7B55B8", grund: "#EFE6FF",
+    schritte: [
+      { typ: "sag", text: "Mit Fragen findest du den Fall: Wer? (der Hund) – Wen? (den Hund) – Wem? (dem Hund). Der Artikel verändert sich.", ru: "Вопросами можно найти падеж: Wer? (der Hund) – Wen? (den Hund) – Wem? (dem Hund). Артикль меняется." },
+      { typ: "luecke", e: "🐕", satz: "Ich sehe ___ Hund. (Wen sehe ich?)", optionen: ["den", "der", "dem"], ru: "Я вижу собаку." },
+      { typ: "luecke", e: "⚽", satz: "Der Ball gehört ___ Jungen. (Wem gehört er?)", optionen: ["dem", "den", "der"], ru: "Мяч принадлежит мальчику." },
+      { typ: "luecke", e: "🐈", satz: "Ich gebe ___ Katze Futter. (Wem?)", optionen: ["der", "die", "das"], ru: "Я даю кошке корм." },
+      { typ: "luecke", e: "👨‍🍳", satz: "___ Koch kocht Suppe. (Wer kocht?)", optionen: ["Der", "Den", "Dem"], ru: "Повар варит суп." },
+      { typ: "luecke", e: "❓", satz: "___ hilfst du? – Ich helfe meiner Oma.", optionen: ["Wem", "Wen", "Wer"], ru: "Кому ты помогаешь? — Бабушке." },
+      { typ: "luecke", e: "🚲", satz: "Wir besuchen ___ Onkel. (Wen?)", optionen: ["den", "dem", "der"], ru: "Мы навещаем дядю." },
+      { typ: "sag", text: "Super! Wer-Fall (1. Fall), Wen-Fall (4. Fall), Wem-Fall (3. Fall). Frag einfach mit dem passenden Fragewort.", ru: "Супер! Wer — 1-й падеж, Wen — 4-й, Wem — 3-й. Просто задай подходящий вопрос." }
+    ]
+  },
+  {
+    id: "w-meinung", stufe: 3, lz: ["de.sz.06"], name: "Meinung sagen – mit weil", ort: "💭", farbe: "#E0574A", grund: "#FFECE8",
+    schritte: [
+      { typ: "sag", text: "Eine Meinung überzeugt besser mit Grund. Sag, was du denkst, und dann „weil …“: Ich finde Hunde toll, weil sie treu sind.", ru: "Мнение убеждает лучше с причиной. Скажи, что думаешь, и потом „weil …“: Ich finde Hunde toll, weil sie treu sind." },
+      { typ: "luecke", e: "🌳", satz: "Ich spiele gern draußen, ___ ich dort rennen kann.", optionen: ["weil", "aber", "oder"], ru: "Я люблю играть на улице, потому что там можно бегать." },
+      { typ: "luecke", e: "🧹", satz: "Ich finde Aufräumen wichtig, weil ich dann ___.", optionen: ["alles schneller finde", "Eis mag", "blau bin"], ru: "Я считаю уборку важной, потому что так всё быстрее нахожу." },
+      { typ: "luecke", e: "📵", satz: "Handys beim Essen finde ich nicht gut, weil wir dann ___.", optionen: ["weniger miteinander reden", "schneller wachsen", "Wolken sehen"], ru: "Телефоны за едой — плохо, потому что тогда мы меньше разговариваем." },
+      { typ: "luecke", e: "🐶", satz: "Ich möchte einen Hund, ___ ich viel mit ihm spazieren gehen würde.", optionen: ["weil", "oder", "und dann aber"], ru: "Я хочу собаку, потому что я бы много с ней гулял." },
+      { typ: "satz", e: "📚", woerter: ["Ich", "lese", "gern,", "weil", "Bücher", "spannend", "sind."], ru: "Я люблю читать, потому что книги интересные." },
+      { typ: "sag", text: "Prima! Im Gespräch gilt auch: zuhören, ausreden lassen und andere Meinungen respektieren.", ru: "Отлично! В разговоре важно слушать, давать договорить и уважать чужое мнение." }
+    ]
   }
 ];

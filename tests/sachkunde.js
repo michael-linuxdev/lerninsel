@@ -4,7 +4,7 @@ const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;
-const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer", "fahrrad", "kinderrechte", "gemeinde"];
+const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer", "fahrrad", "kinderrechte", "gemeinde", "brot", "wetterkarte", "strom"];
 
 (async () => {
   const browser = await chromium.launch();
@@ -25,7 +25,7 @@ const NEU = ["sinne", "wald", "kompass", "schwimmen", "feuer", "fahrrad", "kinde
       idx: neu.map(id => THEMEN.findIndex(t => t.id === id)),
       ohneRu: THEMEN.filter(t => neu.includes(t.id)).flatMap(t => t.schritte.filter(s => !(s.ru || s.satzRu)).map(() => t.id)) }), NEU);
     if (art === "quer") {
-      erwarte(daten.alle === 18, `18 Themen bei Eule Ella (${daten.alle})`);
+      erwarte(daten.alle === 21, `21 Themen bei Eule Ella (${daten.alle})`);
       erwarte(!daten.ohneLz.length && daten.idx.every(i => i >= 0), "alle Themen haben Lernziele, die neuen sind da");
       erwarte(!daten.ohneRu.length, "jeder neue Schritt hat einen russischen Entwurf");
     }

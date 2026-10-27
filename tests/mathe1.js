@@ -88,11 +88,11 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     // NA-33: dritter Weg Klasse 3
     await p.click('.weg-wahl[data-weg="k3"]'); await p.waitForTimeout(300);
     const w3 = await wegInfo(p);
-    erwarte(w3.an === "k3" && w3.stationen === 17 && w3.erste === "Zahlen bis 1000" && !w3.einstufung, `Klasse 3: 17 Stationen, beginnt mit „Zahlen bis 1000“ (${w3.stationen})`);
-    for (let s3 = 0; s3 < 17; s3++) { await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(120);
+    erwarte(w3.an === "k3" && w3.stationen === 18 && w3.erste === "Zahlen bis 1000" && !w3.einstufung, `Klasse 3: 18 Stationen, beginnt mit „Zahlen bis 1000“ (${w3.stationen})`);
+    for (let s3 = 0; s3 < 18; s3++) { await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(120);
       if (!(await p.evaluate(() => __mathe.lauf.liste.length === 10))) fehler.push("Kl. 3 Station " + s3 + " hat keine 10 Aufgaben"); }
     // NA-33b: schriftlich plus/minus, Würfelnetze, Spiegeln, Diagramme – Bild sichtbar, richtige Antwort wird angenommen
-    for (const [s3, name] of [[12, "schriftplus"], [13, "schriftminus"], [14, "netz"], [15, "spiegel"], [16, "diagramm"]]) {
+    for (const [s3, name] of [[12, "schriftplus"], [13, "schriftminus"], [14, "netz"], [15, "spiegel"], [16, "diagramm"], [17, "flaeche"]]) {
       await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(200);
       const info = await p.evaluate(() => { const a = __mathe.lauf.liste[__mathe.lauf.pos], svg = document.querySelector(".bild svg"), r = svg && svg.getBoundingClientRect();
         return { bild: !!svg && r.width > 60 && r.height > 60, passt: document.documentElement.scrollWidth <= innerWidth + 1, antwort: a.antwort, wahl: a.art === "wahl" }; });
@@ -101,6 +101,24 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       await p.evaluate((w) => __mathe.antworte(w), info.antwort); await p.waitForTimeout(250);
       erwarte(await p.evaluate(() => /\bgut\b/.test(document.getElementById("rueck").className)), `Kl. 3 ${name}: richtige Antwort wird angenommen`);
     }
+    // NA-37: Weg „4. Klasse“ – 9 Stationen, große Zahlen lassen sich eintippen
+    await p.waitForTimeout(1100);
+    await p.evaluate(() => document.getElementById("zum-weg") && document.getElementById("zum-weg").click()); await p.waitForTimeout(300);
+    await p.click('.weg-wahl[data-weg="k4"]'); await p.waitForTimeout(300);
+    const w4 = await wegInfo(p);
+    erwarte(w4.an === "k4" && w4.stationen === 9 && w4.erste === "Zahlen bis 1 Million", `Klasse 4: 9 Stationen, beginnt mit „Zahlen bis 1 Million“ (${w4.stationen})`);
+    for (let s4 = 0; s4 < 9; s4++) {
+      await p.evaluate((n) => __mathe.starte(n), s4); await p.waitForTimeout(150);
+      const info = await p.evaluate(() => { const a = __mathe.lauf.liste[0]; return { antwort: a.antwort, zahl: a.art === "zahl", passt: document.documentElement.scrollWidth <= innerWidth + 1, n: __mathe.lauf.liste.length }; });
+      if (info.zahl) { for (const z of info.antwort) await p.click(`.taste[data-ziffer="${z}"]`); await p.click('.taste[data-tun="ok"]'); }
+      else await p.evaluate((w) => __mathe.antworte(w), info.antwort);
+      await p.waitForTimeout(200);
+      const gut = await p.evaluate(() => /\bgut\b/.test(document.getElementById("rueck").className));
+      if (!(gut && info.passt && info.n === 10)) fehler.push(`Kl. 4 Station ${s4}: ${info.antwort} nicht angenommen oder Scrollleiste`);
+      if (s4 === 7 || s4 === 8) await bild(p, "mathe4-" + s4);
+      await p.waitForTimeout(1000);
+    }
+    erwarte(!fehler.some(f => f.startsWith("Kl. 4")), "Klasse 4: in jeder Station wird die richtige Antwort (auch 4–6 Ziffern über die Tasten) angenommen");
     // Elternbereich: Subtraktionsverfahren „Ergänzen“ ändert die Hilfe
     await p.waitForTimeout(1100);
     const ergaenzen = await p.evaluate(() => { const e = Spielwelt.lade("eltern") || {}; e.mathe = { minus: "ergaenzen" }; Spielwelt.speichere("eltern", e);

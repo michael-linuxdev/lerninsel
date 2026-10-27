@@ -2,12 +2,12 @@
   const S = window.Spielwelt;
   // Zwei Wege (NA-32): „k1“ = Klasse 1 und Vorschule (Mengen mit Material), „k2“ = der bisherige Matheweg Klasse 2.
   // Fortschritt je Weg in mathe.k1 bzw. mathe.k2; der Einstufungstest gehört nur zu Klasse 2.
-  const WEGE = { k1: window.Mathe.STATIONEN_K1 || [], k2: window.Mathe.STATIONEN, k3: window.Mathe.STATIONEN_K3 || [] };
+  const WEGE = { k1: window.Mathe.STATIONEN_K1 || [], k2: window.Mathe.STATIONEN, k3: window.Mathe.STATIONEN_K3 || [], k4: window.Mathe.STATIONEN_K4 || [] };
   const ersterWeg = () => { const d = S.lade("mathe") || {}; if (d.weg && WEGE[d.weg]) return d.weg;
-    const st = (S.stufe && S.stufe()) || {}; return ["vs", "1"].includes(st.code) && WEGE.k1.length ? "k1" : ["3", "4", "5"].includes(st.code) && WEGE.k3.length ? "k3" : "k2"; };
+    const st = (S.stufe && S.stufe()) || {}; return ["vs", "1"].includes(st.code) && WEGE.k1.length ? "k1" : ["4", "5"].includes(st.code) && WEGE.k4.length ? "k4" : ["3", "4", "5"].includes(st.code) && WEGE.k3.length ? "k3" : "k2"; };
   let WEG = ersterWeg(), ST = WEGE[WEG];
   // Können je Lernziel (NA-50): Lernziele einer Station (beide Wege)
-  const stationVon = (id) => WEGE.k1.find(s => s.id === id) || WEGE.k2.find(s => s.id === id) || WEGE.k3.find(s => s.id === id);
+  const stationVon = (id) => WEGE.k1.find(s => s.id === id) || WEGE.k2.find(s => s.id === id) || WEGE.k3.find(s => s.id === id) || WEGE.k4.find(s => s.id === id);
   const lzVon = (id) => (stationVon(id) || {}).lz || [];
   const KN = () => window.Koennen;
   function setzeWeg(w) { if (!WEGE[w] || !WEGE[w].length) return; WEG = w; ST = WEGE[w]; const d = daten(); d.weg = w; S.speichere("mathe", d); }
@@ -15,7 +15,7 @@
   const LOB = ["Richtig!", "Super!", "Klasse!", "Genau!", "Toll gerechnet!", "Spitze!", "Prima!"];
 
   // ---------- Fortschritt ----------
-  const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; d.k1 = d.k1 || {}; d.k3 = d.k3 || {}; return d; };
+  const daten = () => { const d = S.lade("mathe") || {}; d.k2 = d.k2 || {}; d.k1 = d.k1 || {}; d.k3 = d.k3 || {}; d.k4 = d.k4 || {}; return d; };
   const bestes = (id) => daten()[WEG][id] || 0;
   const startAb = () => WEG === "k2" ? (daten().einstufung || {}).startAb || 0 : 0;   // aus dem Einstufungstest (nur Klasse 2)
   const istOffen = (i) => S.offen(i === 0 || i <= startAb() || bestes(ST[i - 1].id) > 0);
@@ -36,9 +36,9 @@
     if (richtig) st.r++; else st.f++;
     d.fehler = d.fehler || [];
     if (!richtig && !a.bild) {
-      const { station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort } = a;
+      const { station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort, max } = a;
       d.fehler = d.fehler.filter(x => x.text !== text);
-      d.fehler.push({ station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort, am: Date.now(), stufe: 1, faellig: tagIn(ABSTAND[1]) });
+      d.fehler.push({ station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort, max, am: Date.now(), stufe: 1, faellig: tagIn(ABSTAND[1]) });
       d.fehler = d.fehler.slice(-40);
     }
     if (richtig && a.ausFehler) {
@@ -96,7 +96,8 @@
     if (kl) {
       kl.innerHTML = `<button class="weg-wahl${WEG === "k1" ? " an" : ""}" data-weg="k1" aria-pressed="${WEG === "k1"}">🐣 Klasse 1 und Vorschule</button>` +
         `<button class="weg-wahl${WEG === "k2" ? " an" : ""}" data-weg="k2" aria-pressed="${WEG === "k2"}">2. Klasse</button>` +
-        `<button class="weg-wahl${WEG === "k3" ? " an" : ""}" data-weg="k3" aria-pressed="${WEG === "k3"}">3. Klasse</button>`;
+        `<button class="weg-wahl${WEG === "k3" ? " an" : ""}" data-weg="k3" aria-pressed="${WEG === "k3"}">3. Klasse</button>` +
+        (WEGE.k4.length ? `<button class="weg-wahl${WEG === "k4" ? " an" : ""}" data-weg="k4" aria-pressed="${WEG === "k4"}">4. Klasse</button>` : "");
       kl.querySelectorAll(".weg-wahl").forEach(b => b.addEventListener("click", () => { if (b.dataset.weg === WEG) return; S.ton("tipp"); setzeWeg(b.dataset.weg); zeichneWeg(); }));
     }
     const karte = $("karte");
@@ -142,10 +143,15 @@
             b.className = "station ziel";
             b.innerHTML = `<span class="kreis">${alle ? "🎓" : "➡️"}</span><span class="name">3. Klasse</span><span class="stern-reihe"></span>`;
             b.addEventListener("click", () => { S.ton("tipp"); setzeWeg("k3"); zeichneWeg(); scrollTo(0, 0); });
+          } else if (WEG === "k3" && WEGE.k4.length) {
+            // Klasse 3 → Klasse 4 (NA-37)
+            b.className = "station ziel";
+            b.innerHTML = `<span class="kreis">${alle ? "🎓" : "➡️"}</span><span class="name">4. Klasse</span><span class="stern-reihe"></span>`;
+            b.addEventListener("click", () => { S.ton("tipp"); setzeWeg("k4"); zeichneWeg(); scrollTo(0, 0); });
           } else {
             b.className = "station ziel" + (alle ? "" : " zu");
             b.innerHTML = `<span class="kreis">${alle ? "🎓" : "🔒"}</span><span class="name">Mehr kommt bald</span><span class="stern-reihe"></span>`;
-            b.addEventListener("click", () => { S.ton("tipp"); S.meldung("Weitere Stationen für die 3. Klasse werden gerade gebaut."); });
+            b.addEventListener("click", () => { S.ton("tipp"); S.meldung("Weitere Stationen werden gerade gebaut."); });
           }
         }
       } else {
@@ -305,7 +311,7 @@
   }
 
   function tippe(ziffer) {
-    if (lauf.gesperrt || lauf.eingabe.length >= 3) return;
+    if (lauf.gesperrt || lauf.eingabe.length >= ((lauf.liste[lauf.pos] || {}).max || 3)) return;
     if (lauf.eingabe === "0") lauf.eingabe = "";
     lauf.eingabe += ziffer; S.ton("tipp"); aktualisiereLuecke();
   }
