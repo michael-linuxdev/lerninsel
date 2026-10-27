@@ -818,7 +818,7 @@ Neue Pakete (vor NA-14):
 - Minispiele bleiben vorerst 3D und werden aus beiden Looks gestartet; Pixel-Fassungen später je Spiel. NA-21 (Leistung „Rund“) bleibt wichtig.
 
 **Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** ~~**NA-24**~~ → ~~**NA-25**~~ (in /dev eingeschaltet) → ~~**NA-26**~~ → ~~**NA-27**~~ → ~~**NA-28**~~ → ~~**NA-14**~~ (in beiden Looks)
-→ ~~**NA-21**~~ → **NA-29** Budget „Rund“ → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 → Punkt 5 ff. wie oben.
+→ ~~**NA-21**~~ → **NA-29** Budget „Rund“ (Teil 1 ✔, Teil 2 Minispiele offen) → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 → Punkt 5 ff. wie oben.
 
 ### Stand 27.10.2026, morgens (Sitzung 27.10. früh: DS-Look, NA-24 fertig, NA-25 vorbereitet, NA-26 begonnen)
 **Antworten des Auftraggebers (27.10.2026, 04:40):** „Pixel“ soll moderner sein – **Nintendo-DS-Zeit**, gewählt: **Draufsicht wie bei den
@@ -968,4 +968,20 @@ Reihenfolge gilt (NA-26 zuerst); nichts ist gesperrt; Geschenke für NA-16 weite
 - **Neues Paket NA-29 Budget „Rund“** (M–L, vor NA-16): Nachbarn, Spielorte, Wissensbaum und Figuren je Material verschmelzen (wie die Deko),
   Bäume/Steine als `InstancedMesh`, Konturen nur für Figuren und große Dinge, Gras-Halme und Kugeln mit weniger Segmenten in „einfach“,
   Schattenkamera enger. Ziel zuerst „einfach“ ≤ 80 / 60.000, dann „schön“ ≤ 150 / 150.000. Abnahme: `STRENG=1 sh tests/laufen.sh leistung` grün.
+
+**NA-29 Budget „Rund“ – Teil 1 fertig (Insel, Welten, Zimmer); Teil 2 (Minispiele) offen**
+- `verschmelzeLokal(wurzel, ausnahmen)` in `quellen/welt3d/heimat.js`: starre Teile je Objekt zu wenigen Meshes; feste Toon-/Basisfarben werden
+  zu Vertex-Farben eines gemeinsamen Materials (`gruppeVon`), Kontur bleibt ein Mesh. Bewegliche Teile (Arme, Beine, Schwanz, Früchte, Lichter,
+  Ballons, Paula, Windrad, Globus, Fische) bleiben getrennt; Antippen (Raycast), Hüpfen und Laufen funktionieren unverändert. Objekte melden sich
+  beim Erzeugen in `starr` an; verschmolzen wird vor dem ersten Bild. Materialien mit späterem Farbwechsel tragen `userData.lebt` (Wandfarben).
+- Gesperrte Spielorte teilen graue Materialien (`grauMat`), Möbel werden beim Hinstellen verschmolzen, das Zimmer ebenfalls.
+- Kugeln mit weniger Segmenten (schön 55 %, einfach 40 %), Baumkronen/-stämme gröber, Bäume ohne Kontur in „einfach“, Wasser- und Geländegitter
+  gröber; große Welten: Deko in 12er-Feldern verschmolzen (Bild- und Schatten-Culling). Test-Haken `__heimat.teile()` (Meshes je Objekt).
+- **Messung danach** (vorher in Klammern): Insel „schön“ 100 Aufrufe / 126.000 Dreiecke (521 / 390.000), „einfach“ 65 / 51.000 (347 / 74.000);
+  Wald groß „schön“ 112 / 150.000–154.000 (387 / 899.000; liegt knapp an der Grenze), „einfach“ 58 / 48.000; Zimmer „schön“ 46 / 23.000 (136 / 51.000), „einfach“ 33 / 12.000.
+  Alle Insel-, Welt- und Zimmer-Szenen liegen im Budget (Wald groß „schön“ schwankt knapp darüber).
+- **Offen (NA-29 Teil 2):** Schatz-Strand (≈ 264), Sternenlauf (≈ 250) und Kart (≈ 290 Aufrufe) liegen noch über 150. Vorschlag: `verschmelzeLokal`
+  und `gruppeVon` nach `quellen/welt3d/gemeinsam.js` verschieben (gemeinsam mit `figur3d.js`), Randbäume/Streifen der Strecken als `InstancedMesh`,
+  Figur (`meineFigur`) lokal verschmelzen. Bauplatz misst im Test nur den Startbildschirm. Danach `STRENG=1 sh tests/laufen.sh leistung` als Abnahme.
+- iPad 10 bitte in `/dev` prüfen: Sieht die runde Insel noch genauso aus (Kugeln etwas kantiger)? Läuft sie flüssiger?
 

@@ -38,7 +38,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
    `docs/MINISPIELE.md`.
 4. `README.md` (Aufbau des Repos, Liste der Dateien in `shared/`).
 
-## 2. Stand (27.10.2026, Sitzung bis mittags)
+## 2. Stand (27.10.2026, Sitzungsende 09 Uhr)
 **Früher fertig** (Einzelheiten in PLAN.md unter „Neuausrichtung 26.10.2026“): NA-01 Ereignisse/Story, NA-02 Profil, NA-10 Szenen + Zeigehand,
 NA-11 Prolog „Ankunft“ (E1), NA-12 Insel-Zugang, NA-13 Sonnenuhr/„Erst lernen“/Erste Frucht mit Nebel, NA-15 Weihnachts-Sonderstart,
 NA-24 Welt-Kern `shared/insel-kern.js`. Alle russischen Szenentexte sind Entwürfe (nur in `/dev`).
@@ -59,9 +59,12 @@ Umschalter: Knopf auf der Insel **und** Elternkarte; Kinder dürfen selbst umsch
   stilles Erledigen (`Story.etappeFertig(id, true)`), Elternknopf „Einführung überspringen“. Test `tests/etappen.js`.
 - Kern-Stationen neu: `nest`, `pinnwand`, `staffelei`, `bild`, `moebel`; Orte für die Zeigehand neu: `nest`, `ballons`, `fipsi`, `baer`.
 
-- **NA-21 Leistungs-Test** `tests/leistung.js`: Tabelle je Szene/Landschaft, Warnung über Budget (Pixel überall 1 Aufruf; Rund-Insel 3–4× darüber).
+- **NA-21 Leistungs-Test** `tests/leistung.js`: Tabelle je Szene/Landschaft, Warnung über Budget (Pixel überall 1 Aufruf).
+- **NA-29 Budget „Rund“, Teil 1:** lokales Verschmelzen mit Vertex-Farben (`verschmelzeLokal`, `starr`, `gruppeVon` in `heimat.js`), gröbere Kugeln,
+  Deko-Felder für große Welten. Insel jetzt ≈ 100 Aufrufe (vorher 521), Welten und Zimmer im Budget. **Teil 2 (Minispiele) offen.**
 
-**Bekannte Baustellen:** Rund-Insel über dem Leistungsbudget (→ NA-29); Deutsch-Bereiche in `shared/lehrplan.js` nach KMK 2004 (NA-03);
+**Bekannte Baustellen:** Minispiele Schatz-Strand, Sternenlauf, Kart über dem Budget (→ NA-29 Teil 2); neue 3D-Objekte auf der Insel mit
+`starr.push([objekt, bewegliche Teile])` anmelden, sonst kosten sie wieder viele Aufrufe; Deutsch-Bereiche in `shared/lehrplan.js` nach KMK 2004 (NA-03);
 `SPIELE` steht in `shared/insel-kern.js` und `quellen/welt3d/gemeinsam.js` (gleich halten); „Meine Welt“ (Welten erschaffen) gibt es nur in „Rund“;
 der Prolog-Test der runden Insel wackelt, wenn der Rechner nebenbei ausgelastet ist (Software-Rendering) – dann einfach nochmal laufen lassen.
 
@@ -74,7 +77,7 @@ soll „Pixel“ danach auch auf der Hauptseite wählbar sein? Geschenke zu Weih
      **Pixel-Insel** (Knopf „👾 Pixel“ auf der Insel): Laufen, Antippen, Zimmer einrichten, Figur/Kleiderschrank. Fehler zuerst beheben.
    - Soll „Pixel“ jetzt auch auf der Hauptseite wählbar werden? Wünsche zum DS-Look (Farben, Größe der Figuren, Details)?
    - Welche Geschenke soll es per QR-Code zu Weihnachten 2026 geben (für NA-16)? Neue Antworten auf die übrigen offenen Fragen im Plan?
-   - Gilt die Reihenfolge noch (nächstes: **NA-29** Budget „Rund“, dann NA-16/17/18), oder soll etwas vorgezogen werden?
+   - Gilt die Reihenfolge noch (nächstes: **NA-29 Teil 2** Minispiele, dann NA-16/17/18); läuft die runde Insel auf dem iPad jetzt flüssiger?, oder soll etwas vorgezogen werden?
    - Was darf in dieser Sitzung keinesfalls angefasst werden?
 2. **Dann selbstständig arbeiten**, bis die Sitzung aufgebraucht ist. Aufgabenliste anlegen (ein Eintrag je Paket bzw. Schritt a/b/c) und abhaken.
    Nur nachfragen, wenn eine Entscheidung nicht rückgängig zu machen ist; sonst die vernünftigste Wahl treffen und im Plan notieren.
@@ -91,8 +94,8 @@ Grundsatz: **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `s
 **Jede neue Figur, jedes Möbel, jedes Bauwerk, jede Szene in beiden Looks** (oder im Plan als offen vermerken).
 1. **Freigabe Pixel auf der Hauptseite** – nur nach Rückmeldung des Auftraggebers: `lookWaehlbar()` in `shared/core.js` auf `true`, Text in der
    Elternkarte („nur in der Testumgebung“) anpassen, `tests/look.js` umstellen.
-2. **NA-29 Budget „Rund“** (neu, Messung und Plan in PLAN.md unter „NA-21 Leistungs-Test (fertig)“): Insel heute ≈ 520 Aufrufe/390.000 Dreiecke
-   („schön“) bzw. ≈ 350/74.000 („einfach“), Budget 150/150.000 bzw. 80/60.000. Messen mit `sh tests/laufen.sh leistung`, Abnahme mit `STRENG=1`.
+2. **NA-29 Teil 2: Minispiele ins Budget** (Plan in PLAN.md, letzter Eintrag): Helfer nach `quellen/welt3d/gemeinsam.js` verschieben, Strecken-Deko
+   als `InstancedMesh`, Figur verschmelzen. Messen mit `sh tests/laufen.sh leistung`, Abnahme `STRENG=1 sh tests/laufen.sh leistung`.
 3. **NA-16** QR-Geschenk (wartet auf die Geschenk-Auswahl) → **NA-17** Kapitel 1–2 (inkl. E9 Atelier, E10 Mein Ich) → **NA-18** Chronik im Album
    (Szenen nochmal ansehen, auch Tutorial-Etappen).
 4. **NA-03** Lehrplan-Kern → NA-40 → NA-30 → NA-32 → NA-31. Minispiele bleiben vorerst 3D (aus beiden Looks gestartet); „Meine Welt“ für Pixel offen.

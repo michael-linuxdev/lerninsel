@@ -7,7 +7,7 @@ import {
   PCFSoftShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide, DoubleSide,
   CylinderGeometry, SphereGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry, PlaneGeometry,
   LatheGeometry, ExtrudeGeometry, Shape, Vector2, Vector3, DataTexture, RedFormat, NearestFilter, InstancedMesh,
-  Object3D, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, BufferAttribute, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
+  Object3D, Matrix4, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, BufferAttribute, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
 } from "../three/three.module.js";
 import { S, SPIELE, istFrei, baumStufe, messe } from "./gemeinsam.js";
 import { BIOME, FARBEN, neuerSeed } from "./welt.js";
@@ -63,7 +63,8 @@ function teil(geo, farbe, { umriss = true, dicke = 1.06, schatten = true } = {})
   if (umriss) { const u = new Mesh(geo, UMRISS); u.scale.setScalar(dicke); m.add(u); }
   return m;
 }
-const kugel = (r, a = 28, b = 20) => new SphereGeometry(r, EINFACH ? Math.ceil(a / 2) : a, EINFACH ? Math.ceil(b / 2) : b);
+// Kugeln: in „schön“ gut die Hälfte, in „einfach“ zwei Fünftel der Segmente (NA-29: Toon-Licht und Kontur verdecken die Kanten)
+const kugel = (r, a = 28, b = 20) => new SphereGeometry(r, Math.max(8, Math.ceil(a * (EINFACH ? 0.4 : 0.55))), Math.max(6, Math.ceil(b * (EINFACH ? 0.4 : 0.55))));
 const setze = (o, x, y, z) => { o.position.set(x, y, z); return o; };
 const AUGE = new MeshBasicMaterial({ color: "#2E2240" }), WEISS = new MeshBasicMaterial({ color: "#ffffff" });
 function augen(eltern, abstand, y, z, r = 0.075) {
@@ -76,6 +77,7 @@ function augen(eltern, abstand, y, z, r = 0.075) {
 // ---------- Hindernisse und antippbare Dinge ----------
 const hindernisse = []; // { x, z, r }
 const tippbar = [];     // Object3D mit userData.tipp()
+const starr = [];       // NA-29: [Objekt, bewegliche Teile] – wird vor dem ersten Bild lokal verschmolzen (verschmelzeLokal)
 const block = (x, z, r) => hindernisse.push({ x, z, r });
 // Zeitsystem: ohne Spielzeit ist die Insel im Lernmodus (Lern-Nachbarn gehen, Spielorte schlafen)
 const Z = window.Zeit;
@@ -97,7 +99,7 @@ const boden = [];
 const deko = new Group();
 if (!WELT.insel) {
   // Gelände: Ringe um die Mitte, Höhe aus der Welt, Farben je Höhe (Gras, Fels, Schneekuppen, Strand)
-  const ringe = EINFACH ? Math.round(WELT.R * 1.4) : Math.round(WELT.R * 2.6), segs = EINFACH ? 64 : 120, RA = WELT.R + 1.2;
+  const ringe = EINFACH ? Math.round(WELT.R * 1.4) : Math.round(WELT.R * 2), segs = EINFACH ? 64 : 96, RA = WELT.R + 1.2;   // NA-29: etwas gröberes Gelände in „schön“
   const pos = [], farb = [], idx = [];
   const cG = new Color(GRAS), cS = new Color(WINTERLICH && WELT.biom !== "wueste" ? "#F3E9D8" : WELT.B.sand), cF = new Color(WELT.B.fels), cW = new Color("#FFFFFF"), c = new Color();
   for (let i = 0; i <= ringe; i++) {
@@ -138,30 +140,33 @@ if (WELT.insel) {
     p.receiveShadow = true; setze(p, -4 + i * 1.25, 0.28, -2.6 + Math.sin(i * 0.9) * 0.6); deko.add(p);
   }
 }
-const wasserGeo = new PlaneGeometry(140, 140, EINFACH ? 1 : 70, EINFACH ? 1 : 70); wasserGeo.rotateX(-Math.PI / 2);
+const wasserGeo = new PlaneGeometry(140, 140, EINFACH ? 1 : 48, EINFACH ? 1 : 48);   // Wellen-Gitter (NA-29: 48 statt 70 reicht für die weichen Wellen) wasserGeo.rotateX(-Math.PI / 2);
 const wasser = new Mesh(wasserGeo, new MeshToonMaterial({ color: NACHT ? "#2E5F8C" : "#5EC3E6", gradientMap: verlauf, transparent: true, opacity: 0.92 }));
 wasser.position.y = -0.55; wasser.receiveShadow = true; scene.add(wasser);
 const wasserBasis = Float32Array.from(wasserGeo.attributes.position.array);
 { const schaum = new Mesh(new TorusGeometry(WELT.insel ? 15.9 : WELT.R + 0.9, 0.18, 8, 80), new MeshBasicMaterial({ color: "#EAFBFF" })); schaum.rotation.x = Math.PI / 2; schaum.position.y = -0.48; scene.add(schaum); }
 
 // ---------- Bäume (Farbe nach Jahreszeit), Steine, Blumen ----------
+// Leistungsbudget (NA-29): Welten mit vielen Bäumen bekommen gröbere Kronen; in „einfach“ haben Bäume keine Kontur.
+const VIELE_BAEUME = WELT.baeume.length > 30, KRONE_SEG = VIELE_BAEUME ? [14, 10] : [18, 12], DEKO_KONTUR = !EINFACH;
 const KRONE = { sommer: ["#5DBB5A", "#4FAF62"], fruehling: ["#5DBB5A", "#F6B6CE"], herbst: ["#F2A03D", "#E2603A", "#F4C542", "#5DBB5A"], winter: ["#3E8E5A", "#3E8E5A"] };
 function baum(x, z, k = 1, i = 0) {
   const b = new Group();
-  b.add(setze(teil(new CylinderGeometry(0.22 * k, 0.32 * k, 1.6 * k, 16), "#9A6A3F"), 0, 0.8 * k, 0));
+  b.add(setze(teil(new CylinderGeometry(0.22 * k, 0.32 * k, 1.6 * k, EINFACH ? 7 : 10), "#9A6A3F", { umriss: DEKO_KONTUR }), 0, 0.8 * k, 0));
   const farben = KRONE[SAISON], f = farben[i % farben.length];
   [[0, 2.4, 0, 1.15], [0.8, 2.0, 0.2, 0.8], [-0.75, 2.05, -0.1, 0.85], [0.1, 2.0, 0.8, 0.75], [0, 3.1, 0, 0.75]].forEach(([dx, y, dz, r]) =>
-    b.add(setze(teil(kugel(r * k), f), dx * k, y * k, dz * k)));
-  if (SAISON === "winter") b.add(setze(teil(kugel(0.6 * k), "#FFFFFF"), 0, 3.45 * k, 0));
-  if (SAISON === "sommer" && i % 2 === 0) [[0.6, 2.3, 0.9], [-0.8, 2.6, 0.6], [0.9, 2.8, -0.4]].forEach(([dx, y, dz]) => b.add(setze(teil(kugel(0.16 * k), "#FF7A6B", { dicke: 1.12 }), dx * k, y * k, dz * k)));
+    b.add(setze(teil(kugel(r * k, ...KRONE_SEG), f, { umriss: DEKO_KONTUR }), dx * k, y * k, dz * k)));   // Kronen: wenige Segmente (NA-29)
+  if (SAISON === "winter") b.add(setze(teil(kugel(0.6 * k, 18, 12), "#FFFFFF"), 0, 3.45 * k, 0));
+  if (SAISON === "sommer" && i % 2 === 0) [[0.6, 2.3, 0.9], [-0.8, 2.6, 0.6], [0.9, 2.8, -0.4]].forEach(([dx, y, dz]) => b.add(setze(teil(kugel(0.16 * k, 10, 8), "#FF7A6B", { dicke: 1.12 }), dx * k, y * k, dz * k)));
   b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 1.7; deko.add(b); block(x, z, 0.6 * k);
 }
 // Nadelbaum, Palme, Kaktus für die eigenen Welten
 function nadelbaum(x, z, k) {
   const b = new Group(), f = WINTERLICH ? "#3E8E5A" : "#3F9A5C";
-  b.add(setze(teil(new CylinderGeometry(0.16 * k, 0.24 * k, 1.0 * k, 12), "#8A5A34"), 0, 0.5 * k, 0));
-  [[1.15, 1.3, 1.1], [0.9, 1.1, 1.9], [0.62, 0.9, 2.6]].forEach(([r, h, y]) => b.add(setze(teil(new ConeGeometry(r * k, h * k, 14), f), 0, y * k, 0)));
-  if (WINTERLICH) b.add(setze(teil(new ConeGeometry(0.4 * k, 0.5 * k, 14), "#FFFFFF"), 0, 3.0 * k, 0));
+  const sg = EINFACH ? 7 : 10;   // Segmente (NA-29)
+  b.add(setze(teil(new CylinderGeometry(0.16 * k, 0.24 * k, 1.0 * k, sg), "#8A5A34", { umriss: DEKO_KONTUR }), 0, 0.5 * k, 0));
+  [[1.15, 1.3, 1.1], [0.9, 1.1, 1.9], [0.62, 0.9, 2.6]].forEach(([r, h, y]) => b.add(setze(teil(new ConeGeometry(r * k, h * k, sg), f, { umriss: DEKO_KONTUR }), 0, y * k, 0)));
+  if (WINTERLICH) b.add(setze(teil(new ConeGeometry(0.4 * k, 0.5 * k, sg), "#FFFFFF"), 0, 3.0 * k, 0));
   b.position.set(x, bodenY(x, z) - 0.05, z); deko.add(b); block(x, z, 0.5 * k);
 }
 function palme(x, z, k) {
@@ -204,29 +209,77 @@ if (WELT.insel && SAISON !== "winter") {
 }
 
 // ---------- Deko verschmelzen (je Material ein Mesh) ----------
-function verschmelze(gruppe) {
+function verschmelze(gruppe, zelle = 0) {
+  // zelle > 0: in Felder dieser Größe aufteilen, damit entfernte Teile großer Welten nicht gezeichnet werden (Bild und Schatten, NA-29)
   gruppe.updateMatrixWorld(true);
-  const sammel = new Map();
+  const felder = new Map(), wp = new Vector3();
   gruppe.traverse(m => {
     if (!m.isMesh || Array.isArray(m.material)) return;
     let g = m.geometry.clone(); g.applyMatrix4(m.matrixWorld);
     if (!g.index) { const n = g.attributes.position.count; g.setIndex([...Array(n).keys()]); }
-    const e = sammel.get(m.material) || { teile: [], schatten: false };
-    e.teile.push(g); e.schatten = e.schatten || m.castShadow; sammel.set(m.material, e);
+    m.getWorldPosition(wp);
+    const feld = zelle ? Math.floor(wp.x / zelle) + "," + Math.floor(wp.z / zelle) : "";
+    if (!felder.has(feld)) felder.set(feld, new Map());
+    const sammel = felder.get(feld), vc = gruppeVon(m.material), key = vc || m.material;
+    const e = sammel.get(key) || { teile: [], farben: vc ? [] : null, schatten: false };
+    e.teile.push(g); if (vc) e.farben.push(m.material.color); e.schatten = e.schatten || m.castShadow; sammel.set(key, e);
   });
-  sammel.forEach(({ teile, schatten }, material) => {
-    let anzahl = 0, idxAnzahl = 0; teile.forEach(g => { anzahl += g.attributes.position.count; idxAnzahl += g.index.count; });
-    const pos = new Float32Array(anzahl * 3), nor = new Float32Array(anzahl * 3), idx = new Uint32Array(idxAnzahl);
-    let o = 0, oi = 0;
-    teile.forEach(g => {
-      pos.set(g.attributes.position.array, o * 3); if (g.attributes.normal) nor.set(g.attributes.normal.array, o * 3);
-      const ix = g.index.array; for (let k = 0; k < ix.length; k++) idx[oi + k] = ix[k] + o;
-      o += g.attributes.position.count; oi += ix.length; g.dispose();
-    });
-    const geo = new BufferGeometry(); geo.setAttribute("position", new Float32BufferAttribute(pos, 3)); geo.setAttribute("normal", new Float32BufferAttribute(nor, 3)); geo.setIndex(new BufferAttribute(idx, 1));
-    geo.computeBoundingSphere();
-    const m = new Mesh(geo, material); m.castShadow = schatten; m.receiveShadow = true; scene.add(m);
+  felder.forEach(sammel => sammel.forEach(({ teile, farben, schatten }, material) => {
+    const m = new Mesh(fuegeZusammen(teile, farben), material); m.castShadow = schatten; m.receiveShadow = true; scene.add(m);
+  }));
+}
+// Viele Geometrien (schon im Zielkoordinatensystem) zu einer: nur Position, Normale, Index
+function fuegeZusammen(teile, farben = null) {
+  let anzahl = 0, idxAnzahl = 0; teile.forEach(g => { anzahl += g.attributes.position.count; idxAnzahl += g.index.count; });
+  const pos = new Float32Array(anzahl * 3), nor = new Float32Array(anzahl * 3), idx = new Uint32Array(idxAnzahl), col = farben ? new Float32Array(anzahl * 3) : null;
+  let o = 0, oi = 0;
+  teile.forEach((g, t) => {
+    const n = g.attributes.position.count;
+    pos.set(g.attributes.position.array, o * 3); if (g.attributes.normal) nor.set(g.attributes.normal.array, o * 3);
+    if (col) { const c = farben[t]; for (let k = 0; k < n; k++) { col[(o + k) * 3] = c.r; col[(o + k) * 3 + 1] = c.g; col[(o + k) * 3 + 2] = c.b; } }
+    const ix = g.index.array; for (let k = 0; k < ix.length; k++) idx[oi + k] = ix[k] + o;
+    o += n; oi += ix.length; g.dispose();
   });
+  const geo = new BufferGeometry(); geo.setAttribute("position", new Float32BufferAttribute(pos, 3)); geo.setAttribute("normal", new Float32BufferAttribute(nor, 3)); geo.setIndex(new BufferAttribute(idx, 1));
+  if (col) geo.setAttribute("color", new Float32BufferAttribute(col, 3));
+  geo.computeBoundingSphere(); geo.computeBoundingBox();
+  return geo;
+}
+// Lokal verschmelzen (NA-29, Leistungsbudget): alle starren Teile unter `wurzel` je Material zu einem Mesh, das Kind von `wurzel` bleibt –
+// so bleiben Antippen (Raycast), Hüpfen, Drehen und Laufen des Ganzen erhalten. Teilbäume in `ausnahmen` (Arme, Beine, Schwanz, Früchte …)
+// bleiben unverändert. Meshes mit Bild-Textur (map) bleiben ebenfalls einzeln. Aus Teil + Kontur je Teil wird so ein Aufruf je Farbe.
+// Materialien mit fester Farbe werden zu Vertex-Farben eines gemeinsamen Materials (ein Aufruf statt einer je Farbe).
+// Ausgenommen: Kontur, durchsichtige, mit Bild, und Materialien, deren Farbe sich später ändert (userData.lebt).
+const TOON_VC = new MeshToonMaterial({ vertexColors: true, gradientMap: verlauf }), BASIC_VC = new MeshBasicMaterial({ vertexColors: true });
+function gruppeVon(m) {
+  if (m === UMRISS || m.transparent || m.map || m.userData.lebt || m.vertexColors || m.side !== 0) return null;
+  if (m.isMeshToonMaterial && m.gradientMap === verlauf) return TOON_VC;
+  if (m.isMeshBasicMaterial) return BASIC_VC;
+  return null;
+}
+function verschmelzeLokal(wurzel, ausnahmen = []) {
+  if (!wurzel) return;
+  const aus = new Set(ausnahmen.filter(Boolean)), sammel = new Map(), weg = [];
+  wurzel.updateMatrixWorld(true);
+  const inv = new Matrix4().copy(wurzel.matrixWorld).invert(), rel = new Matrix4();
+  (function besuche(o) {
+    if (aus.has(o)) return;
+    if (o !== wurzel && o.isMesh && !o.isInstancedMesh && !Array.isArray(o.material) && !o.material.map && !o.userData.bleibt) {
+      const g = o.geometry.clone(); g.applyMatrix4(rel.multiplyMatrices(inv, o.matrixWorld));
+      if (!g.index) { const n = g.attributes.position.count; g.setIndex([...Array(n).keys()]); }
+      if (!g.attributes.normal) g.computeVertexNormals();
+      const vc = gruppeVon(o.material), key = vc || o.material;
+      const e = sammel.get(key) || { teile: [], farben: vc ? [] : null, schatten: false }; e.teile.push(g); if (vc) e.farben.push(o.material.color); e.schatten = e.schatten || o.castShadow; sammel.set(key, e);
+      weg.push(o);
+    }
+    o.children.forEach(besuche);
+  })(wurzel);
+  if (weg.length < 2) { sammel.forEach(e => e.teile.forEach(g => g.dispose())); return; }
+  const wegSet = new Set(weg);
+  // Kinder, die nicht verschmolzen werden (Sprites, Ausnahmen unter einem Teil), an die Wurzel hängen – Lage bleibt gleich
+  weg.forEach(m => [...m.children].forEach(c => { if (!wegSet.has(c)) wurzel.attach(c); }));
+  weg.forEach(m => { if (m.parent) m.parent.remove(m); });
+  sammel.forEach(({ teile, farben, schatten }, material) => { const m = new Mesh(fuegeZusammen(teile, farben), material); m.castShadow = schatten; m.receiveShadow = true; wurzel.add(m); });
 }
 // ---------- Steg mit Pixels Boot (Ankunft im Prolog, NA-11) ----------
 // Liegt am Südufer (zur Kamera hin), damit die Ankunft gleich zu sehen ist. Wird mit der Deko verschmolzen.
@@ -250,7 +303,7 @@ function verschmelze(gruppe) {
   deko.add(setze(teil(new CylinderGeometry(0.04, 0.04, 0.8, 6), "#9A6A3F"), SU.x - 0.5, y + 1.1, SU.z));
   block(SU.x, SU.z, 0.6);
 }
-verschmelze(deko);
+verschmelze(deko, !WELT.insel && WELT.R > 16 ? 12 : 0);   // große Welten in Feldern (NA-29)
 const sonnenMat = new MeshBasicMaterial({ color: "#7E7A92" });
 const uhrSonne = setze(new Mesh(kugel(0.22, 16, 12), sonnenMat), SU.x - 0.5, bodenY(SU.x, SU.z) + 1.6, SU.z); scene.add(uhrSonne);
 const SONNE_DUNKEL = new Color("#7E7A92"), SONNE_HELL = new Color("#FFC83D");
@@ -309,16 +362,17 @@ const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" :
   h.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.9, 16), "#B9584A"), 0.9, 3.5, -0.5));
   h.position.set(P.haus[0], bodenY(P.haus[0], P.haus[1]), P.haus[1]); h.rotation.y = KI.HAUS_DREH; scene.add(h); block(P.haus[0], P.haus[1], 2.3);
   antippbar(h, () => prolog ? reingehen() : spielOrt(() => reingehen()), ["🚪", "Reingehen"], 3.4);
-  hausObj = h;
+  hausObj = h; starr.push([h]);
 }
 
 // ---------- Wolken, Sterne, Schnee ----------
 const wolken = [];
 for (let i = 0; i < 5; i++) {
   const w = new Group();
+  const wm = new MeshLambertMaterial({ color: NACHT ? "#6E7FB0" : "#ffffff" });   // ein Material je Wolke → 1 Aufruf nach dem Verschmelzen
   [[0, 0, 0, 1.4], [1.3, -0.2, 0, 1], [-1.3, -0.25, 0.1, 1.05], [0.4, 0.5, -0.3, 0.9]].forEach(([x, y, z, r]) =>
-    w.add(setze(new Mesh(kugel(r, 18, 12), new MeshLambertMaterial({ color: NACHT ? "#6E7FB0" : "#ffffff" })), x, y, z)));
-  w.position.set(-30 + i * 15, 13 + (i % 2) * 2, -22 + (i % 3) * 7); scene.add(w); wolken.push(w);
+    w.add(setze(new Mesh(kugel(r, 18, 12), wm), x, y, z)));
+  w.position.set(-30 + i * 15, 13 + (i % 2) * 2, -22 + (i % 3) * 7); scene.add(w); wolken.push(w); starr.push([w]);
 }
 if (NACHT) {
   const pos = []; for (let i = 0; i < 300; i++) { const a = Math.random() * Math.PI * 2, h = 0.25 + Math.random() * 0.7; pos.push(Math.cos(a) * 70 * Math.cos(h), 70 * Math.sin(h), Math.sin(a) * 70 * Math.cos(h)); }
@@ -378,6 +432,7 @@ const windrad = new Group(); windrad.position.set(0, 2.75, 0); station.add(windr
 windrad.add(setze(teil(new CylinderGeometry(0.02, 0.02, 0.4, 6), "#6B6B7A"), 0, -0.2, 0));
 [0, 1, 2].forEach(i => { const b = new Group(); b.rotation.y = i * Math.PI * 2 / 3; const sch = teil(kugel(0.1, 12, 8), ["#FFD84D", "#5CCBA6", "#7B9BFF"][i], { dicke: 1.1 }); sch.scale.set(1, 0.6, 1); b.add(setze(sch, 0.24, 0, 0)); b.add(setze(new Mesh(new BoxGeometry(0.22, 0.02, 0.02), mat("#6B6B7A")), 0.12, 0, 0)); windrad.add(b); });
 antippbar(station, () => zeigeAntwort(K.antwort("station", { wetter })), ...K.aktionFuer("station"));
+starr.push([station, [windrad]], [windrad]);
 
 // ---------- Wehendes Gras ----------
 let halme = null; const halmDaten = [];
@@ -469,7 +524,8 @@ function figur(look) {
   return f;
 }
 const look = (S.lade("anziehen") || {}).aktuell || (window.Figur ? window.Figur.STANDARD() : { figur: { farbe: "#F8D2B8" } });
-const ich = figur(look); ich.position.set(WELT.insel ? 1 : P.start[0] + 1, 0.25, WELT.insel ? 2 : P.start[1] + 2); ich.position.y = bodenY(ich.position.x, ich.position.z); scene.add(ich);
+const ich = figur(look); { const u = ich.userData; starr.push([u.koerper, [...u.beine, ...u.arme]], ...u.beine.map(b => [b]), ...u.arme.map(a => [a])); }
+ich.position.set(WELT.insel ? 1 : P.start[0] + 1, 0.25, WELT.insel ? 2 : P.start[1] + 2); ich.position.y = bodenY(ich.position.x, ich.position.z); scene.add(ich);
 
 // ---------- Das eigene Tier ----------
 const TP = window.TierPflege, T = window.Tiere;
@@ -503,13 +559,14 @@ function tierModell(art, f, stufe) {
 let tier = null, nest = null;
 const NEST = new Vector3(P.nest[0], bodenY(P.nest[0], P.nest[1]), P.nest[1]);
 {
-  nest = new Group(); nest.position.copy(NEST); scene.add(nest); block(NEST.x, NEST.z, 0.6);
+  nest = new Group(); nest.position.copy(NEST); scene.add(nest); block(NEST.x, NEST.z, 0.6); starr.push([nest]);
   const ring = teil(new TorusGeometry(0.45, 0.16, 10, 24), "#B98A55"); ring.rotation.x = Math.PI / 2; ring.position.y = 0.12; nest.add(ring);
   nest.add(setze(teil(new CylinderGeometry(0.45, 0.4, 0.12, 24), "#A47746", { umriss: false }), 0, 0.06, 0));
   if (tierDaten && tierDaten.phase === "tier" && T && T.ARTEN[tierDaten.art]) {
     const f = T.ARTEN[tierDaten.art].farben[tierDaten.farbe] || T.ARTEN[tierDaten.art].farben[0];
     tier = tierModell(tierDaten.art, f, TP.stufe ? TP.stufe(tierDaten) : 0);
     tier.position.set(P.tier[0], bodenY(P.tier[0], P.tier[1]), P.tier[1]); scene.add(tier);
+    starr.push([tier.userData.k, [tier.userData.schwanz]], [tier.userData.schwanz]);
     antippbar(tier, () => {
       herzen(tier.position);
       const ok = TP.streicheln ? TP.streicheln() : false;
@@ -653,13 +710,13 @@ const name = S.profil.name || "du";
 // Platz und Texte der Nachbarn aus dem Kern; hier nur, wie sie in 3D aussehen
 const BAU_NACHBAR = { eule, fipsi, robo, baer, biber };
 const NACHBARN = KI.nachbarn().map(n => Object.assign(n, { bau: BAU_NACHBAR[n.e] }));
-{ const t = tafel("Mathe", "#5CCBA6"), [x, z, d] = P.schild; t.position.set(x, bodenY(x, z), z); t.rotation.y = d; scene.add(t); block(x, z, 0.4); }
+{ const t = tafel("Mathe", "#5CCBA6"), [x, z, d] = P.schild; t.position.set(x, bodenY(x, z), z); t.rotation.y = d; scene.add(t); block(x, z, 0.4); starr.push([t]); }
 
 // Lernfunde des Tages: Wer heute etwas Neues im Fach gelernt hat, wird vom passenden Nachbarn begrüßt.
 // Die Nachbarn hüpfen dann ab und zu, bis man mit ihnen gesprochen hat (shared/lernfunde.js).
 NACHBARN.forEach(n => {
   const o = n.bau(); n.y = bodenY(n.x, n.z); o.position.set(n.x, n.y, n.z); o.rotation.y = n.dreh; if (n.e !== "🧮") o.scale.multiplyScalar(1.3); scene.add(o); block(n.x, n.z, 0.8);
-  n.obj = o;
+  n.obj = o; { const u = o.userData; starr.push([o, [u.koerper, u.schwanz]], [u.koerper, [u.schwanz]], [u.schwanz]); }
   const fund = K.fundFuer(n.e);
   n.freut = !!fund && n.e !== "🧮";
   const aktion = fund ? ["🌱", n.e === "🧮" ? "Lesen" : "Reden"] : n.e === "🧮" ? ["🧮", "Lesen"] : ["💬", "Reden"];
@@ -710,6 +767,7 @@ const wissen = (() => {
     return m;
   });
   antippbar(g, () => zeigeAntwort(K.antwort("wissensbaum")), ...K.aktionFuer("wissensbaum"));
+  starr.push([g, [...fruechte, ...g.children.filter(c => c.userData.licht !== undefined)]]);
   return {
     info, fruechte,
     tick(t) {
@@ -736,11 +794,12 @@ const ballons = new Group(); ballons.position.set(P.ballons[0], bodenY(P.ballons
 });
 ballons.add(setze(teil(new CylinderGeometry(0.12, 0.16, 0.5, 12), "#9A6A3F"), 0, 0.25, 0));
 antippbar(ballons, () => zeigeAntwort(K.antwort("ballons")), ...K.aktionFuer("ballons"));
+{ const bunt = ballons.children.filter(b => b.userData.p !== undefined); starr.push([ballons, bunt], ...bunt.map(b => [b])); }
 const truhe = new Group(); truhe.position.set(P.truhe[0], WELT.insel ? 0.05 : bodenY(P.truhe[0], P.truhe[1]) - 0.15, P.truhe[1]); truhe.rotation.y = WELT.insel ? 0 : Math.atan2(-P.truhe[0], -P.truhe[1]); scene.add(truhe);
 truhe.add(setze(teil(new BoxGeometry(0.9, 0.5, 0.6), "#B9732E"), 0, 0.25, 0));
 const deckel = teil(new CylinderGeometry(0.3, 0.3, 0.9, 16, 1, false, 0, Math.PI), "#C98A3E"); deckel.rotation.z = Math.PI / 2; setze(deckel, 0, 0.5, 0); truhe.add(deckel);
 truhe.add(setze(teil(new BoxGeometry(0.16, 0.2, 0.05), "#FFC83D", { dicke: 1.1 }), 0, 0.45, 0.32));
-antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe"));
+antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe")); starr.push([truhe]);
 
 // ---------- Schachtisch mit Schildkröte Tilda (Lernen, daher auch ohne Spielzeit) ----------
 {
@@ -755,7 +814,7 @@ antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe"
   t.add(setze(teil(new CylinderGeometry(0.43, 0.43, 0.08, 18), "#E8D9A0"), 0, 0.17, 0));
   const kopf = new Group(); kopf.position.set(0, 0.32, 0.5); t.add(kopf); kopf.add(teil(kugel(0.17, 14, 10), "#8FD06A")); augen(kopf, 0.07, 0.04, 0.14, 0.035);
   [[-0.3, 0.35], [0.3, 0.35], [-0.3, -0.35], [0.3, -0.35]].forEach(([fx, fz]) => t.add(setze(teil(kugel(0.1, 10, 8), "#8FD06A"), fx, 0.07, fz)));
-  antippbar(g, () => zeigeAntwort(K.antwort("schach")), ...K.aktionFuer("schach"));
+  antippbar(g, () => zeigeAntwort(K.antwort("schach")), ...K.aktionFuer("schach")); starr.push([g]);
 }
 
 // ---------- Bühne mit Papagei Paula: spielt die eigene Melodie aus dem Atelier, alle tanzen ----------
@@ -784,7 +843,7 @@ const paula = (() => {
     g.add(setze(new Mesh(new CircleGeometry(0.13, 16), mat("#FFC83D")), s * 1.05, 0.66, -0.37));
   });
   const note = schildSprite("🎵"); note.position.set(0, 2.3, 0); g.add(note); g.userData.note = note;
-  paula.position.set(0, 0.3, 0); g.add(paula);
+  paula.position.set(0, 0.3, 0); g.add(paula); starr.push([g, [paula, note]], [paula]);
   // Melodie und Texte aus dem Insel-Kern; hier tanzen alle mit
   antippbar(g, () => {
     const a = K.antwort("buehne");
@@ -802,6 +861,9 @@ function schildSprite(text) {
   const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace;
   const sp = new Sprite(new SpriteMaterial({ map: t, depthTest: false })); sp.scale.set(0.9, 0.9, 1); return sp;
 }
+// Graue Fassung eines Materials für gesperrte Orte – je Ausgangsmaterial nur einmal, damit Verschmelzen wirkt (NA-29)
+const GRAU = new Map();
+function grauMat(m) { if (m === UMRISS) return m; if (!GRAU.has(m)) { const g = m.clone(); g.color.lerp(new Color("#B9B4C6"), 0.55); GRAU.set(m, g); } return GRAU.get(m); }
 const ORT_BAU = {
   lauf() { // Startbogen mit Stern
     const g = new Group();
@@ -829,16 +891,18 @@ const ORT_BAU = {
 ["lauf", "kart", "bau"].forEach(id => {
   const [x, z] = P[id], o = ORT_BAU[id](); o.position.set(x, bodenY(x, z), z); o.rotation.y = Math.atan2(-x, -z); scene.add(o); block(x, z, 1.2);
   const frei = istFrei(id), info = SPIELE[id];
-  if (!frei) { const sp = schildSprite("🔒"); sp.position.set(0, 3.2, 0); o.add(sp); o.traverse(m => { if (m.material && m.material.color && !m.isSprite) { m.material = m.material.clone(); m.material.color.lerp(new Color("#B9B4C6"), 0.55); } }); }
-  antippbar(o, () => zeigeAntwort(K.antwort(id)), ...K.aktionFuer(id));
+  if (!frei) { const sp = schildSprite("🔒"); sp.position.set(0, 3.2, 0); o.add(sp); o.traverse(m => { if (m.material && m.material.color && !m.isSprite) m.material = grauMat(m.material); }); }
+  antippbar(o, () => zeigeAntwort(K.antwort(id)), ...K.aktionFuer(id)); starr.push([o]);
 });
 
 
 // ---------- Zimmer im Haus (eigener Bereich weit weg von der Insel) ----------
 // ZX (Mitte des Zimmers) kommt aus dem Kern
 let drinnen = false;
+const zimmerEigen = [];   // antippbare Teile des Zimmers (werden je für sich verschmolzen)
 const zimmer = new Group(); zimmer.position.set(ZX, 0, 0); scene.add(zimmer);
 const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlauf }), WAND_SEITE = new MeshToonMaterial({ color: "#FFE9C2", gradientMap: verlauf });
+WAND_HINTEN.userData.lebt = WAND_SEITE.userData.lebt = true;   // Farbe ändert sich beim Streichen – nicht in Vertex-Farben einbacken
 {
   const boden = new Mesh(new BoxGeometry(8.4, 0.3, 7.4), mat("#E2B47E")); boden.position.y = 0.1; boden.receiveShadow = true; zimmer.add(boden);
   for (let i = -3; i <= 3; i++) zimmer.add(setze(new Mesh(new BoxGeometry(0.04, 0.02, 7.4), mat("#C9955E")), i * 1.2, 0.26, 0));
@@ -848,27 +912,27 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
   zimmer.add(setze(new Mesh(new BoxGeometry(0.08, 1.2, 0.1), mat("#FFFFFF")), 0, 2.1, -3.5));
   const teppich = new Mesh(new CylinderGeometry(1.6, 1.6, 0.04, 40), mat("#B7A4F2")); teppich.position.set(0, 0.27, 0.6); teppich.receiveShadow = true; zimmer.add(teppich);
   // Bett
-  const bett = new Group(); bett.position.set(-2.9, 0.25, -2.2); zimmer.add(bett);
+  const bett = new Group(); bett.position.set(-2.9, 0.25, -2.2); zimmer.add(bett); zimmerEigen.push(bett);
   bett.add(setze(teil(new BoxGeometry(1.8, 0.5, 2.6), "#9A6A3F", { dicke: 1.03 }), 0, 0.25, 0));
   bett.add(setze(teil(new BoxGeometry(1.7, 0.2, 1.8), "#7FC6F5", { dicke: 1.03 }), 0, 0.6, 0.35));
   const kissen = teil(kugel(0.4), "#FFFFFF"); kissen.scale.set(1.6, 0.5, 0.9); bett.add(setze(kissen, 0, 0.65, -0.85));
   block(ZX - 2.9, -2.2, 1.4);
   // Stickeralbum liegt auf dem Bett
-  const album = new Group(); album.position.set(0.25, 0.76, 0.75); album.rotation.y = 0.4; bett.add(album);
+  const album = new Group(); album.position.set(0.25, 0.76, 0.75); album.rotation.y = 0.4; bett.add(album); starr.push([bett, [album]], [album]);
   album.add(setze(teil(new BoxGeometry(0.62, 0.1, 0.48), "#E0457B", { dicke: 1.05 }), 0, 0, 0));
   album.add(setze(new Mesh(new BoxGeometry(0.56, 0.11, 0.42), mat("#FFF6E8")), 0.02, 0, 0));
   album.add(setze(new Mesh(kugel(0.07, 10, 8), mat("#FFD84D")), 0.05, 0.07, 0.02));
   antippbar(album, () => zeigeAntwort(K.antwort("album")), ...K.aktionFuer("album"));
   antippbar(bett, () => zeigeAntwort(K.antwort("bett", { tier: tier ? tierDaten.name || "dein Tier" : null })), ...K.aktionFuer("bett"));
   // Kleiderschrank
-  const schrank = new Group(); schrank.position.set(2.8, 0.25, -3.0); zimmer.add(schrank);
+  const schrank = new Group(); schrank.position.set(2.8, 0.25, -3.0); zimmer.add(schrank); zimmerEigen.push(schrank); starr.push([schrank]);
   schrank.add(setze(teil(new BoxGeometry(2.0, 2.6, 0.9), "#C2337A", { dicke: 1.03 }), 0, 1.3, 0));
   [-0.48, 0.48].forEach(x => { schrank.add(setze(teil(new BoxGeometry(0.9, 2.3, 0.06), "#E0579A", { dicke: 1.02 }), x, 1.3, 0.47)); schrank.add(setze(teil(kugel(0.07), "#FFC83D", { dicke: 1.15 }), x * 0.25, 1.35, 0.53)); });
   schrank.add(setze(teil(new BoxGeometry(0.5, 0.3, 0.05), "#FFFFFF", { dicke: 1.08 }), 0, 2.35, 0.52));
   block(ZX + 2.8, -3.0, 1.2);
   antippbar(schrank, () => zeigeAntwort(K.antwort("schrank")), ...K.aktionFuer("schrank"));
   // Spiegel
-  const spiegel = new Group(); spiegel.position.set(-4.05, 1.7, 1.0); spiegel.rotation.y = Math.PI / 2; zimmer.add(spiegel);
+  const spiegel = new Group(); spiegel.position.set(-4.05, 1.7, 1.0); spiegel.rotation.y = Math.PI / 2; zimmer.add(spiegel); zimmerEigen.push(spiegel); starr.push([spiegel]);
   const rahmen = teil(new TorusGeometry(0.55, 0.08, 10, 30), "#FFC83D"); rahmen.scale.y = 1.4; spiegel.add(rahmen);
   const glas = new Mesh(new CircleGeometry(0.52, 30), new MeshBasicMaterial({ color: "#CFEFFF" })); glas.scale.y = 1.4; glas.position.z = 0.02; spiegel.add(glas);
   antippbar(spiegel, () => zeigeAntwort(K.antwort("spiegel")), ...K.aktionFuer("spiegel"));
@@ -893,21 +957,21 @@ const WAND_HINTEN = new MeshToonMaterial({ color: "#FFD9E6", gradientMap: verlau
       g2.restore();
     });
     const tex = new CanvasTexture(c); tex.colorSpace = SRGBColorSpace;
-    const wand = new Group(); wand.position.set(4.06, 1.95, 0.9); wand.rotation.y = -Math.PI / 2; zimmer.add(wand);
+    const wand = new Group(); wand.position.set(4.06, 1.95, 0.9); wand.rotation.y = -Math.PI / 2; zimmer.add(wand); zimmerEigen.push(wand); starr.push([wand]);
     wand.add(teil(new BoxGeometry(1.72, 1.1, 0.06), "#8A5A34", { dicke: 1.03 }));
     wand.add(setze(new Mesh(new PlaneGeometry(1.6, 1.0), new MeshBasicMaterial({ map: tex })), 0, 0, 0.035));
     antippbar(wand, () => zeigeAntwort(K.antwort("pinnwand")), ["📌", "Ansehen"], 1.9);
   }
   // Atelier: Staffelei mit dem neuesten Bild und bis zu drei gemalten Bildern als Poster an den Wänden (shared/bilder.js)
   {
-    const staffelei = new Group(); staffelei.position.set(-2.1, 0.25, 2.3); staffelei.rotation.y = 0.55; zimmer.add(staffelei);
+    const staffelei = new Group(); staffelei.position.set(-2.1, 0.25, 2.3); staffelei.rotation.y = 0.55; zimmer.add(staffelei); zimmerEigen.push(staffelei); starr.push([staffelei]);
     [[-0.42, 0.12], [0.42, -0.12]].forEach(([x, r]) => { const b = teil(new BoxGeometry(0.07, 2.0, 0.07), "#B07A48"); b.position.set(x, 1.0, 0); b.rotation.z = r; staffelei.add(b); });
     const hinten = teil(new BoxGeometry(0.07, 1.9, 0.07), "#B07A48"); hinten.position.set(0, 0.95, -0.38); hinten.rotation.x = -0.25; staffelei.add(hinten);
     staffelei.add(setze(teil(new BoxGeometry(1.0, 0.07, 0.16), "#B07A48"), 0, 0.88, 0.06));
     const brett = new Group(); brett.position.set(0, 1.32, 0.1); brett.rotation.x = -0.08; staffelei.add(brett);
     brett.add(teil(new BoxGeometry(1.06, 0.82, 0.04), "#FFFFFF", { dicke: 1.03 }));
     const leinwandMat = new MeshBasicMaterial({ color: "#FFFFFF" });
-    brett.add(setze(new Mesh(new PlaneGeometry(1.0, 0.75), leinwandMat), 0, 0, 0.025));
+    { const lw = setze(new Mesh(new PlaneGeometry(1.0, 0.75), leinwandMat), 0, 0, 0.025); lw.userData.bleibt = true; brett.add(lw); }   // bekommt später ein Bild – nicht verschmelzen
     const klecks = [["#E8453C", -0.18, 0.05], ["#FFC83D", 0, 0.12], ["#2F86C8", 0.18, 0.04]];
     const palette = new Group(); palette.position.set(0.25, 0.94, 0.12); staffelei.add(palette);
     palette.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.03, 20), "#D9A867"), 0, 0, 0));
@@ -972,6 +1036,7 @@ function stelleMoebel() {
     if (platzHindernis[pl.id]) { hindernisse.splice(hindernisse.indexOf(platzHindernis[pl.id]), 1); delete platzHindernis[pl.id]; }
     const m = MOEBEL.find(x => x.id === id); if (!m) return;
     const o = m.bau(); o.userData.id = id; o.position.set(pl.x, 0.25, pl.z); o.rotation.y = Math.atan2(-pl.x, 0.8 - pl.z); zimmer.add(o); moebelObj[pl.id] = o;
+    verschmelzeLokal(o, [o.userData.dreh, o.userData.fische]);
     platzHindernis[pl.id] = { x: ZX + pl.x, z: pl.z, r: 0.6 }; hindernisse.push(platzHindernis[pl.id]);
     antippbar(o, () => zeigeAntwort(K.antwort("moebel", { id })));
   });
@@ -981,6 +1046,8 @@ function stelleMoebel() {
 stelleMoebel();
 // Ringe zeigen beim Aussuchen, wo die Plätze sind
 const platzRinge = PLAETZE.map(pl => { const r = new Mesh(new TorusGeometry(0.55, 0.05, 6, 28), new MeshBasicMaterial({ color: "#FF6F91" })); r.rotation.x = Math.PI / 2; r.position.set(pl.x, 0.3, pl.z); r.visible = false; zimmer.add(r); return r; });
+// Wände, Boden, Teppich, Fenster, Pflanze: zu wenigen Meshes verschmelzen (Möbel, Ringe und antippbare Teile bleiben eigene Objekte)
+starr.push([zimmer, [...zimmerEigen, ...platzRinge, ...Object.values(moebelObj)]]);
 // Laden (Kaufen, Hinstellen, Wegräumen, Wandfarbe) im gemeinsamen Baustein shared/einrichten.js – gleich für beide Looks
 window.Einrichten.verbinde({
   neu: () => stelleMoebel(),
@@ -1418,7 +1485,7 @@ if (weihnachtsPaket()) {
   paket.add(setze(new Mesh(new BoxGeometry(0.12, 0.6, 0.67), mat("#FFC83D")), 0, 0.29, 0));
   paket.add(setze(new Mesh(new BoxGeometry(0.67, 0.6, 0.12), mat("#FFC83D")), 0, 0.29, 0));
   [-1, 1].forEach(sx => { const s = new Mesh(new TorusGeometry(0.1, 0.035, 6, 14), mat("#FFC83D")); s.rotation.y = sx * 0.6; paket.add(setze(s, sx * 0.09, 0.66, 0)); });
-  paket.position.set(PAKET_POS.x, y, PAKET_POS.z); paket.rotation.y = 0.3; scene.add(paket); block(PAKET_POS.x, PAKET_POS.z, 0.45);
+  paket.position.set(PAKET_POS.x, y, PAKET_POS.z); paket.rotation.y = 0.3; scene.add(paket); block(PAKET_POS.x, PAKET_POS.z, 0.45); starr.push([paket]);
   antippbar(paket, () => oeffnePaket(), ["🎁", "Öffnen"], 1.8);
 }
 function oeffnePaket() {
@@ -1513,6 +1580,9 @@ setTimeout(naechsteStory, 900);
 setInterval(naechsteStory, 5000);   // z. B. wenn die Spielzeit beginnt, während das Kind auf der Insel ist
 antippbar(uhrSonne, () => zeigeAntwort(K.antwort("sonnenuhr")), ...K.aktionFuer("sonnenuhr"));
 
+// ---------- Leistungsbudget (NA-29): starre Teile je Objekt verschmelzen ----------
+starr.forEach(([o, aus]) => verschmelzeLokal(o, aus || []));
+
 // ---------- Bildschirm-Punkte für Szenen und Zeigehand (NA-10) ----------
 const _bp = new Vector3();
 function bildschirm(x, y, z) {
@@ -1525,4 +1595,9 @@ const ORTE = { ich: () => [ich.position.x, ich.position.y + 1.4, ich.position.z]
 Object.entries(KI.ORTE).forEach(([k, o]) => { ORTE[k] = () => [o.x, bodenY(o.x, o.z) + o.h, o.z]; });
 // Insel.ort("haus") liefert eine Funktion für Zeige.auf(); Insel.bildschirm(x, y, z) rechnet einen 3D-Punkt um
 window.Insel = { bildschirm, ort: (name) => () => (ORTE[name] && !drinnen ? bildschirm(...ORTE[name]()) : null), ORTE: Object.keys(ORTE) };
-window.__heimat = { bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+// Test-Haken: wie viele sichtbare Meshes hat jedes Objekt der Szene (für das Leistungsbudget, NA-29)
+function teileZaehlen() {
+  return scene.children.map(o => { let n = 0, d = 0; o.traverseVisible(m => { if (m.isMesh || m.isPoints || m.isLineSegments) { n++; const g = m.geometry; d += g.index ? g.index.count / 3 : (g.attributes.position ? g.attributes.position.count / 3 : 0); } }); return { name: o.type + (o.userData.tipp ? "*" : "") + (o.userData.aktion ? ":" + o.userData.aktion[1] : ""), x: Math.round(o.position.x), z: Math.round(o.position.z), meshes: n, dreiecke: Math.round(d) }; })
+    .filter(x => x.meshes > 0).sort((a, b) => b.meshes - a.meshes);
+}
+window.__heimat = { teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
