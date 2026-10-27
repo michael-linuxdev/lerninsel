@@ -188,11 +188,22 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
 });
 
-pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Lernbereiche je Klasse, Kl. 1/2 ohne Englisch, Zählung 2 / 14 / 4", () => {
-  const n = { ja: 0, teil: 0, nein: 0 };
-  [3, 4].forEach(k => { const lb = L.fuer("sachsen", "englisch", k); assert.strictEqual(lb.length, 10); lb.forEach(x => { n[x.abdeckung]++; x.lz.forEach(id => assert.ok(K.ziel(id), id)); }); });
-  assert.deepStrictEqual({ ...n }, { ja: 2, teil: 14, nein: 4 });
+pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und „My Portfolio“ je Klasse, Kl. 1/2 ohne Englisch, Zählung 17 / 5 / 0, alle Inhaltspunkte zugeordnet", () => {
+  const n = { ja: 0, teil: 0, nein: 0 }, echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8"), ids = new Set();
+  const soll = { 3: [40, { ja: 37, teil: 2, nein: 0, aussen: 1 }], 4: [33, { ja: 28, teil: 3, nein: 0, aussen: 2 }] };
+  [3, 4].forEach(k => { const lb = L.fuer("sachsen", "englisch", k), m = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
+    assert.strictEqual(lb.length, 11);
+    lb.forEach(x => { n[x.abdeckung]++; x.lz.forEach(id => assert.ok(K.ziel(id), id));
+      assert.ok(x.punkte && x.punkte.length >= 2, `Englisch ${k} ${x.titel}: Punkte fehlen`);
+      x.punkte.forEach(p => { z++; m[p.abdeckung]++; assert.ok(!ids.has(p.id) && p.kl === String(k), p.id); ids.add(p.id);
+        p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "englisch" ? w.ENGLISCH.some(l => l.id === id) : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
+        if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("englisch:")), p.id); });
+      assert.strictEqual(x.abdeckung, x.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein") ? "teil" : "ja", `Englisch ${k} ${x.titel}`); });
+    assert.strictEqual(z, soll[k][0]); assert.deepStrictEqual(m, soll[k][1]); });
+  assert.deepStrictEqual({ ...n }, { ja: 17, teil: 5, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "englisch", 2).length, 0);
+  const benutzt = new Set(); [3, 4].forEach(k => L.fuer("sachsen", "englisch", k).forEach(x => x.punkte.forEach(p => p.app.forEach(a => benutzt.add(a)))));
+  w.ENGLISCH.forEach(l => assert.ok(benutzt.has("englisch:" + l.id), l.id + " kommt in keinem Inhaltspunkt vor"));
   assert.ok(L.laender.sachsen.faecher.deutsch.stand.startsWith("Lehrplan 2025, gültig ab 1.8.2025"));
 });
 

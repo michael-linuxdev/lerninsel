@@ -7,12 +7,136 @@
 // Quellen: Mathematik 2025 (Lehrplan Grundschule Sachsen, Fassung 2025, gültig ab 1.8.2025; vom Auftraggeber als PDF bereitgestellt), Kl. 1/2, 3 und 4;
 //   Deutsch 2025 (Fachlehrplan Deutsch, gültig ab 1.8.2025, kommentierte Fassung; PDF vom Auftraggeber, 28.10.2026), Kl. 1/2, 3 und 4;
 //   Sachunterricht 2019 (Lehrplan Grundschule, gültig ab 1.8.2019; PDF vom Auftraggeber, 28.10.2026), Kl. 1/2, 3 und 4 – nur die Pflicht-Lernbereiche,
-//   die Wahlbereiche (z. B. Abfall, Steine, Himmelsraum) sind freiwillig und nicht gezählt.
+//   die Wahlbereiche (z. B. Abfall, Steine, Himmelsraum) sind freiwillig und nicht gezählt;
+//   Englisch 2019 (Lehrplan Grundschule, Kl. 3 und 4; PDF vom Auftraggeber, 28.10.2026) – zehn Themen-Lernbereiche und „My Portfolio“.
 // app-Zuordnungen: mathe:<station>, werkstatt:<kapitel>, deutsch:<abenteuer-kapitel>, lesen:<anlaute|silben|texte|spuren|legen|tafel>,
 //   medien:<lektion>, sachkunde:<thema>, echtewelt:<id>
 (function () {
   const P = window.LehrplanLaender && window.LehrplanLaender.sn; if (!P) return;
   const PUNKTE = {
+    englisch: {
+      "3": {
+        1: [ // Me, my family and my friends
+          ["sn.en3.mf.01", "Englisch als neue Sprache erleben: Klang, Rhythmus, Lieder und Reime", "3", ["englisch:en-hello", "englisch:en-party"], "teil"],
+          ["sn.en3.mf.02", "Englische Wörter im Alltag entdecken (Computer, Essen, Kleidung, Spiele)", "3", ["englisch:en-everywhere"], "ja"],
+          ["sn.en3.mf.03", "Begrüßen, verabschieden, sich vorstellen", "3", ["englisch:en-hello"], "ja"],
+          ["sn.en3.mf.04", "Über sich, Familie und Freunde Auskunft geben: Name, Alter, Geschwister", "3", ["englisch:en-family", "englisch:en-numbers2"], "ja"],
+          ["sn.en3.mf.05", "Befinden ausdrücken: How are you? I'm fine.", "3", ["englisch:en-feelings", "englisch:en-hello"], "ja"],
+          ["sn.en3.mf.06", "Zahlen von 0 bis 12", "3", ["englisch:en-numbers", "englisch:en-numbers2"], "ja"],
+          ["sn.en3.mf.07", "Beim Hören helfen Tonfall, Bilder und Töne", "3", ["englisch:en-hello", "englisch:en-animals"], "ja"]
+        ],
+        2: [ // My body and my clothes
+          ["sn.en3.bc.01", "Körperteile benennen", "3", ["englisch:en-body"], "ja"],
+          ["sn.en3.bc.02", "Kleidungsstücke benennen", "3", ["englisch:en-clothes"], "ja"],
+          ["sn.en3.bc.03", "Wetter: It's rainy. It's sunny.", "3", ["englisch:en-weather"], "ja"],
+          ["sn.en3.bc.04", "Grund- und Mischfarben", "3", ["englisch:en-colours"], "ja"],
+          ["sn.en3.bc.05", "Lieblingsfarbe und -kleidung nennen, Besitz ausdrücken (Is this your jacket?)", "3", ["englisch:en-colours", "englisch:en-clothes"], "ja"]
+        ],
+        3: [ // At home
+          ["sn.en3.ah.01", "Zimmer benennen", "3", ["englisch:en-home"], "ja"],
+          ["sn.en3.ah.02", "Einrichtungs- und Gebrauchsgegenstände", "3", ["englisch:en-furniture", "englisch:en-home"], "ja"],
+          ["sn.en3.ah.03", "Sagen, wo jemand oder etwas ist", "3", ["englisch:en-home", "englisch:en-furniture"], "ja"],
+          ["sn.en3.ah.04", "Wohnen in englischsprachigen Ländern (Kamin, bunte Haustüren)", "3", ["englisch:en-furniture"], "ja"]
+        ],
+        4: [ // Food and drink
+          ["sn.en3.fd.01", "Mahlzeiten, Tischsitten und typische Speisen (fish and chips, Pancake Day)", "3", ["englisch:en-cafe", "englisch:en-food"], "ja"],
+          ["sn.en3.fd.02", "Lebensmittel: Obst, Gemüse, Süßes, Käse", "3", ["englisch:en-food"], "ja"],
+          ["sn.en3.fd.03", "Zahlen bis 100", "3", ["englisch:en-numbers2"], "ja"],
+          ["sn.en3.fd.04", "Hunger und Durst, Vorlieben, Wünsche, bitten und danken", "3", ["englisch:en-food", "englisch:en-feelings", "englisch:en-cafe"], "ja"]
+        ],
+        5: [ // Let's go shopping
+          ["sn.en3.sh.01", "Kleidung, Lebensmittel und Spielsachen im Laden", "3", ["englisch:en-shopping", "englisch:en-clothes"], "ja"],
+          ["sn.en3.sh.02", "Mengen und Preise, britisches Geld (penny, pound)", "3", ["englisch:en-shopping"], "ja"],
+          ["sn.en3.sh.03", "Einkaufsgespräch: bitten, wünschen, Preis erfragen, bedauern", "3", ["englisch:en-shopping"], "ja"]
+        ],
+        6: [ // At school
+          ["sn.en3.sc.01", "Schulalltag in englischsprachigen Ländern (Schuluniform)", "3", ["englisch:en-subjects"], "ja"],
+          ["sn.en3.sc.02", "Schulsachen, Fächer, Wochentage, volle Stunden", "3", ["englisch:en-school", "englisch:en-subjects"], "ja"],
+          ["sn.en3.sc.03", "Nach Schulsachen fragen, Besitz ausdrücken (Have you got a pen? This is my pencil.)", "3", ["englisch:en-school"], "ja"]
+        ],
+        7: [ // My hobbies
+          ["sn.en3.ho.01", "Sportarten, Spiele, Musik, Malen und Basteln", "3", ["englisch:en-hobbies", "englisch:en-sports"], "ja"],
+          ["sn.en3.ho.02", "Vorlieben ausdrücken: Do you like …?", "3", ["englisch:en-hobbies", "englisch:en-sports"], "ja"]
+        ],
+        8: [ // Animals
+          ["sn.en3.an.01", "Haustiere und Tiere auf dem Bauernhof", "3", ["englisch:en-animals"], "ja"],
+          ["sn.en3.an.02", "Tiere beschreiben: It's brown. It has got four legs. It can …", "3", ["englisch:en-zoo", "englisch:en-animals"], "ja"],
+          ["sn.en3.an.03", "Lieblingstiere, Besitz und Wünsche (What would you like for your birthday?)", "3", ["englisch:en-animals", "englisch:en-party"], "ja"]
+        ],
+        9: [ // Let's go on a trip
+          ["sn.en3.tr.01", "Ausflugsziele und Verkehrsmittel", "3", ["englisch:en-trip"], "ja"],
+          ["sn.en3.tr.02", "Sehenswürdigkeiten", "3", ["englisch:en-london"], "ja"],
+          ["sn.en3.tr.03", "Fahrkarte kaufen, nach dem Weg fragen", "3", ["englisch:en-trip"], "ja"]
+        ],
+        10: [ // Around the year
+          ["sn.en3.yr.01", "Feste: Easter, Halloween, Christmas, New Year, Birthday", "3", ["englisch:en-year", "englisch:en-party"], "ja"],
+          ["sn.en3.yr.02", "Monate und Jahreszeiten", "3", ["englisch:en-year"], "ja"],
+          ["sn.en3.yr.03", "Gratulieren mündlich und schriftlich, Grußkarten", "3", ["englisch:en-party"], "ja"],
+          ["sn.en3.yr.04", "Lieder, Reime und szenisches Spiel zu den Festen", "3", ["englisch:en-party"], "teil"]
+        ],
+        11: [ // My Portfolio
+          ["sn.en3.pf.01", "Sprachenpass: Sprachen nennen, die ich lerne und spreche (auch Familiensprachen)", "3", ["englisch:en-portfolio"], "ja"],
+          ["sn.en3.pf.02", "Sprachenbiografie und Dossier: Lernerfolge und gelungene Arbeiten sammeln", "3", ["englisch:en-portfolio", "echtewelt:sprachenmappe"], "aussen"]
+        ]
+      },
+      "4": {
+        1: [
+          ["sn.en4.mf.01", "Englisch im Alltag: wozu man es braucht (Handy, Computer)", "4", ["englisch:en-everywhere"], "ja"],
+          ["sn.en4.mf.02", "Mimik und Gestik beim Sprechen einsetzen", "4", ["englisch:en-feelings"], "teil"],
+          ["sn.en4.mf.03", "Sich und andere vorstellen, Herkunft, Interviews", "4", ["englisch:en-portfolio", "englisch:en-family", "englisch:en-hello"], "ja"],
+          ["sn.en4.mf.04", "Befinden und Gefühle ausdrücken", "4", ["englisch:en-feelings"], "ja"]
+        ],
+        2: [
+          ["sn.en4.bc.01", "Körper, Kleidung, Farbnuancen (light green, dark blue), Wetter (foggy, snowy)", "4", ["englisch:en-colours", "englisch:en-weather", "englisch:en-body"], "ja"],
+          ["sn.en4.bc.02", "Passende Kleidung zum Wetter wählen, Lieblingskleidung erfragen", "4", ["englisch:en-weather", "englisch:en-clothes"], "ja"]
+        ],
+        3: [
+          ["sn.en4.ah.01", "Zimmer, Möbel und Gebrauchsgegenstände", "4", ["englisch:en-home", "englisch:en-furniture"], "ja"],
+          ["sn.en4.ah.02", "Lage beschreiben: in, on, under, next to", "4", ["englisch:en-furniture", "englisch:en-home"], "ja"]
+        ],
+        4: [
+          ["sn.en4.fd.01", "Im Café oder Restaurant bestellen, Preise erfragen, höflich sein", "4", ["englisch:en-cafe"], "ja"],
+          ["sn.en4.fd.02", "Typische Speisen und Getränke englischsprachiger Länder", "4", ["englisch:en-cafe", "englisch:en-dates"], "ja"],
+          ["sn.en4.fd.03", "Gesunde Ernährung", "4", ["englisch:en-cafe", "englisch:en-food"], "ja"],
+          ["sn.en4.fd.04", "Rezeptbuch oder Speisekarte gestalten", "4", ["echtewelt:speisekarte"], "aussen"]
+        ],
+        5: [
+          ["sn.en4.sh.01", "Kleidung, Spielsachen, Preise bis 100", "4", ["englisch:en-shopping", "englisch:en-numbers2"], "ja"],
+          ["sn.en4.sh.02", "Verkaufsgespräch beginnen und beenden, Wunschliste", "4", ["englisch:en-shopping"], "ja"]
+        ],
+        6: [
+          ["sn.en4.sc.01", "Tagesabschnitte, Schulfächer, Wochentage", "4", ["englisch:en-subjects"], "ja"],
+          ["sn.en4.sc.02", "Uhrzeit erfragen und angeben (It's nine thirty.)", "4", ["englisch:en-subjects"], "ja"],
+          ["sn.en4.sc.03", "Deutsche und britische Schulen vergleichen", "4", ["englisch:en-subjects"], "ja"],
+          ["sn.en4.sc.04", "Hilfe anbieten und suchen, sich entschuldigen (Sorry, I'm late.)", "4", ["englisch:en-subjects", "englisch:en-school"], "ja"]
+        ],
+        7: [
+          ["sn.en4.ho.01", "Englische und amerikanische Sportarten (cricket, American football)", "4", ["englisch:en-sports"], "ja"],
+          ["sn.en4.ho.02", "Lesen und Medien: englische Kinderbücher und Angebote", "4", ["englisch:en-everywhere"], "teil"],
+          ["sn.en4.ho.03", "Zum Spielen einladen: Would you like to play with me?", "4", ["englisch:en-sports"], "ja"]
+        ],
+        8: [
+          ["sn.en4.an.01", "Zoo- und Wildtiere, Lebensräume, bedrohte Tiere", "4", ["englisch:en-zoo"], "ja"],
+          ["sn.en4.an.02", "Tiere beschreiben, Ratespiele mit Steckbriefen", "4", ["englisch:en-zoo"], "ja"],
+          ["sn.en4.an.03", "Einen englischen Text über Tiere verstehen (Schlüsselwörter)", "4", ["englisch:en-zoo"], "teil"]
+        ],
+        9: [
+          ["sn.en4.tr.01", "Ausflugsziele und Verkehrsmittel", "4", ["englisch:en-trip"], "ja"],
+          ["sn.en4.tr.02", "Sehenswürdigkeiten in London", "4", ["englisch:en-london"], "ja"],
+          ["sn.en4.tr.03", "Fahrkarte kaufen, Preisauskunft", "4", ["englisch:en-trip"], "ja"]
+        ],
+        10: [
+          ["sn.en4.yr.01", "Weitere Feste: Valentine's Day, Pancake Day, Mother's Day, Thanksgiving, St Patrick's Day", "4", ["englisch:en-dates"], "ja"],
+          ["sn.en4.yr.02", "Ordnungszahlen und Datum", "4", ["englisch:en-dates"], "ja"],
+          ["sn.en4.yr.03", "Wochentage, Monate und Jahreszeiten sicher", "4", ["englisch:en-subjects", "englisch:en-year"], "ja"],
+          ["sn.en4.yr.04", "Glückwunschkarten schreiben, britische und deutsche Traditionen vergleichen", "4", ["englisch:en-party", "englisch:en-dates"], "ja"]
+        ],
+        11: [
+          ["sn.en4.pf.01", "Sprachenpass aktualisieren, eigene Fortschritte beschreiben", "4", ["englisch:en-portfolio"], "ja"],
+          ["sn.en4.pf.02", "Etwa zehn gelungene Arbeiten für das Dossier auswählen", "4", ["echtewelt:sprachenmappe"], "aussen"]
+        ]
+      }
+    },
     sachkunde: {
       "1/2": {
         1: [ // Zusammen leben und lernen

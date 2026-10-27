@@ -88,7 +88,7 @@ const NEU = ["zahlen100", "lage", "rechentricks", "euro", "linien", "zahlenmauer
       await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(300);
       if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); }
       await p.waitForSelector(".lp-punkte");
-      const lp = await p.evaluate(() => ({ n: document.querySelectorAll(".lp-punkte").length, punkte: document.querySelectorAll(".lp-punkte li").length, text: document.querySelector(".lp-punkte summary").textContent }));
+      const lp = await p.evaluate(() => { const m = [...document.querySelectorAll(".lp-punkte")].filter(d => d.querySelector("li[data-punkt^='sn.ma12']")); return { n: m.length, punkte: m.reduce((z, d) => z + d.querySelectorAll("li").length, 0), text: m[0].querySelector("summary").textContent }; });
       erwarte(lp.n === 4 && lp.punkte === 54, `Elternbereich: 4 Lernbereiche Mathe mit 54 Inhaltspunkten zum Aufklappen (${lp.n}, ${lp.punkte}; „${lp.text}“)`);
       if (BILDER) { await p.evaluate(() => { document.querySelectorAll(".lp-punkte").forEach(d => d.open = true); document.querySelector(".lp-punkte").scrollIntoView(); }); await p.screenshot({ path: `${BILDER}/mathe2-eltern.png` }); }
     }
