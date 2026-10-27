@@ -16,7 +16,7 @@ function lade(dateien) {
   dateien.forEach(d => vm.runInContext(fs.readFileSync(path.join(WURZEL, d), "utf8"), ctx, { filename: d }));
   return ctx;
 }
-const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/deutsch/werkstatt.js"];
+const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js"];
 const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "inhalte/deutsch/schreiben.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan.js"];
 const w = lade(DATEN.concat(LEHRPLAN));
 const K = w.LernzielKern, I = w.Inhalte, L = w.LEHRPLAN;

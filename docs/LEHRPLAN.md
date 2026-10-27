@@ -115,6 +115,7 @@ Schulform passt, und zeigt keine Noten.
 | Medienbildung | Tablet-Führerschein (6 Lektionen) | `spiele/medien/` | Bereiche Schützen und Analysieren gut, Produzieren/Problemlösen fehlen |
 | Denken | Schach (Lektionen, Matt in 1, KI) | `spiele/schach/` | Zusatz, kein Lehrplanfach |
 | Vorschule | „Gleicher Anfang“, Buchstaben-Tafel, Matheweg Klasse 1/Vorschule (Mengen, Würfel, Muster), „Ankommen“ | `spiele/lesen/`, `spiele/mathe/`, `spiele/daz/` | Anfang gemacht, kein eigener Pfad |
+| Englisch | „Englisch mit Papagei Paula“: 11 Lektionen (Kl. 3: Begrüßen, Farben, Zahlen, Tiere, Körper, Essen; Kl. 4: Familie, Schulsachen, Kleidung, Wetter; Übergang 5: Hobbys/über mich) mit Wortkarten, Hören (englische Gerätestimme), Lesen, Übersetzen, Satzbau; Eltern-Einstellung Beginn ab Kl. 1 oder 3 | `spiele/englisch/` | Einstieg gemacht: Wortschatz und Hören gut, Sprechen nur als Nachsprechen (keine Spracherkennung), Lesen/Schreiben wenig |
 | Übergang 5 | Matheweg „Übergang 5“ (10 Stationen: Fit aus Kl. 4, Brüche erkennen/von Mengen/vergleichen, Kommazahlen bei Größen, Klammer und Punkt vor Strich, Koordinaten, Winkel, Durchschnitt, Sachaufgaben in Schritten, Urkunde), Werkstatt „Fachbegriffe für Klasse 5“ und „Lesestrategien“, Eule Ella „Lernen lernen“ und „Neue Schule“ (NA-39) | `spiele/mathe/aufgaben.js` (`STATIONEN_K5`), `spiele/deutsch/werkstatt.js`, `spiele/sachkunde/themen.js` | Anfang gemacht: Mathe gut, Deutsch und Lernstrategien teilweise; Englisch, Erdkunde/Europa fehlen |
 
 ## Lücken nach Priorität

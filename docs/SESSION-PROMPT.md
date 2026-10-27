@@ -32,7 +32,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 ## 1. Zuerst lesen
 1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
    Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Abend (Sitzung 27.10., 18:15: NA-39 Übergang Klasse 5)“**; davor „17:50: Schritt B … und
+   **„Zwei Looks (Entscheidung 27.10.2026)“** und den neuesten „Stand …“-Eintrag (zuletzt **„Stand 27.10.2026, Abend (Sitzung 27.10., 18:30: Englisch-Einstieg)“**; davor „18:15: NA-39 Übergang Klasse 5“; „17:50: Schritt B … und
    Schritt C …“: Mathe-Rest, Urkunde, Sachunterricht-Rest; „17:30: … Schritt A“: Schritt-Typen `ordnen`/`verbessern`, 6 Schreib-Kapitel). Ältere Abschnitte sind Historie.
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10, **Abschnitt 2: Regeln des DS-Pixel-Looks**),
@@ -42,7 +42,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
    (Abschnitte Klasse 3 und 4), `spiele/deutsch/werkstatt.js` (Kapitel ab `w-praeteritum`), `spiele/sachkunde/themen.js` (ab `sinne`),
    `shared/lehrplan/kern.js` (Lernziel-IDs) und `shared/lehrplan/laender/sachsen.js` (Zuordnung `app`, `abdeckung`, `hinweis`).
 
-## 2. Stand (27.10.2026, nach Schritt A, B, C und NA-39 Übergang 5)
+## 2. Stand (27.10.2026, nach Schritt A, B, C, NA-39 Übergang 5 und Englisch)
 **Früher fertig** (Einzelheiten in PLAN.md unter „Neuausrichtung 26.10.2026“): NA-01 Ereignisse/Story, NA-02 Profil, NA-10 Szenen + Zeigehand,
 NA-11 Prolog „Ankunft“ (E1), NA-12 Insel-Zugang, NA-13 Sonnenuhr/„Erst lernen“/Erste Frucht mit Nebel, NA-14 Tutorial E4–E8, NA-15
 Weihnachts-Sonderstart, NA-21 Leistungs-Test, NA-24 Welt-Kern `shared/insel-kern.js`, NA-25–28 Pixel-Look (Insel, Umschalter, Figuren, Zimmer),
@@ -62,7 +62,10 @@ Schreiben“ (Laute, Silben, 20 Lesetexte, Nachspuren, Wörter legen), NA-50 Kö
   formulieren; Sachsen ist nur das erste ausgearbeitete Länderprofil.
 - **„Weiter in größeren Schritten“** (27.10., 17:15): mehrere Pakete pro Schritt bündeln, dann einmal gesamt testen und pushen.
 
-### Was in der letzten Sitzung (27.10., ab 17:30) fertig und gepusht wurde – Schritte A, B, C und NA-39
+### Was in der letzten Sitzung (27.10., ab 17:30) fertig und gepusht wurde – Schritte A, B, C, NA-39 und Englisch
+**Englisch-Einstieg:** neue Seite `spiele/englisch/` „Englisch mit Papagei Paula“ mit 11 Lektionen (`spiele/englisch/lektionen.js`, Kl. 3: 6, Kl. 4: 4, Übergang 5: 1);
+Wortkarten, Hören (englische Gerätestimme; ohne Stimme Lesen), Lesen, Übersetzen, Satzbau, Wahl. Tür auf der Startseite (Raster 12 Spalten), Lernfach im
+Zeitsystem, Fähigkeit „Englisch-Ohr“, Kern-Fach `en` (7 Ziele), Eltern-Karte „Englisch wie in der Schule“ (Beginn ab Kl. 1 oder 3). Test `tests/englisch.js`.
 **NA-39 Übergang Klasse 5:** fünfter Matheweg „🎒 Übergang 5“ (`Mathe.STATIONEN_K5`, `mathe.k5`, 10 Stationen: Fit aus Kl. 4, Brüche ×3, Kommazahlen bei
 Größen, Klammer/Punkt vor Strich, Koordinaten, Winkel, Durchschnitt, Sachaufgaben in Schritten; Urkunde „Fit für Klasse 5!“, Kl.-4-Urkunde führt dorthin);
 Werkstatt „Fachbegriffe für Klasse 5“ und „Lesestrategien“ (`stufe: 5`, jetzt 30 Kapitel); Eule Ella „Lernen lernen“ und „Neue Schule“ (Themen
@@ -129,7 +132,8 @@ Einzelheiten in PLAN.md, Einträge „Stand 27.10.2026, Abend (NA-33 … Schritt
   die 23 neuen Werkstatt-Kapitel (Kl. 3), **bes. „Ordnen“ und „Verbessern“ im Hochformat (Brief, Satzanfänge, Wörterbuch)**, die 16 neuen Sachthemen
   (bes. Zuordnen mit drei Gruppen im Hochformat), Eltern-Karte „Mathe wie in der Schule“, **Mathe Kl. 3 Stationen 19–20 (Würfelgebäude, Glücksrad),
   Kl. 4 Stationen 10–14 und die Urkunde, Bildaufgaben im Hochformat (Frage jetzt sichtbar?), „9 kg = 9000 g“ eintippen, Kind mit Stufe „Übergang 5“:
-  Matheweg „Übergang 5“ (Brüche, Koordinaten, Winkel), „Fachbegriffe“, „Lesestrategien“, „Lernen lernen“, „Neue Schule“**.
+  Matheweg „Übergang 5“ (Brüche, Koordinaten, Winkel), „Fachbegriffe“, „Lesestrategien“, „Lernen lernen“, „Neue Schule“; Englisch: spricht das iPad die
+  englischen Wörter (britische Stimme)? Startseite quer und hoch mit der neuen Tür**.
 - Geschenke zu Weihnachten 2026 (NA-16); Muttersprachlerinnen für ru/uk; Lehrkräfte; Tonaufnahmen; Silbenfarben der Schule.
 - Soll **Ergänzen** zusätzlich als „Ergänzen mit Erweitern“ vs. „mit Entbündeln“ unterschieden werden, oder ein drittes Verfahren (Abziehen mit Erweitern)?
 
@@ -166,7 +170,8 @@ Rückfrage): Mathe Kl. 4 Schrägbilder/Vierecke/Volumen/Klammerregel, Kl. 3 Schi
 **Schritt D – Länder und Übergreifendes (M):** NA-47 Länderprofile (zuerst die Struktur für ein zweites Land, z. B. NRW oder Berlin/Brandenburg –
 nur Lernbereiche und Zuordnung zu `lz`, keine Lehrplantexte), Elternbereich „Was übt die App?“ je Land. (~~NA-39 Übergang Kl. 5~~ erledigt 27.10.)
 
-**Schritt E – Englisch-Einstieg (M, nur nach Rückfrage):** Englisch fehlt als Fach ganz (Kl. 3/4 in den meisten Ländern, wichtig für Übergang 5).
+~~**Schritt E – Englisch-Einstieg**~~ (erledigt 27.10.). **Englisch Teil 2 (M, nach Rückfrage):** Lernkartei für Englisch, Wochentage/Monate/Uhrzeit,
+kurze Dialoge, Englisch im Länderprofil Sachsen, Tonaufnahmen statt Gerätestimme (NA-43).
 
 **Grafik/Story (nur nach ausdrücklicher Freigabe):** NA-29b Handy-Leistung (S), NA-29 Teil 2 Minispiele ins Budget, NA-16 QR-Geschenk
 (wartet auf Geschenk-Auswahl) → NA-17 Kapitel 1–2 → NA-18 Chronik im Album.
@@ -205,6 +210,9 @@ nur Lernbereiche und Zuordnung zu `lz`, keine Lehrplantexte), Elternbereich „W
   `ordnen` (`{ frage?, teile: [richtige Reihenfolge], e?, ru }`, Teile ≤ 16 Zeichen liegen nebeneinander) und `verbessern`
   (`{ frage?, satz, falsch, stelle?, optionen: [besser, …], tipp?, e?, ru }`, `stelle` = Wortnummer bei Mehrfachvorkommen).
   Renderer in `spiele/deutsch/abenteuer.js` (`schritt()`/`switch`), Antwort über `antwort(knopf, richtig, beiRichtig)`.
+- Englisch (`spiele/englisch/lektionen.js`): `{ id, stufe, lz, name, e, farbe, grund, intro: { de, ru }, woerter: [{ en, de, ru, e }], extra: [satz|wahl], ende }`;
+  Schritte entstehen in `englisch.js` (`baue(k)`) aus den Wörtern; jedes Wort braucht ein eigenes Emoji. Test-Haken `__englisch` (starte, schritt, lauf, sichtbar).
+  Eltern-Einstellung `eltern.englisch.ab` = `"3"` | `"1"`.
 - Sachthemen (`spiele/sachkunde/themen.js`): `{ id, stufe?, lz, name, e, farbe, grund, kurz, schritte }` (`stufe` wie in der Werkstatt: sichtbar ab der Klasse davor); Typen `info` (mit `fakten`), `wahl` (`ok`, `warum`),
   `daumen` (`ok`), `zuordnen` (2–3 Gruppen, je 2–3 Dinge), `baum`. Jede Zeile mit russischem Entwurf (`ru`, `satzRu`, `warumRu`).
 - Eltern-Einstellungen für Schulunterschiede: `Spielwelt.lade("eltern").mathe` (z. B. `minus: "abziehen" | "ergaenzen"`), Karte in
@@ -246,7 +254,7 @@ nur Lernbereiche und Zuordnung zu `lz`, keine Lehrplantexte), Elternbereich „W
 - `sh tests/laufen.sh` = Node-Tests `story-migration`, `inselkern`, `lehrplan`, `wortschatz`, `koennen`, `mathe-generatoren` + Rauchtest über alle Seiten (quer/hoch). Für /dev: `PFAD=dev/ sh tests/laufen.sh`.
   Neue Seiten in `tests/rauchtest.js` aufnehmen (3D-Seiten in `SEITEN_3D`).
 - Einzelne Tests: `sh tests/laufen.sh <name>` mit `ereignisse`, `profil`, `szene`, `prolog`, `zugang`, `tutorial`, `etappen`, `weihnachten`, `pixelinsel`,
-  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1, 3 und 4, Urkunde, Eltern-Wahl Subtraktion), `sachkunde` (Themen Kl. 3–4, die fünf neuesten echt durchgeklickt), `deutsch34` (Werkstatt Kl. 3–4 inkl. echtem Antippen von `ordnen`/`verbessern`), `uebergang5` (Übergang Kl. 5: Matheweg, Urkunden, Deutsch und Sachthemen echt durchgeklickt), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
+  `look` (braucht frisch gebautes /dev), `leistung` (Messtabelle, `STRENG=1` = Budget erzwingen), `probe` (Grafik-Proben, NUR=pixel|rund|pixel25d), `daz` (Ankommen/DaZ D0), `lesen` (Laute, Silben, Lesetexte, Nachspuren, Wörter legen), `mathe1` (Matheweg Kl. 1, 3 und 4, Urkunde, Eltern-Wahl Subtraktion), `sachkunde` (Themen Kl. 3–4, die fünf neuesten echt durchgeklickt), `deutsch34` (Werkstatt Kl. 3–4 inkl. echtem Antippen von `ordnen`/`verbessern`), `uebergang5` (Übergang Kl. 5: Matheweg, Urkunden, Deutsch und Sachthemen echt durchgeklickt), `englisch` (Englisch: Tür, Sichtbarkeit, alle Lektionen echt durchgeklickt), `koennen-anzeige` (Mein Können, Empfehlung), `handy` (Rechenaufwand auf kleinen Smartphones, `DROSSEL=4`); mehrere Läufe gleichzeitig mit `PORT=<nummer>`;
   Node: `node tests/inselkern.js`
   (Screenshots mit `BILDER=<ordner>`). In einer `&&`-Kette mit `tail -1 | grep -q bestanden` prüfen, sonst wird trotz Fehler gepusht.
 - Jedes neue Paket bekommt einen eigenen Test `tests/<name>.js` nach dem Muster der vorhandenen.
@@ -265,7 +273,7 @@ nur Lernbereiche und Zuordnung zu `lz`, keine Lehrplantexte), Elternbereich „W
   bildschirm, prolog, imProlog, steg, sonnenuhr, su, nebel, naechsteStory, paket, oeffnePaket, lichter, zeichnungen), `__szene`
   (spiele, aktuell, weiter, abbrechen, szenen), `__pixel` (ich, teleport, laufeZu, tippe(id), orte, nachbarn, aktion, druecke, reingehen,
   rausgehen, drinnen, besuche, paket, oeffnePaket, lichter, nebel, zimmerDaten, moebel, einrichten, ringe, figur, tierRichtung, zeichnungen, zoom), `__ereignisse`, `__atelier`, `__musik`, `__schach`, `__gefuehle`, `__lauf`, `__kart`,
-  `__bau`, `__duell`, `__ich`, `__mathe` (… zeigeUrkunde), `__sachkunde` (starte, schritt), `__deutsch` (starte, schritt); geplant: `__tutorial`. Jeder neue Baustein bekommt einen Test-Haken.
+  `__bau`, `__duell`, `__ich`, `__mathe` (… zeigeUrkunde), `__sachkunde` (starte, schritt), `__englisch` (starte, schritt, sichtbar), `__deutsch` (starte, schritt); geplant: `__tutorial`. Jeder neue Baustein bekommt einen Test-Haken.
 - Jede geänderte Seite einmal öffnen, Konsole auf Fehler prüfen, Screenshots ansehen (Quer- und Hochformat; mit Hilfesprache Russisch, in /dev).
 - Externe Seiten (Open-Meteo, Google Fonts) sind aus der Sandbox meist nicht erreichbar – Fehlermeldungen dazu ignorieren, mit Cache-Daten testen.
 

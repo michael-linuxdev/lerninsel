@@ -339,6 +339,21 @@
       <div class="knoepfe"><button class="knopf haupt" id="m-speichern">Speichern</button></div>
     </div>`;
   }
+  // Englisch (Englisch-Einstieg): Beginn je nach Bundesland/Schule – meist Kl. 3, in manchen Ländern früher
+  function englischKarte() {
+    const ab = ((S.lade("eltern") || {}).englisch || {}).ab || "3";
+    return `<div class="karte">
+      <h2>🦜 Englisch wie in der Schule</h2>
+      <div class="zeit-raster"><label>Englisch zeigen<select id="en-ab">
+        <option value="3" ${ab === "3" ? "selected" : ""}>Wie in den meisten Ländern: ab Klasse 3 (erste Lektionen schon in Klasse 2)</option>
+        <option value="1" ${ab === "1" ? "selected" : ""}>Schon ab Klasse 1 (wenn die Schule früh mit Englisch beginnt)</option></select></label></div>
+      <p class="klein">Englische Wörter liest die englische Stimme des Geräts vor. Fehlt sie: iPad → Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Englisch. Ohne Stimme werden Hör-Aufgaben zu Lese-Aufgaben.</p>
+      <div class="knoepfe"><button class="knopf haupt" id="en-speichern">Speichern</button></div>
+    </div>`;
+  }
+  function englischKnoepfe() {
+    $("en-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.englisch = Object.assign({}, e.englisch || {}, { ab: $("en-ab").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+  }
   function matheKnoepfe() {
     $("m-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.mathe = Object.assign({}, e.mathe || {}, { minus: $("m-minus").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
@@ -491,6 +506,7 @@
       ${zeitKarte()}
       ${inselKarte()}
       ${matheKarte()}
+      ${englischKarte()}
       ${echteWeltKarte()}
       ${staerkenKarte()}
       ${storyKarte()}
@@ -520,7 +536,7 @@
     // Einführung E2–E8 überspringen (still: zählt nicht als neue Etappe); E3 öffnet Kapitel 1 wie in der Szene „Erste Frucht“
     if ($("tutorial-weg")) $("tutorial-weg").addEventListener("click", () => { TUTORIAL.forEach(e => window.Story.etappeFertig(e, true)); window.Story.setzeKapitel(1); S.meldung("Einführung übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
-    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
+    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";

@@ -1321,3 +1321,28 @@ Schulform, keine Noten**; Berlin/Brandenburg (Grundschule bis Kl. 6) ausdrückli
   Sachsen hat keinen Kl.-5-Lehrplan in der App (Grundschule endet mit Kl. 4) – Übergang 5 ist KMK-orientiert.
 - **Nächstes:** Schritt D (Länderprofile, NA-47) oder Englisch-Einstieg (Kl. 3–5), nach Rückfrage.
 
+### Stand 27.10.2026, Abend (Sitzung 27.10., 18:30: Englisch-Einstieg)
+Auftrag: „Als Nächstes Englisch“. Englisch fehlte als Fach ganz. Grafik/3D nicht angefasst (nur die 2D-Startseite bekommt eine Tür).
+- **Neue Seite `spiele/englisch/`** „Englisch mit Papagei Paula“ (Paula plappert nach – vorhandene Figur aus `shared/figuren.js`, keine neue Grafik):
+  11 Lektionen in `spiele/englisch/lektionen.js` (`window.ENGLISCH`), Kl. 3: Hello, Colours, Numbers 1–10, Animals, My body, Food; Kl. 4: Family,
+  School, Clothes, Weather; Übergang 5: Hobbies/über mich. Je Lektion 8–10 Wörter (`{ en, de, ru, e }`, britische Schreibweise) plus Satzbau
+  („I like bananas.“, „This is my sister.“) und eine Wahlfrage.
+- **Ablauf je Lektion** (automatisch aus den Wörtern): Paula erklärt → Wortkarten (antippen, englisch hören, nachsprechen) → 6 Aufgaben im Wechsel
+  Hören („Welches Bild?“), Lesen („Welches Bild?“), Übersetzen („Wie heißt … auf Englisch?“) → Satzbau → Wahl → Abschluss mit Alltagsauftrag.
+  Englisch spricht die Gerätestimme (`en-GB`, sonst `en-US`); **ohne englische Stimme werden Hör-Aufgaben zu Lese-Aufgaben** und die Übersicht sagt es ehrlich.
+  Keine Spracherkennung (offline, keine Daten) – Sprechen ist Nachsprechen.
+- **Sichtbarkeit** wie Werkstatt/Sachthemen (ab der Klasse vor der Stufe: Kl. 2 sieht 6, Kl. 3 sieht 10, ab Kl. 4 alle 11). Kl. 1 sieht nichts, mit
+  ehrlichem Hinweis. **Eltern-Einstellung** „🦜 Englisch wie in der Schule“: Beginn ab Kl. 3 (Standard) oder schon ab Kl. 1 (`eltern.englisch.ab`),
+  mit Hinweis, wie man eine englische Stimme installiert – die Länder beginnen unterschiedlich.
+- **Anbindung:** Tür „Englisch“ auf der Startseite (Raster jetzt 12 Spalten: vier Lern-Türen in einer Reihe ab 1024 px, darunter zwei Spalten);
+  Zeitsystem zählt Englisch als Lernfach (auch im „Erst lernen“-Fenster); neue Fähigkeit „Englisch-Ohr“ 🦜 (Belohnungen: Sterne); Lernfunde-Fach
+  „englisch“; Können je Lernziel; Inhalte-Register (`englisch:<id>`, mit Stufe); neues Kern-Fach `en` mit 7 Lernzielen (Kern jetzt 162);
+  Offline-Liste in `sw.js`; Rauchtest um die Seite erweitert.
+- **Test:** neu `tests/englisch.js` – Tür in drei Breiten, Sichtbarkeit Kl. 1–5 und Eltern-Einstellung, alle 11 Lektionen echt durchgeklickt (eine
+  mit absichtlichem Fehler), Hören mit simulierter englischer Stimme, Fortschritt und Fähigkeit, „Mein Ich“, Eltern-Karte, Handy hoch.
+- **Offen:** Englisch im Länderprofil Sachsen (Lernbereiche nachtragen), Lernkartei für Englisch, Englisch-Wörter auf der Insel/Story (Grafik eingefroren),
+  Uhrzeit, Wochentage, Monate, Kurzdialoge; Ukrainisch-Entwürfe; echte Tonaufnahmen (NA-43) statt Gerätestimme.
+- Beobachtung: `tests/tutorial.js` (3D-Insel, Sonnenuhr) scheiterte zweimal, als parallel andere Browser-Tests liefen, und bestand danach dreimal
+  allein – gleiches Wackeln wie beim Prolog-Test; Ursache Swiftshader-Zeit, nicht Englisch. Insel-Tests am besten allein laufen lassen.
+- **Nächstes:** Schritt D (Länderprofile, NA-47) oder Englisch Teil 2 (Lernkartei, Wochentage/Uhrzeit, Dialoge), nach Rückfrage.
+

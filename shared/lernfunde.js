@@ -13,6 +13,7 @@
     mathe: { e: "🦫", name: "Mathe" },
     deutsch: { e: "🦊", name: "Deutsch" },
     sachkunde: { e: "🦉", name: "Sachunterricht" },
+    englisch: { e: "🦜", name: "Englisch" },
     tablet: { e: "🤖", name: "Tablet" },
     welt: { e: "🌍", name: "Echte Welt" },
     schach: { e: "♟️", name: "Schach" },

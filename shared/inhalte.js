@@ -50,6 +50,8 @@
     kapitel(window.WERKSTATT, "werkstatt:", "deutsch", true);
     kapitel(window.THEMEN, "sachkunde:", "sachkunde", true);
     kapitel(window.LEKTIONEN, "medien:", "medien", false);
+    (window.ENGLISCH || []).forEach(k => registriere({ id: "englisch:" + k.id, fach: "englisch", lz: k.lz, aufgaben: Math.min(6, k.woerter.length) + (k.extra || []).length,
+      lernkartei: false, titel: k.name, quelle: "bestand", stufe: [String(k.stufe)] }));
     STATISCH.forEach(s => nachId[s.id] || registriere(Object.assign({ quelle: "bestand" }, s)));
   }
 

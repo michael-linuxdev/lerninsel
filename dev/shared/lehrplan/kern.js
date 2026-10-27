@@ -24,6 +24,8 @@
     mu: { name: "Musik", quelle: "Länderpläne", bereiche: { ho: "Musik hören", ma: "Musik machen", no: "Musik lesen und aufschreiben" } },
     sp: { name: "Bewegung", quelle: "Länderpläne", bereiche: { be: "Sich bewegen" } },
     et: { name: "Ethik und soziales Lernen", quelle: "Länderpläne", bereiche: { ge: "Gefühle", mi: "Miteinander", we: "Werte" } },
+    en: { name: "Englisch", quelle: "Länderpläne Fremdsprache Grundschule (GeR A1 angebahnt)", bereiche: {
+      hv: "Hörverstehen", sp: "Sprechen", ws: "Wortschatz", le: "Lesen und Schreiben" } },
     daz: { name: "Deutsch als Zweitsprache", quelle: "SPRACHEN.md", bereiche: { d0: "D0 Ankommen", d1: "D1 Erste Sätze" } }
   };
 
@@ -189,6 +191,15 @@
     ["et.ge.02", "1", "Mit starken Gefühlen umgehen, zur Ruhe kommen"],
     ["et.mi.01", "1", "Freundschaft und Miteinander"],
     ["et.we.01", "3", "Gerechtigkeit und Vielfalt"],
+
+    // ---------- Englisch (Grundschule; Beginn je nach Land Kl. 1 oder 3) ----------
+    ["en.hv.01", "3", "Einfache englische Wörter und Sätze hören und verstehen"],
+    ["en.sp.01", "3", "Begrüßen, verabschieden, sich vorstellen"],
+    ["en.ws.01", "3", "Grundwortschatz: Farben, Zahlen, Tiere, Körper, Essen"],
+    ["en.sp.02", "4", "Einfache Sätze sprechen (I like …, I have …, This is …)"],
+    ["en.ws.02", "4", "Wortschatz: Familie, Schule, Kleidung, Wetter, Hobbys"],
+    ["en.le.01", "4", "Bekannte Wörter und kurze Sätze lesen"],
+    ["en.sp.03", "5", "Über sich erzählen: Alter, Herkunft, Hobbys"],
 
     // ---------- Deutsch als Zweitsprache ----------
     ["daz.d0.01", "1", "Erste Wörter für Schule und Alltag verstehen"],
