@@ -15,7 +15,7 @@
 3. **Stufen:** Vorschule (letztes Kita-Jahr), Klasse 1, 2, 3, 4 und „Übergang 5“. Klasse 1/2 bleiben in den Daten getrennt,
    auch wo ein Land sie als Doppeljahrgang führt (Sachsen: „1/2“) – das Land fasst sie im Filter zusammen.
 4. **Ehrliche Abdeckung:** `ja` (übt das Lernziel mit Aufgaben und Wiederholung), `teil` (einzelne Aufgaben oder nur ein Ausschnitt),
-   `nein`. Die heutigen Werte in `shared/lehrplan.js` für Sachsen: **7 × ja, 15 × teil, 30 × nein** (Klasse 1/2, 3, 4 zusammen; gezählt am 26.10.2026).
+   `nein`. Die Werte von Hand für Sachsen (`shared/lehrplan/laender/sachsen.js`, 49 Lernbereiche): **6 × ja, 14 × teil, 29 × nein** (Klasse 1/2, 3, 4 zusammen; nachgezählt am 27.10.2026). Daneben errechnet `shared/lehrplan.js` die Abdeckung aus den Lernziel-Verweisen (NA-03).
 
 ## Quellen
 | Kürzel | Dokument | Link |
@@ -33,8 +33,8 @@
 | KITA | Bildungspläne der Länder für Kindertageseinrichtungen (Übersicht) | [Deutscher Bildungsserver](https://www.bildungsserver.de/bildungsplaene-fuer-kitas-2027-de.html) |
 | UE | Übergang zur weiterführenden Schule, Regelungen der Länder | [Deutscher Bildungsserver](https://www.bildungsserver.de/schule/uebergang-zur-weiterfuehrenden-schule-12373-de.html) |
 
-Hinweis: `shared/lehrplan.js` nennt für Deutsch noch die vier Bereiche der Fassung 2004. Die Fassung 2022 hat fünf
-(„Lesen“ und „Sich mit Texten und anderen Medien auseinandersetzen“ sind getrennt). → Arbeitspaket NA-03 in `PLAN.md`.
+Erledigt (NA-03, 27.10.2026): Der Lehrplan-Kern `shared/lehrplan/kern.js` und `LEHRPLAN.kmk.deutsch` nutzen die fünf Bereiche der Fassung 2022
+(„Lesen“ und „Sich mit Texten und anderen Medien auseinandersetzen“ sind getrennt).
 
 ---
 
@@ -106,7 +106,7 @@ Schulform passt, und zeigt keine Noten.
 | Fach | Was es gibt | Dateien | Einschätzung |
 |---|---|---|---|
 | Mathematik | Matheweg mit 21 Stationen (ZR 20/100, Zehner, Vergleich, gerade, Formen, Verdoppeln, Ergänzen, Sachaufgaben, Daten, Einmaleins 1–3, Geteilt, Geld, Länge, Zufall, Uhr, Kalender), Einstufung, Lernkartei, Duell, Bauplatz-Zählaufgaben | `spiele/mathe/aufgaben.js`, `mathe.js`, `spiele/familie/`, `quellen/welt3d/bau.js` | Kl. 2 gut, Kl. 1 teilweise (über Kl.-2-Stationen), Kl. 3 kaum, Kl. 4 und Vorschule nicht |
-| Deutsch | Fipsis Abenteuer (5 Kapitel: Wortschatz, Artikel, Lücken, Satzbau, Hören, Mehrzahl, Präpositionen), Wörter-Werkstatt (Verben, Adjektive, Wortarten, Verlängern, Silben), Wort des Tages (67 Wörter) | `spiele/deutsch/`, `shared/woerter.js` | Sprache untersuchen Kl. 2 teilweise; **Lesen, Schreiben, Schriftspracherwerb fehlen fast ganz** |
+| Deutsch | Fipsis Abenteuer (5 Kapitel: Wortschatz, Artikel, Lücken, Satzbau, Hören, Mehrzahl, Präpositionen), Wörter-Werkstatt (Verben, Adjektive, Wortarten, Verlängern, Silben), Wort des Tages (64 Wörter, jetzt aus dem Wortschatz-Kern), „Ankommen“ (DaZ D0: 100 Wörter, 20 Sätze) | `spiele/deutsch/`, `spiele/daz/`, `inhalte/woerter/`, `shared/woerter.js` | Sprache untersuchen Kl. 2 teilweise; **Lesen, Schreiben, Schriftspracherwerb fehlen fast ganz** |
 | Sachunterricht | 4 Themen: Geschenkebringer, Familie, Gesund und munter, Bäume und Vögel; echtes Wetter auf der Insel | `spiele/sachkunde/themen.js`, `quellen/welt3d/heimat.js` | dünn: nur Ausschnitte aus 2 Perspektiven |
 | Kunst | Malen, Ausmalbilder, 14 Malaufträge | `spiele/atelier/atelier.js`, `vorlagen.js` | Kl. 1–2 teilweise |
 | Musik | Xylofon, 4 Lieder, Rhythmus, hoch/tief, laut/leise, eigene Melodie, Bühne | `spiele/atelier/musik.js` | Kl. 1–2 gut für den Anfang |

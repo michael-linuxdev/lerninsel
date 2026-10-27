@@ -698,7 +698,7 @@ NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Vol
    (**Meilenstein 15.12.2026:** Prolog, E1–E3, Weihnachten – technisch erreicht am 27.10.2026, iPad-Test steht aus)
 3. **Vorgezogen (27.10.):** **NA-20** Probeszenen – Auswahl auf „Rund“ oder „Pixel“ eingegrenzt, Proben stehen, Entscheidung offen → **NA-21** Leistungs-Test (nur bei „Rund“ dringend)
 4. **NA-14** Tutorial E4–E8 → ~~**NA-12** Insel-Zugang~~ → **NA-16** QR-Geschenk → **NA-17** Kapitel 1–2 → **NA-18** Chronik
-5. **NA-03** Lehrplan-Kern → **NA-40** Wortschatz-Kern/DaZ D0 → **NA-30** Anlaute → **NA-32** Mathe Kl. 1/Vorschule → **NA-31** Lesen
+5. ~~**NA-03** Lehrplan-Kern~~ → ~~**NA-40** Wortschatz-Kern/DaZ D0~~ → **NA-30** Anlaute → **NA-32** Mathe Kl. 1/Vorschule → **NA-31** Lesen
 6. **NA-22** eine Kind-Figur → **NA-23** Neubau nach Stilwahl (abwechselnd mit 7)
 7. **NA-50** Können je Lernziel → **NA-51** Bennos Brücke → **NA-52** Paulas Fest → NA-53/54/55
 8. **NA-44** RTL → **NA-43** Ton-Aufnahmen → **NA-42** Ukrainisch (sobald Muttersprachler bereitstehen, darf es vorgezogen werden)
@@ -1013,4 +1013,53 @@ Neues kleines Paket **NA-29b Handy-Leistung** (S, unabhängig von der Look-Wahl)
 - Rund auf kleinen Bildschirmen (kürzere Seite < 500 CSS-Pixel) beim ersten Start automatisch „einfach“; Eltern-Einstellung hat Vorrang.
 - Abnahme: `sh tests/laufen.sh handy` – Pixel flach ≤ 0,3 Mio. Pixel pro Bild, Rund auf Handy-Größe „einfach“ ohne Eingriff.
 - Wenn möglich einmal auf einem echten älteren Gerät gegenprüfen.
+
+### Stand 27.10.2026, Mittag (Sitzung 27.10.: Pixel freigegeben, Grafik eingefroren, NA-03 und NA-40 fertig)
+**Antworten des Auftraggebers (27.10.2026, 12:00):** iPad-Test noch nicht gemacht. **Pixel-Look: „Rund + Pixel flach“** – die Vorschau
+Pixel 2,5D wird nicht weiterverfolgt (Dateien bleiben als Nachschlag, kein Paket, kein dritter Look). **„Bis Weihnachten pushen wir alles auf
+Main. Kein Kind spielt hier bisher.“** → neue Funktionen sind ab jetzt auch auf der Hauptseite sichtbar. **„Lieber Inhalte zuerst“** → Grafik
+eingefroren (NA-29b, NA-29 Teil 2 warten), Reihenfolge jetzt Punkt 5: NA-03 → NA-40 → NA-30 → NA-32 → NA-31.
+
+**Fertig und gepusht**
+- **Pixel auf der Hauptseite wählbar:** `Spielwelt.lookWaehlbar()` = immer wahr; Elternkarte ohne „nur in der Testumgebung“; `tests/look.js` prüft
+  jetzt Knopf und Umschalten auch auf der Hauptseite. Standard bleibt „Rund“.
+- **NA-03 Lehrplan-Kern**
+  - a) `shared/lehrplan/kern.js` (`window.LernzielKern`): 148 Lernziele mit festen IDs `<fach>.<bereich>.<nr>` – Mathe (5 Leitideen + prozessbezogene
+    Kompetenzen `ma.pk`), Deutsch mit den **fünf** Bereichen der KMK-Fassung 2022 (`de.sz` Sprechen und Zuhören, `de.sc` Schreiben, `de.le` Lesen,
+    `de.tm` Texte und Medien, `de.su` Sprache untersuchen), Sachunterricht nach GDSU-Perspektiven, Medienbildung (KMK-DW), Kunst, Musik, Bewegung,
+    Ethik, DaZ (`daz.d0`, `daz.d1`); je Ziel Kern-Stufe vs/1–4/5. Titel sind eigene Zusammenfassungen.
+  - b) `shared/lehrplan/laender/sachsen.js`: alle 49 sächsischen Lernbereiche (unverändert übernommen) mit `lz`-Verweisen; Abweichungen
+    (`ma.dz.05` schon Kl. 2, Zusatz-Ziel `su.hi.sn01` Sorbische Kultur, Fundstellen). `shared/lehrplan.js` ist jetzt die Kompatibilitäts-Schicht:
+    `window.LEHRPLAN` wie vorher, `kmk.deutsch` mit fünf Bereichen, neu `errechnet(lernbereich)` und `zaehle(land, klasse)`.
+  - c) `shared/inhalte.js` (`window.Inhalte`): `registriere`, `ausBestand()` (liest Matheweg-Stationen, Fipsi-Kapitel, Werkstatt, Sachthemen,
+    Führerschein und feste Angebote wie Atelier/Musik/Gefühle), `abdeckung(lz)` nach der Regel aus LEHRPLAN.md, `fuer(kind)` (Stufe des Kindes oder
+    eine darunter, Länder-Filter), `ohneInhalt()`. Bestehende Inhalte tragen nur ein Feld `lz` (nichts umgebaut). Bei Fipsis Geschichte ergibt
+    sich das Lernziel aus dem Schritt-Typ (Artikel → `de.su.05` usw.).
+  - Elternkarte „Was übt die App?“ zeigt wie vorher die Einschätzung von Hand und darunter je Lernbereich „Nach Lernzielen errechnet“ plus eine
+    Vergleichszeile. Test `tests/lehrplan.js` (Node, 8 Prüfungen, listet Lernziele ohne Inhalt: 88 von 148; `LUECKEN=1` zeigt die IDs).
+- **NA-40 Wortschatz-Kern und DaZ D0**
+  - a) `inhalte/woerter/bestand.js` (die 64 Wörter von „Wort des Tages“, jetzt mit Silben und Wortfeldern) und `inhalte/woerter/d0.js`
+    (72 neue Wörter + 20 Sätze, Ukrainisch für die D0-Bestandswörter). `shared/woerter.js` baut daraus `window.Wortschatz` (wort, feld, daz,
+    saetze, hilfe, ARTIKEL) und weiter `window.WOERTER` in alter Form und Reihenfolge – das Wort des Tages bleibt gleich. Artikel mit Farbe **und**
+    Form: der ■ blau, die ● rot, das ▲ grün. Test `tests/wortschatz.js` (Node).
+  - b) Neue Seite **„Ankommen“** `spiele/daz/` (`ankommen.js`, `shared/daz.js`): Wörter ansehen nach 11 Wortfeldern (Bild, Artikel-Zeichen,
+    Silbenbögen, Mehrzahl, Vorlesen), „Hören und zeigen“ (10 Aufgaben, drei Bilder), „Sätze für jeden Tag“ (8 Aufgaben). Richtige Antworten
+    beim ersten Versuch zählen als Lernaufgabe (Zeit-Regel) und für den Fortschritt (`profil.daten.daz`); neue Wörter werden Lernfunde.
+    D0 gilt als geschafft ab 80 Wörtern und 15 Sätzen. **Deutschstand „keine“:** Die Deutsch-Seite leitet nach „Ankommen“ weiter, bis D0 geschafft
+    ist (`?karte=1` bleibt bei Fipsi); bei „keine“ und „wenig“ steht oben auf Fipsis Karte ein Knopf „Ankommen“. Ohne Gerätestimme steht das
+    gesuchte Wort in der Frage. Test `tests/daz.js`.
+
+**Entscheidungen / Abweichungen**
+- Die Zahlen in LEHRPLAN.md waren leicht falsch: Sachsen hat **49** Lernbereiche (von Hand 6 × ja, 14 × teil, 29 × nein), „Wort des Tages“ hatte
+  **64** Wörter (nicht 67).
+- Die errechnete Abdeckung ist streng (ein Lernbereich ist nur „gut“, wenn alle seine Lernziele „gut“ sind) und steht deshalb nur zum Vergleich
+  neben der Einschätzung von Hand; nach NA-30/31/32 kann sie die Hand-Werte ersetzen.
+- Russisch der Bestandswörter gilt als geprüft (war schon im Kinder-UI); alle neuen russischen und ukrainischen Texte sind **Entwürfe** und
+  erscheinen weiter nur in /dev – die Regel „keine ungeprüfte Übersetzung im Kinder-UI“ gilt trotz „alles auf Main“.
+- Bilder sind vorerst Emojis (wie bisher bei Wort des Tages); Ton über die Gerätestimme, `ton`-Schlüssel je Wort für spätere Aufnahmen (NA-43).
+
+**Offen / als Nächstes**
+- iPad 10: Hauptseite → Eltern → neues Kind mit Deutsch-Kenntnissen „keine“ → Deutsch öffnen → „Ankommen“; Wörter ansehen, Hören und zeigen,
+  Sätze. Elternbereich → „Was übt die App?“. Pixel-Look jetzt auch auf der Hauptseite (Knopf „👾 Pixel“ auf der Insel).
+- Nächstes Paket: **NA-30 Anlaute** → NA-32 → NA-31; Russisch/Ukrainisch der D0-Texte von Muttersprachlerinnen prüfen lassen.
 
