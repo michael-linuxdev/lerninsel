@@ -799,3 +799,23 @@ der 2000er – eigener Stil, keine fremden Figuren/Kacheln).
 - **Auftraggeber + Kinder vergleichen auf iPad 10 und Handy:** `/dev/spiele/probe/` (Pixel) und `/dev/spiele/welt3d/probe.html?stil=b` (Rund).
 - Danach: Stil festlegen und GRAFIK.md anpassen; bei „Pixel“ neues Paket „Insel in 2D“ planen, bei „Rund“ **NA-21** → Budget.
 - Dann **NA-14** Tutorial E4–E8; NA-16 wartet weiter auf die Geschenk-Auswahl.
+
+### Zwei Looks (Entscheidung 27.10.2026)
+Antwort des Auftraggebers nach dem Vergleich: **„Immer beides, kann jederzeit umgeschaltet werden.“** Die App bekommt zwei gleichwertige
+Darstellungen derselben Welt: **„Rund“** (three.js, wie Animal Crossing, heutige Insel) und **„Pixel“** (PixiJS, Draufsicht aus 16×16-Kacheln).
+Spielstand, Story, Etappen, Lernfunde, Zimmer, Tier und Orte gibt es nur einmal; Umschalten verliert nichts. GRAFIK.md Abschnitt 2 ist damit entschieden.
+
+Neue Pakete (vor NA-14):
+- **NA-24 Welt-Kern trennen** (M): Orte, Stationen, Aktionen, Story-Auslöser (`naechsteStory`/`spieleStory`), Paket, Nebelstufe und Zimmer-Daten
+  aus `quellen/welt3d/heimat.js` nach `shared/insel-kern.js` (`window.InselKern`). Abnahme: Rund-Insel unverändert, alle Tests grün; Node-Test `tests/inselkern.js`.
+- **NA-25 Umschalter** (S): Profilfeld `look` (`rund`|`pixel`, Standard `rund`, Migration), `Spielwelt.look()`, Knopf auf der Insel, Karte im
+  Elternbereich (Umschalten fürs Kind sperrbar), Einstieg leitet je nach Look weiter. Test `tests/look.js`.
+- **NA-26 Pixel-Insel** (L, a/b/c): PixiJS-Insel aus `InselKern` (Kacheln je Biom, Stationen, Aktionsknopf, Szenen, Zeigehand über
+  `window.Insel.ort()`), Prolog E1–E3 und Weihnachts-Paket spielbar; Pixi-Bündel offline in `sw.js`, Lizenzen in `LIZENZEN.md`.
+- **NA-27 Pixel-Figuren** (M): Kind aus Kleiderschrank-Daten als Sprite (vier Richtungen), Tiere und Insel-Figuren. Ab jetzt wird jede neue
+  Figur, jedes Möbel, jedes Bauwerk in beiden Looks gebaut (oder als offen vermerkt).
+- **NA-28 Pixel-Zimmer** (M): Zimmer und Möbel in Pixel, gleiche Möbel-Daten.
+- Minispiele bleiben vorerst 3D und werden aus beiden Looks gestartet; Pixel-Fassungen später je Spiel. NA-21 (Leistung „Rund“) bleibt wichtig.
+
+**Reihenfolge ab 27.10.2026 (ersetzt Punkt 3–4 oben):** **NA-24** → **NA-25** → **NA-26** → **NA-27** → **NA-28** → **NA-14** (in beiden Looks)
+→ **NA-21** → NA-16 (wartet auf Geschenk-Auswahl) → NA-17 → NA-18 → Punkt 5 ff. wie oben.

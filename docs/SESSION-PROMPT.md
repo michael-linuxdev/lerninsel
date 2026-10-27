@@ -7,8 +7,8 @@ Voraussetzung: Das Konto hat Lese- und Schreibzugriff auf das GitHub-Repo `micha
 
 ---
 
-Du arbeitest an der **Lerninsel**: einer Offline-Lern-App für Grundschulkinder auf dem Tablet (reines HTML/CSS/JS, three.js für 3D,
-kein Server). Repo `michael-linuxdev/lerninsel`, Branch `main`; was auf `main` liegt, ist sofort online unter lerninsel.micana.de
+Du arbeitest an der **Lerninsel**: einer Offline-Lern-App für Grundschulkinder auf dem Tablet (reines HTML/CSS/JS, three.js für den Look „Rund“,
+PixiJS für den Look „Pixel“, kein Server). Repo `michael-linuxdev/lerninsel`, Branch `main`; was auf `main` liegt, ist sofort online unter lerninsel.micana.de
 (Hauptseite für die Kinder), `/dev` (neue Funktionen, eigener Spielstand) und `/dev/test` (Testmodus, alles frei).
 Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf **Deutsch**.
 
@@ -20,18 +20,25 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
    - **Playwright + Chromium**: `node -e "require('playwright')"` (ggf. vorher `export NODE_PATH=$(npm root -g)`); Browser unter `/opt/pw-browsers`
      (`PLAYWRIGHT_BROWSERS_PATH`). Fehlt beides: `npm i -g playwright && npx playwright install chromium` und `PLAYWRIGHT_BROWSERS_PATH` weglassen.
    - `python3` für den lokalen Server.
+   - **PixiJS-Quellcode** (für den Look „Pixel“; npm und CDNs sind in der Arbeitsumgebung meist gesperrt, GitHub geht):
+     ```
+     mkdir -p ~/eng/dep && cd ~/eng
+     git clone -q --depth 1 --branch v8.22.0 --filter=blob:none --sparse https://github.com/pixijs/pixijs pixi && git -C pixi sparse-checkout set src
+     cd dep && for r in primus/eventemitter3 mapbox/earcut kaimallea/isMobile xmldom/xmldom pixijs/colord avoidwork/tiny-lru jkroso/parse-svg-path; do git clone -q --depth 1 https://github.com/$r; done
+     ```
+     Bauen dann mit `ENGINES=~/eng node quellen/probe/bauen.js` (Ausgabe `spiele/probe/pixel.js`). Geht `npm i pixi.js`, reicht das statt der Klone.
 3. Einmal `sh tests/laufen.sh` ausführen (Node-Test + Rauchtest). Muss grün sein, bevor du etwas änderst. Dauert ca. 2 Minuten.
 
 ## 1. Zuerst lesen
 1. `docs/PLAN.md`, nur den Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – er ist verbindlich (Entscheidungen, Phasen,
    Arbeitspaket-Backlog NA-xx mit Ziel/Dateien/Abnahme/Test/Größe, „Reihenfolge“, offene Fragen) – und darin besonders den letzten Eintrag
-   **„Stand 27.10.2026“** (was fertig ist, Abweichungen, nächste Schritte). Ältere Abschnitte sind Historie.
+   **„Stand 27.10.2026“** und **„Zwei Looks (Entscheidung 27.10.2026)“** (was fertig ist, Abweichungen, nächste Schritte). Ältere Abschnitte sind Historie.
 2. `docs/KONZEPT.md` (Story „Die Insel erwacht“, Begriffe, Figuren, Kapitelbogen, Tutorial-Etappen E0–E10, Verzahnung, Individualisierung).
 3. Je nach Paket: `docs/LEHRPLAN.md`, `docs/SPRACHEN.md` (Prüfstatus von Übersetzungen!), `docs/GRAFIK.md` (Leistungsbudget iPad 10),
    `docs/MINISPIELE.md`.
 4. `README.md` (Aufbau des Repos, Liste der Dateien in `shared/`).
 
-## 2. Stand (27.10.2026)
+## 2. Stand (27.10.2026, Sitzungsende 03 Uhr)
 **Fertig** (Einzelheiten in PLAN.md → „Stand 27.10.2026“):
 - **NA-01** `shared/ereignisse.js`: `Ereignisse.melde/hoere/offene/abholen` und `window.Story` (Kapitel, Etappen E1…, gesehene Szenen,
   Chronik, Geschenke) in `profil.daten.story`, mit Migration alter Spielstände.
@@ -46,12 +53,17 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
   höchstens 2 neue Etappen pro Tag (`Story.darfNeueEtappe()`).
 - **NA-15** Weihnachts-Sonderstart (Erststart 1.–26.12.): Paket am Steg (Tannenbaum fürs Zimmer, Schleife fürs Tier), Lichterkette im Dezember.
 
-**Grafik (Sitzung 27.10.2026, nachts):** Eine andere Engine ist erlaubt, Smartphones zählen mit. Zur Wahl stehen nur noch zwei Looks:
-**„Rund“ wie Animal Crossing** (heutiger Stil B, three.js, `spiele/welt3d/probe.html?stil=b`) und **„Pixel“** (Draufsicht, 16×16-Kacheln,
-PixiJS, `spiele/probe/`, Quelle `quellen/probe/pixel.js`, Bau `ENGINES=<ordner> node quellen/probe/bauen.js` – npm/CDN sind gesperrt,
-PixiJS kommt als Quellcode von GitHub, Anleitung im Kopf von `bauen.js`). Test `sh tests/laufen.sh probe` (Handy + iPad, quer + hoch).
-Messhaken für NA-21: `messe()` in `gemeinsam.js`, `__heimat.info()`, `__welt3d.info()`, `__probe.info()`, `window.__keinSparen`.
-Fremde Bestandteile stehen in `docs/LIZENZEN.md`. **Die Stil-Entscheidung des Auftraggebers steht noch aus.**
+**Grafik – Entscheidung des Auftraggebers (27.10.2026): „Immer beides, kann jederzeit umgeschaltet werden.“**
+Die App bekommt zwei gleichwertige Looks, zwischen denen Kind und Eltern jederzeit wechseln:
+- **„Rund“** (wie Animal Crossing): die heutige 3D-Insel mit three.js (`quellen/welt3d/heimat.js`), Vergleichsprobe `spiele/welt3d/probe.html?stil=b`.
+- **„Pixel“** (Draufsicht aus 16×16-Kacheln wie Handheld-Abenteuer der 2000er, eigener Stil ohne fremde Figuren/Kacheln): PixiJS 8.22,
+  Probe `spiele/probe/` aus `quellen/probe/pixel.js` (Karte 40×30, Wasser in zwei Bildern, Kind in vier Richtungen, Fipsi folgt,
+  Retro-Textfeld; alles im Code gezeichnet: Formen → feste Palette `PAL` → automatischer Umriss, Funktion `pixelbild()`).
+  Messwerte Pixel: 1 Zeichenaufruf, ≈ 5.000 Dreiecke, 0,84 MB. Rund: 230–400 Aufrufe, 150–260 Tsd. Dreiecke.
+- Test der Proben: `sh tests/laufen.sh probe` (Handy 390×844 und iPad 1180×820, quer und hoch; `NUR=pixel|rund`, `BILDER=<ordner>`).
+- Messhaken (für NA-21): `messe()` in `quellen/welt3d/gemeinsam.js`, `__heimat.info()`, `__welt3d.info()`, `__probe.info()`,
+  `window.__keinSparen` (schaltet im Test den Sparmodus der Insel ab). `tests/leistung.js` gibt es noch nicht.
+- Fremde Bestandteile stehen in `docs/LIZENZEN.md` (Lizenztexte für das Pixi-Bündel in `spiele/probe/LIZENZEN.txt`).
 
 **Antworten des Auftraggebers (26.10.2026):** Insel-Zugang über die erste Lektion – ja (umgesetzt). QR-Geschenke mit privatem Schlüssel nur
 beim Auftraggeber und Node-Skript – einverstanden; **welche Geschenke** es zu Weihnachten 2026 gibt, ist noch offen.
@@ -65,7 +77,9 @@ Entwürfe (`status: { ru: "entwurf" }`) und erscheinen nur in `/dev`.
 1. **Fragerunde zuerst** (höchstens 4 Fragen mit dem Frage-Werkzeug, sonst als kurze Liste), bevor du baust. Kläre mindestens:
    - Rückmeldung vom iPad 10 zu Ankunft, Sonnenuhr, Erste Frucht, Weihnachts-Paket (in `/dev` mit neuem Kind getestet?) – Fehler zuerst beheben.
    - Welche Geschenke soll es per QR-Code zu Weihnachten 2026 geben (für NA-16)? Neue Antworten auf die übrigen offenen Fragen im Plan?
-   - Gilt die Reihenfolge noch (nächstes: **NA-14**), oder soll etwas vorgezogen werden (z. B. NA-21/NA-20 Grafik, NA-16 QR-Geschenk)?
+   - Wie haben Kinder und Auftraggeber die beiden Looks auf iPad und Handy erlebt (`/dev/spiele/probe/` und `/dev/spiele/welt3d/probe.html?stil=b`)?
+     Wo soll der Umschalter sitzen (Vorschlag: Knopf auf der Insel **und** im Elternbereich), dürfen Kinder selbst umschalten (Vorschlag: ja)?
+   - Gilt die Reihenfolge noch (nächstes: **NA-24** Welt-Kern trennen), oder soll etwas vorgezogen werden (z. B. NA-14 Tutorial, NA-16 QR-Geschenk)?
    - Was darf in dieser Sitzung keinesfalls angefasst werden?
 2. **Dann selbstständig arbeiten**, bis die Sitzung aufgebraucht ist. Aufgabenliste anlegen (ein Eintrag je Paket bzw. Schritt a/b/c) und abhaken.
    Nur nachfragen, wenn eine Entscheidung nicht rückgängig zu machen ist; sonst die vernünftigste Wahl treffen und im Plan notieren.
@@ -76,18 +90,29 @@ Entwürfe (`status: { ru: "entwurf" }`) und erscheinen nur in `/dev`.
    offene Punkte, nächstes Paket), in der „Reihenfolge“ erledigte Pakete durchstreichen, **diese Datei (`docs/SESSION-PROMPT.md`) auf den neuen
    Stand bringen** (Abschnitte 2 und 4), pushen und kurz berichten.
 
-## 4. Nächste Pakete (Reihenfolge laut Plan)
-0. **Zuerst fragen: Rund oder Pixel?** (Vergleich auf iPad 10 und Handy in `/dev`). Bei „Pixel“: neues Paket „Insel in 2D“ planen
-   (Spiel-Logik, Story, Spielstand bleiben; Figuren als Pixel-Sprites) und GRAFIK.md neu fassen. Bei „Rund“: **NA-21** `tests/leistung.js`
-   bauen (Haken sind vorbereitet) und das Budget angehen.
-1. **NA-14** Tutorial E4–E8 (M): neu `shared/tutorial.js` (Etappen-Liste, Auslöser, Tageslimit – das Limit steckt heute in
-   `Story.darfNeueEtappe()`), Szenen in `shared/szenen.js`, Auslöser in `quellen/welt3d/heimat.js` (Funktion `naechsteStory()`),
-   `spiele/tier/tier.js`, `shared/lernkartei.js`; Elternschalter „Tutorial überspringen“; bestehende Kinder bekommen nur Etappen,
-   deren Feature sie noch nie genutzt haben. Test-Haken `window.__tutorial`. Test: Uhr über drei Tage vorstellen (Muster: `tests/tutorial.js`).
-2. Daneben (nur bei „Rund“): **NA-21** Leistungs-Test (`tests/leistung.js`).
-3. **NA-16** QR-Geschenk (sobald die Geschenk-Auswahl da ist; Liste eingelöster Geschenke: `Story.hatGeschenk/merkeGeschenk`),
-   **NA-17** Kapitel 1–2, **NA-18** Inselchronik im Album (Szenen aus `shared/szenen.js` per `Szene.spiele(id)` abspielen).
-4. Danach laut Plan: NA-03 Lehrplan-Kern → NA-40 Wortschatz/DaZ D0 → NA-30 Anlaute → NA-32 → NA-31.
+## 4. Nächste Pakete (Reihenfolge laut Plan, Einzelheiten in PLAN.md → „Zwei Looks“)
+Grundsatz: **Eine Welt, zwei Darstellungen.** Spielstand, Story, Etappen, Lernfunde, Zimmer, Tier und Orte gibt es nur einmal;
+„Rund“ und „Pixel“ zeichnen dieselbe Welt. Nichts, was das Kind besitzt oder erlebt hat, hängt am Look. Umschalten verliert nichts.
+1. **NA-24 Welt-Kern trennen** (M): aus `quellen/welt3d/heimat.js` alles herausziehen, was nicht Zeichnen ist – Orte/Plätze (`ORTE`,
+   `WELT.plaetze`), Stationen und ihre Aktionen (Reingehen, Sonnenuhr, Eule, Wissensbaum, Pixel am Steg …), `naechsteStory()`/`spieleStory()`,
+   Paket, Nebelstufe, Zimmer-Daten – nach neu `shared/insel-kern.js` (`window.InselKern`). Danach liest `heimat.js` nur noch aus dem Kern.
+   Abnahme: Insel „Rund“ verhält sich exakt wie vorher; **alle** bestehenden Tests grün (prolog, tutorial, weihnachten, zugang, szene, Rauchtest).
+   Test `tests/inselkern.js` (Node, ohne Browser: Stationen, Story-Reihenfolge, Paket-Regeln).
+2. **NA-25 Umschalter „Rund/Pixel“** (S): Profilfeld `look: "rund" | "pixel"` (Standard `rund`, Migration), Knopf auf der Insel und Karte im
+   Elternbereich (Eltern können das Umschalten für Kinder sperren). Ein Einstieg `spiele/welt3d/heimat.html` bzw. neu `spiele/insel/` leitet je
+   nach Look weiter; `Spielwelt.look()` als Helfer. Test `tests/look.js` (umschalten → gleicher Spielstand, gleiche Etappen).
+3. **NA-26 Pixel-Insel** (L, in Schritten a/b/c): `quellen/pixel/insel.js` zeichnet die Welt aus `InselKern` mit PixiJS (Kacheln, Weg, Haus,
+   Bäume, Steg, Sonnenuhr, Wissensbaum, Figuren-Stationen), Antippen zum Laufen, Aktionsknopf, Szenen (`shared/szene.js`) und Zeigehand
+   (`zeige.js` braucht dafür `window.Insel.ort()` auch in Pixel). Biome und Wünsche aus `welt.js` als Kachel-Paletten. PixiJS-Bündel in die
+   Offline-Liste von `sw.js`, Lizenzen in `docs/LIZENZEN.md`. Abnahme: Prolog E1–E3 und Weihnachts-Paket sind in beiden Looks spielbar.
+4. **NA-27 Pixel-Figuren** (M): Kind aus den Kleiderschrank-Daten (Hautfarbe, Haare, Kleidung aus `spiele/anziehen/figur.js`) als Pixel-Sprite
+   in vier Richtungen; die Tier-Begleiter und die Insel-Figuren (Robo Pixel, Ella, Fipsi, Benno, Bruni, Paula, Tilda) als Pixel-Sprites.
+   Ab jetzt gilt: **jede neue Figur, jedes neue Möbel, jedes neue Bauwerk in beiden Looks** (Prüfung in jedem Paket).
+5. **NA-28 Pixel-Zimmer** (M): Zimmer und Möbel (inkl. Tannenbaum) in Pixel, gleiche Möbel-Daten.
+6. **NA-14** Tutorial E4–E8 – danach, in beiden Looks (Szenen sind schon look-unabhängig).
+7. Rund-Seite: **NA-21** Leistungs-Test (`tests/leistung.js`, Haken vorbereitet) → Budget der 3D-Insel.
+8. Minispiele bleiben vorerst in 3D (beide Looks starten dieselben Minispiele); Pixel-Fassungen später, je Spiel ein eigenes Paket.
+9. **NA-16** QR-Geschenk (wartet auf die Geschenk-Auswahl), **NA-17**, **NA-18**; danach NA-03 → NA-40 → NA-30 → NA-32 → NA-31.
 
 ## 5. Wie die Story-Bausteine benutzt werden (Kurzreferenz)
 - Szene registrieren (nur Daten) in `shared/szenen.js`:
@@ -95,7 +120,8 @@ Entwürfe (`status: { ru: "entwurf" }`) und erscheinen nur in `/dev`.
   `wer`: robo, eule, fipsi, biber, baer, papagei, tilda. Höchstens 4 Blasen, kurze Sätze, jede Zeile vorlesbar.
 - Auf der Insel abspielen: in `heimat.js` `spieleStory(id)` ergänzen (dort `zeige`/`bis`/`beim` je Blase setzen) und die Bedingung in
   `naechsteStory()` einreihen. Am Ende `Story.etappeFertig(def.etappe)`; Szenen landen automatisch in der Chronik.
-- 3D-Ziele für die Zeigehand: `window.Insel.ort("haus" | "sonnenuhr" | "wissensbaum" | "eule" | "ich")`; neue Orte in `ORTE` in `heimat.js`.
+- 3D-Ziele für die Zeigehand: `window.Insel.ort("haus" | "sonnenuhr" | "wissensbaum" | "eule" | "ich")`; neue Orte in `ORTE` in `heimat.js`
+  (nach NA-24 im `InselKern`; jeder Ort muss in beiden Looks einen Bildschirmpunkt liefern).
 - Ereignisse: `Ereignisse.melde("bauwerk", { id })`; auf einer anderen Seite `Ereignisse.abholen("bauwerk")`.
 
 ## 6. Regeln (unverändert gültig)
@@ -109,7 +135,9 @@ Entwürfe (`status: { ru: "entwurf" }`) und erscheinen nur in `/dev`.
 - Sprache: Deutsch, kindgerecht; alle neuen Texte als Sprachschlüssel `{ de, ru, … }`; Hilfesprache nur, wenn gewählt. Neue Übersetzungen
   bekommen einen Prüfstatus (`entwurf`/`geprueft`/`kindgerecht`); **keine ungeprüfte Maschinenübersetzung im Kinder-UI** (Entwürfe nur in /dev).
 - Story- und Tutorial-Texte: höchstens 4 Sprechblasen je Szene, jede Zeile vorlesbar, ohne Lesen bedienbar (Zeigehand, Leuchten, Ton).
-- Grafik: **Bis zur Stilentscheidung (NA-20) keine Figuren neu bauen.** Neue 3D-Teile sparsam (feste Deko in die Gruppe `deko` vor
+- Grafik: **zwei Looks, „Rund“ (three.js) und „Pixel“ (PixiJS), jederzeit umschaltbar** (Entscheidung 27.10.2026). Neues Sichtbares
+  immer für beide Looks bauen oder im Plan als offen vermerken. Pixel: Kacheln 16×16, nur Farben aus der Palette `PAL`, automatischer Umriss,
+  ganzzahlige Vergrößerung (scharfe Pixel), Wasser/Animationen in wenigen festen Bildern. Rund: Neue 3D-Teile sparsam (feste Deko in die Gruppe `deko` vor
   `verschmelze(deko)`, dann kosten sie kaum Zeichenaufrufe) und immer auch in Stufe „einfach“ prüfen.
   Keine fremden urheberrechtlich geschützten Figuren; fremde Dateien nur CC0/OFL und dann in `docs/LIZENZEN.md`.
 - Lerninhalte nur zusammenfassen und Lernziel-IDs zuordnen, nie Lehrpläne wörtlich abschreiben.
@@ -119,6 +147,7 @@ Entwürfe (`status: { ru: "entwurf" }`) und erscheinen nur in `/dev`.
 ## 7. Bauen
 - Wenn Dateien in `quellen/welt3d/` geändert wurden: `ESBUILD=<pfad> sh quellen/bauen.sh` (baut `spiele/welt3d/*.js`, aktualisiert die
   `gemeinsam-*.js`-Einträge in `sw.js`). **Nie** die gebauten Dateien in `spiele/welt3d/` von Hand ändern.
+- Pixel-Probe/-Insel bauen: `ENGINES=~/eng node quellen/probe/bauen.js` (siehe Abschnitt 0); gebaute Dateien in `spiele/probe/` nie von Hand ändern.
 - **Vor jedem Push** `sh quellen/dev-bauen.sh` (setzt die Cache-Version in `sw.js`, baut `/dev` und `/dev/test`; `dev/` nie von Hand ändern).
 - Neue Dateien unter `shared/`, `spiele/` oder `inhalte/` in die Offline-Liste in `sw.js` eintragen und in den HTML-Seiten einbinden
   (`shared/ereignisse.js` steht überall direkt nach `shared/core.js`).

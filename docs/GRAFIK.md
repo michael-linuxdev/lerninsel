@@ -17,8 +17,10 @@
 ## 2. Weg zum neuen Stil
 > **Stand 27.10.2026 (nachts):** Der Auftraggeber hat die Auswahl auf zwei Looks eingegrenzt – **„Rund“ wie Animal Crossing**
 > (heutiger Stil B mit three.js) oder **„Pixel“** (Draufsicht aus 16×16-Kacheln, PixiJS, Probe `spiele/probe/`). Andere Engines sind erlaubt,
-> Smartphones zählen mit. Die Varianten B+, C und D unten sind damit Historie. Kinder wählen den Stil nicht selbst (doppelter Zeichenaufwand);
-> sie stimmen beim Vergleich mit ab.
+> Smartphones zählen mit. Die Varianten B+, C und D unten sind damit Historie.
+> **Entscheidung 27.10.2026: beide Looks bleiben, jederzeit umschaltbar** (Profilfeld `look`). Jede neue Figur und jedes neue Ding
+> wird für „Rund“ und „Pixel“ gebaut. Pixel-Regeln: 16×16-Kacheln, feste Palette, automatischer dunkler Umriss, ganzzahlige Vergrößerung,
+> Animationen in wenigen festen Bildern. Pakete NA-24 bis NA-28 in PLAN.md.
 
 1. **Drei Probeszenen** (Erweiterung von `spiele/welt3d/probe.html`, gleiche Szene: Kind, Fipsi, Baum, Haus, Wasser, Wiese):
    - **B+ „Toon verbessert“:** wie heute, aber einheitliche Proportionen, weichere Konturen, Farbverlauf-Licht (Gradient-Map), Randlicht.
