@@ -2,7 +2,7 @@
 // danach auch ohne Internet geladen. Bei Internet wird im Hintergrund aktualisiert.
 // /dev hat einen eigenen Cache, damit sich Test- und echte Seite nicht gegenseitig löschen
 const VORSILBE = self.registration.scope.includes("/dev/test/") ? "test-" : self.registration.scope.includes("/dev/") ? "dev-" : "";
-const CACHE = VORSILBE + "spielwelt-e23a38c373";
+const CACHE = VORSILBE + "spielwelt-7780d9a3da";
 const START = [
   "./",
   "index.html",
@@ -73,6 +73,7 @@ const START = [
   "spiele/lesen/",
   "spiele/lesen/lesen.js",
   "inhalte/deutsch/anlaute.js",
+  "inhalte/deutsch/lesetexte.js",
   "inhalte/woerter/anlaute.js",
   "spiele/daz/",
   "spiele/daz/ankommen.js",

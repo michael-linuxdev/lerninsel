@@ -61,6 +61,25 @@
   .rueck { text-align: center; min-height: 2.2em; font-size: 1.4rem; font-weight: 700; margin-top: 12px; }
   .runde-ende { text-align: center; font-size: 1.4rem; }
   .runde-ende .gross { font-size: 4rem; }
+  /* Silben: abwechselnd blau und rot mit Silbenbogen (Silbenmethode); ohne Farben nur die Bögen */
+  .sw { white-space: nowrap; }
+  .sb { display: inline-block; padding: 0 .04em .12em; margin: 0 .02em; border-bottom: .12em solid currentColor; border-radius: 0 0 .7em .7em / 0 0 .5em .5em; }
+  .farbig .sb:nth-child(odd) { color: #2F6FD6; } .farbig .sb:nth-child(even) { color: #D7263D; }
+  .silbenwort { font-size: 3.4rem; font-weight: 700; letter-spacing: .02em; text-align: center; margin: 4px 0 14px; }
+  .texte { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 640px) { .texte { grid-template-columns: 1fr; } }
+  .text-karte { background: #fff; border: 0; border-radius: 22px; padding: 12px 16px; font: inherit; font-weight: 600; font-size: 1.15rem; display: flex; align-items: center; gap: 12px; cursor: pointer; color: inherit; text-align: left; box-shadow: 0 6px 0 rgba(58,160,224,.2); }
+  .text-karte .emoji { font-size: 2.4rem; }
+  .text-karte small { display: block; font-weight: 400; color: #4a6f8a; }
+  .text-karte .fertig { margin-left: auto; font-size: 1.5rem; }
+  .stufe-titel { grid-column: 1 / -1; margin: 10px 0 0; font-size: 1.2rem; }
+  .lesetext { background: #fff; border-radius: 26px; padding: 18px 20px; display: flex; gap: 18px; align-items: center; box-shadow: 0 7px 0 rgba(58,160,224,.22); margin-bottom: 16px; }
+  .lt-bild { font-size: 5rem; flex: none; }
+  .lt-text { font-size: 1.7rem; line-height: 1.8; margin: 0; }
+  @media (max-width: 640px) { .lesetext { flex-direction: column; } .lt-bild { font-size: 3.6rem; } .lt-text { font-size: 1.4rem; } }
+  .wahl.antworten button { font-size: 1.25rem; font-weight: 600; padding: 12px 6px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .wahl.antworten button span { font-size: 2.6rem; }
+  @media (max-width: 640px) { .wahl.antworten { grid-template-columns: 1fr; } .wahl.antworten button { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 8px 14px; text-align: left; } }
 </style>
 </head>
 <body>
@@ -74,6 +93,8 @@
       <button class="weg" id="weg-gleich"><span class="emoji">👂</span>Gleicher Anfang<small>Was klingt am Anfang gleich?</small></button>
       <button class="weg" id="weg-bild"><span class="emoji">🖼️</span>Finde das Bild<small>Was fängt mit dem Buchstaben an?</small></button>
       <button class="weg" id="weg-buchstabe"><span class="emoji">🅰️</span>Welcher Buchstabe?<small>Hör den Anfang und wähle</small></button>
+      <button class="weg" id="weg-silben"><span class="emoji">🌈</span>Silben lesen<small>Lies das Wort und finde das Bild</small></button>
+      <button class="weg" id="weg-texte"><span class="emoji">📖</span>Lesetexte<small>Kurze Geschichten mit Fragen</small></button>
     </div>
     <p class="stand" id="stand"></p>
   </main>
@@ -82,6 +103,24 @@
 <section class="ansicht" id="tafel-ansicht" hidden>
   <div class="oben"><button class="knopf rund zurueck" aria-label="Zurück">⬅️</button><h1>🔤 Buchstaben-Tafel</h1></div>
   <main><div class="tafel" id="tafel"></div><div class="detail" id="detail" hidden></div></main>
+</section>
+
+<section class="ansicht" id="texte-ansicht" hidden>
+  <div class="oben"><button class="knopf rund zurueck" aria-label="Zurück">⬅️</button><h1>📖 Lesetexte</h1>
+    <button class="knopf" id="silbenfarbe" aria-pressed="true">🌈 Silben an</button></div>
+  <main><div class="texte" id="texte"></div></main>
+</section>
+
+<section class="ansicht" id="text-ansicht" hidden>
+  <div class="oben"><button class="knopf rund" id="text-zurueck" aria-label="Zur Liste">⬅️</button><h1 id="text-titel"></h1>
+    <button class="ton" id="text-ton" aria-label="Vorlesen">🔊</button></div>
+  <main>
+    <div class="lesetext"><div class="lt-bild" id="text-bild" aria-hidden="true"></div><p class="lt-text" id="text-text"></p></div>
+    <div class="frage" id="text-frage"></div>
+    <div class="wahl antworten" id="text-wahl"></div>
+    <p class="rueck" id="text-rueck" aria-live="polite"></p>
+    <div id="text-ende" hidden class="runde-ende"></div>
+  </main>
 </section>
 
 <section class="ansicht" id="uebung-ansicht" hidden>
@@ -110,6 +149,7 @@
 <script src="../../inhalte/woerter/anlaute.js"></script>
 <script src="../../shared/woerter.js"></script>
 <script src="../../inhalte/deutsch/anlaute.js"></script>
+<script src="../../inhalte/deutsch/lesetexte.js"></script>
 <script src="lesen.js"></script>
 </body>
 </html>

@@ -17,7 +17,7 @@ function lade(dateien) {
   return ctx;
 }
 const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/deutsch/werkstatt.js"];
-const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan.js"];
+const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan.js"];
 const w = lade(DATEN.concat(LEHRPLAN));
 const K = w.LernzielKern, I = w.Inhalte, L = w.LEHRPLAN;
 
@@ -71,14 +71,15 @@ pruefe("Bestehende Inhalte tragen lz-Verweise, alle zeigen auf existierende Ziel
   assert.ok(I.alle().length >= 23 + 5 + 5 + 4 + 6 + 5, "Inhalte: " + I.alle().length);
 });
 
-pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten knapp teilweise, Anlaute gut, flüssig Lesen und Schreiben noch nicht", () => {
+pruefe("Errechnete Abdeckung: Plus/Minus bis 100 gut, Wortarten knapp teilweise, Anlaute gut, Lesetexte teilweise, Schreiben noch nicht", () => {
   assert.strictEqual(I.abdeckung("ma.zo.07"), "ja");    // vier Stationen
   assert.strictEqual(I.abdeckung("de.su.04"), "teil");  // drei Werkstatt-Kapitel, aber nur 28 Aufgaben
   assert.strictEqual(I.abdeckung("ma.zo.03"), "ja");    // Plus/Minus bis 20 und bis 10 (Klasse-1-Weg)
   assert.strictEqual(I.abdeckung("ma.zo.05"), "teil");  // nur eine Station
   assert.strictEqual(I.abdeckung("me.ph.01"), "teil");  // ohne Lernkartei
   assert.strictEqual(I.abdeckung("de.le.02"), "ja");    // NA-30: Tafel, Finde das Bild, Welcher Buchstabe (mit Lernkartei)
-  assert.strictEqual(I.abdeckung("de.le.05"), "nein");
+  assert.strictEqual(I.abdeckung("de.le.05"), "teil");   // NA-31: Lesetexte Kl. 2 (ohne Lernkartei)
+  assert.strictEqual(I.abdeckung("de.sc.02"), "nein");
   assert.strictEqual(I.abdeckung("de.sc.02"), "nein");
   const z = L.zaehle("sachsen", 2).errechnet;
   assert.strictEqual(z.ja + z.teil + z.nein, 17, "Kl. 1/2: 17 Lernbereiche");
@@ -100,10 +101,10 @@ pruefe("Inhalte.fuer(kind): passende Stufe oder eine darunter, Vorschule nur Vor
   const vs = ids({ stufe: "vs", land: "sn" });
   assert.ok(vs.includes("daz:d0") && vs.includes("de.anlaute.gleich") && vs.includes("mathe:k1wuerfel"), "Vorschule: Ankommen, Anlaute, Mengen");
   assert.ok(!vs.includes("mathe:plus20") && !vs.includes("mathe:k1zwanzig"), "Vorschule: keine Klasse-1/2-Rechenaufgaben");
-  I.registriere({ id: "test:nurby", lz: ["de.le.05"], stufe: ["1"], laender: ["by"] });
+  I.registriere({ id: "test:nurby", lz: ["de.sc.02"], stufe: ["1"], laender: ["by"] });
   assert.ok(ids({ stufe: "1", land: "by" }).includes("test:nurby"));
   assert.ok(!ids({ stufe: "1", land: "sn" }).includes("test:nurby"));
-  assert.strictEqual(I.abdeckung("de.le.05"), "teil");
+  assert.strictEqual(I.abdeckung("de.sc.02"), "teil");
 });
 
 // Übersicht: Lernziele ohne Inhalt (Abnahme NA-03: „tests/lehrplan.js listet Lernziele ohne Inhalt“)

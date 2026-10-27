@@ -99,6 +99,47 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.evaluate(() => __lesen.runde("buchstabe")); await p.waitForTimeout(200);
     const erste = await p.evaluate(() => __lesen.ziel());
     erwarte(erste.__karte && erste.wort === ersteZiel.wort, "fällige Lernkarten-Aufgabe steht am Anfang der nächsten Runde");
+
+    // NA-31 Silben lesen: Wort in Silbenbögen, kein Vorlesen bis zum ersten Fehler; Fehler → Lernkarte „silbenwort“
+    erwarte(await p.evaluate(() => __lesen.silbenWoerter() >= 60), "genug Bildwörter für „Silben lesen“");
+    await p.evaluate(() => __lesen.runde("silben")); await p.waitForTimeout(200);
+    const sw = await p.evaluate(() => ({ silben: document.querySelectorAll(".silbenwort .sb").length, ton: document.getElementById("frage-ton").hidden, wort: Wortschatz.wort(__lesen.ziel().wort) }));
+    erwarte(sw.silben === sw.wort.silben.length && sw.ton, `Silbenwort „${sw.wort.silben.join("-")}“ in ${sw.silben} Bögen, Vorlesen erst als Hilfe`);
+    await bild(p, "lesen-silben");
+    const nSilben = await p.evaluate(() => __lesen.anzahl());
+    for (let i = 0; i < nSilben; i++) {
+      await p.waitForFunction((k) => __lesen.aufgabeNr() === k, i);
+      const r = await p.evaluate(() => __lesen.richtigIndex());
+      if (i === 1) { await p.click(`#wahl [data-i="${(r + 1) % 3}"]`); await p.waitForTimeout(150);
+        if (await p.evaluate(() => document.getElementById("frage-ton").hidden)) fehler.push("nach dem Fehler fehlt der Vorlese-Knopf"); }
+      await p.click(`#wahl [data-i="${r}"]`); await p.waitForTimeout(1400);
+    }
+    await p.waitForSelector("#uebung-ende:not([hidden])");
+    const lks = await p.evaluate(() => (Spielwelt.lade("lernkartei").lesen || []).filter(k => k.s.typ === "silbenwort").length);
+    const ws = await p.evaluate(() => Object.keys(__lesen.stand().w).length);
+    erwarte(lks === 1 && ws === nSilben - 1, `Silben: ${ws} Wörter gelesen, 1 Lernkarte „silbenwort“ (${lks})`);
+
+    // NA-31 Lesetexte: Liste, Text mit Silbenbögen, Fragen; erste Frage zuerst falsch
+    await p.evaluate(() => __lesen.texte()); await p.waitForTimeout(200);
+    const liste = await p.evaluate(() => ({ n: document.querySelectorAll(".text-karte").length, erst: document.querySelector(".stufe-titel").textContent }));
+    erwarte(liste.n === 20 && /Kurze/.test(liste.erst), `20 Lesetexte, Klasse 1 sieht zuerst die kurzen (${liste.n})`);
+    await p.click('.text-karte[data-id="lt.05"]'); await p.waitForTimeout(200);
+    const tx = await p.evaluate(() => ({ text: document.getElementById("text-text").textContent, boegen: document.querySelectorAll("#text-text .sb").length, farbig: !!document.querySelector("#text-text .farbig") }));
+    erwarte(/^Im Nest sind drei Eier\./.test(tx.text) && tx.boegen > 15 && tx.farbig, `Text ohne Trennstriche, ${tx.boegen} Silbenbögen, farbig`);
+    await bild(p, "lesen-text");
+    for (let f = 0; f < 2; f++) {
+      await p.waitForFunction((k) => __lesen.textFrageNr() === k, f);
+      const r = await p.evaluate(() => __lesen.textRichtig());
+      if (f === 0) { await p.click(`#text-wahl [data-i="${(r + 1) % 3}"]`); await p.waitForTimeout(150); }
+      await p.click(`#text-wahl [data-i="${r}"]`); await p.waitForTimeout(1100);
+    }
+    await p.waitForSelector("#text-ende:not([hidden])");
+    const tst = await p.evaluate(() => __lesen.stand().t["lt.05"]);
+    erwarte(tst === 1, `Text „Das Nest“: 1 von 2 Fragen gleich richtig gespeichert (${tst})`);
+    await p.click("#text-liste"); await p.waitForTimeout(200);
+    await p.click("#silbenfarbe"); await p.waitForTimeout(200);
+    await p.click('.text-karte[data-id="lt.11"]'); await p.waitForTimeout(200);
+    erwarte(await p.evaluate(() => !document.querySelector("#text-text .farbig") && document.querySelectorAll("#text-text .sb").length > 20), "Silbenfarben abschaltbar, Bögen bleiben");
     await ctx.close();
   }
 
@@ -112,6 +153,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.click("#weg-tafel");
     erwarte(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), "Tafel im Hochformat passt");
     await bild(p, "lesen-tafel-hoch");
+    await p.evaluate(() => __lesen.text("lt.14")); await p.waitForTimeout(200);
+    erwarte(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), "Lesetext im Hochformat passt");
+    await bild(p, "lesen-text-hoch");
     await ctx.close();
   }
 
