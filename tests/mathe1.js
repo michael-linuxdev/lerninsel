@@ -88,9 +88,19 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     // NA-33: dritter Weg Klasse 3
     await p.click('.weg-wahl[data-weg="k3"]'); await p.waitForTimeout(300);
     const w3 = await wegInfo(p);
-    erwarte(w3.an === "k3" && w3.stationen === 12 && w3.erste === "Zahlen bis 1000" && !w3.einstufung, `Klasse 3: 12 Stationen, beginnt mit „Zahlen bis 1000“ (${w3.stationen})`);
-    for (let s3 = 0; s3 < 12; s3++) { await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(120);
+    erwarte(w3.an === "k3" && w3.stationen === 17 && w3.erste === "Zahlen bis 1000" && !w3.einstufung, `Klasse 3: 17 Stationen, beginnt mit „Zahlen bis 1000“ (${w3.stationen})`);
+    for (let s3 = 0; s3 < 17; s3++) { await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(120);
       if (!(await p.evaluate(() => __mathe.lauf.liste.length === 10))) fehler.push("Kl. 3 Station " + s3 + " hat keine 10 Aufgaben"); }
+    // NA-33b: schriftlich plus/minus, Würfelnetze, Spiegeln, Diagramme – Bild sichtbar, richtige Antwort wird angenommen
+    for (const [s3, name] of [[12, "schriftplus"], [13, "schriftminus"], [14, "netz"], [15, "spiegel"], [16, "diagramm"]]) {
+      await p.evaluate((n) => __mathe.starte(n), s3); await p.waitForTimeout(200);
+      const info = await p.evaluate(() => { const a = __mathe.lauf.liste[__mathe.lauf.pos], svg = document.querySelector(".bild svg"), r = svg && svg.getBoundingClientRect();
+        return { bild: !!svg && r.width > 60 && r.height > 60, passt: document.documentElement.scrollWidth <= innerWidth + 1, antwort: a.antwort, wahl: a.art === "wahl" }; });
+      erwarte(info.bild && info.passt, `Kl. 3 ${name}: Bild sichtbar, keine Scrollleiste`);
+      await bild(p, "mathe3-" + name);
+      await p.evaluate((w) => __mathe.antworte(w), info.antwort); await p.waitForTimeout(250);
+      erwarte(await p.evaluate(() => /\bgut\b/.test(document.getElementById("rueck").className)), `Kl. 3 ${name}: richtige Antwort wird angenommen`);
+    }
     await p.evaluate(() => document.getElementById("zum-weg").click()); await p.waitForTimeout(300);
     await p.click('.weg-wahl[data-weg="k1"]'); await p.waitForTimeout(300);
     erwarte((await wegInfo(p)).an === "k1", "zurück zu Klasse 1");

@@ -53,7 +53,7 @@ NA-29 Teil 1 Budget „Rund“ (Insel ≈ 100 Aufrufe).
   alle anderen Sprachen (Ukrainisch …) erst später bzw. nur in /dev.
 - **„Lieber Inhalte zuerst“** – Inhalte Priorität 1 (Phase D) vor Grafik und Story.
 
-**In der letzten Sitzung fertig und gepusht** (zuletzt NA-34: sechs neue Sachthemen; NA-33a: Matheweg „3. Klasse“ mit 12 Stationen; PLAN.md → „Stand 27.10.2026, Mittag“, „… Nachmittag“, „… Abend“):
+**In den letzten Sitzungen fertig und gepusht** (zuletzt **NA-33 Schritt b**: Matheweg „3. Klasse“ jetzt 17 Stationen mit schriftlich plus/minus, Würfelnetzen, Spiegeln, Diagrammen; davor NA-34 Sachthemen, NA-33a; PLAN.md → „Stand 27.10.2026, Abend (NA-33 … Schritt b)“):
 - **Pixel auf der Hauptseite wählbar** (`Spielwelt.lookWaehlbar()` = immer wahr, `tests/look.js` umgestellt).
 - **NA-03 Lehrplan-Kern:** `shared/lehrplan/kern.js` (148 Lernziel-IDs `<fach>.<bereich>.<nr>`, Deutsch mit fünf KMK-2022-Bereichen
   `de.sz/sc/le/tm/su`), `shared/lehrplan/laender/sachsen.js` (49 Lernbereiche mit `lz`), `shared/inhalte.js` (Inhalte-Verzeichnis, errechnete
@@ -106,10 +106,9 @@ Wörter nur als Verweis auf den Wortschatz-Kern (`w.<wort>`, neue Wörter in `in
 Neue Inhaltsdateien auch in `spiele/eltern/index.html` (für die Abdeckung), `tests/lehrplan.js` und `sw.js` eintragen.
 Grundsatz Grafik (eingefroren): **Eine Welt, zwei Darstellungen.** Alles außer Zeichnen kommt aus `shared/insel-kern.js`; neue sichtbare Dinge in
 beiden Looks oder im Plan als offen vermerken.
-1. **NA-33 Mathe Kl. 3, Schritt b** (M): Schritt a ist fertig (Weg „3. Klasse“ mit 12 Stationen in `Mathe.STATIONEN_K3`). Offen: schriftliche
-   Addition/Subtraktion mit Stellenwerttafel, Würfelnetze/Symmetrie, Diagramme und
-   Kombinationen – je Station `lz` und `stufe: "3"`, Test in `tests/mathe1.js`.
-2. Nach Rückmeldung: **NA-34 Sachunterricht** je Perspektive (Wasser, Verkehr, früher/heute, Bauen, Regeln), **NA-33 Mathe Kl. 3**, oder
+1. **Rückmeldung abwarten/abfragen** (iPad: Matheweg Kl. 3 mit den neuen Stationen, Subtraktionsverfahren der Schule). Grafik/3D wurde in der
+   letzten Sitzung ausdrücklich nicht angefasst – vor Grafik-Arbeit nachfragen.
+2. Nach Rückmeldung: **NA-34 Sachunterricht** Kl. 3–4-Themen, **NA-36 Deutsch Kl. 3–4**, Rest Mathe Kl. 3 (Würfelgebäude, Flächen, Zufall, Teilbarkeit), oder
    Grafik/Story: **NA-29b Handy-Leistung** (S), **NA-29 Teil 2** Minispiele ins Budget, **NA-16** QR-Geschenk (wartet auf Geschenk-Auswahl)
    → **NA-17** Kapitel 1–2 → **NA-18** Chronik im Album.
 
@@ -136,7 +135,7 @@ beiden Looks oder im Plan als offen vermerken.
   `Koennen.brauchtLeichter(lz)`; Seiten laden `shared/koennen.js`.
 - Lesen/Schreiben: `window.ANLAUTE` (Anlaut-Tabelle), `window.LESETEXTE` (Texte in Sprechsilben „Ba-na-ne“), `window.SCHRIFT` (Strich-Daten),
   Lernkartei-Fach `lesen` (Schritte `anlaut`, `silbenwort`, `schreibwort`);
-  Matheweg: `Mathe.STATIONEN` (Kl. 2, `mathe.k2`), `Mathe.STATIONEN_K1` (Kl. 1/Vorschule, `mathe.k1`), `Mathe.STATIONEN_K3` (Kl. 3, `mathe.k3`), Weg-Wahl in `mathe.weg`.
+  Matheweg: `Mathe.STATIONEN` (Kl. 2, `mathe.k2`), `Mathe.STATIONEN_K1` (Kl. 1/Vorschule, `mathe.k1`), `Mathe.STATIONEN_K3` (Kl. 3, 17 Stationen, `mathe.k3`; `Mathe._k3.istWuerfelnetz(zellen)`), Weg-Wahl in `mathe.weg`.
 - Pixel-Grafik: Zeichnung in `quellen/pixel/dinge.js` (Pixelpuffer mit `kugel/zylinder/vieleck/fuelle/rect`, nur Farben aus `PAL`), in
   `quellen/pixel/insel.js` vor `packe()` mit `merke()` in den Atlas, dann `new Sprite(e.tex)`; Dinge auf den Boden mit `stelle(e, x, z)`,
   antippbar mit `antippbar(sprite, x, z, tipp, aktion, nah, id)`.

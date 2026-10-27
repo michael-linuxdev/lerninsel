@@ -328,7 +328,7 @@
       markiereWahl(wert, true);
       rueck.className = "rueck gut"; rueck.textContent = LOB[Math.floor(Math.random() * LOB.length)];
       S.ton("juhu");
-      setTimeout(naechste, 950);
+      const dieser = lauf; setTimeout(() => { if (lauf === dieser) naechste(); }, 950); // nicht weiterblättern, wenn inzwischen eine andere Runde läuft
       return;
     }
 

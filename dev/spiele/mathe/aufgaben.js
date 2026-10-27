@@ -496,6 +496,95 @@
     for (let i = 0; i < e; i++) { s += `<rect x="${x}" y="52" width="10" height="10" fill="#FFB03B" stroke="#B5701A" stroke-width="2"/>`; x += 15; }
     return `<svg viewBox="0 0 ${Math.max(x, 60) + 6} 70" role="img" aria-label="Hunderter, Zehner und Einer">${s}</svg>`;
   }
+  // ---------- Klasse 3, Schritt b: schriftlich rechnen, Würfelnetze, Spiegeln, Diagramme ----------
+  const stellen = (n) => [Math.floor(n / 100), Math.floor(n / 10) % 10, n % 10];
+  // Stellenwerttafel H | Z | E mit zwei Zahlen, Rechenzeichen und leerer Ergebniszeile
+  function schriftBild(a, b, zeichen) {
+    const sp = [70, 120, 170], kopf = ["H", "Z", "E"], farbe = ["#7B9BFF", "#5CCBA6", "#FFB03B"];
+    let s = sp.map((x, i) => `<rect x="${x - 22}" y="4" width="44" height="34" rx="6" fill="${farbe[i]}"/><text x="${x}" y="29" text-anchor="middle" font-size="22" font-weight="700" fill="#3b1f63">${kopf[i]}</text>`).join("");
+    const zeile = (n, y) => stellen(n).map((d, i) => (n >= 100 || i > 0 || d > 0) ? `<text x="${sp[i]}" y="${y}" text-anchor="middle" font-size="30" fill="#3b1f63">${d}</text>` : "").join("");
+    s += zeile(a, 76) + `<text x="24" y="116" text-anchor="middle" font-size="30" font-weight="700" fill="#3b1f63">${zeichen}</text>` + zeile(b, 116);
+    s += `<line x1="10" y1="132" x2="196" y2="132" stroke="#3b1f63" stroke-width="3"/>`;
+    s += sp.map(x => `<rect x="${x - 18}" y="140" width="36" height="40" rx="5" fill="none" stroke="#9b8bb5" stroke-width="2" stroke-dasharray="5 4"/>`).join("");
+    return `<svg viewBox="0 0 206 188" role="img" aria-label="Stellenwerttafel mit Hundertern, Zehnern und Einern">${s}</svg>`;
+  }
+  function schriftPlusHilfe(a, b) {
+    const x = stellen(a), y = stellen(b), name = ["Hunderter", "Zehner", "Einer"]; let ue = 0; const t = [];
+    for (let i = 2; i >= 0; i--) { const s = x[i] + y[i] + ue;
+      t.push(`${name[i]}: ${x[i]} + ${y[i]}${ue ? " + 1 (gemerkt)" : ""} = ${s}${s >= 10 && i > 0 ? ` – schreibe ${s % 10}, merke 1` : ""}.`); ue = s >= 10 ? 1 : 0; }
+    return t.join(" ") + ` Ergebnis: ${a + b}.`;
+  }
+  function schriftMinusHilfe(a, b) {
+    const x = stellen(a), y = stellen(b), name = ["Hunderter", "Zehner", "Einer"]; const t = [];
+    for (let i = 2; i >= 0; i--) {
+      if (x[i] < y[i]) { x[i] += 10; x[i - 1] -= 1; t.push(`${name[i]}: ${x[i] - 10} ${M} ${y[i]} geht nicht. Tausche einen ${name[i - 1]} in 10 ${name[i]}: ${x[i]} ${M} ${y[i]} = ${x[i] - y[i]}.`); }
+      else t.push(`${name[i]}: ${x[i]} ${M} ${y[i]} = ${x[i] - y[i]}.`);
+    }
+    return t.join(" ") + ` Ergebnis: ${a - b}.`;
+  }
+
+  // Würfelnetz-Prüfung: Netz auf einen Würfel klappen; gültig, wenn die 6 Felder auf 6 verschiedenen Seiten landen
+  function istWuerfelnetz(zellen) {
+    const key = (z) => z[0] + "," + z[1], da = new Set(zellen.map(key));
+    if (da.size !== 6) return false;
+    const neg = (v) => v.map(x => -x), start = zellen[0], seiten = new Set(), besucht = new Map();
+    const stapel = [[start, [0, 0, 1], [1, 0, 0], [0, 1, 0]]]; besucht.set(key(start), true);
+    while (stapel.length) {
+      const [z, n, u, v] = stapel.pop(); seiten.add(n.join(","));
+      const nach = [[[z[0], z[1] + 1], u, neg(n), v], [[z[0], z[1] - 1], neg(u), n, v], [[z[0] + 1, z[1]], v, u, neg(n)], [[z[0] - 1, z[1]], neg(v), u, n]];
+      for (const [nz, nn, nu, nv] of nach) if (da.has(key(nz)) && !besucht.has(key(nz))) { besucht.set(key(nz), true); stapel.push([nz, nn, nu, nv]); }
+    }
+    return besucht.size === 6 && seiten.size === 6;
+  }
+  function zufallsNetz() { // zusammenhängende Form aus 6 Kästchen
+    const z = [[2, 2]], da = new Set(["2,2"]);
+    while (z.length < 6) { const [a, b] = wahl(z), d = wahl([[0, 1], [0, -1], [1, 0], [-1, 0]]), n = [a + d[0], b + d[1]];
+      if (da.has(n.join(","))) continue; da.add(n.join(",")); z.push(n); }
+    const r0 = Math.min(...z.map(p => p[0])), c0 = Math.min(...z.map(p => p[1]));
+    return z.map(p => [p[0] - r0, p[1] - c0]);
+  }
+  function netzBild(zellen) {
+    const g = 36, zeilen = Math.max(...zellen.map(p => p[0])) + 1, spalten = Math.max(...zellen.map(p => p[1])) + 1;
+    const s = zellen.map(p => `<rect x="${4 + p[1] * g}" y="${4 + p[0] * g}" width="${g}" height="${g}" fill="#FFD36B" stroke="#3b1f63" stroke-width="2.5"/>`).join("");
+    return `<svg viewBox="0 0 ${spalten * g + 8} ${zeilen * g + 8}" style="max-height:220px" role="img" aria-label="Form aus sechs Quadraten">${s}</svg>`;
+  }
+
+  // Spiegelbild: 6 Spalten × 5 Zeilen, Spiegelachse in der Mitte; fehlt = Felder rechts, die noch leer sind
+  function spiegelBild(links, rechts) {
+    const g = 30, Z = 5; let s = "";
+    for (let zi = 0; zi < Z; zi++) for (let sp = 0; sp < 6; sp++) {
+      const voll = sp < 3 ? links[zi][sp] : rechts[zi][sp - 3];
+      s += `<rect x="${4 + sp * g}" y="${4 + zi * g}" width="${g}" height="${g}" fill="${voll ? "#7B9BFF" : "#fff"}" stroke="#c9bfe0" stroke-width="1.5"/>`;
+    }
+    s += `<line x1="${4 + 3 * g}" y1="0" x2="${4 + 3 * g}" y2="${Z * g + 8}" stroke="#E5484D" stroke-width="4" stroke-dasharray="8 5"/>`;
+    return `<svg viewBox="0 0 ${6 * g + 8} ${Z * g + 8}" style="max-height:200px" role="img" aria-label="Muster mit roter Spiegelachse">${s}</svg>`;
+  }
+
+  // Säulendiagramm; fehlt = Index der Säule, die noch nicht gezeichnet ist
+  function saeulenBild(kat, werte, fehlt = -1, strich = -1) {
+    const g = 18, h = 10 * g, b = 44, x0 = 30; let s = "";
+    for (let i = 0; i <= 10; i++) s += `<line x1="${x0}" y1="${8 + h - i * g}" x2="${x0 + kat.length * (b + 14) + 4}" y2="${8 + h - i * g}" stroke="#e3dcef" stroke-width="1"/>` +
+      (i % 2 === 0 ? `<text x="${x0 - 6}" y="${13 + h - i * g}" text-anchor="end" font-size="13" fill="#3b1f63">${i}</text>` : "");
+    kat.forEach((k, i) => { const x = x0 + 10 + i * (b + 14);
+      if (i !== fehlt) s += `<rect x="${x}" y="${8 + h - werte[i] * g}" width="${b}" height="${werte[i] * g}" fill="${["#7B9BFF", "#5CCBA6", "#FFB03B", "#F27BAA"][i]}" stroke="#3b1f63" stroke-width="1.5"/>`;
+      else s += `<rect x="${x}" y="${8 + h - 1}" width="${b}" height="2" fill="#3b1f63"/><text x="${x + b / 2}" y="${h - 4}" text-anchor="middle" font-size="26" fill="#9b8bb5">?</text>`;
+      s += `<text x="${x + b / 2}" y="${h + 40}" text-anchor="middle" font-size="26">${k}</text>`; });
+    s += `<line x1="${x0}" y1="8" x2="${x0}" y2="${8 + h}" stroke="#3b1f63" stroke-width="2"/><line x1="${x0}" y1="${8 + h}" x2="${x0 + kat.length * (b + 14) + 4}" y2="${8 + h}" stroke="#3b1f63" stroke-width="2"/>`;
+    let w = x0 + kat.length * (b + 14) + 10;
+    if (strich >= 0) { // Strichliste für die fehlende Säule
+      let t = "", x = w + 14; const n = werte[strich];
+      for (let i = 0; i < n; i++) { const grp = Math.floor(i / 5), pos = i % 5, gx = x + grp * 46;
+        t += pos < 4 ? `<line x1="${gx + pos * 9}" y1="70" x2="${gx + pos * 9}" y2="110" stroke="#3b1f63" stroke-width="3" stroke-linecap="round"/>`
+                     : `<line x1="${gx - 5}" y1="104" x2="${gx + 33}" y2="76" stroke="#3b1f63" stroke-width="3" stroke-linecap="round"/>`; }
+      s += `<text x="${x + 40}" y="52" text-anchor="middle" font-size="26">${kat[strich]}</text>` + t; w += 110;
+    }
+    return `<svg viewBox="0 0 ${w} ${h + 52}" style="max-height:240px" role="img" aria-label="Säulendiagramm">${s}</svg>`;
+  }
+  // [Thema, Bilder, Namen, Frage „wie viele“, Frage „wie viele mehr“, Frage „am meisten“]
+  const UMFRAGEN = [["Lieblingstier", ["🐶", "🐱", "🐰", "🐦"], ["Hund", "Katze", "Hase", "Vogel"], (a) => `Wie viele Kinder haben ${a} gewählt?`, (a, b) => `Wie viele Kinder mehr haben ${a} gewählt als ${b}?`, "Welches Tier haben die meisten gewählt?"],
+    ["Lieblingsobst", ["🍎", "🍌", "🍓", "🍐"], ["Apfel", "Banane", "Erdbeere", "Birne"], (a) => `Wie viele Kinder haben ${a} gewählt?`, (a, b) => `Wie viele Kinder mehr haben ${a} gewählt als ${b}?`, "Welches Obst haben die meisten gewählt?"],
+    ["Wetter im Monat", ["☀️", "☁️", "🌧️", "❄️"], ["Sonne", "Wolken", "Regen", "Schnee"], (a) => `An wie vielen Tagen gab es ${a}?`, (a, b) => `An wie vielen Tagen mehr gab es ${a} als ${b}?`, "Welches Wetter gab es am häufigsten?"]];
+
   const STATIONEN_K3 = [
     { id: "k3stellen", stufe: "3", lz: ["ma.zo.12"], name: "Zahlen bis 1000", icon: "💯",
       neu: () => { const n = r(101, 999); return zahl("", n, `${Math.floor(n / 100)} Hunderter, ${Math.floor(n / 10) % 10} Zehner und ${n % 10} Einer sind ${n}.`, { frage: "Welche Zahl ist das?", bild: stellenBild(n), nurLuecke: true }); } },
@@ -541,7 +630,47 @@
     { id: "k3sach", stufe: "3", lz: ["ma.zo.11", "ma.pk.04"], name: "Mal und geteilt im Alltag", icon: "📦",
       neu: () => { const n = wahl(NAMEN), k = r(3, 9), j = r(3, 9);
         if (Math.random() < 0.5) return zahl("", k * j, `${k} Kisten mit je ${j} Äpfeln: ${k} · ${j} = ${k * j}.`, { frage: `${n} trägt ${k} Kisten. In jeder Kiste sind ${j} Äpfel. Wie viele Äpfel sind es zusammen?`, nurLuecke: true });
-        return zahl("", j, `${k * j} Sticker gerecht auf ${k} Kinder verteilt: ${k * j} : ${k} = ${j}.`, { frage: `${n} verteilt ${k * j} Sticker gerecht an ${k} Kinder. Wie viele bekommt jedes Kind?`, nurLuecke: true }); } }
+        return zahl("", j, `${k * j} Sticker gerecht auf ${k} Kinder verteilt: ${k * j} : ${k} = ${j}.`, { frage: `${n} verteilt ${k * j} Sticker gerecht an ${k} Kinder. Wie viele bekommt jedes Kind?`, nurLuecke: true }); } },
+    { id: "k3schriftplus", stufe: "3", lz: ["ma.zo.13"], name: "Schriftlich plus", icon: "🧮",
+      neu: () => { let a, b; do { a = r(105, 789); b = r(102, 999 - a); } while (b < 100 || (Math.random() < 0.7 && (a % 10) + (b % 10) < 10 && (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10) < 10));
+        return zahl("", a + b, schriftPlusHilfe(a, b), { frage: "Rechne schriftlich: Fang bei den Einern an.", bild: schriftBild(a, b, "+"), nurLuecke: true }); } },
+    { id: "k3schriftminus", stufe: "3", lz: ["ma.zo.13"], name: "Schriftlich minus", icon: "🧾",
+      neu: () => { let a, b, x, y; do { a = r(300, 999); b = r(101, a - 100); x = stellen(a); y = stellen(b); }
+        while ((x[2] < y[2] && x[1] === 0) || (x[1] - (x[2] < y[2] ? 1 : 0) < y[1] && x[0] - 1 < y[0]) || (Math.random() < 0.6 && x[2] >= y[2] && x[1] >= y[1]));
+        return zahl("", a - b, schriftMinusHilfe(a, b), { frage: "Rechne schriftlich: Fang bei den Einern an.", bild: schriftBild(a, b, M), nurLuecke: true }); } },
+    { id: "k3netz", stufe: "3", lz: ["ma.rf.07"], name: "Würfelnetze", icon: "🎲",
+      neu: () => { const soll = Math.random() < 0.5; let z; do z = zufallsNetz(); while (istWuerfelnetz(z) !== soll);
+        return { text: "", frage: "Kann man aus dieser Form einen Würfel falten?", antwort: soll ? "ja" : "nein", art: "wahl", optionen: ["ja", "nein"], nurLuecke: true, bild: netzBild(z),
+          hilfe: soll ? "Ja: Beim Falten landet jedes Quadrat auf einer anderen Würfelseite – alle 6 Seiten sind da." : "Nein: Beim Falten würden zwei Quadrate auf derselben Würfelseite liegen, eine Seite bliebe offen." }; } },
+    { id: "k3spiegel", stufe: "3", lz: ["ma.rf.05", "ma.rf.07"], name: "Spiegeln", icon: "🪞",
+      neu: () => {
+        const links = Array.from({ length: 5 }, () => Array.from({ length: 3 }, () => Math.random() < 0.45));
+        if (links.flat().filter(Boolean).length < 3) links[r(0, 4)][2] = links[r(0, 4)][1] = links[r(0, 4)][0] = true;
+        const spiegel = links.map(z => z.slice().reverse());
+        if (Math.random() < 0.5) { // Wie viele Kästchen fehlen noch?
+          const voll = []; spiegel.forEach((z, i) => z.forEach((v, j) => v && voll.push([i, j])));
+          const weg = mische(voll).slice(0, r(1, Math.min(4, voll.length))), rechts = spiegel.map(z => z.slice());
+          weg.forEach(([i, j]) => { rechts[i][j] = false; });
+          return zahl("", weg.length, `Vergleiche Zeile für Zeile: Jedes blaue Kästchen links braucht rechts einen Partner im gleichen Abstand zur roten Linie. Es fehlen ${weg.length}.`,
+            { frage: "Die rote Linie ist ein Spiegel. Wie viele Kästchen musst du rechts noch anmalen?", bild: spiegelBild(links, rechts), nurLuecke: true });
+        }
+        const soll = Math.random() < 0.5, rechts = spiegel.map(z => z.slice());
+        if (!soll) { const i = r(0, 4), j = r(0, 2); rechts[i][j] = !rechts[i][j]; }
+        return { text: "", frage: "Ist das Muster spiegelgleich zur roten Linie?", antwort: soll ? "ja" : "nein", art: "wahl", optionen: ["ja", "nein"], nurLuecke: true, bild: spiegelBild(links, rechts),
+          hilfe: soll ? "Ja: Jedes Kästchen hat auf der anderen Seite einen Partner im gleichen Abstand zur Linie." : "Nein: Mindestens ein Kästchen hat auf der anderen Seite keinen passenden Partner." };
+      } },
+    { id: "k3diagramm", stufe: "3", lz: ["ma.dz.03", "ma.dz.06"], name: "Diagramme", icon: "📊",
+      neu: () => { const [thema, kat, namen, fWie, fMehr, fMeist] = wahl(UMFRAGEN), werte = kat.map(() => r(1, 10)), art = r(0, 3);
+        if (art === 0) { const i = r(0, 3); // Diagramm erstellen: Strichliste zählen
+          return zahl("", werte[i], `Zähle die Striche: Jede Fünfergruppe hat einen Querstrich. Das sind ${werte[i]} – so hoch wird die Säule.`,
+            { frage: `${thema}: Die Säule für ${namen[i]} fehlt noch. Wie hoch musst du sie zeichnen?`, bild: saeulenBild(kat, werte, i, i), nurLuecke: true }); }
+        if (art === 1) { const i = r(0, 3);
+          return zahl("", werte[i], `Folge der Säule ${kat[i]} bis oben und lies links die Zahl ab: ${werte[i]}.`, { frage: `${thema}: ${fWie(namen[i])}`, bild: saeulenBild(kat, werte), nurLuecke: true }); }
+        if (art === 2) { let i = r(0, 3), j = r(0, 3); while (werte[i] === werte[j]) { werte[i] = r(1, 10); j = (i + 1 + r(0, 2)) % 4; } if (werte[i] < werte[j]) [i, j] = [j, i];
+          return zahl("", werte[i] - werte[j], `${namen[i]}: ${werte[i]}, ${namen[j]}: ${werte[j]}. ${werte[i]} ${M} ${werte[j]} = ${werte[i] - werte[j]}.`, { frage: `${thema}: ${fMehr(namen[i], namen[j])}`, bild: saeulenBild(kat, werte), nurLuecke: true }); }
+        const max = Math.max(...werte), sieger = werte.indexOf(max); werte.forEach((w, k) => { if (k !== sieger && w === max) werte[k] = max - 1; });
+        return { text: "", frage: `${thema}: ${fMeist}`, antwort: kat[sieger], art: "wahl", optionen: kat.slice(), nurLuecke: true, bild: saeulenBild(kat, werte),
+          hilfe: `Die höchste Säule gewinnt: ${namen[sieger]} mit ${werte[sieger]}.` }; } }
   ];
 
   function malAufgabe(reihen) {
@@ -564,5 +693,5 @@
     return liste;
   }
 
-  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, runde, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
+  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, runde, _k3: { istWuerfelnetz, zufallsNetz }, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
 })();

@@ -683,7 +683,7 @@ Alle Pakete: kein Bezug zu einem echten Kind, Texte mit Sprachschlüsseln, Rauch
 Jedes Spiel: Prüffragen aus `MINISPIELE.md` Abschnitt 1, Test-Haken, Eintrag in `SEITEN_3D`, Leistungs-Test.
 
 #### Phase G – Breite (2027)
-NA-33 Mathe Kl. 3 · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 · NA-37 Mathe Kl. 4 · NA-38 Medienbildung
+~~NA-33 Mathe Kl. 3~~ (27.10.: 17 Stationen) · NA-34 Sachunterricht je Perspektive · NA-36 Deutsch Kl. 3–4 · NA-37 Mathe Kl. 4 · NA-38 Medienbildung
 „Produzieren/Problemlösen“ (Roboter-Weg) · NA-39 Übergang 5 · NA-41 Vorschul-Pfad · NA-46 Arabisch, Türkisch und weitere Sprachen ·
 NA-47 Länderprofile NRW, BY, BW, NI, BB · NA-56 Kapitel 5–7 · russische Volkslied-Melodien (Noten prüfen).
 
@@ -1167,3 +1167,17 @@ SPRACHEN.md Abschnitt 6 entsprechend ergänzt; Tests `szene`, `daz`, `wortschatz
 - **Offen (Schritt b):** schriftliche Addition/Subtraktion mit Stellenwerttafel,
   Raum und Form Kl. 3 (Würfelnetze, Symmetrie), Daten (Diagramme erstellen, Kombinationen).
 
+### Stand 27.10.2026, Abend (NA-33 Mathe Kl. 3, Schritt b – fertig)
+- Fünf neue Stationen im Weg „3. Klasse“ (jetzt **17**, alle `stufe: "3"`):
+  **Schriftlich plus** und **Schriftlich minus** (`ma.zo.13`) mit Stellenwerttafel H/Z/E, leeren Ergebniskästchen und Hilfe Stelle für Stelle
+  (Übertrag „merke 1“; Minus mit Entbündeln „Tausche einen Zehner in 10 Einer“, doppeltes Entbündeln über eine Null wird nicht gestellt);
+  **Würfelnetze** (`ma.rf.07`, ja/nein, zufällige Sechserformen, eingebaute Faltprüfung erkennt genau die 11 Würfelnetze unter den 35 Hexominos);
+  **Spiegeln** (`ma.rf.05`, `ma.rf.07`: spiegelgleich ja/nein oder „Wie viele Kästchen fehlen noch?“);
+  **Diagramme** (`ma.dz.03`, `ma.dz.06`: Säule aus Strichliste anlegen, ablesen, Unterschied, höchste Säule; Themen Tier, Obst, Wetter).
+- Aufgaben mit Bild landen wie bisher nicht in der Lernkartei.
+- Matheweg: Nach einer richtigen Antwort blättert der Zeitgeber nur noch weiter, wenn noch dieselbe Runde läuft (vorher Konsolenfehler beim schnellen Wechsel).
+- Sachsen Kl. 3: „Raum und Form“ nein → teil, „Zahl und Operation“ und „Daten und Zufall“ bleiben teil (Hinweise aktualisiert) – jetzt 9/16/24.
+- Test: `tests/mathe1.js` prüft 17 Stationen, Bild sichtbar ohne Scrollleiste und Annahme der richtigen Antwort für die fünf neuen.
+- **Offen in Mathe Kl. 3:** Würfelgebäude/Baupläne, Flächen/Umfang, Schiebe-/Drehsymmetrie, Zufallsexperimente, Teilbarkeit, schriftliche
+  Multiplikation. **Frage an den Auftraggeber:** Welches Subtraktionsverfahren nutzt die Schule (Entbündeln/Abziehen oder Ergänzen)?
+- **Nächstes:** nach iPad-Rückmeldung NA-34 Sachunterricht (Kl. 3–4-Themen) oder NA-36 Deutsch Kl. 3–4; Grafik bleibt eingefroren.
