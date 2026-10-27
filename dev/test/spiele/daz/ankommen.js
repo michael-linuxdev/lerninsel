@@ -129,6 +129,7 @@
     const z = lauf.ziele[lauf.i], o = lauf.optionen[i], b = $("wahl").querySelector(`[data-i="${i}"]`);
     if (!o || b.classList.contains("falsch") || b.classList.contains("richtig")) return;
     if (o.id !== z.id) {
+      if (!lauf.versuche && window.Koennen) Koennen.melde([lauf.art === "hoeren" ? "daz.d0.01" : "daz.d0.02"], false);
       lauf.versuche++; b.classList.add("falsch"); $("rueck").textContent = "Hör nochmal hin.";
       if (S.ton) S.ton("tipp"); sprich(lauf.text); return;
     }
@@ -138,6 +139,7 @@
     if (S.ton) S.ton("juhu");
     if (lauf.versuche === 0) {
       lauf.richtig++;
+      if (window.Koennen) Koennen.melde([lauf.art === "hoeren" ? "daz.d0.01" : "daz.d0.02"], true);
       const neu = D.merke(lauf.art === "hoeren" ? "wort" : "satz", z.id);
       if (C) C.gib("deutsch", 1);   // zählt als Lernaufgabe (Zeit-Regel „Erst lernen“)
       if (neu && lauf.art === "hoeren" && window.Lernfunde) Lernfunde.merke({ fach: "deutsch", art: "wort", e: z.bild, text: `Neues Wort: ${sprechbar(z)}`, schluessel: "daz:" + z.id });

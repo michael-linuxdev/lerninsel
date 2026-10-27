@@ -1,6 +1,6 @@
 #!/bin/sh
 # Startet einen lokalen Server, führt einen Browser-Test aus und beendet den Server wieder.
-#   sh tests/laufen.sh              → Node-Tests (story-migration, inselkern, lehrplan, wortschatz) und Rauchtest über alle Seiten
+#   sh tests/laufen.sh              → Node-Tests (story-migration, inselkern, lehrplan, wortschatz, koennen) und Rauchtest über alle Seiten
 #   sh tests/laufen.sh ereignisse   → nur tests/ereignisse.js (ebenso profil, szene, prolog, zugang, tutorial, etappen, weihnachten, probe, pixelinsel, look, leistung, daz, lesen, mathe1)
 cd "$(dirname "$0")/.."
 PORT=${PORT:-8799}
@@ -10,6 +10,7 @@ if [ "$TEST" = "rauchtest" ]; then
   node tests/inselkern.js || exit 1
   node tests/lehrplan.js || exit 1
   node tests/wortschatz.js || exit 1
+  node tests/koennen.js || exit 1
 fi
 python3 -m http.server "$PORT" >/dev/null 2>&1 &
 SERVER=$!

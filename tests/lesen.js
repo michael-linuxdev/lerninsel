@@ -185,6 +185,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     }
     await p.waitForSelector("#legen-ende:not([hidden])");
     const legenStand = await p.evaluate(() => ({ sw: Object.keys(__lesen.stand().sw || {}).length, k: (Spielwelt.lade("lernkartei").lesen || []).filter(k => k.s.typ === "schreibwort").length }));
+    const kn = await p.evaluate(() => Object.keys(Spielwelt.lade("koennen") || {}));
+    erwarte(["de.le.01", "de.le.02", "de.le.03", "de.le.04", "de.sc.02", "de.sc.03"].every(z => kn.includes(z)), `Können je Lernziel gemeldet (${kn.join(", ")})`);
     erwarte(legenStand.sw === 7 && legenStand.k === 1, `Wörter legen: 7 ohne Fehler, 1 Lernkarte „schreibwort“ (${JSON.stringify(legenStand)})`);
     await ctx.close();
   }

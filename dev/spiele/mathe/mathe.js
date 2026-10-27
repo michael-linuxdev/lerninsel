@@ -6,6 +6,10 @@
   const ersterWeg = () => { const d = S.lade("mathe") || {}; if (d.weg && WEGE[d.weg]) return d.weg;
     const st = (S.stufe && S.stufe()) || {}; return ["vs", "1"].includes(st.code) && WEGE.k1.length ? "k1" : "k2"; };
   let WEG = ersterWeg(), ST = WEGE[WEG];
+  // Können je Lernziel (NA-50): Lernziele einer Station (beide Wege)
+  const stationVon = (id) => WEGE.k1.find(s => s.id === id) || WEGE.k2.find(s => s.id === id);
+  const lzVon = (id) => (stationVon(id) || {}).lz || [];
+  const KN = () => window.Koennen;
   function setzeWeg(w) { if (!WEGE[w] || !WEGE[w].length) return; WEG = w; ST = WEGE[w]; const d = daten(); d.weg = w; S.speichere("mathe", d); }
   const $ = (id) => document.getElementById(id);
   const LOB = ["Richtig!", "Super!", "Klasse!", "Genau!", "Toll gerechnet!", "Spitze!", "Prima!"];
@@ -74,7 +78,14 @@
     const d = daten(), geschafft = ST.filter(s => (d[WEG][s.id] || 0) > 0).length, faellig = (d.fehler || []).filter(f => faellig_(f)).length, n = S.profil.name || "du";
     $("benno-text").textContent = geschafft === 0 ? `Hallo ${n}! Ich bin Biber Benno. Ich baue Dämme und zähle jeden Stamm. Komm, wir rechnen zusammen!`
       : faellig ? `Hallo ${n}! ${faellig} ${faellig === 1 ? "Aufgabe von früher wartet" : "Aufgaben von früher warten"} im Mathe-Training. Die schaffen wir!`
+      : empfehlung() ? `Schon ${geschafft} von ${ST.length} Stationen geschafft! Heute passt gut: „${empfehlung().name}“.`
       : `Schon ${geschafft} von ${ST.length} Stationen geschafft! Mein Damm wird immer länger.`;
+  }
+  // NA-50: die offene Station, deren Lernziele gerade am besten in die Zielzone passen (nur wenn schon geübt wurde)
+  function empfehlung() {
+    if (!KN()) return null;
+    const offen = ST.filter((s, i) => istOffen(i) && bestes(s.id) > 0);
+    return offen.length ? KN().naechste(offen, 1)[0] : null;
   }
   const faellig_ = (f) => !f.faellig || f.faellig <= tagIn(0);
 
@@ -215,7 +226,9 @@
     const d = daten(), stat = d.stat || {};
     const offen = ST.filter((s, i) => istOffen(i));
     const schwaeche = (id) => { const x = stat[id] || { r: 0, f: 0 }; return (x.f + 1) / (x.r + x.f + 2); };
-    const schwach = offen.slice().sort((a, b) => schwaeche(b.id) - schwaeche(a.id) || Math.random() - 0.5).slice(0, 2);
+    // NA-50: Stationen in der Zielzone (70–85 % Treffer) zuerst; ohne Können-Daten wie bisher die schwächsten
+    const schwach = KN() ? KN().naechste(offen, 2)
+      : offen.slice().sort((a, b) => schwaeche(b.id) - schwaeche(a.id) || Math.random() - 0.5).slice(0, 2);
     const offeneIds = offen.map(s => s.id);
     // zuerst fällige Wiederholungen (höchstens 4), älteste zuerst
     let liste = (d.fehler || []).filter(f => offeneIds.includes(f.station) && faellig(f)).sort((x, y) => (x.faellig || "").localeCompare(y.faellig || "")).slice(0, 4)
@@ -258,7 +271,7 @@
       (a.frage ? `<p class="frage${a.bild ? "" : " gross"}">${a.frage}</p>` : "") +
       (a.bild ? `<div class="bild">${a.bild}</div>` : "") +
       (a.art === "wahl" && a.nurLuecke ? "" : `<div class="ausdruck ${a.wort ? "wort" : ""}" id="ausdruck">${ausdruck}</div>`) +
-      `<p class="rueck" id="rueck"></p><div id="hilfe-platz"></div>`;
+      `<p class="rueck" id="rueck">${a.bruecke ? "Eine leichtere Aufgabe zwischendurch 🙂" : ""}</p><div id="hilfe-platz"></div>`;
     aktualisiereLuecke();
     zeigeEingabe(a);
   }
@@ -302,7 +315,7 @@
       lauf.gesperrt = true;
       if (!lauf.ergebnis[lauf.pos]) lauf.ergebnis[lauf.pos] = "gut";
       if (lauf.einstufung) lauf.erst[lauf.pos] = lauf.versuch === 0;
-      if (lauf.versuch === 0 && !a.wieder) { statistik(a, true); C() && C().gib("mathe", 1); }
+      if (lauf.versuch === 0 && !a.wieder) { statistik(a, true); C() && C().gib("mathe", 1); if (KN()) KN().melde(lzVon(a.station), true); }
       if (luecke) luecke.className = "luecke richtig";
       markiereWahl(wert, true);
       rueck.className = "rueck gut"; rueck.textContent = LOB[Math.floor(Math.random() * LOB.length)];
@@ -312,7 +325,17 @@
     }
 
     lauf.versuch++;
-    if (lauf.versuch === 1 && !a.wieder) statistik(a, false);
+    if (lauf.versuch === 1 && !a.wieder) {
+      statistik(a, false);
+      if (KN()) {
+        KN().melde(lzVon(a.station), false);
+        // Zwei Fehler in Folge beim selben Lernziel: einmal je Runde eine leichtere Aufgabe von der Station davor einschieben
+        if (!lauf.bruecke && !lauf.einstufung && !lauf.training && lauf.nr > 0 && KN().brauchtLeichter(lzVon(a.station))) {
+          const vorher = ST[lauf.nr - 1], leicht = window.Mathe.runde(vorher.id, 1)[0];
+          if (leicht) { lauf.bruecke = true; lauf.liste.splice(lauf.pos + 1, 0, Object.assign(leicht, { station: vorher.id, wieder: true, bruecke: true })); }
+        }
+      }
+    }
     S.ton("nein");
     if (luecke) { luecke.className = "luecke falsch"; }
     markiereWahl(wert, false);

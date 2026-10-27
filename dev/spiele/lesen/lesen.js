@@ -34,6 +34,9 @@
   const SILBENWOERTER = W.alle().filter(w => w.wortart === "nomen" && w.silben.length >= 1 && w.silben.length <= 3 && w.stufe.includes("1"))
     .filter((w, i, l) => l.findIndex(x => x.bild === w.bild) === i);
 
+  // NA-50: Antworten beim ersten Versuch je Lernziel melden
+  const LZ = { gleich: ["de.le.01"], bild: ["de.le.02"], buchstabe: ["de.le.02", "de.su.02"], silben: ["de.le.03"], legen: ["de.sc.03", "de.sc.05"], spuren: ["de.sc.02"] };
+  const kn = (lz, r) => { if (window.Koennen) Koennen.melde(lz, r); };
   function sprich(text, fertig) { if (SP) SP.sprich(text, "de-DE", fertig); else if (fertig) fertig(); }
   let ansicht = "start";
   function zeige(n) { ansicht = n; ["start", "tafel", "uebung", "texte", "text", "spuren", "legen"].forEach(v => $(v + "-ansicht").hidden = v !== n); scrollTo(0, 0); if (SP) SP.stopp(); }
@@ -179,7 +182,7 @@
     const schritt = lauf.modus === "silben" ? { typ: "silbenwort", wort: z.wort } : { typ: "anlaut", wort: z.wort, ziel: z.ziel };
     if (lauf.modus === "silben") return antworteSilben(i, z, k, schritt);
     if (i !== lauf.richtig_i) {
-      if (lauf.versuche === 0 && LK) LK.falsch("lesen", schritt);
+      if (lauf.versuche === 0) { if (LK) LK.falsch("lesen", schritt); kn(LZ[lauf.modus], false); }
       lauf.versuche++; k.classList.add("falsch");
       const o = lauf.optionen[i];
       $("rueck").textContent = o.w ? `${o.w.de} fängt mit ${buchstabeVon[o.id] || o.w.de[0]} an. Hör nochmal hin.` : "Hör nochmal hin.";
@@ -192,7 +195,7 @@
     $("rueck").textContent = `${lob} ${z.ziel} wie ${w.de}.`;
     if (S.ton) S.ton("juhu");
     if (lauf.versuche === 0) {
-      lauf.richtig++;
+      lauf.richtig++; kn(LZ[lauf.modus], true);
       if (C) C.gib("deutsch", 1);   // zählt als Lernaufgabe (Zeit-Regel)
       const d = daten(), vorher = d.b[z.ziel] || 0;
       if (lauf.modus !== "gleich") { d.b[z.ziel] = Math.min(9, vorher + 1); S.speichere("lesen", d); }
@@ -207,7 +210,7 @@
   function antworteSilben(i, z, k, schritt) {
     const w = wort(z.wort);
     if (i !== lauf.richtig_i) {
-      if (lauf.versuche === 0 && LK) LK.falsch("lesen", schritt);
+      if (lauf.versuche === 0) { if (LK) LK.falsch("lesen", schritt); kn(LZ.silben, false); }
       lauf.versuche++; k.classList.add("falsch");
       $("rueck").textContent = "Lies nochmal Silbe für Silbe.";
       $("frage-ton").hidden = false;   // jetzt darf man sich helfen lassen
@@ -219,7 +222,7 @@
     $("rueck").innerHTML = `${lob} ${silbenHtml(w.silben.join("-"))}`;
     if (S.ton) S.ton("juhu");
     if (lauf.versuche === 0) {
-      lauf.richtig++;
+      lauf.richtig++; kn(LZ.silben, true);
       if (C) C.gib("deutsch", 1);
       const d = daten(); d.w[z.wort] = Math.min(9, (d.w[z.wort] || 0) + 1); S.speichere("lesen", d);
       if (z.__karte && LK && LK.richtig("lesen", schritt) && window.Lernfunde)
@@ -271,11 +274,12 @@
     if (!tlauf || !$("text-ende").hidden) return;
     const o = tlauf.optionen[i], b = $("text-wahl").querySelector(`[data-i="${i}"]`);
     if (!o || b.classList.contains("falsch") || b.classList.contains("richtig")) return;
-    if (!o.richtig) { tlauf.versuche++; b.classList.add("falsch"); $("text-rueck").textContent = "Lies nochmal im Text nach."; if (S.ton) S.ton("tipp"); return; }
+    const tlz = tlauf.t.lz.filter(z => z.startsWith("de."));
+    if (!o.richtig) { if (!tlauf.versuche) kn(tlz, false); tlauf.versuche++; b.classList.add("falsch"); $("text-rueck").textContent = "Lies nochmal im Text nach."; if (S.ton) S.ton("tipp"); return; }
     b.classList.add("richtig");
     $("text-rueck").textContent = LOB[Math.floor(Math.random() * LOB.length)];
     if (S.ton) S.ton("juhu");
-    if (tlauf.versuche === 0) { tlauf.richtig++; if (C) C.gib("deutsch", 1); }
+    if (tlauf.versuche === 0) { tlauf.richtig++; kn(tlz, true); if (C) C.gib("deutsch", 1); }
     setTimeout(() => {
       tlauf.f++;
       if (tlauf.f < tlauf.t.fragen.length) { textFrage(); return; }
@@ -387,7 +391,7 @@
     spurZeichnen();
     const z = spur.zeichen[spur.i];
     const d = daten(); d.sp = d.sp || {}; d.sp[z.toUpperCase()] = Math.min(9, (d.sp[z.toUpperCase()] || 0) + (z === z.toLowerCase() ? 1 : 0)); S.speichere("lesen", d);
-    spur.fertig++;
+    spur.fertig++; kn(LZ.spuren, true);
     if (C) C.gib("deutsch", 1);
     const lob = LOB[Math.floor(Math.random() * LOB.length)];
     $("spuren-rueck").textContent = `${lob} Das ist ${z}.`;
@@ -444,7 +448,7 @@
     const z = leg.ziele[leg.i], w = wort(z.wort), s = leg.steine[i], k = $("legen-steine").querySelector(`[data-i="${i}"]`);
     if (!s || k.classList.contains("weg")) return;
     if (s.b !== w.de[leg.pos]) {
-      if (leg.fehler === 0 && LK) LK.falsch("lesen", { typ: "schreibwort", wort: z.wort });
+      if (leg.fehler === 0) { if (LK) LK.falsch("lesen", { typ: "schreibwort", wort: z.wort }); kn(LZ.legen, false); }
       leg.fehler++; k.classList.remove("wackel"); void k.offsetWidth; k.classList.add("wackel"); setTimeout(() => k.classList.remove("wackel"), 450);
       $("legen-rueck").textContent = leg.pos === 0 && s.b.toLowerCase() === w.de[0].toLowerCase() ? "Nomen schreibt man am Anfang groß!" : "Hör nochmal genau hin.";
       if (S.ton) S.ton("tipp"); sprich(w.de); return;
@@ -457,7 +461,7 @@
     $("legen-rueck").textContent = `${lob} ${W.mitArtikel(w)}`;
     if (S.ton) S.ton("juhu");
     if (leg.fehler === 0) {
-      leg.richtig++;
+      leg.richtig++; kn(LZ.legen, true);
       if (C) C.gib("deutsch", 1);
       const d = daten(); d.sw = d.sw || {}; d.sw[z.wort] = Math.min(9, (d.sw[z.wort] || 0) + 1); S.speichere("lesen", d);
       if (z.__karte && LK && LK.richtig("lesen", { typ: "schreibwort", wort: z.wort }) && window.Lernfunde)

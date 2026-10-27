@@ -51,6 +51,22 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     w = await wegInfo(p);
     erwarte(!w.zweiteZu, "danach ist die zweite Station offen");
 
+    // NA-50 Können: Treffer werden je Lernziel gezählt; zwei Fehler in Folge → leichtere Aufgabe von der Station davor
+    const kn = await p.evaluate(() => Object.assign({ stand: Koennen.standVon("ma.zo.01") }, Spielwelt.lade("koennen") || {}));
+    erwarte(kn["ma.zo.01"] && kn["ma.zo.01"][1] === 10 && kn.stand >= 3, `Können „ma.zo.01“ nach 10 Treffern: ${JSON.stringify(kn["ma.zo.01"])}`);
+    await p.evaluate(() => __mathe.starte(1)); await p.waitForTimeout(200);
+    const falsch = (a) => a.art === "wahl" ? a.optionen.find(o => o !== a.antwort) : String(Number(a.antwort) + 1);
+    await p.evaluate((f) => { const a = __mathe.lauf.liste[0]; __mathe.antworte(eval(f)(a)); }, falsch.toString()); await p.waitForTimeout(850);
+    await p.evaluate((f) => { const a = __mathe.lauf.liste[0]; __mathe.antworte(eval(f)(a)); }, falsch.toString()); await p.waitForTimeout(300);
+    await p.click("#weiter"); await p.waitForTimeout(300);
+    await p.evaluate((f) => { const a = __mathe.lauf.liste[1]; __mathe.antworte(eval(f)(a)); }, falsch.toString()); await p.waitForTimeout(300);
+    const br = await p.evaluate(() => { const l = __mathe.lauf.liste; return { naechste: l[2] && l[2].bruecke, station: l[2] && l[2].station }; });
+    erwarte(br.naechste && br.station === "k1wuerfel", `nach zwei Fehlern in Folge kommt eine leichtere Aufgabe (${JSON.stringify(br)})`);
+    await p.waitForTimeout(900);
+    await p.evaluate(() => { const a = __mathe.lauf.liste[__mathe.lauf.pos]; __mathe.antworte(a.antwort); }); await p.waitForTimeout(1100);
+    erwarte(await p.evaluate(() => /leichtere Aufgabe/.test(document.getElementById("rueck").textContent) || __mathe.lauf.liste[__mathe.lauf.pos].bruecke), "Hinweis „Eine leichtere Aufgabe zwischendurch“");
+    await p.evaluate(() => { document.getElementById("zum-weg").click(); }); await p.waitForTimeout(300);
+
     // Alle Stationen einmal anspielen (je eine richtige Aufgabe), damit jeder Generator im Browser läuft
     for (let s = 1; s < 10; s++) {
       await p.evaluate((n) => __mathe.starte(n), s); await p.waitForTimeout(150);
@@ -77,6 +93,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(500); }
     const bericht = await p.evaluate(() => document.body.textContent);
     erwarte(/Kl\. 1: Würfelbilder/.test(bericht), "Elternbericht listet „Kl. 1: Würfelbilder“");
+    erwarte(/Können: [●○]{4}/.test(bericht), "„Was übt die App?“ zeigt das Können je Lernbereich");
     await ctx.close();
   }
   {

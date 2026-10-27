@@ -144,6 +144,12 @@
   }
 
   // ---------- Lehrplan: Was übt die App? ----------
+  // NA-50: Können des Kindes je Lernbereich (Durchschnitt über dessen Lernziele), nur wenn schon geübt wurde
+  function koennenZeile(lz) {
+    const K = window.Koennen; if (!K || !lz) return "";
+    const st = K.standListe(lz); if (st === null) return "";
+    return `<br><span class="lp-koennen" data-stand="${st}">Können: ${"●".repeat(st)}${"○".repeat(4 - st)} ${K.NAMEN[st]}</span>`;
+  }
   function lehrplanKarte(mathe) {
     const L = window.LEHRPLAN; if (!L) return "";
     // Nur Sachsen ist ausgearbeitet; andere Länder sehen vorerst Sachsen als Beispiel (ehrlicher Hinweis)
@@ -160,7 +166,7 @@
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
       return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span></h3><ul class="lp-liste">${lb.map(x =>
-        `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app)}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
+        `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app)}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${koennenZeile(x.lz)}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
     }).join("");
     return `<div class="karte">
       <h2>📘 Was übt die App? (Lehrplan ${lname}, ${k.klasse}. Klasse)</h2>
