@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Ankommen</title>
+<meta name="theme-color" content="#FFF1D9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #FFF1D9; background-image: none; --grund: #FFF1D9; --akzent: #E8A33D; }
+  .ansicht[hidden] { display: none !important; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; min-width: 0; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  main { max-width: 980px; margin: 0 auto; padding: 14px 16px 40px; }
+
+  /* Fipsi und Sprechblase */
+  .erzaehler { display: flex; align-items: flex-end; gap: 12px; margin: 6px 0 16px; }
+  .erzaehler .fipsi { width: 110px; height: 110px; flex: none; }
+  .blase { background: #fff; border-radius: 22px; padding: 14px 18px; font-size: 1.25rem; line-height: 1.35; box-shadow: 0 5px 0 rgba(232,163,61,.25); position: relative; flex: 1; }
+  .blase .hilfe, .hilfe { display: block; margin-top: 6px; font-size: 1.05rem; color: #7a5a2a; }
+  .hilfe.entwurf { border-bottom: 2px dashed #E8A33D; }
+  .ton { border: 0; background: #FFE2B0; border-radius: 999px; font-size: 1.4rem; width: 48px; height: 48px; cursor: pointer; flex: none; }
+
+  /* Start */
+  .wege { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .weg { background: #fff; border: 0; border-radius: 26px; padding: 18px 10px; font: inherit; font-weight: 600; font-size: 1.15rem; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 7px 0 rgba(232,163,61,.25); cursor: pointer; color: inherit; }
+  .weg .emoji { font-size: 3.2rem; }
+  .weg:active { transform: translateY(3px); }
+  .stand { text-align: center; margin: 18px 0 6px; font-size: 1.1rem; }
+  .balken { height: 14px; background: #fff; border-radius: 999px; overflow: hidden; max-width: 520px; margin: 0 auto; }
+  .balken span { display: block; height: 100%; background: #E8A33D; width: 0; transition: width .4s; }
+  .weiter { display: flex; align-items: center; justify-content: center; margin: 22px auto 0; max-width: 420px; text-decoration: none; }
+  @media (max-width: 640px) { .erzaehler .fipsi { width: 80px; height: 80px; } .blase { font-size: 1.1rem; } .wege { grid-template-columns: 1fr; } .weg { flex-direction: row; justify-content: flex-start; padding: 12px 18px; } .weg .emoji { font-size: 2.4rem; } }
+
+  /* Felder und Karten */
+  .felder { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 760px) { .felder { grid-template-columns: repeat(2, 1fr); } }
+  .feld { background: #fff; border: 0; border-radius: 22px; padding: 14px 8px; font: inherit; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 6px 0 rgba(232,163,61,.2); cursor: pointer; color: inherit; }
+  .feld .emoji { font-size: 2.6rem; }
+  .feld small { font-weight: 400; color: #8a6a3a; }
+  .karte-wort { background: #fff; border-radius: 30px; padding: 22px 18px; text-align: center; box-shadow: 0 8px 0 rgba(232,163,61,.25); max-width: 560px; margin: 0 auto; }
+  .karte-wort .bild { font-size: 7rem; line-height: 1.1; }
+  .karte-wort .wort { font-size: 2.6rem; font-weight: 700; margin: 6px 0; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .silben { font-size: 1.3rem; letter-spacing: 1px; color: #6b5a8a; }
+  .silben b { display: inline-block; padding: 0 6px; border-bottom: 4px solid #E8A33D; border-radius: 2px; margin: 0 3px; font-weight: 600; }
+  .mehrzahl { margin-top: 8px; font-size: 1.2rem; }
+  .art { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #fff; border-radius: 999px; padding: 2px 14px 2px 10px; font-size: .8em; }
+  .art i { font-style: normal; font-size: .9em; }
+  .blaettern { display: flex; justify-content: center; gap: 14px; margin-top: 16px; align-items: center; }
+  .blaettern .knopf { min-width: 90px; }
+  .nr { font-size: 1.05rem; color: #8a6a3a; min-width: 70px; text-align: center; }
+
+  /* Hören und zeigen, Sätze */
+  .frage { text-align: center; font-size: 1.3rem; margin-bottom: 14px; display: flex; justify-content: center; align-items: center; gap: 12px; }
+  .wahl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 720px; margin: 0 auto; }
+  .wahl button { background: #fff; border: 4px solid transparent; border-radius: 26px; font-size: 5rem; padding: 14px 0; cursor: pointer; box-shadow: 0 7px 0 rgba(232,163,61,.25); }
+  .wahl button.richtig { border-color: #2E9C5A; background: #E3F7EF; }
+  .wahl button.falsch { border-color: #D7263D; opacity: .45; }
+  .wahl button small { display: block; font-size: 1.1rem; font-weight: 600; margin-top: 4px; }
+  .rueck { text-align: center; min-height: 2.2em; font-size: 1.4rem; font-weight: 700; margin-top: 12px; }
+  .runde-ende { text-align: center; font-size: 1.4rem; }
+  .runde-ende .gross { font-size: 4rem; }
+  .satz-text { font-size: 1.6rem; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<section class="ansicht" id="start-ansicht">
+  <div class="oben">
+    <a class="knopf rund" href="../../" aria-label="Zurück">⬅️</a>
+    <h1>🧳 Ankommen</h1>
+  </div>
+  <main>
+    <div class="erzaehler"><div id="fipsi-start"></div><div class="blase" id="start-blase"></div><button class="ton" id="start-ton" aria-label="Vorlesen">🔊</button></div>
+    <div class="wege">
+      <button class="weg" id="weg-woerter"><span class="emoji">🖼️</span>Wörter ansehen</button>
+      <button class="weg" id="weg-hoeren"><span class="emoji">👂</span>Hören und zeigen</button>
+      <button class="weg" id="weg-saetze"><span class="emoji">💬</span>Sätze für jeden Tag</button>
+    </div>
+    <p class="stand" id="stand"></p>
+    <div class="balken" aria-hidden="true"><span id="stand-balken"></span></div>
+    <a class="knopf weiter" id="zum-abenteuer" href="../deutsch/?karte=1">🦊 Zu Fipsis Abenteuer</a>
+  </main>
+</section>
+
+<section class="ansicht" id="felder-ansicht" hidden>
+  <div class="oben"><button class="knopf rund zurueck" aria-label="Zurück">⬅️</button><h1>🖼️ Wörter ansehen</h1></div>
+  <main><div class="felder" id="felder"></div></main>
+</section>
+
+<section class="ansicht" id="karte-ansicht" hidden>
+  <div class="oben"><button class="knopf rund" id="karte-zurueck" aria-label="Zurück">⬅️</button><h1 id="karte-titel"></h1></div>
+  <main>
+    <div class="karte-wort" id="karte"></div>
+    <div class="blaettern">
+      <button class="knopf" id="karte-vor" aria-label="Vorheriges Wort">◀</button>
+      <span class="nr" id="karte-nr"></span>
+      <button class="knopf haupt" id="karte-nach" aria-label="Nächstes Wort">▶</button>
+    </div>
+  </main>
+</section>
+
+<section class="ansicht" id="uebung-ansicht" hidden>
+  <div class="oben"><button class="knopf rund zurueck" aria-label="Zurück">⬅️</button><h1 id="uebung-titel"></h1><div class="fortschritt" aria-hidden="true"><span id="uebung-balken"></span></div></div>
+  <main>
+    <div class="frage" id="frage"></div>
+    <div class="wahl" id="wahl"></div>
+    <p class="rueck" id="rueck" aria-live="polite"></p>
+    <div id="uebung-ende" hidden class="runde-ende"></div>
+  </main>
+</section>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/sticker.js"></script>
+<script src="../../shared/echtewelt.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../shared/figuren.js"></script>
+<script src="../../inhalte/woerter/bestand.js"></script>
+<script src="../../inhalte/woerter/d0.js"></script>
+<script src="../../shared/woerter.js"></script>
+<script src="../../shared/daz.js"></script>
+<script src="ankommen.js"></script>
+</body>
+</html>

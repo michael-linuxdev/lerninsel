@@ -95,7 +95,7 @@ pruefe("Inhalte.fuer(kind): passende Stufe oder eine darunter, Vorschule nur Vor
   assert.ok(kl2.includes("mathe:plus100") && kl2.includes("mathe:plus20"), "Kl. 2 bekommt Kl.-2- und Kl.-1-Stationen");
   assert.ok(!kl2.includes("mathe:mal3"), "Einmaleins 6–9 erst ab Kl. 3");
   assert.ok(ids({ stufe: "3", land: "sn" }).includes("mathe:mal3"));
-  assert.strictEqual(ids({ stufe: "vs", land: "sn" }).length, 0, "noch keine Vorschul-Inhalte");
+  assert.strictEqual(ids({ stufe: "vs", land: "sn" }).join(), "daz:d0", "Vorschule: bisher nur „Ankommen“");
   I.registriere({ id: "test:nurby", lz: ["de.le.02"], stufe: ["1"], laender: ["by"] });
   assert.ok(ids({ stufe: "1", land: "by" }).includes("test:nurby"));
   assert.ok(!ids({ stufe: "1", land: "sn" }).includes("test:nurby"));
