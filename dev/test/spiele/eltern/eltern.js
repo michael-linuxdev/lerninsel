@@ -181,7 +181,8 @@
     const faecher = Object.keys(L.laender[land].faecher).filter(f => L.fuer(land, f, k.klasse).length).map(f => {
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
-      return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span></h3><ul class="lp-liste">${lb.map(x =>
+      const rel = f === "ethik" && { ev: "evangelische", ka: "katholische" }[((S.lade("eltern") || {}).ethik || {}).unterricht];
+      return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span>${rel ? `<br><span class="klein lp-religion">Ihr Kind hat ${rel} Religion statt Ethik. Der Religions-Lehrplan ist noch nicht eingearbeitet; die Ethik-Themen zu Festen, Kirchenjahr und Religionen passen zu beiden Fächern.</span>` : ""}</h3><ul class="lp-liste">${lb.map(x =>
         `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app.filter(a => !a.startsWith("werkstatt:") && !(x.punkte && a.startsWith("sachkunde:"))).concat((x.punkte || []).flatMap(p => p.app).filter(a => a.startsWith("werkstatt:") || a.startsWith("sachkunde:"))))}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${punkteHtml(x.punkte)}${koennenZeile(x.lz)}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
     }).join("");
     return `<div class="karte">
@@ -397,10 +398,14 @@
     const e = S.lade("eltern") || {}, de = (e.deutsch || {}).schule || "", su = (e.sachkunde || {}).schule || "";
     const auswahl = (id, namen, wert, leer) => `<select id="${id}"><option value="" ${!wert ? "selected" : ""}>${leer}</option>${Object.entries(namen).map(([k, n]) => `<option value="${k}" ${wert === k ? "selected" : ""}>${n}</option>`).join("")}</select>`;
     return `<div class="karte" id="schuljahr-karte">
-      <h2>📚 Deutsch und Sachunterricht wie im Schuljahr</h2>
-      <div class="zeit-raster"><label>Deutsch – gerade in der Schule${auswahl("d-schule", DE_LB, de, "Keine Angabe")}</label>
-        <label>Sachunterricht – gerade in der Schule${auswahl("su-schule", SU_LB, su, "Keine Angabe")}</label></div>
-      <p class="klein">Der gewählte Lernbereich steht in der Wörter-Werkstatt bzw. bei Eule Ella ganz oben und ist markiert. Alles andere bleibt offen.
+      <h2>📚 Wie im Schuljahr: gerade in der Schule</h2>
+      <p class="klein">Welcher Lernbereich ist in der Schule gerade dran?</p>
+      <div class="zeit-raster"><label>Deutsch${auswahl("d-schule", DE_LB, de, "Keine Angabe")}</label>
+        <label>Sachunterricht${auswahl("su-schule", SU_LB, su, "Keine Angabe")}</label>
+        ${Object.entries(window.FACH_SEITEN || {}).map(([f, x]) => `<label>${x.name}${auswahl("fs-" + f, Object.fromEntries(x.lb.map(([id, t]) => [id, t.replace(/^\S+\s/, "")])), (e[f] || {}).schule || "", "Keine Angabe")}</label>`).join("")}
+        <label>Mein Kind hat in der Schule${auswahl("et-unterricht", { ev: "Evangelische Religion", ka: "Katholische Religion" }, (e.ethik || {}).unterricht === "ethik" ? "" : (e.ethik || {}).unterricht || "", "Ethik")}</label></div>
+      <p class="klein" id="religion-hinweis">${["ev", "ka"].includes((e.ethik || {}).unterricht) ? "Religion: Die Themen nach dem sächsischen Lehrplan folgen, sobald er eingearbeitet ist. Bis dahin zeigt Eule Ella unter „Ethik“ die Themen, die zu beiden Fächern passen (Feste, Kirchenjahr, Religionen, Miteinander)." : "Ethik ist voreingestellt. Hat Ihr Kind evangelische oder katholische Religion, wählen Sie das hier."}</p>
+      <p class="klein">Der gewählte Lernbereich steht in der Wörter-Werkstatt bzw. bei Eule Ella (auch Kunst, Musik, Werken, Sport, Ethik) ganz oben und ist markiert. Alles andere bleibt offen.
         Mit „Zeig, was du kannst“ (je Lernbereich) zeigt das Kind ohne Noten und ohne Sterne, was schon sitzt – hier seht ihr das Ergebnis.</p>
       <div class="knoepfe"><button class="knopf haupt" id="sj-speichern">Speichern</button></div>
       <h3>Deutsch – „Zeig, was du kannst“</h3>${lernstandListe("deutsch", DE_LB, window.WERKSTATT || [], "lernstand-deutsch")}
@@ -412,6 +417,8 @@
       const e = S.lade("eltern") || {};
       e.deutsch = Object.assign({}, e.deutsch || {}, { schule: $("d-schule").value });
       e.sachkunde = Object.assign({}, e.sachkunde || {}, { schule: $("su-schule").value });
+      Object.keys(window.FACH_SEITEN || {}).forEach(f => { e[f] = Object.assign({}, e[f] || {}, { schule: $("fs-" + f).value }); });
+      e.ethik = Object.assign({}, e.ethik || {}, { unterricht: $("et-unterricht").value || "ethik" });
       S.speichere("eltern", e); S.meldung("Gespeichert.");
     });
   }

@@ -1635,3 +1635,16 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Offen / nächstes Paket:** Eltern-Einstellung „gerade in der Schule“ für die neuen Fächer; Lieder zum Mitsingen und Melodien wiedererkennen im
   Atelier; „Mein Heft“; Handschrift-Übung; Englisch-Lernkartei; Religion (ev./kath.) als Alternative zu Ethik nur auf Wunsch.
 
+### Stand 28.10.2026, abends (Rückmeldung Auftraggeber: Religion als Eltern-Wahl, „gerade in der Schule“ für die neuen Fächer)
+- **„Gerade in der Schule“ jetzt auch für Kunst, Musik, Werken, Sport, Ethik:** Karte im Elternbereich heißt „Wie im Schuljahr: gerade in der Schule“
+  (alle sieben Fächer als Auswahl, kurze Beschriftungen, passt ins Hochformat). Bei Eule Ella steht der gewählte Lernbereich oben und ist markiert.
+  Speicherort `eltern.<fach>.schule` (z. B. `eltern.kunst.schule = "ku2"`).
+- **Eltern-Wahl Ethik oder Religion:** „Mein Kind hat in der Schule: Ethik (Standard) · Evangelische Religion · Katholische Religion“
+  (`eltern.ethik.unterricht` = `ethik`|`ev`|`ka`). Mit Religion: Eule Ella begrüßt passend und zeigt unter „Ethik“ zuerst „Voneinander: Feste und
+  Religionen“; im Elternbereich steht beim Lehrplan Ethik ein ehrlicher Hinweis, dass der Religions-Lehrplan noch fehlt.
+- **Entscheidung:** Religion bekommt **eigene Themen erst mit den Lehrplan-PDFs** (Ev. und Kath. Religion Grundschule Sachsen, 2004/2009/2019); das
+  Schulportal und die Archivkopien sind aus der Arbeitsumgebung gesperrt. Bis dahin passen die Ethik-Themen zu Festen, Kirchenjahr und Religionen
+  zu beiden Fächern. Ethik bleibt für alle Kinder sichtbar (nichts entfernt).
+- **Test:** `faechervoll` stellt die Auswahl über die Eltern-Karte ein und prüft Markierung, Reihenfolge, Speichern nach Neuladen und den Religions-Hinweis.
+- **Nächstes Paket:** Religion (ev./kath.) nach den PDFs: Profil, Inhaltspunkte, Themen (Reiter „Religion“ statt Hinweis).
+

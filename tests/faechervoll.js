@@ -127,6 +127,25 @@ const FAECHER = ["kunst", "musik", "werken", "sport", "ethik"];
         `Elternbereich Kl. 4: Kunst 3, Musik 4, Werken 3, Sport 5 (mit 🌍), Ethik 4 Lernbereiche (${JSON.stringify(e).slice(0, 200)})`);
       erwarte(/Ethik: Wir in der Welt/.test(e.ls), `Elternbereich zeigt „Zeig, was du kannst“ Ethik (${e.ls.slice(0, 90)})`);
       if (BILDER) { await p.evaluate(() => [...document.querySelectorAll("h3.lp-fach")].find(x => x.textContent.startsWith("Sport")).scrollIntoView()); await p.screenshot({ path: `${BILDER}/faechervoll-eltern-sport.png` }); }
+      // „Gerade in der Schule“ für die neuen Fächer und Eltern-Wahl Ethik/Religion – über die Karte im Elternbereich eingestellt
+      await p.selectOption("#fs-kunst", "ku2"); await p.selectOption("#fs-sport", "sp3"); await p.selectOption("#et-unterricht", "ev");
+      await p.click("#sj-speichern"); await p.waitForTimeout(200);
+      const el = await p.evaluate(() => { const e = Spielwelt.lade("eltern"); return [e.kunst.schule, e.sport.schule, e.musik.schule, e.ethik.unterricht].join(); });
+      erwarte(el === "ku2,sp3,,ev", `Elternbereich speichert „gerade in der Schule“ je Fach und Religion (${el})`);
+      await p.reload(); await p.waitForTimeout(300); if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); } await p.waitForSelector(".lp-punkte");
+      const rel = await p.evaluate(() => ({ hinweis: !!document.querySelector(".lp-religion"), wahl: document.getElementById("et-unterricht").value, kunst: document.getElementById("fs-kunst").value }));
+      erwarte(rel.hinweis && rel.wahl === "ev" && rel.kunst === "ku2", "Elternbereich: Auswahl bleibt nach Neuladen, Hinweis „Religion statt Ethik“ im Lehrplan");
+      for (const [fach, lb] of [["kunst", "ku2"], ["sport", "sp3"]]) {
+        await oeffne(p, fach);
+        const g = await p.evaluate(() => { const x = document.querySelector(".su-gruppe"); return { lb: x.dataset.lb, schule: x.classList.contains("schule"), marke: !!x.querySelector(".schule-marke") }; });
+        erwarte(g.lb === lb && g.schule && g.marke, `${fach}: Lernbereich ${lb} steht oben und ist als „Gerade in der Schule“ markiert`);
+      }
+      await oeffne(p, "musik");
+      erwarte(!(await p.$(".su-gruppe.schule")), "musik: ohne Einstellung keine Markierung, Lehrplan-Reihenfolge");
+      await oeffne(p, "ethik");
+      const eth = await p.evaluate(() => ({ erste: document.querySelector(".su-gruppe").dataset.lb, marke: !!document.querySelector(".schule-marke"), intro: document.getElementById("intro-text").textContent }));
+      erwarte(eth.erste === "et3" && !eth.marke, `Ethik mit Religion: „Feste und Religionen“ oben (ohne Markierung) (${eth.erste})`);
+      if (BILDER) await p.screenshot({ path: `${BILDER}/faechervoll-ethik-religion.png` });
     }
     await ctx.close();
   }

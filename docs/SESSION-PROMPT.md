@@ -12,7 +12,7 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (28.10.2026, nachmittags)
+## 1. Stand (28.10.2026, abends)
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
   **Kl. 1/Vorschule 22** · **Kl. 2 45** · **Kl. 3 35** · **Kl. 4 26** · **Übergang 5** 16 (vorläufig). Freischalten je Lernbereich, Lernbereichs-Kacheln
@@ -65,7 +65,9 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
   gehört mir“ – ist der Ton so recht?, „Licht und Schatten“, „Sachsen entdecken“), **Englisch** (neue Lektionen, z. B. „London“, „Café“),
   dazu weiter offen: Matheweg-Kacheln und „Zeig, was du kannst“, Aufnehmen mit Eltern-Schalter.
 - **Neue Fächer ansehen** (in /dev): Eule Ella → Reiter Kunst/Musik/Werken/Sport/Ethik; passt der Ton bei Ethik (Religionen, Geheimnisse, Abschied)?
-  Soll es statt/neben Ethik evangelische oder katholische Religion geben (Eltern-Wahl)? Optional **Mathematik Klasse 5 (Oberschule/Gymnasium)** als PDF.
+  Elternbereich → „Wie im Schuljahr: gerade in der Schule“ (alle Fächer, dazu „Mein Kind hat in der Schule: Ethik/Ev./Kath. Religion“).
+- **Lehrplan-PDFs Evangelische und Katholische Religion (Grundschule Sachsen)** hochladen – der Auftraggeber will Religion als Eltern-Wahl (28.10.).
+  Optional **Mathematik Klasse 5 (Oberschule/Gymnasium)** als PDF.
 - Deutsch: Sollen Kinder ihre eigenen Texte selbst wiederfinden („Mein Heft“)? Handschrift-Übung mit Finger/Stift (Schulausgangsschrift oder
   Vereinfachte Ausgangsschrift – je nach Schule als Eltern-Einstellung)?
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
@@ -78,8 +80,9 @@ Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ab
    (siehe oben).
 2. **Schuljahres-Gerüst für Deutsch, SU und Englisch ist fertig** (28.10. mittags, Test `schuljahr2`). Werkstatt, Sachthemen und Englisch-Lektionen
    sind nach Lernbereichen gruppiert.
-3. **Kunst, Musik, Werken, Sport, Ethik sind gegen die Lehrpläne geprüft** (28.10. nachmittags, Test `faechervoll`). Offen: „gerade in der Schule“
-   für diese Fächer, Melodien wiedererkennen und Lieder zum Mitsingen im Atelier, Bilder bearbeiten, Programmieren (Werken Kl. 4).
+3. **Kunst, Musik, Werken, Sport, Ethik sind gegen die Lehrpläne geprüft** (28.10. nachmittags, Test `faechervoll`), „gerade in der Schule“ und die
+   Eltern-Wahl Ethik/Religion gibt es seit 28.10. abends. **Nächstes Paket: Religion (ev./kath.) nach den PDFs** – Profil, Inhaltspunkte, eigene Themen,
+   Reiter „Religion“. Offen: Melodien wiedererkennen und Lieder zum Mitsingen im Atelier, Bilder bearbeiten, Programmieren (Werken Kl. 4).
 4. Vorschläge an den Auftraggeber: „Mein Heft“ (eigene Texte), Handschrift-Übung, Englisch-Lernkartei, Lieder/Reime.
 
 Zurückgestellt (nur wenn der Auftraggeber es will): D2 „Mein Heft“, E2 Englisch Teil 2, M3 Mathe Kl. 4, Länderprofil 2,

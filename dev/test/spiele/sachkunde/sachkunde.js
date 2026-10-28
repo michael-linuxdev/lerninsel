@@ -69,7 +69,8 @@
     $("ru-schalter").hidden = !S.hilfeRu(); $("ru-schalter").textContent = HL().kurz; $("ru-schalter").classList.toggle("aus", !d.ru); $("ru-schalter").setAttribute("aria-pressed", d.ru);
     const fertig = TH.filter(t => bestes(t.id) > 0).length;
     reiter();
-    $("intro-text").textContent = fertig === 0 ? (FACH ? `Hallo ${name()}! ${FS[FACH].intro}` : `Hallo ${name()}! Ich bin Eule Ella. Mit mir entdeckst du spannende Dinge über die Welt.`)
+    const religion = FACH === "ethik" && ["ev", "ka"].includes((((S.lade("eltern") || {}).ethik) || {}).unterricht);   // Eltern-Wahl: Kind hat Religion statt Ethik
+    $("intro-text").textContent = fertig === 0 ? (FACH ? `Hallo ${name()}! ${religion ? "Du hast in der Schule Religion. Hier findest du Themen, die zu Religion und Ethik passen: Feste, Kirchenjahr, Religionen und unser Miteinander." : FS[FACH].intro}` : `Hallo ${name()}! Ich bin Eule Ella. Mit mir entdeckst du spannende Dinge über die Welt.`)
       : `Du hast schon ${fertig} ${fertig === 1 ? "Thema" : "Themen"} entdeckt. Bald kommen neue dazu!`;
     $("themen").innerHTML = "";
     const klasse = ((S.stufe && S.stufe()) || {}).klasse || 2;
@@ -86,7 +87,7 @@
     };
     // Schuljahr SU (28.10.2026): Themen nach den Lernbereichen des Lehrplans gruppiert; Themen früherer Klassen eingeklappt
     const stufeVon = (t) => Math.max(2, t.stufe || t.kl || 2);
-    const schule = (((S.lade("eltern") || {}).sachkunde || {}).schule) || "";   // Eltern-Einstellung „gerade in der Schule“ (Lernbereich)
+    const schule = (((S.lade("eltern") || {})[FACH || "sachkunde"] || {}).schule) || "";   // Eltern-Einstellung „gerade in der Schule“ (Lernbereich)
     SU_LB.forEach(([lb, titel]) => {
       const alle = TH.map((t, i) => [t, i]).filter(([t]) => (t.lb || LB0) === lb
         && !(t.stufe && klasse < t.stufe - 1)                   // NA-39: Übergangs-Themen (stufe 5) erst ab Klasse 4 zeigen
@@ -105,7 +106,7 @@
         frueher.forEach(([t, i]) => d.querySelector(".lektionen").appendChild(kachel(t, i)));
         g.appendChild(d);
       }
-      if (lb === schule) $("themen").prepend(g); else $("themen").appendChild(g);   // „gerade in der Schule“ steht oben
+      if (lb === schule || (religion && !schule && lb === "et3")) $("themen").prepend(g); else $("themen").appendChild(g);   // „gerade in der Schule“ (bei Religion: Feste und Religionen) steht oben
     });
   }
 
