@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Schreiben und Präsentieren</title>
+<meta name="theme-color" content="#EEF6FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #EEF6FF; background-image: none; overflow-wrap: break-word; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.6rem; flex: 1; min-width: 0; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .reiter { display: flex; gap: 8px; padding: 12px 16px 4px; max-width: 1100px; margin: 0 auto; flex-wrap: wrap; }
+  .reiter button { font: inherit; font-weight: 600; font-size: 1rem; border: 0; border-radius: 999px; padding: 10px 14px; min-height: 50px; background: #fff; color: var(--pflaume); box-shadow: 0 4px 0 rgba(40,80,160,.1); }
+  .reiter button.an { background: var(--pflaume); color: #fff; }
+  .blatt { max-width: 1100px; margin: 10px auto 40px; padding: 0 16px; }
+  .teil[hidden] { display: none !important; }
+  .karte { background: #fff; border-radius: 22px; padding: 14px 16px; box-shadow: 0 6px 0 rgba(40,80,160,.1); margin-bottom: 14px; }
+  .leiste { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .leiste button, .leiste select { min-height: 48px; min-width: 48px; border-radius: 12px; border: 2px solid #CFE0F5; background: #fff; font: inherit; font-size: 1.05rem; padding: 0 10px; }
+  .editor { min-height: 220px; border: 3px solid #CFE0F5; border-radius: 16px; padding: 12px 14px; font-size: 1.2rem; line-height: 1.5; background: #FFFDF8; outline: none; }
+  .editor:focus { border-color: var(--pflaume-hell); }
+  .editor h2 { font-size: 1.7rem; margin: 4px 0; }
+  .checks { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 4px; }
+  .checks li::before { content: "⬜ "; } .checks li.ok::before { content: "✅ "; }
+  textarea.feld, input.feld { width: 100%; box-sizing: border-box; font-size: 1.15rem; border-radius: 12px; border: 2px solid #CFE0F5; padding: 8px 10px; font-family: inherit; }
+  textarea.feld { min-height: 140px; line-height: 1.5; }
+  .pruef { font-size: 1.3rem; line-height: 1.9; padding: 10px; background: #FFFDF8; border-radius: 14px; border: 2px solid #E8E2D4; }
+  .pruef .falsch { text-decoration: underline wavy #E5484D; text-underline-offset: 5px; cursor: pointer; background: #FFECEC; border-radius: 4px; }
+  .pruef .name { text-decoration: underline dotted #2F86C8; text-underline-offset: 5px; cursor: pointer; }
+  .vorschlaege { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .folien-liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+  .folie-k { border: 3px solid #CFE0F5; border-radius: 16px; padding: 10px; background: #fff; }
+  .folie-k.an { border-color: var(--pflaume); }
+  .vortrag { position: fixed; inset: 0; z-index: 50; background: #1E2A44; color: #fff; display: flex; flex-direction: column; padding: max(16px, env(safe-area-inset-top)) 16px 16px; }
+  .vortrag[hidden] { display: none; }
+  .vortrag .folie { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: #fff; color: #1E2A44; border-radius: 22px; padding: 20px; margin: 10px 0; overflow: auto; }
+  .vortrag .folie h2 { font-size: clamp(1.6rem, 5vw, 3rem); margin: 0 0 10px; }
+  .vortrag .folie .bild { font-size: clamp(3rem, 12vw, 7rem); }
+  .vortrag .folie ul { font-size: clamp(1.1rem, 3vw, 1.8rem); text-align: left; }
+  .vortrag .unten { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; }
+  .podcast-teil { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid #E6EEF8; }
+  .podcast-teil:first-child { border-top: 0; }
+  .wiki-text a { color: #2F6FB8; font-weight: 700; }
+  .klein { font-size: .95rem; opacity: .85; }
+  .meldung { font-weight: 600; min-height: 1.4em; }
+</style>
+</head>
+<body>
+<div class="oben"><a class="knopf rund" href="../deutsch/" aria-label="Zurück zu Deutsch">⬅️</a><h1>💻 Schreiben und Präsentieren</h1></div>
+<div class="reiter">
+  <button data-teil="gestalten" class="an">✍️ Text gestalten</button>
+  <button data-teil="pruefen">🔍 Rechtschreibprüfung</button>
+  <button data-teil="folien">🖼️ Präsentation</button>
+  <button data-teil="podcast">🎧 Podcast</button>
+  <button data-teil="wiki">📖 Wiki</button>
+</div>
+<div class="blatt">
+  <section class="teil" id="t-gestalten">
+    <div class="karte"><p id="g-auftrag"></p>
+      <div class="leiste" id="g-leiste">
+        <button data-cmd="h2" aria-label="Überschrift">H Überschrift</button><button data-cmd="p" aria-label="Normaler Text">¶ Text</button>
+        <button data-cmd="bold" aria-label="Fett"><b>F</b></button><button data-cmd="italic" aria-label="Kursiv"><i>K</i></button><button data-cmd="underline" aria-label="Unterstrichen"><u>U</u></button>
+        <button data-cmd="mark" aria-label="Hervorheben">🖍️ Markieren</button>
+        <select id="g-groesse" aria-label="Schriftgröße"><option value="">Größe</option><option value="2">klein</option><option value="3">normal</option><option value="5">groß</option><option value="6">sehr groß</option></select>
+        <select id="g-schrift" aria-label="Schriftart"><option value="">Schriftart</option><option value="Fredoka, sans-serif">Rund</option><option value="Georgia, serif">Buch</option><option value="'Courier New', monospace">Schreibmaschine</option></select>
+        <button data-cmd="links" aria-label="Linksbündig">⬅️ links</button><button data-cmd="mitte" aria-label="Zentriert">↔️ Mitte</button>
+      </div>
+      <div class="editor" id="g-editor" contenteditable="true" spellcheck="false" lang="de"></div>
+      <ul class="checks" id="g-checks"></ul>
+      <div class="leiste" style="margin-top:10px"><button id="g-speichern">💾 In mein Heft</button><button id="g-neu">🧽 Neu anfangen</button></div>
+      <p class="meldung" id="g-meldung"></p>
+    </div>
+  </section>
+  <section class="teil" id="t-pruefen" hidden>
+    <div class="karte"><p>Schreib einen Text – oder nimm den Beispieltext. Dann lass ihn prüfen. Rot unterstrichene Wörter kennt das Programm nicht: Tippe darauf und such dir das richtige Wort aus. Aber Vorsicht: Die Prüfung kennt nicht jedes Wort (zum Beispiel Namen) und findet nicht jeden Fehler!</p>
+      <textarea class="feld" id="p-text" lang="de" spellcheck="false"></textarea>
+      <div class="leiste" style="margin-top:8px"><button id="p-pruefen">🔍 Prüfen</button><button id="p-beispiel">📄 Beispieltext</button></div>
+      <div class="pruef" id="p-ergebnis" hidden></div>
+      <div id="p-hilfe"></div>
+      <p class="meldung" id="p-meldung"></p>
+    </div>
+  </section>
+  <section class="teil" id="t-folien" hidden>
+    <div class="karte"><p>Bau eine kleine Präsentation mit bis zu fünf Folien. Auf jede Folie: eine Überschrift, ein Bild und höchstens drei Stichpunkte – keine langen Sätze! Dann trägst du vor.</p>
+      <div class="leiste"><select id="f-thema" aria-label="Thema"></select><button id="f-neu">➕ Folie dazu</button><button id="f-vortrag">▶️ Vortragen</button></div>
+      <div class="folien-liste" id="f-liste"></div>
+      <p class="meldung" id="f-meldung"></p>
+    </div>
+  </section>
+  <section class="teil" id="t-podcast" hidden>
+    <div class="karte"><p>Ein Podcast ist eine Sendung zum Anhören. Nimm sie in vier Teilen auf: Begrüßung, Thema, Interessantes, Verabschiedung. Danach spielst du alles hintereinander ab.</p>
+      <label>Wie heißt deine Sendung?<input class="feld" id="pc-titel" maxlength="40" placeholder="z. B. Mias Tierfunk"></label>
+      <div id="pc-teile" style="margin-top:8px"></div>
+      <div class="leiste" style="margin-top:8px"><button id="pc-alles">▶️ Ganze Sendung anhören</button></div>
+      <p class="meldung" id="pc-meldung"></p>
+    </div>
+  </section>
+  <section class="teil" id="t-wiki" hidden>
+    <div class="karte"><p>In einem Wiki schreiben viele zusammen Seiten, die miteinander verlinkt sind (wie in einem Lexikon). Schreib einen Seitennamen in doppelte eckige Klammern, zum Beispiel [[Igel]] – dann wird daraus ein Link zu dieser Seite.</p>
+      <div class="leiste" id="w-seiten"></div>
+      <div id="w-ansicht"></div>
+      <p class="meldung" id="w-meldung"></p>
+    </div>
+  </section>
+</div>
+<div class="vortrag" id="vortrag" hidden>
+  <div class="unten"><span id="v-nr"></span><span id="v-uhr">0:00</span></div>
+  <div class="folie" id="v-folie"></div>
+  <p class="klein" id="v-tipp" style="text-align:center"></p>
+  <div class="unten"><button class="knopf" id="v-zurueck">⬅️</button><button class="knopf haupt" id="v-weiter">➡️ Weiter</button><button class="knopf" id="v-ende">⏹️ Beenden</button></div>
+</div>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/echtewelt.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../inhalte/woerter/bestand.js"></script>
+<script src="../../inhalte/woerter/d0.js"></script>
+<script src="../../shared/woerter.js"></script>
+<script src="../deutsch/werkstatt.js"></script>
+<script src="../deutsch/geschichte.js"></script>
+<script src="../../inhalte/deutsch/lesetexte.js"></script>
+<script src="../../inhalte/deutsch/vorlesen.js"></script>
+<script src="../../shared/eigenes.js"></script>
+<script src="praesentieren.js"></script>
+</body>
+</html>

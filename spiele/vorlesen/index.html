@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Vorlesen</title>
+<meta name="theme-color" content="#FFF4E6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #FFF4E6; background-image: none; overflow-wrap: break-word; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; min-width: 0; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .ansicht[hidden] { display: none !important; }
+  .reiter { display: flex; gap: 8px; padding: 12px 16px 4px; max-width: 1000px; margin: 0 auto; flex-wrap: wrap; }
+  .reiter button { font: inherit; font-weight: 600; font-size: 1.05rem; border: 0; border-radius: 999px; padding: 10px 16px; min-height: 52px; background: #fff; color: var(--pflaume); box-shadow: 0 4px 0 rgba(160,100,40,.12); }
+  .reiter button.an { background: var(--pflaume); color: #fff; }
+  .blatt { max-width: 1000px; margin: 10px auto 40px; padding: 0 16px; }
+  .karte { background: #fff; border-radius: 22px; padding: 16px 18px; box-shadow: 0 6px 0 rgba(160,100,40,.12); margin-bottom: 14px; }
+  .kacheln { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .kacheln button { min-height: 96px; border: 0; border-radius: 20px; background: #fff; font: inherit; font-weight: 600; font-size: 1.05rem; color: var(--pflaume); box-shadow: 0 5px 0 rgba(160,100,40,.12); display: flex; align-items: center; gap: 10px; padding: 10px 14px; text-align: left; }
+  .kacheln .e { font-size: 2.4rem; }
+  .kacheln small { display: block; font-weight: 500; opacity: .75; }
+  .lesetext { font-size: 1.5rem; line-height: 1.75; margin: 6px 0 10px; color: #22305A; }
+  .knoepfe { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .zeit { font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .ergebnis b { font-size: 1.4rem; }
+  .selbst { display: grid; gap: 10px; margin-top: 10px; }
+  .selbst .z { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; background: #F6F1FF; border-radius: 14px; padding: 8px 12px; }
+  .selbst button { font-size: 1.6rem; min-width: 56px; min-height: 52px; border-radius: 14px; border: 2px solid #ddd; background: #fff; }
+  .selbst button.an { border-color: var(--pflaume); background: #EDE3FF; }
+  .zeile { padding: 8px 12px; border-radius: 14px; margin: 6px 0; font-size: 1.3rem; line-height: 1.5; background: #FAFAFA; display: flex; gap: 10px; align-items: flex-start; }
+  .zeile .wer { font-size: .9rem; font-weight: 700; min-width: 92px; color: var(--pflaume-hell); }
+  .zeile.ich { background: #FFF3C4; }
+  .zeile.dran { outline: 4px solid #2FA37C; }
+  .zeile.vorbei { opacity: .55; }
+  .pass-liste li { margin: 6px 0; font-size: 1.1rem; }
+  input.feld { min-height: 52px; font-size: 1.15rem; padding: 6px 12px; border-radius: 12px; border: 2px solid #D9C9F2; width: 100%; box-sizing: border-box; }
+  .klein { font-size: .95rem; opacity: .85; }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../deutsch/" aria-label="Zurück zu Deutsch">⬅️</a>
+  <h1>🎙️ Vorlesen und Lesetheater</h1>
+</div>
+<div class="reiter" role="tablist">
+  <button data-teil="laut" class="an">🎙️ Laut lesen</button>
+  <button data-teil="theater">🎭 Lesetheater</button>
+  <button data-teil="pass">📚 Mein Lesepass</button>
+</div>
+<div class="blatt">
+  <section class="ansicht" id="laut-liste">
+    <div class="karte"><p>Such dir einen Text aus. Lies ihn laut vor – ich messe die Zeit, und wenn deine Eltern es erlaubt haben, nimmst du dich auf. Lies denselben Text ruhig mehrmals: Du wirst jedes Mal flüssiger!</p></div>
+    <div class="kacheln" id="texte"></div>
+  </section>
+  <section class="ansicht" id="laut-text" hidden>
+    <div class="karte">
+      <h2 id="lt-titel" style="margin:0"></h2>
+      <p class="lesetext" id="lt-text"></p>
+      <div class="knoepfe" id="lt-start-knoepfe">
+        <button class="knopf" id="lt-vorbild">👂 Erst anhören</button>
+        <button class="knopf haupt" id="lt-los">▶️ Ich lese jetzt vor</button>
+        <span class="zeit" id="lt-zeit" hidden>0:00</span>
+        <button class="knopf haupt" id="lt-stopp" hidden>⏹️ Fertig</button>
+      </div>
+      <p class="klein" id="lt-aufnahme-info"></p>
+    </div>
+    <div class="karte" id="lt-ergebnis" hidden>
+      <div class="ergebnis" id="lt-werte"></div>
+      <div class="knoepfe" style="margin-top:8px"><button class="knopf" id="lt-anhoeren" hidden>🔊 Mich anhören</button></div>
+      <h3 style="margin:14px 0 4px">Wie war dein Vorlesen?</h3>
+      <div class="selbst" id="lt-selbst"></div>
+      <div class="knoepfe" style="margin-top:12px"><button class="knopf haupt" id="lt-speichern">✅ Fertig</button><button class="knopf" id="lt-nochmal">🔁 Noch einmal lesen</button></div>
+    </div>
+    <button class="knopf" id="lt-zurueck">⬅️ Andere Texte</button>
+  </section>
+  <section class="ansicht" id="theater-liste" hidden>
+    <div class="karte"><p>Beim Lesetheater liest jeder eine Rolle. Such dir eine Rolle aus – die anderen Rollen liest das Tablet. Danach tauscht ihr! Am schönsten ist es mit deiner Familie.</p></div>
+    <div class="kacheln" id="stuecke"></div>
+  </section>
+  <section class="ansicht" id="theater-stueck" hidden>
+    <div class="karte"><h2 id="th-titel" style="margin:0 0 6px"></h2><div class="knoepfe" id="th-rollen"></div><p class="klein" id="th-info"></p></div>
+    <div class="karte" id="th-zeilen"></div>
+    <div class="knoepfe"><button class="knopf haupt" id="th-gelesen" hidden>✅ Ich habe gelesen</button><button class="knopf" id="th-weiter" hidden>➡️ Weiter</button><button class="knopf" id="th-zurueck">⬅️ Andere Stücke</button></div>
+  </section>
+  <section class="ansicht" id="pass" hidden>
+    <div class="karte">
+      <h2 style="margin:0 0 6px">📚 Mein Lesepass</h2>
+      <p>Hier sammelst du alles, was du liest – Bücher, Comics, Zeitschriften, auch Bücher aus der Bibliothek.</p>
+      <label>Was hast du gelesen?<input class="feld" id="pass-titel" maxlength="60" placeholder="z. B. Die kleine Hexe"></label>
+      <p style="margin:10px 0 4px">Wie hat es dir gefallen?</p>
+      <div class="knoepfe" id="pass-gefallen"><button class="knopf" data-g="3">😍 super</button><button class="knopf" data-g="2">🙂 gut</button><button class="knopf" data-g="1">😐 geht so</button></div>
+      <div class="knoepfe" style="margin-top:10px"><button class="knopf haupt" id="pass-dazu">➕ In den Lesepass</button></div>
+      <p class="klein" id="pass-meldung"></p>
+    </div>
+    <div class="karte"><h3 style="margin:0" id="pass-zahl"></h3><ul class="pass-liste" id="pass-liste"></ul></div>
+  </section>
+</div>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/echtewelt.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../inhalte/deutsch/lesetexte.js"></script>
+<script src="../../inhalte/deutsch/vorlesen.js"></script>
+<script src="../../shared/koennen.js"></script>
+<script src="../../shared/eigenes.js"></script>
+<script src="vorlesen.js"></script>
+</body>
+</html>

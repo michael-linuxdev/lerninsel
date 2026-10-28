@@ -5,7 +5,8 @@
   const S = window.Spielwelt, SP = window.Sprache, E = window.Eigenes;
   const $ = (id) => document.getElementById(id);
   const esc = (t) => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const kapitel = (id) => (window.WERKSTATT || []).find(k => k.id === id) || { name: "Wörter-Werkstatt", ort: "✏️" };
+  const SONDER = { vorlesen: { name: "Vorlesen", ort: "🎙️" }, gestalten: { name: "Text gestaltet", ort: "✍️" }, podcast: { name: "Podcast", ort: "🎧" } };
+  const kapitel = (id) => SONDER[id] || (window.WERKSTATT || []).find(k => k.id === id) || { name: "Wörter-Werkstatt", ort: "✏️" };
   const datum = (t) => new Date(t).toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" });
   let art = "text", liste = { text: [], ton: [] }, urls = [];
 

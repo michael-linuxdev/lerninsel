@@ -276,7 +276,7 @@
         ],
         6: [
           ["sn.su4.me.01", "Informationen aus verschiedenen Quellen auswählen, Urheberrecht beachten", "4", ["sachkunde:medien-info", "sachkunde:medien-welt"], "ja"],
-          ["sn.su4.me.02", "Eine Präsentation zu einem Thema gestalten und vortragen, Kriterien zur Bewertung", "4", ["werkstatt:w-vortrag", "werkstatt:w-rueckmeldung"], "teil"]
+          ["sn.su4.me.02", "Eine Präsentation zu einem Thema gestalten und vortragen, Kriterien zur Bewertung", "4", ["praesentieren:folien", "werkstatt:w-vortrag", "werkstatt:w-rueckmeldung"], "ja"]
         ]
       }
     },
@@ -317,7 +317,7 @@
           ["sn.de12.sc.16", "Texte planen: Schreibanlass klären, Stichwörter und Wörter sammeln", "2", ["werkstatt:w-beschreiben", "werkstatt:w-wortbau"], "ja"],
           ["sn.de12.sc.17", "Erlebtes und Erdachtes aufschreiben, kleine Gedichtformen", "2", ["werkstatt:w-erzaehlen", "werkstatt:w-elfchen", "werkstatt:w-maerchen"], "ja"],
           ["sn.de12.sc.18", "Beschreiben: Gegenstand, Person, Tier", "2", ["werkstatt:w-beschreiben"], "ja"],
-          ["sn.de12.sc.19", "Texte gestalten: Überschrift, Platz einteilen, hervorheben, am Gerät schreiben", "2", ["werkstatt:w-beschreiben", "werkstatt:w-einladung"], "teil"],
+          ["sn.de12.sc.19", "Texte gestalten: Überschrift, Platz einteilen, hervorheben, am Gerät schreiben", "2", ["praesentieren:gestalten", "werkstatt:w-beschreiben", "werkstatt:w-einladung"], "ja"],
           ["sn.de12.sc.20", "Texte überarbeiten nach Kriterien (Aufbau, Wörter, Rechtschreibung), Rückmeldungen und Checklisten nutzen", "2", ["werkstatt:w-ueberarbeiten"], "ja"],
           ["sn.de12.sc.21", "Fachbegriffe: Buchstabe, Laut, Silbe, Wortstamm, Selbst-, Mit-, Um- und Zwielaut, Strategie, Verlängern, Ableiten, Zerlegen", "2", ["werkstatt:w-laute", "werkstatt:w-detektiv"], "ja"]
         ],
@@ -328,7 +328,7 @@
           ["sn.de12.le.04", "Wörter über Silben und Wortbausteine lesen", "1/2", ["lesen:silben", "werkstatt:w-silben", "werkstatt:w-wortbau"], "ja"],
           ["sn.de12.le.05", "Häufige Wörter blitzschnell lesen (Blitzlesen)", "1/2", ["werkstatt:w-merkwoerter"], "ja"],
           ["sn.de12.le.06", "Sätze und kurze Texte lesen: Wort- und Satzgrenzen, Satzmelodie", "1/2", ["lesen:texte", "werkstatt:w-satzarten", "deutsch:wald"], "ja"],
-          ["sn.de12.le.07", "Flüssig lesen: still, leise und laut, genau, im passenden Tempo; Lautleseverfahren", "2", ["werkstatt:w-lautlesen", "lesen:texte"], "teil"],
+          ["sn.de12.le.07", "Flüssig lesen: still, leise und laut, genau, im passenden Tempo; Lautleseverfahren", "2", ["vorlesen:laut", "werkstatt:w-lautlesen", "lesen:texte"], "ja"],
           ["sn.de12.le.08", "Vor dem Lesen: Vermutungen, Bilder betrachten, Vorwissen nutzen", "2", ["werkstatt:w-lesedetektiv"], "ja"],
           ["sn.de12.le.09", "Beim Lesen: Informationen finden, Wichtiges erkennen, unbekannte Wörter klären", "2", ["werkstatt:w-lesedetektiv", "lesen:texte"], "ja"],
           ["sn.de12.le.10", "Nach dem Lesen: Überschrift finden, mit eigenen Worten wiedergeben, Schlussfolgerungen ziehen", "2", ["werkstatt:w-lesedetektiv", "lesen:texte"], "ja"]
@@ -394,14 +394,14 @@
           ["sn.de3.sc.14", "Gedanken, Gefühle und Beobachtungen ausdrücken", "3", ["werkstatt:w-tagebuch"], "ja"],
           ["sn.de3.sc.15", "Beschreiben, erklären, anleiten: Orts- und Bildbeschreibung, Anleitung, Rezept, Lexikoneintrag", "3", ["werkstatt:w-anleitung"], "ja"],
           ["sn.de3.sc.16", "Bitten, wünschen, danken: Einladung, Glückwunsch, Brief", "3", ["werkstatt:w-brief", "werkstatt:w-einladung", "werkstatt:w-glueckwunsch"], "ja"],
-          ["sn.de3.sc.17", "Digitale Texte gestalten: Schriftart, Größe, hervorheben, Absatz", "3", ["werkstatt:w-digital-schreiben"], "teil"],
+          ["sn.de3.sc.17", "Digitale Texte gestalten: Schriftart, Größe, hervorheben, Absatz", "3", ["praesentieren:gestalten", "werkstatt:w-digital-schreiben"], "ja"],
           ["sn.de3.sc.18", "Kreativ und produktiv schreiben: nach Bildern, Musik, Fantasie; weiterschreiben, umschreiben, gemeinsam", "3", ["werkstatt:w-weiterschreiben", "werkstatt:w-bildergeschichte"], "ja"],
           ["sn.de3.sc.19", "Überarbeiten: stilistisch, grammatisch, orthografisch; Textlupe und Schreibkonferenz", "3", ["werkstatt:w-textlupe", "werkstatt:w-ueberarbeiten"], "ja"],
-          ["sn.de3.sc.20", "Digitale Schreibwerkzeuge zum Überarbeiten (Rechtschreibprüfung)", "3", ["werkstatt:w-textlupe", "werkstatt:w-digital-schreiben"], "teil"],
+          ["sn.de3.sc.20", "Digitale Schreibwerkzeuge zum Überarbeiten (Rechtschreibprüfung)", "3", ["praesentieren:pruefen", "werkstatt:w-textlupe", "werkstatt:w-digital-schreiben"], "ja"],
           ["sn.de3.sc.21", "Fachbegriffe: nachgestellter Wortbaustein, Komma, Doppelpunkt, Anführungszeichen, Trennstrich", "3", ["werkstatt:w-trennen", "werkstatt:w-vornach", "werkstatt:w-rede"], "ja"]
         ],
         3: [
-          ["sn.de3.le.01", "Flüssig, zügig und sinngestaltend lesen; Lautleseverfahren, Lesetheater", "3", ["werkstatt:w-lautlesen", "werkstatt:w-theater"], "teil"],
+          ["sn.de3.le.01", "Flüssig, zügig und sinngestaltend lesen; Lautleseverfahren, Lesetheater", "3", ["vorlesen:laut", "vorlesen:theater", "werkstatt:w-lautlesen", "werkstatt:w-theater"], "ja"],
           ["sn.de3.le.02", "Vor dem Lesen: Leseziel, Vorwissen, Textsorte erkennen, Vermutungen", "3", ["werkstatt:w-lesen-fledermaus", "werkstatt:w-lesen-igel"], "ja"],
           ["sn.de3.le.03", "Beim Lesen: Schlüsselwörter markieren, Grafiken zuordnen, Unverstandenes nochmals lesen", "3", ["werkstatt:w-lesen-fledermaus"], "ja"],
           ["sn.de3.le.04", "Nach dem Lesen: Abschnitte gliedern, Wörter nachschlagen, Informationen finden, Schlussfolgerungen begründen", "3", ["werkstatt:w-lesen-fledermaus", "werkstatt:w-lesen-igel"], "ja"]
@@ -462,7 +462,7 @@
           ["sn.de4.sc.10", "Fachbegriffe: Vokal, Konsonant, Bindestrich", "4", ["werkstatt:w-rechtschreib4"], "ja"]
         ],
         3: [
-          ["sn.de4.le.01", "Selbstbestimmt lesen; Laut- und Vielleseverfahren", "4", ["werkstatt:w-lautlesen", "lesen:texte"], "teil"],
+          ["sn.de4.le.01", "Selbstbestimmt lesen; Laut- und Vielleseverfahren", "4", ["vorlesen:laut", "vorlesen:pass", "werkstatt:w-lautlesen"], "ja"],
           ["sn.de4.le.02", "Vor dem Lesen: Erwartungen formulieren, Textsorte klären", "4", ["werkstatt:w-lesen4", "werkstatt:w-lesestrategien"], "ja"],
           ["sn.de4.le.03", "Beim Lesen: Wichtiges markieren, Bild und Ton in digitalen Texten, Hyperlinks", "4", ["werkstatt:w-lesen4"], "ja"],
           ["sn.de4.le.04", "Textverstehen prüfen, Sinnabschnitte erfassen", "4", ["werkstatt:w-lesen4", "werkstatt:w-lesen-vergleich"], "ja"],
@@ -476,7 +476,7 @@
           ["sn.de4.tm.04", "Informationen auf Glaubwürdigkeit prüfen, Fake News", "4", ["werkstatt:w-medien4", "medien:freundlich"], "ja"],
           ["sn.de4.tm.05", "Deutungen mit Textstellen belegen, Fassungen vergleichen, Bezüge zwischen Texten", "4", ["werkstatt:w-sage-comic"], "ja"],
           ["sn.de4.tm.06", "Weitere Kinderbücher kennen, themenbezogen auswählen", "4", ["werkstatt:w-buchtipp", "werkstatt:w-buch-finden"], "ja"],
-          ["sn.de4.tm.07", "Digitale Werkzeuge für Präsentationen, Podcasts und Wikis nutzen", "4", ["werkstatt:w-hoerspiel", "werkstatt:w-vortrag"], "teil"],
+          ["sn.de4.tm.07", "Digitale Werkzeuge für Präsentationen, Podcasts und Wikis nutzen", "4", ["praesentieren:folien", "praesentieren:podcast", "praesentieren:wiki", "werkstatt:w-vortrag"], "ja"],
           ["sn.de4.tm.08", "Datenschutz, Schutz der eigenen Identität, Persönlichkeits- und Urheberrechte", "4", ["werkstatt:w-medien4", "medien:daten"], "ja"],
           ["sn.de4.tm.09", "Selbstgewählte Texte vortragen, szenisch darstellen, kurze Texte auswendig", "4", ["werkstatt:w-gedicht-vortragen", "werkstatt:w-theater", "werkstatt:w-auswendig"], "ja"],
           ["sn.de4.tm.10", "Fachbegriffe: Absatz, Dialog", "4", ["werkstatt:w-theater", "werkstatt:w-lesen4"], "ja"]
@@ -936,7 +936,7 @@
         4: [ // Musik wahrnehmen, verstehen und deuten
           ["sn.mu4.4.01", "Gattungen: Lied, Suite, Kindermusical, Oper", "4", ["sachkunde:mu-gattungen"], "ja"],
           ["sn.mu4.4.02", "Instrumente von Orchester, Band und Folklore, Orgel; Chöre, Sopran, Alt, Tenor, Bass", "4", ["sachkunde:mu-orchester"], "ja"],
-          ["sn.mu4.4.03", "Über Musik sprechen, Informationen sammeln und präsentieren", "4", ["sachkunde:mu-komponisten"], "teil"],
+          ["sn.mu4.4.03", "Über Musik sprechen, Informationen sammeln und präsentieren", "4", ["praesentieren:folien", "sachkunde:mu-komponisten"], "ja"],
           ["sn.mu4.4.04", "Musizierstätten in Sachsen kennen und besuchen", "4", ["sachkunde:mu-sachsen", "echtewelt:musizierstaette"], "ja"],
           ["sn.mu4.4.05", "Tonträger, Musik- und Videoplattformen, rechtliche Regeln", "4", ["sachkunde:mu-medien"], "ja"],
           ["sn.mu4.4.06", "Komponisten und Musik verschiedener Zeiten und Kulturen", "4", ["sachkunde:mu-komponisten", "sachkunde:mu-taenze"], "ja"]

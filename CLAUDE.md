@@ -24,7 +24,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
      cd dep && for r in primus/eventemitter3 mapbox/earcut kaimallea/isMobile xmldom/xmldom pixijs/colord avoidwork/tiny-lru jkroso/parse-svg-path; do git clone -q --depth 1 https://github.com/$r; done
      ```
      Bauen dann mit `ENGINES=~/eng node quellen/probe/bauen.js` (Ausgabe `spiele/probe/pixel.js`). Geht `npm i pixi.js`, reicht das statt der Klone.
-3. Einmal `sh tests/laufen.sh` ausführen (Node-Tests, dann Rauchtest über 62 Seitenaufrufe). Muss grün sein, bevor du etwas änderst. Dauert ca. 2–3 Minuten.
+3. Einmal `sh tests/laufen.sh` ausführen (Node-Tests, dann Rauchtest über 66 Seitenaufrufe). Muss grün sein, bevor du etwas änderst. Dauert ca. 2–3 Minuten.
 
 ## 2. Zuerst lesen (je nach Aufgabe)
 1. `docs/PLAN.md`, Abschnitt **„Neuausrichtung 26.10.2026“** am Ende – verbindlich (Entscheidungen, Arbeitspakete NA-xx, offene Fragen),
