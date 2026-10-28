@@ -7,10 +7,10 @@
 
   const KATEGORIEN = [
     { id: "figur", name: "Ich", icon: "🙂", teile: P.gesichter, farben: HAUT, platz: "figur" },
-    { id: "haare", name: "Haare", icon: "💇‍♀️", teile: P.haare, farben: HAARFARBEN, platz: "haare" },
+    { id: "haare", name: "Haare", icon: "💇", teile: P.haare, farben: HAARFARBEN, platz: "haare" },
     { id: "oben", name: "Oben", icon: "👚", teile: P.oberteile, farben: STOFF, platz: "oberteil", leer: true },
     { id: "unten", name: "Unten", icon: "🩳", teile: P.unterteile, farben: STOFF, platz: "unterteil", leer: true },
-    { id: "kleider", name: "Kleider", icon: "👗", teile: P.kleider, farben: STOFF, platz: "kleid", leer: true },
+    { id: "kleider", name: "Kleider & Anzüge", icon: ((window.Spielwelt && Spielwelt.kind && Spielwelt.kind().geschlecht) === "m" ? "🦸" : "👗"), teile: P.kleider, farben: STOFF, platz: "kleid", leer: true },
     { id: "schuhe", name: "Schuhe", icon: "👟", teile: P.schuhe, farben: STOFF, platz: "schuhe", leer: true },
     { id: "extras", name: "Extras", icon: "👑", teile: P.extras, farben: STOFF.concat(["#FFE27A"]), platz: "extras", mehrere: true },
     { id: "orte", name: "Orte", icon: "🏞️", teile: P.orte, farben: null, platz: "ort" }
@@ -24,7 +24,7 @@
   const EXTRA_SICHT = {
     kette: "100 172 100 74", schal: "104 168 92 120", tasche: "176 312 76 96", teddy: "190 340 66 84", armband: "62 318 44 36",
     zauberstab: "20 250 86 120", ballon: "10 150 90 210", krone: "90 16 120 70", einhorn: "84 0 132 110", hut: "48 14 204 86",
-    muetze: "80 10 140 104", umhang: "44 170 212 330", fluegel: "0 90 300 290"
+    muetze: "80 10 140 104", fliege: "116 172 68 48", fussball: "194 360 60 60", kuscheldino: "194 352 66 72", schwert: "44 252 72 112", umhang: "44 170 212 330", fluegel: "0 90 300 290"
   };
   function vorschau(kat, teil, farbe) {
     const haut = (zustand.figur && zustand.figur.farbe) || HAUT[1];

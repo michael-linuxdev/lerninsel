@@ -449,5 +449,126 @@
         `<circle cx="70" cy="190" r="26" fill="#E6E1FF"/><circle cx="62" cy="182" r="6" fill="#C9C1F2"/><path d="M0 560 Q230 520 460 560 V620 H0 Z" fill="#7B55B8"/>` }
   ];
 
+
+  // ---------- Jungen gleichziehen (30.10.2026): Frisuren, Oberteile, Hosen, Anzüge, Schuhe und Extras ----------
+  // Neue Teile stehen weiter vorn in den Listen; IDs bleiben dauerhaft (gespeicherte Looks).
+  const zuerst = (liste, neue, nachId) => { const i = liste.findIndex(t => t.id === nachId); liste.splice(i < 0 ? 0 : i + 1, 0, ...neue); };
+  zuerst(haare, [
+    { id: "scheitel", name: "Seitenscheitel",
+      hinten: c => flaeche("M92 126 Q88 48 150 46 Q212 48 208 126 L204 146 Q150 138 96 146 Z", c),
+      vorne: c => flaeche("M94 118 Q94 50 150 48 Q206 50 206 118 Q204 94 188 84 Q150 70 120 90 Q102 102 94 118 Z", c) + linie("M120 54 Q128 70 120 90", detail(c), 3) + kappeGlanz(c) },
+    { id: "igel", name: "Igel-Frisur",
+      hinten: c => flaeche("M92 128 Q88 52 150 50 Q212 52 208 128 L204 148 Q150 140 96 148 Z", c),
+      vorne: c => flaeche("M94 112 L90 72 L108 82 L108 48 L126 66 L134 34 L150 58 L166 34 L174 66 L192 48 L192 82 L210 72 L206 112 Q150 94 94 112 Z", c) + glanz("M134 50 L140 64 M164 50 L160 64", c, 3) },
+    { id: "wuschel", name: "Wuschelkopf",
+      hinten: c => kreis(150, 106, 62, c),
+      vorne: c => [[104, 92, 20], [124, 72, 22], [150, 64, 22], [176, 72, 22], [196, 92, 20], [116, 98, 14], [140, 90, 14], [164, 92, 14], [186, 100, 13]].map(([x, y, r]) => kreis(x, y, r, c)).join("") + glanz("M138 60 q8 -6 16 -2", c, 4) },
+    { id: "kurzlocken", name: "Kurze Locken",
+      hinten: c => [[96, 100, 18], [108, 72, 20], [134, 56, 21], [166, 56, 21], [192, 72, 20], [204, 100, 18], [92, 128, 15], [208, 128, 15]].map(([x, y, r]) => kreis(x, y, r, c)).join(""),
+      vorne: c => [[112, 90, 13], [132, 80, 13], [150, 76, 13], [168, 80, 13], [188, 90, 13]].map(([x, y, r]) => kreis(x, y, r, c) + glanz(`M${x - 5} ${y - 4} q3 -4 7 -3`, c, 2.5)).join("") },
+    { id: "afro", name: "Afro",
+      hinten: c => kreis(150, 98, 84, c) + [[96, 66], [120, 40], [150, 30], [180, 40], [204, 66], [84, 104], [216, 104]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2.6" fill="${detail(c)}"/>`).join(""),
+      vorne: c => flaeche("M90 120 Q86 44 150 42 Q214 44 210 120 Q200 92 150 90 Q100 92 90 120 Z", c) + [[120, 62], [140, 54], [162, 54], [182, 62], [130, 74], [170, 74], [150, 66]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2.5" fill="${detail(c)}"/>`).join("") },
+    { id: "undercut", name: "Undercut",
+      hinten: c => flaeche("M96 128 Q92 60 150 58 Q208 60 204 128 L200 140 Q150 134 100 140 Z", detail(c, 0.12)),
+      vorne: c => flaeche("M98 106 Q94 36 152 34 Q206 38 202 106 Q192 78 154 72 Q114 76 98 106 Z", c) + linie("M132 40 Q150 52 176 46", detail(c), 3) + kappeGlanz(c) +
+        linie("M96 112 L96 132 M204 112 L204 132", detail(c, 0.12), 6) },
+    { id: "schulterlang", name: "Schulterlang",
+      hinten: c => flaeche("M88 124 Q84 46 150 46 Q216 46 212 124 L216 200 Q202 212 188 204 L150 210 L112 204 Q98 212 84 200 Z", c) + linie("M98 150 L96 196 M202 150 L204 196", detail(c), 3),
+      vorne: c => flaeche("M94 124 Q92 50 150 48 Q208 50 206 124 Q196 84 154 64 L146 64 Q104 84 94 124 Z", c) + kappeGlanz(c) }
+  ], "lang");
+  const vAusschnitt = linie("M134 188 L150 206 L166 188", D, 3);
+  const kragen = (c) => flaeche("M128 184 L150 200 L136 214 L120 194 Z", c) + flaeche("M172 184 L150 200 L164 214 L180 194 Z", c);
+  zuerst(oberteile, [
+    { id: "trikot", name: "Fußball-Trikot",
+      rumpf: c => flaeche(rumpfT, c) + flaeche("M102 190 L114 190 L116 306 L108 306 Q108 248 102 190 Z", "#fff") + flaeche("M198 190 L186 190 L184 306 L192 306 Q192 248 198 190 Z", "#fff") + vAusschnitt +
+        `<text x="150" y="268" font-size="44" font-weight="700" text-anchor="middle" fill="${hell(c) ? D : "#fff"}" stroke="${D}" stroke-width="1.5" font-family="Fredoka, Arial">10</text>`,
+      aermel: c => aermel(0, .32, 36, c) + aermel(.27, .32, 37, "#fff") },
+    { id: "hemd", name: "Karohemd",
+      rumpf: c => muster(rumpfT, c, [104, 128, 152, 176].map(x => `<rect x="${x}" y="176" width="10" height="140" fill="${detail(c, 0.3)}" opacity=".55"/>`).join("") + [204, 232, 260, 288].map(y => `<rect x="96" y="${y}" width="110" height="10" fill="${detail(c, 0.3)}" opacity=".55"/>`).join("")) +
+        kragen(ton(c, 0.25)) + [222, 248, 274].map(y => kreis(150, y, 4, "#fff")).join("") + linie("M150 206 L150 306", D, 2.5),
+      aermel: c => aermel(0, .9, 32, c) + aermel(.84, .9, 34, detail(c, 0.25)) },
+    { id: "polo", name: "Polo-Shirt",
+      rumpf: c => flaeche(rumpfT, c) + kragen(ton(c, 0.3)) + linie("M150 200 L150 230", D, 2.5) + kreis(150, 214, 3.5, "#fff") + kreis(150, 226, 3.5, "#fff") + falten(c),
+      aermel: c => aermel(0, .32, 36, c) + aermel(.27, .32, 37, ton(c, 0.3)) },
+    { id: "dinoshirt", name: "Dino-Shirt",
+      rumpf: c => flaeche(rumpfT, c) + ausschnitt + `<g transform="translate(150 250)"><path d="M-30 18 Q-34 -6 -10 -8 L8 -8 Q14 -30 30 -26 Q40 -20 32 -10 L22 -10 L20 10 L26 26 L16 26 L12 14 L-12 14 L-14 26 L-24 26 L-22 14 Q-40 20 -46 8 Z" fill="#5CCB6A" stroke="${D}" stroke-width="2.5" stroke-linejoin="round"/>` +
+        `<path d="M-22 -6 l4 -8 l4 8 M-10 -8 l4 -9 l4 9 M2 -8 l4 -9 l4 9" fill="#3E9E5A" stroke="${D}" stroke-width="2"/><circle cx="26" cy="-19" r="2.5" fill="${D}"/></g>`,
+      aermel: c => aermel(0, .32, 36, c) },
+    { id: "raketenshirt", name: "Raketen-Shirt",
+      rumpf: c => flaeche(rumpfT, c) + ausschnitt + `<g transform="translate(150 252) rotate(30)"><path d="M0 -40 Q16 -22 14 14 L-14 14 Q-16 -22 0 -40 Z" fill="#fff" stroke="${D}" stroke-width="2.5"/>` +
+        `<circle cx="0" cy="-12" r="6" fill="#4FA8F0" stroke="${D}" stroke-width="2"/><path d="M-14 4 L-24 20 L-12 14 Z M14 4 L24 20 L12 14 Z" fill="#E8463B" stroke="${D}" stroke-width="2"/><path d="M-8 16 Q0 34 8 16 Z" fill="#FFC83D"/></g>` +
+        funkeln([[118, 222, 4], [184, 288, 4], [122, 290, 3]], "#FFE27A"),
+      aermel: c => aermel(0, .32, 36, c) },
+    { id: "heldenshirt", name: "Superhelden-Shirt",
+      rumpf: c => flaeche(rumpfT, c) + ausschnitt + kreis(150, 248, 28, "#FFC83D") + flaeche("M156 226 L136 252 L150 252 L142 272 L166 242 L152 242 L160 226 Z", "#E8463B") +
+        `<rect x="108" y="290" width="84" height="12" rx="4" fill="#FFC83D" stroke="${D}" stroke-width="2.5"/>`,
+      aermel: c => aermel(0, .9, 32, c) + aermel(.84, .9, 34, "#FFC83D") }
+  ], "tshirt");
+  zuerst(unterteile, [
+    { id: "cargo", name: "Cargohose",
+      teil: c => glied(134, 320, 132, 512, 38, c) + glied(166, 320, 168, 512, 38, c) + flaeche(huefte, c) +
+        `<rect x="104" y="392" width="22" height="30" rx="4" fill="${detail(c, 0.18)}" stroke="${D}" stroke-width="2.5"/><rect x="174" y="392" width="22" height="30" rx="4" fill="${detail(c, 0.18)}" stroke="${D}" stroke-width="2.5"/>` +
+        linie("M106 400 L124 400 M176 400 L194 400", D, 2) + naht(c) + glied(132, 504, 132, 512, 40, detail(c)) + glied(168, 504, 168, 512, 40, detail(c)) },
+    { id: "bermuda", name: "Bermudas",
+      teil: c => glied(134, 320, 133, 420, 40, c) + glied(166, 320, 167, 420, 40, c) + flaeche(huefte, c) + naht(c) +
+        glied(133, 414, 133, 420, 42, detail(c)) + glied(167, 414, 167, 420, 42, detail(c)) + linie("M118 340 L118 380 M182 340 L182 380", glanzFarbe(c), 2.5, 'stroke-dasharray="4 4"') }
+  ], "hose");
+  const beinPaar = (c, bis = 512, w = 38) => glied(134, 318, 132, bis, w, c) + glied(166, 318, 168, bis, w, c) + flaeche(huefte, c);
+  zuerst(kleider, [
+    { id: "ritter", name: "Ritter-Rüstung",
+      rock: c => beinPaar("#B8C2CF") + linie("M132 440 L132 470 M168 440 L168 470", "#8E99A8", 4) + flaeche("M110 286 L190 286 L198 372 Q150 382 102 372 Z", c) + linie("M150 300 L150 368 M126 330 L174 330", "#FFC83D", 7),
+      rumpf: c => flaeche(rumpfT, "#B8C2CF") + flaeche("M118 196 Q150 188 182 196 L180 292 Q150 300 120 292 Z", "#D3DAE3") + glanz("M126 210 L128 280", "#D3DAE3", 4) + flaeche("M136 222 L164 222 L164 246 Q150 262 136 246 Z", c),
+      aermel: () => aermel(0, .9, 32, "#B8C2CF") + aermel(0, .14, 38, "#D3DAE3") },
+    { id: "astronaut", name: "Astronaut", preis: 2,
+      rock: () => beinPaar("#F4F6FA", 512, 42) + glied(132, 494, 132, 512, 44, "#C9D2DE") + glied(168, 494, 168, 512, 44, "#C9D2DE"),
+      rumpf: c => flaeche(rumpfT, "#F4F6FA") + `<rect x="128" y="226" width="44" height="34" rx="6" fill="${c}" stroke="${D}" stroke-width="2.5"/>` + kreis(140, 236, 4, "#FFC83D", false) + kreis(152, 236, 4, "#5CCB6A", false) + kreis(164, 236, 4, "#E8463B", false) +
+        `<rect x="134" y="246" width="32" height="6" rx="3" fill="#fff"/>` + linie("M104 290 L196 290", "#C9D2DE", 6),
+      aermel: c => aermel(0, .9, 34, "#F4F6FA") + aermel(.84, .92, 36, c) },
+    { id: "pirat", name: "Pirat",
+      rock: c => beinPaar("#3A3550", 470) + glied(132, 462, 132, 470, 40, "#fff") + glied(168, 462, 168, 470, 40, "#fff"),
+      rumpf: c => flaeche(rumpfT, "#fff") + linie("M130 188 L150 220 L170 188", D, 2.5) + flaeche("M102 190 Q118 186 128 190 L138 306 Q120 314 108 306 Q108 248 102 190 Z", c) + flaeche("M198 190 Q182 186 172 190 L162 306 Q180 314 192 306 Q192 248 198 190 Z", c) +
+        `<rect x="106" y="282" width="88" height="14" rx="4" fill="#5A3A22" stroke="${D}" stroke-width="2.5"/><rect x="142" y="280" width="16" height="18" rx="2" fill="#FFC83D" stroke="${D}" stroke-width="2"/>`,
+      aermel: () => aermel(0, .9, 34, "#fff") },
+    { id: "feuerwehr", name: "Feuerwehr",
+      rock: c => beinPaar(c) + glied(132, 440, 132, 448, 40, "#FFE27A") + glied(168, 440, 168, 448, 40, "#FFE27A"),
+      rumpf: c => flaeche(rumpfT, c) + `<rect x="104" y="248" width="92" height="12" fill="#FFE27A" stroke="${D}" stroke-width="2"/><rect x="104" y="280" width="92" height="12" fill="#FFE27A" stroke="${D}" stroke-width="2"/>` + linie("M150 192 L150 306", D, 2.5),
+      aermel: c => aermel(0, .9, 32, c) + aermel(.55, .62, 33, "#FFE27A") },
+    { id: "dinokostuem", name: "Dino-Kostüm", preis: 2,
+      rock: c => flaeche("M196 300 Q262 330 270 420 Q240 380 196 360 Z", c) + beinPaar(c, 500, 42) + flaeche("M126 300 Q150 292 174 300 L172 370 Q150 380 128 370 Z", ton(c, 0.45)),
+      rumpf: c => flaeche(rumpfT, c) + flaeche("M128 200 Q150 194 172 200 L170 298 Q150 306 130 298 Z", ton(c, 0.45)) + [210, 236, 262, 288].map(y => linie(`M134 ${y} L166 ${y}`, ton(c, 0.25), 2.5)).join("") +
+        `<path d="M196 196 l14 6 l-10 10 l14 8 l-12 10 l12 10 l-14 6" fill="${detail(c, 0.2)}" stroke="${D}" stroke-width="2.5" stroke-linejoin="round"/>`,
+      aermel: c => aermel(0, .9, 34, c) }
+  ], null);
+  zuerst(schuhe, [
+    { id: "fussballschuhe", name: "Fußballschuhe",
+      teil: c => fussPaar(x => `<rect x="${x - 23}" y="532" width="46" height="22" rx="11" fill="${c}" stroke="${D}" stroke-width="3"/>` + linie(`M${x - 12} 538 l18 10`, hell(c) ? D : "#fff", 4) +
+        [-16, -6, 4, 14].map(d => `<rect x="${x + d - 3}" y="554" width="6" height="8" rx="2" fill="${D}"/>`).join("")) },
+    { id: "sneaker", name: "Sneaker (hoch)",
+      teil: c => glied(132, 512, 131, 540, 32, c) + glied(168, 512, 169, 540, 32, c) + fussPaar(x => `<rect x="${x - 23}" y="530" width="46" height="24" rx="11" fill="${c}" stroke="${D}" stroke-width="3"/>` +
+        `<rect x="${x - 25}" y="550" width="50" height="9" rx="4" fill="#fff" stroke="${D}" stroke-width="3"/>` + linie(`M${x - 6} 516 l12 0 M${x - 6} 524 l12 0 M${x - 6} 532 l12 0`, "#fff", 2.5) + kreis(x + 10, 540, 5, "#FFC83D")) }
+  ], "turn");
+  zuerst(extras, [
+    { id: "cap", name: "Basecap", ebene: "kopf", farbe: "#3AA0E0",
+      teil: c => flaeche("M94 94 Q94 38 150 36 Q206 38 206 94 Z", c) + flaeche("M90 92 Q150 104 210 92 L218 104 Q150 122 82 104 Z", detail(c, 0.2)) + kreis(150, 38, 6, detail(c, 0.2)) + glanz("M112 60 Q130 46 150 44", c, 5) },
+    { id: "piratenhut", name: "Piratenhut", ebene: "kopf", farbe: "#2E2B47",
+      teil: c => flaeche("M80 88 Q100 34 150 30 Q200 34 220 88 Q150 70 80 88 Z", c) + linie("M86 84 Q150 66 214 84", "#FFC83D", 4) +
+        kreis(150, 54, 11, "#fff", false) + `<circle cx="146" cy="52" r="2.2" fill="${D}"/><circle cx="154" cy="52" r="2.2" fill="${D}"/>` + linie("M138 68 L162 76 M162 68 L138 76", "#fff", 3) },
+    { id: "augenklappe", name: "Augenklappe", ebene: "kopf", farbe: "#2A2230",
+      teil: c => linie("M96 104 L206 148", c, 4) + `<ellipse cx="170" cy="128" rx="16" ry="14" fill="${c}" stroke="${D}" stroke-width="2.5"/>` },
+    { id: "maske", name: "Helden-Maske", ebene: "kopf", farbe: "#E8463B",
+      teil: c => `<path d="M100 118 Q150 104 200 118 L198 140 Q174 148 150 136 Q126 148 102 140 Z M118 128 a12 9 0 1 0 24 0 a12 9 0 1 0 -24 0 Z M158 128 a12 9 0 1 0 24 0 a12 9 0 1 0 -24 0 Z" fill="${c}" fill-rule="evenodd" stroke="${D}" stroke-width="3" stroke-linejoin="round"/>` +
+        linie("M100 124 L84 118 M200 124 L216 118", c, 6) },
+    { id: "fliege", name: "Fliege", ebene: "hals", farbe: "#E8463B",
+      teil: c => flaeche("M150 196 L128 184 L128 208 Z", c) + flaeche("M150 196 L172 184 L172 208 Z", c) + kreis(150, 196, 6, detail(c)) },
+    { id: "fussball", name: "Fußball", ebene: "hand", farbe: "#FFFFFF",
+      teil: c => kreis(224, 392, 23, c) + `<path d="M224 382 l9 6 l-3 10 h-12 l-3 -10 z" fill="${D}"/>` + linie("M224 382 L224 370 M233 388 L245 384 M230 398 L238 410 M218 398 L210 410 M215 388 L203 384", D, 2.5) },
+    { id: "kuscheldino", name: "Kuschel-Dino", ebene: "hand", farbe: "#5CCB6A", preis: 2,
+      teil: c => `<ellipse cx="224" cy="398" rx="24" ry="18" fill="${c}" stroke="${D}" stroke-width="3"/>` + kreis(240, 372, 13, c) + `<circle cx="244" cy="369" r="2.4" fill="${D}"/>` +
+        `<path d="M206 384 l5 -9 l5 9 M218 380 l5 -10 l5 10" fill="${detail(c, 0.25)}" stroke="${D}" stroke-width="2"/>` + `<ellipse cx="224" cy="404" rx="12" ry="8" fill="${ton(c, 0.45)}"/>` },
+    { id: "schwert", name: "Holzschwert", ebene: "hand", farbe: "#C9A266",
+      teil: c => linie("M86 356 L58 262", D, 13) + linie("M86 356 L58 262", c, 8) + linie("M72 330 L98 322", D, 10) + linie("M72 330 L98 322", "#8A5A34", 6) + glanz("M80 340 L64 284", c, 2.5) }
+  ], null);
+
   window.Puppe = { D, ton, koerper, gesichter, haare, oberteile, unterteile, kleider, schuhe, extras, orte };
 })();

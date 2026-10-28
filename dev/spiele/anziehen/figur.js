@@ -8,7 +8,7 @@
   const STANDARD = (g = window.Spielwelt && window.Spielwelt.kind ? window.Spielwelt.kind().geschlecht : "w") => ({
     ort: "zimmer",
     figur: { id: "laecheln", farbe: HAUT[1] },
-    haare: g === "m" ? { id: "kurz", farbe: HAARFARBEN[2] } : { id: "lang", farbe: HAARFARBEN[2] },
+    haare: g === "m" ? { id: "scheitel", farbe: HAARFARBEN[2] } : { id: "lang", farbe: HAARFARBEN[2] },
     oberteil: { id: "tshirt", farbe: g === "m" ? "#3AA0E0" : "#FF9BC8" },
     unterteil: g === "m" ? { id: "jeans", farbe: "#3A5FA8" } : { id: "rock", farbe: "#7B55B8" },
     kleid: null,

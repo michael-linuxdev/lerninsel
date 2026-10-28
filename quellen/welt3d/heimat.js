@@ -453,12 +453,15 @@ if (!EINFACH && MIT_GRAS) {
 }
 
 // ---------- Figur nach dem Look aus dem Kleiderschrank ----------
-const LANG = ["lang", "wellen", "locken"], KURZ = ["bob", "kurz"], HOSEN = ["hose", "jeans", "jogging", "leggings"];
+const LANG = ["lang", "wellen", "locken"], KURZ = ["bob", "kurz", "scheitel", "undercut", "igel", "wuschel", "kurzlocken", "afro", "schulterlang"], HOSEN = ["hose", "jeans", "jogging", "leggings", "cargo", "bermuda"];
+// Anzüge aus „Kleider & Anzüge“ (30.10.2026) haben Hosenbeine statt Rock
+const ANZUG = { ritter: "#B8C2CF", astronaut: "#F4F6FA", pirat: "#3A3550", feuerwehr: null, dinokostuem: null };
 function figur(look) {
   const f = new Group(), haut = look.figur.farbe, haarF = (look.haare && look.haare.farbe) || "#8A5A34", haarId = (look.haare && look.haare.id) || "lang";
   const koerper = new Group(); f.add(koerper);
   const kleid = look.kleid, oben = kleid ? kleid.farbe : (look.oberteil ? look.oberteil.farbe : "#FF9BC8");
-  const unterId = kleid ? "kleid" : (look.unterteil ? look.unterteil.id : "rock"), unten = kleid ? kleid.farbe : (look.unterteil ? look.unterteil.farbe : "#7B55B8");
+  const anzug = kleid && kleid.id in ANZUG;
+  const unterId = anzug ? "hose" : kleid ? "kleid" : (look.unterteil ? look.unterteil.id : "rock"), unten = anzug ? (ANZUG[kleid.id] || kleid.farbe) : kleid ? kleid.farbe : (look.unterteil ? look.unterteil.farbe : "#7B55B8");
   const schuhF = (look.schuhe && look.schuhe.farbe) || "#FFFFFF";
   const ohneBeine = kleid && kleid.id === "meerjungfrau", langesKleid = kleid && ["ball", "fee", "meerjungfrau"].includes(kleid.id);
   const hose = HOSEN.includes(unterId), shorts = unterId === "shorts";
@@ -504,6 +507,11 @@ function figur(look) {
   else if (haarId === "puffs") [-1, 1].forEach(s => haarteil(kugel(0.28), 0.6 * s, 0.1, -0.05));
   else if (!KURZ.includes(haarId)) [-1, 1].forEach(s => haarteil(kugel(0.2), 0.6 * s, -0.05, -0.1));
   if (haarId === "bob") haarteil(kugel(0.62), 0, -0.12, -0.12, 1.04, 0.75, 0.9);
+  if (haarId === "schulterlang") haarteil(kugel(0.62), 0, -0.3, -0.16, 1.06, 0.95, 0.85);
+  if (haarId === "afro") haarteil(kugel(0.74), 0, 0.18, -0.08, 1.05, 0.95, 1);
+  if (haarId === "igel") for (let i = 0; i < 7; i++) { const w = (i / 6 - 0.5) * 1.6; const z = haarteil(new ConeGeometry(0.11, 0.3, 8), Math.sin(w) * 0.4, 0.6 - Math.abs(w) * 0.12, Math.cos(w) * 0.1 - 0.05); z.rotation.z = -w * 0.5; }
+  if (haarId === "wuschel" || haarId === "kurzlocken") { const r = haarId === "wuschel" ? 0.22 : 0.17; [[-0.36, 0.4], [-0.12, 0.55], [0.12, 0.55], [0.36, 0.4], [0, 0.42]].forEach(([x, y]) => haarteil(kugel(r), x, y, 0.2)); }
+  if (haarId === "undercut") haarteil(kugel(0.5), 0, 0.42, 0.05, 1, 0.55, 1);
   // Gesicht
   augen(kopf, 0.2, 0.02, 0.53);
   [-1, 1].forEach(s => { const w = new Mesh(new CircleGeometry(0.09, 16), new MeshBasicMaterial({ color: "#FF9FB2", transparent: true, opacity: 0.6 })); setze(w, 0.33 * s, -0.12, 0.49); w.rotation.y = 0.5 * s; kopf.add(w); });
@@ -516,6 +524,8 @@ function figur(look) {
   if (hat("hut") || hat("entdeckerhut")) { const id = hat("hut") ? "hut" : "entdeckerhut"; kopf.add(setze(teil(new CylinderGeometry(0.85, 0.85, 0.05, 28), farbe(id, "#FFE27A")), 0, 0.45, 0)); kopf.add(setze(teil(new SphereGeometry(0.5, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), farbe(id, "#FFE27A")), 0, 0.45, 0)); }
   if (hat("katzenohren") || hat("fuchsohren")) { const id = hat("katzenohren") ? "katzenohren" : "fuchsohren"; [-1, 1].forEach(s => { const o = teil(new ConeGeometry(0.16, 0.32, 12), farbe(id, "#F28C38")); setze(o, 0.33 * s, 0.6, -0.05); o.rotation.z = -0.35 * s; kopf.add(o); }); }
   if (hat("brille") || hat("sonnenbrille") || hat("pixelbrille")) { const id = hat("brille") ? "brille" : hat("sonnenbrille") ? "sonnenbrille" : "pixelbrille"; [-1, 1].forEach(s => { const g = new Mesh(new TorusGeometry(0.12, 0.025, 8, 20), mat(farbe(id, "#7B55B8"))); setze(g, 0.2 * s, 0.02, 0.56); kopf.add(g); if (id !== "brille") kopf.add(setze(new Mesh(new CircleGeometry(0.11, 16), mat("#2A2230")), 0.2 * s, 0.02, 0.57)); }); }
+  if (hat("cap")) { const c = farbe("cap", "#3AA0E0"); kopf.add(setze(teil(new SphereGeometry(0.62, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), c), 0, 0.18, 0)); const sch = teil(new CylinderGeometry(0.42, 0.42, 0.05, 20, 1, false, -Math.PI / 2, Math.PI), c); setze(sch, 0, 0.2, 0.32); kopf.add(sch); }
+  if (hat("piratenhut")) { const c = farbe("piratenhut", "#2E2B47"); const h = teil(new ConeGeometry(0.75, 0.5, 3), c); h.rotation.y = Math.PI; setze(h, 0, 0.62, -0.02); kopf.add(h); }
   if (hat("schleife")) [-1, 1].forEach(s => kopf.add(setze(teil(kugel(0.13), farbe("schleife", "#FF6F9F")), 0.18 * s + 0.35, 0.5, 0.1)));
   if (hat("fluegel")) [-1, 1].forEach(s => { const fl = teil(kugel(0.45), new MeshToonMaterial({ color: farbe("fluegel", "#BDE7FF"), gradientMap: verlauf, transparent: true, opacity: 0.7 })); fl.scale.set(0.25, 1, 0.6); setze(fl, 0.32 * s, 1.35, -0.38); fl.rotation.z = 0.5 * s; koerper.add(fl); });
   if (hat("umhang")) { const u = teil(new CylinderGeometry(0.32, 0.6, 1.1, 20, 1, true, Math.PI * 0.6, Math.PI * 0.8), farbe("umhang", "#C2337A")); u.material = u.material.clone(); u.material.side = 2; setze(u, 0, 0.85, 0); koerper.add(u); }
