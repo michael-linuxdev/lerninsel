@@ -206,6 +206,49 @@
   }
   $("bild-zu").addEventListener("click", () => { $("bild-dlg").hidden = true; });
   $("bild-weiter").addEventListener("click", () => { $("bild-dlg").hidden = true; const a = AUFTRAEGE.find(x => x[0] === offen.auftrag); oeffneMalen({ bild: offen, auftrag: a || null }); });
+  // ---------- Bilder digital bearbeiten (30.10.2026, Lehrplan Kunst Kl. 3: Bilder digital bearbeiten und verfremden) ----------
+  // Effekte wirken auf eine Kopie; „Als neues Bild speichern“ legt das verfremdete Bild zusätzlich in die Galerie (Original bleibt).
+  const EFFEKTE = [
+    ["grau", "⚫ Schwarz-weiß", (d) => { for (let i = 0; i < d.length; i += 4) { const g = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = d[i + 1] = d[i + 2] = g; } }],
+    ["negativ", "🔄 Umkehren (Negativ)", (d) => { for (let i = 0; i < d.length; i += 4) { d[i] = 255 - d[i]; d[i + 1] = 255 - d[i + 1]; d[i + 2] = 255 - d[i + 2]; } }],
+    ["tauschen", "🎨 Farben tauschen", (d) => { for (let i = 0; i < d.length; i += 4) { const r = d[i]; d[i] = d[i + 1]; d[i + 1] = d[i + 2]; d[i + 2] = r; } }],
+    ["sepia", "📜 Wie ein altes Foto", (d) => { for (let i = 0; i < d.length; i += 4) { const r = d[i], g = d[i + 1], b = d[i + 2]; d[i] = Math.min(255, r * .39 + g * .77 + b * .19); d[i + 1] = Math.min(255, r * .35 + g * .69 + b * .17); d[i + 2] = Math.min(255, r * .27 + g * .53 + b * .13); } }],
+    ["spiegeln", "↔️ Spiegeln", null], ["kaleido", "🦋 Symmetrisch", null], ["mosaik", "🟪 Mosaik", null], ["popart", "🖼️ Pop-Art (4 Farben)", null]
+  ];
+  let vf = null;
+  function vfZeichne(art) {
+    const c = $("vf-bild"), k = c.getContext("2d"), W = c.width, H = c.height;
+    k.save(); k.clearRect(0, 0, W, H); k.fillStyle = "#fff"; k.fillRect(0, 0, W, H);
+    if (art === "spiegeln") { k.translate(W, 0); k.scale(-1, 1); k.drawImage(vf.img, 0, 0, W, H); }
+    else if (art === "kaleido") { k.drawImage(vf.img, 0, 0, vf.img.width / 2, vf.img.height, 0, 0, W / 2, H); k.translate(W, 0); k.scale(-1, 1); k.drawImage(vf.img, 0, 0, vf.img.width / 2, vf.img.height, 0, 0, W / 2, H); }
+    else if (art === "popart") { [[255, 80, 120], [60, 180, 255], [255, 210, 40], [80, 220, 120]].forEach(([r, g, b], i) => {
+        const x = (i % 2) * W / 2, y = Math.floor(i / 2) * H / 2; k.drawImage(vf.img, x, y, W / 2, H / 2); const d = k.getImageData(x, y, W / 2, H / 2);
+        for (let j = 0; j < d.data.length; j += 4) { const hell = (d.data[j] + d.data[j + 1] + d.data[j + 2]) / 765; d.data[j] = r * hell; d.data[j + 1] = g * hell; d.data[j + 2] = b * hell; }
+        k.putImageData(d, x, y); }); }
+    else k.drawImage(vf.img, 0, 0, W, H);
+    k.restore();
+    if (art === "mosaik") { const s = 16, d = k.getImageData(0, 0, W, H); for (let y = 0; y < H; y += s) for (let x = 0; x < W; x += s) { const i = (y * W + x) * 4; k.fillStyle = `rgb(${d.data[i]},${d.data[i + 1]},${d.data[i + 2]})`; k.fillRect(x, y, s, s); } }
+    const e = EFFEKTE.find(x => x[0] === art);
+    if (e && e[2]) { const d = k.getImageData(0, 0, W, H); e[2](d.data); k.putImageData(d, 0, 0); }
+    vf.art = art || "";
+    $("vf-effekte").querySelectorAll("[data-vf]").forEach(b => b.classList.toggle("haupt", b.dataset.vf === art));
+  }
+  $("bild-verfremden").addEventListener("click", () => {
+    if (!offen) return; S.ton("tipp"); $("bild-dlg").hidden = true;
+    const img = new Image(); img.onload = () => { vf = { img, art: "" }; vfZeichne(""); $("vf-dlg").hidden = false; }; img.src = offen.url;
+    $("vf-effekte").innerHTML = EFFEKTE.map(([id, n]) => `<button class="knopf" data-vf="${id}">${n}</button>`).join("");
+    $("vf-effekte").querySelectorAll("[data-vf]").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); vfZeichne(b.dataset.vf); }));
+  });
+  $("vf-original").addEventListener("click", () => { S.ton("tipp"); vfZeichne(""); });
+  $("vf-zu").addEventListener("click", () => { $("vf-dlg").hidden = true; });
+  $("vf-speichern").addEventListener("click", async () => {
+    if (!vf || !vf.art) { $("vf-info").textContent = "Wähle zuerst einen Effekt aus."; return; }
+    const id = await B.speichere({ url: $("vf-bild").toDataURL("image/jpeg", 0.85), auftrag: "verfremdet" });
+    if (!id) { $("vf-info").textContent = "Die Galerie ist voll. Lösch zuerst ein Bild."; return; }
+    S.ton("juhu"); $("vf-dlg").hidden = true; if (C) C.gib("kreativ", 2);
+    if (window.Lernfunde) Lernfunde.merke({ fach: "kunst", art: "kunst", e: "🪄", schluessel: "verfremdet", text: "Kunst: ein Bild digital verfremdet" });
+    zeigeGalerie();
+  });
   $("bild-wand").addEventListener("click", () => {
     const an = !B.wand().includes(offen.id), voll = an && B.wand().length >= B.WAND;
     B.setzeWand(offen.id, an); $("bild-dlg").hidden = true; S.ton(an ? "juhu" : "tipp"); zeigeGalerie();

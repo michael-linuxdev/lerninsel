@@ -48,7 +48,7 @@
   }
 
   // ---------- Bereiche ----------
-  const TEILE = ["menue", "xylo", "rhythmus", "hoertest", "melodie", "singen"];
+  const TEILE = ["menue", "xylo", "rhythmus", "hoertest", "melodie", "singen", "erkennen"];
   let laeufer = [];
   const stoppe = () => { laeufer.forEach(clearTimeout); laeufer = []; };
   const spaeter = (fn, ms) => laeufer.push(setTimeout(fn, ms));
@@ -57,6 +57,7 @@
     xylo: ["Tippe auf die Klangstäbe. Lange Stäbe klingen tief, kurze klingen hoch. Oder spiel ein Lied mit – der leuchtende Stab ist dran.", "Длинные пластинки звучат низко, короткие – высоко."],
     rhythmus: ["Hör gut zu! Ich klatsche einen Rhythmus vor. Dann tippst du ihn auf der Trommel nach.", "Слушай внимательно и повтори ритм на барабане."],
     hoertest: ["Ich spiele zwei Töne. Hör genau hin!", "Я сыграю два звука. Слушай внимательно!"],
+    erkennen: ["Ohren-Rätsel! Ich spiele etwas vor – findest du heraus, was es ist?", "Загадки для ушей! Угадай, что я сыграю."],
     singen: ["Sing mit! Ich spiele die Melodie, und die Silben leuchten, wenn du sie singst.", "Пой вместе! Я играю мелодию, а слоги светятся."],
     melodie: ["Erfinde deine eigene Melodie! Vielleicht tanzen bald die Tiere auf der Insel dazu.", "Придумай свою мелодию!"]
   };
@@ -65,7 +66,7 @@
   function teil(n) {
     stoppe(); TEILE.forEach(t => { $("m-" + t).hidden = t !== n; });
     sag(...TEXTE[n]);
-    if (n === "xylo") zeigeXylo(); if (n === "rhythmus") rhStart(); if (n === "hoertest") htStart(); if (n === "melodie") zeigeRaster(); if (n === "singen") zeigeSingen();
+    if (n === "xylo") zeigeXylo(); if (n === "rhythmus") rhStart(); if (n === "hoertest") htStart(); if (n === "melodie") zeigeRaster(); if (n === "singen") zeigeSingen(); if (n === "erkennen") ekStart();
     if (n !== "singen" && window.Lieder) Lieder.stopp();
     scrollTo(0, 0);
   }
@@ -196,6 +197,58 @@
     $("ht-neu").addEventListener("click", htStart);
   });
 
+  // ---------- Ohren-Rätsel (30.10.2026, Lehrplan Musik: Grundton spüren, Melodie- und Rhythmusbausteine wiedererkennen) ----------
+  // Gemischte Fragen: Welches Lied? · Endet die Melodie auf dem Grundton? · Geht die Melodie nach oben oder unten? · Welcher Rhythmus war das?
+  const EK_FRAGEN = 8;
+  let ek = null;
+  function ekStart() { ek = { nr: 0, richtig: 0 }; ekNeu(); }
+  const zufall = (a) => a[Math.floor(Math.random() * a.length)];
+  const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  function ekNeu() {
+    $("ek-weiter").hidden = true; $("ek-text").textContent = "";
+    const art = ["lied", "grundton", "richtung", "rhythmus"][ek.nr % 4]; ek.art = art; ek.beantwortet = false;
+    if (art === "lied") {
+      const l = zufall(LIEDER); ek.noten = l.n.slice(0, 8).map(([t, d]) => [t, d]); ek.loesung = l.name;
+      ek.optionen = mische([l.name, ...mische(LIEDER.filter(x => x !== l).map(x => x.name)).slice(0, 2)]);
+      ek.frage = "🎵 Welches Lied beginnt so?";
+    } else if (art === "grundton") {
+      const fertig = Math.random() < 0.5, weg = [0, zufall([2, 4]), zufall([3, 4, 5]), zufall([2, 4]), zufall([1, 3])];
+      ek.noten = weg.map(t => [t, 1]).concat([[fertig ? 0 : zufall([1, 4, 6]), 2]]); ek.loesung = fertig ? "🏠 Fertig – zu Hause auf dem Grundton" : "❓ Noch nicht fertig";
+      ek.optionen = ["🏠 Fertig – zu Hause auf dem Grundton", "❓ Noch nicht fertig"]; ek.frage = "🏠 Klingt die Melodie am Ende fertig?";
+    } else if (art === "richtung") {
+      const r = zufall(["hoch", "runter", "gleich"]), s = r === "hoch" ? zufall([0, 1, 2]) : r === "runter" ? zufall([5, 6, 7]) : zufall([2, 3, 4]);
+      ek.noten = [0, 1, 2, 3].map(i => [r === "hoch" ? s + i : r === "runter" ? s - i : s, 1]);
+      ek.loesung = { hoch: "⬆️ nach oben", runter: "⬇️ nach unten", gleich: "➡️ bleibt gleich" }[r]; ek.optionen = ["⬆️ nach oben", "⬇️ nach unten", "➡️ bleibt gleich"]; ek.frage = "↕️ Wohin geht die Melodie?";
+    } else {
+      const m = zufall(RHYTHMEN), bild = (x) => Array.from({ length: 8 }, (_, i) => x.includes(i) ? "👏" : "·").join(" ");
+      ek.rhythmus = m; ek.loesung = bild(m); ek.optionen = mische([bild(m), ...mische(RHYTHMEN.filter(x => bild(x) !== bild(m))).slice(0, 2).map(bild)]); ek.frage = "👏 Welcher Rhythmus war das?";
+    }
+    $("ek-frage").textContent = ek.frage; $("ek-stand").textContent = `Rätsel ${ek.nr + 1} von ${EK_FRAGEN}`;
+    $("ek-optionen").innerHTML = ek.optionen.map((o, i) => `<button class="knopf haupt gross-k" data-ek="${i}">${o}</button>`).join("");
+    $("ek-optionen").querySelectorAll("[data-ek]").forEach(b => b.addEventListener("click", () => ekAntwort(b)));
+    ekSpielen();
+  }
+  function ekSpielen() {
+    audio(); stoppe();
+    if (ek.art === "rhythmus") { for (let i = 0; i < 8; i++) if (ek.rhythmus.includes(i)) spaeter(() => klatsch(), 300 + i * ACHTEL); return; }
+    let t = 300; ek.noten.forEach(([i, d]) => { spaeter(() => klang(TOENE[i][1], { dauer: 0.5 + d * 0.2 }), t); t += d * 380; });
+  }
+  function ekAntwort(b) {
+    if (!ek || ek.beantwortet) return;
+    if (ek.optionen[+b.dataset.ek] === ek.loesung) { ek.beantwortet = true; ek.richtig++; S.ton("juhu"); b.classList.add("richtig");
+      $("ek-text").textContent = ek.art === "grundton" ? "✅ Richtig! Melodien, die auf dem Grundton enden, klingen „zu Hause“." : "✅ Richtig – gut zugehört!"; $("ek-weiter").hidden = false; }
+    else { S.ton("tipp"); b.disabled = true; $("ek-text").textContent = "Hör noch einmal genau hin."; ekSpielen(); }
+  }
+  $("ek-hoeren").addEventListener("click", () => { if (ek) ekSpielen(); });
+  $("ek-weiter").addEventListener("click", () => {
+    ek.nr++; if (ek.nr < EK_FRAGEN) return ekNeu();
+    const d = lade(); d.erkennen = (d.erkennen || 0) + 1; speichere(d); gib(3);
+    if (d.erkennen === 1) { S.gibSterne(1); fund("Musik: Lieder, Grundton, Melodie- und Rhythmusbausteine am Klang erkennen", "erkennen", "👂"); }
+    $("ek-frage").textContent = "🎉 Super Ohren!"; $("ek-stand").textContent = ""; $("ek-optionen").innerHTML = ""; $("ek-weiter").hidden = true;
+    $("ek-text").innerHTML = `Du hast alle ${EK_FRAGEN} Rätsel gelöst. <button class="knopf" id="ek-neu">🔁 Noch einmal</button>`;
+    $("ek-neu").addEventListener("click", ekStart);
+  });
+
   // ---------- Meine Melodie ----------
   let mel = [-1, -1, -1, -1, -1, -1, -1, -1];
   function zeigeRaster() {
@@ -248,5 +301,5 @@
   }
 
   window.MusikEcke = { zeige: () => teil("menue"), teil, LIEDER, TOENE, klang, lade };
-  window.__musik = { singen: zeigeSingen, rh: () => rh, ht: () => ht, lied: () => ({ lied: lied && lied.id, pos, vorspiel }), mel: () => mel, RHYTHMEN, ACHTEL };
+  window.__musik = { ek: () => ek, singen: zeigeSingen, rh: () => rh, ht: () => ht, lied: () => ({ lied: lied && lied.id, pos, vorspiel }), mel: () => mel, RHYTHMEN, ACHTEL };
 })();

@@ -32,6 +32,9 @@
     { id: "gefuehle:alle", fach: "ethik", lz: ["et.ge.01", "et.ge.02", "et.mi.01", "sp.be.01", "sp.be.02"], aufgaben: 20, quelle: "spiele/gefuehle/" },
     { id: "wort:tag", fach: "deutsch", lz: ["de.su.03", "daz.d0.01"], aufgaben: 0, quelle: "shared/woerter.js" },
     { id: "insel:wetter", fach: "sachkunde", lz: ["su.na.04"], aufgaben: 0, quelle: "Wetterstation auf der Insel" },
+    { id: "atelier:erkennen", fach: "musik", lz: ["mu.ho.01", "mu.ho.02"], aufgaben: 8, quelle: "spiele/atelier/musik.js (Ohren-Rätsel)" },
+    { id: "atelier:verfremden", fach: "kunst", lz: ["ku.ge.02", "me.pp.01"], aufgaben: 8, quelle: "spiele/atelier/ (Bilder verfremden)" },
+    { id: "robo:alle", fach: "werken", lz: ["me.ph.01", "su.te.05"], stufe: ["3", "4"], aufgaben: 13, quelle: "spiele/robo/ (Programmieren)" },
     { id: "daz:d0", fach: "deutsch", lz: ["daz.d0.01", "daz.d0.02", "daz.d0.03", "de.su.03"], stufe: ["vs", "1", "2", "3", "4"], aufgaben: 120, quelle: "spiele/daz/ (Ankommen)" }
   ];
 

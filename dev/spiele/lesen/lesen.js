@@ -369,11 +369,12 @@
       $("spuren").setAttribute("viewBox", `${spur.vb[0]} -5 ${spur.vb[1]} 130`);
       $("spuren").style.width = wort ? `min(94vw, 980px, calc((100vh - 230px) * ${(spur.vb[1] / 130).toFixed(2)}))` : "";   // ganzes Wort passt auf den Bildschirm $("spuren").classList.toggle("breit", wort); $("spuren").parentElement.classList.toggle("breit-main", wort);
       $("spuren-bild").textContent = wort ? "📝" : "✒️";
-      $("spuren-wort").textContent = wort ? `Wort: ${z}` : `kleines ${z}`;
+      const gk = z === z.toLowerCase() ? "kleines" : "großes";
+      $("spuren-wort").textContent = wort ? `Wort: ${z}` : `${gk} ${z}`;
       $("spuren-balken").style.width = Math.round(100 * spur.i / spur.zeichen.length) + "%";
       $("spuren-rueck").textContent = "";
       spurZeichnen();
-      sprich(wort ? `Schreib das Wort ${z} in Schreibschrift. Fang beim Punkt an und schreib ohne abzusetzen.` : `Schreib das kleine ${z} in Schreibschrift. Fang beim Punkt an.`);
+      sprich(wort ? `Schreib das Wort ${z} in Schreibschrift. Fang beim Punkt an und schreib ohne abzusetzen.` : `Schreib das ${gk} ${z} in Schreibschrift. Fang beim Punkt an.`);
       return;
     }
     spur.vb = [0, 100]; $("spuren").setAttribute("viewBox", "0 -10 100 130"); $("spuren").classList.remove("breit"); $("spuren").style.width = ""; $("spuren").parentElement.classList.remove("breit-main");

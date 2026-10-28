@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Robo programmieren</title>
+<meta name="theme-color" content="#E8F3FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #E8F3FF; background-image: none; overflow-wrap: break-word; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; min-width: 0; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .ansicht[hidden] { display: none !important; }
+  .blatt { max-width: 1100px; margin: 10px auto 30px; padding: 0 16px; }
+  .blase { background: #fff; border-radius: 20px; padding: 12px 16px; font-size: 1.15rem; box-shadow: 0 4px 0 rgba(0,0,0,.06); display: flex; gap: 12px; align-items: center; }
+  .blase .robo { width: 64px; height: 64px; flex: none; }
+  .level-liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 12px; margin-top: 14px; }
+  .level-liste button { min-height: 86px; border-radius: 18px; border: 0; background: #fff; font: inherit; font-weight: 700; font-size: 1.3rem; color: var(--pflaume); box-shadow: 0 5px 0 rgba(0,0,0,.08); }
+  .level-liste button.fertig { background: #D4F2DE; }
+  .level-liste button:disabled { opacity: .45; }
+  .level-liste small { display: block; font-size: .8rem; font-weight: 600; }
+  .spiel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 380px); gap: 16px; margin-top: 12px; align-items: start; }
+  @media (max-width: 800px) { .spiel { grid-template-columns: 1fr; } }
+  .gitter { width: 100%; max-width: min(560px, 62vh); aspect-ratio: 1; margin: 0 auto; display: block; background: #fff; border-radius: 22px; box-shadow: 0 6px 0 rgba(0,0,0,.08); touch-action: manipulation; }
+  .programm { background: #fff; border-radius: 22px; padding: 12px; box-shadow: 0 6px 0 rgba(0,0,0,.08); }
+  .programm h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .zeile { display: flex; flex-wrap: wrap; gap: 6px; min-height: 64px; padding: 8px; border-radius: 14px; background: #F2F6FB; border: 2px dashed #C9D8EA; }
+  .befehl { min-width: 54px; min-height: 54px; border-radius: 14px; border: 0; font-size: 1.6rem; background: #FFE9A8; box-shadow: 0 3px 0 rgba(0,0,0,.1); position: relative; }
+  .befehl.schleife { background: #D9C8FF; font-size: 1.1rem; font-weight: 700; padding: 0 8px; }
+  .befehl.dran { outline: 4px solid #2FA37C; }
+  .befehl.fehler { outline: 4px solid #E5484D; }
+  .tasten { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .tasten .befehl { background: #fff; border: 3px solid #FFC83D; min-width: 62px; min-height: 62px; }
+  .knoepfe { display: flex; flex-wrap: wrap; gap: 8px; }
+  .meldung { min-height: 1.6em; font-weight: 600; margin: 8px 0 0; }
+  .meldung.gut { color: #1E7A47; } .meldung.nein { color: #B3261E; }
+  .klein { font-size: .95rem; opacity: .85; }
+</style>
+</head>
+<body>
+<section class="ansicht" id="liste-ansicht">
+  <div class="oben"><a class="knopf rund" href="../../" aria-label="Zur Spielwelt">🏠</a><h1>🤖 Robo programmieren</h1></div>
+  <div class="blatt">
+    <div class="blase"><svg class="robo" id="robo-klein" viewBox="0 0 64 64" aria-hidden="true"></svg><p id="intro"></p></div>
+    <div class="level-liste" id="levels"></div>
+    <p class="klein">Programmieren heißt: Befehle in die richtige Reihenfolge bringen. Ein Roboter macht genau das, was im Programm steht – nicht mehr und nicht weniger.</p>
+  </div>
+</section>
+<section class="ansicht" id="spiel-ansicht" hidden>
+  <div class="oben"><button class="knopf rund" id="zur-liste" aria-label="Zur Übersicht">⬅️</button><h1 id="level-titel"></h1></div>
+  <div class="blatt">
+    <div class="blase"><p id="auftrag"></p></div>
+    <div class="spiel">
+      <svg class="gitter" id="gitter" role="img" aria-label="Spielfeld"></svg>
+      <div class="programm">
+        <h3>Dein Programm <span class="klein" id="laenge"></span></h3>
+        <div class="zeile" id="zeile" aria-label="Programm"></div>
+        <div class="tasten" id="tasten"></div>
+        <div class="knoepfe"><button class="knopf haupt" id="start">▶️ Start</button><button class="knopf" id="loeschen">⌫ Letzten weg</button><button class="knopf" id="leeren">🧽 Alles weg</button></div>
+        <p class="meldung" id="meldung" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/echtewelt.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../shared/figuren.js"></script>
+<script src="robo.js"></script>
+</body>
+</html>

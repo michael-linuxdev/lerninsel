@@ -179,7 +179,7 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten
   assert.strictEqual(I.abdeckung("de.su.04"), "ja");    // NA-36: mit Steigerung und Pronomen genug Aufgaben
   assert.strictEqual(I.abdeckung("ma.zo.03"), "ja");    // Plus/Minus bis 20 und bis 10 (Klasse-1-Weg)
   assert.strictEqual(I.abdeckung("ma.zo.05"), "ja");    // Zehner und Einer, Zahlen bis 100, Bild/Zahl/Rechnung (Sachsen in voller Tiefe)
-  assert.strictEqual(I.abdeckung("me.ph.01"), "teil");  // ohne Lernkartei
+  assert.strictEqual(I.abdeckung("me.ph.01"), "ja");    // seit 30.10.2026 mit „Robo programmieren“
   assert.strictEqual(I.abdeckung("de.le.02"), "ja");    // NA-30: Tafel, Finde das Bild, Welcher Buchstabe (mit Lernkartei)
   assert.strictEqual(I.abdeckung("de.le.05"), "ja");     // Schuljahr Deutsch: Lesetexte, Laut lesen, Lese-Detektiv
   assert.strictEqual(I.abdeckung("de.sc.02"), "teil");   // NA-35: Nachspuren (ohne Lernkartei)
@@ -213,7 +213,7 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jede
   const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8"), alleThemen = w.THEMEN.concat(w.FACH_THEMEN);
   const gibt = (a) => { const [art, id] = a.split(":");
     return art === "sachkunde" ? alleThemen.some(t => t.id === id) : art === "echtewelt" ? echt.includes(`["${id}", `) : art === "englisch" ? w.ENGLISCH.some(l => l.id === id)
-      : ["atelier:malen", "atelier:musik", "atelier:lieder", "gefuehle:alle", "lesen:silben"].includes(a); };
+      : ["atelier:malen", "atelier:musik", "atelier:lieder", "atelier:erkennen", "atelier:verfremden", "gefuehle:alle", "lesen:silben", "robo:alle"].includes(a); };
   const soll = { kunst: [3, 3, 3], musik: [4, 4, 4], werken: [3, 2, 3], sport: [6, 5, 5], ethik: [4, 4, 4], evreligion: [4, 4, 4], kareligion: [4, 4, 4] };   // Lernbereiche Kl. 1/2, 3, 4
   const benutzt = new Set(), z = {};
   Object.entries(soll).forEach(([f, [n12, n3, n4]]) => {
@@ -223,14 +223,14 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jede
       lbs.forEach(lb => { lb.lz.forEach(id => assert.ok(K.ziel(id), id)); assert.ok(lb.punkte && lb.punkte.length >= 2, `${f} ${k} ${lb.titel}`);
         lb.punkte.forEach(p => { if (ids.has(p.id)) return; ids.add(p.id); m[p.abdeckung]++;
           assert.ok(p.app.length && p.app.every(gibt), `${p.id}: ${p.app}`); p.app.forEach(a => benutzt.add(a));
-          if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(sachkunde|atelier|gefuehle|lesen|englisch):/.test(a)), p.id + " ist „ja“ ohne Übung");
+          if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(sachkunde|atelier|gefuehle|lesen|englisch|robo):/.test(a)), p.id + " ist „ja“ ohne Übung");
           if (p.abdeckung === "aussen") assert.ok(p.app.some(a => a.startsWith("echtewelt:")), p.id + " ist „aussen“ ohne Echte-Welt-Aufgabe"); });
         const a = lb.punkte.map(p => p.abdeckung), erw = a.some(x => x === "teil" || x === "nein") ? "teil" : a.filter(x => x === "aussen").length >= a.filter(x => x === "ja").length ? "aussen" : "ja";
         assert.strictEqual(lb.abdeckung, erw, `${f} Kl. ${k} ${lb.titel}`); }); });
     z[f] = m;
   });
   w.FACH_THEMEN.forEach(t => assert.ok(benutzt.has("sachkunde:" + t.id), t.id + " kommt in keinem Inhaltspunkt vor"));
-  assert.deepStrictEqual(z, { kunst: { ja: 32, teil: 1, nein: 0, aussen: 12 }, musik: { ja: 34, teil: 3, nein: 0, aussen: 11 }, werken: { ja: 24, teil: 1, nein: 0, aussen: 9 },
+  assert.deepStrictEqual(z, { kunst: { ja: 33, teil: 0, nein: 0, aussen: 12 }, musik: { ja: 36, teil: 1, nein: 0, aussen: 11 }, werken: { ja: 25, teil: 0, nein: 0, aussen: 9 },
     sport: { ja: 14, teil: 0, nein: 0, aussen: 28 }, ethik: { ja: 43, teil: 0, nein: 0, aussen: 0 },
     evreligion: { ja: 45, teil: 0, nein: 0, aussen: 2 }, kareligion: { ja: 59, teil: 0, nein: 0, aussen: 1 } });
 });

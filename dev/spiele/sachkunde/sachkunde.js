@@ -62,7 +62,8 @@
     const r = $("fach-reiter"); if (!r || !Object.keys(FS).length) return;
     const kl = ((S.stufe && S.stufe()) || {}).klasse || 2, sichtbar = (t) => !(t.stufe && kl < t.stufe - 1) && !(t.land && (S.land() || {}).code !== t.land);
     const liste = [["", "🔬", "Sachunterricht"]].concat(Object.entries(FS).filter(([f, x]) => (!x.nurMitWahl || KONF || f === FACH) && (window.FACH_THEMEN || []).some(t => t.fach === f && sichtbar(t) && passtKonf(t))).map(([f, x]) => [f, x.e, x.name]));
-    r.innerHTML = liste.map(([f, e, n]) => `<a class="reiter${f === FACH ? " an" : ""}" data-fach="${f}" href="./${f ? "?fach=" + f : ""}"${f === FACH ? ' aria-current="page"' : ""}><span>${e}</span> ${n}</a>`).join("");
+    r.innerHTML = liste.map(([f, e, n]) => `<a class="reiter${f === FACH ? " an" : ""}" data-fach="${f}" href="./${f ? "?fach=" + f : ""}"${f === FACH ? ' aria-current="page"' : ""}><span>${e}</span> ${n}</a>`).join("") +
+      (FACH === "werken" && kl >= 3 ? `<a class="reiter" id="robo-link" href="../robo/"><span>🤖</span> Robo programmieren</a>` : "");   // Werken Kl. 4: Programmieren
   }
   function zeichneListe() {
     const d = daten();

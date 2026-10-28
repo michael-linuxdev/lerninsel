@@ -828,7 +828,7 @@
           ["sn.ku3.1.07", "Schrift als Gestaltungsmittel: Monogramm, Geheimschrift, Kalligrafie", "3", ["sachkunde:ku-schrift-foto"], "ja"],
           ["sn.ku3.1.08", "Fotografie: Bildausschnitt, Lochkamera, Licht und Schatten", "3", ["sachkunde:ku-schrift-foto"], "ja"],
           ["sn.ku3.1.09", "Persönlichkeitsrechte und Urheberrecht bei Bildern", "3", ["sachkunde:ku-schrift-foto"], "ja"],
-          ["sn.ku3.1.10", "Bilder digital bearbeiten und verfremden", "3", ["atelier:malen"], "teil"]
+          ["sn.ku3.1.10", "Bilder digital bearbeiten und verfremden", "3", ["atelier:verfremden", "atelier:malen"], "ja"]
         ],
         2: [ // Körperhaft-räumliches Gestalten
           ["sn.ku3.2.01", "Bildhauer und ihre Arbeitsweise, Formbarkeit von Materialien", "3", ["sachkunde:ku-bildhauer"], "ja"],
@@ -867,7 +867,7 @@
       "1/2": {
         1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
           ["sn.mu12.1.01", "Stimme als Instrument: Geräusche nachahmen, Texte und Bilder verklanglichen", "1/2", ["sachkunde:mu-stimme"], "ja"],
-          ["sn.mu12.1.02", "Grundton spüren, Melodiebausteine wiedererkennen", "1/2", ["atelier:musik"], "teil"],
+          ["sn.mu12.1.02", "Grundton spüren, Melodiebausteine wiedererkennen", "1/2", ["atelier:erkennen", "atelier:musik"], "ja"],
           ["sn.mu12.1.03", "Rhythmus und Melodie beim Sprechen: Verse rhythmisieren", "1/2", ["sachkunde:mu-rhythmus", "lesen:silben"], "ja"],
           ["sn.mu12.1.04", "Grundlagen des Singens: Haltung, Atmung, Tonbildung", "1/2", ["sachkunde:mu-stimme"], "ja"],
           ["sn.mu12.1.05", "Im Klassengesang singen, Kanon-Vorübungen, etwa sechs Lieder auswendig", "1/2", ["atelier:lieder", "echtewelt:singen"], "aussen"]
@@ -894,7 +894,7 @@
       },
       "3": {
         1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
-          ["sn.mu3.1.01", "Melodie- und Rhythmusbausteine singen und wiedererkennen", "3", ["atelier:musik"], "teil"],
+          ["sn.mu3.1.01", "Melodie- und Rhythmusbausteine singen und wiedererkennen", "3", ["atelier:erkennen", "atelier:lieder", "atelier:musik"], "ja"],
           ["sn.mu3.1.02", "Haltung, Atmung und Tonraum beim Singen", "3", ["sachkunde:mu-stimme"], "ja"],
           ["sn.mu3.1.03", "Kanon und Quodlibet, solistisch und mehrstimmig singen", "3", ["sachkunde:mu-singen3", "echtewelt:singen"], "aussen"],
           ["sn.mu3.1.04", "Gestaltungsmittel beim Singen: Lautstärke, Tempo, Stimmklang, Fachbegriffe", "3", ["sachkunde:mu-singen3"], "ja"],
@@ -996,7 +996,7 @@
         ],
         3: [ // Begegnung mit Robotern und Automaten
           ["sn.we4.3.01", "Roboter und Automaten im Alltag: Eingabe – Verarbeitung – Ausgabe, Sensor, Aktor", "4", ["sachkunde:we-roboter", "echtewelt:automat"], "ja"],
-          ["sn.we4.3.02", "Einfache Programmierumgebung: kurze Befehlsfolgen", "4", ["sachkunde:we-roboter"], "teil"],
+          ["sn.we4.3.02", "Einfache Programmierumgebung: kurze Befehlsfolgen", "4", ["robo:alle", "sachkunde:we-roboter"], "ja"],
           ["sn.we4.3.03", "Ein Modell bauen und programmieren, Fehler suchen", "4", ["echtewelt:automat"], "aussen"]
         ]
       }

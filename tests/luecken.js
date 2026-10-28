@@ -103,7 +103,16 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const { ctx, p } = await kind("2");
     await p.goto(BASIS + "spiele/lesen/"); await p.waitForTimeout(400);
     const ok = await p.evaluate(() => { const S = window.SCHREIBSCHRIFT; return S.reihe.concat(S.woerter).every(w => { const r = S.baue(w); return r.striche[0].length > 10 && r.breite > 20 && r.striche.every(s => s.every(q => isFinite(q[0]) && isFinite(q[1]))); }); });
-    erwarte(ok, "Schreibschrift: alle 30 Kleinbuchstaben und 34 Wörter haben gültige Striche");
+    erwarte(ok, "Schreibschrift: alle Klein- und Großbuchstaben und alle Übungswörter haben gültige Striche");
+    // Großbuchstaben: kommen dran, wenn alle Kleinbuchstaben geübt sind; ein großes A mit dem Finger nachspuren
+    await p.evaluate(() => { const d = Spielwelt.lade("lesen") || {}; d.sas = {}; "ilutenmrsaodcbhkfgjpqvwxyzäöüß".split("").forEach(z => d.sas[z] = 2); Spielwelt.speichere("lesen", d); });
+    await p.reload(); await p.waitForTimeout(400); await p.click("#weg-sas"); await p.waitForTimeout(300);
+    const z0 = await p.evaluate(() => ({ z: __lesen.spurZeichen(), t: document.getElementById("spuren-wort").textContent }));
+    erwarte(z0.z === "I" && /großes I/.test(z0.t), `Nach den Kleinbuchstaben kommen die Großbuchstaben (${z0.t})`);
+    await nachspuren(p, 4);
+    const g = await p.evaluate(() => __lesen.stand().sas);
+    erwarte(g.I >= 1 && g.L >= 1 && g.H >= 1, `Großbuchstaben I, L, H und ein Wort nachgespurt (${["I", "L", "H"].map(z => z + ":" + g[z]).join(" ")})`);
+    await bild(p, "sas-gross");
     await ctx.close();
   }
 

@@ -458,7 +458,7 @@
       <div class="zeit-raster"><label>Schreibschrift üben (Lesen und Schreiben → „Schreibschrift“)<select id="d-schrift">
         <option value="sas" ${schrift !== "aus" ? "selected" : ""}>Schulausgangsschrift (Sachsen und andere Länder)</option>
         <option value="aus" ${schrift === "aus" ? "selected" : ""}>Aus – die Schule nutzt eine andere Schrift</option></select></label></div>
-      <p class="klein">Bisher gibt es die Kleinbuchstaben und verbundene Wörter der Schulausgangsschrift; Großbuchstaben, Vereinfachte und Lateinische Ausgangsschrift folgen. Die Formen sind nachgebildet – bitte mit der Schreibtabelle der Schule vergleichen. Das Kind findet seine eigenen Texte und Aufnahmen unter „Mein Ich“ → „Mein Heft“.</p>
+      <p class="klein">Es gibt alle Klein- und Großbuchstaben und verbundene Wörter der Schulausgangsschrift; Vereinfachte und Lateinische Ausgangsschrift folgen. Die Formen sind nachgebildet – bitte mit der Schreibtabelle der Schule vergleichen. Das Kind findet seine eigenen Texte und Aufnahmen unter „Mein Ich“ → „Mein Heft“.</p>
       <label class="schalter-z"><input type="checkbox" id="d-aufnehmen" ${an ? "checked" : ""}> Mein Kind darf sich in der Wörter-Werkstatt selbst aufnehmen (Gedicht vortragen, Geschichte nacherzählen, Buchtipp)</label>
       <p class="klein">Die Aufnahmen bleiben nur auf diesem Gerät, werden nie hochgeladen und nicht mit dem Spielstand übertragen. Das Gerät fragt beim ersten Mal nach dem Mikrofon. Ist der Schalter aus, fallen die Aufnahme-Schritte still weg.${window.Eigenes && !Eigenes.kannAufnehmen() ? " <b>Dieser Browser kann nicht aufnehmen.</b>" : ""}</p>
       <div class="knoepfe"><button class="knopf haupt" id="d-speichern">Speichern</button></div>
