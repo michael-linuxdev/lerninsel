@@ -1829,3 +1829,23 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
   weiter „bald“ bzw. werden durch die neuen Spiele belegt). **Neue Spiele in 3D („Rund“), Reihenfolge: Insel-Garten → Bäckerei Benno → Tierpflege-Station**
   (Katalog `docs/MINISPIELE.md`, Priorität 1). Danach: Schach, Kopfrechen-Duell, Gefühle und Atelier deutlich verbessern.
 - Folgen: Kapitel 3 öffnet künftig über die Bäckerei Benno (statt Bennos Brücke am Bauplatz); Etappe E6 „Spielorte“ zeigt dann das erste neue Spiel.
+
+### Fragerunde 30.10.2026: Alter und Klasse – welche Inhalte ein Kind sieht (neues Paket NA-60 „Altersgerechte Erfahrung“)
+**Heute (Bestandsaufnahme):** Die Klasse (Stufe `vs`, `1`–`4`, `5`) steuert: Matheweg-Start (vs/1 → Kl.-1-Weg, 4 → Kl. 4, 5 → Übergang),
+Sichtbarkeit in Werkstatt, Sachunterricht, Englisch und Vorlesen (Inhalte ab der Klasse davor, frühere Klassen eingeklappt), Vorschul-Rucksack-Tür
+(nur vs/1), Lesen (Vorschule nur „Gleicher Anfang“ und „Bild-Wort“). Vorschule zählt sonst wie Klasse 1. Das Alter steuert nur die Bildschirmzeit (DGKJ).
+Tagesaufgaben und Startseite sind für alle Klassen gleich; Englisch steht schon ab Klasse 2 offen; „Mein Können“ empfiehlt nur innerhalb einer Seite.
+**Entscheidungen:**
+- **Vorschule bekommt eine eigene Startseite:** wenige große Bild-Türen (Vorschul-Rucksack, Zahlen = Mathe Kl. 1, Laute und Reime, Insel, Malen), keine Lesetexte,
+  Tagesaufgaben aus dem Rucksack.
+- **Klassen 1–4:** Tagesaufgaben je Klasse; Feld „Heute für dich“ auf der Startseite (nächste passende Station/Kapitel nach Klasse, „gerade in der Schule“
+  und Können); Türen nach Klasse (z. B. Englisch ab Kl. 3 – bzw. nach Eltern-Wahl ab Kl. 1 –, Rucksack nur bis Kl. 1, Robo-Programmieren ab Kl. 3);
+  Bedienung nach Lesestärke: Kl. 1 mehr Bilder und kurze Texte, ab Kl. 3 mehr Text.
+- **Vorlesen in jedem Alter nur auf Knopfdruck** (Entscheidung des Auftraggebers; ersetzt das automatische Vorlesen in Szenen und Seiten – 🔊-Knopf gut
+  sichtbar, auch für Vorschulkinder; Regel „ohne Lesen bedienbar“ bleibt über den Knopf, Bilder, Zeigehand). Alte Variante als Eltern-Schalter
+  („automatisch vorlesen“), weil eine bestehende Funktion ersetzt wird.
+- **Andere Klassen nach Können:** Standard eigene Klasse; wer stark ist, bekommt Inhalte der nächsten Klasse vorgeschlagen, bei Lücken gezielt
+  Wiederholung aus früheren Klassen (über „Mein Können“).
+- **Alter zusätzlich:** Ton und Story (Jüngere kürzere Szenen und mehr Figuren-Hilfe, Ältere etwas mehr Text und eigene Ziele) und Schwierigkeit der neuen
+  Insel-Spiele (z. B. Bäckerei Kl. 1 bis 10 €, Kl. 3 mit Komma).
+- Reihenfolge (meine Wahl): NA-60 zuerst (es bestimmt auch die Schwierigkeit der neuen Spiele), dann Insel-Garten → Bäckerei Benno → Tierpflege-Station.
