@@ -208,31 +208,36 @@
       if (Spielwelt.offen(m.fuehrerschein)) return true;
       return Spielwelt.inselRegel() === "bedienung" && !!(m.lektionen && m.lektionen.bedienung > 0);
     },
-    minispieleOffen() { return Spielwelt.offen((profil.daten.medien || {}).fuehrerschein); },
+    // Die fünf Insel-Minispiele (Ballon-Party, Schatz-Strand, Sternenlauf, Kart, Bauplatz) sind seit 30.10.2026 ausgeblendet, bis sie
+    // neu gedacht sind (Entscheidung des Auftraggebers); ihre Orte auf der Insel zeigen „bald“. Wieder einschalten: MINISPIELE_AUS = false.
+    MINISPIELE_AUS: true,
+    minispieleOffen() { return !Spielwelt.MINISPIELE_AUS && Spielwelt.offen((profil.daten.medien || {}).fuehrerschein); },
     stufe() { return STUFEN.find(x => x.code === Spielwelt.kind().stufe); },
     land() { return LAENDER.find(x => x.code === Spielwelt.kind().land); },
-    // Zwei Looks der Insel (NA-25): "rund" (three.js) und "pixel" (PixiJS) zeichnen dieselbe Welt – umschalten verliert nichts.
-    // Gemerkt bei den Insel-Einstellungen des Kindes (eltern.insel.look); fehlt der Wert, gilt "rund".
-    // Solange die Pixel-Insel entsteht (NA-26 bis NA-28), soll „Pixel“ nur in /dev und /dev/test wählbar sein; auf der Hauptseite gilt „Rund“.
-    LOOKS: ["rund", "pixel"],
-    // Seit NA-26 (Pixel-Insel spielbar) in /dev und /dev/test wählbar; auf der Hauptseite erst, wenn Figuren und Zimmer (NA-27/28) fertig sind.
-    // Seit 27.10.2026 überall wählbar (Entscheidung des Auftraggebers: bis Weihnachten geht alles direkt auf die Hauptseite).
-    lookWaehlbar() { return true; },
+    // Look der Insel: seit 30.10.2026 nur noch „Rund“ (three.js) – der Pixel-Look ist entfernt (Entscheidung des Auftraggebers).
+    // Die Funktionen bleiben für ältere Aufrufe bestehen; ein gemerktes eltern.insel.look = "pixel" wird ignoriert.
+    LOOKS: ["rund"],
+    lookWaehlbar() { return false; },
     // Übersetzungs-Entwürfe (Status „entwurf“): auf der Hauptseite nur für die freigegebenen Sprachen (Entscheidung 27.10.2026:
     // Russisch ja, alle anderen erst nach Prüfung); in /dev und /dev/test immer. 29.10.2026: „Der Entwicklungsstand kommt vollständig nach main“ –
     // auch die sorbischen Entwurfs-Lektionen (hsb) stehen auf der Hauptseite; die Prüfung läuft weiter (spiele/sorbisch/pruefen.html).
     ENTWURF_FREI: ["ru", "hsb"],
     entwurfErlaubt(code) { return UMG !== "prod" || Spielwelt.ENTWURF_FREI.includes(code); },
-    look() { if (!Spielwelt.lookWaehlbar()) return "rund"; return ((profil.daten.eltern || {}).insel || {}).look === "pixel" ? "pixel" : "rund"; },
+    look() { return "rund"; },
+    // Grafikstufe der Insel ohne gespeicherte Wahl (30.10.2026): kleine Bildschirme (kürzere Seite < 500 CSS-Pixel, also Handys) „einfach“,
+    // sonst „schön“. Eine Wahl im Elternbereich (eltern.insel.grafik) oder auf der Insel hat immer Vorrang.
+    grafikStandard() {
+      try { const kurz = Math.min(screen.width || innerWidth, screen.height || innerHeight); return kurz > 0 && kurz < 500 ? "einfach" : "schoen"; } catch (e) { return "schoen"; }
+    },
     // Eltern können das Umschalten für das Kind sperren (eltern.insel.lookKind = false); Erwachsene (PIN) dürfen immer
     lookKindDarf() { return ((profil.daten.eltern || {}).insel || {}).lookKind !== false; },
     setzeLook(l) {
       const e = Spielwelt.lade("eltern") || {};
-      e.insel = Object.assign({}, e.insel || {}, { look: l === "pixel" ? "pixel" : "rund" });
+      e.insel = Object.assign({}, e.insel || {}, { look: "rund" });
       Spielwelt.speichere("eltern", e); return Spielwelt.look();
     },
     // Adresse der Insel im gewählten Look (wurzel = Weg zur Startseite, z. B. "../../")
-    inselUrl(wurzel = "", suche = "") { return wurzel + (Spielwelt.look() === "pixel" ? "spiele/pixel/insel.html" : "spiele/welt3d/heimat.html") + suche; },
+    inselUrl(wurzel = "", suche = "") { return wurzel + "spiele/welt3d/heimat.html" + suche; },
     // Hilfesprachen: Inhalte tragen Hilfetexte als Felder je Sprache, z. B. { text, ru, uk } oder { warum, warumRu, warumUk }
     SPRACHEN,
     hilfe() { const c = Spielwelt.kind().hilfesprache; return SPRACHEN.find(x => x.code === c && x.fertig) || null; },

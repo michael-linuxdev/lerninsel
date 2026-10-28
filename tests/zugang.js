@@ -47,7 +47,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await p.goto(BASIS); await medien(() => { const m = Spielwelt.lade("medien"); m.fuehrerschein = "2026-10-20"; Spielwelt.speichere("medien", m); });
   erwarte(await insel(), "alte Regel + kompletter Führerschein: Insel offen");
   await p.goto(BASIS + "spiele/welt3d/ballons.html"); await p.waitForTimeout(1500);
-  erwarte(/ballons\.html/.test(p.url()), "kompletter Führerschein: Minispiel offen");
+  erwarte(/heimat\.html/.test(p.url()), "Minispiele sind ausgeblendet (seit 30.10.2026): auch mit Führerschein zurück auf die Insel");
   await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(300);
   if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); }
   await p.uncheck("#i-zugang"); await p.click("#i-speichern"); await p.waitForTimeout(200);

@@ -25,7 +25,7 @@ const GRAFIK_KEY = "lerninsel.grafik";
 const lies = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 // Insel-Einstellungen (Grafik, Steuerung, Kamera) werden pro Kind bei den Eltern-Daten gemerkt.
 // Eltern legen im Elternbereich fest, ob das Kind die Knöpfe überhaupt sieht (kindDarf). Alte Tablet-Werte dienen als Startwert.
-const EIN = Object.assign({ grafik: lies(GRAFIK_KEY) === "einfach" ? "einfach" : "schoen", steuerung: lies("lerninsel.steuerung") === "tippen" ? "tippen" : "joystick", kamera: "fest", kindDarf: true },
+const EIN = Object.assign({ grafik: lies(GRAFIK_KEY) === "einfach" ? "einfach" : lies(GRAFIK_KEY) === "schoen" ? "schoen" : (S.grafikStandard ? S.grafikStandard() : "schoen"), steuerung: lies("lerninsel.steuerung") === "tippen" ? "tippen" : "joystick", kamera: "fest", kindDarf: true },
   (S.lade("eltern") || {}).insel || {});
 function merkeEin(k, v) { EIN[k] = v; const e = S.lade("eltern") || {}; e.insel = Object.assign({}, e.insel || {}, { [k]: v }); S.speichere("eltern", e); }
 const EINFACH = EIN.grafik === "einfach";
@@ -1240,10 +1240,6 @@ $("kamera").addEventListener("click", () => {
 // Eltern können die Einstellungs-Knöpfe ausblenden (Erwachsene sehen sie immer)
 if (!EIN.kindDarf && !(S.erwachsen && S.erwachsen())) ["grafik", "steuerung", "kamera"].forEach(id => { $(id).hidden = true; });
 // Look umschalten (NA-25): dieselbe Welt in Pixel – Spielstand, Story und Zimmer bleiben, nichts geht verloren
-if (S.lookWaehlbar && S.lookWaehlbar() && (S.lookKindDarf() || S.erwachsen())) {
-  $("look").hidden = false;
-  $("look").addEventListener("click", () => { S.ton("tipp"); S.setzeLook("pixel"); location.href = "../pixel/insel.html" + location.search.replace(/[?&]szene=[^&]*/, ""); });
-}
 $("grafik").textContent = EINFACH ? "✨ einfach" : "✨ schön";
 // Steuerung: Joystick oder Tippen (jederzeit umschaltbar, das Tablet merkt es sich)
 let STEUERUNG = EIN.steuerung === "tippen" ? "tippen" : "joystick";

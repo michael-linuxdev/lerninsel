@@ -9,7 +9,7 @@ let n = 0;
 const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
 
 // ---------- Attrappen ----------
-function neueUmgebung({ story = {}, zeit = null, funde = 0, speicher = {}, jetzt, heuteFach = {}, sterne = 0, tier = null, karten = 0 } = {}) {
+function neueUmgebung({ story = {}, zeit = null, funde = 0, speicher = {}, jetzt, heuteFach = {}, sterne = 0, tier = null, karten = 0, minispieleAus = false } = {}) {
   const daten = JSON.parse(JSON.stringify(speicher)), frei = new Set(), geschenkeTier = [];
   const st = Object.assign({ kapitel: 0, etappen: {}, gesehen: [], geschenke: [] }, story);
   let neueHeute = 0;
@@ -20,7 +20,7 @@ function neueUmgebung({ story = {}, zeit = null, funde = 0, speicher = {}, jetzt
       lade: (k) => (k in daten ? JSON.parse(JSON.stringify(daten[k])) : null),
       speichere: (k, v) => { daten[k] = JSON.parse(JSON.stringify(v)); },
       offen: (x) => !!x, istFrei: (id) => frei.has(id), schalteFrei: (id) => { frei.add(id); return true; },
-      paar: (x) => [x[0], ""], ht: () => "", kind: () => ({ ort: null }), sterne: () => sterne
+      paar: (x) => [x[0], ""], ht: () => "", kind: () => ({ ort: null }), sterne: () => sterne, MINISPIELE_AUS: minispieleAus
     },
     Story: {
       etappe: (e) => !!st.etappen[e], etappeFertig: (e, still) => { if (!st.etappen[e]) { st.etappen[e] = still ? 1 : "2026-10-27"; if (!still) neueHeute++; } },
@@ -226,6 +226,13 @@ pruefe("Spielort: ohne Spielzeit schläft er, ohne Führerschein gesperrt, sonst
   assert.strictEqual(u.K.antwort("ballons").blase[4], "../welt3d/ballons.html");
   assert.strictEqual(u.K.antwort("truhe").blase[4], "../welt3d/insel.html");
   assert.strictEqual(u.K.antwort("schach").blase[4], "../schach/", "Tilda geht auch ohne Spielzeit");
+});
+
+pruefe("Minispiele ausgeblendet (30.10.2026): alle fünf Orte zeigen „bald“ ohne Ziel, Aktionsknopf „Ansehen“", () => {
+  const u = neueUmgebung({ zeit: SPIELEN, funde: 20, speicher: { medien: { fuehrerschein: true } }, minispieleAus: true });
+  ["ballons", "truhe", "lauf", "kart", "bau"].forEach(id => { const b = u.K.antwort(id).blase;
+    assert.ok(b[0] === "🚧" && /entsteht etwas Neues/.test(b[2]) && !b[4], id); assert.deepStrictEqual(u.K.aktionFuer(id)[0], ["🚧", "Ansehen"], id); });
+  assert.strictEqual(u.K.antwort("schach").blase[4], "../schach/", "Schach bleibt");
 });
 
 pruefe("neue Minispiel-Orte öffnen sich mit dem Wissensbaum", () => {

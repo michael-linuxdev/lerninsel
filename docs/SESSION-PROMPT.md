@@ -66,7 +66,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - Satz-Bauen/Ordnen werten jetzt den Wortlaut (doppelte Wörter austauschbar) – war vorher ein stiller Fehler in Englisch.
 - Nur russische Übersetzungs-Entwürfe (alle neuen Kapitel/Themen/Lektionen haben ru-Entwürfe); Ukrainisch u. a. fehlen. Ton über die Gerätestimme.
 - Länderprofile außer Sachsen fehlen (NA-47); Heimat-Themen für andere Länder fehlen.
-- Grafik eingefroren mit offenen Paketen NA-29b (Handy-Leistung) und NA-29 Teil 2.
+- Grafik freigegeben (30.10.2026): **nur noch der Look „Rund“** (Pixel entfernt), **Minispiele ausgeblendet** (Orte mit „bald“-Schild, `Spielwelt.MINISPIELE_AUS`), Handys starten automatisch in „einfach“. NA-29 Teil 2 entfällt bis zum Neuentwurf der Minispiele.
 - **Insel-Tests (`tutorial`, `prolog`) wackeln, wenn parallel andere Browser-Tests laufen** – allein laufen lassen; einmal gescheitert heißt nicht kaputt.
 
 ### Offene Fragen an den Auftraggeber
@@ -78,7 +78,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Neue Fächer ansehen** (in /dev): Eule Ella → Reiter Kunst/Musik/Werken/Sport/Ethik; passt der Ton bei Ethik (Religionen, Geheimnisse, Abschied)?
   Elternbereich → „Wie im Schuljahr: gerade in der Schule“ (alle Fächer, dazu „Mein Kind hat in der Schule: Ethik/Ev./Kath. Religion“).
 - **Neu ansehen (in /dev):** Vorschul-Rucksack (Kind mit Stufe „Vorschule“), Sorbisch als Muttersprache (Elternbereich → Sorbisch → „als Muttersprache“), Robo, Vorlesen, Präsentieren.
-- **Dashboard auf dem iPad ansehen:** Startseite quer/hoch, „Meine Ecke“-Reiter, Elternbereich-Reiter – passt die Aufteilung? Dann weiter mit Grafik NA-29 Teil 2 und NA-29b.
+- **Dashboard auf dem iPad ansehen:** Startseite quer/hoch, „Meine Ecke“-Reiter, Elternbereich-Reiter – passt die Aufteilung?
+- **Minispiele neu denken** (später): Welche Spiele mit welchem Lernbezug sollen auf die freien Orte?
 - **Sorbisch prüfen lassen (jetzt 72 Lektionen, auch Muttersprache):** Prüferin/Prüfer öffnet `…/spiele/sorbisch/pruefen.html` (oder Elternbereich → Sorbisch → Prüfliste), hakt ab,
   korrigiert und schickt den Text zurück → Korrekturen in `spiele/sorbisch/lektionen.js`, geprüfte IDs in `geprueft.js` eintragen. Optional **Mathematik Klasse 5 (Oberschule/Gymnasium)** als PDF.
 - Deutsch: Sollen Kinder ihre eigenen Texte selbst wiederfinden („Mein Heft“)? Handschrift-Übung mit Finger/Stift (Schulausgangsschrift oder
@@ -86,7 +87,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (Inhalte fertig seit 30.10.2026; davor: Lehrplan Sachsen in voller Tiefe, Entscheidung 27.10.2026)
-0. **iPad-Rückmeldung einarbeiten**, Sorbisch-Prüfung nachtragen, dann **Grafik nach Freigabe** (NA-29 Teil 2, NA-29b Handy-Leistung).
+0. **Optik verbessern** (Reihenfolge des Auftraggebers): 3D-Insel „Rund“, Fachseiten (einheitlicher Stil), Figuren, Startseite/Meine Ecke, Jungen-Figuren gleichziehen; **danach Story** NA-17, NA-18, NA-16. iPad-Rückmeldung und Sorbisch-Prüfung jederzeit einarbeiten.
 **Arbeitsliste: `docs/SACHSEN-SCHULJAHR.md` – zuerst lesen.** Maßstab „wie ein Schuljahr“ (jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr,
 Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen.
 

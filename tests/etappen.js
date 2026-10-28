@@ -1,6 +1,6 @@
 // Playwright-Test (NA-14): Tutorial-Etappen E4–E8 über drei Tage – Sterne fürs Zimmer, Nest und Ei, Spielorte, Merkkiste, Gefühle.
 // Höchstens zwei neue Etappen am Tag; wer eine Funktion schon kennt, bekommt die Etappe still; Eltern können die Einführung überspringen.
-// Läuft auf der Pixel-Insel (Tage 1–3) und prüft die Sterne-Szene zusätzlich auf der runden Insel.
+// Läuft auf der runden Insel (Tage 1–3; bis 30.10.2026 auf der inzwischen entfernten Pixel-Insel) und prüft „schon genutzt“ zusätzlich.
 // Aufruf: sh tests/laufen.sh etappen   (Screenshots mit BILDER=<ordner>)
 const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
@@ -35,10 +35,10 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
   const tag = async (p, d) => { await p.evaluate((t) => localStorage.setItem("__testJetzt", String(t)), TAG(d)); };
   const spielzeit = (p) => p.evaluate(() => { for (let i = 0; i < 12; i++) Zeit.aufgabe(); });
 
-  // ---------- Pixel: drei Tage ----------
+  // ---------- Drei Tage auf der Insel ----------
   {
     const { ctx, p } = await neuesKind();
-    const INSEL = BASIS + "spiele/pixel/insel.html?stunde=14";
+    const INSEL = BASIS + "spiele/welt3d/heimat.html?stunde=14";
     // Tag 2 (21.10.): Sterne und Spielzeit → E4 Sterne; danach E5 Ei; dann ist für heute Schluss
     await tag(p, 21);
     await p.goto(BASIS); await spielzeit(p); await p.evaluate(() => Spielwelt.gibSterne(6));
@@ -49,17 +49,17 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     await weiter(p);
     a = await szene(p);
     erwarte(a.nr === 1 && a.wartet && a.zeigt, "E4: Benno zeigt aufs Haus und wartet");
-    await p.evaluate(() => __pixel.reingehen()); await p.waitForTimeout(500);
+    await p.evaluate(() => __heimat.reingehen()); await p.waitForTimeout(600);
     a = await szene(p);
     erwarte(a && a.nr === 2 && a.wartet, "E4: im Zimmer wartet Benno auf „Einrichten“");
-    await p.click("#einrichten"); await p.waitForTimeout(600);
+    await p.click("#einrichten", { force: true }); await p.waitForTimeout(600);
     erwarte(await p.evaluate(() => !__szene.aktuell() && Story.etappe("E4")), "E4 erledigt, sobald der Laden offen ist");
     await p.click('[data-moebel="lampe"]'); await p.click('[data-platz="links"]'); await p.click("#laden-zu");
-    erwarte(await p.evaluate(() => __pixel.moebel().includes("lampe")), "erstes Möbel gekauft und aufgestellt");
-    await p.evaluate(() => __pixel.rausgehen());
+    erwarte(await p.evaluate(() => JSON.stringify(__heimat.zimmerDaten().plaetze).includes("lampe")), "erstes Möbel gekauft und aufgestellt");
+    await p.evaluate(() => __heimat.rausgehen());
     await warteSzene(p, "ei");
     a = await szene(p);
-    erwarte(a.wer === "robo" && a.zeigt, "E5: Pixel zeigt auf das Nest");
+    erwarte(a.wer === "robo" && a.zeigt, "E5: Robo Pixel zeigt auf das Nest");
     for (let i = 0; i < 3; i++) await weiter(p);
     await p.waitForTimeout(300);
     const nest = await p.evaluate(() => ({ e5: Story.etappe("E5"), titel: document.getElementById("blase-titel").textContent, los: !document.getElementById("blase-los").hidden }));
@@ -73,15 +73,12 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     await p.goto(BASIS); await spielzeit(p);
     await p.evaluate(() => { const m = Spielwelt.lade("medien"); m.fuehrerschein = "2026-10-01"; Spielwelt.speichere("medien", m);
       Spielwelt.speichere("lernkartei", { deutsch: [{ k: "wort|Apfel", s: { typ: "wort", wort: "Apfel" }, stufe: 1, faellig: "2000-01-01" }], sachkunde: [] }); });
-    await p.goto(INSEL); await warteSzene(p, "spielorte");
-    erwarte((await szene(p)).zeigt, "E6: Pixel zeigt auf die Ballon-Wiese");
-    await bild(p, "etappen-spielorte");
-    await weiter(p); await weiter(p);
-    await warteSzene(p, "merkkiste");
+    // E6 „Spielorte“ wartet, solange die Minispiele ausgeblendet sind (seit 30.10.2026) – direkt E7
+    await p.goto(INSEL); await warteSzene(p, "merkkiste");
     a = await szene(p);
     erwarte(a.wer === "fipsi" && a.zeigt, "E7: Fipsi zeigt auf sich – die Merkkiste wartet");
     await weiter(p); await weiter(p);
-    erwarte(await p.evaluate(() => Story.etappe("E6") && Story.etappe("E7")), "E6 und E7 erledigt");
+    erwarte(await p.evaluate(() => !Story.etappe("E6") && Story.etappe("E7")), "E7 erledigt, E6 wartet auf die Minispiele");
 
     // Tag 4 (23.10.): Bruni fragt, wie es geht (E8)
     await tag(p, 23);
@@ -89,8 +86,8 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     a = await szene(p);
     erwarte(a.wer === "baer" && a.zeigt, "E8: Bruni fragt, wie es dir geht");
     await weiter(p); await weiter(p);
-    const ende = await p.evaluate(() => ({ e: ["E4", "E5", "E6", "E7", "E8"].every(e => Story.etappe(e)), chronik: Story.chronik().map(x => x.s) }));
-    erwarte(ende.e && ["sterne", "ei", "spielorte", "merkkiste", "gefuehle"].every(x => ende.chronik.includes(x)), `alle Etappen erledigt, Chronik: ${ende.chronik.join(", ")}`);
+    const ende = await p.evaluate(() => ({ e: ["E4", "E5", "E7", "E8"].every(e => Story.etappe(e)), chronik: Story.chronik().map(x => x.s) }));
+    erwarte(ende.e && ["sterne", "ei", "merkkiste", "gefuehle"].every(x => ende.chronik.includes(x)) && !ende.chronik.includes("spielorte"), `Etappen ohne Minispiele erledigt, Chronik: ${ende.chronik.join(", ")}`);
     await ctx.close();
   }
 

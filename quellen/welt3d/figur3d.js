@@ -4,7 +4,8 @@
 import { Group, Mesh, MeshToonMaterial, MeshBasicMaterial, BackSide, SphereGeometry, CylinderGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry,
   LatheGeometry, TorusGeometry, Vector2, DataTexture, RedFormat, NearestFilter, CircleGeometry } from "../three/three.module.js";
 
-const EINFACH = (() => { try { const e = (window.Spielwelt.lade("eltern") || {}).insel; return e ? e.grafik === "einfach" : localStorage.getItem("lerninsel.grafik") === "einfach"; } catch (e) { return false; } })();
+const EINFACH = (() => { try { const S = window.Spielwelt, e = (S.lade("eltern") || {}).insel, l = localStorage.getItem("lerninsel.grafik");
+  return (e && e.grafik ? e.grafik : l || (S.grafikStandard ? S.grafikStandard() : "schoen")) === "einfach"; } catch (e) { return false; } })();
 export const verlauf = new DataTexture(new Uint8Array([110, 190, 255]), 3, 1, RedFormat);
 verlauf.minFilter = verlauf.magFilter = NearestFilter; verlauf.needsUpdate = true;
 const mats = new Map();

@@ -11,8 +11,7 @@ const GERAETE = [
 const SZENEN = [
   ["Rund (schön)", "spiele/welt3d/heimat.html?stunde=14", "schoen"],
   ["Rund (einfach)", "spiele/welt3d/heimat.html?stunde=14", "einfach"],
-  ["Pixel flach", "spiele/pixel/insel.html?stunde=14", null],
-  ["Pixel 2,5D (Vorschau)", "spiele/welt3d/probe25d.html", null]
+  ["Rund (ohne Wahl → automatisch)", "spiele/welt3d/heimat.html?stunde=14", "auto"]
 ];
 const DROSSEL = +(process.env.DROSSEL || 4);   // CPU 4× langsamer ≈ einfaches Handy
 
@@ -48,10 +47,13 @@ const MESSEN = () => {
     const cdp = await ctx.newCDPSession(p);
     for (const [sname, url, grafik] of SZENEN) {
       await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
-      if (grafik) await p.evaluate((g) => { const e = Spielwelt.lade("eltern") || {}; e.insel = Object.assign({}, e.insel || {}, { grafik: g }); Spielwelt.speichere("eltern", e); try { localStorage.removeItem("lerninsel.sparen"); } catch (x) { /* egal */ } }, grafik);
+      if (grafik === "auto") await p.evaluate(() => { const e = Spielwelt.lade("eltern") || {}; if (e.insel) delete e.insel.grafik; Spielwelt.speichere("eltern", e); try { localStorage.removeItem("lerninsel.grafik"); } catch (er) { /* egal */ } });
+      else if (grafik) await p.evaluate((g) => { const e = Spielwelt.lade("eltern") || {}; e.insel = Object.assign({}, e.insel || {}, { grafik: g }); Spielwelt.speichere("eltern", e); try { localStorage.removeItem("lerninsel.sparen"); } catch (x) { /* egal */ } }, grafik);
       await p.goto(BASIS + url); await p.waitForTimeout(4000);
       await p.evaluate(() => { if (window.__szene && __szene.aktuell()) Szene.abbrechen(); const t = document.querySelector(".pixelbox"); if (t) t.hidden = true; });
       await p.waitForTimeout(800);
+      // Seit 30.10.2026: ohne gespeicherte Wahl startet die Insel auf kleinen Bildschirmen (kürzere Seite < 500) in „einfach“
+      if (grafik === "auto") { const g = await p.evaluate(() => document.getElementById("grafik").textContent); if (!/einfach/.test(g)) fehler.push(`${gname}: ohne Wahl nicht „einfach“ (${g})`); else console.log(`  ✓ ${gname}: ohne Wahl automatisch „einfach“`); }
       // Messfenster 1: ohne Drosselung (Zeichenaufrufe, Dreiecke, Bildgröße), Messfenster 2: CPU gedrosselt (Hauptthread-Zeit)
       const fenster = async (ms) => { await p.evaluate(() => Object.assign(window.__mess, { aufrufe: 0, dreiecke: 0, ms: 0, bilder: 0 })); const t0 = Date.now(); await p.waitForTimeout(ms); return p.evaluate((dauer) => { const z = window.__mess; return { bilder: z.bilder, proBild: { aufrufe: z.aufrufe / Math.max(1, z.bilder), dreiecke: z.dreiecke / Math.max(1, z.bilder), ms: z.ms / Math.max(1, z.bilder) }, fps: z.bilder / (dauer / 1000) }; }, Date.now() - t0); };
       const a = await fenster(4000);

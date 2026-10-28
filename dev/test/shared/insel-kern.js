@@ -245,7 +245,8 @@
     { id: "E4", szene: "sterne", faellig: (st) => st.spielen && S().sterne() >= 4,
       genutzt: () => { const d = zimmerDaten(); return Object.keys(d.plaetze).length > 0 || d.wand !== "rosa"; } },
     { id: "E5", szene: "ei", faellig: () => !!W.TierPflege, genutzt: () => { const d = tierDaten(); return !!d && (d.phase === "ei" || d.phase === "tier"); } },
-    { id: "E6", szene: "spielorte", faellig: (st) => st.spielen && !st.frei && profi(), genutzt: () => W.Story.zustand().etappen.E1 === 1 },
+    // E6 wartet, solange die Minispiele ausgeblendet sind (Spielwelt.MINISPIELE_AUS)
+    { id: "E6", szene: "spielorte", faellig: (st) => !S().MINISPIELE_AUS && st.spielen && !st.frei && profi(), genutzt: () => W.Story.zustand().etappen.E1 === 1 },
     { id: "E7", szene: "merkkiste", faellig: () => faelligeKarten() > 0,
       genutzt: () => { const k = S().lade("lernkartei") || {}; return ["deutsch", "sachkunde"].some(f => (k[f] || []).some(c => c.stufe >= 2)); } },
     { id: "E8", szene: "gefuehle", faellig: () => tageSeitE1() >= 1, genutzt: () => Object.keys((S().lade("gefuehle") || {}).tage || {}).length > 0 }
@@ -411,7 +412,9 @@
   };
   const baumStufe = () => (W.Lernfunde ? W.Lernfunde.baum().stufe : 0);
   const istFrei = (id) => S().offen(baumStufe() >= ((SPIELE[id] || {}).stufe || 0));
-  const BALD = new Set([]);   // Spiele, die noch entstehen
+  // Spiele, die noch entstehen: seit 30.10.2026 alle fünf Minispiele (ausgeblendet, werden neu gedacht – Spielwelt.MINISPIELE_AUS)
+  const bald = (id) => !!S().MINISPIELE_AUS && ["ballons", "truhe", "insel", "lauf", "kart", "bau"].includes(id);
+  const baldBlase = (e, titel) => blase("🚧", `${e} ${titel}`, "Hier entsteht etwas Neues! Bald kannst du hier wieder spielen.", "Здесь появится что-то новое! Скоро здесь снова можно будет играть.");
   const ORT_TEXT = {
     lauf: ["Der Sternenlauf", "Lauf so schnell du kannst und sammle Sterne! Wische, um auszuweichen.", "Беги и собирай звёзды!", "../welt3d/lauf.html"],
     kart: ["Die Kart-Bahn", "Fahr ein Rennen mit deinem Kart!", "Гонка на карте!", "../welt3d/kart.html"],
@@ -476,8 +479,8 @@
   // alle übrigen Stationen
   function antwort(id, lage = {}) {
     switch (id) {
-      case "ballons": return spielort(() => profi() ? blase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", "Лопни как можно больше шариков!", "../welt3d/ballons.html") : fuehrerschein());
-      case "truhe": return spielort(() => profi() ? blase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "../welt3d/insel.html") : fuehrerschein());
+      case "ballons": if (bald(id)) return baldBlase("🎈", "Ballon-Wiese"); return spielort(() => profi() ? blase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", "Лопни как можно больше шариков!", "../welt3d/ballons.html") : fuehrerschein());
+      case "truhe": if (bald(id)) return baldBlase("🏝️", "Schatz-Strand"); return spielort(() => profi() ? blase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "../welt3d/insel.html") : fuehrerschein());
       case "schach": return blase("🐢", "Tilda am Schachtisch", `Hallo ${name()}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?", "../schach/");
       case "buehne": return paulaAntwort();
       case "station": return wetterAntwort(lage.wetter);
@@ -506,11 +509,11 @@
       case "moebel": { const m = MOEBEL.find(x => x.id === lage.id); return m ? { blase: [m.e, m.name, m.text, "", null] } : null; }
       case "lauf": case "kart": case "bau": {
         const info = SPIELE[id], [titel, de, ru, ziel] = ORT_TEXT[id];
+        if (bald(id)) return baldBlase(info.e, titel);
         if (!istFrei(id)) {
           const brauch = W.Lernfunde ? W.Lernfunde.STUFEN[info.stufe - 1] : 0, hat = W.Lernfunde ? W.Lernfunde.gesamt() : 0;
           return blase("🌳", `${info.e} ${info.name} – noch zu`, `Dieser Ort öffnet sich, wenn dein Wissensbaum wächst. Noch ${Math.max(1, brauch - hat)} ${brauch - hat === 1 ? "Lernfund" : "Lernfunde"} – lern etwas Neues bei Ella, Fipsi oder Benno!`, "Это место откроется, когда вырастет твоё дерево знаний. Узнай что-нибудь новое!");
         }
-        if (BALD.has(id)) return blase("🚧", titel, "Hier wird noch gebaut! Bald kannst du hier spielen.", "Здесь ещё строят! Скоро можно будет играть.");
         return spielort(() => profi() ? blase(info.e, titel, de, ru, ziel) : fuehrerschein());
       }
     }
@@ -521,7 +524,7 @@
     haus: [["🚪", "Reingehen"], 3.4], ballons: [["🎈", "Spielen"], 1.9], truhe: [["🔓", "Öffnen"], 1.9], schach: [["♟️", "Schach"], 2.4], buehne: [["🎵", "Musik"], 2.6],
     station: [["🌦️", "Ansehen"], 1.9], album: [["📒", "Album"], 1.6], bett: [["🛏️", "Ansehen"], 2.2], schrank: [["🚪", "Öffnen"], 2.0], spiegel: [["🪞", "Reinschauen"], 1.6], wissensbaum: [["🌳", "Ansehen"], 2.2], sonnenuhr: [["☀️", "Ansehen"], 1.9], paket: [["🎁", "Öffnen"], 1.8], nachbar: [["💬", "Reden"], 2.3]
   };
-  const aktionFuer = (id) => (["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
+  const aktionFuer = (id) => (bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
   W.InselKern = {
     // Stationen

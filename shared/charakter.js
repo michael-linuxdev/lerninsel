@@ -154,7 +154,7 @@
   function aufgaben() {
     const d = lade(), r = zufall(d.tag.datum + "|" + (S.profil.name || ""));
     const m = S.lade("medien"), dreiD = S.offen(m && m.fuehrerschein);
-    const auswahl = WECHSEL.filter(w => !w.dreiD || dreiD);
+    const auswahl = WECHSEL.filter(w => !w.dreiD || (dreiD && !S.MINISPIELE_AUS));   // Minispiele ausgeblendet → keine Aufgabe dafür
     const dritte = auswahl[Math.floor(r() * auswahl.length)];
     const liste = [
       { id: "training", emoji: "🧮", titel: "Mathe-Training", text: "8 Aufgaben – genau die, die noch schwer sind.", ereignis: "training-fertig", skill: "mathe", link: "../mathe/?training=1" },

@@ -26,10 +26,7 @@ const SZENEN = [
   ["Schatz-Strand", "spiele/welt3d/insel.html", "schoen"],
   ["Sternenlauf", "spiele/welt3d/lauf.html", "schoen"],
   ["Kart-Rennen", "spiele/welt3d/kart.html", "schoen"],
-  ["Bauplatz", "spiele/welt3d/bau.html", "schoen"],
-  ["Pixel-Insel", "spiele/pixel/insel.html?stunde=14", "-"],
-  ["Pixel-Insel Wald, groß", "spiele/pixel/insel.html?stunde=14&biom=wald&groesse=gross&huegel=viel&seed=5", "-"],
-  ["Pixel-Zimmer", "spiele/pixel/insel.html?stunde=14&drinnen=1", "-"]
+  ["Bauplatz", "spiele/welt3d/bau.html", "schoen"]
 ];
 
 (async () => {

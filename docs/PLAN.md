@@ -1762,3 +1762,16 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
   Lehrplan aufklappen, Feld speichern); `luecken` und `etappen` tippen jetzt den Reiter an; Tests mit Elternbereich setzen `__elternAlle`.
 - **Nächstes:** weitere Grafik-Pakete NA-29 Teil 2 und NA-29b (Handy-Leistung) nach Rückmeldung zum Dashboard.
 - **Nachtrag 30.10.2026:** „Hallo,“ vor dem Namen entfällt (nur der bunte Name). „Mein Ich“ heißt jetzt **„Meine Ecke“** (Wahl des Auftraggebers; Seite bleibt `spiele/ich/`, Test-Haken `__ich`).
+
+### Stand 30.10.2026, spät (Auftraggeber: „Pixel fliegt raus. Alle Minispiele raus (später neu denken). Zuerst die Optik, dann die Story.“)
+- **Pixel-Look entfernt:** nur noch „Rund“ (three.js). Umschaltknopf auf der Insel und Look-Wahl im Elternbereich weg; `Spielwelt.look()` liefert immer
+  „rund“, `inselUrl` immer `spiele/welt3d/heimat.html`. Gelöscht (im Git-Verlauf erhalten): `quellen/pixel/`, `quellen/probe/`, `spiele/probe/`,
+  `spiele/pixel/insel.js`, Vorschau „Pixel 2,5D“, Tests `pixelinsel` und `look`. `spiele/pixel/insel.html` leitet alte Lesezeichen zur runden Insel.
+  Test `etappen` läuft jetzt auf der runden Insel.
+- **Minispiele ausgeblendet** (Ballon-Party, Schatz-Strand, Sternenlauf, Kart, Bauplatz): `Spielwelt.MINISPIELE_AUS = true`. Ihre Orte bleiben mit Schild
+  „🚧 Hier entsteht etwas Neues“ (Wahl des Auftraggebers), direkte Aufrufe leiten zur Insel, keine Tagesaufgabe dafür, Etappe E6 „Spielorte“ wartet.
+  Code bleibt für den Neuentwurf. Schach, Kopfrechen-Duell, Gefühle und Atelier bleiben (später ebenfalls deutlich verbessern).
+- **Kleine Bildschirme:** ohne gespeicherte Wahl startet „Rund“ auf Handys (kürzere Seite < 500 CSS-Pixel) in „einfach“ (`Spielwelt.grafikStandard()`);
+  Wahl im Elternbereich oder auf der Insel hat Vorrang. Test `handy` prüft es.
+- **Nächstes:** Optik in vier Bereichen – 3D-Insel „Rund“, Fachseiten (einheitlicher Stil), Figuren (Kind, Tiere, Lernbegleiter), Startseite/Meine Ecke
+  (Türen mit eigenen Bildern) – und **Jungen-Figuren auf den Stand der Mädchen bringen**. Danach Story NA-17, NA-18, NA-16.
