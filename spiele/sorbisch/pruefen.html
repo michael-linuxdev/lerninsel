@@ -55,6 +55,7 @@
   </div>
 </div>
 <script src="lektionen.js"></script>
+<script src="mutter.js"></script>
 <script src="geprueft.js"></script>
 <script>
 (function () {
@@ -79,6 +80,19 @@
     });
     [["intro", k.intro.de], ["ende", k.ende.de]].forEach(([n, t]) => /[„“]|[čćěłńóřšźž]/i.test(t) && e.push({ k: n, art: "Deutscher Text mit sorbischen Wörtern", so: t, de: "" }));
     gruppen.push({ id: k.id, name: k.name + (FREI.includes(k.id) ? " (schon freigegeben)" : ""), eintraege: e });
+  });
+  // Sorbisch als Muttersprache (mutter.js): Überschriften, sorbische Aufgaben, Lesetexte, Antworten und Sätze
+  gruppen.push({ id: "mutter-seite", name: "Muttersprache: Überschriften der Lernbereiche", eintraege: (window.SORBISCH_MUTTER_LB || []).map(([nr, t]) =>
+    ({ k: "lb" + nr, art: "Überschrift Lernbereich " + nr, so: t.replace(/^\S+\s/, "").split(" – ")[0], de: t.split(" – ")[1] || "" })) });
+  (window.SORBISCH_MUTTER || []).forEach(k => {
+    const e = [{ k: "name", art: "Name der Lektion", so: k.name.split(" – ")[0], de: k.name.split(" – ")[1] || "" }], texte = new Set();
+    k.schritte.forEach((x, i) => {
+      if (x.so) e.push({ k: "s" + i, art: x.typ === "sag" ? "Sorbischer Text" : "Frage auf Sorbisch", so: x.so, de: x.text || x.frage || "" });
+      if (x.typ === "textfrage" && !texte.has(x.text)) { texte.add(x.text); e.push({ k: "t" + i, art: "Lesetext" + (x.titel ? ` „${x.titel}“` : ""), so: x.text, de: "" }); }
+      if (x.typ === "satz") e.push({ k: "x" + i, art: "Satz", so: x.woerter.join(" "), de: x.de });
+      if ((x.typ === "wahl" || x.typ === "textfrage") && /[a-zčćěłńóřšž]/i.test(x.optionen.join(""))) x.optionen.forEach((o, j) => /[a-zčćěłńóřšž]/i.test(o) && e.push({ k: "x" + i + "o" + j, art: j === 0 ? "Richtige Antwort" : "Falsche Antwort (soll trotzdem korrekt geschrieben sein)", so: o, de: x.frage }));
+    });
+    gruppen.push({ id: k.id, name: "Muttersprache: " + k.name + (FREI.includes(k.id) ? " (schon freigegeben)" : ""), eintraege: e });
   });
 
   const schl = (g, e) => g.id + ":" + e.k;

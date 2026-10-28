@@ -29,6 +29,8 @@
       hv: "Hörverstehen", sp: "Sprechen", ws: "Wortschatz", le: "Lesen und Schreiben", ik: "Interkulturelles Lernen" } },
     so: { name: "Sorbisch (Obersorbisch)", quelle: "Lehrplan Sachsen „Sorbisch als Fremdsprache“ (Grundschule)", bereiche: {
       sp: "Sprechen", ws: "Wortschatz", le: "Lesen", ik: "Sorbische Kultur und Bräuche" } },
+    sm: { name: "Sorbisch (Muttersprache)", quelle: "Lehrplan Sachsen Grundschule Sorbisch (2004)", bereiche: {
+      sp: "Schriftspracherwerb", sz: "Sprechen und Zuhören", sc: "Schreiben", rs: "Richtig schreiben", le: "Lesen und Medien", su: "Sprache untersuchen", ku: "Sorbische Literatur und Kultur" } },
     daz: { name: "Deutsch als Zweitsprache", quelle: "SPRACHEN.md", bereiche: { d0: "D0 Ankommen", d1: "D1 Erste Sätze" } }
   };
 
@@ -234,6 +236,15 @@
     ["so.sp.02", "3", "Kurze sorbische Sätze bilden (Ja rěkam …, Ja sym …, Ja rady …)"],
     ["so.le.01", "1", "Sorbische Wörter mit ihren Buchstaben (č, ć, ł, ř, š, ž, ě …) lesen"],
     ["so.ik.01", "1", "Sorbische Feste und Bräuche (Vogelhochzeit, Ostern) und die Lausitz als zweisprachige Heimat"],
+
+    // ---------- Sorbisch als Muttersprache (Sachsen, Lehrplan 2004, nur nach Eltern-Wahl) ----------
+    ["sm.sp.01", "1", "Sorbische Laute und Buchstaben (č, ć, dź, ł, š, ž …), Silben und erste Wörter"],
+    ["sm.sz.01", "1", "Auf Sorbisch höflich sprechen, Gesprächsregeln einhalten, Nachrichten weitergeben"],
+    ["sm.sc.01", "1", "Sorbische Texte für andere schreiben: Einladung, Geschichte, Brief"],
+    ["sm.rs.01", "1", "Sorbisch richtig schreiben: Satzanfang, Auslaut (dub – duby), č/ć, ł/w, Alphabet im Wörterbuch"],
+    ["sm.le.01", "1", "Sorbische Wörter, Sätze und Texte lesen und verstehen, sorbische Medien kennen"],
+    ["sm.su.01", "3", "Sorbische Sprache untersuchen: Wortarten, Dual, Wortfamilien, slawische Verwandtschaft"],
+    ["sm.ku.01", "1", "Sorbische Märchen, Sagen (Krabat), Feste, Theater und die mehrsprachige Lausitz"],
 
     // ---------- Deutsch als Zweitsprache ----------
     ["daz.d0.01", "1", "Erste Wörter für Schule und Alltag verstehen"],

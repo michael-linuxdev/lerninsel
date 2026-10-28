@@ -190,7 +190,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     p.on("pageerror", e => fehler.push(`${p.url()}: ${e.message}`));
     await p.goto(BASIS + "spiele/sorbisch/pruefen.html"); await p.waitForTimeout(300);
     const gruppen = await p.evaluate(() => __pruefen.gruppen());
-    erwarte(gruppen.length === 48 && gruppen.every(g => g.n >= 3), `Prüfseite ${art}: Seitentexte und 47 Lektionen mit allen Einträgen (${gruppen.reduce((n, g) => n + g.n, 0)})`);
+    erwarte(gruppen.length === 74 && gruppen.every(g => g.n >= 3), `Prüfseite ${art}: Seitentexte, 47 Lektionen und 25 der Muttersprache mit allen Einträgen (${gruppen.reduce((n, g) => n + g.n, 0)})`);
     erwarte(await passt(p), `Prüfseite ${art}: keine Scrollleiste`);
     if (art === "quer") {
       const n = gruppen.find(g => g.id === "so-witaj").n;

@@ -62,6 +62,8 @@
       lernkartei: false, titel: k.name, quelle: "bestand", stufe: [String(k.stufe)] }));
     (window.SORBISCH || []).forEach(k => registriere({ id: "sorbisch:" + k.id, fach: "sorbisch", lz: k.lz, aufgaben: Math.min(6, k.woerter.length) + (k.extra || []).length,
       lernkartei: false, titel: k.name, quelle: "bestand", stufe: k.stufe < 3 ? ["1", "2"] : ["3", "4"] }));   // nur nach Eltern-Wahl sichtbar
+    (window.SORBISCH_MUTTER || []).forEach(k => registriere({ id: "sorbisch:" + k.id, fach: "sorbisch", lz: k.lz, aufgaben: k.schritte.filter(x => x.typ !== "sag").length,
+      lernkartei: false, titel: k.name, quelle: "bestand", stufe: k.stufe < 3 ? ["1", "2"] : [String(k.stufe)] }));   // Sorbisch als Muttersprache, nur nach Eltern-Wahl
     STATISCH.forEach(s => nachId[s.id] || registriere(Object.assign({ quelle: "bestand" }, s)));
   }
 

@@ -3,8 +3,11 @@
 // Es gibt keine sorbische Gerätestimme: Sorbisch wird gelesen, nicht vorgelesen (keine falsche Aussprache). Deutsche Erklärungen werden vorgelesen.
 // Prüfung: Alle sorbischen Texte sind Entwürfe. Seit 29.10.2026 erscheinen sie auch auf der Hauptseite (Spielwelt.ENTWURF_FREI enthält "hsb");
 // ohne diese Freigabe zeigt die Hauptseite nur Lektionen aus geprueft.js (SORBISCH_FREI). Prüfliste: spiele/sorbisch/pruefen.html.
+// Seit 30.10.2026 auch „Sorbisch als Muttersprache“ (eltern.sorbisch.art = "mutter", Lehrplan 2004): Lektionen aus mutter.js mit festen Schritten.
 (function () {
-  const S = window.Spielwelt, SP = window.Sprache, L0 = window.SORBISCH || [], F = window.Figuren;
+  const S = window.Spielwelt, SP = window.Sprache, F = window.Figuren;
+  const MUTTER = (((S.lade("eltern") || {}).sorbisch || {}).art) === "mutter";
+  const L0 = (MUTTER ? window.SORBISCH_MUTTER : window.SORBISCH) || [];
   const $ = (id) => document.getElementById(id);
   const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
   const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -33,7 +36,9 @@
     $("paula-klein").innerHTML = F.papagei("");
     $("ton-vorlesen").textContent = daten().vorlesen ? "🗣️" : "🔇";
     const sicht = L.filter(sichtbar), fertig = sicht.filter(k => bestes(k.id) > 0).length;
-    $("intro-text").textContent = !sicht.length ? `Witaj, ${name()}! Die sorbischen Lektionen werden gerade von jemandem geprüft, der Sorbisch spricht. Bald geht es los!`
+    $("intro-text").textContent = MUTTER && sicht.length ? (fertig === 0 ? `Witaj, ${name()}! Tu čitaš, pisaš a přepytuješ serbsku rěč. (Hier liest, schreibst und erforschst du Sorbisch als deine Sprache.)`
+        : `Jara derje, ${name()}! Ty sy hižo ${fertig} ${fertig === 1 ? "lekciju" : "lekcijow"} zdokonjał(a). (Schon ${fertig} geschafft.)`)
+      : !sicht.length ? `Witaj, ${name()}! Die sorbischen Lektionen werden gerade von jemandem geprüft, der Sorbisch spricht. Bald geht es los!`
       : fertig === 0 ? `Witaj, ${name()}! Ich bin Paula. Ich lerne mit dir Sorbisch – die Sprache der Sorben in der Lausitz. Lies die Wörter laut, so gut du kannst!`
       : `Jara derje! Du hast schon ${fertig} ${fertig === 1 ? "Lektion" : "Lektionen"} geschafft.`;
     $("lektionen").innerHTML = "";
@@ -67,15 +72,17 @@
 
   // ---------- „Zeig, was du kannst“ je Lernbereich ----------
   // Wörter aus den Lektionen der eigenen Stufe (Kl. 1/2: Stufe 1; Kl. 3/4: alle), je Lektion bis zu 4, höchstens 10, ohne Sterne.
-  // Ergebnis in sorbisch.lernstand["k<klasse>:<lb>"] = { am, n, richtig, je: { lektion: bool } }.
-  const EN_LB = window.SORBISCH_LB || [];
+  // Ergebnis in sorbisch.lernstand["k<klasse>:<lb>"] (Muttersprache: "m<klasse>:<lb>") = { am, n, richtig, je: { lektion: bool } }.
+  const EN_LB = (MUTTER ? window.SORBISCH_MUTTER_LB : window.SORBISCH_LB) || [];
   const enKlasse = () => klasse();
   const lernstandLektionen = (nr) => L.filter(k => (k.lb || 1) === nr && sichtbar(k) && (klasse() >= 3 || k.stufe < 3));
   const pad2 = (n) => String(n).padStart(2, "0");
   const heute = () => { const d = window.__jetzt ? new Date(window.__jetzt) : new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; };
   function starteLernstand(nr) {
-    const lek = mische(lernstandLektionen(nr)), je = Math.min(4, Math.ceil(10 / Math.max(1, lek.length))), arten = hatEnglisch() ? ["hoeren", "deutsch", "lesen"] : ["lesen", "deutsch"];
-    const schritte = mische([].concat(...lek.map(k => mische(k.woerter).slice(0, je).map(w => ({ wort: w, andere: mische(k.woerter.filter(x => x !== w)).slice(0, 2), __kap: k.id })))))
+    const lek = mische(lernstandLektionen(nr)), je = Math.min(MUTTER ? 3 : 4, Math.ceil(10 / Math.max(1, lek.length))), arten = hatEnglisch() ? ["hoeren", "deutsch", "lesen"] : ["lesen", "deutsch"];
+    // Muttersprache: Aufgaben (Wahl, Lesetext) aus den festen Schritten der Lektionen
+    const schritte = MUTTER ? mische([].concat(...lek.map(k => mische(k.schritte.filter(x => x.typ === "wahl" || x.typ === "textfrage")).slice(0, je).map(x => Object.assign({}, x, { __kap: k.id }))))).slice(0, 10)
+      : mische([].concat(...lek.map(k => mische(k.woerter).slice(0, je).map(w => ({ wort: w, andere: mische(k.woerter.filter(x => x !== w)).slice(0, 2), __kap: k.id })))))
       .slice(0, 10).map((x, i) => Object.assign(x, { typ: arten[i % arten.length] }));
     const titel = (EN_LB.find(x => x[0] === nr) || [nr, ""])[1].replace(/^\S+\s/, "");
     const k = { id: "lernstand-" + nr, lernstand: nr, name: "Zeig, was du kannst", e: "🎯", farbe: "#7B55B8", grund: "#EFE6FF", lz: [...new Set([].concat(...lek.map(x => x.lz)))],
@@ -87,7 +94,7 @@
     const { k } = lauf, je = {};
     k.schritte.forEach(x => { if (x.__kap) je[x.__kap] = !lauf.falsch.has(x.__kap); });
     const ids = Object.keys(je), gut = ids.filter(id => je[id]), ueben = ids.filter(id => !je[id]), nm = (id) => (L.find(x => x.id === id) || {}).name || id;
-    const d = daten(); d.lernstand = d.lernstand || {}; d.lernstand[`k${enKlasse()}:${k.lernstand}`] = { am: heute(), n: ids.length, richtig: gut.length, je }; speichere(d);
+    const d = daten(); d.lernstand = d.lernstand || {}; d.lernstand[`${MUTTER ? "m" : "k"}${enKlasse()}:${k.lernstand}`] = { am: heute(), n: ids.length, richtig: gut.length, je }; speichere(d);
     if (window.Charakter) Charakter.gib("sorbisch", 3);
     $("ende-titel").textContent = "Dźakuju so – danke fürs Zeigen!";
     $("ende-sterne").innerHTML = `<span style="animation-delay:180ms">🎯</span>`;
@@ -104,6 +111,7 @@
 
   // ---------- Lektion: Schritte aus den Wörtern erzeugen ----------
   function baue(k) {
+    if (k.schritte) return k.schritte.slice();   // Muttersprache: feste Schritte
     const w = k.woerter, quiz = mische(w).slice(0, 6), arten = hatEnglisch() ? ["hoeren", "lesen", "deutsch"] : ["lesen", "deutsch", "lesen"];
     const ablenker = (x) => mische(w.filter(y => y !== x)).slice(0, 2);
     return [{ typ: "sag", text: k.intro.de, ru: k.intro.ru }, { typ: "karten" }]
@@ -116,6 +124,7 @@
   // (falsch → morgen, dann nach 3 und 7 Tagen; Wiederholungen zählen nicht gegen die Sterne).
   function mitWiederholung(schritte) {
     if (!window.Lernkartei) return schritte;
+    if (MUTTER) return schritte;
     const karten = Lernkartei.faellige("sorbisch", 3).map(s => s.typ === "hoeren" && !hatEnglisch() ? Object.assign({}, s, { typ: "lesen" }) : s);
     if (!karten.length) return schritte;
     const intro = { typ: "sag", text: "Kurz wiederholen: Diese Wörter waren letztes Mal knifflig.", ru: "Коротко повторим: эти слова в прошлый раз были трудными." };
@@ -141,6 +150,8 @@
     if (gesprochen) sprichDe(mitName(gesprochen));
   }
   const hinweis = `<p class="hinweis" id="hinweis"></p>`;
+  // Muttersprache: Aufgabe auf Sorbisch groß, deutsche Hilfe klein darunter (vorgelesen wird nur das Deutsche)
+  const soText = (so, de) => `<span lang="hsb" class="so-text">${so}</span>${de ? `<span class="de-hilfe">${de}</span>` : ""}`;
   const weiterKnopf = (t = "Weiter") => `<button class="knopf weiter" id="weiter">${t}</button>`;
   const aufWeiter = () => $("weiter").addEventListener("click", () => { S.ton("tipp"); weiter(); });
 
@@ -152,7 +163,7 @@
     A.scrollTop = 0;
     switch (s.typ) {
       case "sag":
-        blase(s.text, s.text, s.ru);
+        blase(s.so ? soText(s.so, s.text) : s.text, s.text, s.ru);
         A.innerHTML = `<div class="gross-emoji" aria-hidden="true">${k.e}</div>` + weiterKnopf(s.letzte ? "Fertig!" : "Weiter"); aufWeiter(); break;
       case "karten": {
         blase("Schau dir jede Karte an und lies das sorbische Wort laut!", "Schau dir jede Karte an und lies das sorbische Wort laut!", "Посмотри на каждую карточку и прочитай лужицкое слово вслух!");
@@ -178,10 +189,11 @@
         A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => antwort(b, opts[+b.dataset.n] === s.wort, s.wort.so, `${s.wort.de} = ${s.wort.so}`)));
         break;
       }
-      case "wahl": {
+      case "wahl": case "textfrage": {
         const opts = mische(s.optionen.map((t, n) => ({ t, ok: n === 0 })));
-        blase(s.frage, s.frage, s.ru);
-        A.innerHTML = (s.e ? `<div class="gross-emoji" aria-hidden="true">${s.e}</div>` : "") + `<div class="optionen texte">` + opts.map((o, n) => `<button class="option" data-n="${n}" lang="hsb">${o.t}</button>`).join("") + `</div>` + hinweis;
+        blase(s.so ? soText(s.so, s.frage) : s.frage, s.frage, s.ru);
+        A.innerHTML = (s.typ === "textfrage" ? `<div class="lesetext" lang="hsb">${s.titel ? `<b>${s.titel}</b><br>` : ""}${s.text}</div>` : "") +
+          (s.e ? `<div class="gross-emoji" aria-hidden="true">${s.e}</div>` : "") + `<div class="optionen texte">` + opts.map((o, n) => `<button class="option" data-n="${n}" lang="hsb">${o.t}</button>`).join("") + `</div>` + hinweis;
         A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => antwort(b, opts[+b.dataset.n].ok, s.optionen[0], s.warum || "")));
         break;
       }
@@ -235,7 +247,7 @@
     }
     lauf.versuche++;
     if (lauf.versuche === 1) { const sj = lauf.schritte[lauf.pos]; if (!(sj && sj.__karte)) lauf.fehler++; if (window.Koennen) Koennen.melde(lz, false); if (sj && sj.__kap) lauf.falsch.add(sj.__kap);
-      if (window.Lernkartei && sj && !lauf.k.lernstand) Lernkartei.falsch("sorbisch", sj); }
+      if (window.Lernkartei && sj && !lauf.k.lernstand && !MUTTER) Lernkartei.falsch("sorbisch", sj); }
     S.ton("nein"); if (knopf) { knopf.classList.add("falsch"); knopf.disabled = true; }
     h.className = "hinweis nein"; h.textContent = "Fast! Versuch es nochmal.";
   }
@@ -247,7 +259,7 @@
     let gewinn = Math.max(0, sterne - vorher); if (vorher === 3 && sterne === 3) gewinn = 1;
     const d = daten(); d.lektionen[k.id] = Math.max(vorher, sterne); speichere(d);
     if (gewinn) S.gibSterne(gewinn);
-    if (window.Lernfunde) Lernfunde.merke({ fach: "sorbisch", art: "woerter", e: k.e, schluessel: "so:" + k.id, text: `Sorbisch: ${k.woerter.slice(0, 4).map(w => `${w.so} = ${w.de}`).join(", ")}` });
+    if (window.Lernfunde) Lernfunde.merke({ fach: "sorbisch", art: "woerter", e: k.e, schluessel: "so:" + k.id, text: k.woerter ? `Sorbisch: ${k.woerter.slice(0, 4).map(w => `${w.so} = ${w.de}`).join(", ")}` : `Serbšćina: ${k.name}` });
     if (window.Charakter) { Charakter.gib("sorbisch", 5); Charakter.ereignis("sorbisch-lektion"); }
     $("ende-titel").textContent = `${k.name}: jara derje!`;
     $("ende-sterne").innerHTML = [1, 2, 3].map(n => `<span class="${n <= sterne ? "" : "leer"}" style="animation-delay:${n * 180}ms">⭐</span>`).join("");
@@ -264,6 +276,7 @@
   $("zur-liste").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); lauf = null; zeige("liste"); zeichneListe(); });
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Deutsche Erklärungen werden vorgelesen." : "Deutsche Erklärungen werden nicht vorgelesen."); });
 
+  if (MUTTER) { document.querySelector("#liste-ansicht h1").textContent = "Serbšćina"; document.title = "Serbšćina – Sorbisch als Muttersprache"; }
   zeichneListe();
-  window.__sorbisch = { alle: () => L0.map(k => k.id), frei: () => L.map(k => k.id), starte, starteLernstand, lernstandLektionen, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; }, sichtbar: () => L.filter(sichtbar).map(k => k.id) };
+  window.__sorbisch = { mutter: MUTTER, alle: () => L0.map(k => k.id), frei: () => L.map(k => k.id), starte, starteLernstand, lernstandLektionen, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; }, sichtbar: () => L.filter(sichtbar).map(k => k.id) };
 })();

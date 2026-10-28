@@ -182,7 +182,8 @@
     let n = { ja: 0, teil: 0, nein: 0, aussen: 0 };
     // Ethik oder Religion: nur das Fach, das das Kind in der Schule hat (Eltern-Wahl eltern.ethik.unterricht)
     const unterricht = ((S.lade("eltern") || {}).ethik || {}).unterricht, nurEines = { ethik: !["ev", "ka"].includes(unterricht), evreligion: unterricht === "ev", kareligion: unterricht === "ka",
-      sorbisch: !!(((S.lade("eltern") || {}).sorbisch || {}).an) };   // Sorbisch nur nach Eltern-Wahl
+      sorbisch: !!(((S.lade("eltern") || {}).sorbisch || {}).an) && (((S.lade("eltern") || {}).sorbisch || {}).art) !== "mutter",   // Sorbisch nur nach Eltern-Wahl
+      sorbischmutter: !!(((S.lade("eltern") || {}).sorbisch || {}).an) && (((S.lade("eltern") || {}).sorbisch || {}).art) === "mutter" };
     const faecher = Object.keys(L.laender[land].faecher).filter(f => !(f in nurEines) || nurEines[f]).filter(f => L.fuer(land, f, k.klasse).length).map(f => {
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
@@ -393,30 +394,31 @@
   }
   // Sorbisch (Obersorbisch, „Sorbisch als Fremdsprache“, 28.10.2026): nur nach Wahl; Lektionen auf der Hauptseite erst nach Prüfung (geprueft.js)
   function sorbischKarte() {
-    const so = (S.lade("eltern") || {}).sorbisch || {}, alle = window.SORBISCH || [], frei = (window.SORBISCH_FREI || []).filter(id => alle.some(k => k.id === id));
-    const lb = Object.fromEntries((window.SORBISCH_LB || []).map(([nr, t]) => [String(nr), t.replace(/^\S+\s/, "")]));
+    const so = (S.lade("eltern") || {}).sorbisch || {}, mutter = so.art === "mutter", alle = (mutter ? window.SORBISCH_MUTTER : window.SORBISCH) || [], frei = (window.SORBISCH_FREI || []).filter(id => alle.some(k => k.id === id));
+    const lb = Object.fromEntries(((mutter ? window.SORBISCH_MUTTER_LB : window.SORBISCH_LB) || []).map(([nr, t]) => [String(nr), t.replace(/^\S+\s/, "")]));
     return `<div class="karte" id="sorbisch-karte">
       <h2>🪺 Sorbisch (Obersorbisch)</h2>
-      <p class="klein">Für Kinder, die in der Schule Sorbisch als Fremdsprache lernen (Lehrplan Sachsen „Sorbisch als Fremdsprache“). Mit der Wahl erscheint auf der Startseite die Tür „Sorbisch“.</p>
+      <p class="klein">Für Kinder, die in der Schule Sorbisch lernen – als Fremdsprache (Lehrplan „Sorbisch als Fremdsprache“) oder als Muttersprache (Lehrplan Grundschule Sorbisch 2004: lesen, schreiben, Rechtschreibung, Sprache untersuchen, sorbische Literatur). Mit der Wahl erscheint auf der Startseite die Tür „Sorbisch“.</p>
       <div class="zeit-raster"><label>Sorbisch zeigen<select id="so-an">
         <option value="" ${!so.an ? "selected" : ""}>Nein</option><option value="1" ${so.an ? "selected" : ""}>Ja, mein Kind lernt Sorbisch</option></select></label>
+        <label>Wie lernt Ihr Kind Sorbisch?<select id="so-art"><option value="fremd" ${!mutter ? "selected" : ""}>als Fremdsprache</option><option value="mutter" ${mutter ? "selected" : ""}>als Muttersprache</option></select></label>
         <label>Gerade in der Schule<select id="so-schule"><option value="">Keine Angabe</option>${Object.entries(lb).map(([k, n]) => `<option value="${k}" ${String(so.schule || "") === k ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
       <p class="klein" id="so-pruefstand">Geprüft: <b>${frei.length} von ${alle.length}</b> Lektionen. Alle sorbischen Wörter sind Entwürfe, bis sie jemand mit Sorbisch-Kenntnissen geprüft hat. Die Lektionen sind schon für die Kinder sichtbar; Korrekturen aus der Prüfung werden nachgetragen.
         Es gibt keine sorbische Gerätestimme: Sorbisch wird gelesen, nicht vorgelesen.</p>
       <p><a class="knopf" id="so-pruefen" href="../sorbisch/pruefen.html">✍️ Prüfliste für die Prüferin oder den Prüfer öffnen</a></p>
-      <h3>„Zeig, was du kannst“</h3>${lernstandListe("sorbisch", lb, alle, "lernstand-sorbisch")}
+      <h3>„Zeig, was du kannst“</h3>${lernstandListe("sorbisch", lb, alle, "lernstand-sorbisch", mutter ? "m" : "k")}
       <div class="knoepfe"><button class="knopf haupt" id="so-speichern">Speichern</button></div>
     </div>`;
   }
   function sorbischKnoepfe() {
-    $("so-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.sorbisch = Object.assign({}, e.sorbisch || {}, { an: !!$("so-an").value, schule: $("so-schule").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+    $("so-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.sorbisch = Object.assign({}, e.sorbisch || {}, { an: !!$("so-an").value, art: $("so-art").value, schule: $("so-art").value !== (((S.lade("eltern") || {}).sorbisch || {}).art || "fremd") ? "" : $("so-schule").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
   // ---------- Schuljahr Deutsch und Sachunterricht (28.10.2026): „gerade in der Schule“ und „Zeig, was du kannst“ ----------
   const DE_LB = { sz: "Sprechen und Zuhören", sc: "Schreiben", le: "Lesen", tm: "Texte und Medien", su: "Sprache untersuchen" };
   const EN_LB = { 1: "Me, my family and my friends", 2: "My body and my clothes", 3: "At home", 4: "Food and drink", 5: "Let's go shopping", 6: "At school", 7: "My hobbies", 8: "Animals", 9: "Let's go on a trip", 10: "Around the year", 11: "My Portfolio" };
   const SU_LB = { zl: "Zusammen leben und lernen", kg: "Mein Körper und meine Gesundheit", pt: "Pflanzen und Tiere", un: "Unbelebte Natur", rz: "Raum und Zeit", ex: "Forschen, Medien, Schuljahre" };
-  function lernstandListe(fach, namen, liste, id) {
-    const ls = (S.lade(fach) || {}).lernstand || {}, eintraege = Object.entries(ls).sort((a, b) => (b[1].am || "").localeCompare(a[1].am || ""));
+  function lernstandListe(fach, namen, liste, id, praefix) {
+    const ls = (S.lade(fach) || {}).lernstand || {}, eintraege = Object.entries(ls).filter(([k]) => !praefix || k[0] === praefix).sort((a, b) => (b[1].am || "").localeCompare(a[1].am || ""));
     const name = (x) => (liste.find(k => k.id === x) || {}).name || x;
     if (!eintraege.length) return `<p class="klein" id="${id}">„Zeig, was du kannst“: noch nicht gemacht.</p>`;
     return `<ul class="liste" id="${id}">` + eintraege.map(([k, v]) => { const [kl, lb] = k.split(":"), ueben = Object.keys(v.je).filter(x => !v.je[x]);

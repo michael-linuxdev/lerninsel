@@ -649,6 +649,104 @@
         ]
       }
     },
+    // Sorbisch als Muttersprache (Lehrplan Grundschule Sorbisch 2004): Inhaltspunkte je Lernbereich, nur zusammengefasst
+    sorbischmutter: {
+      "1/2": {
+        1: [ // Schriftspracherwerb (Přiswojenje spisowneje rěče)
+          ["sn.sm12.1.01", "Bedeutung von Lesen und Schreiben, Schrift als Zeichensystem", "1/2", ["sorbisch:sm-pismiki", "sorbisch:sm-slowa"], "ja"],
+          ["sn.sm12.1.02", "Laute hören und unterscheiden, Wörter in Silben gliedern, reimen", "1/2", ["sorbisch:sm-zlozki"], "teil"],
+          ["sn.sm12.1.03", "Buchstaben und Laut-Buchstaben-Beziehungen, auch č, ć, dź, ł, š, ž", "1/2", ["sorbisch:sm-pismiki"], "ja"],
+          ["sn.sm12.1.04", "Lesetechnik: Wörter, Sätze und kurze Texte lesen", "1/2", ["sorbisch:sm-slowa", "sorbisch:sm-mica"], "ja"],
+          ["sn.sm12.1.05", "Druckschrift und Schulausgangsschrift schreiben", "1/2", ["lesen:schreibschrift"], "teil"]
+        ],
+        2: [ // Sprechen und Zuhören (Rěčeć a připosłuchać)
+          ["sn.sm12.2.01", "Erlebnisse und Geschichten zusammenhängend erzählen", "1/2", [], "nein"],
+          ["sn.sm12.2.02", "Einander aktiv zuhören, Gesprächsregeln finden und einhalten", "1/2", ["sorbisch:sm-rozmolwa"], "teil"],
+          ["sn.sm12.2.03", "Grüßen, sich entschuldigen, bitten, danken, wünschen, einladen", "1/2", ["sorbisch:sm-zdwoliwy"], "ja"],
+          ["sn.sm12.2.04", "Ausdrucksmittel: Stimme, Mimik, Gestik; Dialekt, Umgangs- und Standardsprache", "1/2", ["sorbisch:sm-dziwadlo"], "teil"]
+        ],
+        3: [ // Für sich und andere schreiben (Za sebje a druhich pisać)
+          ["sn.sm12.3.01", "Schreibanlässe nutzen, Ideen sammeln, für andere verständlich schreiben", "1/2", ["sorbisch:sm-preprosenje"], "teil"],
+          ["sn.sm12.3.02", "Gebrauchsformen: Einladung, Glückwunsch, Brief", "1/2", ["sorbisch:sm-preprosenje", "sorbisch:sm-zdwoliwy"], "ja"],
+          ["sn.sm12.3.03", "Texte überarbeiten, gestalten und präsentieren", "1/2", ["praesentieren:gestalten"], "teil"]
+        ],
+        4: [ // Richtig schreiben (Prawje pisać)
+          ["sn.sm12.4.01", "Laute und Buchstaben: stimmhafte und stimmlose Konsonanten, stumme h/ł/w, ähnliche Laute č/ć, ł/w", "1/2", ["sorbisch:sm-cc", "sorbisch:sm-zwuki"], "ja"],
+          ["sn.sm12.4.02", "Großschreibung von Vornamen, Familiennamen und Satzanfängen, Satzzeichen", "1/2", ["sorbisch:sm-wulke1"], "ja"],
+          ["sn.sm12.4.03", "Orientierungswortschatz und eigene Wörterkartei", "1/2", ["sorbisch:sm-slowa", "sorbisch:sm-cc"], "teil"]
+        ],
+        5: [ // Lesen und Umgang mit Medien (Čitanje/Wobchad z medijemi)
+          ["sn.sm12.5.01", "Sinnentnehmend lesen, Fragen zum Text beantworten", "1/2", ["sorbisch:sm-mica"], "ja"],
+          ["sn.sm12.5.02", "Über Gelesenes sprechen, laut und leise lesen", "1/2", ["sorbisch:sm-mica"], "teil"]
+        ],
+        6: [ // Sprache untersuchen (Rěč přepytować)
+          ["sn.sm12.6.01", "Wörter, Silben und Buchstaben untersuchen, Sorbisch und Deutsch vergleichen", "1/2", ["sorbisch:sm-zlozki", "sorbisch:sm-druziny"], "ja"],
+          ["sn.sm12.6.02", "Erste Wortarten kennenlernen", "1/2", ["sorbisch:sm-druziny"], "ja"]
+        ],
+        7: [ // Wahlbereiche (freiwillig)
+          ["sn.sm12.7.01", "Wahlbereich Buchstabenfest", "1/2", ["sorbisch:sm-pismiki"], "teil"],
+          ["sn.sm12.7.02", "Wahlbereich Sorbische Volksmärchen", "1/2", ["sorbisch:sm-bajki"], "ja"],
+          ["sn.sm12.7.03", "Wahlbereich Sorbische Sagengestalten", "1/2", ["sorbisch:sm-bajki", "echtewelt:sage"], "ja"],
+          ["sn.sm12.7.04", "Wahlbereich Kasperletheater", "1/2", ["sorbisch:sm-bajki", "sorbisch:sm-dziwadlo"], "ja"]
+        ]
+      },
+      "3": {
+        2: [ // Sprechen und Zuhören (Rěčeć a připosłuchać)
+          ["sn.sm3.2.01", "Gesprächsregeln und Gesprächsformen (Gespräch über Lerninhalte, Diskussion)", "3", ["sorbisch:sm-rozmolwa"], "ja"],
+          ["sn.sm3.2.02", "Zuhören und nachfragen, wenn man etwas nicht versteht", "3", ["sorbisch:sm-rozmolwa"], "teil"],
+          ["sn.sm3.2.03", "Erzählen und vortragen", "3", [], "nein"]
+        ],
+        3: [ // Für sich und andere schreiben (Za sebje a druhich pisać)
+          ["sn.sm3.3.01", "Texte planen, Geschichten aufbauen (Anfang, Höhepunkt, Schluss)", "3", ["sorbisch:sm-stawizna"], "ja"],
+          ["sn.sm3.3.02", "Texte überarbeiten und präsentieren", "3", ["praesentieren:gestalten"], "teil"]
+        ],
+        4: [ // Richtig schreiben (Prawje pisać)
+          ["sn.sm3.4.01", "Auslaut und Verlängerungsprobe (dub – duby)", "3", ["sorbisch:sm-zwuki"], "ja"],
+          ["sn.sm3.4.02", "Ähnlich klingende Laute (č/ć, ł/w)", "3", ["sorbisch:sm-cc"], "ja"],
+          ["sn.sm3.4.03", "Kleinschreibung der Substantive, Großschreibung von Namen und Satzanfang", "3", ["sorbisch:sm-druziny", "sorbisch:sm-wulke1"], "ja"]
+        ],
+        5: [ // Lesen und Umgang mit Medien (Čitanje/Wobchad z medijemi)
+          ["sn.sm3.5.01", "Texte lesen und verstehen", "3", ["sorbisch:sm-ptaci"], "ja"],
+          ["sn.sm3.5.02", "Kinderzeitschrift und Bibliothek nutzen", "3", ["sorbisch:sm-plomjo"], "ja"]
+        ],
+        6: [ // Sprache untersuchen (Rěč přepytować)
+          ["sn.sm3.6.01", "Wortarten: Substantiv, Verb, Adjektiv", "3", ["sorbisch:sm-druziny"], "ja"],
+          ["sn.sm3.6.02", "Den Dual kennen und bilden", "3", ["sorbisch:sm-dual"], "ja"]
+        ],
+        7: [ // Wahlbereiche (freiwillig)
+          ["sn.sm3.7.01", "Wahlbereich Rund um die Płomjo", "3", ["sorbisch:sm-plomjo"], "ja"],
+          ["sn.sm3.7.02", "Wahlbereich Mehrsprachigkeit der Lausitz", "3", ["sorbisch:sm-plomjo"], "ja"],
+          ["sn.sm3.7.03", "Wahlbereich Zweisprachig Theater spielen", "3", ["sorbisch:sm-dziwadlo"], "ja"]
+        ]
+      },
+      "4": {
+        2: [ // Sprechen und Zuhören (Rěčeć a připosłuchać)
+          ["sn.sm4.2.01", "Nachrichten und Informationen weitergeben", "4", ["sorbisch:sm-powesc"], "ja"],
+          ["sn.sm4.2.02", "Diskutieren und die eigene Meinung sagen", "4", ["sorbisch:sm-rozmolwa"], "teil"]
+        ],
+        3: [ // Für sich und andere schreiben (Za sebje a druhich pisać)
+          ["sn.sm4.3.01", "Einen Brief schreiben (Anrede, Text, Gruß)", "4", ["sorbisch:sm-list"], "ja"],
+          ["sn.sm4.3.02", "Eigene Texte schreiben und überarbeiten", "4", ["sorbisch:sm-stawizna", "praesentieren:gestalten"], "teil"]
+        ],
+        4: [ // Richtig schreiben (Prawje pisać)
+          ["sn.sm4.4.01", "Alphabet und Wörterbuch nutzen", "4", ["sorbisch:sm-slownik"], "ja"],
+          ["sn.sm4.4.02", "Rechtschreibstrategien anwenden", "4", ["sorbisch:sm-zwuki", "sorbisch:sm-cc"], "ja"]
+        ],
+        5: [ // Lesen und Umgang mit Medien (Čitanje/Wobchad z medijemi)
+          ["sn.sm4.5.01", "Sagen und längere Texte lesen", "4", ["sorbisch:sm-krabat"], "ja"],
+          ["sn.sm4.5.02", "Sorbische Medien: Zeitung, Radio, Fernsehen, Verlag", "4", ["sorbisch:sm-medije"], "ja"]
+        ],
+        6: [ // Sprache untersuchen (Rěč přepytować)
+          ["sn.sm4.6.01", "Wortfamilien und Wortstamm", "4", ["sorbisch:sm-swojba"], "ja"],
+          ["sn.sm4.6.02", "Wortarten und Formen (auch Dual)", "4", ["sorbisch:sm-druziny", "sorbisch:sm-dual"], "ja"]
+        ],
+        7: [ // Wahlbereiche (freiwillig)
+          ["sn.sm4.7.01", "Wahlbereich Slawische Sprachverwandtschaft", "4", ["sorbisch:sm-slowjan"], "ja"],
+          ["sn.sm4.7.02", "Wahlbereich Zweisprachig Theater spielen", "4", ["sorbisch:sm-dziwadlo"], "ja"],
+          ["sn.sm4.7.03", "Wahlbereich Sorbisches Fest", "4", ["sorbisch:sm-swjedzen"], "ja"]
+        ]
+      }
+    },
     // Kunst, Musik, Werken, Sport (Kl. 1/2 und 3/4: dieselben Punkte für Kl. 3 und 4), Ethik – Lehrpläne Grundschule Sachsen 2019 (PDFs vom Auftraggeber, 28.10.2026)
     sorbisch: {
       "1/2": {
