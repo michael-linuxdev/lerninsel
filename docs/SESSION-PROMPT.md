@@ -90,7 +90,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (Inhalte fertig seit 30.10.2026; davor: Lehrplan Sachsen in voller Tiefe, Entscheidung 27.10.2026)
-0. **Optik** erledigt (Teil 1: Jungen, 3D-Figur, Wasser, Fachseiten-Gruppen, Startseiten-Türen; Teil 2: Gras ruhiger, Tiere größer, Meine Ecke, Mathe-Lernbereiche mit Balken) – Rückmeldung vom iPad abwarten; **Story** NA-17 (Kapitel 2 + E9), NA-18 (Inselchronik) und NA-16 (QR-Geschenk, Technik) erledigt – offen: Schlüssel des Auftraggebers eintragen, Geschenk-Auswahl; danach Kapitel 3 erst mit neuen Minispielen. iPad-Rückmeldung und Sorbisch-Prüfung jederzeit einarbeiten.
+0. **Neue Minispiele (Entscheidung 30.10.2026, ersetzen die fünf alten):** Insel-Garten → Bäckerei Benno (öffnet Kapitel 3) → Tierpflege-Station, je 3D „Rund“; danach Schach, Duell, Gefühle, Atelier verbessern. QR-Geschenke: später.
+1. **Optik** erledigt (Teil 1: Jungen, 3D-Figur, Wasser, Fachseiten-Gruppen, Startseiten-Türen; Teil 2: Gras ruhiger, Tiere größer, Meine Ecke, Mathe-Lernbereiche mit Balken) – Rückmeldung vom iPad abwarten; **Story** NA-17 (Kapitel 2 + E9), NA-18 (Inselchronik) und NA-16 (QR-Geschenk, Technik) erledigt – offen: Schlüssel des Auftraggebers eintragen, Geschenk-Auswahl; danach Kapitel 3 erst mit neuen Minispielen. iPad-Rückmeldung und Sorbisch-Prüfung jederzeit einarbeiten.
 **Arbeitsliste: `docs/SACHSEN-SCHULJAHR.md` – zuerst lesen.** Maßstab „wie ein Schuljahr“ (jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr,
 Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen.
 

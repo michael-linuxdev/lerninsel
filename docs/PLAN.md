@@ -1821,3 +1821,11 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Tests:** neu `kapitel`, `chronik`, `geschenk` (Test-Schlüssel `tests/geschenk-testschluessel.json`, ausdrücklich nur für Tests).
 - **Offen:** Schlüsselpaar beim Auftraggeber erzeugen und den öffentlichen Teil eintragen; Geschenk-Auswahl für Weihnachten 2026 festlegen.
 - **Nächstes:** Kapitel 3 „Bennos Brücke“ braucht den Bauplatz (Minispiele ausgeblendet) – vorher Minispiele neu denken; sonst iPad-Rückmeldung einarbeiten.
+
+### Fragerunde 30.10.2026 (nach Story NA-16/17/18)
+- iPad-Rückmeldung: noch nicht getestet. Nichts ist gesperrt.
+- **QR-Geschenke:** später – Codes bleiben ausgeschaltet („noch nicht eingerichtet“), bis der Auftraggeber den Schlüssel erzeugt.
+- **Minispiele neu denken – Entscheidung:** Ballon-Party, Schatz-Strand, Sternenlauf, Kart und Bauplatz werden **ersetzt** (Code bleibt, Orte zeigen
+  weiter „bald“ bzw. werden durch die neuen Spiele belegt). **Neue Spiele in 3D („Rund“), Reihenfolge: Insel-Garten → Bäckerei Benno → Tierpflege-Station**
+  (Katalog `docs/MINISPIELE.md`, Priorität 1). Danach: Schach, Kopfrechen-Duell, Gefühle und Atelier deutlich verbessern.
+- Folgen: Kapitel 3 öffnet künftig über die Bäckerei Benno (statt Bennos Brücke am Bauplatz); Etappe E6 „Spielorte“ zeigt dann das erste neue Spiel.
