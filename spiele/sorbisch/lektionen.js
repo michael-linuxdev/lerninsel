@@ -295,3 +295,310 @@ window.SORBISCH = [
     ende: { de: "Jara derje! Mehrere Sprachen zu können ist ein Schatz. Leg in dein Portfolio, was du schon auf Sorbisch kannst.", ru: "Очень хорошо! Знать несколько языков — это сокровище. Сложи в портфолио то, что ты уже умеешь по-лужицки." }
   }
 ];
+
+// ---------- Ausbau 30.10.2026: fehlende und teilweise Inhaltspunkte, Kultur, Wahlbereiche (lb 12) – alles ENTWÜRFE ----------
+window.SORBISCH_LB.push([12, "⭐ Hišće wjace – Wahlbereiche (freiwillig)"]);
+window.SORBISCH.push(
+  // Klasse 1/2
+  {
+    id: "so-prosy", lb: 4, stufe: 1, lz: ["so.ws.01", "so.le.01"], name: "Čitaj! – Was sagt die Lehrerin?", e: "🧑‍🏫", farbe: "#B9770E", grund: "#FDF2E0",
+    intro: { de: "In der Schule sagt die Lehrerin auf Sorbisch, was du tun sollst: lesen, schreiben, malen. Lies die Wörter und zeig, was sie bedeuten!", ru: "В школе учительница говорит по-лужицки, что делать: читать, писать, рисовать. Прочитай слова и покажи, что они значат!" },
+    woerter: [
+      { so: "Sydń so!", de: "Setz dich!", ru: "Садись!", e: "🪑" }, { so: "Stań!", de: "Steh auf!", ru: "Встань!", e: "🧍" },
+      { so: "Čitaj!", de: "Lies!", ru: "Читай!", e: "📖" }, { so: "Pisaj!", de: "Schreib!", ru: "Пиши!", e: "✍️" },
+      { so: "Moluj!", de: "Mal!", ru: "Рисуй!", e: "🖍️" }, { so: "Słuchaj!", de: "Hör zu!", ru: "Слушай!", e: "👂" },
+      { so: "Pokaž!", de: "Zeig!", ru: "Покажи!", e: "👉" }, { so: "Wzmi pisak!", de: "Nimm den Stift!", ru: "Возьми ручку!", e: "🖊️" }],
+    extra: [
+      { typ: "wahl", frage: "Die Lehrerin will, dass du ein Bild malst. Was sagt sie?", ru: "Учительница хочет, чтобы ты нарисовал картинку. Что она говорит?", optionen: ["Moluj!", "Čitaj!", "Stań!"], e: "🎨", warum: "„Moluj!“ heißt „Mal!“." }],
+    ende: { de: "Jara derje! Spiel zu Hause Lehrerin oder Lehrer: Sag „Stań!“ und „Sydń so!“ – wer macht mit?", ru: "Очень хорошо! Поиграй дома в учителя: скажи «Stań!» и «Sydń so!» — кто будет выполнять?" }
+  },
+  {
+    id: "so-licby20", lb: 4, stufe: 1, lz: ["so.ws.01"], name: "Licby do dwaceći – Zahlen bis 20", e: "🔢", farbe: "#138D75", grund: "#E3F7F2",
+    intro: { de: "Nach „dźesać“ (zehn) geht es weiter: Die Zahlen von 13 bis 19 enden auf Sorbisch fast alle auf „-naće“.", ru: "После «dźesać» (десять) считаем дальше: числа от 13 до 19 по-лужицки почти все кончаются на «-naće»." },
+    woerter: [
+      { so: "jědnaće", de: "elf", ru: "одиннадцать", e: "11" }, { so: "dwanaće", de: "zwölf", ru: "двенадцать", e: "12" },
+      { so: "třinaće", de: "dreizehn", ru: "тринадцать", e: "13" }, { so: "štyrnaće", de: "vierzehn", ru: "четырнадцать", e: "14" },
+      { so: "pjatnaće", de: "fünfzehn", ru: "пятнадцать", e: "15" }, { so: "šěsnaće", de: "sechzehn", ru: "шестнадцать", e: "16" },
+      { so: "sydomnaće", de: "siebzehn", ru: "семнадцать", e: "17" }, { so: "wosomnaće", de: "achtzehn", ru: "восемнадцать", e: "18" },
+      { so: "dźewjatnaće", de: "neunzehn", ru: "девятнадцать", e: "19" }, { so: "dwaceći", de: "zwanzig", ru: "двадцать", e: "20" }],
+    extra: [
+      { typ: "wahl", frage: "Zwei Hände und zwei Füße haben zusammen 20 Finger und Zehen. Wie heißt zwanzig?", ru: "У двух рук и двух ног вместе 20 пальцев. Как будет «двадцать»?", optionen: ["dwaceći", "dwanaće", "dźewjatnaće"], e: "🖐️", warum: "„dwaceći“ heißt „zwanzig“." }],
+    ende: { de: "Wulkotnje! Zähl beim Treppensteigen bis „dwaceći“.", ru: "Отлично! Поднимаясь по лестнице, считай до «dwaceći»." }
+  },
+  {
+    id: "so-letne", lb: 10, stufe: 1, lz: ["so.ws.01"], name: "Što činimy? – Im Jahreslauf", e: "🪁", farbe: "#2E86C1", grund: "#E4F1FB",
+    intro: { de: "Im Winter rodeln, im Sommer baden, im Herbst Pilze sammeln: Was machst du zu welcher Jahreszeit?", ru: "Зимой — кататься на санках, летом — купаться, осенью — собирать грибы. Что ты делаешь в какое время года?" },
+    woerter: [
+      { so: "sankować", de: "rodeln", ru: "кататься на санках", e: "🛷" }, { so: "na łyžach jězdźić", de: "Ski fahren", ru: "кататься на лыжах", e: "⛷️" },
+      { so: "kupać so", de: "baden", ru: "купаться", e: "🏊" }, { so: "kwětki trěhać", de: "Blumen pflücken", ru: "рвать цветы", e: "💐" },
+      { so: "hriby zběrać", de: "Pilze sammeln", ru: "собирать грибы", e: "🍄" }, { so: "draka pušćić", de: "Drachen steigen lassen", ru: "запускать воздушного змея", e: "🪁" },
+      { so: "jejka barbić", de: "Eier färben", ru: "красить яйца", e: "🥚" }],
+    extra: [
+      { typ: "wahl", frage: "Es liegt viel Schnee. Was kannst du machen?", ru: "Лежит много снега. Что можно делать?", optionen: ["sankować", "kupać so", "kwětki trěhać"], e: "❄️", warum: "„sankować“ heißt „rodeln“ – das geht im Winter." }],
+    ende: { de: "Super! Was machst du in der jetzigen Jahreszeit am liebsten? Sag es auf Sorbisch.", ru: "Супер! Что ты больше всего любишь делать в это время года? Скажи по-лужицки." }
+  },
+  // Klasse 3/4
+  {
+    id: "so-hodzina", lb: 4, stufe: 3, lz: ["so.ws.02", "so.sp.02"], name: "Kak pozdźe je? – Die Uhrzeit", e: "🕒", farbe: "#1F618D", grund: "#E5EFF7",
+    intro: { de: "„Kak pozdźe je?“ heißt „Wie spät ist es?“. Wir sagen die vollen Stunden: eine Uhr, zwei Uhr, drei Uhr …", ru: "«Kak pozdźe je?» значит «Который час?». Называем целые часы: час, два часа, три часа …" },
+    woerter: [
+      { so: "Kak pozdźe je?", de: "Wie spät ist es?", ru: "Который час?", e: "❓" }, { so: "časnik", de: "Uhr", ru: "часы", e: "⌚" },
+      { so: "jedna hodźina", de: "ein Uhr", ru: "час", e: "🕐" }, { so: "dwě hodźinje", de: "zwei Uhr", ru: "два часа", e: "🕑" },
+      { so: "tři hodźiny", de: "drei Uhr", ru: "три часа", e: "🕒" }, { so: "štyri hodźiny", de: "vier Uhr", ru: "четыре часа", e: "🕓" },
+      { so: "pjeć hodźin", de: "fünf Uhr", ru: "пять часов", e: "🕔" }, { so: "dwanaće hodźin", de: "zwölf Uhr", ru: "двенадцать часов", e: "🕛" }],
+    extra: [
+      { typ: "satz", de: "Sag: „Es ist fünf Uhr.“", ru: "Скажи: «Сейчас пять часов».", woerter: ["Je", "pjeć", "hodźin."], e: "🕔" },
+      { typ: "wahl", frage: "Mittags um 12 Uhr läuten die Glocken. Wie spät ist es?", ru: "В 12 часов дня звонят колокола. Который час?", optionen: ["dwanaće hodźin", "dwě hodźinje", "jedna hodźina"], e: "🔔", warum: "„dwanaće“ heißt „zwölf“." }],
+    ende: { de: "Jara derje! Schau heute dreimal auf die Uhr und sag die volle Stunde auf Sorbisch.", ru: "Очень хорошо! Посмотри сегодня три раза на часы и назови час по-лужицки." }
+  },
+  {
+    id: "so-predmety", lb: 4, stufe: 3, lz: ["so.ws.02"], name: "Rozwrh hodźin – Schulfächer", e: "📋", farbe: "#B7950B", grund: "#FCF6DC",
+    intro: { de: "Was steht heute auf deinem Stundenplan – „rozwrh hodźin“? Mathe, Deutsch, Musik? Und natürlich Sorbisch!", ru: "Что сегодня в твоём расписании — «rozwrh hodźin»? Математика, немецкий, музыка? И, конечно, лужицкий!" },
+    woerter: [
+      { so: "rozwrh hodźin", de: "Stundenplan", ru: "расписание", e: "📋" }, { so: "matematika", de: "Mathematik", ru: "математика", e: "➗" },
+      { so: "němčina", de: "Deutsch", ru: "немецкий язык", e: "📝" }, { so: "serbšćina", de: "Sorbisch", ru: "лужицкий язык", e: "🪺" },
+      { so: "hudźba", de: "Musik", ru: "музыка", e: "🎵" }, { so: "sport", de: "Sport", ru: "физкультура", e: "🤸" },
+      { so: "wuměłstwo", de: "Kunst", ru: "рисование", e: "🎨" }, { so: "wěcna wučba", de: "Sachunterricht", ru: "окружающий мир", e: "🔬" }],
+    extra: [
+      { typ: "satz", de: "Sag: „Mir gefällt Musik.“", ru: "Скажи: «Мне нравится музыка».", woerter: ["Mi", "so", "lubi", "hudźba."], e: "🎶" }],
+    ende: { de: "Super! Schreib morgen die Fächer auf deinem Stundenplan auch auf Sorbisch dazu.", ru: "Супер! Завтра подпиши предметы в своём расписании по-лужицки." }
+  },
+  {
+    id: "so-dzen", lb: 4, stufe: 3, lz: ["so.ws.02"], name: "Dźeń – Morgen, Mittag, Abend", e: "🌅", farbe: "#CA6F1E", grund: "#FDEFE3",
+    intro: { de: "Der Tag hat viele Abschnitte: Morgen, Vormittag, Mittag, Nachmittag, Abend und Nacht.", ru: "В дне много частей: утро, первая половина дня, полдень, вторая половина дня, вечер и ночь." },
+    woerter: [
+      { so: "dźeń", de: "Tag", ru: "день", e: "☀️" }, { so: "ranje", de: "Morgen", ru: "утро", e: "🌅" },
+      { so: "dopołdnjo", de: "Vormittag", ru: "первая половина дня", e: "🏫" }, { so: "připołdnjo", de: "Mittag", ru: "полдень", e: "🍲" },
+      { so: "popołdnjo", de: "Nachmittag", ru: "вторая половина дня", e: "🛝" }, { so: "wječor", de: "Abend", ru: "вечер", e: "🌇" },
+      { so: "nóc", de: "Nacht", ru: "ночь", e: "🌙" }],
+    extra: [
+      { typ: "wahl", frage: "Wann stehst du auf und frühstückst?", ru: "Когда ты встаёшь и завтракаешь?", optionen: ["ranje", "wječor", "nóc"], e: "🥣", warum: "„ranje“ heißt „Morgen“." }],
+    ende: { de: "Wulkotnje! Sag heute Abend „Dobry wječor!“ – Guten Abend!", ru: "Отлично! Скажи сегодня вечером «Dobry wječor!» — «Добрый вечер!»" }
+  },
+  {
+    id: "so-hdze", lb: 3, stufe: 3, lz: ["so.ws.02", "so.sp.02"], name: "Hdźe je kóčka? – Wo ist was?", e: "🐈", farbe: "#A04000", grund: "#FBEEE6",
+    intro: { de: "Die Katze versteckt sich überall: auf dem Bett, unter dem Tisch, hinter der Tür. Und was machen wir zu Hause?", ru: "Кошка прячется везде: на кровати, под столом, за дверью. А что мы делаем дома?" },
+    woerter: [
+      { so: "na", de: "auf", ru: "на", e: "⏫" }, { so: "pod", de: "unter", ru: "под", e: "⏬" },
+      { so: "pódla", de: "neben", ru: "рядом", e: "↔️" }, { so: "za", de: "hinter", ru: "за", e: "🔙" },
+      { so: "moja stwa", de: "mein Zimmer", ru: "моя комната", e: "🚪" }, { so: "warić", de: "kochen", ru: "готовить", e: "🍳" },
+      { so: "rumować", de: "aufräumen", ru: "убирать", e: "🧹" }, { so: "spać", de: "schlafen", ru: "спать", e: "😴" }],
+    extra: [
+      { typ: "wahl", frage: "Die Katze schläft unter dem Tisch. Wo ist sie?", ru: "Кошка спит под столом. Где она?", optionen: ["pod blidom", "na blidźe", "za blidom"], e: "🐈", warum: "„pod“ heißt „unter“ – „pod blidom“ heißt „unter dem Tisch“." },
+      { typ: "satz", de: "Sag: „Ich räume mein Zimmer auf.“", ru: "Скажи: «Я убираю свою комнату».", woerter: ["Ja", "rumuju", "swoju", "stwu."], e: "🧹" }],
+    ende: { de: "Jara derje! Versteck ein Kuscheltier und sag auf Sorbisch, wo es ist: „na“, „pod“ oder „za“.", ru: "Очень хорошо! Спрячь мягкую игрушку и скажи по-лужицки, где она: «na», «pod» или «za»." }
+  },
+  {
+    id: "so-wosoby", lb: 1, stufe: 3, lz: ["so.ws.02", "so.sp.02"], name: "Kajki je? – Personen beschreiben", e: "🧑", farbe: "#CB4335", grund: "#FBE9E7",
+    intro: { de: "Wie sieht deine Freundin aus? Ist sie groß oder klein? Hat sie lange Haare und blaue Augen?", ru: "Как выглядит твоя подруга? Она высокая или маленькая? У неё длинные волосы и голубые глаза?" },
+    woerter: [
+      { so: "wulki", de: "groß", ru: "большой", e: "🦒" }, { so: "mały", de: "klein", ru: "маленький", e: "🐜" },
+      { so: "włosy", de: "Haare", ru: "волосы", e: "💇" }, { so: "woči", de: "Augen", ru: "глаза", e: "👀" },
+      { so: "dołhe włosy", de: "lange Haare", ru: "длинные волосы", e: "👱‍♀️" }, { so: "krótke włosy", de: "kurze Haare", ru: "короткие волосы", e: "👦" },
+      { so: "módre woči", de: "blaue Augen", ru: "голубые глаза", e: "🔵" }, { so: "nawoči", de: "Brille", ru: "очки", e: "👓" }],
+    extra: [
+      { typ: "satz", de: "Sag: „Mia hat lange Haare.“", ru: "Скажи: «У Мии длинные волосы».", woerter: ["Mia", "ma", "dołhe", "włosy."], e: "👧" },
+      { typ: "wahl", frage: "Paul ist 1 Meter 90 groß. Wie ist er?", ru: "Рост Пауля — 1 метр 90. Какой он?", optionen: ["wulki", "mały", "krótki"], e: "📏", warum: "„wulki“ heißt „groß“." }],
+    ende: { de: "Super! Beschreib jemanden aus deiner Familie auf Sorbisch – die anderen raten, wer es ist.", ru: "Супер! Опиши кого-нибудь из семьи по-лужицки — остальные угадывают, кто это." }
+  },
+  {
+    id: "so-mimika", lb: 1, stufe: 3, lz: ["so.sp.02", "so.ik.01"], name: "Woblico – Gesichter und Gesten", e: "🎭", farbe: "#884EA0", grund: "#F4ECF7",
+    intro: { de: "Auch ohne Worte sagt dein Gesicht viel: Du lachst, weinst oder staunst. Schau genau hin – wie fühlt sich jemand?", ru: "Даже без слов лицо говорит многое: ты смеёшься, плачешь или удивляешься. Посмотри внимательно — что чувствует человек?" },
+    woerter: [
+      { so: "woblico", de: "Gesicht", ru: "лицо", e: "🙂" }, { so: "smjeć so", de: "lachen", ru: "смеяться", e: "😂" },
+      { so: "płakać", de: "weinen", ru: "плакать", e: "😢" }, { so: "smutny", de: "traurig", ru: "грустный", e: "😞" },
+      { so: "rozhněwany", de: "wütend", ru: "сердитый", e: "😠" }, { so: "překwapjeny", de: "überrascht", ru: "удивлённый", e: "😮" },
+      { so: "kiwać", de: "winken", ru: "махать", e: "👋" }],
+    extra: [
+      { typ: "wahl", frage: "Schau das Gesicht an: 😠 Wie fühlt sich das Kind?", ru: "Посмотри на лицо: 😠 Что чувствует ребёнок?", optionen: ["rozhněwany", "smutny", "překwapjeny"], e: "🧒", warum: "„rozhněwany“ heißt „wütend“." }],
+    ende: { de: "Jara derje! Spielt in der Familie „Gesichter raten“: Einer macht ein Gesicht, die anderen sagen es auf Sorbisch.", ru: "Очень хорошо! Поиграйте в семье «угадай лицо»: один корчит рожицу, остальные говорят по-лужицки." }
+  },
+  {
+    id: "so-lubi", lb: 2, stufe: 3, lz: ["so.sp.02", "so.ws.02"], name: "Mi so lubi – Was mir gefällt", e: "👍", farbe: "#2471A3", grund: "#E6F1FA",
+    intro: { de: "„Mi so lubi …“ heißt „Mir gefällt …“, „Mi so njelubi …“ heißt „Mir gefällt … nicht“. Was ist deine Lieblingskleidung?", ru: "«Mi so lubi …» значит «Мне нравится …», «Mi so njelubi …» — «Мне не нравится …». Какая твоя любимая одежда?" },
+    woerter: [
+      { so: "Mi so lubi …", de: "Mir gefällt …", ru: "Мне нравится …", e: "👍" }, { so: "Mi so njelubi …", de: "Mir gefällt … nicht", ru: "Мне не нравится …", e: "👎" },
+      { so: "najlubši", de: "Lieblings-", ru: "любимый", e: "❤️" }, { so: "rjany", de: "schön", ru: "красивый", e: "✨" },
+      { so: "nowy", de: "neu", ru: "новый", e: "🆕" }, { so: "čapka", de: "Mütze", ru: "шапка", e: "🧢" },
+      { so: "šal", de: "Schal", ru: "шарф", e: "🧣" }],
+    extra: [
+      { typ: "satz", de: "Sag: „Mir gefällt die rote Mütze.“", ru: "Скажи: «Мне нравится красная шапка».", woerter: ["Mi", "so", "lubi", "čerwjena", "čapka."], e: "🧢" },
+      { typ: "satz", de: "Sag: „Mir gefällt der Schal nicht.“", ru: "Скажи: «Мне не нравится шарф».", woerter: ["Mi", "so", "njelubi", "šal."], e: "🧣" }],
+    ende: { de: "Wulkotnje! Zeig deiner Familie dein Lieblingsstück und sag: „Mi so lubi …“", ru: "Отлично! Покажи семье свою любимую вещь и скажи: «Mi so lubi …»" }
+  },
+  {
+    id: "so-rady", lb: 6, stufe: 3, lz: ["so.sp.02", "so.ws.02"], name: "Što rady činiš? – Über Hobbys sprechen", e: "💬", farbe: "#239B56", grund: "#E7F6EC",
+    intro: { de: "Wir unterhalten uns über Hobbys: „Što rady činiš?“ – „Was machst du gern?“ Und dann fragst du zurück: „A ty?“", ru: "Говорим о хобби: «Što rady činiš?» — «Что ты любишь делать?» А потом спрашиваешь в ответ: «A ty?»" },
+    woerter: [
+      { so: "Što rady činiš?", de: "Was machst du gern?", ru: "Что ты любишь делать?", e: "❓" }, { so: "Ja rady hraju kopańcu.", de: "Ich spiele gern Fußball.", ru: "Я люблю играть в футбол.", e: "⚽" },
+      { so: "Ja rady jězdźu na kolesu.", de: "Ich fahre gern Fahrrad.", ru: "Я люблю кататься на велосипеде.", e: "🚲" }, { so: "A ty?", de: "Und du?", ru: "А ты?", e: "👉" },
+      { so: "Ja tež.", de: "Ich auch.", ru: "Я тоже.", e: "🙌" }, { so: "Ja njerady …", de: "Ich … nicht gern.", ru: "Я не люблю …", e: "🙅" },
+      { so: "najradšo", de: "am liebsten", ru: "больше всего", e: "🏆" }],
+    extra: [
+      { typ: "satz", de: "Frag: „Was machst du gern?“", ru: "Спроси: «Что ты любишь делать?»", woerter: ["Što", "rady", "činiš?"], e: "💬" },
+      { typ: "wahl", frage: "Dein Freund sagt: „Ja rady čitam.“ Du liest auch gern. Was sagst du?", ru: "Друг говорит: «Ja rady čitam». Ты тоже любишь читать. Что ты скажешь?", optionen: ["Ja tež.", "A ty?", "Ja njerady …"], e: "📚", warum: "„Ja tež“ heißt „Ich auch“." }],
+    ende: { de: "Jara derje! Frag jemanden auf Sorbisch: „Što rady činiš?“", ru: "Очень хорошо! Спроси кого-нибудь по-лужицки: «Što rady činiš?»" }
+  },
+  {
+    id: "so-wopis", lb: 5, stufe: 3, lz: ["so.ws.02", "so.sp.02"], name: "Kajke je zwěrjo? – Tiere beschreiben", e: "🐘", farbe: "#7D6608", grund: "#FAF4DD",
+    intro: { de: "Der Elefant ist groß, die Schnecke ist langsam, der Fisch lebt im Wasser. Wir beschreiben Tiere – und du erfindest dein Wunschtier!", ru: "Слон большой, улитка медленная, рыба живёт в воде. Мы описываем животных — а ты придумаешь животное своей мечты!" },
+    woerter: [
+      { so: "wulki", de: "groß", ru: "большой", e: "🐘" }, { so: "mały", de: "klein", ru: "маленький", e: "🐭" },
+      { so: "spěšny", de: "schnell", ru: "быстрый", e: "🐆" }, { so: "pomały", de: "langsam", ru: "медленный", e: "🐌" },
+      { so: "sylny", de: "stark", ru: "сильный", e: "🦍" }, { so: "žiwy w lěsu", de: "lebt im Wald", ru: "живёт в лесу", e: "🌲" },
+      { so: "žiwy we wodźe", de: "lebt im Wasser", ru: "живёт в воде", e: "🐟" }],
+    extra: [
+      { typ: "satz", de: "Sag: „Der Elefant ist groß.“", ru: "Скажи: «Слон большой».", woerter: ["Słon", "je", "wulki."], e: "🐘" },
+      { typ: "wahl", frage: "Die Schnecke kriecht ganz gemütlich. Wie ist sie?", ru: "Улитка ползёт очень не спеша. Какая она?", optionen: ["pomała", "spěšna", "sylna"], e: "🐌", warum: "„pomały“ heißt „langsam“ – bei „šlinka“ (die Schnecke) heißt es „pomała“." }],
+    ende: { de: "Super! Mal dein Wunschtier und schreib dazu: „Moje zwěrjo je …“ – groß, klein, schnell?", ru: "Супер! Нарисуй животное своей мечты и подпиши: «Moje zwěrjo je …» — большое, маленькое, быстрое?" }
+  },
+  {
+    id: "so-dzesatki", lb: 7, stufe: 3, lz: ["so.ws.02"], name: "Dźesatki – Zehner bis 100", e: "💯", farbe: "#117A65", grund: "#E3F4EF",
+    intro: { de: "Zehn, zwanzig, dreißig … bis hundert. Ab fünfzig enden die Zehner auf Sorbisch auf „-dźesat“.", ru: "Десять, двадцать, тридцать … до ста. Начиная с пятидесяти, десятки по-лужицки кончаются на «-dźesat»." },
+    woerter: [
+      { so: "dźesać", de: "zehn", ru: "десять", e: "🔟" }, { so: "dwaceći", de: "zwanzig", ru: "двадцать", e: "20" },
+      { so: "třiceći", de: "dreißig", ru: "тридцать", e: "30" }, { so: "štyrceći", de: "vierzig", ru: "сорок", e: "40" },
+      { so: "pjećdźesat", de: "fünfzig", ru: "пятьдесят", e: "50" }, { so: "šěsćdźesat", de: "sechzig", ru: "шестьдесят", e: "60" },
+      { so: "sydomdźesat", de: "siebzig", ru: "семьдесят", e: "70" }, { so: "wosomdźesat", de: "achtzig", ru: "восемьдесят", e: "80" },
+      { so: "dźewjećdźesat", de: "neunzig", ru: "девяносто", e: "90" }, { so: "sto", de: "hundert", ru: "сто", e: "💯" }],
+    extra: [
+      { typ: "wahl", frage: "Ein Euro hat 100 Cent. Wie heißt hundert?", ru: "В одном евро 100 центов. Как будет «сто»?", optionen: ["sto", "dźesać", "dźewjećdźesat"], e: "💶", warum: "„sto“ heißt „hundert“." }],
+    ende: { de: "Wulkotnje! Zähl in Zehnerschritten bis „sto“ – so schnell du kannst.", ru: "Отлично! Посчитай десятками до «sto» — как можно быстрее." }
+  },
+  {
+    id: "so-wobchod", lb: 7, stufe: 3, lz: ["so.sp.02", "so.ws.02"], name: "We wobchodźe – Ein Verkaufsgespräch", e: "🏪", farbe: "#B9770E", grund: "#FDF2E0",
+    intro: { de: "Wir spielen Laden: „Ja bych rady …“ heißt „Ich hätte gern …“, „Što to płaći?“ heißt „Was kostet das?“. Und höflich sein: prošu und dźakuju so!", ru: "Играем в магазин: «Ja bych rady …» значит «Я бы хотел …», «Što to płaći?» — «Сколько это стоит?». И будь вежлив: prošu и dźakuju so!" },
+    woerter: [
+      { so: "wobchod", de: "Laden", ru: "магазин", e: "🏪" }, { so: "předawarka", de: "Verkäuferin", ru: "продавщица", e: "👩‍💼" },
+      { so: "Ja bych rady …", de: "Ich hätte gern …", ru: "Я бы хотел …", e: "🙋" }, { so: "Što to płaći?", de: "Was kostet das?", ru: "Сколько это стоит?", e: "🏷️" },
+      { so: "euro", de: "Euro", ru: "евро", e: "💶" }, { so: "pjenjezy", de: "Geld", ru: "деньги", e: "💰" },
+      { so: "Hišće něšto?", de: "Noch etwas?", ru: "Что-нибудь ещё?", e: "➕" }],
+    extra: [
+      { typ: "satz", de: "Sag: „Ich hätte gern ein Brot.“", ru: "Скажи: «Я бы хотел хлеб».", woerter: ["Ja", "bych", "rady", "chlěb."], e: "🍞" },
+      { typ: "wahl", frage: "Die Verkäuferin fragt: „Hišće něšto?“ Du brauchst nichts mehr. Was sagst du?", ru: "Продавщица спрашивает: «Hišće něšto?» Тебе больше ничего не нужно. Что ты скажешь?", optionen: ["Ně, dźakuju so.", "Haj, prošu.", "Dobru nóc."], e: "🛍️", warum: "„Ně, dźakuju so“ heißt „Nein, danke“ – höflich!" }],
+    ende: { de: "Jara derje! Spielt zu Hause Laden – mit Spielgeld und auf Sorbisch.", ru: "Очень хорошо! Поиграйте дома в магазин — с игрушечными деньгами и по-лужицки." }
+  },
+  {
+    id: "so-mjeniny", lb: 8, stufe: 3, lz: ["so.ik.01", "so.ws.02"], name: "Mjeniny – Kalender und Namenstage", e: "📛", farbe: "#C2185B", grund: "#FCE4EF",
+    intro: { de: "Viele Sorben feiern nicht nur Geburtstag, sondern auch Namenstag – „mjeniny“. Jeder Tag im Kalender gehört zu einem Namen. Wann ist deiner?", ru: "Многие лужичане празднуют не только день рождения, но и именины — «mjeniny». Каждый день в календаре связан с каким-то именем. Когда твои?" },
+    woerter: [
+      { so: "kalender", de: "Kalender", ru: "календарь", e: "📅" }, { so: "mjeniny", de: "Namenstag", ru: "именины", e: "📛" },
+      { so: "narodniny", de: "Geburtstag", ru: "день рождения", e: "🎂" }, { so: "dźensa", de: "heute", ru: "сегодня", e: "👇" },
+      { so: "jutře", de: "morgen", ru: "завтра", e: "➡️" }, { so: "wčera", de: "gestern", ru: "вчера", e: "⬅️" },
+      { so: "tydźeń", de: "Woche", ru: "неделя", e: "🗓️" }, { so: "měsac", de: "Monat", ru: "месяц", e: "🌙" }],
+    extra: [
+      { typ: "wahl", frage: "Am Tag ihres Namens bekommt Maria ein kleines Geschenk. Was feiert sie?", ru: "В день своего имени Мария получает маленький подарок. Что она празднует?", optionen: ["mjeniny", "narodniny", "hody"], e: "🎁", warum: "„mjeniny“ heißt „Namenstag“." }],
+    ende: { de: "Wulkotnje! Bastel einen Familienkalender mit Geburtstagen und Namenstagen – und schreib die sorbischen Monatsnamen dazu.", ru: "Отлично! Сделай семейный календарь с днями рождения и именинами — и подпиши лужицкие названия месяцев." }
+  },
+  {
+    id: "so-datum", lb: 10, stufe: 3, lz: ["so.ws.02"], name: "Prěni, druhi – Datum und Ordnungszahlen", e: "🥇", farbe: "#5B2C6F", grund: "#F1E8F5",
+    intro: { de: "Wer ist Erster, wer Zweiter? Mit Ordnungszahlen sagst du auch das Datum: „prěni róžowc“ ist der erste Mai.", ru: "Кто первый, кто второй? С порядковыми числительными называют и дату: «prěni róžowc» — первое мая." },
+    woerter: [
+      { so: "prěni", de: "der Erste", ru: "первый", e: "🥇" }, { so: "druhi", de: "der Zweite", ru: "второй", e: "🥈" },
+      { so: "třeći", de: "der Dritte", ru: "третий", e: "🥉" }, { so: "štwórty", de: "der Vierte", ru: "четвёртый", e: "4️⃣" },
+      { so: "pjaty", de: "der Fünfte", ru: "пятый", e: "5️⃣" }, { so: "sydmy", de: "der Siebte", ru: "седьмой", e: "7️⃣" },
+      { so: "dźesaty", de: "der Zehnte", ru: "десятый", e: "🔟" }, { so: "datum", de: "Datum", ru: "дата", e: "📆" }],
+    extra: [
+      { typ: "wahl", frage: "Beim Wettlauf kommst du als Erste oder Erster ins Ziel. Welcher Platz?", ru: "В забеге ты приходишь к финишу первым. Какое место?", optionen: ["prěni", "třeći", "dźesaty"], e: "🏁", warum: "„prěni“ heißt „der Erste“." },
+      { typ: "wahl", frage: "Der 25. Januar ist Vogelhochzeit. Der Januar ist der … Monat.", ru: "25 января — птичья свадьба. Январь — это … месяц.", optionen: ["prěni", "druhi", "pjaty"], e: "🐦", warum: "Der Januar ist der erste Monat – „prěni“." }],
+    ende: { de: "Super! Schreib das heutige Datum mit dem sorbischen Monatsnamen auf.", ru: "Супер! Напиши сегодняшнюю дату с лужицким названием месяца." }
+  },
+  {
+    id: "so-strony", lb: 10, stufe: 3, lz: ["so.ws.02", "so.ik.01"], name: "Sewjer a juh – Himmelsrichtungen", e: "🧭", farbe: "#2E86C1", grund: "#E4F1FB",
+    intro: { de: "Norden, Süden, Osten, Westen: Mit dem Kompass findest du den Weg. Die Oberlausitz liegt im Osten von Sachsen.", ru: "Север, юг, восток, запад: с компасом найдёшь дорогу. Верхняя Лужица находится на востоке Саксонии." },
+    woerter: [
+      { so: "sewjer", de: "Norden", ru: "север", e: "⬆️" }, { so: "juh", de: "Süden", ru: "юг", e: "⬇️" },
+      { so: "wuchod", de: "Osten", ru: "восток", e: "➡️" }, { so: "zapad", de: "Westen", ru: "запад", e: "⬅️" },
+      { so: "kompas", de: "Kompass", ru: "компас", e: "🧭" }, { so: "karta", de: "Landkarte", ru: "карта", e: "🗺️" }],
+    extra: [
+      { typ: "wahl", frage: "Wo geht morgens die Sonne auf?", ru: "Где утром восходит солнце?", optionen: ["na wuchodźe", "na zapadźe", "na sewjerje"], e: "🌄", warum: "Die Sonne geht im Osten auf – „na wuchodźe“." }],
+    ende: { de: "Jara derje! Stell dich morgens so hin, dass die Sonne vor dir ist – dann schaust du nach „wuchod“.", ru: "Очень хорошо! Встань утром лицом к солнцу — значит, ты смотришь на «wuchod»." }
+  },
+  {
+    id: "so-wjes", lb: 9, stufe: 3, lz: ["so.sp.02", "so.ws.02"], name: "Hdźe je šula? – Den Weg beschreiben", e: "🚸", farbe: "#2874A6", grund: "#E6F0F8",
+    intro: { de: "Jemand sucht die Kirche. Du hilfst: links, rechts, geradeaus! „Hdźe je …?“ heißt „Wo ist …?“", ru: "Кто-то ищет церковь. Ты помогаешь: налево, направо, прямо! «Hdźe je …?» значит «Где …?»" },
+    woerter: [
+      { so: "Hdźe je …?", de: "Wo ist …?", ru: "Где …?", e: "❓" }, { so: "nalěwo", de: "links", ru: "налево", e: "⬅️" },
+      { so: "naprawo", de: "rechts", ru: "направо", e: "➡️" }, { so: "runje", de: "geradeaus", ru: "прямо", e: "⬆️" },
+      { so: "cyrkej", de: "Kirche", ru: "церковь", e: "⛪" }, { so: "dwórnišćo", de: "Bahnhof", ru: "вокзал", e: "🚉" },
+      { so: "torhošćo", de: "Marktplatz", ru: "рыночная площадь", e: "🛍️" }, { so: "most", de: "Brücke", ru: "мост", e: "🌉" }],
+    extra: [
+      { typ: "satz", de: "Sag: „Geh nach rechts!“", ru: "Скажи: «Иди направо!»", woerter: ["Dźi", "naprawo!"], e: "➡️" },
+      { typ: "wahl", frage: "Der Weg zur Schule geht geradeaus über die Brücke. Was sagst du?", ru: "Дорога в школу идёт прямо через мост. Что ты скажешь?", optionen: ["Dźi runje!", "Dźi nalěwo!", "Dźi naprawo!"], e: "🏫", warum: "„runje“ heißt „geradeaus“." }],
+    ende: { de: "Super! Beschreib jemandem auf Sorbisch deinen Schulweg: „nalěwo“, „naprawo“, „runje“.", ru: "Супер! Опиши кому-нибудь по-лужицки свою дорогу в школу: «nalěwo», «naprawo», «runje»." }
+  },
+  {
+    id: "so-luzica", lb: 9, stufe: 3, lz: ["so.ik.01", "so.ws.02"], name: "Po Łužicy – Ausflugsziele", e: "🏰", farbe: "#1A5276", grund: "#E5EEF6",
+    intro: { de: "In der Lausitz gibt es viel zu entdecken: die Ortenburg in Bautzen, das Kloster St. Marienstern, den Spreewald mit seinen Kähnen und die Krabatmühle in Schwarzkollm.", ru: "В Лужице много интересного: замок Ортенбург в Баутцене, монастырь Мариенштерн, Шпревальд с лодками и мельница Крабата в Шварцколме." },
+    woerter: [
+      { so: "hród", de: "Burg / Schloss", ru: "замок", e: "🏰" }, { so: "klóšter", de: "Kloster", ru: "монастырь", e: "🔔" },
+      { so: "muzej", de: "Museum", ru: "музей", e: "🖼️" }, { so: "wěža", de: "Turm", ru: "башня", e: "🗼" },
+      { so: "młyn", de: "Mühle", ru: "мельница", e: "⚙️" }, { so: "Błota", de: "Spreewald", ru: "Шпревальд", e: "🛶" },
+      { so: "jězor", de: "See", ru: "озеро", e: "🏖️" }, { so: "wulět", de: "Ausflug", ru: "экскурсия", e: "🎒" }],
+    extra: [
+      { typ: "wahl", frage: "Im Spreewald fährt man mit dem Kahn über die Fließe. Wie heißt der Spreewald auf Sorbisch?", ru: "В Шпревальде катаются на лодке по протокам. Как Шпревальд называется по-лужицки?", optionen: ["Błota", "Budyšin", "Łuka"], e: "🛶", warum: "Der Spreewald heißt „Błota“ – das heißt eigentlich „Sümpfe“." },
+      { typ: "wahl", frage: "Aus alten Tagebauen sind in der Lausitz viele Badeseen geworden. Was ist ein See?", ru: "Из старых карьеров в Лужице получилось много озёр. Как будет «озеро»?", optionen: ["jězor", "młyn", "wěža"], e: "🏊", warum: "„jězor“ heißt „See“ – das Lausitzer Seenland." }],
+    ende: { de: "Jara derje! Plant zusammen einen Ausflug in die Lausitz – wohin möchtest du?", ru: "Очень хорошо! Спланируйте вместе поездку в Лужицу — куда ты хочешь?" }
+  },
+  {
+    id: "so-mjena", lb: 9, stufe: 3, lz: ["so.ik.01", "so.le.01"], name: "Serbske mjena – Ortsnamen", e: "🪧", farbe: "#34495E", grund: "#EAEEF2",
+    intro: { de: "In der Lausitz haben viele Orte zwei Namen: einen deutschen und einen sorbischen. Auf den Ortsschildern stehen beide!", ru: "В Лужице у многих мест два названия: немецкое и лужицкое. На табличках написаны оба!" },
+    woerter: [
+      { so: "Budyšin", de: "Bautzen", ru: "Баутцен", e: "🏰" }, { so: "Kamjenc", de: "Kamenz", ru: "Каменц", e: "📜" },
+      { so: "Wojerecy", de: "Hoyerswerda", ru: "Хойерсверда", e: "🏙️" }, { so: "Kulow", de: "Wittichenau", ru: "Виттихенау", e: "⛪" },
+      { so: "Chrósćicy", de: "Crostwitz", ru: "Кроствиц", e: "🐎" }, { so: "Slepo", de: "Schleife", ru: "Шлайфе", e: "🌲" },
+      { so: "Zhorjelc", de: "Görlitz", ru: "Гёрлиц", e: "🌉" }, { so: "Lubij", de: "Löbau", ru: "Лёбау", e: "⛰️" }],
+    extra: [
+      { typ: "wahl", frage: "Auf dem Ortsschild steht „Hoyerswerda“ und darunter …?", ru: "На табличке написано «Хойерсверда», а под ним …?", optionen: ["Wojerecy", "Kamjenc", "Kulow"], e: "🪧", warum: "Hoyerswerda heißt auf Sorbisch „Wojerecy“." }],
+    ende: { de: "Super! Achte bei der nächsten Fahrt durch die Lausitz auf die zweisprachigen Ortsschilder.", ru: "Супер! В следующей поездке по Лужице обрати внимание на двуязычные таблички." }
+  },
+  // Wahlbereiche (freiwillig)
+  {
+    id: "so-domizna", lb: 12, stufe: 3, lz: ["so.ik.01", "so.ws.02"], name: "Moja domizna – Meine Heimatregion", e: "🏡", farbe: "#1E8449", grund: "#E5F5EA",
+    intro: { de: "Die Lausitz – „Łužica“ – ist die Heimat der Sorben. Es gibt die Oberlausitz mit Bergen und die Niederlausitz mit dem Spreewald. Die sorbische Fahne ist blau, rot und weiß.", ru: "Лужица — «Łužica» — родина лужичан. Есть Верхняя Лужица с горами и Нижняя Лужица со Шпревальдом. Лужицкий флаг — сине-красно-белый." },
+    woerter: [
+      { so: "domizna", de: "Heimat", ru: "родина", e: "🏡" }, { so: "Łužica", de: "Lausitz", ru: "Лужица", e: "🗺️" },
+      { so: "Hornja Łužica", de: "Oberlausitz", ru: "Верхняя Лужица", e: "⛰️" }, { so: "Delnja Łužica", de: "Niederlausitz", ru: "Нижняя Лужица", e: "🛶" },
+      { so: "wjes", de: "Dorf", ru: "деревня", e: "🏘️" }, { so: "město", de: "Stadt", ru: "город", e: "🏙️" },
+      { so: "Serbja", de: "die Sorben", ru: "лужичане", e: "👪" }, { so: "chorhoj", de: "Fahne", ru: "флаг", e: "🚩" }],
+    extra: [
+      { typ: "wahl", frage: "Welche Farben hat die sorbische Fahne?", ru: "Какого цвета лужицкий флаг?", optionen: ["módra, čerwjena, běła", "čorna, čerwjena, złota", "zelena, běła, čerwjena"], e: "🚩", warum: "Die sorbische Fahne ist blau, rot und weiß – „módra, čerwjena, běła“." }],
+    ende: { de: "Wulkotnje! Mal eine Karte von deinem Wohnort und schreib „moja domizna“ darüber.", ru: "Отлично! Нарисуй карту своего места и подпиши сверху «moja domizna»." }
+  },
+  {
+    id: "so-budysin", lb: 12, stufe: 3, lz: ["so.ik.01", "so.ws.02"], name: "Budyšin – Eine Stadt in der Lausitz", e: "🗼", farbe: "#922B21", grund: "#F9EBEA",
+    intro: { de: "Bautzen – „Budyšin“ – ist über 1000 Jahre alt. Hier stehen das Haus der Sorben, das Sorbische Museum und ein Theater, das auf Deutsch und Sorbisch spielt. Der Reichenturm ist ein bisschen schief!", ru: "Баутцену — «Budyšin» — больше 1000 лет. Здесь есть Дом лужичан, Лужицкий музей и театр, который играет по-немецки и по-лужицки. Башня Райхентурм немного наклонена!" },
+    woerter: [
+      { so: "Budyšin", de: "Bautzen", ru: "Баутцен", e: "🏰" }, { so: "Serbski dom", de: "Haus der Sorben", ru: "Дом лужичан", e: "🏛️" },
+      { so: "dźiwadło", de: "Theater", ru: "театр", e: "🎭" }, { so: "Sprjewja", de: "Spree", ru: "Шпрее", e: "🏞️" },
+      { so: "kruta wěža", de: "schiefer Turm", ru: "наклонная башня", e: "🗼" }, { so: "hasa", de: "Gasse / Straße", ru: "улица", e: "🛣️" },
+      { so: "hornc", de: "Senf", ru: "горчица", e: "🌭" }],
+    extra: [
+      { typ: "wahl", frage: "Durch Bautzen fließt ein Fluss. Wie heißt die Spree auf Sorbisch?", ru: "Через Баутцен течёт река. Как Шпрее называется по-лужицки?", optionen: ["Sprjewja", "Nysa", "Łobjo"], e: "🌊", warum: "Die Spree heißt „Sprjewja“, die Neiße „Nysa“, die Elbe „Łobjo“." }],
+    ende: { de: "Jara derje! Bautzen ist auch für seinen Senf bekannt. Schau, ob ihr welchen im Kühlschrank habt!", ru: "Очень хорошо! Баутцен известен и своей горчицей. Посмотри, нет ли её у вас в холодильнике!" }
+  },
+  {
+    id: "so-baje", lb: 12, stufe: 3, lz: ["so.ik.01", "so.le.01"], name: "Serbske baje – Sagengestalten", e: "🧙", farbe: "#4A235A", grund: "#F0E6F5",
+    intro: { de: "Die Sorben erzählen alte Sagen: von Krabat, dem Müllerjungen, der in der schwarzen Mühle zaubern lernt und mit Raben fliegt; vom Wassermann, der im Teich wohnt; und von der Mittagsfrau, die mittags über die Felder geht.", ru: "Лужичане рассказывают старые предания: о Крабате, мальчике с мельницы, который научился колдовать и летал с воронами; о водяном, живущем в пруду; о полуднице, что в полдень ходит по полям." },
+    woerter: [
+      { so: "baja", de: "Sage", ru: "предание", e: "📜" }, { so: "Krabat", de: "Krabat", ru: "Крабат", e: "🧙" },
+      { so: "hawron", de: "Rabe", ru: "ворон", e: "🐦‍⬛" }, { so: "młyn", de: "Mühle", ru: "мельница", e: "⚙️" },
+      { so: "wódny muž", de: "Wassermann", ru: "водяной", e: "🌊" }, { so: "připołdnica", de: "Mittagsfrau", ru: "полуденница", e: "🌾" },
+      { so: "lutki", de: "Lutki (kleine Leute)", ru: "лютки (маленький народец)", e: "🍄" }],
+    extra: [
+      { typ: "wahl", frage: "Krabat verwandelt sich mit den anderen Müllerburschen in Vögel. In welche?", ru: "Крабат с другими подмастерьями превращается в птиц. В каких?", optionen: ["hawrony", "ptački", "kokoše"], e: "🪶", warum: "Sie werden zu Raben – „hawrony“." }],
+    ende: { de: "Super! Lass dir eine Sage erzählen oder vorlesen und mal Krabat oder den Wassermann.", ru: "Супер! Попроси рассказать или прочитать тебе предание и нарисуй Крабата или водяного." }
+  },
+  {
+    id: "so-jutrowne", lb: 12, stufe: 3, lz: ["so.ik.01", "so.ws.02"], name: "Jutrowne nałožki – Osterbräuche", e: "🐣", farbe: "#A93226", grund: "#FAE5E3",
+    intro: { de: "Zu Ostern gibt es bei den Sorben viele Bräuche: Ostereier mit Wachs und Feder verzieren, Osterwasser holen, Osterfeuer, Eier den Hang hinunterrollen (Waleien) – und am Ostersonntag reiten die Osterreiter.", ru: "На Пасху у лужичан много обычаев: расписывать яйца воском и пером, приносить пасхальную воду, пасхальный костёр, катать яйца с горки — а в пасхальное воскресенье выезжают пасхальные всадники." },
+    woerter: [
+      { so: "jutrowne jejko", de: "Osterei", ru: "пасхальное яйцо", e: "🥚" }, { so: "wósk", de: "Wachs", ru: "воск", e: "🕯️" },
+      { so: "pjero", de: "Feder", ru: "перо", e: "🪶" }, { so: "křižerjo", de: "Osterreiter", ru: "пасхальные всадники", e: "🐎" },
+      { so: "jutrowny wohen", de: "Osterfeuer", ru: "пасхальный костёр", e: "🔥" }, { so: "jutrowna woda", de: "Osterwasser", ru: "пасхальная вода", e: "💧" },
+      { so: "walkowanje", de: "Eierrollen (Waleien)", ru: "катание яиц", e: "⛰️" }, { so: "jutrowny zajac", de: "Osterhase", ru: "пасхальный заяц", e: "🐇" }],
+    extra: [
+      { typ: "wahl", frage: "Womit tragen die Sorben die feinen Muster auf die Ostereier auf?", ru: "Чем лужичане наносят тонкие узоры на пасхальные яйца?", optionen: ["z wóskom a pjerom", "z nožicami", "z linealom"], e: "🎨", warum: "Mit Wachs und einer Feder – „z wóskom a pjerom“." }],
+    ende: { de: "Wulkotnje! Verziere vor Ostern mit einem Erwachsenen ein Ei mit Wachs – wie die Sorben.", ru: "Отлично! Перед Пасхой распиши со взрослым яйцо воском — как лужичане." }
+  }
+);

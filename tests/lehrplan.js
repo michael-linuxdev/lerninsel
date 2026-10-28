@@ -238,17 +238,18 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jede
     evreligion: { ja: 45, teil: 0, nein: 0, aussen: 2 }, kareligion: { ja: 59, teil: 0, nein: 0, aussen: 1 } });
 });
 
-pruefe("Sachsen Sorbisch als Fremdsprache (nur nach Eltern-Wahl): 6 Themen Kl. 1/2, 11 Lernbereiche Kl. 3 und 4, jeder Punkt zugeordnet, jede Lektion kommt vor, ehrlich „teil“ ohne Hören", () => {
-  const f = L.laender.sachsen.faecher.sorbisch, m = { ja: 0, teil: 0, nein: 0 }, ids = new Set(), benutzt = new Set();
+pruefe("Sachsen Sorbisch als Fremdsprache (nur nach Eltern-Wahl): 6 Themen Kl. 1/2, 11 Lernbereiche + Wahlbereiche Kl. 3 und 4, jeder Punkt zugeordnet, jede Lektion kommt vor, ehrlich „teil“ ohne Hören", () => {
+  const f = L.laender.sachsen.faecher.sorbisch, m = { ja: 0, teil: 0, nein: 0 }, ids = new Set(), benutzt = new Set(), echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
   assert.ok(f && f.stand.includes("Sorbisch als Fremdsprache"));
-  [[2, 6], [3, 11], [4, 11]].forEach(([k, anz]) => { const lbs = L.fuer("sachsen", "sorbisch", k); assert.strictEqual(lbs.length, anz, "Sorbisch Kl. " + k);
+  [[2, 6], [3, 12], [4, 12]].forEach(([k, anz]) => { const lbs = L.fuer("sachsen", "sorbisch", k); assert.strictEqual(lbs.length, anz, "Sorbisch Kl. " + k);
     lbs.forEach(lb => { lb.lz.forEach(id => assert.ok(K.ziel(id), id)); assert.ok(lb.punkte && lb.punkte.length >= 2, lb.titel);
-      lb.punkte.forEach(p => { p.app.forEach(a => { assert.ok(a.startsWith("sorbisch:") && w.SORBISCH.some(l => "sorbisch:" + l.id === a), `${p.id}: ${a}`); benutzt.add(a); });
+      lb.punkte.forEach(p => { p.app.forEach(a => { const [art, id] = a.split(":");
+          assert.ok(art === "sorbisch" ? w.SORBISCH.some(l => l.id === id) : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); benutzt.add(a); });
         if (p.abdeckung === "ja") assert.ok(p.app.length, p.id + " ist „ja“ ohne Lektion");
         if (!ids.has(p.id)) { ids.add(p.id); m[p.abdeckung]++; } });
       assert.strictEqual(lb.abdeckung, lb.punkte.some(p => p.abdeckung !== "ja") ? "teil" : "ja", `Sorbisch Kl. ${k} ${lb.titel}`); }); });
   w.SORBISCH.forEach(l => assert.ok(benutzt.has("sorbisch:" + l.id), l.id + " kommt in keinem Inhaltspunkt vor"));
-  assert.deepStrictEqual(m, { ja: 26, teil: 14, nein: 7 });
+  assert.deepStrictEqual(m, { ja: 49, teil: 1, nein: 1 });   // 30.10.2026: nur Hören/Nachsprechen fehlt (keine sorbische Stimme)
   // Jedes Wort mit eigenem Emoji je Lektion, Sätze und Wahlaufgaben vollständig
   w.SORBISCH.forEach(l => { const e = l.woerter.map(x => x.e); assert.strictEqual(new Set(e).size, e.length, l.id + ": Emoji doppelt");
     l.woerter.forEach(x => assert.ok(x.so && x.de && x.ru, l.id + ": Wort unvollständig"));

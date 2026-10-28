@@ -1,5 +1,5 @@
 // Test Sorbisch (Obersorbisch, nur nach Eltern-Wahl): Tür nur mit Wahl, seit 29.10. auch auf der Hauptseite alle Entwurfs-Lektionen (ohne Freigabe nur geprüfte),
-// alle 23 Lektionen in /dev echt durchgeklickt (Wortkarten, Lesen, Übersetzen, Satzbau, Wahl) – ohne sorbische Stimme, ohne Hör-Aufgaben,
+// alle 47 Lektionen in /dev echt durchgeklickt (Wortkarten, Lesen, Übersetzen, Satzbau, Wahl) – ohne sorbische Stimme, ohne Hör-Aufgaben,
 // „Zeig, was du kannst“, „gerade in der Schule“, Fähigkeit „Sorbisch-Ohr“ nur mit Wahl, Elternbereich (Karte, Lehrplan), Prüfseite für die Prüferin.
 // Braucht ein frisch gebautes /dev (sh quellen/dev-bauen.sh). Keine Konsolenfehler, keine waagerechte Scrollleiste.
 const { chromium } = require("playwright");
@@ -39,8 +39,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const { ctx, p } = await kind("3");
     erwarte(await p.evaluate(() => document.querySelector(".tuer.sorbisch").hidden), "ohne Wahl: keine Tür „Sorbisch“ auf der Startseite");
     await eltern(p);
-    erwarte(!(await lpSorbisch(p)) && await p.evaluate(() => /0 von 23/.test(document.getElementById("so-pruefstand").textContent)),
-      "Elternbereich ohne Wahl: kein Sorbisch unter „Was übt die App?“, Prüfstand „0 von 23“");
+    erwarte(!(await lpSorbisch(p)) && await p.evaluate(() => /0 von 47/.test(document.getElementById("so-pruefstand").textContent)),
+      "Elternbereich ohne Wahl: kein Sorbisch unter „Was übt die App?“, Prüfstand „0 von 47“");
     await p.selectOption("#so-an", "1"); await p.selectOption("#so-schule", "8"); await p.click("#so-speichern"); await p.waitForTimeout(200);
     erwarte(await p.evaluate(() => { const s = Spielwelt.lade("eltern").sorbisch || {}; return s.an === true && s.schule === "8"; }), "Elternbereich: Karte „Sorbisch“ speichert Wahl und „gerade in der Schule“");
     await p.reload(); await p.waitForTimeout(400); if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(500); }
@@ -54,7 +54,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     }
     await p.setViewportSize({ width: 1180, height: 820 });
     await p.goto(BASIS + "spiele/sorbisch/"); await p.waitForTimeout(400);
-    erwarte(await sichtbar(p) === 23, "Hauptseite: alle 23 Lektionen sichtbar (Entwürfe freigegeben, Entscheidung 29.10.2026)");
+    erwarte(await sichtbar(p) === 47, "Hauptseite: alle 47 Lektionen sichtbar (Entwürfe freigegeben, Entscheidung 29.10.2026)");
     await bild(p, "sorbisch-hauptseite");
     // Ohne Freigabe der Entwürfe: nur Lektionen aus geprueft.js, sonst ehrlicher Hinweis
     await p.addInitScript(() => { let sw; Object.defineProperty(window, "Spielwelt", { configurable: true, get: () => sw, set: (v) => { v.ENTWURF_FREI = ["ru"]; sw = v; } }); });
@@ -75,7 +75,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
 
   // ---------- /dev: Sichtbarkeit je Klasse ----------
   const DEV = BASIS + "dev/";
-  for (const [stufe, anzahl] of [["1", 10], ["2", 23], ["4", 23]]) {
+  for (const [stufe, anzahl] of [["1", 13], ["2", 47], ["4", 47]]) {
     const { ctx, p } = await kind(stufe, { basis: DEV });
     await waehle(p, true);
     await p.goto(DEV + "spiele/sorbisch/"); await p.waitForTimeout(400);
@@ -136,7 +136,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const ids = await p.evaluate(() => SORBISCH.map(k => k.id));
     const daten = await p.evaluate(() => SORBISCH.every(k => k.lz.length && k.stufe && k.intro.ru && k.ende.ru && k.woerter.length >= 6 && k.woerter.every(w => w.so && w.de && w.ru && w.e) &&
       new Set(k.woerter.map(w => w.e)).size === k.woerter.length && (k.extra || []).every(s => s.ru)));
-    erwarte(ids.length === 23 && daten, "23 Lektionen: Lernziel, Stufe, russische Entwürfe, je Wort ein eigenes Bild");
+    erwarte(ids.length === 47 && daten, "47 Lektionen: Lernziel, Stufe, russische Entwürfe, je Wort ein eigenes Bild");
     let alleOk = true, hoeren = false;
     for (const [n, id] of ids.entries()) {
       const r = await spiele(p, id, "quer", n === 0);
@@ -145,16 +145,22 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       if (n === 0) erwarte(r.ok && /zweiten Versuch/.test(r.ende.text), "„Witaj!“ mit einem Fehler bis zum Ende, Fehler wird angezeigt");
       else if (!/beim ersten Mal richtig/.test(r.ende.text)) { alleOk = false; console.log(`    ${id}: ${r.ende.text}`); }
     }
-    erwarte(alleOk && !hoeren, "/dev quer: alle 23 Lektionen echt durchgeklickt bis zum Ende, keine Hör-Aufgabe");
+    erwarte(alleOk && !hoeren, "/dev quer: alle 47 Lektionen echt durchgeklickt bis zum Ende, keine Hör-Aufgabe");
     const sorbischGesprochen = await p.evaluate(() => window.__gesprochen.filter(([t, l]) => l !== "de-DE" && !/^ru/.test(l) || SORBISCH.some(k => k.woerter.some(w => w.so === t))).length);
     erwarte(sorbischGesprochen === 0, "Sorbische Wörter werden nie vorgelesen (nur deutsche Erklärungen)");
     await bild(p, "sorbisch-ende");
     const stand = await p.evaluate(() => ({ lek: Object.keys((Spielwelt.lade("sorbisch") || {}).lektionen || {}).length, xp: Charakter.stufe ? Charakter.stufe("sorbisch") : 0 }));
-    erwarte(stand.lek === 23 && stand.xp >= 1, `Fortschritt gespeichert (23 Lektionen) und Fähigkeit „Sorbisch-Ohr“ gewachsen (Stufe ${stand.xp})`);
+    erwarte(stand.lek === 47 && stand.xp >= 1, `Fortschritt gespeichert (47 Lektionen) und Fähigkeit „Sorbisch-Ohr“ gewachsen (Stufe ${stand.xp})`);
+    // Sorbische Bräuche als Echte-Welt-Aufgaben (Vogelhochzeit, Ostereier, Osterreiten, Ortsschild, Sage, Namenstag, Mappe) nur mit Wahl
+    const ew = await p.evaluate(() => EchteWelt.passend().filter(id => EchteWelt.IDEEN.find(i => i[0] === id)[1] === "sorbisch"));
+    erwarte(ew.length === 7 && ew.includes("vogelhochzeit") && ew.includes("osterreiten"), `Echte Welt mit Wahl: 7 sorbische Brauch-Aufgaben (${ew.join(", ")})`);
+    await waehle(p, false);
+    erwarte(await p.evaluate(() => !EchteWelt.passend().some(id => EchteWelt.IDEEN.find(i => i[0] === id)[1] === "sorbisch")), "Echte Welt ohne Wahl: keine sorbischen Aufgaben");
+    await waehle(p, true);
     // „Zeig, was du kannst“ (Lernbereich 1: Familie und Freunde) mit einem Fehler
     const r = await spiele(p, "lernstand", "quer", true, 1);
     const ls = await p.evaluate(() => (Spielwelt.lade("sorbisch").lernstand || {})["k4:1"]);
-    erwarte(r.ende.an && ls && ls.n === 3 && ls.richtig === 2, `„Zeig, was du kannst“ Lernbereich 1 durchgespielt (Aufgaben aus 3 Lektionen, eine mit Fehler), Ergebnis gespeichert (${ls && ls.richtig} von ${ls && ls.n} Lektionen sicher)`);
+    erwarte(r.ende.an && ls && ls.n === 5 && ls.richtig === 4, `„Zeig, was du kannst“ Lernbereich 1 durchgespielt (Aufgaben aus 5 Lektionen, eine mit Fehler), Ergebnis gespeichert (${ls && ls.richtig} von ${ls && ls.n} Lektionen sicher)`);
     await p.goto(DEV + "spiele/ich/"); await p.waitForTimeout(400);
     erwarte(await p.evaluate(() => /Sorbisch-Ohr/.test(document.body.textContent)), "„Mein Ich“ zeigt die Fähigkeit „Sorbisch-Ohr“ (mit Wahl)");
     await waehle(p, false); await p.reload(); await p.waitForTimeout(400);
@@ -184,7 +190,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     p.on("pageerror", e => fehler.push(`${p.url()}: ${e.message}`));
     await p.goto(BASIS + "spiele/sorbisch/pruefen.html"); await p.waitForTimeout(300);
     const gruppen = await p.evaluate(() => __pruefen.gruppen());
-    erwarte(gruppen.length === 24 && gruppen.every(g => g.n >= 3), `Prüfseite ${art}: Seitentexte und 23 Lektionen mit allen Einträgen (${gruppen.reduce((n, g) => n + g.n, 0)})`);
+    erwarte(gruppen.length === 48 && gruppen.every(g => g.n >= 3), `Prüfseite ${art}: Seitentexte und 47 Lektionen mit allen Einträgen (${gruppen.reduce((n, g) => n + g.n, 0)})`);
     erwarte(await passt(p), `Prüfseite ${art}: keine Scrollleiste`);
     if (art === "quer") {
       const n = gruppen.find(g => g.id === "so-witaj").n;

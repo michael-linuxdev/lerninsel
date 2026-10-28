@@ -663,8 +663,8 @@
           ["sn.so12.2.03", "Befinden als Grußformel ausdrücken (Kak so tebi wjedźe?)", "1/2", ["sorbisch:so-witaj"], "ja"]
         ],
         4: [ // In der Schule
-          ["sn.so12.4.01", "Schulsachen benennen und nach Anweisung benutzen", "1/2", ["sorbisch:so-sula"], "teil"],
-          ["sn.so12.4.02", "Zahlen bis 20 benennen", "1/2", ["sorbisch:so-licby", "sorbisch:so-licby100"], "teil"],
+          ["sn.so12.4.01", "Schulsachen benennen und nach Anweisung benutzen", "1/2", ["sorbisch:so-sula", "sorbisch:so-prosy"], "ja"],
+          ["sn.so12.4.02", "Zahlen bis 20 benennen", "1/2", ["sorbisch:so-licby", "sorbisch:so-licby20"], "ja"],
           ["sn.so12.4.03", "Farben benennen", "1/2", ["sorbisch:so-barby"], "ja"]
         ],
         5: [ // Haus- und Zootiere
@@ -673,122 +673,134 @@
         ],
         8: [ // Feste und Bräuche
           ["sn.so12.8.01", "Sorbische Feste und Bräuche kennenlernen: Vogelhochzeit, Ostern, Weihnachten, Geburtstag", "1/2", ["sorbisch:so-swjedzenje"], "ja"],
-          ["sn.so12.8.02", "Feste mitfeiern (Vogelhochzeit, Ostereier verzieren)", "1/2", ["sorbisch:so-swjedzenje"], "teil"]
+          ["sn.so12.8.02", "Feste mitfeiern (Vogelhochzeit, Ostereier verzieren)", "1/2", ["sorbisch:so-swjedzenje", "echtewelt:vogelhochzeit", "echtewelt:ostereier"], "ja"]
         ],
         10: [ // Jahreszeiten
           ["sn.so12.10.01", "Jahreszeiten benennen", "1/2", ["sorbisch:so-leto"], "ja"],
           ["sn.so12.10.02", "Typische Naturerscheinungen benennen (Regen, Schnee, Wind, Sonne)", "1/2", ["sorbisch:so-leto"], "ja"],
-          ["sn.so12.10.03", "Jahrestypische Aktivitäten benennen", "1/2", ["sorbisch:so-sport"], "teil"]
+          ["sn.so12.10.03", "Jahrestypische Aktivitäten benennen", "1/2", ["sorbisch:so-letne"], "ja"]
         ]
       },
       "3": {
         1: [ // Meine Familie, meine Freunde und ich
           ["sn.so34.1.01", "Begrüßen, vorstellen, verabschieden, bedauern", "3", ["sorbisch:so-witaj", "sorbisch:so-preceljo"], "ja"],
           ["sn.so34.1.02", "Auskunft zur eigenen Person: Name, Alter, Wohnort, Familie", "3", ["sorbisch:so-preceljo", "sorbisch:so-swojba"], "ja"],
-          ["sn.so34.1.03", "Eine Person beschreiben", "3", [], "nein"],
-          ["sn.so34.1.04", "Verschiedene Sprecher verstehen, Mimik und Gestik beobachten", "3", [], "nein"]
+          ["sn.so34.1.03", "Eine Person beschreiben", "3", ["sorbisch:so-wosoby"], "ja"],
+          ["sn.so34.1.04", "Verschiedene Sprecher verstehen, Mimik und Gestik beobachten", "3", ["sorbisch:so-mimika"], "teil"]
         ],
         2: [ // Mein Körper, meine Kleidung und mein Befinden
           ["sn.so34.2.01", "Körperteile, Kleidung, Grund- und Mischfarben", "3", ["sorbisch:so-cylo", "sorbisch:so-drasta", "sorbisch:so-barby"], "ja"],
           ["sn.so34.2.02", "Befinden, Gefühle und Schmerzen ausdrücken und erfragen", "3", ["sorbisch:so-pocucy"], "ja"],
-          ["sn.so34.2.03", "Vorlieben und Abneigungen ausdrücken (Lieblingskleidung)", "3", [], "nein"]
+          ["sn.so34.2.03", "Vorlieben und Abneigungen ausdrücken (Lieblingskleidung)", "3", ["sorbisch:so-lubi"], "ja"]
         ],
         3: [ // Zuhause
           ["sn.so34.3.01", "Zimmer, Einrichtungs- und Gebrauchsgegenstände", "3", ["sorbisch:so-doma"], "ja"],
-          ["sn.so34.3.02", "Lagebeziehungen, Besitz und Tätigkeiten im Haus", "3", ["sorbisch:so-doma"], "teil"]
+          ["sn.so34.3.02", "Lagebeziehungen, Besitz und Tätigkeiten im Haus", "3", ["sorbisch:so-doma", "sorbisch:so-hdze"], "ja"]
         ],
         4: [ // In der Schule
           ["sn.so34.4.01", "Schulsachen, Inhalt der Federtasche, Klassenzimmer", "3", ["sorbisch:so-sula"], "ja"],
-          ["sn.so34.4.02", "Wochentage, Tagesabschnitte, Schulfächer", "3", ["sorbisch:so-tydzen"], "teil"],
-          ["sn.so34.4.03", "Uhrzeit erfragen und angeben (volle Stunden)", "3", [], "nein"]
+          ["sn.so34.4.02", "Wochentage, Tagesabschnitte, Schulfächer", "3", ["sorbisch:so-tydzen", "sorbisch:so-predmety", "sorbisch:so-dzen"], "ja"],
+          ["sn.so34.4.03", "Uhrzeit erfragen und angeben (volle Stunden)", "3", ["sorbisch:so-hodzina"], "ja"]
         ],
         5: [ // Haus- und Zootiere
           ["sn.so34.5.01", "Haustiere, Tiere auf dem Bauernhof und im Zoo", "3", ["sorbisch:so-zwerjata", "sorbisch:so-zoo"], "ja"],
-          ["sn.so34.5.02", "Tiere beschreiben: Eigenschaften, Lebensraum, Wunschtier", "3", ["sorbisch:so-zoo"], "teil"]
+          ["sn.so34.5.02", "Tiere beschreiben: Eigenschaften, Lebensraum, Wunschtier", "3", ["sorbisch:so-zoo", "sorbisch:so-wopis"], "ja"]
         ],
         6: [ // Sport und Freizeit
           ["sn.so34.6.01", "Hobbys, Spiel- und Sportmöglichkeiten benennen", "3", ["sorbisch:so-sport"], "ja"],
-          ["sn.so34.6.02", "Vorlieben ausdrücken (Ja rady …), sich austauschen", "3", ["sorbisch:so-sport"], "teil"]
+          ["sn.so34.6.02", "Vorlieben ausdrücken (Ja rady …), sich austauschen", "3", ["sorbisch:so-sport", "sorbisch:so-rady"], "ja"]
         ],
         7: [ // Beim Einkaufen
-          ["sn.so34.7.01", "Zahlwörter bis 100", "3", ["sorbisch:so-licby100"], "teil"],
+          ["sn.so34.7.01", "Zahlwörter bis 100", "3", ["sorbisch:so-licby100", "sorbisch:so-dzesatki"], "ja"],
           ["sn.so34.7.02", "Lebensmittel, Speisen und Getränke, typisch sorbische Speisen", "3", ["sorbisch:so-jedz"], "ja"],
-          ["sn.so34.7.03", "Kleine Verkaufsgespräche: Preise, bitten, danken, höflich sein", "3", ["sorbisch:so-witaj"], "teil"]
+          ["sn.so34.7.03", "Kleine Verkaufsgespräche: Preise, bitten, danken, höflich sein", "3", ["sorbisch:so-wobchod", "sorbisch:so-witaj"], "ja"]
         ],
         8: [ // Feste und Bräuche
-          ["sn.so34.8.01", "Sorbische Feste und Bräuche im Jahreskreis (Vogelhochzeit, Osterreiten, Ostereier)", "3", ["sorbisch:so-swjedzenje", "sorbisch:so-jutry"], "ja"],
+          ["sn.so34.8.01", "Sorbische Feste und Bräuche im Jahreskreis (Vogelhochzeit, Osterreiten, Ostereier)", "3", ["sorbisch:so-swjedzenje", "sorbisch:so-jutry", "echtewelt:osterreiten", "echtewelt:ostereier"], "ja"],
           ["sn.so34.8.02", "Grüße und Wünsche formulieren", "3", ["sorbisch:so-jutry"], "ja"],
-          ["sn.so34.8.03", "Geburtstage, Namenstage, Kalender", "3", ["sorbisch:so-mesacy"], "teil"]
+          ["sn.so34.8.03", "Geburtstage, Namenstage, Kalender", "3", ["sorbisch:so-mesacy", "sorbisch:so-mjeniny", "echtewelt:namenstag"], "ja"]
         ],
         9: [ // Unterwegs und auf Reisen
-          ["sn.so34.9.01", "Sehenswürdigkeiten und Ausflugsziele in Ober- und Niederlausitz", "3", ["sorbisch:so-puc"], "teil"],
+          ["sn.so34.9.01", "Sehenswürdigkeiten und Ausflugsziele in Ober- und Niederlausitz", "3", ["sorbisch:so-puc", "sorbisch:so-luzica", "sorbisch:so-mjena", "echtewelt:ortsschild"], "ja"],
           ["sn.so34.9.02", "Verkehrsmittel", "3", ["sorbisch:so-puc"], "ja"],
-          ["sn.so34.9.03", "Orientierung im Ort, einfache Wegbeschreibung", "3", [], "nein"]
+          ["sn.so34.9.03", "Orientierung im Ort, einfache Wegbeschreibung", "3", ["sorbisch:so-wjes"], "ja"]
         ],
         10: [ // Die Natur im Laufe des Jahres
           ["sn.so34.10.01", "Monate (sorbische Monatsnamen) und Jahreszeiten", "3", ["sorbisch:so-mesacy", "sorbisch:so-leto"], "ja"],
-          ["sn.so34.10.02", "Wetter, Himmelsrichtungen", "3", ["sorbisch:so-leto"], "teil"],
+          ["sn.so34.10.02", "Wetter, Himmelsrichtungen", "3", ["sorbisch:so-leto", "sorbisch:so-strony"], "ja"],
           ["sn.so34.10.03", "Pflanzen und Tiere von Wald, Wiese, Gewässer", "3", ["sorbisch:so-priroda", "sorbisch:so-zoo"], "ja"],
-          ["sn.so34.10.04", "Datum angeben, Ordnungszahlen", "3", [], "nein"]
+          ["sn.so34.10.04", "Datum angeben, Ordnungszahlen", "3", ["sorbisch:so-datum"], "ja"]
         ],
         11: [ // Mein Portfolio
           ["sn.so34.11.01", "Sprachen nennen, die man lernt und benutzt (auch Familiensprachen)", "3", ["sorbisch:so-rece"], "ja"],
-          ["sn.so34.11.02", "Sprachenbiografie und Dossier: Lernerfolge zeigen", "3", ["sorbisch:so-rece"], "teil"]
+          ["sn.so34.11.02", "Sprachenbiografie und Dossier: Lernerfolge zeigen", "3", ["sorbisch:so-rece", "echtewelt:sorbischmappe"], "ja"]
+        ],
+        12: [ // Wahlbereiche (freiwillig)
+          ["sn.so34.w.01", "Wahlbereich Heimatregion: Lausitz, Ober- und Niederlausitz, Dorf und Stadt, sorbische Fahne", "3", ["sorbisch:so-domizna"], "ja"],
+          ["sn.so34.w.02", "Wahlbereich Eine Stadt in der Lausitz (Bautzen)", "3", ["sorbisch:so-budysin"], "ja"],
+          ["sn.so34.w.03", "Wahlbereich Sagengestalten (Krabat, Wassermann, Mittagsfrau, Lutki)", "3", ["sorbisch:so-baje", "echtewelt:sage"], "ja"],
+          ["sn.so34.w.04", "Wahlbereich Osterbräuche (Ostereier, Osterreiten, Osterwasser, Osterfeuer)", "3", ["sorbisch:so-jutrowne", "echtewelt:ostereier"], "ja"]
         ]
       },
       "4": {
         1: [ // Meine Familie, meine Freunde und ich
           ["sn.so34.1.01", "Begrüßen, vorstellen, verabschieden, bedauern", "4", ["sorbisch:so-witaj", "sorbisch:so-preceljo"], "ja"],
           ["sn.so34.1.02", "Auskunft zur eigenen Person: Name, Alter, Wohnort, Familie", "4", ["sorbisch:so-preceljo", "sorbisch:so-swojba"], "ja"],
-          ["sn.so34.1.03", "Eine Person beschreiben", "4", [], "nein"],
-          ["sn.so34.1.04", "Verschiedene Sprecher verstehen, Mimik und Gestik beobachten", "4", [], "nein"]
+          ["sn.so34.1.03", "Eine Person beschreiben", "4", ["sorbisch:so-wosoby"], "ja"],
+          ["sn.so34.1.04", "Verschiedene Sprecher verstehen, Mimik und Gestik beobachten", "4", ["sorbisch:so-mimika"], "teil"]
         ],
         2: [ // Mein Körper, meine Kleidung und mein Befinden
           ["sn.so34.2.01", "Körperteile, Kleidung, Grund- und Mischfarben", "4", ["sorbisch:so-cylo", "sorbisch:so-drasta", "sorbisch:so-barby"], "ja"],
           ["sn.so34.2.02", "Befinden, Gefühle und Schmerzen ausdrücken und erfragen", "4", ["sorbisch:so-pocucy"], "ja"],
-          ["sn.so34.2.03", "Vorlieben und Abneigungen ausdrücken (Lieblingskleidung)", "4", [], "nein"]
+          ["sn.so34.2.03", "Vorlieben und Abneigungen ausdrücken (Lieblingskleidung)", "4", ["sorbisch:so-lubi"], "ja"]
         ],
         3: [ // Zuhause
           ["sn.so34.3.01", "Zimmer, Einrichtungs- und Gebrauchsgegenstände", "4", ["sorbisch:so-doma"], "ja"],
-          ["sn.so34.3.02", "Lagebeziehungen, Besitz und Tätigkeiten im Haus", "4", ["sorbisch:so-doma"], "teil"]
+          ["sn.so34.3.02", "Lagebeziehungen, Besitz und Tätigkeiten im Haus", "4", ["sorbisch:so-doma", "sorbisch:so-hdze"], "ja"]
         ],
         4: [ // In der Schule
           ["sn.so34.4.01", "Schulsachen, Inhalt der Federtasche, Klassenzimmer", "4", ["sorbisch:so-sula"], "ja"],
-          ["sn.so34.4.02", "Wochentage, Tagesabschnitte, Schulfächer", "4", ["sorbisch:so-tydzen"], "teil"],
-          ["sn.so34.4.03", "Uhrzeit erfragen und angeben (volle Stunden)", "4", [], "nein"]
+          ["sn.so34.4.02", "Wochentage, Tagesabschnitte, Schulfächer", "4", ["sorbisch:so-tydzen", "sorbisch:so-predmety", "sorbisch:so-dzen"], "ja"],
+          ["sn.so34.4.03", "Uhrzeit erfragen und angeben (volle Stunden)", "4", ["sorbisch:so-hodzina"], "ja"]
         ],
         5: [ // Haus- und Zootiere
           ["sn.so34.5.01", "Haustiere, Tiere auf dem Bauernhof und im Zoo", "4", ["sorbisch:so-zwerjata", "sorbisch:so-zoo"], "ja"],
-          ["sn.so34.5.02", "Tiere beschreiben: Eigenschaften, Lebensraum, Wunschtier", "4", ["sorbisch:so-zoo"], "teil"]
+          ["sn.so34.5.02", "Tiere beschreiben: Eigenschaften, Lebensraum, Wunschtier", "4", ["sorbisch:so-zoo", "sorbisch:so-wopis"], "ja"]
         ],
         6: [ // Sport und Freizeit
           ["sn.so34.6.01", "Hobbys, Spiel- und Sportmöglichkeiten benennen", "4", ["sorbisch:so-sport"], "ja"],
-          ["sn.so34.6.02", "Vorlieben ausdrücken (Ja rady …), sich austauschen", "4", ["sorbisch:so-sport"], "teil"]
+          ["sn.so34.6.02", "Vorlieben ausdrücken (Ja rady …), sich austauschen", "4", ["sorbisch:so-sport", "sorbisch:so-rady"], "ja"]
         ],
         7: [ // Beim Einkaufen
-          ["sn.so34.7.01", "Zahlwörter bis 100", "4", ["sorbisch:so-licby100"], "teil"],
+          ["sn.so34.7.01", "Zahlwörter bis 100", "4", ["sorbisch:so-licby100", "sorbisch:so-dzesatki"], "ja"],
           ["sn.so34.7.02", "Lebensmittel, Speisen und Getränke, typisch sorbische Speisen", "4", ["sorbisch:so-jedz"], "ja"],
-          ["sn.so34.7.03", "Kleine Verkaufsgespräche: Preise, bitten, danken, höflich sein", "4", ["sorbisch:so-witaj"], "teil"]
+          ["sn.so34.7.03", "Kleine Verkaufsgespräche: Preise, bitten, danken, höflich sein", "4", ["sorbisch:so-wobchod", "sorbisch:so-witaj"], "ja"]
         ],
         8: [ // Feste und Bräuche
-          ["sn.so34.8.01", "Sorbische Feste und Bräuche im Jahreskreis (Vogelhochzeit, Osterreiten, Ostereier)", "4", ["sorbisch:so-swjedzenje", "sorbisch:so-jutry"], "ja"],
+          ["sn.so34.8.01", "Sorbische Feste und Bräuche im Jahreskreis (Vogelhochzeit, Osterreiten, Ostereier)", "4", ["sorbisch:so-swjedzenje", "sorbisch:so-jutry", "echtewelt:osterreiten", "echtewelt:ostereier"], "ja"],
           ["sn.so34.8.02", "Grüße und Wünsche formulieren", "4", ["sorbisch:so-jutry"], "ja"],
-          ["sn.so34.8.03", "Geburtstage, Namenstage, Kalender", "4", ["sorbisch:so-mesacy"], "teil"]
+          ["sn.so34.8.03", "Geburtstage, Namenstage, Kalender", "4", ["sorbisch:so-mesacy", "sorbisch:so-mjeniny", "echtewelt:namenstag"], "ja"]
         ],
         9: [ // Unterwegs und auf Reisen
-          ["sn.so34.9.01", "Sehenswürdigkeiten und Ausflugsziele in Ober- und Niederlausitz", "4", ["sorbisch:so-puc"], "teil"],
+          ["sn.so34.9.01", "Sehenswürdigkeiten und Ausflugsziele in Ober- und Niederlausitz", "4", ["sorbisch:so-puc", "sorbisch:so-luzica", "sorbisch:so-mjena", "echtewelt:ortsschild"], "ja"],
           ["sn.so34.9.02", "Verkehrsmittel", "4", ["sorbisch:so-puc"], "ja"],
-          ["sn.so34.9.03", "Orientierung im Ort, einfache Wegbeschreibung", "4", [], "nein"]
+          ["sn.so34.9.03", "Orientierung im Ort, einfache Wegbeschreibung", "4", ["sorbisch:so-wjes"], "ja"]
         ],
         10: [ // Die Natur im Laufe des Jahres
           ["sn.so34.10.01", "Monate (sorbische Monatsnamen) und Jahreszeiten", "4", ["sorbisch:so-mesacy", "sorbisch:so-leto"], "ja"],
-          ["sn.so34.10.02", "Wetter, Himmelsrichtungen", "4", ["sorbisch:so-leto"], "teil"],
+          ["sn.so34.10.02", "Wetter, Himmelsrichtungen", "4", ["sorbisch:so-leto", "sorbisch:so-strony"], "ja"],
           ["sn.so34.10.03", "Pflanzen und Tiere von Wald, Wiese, Gewässer", "4", ["sorbisch:so-priroda", "sorbisch:so-zoo"], "ja"],
-          ["sn.so34.10.04", "Datum angeben, Ordnungszahlen", "4", [], "nein"]
+          ["sn.so34.10.04", "Datum angeben, Ordnungszahlen", "4", ["sorbisch:so-datum"], "ja"]
         ],
         11: [ // Mein Portfolio
           ["sn.so34.11.01", "Sprachen nennen, die man lernt und benutzt (auch Familiensprachen)", "4", ["sorbisch:so-rece"], "ja"],
-          ["sn.so34.11.02", "Sprachenbiografie und Dossier: Lernerfolge zeigen", "4", ["sorbisch:so-rece"], "teil"]
+          ["sn.so34.11.02", "Sprachenbiografie und Dossier: Lernerfolge zeigen", "4", ["sorbisch:so-rece", "echtewelt:sorbischmappe"], "ja"]
+        ],
+        12: [ // Wahlbereiche (freiwillig)
+          ["sn.so34.w.01", "Wahlbereich Heimatregion: Lausitz, Ober- und Niederlausitz, Dorf und Stadt, sorbische Fahne", "4", ["sorbisch:so-domizna"], "ja"],
+          ["sn.so34.w.02", "Wahlbereich Eine Stadt in der Lausitz (Bautzen)", "4", ["sorbisch:so-budysin"], "ja"],
+          ["sn.so34.w.03", "Wahlbereich Sagengestalten (Krabat, Wassermann, Mittagsfrau, Lutki)", "4", ["sorbisch:so-baje", "echtewelt:sage"], "ja"],
+          ["sn.so34.w.04", "Wahlbereich Osterbräuche (Ostereier, Osterreiten, Osterwasser, Osterfeuer)", "4", ["sorbisch:so-jutrowne", "echtewelt:ostereier"], "ja"]
         ]
       }
     },

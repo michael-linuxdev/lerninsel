@@ -93,12 +93,20 @@
     ["fest", "helfen", "🎉", "Plant in der Familie ein kleines Fest: Wen ladet ihr ein? Was gibt es?", "Спланируйте в семье маленький праздник: кого пригласить? Что будет?", 1],
     ["wuensche", "gefuehle", "🌠", "Mal oder schreib zwei Wünsche: einen, den man kaufen kann, und einen, den man nicht kaufen kann.", "Нарисуй или напиши два желания: одно можно купить, другое нельзя.", 3],
     ["helfenprojekt", "helfen", "🤲", "Überlegt in der Familie: Wem können wir helfen? Nachbarn, Tierheim, eine Sammelaktion …", "Подумайте в семье: кому мы можем помочь? Соседям, приюту для животных, сбору вещей …", 3],
+    // Sorbische Bräuche (30.10.2026): nur, wenn die Eltern Sorbisch gewählt haben (Feld 8 = "sorbisch")
+    ["vogelhochzeit", "sorbisch", "🐦", "Feiere Vogelhochzeit (25. Januar): Stell am Abend vorher einen Teller ans Fenster. Mal ein Vogelpaar als Braut und Bräutigam.", "Отпразднуй птичью свадьбу (25 января): вечером накануне поставь тарелку на окно. Нарисуй пару птиц — невесту и жениха.", 1, 0, "sorbisch"],
+    ["ostereier", "sorbisch", "🥚", "Verziere mit einem Erwachsenen ein Osterei nach sorbischer Art: Muster mit warmem Wachs und einer Feder auftupfen, dann färben.", "Распиши со взрослым пасхальное яйцо по-лужицки: нанеси узор тёплым воском и пером, потом покрась.", 1, 0, "sorbisch"],
+    ["osterreiten", "sorbisch", "🐎", "Schau dir mit einem Erwachsenen das Osterreiten an – am Ostersonntag in der Lausitz oder als Film. Wie sind die Pferde geschmückt?", "Посмотри со взрослым на пасхальных всадников — в пасхальное воскресенье в Лужице или в фильме. Как украшены лошади?", 1, 0, "sorbisch"],
+    ["ortsschild", "sorbisch", "🪧", "Such auf einem Ortsschild oder einer Karte der Lausitz einen Ort mit zwei Namen. Wie heißt er auf Sorbisch?", "Найди на табличке или карте Лужицы место с двумя названиями. Как оно называется по-лужицки?", 2, 0, "sorbisch"],
+    ["sage", "sorbisch", "📜", "Lass dir eine sorbische Sage erzählen oder vorlesen (Krabat, der Wassermann, die Mittagsfrau) und mal ein Bild dazu.", "Попроси рассказать или прочитать лужицкое предание (Крабат, водяной, полудница) и нарисуй к нему картинку.", 2, 0, "sorbisch"],
+    ["namenstag", "sorbisch", "📅", "Mach einen Familienkalender: Trag Geburtstage und Namenstage ein und schreib die sorbischen Monatsnamen dazu.", "Сделай семейный календарь: впиши дни рождения и именины и подпиши лужицкие названия месяцев.", 3, 0, "sorbisch"],
+    ["sorbischmappe", "sorbisch", "📒", "Leg eine Sorbisch-Mappe an: Heb gelungene Arbeiten auf und schreib dazu „To móžu!“ (Das kann ich!).", "Заведи папку по лужицкому: собирай удачные работы и подписывай «To móžu!» (Я это умею!).", 3, 0, "sorbisch"],
   ];
-  const BEREICH = { mathe: "Rechnen im Alltag", natur: "Natur", sprache: "Lesen und Schreiben", mutter: "Familiensprache", helfen: "Helfen und Fragen", bewegung: "Bewegung", gefuehle: "Gefühle und Freude", kunst: "Kunst", werken: "Werken und Bauen", musik: "Musik" };
+  const BEREICH = { mathe: "Rechnen im Alltag", natur: "Natur", sprache: "Lesen und Schreiben", mutter: "Familiensprache", helfen: "Helfen und Fragen", bewegung: "Bewegung", gefuehle: "Gefühle und Freude", kunst: "Kunst", werken: "Werken und Bauen", musik: "Musik", sorbisch: "Sorbische Bräuche" };
   const pad = (n) => String(n).padStart(2, "0");
   const heute = () => { if (window.__heute) return window.__heute; const d = window.__jetzt ? new Date(window.__jetzt) : new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
   const lade = () => Object.assign({ erledigt: {} }, S.lade("echtewelt") || {});
-  const passend = () => { const k = S.kind(); return IDEEN.filter(i => (i[5] || 1) <= (k.klasse || 2) && (!i[6] || S.hilfe())); };
+  const passend = () => { const k = S.kind(); return IDEEN.filter(i => (i[5] || 1) <= (k.klasse || 2) && (!i[6] || S.hilfe()) && (!i[7] || (((S.lade("eltern") || {})[i[7]] || {}).an))); };
   function zahl(seed) { let h = 2166136261; for (const c of seed) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
   function idee(i) { return i ? { id: i[0], bereich: i[1], bereichName: BEREICH[i[1]], e: i[2], text: i[3], ru: i[4] } : null; }
   // Heutige Idee (gleich für den ganzen Tag, „Andere Idee“ blättert weiter, höchstens 2-mal)
@@ -122,5 +130,5 @@
     if (window.Familie) window.Familie.merke("welt", a.text);
     return true;
   }
-  window.EchteWelt = { IDEEN, BEREICH, heutige, andere, geschafft, selbstAbhaken };
+  window.EchteWelt = { IDEEN, BEREICH, heutige, andere, geschafft, selbstAbhaken, passend: () => passend().map(i => i[0]) };
 })();
