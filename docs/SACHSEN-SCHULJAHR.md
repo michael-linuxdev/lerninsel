@@ -21,7 +21,7 @@ Die Seiten des Schulportals (`schulportal.sachsen.de/lplandb`) sind aus der Arbe
 | Sport | 2019 | ✅ liegt vor | ✅ liegt vor |
 | Ethik | 2004/2019 | ✅ liegt vor | ✅ liegt vor |
 | Ev. und Kath. Religion | 2004/2009/2019 | ✅ liegt vor | ✅ liegt vor |
-| Sorbisch (Fremdsprache / Muttersprache) | 2019 / 2004 | ✅ liegt vor, noch nicht eingearbeitet | – |
+| Sorbisch (Fremdsprache / Muttersprache) | 2019 / 2004 | ✅ Fremdsprache eingearbeitet (Eltern-Wahl, Wörter in Prüfung); Muttersprache nicht | ✅ Fremdsprache |
 | Englisch | 2019 | – (Pflicht erst ab Kl. 3) | ✅ liegt vor |
 
 Regel bleibt: Lehrplantexte **nur zusammenfassen**, nie wörtlich übernehmen; jeder Punkt bekommt eine Lernziel-ID.

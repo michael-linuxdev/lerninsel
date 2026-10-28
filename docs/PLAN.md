@@ -1664,3 +1664,24 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Sorbisch:** Lehrpläne „Sorbisch als Fremdsprache (Intensives Sprachenlernen)“ und „Sorbisch“ (2004, auf Sorbisch) liegen vor, sind aber **noch nicht
   eingearbeitet** – sorbische Wörter brauchen eine Prüfung durch Muttersprachler (Regel: keine ungeprüfte Übersetzung im Kinder-UI). Offene Frage an den Auftraggeber.
 
+### Stand 28.10.2026, nachts (Sorbisch als Eltern-Wahl, mit Prüfung durch eine Person, die Sorbisch spricht)
+- **Auftraggeber:** Sorbisch als Eltern-Wahl – ja; es gibt jemanden, der die sorbischen Wörter prüft – ja.
+- **Neu: Sorbisch (Obersorbisch) mit Papagei Paula** (`spiele/sorbisch/`, abgeleitet von Englisch, Englisch unverändert). 23 Lektionen nach dem Lehrplan
+  „Intensives Sprachenlernen Sorbisch als Fremdsprache“: 10 für Kl. 1/2 (Begrüßen, Familie, Körper, Kleidung, Farben, Zahlen, Schule, Tiere, Feste mit
+  Vogelhochzeit, Jahreszeiten), 13 für Kl. 3/4 (Freunde/Wohnort, Befinden, Zuhause, Wochentage, Freizeit, Zahlen bis 100, Einkaufen, Zoo/Wald, Wünsche und
+  Osterreiter, Unterwegs/Ortsnamen, sorbische Monatsnamen, Natur, Sprachen). Gruppen nach den 11 Lernbereichen, Kl.-1/2-Lektionen ab Kl. 3 eingeklappt,
+  „Zeig, was du kannst“, „gerade in der Schule“, Fähigkeit „Sorbisch-Ohr“ (nur mit Wahl), Lernfunde.
+- **Eltern-Wahl:** Elternbereich → Karte „Sorbisch (Obersorbisch)“ (`eltern.sorbisch.an`, `eltern.sorbisch.schule`). Erst dann erscheinen die Tür auf der
+  Startseite, der Knopf bei „Erst lernen“, die Fähigkeit und das Fach unter „Was übt die App?“.
+- **Prüfung (Regel: keine ungeprüfte Übersetzung im Kinder-UI):** Alle sorbischen Texte sind Entwürfe. Auf der Hauptseite erscheinen nur Lektionen, deren
+  ID in `spiele/sorbisch/geprueft.js` (`SORBISCH_FREI`) steht – heute keine, die Seite sagt das ehrlich („werden gerade geprüft“). In /dev alle.
+  **Prüfliste `spiele/sorbisch/pruefen.html`** (Link in der Eltern-Karte, auch direkt aufrufbar): jedes Wort, jeden Satz, jede Antwort und die Seitentexte
+  mit ✓/✗ abhaken, Korrektur eintippen; die Seite baut daraus einen Text (Freigaben + Korrekturen) zum Kopieren/Teilen. Gespeichert nur im Browser.
+- **Entscheidungen:** Keine sorbische Gerätestimme → Sorbisch wird **gelesen, nicht vorgelesen** (keine falsche Aussprache); Hör-Aufgaben entfallen,
+  deutsche Erklärungen werden vorgelesen. Der Lehrplan „Sorbisch“ (Muttersprache, 2004) ist nicht eingearbeitet (Unterricht auf Sorbisch – anderes Ziel).
+- **Profil:** Fach `sorbisch` in `sachsen.js` (Kl. 1/2: 6 Themen, Kl. 3 und 4: je 11 Lernbereiche), 47 Inhaltspunkte (26 geübt, 14 teilweise, 7 fehlen –
+  vor allem Hören/Sprechen, Uhrzeit, Datum, Wegbeschreibung), ehrlich alle Kl.-3/4-Lernbereiche „teilweise“. Kern-Fach `so` mit 6 Lernzielen. Nur mit Wahl sichtbar.
+- **Test:** `sorbisch` (Tür nur mit Wahl, Hauptseite nur Freigegebenes, /dev alle 23 Lektionen echt durchgeklickt, nie sorbisch vorgelesen, Lernstand,
+  „Mein Ich“, Elternbereich, Prüfseite abhaken/korrigieren); `lehrplan` zählt Sorbisch mit (Kl. 1/2 jetzt 49 Lernbereiche).
+- **Nächstes:** Rückmeldung der Prüferin/des Prüfers einarbeiten (Korrekturen in `lektionen.js`, IDs in `geprueft.js`); danach ggf. sorbische
+  Aufnahmen (eigene Stimme, CC0) für Hör-Aufgaben.

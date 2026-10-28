@@ -16,7 +16,7 @@ function lade(dateien) {
   dateien.forEach(d => vm.runInContext(fs.readFileSync(path.join(WURZEL, d), "utf8"), ctx, { filename: d }));
   return ctx;
 }
-const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/sachkunde/faecher.js", "spiele/sachkunde/religion.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js"];
+const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/sachkunde/faecher.js", "spiele/sachkunde/religion.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js", "spiele/sorbisch/lektionen.js"];
 const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "inhalte/deutsch/schreiben.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan/laender/sachsen-punkte.js", "shared/lehrplan.js"];
 const w = lade(DATEN.concat(LEHRPLAN));
 const K = w.LernzielKern, I = w.Inhalte, L = w.LEHRPLAN;
@@ -184,7 +184,7 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten
   assert.strictEqual(I.abdeckung("de.sc.07"), "ja");     // Schuljahr Deutsch: Geschichte ordnen, Satzanfänge, Überarbeiten, Textlupe, Weiterschreiben …
   assert.strictEqual(I.abdeckung("de.sz.07"), "teil");   // Paket A: Vortrag vorbereiten
   const z = L.zaehle("sachsen", 2).errechnet;
-  assert.strictEqual(z.ja + z.teil + z.nein, 43, "Kl. 1/2: 43 Lernbereiche (Deutsch 2025: fünf statt sieben; dazu Kunst 3, Musik 4, Werken 3, Sport 6, Ethik 4, Ev. und Kath. Religion je 4)");
+  assert.strictEqual(z.ja + z.teil + z.nein, 49, "Kl. 1/2: 49 Lernbereiche (Deutsch 2025: fünf statt sieben; dazu Kunst 3, Musik 4, Werken 3, Sport 6, Ethik 4, Ev. und Kath. Religion je 4, Sorbisch 6)");
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
 });
 
@@ -231,6 +231,24 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jede
   assert.deepStrictEqual(z, { kunst: { ja: 32, teil: 1, nein: 0, aussen: 12 }, musik: { ja: 34, teil: 3, nein: 0, aussen: 11 }, werken: { ja: 24, teil: 1, nein: 0, aussen: 9 },
     sport: { ja: 14, teil: 0, nein: 0, aussen: 28 }, ethik: { ja: 43, teil: 0, nein: 0, aussen: 0 },
     evreligion: { ja: 45, teil: 0, nein: 0, aussen: 2 }, kareligion: { ja: 59, teil: 0, nein: 0, aussen: 1 } });
+});
+
+pruefe("Sachsen Sorbisch als Fremdsprache (nur nach Eltern-Wahl): 6 Themen Kl. 1/2, 11 Lernbereiche Kl. 3 und 4, jeder Punkt zugeordnet, jede Lektion kommt vor, ehrlich „teil“ ohne Hören", () => {
+  const f = L.laender.sachsen.faecher.sorbisch, m = { ja: 0, teil: 0, nein: 0 }, ids = new Set(), benutzt = new Set();
+  assert.ok(f && f.stand.includes("Sorbisch als Fremdsprache"));
+  [[2, 6], [3, 11], [4, 11]].forEach(([k, anz]) => { const lbs = L.fuer("sachsen", "sorbisch", k); assert.strictEqual(lbs.length, anz, "Sorbisch Kl. " + k);
+    lbs.forEach(lb => { lb.lz.forEach(id => assert.ok(K.ziel(id), id)); assert.ok(lb.punkte && lb.punkte.length >= 2, lb.titel);
+      lb.punkte.forEach(p => { p.app.forEach(a => { assert.ok(a.startsWith("sorbisch:") && w.SORBISCH.some(l => "sorbisch:" + l.id === a), `${p.id}: ${a}`); benutzt.add(a); });
+        if (p.abdeckung === "ja") assert.ok(p.app.length, p.id + " ist „ja“ ohne Lektion");
+        if (!ids.has(p.id)) { ids.add(p.id); m[p.abdeckung]++; } });
+      assert.strictEqual(lb.abdeckung, lb.punkte.some(p => p.abdeckung !== "ja") ? "teil" : "ja", `Sorbisch Kl. ${k} ${lb.titel}`); }); });
+  w.SORBISCH.forEach(l => assert.ok(benutzt.has("sorbisch:" + l.id), l.id + " kommt in keinem Inhaltspunkt vor"));
+  assert.deepStrictEqual(m, { ja: 26, teil: 14, nein: 7 });
+  // Jedes Wort mit eigenem Emoji je Lektion, Sätze und Wahlaufgaben vollständig
+  w.SORBISCH.forEach(l => { const e = l.woerter.map(x => x.e); assert.strictEqual(new Set(e).size, e.length, l.id + ": Emoji doppelt");
+    l.woerter.forEach(x => assert.ok(x.so && x.de && x.ru, l.id + ": Wort unvollständig"));
+    assert.ok(w.SORBISCH_LB.some(([nr]) => nr === l.lb), l.id + ": Lernbereich fehlt"); });
+  assert.ok(Array.isArray(w.SORBISCH_FREI || []));
 });
 
 pruefe("Länder-Abweichung: Sachsen verschiebt einfache Kombinationen nach Kl. 2 und kennt ein Zusatz-Ziel", () => {

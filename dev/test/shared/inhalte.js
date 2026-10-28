@@ -54,6 +54,8 @@
     kapitel(window.LEKTIONEN, "medien:", "medien", false);
     (window.ENGLISCH || []).forEach(k => registriere({ id: "englisch:" + k.id, fach: "englisch", lz: k.lz, aufgaben: Math.min(6, k.woerter.length) + (k.extra || []).length,
       lernkartei: false, titel: k.name, quelle: "bestand", stufe: [String(k.stufe)] }));
+    (window.SORBISCH || []).forEach(k => registriere({ id: "sorbisch:" + k.id, fach: "sorbisch", lz: k.lz, aufgaben: Math.min(6, k.woerter.length) + (k.extra || []).length,
+      lernkartei: false, titel: k.name, quelle: "bestand", stufe: k.stufe < 3 ? ["1", "2"] : ["3", "4"] }));   // nur nach Eltern-Wahl sichtbar
     STATISCH.forEach(s => nachId[s.id] || registriere(Object.assign({ quelle: "bestand" }, s)));
   }
 

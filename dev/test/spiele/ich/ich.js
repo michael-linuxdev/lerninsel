@@ -27,12 +27,12 @@
     const fs = $("fs-link");
     if (md.fuehrerschein) { fs.textContent = "🪪 Mein Tablet-Führerschein"; fs.href = "../medien/#fuehrerschein"; }
     else { fs.textContent = `🪪 Tablet-Führerschein: ${ok} von ${anz}`; fs.href = "../medien/"; }
-    $("gesamt").textContent = `Gesamtstufe ${C.gesamt()} von ${C.FAEHIGKEITEN.length * C.MAX}`;
+    $("gesamt").textContent = `Gesamtstufe ${C.gesamt()} von ${C.sichtbareFaehigkeiten().length * C.MAX}`;
 
     // Superkräfte (Vorteile)
     const vorteile = [];
     const ueberholt = { "ballon-zeit-5": "ballon-zeit-10", "schrank-18": "schrank-24" };
-    C.FAEHIGKEITEN.forEach(f => Object.entries(C.BELOHNUNGEN[f.id]).forEach(([st, b]) => {
+    C.sichtbareFaehigkeiten().forEach(f => Object.entries(C.BELOHNUNGEN[f.id]).forEach(([st, b]) => {
       if (b.vorteil && C.hat(b.vorteil) && !(ueberholt[b.vorteil] && C.hat(ueberholt[b.vorteil]))) vorteile.push(`${f.icon} ${b.text}`);
     }));
     $("vorteile").innerHTML = vorteile.length ? `<h3>Meine Superkräfte</h3>` + vorteile.map(v => `<div class="vorteil">${v}</div>`).join("")
@@ -71,7 +71,7 @@
     if (ta) ta.addEventListener("click", () => { const n = C.oeffneTruhe(); if (n) { C.hinweis("🎁 Wochentruhe!", `+${n} ⭐ für den Kleiderschrank`, "#D08A1E"); } zeichne(); });
 
     // Fähigkeiten
-    $("faehigkeiten").innerHTML = C.FAEHIGKEITEN.map(f => {
+    $("faehigkeiten").innerHTML = C.sichtbareFaehigkeiten().map(f => {
       const p = C.fortschritt(f.id);
       return `<button class="fh" style="--f:${f.farbe}" data-f="${f.id}">
         <div class="fh-kopf"><span class="i" aria-hidden="true">${f.icon}</span><b>${f.name}</b><span class="stufe">Stufe ${p.stufe}</span></div>

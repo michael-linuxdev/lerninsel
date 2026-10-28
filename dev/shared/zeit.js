@@ -10,7 +10,7 @@
   const ART = (document.currentScript && document.currentScript.dataset.art) || "neutral";
   const TICK = 5;           // Sekunden
   const AKTIV_FENSTER = 60; // Sekunden ohne Eingabe gelten als Pause
-  const LERN_FAECHER = ["mathe", "deutsch", "tablet", "sachkunde", "englisch"];
+  const LERN_FAECHER = ["mathe", "deutsch", "tablet", "sachkunde", "englisch", "sorbisch"];
 
   // ---------- Regeln (pro Kind, im Elternbereich einstellbar) ----------
   function empfehlung(alter) {
@@ -139,7 +139,7 @@
     overlay(`<div style="font-size:4rem">${vorbei ? "⏰" : "🌱"}</div><h2 style="margin:6px 0">${vorbei ? "Spielzeit vorbei!" : "Erst lernen, dann spielen"}</h2>${vorbei ? idee() : ""}
       <p style="font-size:1.2rem;line-height:1.4">Noch ${st.fehltMin} Minuten lernen oder ${st.fehltAufgaben} Aufgaben richtig lösen, dann darfst du ${st.regeln.spielMin} Minuten spielen.</p>
       ${leiste(st)}
-      <div>${knopf("spiele/mathe/", "🧮 Mathe", true)}${knopf("spiele/deutsch/", "🦊 Deutsch", true)}${knopf("spiele/sachkunde/", "🦉 Sachunterricht", true)}${knopf("spiele/englisch/", "🦜 Englisch", true)}${knopf("spiele/medien/", "🤖 Tablet", true)}</div>
+      <div>${knopf("spiele/mathe/", "🧮 Mathe", true)}${knopf("spiele/deutsch/", "🦊 Deutsch", true)}${knopf("spiele/sachkunde/", "🦉 Sachunterricht", true)}${knopf("spiele/englisch/", "🦜 Englisch", true)}${(((S.lade("eltern") || {}).sorbisch || {}).an) ? knopf("spiele/sorbisch/", "🪺 Sorbisch", true) : ""}${knopf("spiele/medien/", "🤖 Tablet", true)}</div>
       ${knopf("", "🏠 Zur Startseite", false)}`);
   }
   function entferneOverlay() { const o = document.getElementById("zeit-overlay"); if (o) o.remove(); }

@@ -12,7 +12,9 @@
     { id: "entdecker", name: "Entdecker-Mut", icon: "🧭", farbe: "#D08A1E", woher: "3D-Welt" },
     { id: "sachkunde", name: "Welt-Wissen", icon: "🌍", farbe: "#1F8F8A", woher: "Sachunterricht mit Eule Ella" },
     { id: "kreativ", name: "Kreativ-Funke", icon: "🎨", farbe: "#C2337A", woher: "Atelier mit Papagei Paula" },
-    { id: "englisch", name: "Englisch-Ohr", icon: "🦜", farbe: "#2F86C8", woher: "Englisch mit Papagei Paula" }
+    { id: "englisch", name: "Englisch-Ohr", icon: "🦜", farbe: "#2F86C8", woher: "Englisch mit Papagei Paula" },
+    // Sorbisch (28.10.2026): nur sichtbar, wenn die Eltern Sorbisch eingeschaltet haben
+    { id: "sorbisch", name: "Sorbisch-Ohr", icon: "🪺", farbe: "#1F8F8A", woher: "Sorbisch mit Papagei Paula", nurMitWahl: () => !!(((S.lade("eltern") || {}).sorbisch || {}).an) }
   ];
   // Erfahrung, die für Stufe 1…10 nötig ist
   const STUFEN_XP = [0, 10, 25, 45, 70, 100, 140, 190, 250, 320];
@@ -56,6 +58,10 @@
     englisch: {
       2: { sterne: 2 }, 3: { sterne: 2 }, 4: { sterne: 3 }, 5: { sterne: 3 }, 6: { sterne: 3 }, 7: { sterne: 3 }, 8: { sterne: 4 }, 9: { sterne: 4 },
       10: { sterne: 5, text: "Titel: Englisch-Profi" }
+    },
+    sorbisch: {
+      2: { sterne: 2 }, 3: { sterne: 2 }, 4: { sterne: 3 }, 5: { sterne: 3 }, 6: { sterne: 3 }, 7: { sterne: 3 }, 8: { sterne: 4 }, 9: { sterne: 4 },
+      10: { sterne: 5, text: "Titel: Sorbisch-Profi" }
     },
     kreativ: {
       2: { sterne: 2 }, 3: { sterne: 2 }, 4: { sterne: 3 }, 5: { sterne: 3 }, 6: { sterne: 3 }, 7: { sterne: 3 }, 8: { sterne: 4 }, 9: { sterne: 4 },
@@ -159,7 +165,7 @@
   }
 
   // Haustier: Leckerli für Spiele, Wärme fürs Ei bei Tagesaufgaben
-  const LECKERLI = { "training-fertig": 2, "wort-fertig": 2, "mathe-runde": 1, "deutsch-kapitel": 1, "tablet-lektion": 1, "ballon-runde": 1, "insel-schatz": 1, "sachkunde-thema": 1, "englisch-lektion": 1 };
+  const LECKERLI = { "training-fertig": 2, "wort-fertig": 2, "mathe-runde": 1, "deutsch-kapitel": 1, "tablet-lektion": 1, "ballon-runde": 1, "insel-schatz": 1, "sachkunde-thema": 1, "sorbisch-lektion": 1, "englisch-lektion": 1 };
   function tierGib(leckerli, waerme) {
     const t = S.lade("tier"); if (!t || !t.phase) return null;
     if (leckerli && t.phase === "tier") t.leckerli = Math.min(99, (t.leckerli || 0) + leckerli);
@@ -212,6 +218,7 @@
   // ---------- Abfragen ----------
   const Charakter = {
     FAEHIGKEITEN, BELOHNUNGEN, STUFEN_XP, MAX,
+    sichtbareFaehigkeiten: () => FAEHIGKEITEN.filter(f => !f.nurMitWahl || f.nurMitWahl()),
     heute, wocheVon,
     xp: (id) => lade().xp[id] || 0,
     stufe: (id) => stufeAus(lade().xp[id] || 0),

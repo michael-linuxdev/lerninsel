@@ -81,6 +81,13 @@
   .tuer.schach { grid-area: schach; background: #3F8E52; }
   .tuer.atelier { grid-area: atelier; background: #E07A2E; }
   .tuer.englisch { grid-area: englisch; background: #2F6FB8; }
+  /* Sorbisch (nur nach Eltern-Wahl): eigene Reihe unter den Lern-Türen */
+  .tuer.sorbisch { grid-area: sorbisch; background: #B03A2E; min-height: 150px; }
+  .tuer.sorbisch[hidden] { display: none; }
+  .schrank.mit-sorbisch { grid-template-areas: "insel insel insel insel insel insel insel insel insel insel insel insel"
+      "mathe mathe mathe deutsch deutsch deutsch sach sach sach englisch englisch englisch"
+      "sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch"
+      "gef gef gef gef schach schach schach schach atelier atelier atelier atelier"; }
   /* Vier Lern-Türen in einer Reihe (ab 1024 px): etwas höher und kleinere Schrift, damit Symbol, Titel und Text Platz haben */
   @media (min-width: 1024px) { .tuer.mathe, .tuer.deutsch, .tuer.sach, .tuer.englisch { min-height: 230px; } .tuer.mathe h2, .tuer.deutsch h2, .tuer.sach h2, .tuer.englisch h2 { font-size: 1.6rem; } .tuer.mathe p, .tuer.deutsch p, .tuer.sach p, .tuer.englisch p { font-size: 1rem; } }
   .abzeichen { display: inline-flex; align-items: center; gap: .4em; margin-top: 10px; padding: 6px 16px; border-radius: 999px; background: #fff; font-weight: 600; font-size: 1.05rem; box-shadow: var(--schatten); }
@@ -103,6 +110,7 @@
 
   @media (max-width: 1023px) {
     .schrank { grid-template-columns: 1fr 1fr; grid-template-areas: "insel insel" "mathe deutsch" "sach englisch" "gef schach" "atelier atelier"; }
+    .schrank.mit-sorbisch { grid-template-areas: "insel insel" "mathe deutsch" "sach englisch" "sorbisch sorbisch" "gef schach" "atelier atelier"; }
     .tuer.insel { min-height: 240px; }
     .tuer.insel .bild { width: 170px; height: 140px; }
   }
@@ -219,6 +227,11 @@
       <h2>Englisch</h2>
       <p>Mit Papagei Paula Englisch sprechen</p>
     </a>
+    <a class="tuer sorbisch" href="spiele/sorbisch/" style="text-decoration:none" hidden>
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><rect x="14" y="22" width="62" height="16" fill="#2B5BA8"/><rect x="14" y="38" width="62" height="16" fill="#E23D2E"/><rect x="14" y="54" width="62" height="16" fill="#fff"/><rect x="14" y="22" width="62" height="48" fill="none" stroke="#fff" stroke-width="3"/><circle cx="84" cy="20" r="9" fill="#FFC83D"/></svg>
+      <h2>Sorbisch</h2>
+      <p>Mit Papagei Paula: Witaj!</p>
+    </a>
     <a class="tuer gef" href="spiele/gefuehle/" style="text-decoration:none">
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 82 L20 52 a16 16 0 0 1 30 -22 a16 16 0 0 1 30 22 z" fill="#fff"/><circle cx="78" cy="22" r="9" fill="#FFC83D"/></svg>
       <h2>Gefühle</h2>
@@ -302,6 +315,13 @@
     });
     document.title = S.genitiv(n) + " Spielwelt";
   }
+  // Sorbisch-Tür nur nach Eltern-Wahl (Elternbereich → Sorbisch)
+  function zeigeSorbisch() {
+    const an = !!(((S.lade("eltern") || {}).sorbisch || {}).an);
+    document.querySelector(".tuer.sorbisch").hidden = !an;
+    document.querySelector(".schrank").classList.toggle("mit-sorbisch", an);
+  }
+  zeigeSorbisch();
   function zeigeSterne() { document.getElementById("sterne").textContent = S.sterne(); }
   function zeigeTon() {
     const b = document.getElementById("ton");

@@ -133,5 +133,7 @@ des Kindes wählbar (Eltern sprechen vielleicht Arabisch, das Kind schon gut Deu
 1. Eintrag in `SPRACHEN` (`shared/core.js`) mit `fertig: false`, `rtl` falls nötig, `tts`-Code.
 2. Glossar anlegen, Muttersprachler gewinnen (zwei).
 3. Texte als `entwurf` eintragen; prüfen lassen; Status setzen.
+   **Sorbisch (Lernsprache, nicht Hilfesprache, 28.10.2026):** alle Wörter in `spiele/sorbisch/lektionen.js` sind Entwürfe; Prüfung über
+   `spiele/sorbisch/pruefen.html`, Freigabe je Lektion in `spiele/sorbisch/geprueft.js` (nur freigegebene auf der Hauptseite, in /dev alle).
 4. Tonaufnahmen für D0, Tutorial, Prolog; Gerätestimmen testen.
 5. `tests/sprachen.js` und Rauchtest (RTL: Screenshots) grün → `fertig: true`.

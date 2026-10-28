@@ -169,17 +169,20 @@
       // Sterne aus allen Mathewegen (Kl. 1–4, Übergang 5) zählen, nicht nur aus Kl. 2
       const st = app.filter(a => a.startsWith("mathe:")).map(a => a.slice(6)), geschafft = (id) => ["k1", "k2", "k3", "k4", "k5"].some(w => (mathe[w] || {})[id]);
       const en = app.filter(a => a.startsWith("englisch:")).map(a => a.slice(9)), enD = (S.lade("englisch") || {}).lektionen || {};
+      const so = app.filter(a => a.startsWith("sorbisch:")).map(a => a.slice(9)), soD = (S.lade("sorbisch") || {}).lektionen || {};
       // Schuljahr Deutsch: Werkstatt-Kapitel des Lernbereichs (aus den Inhaltspunkten), geschafft = mindestens ein Stern
       const wk = [...new Set(app.filter(a => a.startsWith("werkstatt:")).map(a => a.slice(10)))], wkD = (S.lade("deutsch") || {}).kapitel || {};
       const su = [...new Set(app.filter(a => a.startsWith("sachkunde:")).map(a => a.slice(10)))], suD = (S.lade("sachkunde") || {}).themen || {};
       return (st.length ? ` · Matheweg: ${st.filter(geschafft).length} von ${st.length} Stationen geschafft` : "") +
         (wk.length ? ` · Werkstatt: <span class="lp-werkstatt">${wk.filter(id => wkD[id]).length} von ${wk.length}</span> Kapiteln geschafft` : "") +
         (su.length ? ` · Sachthemen: <span class="lp-sachthemen">${su.filter(id => suD[id]).length} von ${su.length}</span> entdeckt` : "") +
-        (en.length ? ` · Englisch: ${en.filter(id => enD[id]).length} von ${en.length} Lektionen geschafft` : "");
+        (en.length ? ` · Englisch: ${en.filter(id => enD[id]).length} von ${en.length} Lektionen geschafft` : "") +
+        (so.length ? ` · Sorbisch: ${so.filter(id => soD[id]).length} von ${so.length} Lektionen geschafft` : "");
     };
     let n = { ja: 0, teil: 0, nein: 0, aussen: 0 };
     // Ethik oder Religion: nur das Fach, das das Kind in der Schule hat (Eltern-Wahl eltern.ethik.unterricht)
-    const unterricht = ((S.lade("eltern") || {}).ethik || {}).unterricht, nurEines = { ethik: !["ev", "ka"].includes(unterricht), evreligion: unterricht === "ev", kareligion: unterricht === "ka" };
+    const unterricht = ((S.lade("eltern") || {}).ethik || {}).unterricht, nurEines = { ethik: !["ev", "ka"].includes(unterricht), evreligion: unterricht === "ev", kareligion: unterricht === "ka",
+      sorbisch: !!(((S.lade("eltern") || {}).sorbisch || {}).an) };   // Sorbisch nur nach Eltern-Wahl
     const faecher = Object.keys(L.laender[land].faecher).filter(f => !(f in nurEines) || nurEines[f]).filter(f => L.fuer(land, f, k.klasse).length).map(f => {
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
@@ -384,6 +387,26 @@
       <div class="knoepfe"><button class="knopf haupt" id="en-speichern">Speichern</button></div>
     </div>`;
   }
+  // Sorbisch (Obersorbisch, „Sorbisch als Fremdsprache“, 28.10.2026): nur nach Wahl; Lektionen auf der Hauptseite erst nach Prüfung (geprueft.js)
+  function sorbischKarte() {
+    const so = (S.lade("eltern") || {}).sorbisch || {}, alle = window.SORBISCH || [], frei = (window.SORBISCH_FREI || []).filter(id => alle.some(k => k.id === id));
+    const lb = Object.fromEntries((window.SORBISCH_LB || []).map(([nr, t]) => [String(nr), t.replace(/^\S+\s/, "")]));
+    return `<div class="karte" id="sorbisch-karte">
+      <h2>🪺 Sorbisch (Obersorbisch)</h2>
+      <p class="klein">Für Kinder, die in der Schule Sorbisch als Fremdsprache lernen (Lehrplan Sachsen „Sorbisch als Fremdsprache“). Mit der Wahl erscheint auf der Startseite die Tür „Sorbisch“.</p>
+      <div class="zeit-raster"><label>Sorbisch zeigen<select id="so-an">
+        <option value="" ${!so.an ? "selected" : ""}>Nein</option><option value="1" ${so.an ? "selected" : ""}>Ja, mein Kind lernt Sorbisch</option></select></label>
+        <label>Gerade in der Schule<select id="so-schule"><option value="">Keine Angabe</option>${Object.entries(lb).map(([k, n]) => `<option value="${k}" ${String(so.schule || "") === k ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
+      <p class="klein" id="so-pruefstand">Geprüft: <b>${frei.length} von ${alle.length}</b> Lektionen. Alle sorbischen Wörter sind Entwürfe, bis sie jemand mit Sorbisch-Kenntnissen geprüft hat. Auf der Startseite erscheinen nur geprüfte Lektionen; in /dev alle.
+        Es gibt keine sorbische Gerätestimme: Sorbisch wird gelesen, nicht vorgelesen.</p>
+      <p><a class="knopf" id="so-pruefen" href="../sorbisch/pruefen.html">✍️ Prüfliste für die Prüferin oder den Prüfer öffnen</a></p>
+      <h3>„Zeig, was du kannst“</h3>${lernstandListe("sorbisch", lb, alle, "lernstand-sorbisch")}
+      <div class="knoepfe"><button class="knopf haupt" id="so-speichern">Speichern</button></div>
+    </div>`;
+  }
+  function sorbischKnoepfe() {
+    $("so-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.sorbisch = Object.assign({}, e.sorbisch || {}, { an: !!$("so-an").value, schule: $("so-schule").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+  }
   // ---------- Schuljahr Deutsch und Sachunterricht (28.10.2026): „gerade in der Schule“ und „Zeig, was du kannst“ ----------
   const DE_LB = { sz: "Sprechen und Zuhören", sc: "Schreiben", le: "Lesen", tm: "Texte und Medien", su: "Sprache untersuchen" };
   const EN_LB = { 1: "Me, my family and my friends", 2: "My body and my clothes", 3: "At home", 4: "Food and drink", 5: "Let's go shopping", 6: "At school", 7: "My hobbies", 8: "Animals", 9: "Let's go on a trip", 10: "Around the year", 11: "My Portfolio" };
@@ -580,7 +603,7 @@
       <div class="karte">
         <h2>Fähigkeiten</h2>
         <table><tr><th>Fähigkeit</th><th class="r">Stufe</th><th class="r">Punkte</th><th>Wächst durch</th></tr>
-          ${C.FAEHIGKEITEN.map(f => `<tr><td>${f.icon} ${f.name}</td><td class="zahl-r">${C.stufe(f.id)}</td><td class="zahl-r">${C.xp(f.id)}</td><td>${f.woher}</td></tr>`).join("")}
+          ${C.sichtbareFaehigkeiten().map(f => `<tr><td>${f.icon} ${f.name}</td><td class="zahl-r">${C.stufe(f.id)}</td><td class="zahl-r">${C.xp(f.id)}</td><td>${f.woher}</td></tr>`).join("")}
         </table>
       </div>
       <div class="karte">
@@ -611,6 +634,7 @@
       ${inselKarte()}
       ${matheKarte()}
       ${englischKarte()}
+      ${sorbischKarte()}
       ${schuljahrKarte()}
       ${deutschKarte()}
       ${echteWeltKarte()}
@@ -642,7 +666,7 @@
     // Einführung E2–E8 überspringen (still: zählt nicht als neue Etappe); E3 öffnet Kapitel 1 wie in der Szene „Erste Frucht“
     if ($("tutorial-weg")) $("tutorial-weg").addEventListener("click", () => { TUTORIAL.forEach(e => window.Story.etappeFertig(e, true)); window.Story.setzeKapitel(1); S.meldung("Einführung übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
-    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
+    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); sorbischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";

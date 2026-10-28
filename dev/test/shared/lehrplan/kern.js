@@ -27,6 +27,8 @@
     re: { name: "Religion (ev./kath.)", quelle: "Länderpläne", bereiche: { mi: "Miteinander leben", go: "Nach Gott fragen", bi: "Biblische Botschaft", fe: "Feste und Kirche" } },
     en: { name: "Englisch", quelle: "Länderpläne Fremdsprache Grundschule (GeR A1 angebahnt)", bereiche: {
       hv: "Hörverstehen", sp: "Sprechen", ws: "Wortschatz", le: "Lesen und Schreiben", ik: "Interkulturelles Lernen" } },
+    so: { name: "Sorbisch (Obersorbisch)", quelle: "Lehrplan Sachsen „Sorbisch als Fremdsprache“ (Grundschule)", bereiche: {
+      sp: "Sprechen", ws: "Wortschatz", le: "Lesen", ik: "Sorbische Kultur und Bräuche" } },
     daz: { name: "Deutsch als Zweitsprache", quelle: "SPRACHEN.md", bereiche: { d0: "D0 Ankommen", d1: "D1 Erste Sätze" } }
   };
 
@@ -224,6 +226,14 @@
     ["en.le.01", "4", "Bekannte Wörter und kurze Sätze lesen"],
     ["en.sp.03", "5", "Über sich erzählen: Alter, Herkunft, Hobbys"],
     ["en.ik.01", "3", "Feste und Jahreslauf in englischsprachigen Ländern"],
+
+    // ---------- Sorbisch als Fremdsprache (Sachsen, nur nach Eltern-Wahl) ----------
+    ["so.sp.01", "1", "Auf Sorbisch grüßen, danken, sich vorstellen und sagen, wie es einem geht"],
+    ["so.ws.01", "1", "Erste sorbische Wörter: Familie, Körper, Kleidung, Farben, Zahlen, Schule, Tiere"],
+    ["so.ws.02", "3", "Sorbischer Wortschatz: Zuhause, Wochentage, Zahlen bis 100, Essen, Freizeit, Unterwegs, Monate, Natur"],
+    ["so.sp.02", "3", "Kurze sorbische Sätze bilden (Ja rěkam …, Ja sym …, Ja rady …)"],
+    ["so.le.01", "1", "Sorbische Wörter mit ihren Buchstaben (č, ć, ł, ř, š, ž, ě …) lesen"],
+    ["so.ik.01", "1", "Sorbische Feste und Bräuche (Vogelhochzeit, Ostern) und die Lausitz als zweisprachige Heimat"],
 
     // ---------- Deutsch als Zweitsprache ----------
     ["daz.d0.01", "1", "Erste Wörter für Schule und Alltag verstehen"],

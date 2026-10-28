@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sorbisch prüfen</title>
+<meta name="theme-color" content="#F4F1EA">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  /* Prüfliste für eine Person mit Sorbisch-Kenntnissen (28.10.2026): jedes sorbische Wort, jeden Satz abhaken oder korrigieren,
+     Ergebnis als Text weitergeben. Gespeichert wird nur in diesem Browser (localStorage), nichts verlässt das Gerät ohne „Teilen“. */
+  body { background: #F4F1EA; background-image: none; padding: max(14px, env(safe-area-inset-top)) 16px 40px; max-width: 980px; margin: 0 auto; overflow-wrap: anywhere; }
+  h1 { margin: 6px 0; font-size: 1.7rem; }
+  .klein { font-size: .95rem; opacity: .85; }
+  .karte { background: #fff; border-radius: 18px; padding: 14px 16px; margin: 14px 0; box-shadow: 0 3px 0 rgba(0,0,0,.08); }
+  .karte h2 { margin: 0 0 8px; font-size: 1.25rem; }
+  .karte h2 .stand { font-size: .9rem; font-weight: 600; margin-left: 8px; padding: 2px 10px; border-radius: 99px; background: #EEE; }
+  .karte h2 .stand.fertig { background: #D4F2DE; color: #1E6B3A; }
+  .eintrag { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; padding: 8px 0; border-top: 1px solid #EEE; }
+  .eintrag:first-of-type { border-top: 0; }
+  .eintrag .so { font-size: 1.15rem; font-weight: 700; }
+  .eintrag .de { font-size: .95rem; opacity: .8; }
+  .eintrag .art { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; opacity: .55; }
+  .wahl { display: flex; gap: 6px; }
+  .wahl button { min-height: 44px; min-width: 52px; padding: 0 12px; border-radius: 12px; border: 2px solid #CCC; background: #fff; font-size: 1.1rem; box-shadow: none; }
+  .wahl button.an.ok { background: #2FA37C; border-color: #2FA37C; color: #fff; }
+  .wahl button.an.nein { background: #E0574A; border-color: #E0574A; color: #fff; }
+  .eintrag input { grid-column: 1 / -1; min-height: 44px; font-size: 1.05rem; padding: 6px 10px; border-radius: 10px; border: 2px solid #E0574A; }
+  .eintrag input[hidden] { display: none; }
+  .oben-leiste { position: sticky; top: 0; z-index: 2; background: #F4F1EA; padding: 8px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .oben-leiste .zahl { font-weight: 700; margin-right: auto; }
+  textarea { width: 100%; min-height: 260px; font: .95rem/1.4 ui-monospace, monospace; border-radius: 12px; padding: 10px; box-sizing: border-box; }
+</style>
+</head>
+<body>
+<p><a class="knopf" href="../eltern/">← Elternbereich</a></p>
+<h1>✍️ Sorbisch prüfen (Obersorbisch)</h1>
+<p>Danke, dass Sie hier helfen! Bitte prüfen Sie jedes sorbische Wort und jeden Satz: <b>✓</b> = richtig und für Grundschulkinder passend,
+  <b>✗</b> = falsch oder ungünstig – dann bitte die richtige Fassung ins Feld schreiben. Unten entsteht ein Text, den Sie an die Familie zurückgeben
+  (kopieren oder „Teilen“). Lektionen, die ganz geprüft sind, schaltet die Familie danach für die Kinder frei.</p>
+<p class="klein">Die Haken werden nur in diesem Browser gespeichert. Grundlage: Lehrplan Sachsen „Sorbisch als Fremdsprache“ (Grundschule). Die Wörter wurden ohne
+  Muttersprachler zusammengestellt und können Fehler enthalten (z. B. Endungen, Häkchen, Wortwahl).</p>
+<div class="oben-leiste"><span class="zahl" id="zahl"></span><a class="knopf" href="#ergebnis">Zum Ergebnis ↓</a></div>
+<div id="liste"></div>
+<div class="karte" id="ergebnis">
+  <h2>Ergebnis</h2>
+  <p class="klein">Diesen Text bitte an die Familie zurückgeben. Er enthält Ihre Korrekturen und die Lektionen, die freigegeben werden können.</p>
+  <label class="klein">Ihr Name oder Kürzel (freiwillig) <input id="pruefer" style="min-height:44px;font-size:1rem;width:100%;box-sizing:border-box"></label>
+  <textarea id="text" readonly></textarea>
+  <div class="knoepfe" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+    <button class="knopf haupt" id="kopieren">📋 Kopieren</button>
+    <button class="knopf" id="teilen" hidden>📤 Teilen</button>
+    <button class="knopf" id="leeren">Alle Haken löschen</button>
+  </div>
+</div>
+<script src="lektionen.js"></script>
+<script src="geprueft.js"></script>
+<script>
+(function () {
+  const KEY = "lerninsel-sorbisch-pruefung", $ = (id) => document.getElementById(id);
+  const L = window.SORBISCH || [], FREI = window.SORBISCH_FREI || [];
+  let st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { st = {}; }
+  const sichern = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { } };
+  const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  // Alle sorbischen Texte, gruppiert: zuerst Texte der Seite, dann je Lektion Wörter, Sätze, Antworten und deutsche Texte mit sorbischen Wörtern
+  const gruppen = [{ id: "seite", name: "Texte der Seite (Lob, Überschriften)", eintraege: [
+    ...(window.SORBISCH_LOB || []).map((t, i) => ({ k: "lob" + i, art: "Lob nach richtiger Antwort", so: t, de: "" })),
+    { k: "witaj", art: "Begrüßung", so: "Witaj!", de: "Willkommen! / Hallo!" },
+    { k: "jaraderje", art: "Lob am Ende", so: "jara derje", de: "sehr gut" },
+    ...(window.SORBISCH_LB || []).map(([nr, t]) => ({ k: "lb" + nr, art: "Überschrift Lernbereich " + nr, so: t.replace(/^\S+\s/, "").split(" – ")[0], de: t.split(" – ")[1] || "" }))] }];
+  L.forEach(k => {
+    const e = [{ k: "name", art: "Name der Lektion", so: k.name.split(" – ")[0], de: k.name.split(" – ")[1] || "" }];
+    k.woerter.forEach((w, i) => e.push({ k: "w" + i, art: "Wort", so: w.so, de: w.de }));
+    (k.extra || []).forEach((x, i) => {
+      if (x.typ === "satz") e.push({ k: "x" + i, art: "Satz", so: x.woerter.join(" "), de: x.de });
+      if (x.typ === "wahl") x.optionen.forEach((o, j) => e.push({ k: "x" + i + "o" + j, art: j === 0 ? "Richtige Antwort" : "Falsche Antwort (soll trotzdem korrekt geschrieben sein)", so: o, de: x.frage }));
+    });
+    [["intro", k.intro.de], ["ende", k.ende.de]].forEach(([n, t]) => /[„“]|[čćěłńóřšźž]/i.test(t) && e.push({ k: n, art: "Deutscher Text mit sorbischen Wörtern", so: t, de: "" }));
+    gruppen.push({ id: k.id, name: k.name + (FREI.includes(k.id) ? " (schon freigegeben)" : ""), eintraege: e });
+  });
+
+  const schl = (g, e) => g.id + ":" + e.k;
+  function zeichne() {
+    $("liste").innerHTML = gruppen.map(g => {
+      const fertig = g.eintraege.every(e => (st[schl(g, e)] || {}).ok === true);
+      return `<section class="karte" data-gruppe="${g.id}"><h2>${esc(g.name)} <span class="stand ${fertig ? "fertig" : ""}">${g.eintraege.filter(e => st[schl(g, e)]).length}/${g.eintraege.length}${fertig ? " ✓" : ""}</span></h2>` +
+        g.eintraege.map(e => { const v = st[schl(g, e)] || {};
+          return `<div class="eintrag" data-k="${esc(schl(g, e))}"><div><div class="art">${esc(e.art)}</div><div class="so" lang="hsb">${esc(e.so)}</div>${e.de ? `<div class="de">${esc(e.de)}</div>` : ""}</div>
+            <div class="wahl"><button class="ok ${v.ok === true ? "an" : ""}" aria-label="richtig">✓</button><button class="nein ${v.ok === false ? "an" : ""}" aria-label="falsch">✗</button></div>
+            <input lang="hsb" placeholder="Richtige Fassung" value="${esc(v.neu || "")}" ${v.ok === false ? "" : "hidden"}></div>`; }).join("") + `</section>`;
+    }).join("");
+    document.querySelectorAll(".eintrag").forEach(d => {
+      const k = d.dataset.k;
+      d.querySelector(".ok").addEventListener("click", () => { st[k] = { ok: true }; sichern(); zeichne(); });
+      d.querySelector(".nein").addEventListener("click", () => { st[k] = { ok: false, neu: (st[k] || {}).neu || "" }; sichern(); zeichne(); document.querySelector(`[data-k="${CSS.escape(k)}"] input`).focus(); });
+      d.querySelector("input").addEventListener("input", (ev) => { st[k] = { ok: false, neu: ev.target.value }; sichern(); text(); });
+    });
+    text();
+  }
+  function text() {
+    const alle = gruppen.reduce((n, g) => n + g.eintraege.length, 0), geprueft = Object.keys(st).filter(k => !k.startsWith("_")).length;
+    $("zahl").textContent = `${geprueft} von ${alle} geprüft`;
+    const frei = gruppen.filter(g => g.id !== "seite" && g.eintraege.every(e => (st[schl(g, e)] || {}).ok === true)).map(g => g.id);
+    const fehler = [];
+    gruppen.forEach(g => g.eintraege.forEach(e => { const v = st[schl(g, e)]; if (v && v.ok === false) fehler.push(`- [${g.id}] ${e.art}: „${e.so}“ → „${v.neu || "?"}“${e.de ? ` (${e.de})` : ""}`); }));
+    const seiteOk = gruppen[0].eintraege.every(e => (st[schl(gruppen[0], e)] || {}).ok === true);
+    $("text").value = `Lerninsel – Prüfung Sorbisch (Obersorbisch)\nGeprüft von: ${st._pruefer || "(ohne Angabe)"}\nStand: ${new Date().toLocaleDateString("de-DE")}\n` +
+      `Geprüft: ${geprueft} von ${alle} Einträgen\n\nFreigeben (alles ✓): ${frei.length ? frei.join(", ") : "noch keine Lektion"}\n` +
+      `Texte der Seite: ${seiteOk ? "alles ✓" : "noch nicht vollständig geprüft"}\n\nKorrekturen (${fehler.length}):\n${fehler.join("\n") || "- keine"}\n`;
+  }
+  $("pruefer").value = st._pruefer || "";
+  $("pruefer").addEventListener("input", (e) => { st._pruefer = e.target.value; sichern(); text(); });
+  $("kopieren").addEventListener("click", async () => { $("text").select(); try { await navigator.clipboard.writeText($("text").value); } catch (e) { document.execCommand("copy"); } $("kopieren").textContent = "✓ Kopiert"; });
+  if (navigator.share) { $("teilen").hidden = false; $("teilen").addEventListener("click", () => navigator.share({ title: "Prüfung Sorbisch", text: $("text").value }).catch(() => { })); }
+  $("leeren").addEventListener("click", () => { if (confirm("Wirklich alle Haken und Korrekturen löschen?")) { st = {}; sichern(); $("pruefer").value = ""; zeichne(); } });
+  zeichne();
+  window.__pruefen = { gruppen: () => gruppen.map(g => ({ id: g.id, n: g.eintraege.length })), text: () => $("text").value };
+})();
+</script>
+</body>
+</html>
