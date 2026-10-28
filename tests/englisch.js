@@ -37,7 +37,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   }
 
   // ---------- Sichtbarkeit je Klasse ----------
-  for (const [stufe, anzahl] of [["1", 0], ["2", 17], ["3", 26], ["4", 27], ["5", 27]]) {
+  for (const [stufe, anzahl] of [["1", 0], ["2", 18], ["3", 30], ["4", 31], ["5", 31]]) {
     const { ctx, p } = await kind(stufe);
     await p.goto(BASIS + "spiele/englisch/"); await p.waitForTimeout(400);
     const n = await sichtbar(p), hinweis = await p.evaluate(() => document.getElementById("intro-text").textContent);
@@ -45,7 +45,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     if (stufe === "1") {
       await p.evaluate(() => { const e = Spielwelt.lade("eltern") || {}; e.englisch = { ab: "1" }; Spielwelt.speichere("eltern", e); });
       await p.reload(); await p.waitForTimeout(400);
-      erwarte(await sichtbar(p) === 17, "Klasse 1 mit Eltern-Einstellung „ab Klasse 1“: die 17 Lektionen der Stufe 3 sichtbar");
+      erwarte(await sichtbar(p) === 18, "Klasse 1 mit Eltern-Einstellung „ab Klasse 1“: die 18 Lektionen der Stufe 3 sichtbar");
     }
     await ctx.close();
   }
@@ -54,12 +54,13 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   async function spiele(p, id, art, falschEinmal) {
     await p.evaluate((id) => __englisch.starte(ENGLISCH.findIndex(k => k.id === id)), id); await p.waitForTimeout(150);
     let runden = 0, haengt = false, scroll = false, hoerenGesehen = false;
-    while (runden++ < 40) {
+    while (runden++ < 90) {
       const l = await p.evaluate(() => { const l = __englisch.lauf; return { ende: !document.getElementById("ende-ansicht").hidden, pos: l && l.pos, s: l && l.schritte[l.pos] }; });
       if (l.ende || !l.s) break;
       if (!(await passt(p))) { scroll = true; console.log(`    Scrollleiste: ${id} Schritt ${l.pos} (${l.s.typ})`); }
       const s = l.s;
       if (s.typ === "lied") { await p.click(".lied-spielen"); await p.waitForSelector(".silbe.an, .lied-zeile.an", { timeout: 3000 }).catch(() => { haengt = true; }); await p.click("#weiter"); await p.waitForTimeout(80); continue; }
+      if (s.typ === "buch" || s.typ === "sachtext" || s.typ === "rolle") { await p.click("#weiter"); await p.waitForTimeout(60); continue; }
       if (s.typ === "sag" || s.typ === "karten") {
         if (s.typ === "karten") { await p.click(".wortkarte >> nth=0"); if (BILDER && id === "en-colours") await bild(p, `englisch-karten-${art}`); }
         await p.click("#weiter"); await p.waitForTimeout(80); continue;
@@ -92,7 +93,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const ids = await p.evaluate(() => ENGLISCH.map(k => k.id));
     const daten = await p.evaluate(() => ENGLISCH.every(k => k.lz.length && k.stufe && k.intro.ru && k.ende.ru && k.woerter.length >= 6 && k.woerter.every(w => w.en && w.de && w.ru && w.e) &&
       new Set(k.woerter.map(w => w.e)).size === k.woerter.length && (k.extra || []).every(s => s.ru)));
-    erwarte(ids.length === 27 && daten, "27 Lektionen: Lernziel, Stufe, russische Entwürfe, je Wort ein eigenes Bild");
+    erwarte(ids.length === 31 && daten, "31 Lektionen: Lernziel, Stufe, russische Entwürfe, je Wort ein eigenes Bild");
     let alleOk = true;
     for (const [n, id] of ids.entries()) {
       const r = await spiele(p, id, "quer", n === 0);
@@ -100,9 +101,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       if (n === 0) erwarte(r.ok && /zweiten Versuch/.test(r.ende.text), "„Hello!“ mit einem Fehler bis zum Ende, Fehler wird angezeigt");
       else if (!/beim ersten Mal richtig/.test(r.ende.text)) { alleOk = false; console.log(`    ${id}: ${r.ende.text}`); }
     }
-    erwarte(alleOk, "quer: alle 27 Lektionen echt durchgeklickt bis zum Ende");
+    erwarte(alleOk, "quer: alle 31 Lektionen echt durchgeklickt bis zum Ende");
     const stand = await p.evaluate(() => ({ lek: Object.keys((Spielwelt.lade("englisch") || {}).lektionen || {}).length, xp: Charakter.stufe ? Charakter.stufe("englisch") : 0 }));
-    erwarte(stand.lek === 27 && stand.xp >= 1, `Fortschritt gespeichert (27 Lektionen) und Fähigkeit „Englisch-Ohr“ gewachsen (Stufe ${stand.xp})`);
+    erwarte(stand.lek === 31 && stand.xp >= 1, `Fortschritt gespeichert (31 Lektionen) und Fähigkeit „Englisch-Ohr“ gewachsen (Stufe ${stand.xp})`);
     await bild(p, "englisch-ende");
     // Hören: mit simulierter englischer Stimme gibt es Hör-Aufgaben, und die Wörter werden auf Englisch gesprochen
     await p.evaluate(() => { window.__gesprochen = []; Sprache.verfuegbar = () => true; Sprache.hat = () => true;

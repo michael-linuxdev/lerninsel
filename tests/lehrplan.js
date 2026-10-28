@@ -16,7 +16,7 @@ function lade(dateien) {
   dateien.forEach(d => vm.runInContext(fs.readFileSync(path.join(WURZEL, d), "utf8"), ctx, { filename: d }));
   return ctx;
 }
-const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/sachkunde/faecher.js", "spiele/sachkunde/religion.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js", "spiele/sorbisch/lektionen.js"];
+const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/sachkunde/landkreise.js", "spiele/sachkunde/faecher.js", "spiele/sachkunde/religion.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js", "spiele/sorbisch/lektionen.js"];
 const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "inhalte/deutsch/schreiben.js", "inhalte/deutsch/schreibschrift.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan/laender/sachsen-punkte.js", "shared/lehrplan.js"];
 const w = lade(DATEN.concat(LEHRPLAN));
 const K = w.LernzielKern, I = w.Inhalte, L = w.LEHRPLAN;
@@ -53,10 +53,10 @@ pruefe("Sachsen: alle 45 Lernbereiche (Mathe, Deutsch 2025, Sachunterricht) habe
   assert.deepStrictEqual(leer, ["sachkunde 3 Experimentieren"]);
 });
 
-pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand; Stand 30.10.2026: 44 gut, 1 teilweise (Landkreis))", () => {
+pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand; Stand 30.10.2026: alle 45 gut)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 44, teil: 1, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 45, teil: 0, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
@@ -141,10 +141,10 @@ pruefe("Sachsen in voller Tiefe: Sachunterricht Kl. 1/2, 3 und 4 (Pflicht-Lernbe
   const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
   const stationen = new Set([].concat(w.Mathe.STATIONEN, w.Mathe.STATIONEN_K1, w.Mathe.STATIONEN_K3, w.Mathe.STATIONEN_K4).map(s => s.id));
   const gibt = (a) => { const [art, id] = a.split(":");
-    return art === "sachkunde" ? w.THEMEN.some(t => t.id === id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id)
+    return art === "sachkunde" ? w.THEMEN.concat(w.LANDKREIS_THEMEN).some(t => t.id === id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id)
       : art === "medien" ? w.LEKTIONEN.some(k => k.id === id) : art === "mathe" ? stationen.has(id) : art === "echtewelt" ? echt.includes(`["${id}", `)
       : art === "praesentieren" ? ["folien"].includes(id) : false; };
-  const ids = new Set(), soll = { "1/2": [47, { ja: 46, teil: 0, nein: 0, aussen: 1 }], "3": [24, { ja: 22, teil: 1, nein: 0, aussen: 1 }], "4": [28, { ja: 27, teil: 0, nein: 0, aussen: 1 }] };
+  const ids = new Set(), soll = { "1/2": [47, { ja: 46, teil: 0, nein: 0, aussen: 1 }], "3": [24, { ja: 23, teil: 0, nein: 0, aussen: 1 }], "4": [28, { ja: 27, teil: 0, nein: 0, aussen: 1 }] };
   const kl = { "1/2": ["1", "2", "1/2"], "3": ["3"], "4": ["4"] };
   Object.entries(soll).forEach(([st, [zahl, verteilung]]) => {
     const n = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
@@ -193,9 +193,9 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
 });
 
-pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und „My Portfolio“ je Klasse, Kl. 1/2 ohne Englisch, Zählung 18 / 4 / 0, alle Inhaltspunkte zugeordnet", () => {
+pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und „My Portfolio“ je Klasse, Kl. 1/2 ohne Englisch, Zählung 22 / 0 / 0, alle Inhaltspunkte zugeordnet", () => {
   const n = { ja: 0, teil: 0, nein: 0 }, echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8"), ids = new Set();
-  const soll = { 3: [40, { ja: 38, teil: 1, nein: 0, aussen: 1 }], 4: [33, { ja: 28, teil: 3, nein: 0, aussen: 2 }] };
+  const soll = { 3: [40, { ja: 39, teil: 0, nein: 0, aussen: 1 }], 4: [33, { ja: 31, teil: 0, nein: 0, aussen: 2 }] };
   [3, 4].forEach(k => { const lb = L.fuer("sachsen", "englisch", k), m = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
     assert.strictEqual(lb.length, 11);
     lb.forEach(x => { n[x.abdeckung]++; x.lz.forEach(id => assert.ok(K.ziel(id), id));
@@ -205,7 +205,7 @@ pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und �
         if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("englisch:")), p.id); });
       assert.strictEqual(x.abdeckung, x.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein") ? "teil" : "ja", `Englisch ${k} ${x.titel}`); });
     assert.strictEqual(z, soll[k][0]); assert.deepStrictEqual(m, soll[k][1]); });
-  assert.deepStrictEqual({ ...n }, { ja: 18, teil: 4, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 22, teil: 0, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "englisch", 2).length, 0);
   const benutzt = new Set(); [3, 4].forEach(k => L.fuer("sachsen", "englisch", k).forEach(x => x.punkte.forEach(p => p.app.forEach(a => benutzt.add(a)))));
   w.ENGLISCH.forEach(l => assert.ok(benutzt.has("englisch:" + l.id), l.id + " kommt in keinem Inhaltspunkt vor"));

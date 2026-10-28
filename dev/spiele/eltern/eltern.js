@@ -430,6 +430,7 @@
       <p class="klein">Welcher Lernbereich ist in der Schule gerade dran?</p>
       <div class="zeit-raster"><label>Deutsch${auswahl("d-schule", DE_LB, de, "Keine Angabe")}</label>
         <label>Sachunterricht${auswahl("su-schule", SU_LB, su, "Keine Angabe")}</label>
+        ${window.LANDKREISE && (S.land() || {}).code === "sn" ? `<label>Unser Landkreis (Sachunterricht)${auswahl("su-landkreis", Object.fromEntries(LANDKREISE.map(k => [k.id, k.name])), (e.sachkunde || {}).landkreis || "", "Keine Angabe")}</label>` : ""}
         ${Object.entries(window.FACH_SEITEN || {}).map(([f, x]) => `<label>${x.name}${auswahl("fs-" + f, Object.fromEntries(x.lb.map(([id, t]) => [id, t.replace(/^\S+\s/, "")])), (e[f] || {}).schule || "", "Keine Angabe")}</label>`).join("")}
         <label>Mein Kind hat in der Schule${auswahl("et-unterricht", { ev: "Evangelische Religion", ka: "Katholische Religion" }, (e.ethik || {}).unterricht === "ethik" ? "" : (e.ethik || {}).unterricht || "", "Ethik")}</label></div>
       <p class="klein" id="religion-hinweis">${["ev", "ka"].includes((e.ethik || {}).unterricht) ? `Bei Eule Ella gibt es jetzt den Reiter „Religion“ mit den Themen nach dem sächsischen Lehrplan ${(e.ethik || {}).unterricht === "ev" ? "Evangelische" : "Katholische"} Religion. Ethik bleibt zusätzlich sichtbar. Im Lehrplan unten steht Religion statt Ethik.` : "Ethik ist voreingestellt. Hat Ihr Kind evangelische oder katholische Religion, wählen Sie das hier."}</p>
@@ -444,7 +445,7 @@
     $("sj-speichern").addEventListener("click", () => {
       const e = S.lade("eltern") || {};
       e.deutsch = Object.assign({}, e.deutsch || {}, { schule: $("d-schule").value });
-      e.sachkunde = Object.assign({}, e.sachkunde || {}, { schule: $("su-schule").value });
+      e.sachkunde = Object.assign({}, e.sachkunde || {}, { schule: $("su-schule").value }, $("su-landkreis") ? { landkreis: $("su-landkreis").value } : {});
       Object.keys(window.FACH_SEITEN || {}).forEach(f => { e[f] = Object.assign({}, e[f] || {}, { schule: $("fs-" + f).value }); });
       e.ethik = Object.assign({}, e.ethik || {}, { unterricht: $("et-unterricht").value || "ethik" });
       S.speichere("eltern", e); S.meldung("Gespeichert.");

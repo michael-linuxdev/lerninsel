@@ -384,3 +384,72 @@ window.ENGLISCH.push(
     ende: { de: "Toll! Frag deine Familie: Welche Sprachen sprechen wir? Schreib sie in deinen Sprachenpass.", ru: "Отлично! Спроси семью: на каких языках мы говорим? Запиши их в свой языковой паспорт." }
   }
 );
+
+// ---------- 30.10.2026: Bücher, Sachtext, Theater zu Festen, Mimik und Gesten ----------
+// Neue Schritt-Typen: buch { titel, seiten: [{ e, en, de }], ru }, sachtext { titel, text (Schlüsselwörter in *…*), woerter: [[en, de]], ru },
+// rolle { szene, rollen: { a, b }, ich, zeilen: [[rolle, en, de]], ru } – das Kind spricht seine Rolle, Paula die andere.
+window.ENGLISCH.push(
+  {
+    id: "en-book", lb: 7, stufe: 4, lz: ["en.le.01", "en.hv.01"], name: "A picture book – Ein Bilderbuch", e: "📚", farbe: "#7B55B8", grund: "#EFE6FF",
+    intro: { de: "Englische Bücher lesen – das geht schon! Achte auf die Bilder und auf Wörter, die du kennst.", ru: "Читать английские книги — это уже получится! Смотри на картинки и знакомые слова." },
+    woerter: [
+      { en: "book", de: "Buch", ru: "книга", e: "📕" }, { en: "page", de: "Seite", ru: "страница", e: "📄" }, { en: "story", de: "Geschichte", ru: "история", e: "📖" },
+      { en: "library", de: "Bücherei", ru: "библиотека", e: "🏛️" }, { en: "to read", de: "lesen", ru: "читать", e: "👓" }, { en: "the end", de: "Ende", ru: "конец", e: "🔚" }],
+    extra: [
+      { typ: "buch", titel: "The Hungry Little Fox", ru: "Английская книжка с картинками: «Голодный лисёнок».", seiten: [
+        { e: "🦊", en: "This is Fox. Fox is little and Fox is hungry.", de: "Das ist Fuchs. Fuchs ist klein und hungrig." },
+        { e: "🍎", en: "On Monday Fox eats one red apple.", de: "Am Montag isst Fuchs einen roten Apfel." },
+        { e: "🍐", en: "On Tuesday Fox eats two green pears.", de: "Am Dienstag isst Fuchs zwei grüne Birnen." },
+        { e: "🍓", en: "On Wednesday Fox eats three sweet strawberries.", de: "Am Mittwoch isst Fuchs drei süße Erdbeeren." },
+        { e: "🤢", en: "On Thursday Fox eats too much cake. Oh no! Fox has got a tummy ache.", de: "Am Donnerstag isst Fuchs zu viel Kuchen. Oh nein! Fuchs hat Bauchweh." },
+        { e: "😴", en: "On Friday Fox eats a carrot and goes to sleep. Good night, Fox! The end.", de: "Am Freitag isst Fuchs eine Möhre und geht schlafen. Gute Nacht, Fuchs! Ende." }] },
+      { typ: "wahl", frage: "What does Fox eat on Tuesday?", ru: "Что ест лисёнок во вторник?", optionen: ["two green pears", "one red apple", "a carrot"], e: "🍐", warum: "On Tuesday: two green pears – zwei grüne Birnen." },
+      { typ: "wahl", frage: "Why has Fox got a tummy ache?", ru: "Почему у лисёнка болит живот?", optionen: ["He eats too much cake.", "He is sleepy.", "He reads a book."], e: "🤢", warum: "Zu viel Kuchen – too much cake!" }],
+    ende: { de: "Super! Such dir in der Bücherei ein englisches Bilderbuch aus – du verstehst schon viel mehr, als du denkst.", ru: "Супер! Возьми в библиотеке английскую книжку с картинками." }
+  },
+  {
+    id: "en-hedgehog", lb: 8, stufe: 4, lz: ["en.le.01", "en.ws.01"], name: "Hedgehogs – ein Sachtext", e: "🦔", farbe: "#8A6E2F", grund: "#F7F0DD",
+    intro: { de: "Heute liest du einen kleinen englischen Sachtext über Igel. Du musst nicht jedes Wort verstehen – die Schlüsselwörter helfen dir!", ru: "Сегодня ты читаешь короткий английский текст о ежах. Ключевые слова помогут!" },
+    woerter: [
+      { en: "hedgehog", de: "Igel", ru: "ёж", e: "🦔" }, { en: "night", de: "Nacht", ru: "ночь", e: "🌙" }, { en: "beetle", de: "Käfer", ru: "жук", e: "🪲" },
+      { en: "worm", de: "Wurm", ru: "червяк", e: "🪱" }, { en: "leaves", de: "Blätter", ru: "листья", e: "🍂" }, { en: "winter", de: "Winter", ru: "зима", e: "❄️" }],
+    extra: [
+      { typ: "sachtext", titel: "Hedgehogs", ru: "Текст о ежах: обрати внимание на ключевые слова.", text: "*Hedgehogs* are small animals with lots of spines. They sleep in the day and look for food at *night*. They eat *beetles* and *worms*. In autumn they make a nest from *leaves*. Then they sleep all *winter*. In spring they wake up again.",
+        woerter: [["spines", "Stacheln"], ["food", "Futter"], ["nest", "Nest"], ["spring", "Frühling"]] },
+      { typ: "wahl", frage: "When do hedgehogs look for food?", ru: "Когда ежи ищут еду?", optionen: ["at night", "in the morning", "at lunchtime"], e: "🌙", warum: "Schlüsselwort: night – nachts." },
+      { typ: "wahl", frage: "What do hedgehogs eat?", ru: "Что едят ежи?", optionen: ["beetles and worms", "pizza and chips", "carrots and apples"], e: "🪲", warum: "Schlüsselwörter: beetles and worms – Käfer und Würmer." },
+      { typ: "wahl", frage: "What do hedgehogs do in winter?", ru: "Что делают ежи зимой?", optionen: ["They sleep.", "They swim.", "They fly south."], e: "⛄", warum: "They sleep all winter – Winterschlaf." }],
+    ende: { de: "Toll! Du hast einen englischen Sachtext verstanden – mit Schlüsselwörtern geht das.", ru: "Отлично! Ты понял(а) английский текст с помощью ключевых слов." }
+  },
+  {
+    id: "en-act", lb: 10, stufe: 3, lz: ["en.sp.02", "en.ik.01"], name: "Act it out! – Theater zu Festen", e: "🎭", farbe: "#E0574A", grund: "#FFECE8",
+    intro: { de: "Wir spielen Theater auf Englisch: eine Szene an Halloween und eine Geburtstagsfeier. Sprich laut und spiel mit Gesicht und Händen!", ru: "Играем сценки на английском: Хэллоуин и день рождения. Говори громко и показывай жестами!" },
+    woerter: [
+      { en: "costume", de: "Kostüm", ru: "костюм", e: "🧛" }, { en: "pumpkin", de: "Kürbis", ru: "тыква", e: "🎃" }, { en: "sweets", de: "Süßigkeiten", ru: "сладости", e: "🍬" },
+      { en: "present", de: "Geschenk", ru: "подарок", e: "🎁" }, { en: "candle", de: "Kerze", ru: "свечка", e: "🕯️" }, { en: "party", de: "Feier", ru: "праздник", e: "🥳" }],
+    extra: [
+      { typ: "rolle", szene: "Halloween: Ein Kind klingelt an der Tür.", ru: "Хэллоуин: ребёнок звонит в дверь.", rollen: { a: "👵 Neighbour", b: "🧛 Kind" }, ich: "b", zeilen: [
+        ["b", "Trick or treat!", "Süßes oder Saures!"], ["a", "Oh! What a scary costume! Who are you?", "Oh! Was für ein gruseliges Kostüm! Wer bist du?"],
+        ["b", "I'm a vampire!", "Ich bin ein Vampir!"], ["a", "Here are some sweets for you.", "Hier sind ein paar Süßigkeiten für dich."], ["b", "Thank you! Happy Halloween!", "Danke! Fröhliches Halloween!"]] },
+      { typ: "rolle", szene: "Geburtstag: Du bringst ein Geschenk.", ru: "День рождения: ты приносишь подарок.", rollen: { a: "🎂 Tom", b: "🎁 Du" }, ich: "b", zeilen: [
+        ["b", "Happy birthday, Tom! This is for you.", "Alles Gute zum Geburtstag, Tom! Das ist für dich."], ["a", "Thank you! What is it?", "Danke! Was ist es?"],
+        ["b", "Open it!", "Mach es auf!"], ["a", "Wow, a football! I love it!", "Wow, ein Fußball! Ich liebe ihn!"], ["b", "Let's play!", "Lass uns spielen!"]] },
+      { typ: "wahl", frage: "Was sagen Kinder an Halloween an der Tür?", ru: "Что говорят дети в Хэллоуин у двери?", optionen: ["Trick or treat!", "Merry Christmas!", "Good night!"], e: "🚪", warum: "„Trick or treat!“ – Süßes oder Saures!" }],
+    ende: { de: "Bravo! Spielt die Szenen mit Familie oder Freunden – mit Kostüm macht es doppelt Spaß.", ru: "Браво! Сыграйте сценки с семьёй или друзьями." }
+  },
+  {
+    id: "en-faces", lb: 1, stufe: 4, lz: ["en.sp.01", "en.sp.03"], name: "Faces and gestures – Mimik und Gesten", e: "🤷", farbe: "#2F86C8", grund: "#E1F3FF",
+    intro: { de: "Beim Sprechen helfen Gesicht und Hände. Zeig mit, wenn du die Wörter hörst!", ru: "Лицо и руки помогают говорить. Показывай вместе со словами!" },
+    woerter: [
+      { en: "happy", de: "fröhlich", ru: "весёлый", e: "😄" }, { en: "sad", de: "traurig", ru: "грустный", e: "😢" }, { en: "angry", de: "wütend", ru: "злой", e: "😠" },
+      { en: "surprised", de: "überrascht", ru: "удивлённый", e: "😮" }, { en: "scared", de: "ängstlich", ru: "испуганный", e: "😨" }, { en: "tired", de: "müde", ru: "усталый", e: "🥱" }],
+    extra: [
+      { typ: "wahl", frage: "Welche Geste passt zu „I don't know.“?", ru: "Какой жест подходит к «I don't know»?", optionen: ["🤷 Schultern hochziehen", "👋 winken", "👍 Daumen hoch"], e: "❓", warum: "„I don't know“ – dazu zuckt man mit den Schultern." },
+      { typ: "wahl", frage: "Welche Geste passt zu „Come here, please!“?", ru: "Какой жест подходит к «Come here, please!»?", optionen: ["🫴 mit der Hand heranwinken", "🙅 Arme kreuzen", "😴 Augen zu"], e: "🙋", warum: "Mit der Hand heranwinken heißt: Komm her!" },
+      { typ: "wahl", frage: "Welches Gesicht passt zu „Wow! A present for me?“", ru: "Какое лицо подходит к «Wow! A present for me?»", optionen: ["surprised 😮", "tired 🥱", "angry 😠"], e: "🎁", warum: "Bei einer Überraschung macht man große Augen: surprised." },
+      { typ: "rolle", szene: "Spiel mit Gesicht und Händen!", ru: "Играй лицом и руками!", rollen: { a: "🦜 Paula", b: "🙂 Du" }, ich: "b", zeilen: [
+        ["a", "Show me: I'm happy!", "Zeig mir: Ich bin fröhlich!"], ["b", "I'm happy! 😄", "Ich bin fröhlich!"], ["a", "Show me: I'm tired!", "Zeig mir: Ich bin müde!"], ["b", "I'm tired! 🥱", "Ich bin müde!"],
+        ["a", "Show me: I don't know!", "Zeig mir: Ich weiß nicht!"], ["b", "I don't know! 🤷", "Ich weiß nicht!"]] }],
+    ende: { de: "Super! Gesichter und Gesten verstehen Menschen überall – das hilft, wenn dir ein Wort fehlt.", ru: "Супер! Мимику и жесты понимают везде." }
+  }
+);

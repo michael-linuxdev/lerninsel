@@ -121,7 +121,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await zuEltern(p); await p.selectOption("#en-schule", "5"); await p.click("#en-speichern"); await p.waitForTimeout(100);
     await p.goto(BASIS + "spiele/englisch/"); await p.waitForSelector("#lektionen .en-gruppe");
     const en = await p.evaluate(() => { const gr = [...document.querySelectorAll(".en-gruppe:not(.lieder-gruppe)")]; return { erste: gr[0].dataset.lb, markiert: gr[0].classList.contains("schule"), gruppen: gr.length, knoepfe: gr.filter(x => x.querySelector(".lernstand-knopf")).length, lek: document.querySelectorAll("#lektionen .lek:not([data-lied])").length }; });
-    erwarte(en.erste === "5" && en.markiert && en.gruppen === 11 && en.knoepfe === 11 && en.lek === 26, `${art}: Englisch – 11 Lernbereiche, „Let's go shopping“ oben und markiert, überall „Zeig, was du kannst“ (${en.gruppen}, ${en.knoepfe}, ${en.lek} Lektionen)`);
+    erwarte(en.erste === "5" && en.markiert && en.gruppen === 11 && en.knoepfe === 11 && en.lek === 30, `${art}: Englisch – 11 Lernbereiche, „Let's go shopping“ oben und markiert, überall „Zeig, was du kannst“ (${en.gruppen}, ${en.knoepfe}, ${en.lek} Lektionen)`);
     if (BILDER) await p.screenshot({ path: `${BILDER}/schuljahr2-englisch-${art}.png` });
     await p.click('.en-gruppe[data-lb="1"] .lernstand-knopf'); await p.waitForSelector("#lektion-ansicht:not([hidden])");
     const eAnz = await p.evaluate(() => __englisch.lauf.schritte.length - 1);

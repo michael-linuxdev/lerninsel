@@ -190,6 +190,31 @@
         A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => antwort(b, opts[+b.dataset.n] === s.wort, s.wort.en, `${s.wort.de} = ${s.wort.en}`)));
         break;
       }
+      case "buch": {   // Bilderbuch (30.10.2026): Seite für Seite lesen und anhören, ohne Bewertung
+        lauf.seite = lauf.seite || 0; const sei = s.seiten[lauf.seite], letzte = lauf.seite + 1 >= s.seiten.length;
+        blase(lauf.seite === 0 ? `Ein englisches Bilderbuch: „${s.titel}“. Lies mit – tippe auf 🔊, dann hörst du die Seite.` : "Lies weiter!", lauf.seite === 0 ? "Ein englisches Bilderbuch. Lies mit!" : "", s.ru);
+        A.innerHTML = `<div class="buch-seite"><div class="gross-emoji" aria-hidden="true">${sei.e}</div><p class="buch-text" lang="en">${sei.en}</p>${daten().ru !== false ? `<p class="buch-de">${sei.de}</p>` : ""}
+          <p class="klein">Seite ${lauf.seite + 1} von ${s.seiten.length}</p><button class="knopf" id="buch-hoeren">🔊 Anhören</button></div>` + `<button class="knopf weiter" id="weiter">${letzte ? "Fertig gelesen" : "Umblättern ➡️"}</button>`;
+        $("buch-hoeren").addEventListener("click", () => sprichEn(sei.en)); if (lauf.seite === 0) setTimeout(() => sprichEn(sei.en), 600);
+        $("weiter").addEventListener("click", () => { S.ton("tipp"); if (letzte) { lauf.seite = 0; weiter(); } else { lauf.seite++; SP.stopp(); schritt(); } });
+        break;
+      }
+      case "sachtext": {   // Sachtext mit Schlüsselwörtern (fett); danach folgen Wahl-Fragen
+        blase(`Ein englischer Sachtext: „${s.titel}“. Achte auf die fett gedruckten Schlüsselwörter – sie helfen dir, auch wenn du nicht jedes Wort kennst.`, "Ein englischer Sachtext. Achte auf die Schlüsselwörter!", s.ru);
+        A.innerHTML = `<div class="sachtext" lang="en">${s.text.replace(/\*(.+?)\*/g, "<b>$1</b>")}</div><p class="klein">${(s.woerter || []).map(([en, de]) => `<b lang="en">${en}</b> = ${de}`).join(" · ")}</p>
+          <button class="knopf" id="text-hoeren">🔊 Text anhören</button>` + weiterKnopf("Ich habe gelesen");
+        $("text-hoeren").addEventListener("click", () => sprichEn(s.text.replace(/\*/g, ""))); aufWeiter();
+        break;
+      }
+      case "rolle": {   // Szenisches Spiel: Das Kind spricht Rolle B, Paula spricht Rolle A (englische Stimme)
+        lauf.zeile = lauf.zeile || 0; const z = s.zeilen[lauf.zeile], ich = z[0] === s.ich, letzte = lauf.zeile + 1 >= s.zeilen.length;
+        blase(lauf.zeile === 0 ? `${s.szene} Du bist ${s.rollen[s.ich]}. Sprich deine Sätze laut – mit Gesicht und Händen, wie im Theater!` : ich ? "Du bist dran! Sprich laut und zeig es mit Gesten." : "Hör zu …", lauf.zeile === 0 ? s.szene : "", s.ru);
+        A.innerHTML = `<div class="rollen">${s.zeilen.map(([r, en, de], i) => `<div class="rolle-zeile${r === s.ich ? " ich" : ""}${i === lauf.zeile ? " dran" : ""}${i < lauf.zeile ? " vorbei" : ""}"><b>${s.rollen[r]}</b> <span lang="en">${en}</span> <small>${de}</small></div>`).join("")}</div>` +
+          `<button class="knopf weiter" id="weiter">${ich ? "✅ Gesagt!" : "➡️ Weiter"}</button>`;
+        if (!ich) sprichEn(z[1]);
+        $("weiter").addEventListener("click", () => { S.ton("tipp"); SP.stopp(); if (letzte) { lauf.zeile = 0; weiter(); } else { lauf.zeile++; schritt(); } });
+        break;
+      }
       case "lied": {   // Lied oder Reim zum Mitsingen/Mitsprechen (shared/lieder.js), ohne Bewertung
         const l = window.Lieder && Lieder.finde(s.id), singen = l && l.zeilen.every(z => z[1]);
         blase(singen ? "Sing mit! Die leuchtenden Silben zeigen, wo wir gerade sind." : "Sprich mit! Hör zu und sag die Zeilen nach.", singen ? "Sing mit!" : "Sprich mit!", s.ru);

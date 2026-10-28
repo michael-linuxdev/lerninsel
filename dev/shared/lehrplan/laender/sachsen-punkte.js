@@ -72,7 +72,7 @@
           ["sn.en3.yr.01", "Feste: Easter, Halloween, Christmas, New Year, Birthday", "3", ["englisch:en-year", "englisch:en-party"], "ja"],
           ["sn.en3.yr.02", "Monate und Jahreszeiten", "3", ["englisch:en-year"], "ja"],
           ["sn.en3.yr.03", "Gratulieren mündlich und schriftlich, Grußkarten", "3", ["englisch:en-party"], "ja"],
-          ["sn.en3.yr.04", "Lieder, Reime und szenisches Spiel zu den Festen", "3", ["englisch:en-party"], "teil"]
+          ["sn.en3.yr.04", "Lieder, Reime und szenisches Spiel zu den Festen", "3", ["englisch:en-act", "englisch:en-party", "englisch:en-year"], "ja"]
         ],
         11: [ // My Portfolio
           ["sn.en3.pf.01", "Sprachenpass: Sprachen nennen, die ich lerne und spreche (auch Familiensprachen)", "3", ["englisch:en-portfolio"], "ja"],
@@ -82,7 +82,7 @@
       "4": {
         1: [
           ["sn.en4.mf.01", "Englisch im Alltag: wozu man es braucht (Handy, Computer)", "4", ["englisch:en-everywhere"], "ja"],
-          ["sn.en4.mf.02", "Mimik und Gestik beim Sprechen einsetzen", "4", ["englisch:en-feelings"], "teil"],
+          ["sn.en4.mf.02", "Mimik und Gestik beim Sprechen einsetzen", "4", ["englisch:en-faces", "englisch:en-feelings", "englisch:en-act"], "ja"],
           ["sn.en4.mf.03", "Sich und andere vorstellen, Herkunft, Interviews", "4", ["englisch:en-portfolio", "englisch:en-family", "englisch:en-hello"], "ja"],
           ["sn.en4.mf.04", "Befinden und Gefühle ausdrücken", "4", ["englisch:en-feelings"], "ja"]
         ],
@@ -112,13 +112,13 @@
         ],
         7: [
           ["sn.en4.ho.01", "Englische und amerikanische Sportarten (cricket, American football)", "4", ["englisch:en-sports"], "ja"],
-          ["sn.en4.ho.02", "Lesen und Medien: englische Kinderbücher und Angebote", "4", ["englisch:en-everywhere"], "teil"],
+          ["sn.en4.ho.02", "Lesen und Medien: englische Kinderbücher und Angebote", "4", ["englisch:en-book", "englisch:en-everywhere"], "ja"],
           ["sn.en4.ho.03", "Zum Spielen einladen: Would you like to play with me?", "4", ["englisch:en-sports"], "ja"]
         ],
         8: [
           ["sn.en4.an.01", "Zoo- und Wildtiere, Lebensräume, bedrohte Tiere", "4", ["englisch:en-zoo"], "ja"],
           ["sn.en4.an.02", "Tiere beschreiben, Ratespiele mit Steckbriefen", "4", ["englisch:en-zoo"], "ja"],
-          ["sn.en4.an.03", "Einen englischen Text über Tiere verstehen (Schlüsselwörter)", "4", ["englisch:en-zoo"], "teil"]
+          ["sn.en4.an.03", "Einen englischen Text über Tiere verstehen (Schlüsselwörter)", "4", ["englisch:en-hedgehog", "englisch:en-zoo"], "ja"]
         ],
         9: [
           ["sn.en4.tr.01", "Ausflugsziele und Verkehrsmittel", "4", ["englisch:en-trip"], "ja"],
@@ -229,7 +229,7 @@
           ["sn.su3.rz.01", "Haupt- und Nebenhimmelsrichtungen, Tagbogen der Sonne", "3", ["sachkunde:kompass", "sachkunde:karten-lesen"], "ja"],
           ["sn.su3.rz.02", "Mit Plan und Kompass orientieren, Grundriss, Karte einnorden", "3", ["sachkunde:karten-lesen", "sachkunde:kompass"], "ja"],
           ["sn.su3.rz.03", "Karten lesen: Nordpfeil, Legende, Lage beschreiben", "3", ["sachkunde:karten-lesen"], "ja"],
-          ["sn.su3.rz.04", "Den eigenen Landkreis kennen: Lage, Städte, Gewässer, Wirtschaft, Kreisstadt, Bräuche", "3", ["sachkunde:landkreis"], "teil"],
+          ["sn.su3.rz.04", "Den eigenen Landkreis kennen: Lage, Städte, Gewässer, Wirtschaft, Kreisstadt, Bräuche", "3", ["sachkunde:landkreis", "sachkunde:lk-sachsen", "sachkunde:lk-bautzen", "sachkunde:lk-goerlitz", "sachkunde:lk-saechsische-schweiz", "sachkunde:lk-meissen", "sachkunde:lk-mittelsachsen", "sachkunde:lk-erzgebirge", "sachkunde:lk-zwickau", "sachkunde:lk-vogtland", "sachkunde:lk-leipzig-land", "sachkunde:lk-nordsachsen", "sachkunde:lk-dresden", "sachkunde:lk-leipzig", "sachkunde:lk-chemnitz"], "ja"],
           ["sn.su3.rz.05", "Verkehrsregeln für Fußgänger und Radfahrer, verkehrssicheres Fahrrad", "3", ["sachkunde:fahrrad"], "ja"],
           ["sn.su3.rz.06", "Rad fahren üben, Helm", "3", ["sachkunde:fahrrad", "echtewelt:radfahren"], "aussen"]
         ],

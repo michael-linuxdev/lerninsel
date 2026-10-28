@@ -6,7 +6,10 @@
   // Religion (ev./kath.) nur nach Eltern-Wahl eltern.ethik.unterricht; Themen mit konf passend zur Konfession (ohne Wahl: alle)
   const KONF = ((u) => ["ev", "ka"].includes(u) ? u : "")((((S.lade("eltern") || {}).ethik) || {}).unterricht);
   const passtKonf = (t) => !t.konf || !KONF || t.konf.includes(KONF);
-  const TH = FACH ? (window.FACH_THEMEN || []).filter(t => t.fach === FACH && passtKonf(t)) : window.THEMEN;
+  // Landkreis-Themen (spiele/sachkunde/landkreise.js): der von den Eltern gewählte Kreis plus das Sachsen-Quiz
+  const LKW = (((S.lade("eltern") || {}).sachkunde) || {}).landkreis || "";
+  const TH = FACH ? (window.FACH_THEMEN || []).filter(t => t.fach === FACH && passtKonf(t))
+    : window.THEMEN.concat((window.LANDKREIS_THEMEN || []).filter(t => t.id === "lk-sachsen" || t.landkreis === LKW));
   const KARTEI = FACH || "sachkunde";   // Lernkartei und Lernfunde je Fach
   const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
   const LANG = () => `lang="${HL().code}"${HL().rtl ? ' dir="rtl"' : ""}`;
