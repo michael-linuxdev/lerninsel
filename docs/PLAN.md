@@ -1648,3 +1648,19 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Test:** `faechervoll` stellt die Auswahl über die Eltern-Karte ein und prüft Markierung, Reihenfolge, Speichern nach Neuladen und den Religions-Hinweis.
 - **Nächstes Paket:** Religion (ev./kath.) nach den PDFs: Profil, Inhaltspunkte, Themen (Reiter „Religion“ statt Hinweis).
 
+### Stand 28.10.2026, spätabends (Evangelische und Katholische Religion nach den sächsischen Lehrplänen)
+- **Quellen:** Lehrpläne Grundschule Sachsen Evangelische und Katholische Religion (2004/2009/2019), PDFs vom Auftraggeber; nur zusammengefasst.
+- **Neu: 37 Religions-Themen mit Eule Ella** (`spiele/sachkunde/religion.js`), Fach `religion`, Lernbereiche re1–re4 (beide Lehrpläne gleich gegliedert:
+  Miteinander leben · Nach Gott fragen / Das Geheimnis entdecken · Die biblische Botschaft kennen lernen · Mit Gemeinde/Kirche feiern). 26 Themen gelten
+  für beide Konfessionen, 5 nur evangelisch (Schöpfungsgeschichte, Zehn Gebote, Zeit und Abschied, Mahl, Luther), 6 nur katholisch (Vaterunser und Stille,
+  Brot und Eucharistie, Verkündigung/Emmaus, Mut und Kinderrechte, Heilungen, Kreuz/Tomas/Sonntag). Biblische Geschichten werden sachlich erzählt
+  („Die Bibel erzählt …“, „Christen glauben …“); Abschied/Tod mit Vertrauenspersonen und 116 111.
+- **Eltern-Wahl wirkt jetzt:** Mit „Evangelische/Katholische Religion“ erscheint bei Eule Ella der Reiter „Religion (evangelisch|katholisch)“ mit den
+  passenden Themen (`konf`); Ethik bleibt sichtbar. Im Elternbereich zeigt „Was übt die App?“ dann Religion statt Ethik.
+- **Profil:** `evreligion` und `kareligion` in `sachsen.js`, Inhaltspunkte ev. 47 (45 geübt, 2 draußen: Kirche erkunden, Gottesdienst mitgestalten),
+  kath. 60 (59/1); 9 neue Kern-Lernziele `re.*` (neues Kern-Fach „Religion“). Neue Echte-Welt-Aufgabe „Kirche besuchen“.
+- **Test:** `faechervoll` klickt alle Religions-Themen echt durch (Kl. 2/3/4, evangelisch alle, katholisch die nur-katholischen), prüft Reiter nur mit Wahl,
+  Konfessions-Filter und Elternbereich.
+- **Sorbisch:** Lehrpläne „Sorbisch als Fremdsprache (Intensives Sprachenlernen)“ und „Sorbisch“ (2004, auf Sorbisch) liegen vor, sind aber **noch nicht
+  eingearbeitet** – sorbische Wörter brauchen eine Prüfung durch Muttersprachler (Regel: keine ungeprüfte Übersetzung im Kinder-UI). Offene Frage an den Auftraggeber.
+

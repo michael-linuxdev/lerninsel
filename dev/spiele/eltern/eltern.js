@@ -178,11 +178,12 @@
         (en.length ? ` · Englisch: ${en.filter(id => enD[id]).length} von ${en.length} Lektionen geschafft` : "");
     };
     let n = { ja: 0, teil: 0, nein: 0, aussen: 0 };
-    const faecher = Object.keys(L.laender[land].faecher).filter(f => L.fuer(land, f, k.klasse).length).map(f => {
+    // Ethik oder Religion: nur das Fach, das das Kind in der Schule hat (Eltern-Wahl eltern.ethik.unterricht)
+    const unterricht = ((S.lade("eltern") || {}).ethik || {}).unterricht, nurEines = { ethik: !["ev", "ka"].includes(unterricht), evreligion: unterricht === "ev", kareligion: unterricht === "ka" };
+    const faecher = Object.keys(L.laender[land].faecher).filter(f => !(f in nurEines) || nurEines[f]).filter(f => L.fuer(land, f, k.klasse).length).map(f => {
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
-      const rel = f === "ethik" && { ev: "evangelische", ka: "katholische" }[((S.lade("eltern") || {}).ethik || {}).unterricht];
-      return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span>${rel ? `<br><span class="klein lp-religion">Ihr Kind hat ${rel} Religion statt Ethik. Der Religions-Lehrplan ist noch nicht eingearbeitet; die Ethik-Themen zu Festen, Kirchenjahr und Religionen passen zu beiden Fächern.</span>` : ""}</h3><ul class="lp-liste">${lb.map(x =>
+      return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span></h3><ul class="lp-liste">${lb.map(x =>
         `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app.filter(a => !a.startsWith("werkstatt:") && !(x.punkte && a.startsWith("sachkunde:"))).concat((x.punkte || []).flatMap(p => p.app).filter(a => a.startsWith("werkstatt:") || a.startsWith("sachkunde:"))))}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${punkteHtml(x.punkte)}${koennenZeile(x.lz)}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
     }).join("");
     return `<div class="karte">
@@ -404,7 +405,7 @@
         <label>Sachunterricht${auswahl("su-schule", SU_LB, su, "Keine Angabe")}</label>
         ${Object.entries(window.FACH_SEITEN || {}).map(([f, x]) => `<label>${x.name}${auswahl("fs-" + f, Object.fromEntries(x.lb.map(([id, t]) => [id, t.replace(/^\S+\s/, "")])), (e[f] || {}).schule || "", "Keine Angabe")}</label>`).join("")}
         <label>Mein Kind hat in der Schule${auswahl("et-unterricht", { ev: "Evangelische Religion", ka: "Katholische Religion" }, (e.ethik || {}).unterricht === "ethik" ? "" : (e.ethik || {}).unterricht || "", "Ethik")}</label></div>
-      <p class="klein" id="religion-hinweis">${["ev", "ka"].includes((e.ethik || {}).unterricht) ? "Religion: Die Themen nach dem sächsischen Lehrplan folgen, sobald er eingearbeitet ist. Bis dahin zeigt Eule Ella unter „Ethik“ die Themen, die zu beiden Fächern passen (Feste, Kirchenjahr, Religionen, Miteinander)." : "Ethik ist voreingestellt. Hat Ihr Kind evangelische oder katholische Religion, wählen Sie das hier."}</p>
+      <p class="klein" id="religion-hinweis">${["ev", "ka"].includes((e.ethik || {}).unterricht) ? `Bei Eule Ella gibt es jetzt den Reiter „Religion“ mit den Themen nach dem sächsischen Lehrplan ${(e.ethik || {}).unterricht === "ev" ? "Evangelische" : "Katholische"} Religion. Ethik bleibt zusätzlich sichtbar. Im Lehrplan unten steht Religion statt Ethik.` : "Ethik ist voreingestellt. Hat Ihr Kind evangelische oder katholische Religion, wählen Sie das hier."}</p>
       <p class="klein">Der gewählte Lernbereich steht in der Wörter-Werkstatt bzw. bei Eule Ella (auch Kunst, Musik, Werken, Sport, Ethik) ganz oben und ist markiert. Alles andere bleibt offen.
         Mit „Zeig, was du kannst“ (je Lernbereich) zeigt das Kind ohne Noten und ohne Sterne, was schon sitzt – hier seht ihr das Ergebnis.</p>
       <div class="knoepfe"><button class="knopf haupt" id="sj-speichern">Speichern</button></div>

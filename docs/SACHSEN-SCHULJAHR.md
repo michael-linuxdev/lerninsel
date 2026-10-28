@@ -19,7 +19,9 @@ Die Seiten des Schulportals (`schulportal.sachsen.de/lplandb`) sind aus der Arbe
 | Musik | 2019 | ✅ liegt vor | ✅ liegt vor |
 | Werken | 2019 | ✅ liegt vor | ✅ liegt vor |
 | Sport | 2019 | ✅ liegt vor | ✅ liegt vor |
-| Ethik (Religion nur auf Wunsch) | 2004/2019 | ✅ liegt vor | ✅ liegt vor |
+| Ethik | 2004/2019 | ✅ liegt vor | ✅ liegt vor |
+| Ev. und Kath. Religion | 2004/2009/2019 | ✅ liegt vor | ✅ liegt vor |
+| Sorbisch (Fremdsprache / Muttersprache) | 2019 / 2004 | ✅ liegt vor, noch nicht eingearbeitet | – |
 | Englisch | 2019 | – (Pflicht erst ab Kl. 3) | ✅ liegt vor |
 
 Regel bleibt: Lehrplantexte **nur zusammenfassen**, nie wörtlich übernehmen; jeder Punkt bekommt eine Lernziel-ID.
@@ -108,6 +110,8 @@ Wissens-Themen mit Eule Ella (`spiele/sachkunde/faecher.js`, Seite `spiele/sachk
 | Werken | 9 | 34 (24 / 1 / 9) | Programmierumgebung |
 | Sport | 10 | 42 (14 / 0 / 28), meist 🌍 | – |
 | Ethik | 16 + Gefühle | 43 (43 / 0 / 0) | – |
+| Ev. Religion (Eltern-Wahl) | 31 | 47 (45 / 0 / 2) | – |
+| Kath. Religion (Eltern-Wahl) | 32 | 60 (59 / 0 / 1) | – |
 
 | Weiteres | Vorhanden | Stand |
 |---|---|---|

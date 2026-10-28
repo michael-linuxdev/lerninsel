@@ -59,8 +59,9 @@ const FAECHER = ["kunst", "musik", "werken", "sport", "ethik"];
   // Welche Themen gehören zu welcher Klasse (wie lernstandThemen: max(2, stufe | kl))
   const probe = await kind("2");
   await oeffne(probe.p, "kunst");
-  const themen = await probe.p.evaluate(() => (window.FACH_THEMEN || []).map(t => ({ id: t.id, fach: t.fach, kl: Math.max(2, t.stufe || t.kl || 2), land: t.land || "" })));
-  erwarte(themen.length === 70, `70 Themen in faecher.js (${themen.length})`);
+  const themen = await probe.p.evaluate(() => (window.FACH_THEMEN || []).map(t => ({ id: t.id, fach: t.fach, kl: Math.max(2, t.stufe || t.kl || 2), land: t.land || "", konf: (t.konf || []).join() })));
+  erwarte(themen.filter(t => t.fach !== "religion").length === 70 && themen.filter(t => t.fach === "religion").length === 37,
+    `70 Themen in faecher.js, 37 in religion.js (${themen.filter(t => t.fach !== "religion").length}/${themen.filter(t => t.fach === "religion").length})`);
 
   // --- Reiter, Gruppen, Landesfilter ---
   {
@@ -69,7 +70,7 @@ const FAECHER = ["kunst", "musik", "werken", "sport", "ethik"];
     const r = await p.evaluate(() => ({ reiter: [...document.querySelectorAll("#fach-reiter .reiter")].map(a => a.dataset.fach), an: (document.querySelector("#fach-reiter .reiter.an") || {}).dataset,
       titel: document.querySelector("#liste-ansicht h1").textContent, gruppen: [...document.querySelectorAll(".su-gruppe")].map(g => g.dataset.lb) }));
     erwarte(r.reiter.join() === ",kunst,musik,werken,sport,ethik" && r.an && r.an.fach === "kunst" && r.titel === "Kunst" && r.gruppen.join() === "ku1,ku2,ku3",
-      `Reiter Sachunterricht + fünf Fächer, Kunst aktiv, Gruppen nach Lernbereichen (${r.reiter.join("|")}; ${r.gruppen.join(",")})`);
+      `Reiter Sachunterricht + fünf Fächer (Religion nur mit Eltern-Wahl), Kunst aktiv, Gruppen nach Lernbereichen (${r.reiter.join("|")}; ${r.gruppen.join(",")})`);
     await p.click('#fach-reiter .reiter[data-fach="sport"]'); await p.waitForSelector("#themen .su-gruppe");
     const sport = await p.evaluate(() => [...document.querySelectorAll(".su-gruppe")].map(g => g.dataset.lb).join());
     erwarte(/fach=sport/.test(p.url()) && sport === "sp1,sp2,sp3,sp4,sp5,sp6", `Reiter „Sport“ öffnet Sport mit sechs Lernbereichen (${sport})`);
@@ -91,6 +92,17 @@ const FAECHER = ["kunst", "musik", "werken", "sport", "ethik"];
       for (const t of liste) { const r = await durchklicken(p, fach, t.id, "quer"); if (r.ok && r.sterne === 3) gut++; else schlecht.push(`${t.id}${r.breit ? " zu breit" : ""}${r.haengt ? " hängt" : ""} ${r.sterne}`); }
       erwarte(gut === liste.length, `Kl. ${kl} ${fach}: ${gut} von ${liste.length} Themen bis zum Ende ohne Fehler, 3 Sterne${schlecht.length ? " – " + schlecht.join(", ") : ""}`);
     }
+    // Religion: evangelisch alle passenden Themen, katholisch die nur-katholischen (die gemeinsamen sind schon durchgeklickt)
+    for (const konf of ["ev", "ka"]) {
+      await p.evaluate((k) => { const e = Spielwelt.lade("eltern"); e.ethik = Object.assign({}, e.ethik || {}, { unterricht: k }); Spielwelt.speichere("eltern", e); }, konf);
+      const liste = themen.filter(t => t.fach === "religion" && t.kl === kl && (konf === "ev" ? t.konf.includes("ev") : t.konf === "ka"));
+      if (!liste.length) continue;
+      await oeffne(p, "religion");
+      let gut = 0; const schlecht = [];
+      for (const t of liste) { const r = await durchklicken(p, "religion", t.id, "quer"); if (r.ok && r.sterne === 3) gut++; else schlecht.push(`${t.id}${r.breit ? " zu breit" : ""}${r.haengt ? " hängt" : ""} ${r.sterne}`); }
+      erwarte(gut === liste.length, `Kl. ${kl} Religion (${konf}): ${gut} von ${liste.length} Themen bis zum Ende ohne Fehler, 3 Sterne${schlecht.length ? " – " + schlecht.join(", ") : ""}`);
+    }
+    await p.evaluate(() => { const e = Spielwelt.lade("eltern"); e.ethik = { unterricht: "ethik" }; Spielwelt.speichere("eltern", e); });
     if (kl === 4) {
       // Landesfilter und Einklappen früherer Klassen
       await oeffne(p, "musik");
@@ -133,8 +145,16 @@ const FAECHER = ["kunst", "musik", "werken", "sport", "ethik"];
       const el = await p.evaluate(() => { const e = Spielwelt.lade("eltern"); return [e.kunst.schule, e.sport.schule, e.musik.schule, e.ethik.unterricht].join(); });
       erwarte(el === "ku2,sp3,,ev", `Elternbereich speichert „gerade in der Schule“ je Fach und Religion (${el})`);
       await p.reload(); await p.waitForTimeout(300); if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); } await p.waitForSelector(".lp-punkte");
-      const rel = await p.evaluate(() => ({ hinweis: !!document.querySelector(".lp-religion"), wahl: document.getElementById("et-unterricht").value, kunst: document.getElementById("fs-kunst").value }));
-      erwarte(rel.hinweis && rel.wahl === "ev" && rel.kunst === "ku2", "Elternbereich: Auswahl bleibt nach Neuladen, Hinweis „Religion statt Ethik“ im Lehrplan");
+      const rel = await p.evaluate(() => { const h = [...document.querySelectorAll("h3.lp-fach")].map(x => x.textContent);
+        return { ev: h.some(x => x.startsWith("Evangelische Religion")), ka: h.some(x => x.startsWith("Katholische Religion")), ethik: h.some(x => x.startsWith("Ethik")),
+          wahl: document.getElementById("et-unterricht").value, kunst: document.getElementById("fs-kunst").value }; });
+      erwarte(rel.ev && !rel.ka && !rel.ethik && rel.wahl === "ev" && rel.kunst === "ku2", `Elternbereich: Auswahl bleibt nach Neuladen, im Lehrplan Evangelische Religion statt Ethik (${JSON.stringify(rel)})`);
+      await oeffne(p, "kunst");
+      erwarte(!!(await p.$('#fach-reiter .reiter[data-fach="religion"]')), "Mit Religion-Wahl erscheint der Reiter „Religion“");
+      await oeffne(p, "religion");
+      const rv = await p.evaluate(() => ({ titel: document.querySelector("#liste-ansicht h1").textContent, ka: !!document.querySelector('[data-id="re-brot"]'), ev: !!document.querySelector('[data-id="re-reformation"]'), gruppen: [...document.querySelectorAll(".su-gruppe")].map(g => g.dataset.lb).join() }));
+      erwarte(rv.titel === "Religion (evangelisch)" && rv.ev && !rv.ka && rv.gruppen === "re1,re2,re3,re4", `Religion (evangelisch): nur passende Themen, vier Lernbereiche (${JSON.stringify(rv)})`);
+      if (BILDER) await p.screenshot({ path: `${BILDER}/faechervoll-religion-ev.png` });
       for (const [fach, lb] of [["kunst", "ku2"], ["sport", "sp3"]]) {
         await oeffne(p, fach);
         const g = await p.evaluate(() => { const x = document.querySelector(".su-gruppe"); return { lb: x.dataset.lb, schule: x.classList.contains("schule"), marke: !!x.querySelector(".schule-marke") }; });

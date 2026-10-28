@@ -16,7 +16,7 @@ function lade(dateien) {
   dateien.forEach(d => vm.runInContext(fs.readFileSync(path.join(WURZEL, d), "utf8"), ctx, { filename: d }));
   return ctx;
 }
-const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/sachkunde/faecher.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js"];
+const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/sachkunde/faecher.js", "spiele/sachkunde/religion.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js"];
 const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "inhalte/deutsch/schreiben.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan/laender/sachsen-punkte.js", "shared/lehrplan.js"];
 const w = lade(DATEN.concat(LEHRPLAN));
 const K = w.LernzielKern, I = w.Inhalte, L = w.LEHRPLAN;
@@ -184,7 +184,7 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten
   assert.strictEqual(I.abdeckung("de.sc.07"), "ja");     // Schuljahr Deutsch: Geschichte ordnen, Satzanfänge, Überarbeiten, Textlupe, Weiterschreiben …
   assert.strictEqual(I.abdeckung("de.sz.07"), "teil");   // Paket A: Vortrag vorbereiten
   const z = L.zaehle("sachsen", 2).errechnet;
-  assert.strictEqual(z.ja + z.teil + z.nein, 35, "Kl. 1/2: 35 Lernbereiche (Deutsch 2025: fünf statt sieben; dazu Kunst 3, Musik 4, Werken 3, Sport 6, Ethik 4)");
+  assert.strictEqual(z.ja + z.teil + z.nein, 43, "Kl. 1/2: 43 Lernbereiche (Deutsch 2025: fünf statt sieben; dazu Kunst 3, Musik 4, Werken 3, Sport 6, Ethik 4, Ev. und Kath. Religion je 4)");
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
 });
 
@@ -207,12 +207,12 @@ pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und �
   assert.ok(L.laender.sachsen.faecher.deutsch.stand.startsWith("Lehrplan 2025, gültig ab 1.8.2025"));
 });
 
-pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik (Lehrpläne 2019): jeder Inhaltspunkt zugeordnet, Zuordnungen echt, LB-Abdeckung passt zu den Punkten, jedes Thema kommt vor", () => {
+pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jeder Inhaltspunkt zugeordnet, Zuordnungen echt, LB-Abdeckung passt zu den Punkten, jedes Thema kommt vor", () => {
   const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8"), alleThemen = w.THEMEN.concat(w.FACH_THEMEN);
   const gibt = (a) => { const [art, id] = a.split(":");
     return art === "sachkunde" ? alleThemen.some(t => t.id === id) : art === "echtewelt" ? echt.includes(`["${id}", `) : art === "englisch" ? w.ENGLISCH.some(l => l.id === id)
       : ["atelier:malen", "atelier:musik", "gefuehle:alle", "lesen:silben"].includes(a); };
-  const soll = { kunst: [3, 3, 3], musik: [4, 4, 4], werken: [3, 2, 3], sport: [6, 5, 5], ethik: [4, 4, 4] };   // Lernbereiche Kl. 1/2, 3, 4
+  const soll = { kunst: [3, 3, 3], musik: [4, 4, 4], werken: [3, 2, 3], sport: [6, 5, 5], ethik: [4, 4, 4], evreligion: [4, 4, 4], kareligion: [4, 4, 4] };   // Lernbereiche Kl. 1/2, 3, 4
   const benutzt = new Set(), z = {};
   Object.entries(soll).forEach(([f, [n12, n3, n4]]) => {
     const fach = L.laender.sachsen.faecher[f]; assert.ok(fach && fach.stand.startsWith("Lehrplan 20"), f);
@@ -229,7 +229,8 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik (Lehrpläne 2019): jeder Inha
   });
   w.FACH_THEMEN.forEach(t => assert.ok(benutzt.has("sachkunde:" + t.id), t.id + " kommt in keinem Inhaltspunkt vor"));
   assert.deepStrictEqual(z, { kunst: { ja: 32, teil: 1, nein: 0, aussen: 12 }, musik: { ja: 34, teil: 3, nein: 0, aussen: 11 }, werken: { ja: 24, teil: 1, nein: 0, aussen: 9 },
-    sport: { ja: 14, teil: 0, nein: 0, aussen: 28 }, ethik: { ja: 43, teil: 0, nein: 0, aussen: 0 } });
+    sport: { ja: 14, teil: 0, nein: 0, aussen: 28 }, ethik: { ja: 43, teil: 0, nein: 0, aussen: 0 },
+    evreligion: { ja: 45, teil: 0, nein: 0, aussen: 2 }, kareligion: { ja: 59, teil: 0, nein: 0, aussen: 1 } });
 });
 
 pruefe("Länder-Abweichung: Sachsen verschiebt einfache Kombinationen nach Kl. 2 und kennt ein Zusatz-Ziel", () => {

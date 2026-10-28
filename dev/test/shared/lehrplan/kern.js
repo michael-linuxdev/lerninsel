@@ -24,6 +24,7 @@
     mu: { name: "Musik", quelle: "Länderpläne", bereiche: { ho: "Musik hören", ma: "Musik machen", no: "Musik lesen und aufschreiben" } },
     sp: { name: "Bewegung", quelle: "Länderpläne", bereiche: { be: "Sich bewegen" } },
     et: { name: "Ethik und soziales Lernen", quelle: "Länderpläne", bereiche: { ge: "Gefühle", mi: "Miteinander", we: "Werte" } },
+    re: { name: "Religion (ev./kath.)", quelle: "Länderpläne", bereiche: { mi: "Miteinander leben", go: "Nach Gott fragen", bi: "Biblische Botschaft", fe: "Feste und Kirche" } },
     en: { name: "Englisch", quelle: "Länderpläne Fremdsprache Grundschule (GeR A1 angebahnt)", bereiche: {
       hv: "Hörverstehen", sp: "Sprechen", ws: "Wortschatz", le: "Lesen und Schreiben", ik: "Interkulturelles Lernen" } },
     daz: { name: "Deutsch als Zweitsprache", quelle: "SPRACHEN.md", bereiche: { d0: "D0 Ankommen", d1: "D1 Erste Sätze" } }
@@ -203,6 +204,16 @@
     ["et.we.04", "4", "Philosophische Fragen: Glück, Zeit, Wünsche, Entscheidungen"],
     ["su.te.04", "3", "Werkstoffe und Werkzeuge sicher nutzen"],
     ["su.te.05", "4", "Technik pflegen, Roboter und Automaten verstehen"],
+    // Religion (Lehrpläne Sachsen Ev. und Kath. Religion 2004/2009/2019, 28.10.2026)
+    ["re.mi.01", "1", "Miteinander leben: Gefühle, Konflikte, Trost und Vergebung"],
+    ["re.mi.02", "3", "Andere Religionen kennen: Judentum und Islam"],
+    ["re.go.01", "1", "Schöpfung, Gottesbilder und Symbole"],
+    ["re.go.02", "2", "Beten, Psalmen und Stille"],
+    ["re.bi.01", "1", "Erzählungen des Alten Testaments"],
+    ["re.bi.02", "1", "Leben, Taten und Gleichnisse Jesu"],
+    ["re.bi.03", "4", "Die Bibel: Aufbau und Entstehung"],
+    ["re.fe.01", "1", "Feste und Kirchenjahr"],
+    ["re.fe.02", "2", "Kirche, Gottesdienst, Taufe und Ökumene"],
 
     // ---------- Englisch (Grundschule; Beginn je nach Land Kl. 1 oder 3) ----------
     ["en.hv.01", "3", "Einfache englische Wörter und Sätze hören und verstehen"],

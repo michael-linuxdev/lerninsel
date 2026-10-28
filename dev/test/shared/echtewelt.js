@@ -87,6 +87,7 @@
     ["schnee", "bewegung", "⛄", "Wenn Schnee liegt: Bau einen Schneemann oder fahr mit einem Erwachsenen Schlitten.", "Если лежит снег: слепи снеговика или покатайся со взрослым на санках.", 1],
     ["schwimmen", "bewegung", "🏊", "Geh mit einem Erwachsenen schwimmen – und denk an die Baderegeln.", "Сходи со взрослым поплавать – и помни правила купания.", 2],
     ["spielregeln", "bewegung", "🤝", "Erfinde mit Freunden ein Spiel und macht die Regeln gemeinsam aus.", "Придумай с друзьями игру и вместе договоритесь о правилах.", 2],
+    ["kirche", "helfen", "⛪", "Besuch mit einem Erwachsenen eine Kirche: Wo sind Altar, Taufbecken, Kreuz und Orgel?", "Сходи со взрослым в церковь: где алтарь, купель, крест и орган?", 1],
     ["staunen", "natur", "🔍", "Schau dir mit einer Lupe einen Wassertropfen, ein Blatt oder einen Käfer an. Worüber staunst du?", "Рассмотри через лупу каплю воды, лист или жука. Чему ты удивляешься?", 1],
     ["stille", "gefuehle", "🕯️", "Nimm dir drei Minuten für Stille: Augen zu, ruhig atmen, lauschen.", "Побудь три минуты в тишине: закрой глаза, дыши спокойно, прислушайся.", 1],
     ["fest", "helfen", "🎉", "Plant in der Familie ein kleines Fest: Wen ladet ihr ein? Was gibt es?", "Спланируйте в семье маленький праздник: кого пригласить? Что будет?", 1],

@@ -3,7 +3,10 @@
   const $ = (id) => document.getElementById(id);
   // Weitere Fächer (28.10.2026): ?fach=kunst|musik|werken|sport|ethik zeigt die Themen dieses Fachs aus faecher.js (gleiche Seite, gleiche Eule)
   const FS = window.FACH_SEITEN || {}, FACH = ((p) => FS[p] ? p : "")(new URLSearchParams(location.search).get("fach"));
-  const TH = FACH ? (window.FACH_THEMEN || []).filter(t => t.fach === FACH) : window.THEMEN;
+  // Religion (ev./kath.) nur nach Eltern-Wahl eltern.ethik.unterricht; Themen mit konf passend zur Konfession (ohne Wahl: alle)
+  const KONF = ((u) => ["ev", "ka"].includes(u) ? u : "")((((S.lade("eltern") || {}).ethik) || {}).unterricht);
+  const passtKonf = (t) => !t.konf || !KONF || t.konf.includes(KONF);
+  const TH = FACH ? (window.FACH_THEMEN || []).filter(t => t.fach === FACH && passtKonf(t)) : window.THEMEN;
   const KARTEI = FACH || "sachkunde";   // Lernkartei und Lernfunde je Fach
   const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
   const LANG = () => `lang="${HL().code}"${HL().rtl ? ' dir="rtl"' : ""}`;
@@ -58,7 +61,7 @@
   function reiter() {
     const r = $("fach-reiter"); if (!r || !Object.keys(FS).length) return;
     const kl = ((S.stufe && S.stufe()) || {}).klasse || 2, sichtbar = (t) => !(t.stufe && kl < t.stufe - 1) && !(t.land && (S.land() || {}).code !== t.land);
-    const liste = [["", "🔬", "Sachunterricht"]].concat(Object.entries(FS).filter(([f]) => (window.FACH_THEMEN || []).some(t => t.fach === f && sichtbar(t))).map(([f, x]) => [f, x.e, x.name]));
+    const liste = [["", "🔬", "Sachunterricht"]].concat(Object.entries(FS).filter(([f, x]) => (!x.nurMitWahl || KONF || f === FACH) && (window.FACH_THEMEN || []).some(t => t.fach === f && sichtbar(t) && passtKonf(t))).map(([f, x]) => [f, x.e, x.name]));
     r.innerHTML = liste.map(([f, e, n]) => `<a class="reiter${f === FACH ? " an" : ""}" data-fach="${f}" href="./${f ? "?fach=" + f : ""}"${f === FACH ? ' aria-current="page"' : ""}><span>${e}</span> ${n}</a>`).join("");
   }
   function zeichneListe() {
@@ -70,7 +73,7 @@
     const fertig = TH.filter(t => bestes(t.id) > 0).length;
     reiter();
     const religion = FACH === "ethik" && ["ev", "ka"].includes((((S.lade("eltern") || {}).ethik) || {}).unterricht);   // Eltern-Wahl: Kind hat Religion statt Ethik
-    $("intro-text").textContent = fertig === 0 ? (FACH ? `Hallo ${name()}! ${religion ? "Du hast in der Schule Religion. Hier findest du Themen, die zu Religion und Ethik passen: Feste, Kirchenjahr, Religionen und unser Miteinander." : FS[FACH].intro}` : `Hallo ${name()}! Ich bin Eule Ella. Mit mir entdeckst du spannende Dinge über die Welt.`)
+    $("intro-text").textContent = fertig === 0 ? (FACH ? `Hallo ${name()}! ${religion ? "Du hast in der Schule Religion – die Religionsthemen findest du oben unter „Religion“. Hier in Ethik gibt es noch mehr zum Nachdenken: Feste, Religionen und unser Miteinander." : FS[FACH].intro}` : `Hallo ${name()}! Ich bin Eule Ella. Mit mir entdeckst du spannende Dinge über die Welt.`)
       : `Du hast schon ${fertig} ${fertig === 1 ? "Thema" : "Themen"} entdeckt. Bald kommen neue dazu!`;
     $("themen").innerHTML = "";
     const klasse = ((S.stufe && S.stufe()) || {}).klasse || 2;
@@ -350,7 +353,7 @@
   $("ru-schalter").addEventListener("click", () => { const d = daten(); d.ru = !d.ru; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(`${HL().name}-Hilfe ist ${d.ru ? "an" : "aus"}.`); });
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Vorlesen ist an." : "Vorlesen ist aus."); });
 
-  if (FACH) { document.title = FS[FACH].name; const h = document.querySelector("#liste-ansicht h1"); if (h) h.textContent = FS[FACH].name; }
+  if (FACH) { const n = FS[FACH].name + (FACH === "religion" && KONF ? (KONF === "ev" ? " (evangelisch)" : " (katholisch)") : ""); document.title = n; const h = document.querySelector("#liste-ansicht h1"); if (h) h.textContent = n; }
   zeichneListe();
   window.__sachkunde = { fach: FACH, themen: TH, starte, starteLernstand, lernstandThemen, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
 })();

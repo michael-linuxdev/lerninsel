@@ -234,6 +234,53 @@
           { nr: 6, lz: ["sp.be.03", "su.na.03"], titel: "Wintersport", inhalte: ["Ski- oder Eislauftechnik", "Pistenregeln und Umwelt"], app: ["echtewelt:schnee", "sachkunde:sp-piste"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." }
         ]
       }
+    },
+    // Evangelische und Katholische Religion (Lehrpläne 2004/2009/2019, 28.10.2026; nur bei Eltern-Wahl statt Ethik sichtbar)
+    evreligion: {
+      name: "Evangelische Religion", stand: "Lehrplan 2004/2009/2019 (gegen den Lehrplantext geprüft am 28.10.2026, Inhaltspunkte in sachsen-punkte.js; nur bei Eltern-Wahl statt Ethik; Wahlbereiche freiwillig)",
+      stufen: {
+        "1/2": [
+          { nr: 1, lz: ["re.mi.01", "et.ge.01"], titel: "Miteinander leben", inhalte: ["Gemeinschaft und Regeln", "Gefühle und Konflikte", "Angst überwinden"], app: ["sachkunde:re-gefuehle", "sachkunde:et-klasse", "gefuehle:alle"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["re.go.01", "re.bi.01"], titel: "Nach Gott und dem Sinn der Welt fragen", inhalte: ["Schöpfung entdecken", "Gottesbilder", "Wasser, Noah"], app: ["sachkunde:re-schoepfung", "echtewelt:staunen", "sachkunde:re-gottesbilder", "sachkunde:re-licht-wasser", "sachkunde:re-noah"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["re.bi.01", "re.bi.02"], titel: "Die biblische Botschaft kennen lernen", inhalte: ["Zeit Jesu", "Jesusgeschichten", "Abraham, Segen, Josef"], app: ["sachkunde:re-zeit-jesu", "sachkunde:re-jesus-hilft", "sachkunde:re-abraham", "sachkunde:re-josef"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["re.fe.01", "re.fe.02"], titel: "Mit der Gemeinde feiern", inhalte: ["Feste im Jahr", "Weihnachten und Ostern", "Sonntag, Kirche, Taufe"], app: ["sachkunde:re-feste12", "sachkunde:re-ostern12", "sachkunde:re-kirche-taufe", "echtewelt:kirche"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "3": [
+          { nr: 1, lz: ["re.mi.01", "re.mi.02"], titel: "Miteinander leben", inhalte: ["Ermutigung", "Brücken bauen, Goldene Regel", "Judentum"], app: ["sachkunde:et-staerken", "sachkunde:re-bruecken", "sachkunde:et-freundschaft", "sachkunde:re-judentum"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["re.go.01"], titel: "Nach Gott und dem Sinn der Welt fragen", inhalte: ["Bildworte", "Gleichnisse vom Reich Gottes", "Schöpfungsgeschichte"], app: ["sachkunde:re-bildworte", "sachkunde:re-gottesbilder", "sachkunde:re-gleichnisse", "sachkunde:re-schoepfung3"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["re.bi.01", "re.bi.02"], titel: "Die biblische Botschaft kennen lernen", inhalte: ["Jesus und die Ausgegrenzten", "Vorbilder", "Mose"], app: ["sachkunde:re-ausgegrenzte", "sachkunde:re-mose"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["re.fe.01", "re.fe.02"], titel: "Mit der Gemeinde feiern", inhalte: ["Kirchenjahr", "Pfingsten", "Gottesdienst"], app: ["sachkunde:re-pfingsten", "echtewelt:kirche"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "4": [
+          { nr: 1, lz: ["re.mi.01", "re.mi.02"], titel: "Miteinander leben", inhalte: ["Zehn Gebote", "Zeit und Abschied", "Islam"], app: ["sachkunde:re-gebote", "sachkunde:re-zeit-abschied", "sachkunde:re-islam"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["re.go.02", "re.go.01"], titel: "Nach Gott und dem Sinn der Welt fragen", inhalte: ["Gebete", "Symbole", "Schöpfungslob"], app: ["sachkunde:re-beten", "sachkunde:re-symbole"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["re.bi.01", "re.bi.02", "re.bi.03"], titel: "Die biblische Botschaft kennen lernen", inhalte: ["Mahl in der Bibel", "Jakob", "Die Bibel"], app: ["sachkunde:re-mahl", "sachkunde:re-jakob", "sachkunde:re-bibel"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["re.fe.01", "re.fe.02"], titel: "Mit der Gemeinde feiern", inhalte: ["Kirchenjahr", "Reformationstag", "Evangelisch und katholisch"], app: ["sachkunde:re-kirchenjahr", "sachkunde:re-reformation", "sachkunde:re-oekumene"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ]
+      }
+    },
+    kareligion: {
+      name: "Katholische Religion", stand: "Lehrplan 2004/2009/2019 (gegen den Lehrplantext geprüft am 28.10.2026, Inhaltspunkte in sachsen-punkte.js; nur bei Eltern-Wahl statt Ethik; Wahlbereiche freiwillig)",
+      stufen: {
+        "1/2": [
+          { nr: 1, lz: ["re.mi.01", "et.ge.01"], titel: "Miteinander leben", inhalte: ["Gemeinschaft", "Freude und Leid, Trost", "Religiöse Erfahrungen"], app: ["sachkunde:re-gefuehle", "sachkunde:et-klasse", "sachkunde:re-kirche-taufe"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["re.go.01", "re.go.02", "re.bi.01"], titel: "Das Geheimnis entdecken", inhalte: ["Licht und Wasser", "Stille, Bilder von Gott", "Schöpfung, Noah, Segen"], app: ["sachkunde:re-licht-wasser", "sachkunde:re-vaterunser", "echtewelt:stille", "sachkunde:re-gottesbilder", "sachkunde:re-schoepfung", "sachkunde:re-noah", "sachkunde:re-abraham"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["re.bi.01", "re.bi.02", "re.go.02"], titel: "Die biblische Botschaft kennen lernen", inhalte: ["Jesusgeschichten", "Heimat Jesu, Vaterunser", "Abraham, Josef"], app: ["sachkunde:re-jesus-hilft", "sachkunde:re-zeit-jesu", "sachkunde:re-gottesbilder", "sachkunde:re-vaterunser", "sachkunde:re-abraham", "sachkunde:re-josef"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["re.fe.01", "re.fe.02"], titel: "Mit der Kirche feiern", inhalte: ["Erntedank, Advent, Weihnachten", "Karwoche und Ostern", "Kirchenraum und Taufe"], app: ["sachkunde:re-feste12", "sachkunde:re-ostern12", "sachkunde:re-kirche-taufe", "echtewelt:kirche"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "3": [
+          { nr: 1, lz: ["re.mi.01", "re.mi.02"], titel: "Miteinander leben", inhalte: ["Regeln und Gebote", "Vergebung, Konflikte", "Judentum"], app: ["sachkunde:re-mose", "sachkunde:et-freundschaft", "sachkunde:re-bruecken", "sachkunde:re-judentum"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["re.go.01", "re.go.02"], titel: "Das Geheimnis entdecken", inhalte: ["Brot", "Stille", "Bildrede und Gleichnisse"], app: ["sachkunde:re-brot", "sachkunde:re-bildworte", "sachkunde:re-gleichnisse"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["re.bi.01", "re.bi.02"], titel: "Die biblische Botschaft kennen lernen", inhalte: ["Zachäus, Gleichnisse", "Samariter", "Mose und der Bund"], app: ["sachkunde:re-ausgegrenzte", "sachkunde:re-gleichnisse", "sachkunde:re-mose"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["re.fe.01", "re.fe.02"], titel: "Mit der Kirche feiern", inhalte: ["Verkündigung und Weihnachten", "Ostern und Emmaus", "Pfingsten und Gottesdienst"], app: ["sachkunde:re-emmaus", "sachkunde:re-feste12", "sachkunde:re-pfingsten", "echtewelt:kirche"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "4": [
+          { nr: 1, lz: ["re.mi.01", "re.mi.02", "et.we.01"], titel: "Miteinander leben", inhalte: ["Selbstvertrauen und Verantwortung", "Gerechtigkeit und Kinderrechte", "Islam"], app: ["sachkunde:re-verantwortung", "sachkunde:et-gerechtigkeit", "sachkunde:kinderrechte", "sachkunde:re-islam"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["re.go.01", "re.go.02"], titel: "Das Geheimnis entdecken", inhalte: ["Symbol Baum", "Stille und Labyrinth", "Psalmen und Gebete"], app: ["sachkunde:re-symbole", "echtewelt:stille", "sachkunde:re-beten"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["re.bi.01", "re.bi.02", "re.bi.03"], titel: "Die biblische Botschaft kennen lernen", inhalte: ["Jesus und die Benachteiligten", "Die Bibel", "Jakob"], app: ["sachkunde:re-heilungen", "sachkunde:re-bibel", "sachkunde:re-jakob"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["re.fe.01", "re.fe.02"], titel: "Mit der Kirche feiern", inhalte: ["Passion und Kreuz", "Kirchenjahr und Sonntag", "Ökumene"], app: ["sachkunde:re-passion", "sachkunde:re-kirchenjahr", "sachkunde:re-oekumene"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ]
+      }
     }
   }
 }, {

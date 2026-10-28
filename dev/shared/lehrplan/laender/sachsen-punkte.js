@@ -1032,6 +1032,178 @@
           ["sn.sp34.6.02", "Pistenregeln, Rücksicht, Umwelt", "3/4", ["sachkunde:sp-piste"], "ja"]
         ]
       }
+    },
+    // Evangelische und Katholische Religion – Lehrpläne Grundschule Sachsen 2004/2009/2019 (PDFs vom Auftraggeber, 28.10.2026)
+    evreligion: {
+      "1/2": {
+        1: [ // Miteinander leben
+          ["sn.rev12.1.01", "Gemeinschaft, Rituale, Regeln und eigene Fähigkeiten", "1/2", ["sachkunde:re-gefuehle", "sachkunde:et-klasse"], "ja"],
+          ["sn.rev12.1.02", "Gefühle und Bedürfnisse wahrnehmen und ausdrücken", "1/2", ["sachkunde:re-gefuehle", "gefuehle:alle"], "ja"],
+          ["sn.rev12.1.03", "Konflikte: Neid, Wut, Lösungen finden", "1/2", ["sachkunde:re-gefuehle", "sachkunde:et-klasse"], "ja"],
+          ["sn.rev12.1.04", "Angst überwinden: Sturmstillung und Jona", "1/2", ["sachkunde:re-gefuehle"], "ja"]
+        ],
+        2: [ // Nach Gott und dem Sinn der Welt fragen
+          ["sn.rev12.2.01", "Vielfalt der Schöpfung mit allen Sinnen, Achtsamkeit", "1/2", ["sachkunde:re-schoepfung", "echtewelt:staunen"], "ja"],
+          ["sn.rev12.2.02", "Ein biblisches Schöpfungslob (Psalmen)", "1/2", ["sachkunde:re-schoepfung"], "ja"],
+          ["sn.rev12.2.03", "Biblische Rede von Gott: Hirte, Fels; eigene Gottesvorstellungen", "1/2", ["sachkunde:re-gottesbilder"], "ja"],
+          ["sn.rev12.2.04", "Wasser als Quelle des Lebens", "1/2", ["sachkunde:re-licht-wasser"], "ja"],
+          ["sn.rev12.2.05", "Die Erzählung von Noah", "1/2", ["sachkunde:re-noah"], "ja"]
+        ],
+        3: [ // Die biblische Botschaft kennen lernen
+          ["sn.rev12.3.01", "Land und Leben zur Zeit Jesu", "1/2", ["sachkunde:re-zeit-jesu"], "ja"],
+          ["sn.rev12.3.02", "Jesusgeschichten: Levi, Kindersegnung, Bartimäus", "1/2", ["sachkunde:re-jesus-hilft"], "ja"],
+          ["sn.rev12.3.03", "Abraham und Sara", "1/2", ["sachkunde:re-abraham"], "ja"],
+          ["sn.rev12.3.04", "Segen und Segenshandlungen", "1/2", ["sachkunde:re-abraham"], "ja"],
+          ["sn.rev12.3.05", "Die Josefsgeschichte", "1/2", ["sachkunde:re-josef"], "ja"]
+        ],
+        4: [ // Mit der Gemeinde feiern
+          ["sn.rev12.4.01", "Erntedank, Nikolaus, Advent, Weihnachten, Ostern im Schulalltag", "1/2", ["sachkunde:re-feste12", "sachkunde:re-ostern12"], "ja"],
+          ["sn.rev12.4.02", "Die Weihnachtsgeschichte", "1/2", ["sachkunde:re-feste12"], "ja"],
+          ["sn.rev12.4.03", "Passion und Ostern", "1/2", ["sachkunde:re-ostern12"], "ja"],
+          ["sn.rev12.4.04", "Sonntag, Kirche und Taufe", "1/2", ["sachkunde:re-kirche-taufe"], "ja"],
+          ["sn.rev12.4.05", "Eine Kirche erleben und erkunden", "1/2", ["echtewelt:kirche"], "aussen"]
+        ]
+      },
+      "3": {
+        1: [ // Miteinander leben
+          ["sn.rev3.1.01", "Ermutigung und eigene Stärken", "3", ["sachkunde:et-staerken"], "ja"],
+          ["sn.rev3.1.02", "Konflikte, Symbol Brücke, Mobbing, Vergebung", "3", ["sachkunde:re-bruecken"], "ja"],
+          ["sn.rev3.1.03", "Die Goldene Regel", "3", ["sachkunde:re-bruecken", "sachkunde:et-freundschaft"], "ja"],
+          ["sn.rev3.1.04", "Jüdische Religion: Synagoge, Thora, Sabbat", "3", ["sachkunde:re-judentum"], "ja"],
+          ["sn.rev3.1.05", "Jesus als Jude", "3", ["sachkunde:re-judentum"], "ja"]
+        ],
+        2: [ // Nach Gott und dem Sinn der Welt fragen
+          ["sn.rev3.2.01", "Bildworte in Alltagssprache und Bibel", "3", ["sachkunde:re-bildworte"], "ja"],
+          ["sn.rev3.2.02", "Gott in Metaphern: Hirte und Licht", "3", ["sachkunde:re-bildworte", "sachkunde:re-gottesbilder"], "ja"],
+          ["sn.rev3.2.03", "Reich Gottes in Gleichnissen: Samariter, Senfkorn, verlorener Sohn", "3", ["sachkunde:re-gleichnisse"], "ja"],
+          ["sn.rev3.2.04", "Die erste Schöpfungsgeschichte", "3", ["sachkunde:re-schoepfung3"], "ja"]
+        ],
+        3: [ // Die biblische Botschaft kennen lernen
+          ["sn.rev3.3.01", "Jesusgeschichten: ein Aussätziger, Zachäus", "3", ["sachkunde:re-ausgegrenzte"], "ja"],
+          ["sn.rev3.3.02", "Ausgegrenzte Menschen heute", "3", ["sachkunde:re-ausgegrenzte"], "ja"],
+          ["sn.rev3.3.03", "Menschen, die aus christlicher Überzeugung anderen geholfen haben", "3", ["sachkunde:re-ausgegrenzte"], "ja"],
+          ["sn.rev3.3.04", "Die Mosegeschichte bis zu den Zehn Geboten", "3", ["sachkunde:re-mose"], "ja"]
+        ],
+        4: [ // Mit der Gemeinde feiern
+          ["sn.rev3.4.01", "Jesus im Mittelpunkt des Kirchenjahres", "3", ["sachkunde:re-pfingsten"], "ja"],
+          ["sn.rev3.4.02", "Pfingsten als Geburtsfest der Kirche", "3", ["sachkunde:re-pfingsten"], "ja"],
+          ["sn.rev3.4.03", "Einen Gottesdienst mitgestalten", "3", ["sachkunde:re-pfingsten", "echtewelt:kirche"], "aussen"]
+        ]
+      },
+      "4": {
+        1: [ // Miteinander leben
+          ["sn.rev4.1.01", "Die Zehn Gebote und das eigene Leben", "4", ["sachkunde:re-gebote"], "ja"],
+          ["sn.rev4.1.02", "Zeit, Werden und Vergehen, Abschied und Hoffnung", "4", ["sachkunde:re-zeit-abschied"], "ja"],
+          ["sn.rev4.1.03", "Die Religion des Islam", "4", ["sachkunde:re-islam"], "ja"]
+        ],
+        2: [ // Nach Gott und dem Sinn der Welt fragen
+          ["sn.rev4.2.01", "Biblische Gebete, Vaterunser, Gebetsformen", "4", ["sachkunde:re-beten"], "ja"],
+          ["sn.rev4.2.02", "Symbole: Baum, Sonne, Weg", "4", ["sachkunde:re-symbole"], "ja"],
+          ["sn.rev4.2.03", "Ein Schöpfungslob gestalten", "4", ["sachkunde:re-beten"], "ja"]
+        ],
+        3: [ // Die biblische Botschaft kennen lernen
+          ["sn.rev4.3.01", "Das Mahl in der Bibel und die Mahlgemeinschaft Jesu", "4", ["sachkunde:re-mahl"], "ja"],
+          ["sn.rev4.3.02", "Die Jakobsgeschichte", "4", ["sachkunde:re-jakob"], "ja"],
+          ["sn.rev4.3.03", "Entstehung und Aufbau der Bibel, Bibelstellen finden", "4", ["sachkunde:re-bibel"], "ja"]
+        ],
+        4: [ // Mit der Gemeinde feiern
+          ["sn.rev4.4.01", "Das Kirchenjahr und das eigene Leben", "4", ["sachkunde:re-kirchenjahr"], "ja"],
+          ["sn.rev4.4.02", "Reformationstag und Martin Luther", "4", ["sachkunde:re-reformation"], "ja"],
+          ["sn.rev4.4.03", "Gemeinsamkeiten und Unterschiede evangelischer und katholischer Feste, Ökumene", "4", ["sachkunde:re-oekumene"], "ja"]
+        ]
+      }
+    },
+    kareligion: {
+      "1/2": {
+        1: [ // Miteinander leben
+          ["sn.rka12.1.01", "Leben in Gemeinschaft, Rituale, Regeln", "1/2", ["sachkunde:re-gefuehle", "sachkunde:et-klasse"], "ja"],
+          ["sn.rka12.1.02", "Freude und Leid bei sich und anderen", "1/2", ["sachkunde:re-gefuehle"], "ja"],
+          ["sn.rka12.1.03", "Trost finden und andere trösten", "1/2", ["sachkunde:re-gefuehle"], "ja"],
+          ["sn.rka12.1.04", "Religiöse Vorerfahrungen und Zugehörigkeit zu einer Religionsgemeinschaft", "1/2", ["sachkunde:re-kirche-taufe"], "ja"]
+        ],
+        2: [ // Das Geheimnis entdecken
+          ["sn.rka12.2.01", "Licht als Symbol im Kirchenjahr, Licht für andere sein", "1/2", ["sachkunde:re-licht-wasser"], "ja"],
+          ["sn.rka12.2.02", "Wasser als Symbol und Taufwasser", "1/2", ["sachkunde:re-licht-wasser"], "ja"],
+          ["sn.rka12.2.03", "Stille und meditative Übungen", "1/2", ["sachkunde:re-vaterunser", "echtewelt:stille"], "ja"],
+          ["sn.rka12.2.04", "Bildsprache der Bibel: Gott ist mein Licht, mein Hirte", "1/2", ["sachkunde:re-gottesbilder"], "ja"],
+          ["sn.rka12.2.05", "Fragen nach Gott und eigene Vorstellungen", "1/2", ["sachkunde:re-gottesbilder"], "ja"],
+          ["sn.rka12.2.06", "Schöpfung und Gott als Schöpfer", "1/2", ["sachkunde:re-schoepfung"], "ja"],
+          ["sn.rka12.2.07", "Die Erzählung von Noah", "1/2", ["sachkunde:re-noah"], "ja"],
+          ["sn.rka12.2.08", "Segen und Segenshandlungen", "1/2", ["sachkunde:re-abraham"], "ja"]
+        ],
+        3: [ // Die biblische Botschaft kennen lernen
+          ["sn.rka12.3.01", "Die Bartimäusgeschichte", "1/2", ["sachkunde:re-jesus-hilft"], "ja"],
+          ["sn.rka12.3.02", "Jesus segnet die Kinder", "1/2", ["sachkunde:re-jesus-hilft"], "ja"],
+          ["sn.rka12.3.03", "Die Heimat Jesu", "1/2", ["sachkunde:re-zeit-jesu"], "ja"],
+          ["sn.rka12.3.04", "Gott als guter Vater und liebende Mutter", "1/2", ["sachkunde:re-gottesbilder"], "ja"],
+          ["sn.rka12.3.05", "Das Vaterunser", "1/2", ["sachkunde:re-vaterunser"], "ja"],
+          ["sn.rka12.3.06", "Abraham und Sara", "1/2", ["sachkunde:re-abraham"], "ja"],
+          ["sn.rka12.3.07", "Die Josefserzählung", "1/2", ["sachkunde:re-josef"], "ja"]
+        ],
+        4: [ // Mit der Kirche feiern
+          ["sn.rka12.4.01", "Erntedank", "1/2", ["sachkunde:re-feste12"], "ja"],
+          ["sn.rka12.4.02", "Advent, Brauchtum und die Weihnachtsgeschichte", "1/2", ["sachkunde:re-feste12"], "ja"],
+          ["sn.rka12.4.03", "Leiden, Sterben und Auferstehung Jesu, Lichtsymbolik zu Ostern", "1/2", ["sachkunde:re-ostern12"], "ja"],
+          ["sn.rka12.4.04", "Die Karwoche", "1/2", ["sachkunde:re-ostern12"], "ja"],
+          ["sn.rka12.4.05", "Der Kirchenraum und seine Ausstattung", "1/2", ["sachkunde:re-kirche-taufe", "echtewelt:kirche"], "ja"],
+          ["sn.rka12.4.06", "Die Taufe", "1/2", ["sachkunde:re-kirche-taufe"], "ja"]
+        ]
+      },
+      "3": {
+        1: [ // Miteinander leben
+          ["sn.rka3.1.01", "Regeln und Gebote zum Schutz des Lebens, Goldene Regel", "3", ["sachkunde:re-mose", "sachkunde:et-freundschaft"], "ja"],
+          ["sn.rka3.1.02", "Rache und Vergebung", "3", ["sachkunde:re-bruecken"], "ja"],
+          ["sn.rka3.1.03", "Konflikte lösen, Brücken bauen", "3", ["sachkunde:re-bruecken"], "ja"],
+          ["sn.rka3.1.04", "Das Judentum als Wurzel des christlichen Glaubens", "3", ["sachkunde:re-judentum"], "ja"]
+        ],
+        2: [ // Das Geheimnis entdecken
+          ["sn.rka3.2.01", "Brot als Symbol, Speisung der Fünftausend, Eucharistie", "3", ["sachkunde:re-brot"], "ja"],
+          ["sn.rka3.2.02", "Stille und Hören: Samuel", "3", ["sachkunde:re-brot"], "ja"],
+          ["sn.rka3.2.03", "Bildrede von Gott, eigene Gottesvorstellungen", "3", ["sachkunde:re-bildworte"], "ja"],
+          ["sn.rka3.2.04", "Die Bildsprache der Gleichnisse, Reich Gottes", "3", ["sachkunde:re-gleichnisse"], "ja"]
+        ],
+        3: [ // Die biblische Botschaft kennen lernen
+          ["sn.rka3.3.01", "Die Zachäusgeschichte", "3", ["sachkunde:re-ausgegrenzte"], "ja"],
+          ["sn.rka3.3.02", "Gleichnisse vom Schatz im Acker und vom Festmahl", "3", ["sachkunde:re-gleichnisse"], "ja"],
+          ["sn.rka3.3.03", "Der barmherzige Samariter", "3", ["sachkunde:re-gleichnisse"], "ja"],
+          ["sn.rka3.3.04", "Die Mosegeschichte, der Bund und die Zehn Gebote", "3", ["sachkunde:re-mose"], "ja"]
+        ],
+        4: [ // Mit der Kirche feiern
+          ["sn.rka3.4.01", "Verkündigung des Herrn", "3", ["sachkunde:re-emmaus"], "ja"],
+          ["sn.rka3.4.02", "Menschwerdung Gottes, die Weisen aus dem Osten", "3", ["sachkunde:re-feste12"], "ja"],
+          ["sn.rka3.4.03", "Das Weizenkorn als Bild für Ostern", "3", ["sachkunde:re-emmaus"], "ja"],
+          ["sn.rka3.4.04", "Der Emmausgang", "3", ["sachkunde:re-emmaus"], "ja"],
+          ["sn.rka3.4.05", "Pfingsten als Geburtsstunde der Kirche", "3", ["sachkunde:re-pfingsten"], "ja"],
+          ["sn.rka3.4.06", "Gottesdienst und eine liturgische Feier gestalten", "3", ["sachkunde:re-pfingsten", "echtewelt:kirche"], "aussen"]
+        ]
+      },
+      "4": {
+        1: [ // Miteinander leben
+          ["sn.rka4.1.01", "Selbstvertrauen, Talente, Ermutigung", "4", ["sachkunde:re-verantwortung"], "ja"],
+          ["sn.rka4.1.02", "Verantwortung für Menschen und Natur", "4", ["sachkunde:re-verantwortung"], "ja"],
+          ["sn.rka4.1.03", "Gerechtigkeit und Ungerechtigkeit, Mobbing", "4", ["sachkunde:re-verantwortung", "sachkunde:et-gerechtigkeit"], "ja"],
+          ["sn.rka4.1.04", "Kinderrechte", "4", ["sachkunde:re-verantwortung", "sachkunde:kinderrechte"], "ja"],
+          ["sn.rka4.1.05", "Leben von Muslimen und die islamische Religion", "4", ["sachkunde:re-islam"], "ja"]
+        ],
+        2: [ // Das Geheimnis entdecken
+          ["sn.rka4.2.01", "Das Symbol Baum", "4", ["sachkunde:re-symbole"], "ja"],
+          ["sn.rka4.2.02", "Stilleübungen und das Labyrinth", "4", ["sachkunde:re-symbole", "echtewelt:stille"], "ja"],
+          ["sn.rka4.2.03", "Psalmen und Gebete, eigene Psalmen", "4", ["sachkunde:re-beten"], "ja"]
+        ],
+        3: [ // Die biblische Botschaft kennen lernen
+          ["sn.rka4.3.01", "Jesus setzt sich für Benachteiligte ein: Aussätziger, Hauptmann", "4", ["sachkunde:re-heilungen"], "ja"],
+          ["sn.rka4.3.02", "Die Bibel als Buch des Lebens, Jesus und die Heilige Schrift", "4", ["sachkunde:re-heilungen", "sachkunde:re-bibel"], "ja"],
+          ["sn.rka4.3.03", "Entstehung und Aufbau der Bibel", "4", ["sachkunde:re-bibel"], "ja"],
+          ["sn.rka4.3.04", "Die Jakobserzählung", "4", ["sachkunde:re-jakob"], "ja"]
+        ],
+        4: [ // Mit der Kirche feiern
+          ["sn.rka4.4.01", "Die Passionsgeschichte und das Kreuz", "4", ["sachkunde:re-passion"], "ja"],
+          ["sn.rka4.4.02", "Der zweifelnde Tomas", "4", ["sachkunde:re-passion"], "ja"],
+          ["sn.rka4.4.03", "Inhalt und Verlauf des Kirchenjahres", "4", ["sachkunde:re-kirchenjahr"], "ja"],
+          ["sn.rka4.4.04", "Der Sonntag", "4", ["sachkunde:re-passion", "sachkunde:re-kirchenjahr"], "ja"],
+          ["sn.rka4.4.05", "Die Ökumene", "4", ["sachkunde:re-oekumene"], "ja"]
+        ]
+      }
     }
   };
   // Übergang in Klasse 5 (Mathe): VORLÄUFIG – der Lehrplantext Kl. 5 (Oberschule/Gymnasium) liegt noch nicht vor. Grundlage: was der
