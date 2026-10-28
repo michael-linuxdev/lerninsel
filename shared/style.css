@@ -106,3 +106,34 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .szene-text { font-size: 1.2rem; }
   .szene-weiter { min-width: 0; flex: 1; }
 }
+
+/* ---------- Fachseiten (30.10.2026): Lernbereichs-Gruppen einheitlich ----------
+   Jede Gruppe ist eine helle Karte; Überschrift links, „Zeig, was du kannst“ rechts in derselben Zeile (schmal: darunter).
+   Noch nicht gespielte Kacheln (.jetzt) bekommen einen feinen Ring und ein ✨ statt eines dicken Rahmens. */
+.su-gruppe, .en-gruppe, .werk-gruppe {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+  margin: 18px auto 0; padding: 4px 0 18px; border-radius: 28px; background: rgba(255,255,255,.5);
+}
+.su-gruppe > *, .en-gruppe > *, .werk-gruppe > * { grid-column: 1 / -1; }
+.su-gruppe > h3, .en-gruppe > h3, .werk-gruppe > h3 { grid-column: 1; margin: 14px 18px 0; font-size: 1.35rem; line-height: 1.25; }
+.lernstand-knopf { font-size: 1.05rem; min-height: 48px; margin: 12px 16px 0; padding: 0 16px; }
+.su-gruppe > .lernstand-knopf, .en-gruppe > .lernstand-knopf, .werk-gruppe > .lernstand-knopf { grid-column: 2; }
+.su-gruppe.schule, .en-gruppe.schule, .werk-gruppe.schule { background: #FFF6D6; box-shadow: inset 0 0 0 3px #F3D27A; }
+.schule-marke { font-size: .95rem; background: #F3D27A; border-radius: 12px; padding: 2px 10px; vertical-align: middle; white-space: nowrap; }
+.su-gruppe .frueher, .en-gruppe .frueher, .werk-gruppe .frueher { margin: 14px 16px 0; }
+.su-gruppe .frueher summary, .en-gruppe .frueher summary, .werk-gruppe .frueher summary { cursor: pointer; font-weight: 600; padding: 10px 14px; background: #fff; border-radius: 16px; display: inline-block; box-shadow: 0 4px 0 rgba(0,0,0,.06); }
+.su-gruppe .frueher .lektionen, .en-gruppe .frueher .lektionen { padding: 0; }
+.lek.jetzt, .ort.jetzt { box-shadow: 0 0 0 2px #D9C8F5, 0 7px 0 rgba(75,35,128,.14); }
+.lek.jetzt::after, .ort.jetzt::after { content: "✨"; position: absolute; top: -10px; right: -6px; width: 30px; height: 30px; display: grid; place-items: center;
+  border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px #D9C8F5; font-size: .95rem; pointer-events: none; }
+/* .lektionen ist ein Raster-Element mit Auto-Rand: ohne feste Breite schrumpft es auf seinen Inhalt und ragt auf dem Handy hinaus */
+.su-gruppe > .lektionen, .en-gruppe > .lektionen { width: 100%; box-sizing: border-box; }
+@media (max-width: 620px) {
+  .su-gruppe, .en-gruppe, .werk-gruppe { grid-template-columns: minmax(0, 1fr); margin-left: 8px; margin-right: 8px; }
+  .su-gruppe .lektionen, .en-gruppe .lektionen { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 0 12px; }
+  .su-gruppe .frueher .lektionen, .en-gruppe .frueher .lektionen { padding: 0; }
+  /* schmale Kacheln: Bild über dem Namen, damit Wörter nicht zerhackt werden */
+  .su-gruppe .lek, .en-gruppe .lek { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; padding: 14px 10px 12px; }
+  .su-gruppe .lek .emoji, .en-gruppe .lek .emoji { grid-row: auto; }
+  .su-gruppe > .lernstand-knopf, .en-gruppe > .lernstand-knopf, .werk-gruppe > .lernstand-knopf { grid-column: 1; justify-self: start; }
+}

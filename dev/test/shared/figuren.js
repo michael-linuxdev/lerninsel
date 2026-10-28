@@ -113,5 +113,20 @@
       <circle cx="74" cy="86" r="7" fill="#FF7FA6" opacity=".5"/><circle cx="126" cy="86" r="7" fill="#FF7FA6" opacity=".5"/>
     </svg>`;
   }
-  window.Figuren = { fipsi, robo, eule, biber, baer, papagei };
+  // Schildkröte Tilda (Schach, 30.10.2026): runder Panzer mit Waben, Kopf vorn, Halstuch
+  function tilda(klasse = "tilda") {
+    const D = "#3b1f63", G = "#8BCB6A", P = "#3F8E52", s = `stroke="${D}" stroke-width="4" stroke-linejoin="round"`;
+    return `<svg class="${klasse}" viewBox="0 0 200 200" aria-hidden="true">
+      <ellipse cx="62" cy="168" rx="18" ry="14" fill="${G}" ${s}/><ellipse cx="138" cy="168" rx="18" ry="14" fill="${G}" ${s}/>
+      <path d="M28 150 Q30 76 100 70 Q170 76 172 150 Z" fill="${P}" ${s}/>
+      <path d="M100 82 l18 12 v20 l-18 12 l-18 -12 v-20 z M52 122 l16 -10 l16 10 v18 h-32 z M116 122 l16 -10 l16 10 v18 h-32 z" fill="#6FB25A" stroke="#2E6E3E" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M22 150 Q100 166 178 150 Q180 162 170 164 Q100 178 30 164 Q20 162 22 150 Z" fill="#E9D27A" ${s}/>
+      <ellipse cx="100" cy="56" rx="40" ry="36" fill="${G}" ${s}/>
+      <path d="M68 84 Q100 98 132 84 L126 100 Q100 108 74 100 Z" fill="#E0578F" ${s}/>
+      <circle cx="86" cy="52" r="8" fill="${D}"/><circle cx="114" cy="52" r="8" fill="${D}"/><circle cx="89" cy="49" r="3" fill="#fff"/><circle cx="117" cy="49" r="3" fill="#fff"/>
+      <path d="M88 70 Q100 80 112 70" stroke="${D}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <circle cx="74" cy="66" r="7" fill="#FF7FA6" opacity=".45"/><circle cx="126" cy="66" r="7" fill="#FF7FA6" opacity=".45"/>
+    </svg>`;
+  }
+  window.Figuren = { fipsi, robo, eule, biber, baer, papagei, tilda };
 })();

@@ -22,11 +22,11 @@ const SZENEN = [
   ["Welt Strand", INSEL + "&biom=strand&groesse=klein&seed=2", "schoen"],
   ["Zimmer", INSEL + "&drinnen=1", "schoen"],
   ["Zimmer", INSEL + "&drinnen=1", "einfach"],
-  ["Ballon-Party", "spiele/welt3d/ballons.html", "schoen"],
-  ["Schatz-Strand", "spiele/welt3d/insel.html", "schoen"],
-  ["Sternenlauf", "spiele/welt3d/lauf.html", "schoen"],
-  ["Kart-Rennen", "spiele/welt3d/kart.html", "schoen"],
-  ["Bauplatz", "spiele/welt3d/bau.html", "schoen"]
+  ["Ballon-Party", "spiele/welt3d/ballons.html", "schoen", "minispiel"],
+  ["Schatz-Strand", "spiele/welt3d/insel.html", "schoen", "minispiel"],
+  ["Sternenlauf", "spiele/welt3d/lauf.html", "schoen", "minispiel"],
+  ["Kart-Rennen", "spiele/welt3d/kart.html", "schoen", "minispiel"],
+  ["Bauplatz", "spiele/welt3d/bau.html", "schoen", "minispiel"]
 ];
 
 (async () => {
@@ -47,7 +47,14 @@ const SZENEN = [
     for (let t = 0; t < 4; t++) { window.__heute = `2026-10-${21 + t}`; for (let i = 0; i < 5; i++) Lernfunde.merke({ fach: "mathe", art: "gemeistert", text: `${t}${i} + 1`, schluessel: "t:" + t + i }); }
     delete window.__heute; });
 
-  for (const [name, adresse, grafik] of SZENEN) {
+  const minispieleAus = await p.evaluate(() => !!Spielwelt.MINISPIELE_AUS);
+  for (const [name, adresse, grafik, art] of SZENEN) {
+    // Minispiele sind seit 30.10.2026 ausgeblendet: dann nur prüfen, dass die Seite zur Insel leitet
+    if (art === "minispiel" && minispieleAus) {
+      await p.goto(BASIS + adresse); await p.waitForTimeout(1500);
+      if (!/welt3d\/heimat\.html/.test(p.url())) fehler.push(`${name}: ausgeblendet, leitet aber nicht zur Insel (${p.url()})`); else console.log(`  ✓ ${name}: ausgeblendet, leitet zur Insel`);
+      continue;
+    }
     if (grafik !== "-") await p.evaluate((g) => { const e = Spielwelt.lade("eltern") || {}; e.insel = Object.assign({}, e.insel || {}, { grafik: g }); Spielwelt.speichere("eltern", e); try { localStorage.removeItem("lerninsel.sparen"); } catch (x) { /* egal */ } }, grafik);
     await p.goto(BASIS + adresse); await p.waitForTimeout(3500);
     if (!p.url().includes(adresse.split("?")[0])) { fehler.push(`${name}: umgeleitet nach ${p.url()} (gesperrt?)`); continue; }

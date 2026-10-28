@@ -1,7 +1,7 @@
 // Test Dashboard (30.10.2026): Startseite „alles auf einen Blick“ (iPad quer und hoch ohne Scrollen, bunter Name, alle Türen sichtbar,
 // mit Sorbisch und Vorschul-Rucksack sechs Lern-Türen), „Meine Ecke“ mit Reitern (Heute / Meine Woche / Ich kann / Meine Sachen, echt angetippt,
 // Wahl bleibt beim Neuladen) und Elternbereich mit Reitern (fünf Teile, Lehrplan je Fach aufklappbar, Felder in allen Teilen bedienbar).
-// Keine waagerechte Scrollleiste, keine Konsolenfehler.
+// Seit 30.10.2026 stehen die Lernbegleiter (Benno, Fipsi, Ella, Paula, Bruni, Tilda) auf den Türen. Keine waagerechte Scrollleiste, keine Konsolenfehler.
 const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
@@ -36,8 +36,10 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       const t = await p.evaluate(() => {
         const tueren = [...document.querySelectorAll(".tuer:not([hidden])")], r = (e) => e.getBoundingClientRect();
         return { lern: document.querySelectorAll("#lernen .tuer:not([hidden])").length, alle: tueren.length, sichtbar: tueren.every(x => r(x).bottom <= innerHeight + 1 && r(x).height >= 100),
+          begleiter: [...document.querySelectorAll(".tuer:not([hidden]) .begleiter")].filter(b => b.querySelector("svg") && b.getBoundingClientRect().width > 40).length,
           name: document.querySelectorAll("#name span").length, farbig: new Set([...document.querySelectorAll("#name span")].map(s => s.style.color)).size };
       });
+      erwarte(t.begleiter === n + 3 - (stufe === "vs" ? 1 : 0), `Startseite ${art}: Lernbegleiter auf den Türen (${t.begleiter})`);
       erwarte(m.w <= m.iw + 1 && t.lern === n && t.name > 3 && t.farbig > 1, `Startseite ${art} (${stufe === "vs" ? "Vorschule + Sorbisch" : "Kl. 2"}): ${n} Lern-Türen, bunter Name, keine Scrollleiste`);
       if (art !== "Handy") erwarte(m.h <= m.ih + 1 && t.sichtbar, `Startseite ${art}: alles auf einen Blick, alle ${t.alle} Türen ohne Scrollen sichtbar (Höhe ${m.h})`);
       await bild(p, `dashboard-start-${stufe}-${art.replace(" ", "-")}`);

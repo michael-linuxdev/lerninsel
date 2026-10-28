@@ -52,6 +52,8 @@ const MESSEN = () => {
       await p.goto(BASIS + url); await p.waitForTimeout(4000);
       await p.evaluate(() => { if (window.__szene && __szene.aktuell()) Szene.abbrechen(); const t = document.querySelector(".pixelbox"); if (t) t.hidden = true; });
       await p.waitForTimeout(800);
+      // Wasser liegt flach (30.10.2026: in „einfach“ stand es als senkrechte Wand im Bild)
+      if (/welt3d/.test(url)) { const hoch = await p.evaluate(() => { const g = __heimat.wasser.geometry; g.computeBoundingBox(); return g.boundingBox.max.y - g.boundingBox.min.y; }); if (hoch > 1) fehler.push(`${gname}: Wasser steht senkrecht (${hoch.toFixed(1)} hoch)`); else console.log(`  ✓ ${gname}: Wasser liegt flach`); }
       // Seit 30.10.2026: ohne gespeicherte Wahl startet die Insel auf kleinen Bildschirmen (kürzere Seite < 500) in „einfach“
       if (grafik === "auto") { const g = await p.evaluate(() => document.getElementById("grafik").textContent); if (!/einfach/.test(g)) fehler.push(`${gname}: ohne Wahl nicht „einfach“ (${g})`); else console.log(`  ✓ ${gname}: ohne Wahl automatisch „einfach“`); }
       // Messfenster 1: ohne Drosselung (Zeichenaufrufe, Dreiecke, Bildgröße), Messfenster 2: CPU gedrosselt (Hauptthread-Zeit)

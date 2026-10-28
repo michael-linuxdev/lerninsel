@@ -107,6 +107,18 @@
   .lernen.sechs .tuer h2 { font-size: 1.35rem; }
   .lernen.sechs .tuer p { display: none; }
   .tuer.zu { filter: saturate(.55); }
+  /* (30.10.2026) Lernbegleiter auf den Türen, Licht von oben und ein Rahmen – mehr Tiefe als flache Farbflächen */
+  .tuer { background-image: linear-gradient(170deg, rgba(255,255,255,.22), rgba(255,255,255,0) 45%, rgba(0,0,0,.10)); }
+  .tuer.insel { background-image: linear-gradient(160deg, #8FD66B, #2E9C5A); }
+  .tuer .begleiter { position: absolute; top: 8px; right: 8px; width: 46%; max-width: 128px; aspect-ratio: 1; pointer-events: none;
+    filter: drop-shadow(0 4px 0 rgba(0,0,0,.14)); transition: transform .2s; }
+  .tuer .begleiter svg { width: 100%; height: 100%; display: block; }
+  .tuer:hover .begleiter, .tuer:active .begleiter { transform: rotate(-4deg) translateY(-2px); }
+  .tuer:has(.begleiter)::after { display: none; }   /* der Begleiter ersetzt den Türknauf */
+  .spielen .tuer .begleiter { top: 50%; transform: translateY(-50%); width: 92px; right: 10px; }
+  .spielen .tuer:hover .begleiter, .spielen .tuer:active .begleiter { transform: translateY(-52%) rotate(-4deg); }
+  .spielen .tuer { padding-right: 104px; }
+  .lernen .tuer h2, .lernen .tuer p { position: relative; }
   .tuer .schloss {
     position: absolute; top: 10px; right: 10px; left: 10px; text-align: center;
     background: rgba(255,255,255,.92); color: var(--pflaume);
@@ -122,6 +134,10 @@
     .reihe { grid-template-columns: 1fr 1fr; }
     .reihe .erst-dann { grid-column: span 2; }
     .reihe.ohne-zeit .erst-dann { grid-column: auto; }
+    /* Spiel-Türen: der Begleiter reicht als Bild, sonst bleibt für den Text zu wenig Platz */
+    .spielen .tuer { padding-left: 16px; padding-right: 84px; }
+    .spielen .tuer .bild { display: none; }
+    .spielen .tuer .begleiter { width: 72px; right: 8px; }
   }
   @media (max-width: 620px) {
     .reihe { grid-template-columns: 1fr; } .reihe .erst-dann { grid-column: auto; }
@@ -225,26 +241,31 @@
     </a>
     <div class="lernen" id="lernen" role="group" aria-label="Lernen">
     <a class="tuer mathe" href="spiele/mathe/" style="text-decoration:none">
+      <span class="begleiter" data-wer="biber" aria-hidden="true"></span>
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M30 50h40M50 30v40" stroke="#fff" stroke-width="12" stroke-linecap="round"/></svg>
       <h2>Mathe</h2>
       <p>Mit Biber Benno rechnen und Sterne sammeln</p>
     </a>
     <a class="tuer deutsch" href="spiele/deutsch/" style="text-decoration:none">
+      <span class="begleiter" data-wer="fipsi" aria-hidden="true"></span>
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M20 70 50 22l30 48z" fill="#fff"/><circle cx="72" cy="30" r="9" fill="#FFC83D"/></svg>
       <h2>Deutsch</h2>
       <p>Mit Fipsi die Schatzkarte finden</p>
     </a>
     <a class="tuer sach" href="spiele/sachkunde/" style="text-decoration:none">
+      <span class="begleiter" data-wer="eule" aria-hidden="true"></span>
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34" fill="#fff"/><path d="M28 36c8 2 10 10 18 8s6-12 14-10 8 8 12 6M24 58c10-2 14 6 22 4s10 6 16 10" stroke="#1F8F8A" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="76" cy="22" r="9" fill="#FFC83D"/></svg>
       <h2>Sachunterricht</h2>
       <p>Mit Eule Ella die Welt entdecken</p>
     </a>
     <a class="tuer englisch" href="spiele/englisch/" style="text-decoration:none">
+      <span class="begleiter" data-wer="papagei" aria-hidden="true"></span>
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M18 26h50a10 10 0 0 1 10 10v22a10 10 0 0 1-10 10H44l-14 12v-12h-12a10 10 0 0 1-10-10V36a10 10 0 0 1 10-10z" fill="#fff"/><text x="43" y="56" text-anchor="middle" font-size="22" font-weight="700" fill="#2F6FB8" font-family="sans-serif">Hi!</text><circle cx="82" cy="20" r="9" fill="#FFC83D"/></svg>
       <h2>Englisch</h2>
       <p>Mit Papagei Paula Englisch sprechen</p>
     </a>
     <a class="tuer sorbisch" href="spiele/sorbisch/" style="text-decoration:none" hidden>
+      <span class="begleiter" data-wer="papagei" aria-hidden="true"></span>
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><rect x="14" y="22" width="62" height="16" fill="#2B5BA8"/><rect x="14" y="38" width="62" height="16" fill="#E23D2E"/><rect x="14" y="54" width="62" height="16" fill="#fff"/><rect x="14" y="22" width="62" height="48" fill="none" stroke="#fff" stroke-width="3"/><circle cx="84" cy="20" r="9" fill="#FFC83D"/></svg>
       <h2>Sorbisch</h2>
       <p>Mit Papagei Paula: Witaj!</p>
@@ -257,16 +278,19 @@
     </div>
     <div class="spielen" role="group" aria-label="Spielen">
     <a class="tuer gef" href="spiele/gefuehle/" style="text-decoration:none">
+      <span class="begleiter" data-wer="baer" aria-hidden="true"></span>
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 82 L20 52 a16 16 0 0 1 30 -22 a16 16 0 0 1 30 22 z" fill="#fff"/><circle cx="78" cy="22" r="9" fill="#FFC83D"/></svg>
       <h2>Gefühle</h2>
       <p>Mit Bärin Bruni: Gefühle und Bewegung</p>
     </a>
     <a class="tuer schach" href="spiele/schach/" style="text-decoration:none">
+      <span class="begleiter" data-wer="tilda" aria-hidden="true"></span>
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M36 84h28l-4-10H40zM42 74l2-30h12l2 30zM40 44h20l-3-8H43zM44 36c-6-4-6-14 6-16 12 2 12 12 6 16z" fill="#fff"/></svg>
       <h2>Schach</h2>
       <p>Mit Schildkröte Tilda</p>
     </a>
     <a class="tuer atelier" href="spiele/atelier/" style="text-decoration:none">
+      <span class="begleiter" data-wer="papagei" aria-hidden="true"></span>
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 16c-20 0-36 14-36 32 0 16 12 26 24 22 6-2 4-10 10-10 8 0 10 16 22 10 10-6 12-16 12-22 0-18-14-32-32-32z" fill="#fff"/><circle cx="34" cy="40" r="6" fill="#E8453C"/><circle cx="50" cy="30" r="6" fill="#FFC83D"/><circle cx="66" cy="38" r="6" fill="#2F86C8"/><circle cx="70" cy="56" r="6" fill="#2FA37C"/></svg>
       <h2>Atelier</h2>
       <p>Mit Papagei Paula malen und Musik machen</p>
@@ -343,6 +367,7 @@
   // Sorbisch-Tür nur nach Eltern-Wahl (Elternbereich → Sorbisch), Vorschul-Rucksack nur für Vorschule und Klasse 1;
   // bei mehr als vier Lern-Türen stehen sie zu dritt nebeneinander
   function zeigeLernTueren() {
+    if (window.Figuren) document.querySelectorAll(".tuer .begleiter").forEach(b => { if (!b.firstChild && Figuren[b.dataset.wer]) b.innerHTML = Figuren[b.dataset.wer](""); });
     document.querySelector(".tuer.sorbisch").hidden = !(((S.lade("eltern") || {}).sorbisch || {}).an);
     document.getElementById("vorschule-link").hidden = !["vs", "1"].includes((S.stufe() || {}).code);
     document.getElementById("lernen").classList.toggle("sechs", document.querySelectorAll("#lernen .tuer:not([hidden])").length > 4);

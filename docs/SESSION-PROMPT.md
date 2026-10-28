@@ -12,7 +12,9 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (30.10.2026, abends) – Inhalte fertig, Grafik freigegeben; Dashboard überarbeitet
+## 1. Stand (30.10.2026, abends) – Inhalte fertig, Grafik freigegeben; Dashboard überarbeitet; Optik Teil 1
+- **Optik Teil 1:** Jungen im Kleiderschrank gleichgezogen (30 neue Teile, Test `anziehen`), 3D-Figur mit eigenem Rumpf statt „Glocke“, Zimmer-Blick aufs Gesicht,
+  **Wasser-Wand in „einfach“ behoben**, Fachseiten mit gemeinsamem Gruppen-Stil (`shared/style.css`), Lernbegleiter auf den Türen der Startseite (neu: `Figuren.tilda`).
 - **Neu:** Startseite „alles auf einen Blick“ (iPad ohne Scrollen, bunter Name bleibt), „Meine Ecke“ mit Reitern (Heute / Meine Woche / Ich kann / Meine Sachen),
   Elternbereich mit Reitern (Überblick / Lernstand / Wie in der Schule / Zeit & Regeln / Kinder & Gerät). Keine alte Ansicht als Schalter (Wunsch des Auftraggebers).
 ### Was es gibt (Inhalte)
@@ -87,7 +89,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (Inhalte fertig seit 30.10.2026; davor: Lehrplan Sachsen in voller Tiefe, Entscheidung 27.10.2026)
-0. **Optik verbessern** (Reihenfolge des Auftraggebers): 3D-Insel „Rund“, Fachseiten (einheitlicher Stil), Figuren, Startseite/Meine Ecke, Jungen-Figuren gleichziehen; **danach Story** NA-17, NA-18, NA-16. iPad-Rückmeldung und Sorbisch-Prüfung jederzeit einarbeiten.
+0. **Optik verbessern** (Reihenfolge des Auftraggebers; Teil 1 erledigt: Jungen, 3D-Figur, Wasser, Fachseiten-Gruppen, Startseiten-Türen) – Teil 2: Insel weiter (Gras ruhiger, Nachbarn, Tiere), Meine Ecke, Mathe-Kopf an den neuen Stil; **danach Story** NA-17, NA-18, NA-16. iPad-Rückmeldung und Sorbisch-Prüfung jederzeit einarbeiten.
 **Arbeitsliste: `docs/SACHSEN-SCHULJAHR.md` – zuerst lesen.** Maßstab „wie ein Schuljahr“ (jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr,
 Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen.
 

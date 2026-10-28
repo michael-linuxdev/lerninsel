@@ -1775,3 +1775,21 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
   Wahl im Elternbereich oder auf der Insel hat Vorrang. Test `handy` prüft es.
 - **Nächstes:** Optik in vier Bereichen – 3D-Insel „Rund“, Fachseiten (einheitlicher Stil), Figuren (Kind, Tiere, Lernbegleiter), Startseite/Meine Ecke
   (Türen mit eigenen Bildern) – und **Jungen-Figuren auf den Stand der Mädchen bringen**. Danach Story NA-17, NA-18, NA-16.
+
+### Stand 30.10.2026, Optik Teil 1 (Jungen gleichziehen, Insel-Figur, Wasser, Fachseiten, Startseite)
+- **Jungen gleichziehen (Kleiderschrank):** 30 neue Teile – Frisuren Scheitel, Igel, Wuschel, Kurzlocken, Afro, Undercut, Schulterlang; Oberteile
+  Fußball-Trikot, Hemd, Polo, Dino-, Raketen- und Helden-Shirt; Cargo und Bermuda; Anzüge Ritter, Astronaut, Pirat, Feuerwehr, Dino (Reiter heißt jetzt
+  „Kleider & Anzüge“, für Jungen mit 🦸); Fußballschuhe, Sneaker; Extras Basecap, Piratenhut, Augenklappe, Helden-Maske, Fliege, Fußball, Kuschel-Dino,
+  Holzschwert. Jungen starten mit „Scheitel“. IDs bestehender Teile unverändert. Neuer Test `anziehen` (jede Kachel hat eine sichtbare Vorschau).
+- **3D-Figur:** Rumpf in der Farbe des Oberteils, Rock/Hose nur bis zur Taille (vorher wirkte jede Figur wie eine Glocke), Kleider bleiben lang; Anzüge mit
+  Hosenbeinen; neue Frisuren und Kappen auch in 3D (Spitzen/Locken stechen nicht durch Hüte). Im Zimmer schaut die Figur zur Kamera, Blick flacher.
+- **Fehler behoben (älter, seit NA-29):** Das Wasser stand in „einfach“, bei reduzierter Bewegung und im Sparmodus als **senkrechte türkise Wand** im Bild
+  (Drehung war in einen Kommentar gerutscht) – wichtig, weil Handys jetzt automatisch „einfach“ bekommen. Test `handy` prüft, dass das Wasser flach liegt.
+- **Fachseiten:** gemeinsamer Stil in `shared/style.css` für Sachunterricht, Englisch, Deutsch-Werkstatt und Sorbisch: Lernbereich als helle Karte,
+  „Zeig, was du kannst“ in der Kopfzeile, neue Themen mit feinem Ring und ✨ statt dickem Rahmen; Handy: Bild über dem Namen (keine zerhackten Wörter),
+  keine Überbreite mehr (SU-Raster, Deutsch-Kopfzeile mit sechs Knöpfen bricht um).
+- **Startseite:** Lernbegleiter auf den Türen (Benno, Fipsi, Ella, Paula, Bruni und neu gezeichnet **Tilda** – `Figuren.tilda`, auch für Sprechblasen),
+  Licht-Verlauf statt flacher Farbe; im Hochformat ohne das kleine Zeichen auf den Spiel-Türen. Test `dashboard` prüft die Begleiter.
+- **Tests:** `leistung` misst die ausgeblendeten Minispiele nicht mehr, sondern prüft, dass sie zur Insel leiten (war seit dem Ausblenden rot).
+  Warnung (kein Fehler): große Wald-Welt mit Hügeln in „schön“ ca. 155 000 statt höchstens 150 000 Dreiecke – in Teil 2 prüfen (Gras/Bäume).
+- **Nächstes:** Optik Teil 2 – 3D-Insel weiter (Gras ruhiger, Nachbarn/Tiere), Tiere und Meine Ecke; danach Story NA-17, NA-18, NA-16.
