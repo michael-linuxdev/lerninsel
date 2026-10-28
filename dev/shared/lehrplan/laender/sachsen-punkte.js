@@ -1540,6 +1540,54 @@
         ["sn.gy5.9.02", "Zählen und Rechnen – einst und jetzt", "5", ["mathe:k4roemisch", "mathe:k4rechenbrett"], "ja"]
       ].map(zuPunkt) }
     ] } } };
+  // Vorschule (30.10.2026): Sächsischer Bildungsplan (Leitfaden für Krippen, Kindergärten und Horte, 2011) mit seinen Bildungsbereichen und der
+  // Schulvorbereitung im letzten Kita-Jahr – nur zusammengefasst. Wird im Elternbereich für Kinder in der Stufe „Vorschule“ gezeigt.
+  // App: vorschule:<aufgabe> (spiele/vorschule/aufgaben.js), dazu vorhandene Inhalte (mathe:, lesen:, sachkunde:, atelier:, gefuehle:, echtewelt:).
+  P.vorschule = { stand: "Sächsischer Bildungsplan (2011), Bildungsbereiche und Schulvorbereitung", bereiche: [
+    { nr: 1, titel: "Somatische Bildung: Körper, Gesundheit, Bewegung", punkte: [
+      ["sn.vs.1.01", "Den eigenen Körper und die Sinne kennen", "vs", ["vorschule:vs-sinne", "sachkunde:sinne"], "ja"],
+      ["sn.vs.1.02", "Gesund essen und trinken, Hygiene, Zähne pflegen", "vs", ["vorschule:vs-gesund", "sachkunde:gesund-essen"], "ja"],
+      ["sn.vs.1.03", "Mein Körper gehört mir: Grenzen setzen, Hilfe holen", "vs", ["sachkunde:mein-koerper"], "ja"],
+      ["sn.vs.1.04", "Bewegung, Gleichgewicht, Grob- und Feinmotorik", "vs", ["gefuehle:alle", "echtewelt:balance", "echtewelt:huepfen", "lesen:spuren"], "aussen"]
+    ].map(zuPunkt) },
+    { nr: 2, titel: "Soziale Bildung: Gefühle, Miteinander, Sicherheit", punkte: [
+      ["sn.vs.2.01", "Gefühle bei sich und anderen erkennen und ausdrücken", "vs", ["gefuehle:alle", "vorschule:vs-miteinander"], "ja"],
+      ["sn.vs.2.02", "Regeln, Streit lösen, sich entschuldigen, helfen", "vs", ["vorschule:vs-miteinander", "sachkunde:regeln"], "ja"],
+      ["sn.vs.2.03", "Familie und Vielfalt", "vs", ["sachkunde:familie"], "ja"],
+      ["sn.vs.2.04", "Sicher im Straßenverkehr, den Schulweg kennen", "vs", ["vorschule:vs-verkehr", "sachkunde:schulweg", "echtewelt:schulweg"], "ja"]
+    ].map(zuPunkt) },
+    { nr: 3, titel: "Kommunikative Bildung: Sprache, Schrift, Medien", punkte: [
+      ["sn.vs.3.01", "Reimen und Silben klatschen (Laute bewusst hören)", "vs", ["vorschule:vs-reime", "vorschule:vs-silben", "lesen:silben"], "ja"],
+      ["sn.vs.3.02", "Anlaute hören, neugierig auf Buchstaben und Schrift werden", "vs", ["lesen:anlaute"], "ja"],
+      ["sn.vs.3.03", "Bildergeschichten verstehen und erzählen", "vs", ["vorschule:vs-geschichte"], "teil"],
+      ["sn.vs.3.04", "Den eigenen Namen schreiben, Stift richtig halten", "vs", ["lesen:spuren", "echtewelt:schreibhaltung"], "teil"],
+      ["sn.vs.3.05", "Bilderbücher anschauen, Bibliothek kennenlernen", "vs", ["echtewelt:bibliothek"], "aussen"]
+    ].map(zuPunkt) },
+    { nr: 4, titel: "Ästhetische Bildung: Malen, Musik, Tanz", punkte: [
+      ["sn.vs.4.01", "Malen, gestalten, Farben mischen", "vs", ["atelier:malen", "vorschule:vs-farben"], "ja"],
+      ["sn.vs.4.02", "Klänge, Geräusche und Instrumente unterscheiden, singen", "vs", ["vorschule:vs-klaenge", "atelier:musik", "atelier:erkennen"], "ja"],
+      ["sn.vs.4.03", "Kneten, schneiden, kleben", "vs", ["echtewelt:kneten", "echtewelt:collage"], "aussen"],
+      ["sn.vs.4.04", "Zu Musik tanzen und sich bewegen", "vs", ["echtewelt:tanzen"], "aussen"]
+    ].map(zuPunkt) },
+    { nr: 5, titel: "Naturwissenschaftliche Bildung: Natur und Technik", punkte: [
+      ["sn.vs.5.01", "Tiere und Pflanzen kennen und beobachten", "vs", ["vorschule:vs-tiere", "sachkunde:kleintiere", "echtewelt:vogel"], "ja"],
+      ["sn.vs.5.02", "Wetter und Jahreszeiten", "vs", ["vorschule:vs-jahr", "sachkunde:wetter"], "ja"],
+      ["sn.vs.5.03", "Einfache Versuche: schwimmen und sinken, Wasser", "vs", ["vorschule:vs-jahr", "sachkunde:wasser", "echtewelt:versuch"], "ja"],
+      ["sn.vs.5.04", "Bauen und konstruieren", "vs", ["sachkunde:bauen", "echtewelt:turm"], "ja"]
+    ].map(zuPunkt) },
+    { nr: 6, titel: "Mathematische Bildung: Mengen, Formen, Muster", punkte: [
+      ["sn.vs.6.01", "Mengen auf einen Blick erfassen und zählen (Würfelbilder)", "vs", ["mathe:k1wuerfel", "mathe:k1zaehlen", "vorschule:vs-zaehlen"], "ja"],
+      ["sn.vs.6.02", "Mehr, weniger, gleich viel; größer, schwerer, länger", "vs", ["mathe:k1mehr", "vorschule:vs-vergleichen"], "ja"],
+      ["sn.vs.6.03", "Formen erkennen, oben – unten – neben", "vs", ["vorschule:vs-formen", "vorschule:vs-vergleichen"], "ja"],
+      ["sn.vs.6.04", "Muster und Reihenfolgen fortsetzen", "vs", ["mathe:k1muster", "vorschule:vs-muster"], "ja"]
+    ].map(zuPunkt) },
+    { nr: 7, titel: "Schulvorbereitung im letzten Kita-Jahr", punkte: [
+      ["sn.vs.7.01", "Schulsachen und Schulalltag kennen, sich melden", "vs", ["vorschule:vs-schulkind"], "ja"],
+      ["sn.vs.7.02", "Tagesablauf ordnen, gestern – heute – morgen", "vs", ["vorschule:vs-schulkind", "vorschule:vs-geschichte"], "ja"],
+      ["sn.vs.7.03", "Selbstständig werden: anziehen, Ranzen packen", "vs", ["echtewelt:anziehen"], "aussen"],
+      ["sn.vs.7.04", "Aufgaben zu Ende bringen, zuhören, sich konzentrieren", "vs", ["vorschule:vs-zaehlen", "vorschule:vs-silben"], "ja"]
+    ].map(zuPunkt) }
+  ] };
   P.uebergang.mathe = [].concat(...Object.values(P.uebergang.schularten).map(s => [].concat(...s.lb.map(l => l.punkte))));
   Object.entries(PUNKTE).forEach(([fach, stufen]) => Object.entries(stufen).forEach(([st, lbs]) => Object.entries(lbs).forEach(([nr, liste]) => {
     const lb = (((P.faecher[fach] || {}).stufen || {})[st] || []).find(x => x.nr === +nr);

@@ -16,7 +16,7 @@ function lade(dateien) {
   dateien.forEach(d => vm.runInContext(fs.readFileSync(path.join(WURZEL, d), "utf8"), ctx, { filename: d }));
   return ctx;
 }
-const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/sachkunde/landkreise.js", "spiele/sachkunde/faecher.js", "spiele/sachkunde/religion.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js", "spiele/sorbisch/lektionen.js", "spiele/sorbisch/mutter.js"];
+const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/sachkunde/landkreise.js", "spiele/sachkunde/faecher.js", "spiele/sachkunde/religion.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js", "spiele/sorbisch/lektionen.js", "spiele/sorbisch/mutter.js", "spiele/vorschule/aufgaben.js"];
 const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "inhalte/deutsch/schreiben.js", "inhalte/deutsch/schreibschrift.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan/laender/sachsen-punkte.js", "shared/lehrplan.js"];
 const w = lade(DATEN.concat(LEHRPLAN));
 const K = w.LernzielKern, I = w.Inhalte, L = w.LEHRPLAN;
@@ -277,6 +277,23 @@ pruefe("Sachsen Sorbisch als Muttersprache (Lehrplan 2004, nur nach Eltern-Wahl)
     l.schritte.forEach(x => { assert.ok(x.ru, l.id + ": russischer Entwurf fehlt");
       if (x.typ === "wahl" || x.typ === "textfrage") assert.ok(x.optionen.length >= 2 && new Set(x.optionen).size === x.optionen.length && x.frage, l.id + ": Wahl unvollständig");
       if (x.typ === "textfrage") assert.ok(x.text, l.id + ": Lesetext fehlt"); }); });
+});
+
+pruefe("Vorschule (Sächsischer Bildungsplan): 7 Bereiche, jeder Punkt zugeordnet, jedes Rucksack-Spiel kommt vor, Lernziele gültig", () => {
+  const V = L.laender.sachsen.vorschule, m = { ja: 0, teil: 0, nein: 0, aussen: 0 }, benutzt = new Set(), echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
+  const stationen = new Set([].concat(w.Mathe.STATIONEN_K1).map(s => s.id)), themen = new Set(w.THEMEN.map(t => t.id));
+  assert.ok(V && /Bildungsplan/.test(V.stand) && V.bereiche.length === 7);
+  V.bereiche.forEach(b => { assert.ok(b.punkte.length >= 4, b.titel); b.punkte.forEach(p => { m[p.abdeckung]++; assert.ok(p.app.length, p.id);
+    p.app.forEach(a => { const [art, id] = a.split(":"); benutzt.add(a);
+      assert.ok(art === "vorschule" ? w.VORSCHULE.some(x => x.id === id) : art === "mathe" ? stationen.has(id) : art === "sachkunde" ? themen.has(id)
+        : art === "echtewelt" ? echt.includes(`["${id}", `) : art === "lesen" ? ["anlaute", "silben", "spuren"].includes(id)
+        : ["atelier:malen", "atelier:musik", "atelier:erkennen", "gefuehle:alle"].includes(a), `${p.id}: ${a}`); }); }); });
+  w.VORSCHULE.forEach(a => { assert.ok(benutzt.has("vorschule:" + a.id), a.id + " kommt in keinem Vorschul-Punkt vor");
+    assert.ok(w.VORSCHULE_BEREICHE.some(b => b.id === a.bereich), a.id + ": Bereich");
+    assert.ok(!a.aufgaben.some(x => x.optionen && x.optionen[0] === a.e), a.id + ": Symbol im Kopf verrät eine Antwort"); a.lz.forEach(id => assert.ok(K.ziel(id), a.id + ": " + id));
+    a.aufgaben.forEach(x => { assert.ok(x.frage && x.ru, a.id + ": Frage/ru"); if (x.typ === "ordnen") assert.ok(x.teile.length >= 3 && new Set(x.teile).size === x.teile.length, a.id);
+      else assert.ok(x.optionen.length >= 2 && new Set(x.optionen).size === x.optionen.length, a.id); }); });
+  assert.deepStrictEqual(m, { ja: 22, teil: 2, nein: 0, aussen: 5 });   // teil: Bildergeschichten erzählen, Namen schreiben (mündlich/auf Papier)
 });
 
 pruefe("Länder-Abweichung: Sachsen verschiebt einfache Kombinationen nach Kl. 2 und kennt ein Zusatz-Ziel", () => {

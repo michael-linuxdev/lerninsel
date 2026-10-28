@@ -64,6 +64,10 @@
       lernkartei: false, titel: k.name, quelle: "bestand", stufe: k.stufe < 3 ? ["1", "2"] : ["3", "4"] }));   // nur nach Eltern-Wahl sichtbar
     (window.SORBISCH_MUTTER || []).forEach(k => registriere({ id: "sorbisch:" + k.id, fach: "sorbisch", lz: k.lz, aufgaben: k.schritte.filter(x => x.typ !== "sag").length,
       lernkartei: false, titel: k.name, quelle: "bestand", stufe: k.stufe < 3 ? ["1", "2"] : [String(k.stufe)] }));   // Sorbisch als Muttersprache, nur nach Eltern-Wahl
+    // Vorschul-Rucksack (spiele/vorschule/aufgaben.js): Bilder-Aufgaben für die Vorschule
+    const VS_FACH = { mathe: "mathe", sprache: "deutsch", natur: "sachkunde", koerper: "sachkunde", sozial: "sachkunde", kunst: "kunst", schule: "sachkunde" };
+    (window.VORSCHULE || []).forEach(a => registriere({ id: "vorschule:" + a.id, fach: VS_FACH[a.bereich] || "sachkunde", lz: a.lz, aufgaben: a.aufgaben.length,
+      lernkartei: false, titel: a.name, quelle: "spiele/vorschule/", stufe: ["vs"] }));
     STATISCH.forEach(s => nachId[s.id] || registriere(Object.assign({ quelle: "bestand" }, s)));
   }
 

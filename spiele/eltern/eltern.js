@@ -84,7 +84,7 @@
     const erklaere = () => {
       const st = S.STUFEN.find(x => x.code === $("e-stufe").value), la = S.LAENDER.find(x => x.code === $("e-land").value);
       const sh = $("e-stufe-hinweis"); sh.hidden = !st.wenig;
-      sh.textContent = st.code === "vs" ? "Für die Vorschule gibt es noch wenig eigene Inhalte. Bis dahin übt das Kind mit den Aufgaben der 1. Klasse, alles mit Bildern und Ton."
+      sh.textContent = st.code === "vs" ? "Für die Vorschule gibt es den Vorschul-Rucksack (Spiele nach den Bildungsbereichen des Sächsischen Bildungsplans) und den Matheweg „Klasse 1 und Vorschule“; dazu die leichten Aufgaben der 1. Klasse, alles mit Bildern und Ton."
         : "Für den Übergang in Klasse 5 gibt es einen eigenen Matheweg („Übergang 5“), Fachbegriffe und Lesestrategien in Deutsch sowie „Lernen lernen“ und „Neue Schule“ bei Eule Ella. Alles andere übt das Kind mit den Aufgaben der 4. Klasse. Die App bewertet nicht, welche Schulform passt.";
       const lh = $("e-land-hinweis"); lh.hidden = !!la.lehrplan;
       lh.textContent = `Für ${la.name} zeigt die App vorerst die gemeinsamen Bildungsstandards (KMK) und den sächsischen Lehrplan als Beispiel. Die Besonderheiten von ${la.name} folgen.`;
@@ -193,11 +193,16 @@
     return `<div class="karte">
       <h2>📘 Was übt die App? (Lehrplan ${lname}, ${k.klasse}. Klasse)</h2>
       ${la.lehrplan ? "" : `<p class="hinweis">Für ${la.name} ist der Lehrplan noch nicht ausgearbeitet. Gezeigt wird der sächsische Lehrplan als Beispiel; er folgt in großen Teilen den gemeinsamen KMK-Bildungsstandards.</p>`}
-      ${stufe.wenig ? `<p class="hinweis">Stufe „${stufe.name}“: Gezeigt wird der Lehrplan der ${k.klasse}. Klasse${stufe.code === "5" ? "; dazu kommen eigene Übergangs-Inhalte (Matheweg „Übergang 5“, Fachbegriffe, Lesestrategien, Lernen lernen)" : ", bis eigene Inhalte da sind"}.</p>` : ""}
+      ${stufe.wenig ? `<p class="hinweis">Stufe „${stufe.name}“: Gezeigt wird der Lehrplan der ${k.klasse}. Klasse${stufe.code === "5" ? "; dazu kommen eigene Übergangs-Inhalte (Matheweg „Übergang 5“, Fachbegriffe, Lesestrategien, Lernen lernen)" : stufe.code === "vs" ? "; unten steht dazu der Sächsische Bildungsplan für die Vorschule mit dem Vorschul-Rucksack" : ", bis eigene Inhalte da sind"}.</p>` : ""}
       <p>${n.ja} Lernbereiche gut abgedeckt, ${n.teil} teilweise, ${n.nein} noch nicht${n.aussen ? `, ${n.aussen} vor allem draußen (Sport, Bauen, Singen – dazu gibt es Echte-Welt-Aufgaben und Wissen in der App)` : ""}. Die App ergänzt den Unterricht, sie ersetzt ihn nicht. Was gerade in der Schule dran ist, weiß die Lehrkraft am besten.</p>
       <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App · 🌍 gehört nach draußen oder aufs Papier (dazu gibt es Echte-Welt-Aufgaben). In den aufklappbaren Inhaltspunkten: ✅ geübt · 🟡 teilweise · ⭕ fehlt noch.</p>
       ${L.zaehle ? (() => { const e = L.zaehle(land, k.klasse).errechnet; return `<p class="klein">Zum Vergleich, aus den Lernzielen der Inhalte errechnet (gut = mindestens drei Inhalte mit zusammen 30 Aufgaben und Wiederholung in der Lernkartei): ${e.ja} gut, ${e.teil} teilweise, ${e.nein} noch nicht.</p>`; })() : ""}
       ${faecher}
+      ${stufe.code === "vs" && L.laender[land].vorschule ? (() => { const V = L.laender[land].vorschule, vd = (S.lade("vorschule") || {}).fertig || {};
+        const alle = (window.VORSCHULE || []).length, fertig = (window.VORSCHULE || []).filter(a => vd[a.id]).length;
+        return `<h3 class="lp-fach" id="lp-vorschule">🎒 Vorschule <span class="klein">(${V.stand})</span></h3><p class="klein">Was Kinder im letzten Kita-Jahr nach dem Sächsischen Bildungsplan erleben und was die App dazu anbietet: Vorschul-Rucksack (<span id="vs-fortschritt">${fertig} von ${alle}</span> Spielen geschafft), Matheweg „Klasse 1 und Vorschule“, Laute und Buchstaben, Atelier, Gefühle und Echte-Welt-Aufgaben. Vieles gehört nach draußen und ins Spiel mit anderen Kindern.</p>` +
+          `<ul class="lp-liste">${V.bereiche.map(l => { const z = l.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein") ? "teil" : l.punkte.filter(p => p.abdeckung === "aussen").length >= l.punkte.filter(p => p.abdeckung === "ja").length ? "aussen" : "ja";
+            return `<li><span class="zeichen">${zeichen[z]}</span><b>${l.titel}</b>${punkteHtml(l.punkte)}</li>`; }).join("")}</ul>`; })() : ""}
       ${stufe.code === "5" && L.laender[land].uebergang ? (() => { const U = L.laender[land].uebergang, sa = (((S.lade("eltern") || {}).mathe || {}).schulart) === "gy" ? "gy" : "os", A = U.schularten[sa];
         return `<h3 class="lp-fach" id="lp-uebergang" data-schulart="${sa}">🎒 Klasse 5 – Mathe am ${A.name} <span class="klein">(${A.quelle})</span></h3><p class="klein">Was die 5. Klasse ${sa === "gy" ? "am Gymnasium" : "an der Oberschule"} lernt und was der Matheweg „Übergang 5“ davon schon übt. Schulart umstellen: Karte „Mathe wie in der Schule“.</p>` +
           `<ul class="lp-liste">${A.lb.map(l => { const z = l.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein") ? "teil" : l.punkte.filter(p => p.abdeckung === "aussen").length >= l.punkte.filter(p => p.abdeckung === "ja").length ? "aussen" : "ja";

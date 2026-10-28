@@ -115,6 +115,11 @@
     .tuer.insel .bild { width: 170px; height: 140px; }
   }
 
+  /* Vorschul-Rucksack (nur Vorschule und Klasse 1) */
+  .vorschul-band { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; max-width: 640px; margin: 14px auto 0; padding: 14px 18px; border-radius: 24px;
+    background: #7B55B8; color: #fff; font-weight: 700; font-size: 1.4rem; text-decoration: none; box-shadow: var(--schatten); }
+  .vorschul-band span { font-size: 2.2rem; } .vorschul-band small { font-weight: 500; font-size: 1rem; opacity: .9; flex-basis: 100%; text-align: center; }
+  .vorschul-band[hidden] { display: none; }
   /* Erst lernen, dann spielen */
   .erst-dann { max-width: 640px; margin: 14px auto 0; background: #fff; border-radius: 24px; padding: 14px 18px; box-shadow: var(--schatten); text-align: center; font-weight: 600; font-size: 1.15rem; }
   .erst-dann b { color: var(--beere); }
@@ -184,6 +189,7 @@
     </div>
   </header>
   <div class="erst-dann" id="erst-dann" hidden></div>
+  <a class="vorschul-band" id="vorschule-link" href="spiele/vorschule/" hidden><span aria-hidden="true">🎒</span> Mein Vorschul-Rucksack <small>Zählen, Reimen, Entdecken, Malen</small></a>
   <div class="dialog" id="robo-dialog" hidden>
     <div class="karte robo-karte" role="dialog" aria-labelledby="robo-titel">
       <div class="robo-bild" id="robo-bild" aria-hidden="true"></div>
@@ -322,6 +328,8 @@
     document.querySelector(".schrank").classList.toggle("mit-sorbisch", an);
   }
   zeigeSorbisch();
+  // Vorschul-Rucksack für Kinder in der Vorschule und in Klasse 1
+  document.getElementById("vorschule-link").hidden = !["vs", "1"].includes((S.stufe() || {}).code);
   function zeigeSterne() { document.getElementById("sterne").textContent = S.sterne(); }
   function zeigeTon() {
     const b = document.getElementById("ton");

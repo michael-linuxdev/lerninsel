@@ -93,6 +93,9 @@
     ["fest", "helfen", "🎉", "Plant in der Familie ein kleines Fest: Wen ladet ihr ein? Was gibt es?", "Спланируйте в семье маленький праздник: кого пригласить? Что будет?", 1],
     ["wuensche", "gefuehle", "🌠", "Mal oder schreib zwei Wünsche: einen, den man kaufen kann, und einen, den man nicht kaufen kann.", "Нарисуй или напиши два желания: одно можно купить, другое нельзя.", 3],
     ["helfenprojekt", "helfen", "🤲", "Überlegt in der Familie: Wem können wir helfen? Nachbarn, Tierheim, eine Sammelaktion …", "Подумайте в семье: кому мы можем помочь? Соседям, приюту для животных, сбору вещей …", 3],
+    // Vorschule (30.10.2026): selbstständig werden, den Schulweg kennen
+    ["anziehen", "helfen", "🧥", "Zieh dich heute ganz allein an – auch Schuhe und Jacke. Schaffst du schon eine Schleife?", "Оденься сегодня полностью сам – и обувь, и куртку. Получается завязать бантик?", 1],
+    ["schulweg", "bewegung", "🚸", "Geh mit einem Erwachsenen deinen Schulweg ab. Wo ist die Ampel, wo der Zebrastreifen? Wo musst du besonders aufpassen?", "Пройди со взрослым дорогу в школу. Где светофор, где зебра? Где нужно быть особенно внимательным?", 1],
     // Sorbische Bräuche (30.10.2026): nur, wenn die Eltern Sorbisch gewählt haben (Feld 8 = "sorbisch")
     ["vogelhochzeit", "sorbisch", "🐦", "Feiere Vogelhochzeit (25. Januar): Stell am Abend vorher einen Teller ans Fenster. Mal ein Vogelpaar als Braut und Bräutigam.", "Отпразднуй птичью свадьбу (25 января): вечером накануне поставь тарелку на окно. Нарисуй пару птиц — невесту и жениха.", 1, 0, "sorbisch"],
     ["ostereier", "sorbisch", "🥚", "Verziere mit einem Erwachsenen ein Osterei nach sorbischer Art: Muster mit warmem Wachs und einer Feder auftupfen, dann färben.", "Распиши со взрослым пасхальное яйцо по-лужицки: нанеси узор тёплым воском и пером, потом покрась.", 1, 0, "sorbisch"],

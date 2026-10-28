@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Vorschul-Rucksack</title>
+<meta name="theme-color" content="#FFF4E0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  body { background: #FFF4E0; background-image: none; overflow-wrap: break-word; }
+  .ansicht[hidden] { display: none !important; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; min-width: 0; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .blatt { max-width: 980px; margin: 0 auto; padding: 0 16px 40px; }
+  .intro { background: #fff; border-radius: 22px; padding: 14px 18px; font-size: 1.25rem; font-weight: 500; margin: 12px 0; box-shadow: 0 6px 0 rgba(160,100,40,.12); display: flex; gap: 12px; align-items: center; }
+  .intro .e { font-size: 3rem; }
+  .bereich { background: #fff; border-radius: 24px; padding: 12px 16px 16px; margin: 14px 0; box-shadow: 0 6px 0 rgba(160,100,40,.12); border-left: 10px solid var(--f); }
+  .bereich h2 { margin: 2px 0 2px; font-size: 1.45rem; }
+  .bereich .klein { margin: 0 0 10px; opacity: .8; }
+  .kacheln { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .kachel { border: 0; border-radius: 20px; background: #FFF9EE; font: inherit; font-weight: 600; font-size: 1.1rem; color: var(--pflaume); min-height: 110px;
+    display: grid; justify-items: center; align-content: center; gap: 4px; padding: 10px; box-shadow: 0 5px 0 rgba(160,100,40,.14); text-decoration: none; text-align: center; }
+  .kachel:active { transform: translateY(3px); }
+  .kachel .e { font-size: 2.6rem; line-height: 1; }
+  .kachel.link { background: #F1F6FF; }
+  .kachel .st { font-size: .9rem; min-height: 1.1em; }
+  .kachel .st .leer { filter: grayscale(1); opacity: .3; }
+  /* Aufgabe */
+  .balken { flex: 1; height: 14px; background: #fff; border-radius: 999px; overflow: hidden; max-width: 260px; }
+  .balken i { display: block; height: 100%; width: 0; background: var(--minze); transition: width .3s; }
+  .frage { display: flex; gap: 12px; align-items: flex-start; background: #fff; border-radius: 24px; padding: 14px 16px; margin: 14px 0; font-size: 1.35rem; font-weight: 600; line-height: 1.35; box-shadow: 0 6px 0 rgba(160,100,40,.12); }
+  .frage .text { flex: 1; }
+  .frage .ru { display: block; margin-top: 6px; font-size: 1.1rem; font-weight: 500; background: #FFF6D6; border-radius: 12px; padding: 6px 10px; color: #7A4A10; }
+  .frage .ru[hidden] { display: none; }
+  .klein-knopf { min-width: 56px; min-height: 56px; border-radius: 16px; border: 0; background: #EAF2FF; font-size: 1.5rem; flex: none; }
+  .optionen { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin: 18px 0; }
+  .option { min-width: 120px; min-height: 120px; border-radius: 26px; border: 4px solid transparent; background: #fff; font-size: 3.6rem; box-shadow: 0 7px 0 rgba(160,100,40,.15); padding: 6px 12px; }
+  .option.lang { font-size: 2.4rem; }
+  .option.richtig { border-color: #2FA37C; background: #E3F7EE; }
+  .option.falsch { border-color: #E5484D; opacity: .55; }
+  .reihe { display: flex; gap: 12px; justify-content: center; min-height: 110px; margin: 10px 0; padding: 10px; border: 3px dashed #E8C98E; border-radius: 22px; background: #FFFBF2; flex-wrap: wrap; }
+  .reihe .platz { font-size: 3.2rem; }
+  .hinweis { text-align: center; font-size: 1.3rem; font-weight: 600; min-height: 1.6em; margin: 6px 0; }
+  .hinweis.gut { color: #1F8A63; } .hinweis.nein { color: #D24A3C; }
+  .ende { text-align: center; background: #fff; border-radius: 26px; padding: 22px; margin: 20px 0; box-shadow: 0 6px 0 rgba(160,100,40,.12); }
+  .ende .sterne-gross { font-size: 3.4rem; letter-spacing: 6px; }
+  .ende .sterne-gross .leer { filter: grayscale(1); opacity: .3; }
+  .knoepfe { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+  @media (max-width: 480px) { .oben h1 { font-size: 1.3rem; hyphens: auto; } .option { min-width: 92px; min-height: 92px; font-size: 2.8rem; } .reihe .platz { font-size: 2.6rem; } }
+</style>
+</head>
+<body>
+<section class="ansicht" id="liste-ansicht">
+  <div class="oben"><a class="knopf rund" href="../../" aria-label="Zur Spielwelt">🏠</a><h1>🎒 Mein Vorschul-Rucksack</h1><button class="knopf rund" id="ton-vorlesen" aria-label="Vorlesen an oder aus">🔊</button></div>
+  <div class="blatt">
+    <div class="intro"><span class="e" aria-hidden="true">🦊</span><p id="intro-text" style="margin:0"></p></div>
+    <div id="bereiche"></div>
+  </div>
+</section>
+<section class="ansicht" id="aufgabe-ansicht" hidden>
+  <div class="oben"><button class="knopf rund" id="zur-liste" aria-label="Zurück">⬅️</button><h1 id="aufgabe-name"></h1><div class="balken"><i id="balken"></i></div></div>
+  <div class="blatt">
+    <div class="frage"><button class="klein-knopf" id="nochmal" aria-label="Nochmal vorlesen">🔊</button><div class="text"><span id="frage-text"></span><span class="ru" id="ru-text" hidden></span></div><button class="klein-knopf" id="ru-knopf" hidden>RU</button></div>
+    <div id="aufgabe"></div>
+    <p class="hinweis" id="hinweis"></p>
+  </div>
+</section>
+<section class="ansicht" id="ende-ansicht" hidden>
+  <div class="blatt"><div class="ende">
+    <h2 id="ende-titel"></h2><div class="sterne-gross" id="ende-sterne"></div><p id="ende-text" style="font-size:1.2rem"></p>
+    <div class="knoepfe" id="ende-knoepfe"></div>
+  </div></div>
+</section>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/echtewelt.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../shared/koennen.js"></script>
+<script src="aufgaben.js"></script>
+<script src="vorschule.js"></script>
+</body>
+</html>
