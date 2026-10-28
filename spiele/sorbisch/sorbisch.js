@@ -1,15 +1,15 @@
 // Sorbisch (Obersorbisch) mit Papagei Paula (28.10.2026): abgeleitet von spiele/englisch/englisch.js – Lektionen aus Wortkarten, Lesen, Übersetzen,
 // Satzbau und Wahl, nach den Lernbereichen des Lehrplans „Sorbisch als Fremdsprache“ gruppiert. Nur nach Eltern-Wahl (eltern.sorbisch.an).
 // Es gibt keine sorbische Gerätestimme: Sorbisch wird gelesen, nicht vorgelesen (keine falsche Aussprache). Deutsche Erklärungen werden vorgelesen.
-// Prüfung: Alle sorbischen Texte sind Entwürfe. Auf der Hauptseite erscheinen nur Lektionen, die in geprueft.js (SORBISCH_FREI) freigegeben sind;
-// in /dev und /dev/test alle. Prüfliste: spiele/sorbisch/pruefen.html.
+// Prüfung: Alle sorbischen Texte sind Entwürfe. Seit 29.10.2026 erscheinen sie auch auf der Hauptseite (Spielwelt.ENTWURF_FREI enthält "hsb");
+// ohne diese Freigabe zeigt die Hauptseite nur Lektionen aus geprueft.js (SORBISCH_FREI). Prüfliste: spiele/sorbisch/pruefen.html.
 (function () {
   const S = window.Spielwelt, SP = window.Sprache, L0 = window.SORBISCH || [], F = window.Figuren;
   const $ = (id) => document.getElementById(id);
   const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
   const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const LOB = window.SORBISCH_LOB || ["Super!"];
-  const FREI = window.SORBISCH_FREI || [], ALLE = S.entwurfErlaubt ? S.entwurfErlaubt("hsb") : false;   // /dev: alle Lektionen, Hauptseite: nur geprüfte
+  const FREI = window.SORBISCH_FREI || [], ALLE = S.entwurfErlaubt ? S.entwurfErlaubt("hsb") : false;   // alle Lektionen, solange Entwürfe freigegeben sind; sonst nur geprüfte
   const L = L0.filter(k => ALLE || FREI.includes(k.id));
   const name = () => S.profil.name || "du";
   const mitName = (t) => (t || "").replace(/\{name\}/g, name());

@@ -1,4 +1,4 @@
-// Test Sorbisch (Obersorbisch, nur nach Eltern-Wahl): Tür nur mit Wahl, Hauptseite nur geprüfte Lektionen (geprueft.js), /dev alle,
+// Test Sorbisch (Obersorbisch, nur nach Eltern-Wahl): Tür nur mit Wahl, seit 29.10. auch auf der Hauptseite alle Entwurfs-Lektionen (ohne Freigabe nur geprüfte),
 // alle 23 Lektionen in /dev echt durchgeklickt (Wortkarten, Lesen, Übersetzen, Satzbau, Wahl) – ohne sorbische Stimme, ohne Hör-Aufgaben,
 // „Zeig, was du kannst“, „gerade in der Schule“, Fähigkeit „Sorbisch-Ohr“ nur mit Wahl, Elternbereich (Karte, Lehrplan), Prüfseite für die Prüferin.
 // Braucht ein frisch gebautes /dev (sh quellen/dev-bauen.sh). Keine Konsolenfehler, keine waagerechte Scrollleiste.
@@ -54,17 +54,22 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     }
     await p.setViewportSize({ width: 1180, height: 820 });
     await p.goto(BASIS + "spiele/sorbisch/"); await p.waitForTimeout(400);
+    erwarte(await sichtbar(p) === 23, "Hauptseite: alle 23 Lektionen sichtbar (Entwürfe freigegeben, Entscheidung 29.10.2026)");
+    await bild(p, "sorbisch-hauptseite");
+    // Ohne Freigabe der Entwürfe: nur Lektionen aus geprueft.js, sonst ehrlicher Hinweis
+    await p.addInitScript(() => { let sw; Object.defineProperty(window, "Spielwelt", { configurable: true, get: () => sw, set: (v) => { v.ENTWURF_FREI = ["ru"]; sw = v; } }); });
+    await p.reload(); await p.waitForTimeout(400);
     erwarte(await sichtbar(p) === 0 && /geprüft/.test(await p.evaluate(() => document.getElementById("intro-text").textContent)),
-      "Hauptseite: ohne Prüfung keine Lektion, ehrlicher Hinweis „wird geprüft“");
-    await bild(p, "sorbisch-hauptseite-leer");
+      "ohne Freigabe der Entwürfe: keine ungeprüfte Lektion, ehrlicher Hinweis „wird geprüft“");
     await ctx.close();
   }
   {
     const { ctx, p } = await kind("3", { frei: ["so-witaj", "so-preceljo"] });
     await waehle(p, true);
+    await p.addInitScript(() => { let sw; Object.defineProperty(window, "Spielwelt", { configurable: true, get: () => sw, set: (v) => { v.ENTWURF_FREI = ["ru"]; sw = v; } }); });
     await p.goto(BASIS + "spiele/sorbisch/"); await p.waitForTimeout(400);
     const ids = await p.evaluate(() => [...document.querySelectorAll("#lektionen .lek")].map(b => b.dataset.id).sort().join());
-    erwarte(ids === "so-preceljo,so-witaj", `Hauptseite: genau die freigegebenen Lektionen sichtbar (${ids})`);
+    erwarte(ids === "so-preceljo,so-witaj", `ohne Freigabe der Entwürfe: genau die geprüften Lektionen sichtbar (${ids})`);
     await ctx.close();
   }
 

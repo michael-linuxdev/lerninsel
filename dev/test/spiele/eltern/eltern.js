@@ -397,7 +397,7 @@
       <div class="zeit-raster"><label>Sorbisch zeigen<select id="so-an">
         <option value="" ${!so.an ? "selected" : ""}>Nein</option><option value="1" ${so.an ? "selected" : ""}>Ja, mein Kind lernt Sorbisch</option></select></label>
         <label>Gerade in der Schule<select id="so-schule"><option value="">Keine Angabe</option>${Object.entries(lb).map(([k, n]) => `<option value="${k}" ${String(so.schule || "") === k ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
-      <p class="klein" id="so-pruefstand">Geprüft: <b>${frei.length} von ${alle.length}</b> Lektionen. Alle sorbischen Wörter sind Entwürfe, bis sie jemand mit Sorbisch-Kenntnissen geprüft hat. Auf der Startseite erscheinen nur geprüfte Lektionen; in /dev alle.
+      <p class="klein" id="so-pruefstand">Geprüft: <b>${frei.length} von ${alle.length}</b> Lektionen. Alle sorbischen Wörter sind Entwürfe, bis sie jemand mit Sorbisch-Kenntnissen geprüft hat. Die Lektionen sind schon für die Kinder sichtbar; Korrekturen aus der Prüfung werden nachgetragen.
         Es gibt keine sorbische Gerätestimme: Sorbisch wird gelesen, nicht vorgelesen.</p>
       <p><a class="knopf" id="so-pruefen" href="../sorbisch/pruefen.html">✍️ Prüfliste für die Prüferin oder den Prüfer öffnen</a></p>
       <h3>„Zeig, was du kannst“</h3>${lernstandListe("sorbisch", lb, alle, "lernstand-sorbisch")}

@@ -219,8 +219,9 @@
     // Seit 27.10.2026 überall wählbar (Entscheidung des Auftraggebers: bis Weihnachten geht alles direkt auf die Hauptseite).
     lookWaehlbar() { return true; },
     // Übersetzungs-Entwürfe (Status „entwurf“): auf der Hauptseite nur für die freigegebenen Sprachen (Entscheidung 27.10.2026:
-    // Russisch ja, alle anderen erst nach Prüfung); in /dev und /dev/test immer.
-    ENTWURF_FREI: ["ru"],
+    // Russisch ja, alle anderen erst nach Prüfung); in /dev und /dev/test immer. 29.10.2026: „Der Entwicklungsstand kommt vollständig nach main“ –
+    // auch die sorbischen Entwurfs-Lektionen (hsb) stehen auf der Hauptseite; die Prüfung läuft weiter (spiele/sorbisch/pruefen.html).
+    ENTWURF_FREI: ["ru", "hsb"],
     entwurfErlaubt(code) { return UMG !== "prod" || Spielwelt.ENTWURF_FREI.includes(code); },
     look() { if (!Spielwelt.lookWaehlbar()) return "rund"; return ((profil.daten.eltern || {}).insel || {}).look === "pixel" ? "pixel" : "rund"; },
     // Eltern können das Umschalten für das Kind sperren (eltern.insel.lookKind = false); Erwachsene (PIN) dürfen immer

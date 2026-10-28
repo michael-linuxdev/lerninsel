@@ -12,7 +12,7 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (28.10.2026, nachts)
+## 1. Stand (29.10.2026)
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
   **Kl. 1/Vorschule 22** · **Kl. 2 45** · **Kl. 3 35** · **Kl. 4 26** · **Übergang 5** 16 (vorläufig). Freischalten je Lernbereich, Lernbereichs-Kacheln
@@ -29,8 +29,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Kunst, Musik, Werken, Sport, Ethik (Eule Ella): 70 Wissens-Themen** auf der Sachunterricht-Seite mit Reitern (`?fach=kunst|musik|werken|sport|ethik`),
   je Fach nach Lernbereichen gruppiert, „Zeig, was du kannst“; Praktisches (Malen, Singen, Bauen, Turnen, Schwimmen) als Echte-Welt-Aufgaben.
 - **Religion (ev./kath.): 37 Themen** nach den sächsischen Lehrplänen, Reiter „Religion“ nur nach Eltern-Wahl (`eltern.ethik.unterricht`).
-- **Sorbisch (Obersorbisch, Papagei Paula): 23 Lektionen** nur nach Eltern-Wahl (`eltern.sorbisch.an`); alle Wörter sind Entwürfe – auf der Hauptseite
-  nur Lektionen aus `spiele/sorbisch/geprueft.js` (heute keine), in /dev alle. Prüfliste `spiele/sorbisch/pruefen.html`. Keine sorbische Stimme: nur Lesen.
+- **Sorbisch (Obersorbisch, Papagei Paula): 23 Lektionen** nur nach Eltern-Wahl (`eltern.sorbisch.an`); alle Wörter sind Entwürfe, stehen aber seit 29.10. auch auf der
+  Hauptseite (Entscheidung „vollständig nach main“, `ENTWURF_FREI` mit `hsb`); Prüfstand in `spiele/sorbisch/geprueft.js`. Prüfliste `spiele/sorbisch/pruefen.html`. Keine sorbische Stimme: nur Lesen.
 - Weiter: Medien (Tablet-Führerschein), Gefühle, Atelier (Malen, Musik), Schach, Insel in zwei Looks, Story/Tutorial E1–E8, Können je Lernziel, Elternbericht.
 
 ### Lehrplan Sachsen (`shared/lehrplan/laender/sachsen.js` + Inhaltspunkte in `sachsen-punkte.js`)
@@ -45,7 +45,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 
 ### Entscheidungen des Auftraggebers (gelten weiter)
 - **Grafik/3D und Story sind eingefroren** – nur nach ausdrücklicher Freigabe anfassen. (2D-Seiten wie Startseite und Fachseiten sind keine Grafik in diesem Sinn.)
-- **Inhalte zuerst.** **Bis Weihnachten geht alles direkt auf `main`**; `/dev` ist zweiter Spielstand. Russische Entwürfe auch auf der Hauptseite.
+- **Inhalte zuerst.** **Bis Weihnachten geht alles direkt auf `main`**; `/dev` ist zweiter Spielstand. Russische Entwürfe auch auf der Hauptseite, seit 29.10. auch die sorbischen (der Entwicklungsstand kommt vollständig nach main).
 - **Für alle Grundschulkinder in Deutschland gleich:** Wo Schulen oder Länder verschieden vorgehen, **Eltern-Einstellung mit sinnvollem Standard**
   (bisher: Subtraktionsverfahren, Englisch-Beginn). Länderspezifisches (Heimatkunde) über das Feld `land`.
 - **In größeren Schritten arbeiten:** mehrere Pakete bündeln, dann einmal gesamt testen und pushen.
@@ -70,7 +70,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Neue Fächer ansehen** (in /dev): Eule Ella → Reiter Kunst/Musik/Werken/Sport/Ethik; passt der Ton bei Ethik (Religionen, Geheimnisse, Abschied)?
   Elternbereich → „Wie im Schuljahr: gerade in der Schule“ (alle Fächer, dazu „Mein Kind hat in der Schule: Ethik/Ev./Kath. Religion“).
 - **Sorbisch prüfen lassen:** Prüferin/Prüfer öffnet `…/spiele/sorbisch/pruefen.html` (oder Elternbereich → Sorbisch → Prüfliste), hakt ab,
-  korrigiert und schickt den Text zurück → Korrekturen in `spiele/sorbisch/lektionen.js`, freigegebene IDs in `geprueft.js` eintragen. Optional **Mathematik Klasse 5 (Oberschule/Gymnasium)** als PDF.
+  korrigiert und schickt den Text zurück → Korrekturen in `spiele/sorbisch/lektionen.js`, geprüfte IDs in `geprueft.js` eintragen. Optional **Mathematik Klasse 5 (Oberschule/Gymnasium)** als PDF.
 - Deutsch: Sollen Kinder ihre eigenen Texte selbst wiederfinden („Mein Heft“)? Handschrift-Übung mit Finger/Stift (Schulausgangsschrift oder
   Vereinfachte Ausgangsschrift – je nach Schule als Eltern-Einstellung)?
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.

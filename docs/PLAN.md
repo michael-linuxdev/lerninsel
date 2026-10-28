@@ -1685,3 +1685,11 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
   „Mein Ich“, Elternbereich, Prüfseite abhaken/korrigieren); `lehrplan` zählt Sorbisch mit (Kl. 1/2 jetzt 49 Lernbereiche).
 - **Nächstes:** Rückmeldung der Prüferin/des Prüfers einarbeiten (Korrekturen in `lektionen.js`, IDs in `geprueft.js`); danach ggf. sorbische
   Aufnahmen (eigene Stimme, CC0) für Hör-Aufgaben.
+
+### Stand 29.10.2026 (Auftraggeber: „Der aktuelle Entwicklungsstand kommt vollständig nach main“)
+- Der Code lag schon vollständig auf `main`; der einzige Unterschied zwischen Hauptseite und /dev waren die **sorbischen Entwurfs-Lektionen**.
+- **Entscheidung des Auftraggebers:** Auch Sorbisch-Entwürfe stehen jetzt auf der Hauptseite (`Spielwelt.ENTWURF_FREI = ["ru", "hsb"]`, wie Russisch am 27.10.).
+  Sorbisch bleibt eine Eltern-Wahl; die Prüfung läuft weiter (`spiele/sorbisch/pruefen.html`), Korrekturen werden nachgetragen, `geprueft.js` zeigt den Prüfstand.
+  Ohne die Freigabe (Eintrag aus `ENTWURF_FREI` entfernen) zeigt die Hauptseite wieder nur geprüfte Lektionen – der Test `sorbisch` prüft beides.
+- Hauptseite und /dev unterscheiden sich jetzt nur noch im eigenen Spielstand und der DEV-Marke.
+

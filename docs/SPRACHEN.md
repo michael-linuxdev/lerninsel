@@ -134,6 +134,6 @@ des Kindes wählbar (Eltern sprechen vielleicht Arabisch, das Kind schon gut Deu
 2. Glossar anlegen, Muttersprachler gewinnen (zwei).
 3. Texte als `entwurf` eintragen; prüfen lassen; Status setzen.
    **Sorbisch (Lernsprache, nicht Hilfesprache, 28.10.2026):** alle Wörter in `spiele/sorbisch/lektionen.js` sind Entwürfe; Prüfung über
-   `spiele/sorbisch/pruefen.html`, Freigabe je Lektion in `spiele/sorbisch/geprueft.js` (nur freigegebene auf der Hauptseite, in /dev alle).
+   `spiele/sorbisch/pruefen.html`, Prüfstand je Lektion in `spiele/sorbisch/geprueft.js`. Seit 29.10.2026 stehen die Entwürfe auch auf der Hauptseite (`ENTWURF_FREI` enthält `hsb`, Entscheidung des Auftraggebers).
 4. Tonaufnahmen für D0, Tutorial, Prolog; Gerätestimmen testen.
 5. `tests/sprachen.js` und Rauchtest (RTL: Screenshots) grün → `fertig: true`.
