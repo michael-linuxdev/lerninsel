@@ -507,7 +507,7 @@
       h.className = "hinweis gut"; h.textContent = lob; S.ton("juhu"); sprich(lob);
       const gespeichert = window.Eigenes ? Eigenes.speichere({ art: "text", kapitel: lauf.k.id, aufgabe: frage, text }).catch(() => null) : Promise.resolve(null);
       gespeichert.then(id => {
-        if (lauf && lauf.k.schritte[lauf.pos] === s) h.insertAdjacentHTML("afterend", `<p class="klein-info" id="gespeichert">${id ? "📓 Gespeichert in deinem Heft – du findest ihn unter „Mein Ich“ → „Mein Heft“." : ""}</p>`);
+        if (lauf && lauf.k.schritte[lauf.pos] === s) h.insertAdjacentHTML("afterend", `<p class="klein-info" id="gespeichert">${id ? "📓 Gespeichert in deinem Heft – du findest ihn unter „Meine Ecke“ → „Mein Heft“." : ""}</p>`);
       });
       pruefen.remove();
       A.insertAdjacentHTML("beforeend", `<button class="knopf weiter" id="weiter">Weiter</button>`);

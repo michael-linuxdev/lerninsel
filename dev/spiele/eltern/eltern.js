@@ -285,7 +285,7 @@
   function gemeinsamHtml() {
     if (!window.Familie) return "";
     const m = Familie.letzteTage(7), esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-    const tipp = "Kurze gemeinsame Momente (1–3 Minuten) wirken mehr als lange Sitzungen: „Erklär mir das mal!“ unter „Mein Ich → Heute neu“ oder ein Kopfrechen-Duell.";
+    const tipp = "Kurze gemeinsame Momente (1–3 Minuten) wirken mehr als lange Sitzungen: „Erklär mir das mal!“ unter „Meine Ecke → Heute neu“ oder ein Kopfrechen-Duell.";
     if (!m.length) return `<h3 style="margin:10px 0 6px;font-size:1.05rem">🤝 Gemeinsam</h3><p class="klein">Diese Woche noch keine gemeinsamen Momente. ${tipp}</p>`;
     return `<h3 style="margin:10px 0 6px;font-size:1.05rem">🤝 Gemeinsam (${m.length})</h3>
       <ul class="liste">${m.slice(-8).reverse().map(x => `<li>${(Familie.ART[x.a] || ["❤️"])[0]} ${esc(x.t)}</li>`).join("")}</ul>`;
@@ -468,7 +468,7 @@
       <div class="zeit-raster"><label>Schreibschrift üben (Lesen und Schreiben → „Schreibschrift“)<select id="d-schrift">
         <option value="sas" ${schrift !== "aus" ? "selected" : ""}>Schulausgangsschrift (Sachsen und andere Länder)</option>
         <option value="aus" ${schrift === "aus" ? "selected" : ""}>Aus – die Schule nutzt eine andere Schrift</option></select></label></div>
-      <p class="klein">Es gibt alle Klein- und Großbuchstaben und verbundene Wörter der Schulausgangsschrift; Vereinfachte und Lateinische Ausgangsschrift folgen. Die Formen sind nachgebildet – bitte mit der Schreibtabelle der Schule vergleichen. Das Kind findet seine eigenen Texte und Aufnahmen unter „Mein Ich“ → „Mein Heft“.</p>
+      <p class="klein">Es gibt alle Klein- und Großbuchstaben und verbundene Wörter der Schulausgangsschrift; Vereinfachte und Lateinische Ausgangsschrift folgen. Die Formen sind nachgebildet – bitte mit der Schreibtabelle der Schule vergleichen. Das Kind findet seine eigenen Texte und Aufnahmen unter „Meine Ecke“ → „Mein Heft“.</p>
       <label class="schalter-z"><input type="checkbox" id="d-aufnehmen" ${an ? "checked" : ""}> Mein Kind darf sich in der Wörter-Werkstatt selbst aufnehmen (Gedicht vortragen, Geschichte nacherzählen, Buchtipp)</label>
       <p class="klein">Die Aufnahmen bleiben nur auf diesem Gerät, werden nie hochgeladen und nicht mit dem Spielstand übertragen. Das Gerät fragt beim ersten Mal nach dem Mikrofon. Ist der Schalter aus, fallen die Aufnahme-Schritte still weg.${window.Eigenes && !Eigenes.kannAufnehmen() ? " <b>Dieser Browser kann nicht aufnehmen.</b>" : ""}</p>
       <div class="knoepfe"><button class="knopf haupt" id="d-speichern">Speichern</button></div>
@@ -534,12 +534,12 @@
       <div class="zeit-raster"><label>Stärke<select id="st-id">${ST.STAERKEN.map(([id, e, t]) => `<option value="${id}">${e} gut ${t}</option>`).join("")}</select></label>
         <label>Was genau? (freiwillig)<input id="st-text" type="text" maxlength="120" placeholder="z. B. deiner Schwester beim Aufräumen geholfen"></label></div>
       <div class="knoepfe"><button class="knopf haupt" id="st-speichern">❤️ Dem Kind zeigen</button></div>
-      <p class="klein">Das Kind sieht es beim nächsten Öffnen von „Mein Ich“.</p>
+      <p class="klein">Das Kind sieht es beim nächsten Öffnen von „Meine Ecke“.</p>
     </div>`;
   }
   function staerkenKnoepfe() {
     const b = $("st-speichern"); if (!b) return;
-    b.addEventListener("click", () => { window.Staerken.elternGesehen($("st-id").value, $("st-text").value.trim()); $("st-text").value = ""; S.meldung("Gespeichert – das Kind sieht es in „Mein Ich“."); });
+    b.addEventListener("click", () => { window.Staerken.elternGesehen($("st-id").value, $("st-text").value.trim()); $("st-text").value = ""; S.meldung("Gespeichert – das Kind sieht es in „Meine Ecke“."); });
   }
 
   function inselKnoepfe() {

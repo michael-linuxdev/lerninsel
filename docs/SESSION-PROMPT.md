@@ -13,7 +13,7 @@ Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort steh
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
 ## 1. Stand (30.10.2026, abends) – Inhalte fertig, Grafik freigegeben; Dashboard überarbeitet
-- **Neu:** Startseite „alles auf einen Blick“ (iPad ohne Scrollen, bunter Name bleibt), „Mein Ich“ mit Reitern (Heute / Meine Woche / Ich kann / Meine Sachen),
+- **Neu:** Startseite „alles auf einen Blick“ (iPad ohne Scrollen, bunter Name bleibt), „Meine Ecke“ mit Reitern (Heute / Meine Woche / Ich kann / Meine Sachen),
   Elternbereich mit Reitern (Überblick / Lernstand / Wie in der Schule / Zeit & Regeln / Kinder & Gerät). Keine alte Ansicht als Schalter (Wunsch des Auftraggebers).
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
@@ -78,7 +78,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Neue Fächer ansehen** (in /dev): Eule Ella → Reiter Kunst/Musik/Werken/Sport/Ethik; passt der Ton bei Ethik (Religionen, Geheimnisse, Abschied)?
   Elternbereich → „Wie im Schuljahr: gerade in der Schule“ (alle Fächer, dazu „Mein Kind hat in der Schule: Ethik/Ev./Kath. Religion“).
 - **Neu ansehen (in /dev):** Vorschul-Rucksack (Kind mit Stufe „Vorschule“), Sorbisch als Muttersprache (Elternbereich → Sorbisch → „als Muttersprache“), Robo, Vorlesen, Präsentieren.
-- **Dashboard auf dem iPad ansehen:** Startseite quer/hoch, „Mein Ich“-Reiter, Elternbereich-Reiter – passt die Aufteilung? Dann weiter mit Grafik NA-29 Teil 2 und NA-29b.
+- **Dashboard auf dem iPad ansehen:** Startseite quer/hoch, „Meine Ecke“-Reiter, Elternbereich-Reiter – passt die Aufteilung? Dann weiter mit Grafik NA-29 Teil 2 und NA-29b.
 - **Sorbisch prüfen lassen (jetzt 72 Lektionen, auch Muttersprache):** Prüferin/Prüfer öffnet `…/spiele/sorbisch/pruefen.html` (oder Elternbereich → Sorbisch → Prüfliste), hakt ab,
   korrigiert und schickt den Text zurück → Korrekturen in `spiele/sorbisch/lektionen.js`, geprüfte IDs in `geprueft.js` eintragen. Optional **Mathematik Klasse 5 (Oberschule/Gymnasium)** als PDF.
 - Deutsch: Sollen Kinder ihre eigenen Texte selbst wiederfinden („Mein Heft“)? Handschrift-Übung mit Finger/Stift (Schulausgangsschrift oder

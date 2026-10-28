@@ -1,6 +1,6 @@
 // Lernfunde: konkrete Dinge, die das Kind heute NEU kann oder weiß – nicht nur Sterne.
 // Beispiele: „7 + 8 = 15 – war schwer, jetzt kannst du es“, „Neues Wort: die Eiche“, „Thema: Bäume und Vögel“.
-// Die Lernspiele melden Funde, „Mein Ich“ zeigt „Heute neu“, die Nachbarn auf der Insel sprechen darüber,
+// Die Lernspiele melden Funde, „Meine Ecke“ zeigt „Heute neu“, die Nachbarn auf der Insel sprechen darüber,
 // der Wochenbericht im Elternbereich listet sie. Später Grundlage für das persönliche Museum (KONZEPT: Langzeit-Motivation).
 // Nach core.js und charakter.js laden. Daten: profil.daten.lernfunde = { tage: { "JJJJ-MM-TT": [fund, …] } }
 // summe: alle Funde seit Beginn (Wissensbaum), baumGesehen: zuletzt auf der Insel gezeigte Baum-Stufe

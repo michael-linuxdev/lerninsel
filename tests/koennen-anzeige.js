@@ -1,4 +1,4 @@
-// Playwright-Test (NA-50, Anzeige): „Mein Können“ in Mein Ich und Fipsis Empfehlung in „Lesen und Schreiben“.
+// Playwright-Test (NA-50, Anzeige): „Mein Können“ in Meine Ecke und Fipsis Empfehlung in „Lesen und Schreiben“.
 // Ohne geübte Lernziele: Karte versteckt, keine Empfehlung. Mit Können-Daten: Pflanze je Fach, Empfehlung in der Zielzone.
 // Aufruf: sh tests/laufen.sh koennen-anzeige
 const { chromium } = require("playwright");

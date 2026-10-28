@@ -483,7 +483,7 @@
     $("ende-gewinn").textContent = `Du hast jetzt ${S.sterne()} Sterne.`;
     const k = $("ende-knoepfe"); k.innerHTML = "";
     const knopf = (text, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = text; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); k.appendChild(b); };
-    knopf("Zurück zu Mein Ich", true, () => { location.href = "../ich/"; });
+    knopf("Zurück zu meiner Ecke", true, () => { location.href = "../ich/"; });
     knopf("Zum Matheweg", false, () => { history.replaceState(null, "", "./"); zeige("weg"); zeichneWeg(); });
     zeige("ende");
     S.ton("juhu");

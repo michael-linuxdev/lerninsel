@@ -28,10 +28,10 @@ werden im Elternbereich festgelegt und bleiben nur auf dem Tablet.
   vorgelesen werden (RU, abschaltbar). Am Ende Urkunde (als Bild speicherbar), Abzeichen auf der Startseite und 3 Extra-Sterne
 - **Sachkunde mit Eule Ella:** Themen mit Bildern, Quiz, „Stimmt das?“ und Zuordnen, alles mit 🔊 und RU. Themen: „Wer bringt die Geschenke?“ (Nikolaus vs. Weihnachtsmann, Christkind, Santa Claus, Ded Moros mit Snegurotschka und Troika) und „Meine Familie“ (Stammbaum über vier Generationen zum Antippen: Geschwister, Großeltern, Urgroßeltern, Enkel, Tante/Onkel, Nichte/Neffe, Cousine, Schwager, Großtante, Großcousine). Neue Themen kommen in `spiele/sachkunde/themen.js` dazu. Fähigkeit „Welt-Wissen“ 🌍, Stufe 2 schaltet die Weihnachtsmütze frei.
 - **Englisch mit Papagei Paula:** 11 Lektionen (Kl. 3–4 und Übergang 5) mit Wortkarten, Hören über die englische Gerätestimme, Lesen, Übersetzen und Satzbau. Inhalte in `spiele/englisch/lektionen.js`. Fähigkeit „Englisch-Ohr“ 🦜; Eltern stellen ein, ob Englisch ab Klasse 1 oder 3 erscheint.
-- **Meine Insel (3D, Stil B) – die Haupttür der Startseite:** ohne Spielzeit im Lernmodus (Lern-Nachbarn gehen, Spielorte schlafen); betretbares Zimmer mit Kleiderschrank (Anziehen), Spiegel (Mein Ich) und Bett, selbst einrichten mit Sternen (10 Möbel auf 6 Plätzen, 5 Wandfarben); Stickeralbum auf dem Bett (48 Sticker auf 6 Seiten: fürs Lernen, fürs Entdecken des echten Wetters auf der Insel und an Festtagen in Deutschland und Russland; Doppelte werden fürs spätere Tauschen gezählt); Wetterstation mit echtem Wetter (Open-Meteo, Ort im Elternbereich, kein GPS; Regen, Schnee, Nebel, Gewitter auf der Insel, offline Jahreszeiten-Wetter); Joystick oder Tippen, Rennen, Springen mit Doppelsprung, Aktionsknopf (vor Figuren und Dingen wird „Springen“ zu „Reden“, „Öffnen“ …); Figur trägt den Look aus dem Kleiderschrank, das eigene Tier läuft mit (Ei im Nest, solange es nicht geschlüpft ist), Eule Ella, Fipsi, Robo Pixel und das Matheweg-Schild führen zu den Fächern, Ballon-Wiese und Schatz-Strand, Tag/Nacht nach Uhr, Jahreszeiten nach Datum, Grafikstufe einfach/schön
+- **Meine Insel (3D, Stil B) – die Haupttür der Startseite:** ohne Spielzeit im Lernmodus (Lern-Nachbarn gehen, Spielorte schlafen); betretbares Zimmer mit Kleiderschrank (Anziehen), Spiegel (Meine Ecke) und Bett, selbst einrichten mit Sternen (10 Möbel auf 6 Plätzen, 5 Wandfarben); Stickeralbum auf dem Bett (48 Sticker auf 6 Seiten: fürs Lernen, fürs Entdecken des echten Wetters auf der Insel und an Festtagen in Deutschland und Russland; Doppelte werden fürs spätere Tauschen gezählt); Wetterstation mit echtem Wetter (Open-Meteo, Ort im Elternbereich, kein GPS; Regen, Schnee, Nebel, Gewitter auf der Insel, offline Jahreszeiten-Wetter); Joystick oder Tippen, Rennen, Springen mit Doppelsprung, Aktionsknopf (vor Figuren und Dingen wird „Springen“ zu „Reden“, „Öffnen“ …); Figur trägt den Look aus dem Kleiderschrank, das eigene Tier läuft mit (Ei im Nest, solange es nicht geschlüpft ist), Eule Ella, Fipsi, Robo Pixel und das Matheweg-Schild führen zu den Fächern, Ballon-Wiese und Schatz-Strand, Tag/Nacht nach Uhr, Jahreszeiten nach Datum, Grafikstufe einfach/schön
 - **3D-Welt** (öffnet sich mit dem Tablet-Führerschein): Ballon-Party (60 Sekunden Ballons antippen, Sterne bei
   15/30/45 Punkten) und Insel-Abenteuer (mit Joystick laufen und springen, 10 Sterne sammeln, Schatztruhe öffnen)
-- **Mein Ich (Charakter):** 5 Fähigkeiten mit je 10 Stufen – Rechen-Kraft (Mathe), Wort-Zauber (Abenteuer, Wort des
+- **Meine Ecke (Charakter):** 5 Fähigkeiten mit je 10 Stufen – Rechen-Kraft (Mathe), Wort-Zauber (Abenteuer, Wort des
   Tages), Tablet-Klugheit (Führerschein), Entdecker-Mut (3D-Welt), Welt-Wissen (Sachkunde). Jede Stufe bringt Sterne, ein exklusives Anziehteil
   oder einen Vorteil im Spiel (z. B. schneller laufen, Doppelsprung, Sternen-Magnet, mehr Zeit bei der Ballon-Party).
   Titel je nach Gesamtstufe
@@ -103,7 +103,7 @@ spiele/medien/          Tablet-Führerschein (lektionen.js = Inhalte, medien.js 
 spiele/sachkunde/       Sachkunde (themen.js = Inhalte, bilder.js = Zeichnungen, sachkunde.js = Ablauf)
 spiele/englisch/        Englisch mit Papagei Paula (lektionen.js = Inhalte, englisch.js = Ablauf)
 shared/sprache.js       Vorlesen mit den Stimmen des Geräts
-spiele/ich/             Mein Ich: Figur, Fähigkeiten, Tagesaufgaben, Wort des Tages, Wochentruhe
+spiele/ich/             Meine Ecke: Figur, Fähigkeiten, Tagesaufgaben, Wort des Tages, Wochentruhe
 spiele/eltern/          Elternbereich mit PIN
 shared/charakter.js     Fähigkeiten, Stufen, Belohnungen, Tagesaufgaben, Kalender
 shared/woerter.js       Wortschatz (window.Wortschatz aus inhalte/woerter/*.js; WOERTER für das Wort des Tages)
@@ -119,7 +119,7 @@ inhalte/woerter/        Wortschatz-Kern (bestand.js, d0.js, anlaute.js)
 inhalte/deutsch/        Deutsch-Inhalte als Daten (anlaute.js, lesetexte.js)
 spiele/daz/             „Ankommen“ (DaZ D0): Wörter ansehen, Hören und zeigen, Sätze
 spiele/lesen/           Laute und Buchstaben, Silben lesen, Lesetexte
-spiele/anziehen/figur.js Zeichnet die Figur (auch für Startseite und Mein Ich)
+spiele/anziehen/figur.js Zeichnet die Figur (auch für Startseite und Meine Ecke)
 spiele/welt3d/          3D-Spiele (gebaut, nicht von Hand ändern)
 quellen/welt3d/         Quellcode der 3D-Spiele, quellen/three/ = three.js (MIT); bauen mit quellen/bauen.sh (esbuild)
 sw.js                   Offline-Speicher

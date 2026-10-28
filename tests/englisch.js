@@ -113,7 +113,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(r.ok && r.hoerenGesehen && gesprochen.length > 3, `mit englischer Stimme: Hör-Aufgaben, Wörter auf Englisch gesprochen (${gesprochen.slice(0, 4).join(", ")} …)`);
     // Ich-Seite und Elternbereich
     await p.goto(BASIS + "spiele/ich/"); await p.waitForTimeout(400);
-    erwarte(await p.evaluate(() => /Englisch-Ohr/.test(document.body.textContent)), "„Mein Ich“ zeigt die Fähigkeit „Englisch-Ohr“");
+    erwarte(await p.evaluate(() => /Englisch-Ohr/.test(document.body.textContent)), "„Meine Ecke“ zeigt die Fähigkeit „Englisch-Ohr“");
     await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(400);
     if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(500); }
     await p.selectOption("#en-ab", "1"); await p.click("#en-speichern"); await p.waitForTimeout(200);

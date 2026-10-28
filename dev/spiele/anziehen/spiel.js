@@ -145,7 +145,7 @@
 
   // Vor dem Ausgeben von Sternen nachfragen
   function frageKauf(t, k) {
-    if (t.belohnung) { S.ton("nein"); S.meldung(`${t.name} bekommst du bei ${t.belohnung}. Schau unter „Mein Ich“.`); return; }
+    if (t.belohnung) { S.ton("nein"); S.meldung(`${t.name} bekommst du bei ${t.belohnung}. Schau unter „Meine Ecke“.`); return; }
     const hat = S.sterne(), fehlt = t.preis - hat;
     const d = document.getElementById("kauf");
     document.getElementById("kauf-bild").innerHTML = vorschau(k, t, farbeFuer(k, t));

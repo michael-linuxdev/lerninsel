@@ -200,7 +200,7 @@
       speichere(d2);
       S.gibSterne(2);
       hinweis("🏅 Alle Tagesaufgaben geschafft!", "Ein Stempel im Kalender und +2 ⭐", "#C2337A");
-      if (wochenTruhe().bereit) hinweis("🎁 Die Wochentruhe ist bereit!", "Öffne sie auf der Seite „Mein Ich“.", "#D08A1E");
+      if (wochenTruhe().bereit) hinweis("🎁 Die Wochentruhe ist bereit!", "Öffne sie auf der Seite „Meine Ecke“.", "#D08A1E");
     }
   }
 

@@ -311,7 +311,7 @@
     $("quiz-punkte").innerHTML = quiz.fragen.slice(1).map(() => `<span class="an"></span>`).join("");
     K.innerHTML = `<div class="riesig">🎉</div><h2 style="margin:0">Geschafft!</h2>
       <p style="font-size:1.3rem;margin:0">${quiz.fehler === 0 ? "Alles beim ersten Mal richtig!" : `${5 - quiz.fehler} von 5 beim ersten Mal richtig.`}<br>Dein Wort heute: <b>${x.a} ${x.w}</b> ${x.e}</p>
-      <button class="knopf haupt weiter" id="q-fertig">Zurück zu Mein Ich</button>`;
+      <button class="knopf haupt weiter" id="q-fertig">Zurück zu meiner Ecke</button>`;
     S.ton("juhu");
     $("q-fertig").addEventListener("click", () => { S.ton("tipp"); $("wort-ansicht").hidden = true; $("haupt-ansicht").hidden = false; zeichne(); });
   }

@@ -49,7 +49,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       erwarte(/in deinem Heft/.test(await p.evaluate(() => (document.getElementById("gespeichert") || {}).textContent || "")), `Werkstatt ${art}: „Gespeichert in deinem Heft“`);
       geschrieben = true;
     }
-    // Über „Mein Ich“ ins Heft
+    // Über „Meine Ecke“ ins Heft
     await p.goto(BASIS + "spiele/ich/"); await p.waitForTimeout(400);
     await p.click('.ich-reiter [data-reiter="sachen"]'); await p.click("#heft-link"); await p.waitForURL(/heft/); await p.waitForTimeout(500);
     await sprachSpion(p);

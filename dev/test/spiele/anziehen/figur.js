@@ -1,4 +1,4 @@
-// Zeichnet die Figur aus einem gespeicherten Look – gemeinsam für Anziehspiel, „Mein Ich“ und andere Seiten.
+// Zeichnet die Figur aus einem gespeicherten Look – gemeinsam für Anziehspiel, „Meine Ecke“ und andere Seiten.
 // Braucht teile.js (window.Puppe).
 (function () {
   const P = window.Puppe;

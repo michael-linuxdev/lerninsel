@@ -162,9 +162,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const ls = await p.evaluate(() => (Spielwelt.lade("sorbisch").lernstand || {})["k4:1"]);
     erwarte(r.ende.an && ls && ls.n === 5 && ls.richtig === 4, `„Zeig, was du kannst“ Lernbereich 1 durchgespielt (Aufgaben aus 5 Lektionen, eine mit Fehler), Ergebnis gespeichert (${ls && ls.richtig} von ${ls && ls.n} Lektionen sicher)`);
     await p.goto(DEV + "spiele/ich/"); await p.waitForTimeout(400);
-    erwarte(await p.evaluate(() => /Sorbisch-Ohr/.test(document.body.textContent)), "„Mein Ich“ zeigt die Fähigkeit „Sorbisch-Ohr“ (mit Wahl)");
+    erwarte(await p.evaluate(() => /Sorbisch-Ohr/.test(document.body.textContent)), "„Meine Ecke“ zeigt die Fähigkeit „Sorbisch-Ohr“ (mit Wahl)");
     await waehle(p, false); await p.reload(); await p.waitForTimeout(400);
-    erwarte(await p.evaluate(() => !/Sorbisch-Ohr/.test(document.body.textContent)), "ohne Wahl: keine Fähigkeit „Sorbisch-Ohr“ in „Mein Ich“");
+    erwarte(await p.evaluate(() => !/Sorbisch-Ohr/.test(document.body.textContent)), "ohne Wahl: keine Fähigkeit „Sorbisch-Ohr“ in „Meine Ecke“");
     await waehle(p, true);
     await eltern(p, DEV);
     erwarte(await p.evaluate(() => /Kl\. 4 · Meine Familie|Kl\. 4 · Ja, moja/.test(document.getElementById("lernstand-sorbisch").textContent)),

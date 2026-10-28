@@ -1761,3 +1761,4 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Tests:** neu `dashboard` (Startseite quer/hoch/Handy, Kl. 2 und Vorschule mit Sorbisch; Mein Ich alle Reiter echt angetippt; Elternbereich alle Reiter,
   Lehrplan aufklappen, Feld speichern); `luecken` und `etappen` tippen jetzt den Reiter an; Tests mit Elternbereich setzen `__elternAlle`.
 - **Nächstes:** weitere Grafik-Pakete NA-29 Teil 2 und NA-29b (Handy-Leistung) nach Rückmeldung zum Dashboard.
+- **Nachtrag 30.10.2026:** „Hallo,“ vor dem Namen entfällt (nur der bunte Name). „Mein Ich“ heißt jetzt **„Meine Ecke“** (Wahl des Auftraggebers; Seite bleibt `spiele/ich/`, Test-Haken `__ich`).

@@ -140,7 +140,7 @@ verschwinden ohne Verlust wieder.
 | E7 Wiederholen | erste fällige Karte | Fipsi holt eine Karte aus der Merkkiste | Lernkartei |
 | E8 Wie geht's dir? | Tag 2–3 | Bruni fragt freundlich | Gefühls-Barometer, Pausen |
 | E9 Atelier | Kapitel 1 erreicht | Paula zeigt Malen und Xylofon | Atelier, Bilder an der Wand |
-| E10 Mein Ich | Tag 3–4 | Spiegel: Fähigkeiten, „Was ich gut kann“ | Fähigkeiten, Stärken |
+| E10 Meine Ecke | Tag 3–4 | Spiegel: Fähigkeiten, „Was ich gut kann“ | Fähigkeiten, Stärken |
 
 Heutiger Zugang: Die Insel öffnet sich erst mit dem kompletten Tablet-Führerschein (6 Lektionen, `index.html`).
 **Vorschlag:** Im Prolog öffnet die Lektion „Bedienung“ die Insel; die übrigen Lektionen werden Aufgaben in Kapitel 1–2.

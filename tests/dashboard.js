@@ -1,5 +1,5 @@
 // Test Dashboard (30.10.2026): Startseite „alles auf einen Blick“ (iPad quer und hoch ohne Scrollen, bunter Name, alle Türen sichtbar,
-// mit Sorbisch und Vorschul-Rucksack sechs Lern-Türen), „Mein Ich“ mit Reitern (Heute / Meine Woche / Ich kann / Meine Sachen, echt angetippt,
+// mit Sorbisch und Vorschul-Rucksack sechs Lern-Türen), „Meine Ecke“ mit Reitern (Heute / Meine Woche / Ich kann / Meine Sachen, echt angetippt,
 // Wahl bleibt beim Neuladen) und Elternbereich mit Reitern (fünf Teile, Lehrplan je Fach aufklappbar, Felder in allen Teilen bedienbar).
 // Keine waagerechte Scrollleiste, keine Konsolenfehler.
 const { chromium } = require("playwright");
@@ -49,20 +49,20 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     }
   }
 
-  // ---------- Mein Ich ----------
+  // ---------- Meine Ecke ----------
   for (const [breite, hoehe, art] of [[1180, 820, "quer"], [390, 760, "Handy"]]) {
     const { ctx, p } = await kind("2", { breite, hoehe });
     await p.click("#ich-knopf"); await p.waitForURL(/spiele\/ich/); await p.waitForTimeout(500);
     const sicht = () => p.evaluate(() => ["heute", "woche", "kann", "sachen"].filter(r => !document.getElementById("teil-" + r).hidden));
-    erwarte((await sicht()).join() === "heute" && await p.evaluate(() => !!document.querySelector("#teil-heute #aufgaben .aufgabe")), `Mein Ich ${art}: startet mit „Heute“ (Tagesaufgaben sichtbar)`);
+    erwarte((await sicht()).join() === "heute" && await p.evaluate(() => !!document.querySelector("#teil-heute #aufgaben .aufgabe")), `Meine Ecke ${art}: startet mit „Heute“ (Tagesaufgaben sichtbar)`);
     for (const [r, sel] of [["woche", "#woche .tag"], ["kann", "#faehigkeiten > *"], ["sachen", "#heft-link"]]) {
       await p.click(`.ich-reiter [data-reiter="${r}"]`); await p.waitForTimeout(150);
       const ok = await p.evaluate(([r, sel]) => { const e = document.querySelector(sel); return !document.getElementById("teil-" + r).hidden && e && e.getClientRects().length > 0; }, [r, sel]);
-      erwarte(ok && (await sicht()).length === 1 && (await masse(p)).w <= (await masse(p)).iw + 1, `Mein Ich ${art}: Reiter „${r}“ zeigt nur seinen Teil, keine Scrollleiste`);
+      erwarte(ok && (await sicht()).length === 1 && (await masse(p)).w <= (await masse(p)).iw + 1, `Meine Ecke ${art}: Reiter „${r}“ zeigt nur seinen Teil, keine Scrollleiste`);
       await bild(p, `dashboard-ich-${art}-${r}`);
     }
     await p.reload(); await p.waitForTimeout(400);
-    erwarte((await sicht()).join() === "sachen", `Mein Ich ${art}: gewählter Reiter bleibt nach dem Neuladen`);
+    erwarte((await sicht()).join() === "sachen", `Meine Ecke ${art}: gewählter Reiter bleibt nach dem Neuladen`);
     await p.click("#heft-link"); await p.waitForURL(/heft/);
     erwarte(true, "„Meine Sachen“ → „Mein Heft“ öffnet das Heft");
     await ctx.close();

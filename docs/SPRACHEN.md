@@ -46,7 +46,7 @@ da sind, darf diese Sprache vorgezogen werden.
 
 ## 2. Muttersprache als Stärke (früher KONZEPT Punkt 5)
 - **Zwei Sprachen sind ein Können:** „Auf Ukrainisch: дуб – du kennst es in zwei Sprachen!“ unter „Heute neu“ (begonnen, auf alle Sprachen ausweiten).
-- **Fähigkeit „Sprachen-Brücke“** in „Mein Ich“: wächst, wenn das Kind Wörter in beiden Sprachen zuordnet. Nie Abzug, wenn es die Hilfe nutzt.
+- **Fähigkeit „Sprachen-Brücke“** in „Meine Ecke“: wächst, wenn das Kind Wörter in beiden Sprachen zuordnet. Nie Abzug, wenn es die Hilfe nutzt.
 - **Kind als Lehrer:** Erklär-Moment „Bring einem Erwachsenen ein Wort in deiner Sprache bei“ (bestehender Erklär-Moment).
 - **Feste und Geschichten** aus den Herkunftsländern als Episoden (Nouruz, Zuckerfest, Maslenitsa …), immer mit Vergleich zu Deutschland.
 - **Schrift entdecken:** freiwilliges Kapitel „Meine Schrift“ (Kyrillisch, Arabisch …) – lesen üben in der Familiensprache, ohne Bewertung.

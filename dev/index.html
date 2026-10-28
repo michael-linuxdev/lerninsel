@@ -29,7 +29,6 @@
   .sterne b { font-size: 1.3rem; }
 
   .hallo { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; min-width: 0; }
-  .hallo p { margin: 0; font-size: 1.4rem; font-weight: 500; color: var(--pflaume-hell); }
   .name {
     margin: 0; line-height: 1;
     font-size: clamp(2.6rem, 6.2vw, 4.4rem); font-weight: 700;
@@ -46,7 +45,7 @@
   .abzeichen { display: inline-flex; align-items: center; gap: .4em; padding: 4px 12px; border-radius: 999px; background: #fff; font-weight: 600; font-size: .95rem; box-shadow: var(--schatten); }
   .abzeichen[hidden] { display: none; }
 
-  /* Reihe: Mein Ich, Mein Tier, Erst lernen – dann spielen */
+  /* Reihe: Meine Ecke, Mein Tier, Erst lernen – dann spielen */
   .reihe { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 12px; align-items: stretch; }
   .ich-knopf { display: flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; border-radius: 22px; background: #fff; color: var(--pflaume); text-decoration: none; box-shadow: var(--schatten); text-align: left; min-width: 0; }
   .ich-knopf:active { transform: translateY(3px); }
@@ -180,7 +179,6 @@
 <main class="seite">
   <div class="kopf">
     <header class="hallo">
-      <p>Hallo,</p>
       <h1 class="name" id="name" aria-label=""></h1>
       <span class="abzeichen" id="abzeichen" hidden>🪪 Tablet-Profi</span>
     </header>
@@ -194,7 +192,7 @@
   <div class="reihe" id="reihe">
     <a class="ich-knopf" href="spiele/ich/" id="ich-knopf">
       <span class="ich-bild" id="ich-bild" aria-hidden="true"></span>
-      <span class="ich-text"><b>Mein Ich</b><span id="ich-titel"></span><span class="ich-aufgaben" id="ich-aufgaben"></span></span>
+      <span class="ich-text"><b>Meine Ecke</b><span id="ich-titel"></span><span class="ich-aufgaben" id="ich-aufgaben"></span></span>
     </a>
     <a class="ich-knopf" href="spiele/tier/" id="tier-knopf">
       <span class="ich-bild" id="tier-bild" aria-hidden="true"></span>
@@ -376,7 +374,7 @@
   }
   zeigeErstDann(); setInterval(zeigeErstDann, 10000);
   const medien = S.lade("medien");
-  // Mein Ich: Figur, Titel und Tagesaufgaben
+  // Meine Ecke: Figur, Titel und Tagesaufgaben
   const look = (S.lade("anziehen") || {}).aktuell || Figur.STANDARD();
   document.getElementById("ich-bild").innerHTML = `<svg viewBox="60 40 180 180">${Figur.zeichneFigur(look)}</svg>`;
   document.getElementById("ich-titel").textContent = Charakter.titel();
