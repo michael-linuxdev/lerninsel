@@ -45,6 +45,10 @@
   .su-gruppe .frueher { margin: 14px 16px 0; }
   .su-gruppe .frueher summary { cursor: pointer; font-weight: 600; padding: 10px 14px; background: #fff; border-radius: 16px; display: inline-block; box-shadow: 0 4px 0 rgba(0,0,0,.06); }
   .su-gruppe .frueher .lektionen { padding: 0; }
+  .fach-reiter { display: flex; gap: 8px; max-width: 900px; margin: 12px auto 0; padding: 0 16px; overflow-x: auto; scrollbar-width: none; }
+  .fach-reiter:empty { display: none; }
+  .reiter { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 14px; border-radius: 999px; background: #fff; color: var(--pflaume); font-weight: 600; font-size: 1.05rem; text-decoration: none; box-shadow: 0 4px 0 rgba(0,0,0,.07); }
+  .reiter.an { background: var(--pflaume); color: #fff; }
   .fs-knopf { display: block; margin: 22px auto 0; min-height: 66px; font-size: 1.35rem; }
 
   /* Lektion */
@@ -146,6 +150,7 @@
     <button class="knopf rund" id="ton-vorlesen" aria-label="Vorlesen an oder aus">🗣️</button>
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
+  <nav class="fach-reiter" id="fach-reiter" aria-label="Fächer"></nav>
   <div class="intro"><span id="eule-klein"></span><p id="intro-text"></p></div>
   <div class="themen" id="themen"></div>
 </section>
@@ -187,6 +192,7 @@
 <script src="../../shared/sprache.js"></script>
 <script src="bilder.js"></script>
 <script src="themen.js"></script>
+<script src="faecher.js"></script>
 <script src="../../shared/koennen.js"></script>
 <script src="sachkunde.js"></script>
 </body>

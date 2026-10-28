@@ -50,6 +50,7 @@
       laender: k.land ? [k.land] : undefined }));
     kapitel(window.WERKSTATT, "werkstatt:", "deutsch", true);
     kapitel(window.THEMEN, "sachkunde:", "sachkunde", true);
+    (window.FACH_THEMEN || []).forEach(t => kapitel([t], "sachkunde:", t.fach, true));   // Kunst, Musik, Werken, Sport, Ethik (spiele/sachkunde/faecher.js)
     kapitel(window.LEKTIONEN, "medien:", "medien", false);
     (window.ENGLISCH || []).forEach(k => registriere({ id: "englisch:" + k.id, fach: "englisch", lz: k.lz, aufgaben: Math.min(6, k.woerter.length) + (k.extra || []).length,
       lernkartei: false, titel: k.name, quelle: "bestand", stufe: [String(k.stufe)] }));

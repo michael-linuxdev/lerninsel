@@ -648,6 +648,390 @@
           ["sn.ma4.dz.05", "Wahrscheinlichkeiten vergleichen und ordnen, gleich wahrscheinlich", "4", ["mathe:k4chance", "mathe:k4diagramme"], "ja"]
         ]
       }
+    },
+    // Kunst, Musik, Werken, Sport (Kl. 1/2 und 3/4: dieselben Punkte für Kl. 3 und 4), Ethik – Lehrpläne Grundschule Sachsen 2019 (PDFs vom Auftraggeber, 28.10.2026)
+    kunst: {
+      "1/2": {
+        1: [ // Flächiges Gestalten
+          ["sn.ku12.1.01", "Bildträger, Mal- und Zeichenwerkzeuge und Techniken erproben (Stifte, Kreide, Wasserfarbe, Scherenschnitt)", "1/2", ["atelier:malen", "echtewelt:collage"], "aussen"],
+          ["sn.ku12.1.02", "Grund- und Mischfarben, Farbkreis, aufhellen und abdunkeln", "1/2", ["sachkunde:ku-farben", "echtewelt:farbkreis"], "ja"],
+          ["sn.ku12.1.03", "Farbauftrag: deckend, lasierend, tupfen, klecksen, spritzen; Werke dazu betrachten", "1/2", ["sachkunde:ku-farbauftrag"], "ja"],
+          ["sn.ku12.1.04", "Punkt, Linie und Muster, Linie als Bewegungsspur, digital malen", "1/2", ["sachkunde:ku-linie", "atelier:malen"], "ja"],
+          ["sn.ku12.1.05", "Einfache Druckverfahren: Finger-, Stempel-, Materialdruck, Abklatsch, Abdrücke", "1/2", ["sachkunde:ku-drucken", "echtewelt:stempel"], "ja"],
+          ["sn.ku12.1.06", "Formen und Bildaufbau: rund–eckig, offen–geschlossen, Reihen, Ballen, Streuen", "1/2", ["sachkunde:ku-formen"], "ja"],
+          ["sn.ku12.1.07", "Buchstaben und Ziffern als Gestaltungsmittel", "1/2", ["sachkunde:ku-formen"], "ja"],
+          ["sn.ku12.1.08", "Gestaltungspraktiken kombinieren: Collage, Frottage, einfaches Malprogramm", "1/2", ["sachkunde:ku-formen", "atelier:malen"], "ja"]
+        ],
+        2: [ // Körperhaft-räumliches Gestalten
+          ["sn.ku12.2.01", "Plastische Objekte betrachten, betasten, beschreiben; Begriff Plastik", "1/2", ["sachkunde:ku-plastik"], "ja"],
+          ["sn.ku12.2.02", "Modellieren mit Ton, Knete, Salzteig, Sand: antragen, abtragen, Abdrücke", "1/2", ["sachkunde:ku-plastik", "echtewelt:kneten"], "aussen"],
+          ["sn.ku12.2.03", "Mit Kartons, Rollen, Korken und Naturfundstücken bauen", "1/2", ["sachkunde:ku-plastik", "echtewelt:turm"], "aussen"],
+          ["sn.ku12.2.04", "Innen- und Außenräume erleben und umgestalten, Labyrinthe, Tierbauten", "1/2", ["sachkunde:ku-plastik", "echtewelt:hoehle"], "aussen"]
+        ],
+        3: [ // Aktionsbetontes Gestalten
+          ["sn.ku12.3.01", "Spielerische Zugänge zu Kunstwerken: Ich sehe was, Geräusche erfinden, Titel und Geschichten", "1/2", ["sachkunde:ku-sinne"], "ja"],
+          ["sn.ku12.3.02", "Szenisches Spiel mit Figuren, Puppen und Schattenfiguren", "1/2", ["sachkunde:ku-sinne", "echtewelt:lebendesbild"], "aussen"],
+          ["sn.ku12.3.03", "Farb- und Formaktionen: sammeln, sortieren, arrangieren, große Malaktionen", "1/2", ["echtewelt:landart"], "aussen"],
+          ["sn.ku12.3.04", "Körperhaltungen, Mimik, Gestik, Verkleiden und Masken", "1/2", ["sachkunde:ku-sinne"], "ja"]
+        ]
+      },
+      "3": {
+        1: [ // Flächiges Gestalten
+          ["sn.ku3.1.01", "Bekannte Techniken erweitern: skizzieren, drucken, schneiden, fotografieren", "3", ["atelier:malen", "echtewelt:frottage"], "aussen"],
+          ["sn.ku3.1.02", "Farben als Träger von Stimmungen: Harmonie, Kontraste, Signalfarben", "3", ["sachkunde:ku-farbgefuehl"], "ja"],
+          ["sn.ku3.1.03", "Farben abstufen (trüben, tönen), Pinselführung und Farbverlauf", "3", ["sachkunde:ku-farbgefuehl", "sachkunde:ku-farbauftrag"], "ja"],
+          ["sn.ku3.1.04", "Hell-Dunkel-Kontrast, Oberflächenstrukturen, optische Täuschungen", "3", ["sachkunde:ku-hell-dunkel"], "ja"],
+          ["sn.ku3.1.05", "Ein besonderes Druckverfahren: Monotypie, Frottage, Materialdruck", "3", ["sachkunde:ku-hell-dunkel", "echtewelt:frottage"], "ja"],
+          ["sn.ku3.1.06", "Bildaufbau: Überdeckung, Größe, Farbabstufung, Figur und Grund", "3", ["sachkunde:ku-bildraum"], "ja"],
+          ["sn.ku3.1.07", "Schrift als Gestaltungsmittel: Monogramm, Geheimschrift, Kalligrafie", "3", ["sachkunde:ku-schrift-foto"], "ja"],
+          ["sn.ku3.1.08", "Fotografie: Bildausschnitt, Lochkamera, Licht und Schatten", "3", ["sachkunde:ku-schrift-foto"], "ja"],
+          ["sn.ku3.1.09", "Persönlichkeitsrechte und Urheberrecht bei Bildern", "3", ["sachkunde:ku-schrift-foto"], "ja"],
+          ["sn.ku3.1.10", "Bilder digital bearbeiten und verfremden", "3", ["atelier:malen"], "teil"]
+        ],
+        2: [ // Körperhaft-räumliches Gestalten
+          ["sn.ku3.2.01", "Bildhauer und ihre Arbeitsweise, Formbarkeit von Materialien", "3", ["sachkunde:ku-bildhauer"], "ja"],
+          ["sn.ku3.2.02", "Modellieren mit Ton, Gips und Pappmaché, Figuren", "3", ["echtewelt:kneten"], "aussen"],
+          ["sn.ku3.2.03", "Montagen aus Fundstücken, Upcycling", "3", ["sachkunde:ku-bildhauer"], "ja"],
+          ["sn.ku3.2.04", "Design: Gebrauchsgegenstände gestalten und prüfen", "3", ["sachkunde:ku-bildhauer"], "ja"],
+          ["sn.ku3.2.05", "Kunst in Außenräumen: Land-Art, Urban Art", "3", ["sachkunde:ku-bildhauer", "echtewelt:landart"], "ja"]
+        ],
+        3: [ // Aktionsbetontes Gestalten
+          ["sn.ku3.3.01", "Spielerische Methoden der Kunstbetrachtung: verdecken, Puzzle, Klanggeschichten, Elfchen, Brief an das Werk", "3", ["sachkunde:ku-aktion3"], "ja"],
+          ["sn.ku3.3.02", "Körper und Bewegung: Rollenspiel, Pantomime, Schattenfiguren", "3", ["sachkunde:ku-aktion3"], "ja"],
+          ["sn.ku3.3.03", "Lebende Bilder und Aktionen mit Farben und Formen, dokumentieren", "3", ["sachkunde:ku-aktion3", "echtewelt:lebendesbild"], "aussen"]
+        ]
+      },
+      "4": {
+        1: [ // Flächiges Gestalten
+          ["sn.ku4.1.01", "Material, Format und Technik passend zur Gestaltungsabsicht wählen", "4", ["atelier:malen", "echtewelt:collage"], "aussen"],
+          ["sn.ku4.1.02", "Gemälde und Grafik; Farben und Formen für Stimmung, Signal und Raum", "4", ["sachkunde:ku-gemaelde", "sachkunde:ku-farbgefuehl"], "ja"],
+          ["sn.ku4.1.03", "Darstellungsweisen vergleichen: Landschaft, Porträt, Stillleben, Urban Art", "4", ["sachkunde:ku-gemaelde"], "ja"],
+          ["sn.ku4.1.04", "Druckverfahren variieren: Monogramme, Piktogramme, Logos", "4", ["sachkunde:ku-medienbild"], "ja"],
+          ["sn.ku4.1.05", "Bildsprache in Medien: Werbung prüfen, Plakat, Comic, Collage", "4", ["sachkunde:ku-medienbild"], "ja"]
+        ],
+        2: [ // Körperhaft-räumliches Gestalten
+          ["sn.ku4.2.01", "Relief, bewegliche Objekte, Windspiele, Klangskulpturen", "4", ["sachkunde:ku-architektur", "echtewelt:windspiel"], "ja"],
+          ["sn.ku4.2.02", "Rauminstallationen und Raummodelle", "4", ["echtewelt:hoehle"], "aussen"],
+          ["sn.ku4.2.03", "Architektur: Form und Funktion, Kirchen, Brücken, Gewölbe", "4", ["sachkunde:ku-architektur", "echtewelt:architektur"], "ja"]
+        ],
+        3: [ // Aktionsbetontes Gestalten
+          ["sn.ku4.3.01", "Aktionsmethoden: Bilddiktat, fiktives Interview, Motive weiterspinnen", "4", ["sachkunde:ku-aktion4"], "ja"],
+          ["sn.ku4.3.02", "Eine Aktion planen und durchführen: lebende Bilder, Schattenspiel, Performance", "4", ["sachkunde:ku-aktion4", "echtewelt:lebendesbild"], "aussen"],
+          ["sn.ku4.3.03", "Aktionskunst kennenlernen und dokumentieren", "4", ["sachkunde:ku-aktion4"], "ja"]
+        ]
+      }
+    },
+    musik: {
+      "1/2": {
+        1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
+          ["sn.mu12.1.01", "Stimme als Instrument: Geräusche nachahmen, Texte und Bilder verklanglichen", "1/2", ["sachkunde:mu-stimme"], "ja"],
+          ["sn.mu12.1.02", "Grundton spüren, Melodiebausteine wiedererkennen", "1/2", ["atelier:musik"], "teil"],
+          ["sn.mu12.1.03", "Rhythmus und Melodie beim Sprechen: Verse rhythmisieren", "1/2", ["sachkunde:mu-rhythmus", "lesen:silben"], "ja"],
+          ["sn.mu12.1.04", "Grundlagen des Singens: Haltung, Atmung, Tonbildung", "1/2", ["sachkunde:mu-stimme"], "ja"],
+          ["sn.mu12.1.05", "Im Klassengesang singen, Kanon-Vorübungen, etwa sechs Lieder auswendig", "1/2", ["echtewelt:singen"], "aussen"]
+        ],
+        2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
+          ["sn.mu12.2.01", "Klänge erzeugen, Klangeigenschaften und Klangfarben untersuchen", "1/2", ["sachkunde:mu-instrumente1", "atelier:musik"], "ja"],
+          ["sn.mu12.2.02", "Themen verklanglichen, eigene grafische Notation", "1/2", ["sachkunde:mu-rhythmus", "atelier:musik"], "ja"],
+          ["sn.mu12.2.03", "Grundschlag und Metrum spüren, Rhythmusbausteine (gleich, doppelt, halb so lang)", "1/2", ["sachkunde:mu-rhythmus", "atelier:musik"], "ja"],
+          ["sn.mu12.2.04", "Erstes Spiel auf Melodieinstrumenten, Lieder begleiten", "1/2", ["atelier:musik", "echtewelt:instrument"], "ja"]
+        ],
+        3: [ // Musik umsetzen, verbinden und in Beziehung bringen
+          ["sn.mu12.3.01", "Musik in freie Bewegung und Tanz umsetzen, Stimmungen darstellen", "1/2", ["sachkunde:mu-bewegung", "echtewelt:tanzen"], "aussen"],
+          ["sn.mu12.3.02", "Einfache Tänze, Schritte, Aufstellungen und Fassungen", "1/2", ["sachkunde:mu-bewegung", "echtewelt:tanzschritte"], "aussen"],
+          ["sn.mu12.3.03", "Musik in Bilder und Sprache umsetzen: Tempo, Stimmung, Überschriften", "1/2", ["sachkunde:mu-bewegung", "sachkunde:mu-laut-leise"], "ja"],
+          ["sn.mu12.3.04", "Szenisches Spiel zu Musik: Puppen, Schattenspiel, Pantomime", "1/2", ["echtewelt:lebendesbild"], "aussen"]
+        ],
+        4: [ // Musik wahrnehmen, verstehen und deuten
+          ["sn.mu12.4.01", "Ausdruck von Musik erleben: Stimmungen, Gefühle, Bilder", "1/2", ["sachkunde:mu-laut-leise"], "ja"],
+          ["sn.mu12.4.02", "Lautstärke und Tempo, einfache Formen", "1/2", ["sachkunde:mu-laut-leise", "atelier:musik"], "ja"],
+          ["sn.mu12.4.03", "Instrumente und Stimmen: Material, Bauweise, Tonerzeugung; Männer-, Frauen-, Kinderstimmen", "1/2", ["sachkunde:mu-instrumente1", "sachkunde:mu-orchester"], "ja"],
+          ["sn.mu12.4.04", "Musik in Schule, Freizeit, Familie und zu besonderen Anlässen", "1/2", ["sachkunde:mu-mozart"], "ja"],
+          ["sn.mu12.4.05", "Leben und Schaffen von Komponisten und Kinderliedermachern", "1/2", ["sachkunde:mu-mozart"], "ja"]
+        ]
+      },
+      "3": {
+        1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
+          ["sn.mu3.1.01", "Melodie- und Rhythmusbausteine singen und wiedererkennen", "3", ["atelier:musik"], "teil"],
+          ["sn.mu3.1.02", "Haltung, Atmung und Tonraum beim Singen", "3", ["sachkunde:mu-stimme"], "ja"],
+          ["sn.mu3.1.03", "Kanon und Quodlibet, solistisch und mehrstimmig singen", "3", ["sachkunde:mu-singen3", "echtewelt:singen"], "aussen"],
+          ["sn.mu3.1.04", "Gestaltungsmittel beim Singen: Lautstärke, Tempo, Stimmklang, Fachbegriffe", "3", ["sachkunde:mu-singen3"], "ja"],
+          ["sn.mu3.1.05", "Lieder verschiedener Stile und Länder, etwa fünf auswendig", "3", ["sachkunde:mu-welt", "echtewelt:singen"], "aussen"]
+        ],
+        2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
+          ["sn.mu3.2.01", "Mit Klängen experimentieren, Klangflächen, eigene Notation", "3", ["atelier:musik"], "ja"],
+          ["sn.mu3.2.02", "Rhythmusbausteine im Zweier- und Dreiertakt", "3", ["sachkunde:mu-taenze", "atelier:musik"], "ja"],
+          ["sn.mu3.2.03", "Rhythmusbausteine notieren", "3", ["sachkunde:mu-noten"], "ja"]
+        ],
+        3: [ // Musik umsetzen, verbinden und in Beziehung bringen
+          ["sn.mu3.3.01", "Musik in Bewegung: Spiegel- und Echotanzen", "3", ["sachkunde:mu-welt", "echtewelt:tanzen"], "aussen"],
+          ["sn.mu3.3.02", "Tänze verschiedener Stile und Länder", "3", ["sachkunde:mu-welt", "echtewelt:tanzschritte"], "aussen"],
+          ["sn.mu3.3.03", "Musik in Bilder und Sprache umsetzen: Klangfarben, Formverläufe, Tempo", "3", ["sachkunde:mu-laut-leise"], "ja"]
+        ],
+        4: [ // Musik wahrnehmen, verstehen und deuten
+          ["sn.mu3.4.01", "Gestaltungsmittel hören: Lautstärke, Tempo, Artikulation, Klangfarbe, Form", "3", ["sachkunde:mu-laut-leise", "sachkunde:mu-singen3"], "ja"],
+          ["sn.mu3.4.02", "Instrumentengruppen, Bauweise und Spielweise", "3", ["sachkunde:mu-gruppen"], "ja"],
+          ["sn.mu3.4.03", "Musik in Freizeit und Kirche, eigene Meinung zu Musikstilen", "3", ["sachkunde:mu-bach"], "ja"],
+          ["sn.mu3.4.04", "Leben und Schaffen von Komponisten, Musik anderer Länder", "3", ["sachkunde:mu-bach", "sachkunde:mu-welt"], "ja"]
+        ]
+      },
+      "4": {
+        1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
+          ["sn.mu4.1.01", "Mit Melodie- und Rhythmusbausteinen Musik erfinden", "4", ["atelier:musik", "sachkunde:mu-rhythmus4"], "ja"],
+          ["sn.mu4.1.02", "Singen: Haltung, Atmung, Tonraum, zweistimmige Lieder", "4", ["sachkunde:mu-stimme", "echtewelt:singen"], "aussen"],
+          ["sn.mu4.1.03", "Lieder verschiedener Zeiten und Kulturen, auch englische, etwa zehn auswendig", "4", ["echtewelt:singen", "englisch:en-party"], "aussen"]
+        ],
+        2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
+          ["sn.mu4.2.01", "Improvisieren, Themen verklanglichen", "4", ["atelier:musik"], "ja"],
+          ["sn.mu4.2.02", "Rhythmusbausteine im Zweier- und Dreiertakt kombinieren", "4", ["sachkunde:mu-rhythmus4", "sachkunde:mu-taenze"], "ja"],
+          ["sn.mu4.2.03", "Lieder mit Melodieinstrumenten begleiten; Viertel, Achtel, halbe und ganze Noten notieren", "4", ["sachkunde:mu-rhythmus4", "sachkunde:mu-noten", "atelier:musik"], "ja"]
+        ],
+        3: [ // Musik umsetzen, verbinden und in Beziehung bringen
+          ["sn.mu4.3.01", "Musik differenziert in Bewegung umsetzen, Schattentanzen", "4", ["echtewelt:tanzen"], "aussen"],
+          ["sn.mu4.3.02", "Tänze verschiedener Stile, Zeiten und Kulturen", "4", ["sachkunde:mu-taenze", "echtewelt:tanzschritte"], "ja"],
+          ["sn.mu4.3.03", "Musik in Bilder, Geschichten und Gedichte umsetzen", "4", ["sachkunde:mu-bewegung"], "ja"]
+        ],
+        4: [ // Musik wahrnehmen, verstehen und deuten
+          ["sn.mu4.4.01", "Gattungen: Lied, Suite, Kindermusical, Oper", "4", ["sachkunde:mu-gattungen"], "ja"],
+          ["sn.mu4.4.02", "Instrumente von Orchester, Band und Folklore, Orgel; Chöre, Sopran, Alt, Tenor, Bass", "4", ["sachkunde:mu-orchester"], "ja"],
+          ["sn.mu4.4.03", "Über Musik sprechen, Informationen sammeln und präsentieren", "4", ["sachkunde:mu-komponisten"], "teil"],
+          ["sn.mu4.4.04", "Musizierstätten in Sachsen kennen und besuchen", "4", ["sachkunde:mu-sachsen", "echtewelt:musizierstaette"], "ja"],
+          ["sn.mu4.4.05", "Tonträger, Musik- und Videoplattformen, rechtliche Regeln", "4", ["sachkunde:mu-medien"], "ja"],
+          ["sn.mu4.4.06", "Komponisten und Musik verschiedener Zeiten und Kulturen", "4", ["sachkunde:mu-komponisten", "sachkunde:mu-taenze"], "ja"]
+        ]
+      }
+    },
+    werken: {
+      "1/2": {
+        1: [ // Entdecken von Technik im Alltag
+          ["sn.we12.1.01", "Technik im Alltag wahrnehmen: Spielzeug, Haushalt, Schule, Freizeit", "1/2", ["sachkunde:we-fahrzeuge"], "ja"],
+          ["sn.we12.1.02", "Fahrzeuge zu Wasser, Land und Luft: Zweck, Kufen, Räder, Flügel", "1/2", ["sachkunde:we-fahrzeuge"], "ja"],
+          ["sn.we12.1.03", "Funktionsweise: bewegliche Teile, Welle und Achse, Rad", "1/2", ["sachkunde:we-fahrzeuge"], "ja"],
+          ["sn.we12.1.04", "Ein technisches Objekt bauen (Windrad, Papierflieger, Fahrzeug) und prüfen", "1/2", ["echtewelt:papierflieger"], "aussen"]
+        ],
+        2: [ // Umgehen mit Material und Werkzeug
+          ["sn.we12.2.01", "Vom Bedarf zur Idee: planen, Skizzen lesen und anfertigen", "1/2", ["sachkunde:we-werkzeug", "echtewelt:bruecke"], "aussen"],
+          ["sn.we12.2.02", "Papierwerkstoffe mit anderen Werkstoffen vergleichen", "1/2", ["sachkunde:we-papier"], "ja"],
+          ["sn.we12.2.03", "Werkzeuge sicher handhaben: Arbeitsschutz, messen, anreißen mit Lineal, Zirkel, Schablone", "1/2", ["sachkunde:we-werkzeug", "echtewelt:werkzeug"], "ja"],
+          ["sn.we12.2.04", "Falten, falzen, biegen, schneiden, lochen, kleben", "1/2", ["sachkunde:we-papier", "echtewelt:papierflieger"], "ja"],
+          ["sn.we12.2.05", "Technische Objekte herstellen und prüfen (Drachen, Modelle)", "1/2", ["echtewelt:bruecke"], "aussen"],
+          ["sn.we12.2.06", "Papier verwenden, Recyclingpapier, Abfall vermeiden", "1/2", ["sachkunde:we-papier"], "ja"]
+        ],
+        3: [ // Bauen stabiler Konstruktionen
+          ["sn.we12.3.01", "Bau- und Tragwerke der Umgebung und ihr Zweck", "1/2", ["sachkunde:we-bauen"], "ja"],
+          ["sn.we12.3.02", "Stabilität: Profile, Bauweisen, Steck- und Schraubverbindungen", "1/2", ["sachkunde:we-bauen"], "ja"],
+          ["sn.we12.3.03", "Türme und Brücken bauen und beurteilen", "1/2", ["echtewelt:bruecke", "echtewelt:turm"], "aussen"]
+        ]
+      },
+      "3": {
+        1: [ // Nutzen von elektrischem Strom
+          ["sn.we3.1.01", "Erneuerbare Energiequellen: Sonne, Wind, Wasser, Biomasse", "3", ["sachkunde:we-strom"], "ja"],
+          ["sn.we3.1.02", "Bauteile und Schaltplan: Spannungsquelle, Leitung, Schalter, Summer, Leuchtmittel, Motor", "3", ["sachkunde:we-strom", "sachkunde:strom"], "ja"],
+          ["sn.we3.1.03", "Mit Baukästen elektrische Objekte bauen (Solarlüfter, Elektrofahrzeug)", "3", ["echtewelt:stromkreis"], "aussen"],
+          ["sn.we3.1.04", "Leiter und Isolatoren, Strom im Alltag, sparsame Geräte", "3", ["sachkunde:we-strom", "sachkunde:strom"], "ja"],
+          ["sn.we3.1.05", "Regeln und Schutz im Umgang mit Strom", "3", ["sachkunde:we-strom", "sachkunde:strom"], "ja"]
+        ],
+        2: [ // Planen und Herstellen eines Gegenstandes
+          ["sn.we3.2.01", "Holz als nachwachsender Rohstoff: Eigenschaften und Einsatz", "3", ["sachkunde:we-holz"], "ja"],
+          ["sn.we3.2.02", "Planen: Werkstoff wählen, Skizze, Arbeitsschritte, Arbeitsplatz einrichten", "3", ["sachkunde:we-holz", "sachkunde:we-werkzeug"], "ja"],
+          ["sn.we3.2.03", "Sägen, feilen, raspeln, schleifen, nageln, schrauben, streichen", "3", ["sachkunde:we-holz", "echtewelt:holz"], "aussen"],
+          ["sn.we3.2.04", "Messen in Millimetern, anreißen, sparsam mit dem Werkstoff", "3", ["sachkunde:we-werkzeug"], "ja"],
+          ["sn.we3.2.05", "Ergebnis beurteilen: Funktion, Aussehen, Sicherheit, Preis", "3", ["echtewelt:holz"], "aussen"]
+        ]
+      },
+      "4": {
+        1: [ // Warten und Pflegen technischer Objekte
+          ["sn.we4.1.01", "Aufbau technischer Objekte: Antrieb, Übertragung, Abtrieb", "4", ["sachkunde:we-fahrrad"], "ja"],
+          ["sn.we4.1.02", "Fehlersuche: Funktionsprobe, Bedienungsanleitung, Demontage", "4", ["sachkunde:we-fahrrad"], "ja"],
+          ["sn.we4.1.03", "Pflege und Wartung, zum Beispiel am Fahrrad", "4", ["sachkunde:we-fahrrad", "echtewelt:fahrradpflege"], "ja"],
+          ["sn.we4.1.04", "Reparieren statt wegwerfen, Werkstoffe trennen, Batterien entsorgen", "4", ["sachkunde:we-fahrrad", "echtewelt:reparieren"], "ja"]
+        ],
+        2: [ // Vergleichen von Werkstoffen und Herstellen eines Produkts
+          ["sn.we4.2.01", "Holzwerkstoffe und Kunststoffe: Eigenschaften, Einsatz, Vor- und Nachteile, Umwelt", "4", ["sachkunde:we-werkstoffe"], "ja"],
+          ["sn.we4.2.02", "Werkstoffe vergleichen: trennen, umformen, fügen, Oberfläche", "4", ["sachkunde:we-werkstoffe", "sachkunde:we-holz"], "ja"],
+          ["sn.we4.2.03", "Arbeitsvorbereitung: technische Skizze, Stückliste, Arbeitsschritte", "4", ["sachkunde:we-werkstoffe"], "ja"],
+          ["sn.we4.2.04", "Ein Produkt fertigen und prüfen (Bücherstütze, Staffelei)", "4", ["echtewelt:holz"], "aussen"]
+        ],
+        3: [ // Begegnung mit Robotern und Automaten
+          ["sn.we4.3.01", "Roboter und Automaten im Alltag: Eingabe – Verarbeitung – Ausgabe, Sensor, Aktor", "4", ["sachkunde:we-roboter", "echtewelt:automat"], "ja"],
+          ["sn.we4.3.02", "Einfache Programmierumgebung: kurze Befehlsfolgen", "4", ["sachkunde:we-roboter"], "teil"],
+          ["sn.we4.3.03", "Ein Modell bauen und programmieren, Fehler suchen", "4", ["echtewelt:automat"], "aussen"]
+        ]
+      }
+    },
+    ethik: {
+      "1/2": {
+        1: [ // Ich im Wir
+          ["sn.et12.1.01", "Eigene Einmaligkeit: Aussehen, Name, Lebenswelt", "1/2", ["sachkunde:et-einmalig"], "ja"],
+          ["sn.et12.1.02", "Eigenschaften und Gefühle, mit Mimik und Körper ausdrücken", "1/2", ["sachkunde:et-einmalig", "gefuehle:alle"], "ja"],
+          ["sn.et12.1.03", "Unterschiedlichkeit: Neigungen, Begabungen, Handicaps, anders sein", "1/2", ["sachkunde:et-einmalig"], "ja"],
+          ["sn.et12.1.04", "Eigene Fähigkeiten und Grenzen, Selbstwert", "1/2", ["sachkunde:et-einmalig"], "ja"]
+        ],
+        2: [ // Miteinander
+          ["sn.et12.2.01", "Familienformen, mein Zuhause", "1/2", ["sachkunde:et-familie", "sachkunde:familie"], "ja"],
+          ["sn.et12.2.02", "Geborgenheit, Verlässlichkeit, Aufgaben in der Familie", "1/2", ["sachkunde:et-familie"], "ja"],
+          ["sn.et12.2.03", "Schule als Gemeinschaft: Umgangsformen, Regeln, streiten und versöhnen", "1/2", ["sachkunde:et-klasse", "gefuehle:alle"], "ja"],
+          ["sn.et12.2.04", "Kritik, Meinungen, Ausgrenzung; um Hilfe bitten", "1/2", ["sachkunde:et-klasse"], "ja"]
+        ],
+        3: [ // Voneinander
+          ["sn.et12.3.01", "Persönliche Feste: Geburtstag und Rituale", "1/2", ["sachkunde:et-herbstfeste"], "ja"],
+          ["sn.et12.3.02", "Erntedank, St. Martin, Advent, Nikolaus", "1/2", ["sachkunde:et-herbstfeste"], "ja"],
+          ["sn.et12.3.03", "Weihnachten, Silvester, Fasching, Ostern; Wünsche und Schenken", "1/2", ["sachkunde:et-winterfeste"], "ja"]
+        ],
+        4: [ // Wir in der Welt
+          ["sn.et12.4.01", "Das Wunderbare der Natur, Sonne, Mond und Sterne", "1/2", ["sachkunde:et-natur"], "ja"],
+          ["sn.et12.4.02", "Werden, Wachsen, Vergehen; eine Pflanze aufziehen", "1/2", ["sachkunde:et-natur", "echtewelt:pflanze"], "ja"],
+          ["sn.et12.4.03", "Umgang mit der Natur, Tier- und Umweltschutz", "1/2", ["sachkunde:et-natur", "echtewelt:staunen"], "ja"]
+        ]
+      },
+      "3": {
+        1: [ // Ich im Wir
+          ["sn.et3.1.01", "Kinder und Erwachsene: Gemeinsamkeiten und Unterschiede", "3", ["sachkunde:et-staerken"], "ja"],
+          ["sn.et3.1.02", "Stärken und Schwächen, Angst bewältigen, Erfolg und Misserfolg", "3", ["sachkunde:et-staerken"], "ja"],
+          ["sn.et3.1.03", "Geschlechterrollen hinterfragen, Vielfalt achten", "3", ["sachkunde:et-staerken"], "ja"],
+          ["sn.et3.1.04", "Gemeinsamkeiten und Unterschiede der Menschen, Herkunft", "3", ["sachkunde:kulturen"], "ja"],
+          ["sn.et3.1.05", "Gut und Böse im eigenen Handeln, Nein sagen, verzeihen", "3", ["sachkunde:et-staerken", "sachkunde:nein-sagen"], "ja"],
+          ["sn.et3.1.06", "Persönliche Konflikte, Kompromisse, Hilfe suchen", "3", ["gefuehle:alle", "sachkunde:et-freundschaft"], "ja"]
+        ],
+        2: [ // Miteinander
+          ["sn.et3.2.01", "Freundschaft finden und pflegen, Vertrauen", "3", ["sachkunde:et-freundschaft"], "ja"],
+          ["sn.et3.2.02", "Konflikte in Freundschaften: Streitregeln, Mobbing, Internet, Goldene Regel, Geheimnisse", "3", ["sachkunde:et-freundschaft"], "ja"],
+          ["sn.et3.2.03", "Wahrheit und Lüge, Notlüge, Vertrauen", "3", ["sachkunde:et-wahrheit"], "ja"]
+        ],
+        3: [ // Voneinander
+          ["sn.et3.3.01", "Ethik und Religion: die Begriffe", "3", ["sachkunde:et-kirchenjahr"], "ja"],
+          ["sn.et3.3.02", "Christlicher Glaube: Kreuz, Kirche, Bibel", "3", ["sachkunde:et-kirchenjahr"], "ja"],
+          ["sn.et3.3.03", "Christlich geprägte Zeiten: Weihnachten, Fastenzeit, Ostern, Pfingsten", "3", ["sachkunde:et-kirchenjahr", "sachkunde:et-winterfeste"], "ja"],
+          ["sn.et3.3.04", "Feiertage in Sachsen und das Kirchenjahr: Reformationstag, sorbische Feiertage", "3", ["sachkunde:et-kirchenjahr"], "ja"]
+        ],
+        4: [ // Wir in der Welt
+          ["sn.et3.4.01", "Symbole wahrnehmen und deuten", "3", ["sachkunde:et-symbole"], "ja"],
+          ["sn.et3.4.02", "Natürliche Welt, vom Menschen gemachte Welt und Gedankenwelt", "3", ["sachkunde:et-symbole"], "ja"],
+          ["sn.et3.4.03", "Die Welt gestalten und bewahren", "3", ["sachkunde:et-symbole"], "ja"],
+          ["sn.et3.4.04", "Die vier Elemente Feuer, Wasser, Erde, Luft", "3", ["sachkunde:et-symbole"], "ja"]
+        ]
+      },
+      "4": {
+        1: [ // Ich im Wir
+          ["sn.et4.1.01", "Eigene Identität, Vorbilder, Selbstwert", "4", ["sachkunde:et-wuensche"], "ja"],
+          ["sn.et4.1.02", "Wünsche, Träume, Lebensvorstellungen", "4", ["sachkunde:et-wuensche", "echtewelt:wuensche"], "ja"],
+          ["sn.et4.1.03", "Entscheidungen treffen, Gewissen, Folgen; Übergang zur neuen Schule", "4", ["sachkunde:et-wuensche"], "ja"]
+        ],
+        2: [ // Miteinander
+          ["sn.et4.2.01", "Beziehungen zwischen den Generationen", "4", ["sachkunde:et-miteinander4", "echtewelt:frage"], "ja"],
+          ["sn.et4.2.02", "Goldene Regel in Religionen und Philosophie, Umgangsformen, Zivilcourage", "4", ["sachkunde:et-miteinander4"], "ja"]
+        ],
+        3: [ // Voneinander
+          ["sn.et4.3.01", "Judentum und Islam: Symbole, Gebetshäuser, heilige Bücher, Feste", "4", ["sachkunde:et-religionen"], "ja"],
+          ["sn.et4.3.02", "Gemeinsamkeiten von Judentum, Christentum und Islam", "4", ["sachkunde:et-religionen"], "ja"],
+          ["sn.et4.3.03", "Religiöse Persönlichkeiten und karitative Hilfe; selbst helfen", "4", ["sachkunde:et-religionen", "echtewelt:helfenprojekt"], "ja"],
+          ["sn.et4.3.04", "Werte und Traditionen anderer Kulturen, Toleranz", "4", ["sachkunde:et-religionen", "sachkunde:kulturen"], "ja"]
+        ],
+        4: [ // Wir in der Welt
+          ["sn.et4.4.01", "Gerechtigkeit und Ungerechtigkeit", "4", ["sachkunde:et-gerechtigkeit"], "ja"],
+          ["sn.et4.4.02", "Kinderrechte und Menschenrechte", "4", ["sachkunde:et-gerechtigkeit", "sachkunde:kinderrechte"], "ja"],
+          ["sn.et4.4.03", "Philosophische Fragen: Glück, Zeit, was den Menschen ausmacht, Abschied", "4", ["sachkunde:et-glueck-zeit"], "ja"]
+        ]
+      }
+    },
+    sport: {
+      "1/2": {
+        1: [ // Leichtathletische Übungen
+          ["sn.sp12.1.01", "Schnell laufen in spielerischen Formen, Startkommando und Hochstart", "1/2", ["sachkunde:sp-laufen", "echtewelt:sprint"], "aussen"],
+          ["sn.sp12.1.02", "Weit und hoch springen: Sprunggarten, Hock- und Schersprung", "1/2", ["sachkunde:sp-laufen", "echtewelt:huepfen"], "aussen"],
+          ["sn.sp12.1.03", "Werfen mit verschiedenen Geräten, Schlagwurf", "1/2", ["sachkunde:sp-laufen", "echtewelt:werfen"], "aussen"],
+          ["sn.sp12.1.04", "Ausdauernd laufen bis zehn Minuten", "1/2", ["sachkunde:sp-laufen", "echtewelt:ausdauer"], "aussen"],
+          ["sn.sp12.1.05", "In der Natur bewegen, Spielregeln, Fairness", "1/2", ["echtewelt:fangen"], "aussen"]
+        ],
+        2: [ // Spiele und Spielformen
+          ["sn.sp12.2.01", "Laufspiele: Wettläufe, Staffeln, Platzsuch- und Fangspiele", "1/2", ["sachkunde:sp-fair", "echtewelt:fangen"], "aussen"],
+          ["sn.sp12.2.02", "Mit Bällen und Spielgeräten üben: werfen, treffen, fangen", "1/2", ["echtewelt:werfen"], "aussen"],
+          ["sn.sp12.2.03", "Fair mit- und gegeneinander spielen, Gruppen bilden", "1/2", ["sachkunde:sp-fair"], "ja"],
+          ["sn.sp12.2.04", "Freizeit- und Pausenspiele, Regeln aushandeln und verändern", "1/2", ["sachkunde:sp-fair", "echtewelt:spielregeln"], "ja"]
+        ],
+        3: [ // Turnerische Übungen
+          ["sn.sp12.3.01", "An Geräten balancieren, klettern, hangeln, rollen; sicherer Geräteaufbau", "1/2", ["sachkunde:sp-turnen", "echtewelt:balance"], "aussen"],
+          ["sn.sp12.3.02", "Rolle vorwärts und rückwärts", "1/2", ["sachkunde:sp-turnen", "echtewelt:rolle"], "aussen"],
+          ["sn.sp12.3.03", "Helfen und sich helfen lassen", "1/2", ["sachkunde:sp-turnen"], "ja"],
+          ["sn.sp12.3.04", "Beidbeinig abspringen: Auf- und Niedersprünge", "1/2", ["echtewelt:huepfen"], "aussen"],
+          ["sn.sp12.3.05", "Gleichgewicht und Kraft, Spannung und Entspannung", "1/2", ["sachkunde:sp-turnen", "echtewelt:balance"], "aussen"]
+        ],
+        4: [ // Gymnastisch-tänzerische Übungen
+          ["sn.sp12.4.01", "Bewegen mit Materialien und Handgeräten", "1/2", ["sachkunde:sp-tanz", "echtewelt:werfen"], "aussen"],
+          ["sn.sp12.4.02", "Rhythmus: Schrittarten, klatschen, stampfen", "1/2", ["sachkunde:sp-tanz", "sachkunde:mu-rhythmus", "atelier:musik"], "ja"],
+          ["sn.sp12.4.03", "Bewegungslieder, Grundschritte, Kindertänze", "1/2", ["echtewelt:tanzschritte"], "aussen"],
+          ["sn.sp12.4.04", "Sinne schulen, gute Körperhaltung, Entspannung", "1/2", ["sachkunde:sp-tanz", "gefuehle:alle"], "ja"]
+        ],
+        5: [ // Schwimmen
+          ["sn.sp12.5.01", "Wassergewöhnung: atmen, springen, gleiten, fortbewegen", "1/2", ["echtewelt:schwimmen"], "aussen"],
+          ["sn.sp12.5.02", "Eine Schwimmtechnik (meist Brustschwimmen), tauchen", "1/2", ["echtewelt:schwimmen"], "aussen"],
+          ["sn.sp12.5.03", "Baderegeln und Badeordnung", "1/2", ["sachkunde:sp-baderegeln"], "ja"],
+          ["sn.sp12.5.04", "Spiele, Sprünge, erste Elemente der Wasserrettung", "1/2", ["sachkunde:sp-baderegeln", "echtewelt:schwimmen"], "aussen"]
+        ],
+        6: [ // Wintersport
+          ["sn.sp12.6.01", "Gewöhnung an Schnee und Eis, kleine Spiele", "1/2", ["echtewelt:schnee"], "aussen"],
+          ["sn.sp12.6.02", "Ski- oder Eislaufen: gleiten, bremsen, Kurven", "1/2", ["echtewelt:schnee"], "aussen"],
+          ["sn.sp12.6.03", "Regeln, Kleidung und Umwelt im Winter", "1/2", ["sachkunde:sp-winter"], "ja"]
+        ]
+      },
+      "3": {
+        1: [ // Leichtathletische Übungen
+          ["sn.sp34.1.01", "Lauf-ABC, Startformen und Sprint bis 50 m", "3/4", ["sachkunde:sp-ausdauer", "echtewelt:sprint"], "aussen"],
+          ["sn.sp34.1.02", "Weitsprung- und Hochsprungtechnik, Leistung messen", "3/4", ["sachkunde:sp-laufen", "echtewelt:huepfen"], "aussen"],
+          ["sn.sp34.1.03", "Werfen und Stoßen, Schlagwurf verbessern", "3/4", ["sachkunde:sp-laufen", "echtewelt:werfen"], "aussen"],
+          ["sn.sp34.1.04", "Bis 15 Minuten ausdauernd laufen, Puls fühlen, eigene Bestleistung, Gesundheit", "3/4", ["sachkunde:sp-ausdauer", "echtewelt:ausdauer"], "ja"]
+        ],
+        2: [ // Spiele und Spielformen
+          ["sn.sp34.2.01", "Lauf- und Ballspiele, prellen, dribbeln, freilaufen", "3/4", ["echtewelt:fangen"], "aussen"],
+          ["sn.sp34.2.02", "Spielrollen, Sieg und Niederlage, Regeln erklären, Schiedsrichter sein", "3/4", ["sachkunde:sp-regeln"], "ja"],
+          ["sn.sp34.2.03", "Freizeit- und Trendsportarten, Spiele anderer Länder", "3/4", ["sachkunde:sp-regeln"], "ja"]
+        ],
+        3: [ // Turnerische Übungen
+          ["sn.sp34.3.01", "Gerätebahnen, Sicherheit, Geräteaufbau", "3/4", ["sachkunde:sp-turnen", "echtewelt:balance"], "aussen"],
+          ["sn.sp34.3.02", "Rollen in Verbindungen, Handstand, Kopfstand, Rad-Vorübungen", "3/4", ["echtewelt:rolle"], "aussen"],
+          ["sn.sp34.3.03", "Sprunggrätsche und Aufhocken, helfen und sichern", "3/4", ["sachkunde:sp-turnen", "echtewelt:huepfen"], "aussen"],
+          ["sn.sp34.3.04", "Gleichgewicht, Kraft, Dehnen, gesunde Haltung", "3/4", ["sachkunde:sp-ruecken", "echtewelt:ruecken"], "ja"]
+        ],
+        4: [ // Gymnastisch-tänzerische Übungen
+          ["sn.sp34.4.01", "Seilspringen und Handgeräte", "3/4", ["sachkunde:sp-ruecken", "echtewelt:huepfen"], "aussen"],
+          ["sn.sp34.4.02", "Aerobic-Grundschritte und Rhythmus", "3/4", ["sachkunde:sp-ruecken"], "ja"],
+          ["sn.sp34.4.03", "Tänze gestalten, auch aus anderen Ländern", "3/4", ["sachkunde:mu-welt", "echtewelt:tanzschritte"], "aussen"],
+          ["sn.sp34.4.04", "Orientierung, Körperhaltung, Kräftigen, Dehnen und Entspannen", "3/4", ["sachkunde:sp-ruecken"], "ja"]
+        ],
+        6: [ // Wintersport
+          ["sn.sp34.6.01", "Ski- oder Eislauftechnik: Aufstieg, Schussfahrt, Bremsen, Bögen, Lift", "3/4", ["echtewelt:schnee"], "aussen"],
+          ["sn.sp34.6.02", "Pistenregeln, Rücksicht, Umwelt", "3/4", ["sachkunde:sp-piste"], "ja"]
+        ]
+      },
+      "4": {
+        1: [ // Leichtathletische Übungen
+          ["sn.sp34.1.01", "Lauf-ABC, Startformen und Sprint bis 50 m", "3/4", ["sachkunde:sp-ausdauer", "echtewelt:sprint"], "aussen"],
+          ["sn.sp34.1.02", "Weitsprung- und Hochsprungtechnik, Leistung messen", "3/4", ["sachkunde:sp-laufen", "echtewelt:huepfen"], "aussen"],
+          ["sn.sp34.1.03", "Werfen und Stoßen, Schlagwurf verbessern", "3/4", ["sachkunde:sp-laufen", "echtewelt:werfen"], "aussen"],
+          ["sn.sp34.1.04", "Bis 15 Minuten ausdauernd laufen, Puls fühlen, eigene Bestleistung, Gesundheit", "3/4", ["sachkunde:sp-ausdauer", "echtewelt:ausdauer"], "ja"]
+        ],
+        2: [ // Spiele und Spielformen
+          ["sn.sp34.2.01", "Lauf- und Ballspiele, prellen, dribbeln, freilaufen", "3/4", ["echtewelt:fangen"], "aussen"],
+          ["sn.sp34.2.02", "Spielrollen, Sieg und Niederlage, Regeln erklären, Schiedsrichter sein", "3/4", ["sachkunde:sp-regeln"], "ja"],
+          ["sn.sp34.2.03", "Freizeit- und Trendsportarten, Spiele anderer Länder", "3/4", ["sachkunde:sp-regeln"], "ja"]
+        ],
+        3: [ // Turnerische Übungen
+          ["sn.sp34.3.01", "Gerätebahnen, Sicherheit, Geräteaufbau", "3/4", ["sachkunde:sp-turnen", "echtewelt:balance"], "aussen"],
+          ["sn.sp34.3.02", "Rollen in Verbindungen, Handstand, Kopfstand, Rad-Vorübungen", "3/4", ["echtewelt:rolle"], "aussen"],
+          ["sn.sp34.3.03", "Sprunggrätsche und Aufhocken, helfen und sichern", "3/4", ["sachkunde:sp-turnen", "echtewelt:huepfen"], "aussen"],
+          ["sn.sp34.3.04", "Gleichgewicht, Kraft, Dehnen, gesunde Haltung", "3/4", ["sachkunde:sp-ruecken", "echtewelt:ruecken"], "ja"]
+        ],
+        4: [ // Gymnastisch-tänzerische Übungen
+          ["sn.sp34.4.01", "Seilspringen und Handgeräte", "3/4", ["sachkunde:sp-ruecken", "echtewelt:huepfen"], "aussen"],
+          ["sn.sp34.4.02", "Aerobic-Grundschritte und Rhythmus", "3/4", ["sachkunde:sp-ruecken"], "ja"],
+          ["sn.sp34.4.03", "Tänze gestalten, auch aus anderen Ländern", "3/4", ["sachkunde:mu-welt", "echtewelt:tanzschritte"], "aussen"],
+          ["sn.sp34.4.04", "Orientierung, Körperhaltung, Kräftigen, Dehnen und Entspannen", "3/4", ["sachkunde:sp-ruecken"], "ja"]
+        ],
+        6: [ // Wintersport
+          ["sn.sp34.6.01", "Ski- oder Eislauftechnik: Aufstieg, Schussfahrt, Bremsen, Bögen, Lift", "3/4", ["echtewelt:schnee"], "aussen"],
+          ["sn.sp34.6.02", "Pistenregeln, Rücksicht, Umwelt", "3/4", ["sachkunde:sp-piste"], "ja"]
+        ]
+      }
     }
   };
   // Übergang in Klasse 5 (Mathe): VORLÄUFIG – der Lehrplantext Kl. 5 (Oberschule/Gymnasium) liegt noch nicht vor. Grundlage: was der

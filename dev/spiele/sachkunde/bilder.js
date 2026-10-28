@@ -120,11 +120,30 @@
   B.vergleich = `<g transform="translate(-6 20) scale(.6)">${B.nikolaus}</g><g transform="translate(92 20) scale(.6)">${B.weihnachtsmann}</g>`;
   B.alle = `<g transform="translate(-30 30) scale(.55)">${B.weihnachtsmann}</g><g transform="translate(64 20) scale(.55)">${B.santa}</g><g transform="translate(130 30) scale(.55)">${B.dedmoros}</g>`;
 
+  // Kunst und Musik (28.10.2026): Farbkreis mit Grund- und Mischfarben, Notenwerte
+  B.farbkreis = (() => {
+    const F = [["#FFD23F", "Gelb"], ["#FF9636", "Orange"], ["#E5383B", "Rot"], ["#8E5BC8", "Lila"], ["#2F6FD6", "Blau"], ["#3BAA5C", "Grün"]];
+    const P = (w, r) => [110 + r * Math.sin(w * Math.PI / 180), 130 - r * Math.cos(w * Math.PI / 180)].map(v => v.toFixed(1)).join(" ");
+    return F.map(([f, n], i) => { const a = i * 60 - 30, b = a + 60, m = a + 30;
+      return `<path d="M110 130 L${P(a, 100)} A100 100 0 0 1 ${P(b, 100)} Z" fill="${f}" stroke="#fff" stroke-width="4"/>` +
+        `<text x="${P(m, 64).split(" ")[0]}" y="${+P(m, 64).split(" ")[1] + 6}" text-anchor="middle" font-size="${i % 2 ? 15 : 19}" font-weight="700" fill="#fff" font-family="Fredoka, Arial, sans-serif">${n}</text>`; }).join("") +
+      `<circle cx="110" cy="130" r="26" fill="#fff"/><text x="110" y="137" text-anchor="middle" font-size="20">🎨</text>`;
+  })();
+  B.noten = (() => {
+    const note = (x, voll, hals, fahne) => `<ellipse cx="${x}" cy="120" rx="15" ry="11" transform="rotate(-20 ${x} 120)" fill="${voll ? "#2E2230" : "#fff"}" stroke="#2E2230" stroke-width="4"/>` +
+      (hals ? `<path d="M${x + 13} 116 V56" stroke="#2E2230" stroke-width="4"/>` : "") + (fahne ? `<path d="M${x + 13} 56 Q${x + 34} 72 ${x + 26} 96" stroke="#2E2230" stroke-width="4" fill="none"/>` : "");
+    const t = (x, a) => `<text x="${x}" y="172" text-anchor="middle" font-size="16" font-weight="700" fill="#2E2230" font-family="Fredoka, Arial, sans-serif">${a}</text>`;
+    return `<path d="M4 120 H216" stroke="#B49ACF" stroke-width="3"/>` + note(26, false, false) + note(80, false, true) + note(134, true, true) + note(186, true, true, true) +
+      t(26, "ganze") + t(84, "halbe") + t(140, "Viertel") + t(194, "Achtel");
+  })();
+
+  const VB = { noten: "0 40 220 145" };   // Bilder mit eigenem Ausschnitt
+
   window.SachBilder = {
     bild(name, klasse = "") {
       if (!name) return "";
       if (!B[name]) return `<div class="gross-emoji ${klasse}" aria-hidden="true">${name}</div>`;
-      return `<svg class="sachbild ${klasse}" viewBox="0 0 220 260" aria-hidden="true">${B[name]}</svg>`;
+      return `<svg class="sachbild ${klasse}" viewBox="${VB[name] || "0 0 220 260"}" aria-hidden="true">${B[name]}</svg>`;
     },
     eule: (klasse = "eule") => `<svg class="${klasse}" viewBox="10 20 200 240" aria-hidden="true">${B.eule}</svg>`,
     stammbaum

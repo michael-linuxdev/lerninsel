@@ -4,9 +4,8 @@ Auftrag (27.10.2026): Den sächsischen Lehrplan **Schritt für Schritt in voller
 in **allen Fächern**. „Volle Tiefe“ heißt laut Auftraggeber **„wie ein Schuljahr“**: jeder Inhaltspunkt geübt, in sinnvoller
 Reihenfolge, mit Wiederholung und einer Lernstands-Prüfung je Lernbereich.
 
-Dieses Dokument ist die Arbeitsliste dafür. Stand 28.10.2026 (vormittags): **Mathe, Deutsch, Sachunterricht und Englisch gegen die PDFs geprüft
-und ausgebaut** (alle Inhaltspunkte in `shared/lehrplan/laender/sachsen-punkte.js`). Kunst, Musik, Werken, Sport und Ethik sind noch
-**vorläufig** – dafür fehlen die PDFs.
+Dieses Dokument ist die Arbeitsliste dafür. Stand 28.10.2026 (nachmittags): **alle Fächer gegen die PDFs geprüft und ausgebaut** –
+Mathe, Deutsch, Sachunterricht, Englisch, Kunst, Musik, Werken, Sport und Ethik (alle Inhaltspunkte in `shared/lehrplan/laender/sachsen-punkte.js`).
 
 ## 1. Quellen (vom Auftraggeber hochzuladen)
 Die Seiten des Schulportals (`schulportal.sachsen.de/lplandb`) sind aus der Arbeitsumgebung gesperrt. Benötigt als PDF:
@@ -16,11 +15,11 @@ Die Seiten des Schulportals (`schulportal.sachsen.de/lplandb`) sind aus der Arbe
 | Mathematik | 2025 (seit 1.8.2025) | ✅ liegt vor | ✅ liegt vor |
 | Deutsch | 2025 | ✅ liegt vor | ✅ liegt vor |
 | Sachunterricht | 2019 | ✅ liegt vor | ✅ liegt vor |
-| Kunst | aktuell gültige | 1/2 | 3 |
-| Musik | aktuell gültige | 1/2 | 3 |
-| Werken | aktuell gültige | 1/2 | 3 |
-| Sport | aktuell gültige | 1/2 | 3 |
-| Ethik (oder ev./kath. Religion) | aktuell gültige | 1/2 | 3 |
+| Kunst | 2019 | ✅ liegt vor | ✅ liegt vor |
+| Musik | 2019 | ✅ liegt vor | ✅ liegt vor |
+| Werken | 2019 | ✅ liegt vor | ✅ liegt vor |
+| Sport | 2019 | ✅ liegt vor | ✅ liegt vor |
+| Ethik (Religion nur auf Wunsch) | 2004/2019 | ✅ liegt vor | ✅ liegt vor |
 | Englisch | 2019 | – (Pflicht erst ab Kl. 3) | ✅ liegt vor |
 
 Regel bleibt: Lehrplantexte **nur zusammenfassen**, nie wörtlich übernehmen; jeder Punkt bekommt eine Lernziel-ID.
@@ -99,14 +98,19 @@ Steine, Himmelsraum, Schlösser …) sind freiwillig und nicht gezählt. Sachthe
 Teilweise: Lieder/Reime zum Mitsingen (Kl. 3 LB 1 und 10), Mimik/Gestik (Kl. 4 LB 1), englische Kinderbücher (LB 7), längere Sachtexte (LB 8).
 Draußen: Sprachenmappe/Dossier, Speisekarte gestalten.
 
-### Weitere Fächer Kl. 2
-| Fach | Vorhanden | Stand |
+### Kunst, Musik, Werken, Sport, Ethik (Lehrpläne 2019) – ✅ gegen die PDFs geprüft (28.10.2026)
+Wissens-Themen mit Eule Ella (`spiele/sachkunde/faecher.js`, Seite `spiele/sachkunde/?fach=…`), Praktisches als Echte-Welt-Aufgaben;
+🌍 = Lernbereich gehört vor allem nach draußen.
+| Fach | Themen | Inhaltspunkte (geübt / teilweise / draußen) | Teilweise |
+|---|---|---|---|
+| Kunst | 17 + Atelier | 45 (32 / 1 / 12) | Bilder digital bearbeiten |
+| Musik | 18 + Musik-Ecke | 48 (34 / 3 / 11) | Melodiebausteine wiedererkennen, über Musik präsentieren |
+| Werken | 9 | 34 (24 / 1 / 9) | Programmierumgebung |
+| Sport | 10 | 42 (14 / 0 / 28), meist 🌍 | – |
+| Ethik | 16 + Gefühle | 43 (43 / 0 / 0) | – |
+
+| Weiteres | Vorhanden | Stand |
 |---|---|---|
-| Kunst | Atelier: Malen mit Vorlagen und freiem Malen, Bilder an die Wand | 🟡 (Farbenlehre, Kunstwerke betrachten, Collage, Plastisches fehlen; Plastisches 🌍) |
-| Musik | Atelier: Musik (Klänge, Instrument), Silben klatschen | 🟡 (Lieder singen, Rhythmus-Notation, Instrumente kennen fehlen) |
-| Werken | – | 🌍 (Papier falten, schneiden, kleben – Echte-Welt-Ideen; evtl. Faltanleitungen in der App) |
-| Sport | Bewegungspausen (Zeitsystem) | 🌍 (Bewegungsaufgaben, keine Bewertung) |
-| Ethik / Religion | Gefühle (erkennen, Streit, Ruhe), SU „Regeln“, „Kinderrechte“ (Kl. 4) | 🟡 (Ethik-Lehrplan prüfen; Religion nur als Eltern-Wahl, neutral) |
 | Englisch (freiwillig Kl. 1/2) | Eltern-Einstellung „ab Kl. 1“, 15 Kl.-3-Lektionen | 🟡 (keine eigenen Kl.-1/2-Lektionen: Lieder, Reime) |
 | Medienbildung (fachübergreifend) | Tablet-Führerschein | ✅ |
 

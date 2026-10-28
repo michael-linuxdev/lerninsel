@@ -121,6 +121,119 @@
           { nr: 11, lz: ["en.sp.03", "en.ik.01"], titel: "My Portfolio", inhalte: ["Sprachenpass, Sprachenbiografie", "Dossier mit eigenen Arbeiten"], app: ["englisch:en-portfolio"], abdeckung: "ja", hinweis: "Sprachen und Fortschritte benennen ja; das Dossier mit etwa zehn Arbeiten entsteht auf Papier (Echte Welt)." }
         ]
       }
+    },
+    // Kunst, Musik, Werken, Sport, Ethik (Lehrpläne 2019, 28.10.2026; erzeugt aus den Inhaltspunkten, abdeckung „aussen“ = vor allem echte Welt)
+    kunst: {
+      name: "Kunst", stand: "Lehrplan 2019 (gegen den Lehrplantext geprüft am 28.10.2026, Inhaltspunkte in sachsen-punkte.js; Wahlbereiche freiwillig)",
+      stufen: {
+        "1/2": [
+          { nr: 1, lz: ["ku.ge.01", "ku.ge.02"], titel: "Flächiges Gestalten", inhalte: ["Werkzeuge und Techniken erproben", "Grund- und Mischfarben, Farbauftrag", "Punkt, Linie, Muster, Drucken", "Formen, Bildaufbau, Schrift, Collage"], app: ["atelier:malen", "echtewelt:collage", "sachkunde:ku-farben", "echtewelt:farbkreis", "sachkunde:ku-farbauftrag", "sachkunde:ku-linie", "sachkunde:ku-drucken", "echtewelt:stempel", "sachkunde:ku-formen"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella, Atelier; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["ku.ge.03"], titel: "Körperhaft-räumliches Gestalten", inhalte: ["Plastiken betrachten und formen", "Bauen mit Fundstücken", "Räume erleben und gestalten"], app: ["sachkunde:ku-plastik", "echtewelt:kneten", "echtewelt:turm", "echtewelt:hoehle"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 3, lz: ["ku.be.01"], titel: "Aktionsbetontes Gestalten", inhalte: ["Kunstwerke spielerisch entdecken", "Spiel mit Figuren und Material", "Körper, Mimik, Verkleiden"], app: ["sachkunde:ku-sinne", "echtewelt:lebendesbild", "echtewelt:landart"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." }
+        ],
+        "3": [
+          { nr: 1, lz: ["ku.ge.01", "ku.ge.02", "me.sa.01"], titel: "Flächiges Gestalten", inhalte: ["Farben und Stimmungen", "Hell-Dunkel, Strukturen, Druck", "Bildaufbau", "Schrift und Fotografie"], app: ["atelier:malen", "echtewelt:frottage", "sachkunde:ku-farbgefuehl", "sachkunde:ku-farbauftrag", "sachkunde:ku-hell-dunkel", "sachkunde:ku-bildraum", "sachkunde:ku-schrift-foto"], abdeckung: "teil", hinweis: "Noch offen: Bilder digital bearbeiten und verfremden." },
+          { nr: 2, lz: ["ku.ge.03"], titel: "Körperhaft-räumliches Gestalten", inhalte: ["Bildhauer und Modellieren", "Montage, Upcycling, Design", "Land-Art"], app: ["sachkunde:ku-bildhauer", "echtewelt:kneten", "echtewelt:landart"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["ku.be.01"], titel: "Aktionsbetontes Gestalten", inhalte: ["Spielerische Kunstbetrachtung", "Körper, Pantomime, Schatten", "Lebende Bilder"], app: ["sachkunde:ku-aktion3", "echtewelt:lebendesbild"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "4": [
+          { nr: 1, lz: ["ku.be.01", "ku.be.02", "me.ar.01"], titel: "Flächiges Gestalten", inhalte: ["Bildarten, Gemälde und Grafik", "Druck, Logos, Piktogramme", "Bilder in Medien und Werbung"], app: ["atelier:malen", "echtewelt:collage", "sachkunde:ku-gemaelde", "sachkunde:ku-farbgefuehl", "sachkunde:ku-medienbild"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella, Atelier; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["ku.be.02", "ku.ge.03"], titel: "Körperhaft-räumliches Gestalten", inhalte: ["Relief und bewegliche Objekte", "Rauminstallation", "Architektur"], app: ["sachkunde:ku-architektur", "echtewelt:windspiel", "echtewelt:hoehle", "echtewelt:architektur"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["ku.be.01", "me.pp.01"], titel: "Aktionsbetontes Gestalten", inhalte: ["Aktionsmethoden der Kunstbetrachtung", "Eine Aktion planen", "Aktionskunst"], app: ["sachkunde:ku-aktion4", "echtewelt:lebendesbild"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ]
+      }
+    },
+    musik: {
+      name: "Musik", stand: "Lehrplan 2019 (gegen den Lehrplantext geprüft am 28.10.2026, Inhaltspunkte in sachsen-punkte.js; Wahlbereiche freiwillig)",
+      stufen: {
+        "1/2": [
+          { nr: 1, lz: ["mu.ma.02"], titel: "Musik erfinden, wiedergeben und gestalten mit der Stimme", inhalte: ["Stimme als Instrument", "Grundlagen des Singens", "Lieder auswendig"], app: ["sachkunde:mu-stimme", "atelier:musik", "sachkunde:mu-rhythmus", "lesen:silben", "echtewelt:singen"], abdeckung: "teil", hinweis: "Noch offen: Grundton spüren, Melodiebausteine wiedererkennen." },
+          { nr: 2, lz: ["mu.ho.02", "mu.ma.01"], titel: "Musik erfinden, wiedergeben und gestalten mit Instrumenten", inhalte: ["Klänge erzeugen und untersuchen", "Grundschlag und Rhythmusbausteine", "Erste Melodieinstrumente"], app: ["sachkunde:mu-instrumente1", "atelier:musik", "sachkunde:mu-rhythmus", "echtewelt:instrument"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella, Atelier; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["mu.ma.01", "sp.be.01"], titel: "Musik umsetzen, verbinden und in Beziehung bringen", inhalte: ["Musik in Bewegung und Tanz", "Musik in Bild und Sprache", "Szenisches Spiel"], app: ["sachkunde:mu-bewegung", "echtewelt:tanzen", "echtewelt:tanzschritte", "sachkunde:mu-laut-leise", "echtewelt:lebendesbild"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 4, lz: ["mu.ho.01", "mu.ho.02", "mu.ho.03"], titel: "Musik wahrnehmen, verstehen und deuten", inhalte: ["Ausdruck von Musik", "Lautstärke, Tempo, Instrumente, Stimmen", "Musik im Leben, Komponisten"], app: ["sachkunde:mu-laut-leise", "atelier:musik", "sachkunde:mu-instrumente1", "sachkunde:mu-orchester", "sachkunde:mu-mozart"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella, Atelier; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "3": [
+          { nr: 1, lz: ["mu.ma.02"], titel: "Musik erfinden, wiedergeben und gestalten mit der Stimme", inhalte: ["Bausteine singen", "Kanon, Quodlibet", "Lieder verschiedener Länder"], app: ["atelier:musik", "sachkunde:mu-stimme", "sachkunde:mu-singen3", "echtewelt:singen", "sachkunde:mu-welt"], abdeckung: "teil", hinweis: "Noch offen: Melodie- und Rhythmusbausteine singen und wiedererkennen." },
+          { nr: 2, lz: ["mu.no.01", "mu.ma.01"], titel: "Musik erfinden, wiedergeben und gestalten mit Instrumenten", inhalte: ["Klangexperimente", "Zweier- und Dreiertakt", "Rhythmen notieren"], app: ["atelier:musik", "sachkunde:mu-taenze", "sachkunde:mu-noten"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella, Atelier; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["mu.ma.01"], titel: "Musik umsetzen, verbinden und in Beziehung bringen", inhalte: ["Spiegel- und Echotanzen", "Tänze anderer Länder", "Musik in Bild und Sprache"], app: ["sachkunde:mu-welt", "echtewelt:tanzen", "echtewelt:tanzschritte", "sachkunde:mu-laut-leise"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 4, lz: ["mu.ho.02", "mu.ho.03"], titel: "Musik wahrnehmen, verstehen und deuten", inhalte: ["Gestaltungsmittel hören", "Instrumentengruppen", "Komponisten, Kirche, andere Länder"], app: ["sachkunde:mu-laut-leise", "sachkunde:mu-singen3", "sachkunde:mu-gruppen", "sachkunde:mu-bach", "sachkunde:mu-welt"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "4": [
+          { nr: 1, lz: ["mu.ma.02", "mu.ma.03"], titel: "Musik erfinden, wiedergeben und gestalten mit der Stimme", inhalte: ["Melodien erfinden", "Zweistimmig singen", "Lieder vieler Zeiten und Kulturen"], app: ["atelier:musik", "sachkunde:mu-rhythmus4", "sachkunde:mu-stimme", "echtewelt:singen", "englisch:en-party"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 2, lz: ["mu.no.01", "mu.ma.01"], titel: "Musik erfinden, wiedergeben und gestalten mit Instrumenten", inhalte: ["Improvisieren", "Rhythmen kombinieren", "Noten notieren"], app: ["atelier:musik", "sachkunde:mu-rhythmus4", "sachkunde:mu-taenze", "sachkunde:mu-noten"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella, Atelier; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["mu.ma.01"], titel: "Musik umsetzen, verbinden und in Beziehung bringen", inhalte: ["Musik in Bewegung", "Tänze aus Zeiten und Kulturen", "Geschichten zur Musik"], app: ["echtewelt:tanzen", "sachkunde:mu-taenze", "echtewelt:tanzschritte", "sachkunde:mu-bewegung"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["mu.ho.02", "mu.ho.03", "me.sa.01"], titel: "Musik wahrnehmen, verstehen und deuten", inhalte: ["Gattungen", "Orchester, Band, Chor", "Musizierstätten in Sachsen, Medien, Komponisten"], app: ["sachkunde:mu-gattungen", "sachkunde:mu-orchester", "sachkunde:mu-komponisten", "sachkunde:mu-sachsen", "echtewelt:musizierstaette", "sachkunde:mu-medien", "sachkunde:mu-taenze"], abdeckung: "teil", hinweis: "Noch offen: Über Musik sprechen, Informationen sammeln und präsentieren." }
+        ]
+      }
+    },
+    werken: {
+      name: "Werken", stand: "Lehrplan 2019 (gegen den Lehrplantext geprüft am 28.10.2026, Inhaltspunkte in sachsen-punkte.js; Wahlbereiche freiwillig)",
+      stufen: {
+        "1/2": [
+          { nr: 1, lz: ["su.te.01"], titel: "Entdecken von Technik im Alltag", inhalte: ["Technik im Alltag", "Fahrzeuge, Rad und Achse", "Ein Objekt bauen"], app: ["sachkunde:we-fahrzeuge", "echtewelt:papierflieger"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["su.te.04"], titel: "Umgehen mit Material und Werkzeug", inhalte: ["Planen und Skizzen", "Papierwerkstoffe", "Werkzeuge und Fertigungsverfahren"], app: ["sachkunde:we-werkzeug", "echtewelt:bruecke", "sachkunde:we-papier", "echtewelt:werkzeug", "echtewelt:papierflieger"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["su.te.02"], titel: "Bauen stabiler Konstruktionen", inhalte: ["Bauwerke der Umgebung", "Stabilität", "Türme und Brücken bauen"], app: ["sachkunde:we-bauen", "echtewelt:bruecke", "echtewelt:turm"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "3": [
+          { nr: 1, lz: ["su.na.09", "su.te.04"], titel: "Nutzen von elektrischem Strom", inhalte: ["Erneuerbare Energie", "Bauteile und Schaltplan", "Sicherheit"], app: ["sachkunde:we-strom", "sachkunde:strom", "echtewelt:stromkreis"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["su.te.04"], titel: "Planen und Herstellen eines Gegenstandes", inhalte: ["Holz als Rohstoff", "Planen und Arbeitsplatz", "Holz bearbeiten"], app: ["sachkunde:we-holz", "sachkunde:we-werkzeug", "echtewelt:holz"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "4": [
+          { nr: 1, lz: ["su.te.03", "su.te.05"], titel: "Warten und Pflegen technischer Objekte", inhalte: ["Baugruppen", "Fehlersuche", "Pflege, Reparatur, Recycling"], app: ["sachkunde:we-fahrrad", "echtewelt:fahrradpflege", "echtewelt:reparieren"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["su.te.04"], titel: "Vergleichen von Werkstoffen und Herstellen eines Produkts", inhalte: ["Holzwerkstoffe und Kunststoffe", "Skizze und Stückliste", "Produkt fertigen"], app: ["sachkunde:we-werkstoffe", "sachkunde:we-holz", "echtewelt:holz"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["su.te.05", "me.ph.01"], titel: "Begegnung mit Robotern und Automaten", inhalte: ["Eingabe – Verarbeitung – Ausgabe", "Befehlsfolgen", "Modell bauen"], app: ["sachkunde:we-roboter", "echtewelt:automat"], abdeckung: "teil", hinweis: "Noch offen: Einfache Programmierumgebung: kurze Befehlsfolgen." }
+        ]
+      }
+    },
+    ethik: {
+      name: "Ethik", stand: "Lehrplan 2004/2019 (gegen den Lehrplantext geprüft am 28.10.2026, Inhaltspunkte in sachsen-punkte.js; Wahlbereiche freiwillig)",
+      stufen: {
+        "1/2": [
+          { nr: 1, lz: ["et.ge.01", "et.we.01"], titel: "Ich im Wir", inhalte: ["Einmaligkeit", "Eigenschaften und Gefühle", "Anders sein"], app: ["sachkunde:et-einmalig", "gefuehle:alle"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["et.mi.01", "et.ge.02"], titel: "Miteinander", inhalte: ["Familienformen", "Geborgenheit", "Klasse, Regeln, Streit"], app: ["sachkunde:et-familie", "sachkunde:familie", "sachkunde:et-klasse", "gefuehle:alle"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["et.we.02"], titel: "Voneinander", inhalte: ["Geburtstag", "Erntedank, St. Martin, Advent, Nikolaus", "Weihnachten, Silvester, Ostern"], app: ["sachkunde:et-herbstfeste", "sachkunde:et-winterfeste"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["et.we.03"], titel: "Wir in der Welt", inhalte: ["Staunen über die Natur", "Werden, Wachsen, Vergehen", "Natur schützen"], app: ["sachkunde:et-natur", "echtewelt:pflanze", "echtewelt:staunen"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "3": [
+          { nr: 1, lz: ["et.ge.02", "et.we.01"], titel: "Ich im Wir", inhalte: ["Kinder und Erwachsene", "Stärken, Schwächen, Mut", "Gut und Böse, Konflikte"], app: ["sachkunde:et-staerken", "sachkunde:kulturen", "sachkunde:nein-sagen", "gefuehle:alle", "sachkunde:et-freundschaft"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["et.mi.01", "et.mi.02"], titel: "Miteinander", inhalte: ["Freundschaft", "Streit, Mobbing, Goldene Regel", "Wahrheit und Lüge"], app: ["sachkunde:et-freundschaft", "sachkunde:et-wahrheit"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["et.we.02"], titel: "Voneinander", inhalte: ["Ethik und Religion", "Kirche, Bibel, Kreuz", "Kirchenjahr und Feiertage in Sachsen"], app: ["sachkunde:et-kirchenjahr", "sachkunde:et-winterfeste"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["et.we.03"], titel: "Wir in der Welt", inhalte: ["Symbole", "Natur, Menschenwelt, Gedankenwelt", "Die vier Elemente, die Welt bewahren"], app: ["sachkunde:et-symbole"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ],
+        "4": [
+          { nr: 1, lz: ["et.we.04", "et.ge.02"], titel: "Ich im Wir", inhalte: ["Identität und Vorbilder", "Wünsche und Träume", "Entscheidungen, Gewissen"], app: ["sachkunde:et-wuensche", "echtewelt:wuensche"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 2, lz: ["et.mi.01", "et.mi.02"], titel: "Miteinander", inhalte: ["Generationen", "Goldene Regel", "Zivilcourage"], app: ["sachkunde:et-miteinander4", "echtewelt:frage"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["et.we.02"], titel: "Voneinander", inhalte: ["Judentum und Islam", "Gemeinsamkeiten der drei Religionen", "Helfen und Toleranz"], app: ["sachkunde:et-religionen", "echtewelt:helfenprojekt", "sachkunde:kulturen"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 4, lz: ["et.we.01", "et.we.04"], titel: "Wir in der Welt", inhalte: ["Gerechtigkeit", "Kinderrechte", "Glück, Zeit, Abschied"], app: ["sachkunde:et-gerechtigkeit", "sachkunde:kinderrechte", "sachkunde:et-glueck-zeit"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." }
+        ]
+      }
+    },
+    sport: {
+      name: "Sport", stand: "Lehrplan 2019, Klassen 1/2 und 3/4 (gegen den Lehrplantext geprüft am 28.10.2026, Inhaltspunkte in sachsen-punkte.js; Schwimmen meist in Kl. 2, Wahlbereiche freiwillig)",
+      stufen: {
+        "1/2": [
+          { nr: 1, lz: ["sp.be.01"], titel: "Leichtathletische Übungen", inhalte: ["Schnell laufen, springen, werfen", "Ausdauernd laufen"], app: ["sachkunde:sp-laufen", "echtewelt:sprint", "echtewelt:huepfen", "echtewelt:werfen", "echtewelt:ausdauer", "echtewelt:fangen"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 2, lz: ["sp.be.03", "et.mi.01"], titel: "Spiele und Spielformen", inhalte: ["Laufspiele", "Ballgeschick", "Fair Play und Regeln"], app: ["sachkunde:sp-fair", "echtewelt:fangen", "echtewelt:werfen", "echtewelt:spielregeln"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 3, lz: ["sp.be.01", "sp.be.03"], titel: "Turnerische Übungen", inhalte: ["An Geräten bewegen", "Rollen", "Gleichgewicht und Kraft"], app: ["sachkunde:sp-turnen", "echtewelt:balance", "echtewelt:rolle", "echtewelt:huepfen"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 4, lz: ["sp.be.01", "mu.ma.01"], titel: "Gymnastisch-tänzerische Übungen", inhalte: ["Handgeräte", "Rhythmus und Tanz", "Sinne und Haltung"], app: ["sachkunde:sp-tanz", "echtewelt:werfen", "sachkunde:mu-rhythmus", "atelier:musik", "echtewelt:tanzschritte", "gefuehle:alle"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 5, lz: ["sp.be.03"], titel: "Schwimmen", inhalte: ["Wassergewöhnung", "Eine Schwimmtechnik", "Baderegeln"], app: ["echtewelt:schwimmen", "sachkunde:sp-baderegeln"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 6, lz: ["sp.be.03"], titel: "Wintersport", inhalte: ["Schnee und Eis", "Ski- oder Eislaufen", "Regeln und Umwelt"], app: ["echtewelt:schnee", "sachkunde:sp-winter"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." }
+        ],
+        "3": [
+          { nr: 1, lz: ["sp.be.01", "su.na.02"], titel: "Leichtathletische Übungen", inhalte: ["Lauf-ABC und Sprint", "Springen und Werfen", "Ausdauer und Gesundheit"], app: ["sachkunde:sp-ausdauer", "echtewelt:sprint", "sachkunde:sp-laufen", "echtewelt:huepfen", "echtewelt:werfen", "echtewelt:ausdauer"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 2, lz: ["sp.be.03", "et.mi.01"], titel: "Spiele und Spielformen", inhalte: ["Lauf- und Ballspiele", "Regeln und Schiedsrichter", "Freizeitsport"], app: ["echtewelt:fangen", "sachkunde:sp-regeln"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["sp.be.01", "sp.be.03"], titel: "Turnerische Übungen", inhalte: ["Gerätebahnen", "Rollen, Stützen, Springen", "Kraft und Haltung"], app: ["sachkunde:sp-turnen", "echtewelt:balance", "echtewelt:rolle", "echtewelt:huepfen", "sachkunde:sp-ruecken", "echtewelt:ruecken"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 4, lz: ["sp.be.02", "mu.ma.01"], titel: "Gymnastisch-tänzerische Übungen", inhalte: ["Seil und Handgeräte", "Aerobic und Rhythmus", "Tänze, Wahrnehmung, Haltung"], app: ["sachkunde:sp-ruecken", "echtewelt:huepfen", "sachkunde:mu-welt", "echtewelt:tanzschritte"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 6, lz: ["sp.be.03", "su.na.03"], titel: "Wintersport", inhalte: ["Ski- oder Eislauftechnik", "Pistenregeln und Umwelt"], app: ["echtewelt:schnee", "sachkunde:sp-piste"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." }
+        ],
+        "4": [
+          { nr: 1, lz: ["sp.be.01", "su.na.02"], titel: "Leichtathletische Übungen", inhalte: ["Lauf-ABC und Sprint", "Springen und Werfen", "Ausdauer und Gesundheit"], app: ["sachkunde:sp-ausdauer", "echtewelt:sprint", "sachkunde:sp-laufen", "echtewelt:huepfen", "echtewelt:werfen", "echtewelt:ausdauer"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 2, lz: ["sp.be.03", "et.mi.01"], titel: "Spiele und Spielformen", inhalte: ["Lauf- und Ballspiele", "Regeln und Schiedsrichter", "Freizeitsport"], app: ["echtewelt:fangen", "sachkunde:sp-regeln"], abdeckung: "ja", hinweis: "In der App: Wissens-Themen mit Eule Ella; Praktisches als Echte-Welt-Aufgabe." },
+          { nr: 3, lz: ["sp.be.01", "sp.be.03"], titel: "Turnerische Übungen", inhalte: ["Gerätebahnen", "Rollen, Stützen, Springen", "Kraft und Haltung"], app: ["sachkunde:sp-turnen", "echtewelt:balance", "echtewelt:rolle", "echtewelt:huepfen", "sachkunde:sp-ruecken", "echtewelt:ruecken"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 4, lz: ["sp.be.02", "mu.ma.01"], titel: "Gymnastisch-tänzerische Übungen", inhalte: ["Seil und Handgeräte", "Aerobic und Rhythmus", "Tänze, Wahrnehmung, Haltung"], app: ["sachkunde:sp-ruecken", "echtewelt:huepfen", "sachkunde:mu-welt", "echtewelt:tanzschritte"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." },
+          { nr: 6, lz: ["sp.be.03", "su.na.03"], titel: "Wintersport", inhalte: ["Ski- oder Eislauftechnik", "Pistenregeln und Umwelt"], app: ["echtewelt:schnee", "sachkunde:sp-piste"], abdeckung: "aussen", hinweis: "Gehört vor allem in die echte Welt (Echte-Welt-Aufgaben); die App übt Wissen und Regeln dazu." }
+        ]
+      }
     }
   }
 }, {

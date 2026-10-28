@@ -53,8 +53,47 @@
     ["gefuehl", "gefuehle", "😊", "Erzähl jemandem: Was hat dich heute froh gemacht?", "Расскажи кому-нибудь: что тебя сегодня порадовало?", 1],
     ["danke", "gefuehle", "🙏", "Sag heute zu drei Menschen ganz bewusst „Danke“.", "Скажи сегодня трём людям «спасибо».", 1],
     ["malen", "gefuehle", "🎨", "Mal ein Bild von deinem Tier oder deiner Welt auf der Insel.", "Нарисуй своего питомца или свой мир на острове.", 1]
+    // Kunst, Musik, Werken, Sport, Ethik (Lehrpläne Sachsen 2019, 28.10.2026): Praktisches, das die App nicht ersetzt
+    ["farbkreis", "kunst", "🎨", "Misch mit Wasserfarben aus Rot, Gelb und Blau die Farben Orange, Grün und Lila und mal einen kleinen Farbkreis.", "Смешай акварелью из красного, жёлтого и синего оранжевый, зелёный и фиолетовый и нарисуй маленький цветовой круг.", 1],
+    ["stempel", "kunst", "🥔", "Druck mit einem Korken, einer halben Kartoffel oder deinem Finger ein Muster auf Papier.", "Напечатай узор на бумаге пробкой, половинкой картошки или пальцем.", 1],
+    ["kneten", "kunst", "🏺", "Forme aus Knete oder Salzteig ein kleines Tier – rollen, drücken, zusammensetzen.", "Слепи из пластилина или солёного теста маленькое животное: катай, нажимай, соединяй.", 1],
+    ["collage", "kunst", "✂️", "Schneide Bilder aus alten Zeitschriften aus und kleb daraus eine Collage.", "Вырежи картинки из старых журналов и сделай из них коллаж.", 1],
+    ["landart", "kunst", "🪨", "Leg draußen aus Steinen, Ästen und Blättern ein Bild oder Muster und mach ein Foto davon.", "Выложи на улице из камней, веток и листьев картину или узор и сфотографируй.", 2],
+    ["museum", "kunst", "🖼️", "Schau dir mit einem Erwachsenen echte Kunst an – im Museum, in einer Kirche oder an einer Hauswand. Was siehst du?", "Посмотри со взрослым настоящее искусство – в музее, в церкви или на стене дома. Что ты видишь?", 2],
+    ["frottage", "kunst", "🍃", "Leg ein Blatt Papier auf eine Münze, ein Blatt oder Holz und reib mit einem Wachsmalstift darüber.", "Положи бумагу на монету, лист или дерево и потри сверху восковым мелком.", 3],
+    ["lebendesbild", "kunst", "🧍", "Stellt zu zweit ein Bild nach, das ihr kennt – ganz still wie eine Statue.", "Вдвоём изобразите знакомую картину – неподвижно, как статуя.", 3],
+    ["architektur", "kunst", "🏛️", "Such in deinem Ort ein besonderes Gebäude. Wozu dient es? Welche Formen siehst du?", "Найди в своём городе особенное здание. Для чего оно? Какие формы ты видишь?", 4],
+    ["windspiel", "kunst", "🎐", "Bau aus Fundstücken ein Windspiel oder ein Mobile, das sich bewegt.", "Сделай из найденных вещей музыку ветра или подвижный мобиль.", 4],
+    ["papierflieger", "werken", "✈️", "Falte einen Papierflieger. Probier zwei Formen aus: Welcher fliegt weiter?", "Сложи бумажный самолётик. Попробуй две формы: какой летит дальше?", 1],
+    ["bruecke", "werken", "🌉", "Bau aus Papier eine Brücke zwischen zwei Büchern. Wie viele Münzen trägt sie? Falte das Papier – hält sie jetzt mehr?", "Построй из бумаги мост между двумя книгами. Сколько монет он выдержит? Сложи бумагу гармошкой – теперь больше?", 1],
+    ["werkzeug", "werken", "🔧", "Schau dir mit einem Erwachsenen einen Werkzeugkasten an. Wofür ist jedes Werkzeug?", "Рассмотри со взрослым ящик с инструментами. Для чего каждый инструмент?", 2],
+    ["stromkreis", "werken", "🔋", "Bau mit einem Erwachsenen und einem Baukasten einen Stromkreis mit Batterie, Schalter und Lämpchen.", "Собери со взрослым из конструктора цепь с батарейкой, выключателем и лампочкой.", 3],
+    ["holz", "werken", "🪵", "Schleif mit einem Erwachsenen ein Stück Holz glatt – erst mit grobem, dann mit feinem Schleifpapier.", "Отшлифуй со взрослым кусок дерева – сначала грубой, потом мелкой наждачной бумагой.", 3],
+    ["reparieren", "werken", "🪛", "Repariere mit einem Erwachsenen etwas Kaputtes, statt es wegzuwerfen.", "Почини со взрослым что-то сломанное, вместо того чтобы выбросить.", 3],
+    ["fahrradpflege", "werken", "🚲", "Pflege mit einem Erwachsenen dein Fahrrad: Luft prüfen, Kette ölen, Bremsen testen.", "Поухаживай со взрослым за велосипедом: проверь шины, смажь цепь, проверь тормоза.", 4],
+    ["automat", "werken", "🤖", "Such Automaten oder Roboter in deinem Alltag. Was gibst du ein, was kommt heraus?", "Найди автоматы или роботов в своей жизни. Что ты вводишь, что получаешь?", 4],
+    ["singen", "musik", "🎤", "Sing ein Lied, das du auswendig kannst – einmal laut und einmal ganz leise.", "Спой песню, которую знаешь наизусть, – один раз громко и один раз совсем тихо.", 1],
+    ["klatschen", "musik", "👏", "Klatsch den Rhythmus deines Namens und der Namen deiner Familie.", "Прохлопай ритм своего имени и имён своей семьи.", 1],
+    ["instrument", "musik", "🥁", "Bau ein Instrument: Reis in eine Dose (Rassel) oder Gummis über eine Schachtel (Gitarre).", "Сделай инструмент: рис в банку (погремушка) или резинки на коробку (гитара).", 1],
+    ["tanzen", "musik", "💃", "Tanz zu Musik: bei schneller Musik schnell, bei langsamer Musik langsam.", "Потанцуй под музыку: под быструю быстро, под медленную медленно.", 1],
+    ["konzert", "musik", "🎻", "Hör mit einem Erwachsenen ein Stück klassische Musik. Welche Instrumente erkennst du?", "Послушай со взрослым классическую музыку. Какие инструменты ты узнаёшь?", 2],
+    ["musizierstaette", "musik", "🎼", "Besuch mit einem Erwachsenen einen Ort, an dem Musik gemacht wird: Konzert, Kirche, Musikschule oder Theater.", "Сходи со взрослым туда, где играют музыку: концерт, церковь, музыкальная школа или театр.", 4],
+    ["sprint", "bewegung", "🏃", "Lauf auf einem freien Platz 20 Meter, so schnell du kannst. Schaffst du es beim zweiten Mal schneller?", "Пробеги на свободной площадке 20 метров как можно быстрее. Во второй раз быстрее?", 1],
+    ["ausdauer", "bewegung", "🫀", "Lauf 10 Minuten gemütlich – so, dass du dich noch unterhalten kannst. Fühl danach dein Herz.", "Беги 10 минут спокойно – так, чтобы можно было разговаривать. Потом почувствуй сердце.", 1],
+    ["werfen", "bewegung", "🎯", "Wirf einen Ball oder ein Säckchen in einen Eimer – erst mit rechts, dann mit links.", "Брось мяч или мешочек в ведро – сначала правой, потом левой рукой.", 1],
+    ["rolle", "bewegung", "🤸", "Üb mit einem Erwachsenen auf einer weichen Matte oder Wiese die Rolle vorwärts.", "Потренируйся со взрослым на мягком мате или траве делать кувырок вперёд.", 1],
+    ["tanzschritte", "bewegung", "🕺", "Üb drei Tanzschritte: seit-ran, Hacke-Spitze und eine Drehung auf vier Schritte.", "Разучи три танцевальных шага: в сторону-приставить, пятка-носок и поворот на четыре шага.", 1],
+    ["ruecken", "bewegung", "🧘", "Mach eine Rücken-Pause: Arme hoch und strecken, Katzenbuckel, dann gerade hinsetzen.", "Сделай паузу для спины: руки вверх, потянуться, «кошка», потом сесть ровно.", 1],
+    ["schnee", "bewegung", "⛄", "Wenn Schnee liegt: Bau einen Schneemann oder fahr mit einem Erwachsenen Schlitten.", "Если лежит снег: слепи снеговика или покатайся со взрослым на санках.", 1],
+    ["schwimmen", "bewegung", "🏊", "Geh mit einem Erwachsenen schwimmen – und denk an die Baderegeln.", "Сходи со взрослым поплавать – и помни правила купания.", 2],
+    ["spielregeln", "bewegung", "🤝", "Erfinde mit Freunden ein Spiel und macht die Regeln gemeinsam aus.", "Придумай с друзьями игру и вместе договоритесь о правилах.", 2],
+    ["staunen", "natur", "🔍", "Schau dir mit einer Lupe einen Wassertropfen, ein Blatt oder einen Käfer an. Worüber staunst du?", "Рассмотри через лупу каплю воды, лист или жука. Чему ты удивляешься?", 1],
+    ["stille", "gefuehle", "🕯️", "Nimm dir drei Minuten für Stille: Augen zu, ruhig atmen, lauschen.", "Побудь три минуты в тишине: закрой глаза, дыши спокойно, прислушайся.", 1],
+    ["fest", "helfen", "🎉", "Plant in der Familie ein kleines Fest: Wen ladet ihr ein? Was gibt es?", "Спланируйте в семье маленький праздник: кого пригласить? Что будет?", 1],
+    ["wuensche", "gefuehle", "🌠", "Mal oder schreib zwei Wünsche: einen, den man kaufen kann, und einen, den man nicht kaufen kann.", "Нарисуй или напиши два желания: одно можно купить, другое нельзя.", 3],
+    ["helfenprojekt", "helfen", "🤲", "Überlegt in der Familie: Wem können wir helfen? Nachbarn, Tierheim, eine Sammelaktion …", "Подумайте в семье: кому мы можем помочь? Соседям, приюту для животных, сбору вещей …", 3],
   ];
-  const BEREICH = { mathe: "Rechnen im Alltag", natur: "Natur", sprache: "Lesen und Schreiben", mutter: "Familiensprache", helfen: "Helfen und Fragen", bewegung: "Bewegung", gefuehle: "Gefühle und Freude" };
+  const BEREICH = { mathe: "Rechnen im Alltag", natur: "Natur", sprache: "Lesen und Schreiben", mutter: "Familiensprache", helfen: "Helfen und Fragen", bewegung: "Bewegung", gefuehle: "Gefühle und Freude", kunst: "Kunst", werken: "Werken und Bauen", musik: "Musik" };
   const pad = (n) => String(n).padStart(2, "0");
   const heute = () => { if (window.__heute) return window.__heute; const d = window.__jetzt ? new Date(window.__jetzt) : new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
   const lade = () => Object.assign({ erledigt: {} }, S.lade("echtewelt") || {});

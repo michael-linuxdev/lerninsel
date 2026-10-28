@@ -1,6 +1,10 @@
 (function () {
-  const S = window.Spielwelt, SP = window.Sprache, TH = window.THEMEN, BI = window.SachBilder;
+  const S = window.Spielwelt, SP = window.Sprache, BI = window.SachBilder;
   const $ = (id) => document.getElementById(id);
+  // Weitere Fächer (28.10.2026): ?fach=kunst|musik|werken|sport|ethik zeigt die Themen dieses Fachs aus faecher.js (gleiche Seite, gleiche Eule)
+  const FS = window.FACH_SEITEN || {}, FACH = ((p) => FS[p] ? p : "")(new URLSearchParams(location.search).get("fach"));
+  const TH = FACH ? (window.FACH_THEMEN || []).filter(t => t.fach === FACH) : window.THEMEN;
+  const KARTEI = FACH || "sachkunde";   // Lernkartei und Lernfunde je Fach
   const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
   const LANG = () => `lang="${HL().code}"${HL().rtl ? ' dir="rtl"' : ""}`;
   const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -47,8 +51,16 @@
   }
 
   // ---------- Übersicht ----------
-  const SU_LB = [["zl", "🤝 Zusammen leben und lernen"], ["kg", "💪 Mein Körper und meine Gesundheit"], ["pt", "🌳 Pflanzen und Tiere"], ["un", "🔬 Unbelebte Natur"], ["rz", "🗺️ Raum und Zeit"], ["ex", "🧪 Forschen, Medien, meine Schulzeit"]];
+  const SU_LB0 = [["zl", "🤝 Zusammen leben und lernen"], ["kg", "💪 Mein Körper und meine Gesundheit"], ["pt", "🌳 Pflanzen und Tiere"], ["un", "🔬 Unbelebte Natur"], ["rz", "🗺️ Raum und Zeit"], ["ex", "🧪 Forschen, Medien, meine Schulzeit"]];
+  const SU_LB = FACH ? FS[FACH].lb : SU_LB0, LB0 = SU_LB[0][0];
   function zeige(n) { ["liste", "lektion", "ende"].forEach(v => $(v + "-ansicht").hidden = v !== n); scrollTo(0, 0); }
+  // Reiter oben: Sachunterricht und die weiteren Fächer (nur Fächer mit Themen für diese Klasse)
+  function reiter() {
+    const r = $("fach-reiter"); if (!r || !Object.keys(FS).length) return;
+    const kl = ((S.stufe && S.stufe()) || {}).klasse || 2, sichtbar = (t) => !(t.stufe && kl < t.stufe - 1) && !(t.land && (S.land() || {}).code !== t.land);
+    const liste = [["", "🔬", "Sachunterricht"]].concat(Object.entries(FS).filter(([f]) => (window.FACH_THEMEN || []).some(t => t.fach === f && sichtbar(t))).map(([f, x]) => [f, x.e, x.name]));
+    r.innerHTML = liste.map(([f, e, n]) => `<a class="reiter${f === FACH ? " an" : ""}" data-fach="${f}" href="./${f ? "?fach=" + f : ""}"${f === FACH ? ' aria-current="page"' : ""}><span>${e}</span> ${n}</a>`).join("");
+  }
   function zeichneListe() {
     const d = daten();
     $("sterne").textContent = S.sterne();
@@ -56,7 +68,8 @@
     $("ton-vorlesen").textContent = d.vorlesen ? "🗣️" : "🔇";
     $("ru-schalter").hidden = !S.hilfeRu(); $("ru-schalter").textContent = HL().kurz; $("ru-schalter").classList.toggle("aus", !d.ru); $("ru-schalter").setAttribute("aria-pressed", d.ru);
     const fertig = TH.filter(t => bestes(t.id) > 0).length;
-    $("intro-text").textContent = fertig === 0 ? `Hallo ${name()}! Ich bin Eule Ella. Mit mir entdeckst du spannende Dinge über die Welt.`
+    reiter();
+    $("intro-text").textContent = fertig === 0 ? (FACH ? `Hallo ${name()}! ${FS[FACH].intro}` : `Hallo ${name()}! Ich bin Eule Ella. Mit mir entdeckst du spannende Dinge über die Welt.`)
       : `Du hast schon ${fertig} ${fertig === 1 ? "Thema" : "Themen"} entdeckt. Bald kommen neue dazu!`;
     $("themen").innerHTML = "";
     const klasse = ((S.stufe && S.stufe()) || {}).klasse || 2;
@@ -75,7 +88,7 @@
     const stufeVon = (t) => Math.max(2, t.stufe || t.kl || 2);
     const schule = (((S.lade("eltern") || {}).sachkunde || {}).schule) || "";   // Eltern-Einstellung „gerade in der Schule“ (Lernbereich)
     SU_LB.forEach(([lb, titel]) => {
-      const alle = TH.map((t, i) => [t, i]).filter(([t]) => (t.lb || "zl") === lb
+      const alle = TH.map((t, i) => [t, i]).filter(([t]) => (t.lb || LB0) === lb
         && !(t.stufe && klasse < t.stufe - 1)                   // NA-39: Übergangs-Themen (stufe 5) erst ab Klasse 4 zeigen
         && !(t.land && (S.land() || {}).code !== t.land))       // Heimatkunde nur für Kinder aus diesem Bundesland
         .sort((a, b) => stufeVon(a[0]) - stufeVon(b[0]) || a[1] - b[1]);
@@ -102,7 +115,7 @@
   function mitWiederholung(t) {
     if (!window.Lernkartei) return t;
     const eigene = new Set(t.schritte.map(x => JSON.stringify(x)));
-    const karten = Lernkartei.faellige("sachkunde", 3).filter(x => { const y = Object.assign({}, x); delete y.__karte; return !eigene.has(JSON.stringify(y)); });
+    const karten = Lernkartei.faellige(KARTEI, 3).filter(x => { const y = Object.assign({}, x); delete y.__karte; return !eigene.has(JSON.stringify(y)); });
     if (!karten.length) return t;
     const intro = { typ: "info", titel: "Kurz wiederholen", bild: "🔁",
       text: "Hallo {name}! Bevor wir anfangen, schauen wir uns kurz an, was letztes Mal knifflig war.",
@@ -153,8 +166,8 @@
       if (o.ok) {
         b.classList.add("richtig");
         if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde((sj && sj.__lz) || lauf.t.lz, true);
-        if (!versucht && sj && sj.__karte && window.Lernkartei && Lernkartei.richtig("sachkunde", sj) && window.Lernfunde)
-          { const t = loesungText(sj); Lernfunde.merke({ fach: "sachkunde", art: "gemeistert", e: "💪", text: t.length > 64 ? t : `${t} – jetzt weißt du es!`, schluessel: "sk:" + t, melden: true }); }
+        if (!versucht && sj && sj.__karte && window.Lernkartei && Lernkartei.richtig(KARTEI, sj) && window.Lernfunde)
+          { const t = loesungText(sj); Lernfunde.merke({ fach: KARTEI, art: "gemeistert", e: "💪", text: t.length > 64 ? t : `${t} – jetzt weißt du es!`, schluessel: "sk:" + t, melden: true }); }
         container.querySelectorAll(".option").forEach(x => x.disabled = true);
         S.ton("juhu"); erklaere(warum, "gut", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
         warum.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
@@ -164,7 +177,7 @@
           if (sj && sj.__kap) lauf.falsch.add(sj.__kap);   // „Zeig, was du kannst“: dieses Thema noch üben
           if (window.Koennen) Koennen.melde(lauf.t.lz, false);
           versucht = true;
-          if (window.Lernkartei) Lernkartei.falsch("sachkunde", sj);
+          if (window.Lernkartei) Lernkartei.falsch(KARTEI, sj);
         }
         b.classList.add("falsch"); b.disabled = true;
         S.ton("nein"); erklaere(warum, "nein", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
@@ -274,7 +287,7 @@
     if (vorher === 3 && sterne === 3) gewinn = 1;
     const d = daten(); d.themen[t.id] = Math.max(vorher, sterne); speichere(d);
     if (gewinn) S.gibSterne(gewinn);
-    if (window.Lernfunde) Lernfunde.merke({ fach: "sachkunde", art: "thema", e: t.e, text: `${t.name} – ${t.kurz}`, schluessel: "s:" + t.id });
+    if (window.Lernfunde) Lernfunde.merke({ fach: KARTEI, art: "thema", e: t.e, text: `${t.name} – ${t.kurz}`, schluessel: "s:" + t.id });
     if (window.Charakter) { Charakter.gib("sachkunde", 2 + sterne * 2); Charakter.ereignis("sachkunde-thema"); }
 
     $("ende-titel").textContent = "Thema geschafft!";
@@ -298,7 +311,7 @@
   const passtLand = (t) => !(t.land && (S.land() || {}).code !== t.land);
   function lernstandThemen(lb) {
     const kl = Math.max(2, klasseJetzt());
-    return TH.filter(t => !t.lernstand && (t.lb || "zl") === lb && Math.max(2, t.stufe || t.kl || 2) === kl && passtLand(t) && t.schritte.some(x => x.typ === "wahl" || x.typ === "daumen"));
+    return TH.filter(t => !t.lernstand && (t.lb || LB0) === lb && Math.max(2, t.stufe || t.kl || 2) === kl && passtLand(t) && t.schritte.some(x => x.typ === "wahl" || x.typ === "daumen"));
   }
   function starteLernstand(lb) {
     const titel = (SU_LB.find(x => x[0] === lb) || [lb, lb])[1].replace(/^\S+\s/, "");
@@ -336,6 +349,7 @@
   $("ru-schalter").addEventListener("click", () => { const d = daten(); d.ru = !d.ru; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(`${HL().name}-Hilfe ist ${d.ru ? "an" : "aus"}.`); });
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Vorlesen ist an." : "Vorlesen ist aus."); });
 
+  if (FACH) { document.title = FS[FACH].name; const h = document.querySelector("#liste-ansicht h1"); if (h) h.textContent = FS[FACH].name; }
   zeichneListe();
-  window.__sachkunde = { starte, starteLernstand, lernstandThemen, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
+  window.__sachkunde = { fach: FACH, themen: TH, starte, starteLernstand, lernstandThemen, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
 })();

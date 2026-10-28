@@ -18,7 +18,10 @@
     welt: { e: "🌍", name: "Echte Welt" },
     schach: { e: "♟️", name: "Schach" },
     kunst: { e: "🎨", name: "Kunst" },
-    musik: { e: "🎵", name: "Musik" }
+    musik: { e: "🎵", name: "Musik" },
+    werken: { e: "🔨", name: "Werken" },
+    sport: { e: "⚽", name: "Sport" },
+    ethik: { e: "💭", name: "Ethik" }
   };
   const pad = (n) => String(n).padStart(2, "0");
   const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;

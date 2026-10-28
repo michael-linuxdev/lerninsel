@@ -163,7 +163,7 @@
     // Nur Sachsen ist ausgearbeitet; andere Länder sehen vorerst Sachsen als Beispiel (ehrlicher Hinweis)
     const k = S.kind(), la = S.land(), land = la.lehrplan && L.laender[la.lehrplan] ? la.lehrplan : "sachsen", lname = (L.laender[land] || {}).name || land;
     const stufe = S.stufe();
-    const zeichen = { ja: "✅", teil: "◐", nein: "○" }, worte = { ja: "gut abgedeckt", teil: "teilweise", nein: "noch nicht" };
+    const zeichen = { ja: "✅", teil: "◐", nein: "○", aussen: "🌍" }, worte = { ja: "gut abgedeckt", teil: "teilweise", nein: "noch nicht", aussen: "vor allem draußen" };
     const k2 = mathe.k2 || {};
     const fortschritt = (app) => {
       // Sterne aus allen Mathewegen (Kl. 1–4, Übergang 5) zählen, nicht nur aus Kl. 2
@@ -177,7 +177,7 @@
         (su.length ? ` · Sachthemen: <span class="lp-sachthemen">${su.filter(id => suD[id]).length} von ${su.length}</span> entdeckt` : "") +
         (en.length ? ` · Englisch: ${en.filter(id => enD[id]).length} von ${en.length} Lektionen geschafft` : "");
     };
-    let n = { ja: 0, teil: 0, nein: 0 };
+    let n = { ja: 0, teil: 0, nein: 0, aussen: 0 };
     const faecher = Object.keys(L.laender[land].faecher).filter(f => L.fuer(land, f, k.klasse).length).map(f => {
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
@@ -188,7 +188,7 @@
       <h2>📘 Was übt die App? (Lehrplan ${lname}, ${k.klasse}. Klasse)</h2>
       ${la.lehrplan ? "" : `<p class="hinweis">Für ${la.name} ist der Lehrplan noch nicht ausgearbeitet. Gezeigt wird der sächsische Lehrplan als Beispiel; er folgt in großen Teilen den gemeinsamen KMK-Bildungsstandards.</p>`}
       ${stufe.wenig ? `<p class="hinweis">Stufe „${stufe.name}“: Gezeigt wird der Lehrplan der ${k.klasse}. Klasse${stufe.code === "5" ? "; dazu kommen eigene Übergangs-Inhalte (Matheweg „Übergang 5“, Fachbegriffe, Lesestrategien, Lernen lernen)" : ", bis eigene Inhalte da sind"}.</p>` : ""}
-      <p>${n.ja} Lernbereiche gut abgedeckt, ${n.teil} teilweise, ${n.nein} noch nicht. Die App ergänzt den Unterricht, sie ersetzt ihn nicht. Was gerade in der Schule dran ist, weiß die Lehrkraft am besten.</p>
+      <p>${n.ja} Lernbereiche gut abgedeckt, ${n.teil} teilweise, ${n.nein} noch nicht${n.aussen ? `, ${n.aussen} vor allem draußen (Sport, Bauen, Singen – dazu gibt es Echte-Welt-Aufgaben und Wissen in der App)` : ""}. Die App ergänzt den Unterricht, sie ersetzt ihn nicht. Was gerade in der Schule dran ist, weiß die Lehrkraft am besten.</p>
       <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App · 🌍 gehört nach draußen oder aufs Papier (dazu gibt es Echte-Welt-Aufgaben). In den aufklappbaren Inhaltspunkten: ✅ geübt · 🟡 teilweise · ⭕ fehlt noch.</p>
       ${L.zaehle ? (() => { const e = L.zaehle(land, k.klasse).errechnet; return `<p class="klein">Zum Vergleich, aus den Lernzielen der Inhalte errechnet (gut = mindestens drei Inhalte mit zusammen 30 Aufgaben und Wiederholung in der Lernkartei): ${e.ja} gut, ${e.teil} teilweise, ${e.nein} noch nicht.</p>`; })() : ""}
       ${faecher}
@@ -404,7 +404,7 @@
         Mit „Zeig, was du kannst“ (je Lernbereich) zeigt das Kind ohne Noten und ohne Sterne, was schon sitzt – hier seht ihr das Ergebnis.</p>
       <div class="knoepfe"><button class="knopf haupt" id="sj-speichern">Speichern</button></div>
       <h3>Deutsch – „Zeig, was du kannst“</h3>${lernstandListe("deutsch", DE_LB, window.WERKSTATT || [], "lernstand-deutsch")}
-      <h3>Sachunterricht – „Zeig, was du kannst“</h3>${lernstandListe("sachkunde", SU_LB, window.THEMEN || [], "lernstand-sachkunde")}
+      <h3>Sachunterricht, Kunst, Musik, Werken, Sport, Ethik – „Zeig, was du kannst“</h3>${lernstandListe("sachkunde", Object.assign({}, SU_LB, ...Object.values(window.FACH_SEITEN || {}).map(f => Object.fromEntries(f.lb.map(([id, t]) => [id, `${f.name}: ${t.replace(/^\S+\s/, "")}`])))), (window.THEMEN || []).concat(window.FACH_THEMEN || []), "lernstand-sachkunde")}
     </div>`;
   }
   function schuljahrKnoepfe() {

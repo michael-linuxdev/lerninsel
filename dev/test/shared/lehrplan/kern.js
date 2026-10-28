@@ -191,6 +191,18 @@
     ["et.ge.02", "1", "Mit starken Gefühlen umgehen, zur Ruhe kommen"],
     ["et.mi.01", "1", "Freundschaft und Miteinander"],
     ["et.we.01", "3", "Gerechtigkeit und Vielfalt"],
+    // Lehrpläne Sachsen 2019 Kunst, Musik, Werken, Sport, Ethik (28.10.2026)
+    ["ku.ge.03", "1", "Plastisch gestalten: formen, bauen, Räume gestalten"],
+    ["ku.be.02", "4", "Gestaltete Umwelt verstehen: Design, Architektur, Bilder in Medien"],
+    ["mu.ho.02", "1", "Instrumente, Stimmen und ihren Klang kennen"],
+    ["mu.ho.03", "3", "Musik im Leben der Menschen: Komponisten, Gattungen, Orte der Musik"],
+    ["sp.be.03", "1", "Sicher und fair: Regeln beim Spielen, Turnen, Schwimmen und im Winter"],
+    ["et.mi.02", "3", "Wahrheit, Vertrauen und Zivilcourage"],
+    ["et.we.02", "1", "Feste, Religionen und Lebensweisen kennen und achten"],
+    ["et.we.03", "1", "Über die Natur staunen und sie bewahren"],
+    ["et.we.04", "4", "Philosophische Fragen: Glück, Zeit, Wünsche, Entscheidungen"],
+    ["su.te.04", "3", "Werkstoffe und Werkzeuge sicher nutzen"],
+    ["su.te.05", "4", "Technik pflegen, Roboter und Automaten verstehen"],
 
     // ---------- Englisch (Grundschule; Beginn je nach Land Kl. 1 oder 3) ----------
     ["en.hv.01", "3", "Einfache englische Wörter und Sätze hören und verstehen"],

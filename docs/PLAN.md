@@ -1611,3 +1611,27 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Fehler behoben (vom Test gefunden):** Satz-Bauen in Englisch wertete einen richtig gelegten Satz als falsch, wenn ein Wort doppelt vorkommt
   („I like London. I like the river.“) und das Kind das andere gleiche Wort antippte. Jetzt zählt der Wortlaut (ebenso bei „ordnen“ in Deutsch).
 - **Offen:** Kunst, Musik, Werken, Sport, Ethik (PDFs fehlen); „Mein Heft“; Handschrift-Übung; Englisch-Lernkartei.
+
+### Stand 28.10.2026, nachmittags (Kunst, Musik, Werken, Sport, Ethik nach den sächsischen Lehrplänen)
+- **Quellen:** Lehrpläne Grundschule Sachsen Kunst, Musik, Werken, Sport (Fassung 2019) und Ethik (2004/2019) als PDFs vom Auftraggeber;
+  nur zusammengefasst. Wahlbereiche bleiben freiwillig und ungezählt.
+- **Neu: 70 Wissens-Themen mit Eule Ella** (`spiele/sachkunde/faecher.js`): Kunst 17, Musik 18, Werken 9, Sport 10, Ethik 16 – für Kl. 1/2, 3 und 4,
+  je mit russischem Entwurf. Gleiche Seite wie Sachunterricht: oben **Reiter** „Sachunterricht · Kunst · Musik · Werken · Sport · Ethik“
+  (`spiele/sachkunde/?fach=…`), Themen nach den Lernbereichen des Fachs gruppiert, frühere Klassen eingeklappt, „Zeig, was du kannst“ je
+  Lernbereich, Lernkartei und Lernfunde je Fach. Vom Atelier aus zwei Knöpfe „Kunst-Wissen“ und „Musik-Wissen“. Neue Bilder: Farbkreis, Notenwerte.
+- **Profil:** fünf neue Fächer in `sachsen.js` mit allen Lernbereichen (Sport: Kl. 1/2 und 3/4, Schwimmen meist in Kl. 2) und **212 Inhaltspunkten**
+  in `sachsen-punkte.js` (erzeugt, Zählung in `tests/lehrplan.js`): Kunst 32 geübt/1 teilweise/12 draußen, Musik 34/3/11, Werken 24/1/9,
+  Sport 14/0/28, Ethik 43/0/0. 11 neue Kern-Lernziele (u. a. `ku.ge.03`, `mu.ho.02/03`, `sp.be.03`, `et.we.02–04`, `su.te.04/05`).
+- **Entscheidung:** Neue Lernbereichs-Abdeckung **„aussen“ (🌍)** – wenn mindestens die Hälfte der Punkte eines Lernbereichs nach draußen gehört
+  (Turnen, Schwimmen, Singen, Modellieren). Sonst hätte z. B. „Schwimmen“ wegen der Baderegeln „gut abgedeckt“ gezeigt. Gilt nur für die neuen Fächer.
+- **Entscheidung:** Sport, Werken und das praktische Gestalten übt die App nicht – sie übt Wissen und Regeln (Baderegeln, Pistenregeln, Fair Play,
+  Werkzeug-Sicherheit, Stromkreis), das Praktische kommt als **36 neue Echte-Welt-Aufgaben** (Bereiche Kunst, Werken und Bauen, Musik, Bewegung).
+- **Ethik:** Religionen sachlich („Christen glauben …“), Feste im Jahreslauf, Judentum/Christentum/Islam; sensible Themen (schlechte Geheimnisse,
+  Mobbing, Abschied) mit Vertrauenspersonen und 116 111.
+- **Teilweise:** Bilder digital bearbeiten (Kunst Kl. 3), Melodiebausteine wiedererkennen (Musik 1/2, 3), über Musik präsentieren (Musik 4),
+  Programmierumgebung (Werken 4).
+- **Test:** neu `tests/faechervoll.js` (alle 70 Themen über die Kacheln echt durchgeklickt, Kinder Kl. 2/3/4, quer und hoch, Reiter,
+  Landesfilter „Musik in Sachsen“, „Zeig, was du kannst“, Elternbereich); Rauchtest mit `?fach=kunst` und `?fach=ethik` (56 Seitenaufrufe).
+- **Offen / nächstes Paket:** Eltern-Einstellung „gerade in der Schule“ für die neuen Fächer; Lieder zum Mitsingen und Melodien wiedererkennen im
+  Atelier; „Mein Heft“; Handschrift-Übung; Englisch-Lernkartei; Religion (ev./kath.) als Alternative zu Ethik nur auf Wunsch.
+

@@ -12,7 +12,7 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (28.10.2026, mittags)
+## 1. Stand (28.10.2026, nachmittags)
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
   **Kl. 1/Vorschule 22** · **Kl. 2 45** · **Kl. 3 35** · **Kl. 4 26** · **Übergang 5** 16 (vorläufig). Freischalten je Lernbereich, Lernbereichs-Kacheln
@@ -26,13 +26,17 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
   Sachsen, Mein Landkreis, Sachsen entdecken.
 - **Englisch (Papagei Paula): 27 Lektionen, nach den 11 Lernbereichen gruppiert** (u. a. neu: Gefühle, Zahlen bis 100, Einkaufen, Fächer/Tage/Uhrzeit, Ausflug, London, Café, Zootiere,
   Feste und Datum, Sportarten, Sprachenpass). Englische Gerätestimme, ohne Stimme Lesen statt Hören. Eltern-Einstellung Beginn ab Kl. 1 oder 3.
+- **Kunst, Musik, Werken, Sport, Ethik (Eule Ella): 70 Wissens-Themen** auf der Sachunterricht-Seite mit Reitern (`?fach=kunst|musik|werken|sport|ethik`),
+  je Fach nach Lernbereichen gruppiert, „Zeig, was du kannst“; Praktisches (Malen, Singen, Bauen, Turnen, Schwimmen) als Echte-Welt-Aufgaben.
 - Weiter: Medien (Tablet-Führerschein), Gefühle, Atelier (Malen, Musik), Schach, Insel in zwei Looks, Story/Tutorial E1–E8, Können je Lernziel, Elternbericht.
 
 ### Lehrplan Sachsen (`shared/lehrplan/laender/sachsen.js` + Inhaltspunkte in `sachsen-punkte.js`)
-- **Mathe und Deutsch nach Fassung 2025**, Sachunterricht und Englisch nach Fassung 2019 – **alle vier gegen die PDFs geprüft.**
+- **Mathe und Deutsch nach Fassung 2025**, Sachunterricht, Englisch, Kunst, Musik, Werken, Sport nach Fassung 2019, Ethik 2004/2019 – **alle gegen die PDFs geprüft.**
 - **Mathe Grundschule vollständig** (120 Punkte). **Deutsch** 179 Punkte (166 geübt, 7 teilweise, 6 Papier). **Sachunterricht** 99 Pflicht-Punkte
   (94/2/3). **Englisch** 73 Punkte (65/5/3).
 - **Lernbereiche Mathe, Deutsch, SU (45): 37 gut, 8 teilweise, 0 fehlt** (Mathe 12/0, Deutsch 9/6, SU 16/2). **Englisch (22, mit „My Portfolio“): 17/5/0.**
+- **Kunst 45 Punkte (32/1/12 draußen), Musik 48 (34/3/11), Werken 34 (24/1/9), Sport 42 (14/0/28), Ethik 43 (43/0/0).** Lernbereiche, die vor allem
+  nach draußen gehören, zeigen 🌍 (`abdeckung: "aussen"`, nur in den neuen Fächern).
 - „Teilweise“ heißt ehrlich: braucht einen Menschen oder ein Werkzeug, das die App nicht hat (Lautlesen mit Rückmeldung, Formatieren am Gerät,
   Präsentationen/Podcasts, Lieder zum Mitsingen, eigener Landkreis, englische Kinderbücher).
 
@@ -60,7 +64,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
   liest das iPad den Text vor?, „Blitzwörter“ – ist das Aufblitzen gut lesbar?, „Ein Elfchen dichten“), **Sachunterricht** (Gruppen, „Mein Körper
   gehört mir“ – ist der Ton so recht?, „Licht und Schatten“, „Sachsen entdecken“), **Englisch** (neue Lektionen, z. B. „London“, „Café“),
   dazu weiter offen: Matheweg-Kacheln und „Zeig, was du kannst“, Aufnehmen mit Eltern-Schalter.
-- **Lehrplan-PDFs Kunst, Musik, Werken, Sport, Ethik (Kl. 1–4)** hochladen; optional **Mathematik Klasse 5 (Oberschule/Gymnasium)** für den Übergang.
+- **Neue Fächer ansehen** (in /dev): Eule Ella → Reiter Kunst/Musik/Werken/Sport/Ethik; passt der Ton bei Ethik (Religionen, Geheimnisse, Abschied)?
+  Soll es statt/neben Ethik evangelische oder katholische Religion geben (Eltern-Wahl)? Optional **Mathematik Klasse 5 (Oberschule/Gymnasium)** als PDF.
 - Deutsch: Sollen Kinder ihre eigenen Texte selbst wiederfinden („Mein Heft“)? Handschrift-Übung mit Finger/Stift (Schulausgangsschrift oder
   Vereinfachte Ausgangsschrift – je nach Schule als Eltern-Einstellung)?
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
@@ -73,8 +78,8 @@ Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ab
    (siehe oben).
 2. **Schuljahres-Gerüst für Deutsch, SU und Englisch ist fertig** (28.10. mittags, Test `schuljahr2`). Werkstatt, Sachthemen und Englisch-Lektionen
    sind nach Lernbereichen gruppiert.
-3. **Kunst, Musik, Werken, Sport, Ethik** – sobald die PDFs da sind: Punkte in `sachsen-punkte.js` (neue Fächer im Profil), Atelier/Musik
-   ausbauen, Rest als Echte-Welt-Aufgaben.
+3. **Kunst, Musik, Werken, Sport, Ethik sind gegen die Lehrpläne geprüft** (28.10. nachmittags, Test `faechervoll`). Offen: „gerade in der Schule“
+   für diese Fächer, Melodien wiedererkennen und Lieder zum Mitsingen im Atelier, Bilder bearbeiten, Programmieren (Werken Kl. 4).
 4. Vorschläge an den Auftraggeber: „Mein Heft“ (eigene Texte), Handschrift-Übung, Englisch-Lernkartei, Lieder/Reime.
 
 Zurückgestellt (nur wenn der Auftraggeber es will): D2 „Mein Heft“, E2 Englisch Teil 2, M3 Mathe Kl. 4, Länderprofil 2,

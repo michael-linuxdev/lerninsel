@@ -37,7 +37,7 @@
     },
     errechnet,
     zaehle(land, klasse) {
-      const n = { hand: { ja: 0, teil: 0, nein: 0 }, errechnet: { ja: 0, teil: 0, nein: 0 } };
+      const n = { hand: { ja: 0, teil: 0, nein: 0, aussen: 0 }, errechnet: { ja: 0, teil: 0, nein: 0 } };
       Object.keys((this.laender[land] || {}).faecher || {}).forEach(f => this.fuer(land, f, klasse).forEach(lb => {
         n.hand[lb.abdeckung]++; n.errechnet[errechnet(lb)]++;
       }));

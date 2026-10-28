@@ -95,6 +95,8 @@
   .dlg .karte { max-width: 620px; width: 100%; text-align: center; }
   .dlg img { width: 100%; border-radius: 14px; box-shadow: inset 0 0 0 2px #F0E6DA; }
   .dlg .knopf { margin: 6px; min-height: 58px; }
+  .wissen-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 18px 16px 0; }
+  .wissen-links .knopf { text-decoration: none; min-height: 56px; display: inline-flex; align-items: center; }
 </style>
 </head>
 <body>
@@ -112,6 +114,7 @@
       <button class="kachel k3" data-zu="musik"><span class="e">🎵</span>Musik-Ecke<small>Xylofon, Rhythmus, eigene Melodie</small></button>
       <button class="kachel k4" data-zu="galerie"><span class="e">🖼️</span>Meine Galerie<small id="galerie-zahl">Deine Bilder</small></button>
     </div>
+    <div class="wissen-links"><a class="knopf" id="zu-kunst" href="../sachkunde/?fach=kunst">🎨 Kunst-Wissen mit Eule Ella</a><a class="knopf" id="zu-musik" href="../sachkunde/?fach=musik">🎵 Musik-Wissen mit Eule Ella</a></div>
   </section>
 
   <section class="ansicht" id="malen-ansicht" hidden>
