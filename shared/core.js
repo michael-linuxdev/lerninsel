@@ -60,7 +60,25 @@
     if (k.land === "sachsen" || !LAENDER.some(x => x.code === k.land)) k.land = "sn";
     if (!DEUTSCHSTAND.some(x => x.code === k.deutschstand)) k.deutschstand = "gut";
     if (!MUTTERSPRACHEN.some(x => x[0] === k.muttersprache)) k.muttersprache = k.hilfesprache || "de";
+    // Geburtsdatum (30.10.2026): "JJJJ-MM-TT" – dann wird das Alter daraus berechnet (Bildschirmzeit, Geburtstag)
+    if (typeof k.geburt !== "string" || !GEBURT_OK(k.geburt)) delete k.geburt;
+    else k.alter = alterAus(k.geburt);
     return k;
+  }
+  const GEBURT_OK = (g) => /^\d{4}-\d{2}-\d{2}$/.test(g) && !isNaN(new Date(g + "T12:00:00")) && +g.slice(0, 4) > 2000;
+  const heuteDatum = () => new Date(window.__jetzt || Date.now());
+  function alterAus(g, am = heuteDatum()) {
+    const [y, m, t] = g.split("-").map(Number);
+    let a = am.getFullYear() - y; if (am.getMonth() + 1 < m || (am.getMonth() + 1 === m && am.getDate() < t)) a--;
+    return Math.max(3, Math.min(14, a));
+  }
+  // Letzter Geburtstag (Datum "JJJJ-MM-TT" und neues Alter) bis heute oder null; 29.2. zählt in Nicht-Schaltjahren am 28.2.
+  function letzterGeburtstag(g, am = heuteDatum()) {
+    if (!g || !GEBURT_OK(g)) return null;
+    const [y, m, t] = g.split("-").map(Number), iso = (j) => { const tag = m === 2 && t === 29 && new Date(j, 1, 29).getMonth() !== 1 ? 28 : t; return `${j}-${String(m).padStart(2, "0")}-${String(tag).padStart(2, "0")}`; };
+    const h = `${am.getFullYear()}-${String(am.getMonth() + 1).padStart(2, "0")}-${String(am.getDate()).padStart(2, "0")}`;
+    let j = am.getFullYear(); if (iso(j) > h) j--;
+    return j > y ? { datum: iso(j), alter: j - y, jahr: j, heute: iso(j) === h } : null;
   }
   const leeresProfil = () => ({ name: "", sterne: 0, freigeschaltet: [], ton: true, daten: {}, stand: 0 });
 
@@ -200,6 +218,9 @@
     eingerichtet() { return !!(profil.daten.eltern && profil.daten.eltern.eingerichtet); },
     kind() { return kindMigrieren(Object.assign({ alter: 8, klasse: 2, geschlecht: "n", hilfesprache: "" }, (profil.daten.eltern || {}).kind || {})); },
     STUFEN, LAENDER, DEUTSCHSTAND, MUTTERSPRACHEN, kindMigrieren,
+    alterAus, letzterGeburtstag, geburtOk: (g) => GEBURT_OK(String(g || "")),
+    // Hat das Kind heute Geburtstag?
+    geburtstagHeute() { const l = letzterGeburtstag(Spielwelt.kind().geburt); return !!(l && l.heute); },
     // Insel-Zugang (NA-12): Standard ist die erste Lektion „Das Tablet bedienen“; Eltern können die alte Regel
     // (kompletter Tablet-Führerschein) wählen. Die Minispiele brauchen weiter den kompletten Führerschein.
     inselRegel() { return ((profil.daten.eltern || {}).insel || {}).zugang === "fuehrerschein" ? "fuehrerschein" : "bedienung"; },

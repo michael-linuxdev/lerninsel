@@ -362,6 +362,8 @@
       s.style.transform = `rotate(${kippen[i % kippen.length]}deg)`;
       el.appendChild(s);
     });
+    // Geburtstag (30.10.2026): an diesem Tag steht ein Kuchen neben dem Namen
+    if (S.geburtstagHeute && S.geburtstagHeute()) { const k = document.createElement("i"); k.className = "kuchen"; k.textContent = " 🎂"; k.setAttribute("aria-label", "Geburtstag"); k.style.fontStyle = "normal"; el.appendChild(k); }
     document.title = S.genitiv(n) + " Spielwelt";
   }
   // Sorbisch-Tür nur nach Eltern-Wahl (Elternbereich → Sorbisch), Vorschul-Rucksack nur für Vorschule und Klasse 1;

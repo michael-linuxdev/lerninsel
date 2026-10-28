@@ -55,6 +55,7 @@
       <h2>${bearbeiten ? "Kind und Einstellungen" : "Angaben zum Kind"}</h2>
       <p class="klein">Alles bleibt nur auf diesem Tablet.</p>
       <label>Vorname (so wird das Kind begrüßt)<input id="e-name" maxlength="20" autocomplete="off" autocapitalize="words" value="${(S.profil.name || "").replace(/"/g, "&quot;")}"></label>
+      <label>Geburtsdatum (für das Alter und ein Geburtstagsgeschenk auf der Insel)<input type="date" id="e-geburt" value="${k.geburt || ""}" min="2008-01-01" max="${new Date(window.__jetzt || Date.now()).toISOString().slice(0, 10)}"></label>
       <div class="zwei">
         <label>Alter<select id="e-alter">${option([4, 5, 6, 7, 8, 9, 10, 11].map(n => [n, n + " Jahre"]), k.alter)}</select></label>
         <label>Stufe<select id="e-stufe">${option(S.STUFEN.map(x => [x.code, x.name]), k.stufe)}</select></label>
@@ -79,7 +80,11 @@
       <div class="knoepfe"><button class="knopf haupt" id="e-ok">${bearbeiten ? "Speichern" : "Fertig – los geht's"}</button>${bearbeiten ? `<button class="knopf" id="e-zurueck">Abbrechen</button>` : ""}</div>
     </div>`;
     const empf = () => { $("e-empf").innerHTML = `<b>Empfehlung der Kinderärzte (DGKJ):</b> ${empfehlung(+$("e-alter").value)} Wichtiger als die Minuten: Bewegung, freies Spiel, Freunde, genug Schlaf und bildschirmfreie Zeiten, z. B. beim Essen und vor dem Schlafen.`; };
-    $("e-alter").addEventListener("change", empf); empf();
+    $("e-alter").addEventListener("change", empf);
+    // Geburtsdatum bestimmt das Alter (Auswahl dann gesperrt)
+    const geburtAlter = () => { const g = $("e-geburt").value, ok = S.geburtOk(g); $("e-alter").disabled = ok;
+      if (ok) { const a = Math.max(4, Math.min(11, S.alterAus(g))); $("e-alter").value = String(a); } empf(); };
+    $("e-geburt").addEventListener("change", geburtAlter); $("e-geburt").addEventListener("input", geburtAlter); geburtAlter();
     // Ehrliche Hinweise und kurze Erklärungen zu Stufe, Land, Deutschstand und Hilfesprache
     const erklaere = () => {
       const st = S.STUFEN.find(x => x.code === $("e-stufe").value), la = S.LAENDER.find(x => x.code === $("e-land").value);
@@ -116,6 +121,7 @@
       }
       S.setzeName(n);
       S.speichere("eltern", Object.assign(eltern(), { eingerichtet: true, kind: {
+        ...(S.geburtOk($("e-geburt").value) ? { geburt: $("e-geburt").value } : {}),
         alter: +$("e-alter").value, stufe: $("e-stufe").value, klasse: S.STUFEN.find(x => x.code === $("e-stufe").value).klasse, geschlecht: $("e-geschlecht").value,
         hilfesprache: $("e-sprache").value, muttersprache: $("e-mutter").value, deutschstand: $("e-deutsch").value, land: $("e-land").value, ort } }));
       if (bearbeiten) { S.meldung("Gespeichert."); uebersicht(); } else location.href = "../../";
@@ -626,6 +632,7 @@
         <button role="tab" data-teil="ueberblick" class="an">📊 Überblick</button><button role="tab" data-teil="lernstand">📘 Lernstand</button><button role="tab" data-teil="schule">🏫 Wie in der Schule</button><button role="tab" data-teil="zeit">⏰ Zeit & Regeln</button><button role="tab" data-teil="kinder">👨‍👩‍👧 Kinder & Gerät</button>
       </nav>
       <section class="eltern-teil" data-teil="ueberblick" role="tabpanel">
+      ${S.kind().geburt ? "" : `<div class="karte" id="geburt-fehlt"><h2>🎂 Geburtsdatum eintragen</h2><p>Mit dem Geburtsdatum stimmt das Alter immer (Bildschirmzeit nach Alter), und am Geburtstag wartet ein Geschenk am Steg der Insel – auch wenn ${S.profil.name || "das Kind"} erst ein paar Tage später spielt.</p><div class="knoepfe"><button class="knopf haupt" id="geburt-eintragen">Jetzt eintragen</button></div></div>`}
       <div class="karte">
         <h2>${S.profil.name || "Spielstand"} auf einen Blick</h2>
         <div class="zahlen">
@@ -694,7 +701,7 @@
       </div>
       <div class="karte">
         <h2>Kind und Einstellungen</h2>
-        <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre, ${S.stufe().name}, ${S.land().name} · Muttersprache: ${(S.MUTTERSPRACHEN.find(x => x[0] === S.kind().muttersprache) || S.MUTTERSPRACHEN[0])[1].split(" – ")[0]}, ${S.DEUTSCHSTAND.find(x => x.code === S.kind().deutschstand).name} · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1].replace(" (in Arbeit)", "")} · Wetter-Ort: ${(S.kind().ort || {}).lat != null ? S.kind().ort.name : "keiner"}</p>
+        <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre${S.kind().geburt ? ` (Geburtstag ${S.kind().geburt.split("-").slice(1).reverse().join(".")}.)` : ""}, ${S.stufe().name}, ${S.land().name} · Muttersprache: ${(S.MUTTERSPRACHEN.find(x => x[0] === S.kind().muttersprache) || S.MUTTERSPRACHEN[0])[1].split(" – ")[0]}, ${S.DEUTSCHSTAND.find(x => x.code === S.kind().deutschstand).name} · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1].replace(" (in Arbeit)", "")} · Wetter-Ort: ${(S.kind().ort || {}).lat != null ? S.kind().ort.name : "keiner"}</p>
         <p class="hinweis"><b>Empfehlung der Kinderärzte (DGKJ):</b> ${empfehlung(S.kind().alter)}</p>
         <div class="knoepfe"><button class="knopf haupt" id="erwachsen">👤 Als Erwachsener spielen</button><button class="knopf" id="kind-aendern">Ändern</button><button class="knopf" id="neu-laden">🔄 App neu laden</button></div>
         <p class="klein">„Als Erwachsener spielen“ öffnet für eine Stunde alles, ohne Sperren und Zeitgrenzen; dabei werden keine Sterne und kein Fortschritt fürs Kind gespeichert (bis „Beenden“ oder die App geschlossen wird). „App neu laden“ holt die neueste Version. Der Spielstand bleibt erhalten.</p>
@@ -719,6 +726,7 @@
     $("pin-neu").addEventListener("click", () => { S.setzePin(null); sessionStorage.removeItem(SITZUNG); pinSeite(); });
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
+    if ($("geburt-eintragen")) $("geburt-eintragen").addEventListener("click", () => einrichtung(true));
     if ($("prolog-neu")) $("prolog-neu").addEventListener("click", () => { window.Story.etappeZuruecksetzen("E1"); S.meldung("Die Ankunft startet beim nächsten Besuch der Insel."); uebersicht(); });
     if ($("prolog-weg")) $("prolog-weg").addEventListener("click", () => { window.Story.etappeFertig("E1"); S.meldung("Ankunft übersprungen."); uebersicht(); });
     // Einführung E2–E8 überspringen (still: zählt nicht als neue Etappe); E3 öffnet Kapitel 1 wie in der Szene „Erste Frucht“

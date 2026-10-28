@@ -49,7 +49,9 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     await weiter(p);
     a = await szene(p);
     erwarte(a.nr === 1 && a.wartet && a.zeigt, "E4: Benno zeigt aufs Haus und wartet");
-    await p.evaluate(() => __heimat.reingehen()); await p.waitForTimeout(600);
+    await p.evaluate(() => __heimat.reingehen());
+    // die Szene prüft alle 200 ms, ob das Kind drinnen ist – unter der langsamen Software-Grafik auf den Zustand warten statt fester Zeit
+    await p.waitForFunction(() => { const s = window.__szene && __szene.aktuell(); return s && s.nr === 2; }, null, { timeout: 8000 }).catch(() => {});
     a = await szene(p);
     erwarte(a && a.nr === 2 && a.wartet, "E4: im Zimmer wartet Benno auf „Einrichten“");
     await p.click("#einrichten", { force: true }); await p.waitForTimeout(600);

@@ -197,11 +197,33 @@
     const [y, m, t] = datum.split("-").map(Number); if (m !== 12 || t > 26) return null;
     const id = "weihnachten-" + y; return St.hatGeschenk(id) ? null : id;
   }
-  // Liegt ein Paket am Steg? "weihnachten-JJJJ" (Weihnachts-Sonderstart), "qr" (eingelöster Geschenk-Code, NA-16) oder null
+  // Geburtstag (30.10.2026): Ab dem Geburtstag wartet ein Paket am Steg – auch noch Tage später (bis 60 Tage), bis es geöffnet ist.
+  // id "geburtstag-JJJJ"; jedes Jahr ein neues. Ohne Geburtsdatum im Elternbereich gibt es keins.
+  function geburtstagsPaket() {
+    const St = W.Story, Sp = S(); if (!St || !Sp.letzterGeburtstag) return null;
+    const l = Sp.letzterGeburtstag(Sp.kind().geburt, new Date(W.__jetzt || Date.now())); if (!l) return null;
+    const tage = Math.round((new Date(isoJetzt() + "T12:00:00") - new Date(l.datum + "T12:00:00")) / 86400000);
+    const id = "geburtstag-" + l.jahr; return tage <= 60 && !St.hatGeschenk(id) ? id : null;
+  }
+  // Liegt ein Paket am Steg? "weihnachten-JJJJ" (Weihnachts-Sonderstart), "geburtstag-JJJJ", "qr" (eingelöster Geschenk-Code, NA-16) oder null
   const qrPaket = () => !!(W.Geschenk && W.Geschenk.pakete().length);
-  const paketDa = () => weihnachtsPaket() || (qrPaket() ? "qr" : null);
+  const paketDa = () => weihnachtsPaket() || geburtstagsPaket() || (qrPaket() ? "qr" : null);
+  // Geburtstagsgeschenk: ein Zubehör fürs Tier, das es noch nicht hat (zuerst der Partyhut), und 5 Sterne
+  function oeffneGeburtstag(id) {
+    W.Story.merkeGeschenk(id);
+    const Sp = S(), l = Sp.letzterGeburtstag(Sp.kind().geburt, new Date(W.__jetzt || Date.now())) || {};
+    const TP = W.TierPflege, besitz = (TP && TP.lade && (TP.lade() || {}).besitz) || {};
+    const zub = ["hut", "krone", "halstuch", "brille", "schleife"].find(z => !besitz[z]);
+    if (zub && TP && TP.schenke) TP.schenke(zub);
+    Sp.gibSterne(5);
+    const NAME = { hut: "ein Partyhut", krone: "eine Krone", halstuch: "ein Halstuch", brille: "eine Brille", schleife: "eine Schleife" };
+    return { id, zimmer: false, blase: ["papagei", `🎂 Alles Gute${l.alter ? " zum " + l.alter + ". Geburtstag" : ""}!`,
+      `Im Paket sind ${zub ? NAME[zub] + " für dein Tier und " : ""}5 Sterne – von allen auf der Insel. Wir feiern mit dir, ${name()}!`,
+      Sp.paar(["", "С днём рождения! В посылке подарок от всех жителей острова."])[1]] };
+  }
   // Öffnet das Paket (nur Spielstand). Ergebnis: { id, zimmer: true, wenn etwas ins Zimmer gestellt wurde, blase: [...] } oder null
   function oeffnePaket() {
+    const gb = !weihnachtsPaket() && geburtstagsPaket(); if (gb) return oeffneGeburtstag(gb);
     const id = weihnachtsPaket();
     if (!id && qrPaket()) {
       const r = W.Geschenk.oeffne(); if (!r) return null;
@@ -233,7 +255,8 @@
     if (!St || !Sz || lage.prolog || lage.drinnen || lage.laeuft || Sz.laeuft || !St.etappe("E1") || lage.test) return null;
     const Zt = W.Zeit, st = Zt ? Zt.status() : { frei: true, spielen: true }, frei = st.frei;
     if (lage.paket === "qr" && !St.gesehen("geschenkpaket")) return "geschenkpaket";
-    if (lage.paket && lage.paket !== "qr" && !St.gesehen("weihnachtspaket")) return "weihnachtspaket";
+    if (typeof lage.paket === "string" && lage.paket.startsWith("geburtstag-") && !St.gesehen(lage.paket)) return "geburtstag";
+    if (lage.paket && !(typeof lage.paket === "string" && (lage.paket === "qr" || lage.paket.startsWith("geburtstag-"))) && !St.gesehen("weihnachtspaket")) return "weihnachtspaket";
     if (!St.etappe("E2")) {
       if (frei) St.etappeFertig("E2");
       else if (St.darfNeueEtappe()) return st.spielen ? "sonne" : "erst-lernen";
@@ -580,7 +603,7 @@
     BIOME, GROESSEN, HUEGEL, STANDARD, FARBEN, erzeuge, neuerSeed, wunsch, zeit, erstelle,
     // Regeln und Zustände
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
-    weihnachtsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
+    weihnachtsPaket, geburtstagsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
     KAPITEL, wortSchilder, deutschFertig,
     // Zimmer
     PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel,

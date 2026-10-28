@@ -27,6 +27,12 @@
     { wer: "robo", text: { de: "Frohe Weihnachten, {name}! Am Steg liegt ein Paket für dich.", ru: "С Рождеством, {name}! У причала лежит подарок для тебя.", status: E } },
     { wer: "robo", text: { de: "Lauf hin und mach es auf!", ru: "Подойди и открой его!", status: E } }
   ] });
+  // Geburtstag (30.10.2026): jedes Jahr einmal, ab dem Geburtstag (auch Tage später), Paket am Steg
+  Sz.registriere("geburtstag", { titel: "Mein Geburtstag", blasen: [
+    { wer: "papagei", text: { de: "Herzlichen Glückwunsch zum Geburtstag, {name}! 🎂", ru: "С днём рождения, {name}! 🎂", status: E } },
+    { wer: "biber", text: { de: "Alle auf der Insel haben zusammen ein Geschenk für dich gepackt.", ru: "Все жители острова вместе упаковали для тебя подарок.", status: E } },
+    { wer: "robo", text: { de: "Es liegt am Steg. Lauf hin und mach es auf!", ru: "Он лежит у причала. Подойди и открой его!", status: E } }
+  ] });
   // QR-Geschenk (NA-16): einmal erklärt; spätere Geschenke liegen einfach am Steg
   Sz.registriere("geschenkpaket", { titel: "Ein Geschenk am Steg", blasen: [
     { wer: "robo", text: { de: "Piep, {name}! Jemand hat dir ein Geschenk geschickt. Es liegt am Steg.", ru: "Пип, {name}! Тебе прислали подарок. Он лежит у причала.", status: E } },

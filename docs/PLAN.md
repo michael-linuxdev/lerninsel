@@ -1849,3 +1849,27 @@ Tagesaufgaben und Startseite sind für alle Klassen gleich; Englisch steht schon
 - **Alter zusätzlich:** Ton und Story (Jüngere kürzere Szenen und mehr Figuren-Hilfe, Ältere etwas mehr Text und eigene Ziele) und Schwierigkeit der neuen
   Insel-Spiele (z. B. Bäckerei Kl. 1 bis 10 €, Kl. 3 mit Komma).
 - Reihenfolge (meine Wahl): NA-60 zuerst (es bestimmt auch die Schwierigkeit der neuen Spiele), dann Insel-Garten → Bäckerei Benno → Tierpflege-Station.
+
+### Stand 30.10.2026, Geburtsdatum und Geburtstagsgeschenk (Wunsch des Auftraggebers)
+- **Geburtsdatum** im Elternbereich (Ersteinrichtung und „Ändern“): Wenn es eingetragen ist, wird das Alter daraus berechnet (Bildschirmzeit nach Alter
+  stimmt dann jedes Jahr von selbst); die Alters-Auswahl ist dann gesperrt. Das Feld ist nicht Pflicht (bestehende Spielstände und Tests), aber solange es
+  fehlt, steht oben im Überblick die Karte „🎂 Geburtsdatum eintragen“.
+- **Geburtstag:** am Tag ein 🎂 neben dem Namen auf der Startseite; auf der Insel gratulieren Paula, Benno und Robo, ein Paket liegt am Steg. Es bleibt liegen,
+  bis es geöffnet ist – **auch nach dem Geburtstag** (bis 60 Tage danach, dann kommt das nächste am nächsten Geburtstag). Inhalt: ein Zubehör fürs Tier, das es
+  noch nicht hat (zuerst der Partyhut, dann Krone, Halstuch, Brille, Schleife) und 5 Sterne. Jedes Jahr einmal; Szene steht in der Inselchronik.
+- Test `geburtstag` (3D, allein).
+
+### Fragerunde 30.10.2026: Klassenwechsel, Sitzenbleiben, Überspringen, Ferien (neues Paket NA-61 „Schuljahreswechsel“)
+**Heute:** Die Klasse ändert sich nie von selbst; sie steht, wie die Eltern sie eingerichtet haben. Ferien kennt die App nicht.
+**Entscheidungen:**
+- **Wechsel zum 1. August** (Beginn des Schuljahres in Sachsen, kein Ferienkalender nötig), **Eltern bestätigen:** Ab dem 1. August fragt der Elternbereich
+  (und ein Hinweis beim Start für Erwachsene): „Ist <Name> jetzt in Klasse 3?“ – Ja / Nein, bleibt / Andere Klasse. Bis zur Antwort bleibt alles wie es ist.
+  Vorschule → Klasse 1, Klasse 4 → „Übergang Klasse 5“.
+- **Sitzenbleiben: still und ohne Verlust.** Das Kind sieht davon nichts (kein Wort „sitzengeblieben“); alles Erreichte bleibt, die App schlägt gezielt die
+  Lücken der Klasse vor (über „Mein Können“).
+- **Überspringen: Lücken-Check anbieten.** Für die übersprungene Klasse je Fach „Zeig, was du kannst“ freiwillig anbieten; Fehlendes kommt als Wiederholung.
+- **Ferienkalender Sachsen:** die offiziell feststehenden sächsischen Schulferien hinterlegen (nur so weit, wie sie beschlossen sind; danach ohne Ferien und
+  ein Hinweis im Plan zum Nachtragen); in den Ferien automatisch der **Ferien-Modus**: mehr Echte-Welt-Ideen, Wiederholen statt neuem Stoff. **Weniger Lernpflicht
+  nur, wenn die Eltern es erlauben** (eigener Schalter im Elternbereich, Standard aus – „Erst lernen, dann spielen“ gilt sonst unverändert). Eltern können
+  den Ferien-Modus ganz abschalten.
+- Reihenfolge: nach dem Geburtstag zuerst NA-61 (klein, betrifft alle Kinder zum 1. August), dann NA-60, dann die neuen Insel-Spiele.

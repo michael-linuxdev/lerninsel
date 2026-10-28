@@ -1602,10 +1602,10 @@ if (K.prologFaellig(q)) setTimeout(() => starteProlog(false), 700);
 // Reihenfolge und Auslöser aus KONZEPT „Etappen“; höchstens zwei neue Etappen am Tag; nur draußen auf der Insel.
 function spieleStory(id) {
   const Sz = window.Szene, St = window.Story, def = Sz && Sz.def(id); if (!def) return;
-  const b = def.blasen, I = window.Insel;
+  const b = def.blasen, I = window.Insel, paketId = paket ? weihnachtsPaket() : null;
   if (id === "erst-lernen") { b[0].zeige = I.ort("sonnenuhr"); b[2].zeige = I.ort("eule"); }
   if (id === "sonne") { b[0].zeige = I.ort("sonnenuhr"); b[0].beim = zeigeSonnenuhr; }
-  if (id === "weihnachtspaket" || id === "geschenkpaket") { b.forEach(x => { x.zeige = () => paket ? I.bildschirm(paket.position.x, paket.position.y + 0.8, paket.position.z) : null; }); b[1].bis = (weiter) => { const t = setInterval(() => { if (!paket) { clearInterval(t); weiter(); } }, 200); return () => clearInterval(t); }; }
+  if (id === "weihnachtspaket" || id === "geschenkpaket" || id === "geburtstag") { b.forEach(x => { x.zeige = () => paket ? I.bildschirm(paket.position.x, paket.position.y + 0.8, paket.position.z) : null; }); b[1].bis = (weiter) => { const t = setInterval(() => { if (!paket) { clearInterval(t); weiter(); } }, 200); return () => clearInterval(t); }; }
   if (id === "erste-frucht") { b[0].zeige = I.ort("wissensbaum"); b[2].beim = () => { St.setzeKapitel(1); nebelWeicht(); }; }
   // E4–E8 (NA-14): Zeigehand und Warten; Auslöser und Texte kommen aus Kern und shared/szenen.js
   const warte = (pruef) => (weiter) => { const tt = setInterval(() => { if (pruef()) { clearInterval(tt); weiter(); } }, 200); return () => clearInterval(tt); };
@@ -1621,6 +1621,7 @@ function spieleStory(id) {
     storyLaeuft = false;
     K.storyFertig(def);
     if (id === "fipsis-karte") zeigeKartenweg();   // auch beim Überspringen
+    if (id === "geburtstag" && paketId) St.merkeSzene(paketId);   // einmal je Jahr
     nebelWeicht();
     if (id === "ei" && !tier && $("blase").hidden) zeigeAntwort(K.antwort("nest"));
     setTimeout(naechsteStory, 1200);
