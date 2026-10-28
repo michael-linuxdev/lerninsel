@@ -62,7 +62,9 @@
   function status() {
     const r = regeln(), d = tag();
     const frei = !r.an || S.test || (S.erwachsen && S.erwachsen());
-    const L = Math.max(1, r.lernMin) * 60, A = Math.max(1, r.lernAufgaben);
+    // Ferien (NA-61): halbe Lernpflicht nur, wenn die Eltern es ausdrücklich erlaubt haben (eltern.ferien.weniger)
+    const fw = S.ferienWeniger && S.ferienWeniger() ? 0.5 : 1;
+    const L = Math.max(1, Math.round(r.lernMin * fw)) * 60, A = Math.max(1, Math.round(r.lernAufgaben * fw));
     const bloecke = Math.max(Math.floor(d.lernSek / L), Math.floor(d.aufgaben / A));
     const tagesGrenze = r.maxSpiel * 60 + d.extraMin * 60;
     const erlaubt = Math.min(bloecke * r.spielMin * 60 + d.extraMin * 60, tagesGrenze);

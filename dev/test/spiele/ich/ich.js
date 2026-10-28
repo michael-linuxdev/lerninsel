@@ -29,6 +29,13 @@
     const fs = $("fs-link");
     if (md.fuehrerschein) { kachel("fs-link", "🪪", "Mein Tablet-Führerschein"); fs.href = "../medien/#fuehrerschein"; }
     else { kachel("fs-link", "🪪", `Tablet-Führerschein: ${ok} von ${anz}`); fs.href = "../medien/"; }
+    // Freiwilliger Lücken-Check nach einer übersprungenen Klasse (NA-61): je Fach ein Weg dorthin, ohne Druck
+    { const lk = (S.kind().luecken || []).filter(c => ["1", "2", "3", "4"].includes(c)), box = $("luecken-check");
+      if (box) { box.hidden = !lk.length;
+        if (lk.length) { const kl = lk[0];
+          box.innerHTML = `<h2>🔍 Kleiner Check: Klasse ${kl}</h2><p>Du hast eine Klasse übersprungen – toll! Wenn du magst, schau, ob du alles aus Klasse ${kl} schon kannst. Was noch fehlt, üben wir dann.</p>
+            <div class="knoepfe"><a class="knopf" href="../mathe/?weg=k${kl}">🧮 Mathe Kl. ${kl}</a><a class="knopf" href="../deutsch/">🦊 Deutsch</a><a class="knopf" href="../sachkunde/">🦉 Sachunterricht</a></div>
+            <p class="klein">Bei Deutsch und Sachunterricht findest du die Themen unter „Wiederholen aus früheren Klassen“.</p>`; } } }
     $("gesamt").textContent = `Gesamtstufe ${C.gesamt()} von ${C.sichtbareFaehigkeiten().length * C.MAX}`;
     $("gesamt-balken").style.width = Math.round(C.gesamt() / Math.max(1, C.sichtbareFaehigkeiten().length * C.MAX) * 100) + "%";
     { const funde = window.Lernfunde ? Lernfunde.baum().summe : 0;
@@ -333,5 +340,7 @@
   let start = location.hash.slice(1); if (!REITER.includes(start)) { try { start = sessionStorage.getItem("ich-reiter") || "heute"; } catch (e) { start = "heute"; } }
   reiter(start);
   if (location.hash === "#wort") starteWort();
+  // Ferien-Aufgabe „Echte Welt“: zur Karte springen (NA-61)
+  document.addEventListener("click", (e) => { const l = e.target.closest('a[href="#echte-welt"]'); if (!l) return; e.preventDefault(); const k = document.getElementById("ew-karte"); if (k) k.scrollIntoView({ behavior: "smooth", block: "center" }); });
   window.__ich = { zeichne, starteWort, reiter, get quiz() { return quiz; } };
 })();

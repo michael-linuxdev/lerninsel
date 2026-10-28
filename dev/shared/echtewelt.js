@@ -131,6 +131,7 @@
     S.gibSterne(1);
     if (window.Lernfunde) window.Lernfunde.merke({ fach: "welt", art: "welt", e: a.e, text: `Echte Welt: ${a.text.split(/[.?!–]/)[0]}`, schluessel: "ew:" + a.id });
     if (window.Familie) window.Familie.merke("welt", a.text);
+    if (window.Charakter && window.Charakter.ereignis) window.Charakter.ereignis("echtewelt");   // zählt als Tagesaufgabe in den Ferien (NA-61)
     return true;
   }
   window.EchteWelt = { IDEEN, BEREICH, heutige, andere, geschafft, selbstAbhaken, passend: () => passend().map(i => i[0]) };

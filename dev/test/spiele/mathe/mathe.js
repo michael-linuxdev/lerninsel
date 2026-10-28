@@ -6,6 +6,8 @@
   const ersterWeg = () => { const d = S.lade("mathe") || {}; if (d.weg && WEGE[d.weg]) return d.weg;
     const st = (S.stufe && S.stufe()) || {}; return ["vs", "1"].includes(st.code) && WEGE.k1.length ? "k1" : st.code === "5" && WEGE.k5.length ? "k5" : ["4", "5"].includes(st.code) && WEGE.k4.length ? "k4" : ["3", "4", "5"].includes(st.code) && WEGE.k3.length ? "k3" : "k2"; };
   let WEG = ersterWeg(), ST = WEGE[WEG];
+  // ?weg=k3 öffnet einen Weg nur für diesen Besuch (Lücken-Check nach einer übersprungenen Klasse, NA-61); die gespeicherte Wahl bleibt
+  { const w = new URLSearchParams(location.search).get("weg"); if (w && WEGE[w] && WEGE[w].length) { WEG = w; ST = WEGE[w]; } }
   // Können je Lernziel (NA-50): Lernziele einer Station (beide Wege)
   const stationVon = (id) => WEGE.k1.find(s => s.id === id) || WEGE.k2.find(s => s.id === id) || WEGE.k3.find(s => s.id === id) || WEGE.k4.find(s => s.id === id) || WEGE.k5.find(s => s.id === id);
   const lzVon = (id) => (stationVon(id) || {}).lz || [];

@@ -65,6 +65,22 @@
     else k.alter = alterAus(k.geburt);
     return k;
   }
+  // Schulferien Sachsen (NA-61, 30.10.2026). Quelle: Schulportal sachsen.de „Schuljahrestermine“ (über Websuche abgerufen am 30.10.2026;
+  // Sommerferien nach KMK-Regelung 2025–2030). Nur offiziell beschlossene Termine – NACHTRAGEN, sobald Sachsen die Ferien ab 2030/31 beschließt.
+  const FERIEN_SN = [
+    ["2026-07-04", "2026-08-14", "Sommerferien"], ["2026-10-12", "2026-10-24", "Herbstferien"], ["2026-12-23", "2027-01-02", "Weihnachtsferien"],
+    ["2027-02-08", "2027-02-19", "Winterferien"], ["2027-03-26", "2027-04-02", "Osterferien"], ["2027-05-15", "2027-05-18", "Pfingstferien"],
+    ["2027-07-10", "2027-08-20", "Sommerferien"], ["2027-10-11", "2027-10-23", "Herbstferien"], ["2027-12-23", "2028-01-01", "Weihnachtsferien"],
+    ["2028-02-14", "2028-02-26", "Winterferien"], ["2028-04-14", "2028-04-22", "Osterferien"], ["2028-07-22", "2028-09-01", "Sommerferien"],
+    ["2028-10-23", "2028-11-03", "Herbstferien"], ["2028-12-23", "2029-01-03", "Weihnachtsferien"], ["2029-02-05", "2029-02-16", "Winterferien"],
+    ["2029-03-29", "2029-04-06", "Osterferien"], ["2029-05-19", "2029-05-22", "Pfingstferien"], ["2029-07-21", "2029-08-31", "Sommerferien"],
+    ["2029-10-22", "2029-11-02", "Herbstferien"], ["2029-12-22", "2030-01-04", "Weihnachtsferien"], ["2030-02-18", "2030-03-01", "Winterferien"],
+    ["2030-04-19", "2030-04-26", "Osterferien"], ["2030-06-08", "2030-06-11", "Pfingstferien"], ["2030-07-13", "2030-08-23", "Sommerferien"]
+  ];
+  const isoTag = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  // Schuljahr: beginnt in Sachsen am 1. August → 2026 = Schuljahr 2026/27
+  const schuljahrAm = (d = new Date(window.__jetzt || Date.now())) => d.getMonth() >= 7 ? d.getFullYear() : d.getFullYear() - 1;
+  const NAECHSTE = { vs: "1", "1": "2", "2": "3", "3": "4", "4": "5", "5": "5" };
   const GEBURT_OK = (g) => /^\d{4}-\d{2}-\d{2}$/.test(g) && !isNaN(new Date(g + "T12:00:00")) && +g.slice(0, 4) > 2000;
   const heuteDatum = () => new Date(window.__jetzt || Date.now());
   function alterAus(g, am = heuteDatum()) {
@@ -219,6 +235,41 @@
     kind() { return kindMigrieren(Object.assign({ alter: 8, klasse: 2, geschlecht: "n", hilfesprache: "" }, (profil.daten.eltern || {}).kind || {})); },
     STUFEN, LAENDER, DEUTSCHSTAND, MUTTERSPRACHEN, kindMigrieren,
     alterAus, letzterGeburtstag, geburtOk: (g) => GEBURT_OK(String(g || "")),
+    // Schulferien (nur Sachsen hinterlegt): { name, von, bis } oder null; bekannt bis FERIEN_BIS
+    ferien(am = new Date(window.__jetzt || Date.now())) {
+      if ((Spielwelt.kind().land || "sn") !== "sn") return null;
+      const t = isoTag(am), f = FERIEN_SN.find(([v, b]) => v <= t && t <= b);
+      return f ? { name: f[2], von: f[0], bis: f[1] } : null;
+    },
+    naechsteFerien(am = new Date(window.__jetzt || Date.now())) { const t = isoTag(am), f = FERIEN_SN.find(([v]) => v > t); return f ? { name: f[2], von: f[0], bis: f[1] } : null; },
+    FERIEN_BIS: FERIEN_SN[FERIEN_SN.length - 1][1],
+    // Ferien-Modus: in den Ferien automatisch (Eltern können ihn abschalten); weniger Lernpflicht nur mit eigener Eltern-Erlaubnis
+    ferienModus() { const e = (profil.daten.eltern || {}).ferien || {}; return e.modus !== false && !!Spielwelt.ferien(); },
+    ferienWeniger() { return Spielwelt.ferienModus() && !!((profil.daten.eltern || {}).ferien || {}).weniger; },
+    // Schuljahreswechsel (NA-61): ab 1. August fragen die Eltern-Seiten, ob das Kind in der nächsten Klasse ist
+    schuljahrAm, NAECHSTE_STUFE: NAECHSTE,
+    schuljahrOffen() { const k = Spielwelt.kind(); return Spielwelt.eingerichtet() && Number.isFinite(k.schuljahr) && k.schuljahr < schuljahrAm(); },
+    // Ältere Spielstände ohne Schuljahr bekommen das laufende (still, damit erst am nächsten 1. August gefragt wird)
+    schuljahrStart() {
+      const e = profil.daten.eltern; if (!e || !e.eingerichtet || !e.kind || Number.isFinite(e.kind.schuljahr)) return;
+      e.kind.schuljahr = schuljahrAm(); Spielwelt.speichere("eltern", e);
+    },
+    // Antwort der Eltern: "ja" (nächste Klasse), "bleibt" (Klasse wiederholen – still, ohne Verlust) oder eine andere Stufe (z. B. überspringen).
+    // „Gerade in der Schule“ wird zurückgesetzt (neues Schuljahr). Übersprungene Klassen merken wir für den freiwilligen Lücken-Check.
+    wechsleSchuljahr(antwort) {
+      const e = Spielwelt.lade("eltern") || {}, k = Object.assign({}, e.kind || {}), alt = k.stufe || "2";
+      const neu = antwort === "ja" ? NAECHSTE[alt] : antwort === "bleibt" ? alt : STUFEN.some(x => x.code === antwort) ? antwort : alt;
+      const ord = (c) => STUFEN.findIndex(x => x.code === c);
+      k.stufe = neu; k.klasse = STUFEN.find(x => x.code === neu).klasse; k.schuljahr = schuljahrAm();
+      if (neu === alt && antwort !== "ja") k.wiederholt = schuljahrAm(); else delete k.wiederholt;
+      const ueber = STUFEN.filter((x, i) => i > ord(NAECHSTE[alt]) - 1 && i < ord(neu) && x.code !== alt && x.code !== "5").map(x => x.code);
+      if (ord(neu) > ord(NAECHSTE[alt])) k.luecken = ueber.filter(c => c !== "vs"); else delete k.luecken;
+      e.kind = k;
+      ["mathe", "deutsch", "sachkunde", "englisch", "sorbisch", "kunst", "musik", "werken", "sport", "ethik"].forEach(f => { if (e[f] && e[f].schule) e[f].schule = ""; });
+      Spielwelt.speichere("eltern", e);
+      const m = Spielwelt.lade("mathe"); if (m && m.weg && neu !== alt) { delete m.weg; Spielwelt.speichere("mathe", m); }   // Matheweg startet in der neuen Klasse
+      return { alt, neu, luecken: k.luecken || [] };
+    },
     // Hat das Kind heute Geburtstag?
     geburtstagHeute() { const l = letzterGeburtstag(Spielwelt.kind().geburt); return !!(l && l.heute); },
     // Insel-Zugang (NA-12): Standard ist die erste Lektion „Das Tablet bedienen“; Eltern können die alte Regel

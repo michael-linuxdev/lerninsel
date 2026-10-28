@@ -122,6 +122,7 @@
       S.setzeName(n);
       S.speichere("eltern", Object.assign(eltern(), { eingerichtet: true, kind: {
         ...(S.geburtOk($("e-geburt").value) ? { geburt: $("e-geburt").value } : {}),
+        schuljahr: Number.isFinite(S.kind().schuljahr) && bearbeiten ? S.kind().schuljahr : S.schuljahrAm(),
         alter: +$("e-alter").value, stufe: $("e-stufe").value, klasse: S.STUFEN.find(x => x.code === $("e-stufe").value).klasse, geschlecht: $("e-geschlecht").value,
         hilfesprache: $("e-sprache").value, muttersprache: $("e-mutter").value, deutschstand: $("e-deutsch").value, land: $("e-land").value, ort } }));
       if (bearbeiten) { S.meldung("Gespeichert."); uebersicht(); } else location.href = "../../";
@@ -573,6 +574,16 @@
       catch (e) { v.hidden = true; $("geschenk-scan").textContent = "📷 Code scannen"; m.textContent = "Die Kamera ist nicht erlaubt. Du kannst den Code auch einfügen."; }
     });
   }
+  // Ferien (NA-61): Ferienkalender Sachsen, Ferien-Modus (Standard an), weniger Lernpflicht nur mit Erlaubnis (Standard aus)
+  function ferienKarte() {
+    const f = (eltern().ferien) || {}, jetzt = S.ferien(), naechste = S.naechsteFerien(), sachsen = (S.kind().land || "sn") === "sn";
+    const datum = (d) => d.split("-").reverse().join(".");
+    return `<div class="karte" id="ferien-karte"><h2>🏖️ Ferien</h2>
+      ${!sachsen ? `<p>Für ${S.land().name} sind noch keine Ferientermine hinterlegt.</p>` : jetzt ? `<p><b>Gerade sind ${jetzt.name}</b> (bis ${datum(jetzt.bis)}).</p>` : naechste ? `<p>Nächste Ferien: <b>${naechste.name}</b> vom ${datum(naechste.von)} bis ${datum(naechste.bis)}.</p>` : `<p>Weitere Ferientermine sind noch nicht hinterlegt.</p>`}
+      <label class="schalter-z"><input type="checkbox" id="fe-modus" ${f.modus !== false ? "checked" : ""}> Ferien-Modus: in den Ferien mehr Echte-Welt-Ideen und Wiederholen statt neuem Stoff</label>
+      <label class="schalter-z"><input type="checkbox" id="fe-weniger" ${f.weniger ? "checked" : ""}> In den Ferien reicht die halbe Lernzeit („Erst lernen, dann spielen“ gilt weiter)</label>
+      <p class="klein">Hinterlegt sind die sächsischen Schulferien bis ${datum(S.FERIEN_BIS)} (Schulportal Sachsen). Der Wechsel ins neue Schuljahr kommt unabhängig davon immer am 1. August.</p></div>`;
+  }
   function zeitKnoepfe() {
     if (!Z) return;
     const wert = (id) => Math.max(0, parseInt($(id).value, 10) || 0);
@@ -597,6 +608,7 @@
   const prozent = (q) => q == null ? "–" : Math.round(q * 100) + " %";
 
   function uebersicht() {
+    if (S.schuljahrStart) S.schuljahrStart();   // ältere Spielstände: laufendes Schuljahr merken (NA-61)
     const mathe = S.lade("mathe") || {}, deutsch = S.lade("deutsch") || {}, medien = S.lade("medien") || {}, welt = S.lade("welt3d") || {};
     const stat = mathe.stat || {}, k2 = mathe.k2 || {};
     const tag = C.tag(), aufgaben = C.aufgaben();
@@ -632,6 +644,12 @@
         <button role="tab" data-teil="ueberblick" class="an">📊 Überblick</button><button role="tab" data-teil="lernstand">📘 Lernstand</button><button role="tab" data-teil="schule">🏫 Wie in der Schule</button><button role="tab" data-teil="zeit">⏰ Zeit & Regeln</button><button role="tab" data-teil="kinder">👨‍👩‍👧 Kinder & Gerät</button>
       </nav>
       <section class="eltern-teil" data-teil="ueberblick" role="tabpanel">
+      ${S.schuljahrOffen() ? `<div class="karte" id="schuljahr-frage"><h2>🎒 Neues Schuljahr ${S.schuljahrAm()}/${String(S.schuljahrAm() + 1).slice(2)}</h2>
+        <p>Ist <b>${S.profil.name}</b> jetzt in der Stufe „${S.STUFEN.find(x => x.code === S.NAECHSTE_STUFE[S.kind().stufe]).name}“? Bis ihr antwortet, bleibt alles wie bisher. Was ${S.profil.name} schon erreicht hat, bleibt in jedem Fall erhalten.</p>
+        <div class="knoepfe"><button class="knopf haupt" id="sj-ja">Ja, ${S.STUFEN.find(x => x.code === S.NAECHSTE_STUFE[S.kind().stufe]).name}</button>
+        <button class="knopf" id="sj-bleibt">Nein, bleibt in „${S.stufe().name}“</button></div>
+        <div class="knoepfe"><select id="sj-andere" aria-label="Andere Stufe">${S.STUFEN.map(x => `<option value="${x.code}">${x.name}</option>`).join("")}</select><button class="knopf" id="sj-andere-ok">Andere Stufe übernehmen</button></div>
+        <p class="klein">Bleibt ${S.profil.name} in der Klasse, sieht ${S.profil.name} davon nichts; die App schlägt dann gezielt vor, was in dieser Klasse noch fehlt. Bei einer übersprungenen Klasse bietet die App einen freiwilligen Lücken-Check an.</p></div>` : ""}
       ${S.kind().geburt ? "" : `<div class="karte" id="geburt-fehlt"><h2>🎂 Geburtsdatum eintragen</h2><p>Mit dem Geburtsdatum stimmt das Alter immer (Bildschirmzeit nach Alter), und am Geburtstag wartet ein Geschenk am Steg der Insel – auch wenn ${S.profil.name || "das Kind"} erst ein paar Tage später spielt.</p><div class="knoepfe"><button class="knopf haupt" id="geburt-eintragen">Jetzt eintragen</button></div></div>`}
       <div class="karte">
         <h2>${S.profil.name || "Spielstand"} auf einen Blick</h2>
@@ -687,6 +705,7 @@
       ${deutschKarte()}
       </section>
       <section class="eltern-teil" data-teil="zeit" role="tabpanel" hidden>
+      ${ferienKarte()}
       ${zeitKarte()}
       ${inselKarte()}
       ${echteWeltKarte()}
@@ -727,12 +746,21 @@
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
     if ($("geburt-eintragen")) $("geburt-eintragen").addEventListener("click", () => einrichtung(true));
+    if ($("schuljahr-frage")) {
+      const fertig = (r) => { S.meldung(r.neu === r.alt ? "Alles klar – die Stufe bleibt." : `Neue Stufe: ${S.STUFEN.find(x => x.code === r.neu).name}.${r.luecken.length ? " Ein freiwilliger Lücken-Check steht in „Meine Ecke“ bereit." : ""}`); uebersicht(); };
+      $("sj-ja").addEventListener("click", () => fertig(S.wechsleSchuljahr("ja")));
+      $("sj-bleibt").addEventListener("click", () => fertig(S.wechsleSchuljahr("bleibt")));
+      $("sj-andere").value = S.NAECHSTE_STUFE[S.kind().stufe];
+      $("sj-andere-ok").addEventListener("click", () => fertig(S.wechsleSchuljahr($("sj-andere").value)));
+    }
     if ($("prolog-neu")) $("prolog-neu").addEventListener("click", () => { window.Story.etappeZuruecksetzen("E1"); S.meldung("Die Ankunft startet beim nächsten Besuch der Insel."); uebersicht(); });
     if ($("prolog-weg")) $("prolog-weg").addEventListener("click", () => { window.Story.etappeFertig("E1"); S.meldung("Ankunft übersprungen."); uebersicht(); });
     // Einführung E2–E8 überspringen (still: zählt nicht als neue Etappe); E3 öffnet Kapitel 1 wie in der Szene „Erste Frucht“
     if ($("tutorial-weg")) $("tutorial-weg").addEventListener("click", () => { TUTORIAL.forEach(e => window.Story.etappeFertig(e, true)); window.Story.setzeKapitel(1); S.meldung("Einführung übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
     geschenkKnoepfe();
+    if ($("fe-modus")) { const sp = () => { const e = eltern(); e.ferien = { modus: $("fe-modus").checked, weniger: $("fe-weniger").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); };
+      $("fe-modus").addEventListener("change", sp); $("fe-weniger").addEventListener("change", sp); }
     zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); sorbischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }

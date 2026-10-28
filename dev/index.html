@@ -60,6 +60,7 @@
   .erst-dann > div:last-child { width: 100%; max-width: 420px !important; align-self: center; }
   .reihe.ohne-zeit { grid-template-columns: 1fr 1fr; }
 
+  .schuljahr-hinweis { display: block; margin: 0 0 8px; padding: 8px 14px; border-radius: 16px; background: #FFF6D6; box-shadow: inset 0 0 0 2px #F3D27A; color: var(--pflaume); font-weight: 600; text-decoration: none; font-size: .95rem; }
   /* Der Schrank: Türen für jedes Spiel */
   .schrank {
     display: grid; gap: 12px;
@@ -349,6 +350,13 @@
   const farben = ["#C2337A", "#FF6F61", "#FFC83D", "#5CCBA6", "#7B55B8", "#3AA0E0"];
   const kippen = [-6, 4, -3, 6, -5, 3, -4, 5];
 
+  // Neues Schuljahr (NA-61): ab 1. August ein Hinweis für die Erwachsenen, bis sie im Elternbereich die Klasse bestätigt haben
+  if (S.schuljahrStart) S.schuljahrStart();
+  if (S.schuljahrOffen && S.schuljahrOffen()) {
+    const h = document.createElement("a"); h.id = "schuljahr-hinweis"; h.href = "spiele/eltern/"; h.className = "schuljahr-hinweis";
+    h.textContent = "🎒 Neues Schuljahr – Erwachsene: bitte im Elternbereich die Klasse bestätigen";
+    document.querySelector("main").prepend(h);
+  }
   function zeigeName() {
     const el = document.getElementById("name");
     const n = S.profil.name || "Du";

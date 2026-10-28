@@ -1873,3 +1873,17 @@ Tagesaufgaben und Startseite sind für alle Klassen gleich; Englisch steht schon
   nur, wenn die Eltern es erlauben** (eigener Schalter im Elternbereich, Standard aus – „Erst lernen, dann spielen“ gilt sonst unverändert). Eltern können
   den Ferien-Modus ganz abschalten.
 - Reihenfolge: nach dem Geburtstag zuerst NA-61 (klein, betrifft alle Kinder zum 1. August), dann NA-60, dann die neuen Insel-Spiele.
+
+### Stand 30.10.2026, NA-61 Schuljahreswechsel und Ferien
+- **Klassenwechsel zum 1. August:** Bei der Einrichtung merkt sich die App das Schuljahr. Ab dem 1. August steht oben im Elternbereich „🎒 Neues Schuljahr
+  2027/28 – ist Mira jetzt in der 3. Klasse?“ mit **Ja** / **Nein, bleibt** / **Andere Stufe**; auf der Startseite ein kleiner Hinweis für Erwachsene. Bis zur
+  Antwort bleibt alles wie bisher. Beim Wechsel starten Matheweg und „gerade in der Schule“ in der neuen Klasse; alles Erreichte bleibt.
+- **Wiederholen** wird nur intern gemerkt (`wiederholt`); das Kind sieht nichts. **Überspringen** (z. B. 3 → Übergang 5): freiwilliger Lücken-Check in Meine Ecke
+  („Kleiner Check: Klasse 4“ mit Matheweg Kl. 4, Deutsch, Sachunterricht). Alte Spielstände ohne Schuljahr bekommen still das laufende.
+- **Ferien Sachsen** bis Sommer 2030 hinterlegt (Schulportal Sachsen, abgerufen über die Websuche – sachsen.de selbst war aus der Sitzung nicht erreichbar;
+  bitte einmal gegenprüfen). **Ab Herbst 2030 nachtragen.** In den Ferien: Tagesaufgabe „Ferien-Idee“ (Echte Welt) statt „Wort des Tages“; halbe
+  Lernzeit nur mit eigenem Eltern-Schalter (Standard aus); Ferien-Modus abschaltbar. Karte „🏖️ Ferien“ im Teil „Zeit & Regeln“.
+- Offen: „Lücken der Klasse gezielt vorschlagen“ beim Wiederholen nutzt bisher „Mein Können“ wie gewohnt – das Feld „Heute für dich“ (NA-60) greift
+  `wiederholt` und `luecken` auf.
+- Test `schuljahrwechsel`.
+- **Nächstes:** NA-60 Altersgerechte Erfahrung, dann Insel-Garten.

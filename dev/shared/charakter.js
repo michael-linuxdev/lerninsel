@@ -158,7 +158,9 @@
     const dritte = auswahl[Math.floor(r() * auswahl.length)];
     const liste = [
       { id: "training", emoji: "🧮", titel: "Mathe-Training", text: "8 Aufgaben – genau die, die noch schwer sind.", ereignis: "training-fertig", skill: "mathe", link: "../mathe/?training=1" },
-      { id: "wort", emoji: "📖", titel: "Wort des Tages", text: "Lerne ein neues Wort und löse 5 Wort-Rätsel.", ereignis: "wort-fertig", skill: "deutsch", link: "#wort" },
+      // In den Ferien (NA-61): statt neuem Wort etwas Echtes draußen – Wiederholen statt neuem Stoff
+      S.ferienModus && S.ferienModus() ? { id: "echtewelt", emoji: "🌍", titel: "Ferien-Idee", text: "Probiere eine Echte-Welt-Idee aus – draußen oder mit deiner Familie.", ereignis: "echtewelt", skill: "entdecker", link: "#echte-welt" }
+        : { id: "wort", emoji: "📖", titel: "Wort des Tages", text: "Lerne ein neues Wort und löse 5 Wort-Rätsel.", ereignis: "wort-fertig", skill: "deutsch", link: "#wort" },
       dritte
     ];
     return liste.map(a => Object.assign({}, a, { erledigt: d.tag.erledigt.includes(a.id) }));
