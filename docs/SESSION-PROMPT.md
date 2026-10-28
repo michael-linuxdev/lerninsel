@@ -12,7 +12,7 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (28.10.2026, vormittags)
+## 1. Stand (28.10.2026, mittags)
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
   **Kl. 1/Vorschule 22** · **Kl. 2 45** · **Kl. 3 35** · **Kl. 4 26** · **Übergang 5** 16 (vorläufig). Freischalten je Lernbereich, Lernbereichs-Kacheln
@@ -45,7 +45,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - Kl.-3/4-Inhalte bleiben **ab der Klasse davor** sichtbar (Werkstatt, Sachthemen, Englisch).
 
 ### Bekannte Baustellen
-- **Schuljahres-Gerüst** („Zeig, was du kannst“, „gerade in der Schule“) gibt es bisher nur für Mathe.
+- **Schuljahres-Gerüst** („Zeig, was du kannst“, „gerade in der Schule“) gibt es für Mathe, Deutsch und Sachunterricht – Englisch fehlt noch.
 - Kinder sehen ihre eigenen Texte noch nicht selbst („Mein Heft“); Handschrift-Übung fehlt (nur Echte Welt).
 - Englisch ohne Lernkartei; Lieder/Reime zum Mitsingen fehlen.
 - Nur russische Übersetzungs-Entwürfe (alle neuen Kapitel/Themen/Lektionen haben ru-Entwürfe); Ukrainisch u. a. fehlen. Ton über die Gerätestimme.
@@ -54,7 +54,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Insel-Tests (`tutorial`, `prolog`) wackeln, wenn parallel andere Browser-Tests laufen** – allein laufen lassen; einmal gescheitert heißt nicht kaputt.
 
 ### Offene Fragen an den Auftraggeber
-- **iPad-10-Test** (in /dev): **Deutsch-Werkstatt** (Gruppen nach Lernbereichen, „Wiederholen aus früheren Klassen“ aufklappen, „Gut zuhören“ –
+- **iPad-10-Test** (in /dev): **Elternbereich → „Deutsch und Sachunterricht wie im Schuljahr“ einstellen, dann in Werkstatt und bei Eule Ella
+  „Zeig, was du kannst“ ausprobieren**; **Deutsch-Werkstatt** (Gruppen nach Lernbereichen, „Wiederholen aus früheren Klassen“ aufklappen, „Gut zuhören“ –
   liest das iPad den Text vor?, „Blitzwörter“ – ist das Aufblitzen gut lesbar?, „Ein Elfchen dichten“), **Sachunterricht** (Gruppen, „Mein Körper
   gehört mir“ – ist der Ton so recht?, „Licht und Schatten“, „Sachsen entdecken“), **Englisch** (neue Lektionen, z. B. „London“, „Café“),
   dazu weiter offen: Matheweg-Kacheln und „Zeig, was du kannst“, Aufnehmen mit Eltern-Schalter.
@@ -69,8 +70,8 @@ Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ab
 
 1. **Mathe, Deutsch, Sachunterricht und Englisch sind gegen die Lehrpläne geprüft und ausgebaut** (Stand 28.10.). Rest ehrlich „teilweise“
    (siehe oben).
-2. **Schuljahres-Gerüst für Deutsch, SU und Englisch** nach dem Muster Mathe: „Zeig, was du kannst“ je Lernbereich (gemischte Schritte aus den
-   Kapiteln/Themen/Lektionen des Lernbereichs), Eltern-Einstellung „gerade in der Schule“ je Fach, Ergebnisse im Elternbericht je Punkt.
+2. **Schuljahres-Gerüst Deutsch und SU ist fertig** (28.10. mittags, Test `schuljahr2`). Offen: **Englisch** (Lektionen einem Lernbereich zuordnen,
+   „Zeig, was du kannst“ aus den Wörtern der Lektionen, „gerade in der Schule“).
 3. **Kunst, Musik, Werken, Sport, Ethik** – sobald die PDFs da sind: Punkte in `sachsen-punkte.js` (neue Fächer im Profil), Atelier/Musik
    ausbauen, Rest als Echte-Welt-Aufgaben.
 4. Vorschläge an den Auftraggeber: „Mein Heft“ (eigene Texte), Handschrift-Übung, Englisch-Lernkartei, Lieder/Reime.

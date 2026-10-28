@@ -105,12 +105,15 @@
         return b;
       };
       const stufeVon = (k) => Math.max(2, k.stufe || 2);
+      const schule = (((S.lade("eltern") || {}).deutsch || {}).schule) || "";   // Eltern-Einstellung „gerade in der Schule“ (Lernbereich)
       WERK_LB.forEach(([lb, titel]) => {
         const alle = W.map((k, i) => [k, i]).filter(([k]) => (k.lb || "su") === lb && !(k.stufe && klasse < k.stufe - 1))
           .sort((a, b) => stufeVon(a[0]) - stufeVon(b[0]) || a[1] - b[1]);
         const frueher = alle.filter(([k]) => klasse >= 3 && stufeVon(k) < klasse), jetzt = alle.filter(x => !frueher.includes(x));
-        const g = document.createElement("section"); g.className = "werk-gruppe"; g.dataset.lb = lb;
-        g.innerHTML = `<h3>${titel}</h3><div class="orte"></div>`;
+        const g = document.createElement("section"); g.className = "werk-gruppe" + (lb === schule ? " schule" : ""); g.dataset.lb = lb;
+        g.innerHTML = `<h3>${titel}${lb === schule ? ` <span class="schule-marke">📌 Gerade in der Schule</span>` : ""}</h3>` +
+          (lernstandKapitel(lb).length >= 2 ? `<button class="knopf lernstand-knopf" data-lb="${lb}">🎯 Zeig, was du kannst</button>` : "") + `<div class="orte"></div>`;
+        const lk = g.querySelector(".lernstand-knopf"); if (lk) lk.addEventListener("click", () => { S.ton("tipp"); starteLernstand(lb); });
         jetzt.forEach(([k, i]) => g.querySelector(".orte").appendChild(kachel(k, i)));
         if (lb === "le") {
           // Lesen und Schreiben (NA-30/31/35): eigene Seite, hier als Kachel im Lernbereich Lesen
@@ -125,7 +128,7 @@
           frueher.forEach(([k, i]) => d.querySelector(".orte").appendChild(kachel(k, i)));
           g.appendChild(d);
         }
-        wk.appendChild(g);
+        if (lb === schule) wk.prepend(g); else wk.appendChild(g);   // „gerade in der Schule“ steht oben
       });
     }
     $("schatz-titel").textContent = anzahl === 5 ? "Die Schatzkarte ist komplett!" : `Die Schatzkarte: ${anzahl} von 5 Teilen`;
@@ -135,7 +138,7 @@
   // ---------- Kapitel ----------
   let lauf = null;
   // NA-50: Lernziele eines Schritts – Werkstatt-Kapitel haben eigene lz, Fipsis Geschichte nach Schritt-Typ
-  const lzSchritt = (s) => (lauf && lauf.werk && lauf.k.lz) || (s && (window.GESCHICHTE_LZ_TYP || {})[s.typ]) || [];
+  const lzSchritt = (s) => (s && s.__lz) || (lauf && lauf.werk && lauf.k.lz) || (s && (window.GESCHICHTE_LZ_TYP || {})[s.typ]) || [];
 
   // Lernkartei (shared/lernkartei.js): fällige Schritte von früher kommen als kurze Wiederholung an den Anfang
   const WIEDER_INTRO = { typ: "sag", text: "Bevor es losgeht: Wir wiederholen kurz, was letztes Mal knifflig war. Du schaffst das!",
@@ -150,8 +153,8 @@
   // Paket D1: Aufnahme-Schritte nur, wenn die Eltern es erlaubt haben und das Gerät aufnehmen kann – sonst still weglassen
   const ohneAufnahme = (k) => window.Eigenes && Eigenes.darfAufnehmen() ? k : Object.assign({}, k, { schritte: k.schritte.filter(x => x.typ !== "aufnehmen") });
   function starte(i, liste = G) {
-    const k = mitWiederholung(ohneAufnahme(liste[i]));
-    lauf = { i, k, liste, werk: liste !== G, pos: 0, fehler: 0, stufe: 0 };
+    const k = liste[i].lernstand ? liste[i] : mitWiederholung(ohneAufnahme(liste[i]));
+    lauf = { i, k, liste, werk: liste !== G, pos: 0, fehler: 0, stufe: 0, falsch: new Set() };
     document.body.style.setProperty("--grund", k.grund);
     document.body.style.setProperty("--akzent", k.farbe);
     $("kapitel-name").textContent = k.name;
@@ -608,6 +611,7 @@
     lauf.versuche++;
     if (lauf.versuche === 1) {
       if (!(schrittJetzt && schrittJetzt.__karte)) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
+      if (schrittJetzt && schrittJetzt.__kap) lauf.falsch.add(schrittJetzt.__kap);   // „Zeig, was du kannst“: dieses Kapitel noch üben
       if (window.Lernkartei) Lernkartei.falsch("deutsch", schrittJetzt);
       if (window.Koennen) Koennen.melde(lzSchritt(schrittJetzt), false);
     }
@@ -634,6 +638,7 @@
 
   // ---------- Ende eines Kapitels ----------
   function beende() {
+    if (lauf.k.lernstand) return beendeLernstand();
     const { k, i, fehler } = lauf;
     const sterne = fehler <= 1 ? 3 : fehler <= 3 ? 2 : 1;
     const vorher = bestes(k.id);
@@ -664,6 +669,50 @@
     zeige("ende"); S.ton("juhu");
   }
 
+
+  // ---------- Schuljahr Deutsch (28.10.2026): „Zeig, was du kannst“ je Lernbereich ----------
+  // Eine Aufgabe aus jedem Kapitel des Lernbereichs für die eigene Klasse (höchstens 10), ohne Sterne und ohne Noten; Ergebnis je Kapitel
+  // in deutsch.lernstand["k<klasse>:<lb>"] = { am, n, richtig, je: { kapitel: bool } } für den Elternbereich.
+  const LERNSTAND_TYPEN = ["luecke", "wort", "hoertext", "blitz", "silben", "wortart", "verlaengern", "artikel", "verbessern"];
+  const klasseJetzt = () => ((S.stufe && S.stufe()) || {}).klasse || 2;
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const heute = () => { const d = window.__jetzt ? new Date(window.__jetzt) : new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; };
+  function lernstandKapitel(lb) {
+    const kl = Math.max(2, klasseJetzt());
+    return W.filter(k => (k.lb || "su") === lb && Math.max(2, k.stufe || 2) === kl && k.schritte.some(x => LERNSTAND_TYPEN.includes(x.typ)));
+  }
+  function starteLernstand(lb) {
+    const titel = (WERK_LB.find(x => x[0] === lb) || [lb, lb])[1].replace(/^\S+\s/, "");
+    // Wenige Kapitel im Lernbereich: bis zu drei Aufgaben je Kapitel, damit es etwa 8–10 Aufgaben werden
+    const kap = mische(lernstandKapitel(lb)).slice(0, 10), je = Math.min(3, Math.ceil(8 / Math.max(1, kap.length)));
+    const schritte = mische([].concat(...kap.map(k => mische(k.schritte.filter(x => LERNSTAND_TYPEN.includes(x.typ))).slice(0, je)
+      .map(x => Object.assign({}, x, { __kap: k.id, __lz: k.lz }))))).slice(0, 10);
+    const k = { id: "lernstand-" + lb, lernstand: lb, name: "Zeig, was du kannst", ort: "🎯", farbe: "#7B55B8", grund: "#EFE6FF", lz: [],
+      schritte: [{ typ: "sag", text: `Zeig mir, was du in „${titel}“ schon kannst, {name}! Das ist kein Test mit Noten – nur ein Blick, was schon klappt.`,
+        ru: "Покажи, что ты уже умеешь! Это не контрольная с оценками — просто посмотрим, что уже получается." }].concat(schritte) };
+    starte(0, [k]);
+  }
+  function beendeLernstand() {
+    const { k } = lauf, je = {};
+    k.schritte.forEach(x => { if (x.__kap) je[x.__kap] = !lauf.falsch.has(x.__kap); });
+    const ids = Object.keys(je), gut = ids.filter(id => je[id]), ueben = ids.filter(id => !je[id]), name = (id) => (W.find(x => x.id === id) || {}).name || id;
+    const d = daten(); d.lernstand = d.lernstand || {}; d.lernstand[`k${Math.max(2, klasseJetzt())}:${k.lernstand}`] = { am: heute(), n: ids.length, richtig: gut.length, je };
+    S.speichere("deutsch", d);
+    if (window.Charakter) Charakter.gib("deutsch", 3);
+    $("ende-titel").textContent = "Danke fürs Zeigen!";
+    $("ende-teil").innerHTML = `<div class="gross-emoji">🎯</div>`;
+    $("ende-sterne").innerHTML = "";
+    $("ende-text").textContent = (gut.length ? `Das kannst du schon: ${gut.slice(0, 4).map(name).join(", ")}${gut.length > 4 ? " und mehr" : ""}. ` : "") +
+      (ueben.length ? `Das üben wir noch zusammen: ${ueben.slice(0, 3).map(name).join(", ")}.` : "Alles beim ersten Mal richtig – super!");
+    $("ende-gewinn").textContent = "Das war kein Test mit Noten – nur ein Blick, was schon klappt.";
+    const kn = $("ende-knoepfe"); kn.innerHTML = "";
+    const knopf = (t, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = t; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
+    const erste = ueben.length ? W.findIndex(x => x.id === ueben[0]) : -1;
+    if (erste >= 0) knopf(`Üben: ${W[erste].name}`, true, () => starte(erste, W));
+    knopf("Zur Werkstatt", erste < 0, () => { zeige("karte"); zeichneKarte(); setTimeout(() => { const w = $("werkstatt"); if (w) w.scrollIntoView({ behavior: "smooth" }); }, 50); });
+    zeige("ende"); S.ton("juhu");
+  }
+
   // ---------- Einstellungen ----------
   function zeigeEinst() {
     const d = daten();
@@ -690,5 +739,5 @@
   $("zur-karte").addEventListener("click", () => { SP.stopp(); if (aufnahmeEnde) { aufnahmeEnde(); aufnahmeEnde = null; } S.ton("tipp"); lauf = null; zeige("karte"); zeichneKarte(); });
 
   zeichneKarte();
-  window.__deutsch = { starte, pruefeText, schritt: (n) => { lauf.pos = n; lauf.gesperrt = false; lauf.versuche = 0; schritt(); }, get lauf() { return lauf; } };
+  window.__deutsch = { starte, pruefeText, starteLernstand, lernstandKapitel, schritt: (n) => { lauf.pos = n; lauf.gesperrt = false; lauf.versuche = 0; schritt(); }, get lauf() { return lauf; } };
 })();

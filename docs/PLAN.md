@@ -1593,3 +1593,15 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
   als eigener Lernbereich gezählt (Lehrplan: verbindlich, in die Themen integriert).
 - **Offen / nächstes Paket:** Schuljahres-Gerüst („Zeig, was du kannst“, „gerade in der Schule“) für Deutsch, SU und Englisch; Kunst, Musik,
   Werken, Sport, Ethik (PDFs fehlen); „Mein Heft“ (eigene Texte für Kinder); Handschrift-Übung; ukrainische Übersetzungen.
+
+### Stand 28.10.2026, mittags (Schuljahres-Gerüst für Deutsch und Sachunterricht)
+- **„Zeig, was du kannst“ je Lernbereich** jetzt auch in der **Wörter-Werkstatt** (5 Lernbereiche) und bei **Eule Ella** (6 Lernbereiche): Knopf
+  unter jeder Lernbereichs-Überschrift. Aufgaben nur aus Kapiteln/Themen **der eigenen Klasse** (Kl. 1/2 = eine Stufe), je Kapitel/Thema eine,
+  bei wenigen Kapiteln bis zu drei, höchstens 10 (Deutsch: Lücke, Wort, Hörtext, Blitz, Silben, Wortart, Verlängern, Artikel, Verbessern;
+  SU: Wahl und Daumen). Ohne Sterne, ohne Kapitelwertung; Ende „Das kannst du schon … / Das üben wir noch …“ mit Knopf zum ersten unsicheren
+  Kapitel/Thema. Ergebnis je Kapitel/Thema in `deutsch.lernstand` bzw. `sachkunde.lernstand`.
+- **Eltern-Einstellung „gerade in der Schule“** für Deutsch und SU (neue Karte „Deutsch und Sachunterricht wie im Schuljahr“): der Lernbereich
+  steht oben und ist markiert; ohne Einstellung die Lehrplan-Reihenfolge. Die Karte zeigt die letzten Ergebnisse mit „noch üben“.
+- **Test:** neu `tests/schuljahr2.js` (quer und hoch, ein absichtlicher Fehler je Durchgang, Elternbereich, Zurücksetzen).
+- **Offen:** dasselbe für Englisch (Lektionen tragen noch keinen Lernbereich; Zuordnung über die Inhaltspunkte möglich); Kunst, Musik,
+  Werken, Sport, Ethik (PDFs fehlen).

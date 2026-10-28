@@ -380,6 +380,38 @@
       <div class="knoepfe"><button class="knopf haupt" id="en-speichern">Speichern</button></div>
     </div>`;
   }
+  // ---------- Schuljahr Deutsch und Sachunterricht (28.10.2026): „gerade in der Schule“ und „Zeig, was du kannst“ ----------
+  const DE_LB = { sz: "Sprechen und Zuhören", sc: "Schreiben", le: "Lesen", tm: "Texte und Medien", su: "Sprache untersuchen" };
+  const SU_LB = { zl: "Zusammen leben und lernen", kg: "Mein Körper und meine Gesundheit", pt: "Pflanzen und Tiere", un: "Unbelebte Natur", rz: "Raum und Zeit", ex: "Forschen, Medien, Schuljahre" };
+  function lernstandListe(fach, namen, liste, id) {
+    const ls = (S.lade(fach) || {}).lernstand || {}, eintraege = Object.entries(ls).sort((a, b) => (b[1].am || "").localeCompare(a[1].am || ""));
+    const name = (x) => (liste.find(k => k.id === x) || {}).name || x;
+    if (!eintraege.length) return `<p class="klein" id="${id}">„Zeig, was du kannst“: noch nicht gemacht.</p>`;
+    return `<ul class="liste" id="${id}">` + eintraege.map(([k, v]) => { const [kl, lb] = k.split(":"), ueben = Object.keys(v.je).filter(x => !v.je[x]);
+      return `<li><b>Kl. ${kl.slice(1)} · ${namen[lb] || lb}</b> (${v.am.split("-").reverse().join(".")}): ${v.richtig} von ${v.n} auf Anhieb${ueben.length ? ` · noch üben: ${ueben.map(name).join(", ")}` : " · alles sicher"}</li>`; }).join("") + `</ul>`;
+  }
+  function schuljahrKarte() {
+    const e = S.lade("eltern") || {}, de = (e.deutsch || {}).schule || "", su = (e.sachkunde || {}).schule || "";
+    const auswahl = (id, namen, wert, leer) => `<select id="${id}"><option value="" ${!wert ? "selected" : ""}>${leer}</option>${Object.entries(namen).map(([k, n]) => `<option value="${k}" ${wert === k ? "selected" : ""}>${n}</option>`).join("")}</select>`;
+    return `<div class="karte" id="schuljahr-karte">
+      <h2>📚 Deutsch und Sachunterricht wie im Schuljahr</h2>
+      <div class="zeit-raster"><label>Deutsch – gerade in der Schule${auswahl("d-schule", DE_LB, de, "Keine Angabe")}</label>
+        <label>Sachunterricht – gerade in der Schule${auswahl("su-schule", SU_LB, su, "Keine Angabe")}</label></div>
+      <p class="klein">Der gewählte Lernbereich steht in der Wörter-Werkstatt bzw. bei Eule Ella ganz oben und ist markiert. Alles andere bleibt offen.
+        Mit „Zeig, was du kannst“ (je Lernbereich) zeigt das Kind ohne Noten und ohne Sterne, was schon sitzt – hier seht ihr das Ergebnis.</p>
+      <div class="knoepfe"><button class="knopf haupt" id="sj-speichern">Speichern</button></div>
+      <h3>Deutsch – „Zeig, was du kannst“</h3>${lernstandListe("deutsch", DE_LB, window.WERKSTATT || [], "lernstand-deutsch")}
+      <h3>Sachunterricht – „Zeig, was du kannst“</h3>${lernstandListe("sachkunde", SU_LB, window.THEMEN || [], "lernstand-sachkunde")}
+    </div>`;
+  }
+  function schuljahrKnoepfe() {
+    $("sj-speichern").addEventListener("click", () => {
+      const e = S.lade("eltern") || {};
+      e.deutsch = Object.assign({}, e.deutsch || {}, { schule: $("d-schule").value });
+      e.sachkunde = Object.assign({}, e.sachkunde || {}, { schule: $("su-schule").value });
+      S.speichere("eltern", e); S.meldung("Gespeichert.");
+    });
+  }
   // Deutsch (Paket D1): eigene Texte lesen, Aufnahmen anhören, Aufnehmen erlauben. Alles liegt nur in der IndexedDB dieses Geräts.
   function deutschKarte() {
     const an = !!(((S.lade("eltern") || {}).deutsch || {}).aufnehmen);
@@ -568,6 +600,7 @@
       ${inselKarte()}
       ${matheKarte()}
       ${englischKarte()}
+      ${schuljahrKarte()}
       ${deutschKarte()}
       ${echteWeltKarte()}
       ${staerkenKarte()}
@@ -598,7 +631,7 @@
     // Einführung E2–E8 überspringen (still: zählt nicht als neue Etappe); E3 öffnet Kapitel 1 wie in der Szene „Erste Frucht“
     if ($("tutorial-weg")) $("tutorial-weg").addEventListener("click", () => { TUTORIAL.forEach(e => window.Story.etappeFertig(e, true)); window.Story.setzeKapitel(1); S.meldung("Einführung übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
-    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); deutschKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
+    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";

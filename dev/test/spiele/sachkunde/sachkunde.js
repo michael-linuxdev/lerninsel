@@ -73,6 +73,7 @@
     };
     // Schuljahr SU (28.10.2026): Themen nach den Lernbereichen des Lehrplans gruppiert; Themen früherer Klassen eingeklappt
     const stufeVon = (t) => Math.max(2, t.stufe || t.kl || 2);
+    const schule = (((S.lade("eltern") || {}).sachkunde || {}).schule) || "";   // Eltern-Einstellung „gerade in der Schule“ (Lernbereich)
     SU_LB.forEach(([lb, titel]) => {
       const alle = TH.map((t, i) => [t, i]).filter(([t]) => (t.lb || "zl") === lb
         && !(t.stufe && klasse < t.stufe - 1)                   // NA-39: Übergangs-Themen (stufe 5) erst ab Klasse 4 zeigen
@@ -80,8 +81,10 @@
         .sort((a, b) => stufeVon(a[0]) - stufeVon(b[0]) || a[1] - b[1]);
       if (!alle.length) return;
       const frueher = alle.filter(([t]) => klasse >= 3 && stufeVon(t) < klasse), jetzt = alle.filter(x => !frueher.includes(x));
-      const g = document.createElement("section"); g.className = "su-gruppe"; g.dataset.lb = lb;
-      g.innerHTML = `<h3>${titel}</h3><div class="lektionen"></div>`;
+      const g = document.createElement("section"); g.className = "su-gruppe" + (lb === schule ? " schule" : ""); g.dataset.lb = lb;
+      g.innerHTML = `<h3>${titel}${lb === schule ? ` <span class="schule-marke">📌 Gerade in der Schule</span>` : ""}</h3>` +
+        (lernstandThemen(lb).length >= 2 ? `<button class="knopf lernstand-knopf" data-lb="${lb}">🎯 Zeig, was du kannst</button>` : "") + `<div class="lektionen"></div>`;
+      const lk = g.querySelector(".lernstand-knopf"); if (lk) lk.addEventListener("click", () => { S.ton("tipp"); starteLernstand(lb); });
       jetzt.forEach(([t, i]) => g.querySelector(".lektionen").appendChild(kachel(t, i)));
       if (frueher.length) {
         const d = document.createElement("details"); d.className = "frueher";
@@ -89,7 +92,7 @@
         frueher.forEach(([t, i]) => d.querySelector(".lektionen").appendChild(kachel(t, i)));
         g.appendChild(d);
       }
-      $("themen").appendChild(g);
+      if (lb === schule) $("themen").prepend(g); else $("themen").appendChild(g);   // „gerade in der Schule“ steht oben
     });
   }
 
@@ -113,8 +116,8 @@
   }
 
   function starte(i) {
-    const t = mitWiederholung(TH[i]);
-    lauf = { i, t, pos: 0, fehler: 0 };
+    const t = TH[i].lernstand ? TH[i] : mitWiederholung(TH[i]);
+    lauf = { i, t, pos: 0, fehler: 0, falsch: new Set() };
     document.body.style.setProperty("--grund", t.grund);
     document.body.style.setProperty("--akzent", t.farbe);
     document.body.classList.toggle("breit", !!t.stammbaum);
@@ -149,7 +152,7 @@
       const sj = lauf.t.schritte[lauf.pos];
       if (o.ok) {
         b.classList.add("richtig");
-        if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde(lauf.t.lz, true);
+        if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde((sj && sj.__lz) || lauf.t.lz, true);
         if (!versucht && sj && sj.__karte && window.Lernkartei && Lernkartei.richtig("sachkunde", sj) && window.Lernfunde)
           { const t = loesungText(sj); Lernfunde.merke({ fach: "sachkunde", art: "gemeistert", e: "💪", text: t.length > 64 ? t : `${t} – jetzt weißt du es!`, schluessel: "sk:" + t, melden: true }); }
         container.querySelectorAll(".option").forEach(x => x.disabled = true);
@@ -158,6 +161,7 @@
       } else {
         if (!versucht) {
           if (!(sj && sj.__karte)) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
+          if (sj && sj.__kap) lauf.falsch.add(sj.__kap);   // „Zeig, was du kannst“: dieses Thema noch üben
           if (window.Koennen) Koennen.melde(lauf.t.lz, false);
           versucht = true;
           if (window.Lernkartei) Lernkartei.falsch("sachkunde", sj);
@@ -262,6 +266,7 @@
 
   // ---------- Ende ----------
   function beende() {
+    if (lauf.t.lernstand) return beendeLernstand();
     const { t, fehler } = lauf;
     const sterne = fehler <= 1 ? 3 : fehler <= 4 ? 2 : 1;
     const vorher = bestes(t.id);
@@ -283,10 +288,54 @@
     zeige("ende"); S.ton("juhu");
   }
 
-  $("zur-liste").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); lauf = null; zeige("liste"); zeichneListe(); });
+
+  // ---------- Schuljahr SU (28.10.2026): „Zeig, was du kannst“ je Lernbereich ----------
+  // Eine Wahl- oder Daumen-Frage aus jedem Thema des Lernbereichs für die eigene Klasse (höchstens 10), ohne Sterne; Ergebnis in
+  // sachkunde.lernstand["k<klasse>:<lb>"] = { am, n, richtig, je: { thema: bool } }.
+  const klasseJetzt = () => ((S.stufe && S.stufe()) || {}).klasse || 2;
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const heute = () => { const d = window.__jetzt ? new Date(window.__jetzt) : new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; };
+  const passtLand = (t) => !(t.land && (S.land() || {}).code !== t.land);
+  function lernstandThemen(lb) {
+    const kl = Math.max(2, klasseJetzt());
+    return TH.filter(t => !t.lernstand && (t.lb || "zl") === lb && Math.max(2, t.stufe || t.kl || 2) === kl && passtLand(t) && t.schritte.some(x => x.typ === "wahl" || x.typ === "daumen"));
+  }
+  function starteLernstand(lb) {
+    const titel = (SU_LB.find(x => x[0] === lb) || [lb, lb])[1].replace(/^\S+\s/, "");
+    // Wenige Themen im Lernbereich: bis zu drei Fragen je Thema, damit es etwa 8–10 Fragen werden
+    const th = mische(lernstandThemen(lb)).slice(0, 10), je = Math.min(3, Math.ceil(8 / Math.max(1, th.length)));
+    const schritte = mische([].concat(...th.map(t => mische(t.schritte.filter(x => x.typ === "wahl" || x.typ === "daumen")).slice(0, je)
+      .map(x => Object.assign({}, x, { __kap: t.id, __lz: t.lz }))))).slice(0, 10);
+    const t = { id: "lernstand-" + lb, lernstand: lb, name: "Zeig, was du kannst", e: "🎯", farbe: "#7B55B8", grund: "#EFE6FF", lz: [], kurz: "",
+      schritte: [{ typ: "info", titel: "Zeig, was du kannst", bild: "🎯", text: `Zeig mir, was du über „${titel}“ schon weißt, {name}! Das ist kein Test mit Noten – nur ein Blick, was schon klappt.`,
+        ru: "Покажи, что ты уже знаешь! Это не контрольная с оценками — просто посмотрим, что уже получается." }].concat(schritte) };
+    TH.push(t); starte(TH.length - 1);   // vorübergehend in die Liste, damit starte(i) wie gewohnt arbeitet
+  }
+  function beendeLernstand() {
+    const { t } = lauf, je = {};
+    t.schritte.forEach(x => { if (x.__kap) je[x.__kap] = !lauf.falsch.has(x.__kap); });
+    const i = TH.indexOf(t); if (i >= 0) TH.splice(i, 1);
+    const ids = Object.keys(je), gut = ids.filter(id => je[id]), ueben = ids.filter(id => !je[id]), name = (id) => (TH.find(x => x.id === id) || {}).name || id;
+    const d = daten(); d.lernstand = d.lernstand || {}; d.lernstand[`k${Math.max(2, klasseJetzt())}:${t.lernstand}`] = { am: heute(), n: ids.length, richtig: gut.length, je };
+    speichere(d);
+    if (window.Charakter) Charakter.gib("sachkunde", 3);
+    $("ende-titel").textContent = "Danke fürs Zeigen!";
+    $("ende-sterne").innerHTML = `<span style="animation-delay:180ms">🎯</span>`;
+    $("ende-text").textContent = (gut.length ? `Das weißt du schon: ${gut.slice(0, 4).map(name).join(", ")}${gut.length > 4 ? " und mehr" : ""}. ` : "") +
+      (ueben.length ? `Das schauen wir uns noch einmal an: ${ueben.slice(0, 3).map(name).join(", ")}.` : "Alles beim ersten Mal richtig – Ella ist stolz auf dich!");
+    $("ende-gewinn").textContent = "Das war kein Test mit Noten – nur ein Blick, was schon klappt.";
+    const kn = $("ende-knoepfe"); kn.innerHTML = "";
+    const knopf = (txt, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = txt; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
+    const erste = ueben.length ? TH.findIndex(x => x.id === ueben[0]) : -1;
+    if (erste >= 0) knopf(`Üben: ${TH[erste].name}`, true, () => starte(erste));
+    knopf("Zur Übersicht", erste < 0, () => { zeige("liste"); zeichneListe(); });
+    zeige("ende"); S.ton("juhu");
+  }
+
+  $("zur-liste").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); if (lauf && lauf.t.lernstand) { const i = TH.indexOf(lauf.t); if (i >= 0) TH.splice(i, 1); } lauf = null; zeige("liste"); zeichneListe(); });
   $("ru-schalter").addEventListener("click", () => { const d = daten(); d.ru = !d.ru; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(`${HL().name}-Hilfe ist ${d.ru ? "an" : "aus"}.`); });
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Vorlesen ist an." : "Vorlesen ist aus."); });
 
   zeichneListe();
-  window.__sachkunde = { starte, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
+  window.__sachkunde = { starte, starteLernstand, lernstandThemen, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
 })();
