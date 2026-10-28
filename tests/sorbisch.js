@@ -15,7 +15,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   const passt = (p) => p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
   async function kind(stufe, { basis = BASIS, breite = 1180, hoehe = 820, frei = null } = {}) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: hoehe }, hasTouch: true, serviceWorkers: "block" });
-    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); });
+    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; });
     if (frei) await ctx.route("**/sorbisch/geprueft.js", r => r.fulfill({ contentType: "application/javascript", body: `window.SORBISCH_FREI = ${JSON.stringify(frei)};` }));
     const p = await ctx.newPage();
     p.on("pageerror", e => fehler.push(`${p.url()}: ${e.message}`));

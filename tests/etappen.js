@@ -111,6 +111,7 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     // Elternbereich: Einführung überspringen
     await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(400);
     if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(300); }
+    await p.click('.eltern-reiter [data-teil="zeit"]');   // Reiter „Zeit & Regeln“ (30.10.2026)
     erwarte(!!(await p.$("#tutorial-weg")), "Elternbereich: Knopf „Einführung überspringen“");
     await p.click("#tutorial-weg"); await p.waitForTimeout(300);
     erwarte(await p.evaluate(() => ["E2", "E3", "E4", "E5", "E6", "E7", "E8"].every(e => Story.etappe(e)) && !document.getElementById("tutorial-weg")), "Einführung übersprungen: alle Etappen erledigt");

@@ -1742,3 +1742,22 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
   Vorschule als eigener Rucksack mit Verweisen auf vorhandene Inhalte statt eigenem Matheweg; Symbole im Kopf dürfen keine Antwort verraten (prüft `tests/lehrplan.js`).
 - **Offen:** Prüfung aller sorbischen Texte (jetzt 72 Lektionen), sorbische Stimme fehlt; Grafik (erst jetzt, nach Abschluss der Inhalte, wieder freigegeben – vorher fragen).
 - **Nächstes:** iPad-Test durch den Auftraggeber, dann Grafik-Pakete (NA-29, NA-29b) nach Freigabe.
+
+### Stand 30.10.2026, abends (Grafik freigegeben – zuerst Dashboard: Startseite, Mein Ich, Elternbereich)
+- **Auftraggeber:** „Ja, jetzt Grafik. Zuerst Dashboard überarbeiten und Mein Ich übersichtlicher.“ Fragerunde: beides (Startseite und Elternbereich),
+  Startseite „alles auf einen Blick“, Mein Ich mit Reitern, Elternbereich mit Reitern, **der bunte große Name bleibt**, **kein Schalter für die alte Ansicht**
+  (ausdrücklich nicht gewünscht; Ausnahme von der Regel „alte Variante per Eltern-Schalter“ – alle Funktionen bleiben erreichbar, nur anders angeordnet).
+- **Startseite** (`index.html`): Kopfzeile mit „Hallo,“ + buntem Namen und Knöpfen (Wechseln, Spielstand, Ton, Sterne); eine Reihe Mein Ich / Mein Tier /
+  Erst lernen; Schrank mit Insel groß links (hoch: oben), Lern-Türen daneben (`#lernen`, bei mehr als 4 zu dritt: Sorbisch und der Vorschul-Rucksack sind
+  jetzt Türen), Spiel-Türen in einer Reihe (`.spielen`). iPad 10 quer und hoch ohne Scrollen, Handy scrollt.
+- **Mein Ich** (`spiele/ich/`): Kopf-Karte (Figur, Name, Titel, Gesamtstufe), Reiter **Heute** (Tagesaufgaben, Echte Welt, Heute neu, Gemeinsam),
+  **Meine Woche**, **Ich kann** (Mein Können, Fähigkeiten, Was ich gut kann, Superkräfte), **Meine Sachen** (große Kacheln: Tier, Schatzkammer, Album, Heft,
+  Führerschein, Anziehen, Für Eltern). Reiter gemerkt (sessionStorage), `#woche|#kann|#sachen` öffnet direkt, Test-Haken `__ich.reiter(n)`.
+- **Elternbereich** (`spiele/eltern/`): Reiter **Überblick** (auf einen Blick, Wochenbericht, Tagesaufgaben, zuletzt falsch), **Lernstand** (Lehrplan – je
+  Fach eingeklappt mit Kurzbilanz –, Fähigkeiten, Matheweg mit aufklappbarer Stationstabelle, Fächer, Stärken), **Wie in der Schule** (Mathe, Englisch,
+  Sorbisch, Schuljahr, Deutsch), **Zeit & Regeln** (Zeit, Insel, Echte Welt, Geschichte), **Kinder & Gerät**. Vorher eine Seite mit über 16 000 px, jetzt
+  höchstens ca. 2 800 px je Teil. Auf dem Handy keine Überbreite mehr (Auswahlfelder). Test-Haken `__eltern.teil(n)`, `window.__elternAlle = true` zeigt alle
+  Teile (ältere Tests bedienen Felder aus allen Teilen).
+- **Tests:** neu `dashboard` (Startseite quer/hoch/Handy, Kl. 2 und Vorschule mit Sorbisch; Mein Ich alle Reiter echt angetippt; Elternbereich alle Reiter,
+  Lehrplan aufklappen, Feld speichern); `luecken` und `etappen` tippen jetzt den Reiter an; Tests mit Elternbereich setzen `__elternAlle`.
+- **Nächstes:** weitere Grafik-Pakete NA-29 Teil 2 und NA-29b (Handy-Leistung) nach Rückmeldung zum Dashboard.

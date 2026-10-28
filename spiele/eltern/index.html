@@ -14,6 +14,22 @@
   .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; }
   .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
   .seite { max-width: 960px; margin: 0 auto; padding: 16px 16px 40px; display: grid; gap: 16px; }
+  /* Reiter (30.10.2026) */
+  .eltern-reiter { z-index: 5; display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 0; background: #F2F4F8; }
+  .eltern-reiter button { flex: 1; min-width: 150px; min-height: 52px; border: 0; border-radius: 999px; background: #fff; font: inherit; font-weight: 700; font-size: 1.05rem; color: var(--pflaume); box-shadow: 0 3px 0 rgba(0,0,0,.08); }
+  .eltern-reiter button.an { background: var(--pflaume); color: #fff; }
+  .eltern-teil { display: grid; gap: 16px; }
+  @media (min-width: 700px) { .eltern-reiter { position: sticky; top: 0; } }
+  .eltern-teil[hidden] { display: none !important; }
+  h3.lp-fach.lp-zu { cursor: pointer; background: #F6F3FC; border-radius: 16px; padding: 12px 44px 12px 14px; position: relative; margin: 8px 0 0; }
+  h3.lp-fach.lp-zu::after { content: "▸"; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; }
+  h3.lp-fach.lp-zu.offen::after { content: "▾"; }
+  details.aufklapp > summary { cursor: pointer; font-weight: 700; padding: 10px 0; color: var(--pflaume); }
+  .lp-bilanz { font-size: .95rem; font-weight: 600; white-space: nowrap; }
+  .lp-liste[hidden] { display: none; }
+  .karte { min-width: 0; overflow-wrap: anywhere; }
+  .karte table { display: block; overflow-x: auto; max-width: 100%; }
+  .karte select, .karte input { max-width: 100%; }
   .karte { background: #fff; border-radius: 22px; padding: 20px; box-shadow: 0 4px 0 rgba(0,0,0,.06); }
   .karte h2 { margin: 0 0 12px; font-size: 1.35rem; }
   .karte p { margin: 0 0 10px; line-height: 1.45; }
@@ -49,9 +65,9 @@
   .kinderliste { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
   .kinderliste li { background: #F6F3FB; border-radius: 14px; padding: 10px 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .klein-k { min-height: 40px; font-size: .95rem; padding: 0 14px; }
-  .zeit-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 14px; margin: 10px 0; }
-  .zeit-raster label { display: grid; gap: 4px; font-weight: 600; font-size: .95rem; }
-  .zeit-raster select { font: inherit; font-size: 1.05rem; padding: 8px 10px; border-radius: 12px; border: 3px solid #D9D2EC; background: #fff; }
+  .zeit-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 10px 14px; margin: 10px 0; }
+  .zeit-raster label { display: grid; gap: 4px; font-weight: 600; font-size: .95rem; min-width: 0; }
+  .zeit-raster select { font: inherit; font-size: 1.05rem; padding: 8px 10px; border-radius: 12px; border: 3px solid #D9D2EC; background: #fff; width: 100%; min-width: 0; text-overflow: ellipsis; }
   .zeit-raster input { font: inherit; font-size: 1.1rem; padding: 8px 10px; border-radius: 12px; border: 3px solid #D9D2EC; }
   .noch-zeile { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; margin: 10px 0 4px; padding: 12px; border-radius: 16px; background: #E3F7EF; }
   .noch-zeile label { display: grid; gap: 4px; font-weight: 600; font-size: .95rem; }

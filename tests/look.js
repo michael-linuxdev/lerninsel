@@ -14,7 +14,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   const erwarte = (ok, text) => { if (!ok) fehler.push(text); else console.log("  ✓ " + text); };
   const bild = async (p, name) => { if (BILDER) await p.screenshot({ path: `${BILDER}/${name}.png` }); };
   const ctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true });
-  await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); });
+  await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; });
   const p = await ctx.newPage();
   p.on("pageerror", e => fehler.push(`${p.url()}: ${e.message}`));
   p.on("console", m => { if (m.type() === "error" && !IGNORIEREN.test(m.text())) fehler.push(`${p.url()}: ${m.text()}`); });

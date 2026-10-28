@@ -187,7 +187,9 @@
     const faecher = Object.keys(L.laender[land].faecher).filter(f => !(f in nurEines) || nurEines[f]).filter(f => L.fuer(land, f, k.klasse).length).map(f => {
       const fach = L.laender[land].faecher[f], lb = L.fuer(land, f, k.klasse);
       lb.forEach(x => n[x.abdeckung]++);
-      return `<h3 class="lp-fach">${fach.name} <span class="klein">(${fach.stand})</span></h3><ul class="lp-liste">${lb.map(x =>
+      // Je Fach eingeklappt (30.10.2026): Name mit Kurzbilanz, Lernbereiche erst nach Antippen
+      const bilanz = ["ja", "teil", "nein", "aussen"].map(z => { const k = lb.filter(x => x.abdeckung === z).length; return k ? `${zeichen[z]} ${k}` : ""; }).filter(Boolean).join(" · ");
+      return `<h3 class="lp-fach lp-zu" role="button" tabindex="0" aria-expanded="false">${fach.name} <span class="lp-bilanz">${bilanz}</span> <span class="klein" title="${fach.stand.replace(/"/g, "&quot;")}">(${fach.stand.split(" (")[0].split(";")[0]})</span></h3><ul class="lp-liste" hidden>${lb.map(x =>
         `<li><span class="zeichen">${zeichen[x.abdeckung]}</span><b>${x.titel}</b><span class="klein">${x.inhalte.join(" · ")}${fortschritt(x.app.filter(a => !a.startsWith("werkstatt:") && !(x.punkte && a.startsWith("sachkunde:"))).concat((x.punkte || []).flatMap(p => p.app).filter(a => a.startsWith("werkstatt:") || a.startsWith("sachkunde:"))))}${x.hinweis ? `<br><i>${x.hinweis}</i>` : ""}${punkteHtml(x.punkte)}${koennenZeile(x.lz)}${L.errechnet ? `<br><span class="lp-errechnet" data-lz="${(x.lz || []).join(" ")}">Nach Lernzielen errechnet: ${zeichen[L.errechnet(x)]} ${worte[L.errechnet(x)]}</span>` : ""}</span></li>`).join("")}</ul>`;
     }).join("");
     return `<div class="karte">
@@ -605,6 +607,10 @@
     const fehler = (mathe.fehler || []).slice(-10).reverse();
 
     inhalt.innerHTML = `
+      <nav class="eltern-reiter" role="tablist" aria-label="Bereiche">
+        <button role="tab" data-teil="ueberblick" class="an">📊 Überblick</button><button role="tab" data-teil="lernstand">📘 Lernstand</button><button role="tab" data-teil="schule">🏫 Wie in der Schule</button><button role="tab" data-teil="zeit">⏰ Zeit & Regeln</button><button role="tab" data-teil="kinder">👨‍👩‍👧 Kinder & Gerät</button>
+      </nav>
+      <section class="eltern-teil" data-teil="ueberblick" role="tabpanel">
       <div class="karte">
         <h2>${S.profil.name || "Spielstand"} auf einen Blick</h2>
         <div class="zahlen">
@@ -615,6 +621,18 @@
         </div>
       </div>
       ${wochenbericht(schwach, mathe)}
+      <div class="karte">
+        <h2>Tagesaufgaben</h2>
+        <p>Heute: ${tag.erledigt.length} von ${aufgaben.length} geschafft (${aufgaben.map(a => `${a.erledigt ? "✓" : "○"} ${a.titel}`).join(", ")}).</p>
+        <p class="klein">Rosa Tage: alle Tagesaufgaben geschafft. Die letzten 4 Wochen:</p>
+        <div class="kalender">${kal}</div>
+      </div>
+      <div class="karte">
+        <h2>Zuletzt falsch gelöst</h2>
+        ${fehler.length ? `<ul class="liste">${fehler.map(f => `<li>${f.text || f.frage} → richtig: <b>${f.antwort}${f.einheit ? " " + f.einheit : ""}</b> <span class="klein">${"●".repeat(f.stufe || 1)}${"○".repeat(3 - (f.stufe || 1))} ${wannWieder(f)}</span></li>`).join("")}</ul><p class="klein">Lernkartei: Falsch gelöste Aufgaben kommen im Mathe-Training nach 1, 3 und 7 Tagen wieder. Dreimal richtig = gelernt${mathe.gelernt ? ` (schon ${mathe.gelernt} gelernt)` : ""}.</p>` : `<p>Noch keine gemerkten Fehler.</p>`}
+      </div>
+      </section>
+      <section class="eltern-teil" data-teil="lernstand" role="tabpanel" hidden>
       ${lehrplanKarte(mathe)}
       <div class="karte">
         <h2>Fähigkeiten</h2>
@@ -623,20 +641,11 @@
         </table>
       </div>
       <div class="karte">
-        <h2>Tagesaufgaben</h2>
-        <p>Heute: ${tag.erledigt.length} von ${aufgaben.length} geschafft (${aufgaben.map(a => `${a.erledigt ? "✓" : "○"} ${a.titel}`).join(", ")}).</p>
-        <p class="klein">Rosa Tage: alle Tagesaufgaben geschafft. Die letzten 4 Wochen:</p>
-        <div class="kalender">${kal}</div>
-      </div>
-      <div class="karte">
         <h2>Mathe: Matheweg 2. Klasse</h2>
         ${mathe.einstufung && !mathe.einstufung.uebersprungen ? `<p>🧭 <b>Einstufungstest</b> am ${mathe.einstufung.am.slice(8)}.${mathe.einstufung.am.slice(5, 7)}.: Start bei „${(window.Mathe.STATIONEN[mathe.einstufung.startAb] || {}).name || "–"}“${mathe.einstufung.geschafft && mathe.einstufung.geschafft.length ? `, schon gekonnt: ${mathe.einstufung.geschafft.map(id => (window.Mathe.STATIONEN.find(x => x.id === id) || {}).name).join(", ")}` : ""}. <button class="knopf klein-k" id="einst-neu">Test wiederholen</button></p>` : ""}
         ${schwach.length ? `<p><b>Braucht noch Übung:</b> ${schwach.map(o => o.s.name).join(", ")}. Das tägliche Mathe-Training übt diese Themen automatisch öfter.</p>` : `<p>Zurzeit keine auffälligen Schwächen (ab 5 gelösten Aufgaben pro Station bewertet).</p>`}
-        <table><tr><th>Station</th><th class="r">Bestes Ergebnis</th><th class="r">Aufgaben</th><th class="r">1. Versuch richtig</th></tr>${stationen}</table>
-      </div>
-      <div class="karte">
-        <h2>Zuletzt falsch gelöst</h2>
-        ${fehler.length ? `<ul class="liste">${fehler.map(f => `<li>${f.text || f.frage} → richtig: <b>${f.antwort}${f.einheit ? " " + f.einheit : ""}</b> <span class="klein">${"●".repeat(f.stufe || 1)}${"○".repeat(3 - (f.stufe || 1))} ${wannWieder(f)}</span></li>`).join("")}</ul><p class="klein">Lernkartei: Falsch gelöste Aufgaben kommen im Mathe-Training nach 1, 3 und 7 Tagen wieder. Dreimal richtig = gelernt${mathe.gelernt ? ` (schon ${mathe.gelernt} gelernt)` : ""}.</p>` : `<p>Noch keine gemerkten Fehler.</p>`}
+        <details class="aufklapp"><summary>Alle Stationen mit Ergebnis anzeigen</summary>
+        <table><tr><th>Station</th><th class="r">Bestes Ergebnis</th><th class="r">Aufgaben</th><th class="r">1. Versuch richtig</th></tr>${stationen}</table></details>
       </div>
       <div class="karte">
         <h2>Deutsch, Sachunterricht, Tablet-Führerschein und 3D-Welt</h2>
@@ -646,16 +655,22 @@
         <p><b>Haustier:</b> ${(() => { const t = S.lade("tier"); return !t || !t.phase ? "noch kein Ei ausgesucht" : t.phase === "ei" ? `Ei wird gewärmt (${t.waerme || 0} von 3)` : `${t.name || "ohne Namen"}, Freundschaft ${t.freundschaft || 0}, ${t.leckerli || 0} Leckerli`; })()}</p>
         <p><b>3D-Welt:</b> Ballon-Rekord ${(welt.ballon && welt.ballon.rekord) || 0} Punkte, Insel-Schatz ${(welt.insel && welt.insel.geschafft) || 0}× gefunden</p>
       </div>
-      ${zeitKarte()}
-      ${inselKarte()}
+      ${staerkenKarte()}
+      </section>
+      <section class="eltern-teil" data-teil="schule" role="tabpanel" hidden>
       ${matheKarte()}
       ${englischKarte()}
       ${sorbischKarte()}
       ${schuljahrKarte()}
       ${deutschKarte()}
+      </section>
+      <section class="eltern-teil" data-teil="zeit" role="tabpanel" hidden>
+      ${zeitKarte()}
+      ${inselKarte()}
       ${echteWeltKarte()}
-      ${staerkenKarte()}
       ${storyKarte()}
+      </section>
+      <section class="eltern-teil" data-teil="kinder" role="tabpanel" hidden>
       <div class="karte">
         <h2>Kinder auf diesem Tablet</h2>
         <ul class="kinderliste">${S.kinder().map(k => `<li>${k.aktiv ? "👉 " : ""}<b>${k.name || "(noch ohne Namen)"}</b>${k.aktiv ? " – gerade aktiv" : ` <button class="knopf klein-k" data-wechsel="${k.id}">Wechseln</button>`}${S.kinder().length > 1 ? ` <button class="knopf klein-k" data-weg="${k.id}">Entfernen</button>` : ""}</li>`).join("")}</ul>
@@ -673,7 +688,9 @@
         <h2>Hinweise</h2>
         <p>Alle Daten bleiben nur auf diesem Tablet, nichts wird ins Internet geschickt. Den Spielstand kannst du auf der Startseite unter „💾 Spielstand“ sichern oder aufs andere Tablet übertragen.</p>
         <div class="knoepfe"><button class="knopf" id="pin-neu">PIN ändern</button><button class="knopf" id="abmelden">Bereich schließen</button></div>
-      </div>`;
+      </div>
+      </section>
+`;
     $("pin-neu").addEventListener("click", () => { S.setzePin(null); sessionStorage.removeItem(SITZUNG); pinSeite(); });
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
@@ -694,6 +711,23 @@
       const weg = Promise.all([window.Bilder ? window.Bilder.loescheKind(k.id).catch(() => {}) : null, window.Eigenes ? window.Eigenes.loescheKind(k.id).catch(() => {}) : null]); S.entferneKind(k.id); weg.then(() => location.reload());
     }));
     $("neu-laden").addEventListener("click", neuLaden);
+    // Lehrplan je Fach auf- und zuklappen (Test-Haken __elternAlle: alles offen)
+    if (window.__elternAlle) inhalt.querySelectorAll("h3.lp-fach.lp-zu").forEach(h => { h.nextElementSibling.hidden = false; h.classList.add("offen"); h.setAttribute("aria-expanded", true); });
+    inhalt.querySelectorAll("h3.lp-fach.lp-zu").forEach(h => { const auf = () => { const ul = h.nextElementSibling, zu = !ul.hidden; ul.hidden = zu; h.setAttribute("aria-expanded", !zu); h.classList.toggle("offen", !zu); };
+      h.addEventListener("click", auf); h.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); auf(); } }); });
+    // Reiter (30.10.2026): Überblick, Lernstand, Wie in der Schule, Zeit & Regeln, Kinder & Gerät; gemerkt für diese Sitzung.
+    // Test-Haken window.__elternAlle zeigt alle Teile untereinander (ältere Tests bedienen Felder aus allen Teilen).
+    const teile = [...inhalt.querySelectorAll(".eltern-teil")];
+    const zeigeTeil = (n) => {
+      if (!teile.some(x => x.dataset.teil === n)) n = "ueberblick";
+      inhalt.querySelectorAll(".eltern-reiter button").forEach(b => { const an = b.dataset.teil === n; b.classList.toggle("an", an); b.setAttribute("aria-selected", an); });
+      teile.forEach(x => { x.hidden = !window.__elternAlle && x.dataset.teil !== n; });
+      try { sessionStorage.setItem("eltern-teil", n); } catch (e) { }
+    };
+    inhalt.querySelectorAll(".eltern-reiter button").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); zeigeTeil(b.dataset.teil); scrollTo(0, 0); }));
+    let teilStart = location.hash.slice(1); try { teilStart = teilStart || sessionStorage.getItem("eltern-teil") || "ueberblick"; } catch (e) { }
+    zeigeTeil(teilStart);
+    window.__eltern = Object.assign(window.__eltern || {}, { teil: zeigeTeil });
     $("abmelden").addEventListener("click", () => { sessionStorage.removeItem(SITZUNG); location.href = "../ich/"; });
   }
 

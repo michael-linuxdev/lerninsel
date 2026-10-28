@@ -13,7 +13,7 @@ const NEU = ["k5quadrat", "k5gleichung", "k5dezimal", "k5dezrechnen", "k5prozent
   const erwarte = (ok, text) => { if (!ok) fehler.push(text); else console.log("  ✓ " + text); };
   async function kind(stufe, breite = 1180, hoehe = 820) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: hoehe }, hasTouch: true });
-    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); });
+    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; });
     const p = await ctx.newPage();
     p.on("pageerror", e => fehler.push(`${p.url()}: ${e.message}`));
     p.on("console", m => { if (m.type() === "error" && !IGNORIEREN.test(m.text())) fehler.push(`${p.url()}: ${m.text()}`); });

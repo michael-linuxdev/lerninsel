@@ -15,7 +15,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   const passt = (p) => p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
   async function kind(stufe, breite = 1180, hoehe = 820) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: hoehe }, hasTouch: true });
-    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__testSchnell = true; window.__liederSchnell = true;
+    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; window.__testSchnell = true; window.__liederSchnell = true;
       window.__heute = localStorage.getItem("__heuteTest") || "2026-10-25"; });
     const p = await ctx.newPage();
     p.on("pageerror", e => fehler.push(`${p.url()}: ${e.message}`));
@@ -51,7 +51,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     }
     // Über „Mein Ich“ ins Heft
     await p.goto(BASIS + "spiele/ich/"); await p.waitForTimeout(400);
-    await p.click("#heft-link"); await p.waitForURL(/heft/); await p.waitForTimeout(500);
+    await p.click('.ich-reiter [data-reiter="sachen"]'); await p.click("#heft-link"); await p.waitForURL(/heft/); await p.waitForTimeout(500);
     await sprachSpion(p);
     const im = await p.evaluate(() => ({ n: __heft.anzahl().text, t: document.querySelector(".seite .text") && document.querySelector(".seite .text").textContent, kap: document.querySelector(".seite .kopf").textContent }));
     erwarte(im.n === 1 && /Liebe Lena/.test(im.t || "") && /Einladung/.test(im.kap), `Heft ${art}: der getippte Text steht mit Kapitel und Datum im Heft`);

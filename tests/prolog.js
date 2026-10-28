@@ -14,7 +14,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
 
   for (const [b, h, lage] of [[1180, 820, "quer"], [820, 1180, "hoch"]]) {
     const ctx = await browser.newContext({ viewport: { width: b, height: h }, hasTouch: true });
-    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); });
+    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; });
     const seite = async (name) => {
       const p = await ctx.newPage();
       p.on("pageerror", e => fehler.push(`${name}: ${e.message}`));

@@ -19,14 +19,16 @@
     $("portraet").innerHTML = `<svg viewBox="55 20 190 220" aria-label="Deine Figur">${window.Figur.zeichneFigur(look)}</svg>`;
     $("name").textContent = name();
     const tier = window.TierPflege && TierPflege.lade();
-    if (tier && tier.phase === "tier") $("tier-link").textContent = `🐾 ${tier.name || "Mein Tier"} (${Tiere.ARTEN[tier.art].name})`;
-    else if (tier && tier.phase === "ei") $("tier-link").textContent = "🥚 Mein Ei";
+    // Kacheln in „Meine Sachen“: großes Symbol + Text
+    const kachel = (id, e, t) => { $(id).innerHTML = `<span aria-hidden="true">${e}</span>${t}`; };
+    if (tier && tier.phase === "tier") kachel("tier-link", "🐾", `${tier.name || "Mein Tier"} (${Tiere.ARTEN[tier.art].name})`);
+    else if (tier && tier.phase === "ei") kachel("tier-link", "🥚", "Mein Ei");
     $("titel").textContent = C.titel();
     // Tablet-Führerschein (Schlüssel zur Insel): Fortschritt, oder der fertige Führerschein zum Ansehen
     const md = S.lade("medien") || {}, anz = (window.LEKTIONEN || []).length || 6, ok = Object.values(md.lektionen || {}).filter(x => x > 0).length;
     const fs = $("fs-link");
-    if (md.fuehrerschein) { fs.textContent = "🪪 Mein Tablet-Führerschein"; fs.href = "../medien/#fuehrerschein"; }
-    else { fs.textContent = `🪪 Tablet-Führerschein: ${ok} von ${anz}`; fs.href = "../medien/"; }
+    if (md.fuehrerschein) { kachel("fs-link", "🪪", "Mein Tablet-Führerschein"); fs.href = "../medien/#fuehrerschein"; }
+    else { kachel("fs-link", "🪪", `Tablet-Führerschein: ${ok} von ${anz}`); fs.href = "../medien/"; }
     $("gesamt").textContent = `Gesamtstufe ${C.gesamt()} von ${C.sichtbareFaehigkeiten().length * C.MAX}`;
 
     // Superkräfte (Vorteile)
@@ -316,6 +318,17 @@
   $("wort-zurueck").addEventListener("click", () => { S.ton("tipp"); SP.stopp(); $("wort-ansicht").hidden = true; $("haupt-ansicht").hidden = false; zeichne(); });
 
   zeichne();
+  // Reiter (30.10.2026): Heute / Meine Woche / Ich kann / Meine Sachen; Wahl bleibt für dieses Gerät gemerkt, #woche|#kann|#sachen öffnet direkt
+  const REITER = ["heute", "woche", "kann", "sachen"];
+  function reiter(n) {
+    if (!REITER.includes(n)) n = "heute";
+    document.querySelectorAll(".ich-reiter button").forEach(b => { const an = b.dataset.reiter === n; b.classList.toggle("an", an); b.setAttribute("aria-selected", an); });
+    REITER.forEach(r => { $("teil-" + r).hidden = r !== n; });
+    try { sessionStorage.setItem("ich-reiter", n); } catch (e) { }
+  }
+  document.querySelectorAll(".ich-reiter button").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); reiter(b.dataset.reiter); }));
+  let start = location.hash.slice(1); if (!REITER.includes(start)) { try { start = sessionStorage.getItem("ich-reiter") || "heute"; } catch (e) { start = "heute"; } }
+  reiter(start);
   if (location.hash === "#wort") starteWort();
-  window.__ich = { zeichne, starteWort, get quiz() { return quiz; } };
+  window.__ich = { zeichne, starteWort, reiter, get quiz() { return quiz; } };
 })();

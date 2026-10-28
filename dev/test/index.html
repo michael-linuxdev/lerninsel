@@ -13,22 +13,27 @@
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="shared/style.css">
 <style>
+  /* Startseite „alles auf einen Blick“ (30.10.2026): Kopfzeile mit buntem Namen, eine Reihe Ich/Tier/Lernzeit, darunter der Schrank:
+     Insel groß links, Lern-Türen daneben, Spiel-Türen in einer Reihe – auf dem iPad 10 quer und hoch ohne Scrollen. */
   .seite {
     min-height: 100%;
-    padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 32px max(20px, env(safe-area-inset-left));
-    max-width: 1100px; margin: 0 auto;
-    display: flex; flex-direction: column; gap: 28px;
+    padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 16px max(16px, env(safe-area-inset-left));
+    max-width: 1180px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 12px;
   }
-  .leiste { display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+  @media (min-width: 700px) { .seite { min-height: 100dvh; } .schrank { flex: 1; } }
+  .kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .leiste { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+  .leiste .knopf { min-height: 48px; padding: 0 14px; font-size: 1.05rem; }
   .sterne { gap: .35em; }
-  .sterne b { font-size: 1.5rem; }
+  .sterne b { font-size: 1.3rem; }
 
-  .hallo { text-align: center; margin-top: 4px; }
-  .hallo p { margin: 0; font-size: 1.6rem; font-weight: 500; color: var(--pflaume-hell); }
+  .hallo { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; min-width: 0; }
+  .hallo p { margin: 0; font-size: 1.4rem; font-weight: 500; color: var(--pflaume-hell); }
   .name {
-    margin: 4px 0 0; line-height: 1;
-    font-size: clamp(3.4rem, 11vw, 7rem); font-weight: 700;
-    display: flex; justify-content: center; flex-wrap: wrap; gap: .04em;
+    margin: 0; line-height: 1;
+    font-size: clamp(2.6rem, 6.2vw, 4.4rem); font-weight: 700;
+    display: flex; flex-wrap: wrap; gap: .04em;
   }
   .name span {
     display: inline-block; color: #fff;
@@ -38,23 +43,40 @@
     text-shadow: 0 .06em 0 var(--pflaume);
   }
   .name-aendern { font-size: 1rem; min-height: 44px; margin-top: 10px; box-shadow: none; background: transparent; text-decoration: underline; text-underline-offset: 4px; }
+  .abzeichen { display: inline-flex; align-items: center; gap: .4em; padding: 4px 12px; border-radius: 999px; background: #fff; font-weight: 600; font-size: .95rem; box-shadow: var(--schatten); }
+  .abzeichen[hidden] { display: none; }
+
+  /* Reihe: Mein Ich, Mein Tier, Erst lernen – dann spielen */
+  .reihe { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 12px; align-items: stretch; }
+  .ich-knopf { display: flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; border-radius: 22px; background: #fff; color: var(--pflaume); text-decoration: none; box-shadow: var(--schatten); text-align: left; min-width: 0; }
+  .ich-knopf:active { transform: translateY(3px); }
+  .ich-bild { width: 64px; height: 64px; border-radius: 18px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #FFE3F0, #FFD1A8); flex: none; }
+  .ich-bild svg { width: 100%; height: 100%; }
+  .ich-text { display: grid; gap: 1px; font-size: .95rem; min-width: 0; }
+  .ich-text b { font-size: 1.3rem; }
+  .ich-aufgaben { font-weight: 600; color: var(--beere); }
+  .erst-dann { background: #fff; border-radius: 22px; padding: 8px 14px; box-shadow: var(--schatten); text-align: center; font-weight: 600; font-size: 1rem; line-height: 1.3; display: flex; flex-direction: column; justify-content: center; }
+  .erst-dann b { color: var(--beere); }
+  .erst-dann > div > div:first-child { height: 16px !important; }
+  .erst-dann > div:last-child { width: 100%; max-width: 420px !important; align-self: center; }
+  .reihe.ohne-zeit { grid-template-columns: 1fr 1fr; }
 
   /* Der Schrank: Türen für jedes Spiel */
   .schrank {
-    display: grid; gap: 18px;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-areas: "insel insel insel insel insel insel insel insel insel insel insel insel"
-      "mathe mathe mathe deutsch deutsch deutsch sach sach sach englisch englisch englisch"
-      "gef gef gef gef schach schach schach schach atelier atelier atelier atelier";
+    display: grid; gap: 12px;
+    grid-template-columns: 5fr 7fr; grid-template-areas: "insel lernen" "spielen spielen"; grid-template-rows: 1fr auto;
     background: var(--holz);
-    padding: 18px; border-radius: var(--rund-gross);
-    box-shadow: inset 0 0 0 6px #EBC48F, 0 10px 0 #D9A867;
+    padding: 12px; border-radius: var(--rund-gross);
+    box-shadow: inset 0 0 0 6px #EBC48F, 0 8px 0 #D9A867;
   }
+  .lernen { grid-area: lernen; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .lernen.sechs { grid-template-columns: 1fr 1fr 1fr; }
+  .spielen { grid-area: spielen; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .tuer {
-    position: relative; min-height: 190px;
+    position: relative; min-height: 150px;
     border-radius: var(--rund);
-    padding: 20px; text-align: left;
-    display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
+    padding: 14px 16px; text-align: left;
+    display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
     color: #fff;
     box-shadow: inset 0 0 0 5px rgba(255,255,255,.35), 0 6px 0 rgba(0,0,0,.15);
     overflow: hidden;
@@ -62,67 +84,57 @@
   }
   .tuer:active { transform: scale(.98); }
   .tuer::after { /* Türknauf */
-    content: ""; position: absolute; top: 50%; right: 16px;
-    width: 18px; height: 18px; border-radius: 50%;
+    content: ""; position: absolute; top: 50%; right: 14px;
+    width: 16px; height: 16px; border-radius: 50%;
     background: var(--sonne); box-shadow: inset -3px -3px 0 rgba(0,0,0,.15);
   }
-  .tuer h2 { margin: 0; font-size: 1.9rem; font-weight: 700; line-height: 1.05; }
-  .tuer p { margin: 0; font-size: 1.1rem; font-weight: 500; opacity: .92; max-width: 22ch; }
-  .tuer .bild { position: absolute; top: 16px; left: 18px; width: 92px; height: 92px; }
-  .tuer.insel { grid-area: insel; background: linear-gradient(160deg, #8FD66B, #2E9C5A); min-height: 280px; }
-  .tuer.insel .bild { top: 10px; left: auto; right: 24px; width: 260px; height: 210px; }
-  .tuer.insel h2 { font-size: 2.6rem; }
-  .tuer.mathe { grid-area: mathe; background: var(--minze); }
-  .tuer.deutsch { grid-area: deutsch; background: var(--koralle); }
-  .tuer.welt3d { grid-area: welt3d; background: var(--pflaume-hell); }
-  .tuer.medien { grid-area: medien; background: #3AA0E0; }
-  .tuer.sach { grid-area: sach; background: #1F8F8A; }
-  .tuer.gef { grid-area: gef; background: #E0578F; }
-  .tuer.schach { grid-area: schach; background: #3F8E52; }
-  .tuer.atelier { grid-area: atelier; background: #E07A2E; }
-  .tuer.englisch { grid-area: englisch; background: #2F6FB8; }
-  /* Sorbisch (nur nach Eltern-Wahl): eigene Reihe unter den Lern-Türen */
-  .tuer.sorbisch { grid-area: sorbisch; background: #B03A2E; min-height: 150px; }
-  .tuer.sorbisch[hidden] { display: none; }
-  .schrank.mit-sorbisch { grid-template-areas: "insel insel insel insel insel insel insel insel insel insel insel insel"
-      "mathe mathe mathe deutsch deutsch deutsch sach sach sach englisch englisch englisch"
-      "sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch sorbisch"
-      "gef gef gef gef schach schach schach schach atelier atelier atelier atelier"; }
-  /* Vier Lern-Türen in einer Reihe (ab 1024 px): etwas höher und kleinere Schrift, damit Symbol, Titel und Text Platz haben */
-  @media (min-width: 1024px) { .tuer.mathe, .tuer.deutsch, .tuer.sach, .tuer.englisch { min-height: 230px; } .tuer.mathe h2, .tuer.deutsch h2, .tuer.sach h2, .tuer.englisch h2 { font-size: 1.6rem; } .tuer.mathe p, .tuer.deutsch p, .tuer.sach p, .tuer.englisch p { font-size: 1rem; } }
-  .abzeichen { display: inline-flex; align-items: center; gap: .4em; margin-top: 10px; padding: 6px 16px; border-radius: 999px; background: #fff; font-weight: 600; font-size: 1.05rem; box-shadow: var(--schatten); }
-  .abzeichen[hidden] { display: none; }
-  .ich-reihe { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-  .ich-knopf { display: inline-flex; align-items: center; gap: 14px; margin-top: 14px; padding: 10px 22px 10px 10px; border-radius: 26px; background: #fff; color: var(--pflaume); text-decoration: none; box-shadow: var(--schatten); text-align: left; }
-  .ich-knopf:active { transform: translateY(3px); }
-  .ich-bild { width: 76px; height: 76px; border-radius: 20px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #FFE3F0, #FFD1A8); flex: none; }
-  .ich-bild svg { width: 100%; height: 100%; }
-  .ich-text { display: grid; gap: 2px; }
-  .ich-text b { font-size: 1.4rem; }
-  .ich-aufgaben { font-weight: 600; color: var(--beere); }
+  .tuer h2 { margin: 0; font-size: 1.55rem; font-weight: 700; line-height: 1.05; }
+  .tuer p { margin: 0; font-size: .98rem; font-weight: 500; opacity: .92; max-width: 24ch; line-height: 1.25; }
+  .tuer .bild { position: absolute; top: 12px; left: 14px; width: 64px; height: 64px; }
+  .tuer.insel { grid-area: insel; background: linear-gradient(160deg, #8FD66B, #2E9C5A); min-height: 300px; }
+  .tuer.insel .bild { top: 52px; left: 50%; transform: translateX(-50%); height: calc(100% - 170px); width: auto; max-width: 90%; aspect-ratio: 6 / 5; }
+  .tuer.insel h2 { font-size: 2.2rem; }
+  .tuer.mathe { background: var(--minze); }
+  .tuer.deutsch { background: var(--koralle); }
+  .tuer.sach { background: #1F8F8A; }
+  .tuer.gef { background: #E0578F; }
+  .tuer.schach { background: #3F8E52; }
+  .tuer.atelier { background: #E07A2E; }
+  .tuer.englisch { background: #2F6FB8; }
+  .tuer.sorbisch { background: #B03A2E; }
+  .tuer.vorschule { background: #7B55B8; }
+  .spielen .tuer { min-height: 120px; padding-left: 92px; justify-content: center; }
+  .spielen .tuer .bild { top: 50%; transform: translateY(-50%); }
+  .lernen.sechs .tuer h2 { font-size: 1.35rem; }
+  .lernen.sechs .tuer p { display: none; }
   .tuer.zu { filter: saturate(.55); }
   .tuer .schloss {
-    position: absolute; top: 14px; right: 14px;
-    background: rgba(255,255,255,.9); color: var(--pflaume);
-    font-size: 1rem; font-weight: 600;
-    padding: 6px 12px; border-radius: 999px;
+    position: absolute; top: 10px; right: 10px; left: 10px; text-align: center;
+    background: rgba(255,255,255,.92); color: var(--pflaume);
+    font-size: .95rem; font-weight: 600;
+    padding: 5px 10px; border-radius: 999px;
   }
 
+  /* iPad hoch und kleiner: Insel oben über die ganze Breite */
   @media (max-width: 1023px) {
-    .schrank { grid-template-columns: 1fr 1fr; grid-template-areas: "insel insel" "mathe deutsch" "sach englisch" "gef schach" "atelier atelier"; }
-    .schrank.mit-sorbisch { grid-template-areas: "insel insel" "mathe deutsch" "sach englisch" "sorbisch sorbisch" "gef schach" "atelier atelier"; }
-    .tuer.insel { min-height: 240px; }
-    .tuer.insel .bild { width: 170px; height: 140px; }
+    .schrank { grid-template-columns: 1fr; grid-template-areas: "insel" "lernen" "spielen"; grid-template-rows: .75fr 1.6fr auto; }
+    .tuer.insel { min-height: 190px; }
+    .tuer.insel .bild { top: 40px; left: auto; right: 24px; transform: none; width: 280px; height: auto; max-width: 42%; }
+    .reihe { grid-template-columns: 1fr 1fr; }
+    .reihe .erst-dann { grid-column: span 2; }
+    .reihe.ohne-zeit .erst-dann { grid-column: auto; }
   }
-
-  /* Vorschul-Rucksack (nur Vorschule und Klasse 1) */
-  .vorschul-band { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; max-width: 640px; margin: 14px auto 0; padding: 14px 18px; border-radius: 24px;
-    background: #7B55B8; color: #fff; font-weight: 700; font-size: 1.4rem; text-decoration: none; box-shadow: var(--schatten); }
-  .vorschul-band span { font-size: 2.2rem; } .vorschul-band small { font-weight: 500; font-size: 1rem; opacity: .9; flex-basis: 100%; text-align: center; }
-  .vorschul-band[hidden] { display: none; }
-  /* Erst lernen, dann spielen */
-  .erst-dann { max-width: 640px; margin: 14px auto 0; background: #fff; border-radius: 24px; padding: 14px 18px; box-shadow: var(--schatten); text-align: center; font-weight: 600; font-size: 1.15rem; }
-  .erst-dann b { color: var(--beere); }
+  @media (max-width: 620px) {
+    .reihe { grid-template-columns: 1fr; } .reihe .erst-dann { grid-column: auto; }
+    .lernen, .lernen.sechs { grid-template-columns: 1fr 1fr; }
+    .lernen.sechs .tuer p { display: block; }
+    .spielen { grid-template-columns: 1fr; }
+    .tuer p { font-size: .92rem; }
+    .lernen .tuer { min-height: 176px; }
+    .lernen .tuer h2 { font-size: 1.25rem; overflow-wrap: anywhere; hyphens: auto; }
+    .tuer.insel .bild { width: 130px; top: 44px; right: 12px; }
+    .leiste .knopf { min-height: 44px; padding: 0 10px; font-size: .95rem; }
+  }
 
   /* Wer spielt? (mehrere Kinder) */
   .wer { position: fixed; inset: 0; z-index: 50; background: rgba(75,35,128,.6); display: grid; place-items: center; padding: 20px; }
@@ -166,18 +178,20 @@
 </head>
 <body>
 <main class="seite">
-  <div class="leiste">
-    <button class="knopf" id="wer-knopf" hidden>👥 Wechseln</button>
-    <button class="knopf" id="spielstand">💾 Spielstand</button>
-    <button class="knopf" id="ton" aria-pressed="true">🔊 Ton an</button>
-    <div class="knopf sterne" aria-live="polite">⭐ <b id="sterne">0</b> Sterne</div>
+  <div class="kopf">
+    <header class="hallo">
+      <p>Hallo,</p>
+      <h1 class="name" id="name" aria-label=""></h1>
+      <span class="abzeichen" id="abzeichen" hidden>🪪 Tablet-Profi</span>
+    </header>
+    <div class="leiste">
+      <button class="knopf" id="wer-knopf" hidden>👥 Wechseln</button>
+      <button class="knopf" id="spielstand">💾 Spielstand</button>
+      <button class="knopf" id="ton" aria-pressed="true">🔊 Ton an</button>
+      <div class="knopf sterne" aria-live="polite">⭐ <b id="sterne">0</b> Sterne</div>
+    </div>
   </div>
-
-  <header class="hallo">
-    <p>Hallo,</p>
-    <h1 class="name" id="name" aria-label=""></h1>
-    <div><span class="abzeichen" id="abzeichen" hidden>🪪 Tablet-Profi</span></div>
-    <div class="ich-reihe">
+  <div class="reihe" id="reihe">
     <a class="ich-knopf" href="spiele/ich/" id="ich-knopf">
       <span class="ich-bild" id="ich-bild" aria-hidden="true"></span>
       <span class="ich-text"><b>Mein Ich</b><span id="ich-titel"></span><span class="ich-aufgaben" id="ich-aufgaben"></span></span>
@@ -186,10 +200,8 @@
       <span class="ich-bild" id="tier-bild" aria-hidden="true"></span>
       <span class="ich-text"><b id="tier-name">Mein Tier</b><span id="tier-zeile"></span></span>
     </a>
-    </div>
-  </header>
-  <div class="erst-dann" id="erst-dann" hidden></div>
-  <a class="vorschul-band" id="vorschule-link" href="spiele/vorschule/" hidden><span aria-hidden="true">🎒</span> Mein Vorschul-Rucksack <small>Zählen, Reimen, Entdecken, Malen</small></a>
+    <div class="erst-dann" id="erst-dann" hidden></div>
+  </div>
   <div class="dialog" id="robo-dialog" hidden>
     <div class="karte robo-karte" role="dialog" aria-labelledby="robo-titel">
       <div class="robo-bild" id="robo-bild" aria-hidden="true"></div>
@@ -201,7 +213,7 @@
     </div>
   </div>
 
-  <nav class="schrank" aria-label="Insel und Lernen">
+  <nav class="schrank" aria-label="Insel, Lernen und Spielen">
     <a class="tuer insel" id="tuer-insel" href="spiele/insel/" style="text-decoration:none">
       <span class="schloss" id="insel-status" hidden></span>
       <svg class="bild" viewBox="0 0 120 100" aria-hidden="true">
@@ -213,6 +225,7 @@
       <h2>Meine Insel</h2>
       <p>Dein Zuhause mit Tier, Haus, Kleiderschrank und Nachbarn</p>
     </a>
+    <div class="lernen" id="lernen" role="group" aria-label="Lernen">
     <a class="tuer mathe" href="spiele/mathe/" style="text-decoration:none">
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M30 50h40M50 30v40" stroke="#fff" stroke-width="12" stroke-linecap="round"/></svg>
       <h2>Mathe</h2>
@@ -238,6 +251,13 @@
       <h2>Sorbisch</h2>
       <p>Mit Papagei Paula: Witaj!</p>
     </a>
+    <a class="tuer vorschule" id="vorschule-link" href="spiele/vorschule/" style="text-decoration:none" hidden>
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><rect x="24" y="30" width="52" height="56" rx="12" fill="#fff"/><path d="M38 30v-6a12 12 0 0 1 24 0v6" stroke="#fff" stroke-width="6" fill="none"/><rect x="34" y="50" width="32" height="14" rx="5" fill="#7B55B8"/><circle cx="84" cy="20" r="9" fill="#FFC83D"/></svg>
+      <h2>Vorschul-Rucksack</h2>
+      <p>Zählen, Reimen, Entdecken, Malen</p>
+    </a>
+    </div>
+    <div class="spielen" role="group" aria-label="Spielen">
     <a class="tuer gef" href="spiele/gefuehle/" style="text-decoration:none">
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 82 L20 52 a16 16 0 0 1 30 -22 a16 16 0 0 1 30 22 z" fill="#fff"/><circle cx="78" cy="22" r="9" fill="#FFC83D"/></svg>
       <h2>Gefühle</h2>
@@ -253,6 +273,7 @@
       <h2>Atelier</h2>
       <p>Mit Papagei Paula malen und Musik machen</p>
     </a>
+    </div>
   </nav>
 </main>
 
@@ -321,15 +342,14 @@
     });
     document.title = S.genitiv(n) + " Spielwelt";
   }
-  // Sorbisch-Tür nur nach Eltern-Wahl (Elternbereich → Sorbisch)
-  function zeigeSorbisch() {
-    const an = !!(((S.lade("eltern") || {}).sorbisch || {}).an);
-    document.querySelector(".tuer.sorbisch").hidden = !an;
-    document.querySelector(".schrank").classList.toggle("mit-sorbisch", an);
+  // Sorbisch-Tür nur nach Eltern-Wahl (Elternbereich → Sorbisch), Vorschul-Rucksack nur für Vorschule und Klasse 1;
+  // bei mehr als vier Lern-Türen stehen sie zu dritt nebeneinander
+  function zeigeLernTueren() {
+    document.querySelector(".tuer.sorbisch").hidden = !(((S.lade("eltern") || {}).sorbisch || {}).an);
+    document.getElementById("vorschule-link").hidden = !["vs", "1"].includes((S.stufe() || {}).code);
+    document.getElementById("lernen").classList.toggle("sechs", document.querySelectorAll("#lernen .tuer:not([hidden])").length > 4);
   }
-  zeigeSorbisch();
-  // Vorschul-Rucksack für Kinder in der Vorschule und in Klasse 1
-  document.getElementById("vorschule-link").hidden = !["vs", "1"].includes((S.stufe() || {}).code);
+  zeigeLernTueren();
   function zeigeSterne() { document.getElementById("sterne").textContent = S.sterne(); }
   function zeigeTon() {
     const b = document.getElementById("ton");
@@ -347,11 +367,12 @@
   // Erst lernen, dann spielen
   function zeigeErstDann() {
     const el = document.getElementById("erst-dann"); if (!window.Zeit) return;
-    const st = Zeit.status(); if (st.frei) { el.hidden = true; return; }
-    el.hidden = false;
-    if (st.genug) el.innerHTML = "😴 Für heute genug gespielt. Lernen geht noch!";
-    else if (st.spielen) el.innerHTML = `🏝️ Spielzeit: noch <b>${Math.max(1, Math.round(st.rest / 60))} Minuten</b>` + Zeit.leisteHtml().replace("margin:14px auto", "margin:8px auto 0");
-    else el.innerHTML = `🌱 Noch <b>${st.fehltMin} Minuten</b> lernen oder <b>${st.fehltAufgaben} Aufgaben</b>, dann ${st.regeln.spielMin} Minuten spielen` + Zeit.leisteHtml().replace("margin:14px auto", "margin:8px auto 0");
+    const st = Zeit.status(), reihe = document.getElementById("reihe");
+    if (st.frei) { el.hidden = true; reihe.classList.add("ohne-zeit"); return; }
+    el.hidden = false; reihe.classList.remove("ohne-zeit");
+    if (st.genug) el.innerHTML = "<div>😴 Für heute genug gespielt. Lernen geht noch!</div>";
+    else if (st.spielen) el.innerHTML = `<div>🏝️ Spielzeit: noch <b>${Math.max(1, Math.round(st.rest / 60))} Minuten</b></div>` + Zeit.leisteHtml().replace("margin:14px auto", "margin:6px auto 0");
+    else el.innerHTML = `<div>🌱 Noch <b>${st.fehltMin} Minuten</b> lernen oder <b>${st.fehltAufgaben} Aufgaben</b>, dann ${st.regeln.spielMin} Minuten spielen</div>` + Zeit.leisteHtml().replace("margin:14px auto", "margin:6px auto 0");
   }
   zeigeErstDann(); setInterval(zeigeErstDann, 10000);
   const medien = S.lade("medien");

@@ -17,8 +17,19 @@
   .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; }
   .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
   .sterne b { font-size: 1.4rem; }
-  .seite { max-width: 1100px; margin: 0 auto; padding: 16px 16px 40px; display: grid; grid-template-columns: 340px 1fr; gap: 18px; align-items: start; }
-  @media (max-width: 860px) { .seite { grid-template-columns: 1fr; } }
+  /* Mein Ich mit Reitern (30.10.2026): Kopf-Karte, darunter Heute / Meine Woche / Ich kann / Meine Sachen */
+  .seite { max-width: 1100px; margin: 0 auto; padding: 12px 16px 40px; display: grid; gap: 14px; }
+  .teil[hidden] { display: none !important; }
+  .teil { display: grid; gap: 18px; align-items: start; }
+  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 860px) { .zwei { grid-template-columns: 1fr; } }
+  .ich-reiter { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ich-reiter button { flex: 1; min-width: 140px; min-height: 56px; border: 0; border-radius: 999px; background: #fff; font: inherit; font-weight: 700; font-size: 1.15rem; color: var(--pflaume); box-shadow: 0 5px 0 rgba(160,100,40,.12); }
+  .ich-reiter button.an { background: var(--pflaume); color: #fff; }
+  .sachen { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+  .sache { display: grid; justify-items: center; gap: 6px; padding: 18px 10px; border-radius: 24px; background: #fff; color: var(--pflaume); font-weight: 700; font-size: 1.2rem; text-decoration: none; box-shadow: 0 7px 0 rgba(160,100,40,.12); text-align: center; }
+  .sache span { font-size: 3rem; line-height: 1; }
+  .sache:active { transform: translateY(3px); }
   .karte { background: #fff; border-radius: 28px; padding: 20px; box-shadow: 0 8px 0 rgba(160,100,40,.12); }
   .karte h2 { margin: 0 0 12px; font-size: 1.45rem; }
   .koennen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -29,13 +40,14 @@
   .spalte { display: grid; gap: 18px; }
 
   /* Ich */
-  .ich { text-align: center; }
-  .portraet { width: 220px; height: 250px; margin: 0 auto; border-radius: 26px; background: radial-gradient(circle at 50% 40%, #FFE3F0, #FFD1A8); overflow: hidden; }
+  .ich { display: flex; align-items: center; gap: 18px; padding: 12px 20px; }
+  .ich-info { display: grid; justify-items: start; gap: 2px; }
+  .portraet { width: 110px; height: 124px; flex: none; border-radius: 22px; background: radial-gradient(circle at 50% 40%, #FFE3F0, #FFD1A8); overflow: hidden; }
   .portraet svg { width: 100%; height: 100%; }
-  .ich .name { font-size: 2rem; font-weight: 700; margin: 10px 0 0; }
+  .ich .name { font-size: 2rem; font-weight: 700; margin: 0; }
   .ich .titel { display: inline-block; margin-top: 4px; padding: 4px 14px; border-radius: 999px; background: var(--pflaume); color: #fff; font-weight: 600; }
-  .ich .gesamt { margin: 10px 0 0; color: var(--pflaume-hell); font-weight: 600; }
-  .vorteile { margin-top: 14px; text-align: left; display: grid; gap: 6px; }
+  .ich .gesamt { margin: 4px 0 0; color: var(--pflaume-hell); font-weight: 600; }
+  .vorteile { text-align: left; display: grid; gap: 6px; }
   .vorteile h3 { margin: 0; font-size: 1.1rem; }
   .vorteil { background: #FFF6D6; border-radius: 14px; padding: 8px 12px; font-size: 1rem; font-weight: 500; }
   .klein { font-size: 1rem; color: var(--pflaume-hell); margin: 0; }
@@ -113,7 +125,8 @@
   .fehler { color: #C0392B; font-weight: 600; margin: 6px 0 0; min-height: 1.2em; }
 
   /* Kalender */
-  .woche { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .woche { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+  @media (max-width: 480px) { .woche { gap: 4px; } .woche > * { min-width: 0; padding-left: 0 !important; padding-right: 0 !important; } .woche .stempel, .woche .leer { transform: scale(.85); } }
   .tag { text-align: center; padding: 8px 2px; border-radius: 16px; background: #FFF7EE; font-weight: 600; }
   .tag .st { display: grid; place-items: center; width: 42px; height: 42px; margin: 6px auto 0; border-radius: 50%; border: 3px dashed #E7C9A6; font-size: 1.4rem; }
   .tag.gestempelt .st { border: 0; background: var(--beere); color: #fff; }
@@ -183,41 +196,31 @@
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
   <div class="seite">
-    <div class="spalte">
-      <div class="karte ich">
-        <div class="portraet" id="portraet"></div>
+    <div class="karte ich">
+      <div class="portraet" id="portraet"></div>
+      <div class="ich-info">
         <p class="name" id="name"></p>
         <span class="titel" id="titel"></span>
         <p class="gesamt" id="gesamt"></p>
-        <div class="vorteile" id="vorteile"></div>
-        <div class="ich-knoepfe">
-          <a class="knopf" href="../tier/" id="tier-link">🐾 Mein Tier</a>
-          <a class="knopf" href="../schatz/">🏆 Schatzkammer</a>
-          <a class="knopf" href="../album/" id="album-link">📒 Stickeralbum</a>
-          <a class="knopf" href="../heft/" id="heft-link">📓 Mein Heft</a>
-          <a class="knopf" href="../medien/" id="fs-link">🪪 Tablet-Führerschein</a>
-          <a class="knopf" href="../anziehen/">👗 Figur anziehen</a>
-          <a class="knopf" href="../eltern/">👨‍👩‍👧 Für Eltern</a>
-        </div>
-      </div>
-      <div class="karte staerken-karte" id="staerken">
-        <h2>⭐ Was ich gut kann</h2>
-        <div id="staerken-inhalt"></div>
-        <button class="knopf" id="staerken-waehlen">✏️ Selbst ankreuzen</button>
       </div>
     </div>
-    <div class="spalte">
+    <nav class="ich-reiter" role="tablist" aria-label="Bereiche">
+      <button role="tab" data-reiter="heute" class="an">🌞 Heute</button>
+      <button role="tab" data-reiter="woche">📅 Meine Woche</button>
+      <button role="tab" data-reiter="kann">⭐ Ich kann</button>
+      <button role="tab" data-reiter="sachen">🎒 Meine Sachen</button>
+    </nav>
+    <div class="teil zwei" id="teil-heute" role="tabpanel">
+      <div class="spalte">
       <div class="karte">
         <div class="tag-kopf"><h2>Tagesaufgaben</h2><p id="datum"></p></div>
         <div id="aufgaben"></div>
       </div>
+      </div>
+      <div class="spalte">
       <div class="karte ew-karte" id="ew-karte">
         <div class="tag-kopf"><h2>🌍 Echte Welt</h2><p>freiwillig</p></div>
         <div id="ew"></div>
-      </div>
-      <div class="karte" id="koennen-karte" hidden>
-        <h2>🌳 Mein Können</h2>
-        <div class="koennen" id="koennen"></div>
       </div>
       <div class="karte" id="heute-neu-karte">
         <h2>🌱 Heute neu</h2>
@@ -232,16 +235,44 @@
         </div>
         <p class="gemeinsam-zahl" id="gemeinsam-zahl"></p>
       </div>
+      </div>
+    </div>
+    <div class="teil" id="teil-woche" role="tabpanel" hidden>
       <div class="karte">
         <h2>Meine Woche</h2>
         <div class="woche" id="woche"></div>
         <div class="truhe" id="truhe"></div>
         <div class="woche-ch" id="woche-ch"></div>
       </div>
+    </div>
+    <div class="teil" id="teil-kann" role="tabpanel" hidden>
+      <div class="karte" id="koennen-karte" hidden>
+        <h2>🌳 Mein Können</h2>
+        <div class="koennen" id="koennen"></div>
+      </div>
       <div class="karte">
         <h2>Meine Fähigkeiten</h2>
         <p class="klein" style="margin-bottom:12px">Tippe auf eine Fähigkeit, um alle Belohnungen zu sehen.</p>
         <div class="faehigkeiten" id="faehigkeiten"></div>
+      </div>
+      <div class="zwei">
+      <div class="karte staerken-karte" id="staerken">
+        <h2>⭐ Was ich gut kann</h2>
+        <div id="staerken-inhalt"></div>
+        <button class="knopf" id="staerken-waehlen">✏️ Selbst ankreuzen</button>
+      </div>
+      <div class="karte"><div class="vorteile" id="vorteile"></div></div>
+      </div>
+    </div>
+    <div class="teil" id="teil-sachen" role="tabpanel" hidden>
+      <div class="sachen">
+        <a class="sache" href="../tier/" id="tier-link"><span>🐾</span>Mein Tier</a>
+        <a class="sache" href="../schatz/"><span>🏆</span>Schatzkammer</a>
+        <a class="sache" href="../album/" id="album-link"><span>📒</span>Stickeralbum</a>
+        <a class="sache" href="../heft/" id="heft-link"><span>📓</span>Mein Heft</a>
+        <a class="sache" href="../medien/" id="fs-link"><span>🪪</span>Tablet-Führerschein</a>
+        <a class="sache" href="../anziehen/"><span>👗</span>Figur anziehen</a>
+        <a class="sache" href="../eltern/"><span>👨‍👩‍👧</span>Für Eltern</a>
       </div>
     </div>
   </div>

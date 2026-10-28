@@ -13,7 +13,7 @@ const NEU = ["w-reime", "w-einladung", "w-bildergeschichte", "w-gedicht-vortrage
   const erwarte = (ok, text) => { if (!ok) fehler.push(text); else console.log("  ✓ " + text); };
   async function kind(stufe, breite, hoehe, ohneMikro) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: hoehe }, hasTouch: true });
-    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); });
+    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; });
     if (ohneMikro) await ctx.addInitScript(() => { navigator.mediaDevices.getUserMedia = () => Promise.reject(new DOMException("verweigert", "NotAllowedError")); });
     const p = await ctx.newPage();
     p.on("pageerror", e => fehler.push(`${p.url()}: ${e.message}`));

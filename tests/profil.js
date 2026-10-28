@@ -11,7 +11,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   const erwarte = (ok, text) => { if (!ok) fehler.push(text); else console.log("  ✓ " + text); };
   const neu = async (breite = 1180, hoehe = 820) => {
     const ctx = await browser.newContext({ viewport: { width: breite, height: hoehe }, hasTouch: true });
-    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); });
+    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; });
     return ctx;
   };
   const seite = async (ctx, name) => {

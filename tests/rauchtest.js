@@ -22,7 +22,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   for (const [breite, hoehe, lage] of [[1180, 820, "quer"], [820, 1180, "hoch"]]) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: hoehe }, hasTouch: true });
     // feste Uhrzeit am Nachmittag, damit die Ruhezeit nicht greift
-    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); });
+    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; });
     const p = await neueSeite(ctx, `einrichtung (${lage})`);
     await p.goto(BASIS);
     await p.waitForURL(/eltern/, { timeout: 5000 });
