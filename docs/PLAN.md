@@ -1716,3 +1716,29 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
   angepasst `lehrplan`, `mathe-generatoren`, `mathe15`, `uebergang5`, `englisch`, `schuljahr2`; Rauchtest 60 Seitenaufrufe.
 - **Nächstes:** Rückmeldung Sorbisch-Prüfung; Großbuchstaben der Schulausgangsschrift; Klasse 5 Deutsch/Englisch nach Lehrplan (PDFs nötig); iPad-Test.
 
+
+### Stand 30.10.2026 (Auftrag: alle Inhalte fertigstellen – Sorbisch, Lautlesen, Präsentieren, Programmieren, SAS, Musik, „teilweise“, Vorschule)
+- **Schulausgangsschrift Großbuchstaben** (A–Z, Ä, Ö, Ü) zum Nachspuren, verbundene Wörter mit Großbuchstaben (`inhalte/deutsch/schreibschrift.js`).
+- **Robo programmieren** (`spiele/robo/`, Werken Kl. 4 und Medien): 13 Level mit Befehlen, Schleifen und Baustein-Grenze. Test `robo`.
+- **Atelier:** „Ohren-Rätsel“ (Melodie wiedererkennen, Grundton, Richtung, Rhythmus) und „Bilder verfremden“ (8 Effekte). Test `atelier`.
+- **Vorlesen und Lesetheater** (`spiele/vorlesen/`): Laut lesen mit Zeit, Wörtern pro Minute, Aufnahme (nur mit Eltern-Schalter), Selbsteinschätzung,
+  wiederholtes Lesen; Lesetheater mit Rollen (Tablet liest die anderen); Lesepass. Test `vorlesen`.
+- **Schreiben und Präsentieren** (`spiele/praesentieren/`): Text gestalten, Rechtschreibprüfung (ohne KI, eigene Wortliste), Präsentation mit Vortragsmodus,
+  Podcast in vier Teilen, kleines Wiki. Test `praesentieren`.
+- **Landkreise Sachsens** (10 Landkreise, 3 kreisfreie Städte, Eltern-Wahl im Elternbereich) und **Englisch** Bilderbuch, Sachtext, Rollenspiel, Mimik (31 Lektionen).
+  Damit sind Deutsch, SU, Englisch, Kunst, Musik, Werken ohne „teilweise“ (außer Ehrliches: Hören ohne Stimme u. Ä.).
+- **Sorbisch als Fremdsprache: 47 Lektionen** (+24: Uhrzeit, Datum/Ordnungszahlen, Wegbeschreibung, Personen, Mimik, „Mi so lubi / njelubi“, Hobbys-Gespräch,
+  Zahlen 11–20 und Zehner, Schulfächer, Tagesabschnitte, Lagebeziehungen, Tiere beschreiben, Verkaufsgespräch, Namenstage, Himmelsrichtungen, Ausflugsziele,
+  Ortsnamen; Wahlbereiche Heimatregion, Bautzen, Sagengestalten, Osterbräuche als `lb` 12). Sieben sorbische Echte-Welt-Aufgaben (Vogelhochzeit, Ostereier,
+  Osterreiten, Ortsschild, Sage, Namenstag, Sorbisch-Mappe; nur mit Wahl, Feld 8 = `"sorbisch"`). Lehrplan 49 ja / 1 teil / 1 nein (nur Hören/Nachsprechen).
+- **Sorbisch als Muttersprache** (Lehrplan Grundschule Sorbisch 2004): Eltern-Wahl `eltern.sorbisch.art` = `fremd` | `mutter`. 25 Lektionen in
+  `spiele/sorbisch/mutter.js` mit festen Schritten (`sag`, `wahl`, `textfrage` mit Lesetext, `satz`), Aufgaben auf Sorbisch mit deutscher Hilfe, nichts Sorbisches
+  vorgelesen. Profil `sorbischmutter` (36 ja / 13 teil / 2 nein – Erzählen, Zuhören, Vortragen, freies Schreiben auf Sorbisch bleiben offen), Lernstand-Schlüssel
+  `m<kl>:<lb>`, Prüfseite enthält auch die Muttersprache. Test `sorbischmutter`.
+- **Vorschul-Rucksack** (`spiele/vorschule/`): 16 Bilder-Spiele ohne Lesen in 7 Bereichen nach dem Sächsischen Bildungsplan (Mathematik, Sprache, Natur, Körper,
+  Soziales/Verkehr, Ästhetik, Schulvorbereitung), mit Bilder-Ordnen; Band auf der Startseite (Vorschule und Kl. 1), Knopf bei „Erst lernen“; Elternbereich zeigt
+  für Vorschulkinder `P.vorschule` (28 Punkte: 22 ja, 2 teil, 4 draußen). Zwei Echte-Welt-Aufgaben (allein anziehen, Schulweg). Test `vorschule`.
+- **Entscheidungen:** Sorbisch-Muttersprache als eigene Lektionsliste statt Erweiterung der Fremdsprache (anderes Ziel: Lesen, Schreiben, Grammatik statt Wortschatz);
+  Vorschule als eigener Rucksack mit Verweisen auf vorhandene Inhalte statt eigenem Matheweg; Symbole im Kopf dürfen keine Antwort verraten (prüft `tests/lehrplan.js`).
+- **Offen:** Prüfung aller sorbischen Texte (jetzt 72 Lektionen), sorbische Stimme fehlt; Grafik (erst jetzt, nach Abschluss der Inhalte, wieder freigegeben – vorher fragen).
+- **Nächstes:** iPad-Test durch den Auftraggeber, dann Grafik-Pakete (NA-29, NA-29b) nach Freigabe.

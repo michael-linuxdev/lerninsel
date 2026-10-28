@@ -12,7 +12,7 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (29.10.2026, abends)
+## 1. Stand (30.10.2026) – Inhalte sind fertig
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
   **Kl. 1/Vorschule 22** · **Kl. 2 45** · **Kl. 3 35** · **Kl. 4 26** · **Übergang 5** 16 (vorläufig). Freischalten je Lernbereich, Lernbereichs-Kacheln
@@ -24,16 +24,19 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Sachunterricht (Eule Ella): 61 Themen, nach sechs Lernbereichen gruppiert**, u. a. Mein Körper gehört mir, Licht und Schatten, Luft und Schall,
   Wetter, Wasserkreislauf, Karten lesen, Waldtiere, Boden, Radfahrprüfung; Heimatkunde nur für Sachsen (`land: "sn"`): Unser Bundesland
   Sachsen, Mein Landkreis, Sachsen entdecken.
-- **Englisch (Papagei Paula): 27 Lektionen, nach den 11 Lernbereichen gruppiert** (u. a. neu: Gefühle, Zahlen bis 100, Einkaufen, Fächer/Tage/Uhrzeit, Ausflug, London, Café, Zootiere,
+- **Englisch (Papagei Paula): 31 Lektionen (auch Bilderbuch, Sachtext, Rollenspiel, Mimik), nach den 11 Lernbereichen gruppiert** (u. a. neu: Gefühle, Zahlen bis 100, Einkaufen, Fächer/Tage/Uhrzeit, Ausflug, London, Café, Zootiere,
   Feste und Datum, Sportarten, Sprachenpass). Englische Gerätestimme, ohne Stimme Lesen statt Hören. Eltern-Einstellung Beginn ab Kl. 1 oder 3.
 - **Kunst, Musik, Werken, Sport, Ethik (Eule Ella): 70 Wissens-Themen** auf der Sachunterricht-Seite mit Reitern (`?fach=kunst|musik|werken|sport|ethik`),
   je Fach nach Lernbereichen gruppiert, „Zeig, was du kannst“; Praktisches (Malen, Singen, Bauen, Turnen, Schwimmen) als Echte-Welt-Aufgaben.
 - **Religion (ev./kath.): 37 Themen** nach den sächsischen Lehrplänen, Reiter „Religion“ nur nach Eltern-Wahl (`eltern.ethik.unterricht`).
-- **Sorbisch (Obersorbisch, Papagei Paula): 23 Lektionen** nur nach Eltern-Wahl (`eltern.sorbisch.an`); alle Wörter sind Entwürfe, stehen aber seit 29.10. auch auf der
+- **Sorbisch (Obersorbisch, Papagei Paula): als Fremdsprache 47 Lektionen (mit Wahlbereichen), als Muttersprache 25 Lektionen** (Eltern-Wahl `eltern.sorbisch.art`), nur nach Eltern-Wahl (`eltern.sorbisch.an`); alle Wörter sind Entwürfe, stehen aber seit 29.10. auch auf der
   Hauptseite (Entscheidung „vollständig nach main“, `ENTWURF_FREI` mit `hsb`); Prüfstand in `spiele/sorbisch/geprueft.js`. Prüfliste `spiele/sorbisch/pruefen.html`. Keine sorbische Stimme: nur Lesen.
 - **Neu 29.10. abends:** „Mein Heft“ (eigene Texte/Aufnahmen), Schreibschrift (Schulausgangsschrift, Kleinbuchstaben und Wörter), Lernkartei für Englisch
   und Sorbisch, Lieder und Reime zum Mitsingen (Englisch „Songs and rhymes“, Atelier „Mitsingen“), **Mathe Klasse 5 nach den Lehrplänen Oberschule und
   Gymnasium** (Weg „Übergang 5“ mit 26 Stationen, Eltern-Wahl Schulart).
+- **Neu 30.10.:** Vorschul-Rucksack (16 Bilder-Spiele nach dem Sächsischen Bildungsplan), Robo programmieren, Vorlesen und Lesetheater, Schreiben und
+  Präsentieren (Gestalten, Rechtschreibprüfung, Folien, Podcast, Wiki), Ohren-Rätsel und Bilder verfremden im Atelier, Landkreise Sachsens,
+  Großbuchstaben der Schulausgangsschrift, sorbische Brauch-Aufgaben in der Echten Welt.
 - Weiter: Medien (Tablet-Führerschein), Gefühle, Atelier (Malen, Musik), Schach, Insel in zwei Looks, Story/Tutorial E1–E8, Können je Lernziel, Elternbericht.
 
 ### Lehrplan Sachsen (`shared/lehrplan/laender/sachsen.js` + Inhaltspunkte in `sachsen-punkte.js`)
@@ -41,7 +44,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Mathe Grundschule vollständig** (120 Punkte). **Deutsch** 179 Punkte (166 geübt, 7 teilweise, 6 Papier). **Sachunterricht** 99 Pflicht-Punkte
   (94/2/3). **Englisch** 73 Punkte (65/5/3).
 - **Lernbereiche Mathe, Deutsch, SU (45): 37 gut, 8 teilweise, 0 fehlt** (Mathe 12/0, Deutsch 9/6, SU 16/2). **Englisch (22, mit „My Portfolio“): 18/4/0.**
-- **Kunst 45 Punkte (32/1/12 draußen), Musik 48 (34/3/11), Werken 34 (24/1/9), Sport 42 (14/0/28), Ethik 43 (43/0/0). Sorbisch 47 (26/14/7, nur mit Wahl).** Lernbereiche, die vor allem
+- **Kunst 45 Punkte (32/1/12 draußen), Musik 48 (34/3/11), Werken 34 (24/1/9), Sport 42 (14/0/28), Ethik 43 (43/0/0). Sorbisch Fremdsprache 51 Punkte (49/1/1), Sorbisch Muttersprache 51 (36/13/2), Vorschule (Bildungsplan) 28 (22/2/0, 4 draußen).** Deutsch, SU, Englisch, Kunst, Musik, Werken haben keine „teilweise“-Punkte mehr außer Dingen, die eine Stimme oder Papier brauchen. Lernbereiche, die vor allem
   nach draußen gehören, zeigen 🌍 (`abdeckung: "aussen"`, nur in den neuen Fächern).
 - „Teilweise“ heißt ehrlich: braucht einen Menschen oder ein Werkzeug, das die App nicht hat (Lautlesen mit Rückmeldung, Formatieren am Gerät,
   Präsentationen/Podcasts, Lieder zum Mitsingen, eigener Landkreis, englische Kinderbücher).
@@ -56,7 +59,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 
 ### Bekannte Baustellen
 - **Schuljahres-Gerüst** („Zeig, was du kannst“, „gerade in der Schule“) gibt es jetzt für alle vier Fächer (Mathe, Deutsch, SU, Englisch).
-- Schreibschrift: Großbuchstaben, Vereinfachte und Lateinische Ausgangsschrift fehlen; Formen der SAS bitte mit der Schule vergleichen.
+- Schreibschrift: Vereinfachte und Lateinische Ausgangsschrift fehlen (SAS jetzt mit Großbuchstaben); Formen der SAS bitte mit der Schule vergleichen.
 - Lieder: bisher 9 (6 englisch, 3 deutsch); Melodie ohne Gesangsstimme (Kinder singen selbst).
 - Satz-Bauen/Ordnen werten jetzt den Wortlaut (doppelte Wörter austauschbar) – war vorher ein stiller Fehler in Englisch.
 - Nur russische Übersetzungs-Entwürfe (alle neuen Kapitel/Themen/Lektionen haben ru-Entwürfe); Ukrainisch u. a. fehlen. Ton über die Gerätestimme.
@@ -72,13 +75,16 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
   dazu weiter offen: Matheweg-Kacheln und „Zeig, was du kannst“, Aufnehmen mit Eltern-Schalter.
 - **Neue Fächer ansehen** (in /dev): Eule Ella → Reiter Kunst/Musik/Werken/Sport/Ethik; passt der Ton bei Ethik (Religionen, Geheimnisse, Abschied)?
   Elternbereich → „Wie im Schuljahr: gerade in der Schule“ (alle Fächer, dazu „Mein Kind hat in der Schule: Ethik/Ev./Kath. Religion“).
-- **Sorbisch prüfen lassen:** Prüferin/Prüfer öffnet `…/spiele/sorbisch/pruefen.html` (oder Elternbereich → Sorbisch → Prüfliste), hakt ab,
+- **Neu ansehen (in /dev):** Vorschul-Rucksack (Kind mit Stufe „Vorschule“), Sorbisch als Muttersprache (Elternbereich → Sorbisch → „als Muttersprache“), Robo, Vorlesen, Präsentieren.
+- **Grafik:** Inhalte sind abgeschlossen – darf jetzt mit der Grafik (NA-29, NA-29b) weitergemacht werden?
+- **Sorbisch prüfen lassen (jetzt 72 Lektionen, auch Muttersprache):** Prüferin/Prüfer öffnet `…/spiele/sorbisch/pruefen.html` (oder Elternbereich → Sorbisch → Prüfliste), hakt ab,
   korrigiert und schickt den Text zurück → Korrekturen in `spiele/sorbisch/lektionen.js`, geprüfte IDs in `geprueft.js` eintragen. Optional **Mathematik Klasse 5 (Oberschule/Gymnasium)** als PDF.
 - Deutsch: Sollen Kinder ihre eigenen Texte selbst wiederfinden („Mein Heft“)? Handschrift-Übung mit Finger/Stift (Schulausgangsschrift oder
   Vereinfachte Ausgangsschrift – je nach Schule als Eltern-Einstellung)?
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
 
-## 2. Nächste Pakete – Lehrplan Sachsen in voller Tiefe (Entscheidung 27.10.2026)
+## 2. Nächste Pakete (Inhalte fertig seit 30.10.2026; davor: Lehrplan Sachsen in voller Tiefe, Entscheidung 27.10.2026)
+0. **iPad-Rückmeldung einarbeiten**, Sorbisch-Prüfung nachtragen, dann **Grafik nach Freigabe** (NA-29 Teil 2, NA-29b Handy-Leistung).
 **Arbeitsliste: `docs/SACHSEN-SCHULJAHR.md` – zuerst lesen.** Maßstab „wie ein Schuljahr“ (jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr,
 Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen.
 

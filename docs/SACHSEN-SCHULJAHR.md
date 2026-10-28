@@ -21,7 +21,7 @@ Die Seiten des Schulportals (`schulportal.sachsen.de/lplandb`) sind aus der Arbe
 | Sport | 2019 | ✅ liegt vor | ✅ liegt vor |
 | Ethik | 2004/2019 | ✅ liegt vor | ✅ liegt vor |
 | Ev. und Kath. Religion | 2004/2009/2019 | ✅ liegt vor | ✅ liegt vor |
-| Sorbisch (Fremdsprache / Muttersprache) | 2019 / 2004 | ✅ Fremdsprache eingearbeitet (Eltern-Wahl, Wörter in Prüfung); Muttersprache nicht | ✅ Fremdsprache |
+| Sorbisch (Fremdsprache / Muttersprache) | 2019 / 2004 | ✅ Fremdsprache (47 Lektionen) und Muttersprache (25 Lektionen) eingearbeitet (Eltern-Wahl, Texte in Prüfung) | ✅ beide |
 | Englisch | 2019 | – (Pflicht erst ab Kl. 3) | ✅ liegt vor |
 | Mathematik Klasse 5 (Oberschule 2019, Gymnasium 2021) | 2019/2021 | ✅ eingearbeitet (Übergang 5, 29.10.2026) | – |
 
@@ -167,3 +167,8 @@ Kl. 4 26 Stationen (dazu Übergang 5: 16).
 - **Elternbereich:** „Zeig, was du kannst – zuletzt“ je Weg und Lernbereich mit Datum, Anzahl auf Anhieb richtig und „noch üben: …“.
 - **Entschieden:** kein fester Halbjahres-Plan (der Lehrplan überlässt die Reihenfolge der Lehrkraft) – „Gerade in der Schule“ ersetzt ihn.
 - **Offen:** dasselbe Gerüst für Deutsch, Sachunterricht, Englisch, sobald deren Inhaltspunkte stehen.
+
+### Stand 30.10.2026
+- Sorbisch Fremdsprache 49/1/1 (nur Hören/Nachsprechen offen), Sorbisch Muttersprache 36/13/2 (Erzählen, Zuhören, Vortragen, freies Schreiben offen).
+- Vorschule: Sächsischer Bildungsplan (7 Bereiche, 28 Punkte) mit dem Vorschul-Rucksack; Profil `P.vorschule`, nur für Stufe „Vorschule“.
+- Deutsch, SU, Englisch, Kunst, Musik, Werken ohne offene „teilweise“-Punkte außer Stimme/Papier. Inhalte damit fertig; Grafik nach Freigabe.
