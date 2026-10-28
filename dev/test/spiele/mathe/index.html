@@ -86,6 +86,8 @@
   .schuljahr[hidden] { display: none; }
   .lb-kachel { background: #fff; border-radius: 20px; padding: 10px 12px; box-shadow: 0 5px 0 rgba(0,0,0,.07); display: flex; flex-direction: column; gap: 4px; }
   .lb-kachel.schule { background: #FFF6D6; box-shadow: inset 0 0 0 3px #F3D27A, 0 5px 0 rgba(0,0,0,.07); }   /* wie „gerade in der Schule“ auf den anderen Fachseiten (30.10.2026) */
+  .weiter-klasse { max-width: 760px; margin: 10px auto 0; padding: 12px 16px; border-radius: 20px; background: #E9FBF3; box-shadow: inset 0 0 0 3px #9FE0C3; text-align: center; font-weight: 600; }
+  .weiter-klasse .knopf { margin-top: 8px; }
   .lb-balken { height: 10px; border-radius: 999px; background: #E6F4EE; overflow: hidden; }
   .lb-balken i { display: block; height: 100%; min-width: 4px; border-radius: 999px; background: var(--minze); }
   .lb-kopf { display: flex; align-items: center; gap: 6px; font-size: 1.05rem; line-height: 1.15; }
@@ -208,6 +210,7 @@
   <div class="benno-zeile"><div class="benno" id="benno" aria-hidden="true"></div><p class="benno-blase" id="benno-text"></p></div>
   <div class="klasse" id="klasse"></div>
   <div class="einstufung" id="einstufung" hidden></div>
+  <div class="weiter-klasse" id="weiter-klasse" hidden></div>
   <div class="schuljahr" id="schuljahr" hidden></div>
   <div class="karte-weg" id="karte"></div>
 </section>

@@ -62,6 +62,8 @@
     document.getElementById("szene-weiter").addEventListener("click", () => { S.ton("tipp"); weiter(); });
     document.getElementById("szene-weg").addEventListener("click", () => { S.ton("tipp"); ende(true); });
     document.getElementById("szene-ton").addEventListener("click", () => {
+      // Vorlesen nur auf Knopfdruck (NA-60): 🔊 liest die Blase vor; nur mit „automatisch vorlesen“ der Eltern bleibt er ein Stumm-Schalter
+      const sp0 = sprecher(); if (!(sp0 && sp0.automatisch && sp0.automatisch())) { lies(); return; }
       const d = S.lade("szene") || {}; d.stumm = !d.stumm; S.speichere("szene", d); zeigeTon();
       if (d.stumm) { const sp = sprecher(); if (sp) sp.stopp(); } else lies();
     });
@@ -72,7 +74,7 @@
     return el;
   }
   const $ = (id) => document.getElementById(id);
-  function zeigeTon() { $("szene-ton").textContent = stumm() ? "🔇" : "🔊"; }
+  function zeigeTon() { const sp = sprecher(), auto = !!(sp && sp.automatisch && sp.automatisch()); $("szene-ton").textContent = auto && stumm() ? "🔇" : "🔊"; $("szene-ton").setAttribute("aria-label", auto ? "Vorlesen an oder aus" : "Vorlesen"); }
 
   // ---------- Ablauf ----------
   let aktiv = null;      // { def, nr, fertig, zeiger, bisWeg }
@@ -159,7 +161,7 @@
     const leuchte = () => { if (aktiv && aktiv.nr === nr) $("szene-weiter").classList.add("leuchtet"); };
     clearTimeout(leuchtTimer);
     const sp = sprecher();
-    if (stumm() || !sp) { leuchtTimer = setTimeout(leuchte, 1500); return; }
+    if ((stumm() && sp && sp.automatisch && sp.automatisch()) || !sp) { leuchtTimer = setTimeout(leuchte, 1500); return; }   // „stumm“ gilt nur beim automatischen Vorlesen
     const hilfeDanach = laufend.hilfe && hilfeSofort() ? laufend.hilfe : null;
     sp.sprich(laufend.text, "de-DE", () => {
       if (hilfeDanach && aktiv && aktiv.nr === nr) sp.sprich(hilfeDanach.text, hilfeDanach.sprache.tts, leuchte); else leuchte();

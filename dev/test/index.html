@@ -24,6 +24,19 @@
   @media (min-width: 700px) { .seite { min-height: 100dvh; } .schrank { flex: 1; } }
   .kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   .leiste { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+  /* „Heute für dich“ (NA-60): ein Vorschlag nach Klasse, Tagesaufgaben, Schule und Lücken */
+  .heute-fuer-dich { flex: 1 1 260px; min-width: 0; max-width: 520px; display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 18px; background: #fff;
+    color: var(--pflaume); text-decoration: none; font-weight: 600; box-shadow: 0 4px 0 rgba(75,35,128,.10); line-height: 1.2; }
+  .heute-fuer-dich .e { font-size: 1.8rem; flex: none; }
+  .heute-fuer-dich small { display: block; font-size: .8rem; color: var(--pflaume-hell); font-weight: 600; }
+  .heute-fuer-dich[hidden] { display: none; }
+  /* Vorschule (NA-60): eigene Startseite – wenige große Bild-Türen, keine Lesetexte */
+  body.vorschul-start .tuer.deutsch, body.vorschul-start .tuer.sach, body.vorschul-start .tuer.englisch, body.vorschul-start .tuer.sorbisch,
+  body.vorschul-start .tuer.gef, body.vorschul-start .tuer.schach { display: none; }
+  body.vorschul-start .tuer p { display: none; }
+  body.vorschul-start .tuer h2 { font-size: 1.9rem; }
+  body.vorschul-start .spielen { grid-template-columns: 1fr; }
+  .tuer.laute { background: #E0578F; }
   .leiste .knopf { min-height: 48px; padding: 0 14px; font-size: 1.05rem; }
   .sterne { gap: .35em; }
   .sterne b { font-size: 1.3rem; }
@@ -108,6 +121,7 @@
   .lernen.sechs .tuer h2 { font-size: 1.35rem; }
   .lernen.sechs .tuer p { display: none; }
   .tuer.zu { filter: saturate(.55); }
+  .lernen .tuer.breit { grid-column: span 2; }
   /* (30.10.2026) Lernbegleiter auf den Türen, Licht von oben und ein Rahmen – mehr Tiefe als flache Farbflächen */
   .tuer { background-image: linear-gradient(170deg, rgba(255,255,255,.22), rgba(255,255,255,0) 45%, rgba(0,0,0,.10)); }
   .tuer.insel { background-image: linear-gradient(160deg, #8FD66B, #2E9C5A); }
@@ -199,6 +213,7 @@
       <h1 class="name" id="name" aria-label=""></h1>
       <span class="abzeichen" id="abzeichen" hidden>🪪 Tablet-Profi</span>
     </header>
+    <a class="heute-fuer-dich" id="heute-fuer-dich" hidden></a>
     <div class="leiste">
       <button class="knopf" id="wer-knopf" hidden>👥 Wechseln</button>
       <button class="knopf" id="spielstand">💾 Spielstand</button>
@@ -271,7 +286,14 @@
       <h2>Sorbisch</h2>
       <p>Mit Papagei Paula: Witaj!</p>
     </a>
+    <a class="tuer laute" id="laute-link" href="spiele/lesen/" style="text-decoration:none" hidden>
+      <span class="begleiter" data-wer="fipsi" aria-hidden="true"></span>
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><text x="50" y="66" text-anchor="middle" font-size="52" font-weight="700" fill="#fff" font-family="sans-serif">Aa</text></svg>
+      <h2>Laute und Reime</h2>
+      <p>Mit Fipsi Anfangslaute hören und Reime finden</p>
+    </a>
     <a class="tuer vorschule" id="vorschule-link" href="spiele/vorschule/" style="text-decoration:none" hidden>
+      <span class="begleiter" data-wer="robo" aria-hidden="true"></span>
       <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><rect x="24" y="30" width="52" height="56" rx="12" fill="#fff"/><path d="M38 30v-6a12 12 0 0 1 24 0v6" stroke="#fff" stroke-width="6" fill="none"/><rect x="34" y="50" width="32" height="14" rx="5" fill="#7B55B8"/><circle cx="84" cy="20" r="9" fill="#FFC83D"/></svg>
       <h2>Vorschul-Rucksack</h2>
       <p>Zählen, Reimen, Entdecken, Malen</p>
@@ -380,9 +402,34 @@
     if (window.Figuren) document.querySelectorAll(".tuer .begleiter").forEach(b => { if (!b.firstChild && Figuren[b.dataset.wer]) b.innerHTML = Figuren[b.dataset.wer](""); });
     document.querySelector(".tuer.sorbisch").hidden = !(((S.lade("eltern") || {}).sorbisch || {}).an);
     document.getElementById("vorschule-link").hidden = !["vs", "1"].includes((S.stufe() || {}).code);
-    document.getElementById("lernen").classList.toggle("sechs", document.querySelectorAll("#lernen .tuer:not([hidden])").length > 4);
+    // Vorschule (NA-60): eigene Startseite – Rucksack, Zahlen, Laute und Reime, Insel, Malen
+    const vs = (S.stufe() || {}).code === "vs";
+    document.body.classList.toggle("vorschul-start", vs);
+    document.getElementById("laute-link").hidden = !vs;
+    const mt = document.querySelector(".tuer.mathe h2"); if (mt) mt.textContent = vs ? "Zahlen" : "Mathe";
+    // Türen nach Klasse (NA-60): Englisch ab Klasse 3 – oder früher, wenn die Eltern „Englisch ab Klasse 1“ gewählt haben
+    const st = (S.stufe() || {}).code || "2", e = S.lade("eltern") || {};
+    document.querySelector(".tuer.englisch").hidden = !(["3", "4", "5"].includes(st) || (e.englisch || {}).ab === "1");
+    const sichtbar = [...document.querySelectorAll("#lernen .tuer:not([hidden])")].filter(t => getComputedStyle(t).display !== "none");
+    document.getElementById("lernen").classList.toggle("sechs", sichtbar.length > 4);
+    document.querySelectorAll("#lernen .tuer.breit").forEach(t => t.classList.remove("breit"));
+    if (sichtbar.length % 2 === 1 && sichtbar.length <= 4) sichtbar[sichtbar.length - 1].classList.add("breit");   // ungerade Zahl: letzte Tür über zwei Spalten
   }
   zeigeLernTueren();
+  // „Heute für dich“ (NA-60): Lücken-Check nach dem Überspringen → nächste offene Tagesaufgabe (je Klasse) → Fach „gerade in der Schule“ → Echte Welt
+  function zeigeHeute() {
+    const el = document.getElementById("heute-fuer-dich"), k = S.kind(), e = S.lade("eltern") || {}, C = window.Charakter;
+    const pfad = (l) => !l ? "spiele/ich/" : l.startsWith("../") ? "spiele/" + l.slice(3) : l.startsWith("#") ? "spiele/ich/" + l : l;
+    let v = null;
+    if ((k.luecken || []).length) v = ["🔍", `Kleiner Check: Klasse ${k.luecken[0]}`, "freiwillig", "spiele/ich/"];
+    if (!v && C && C.aufgaben) { const a = C.aufgaben().find(x => !x.erledigt); if (a) v = [a.emoji, a.titel, "Tagesaufgabe", pfad(a.link)]; }
+    if (!v) { const F = [["mathe", "🧮", "Mathe", "spiele/mathe/"], ["deutsch", "🦊", "Deutsch", "spiele/deutsch/"], ["sachkunde", "🦉", "Sachunterricht", "spiele/sachkunde/"], ["englisch", "🦜", "Englisch", "spiele/englisch/"]]
+      .find(([f]) => (e[f] || {}).schule); if (F) v = [F[1], F[2], "gerade in der Schule", F[3]]; }
+    if (!v) v = ["🌍", "Eine Echte-Welt-Idee", "für draußen", "spiele/ich/#echte-welt"];
+    el.innerHTML = `<span class="e" aria-hidden="true">${v[0]}</span><span><small>Heute für dich · ${v[2]}</small>${v[1]}</span>`;
+    el.href = v[3]; el.hidden = false;
+  }
+  zeigeHeute();
   function zeigeSterne() { document.getElementById("sterne").textContent = S.sterne(); }
   function zeigeTon() {
     const b = document.getElementById("ton");

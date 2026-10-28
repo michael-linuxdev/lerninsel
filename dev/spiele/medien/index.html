@@ -158,7 +158,8 @@
   </div>
   <div class="intro"><span id="robo-klein"></span><p id="intro-text"></p></div>
   <div class="lektionen" id="lektionen"></div>
-  <p style="text-align:center;margin:16px"><a class="knopf haupt" id="robo-link" href="../robo/">🤖 Robo programmieren</a></p>
+  <p style="text-align:center;margin:16px" id="robo-zeile"><a class="knopf haupt" id="robo-link" href="../robo/">🤖 Robo programmieren</a></p>
+  <script>/* Robo-Programmieren ab Klasse 3 (NA-60) */ addEventListener("DOMContentLoaded", function () { const S = window.Spielwelt, st = S && S.stufe && (S.stufe() || {}).code; if (st && !["3", "4", "5"].includes(st)) { const z = document.getElementById("robo-zeile"); if (z) z.hidden = true; } });</script>
   <button class="knopf haupt fs-knopf" id="fs-zeigen" hidden>🪪 Meinen Führerschein ansehen</button>
 </section>
 

@@ -99,6 +99,12 @@
 
   function zeichneWeg() {
     $("sterne").textContent = S.sterne(); benno();
+    // Nach Können über die Klasse hinaus (NA-60): Wer alle Stationen dieses Weges geschafft hat, bekommt den nächsten Weg vorgeschlagen (freiwillig)
+    { const wk = $("weiter-klasse"), REIHE = ["k1", "k2", "k3", "k4", "k5"], naechster = REIHE[REIHE.indexOf(WEG) + 1];
+      const alle = ST.length > 0 && ST.every(st => bestes(st.id) > 0);
+      if (wk) { wk.hidden = !(alle && naechster && WEGE[naechster] && WEGE[naechster].length);
+        if (!wk.hidden) { wk.innerHTML = `🌟 Du hast alle Stationen geschafft! Wenn du magst, schau schon mal in den nächsten Weg.<br><button class="knopf haupt" id="weiter-klasse-los">Weiter: ${naechster === "k5" ? "Übergang 5" : naechster.slice(1) + ". Klasse"}</button>`;
+          $("weiter-klasse-los").addEventListener("click", () => { S.ton("tipp"); setzeWeg(naechster); zeichneWeg(); }); } } }
     // Umschalter zwischen den Wegen (Klasse 1 / Klasse 2)
     const kl = $("klasse");
     if (kl) {

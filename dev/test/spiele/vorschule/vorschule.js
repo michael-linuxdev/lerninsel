@@ -90,7 +90,7 @@
     let gewinn = Math.max(0, sterne - vorher); if (vorher === 3 && sterne === 3) gewinn = 1;
     d.fertig[a.id] = Math.max(vorher, sterne); speichere(d);
     if (gewinn) S.gibSterne(gewinn);
-    if (window.Charakter) Charakter.gib(FACH[a.bereich] || "sachkunde", 5);
+    if (window.Charakter) { Charakter.gib(FACH[a.bereich] || "sachkunde", 5); Charakter.ereignis("vorschule-spiel"); }
     if (window.Lernfunde) Lernfunde.merke({ fach: FUND[a.bereich] || "sachkunde", art: "neu", e: a.e, schluessel: "vs:" + a.id, text: `Vorschul-Rucksack: ${a.name}` });
     $("ende-titel").textContent = `${a.name}: geschafft!`;
     $("ende-sterne").innerHTML = [1, 2, 3].map(n => `<span class="${n <= sterne ? "" : "leer"}">⭐</span>`).join("");

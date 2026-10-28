@@ -725,6 +725,11 @@
         <div class="knoepfe"><button class="knopf haupt" id="erwachsen">👤 Als Erwachsener spielen</button><button class="knopf" id="kind-aendern">Ändern</button><button class="knopf" id="neu-laden">🔄 App neu laden</button></div>
         <p class="klein">„Als Erwachsener spielen“ öffnet für eine Stunde alles, ohne Sperren und Zeitgrenzen; dabei werden keine Sterne und kein Fortschritt fürs Kind gespeichert (bis „Beenden“ oder die App geschlossen wird). „App neu laden“ holt die neueste Version. Der Spielstand bleibt erhalten.</p>
       </div>
+      <div class="karte" id="vorlesen-karte">
+        <h2>🔊 Vorlesen</h2>
+        <p>Texte werden vorgelesen, wenn ${S.profil.name || "das Kind"} auf 🔊 tippt. So kann ${S.profil.name || "es"} selbst entscheiden, wann es zuhört.</p>
+        <label class="schalter-z"><input type="checkbox" id="vl-auto" ${(eltern().vorlesen || {}).auto ? "checked" : ""}> Automatisch vorlesen (wie früher: jede Sprechblase und Aufgabe wird sofort vorgelesen)</label>
+      </div>
       <div class="karte" id="geschenk-karte">
         <h2>🎁 Geschenk-Code einlösen</h2>
         <p>Mit einem Geschenk-Code der Lerninsel bekommt <b>${S.profil.name}</b> ein Paket am Steg der Insel (z. B. einen Tannenbaum fürs Zimmer). Jeder Code gilt einmal je Kind; gefälschte Codes werden erkannt.</p>
@@ -759,6 +764,7 @@
     if ($("tutorial-weg")) $("tutorial-weg").addEventListener("click", () => { TUTORIAL.forEach(e => window.Story.etappeFertig(e, true)); window.Story.setzeKapitel(1); S.meldung("Einführung übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
     geschenkKnoepfe();
+    if ($("vl-auto")) $("vl-auto").addEventListener("change", () => { const e = eltern(); e.vorlesen = { auto: $("vl-auto").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });
     if ($("fe-modus")) { const sp = () => { const e = eltern(); e.ferien = { modus: $("fe-modus").checked, weniger: $("fe-weniger").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); };
       $("fe-modus").addEventListener("change", sp); $("fe-weniger").addEventListener("change", sp); }
     zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); sorbischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();

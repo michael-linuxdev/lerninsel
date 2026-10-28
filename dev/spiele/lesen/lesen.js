@@ -6,6 +6,8 @@
 // Test-Haken: window.__lesen (ansicht, runde(modus), antworte(i), richtigIndex, aufgabeNr, stand, tafel, detail(b), texte, text(id), textAntworte(i), textRichtig).
 (function () {
   const S = window.Spielwelt, W = window.Wortschatz, SP = window.Sprache, C = window.Charakter, LK = window.Lernkartei;
+  // Tagesaufgabe „Laute und Silben“ (NA-60): nach 5 gelösten Lese-Aufgaben auf dieser Seite
+  let geuebtZahl = 0; const geuebt = () => { if (++geuebtZahl === 5 && C && C.ereignis) C.ereignis("lesen-runde"); };
   const $ = (id) => document.getElementById(id);
   const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const LOB = ["Richtig!", "Super!", "Genau!", "Toll!", "Prima!"];
@@ -210,7 +212,7 @@
     if (S.ton) S.ton("juhu");
     if (lauf.versuche === 0) {
       lauf.richtig++; kn(LZ[lauf.modus], true);
-      if (C) C.gib("deutsch", 1);   // zählt als Lernaufgabe (Zeit-Regel)
+      if (C) { C.gib("deutsch", 1); geuebt(); }   // zählt als Lernaufgabe (Zeit-Regel)
       const d = daten(), vorher = d.b[z.ziel] || 0;
       if (lauf.modus !== "gleich") { d.b[z.ziel] = Math.min(9, vorher + 1); S.speichere("lesen", d); }
       if (lauf.modus !== "gleich" && vorher === 0 && window.Lernfunde)
@@ -237,7 +239,7 @@
     if (S.ton) S.ton("juhu");
     if (lauf.versuche === 0) {
       lauf.richtig++; kn(LZ.silben, true);
-      if (C) C.gib("deutsch", 1);
+      if (C) { C.gib("deutsch", 1); geuebt(); }
       const d = daten(); d.w[z.wort] = Math.min(9, (d.w[z.wort] || 0) + 1); S.speichere("lesen", d);
       if (z.__karte && LK && LK.richtig("lesen", schritt) && window.Lernfunde)
         Lernfunde.merke({ fach: "deutsch", art: "gemeistert", e: "🌈", text: `Gemeistert: ${w.silben.join("-")} gelesen`, schluessel: "lesen-s:" + z.wort });
@@ -293,7 +295,7 @@
     b.classList.add("richtig");
     $("text-rueck").textContent = LOB[Math.floor(Math.random() * LOB.length)];
     if (S.ton) S.ton("juhu");
-    if (tlauf.versuche === 0) { tlauf.richtig++; kn(tlz, true); if (C) C.gib("deutsch", 1); }
+    if (tlauf.versuche === 0) { tlauf.richtig++; kn(tlz, true); if (C) { C.gib("deutsch", 1); geuebt(); } }
     setTimeout(() => {
       tlauf.f++;
       if (tlauf.f < tlauf.t.fragen.length) { textFrage(); return; }
@@ -441,7 +443,7 @@
     else { d.sp = d.sp || {}; d.sp[z.toUpperCase()] = Math.min(9, (d.sp[z.toUpperCase()] || 0) + (z === z.toLowerCase() ? 1 : 0)); }
     S.speichere("lesen", d);
     spur.fertig++; kn(LZ.spuren, true);
-    if (C) C.gib("deutsch", 1);
+    if (C) { C.gib("deutsch", 1); geuebt(); }
     const lob = LOB[Math.floor(Math.random() * LOB.length)];
     $("spuren-rueck").textContent = spur.modus === "sas" ? `${lob} ${z.length > 1 ? "Ein schön verbundenes Wort!" : "Das ist ein " + z + "."}` : `${lob} Das ist ${z}.`;
     if (S.ton) S.ton("juhu");
@@ -511,7 +513,7 @@
     if (S.ton) S.ton("juhu");
     if (leg.fehler === 0) {
       leg.richtig++; kn(LZ.legen, true);
-      if (C) C.gib("deutsch", 1);
+      if (C) { C.gib("deutsch", 1); geuebt(); }
       const d = daten(); d.sw = d.sw || {}; d.sw[z.wort] = Math.min(9, (d.sw[z.wort] || 0) + 1); S.speichere("lesen", d);
       if (z.__karte && LK && LK.richtig("lesen", { typ: "schreibwort", wort: z.wort }) && window.Lernfunde)
         Lernfunde.merke({ fach: "deutsch", art: "gemeistert", e: "🧩", text: `Gemeistert: ${w.de} geschrieben`, schluessel: "legen:" + z.wort });

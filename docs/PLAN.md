@@ -1887,3 +1887,22 @@ Tagesaufgaben und Startseite sind für alle Klassen gleich; Englisch steht schon
   `wiederholt` und `luecken` auf.
 - Test `schuljahrwechsel`.
 - **Nächstes:** NA-60 Altersgerechte Erfahrung, dann Insel-Garten.
+
+### Stand 30.10.2026, NA-60 Altersgerechte Erfahrung (Teil 1)
+- **Vorlesen nur auf Knopfdruck** (Entscheidung des Auftraggebers, ersetzt das automatische Vorlesen): zentral in `Sprache.sprich` – gesprochen wird nur nach
+  dem Antippen eines Vorlese-Knopfs (🔊, „Vorlesen“, „Anhören“, „Nochmal …“) und in der Kette danach. 🔊 in Szenen liest jetzt die Blase vor (statt stumm
+  zu schalten). Alte Variante als Eltern-Schalter „Automatisch vorlesen“ (Kinder & Gerät, Standard aus).
+- **Vorschule: eigene Startseite** mit großen Bild-Türen ohne Beschreibungstexte: Insel, Zahlen (Mathe), Laute und Reime (Lesen, neu als Tür), Vorschul-
+  Rucksack (jetzt mit Robo), Atelier. Deutsch, Sachunterricht, Englisch, Sorbisch, Gefühle und Schach sind dort ausgeblendet (über Mathe/Lesen/Rucksack erreichbar
+  ist der Vorschul-Stoff vollständig; Sorbisch für Vorschulkinder ggf. später).
+- **Tagesaufgaben je Klasse:** Vorschule Rucksack + Zahlen-Station + Laute/Silben; Kl. 1 Laute/Silben + Zahlen-Station + Wechselaufgabe; Kl. 2 wie bisher;
+  Kl. 3–4 Mathe-Training + Wort des Tages + Englisch. Ferien ersetzen weiter das neue Wort durch die Ferien-Idee.
+- **Türen nach Klasse:** Englisch erst ab Kl. 3 (oder mit Eltern-Wahl „ab Klasse 1“); Robo-Programmieren ab Kl. 3; bei ungerader Türzahl ist die letzte
+  Tür doppelt breit.
+- **„Heute für dich“** auf der Startseite (neben dem Namen): Lücken-Check nach dem Überspringen → nächste offene Tagesaufgabe → Fach „gerade in der Schule“ →
+  Echte-Welt-Idee.
+- **Über die Klasse hinaus nach Können:** Matheweg komplett → Vorschlag für den nächsten Weg (freiwillig).
+- **Offen (Teil 2):** Ton und Story nach Alter (kürzere Szenen für Jüngere – braucht eigene Kurzfassungen, weil Szenen an festen Blasen warten), mehr Bilder/
+  kürzere Texte in Kl. 1 bzw. mehr Text ab Kl. 3 inhaltlich, gezielte Lücken nach Wiederholen in „Heute für dich“; Spiel-Schwierigkeit nach Alter kommt mit
+  den neuen Insel-Spielen.
+- Test `altersgerecht`; `dashboard` angepasst (Kl. 2 drei Lern-Türen, Vorschule drei, Kl. 3 vier).

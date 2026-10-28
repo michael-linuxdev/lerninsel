@@ -30,13 +30,34 @@
   }
   ["pointerdown", "touchend"].forEach(ev => addEventListener(ev, entsperren, { capture: true, passive: true }));
 
+  // Vorlesen nur auf Knopfdruck (NA-60, Entscheidung des Auftraggebers): Gesprochen wird nur, wenn das Kind gerade (≤ 2,5 s) einen Vorlese-Knopf
+  // angetippt hat (🔊/🔈 oder Beschriftung „Vorlesen“, „Anhören“, „Nochmal …“, „hören“, data-vorlesen), oder in einer Kette danach (fertig-Rückruf).
+  // Eltern können das alte automatische Vorlesen einschalten: eltern.vorlesen.auto = true. Gesperrte Aufrufe rufen „fertig“ sofort auf.
+  let letzterKnopf = 0, inKette = false;
+  const VORLESE_TEXT = /vorles|anhör|hören|nochmal|vorsprech|abspielen|aussprache/i;
+  const istVorleseKnopf = (el) => {
+    const b = el && el.closest && el.closest("button, a, [role=button], [data-vorlesen], .wort, .karte-wort");
+    if (!b) return false;
+    if (b.hasAttribute("data-vorlesen")) return true;
+    const t = (b.getAttribute("aria-label") || "") + " " + (b.getAttribute("title") || "") + " " + (b.textContent || "").slice(0, 40);
+    return /[🔊🔈🔉]/u.test(t) || VORLESE_TEXT.test(t);
+  };
+  addEventListener("pointerdown", (e) => { if (istVorleseKnopf(e.target)) letzterKnopf = Date.now(); }, { capture: true, passive: true });
+  addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && istVorleseKnopf(document.activeElement)) letzterKnopf = Date.now(); }, { capture: true });
+  const automatisch = () => { try { const e = window.Spielwelt && window.Spielwelt.lade("eltern"); return !!(e && e.vorlesen && e.vorlesen.auto); } catch (x) { return false; } };
+  const darf = () => automatisch() || inKette || Date.now() - letzterKnopf < 2500 || !!window.__vorlesenImmer;
+
   const Sprache = {
+    // für Seiten: Ist automatisches Vorlesen erlaubt? (sonst nur auf Knopfdruck)
+    automatisch,
+    // ein Knopf, der vorlesen soll, aber keine passende Beschriftung hat, kann das hier melden
+    knopf() { letzterKnopf = Date.now(); },
     verfuegbar() { return !!synth; },
     hat(lang) { lade(); return !!stimmeFuer(lang) || (apple && stimmen.some(v => (v.lang || "").toLowerCase().startsWith(lang.slice(0, 2).toLowerCase()))); },
     stimmeName(lang) { lade(); const v = stimmeFuer(lang); return v ? `${v.name} (${v.lang})` : "keine eigene, Standardstimme des Geräts"; },
     stopp() { if (synth && (synth.speaking || synth.pending)) { synth.cancel(); abgebrochen = Date.now(); } },
     sprich(text, lang = "de-DE", fertig) {
-      if (!synth || !text) { if (fertig) fertig(); return; }
+      if (!synth || !text || !darf()) { if (fertig) fertig(); return; }
       lade();
       const u = new SpeechSynthesisUtterance(text);
       const v = stimmeFuer(lang);
@@ -45,7 +66,7 @@
       u.rate = apple ? 0.95 : (lang.startsWith("de") ? 0.88 : 0.9);
       u.pitch = 1.05;
       u.volume = 1;
-      const ende = () => { const i = merker.indexOf(u); if (i >= 0) merker.splice(i, 1); if (fertig) fertig(); };
+      const ende = () => { const i = merker.indexOf(u); if (i >= 0) merker.splice(i, 1); if (fertig) { inKette = true; try { fertig(); } finally { inKette = false; } } };
       u.onend = ende; u.onerror = ende;
       merker.push(u);
       if (synth.paused) synth.resume();

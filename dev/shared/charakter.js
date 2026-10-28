@@ -156,18 +156,28 @@
     const m = S.lade("medien"), dreiD = S.offen(m && m.fuehrerschein);
     const auswahl = WECHSEL.filter(w => !w.dreiD || (dreiD && !S.MINISPIELE_AUS));   // Minispiele ausgeblendet → keine Aufgabe dafür
     const dritte = auswahl[Math.floor(r() * auswahl.length)];
-    const liste = [
-      { id: "training", emoji: "🧮", titel: "Mathe-Training", text: "8 Aufgaben – genau die, die noch schwer sind.", ereignis: "training-fertig", skill: "mathe", link: "../mathe/?training=1" },
+    // Tagesaufgaben je Klasse (NA-60): Vorschule aus dem Rucksack, Kl. 1 Laute/Silben + Rechnen bis 20, Kl. 2 wie bisher, Kl. 3/4 mit Englisch
+    const st = ((S.stufe && S.stufe()) || {}).code || "2", ferien = S.ferienModus && S.ferienModus();
+    const A = {
+      training: { id: "training", emoji: "🧮", titel: "Mathe-Training", text: "8 Aufgaben – genau die, die noch schwer sind.", ereignis: "training-fertig", skill: "mathe", link: "../mathe/?training=1" },
+      wort: { id: "wort", emoji: "📖", titel: "Wort des Tages", text: "Lerne ein neues Wort und löse 5 Wort-Rätsel.", ereignis: "wort-fertig", skill: "deutsch", link: "#wort" },
       // In den Ferien (NA-61): statt neuem Wort etwas Echtes draußen – Wiederholen statt neuem Stoff
-      S.ferienModus && S.ferienModus() ? { id: "echtewelt", emoji: "🌍", titel: "Ferien-Idee", text: "Probiere eine Echte-Welt-Idee aus – draußen oder mit deiner Familie.", ereignis: "echtewelt", skill: "entdecker", link: "#echte-welt" }
-        : { id: "wort", emoji: "📖", titel: "Wort des Tages", text: "Lerne ein neues Wort und löse 5 Wort-Rätsel.", ereignis: "wort-fertig", skill: "deutsch", link: "#wort" },
-      dritte
-    ];
+      ferien: { id: "echtewelt", emoji: "🌍", titel: "Ferien-Idee", text: "Probiere eine Echte-Welt-Idee aus – draußen oder mit deiner Familie.", ereignis: "echtewelt", skill: "entdecker", link: "#echte-welt" },
+      rucksack: { id: "rucksack", emoji: "🎒", titel: "Vorschul-Rucksack", text: "Spiel ein Spiel aus deinem Rucksack.", ereignis: "vorschule-spiel", skill: "entdecker", link: "../vorschule/" },
+      zahlen: { id: "zahlen", emoji: "🔢", titel: "Zahlen-Station", text: "Spiele eine Station auf dem Matheweg.", ereignis: "mathe-runde", skill: "mathe", link: "../mathe/" },
+      laute: { id: "laute", emoji: "🔤", titel: "Laute und Silben", text: "Löse 5 Aufgaben mit Lauten, Silben oder Wörtern.", ereignis: "lesen-runde", skill: "deutsch", link: "../lesen/" },
+      englisch: { id: "englisch", emoji: "🦜", titel: "Englisch mit Paula", text: "Mach eine Englisch-Lektion (auch eine von früher).", ereignis: "englisch-lektion", skill: "englisch", link: "../englisch/" }
+    };
+    const englischDa = ["3", "4", "5"].includes(st) || ((S.lade("eltern") || {}).englisch || {}).ab === "1";
+    const liste = st === "vs" ? [A.rucksack, A.zahlen, ferien ? A.ferien : A.laute]
+      : st === "1" ? [A.laute, A.zahlen, ferien ? A.ferien : dritte]
+      : ["3", "4", "5"].includes(st) && englischDa ? [A.training, ferien ? A.ferien : A.wort, A.englisch]
+      : [A.training, ferien ? A.ferien : A.wort, dritte];
     return liste.map(a => Object.assign({}, a, { erledigt: d.tag.erledigt.includes(a.id) }));
   }
 
   // Haustier: Leckerli für Spiele, Wärme fürs Ei bei Tagesaufgaben
-  const LECKERLI = { "training-fertig": 2, "wort-fertig": 2, "mathe-runde": 1, "deutsch-kapitel": 1, "tablet-lektion": 1, "ballon-runde": 1, "insel-schatz": 1, "sachkunde-thema": 1, "sorbisch-lektion": 1, "englisch-lektion": 1 };
+  const LECKERLI = { "vorschule-spiel": 1, "lesen-runde": 1, "echtewelt": 1, "training-fertig": 2, "wort-fertig": 2, "mathe-runde": 1, "deutsch-kapitel": 1, "tablet-lektion": 1, "ballon-runde": 1, "insel-schatz": 1, "sachkunde-thema": 1, "sorbisch-lektion": 1, "englisch-lektion": 1 };
   function tierGib(leckerli, waerme) {
     const t = S.lade("tier"); if (!t || !t.phase) return null;
     if (leckerli && t.phase === "tier") t.leckerli = Math.min(99, (t.leckerli || 0) + leckerli);

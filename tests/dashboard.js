@@ -27,20 +27,23 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   }
 
   // ---------- Startseite ----------
-  for (const [stufe, sorbisch, n] of [["2", false, 4], ["vs", true, 6]]) {
+  // NA-60: Kl. 2 ohne Englisch (erst ab Kl. 3) → Mathe, Deutsch, SU; Vorschule eigene Startseite → Zahlen, Laute und Reime, Rucksack (Sorbisch dort nicht)
+  for (const [stufe, sorbisch, n] of [["2", false, 3], ["vs", true, 3], ["3", false, 4]]) {
     for (const [breite, hoehe, art] of [[1180, 820, "iPad quer"], [820, 1180, "iPad hoch"], [390, 760, "Handy"]]) {
       const { ctx, p } = await kind(stufe, { breite, hoehe, name: stufe === "vs" ? "Maximilian" : "Mira" });
       if (sorbisch) { await p.evaluate(() => { const e = Spielwelt.lade("eltern") || {}; e.sorbisch = { an: true }; Spielwelt.speichere("eltern", e); }); await p.reload(); }
       await p.waitForTimeout(500);
       const m = await masse(p);
       const t = await p.evaluate(() => {
-        const tueren = [...document.querySelectorAll(".tuer:not([hidden])")], r = (e) => e.getBoundingClientRect();
-        return { lern: document.querySelectorAll("#lernen .tuer:not([hidden])").length, alle: tueren.length, sichtbar: tueren.every(x => r(x).bottom <= innerHeight + 1 && r(x).height >= 100),
-          begleiter: [...document.querySelectorAll(".tuer:not([hidden]) .begleiter")].filter(b => b.querySelector("svg") && b.getBoundingClientRect().width > 40).length,
+        const da = (t) => !t.hidden && getComputedStyle(t).display !== "none";
+        const tueren = [...document.querySelectorAll(".tuer")].filter(da), r = (e) => e.getBoundingClientRect();
+        return { lern: [...document.querySelectorAll("#lernen .tuer")].filter(da).length, ohneBegleiter: tueren.filter(t => !t.classList.contains("insel") && !t.querySelector(".begleiter svg")).map(t => t.className),
+          heute: (document.getElementById("heute-fuer-dich") || {}).textContent || "", alle: tueren.length, sichtbar: tueren.every(x => r(x).bottom <= innerHeight + 1 && r(x).height >= 100),
           name: document.querySelectorAll("#name span").length, farbig: new Set([...document.querySelectorAll("#name span")].map(s => s.style.color)).size };
       });
-      erwarte(t.begleiter === n + 3 - (stufe === "vs" ? 1 : 0), `Startseite ${art}: Lernbegleiter auf den Türen (${t.begleiter})`);
-      erwarte(m.w <= m.iw + 1 && t.lern === n && t.name > 3 && t.farbig > 1, `Startseite ${art} (${stufe === "vs" ? "Vorschule + Sorbisch" : "Kl. 2"}): ${n} Lern-Türen, bunter Name, keine Scrollleiste`);
+      erwarte(!t.ohneBegleiter.length, `Startseite ${art}: jede Tür (außer der Insel) hat ihren Lernbegleiter${t.ohneBegleiter.length ? " – fehlt: " + t.ohneBegleiter.join(", ") : ""}`);
+      erwarte(/Heute für dich/.test(t.heute), `Startseite ${art}: „Heute für dich“ (${t.heute.replace(/\s+/g, " ").trim()})`);
+      erwarte(m.w <= m.iw + 1 && t.lern === n && t.name > 3 && t.farbig > 1, `Startseite ${art} (${stufe === "vs" ? "Vorschule + Sorbisch" : "Kl. " + stufe}): ${n} Lern-Türen, bunter Name, keine Scrollleiste`);
       if (art !== "Handy") erwarte(m.h <= m.ih + 1 && t.sichtbar, `Startseite ${art}: alles auf einen Blick, alle ${t.alle} Türen ohne Scrollen sichtbar (Höhe ${m.h})`);
       await bild(p, `dashboard-start-${stufe}-${art.replace(" ", "-")}`);
       if (art === "iPad quer" && stufe === "2") {

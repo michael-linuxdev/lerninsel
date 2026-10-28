@@ -340,6 +340,7 @@
   let start = location.hash.slice(1); if (!REITER.includes(start)) { try { start = sessionStorage.getItem("ich-reiter") || "heute"; } catch (e) { start = "heute"; } }
   reiter(start);
   if (location.hash === "#wort") starteWort();
+  if (location.hash === "#echte-welt") setTimeout(() => { const k = document.getElementById("ew-karte"); if (k && !k.hidden) k.scrollIntoView({ block: "center" }); }, 300);
   // Ferien-Aufgabe „Echte Welt“: zur Karte springen (NA-61)
   document.addEventListener("click", (e) => { const l = e.target.closest('a[href="#echte-welt"]'); if (!l) return; e.preventDefault(); const k = document.getElementById("ew-karte"); if (k) k.scrollIntoView({ behavior: "smooth", block: "center" }); });
   window.__ich = { zeichne, starteWort, reiter, get quiz() { return quiz; } };
