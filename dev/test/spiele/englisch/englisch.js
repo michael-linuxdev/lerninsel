@@ -61,6 +61,19 @@
       }
       if (nr === schule) $("lektionen").prepend(g); else $("lektionen").appendChild(g);   // „gerade in der Schule“ steht oben
     });
+    // Lieder und Reime zum Mitsingen (shared/lieder.js), sobald es Lektionen gibt
+    if (sicht.length && window.Lieder) {
+      const g = document.createElement("section"); g.className = "en-gruppe lieder-gruppe";
+      g.innerHTML = `<h3>🎵 Songs and rhymes – Lieder und Reime</h3><div class="lektionen"></div>`;
+      Lieder.alle("en").forEach(l => {
+        const b = document.createElement("button"); b.className = "lek"; b.style.setProperty("--f", "#FFF3C4"); b.dataset.lied = l.id;
+        b.innerHTML = `<span class="emoji">${l.zeilen.every(z => z[1]) ? "🎵" : "🗣️"}</span><span>${l.titel}</span><span class="stern-reihe">${(daten().lieder || {})[l.id] ? "✔️" : ""}</span>`;
+        b.addEventListener("click", () => { S.ton("tipp"); starte(-1, { id: "lied-" + l.id, lied: l.id, name: l.titel, e: "🎵", farbe: "#B5701A", grund: "#FFF3C4", lz: ["en.hv.01"],
+          schritte: [{ typ: "lied", id: l.id, ru: l.ru ? `Пой вместе: ${l.ru}` : "" }] }); });
+        g.querySelector(".lektionen").appendChild(b);
+      });
+      $("lektionen").appendChild(g);
+    }
   }
 
   // ---------- Schuljahr Englisch: „Zeig, was du kannst“ je Lernbereich ----------
@@ -111,10 +124,20 @@
       .concat([{ typ: "sag", text: k.ende.de, ru: k.ende.ru, letzte: true }]);
   }
 
+  // Lernkartei (shared/lernkartei.js): Wörter, die letztes Mal knifflig waren, kommen nach der Begrüßung als kurze Wiederholung
+  // (falsch → morgen, dann nach 3 und 7 Tagen; Wiederholungen zählen nicht gegen die Sterne).
+  function mitWiederholung(schritte) {
+    if (!window.Lernkartei) return schritte;
+    const karten = Lernkartei.faellige("englisch", 3).map(s => s.typ === "hoeren" && !hatEnglisch() ? Object.assign({}, s, { typ: "lesen" }) : s);
+    if (!karten.length) return schritte;
+    const intro = { typ: "sag", text: "Kurz wiederholen: Diese Wörter waren letztes Mal knifflig.", ru: "Коротко повторим: эти слова в прошлый раз были трудными." };
+    return [schritte[0], intro, ...karten, ...schritte.slice(1)];
+  }
+
   let lauf = null;
   function starte(i, lernstand) {
     const k = lernstand || L[i];
-    lauf = { i, k, schritte: k.lernstand ? k.schritte : baue(k), pos: 0, fehler: 0, falsch: new Set() };
+    lauf = { i, k, schritte: k.schritte ? k.schritte : mitWiederholung(baue(k)), pos: 0, fehler: 0, falsch: new Set() };
     document.body.style.setProperty("--grund", k.grund); document.body.style.setProperty("--akzent", k.farbe);
     $("lektion-name").textContent = k.name;
     $("paula-gross").innerHTML = F.papagei("papagei");
@@ -167,6 +190,13 @@
         A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => antwort(b, opts[+b.dataset.n] === s.wort, s.wort.en, `${s.wort.de} = ${s.wort.en}`)));
         break;
       }
+      case "lied": {   // Lied oder Reim zum Mitsingen/Mitsprechen (shared/lieder.js), ohne Bewertung
+        const l = window.Lieder && Lieder.finde(s.id), singen = l && l.zeilen.every(z => z[1]);
+        blase(singen ? "Sing mit! Die leuchtenden Silben zeigen, wo wir gerade sind." : "Sprich mit! Hör zu und sag die Zeilen nach.", singen ? "Sing mit!" : "Sprich mit!", s.ru);
+        A.innerHTML = `<div id="lied-platz"></div>` + weiterKnopf(); aufWeiter();
+        if (l) Lieder.zeige($("lied-platz"), s.id);
+        break;
+      }
       case "wahl": {
         const opts = mische(s.optionen.map((t, n) => ({ t, ok: n === 0 })));
         blase(s.frage, s.frage, s.ru);
@@ -211,6 +241,9 @@
       lauf.gesperrt = true;
       if (lauf.versuche === 0 && window.Charakter) Charakter.gib("englisch", 1);
       if (lauf.versuche === 0 && window.Koennen) Koennen.melde(lz, true);
+      const sk = lauf.schritte[lauf.pos];
+      if (lauf.versuche === 0 && sk && sk.__karte && window.Lernkartei && Lernkartei.richtig("englisch", sk) && window.Lernfunde && sk.wort)
+        Lernfunde.merke({ fach: "englisch", art: "gemeistert", e: "💪", text: `${sk.wort.en} = ${sk.wort.de} – jetzt weißt du es!`, schluessel: "enk:" + sk.wort.en, melden: true });
       if (knopf) knopf.classList.add("richtig");
       document.querySelectorAll("#aufgabe .option").forEach(o => o.disabled = true);
       h.className = "hinweis gut"; h.innerHTML = `${LOB[Math.floor(Math.random() * LOB.length)]}${erklaerung ? ` <span class="erklaerung">${erklaerung}</span>` : ""}`;
@@ -220,14 +253,24 @@
       return;
     }
     lauf.versuche++;
-    if (lauf.versuche === 1) { lauf.fehler++; if (window.Koennen) Koennen.melde(lz, false); const sj = lauf.schritte[lauf.pos]; if (sj && sj.__kap) lauf.falsch.add(sj.__kap); }
+    if (lauf.versuche === 1) { const sj = lauf.schritte[lauf.pos]; if (!(sj && sj.__karte)) lauf.fehler++; if (window.Koennen) Koennen.melde(lz, false); if (sj && sj.__kap) lauf.falsch.add(sj.__kap);
+      if (window.Lernkartei && sj && !lauf.k.lernstand) Lernkartei.falsch("englisch", sj); }
     S.ton("nein"); if (knopf) { knopf.classList.add("falsch"); knopf.disabled = true; }
     h.className = "hinweis nein"; h.textContent = "Fast! Try again – versuch es nochmal.";
   }
-  function weiter() { SP.stopp(); lauf.pos++; schritt(); }
+  function weiter() { SP.stopp(); if (window.Lieder) Lieder.stopp(); lauf.pos++; schritt(); }
 
   function beende() {
     if (lauf.k.lernstand) return beendeLernstand();
+    if (lauf.k.lied) {   // Lied aus „Songs and rhymes“: kein Test, nur Mitmachen
+      const d = daten(); d.lieder = d.lieder || {}; const neu = !d.lieder[lauf.k.lied]; d.lieder[lauf.k.lied] = 1; speichere(d);
+      if (window.Charakter) Charakter.gib("englisch", 2);
+      if (neu && window.Lernfunde) Lernfunde.merke({ fach: "englisch", art: "lied", e: "🎵", schluessel: "enlied:" + lauf.k.lied, text: `Englisch: „${lauf.k.name}“ mitgesungen` });
+      $("ende-titel").textContent = `${lauf.k.name}: well done!`; $("ende-sterne").innerHTML = "🎵"; $("ende-text").textContent = "Schön mitgesungen! Sing es heute noch einmal für jemanden.";
+      $("ende-gewinn").textContent = ""; const kn = $("ende-knoepfe"); kn.innerHTML = "";
+      const b = document.createElement("button"); b.className = "knopf haupt"; b.textContent = "Zur Übersicht"; b.addEventListener("click", () => { S.ton("tipp"); zeige("liste"); zeichneListe(); }); kn.appendChild(b);
+      zeige("ende"); S.ton("juhu"); return;
+    }
     const { k, fehler } = lauf, sterne = fehler <= 1 ? 3 : fehler <= 3 ? 2 : 1, vorher = bestes(k.id);
     let gewinn = Math.max(0, sterne - vorher); if (vorher === 3 && sterne === 3) gewinn = 1;
     const d = daten(); d.lektionen[k.id] = Math.max(vorher, sterne); speichere(d);
@@ -250,5 +293,5 @@
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Deutsche Erklärungen werden vorgelesen." : "Deutsche Erklärungen werden nicht vorgelesen. Englische Wörter hörst du weiter."); });
 
   zeichneListe();
-  window.__englisch = { starte, starteLernstand, lernstandLektionen, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; }, sichtbar: () => L.filter(sichtbar).map(k => k.id) };
+  window.__englisch = { lied: (id) => { const b = document.querySelector(`[data-lied="${id}"]`); if (b) b.click(); }, starte, starteLernstand, lernstandLektionen, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; }, sichtbar: () => L.filter(sichtbar).map(k => k.id) };
 })();

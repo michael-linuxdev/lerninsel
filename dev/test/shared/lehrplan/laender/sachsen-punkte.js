@@ -17,7 +17,7 @@
     englisch: {
       "3": {
         1: [ // Me, my family and my friends
-          ["sn.en3.mf.01", "Englisch als neue Sprache erleben: Klang, Rhythmus, Lieder und Reime", "3", ["englisch:en-hello", "englisch:en-party"], "teil"],
+          ["sn.en3.mf.01", "Englisch als neue Sprache erleben: Klang, Rhythmus, Lieder und Reime", "3", ["englisch:en-hello", "englisch:en-numbers", "englisch:en-year", "englisch:en-party"], "ja"],
           ["sn.en3.mf.02", "Englische Wörter im Alltag entdecken (Computer, Essen, Kleidung, Spiele)", "3", ["englisch:en-everywhere"], "ja"],
           ["sn.en3.mf.03", "Begrüßen, verabschieden, sich vorstellen", "3", ["englisch:en-hello"], "ja"],
           ["sn.en3.mf.04", "Über sich, Familie und Freunde Auskunft geben: Name, Alter, Geschwister", "3", ["englisch:en-family", "englisch:en-numbers2"], "ja"],
@@ -302,7 +302,7 @@
           ["sn.de12.sc.01", "Vorläuferfähigkeiten: Auge-Hand-Koordination, Formen und Raum-Lage erkennen, Laute hören", "1", ["lesen:spuren", "lesen:anlaute", "werkstatt:w-laute"], "ja"],
           ["sn.de12.sc.02", "Gute Sitz- und Schreibhaltung, Stifthaltung (auch für Linkshänder), passende Schreibgeräte", "1", ["echtewelt:schreibhaltung"], "aussen"],
           ["sn.de12.sc.03", "Druckschrift als erste Schrift schreiben", "1", ["lesen:spuren", "lesen:legen"], "ja"],
-          ["sn.de12.sc.04", "Schulausgangsschrift lernen und zunehmend flüssig schreiben; Schrift prüfen (Größe, Abstände, Form)", "2", ["echtewelt:schreibschrift"], "aussen"],
+          ["sn.de12.sc.04", "Schulausgangsschrift lernen und zunehmend flüssig schreiben; Schrift prüfen (Größe, Abstände, Form)", "2", ["lesen:schreibschrift", "echtewelt:schreibschrift"], "aussen"],
           ["sn.de12.sc.05", "Laute und Buchstaben zuordnen: Selbstlaute, Umlaute, Zwielaute, Mitlaute; Laute im Wort finden", "1", ["lesen:anlaute", "lesen:legen", "werkstatt:w-laute"], "ja"],
           ["sn.de12.sc.06", "Zweisilber: offene und geschlossene Silbe, ie-Schreibung, doppelte Mitlaute", "2", ["werkstatt:w-silbe-lang-kurz"], "ja"],
           ["sn.de12.sc.07", "Wortstamm bleibt gleich: verlängern und ableiten (Ball – Bälle, Berg – Berge)", "2", ["werkstatt:w-verlaengern", "werkstatt:w-detektiv"], "ja"],
@@ -378,7 +378,7 @@
           ["sn.de3.sz.12", "Nach dem Zuhören: gezielt nachfragen, wiedergeben, versteckte Informationen finden, Rätsel lösen", "3", ["werkstatt:w-zuhoeren-profi"], "ja"]
         ],
         2: [
-          ["sn.de3.sc.01", "Individuelle Handschrift: automatisiert, leserlich, flüssig", "3", ["echtewelt:schreibschrift"], "aussen"],
+          ["sn.de3.sc.01", "Individuelle Handschrift: automatisiert, leserlich, flüssig", "3", ["lesen:schreibschrift", "echtewelt:schreibschrift"], "aussen"],
           ["sn.de3.sc.02", "Seiten gestalten: Schriftgröße, Ränder, Absätze; über die eigene Schrift sprechen", "3", ["werkstatt:w-digital-schreiben"], "ja"],
           ["sn.de3.sc.03", "Doppelte Mitlaute, ck und tz", "3", ["werkstatt:w-kurz-lang"], "ja"],
           ["sn.de3.sc.04", "Silbentrennendes h, doppelte Selbstlaute (Merkwörter)", "3", ["werkstatt:w-merkwoerter3"], "ja"],
@@ -870,7 +870,7 @@
           ["sn.mu12.1.02", "Grundton spüren, Melodiebausteine wiedererkennen", "1/2", ["atelier:musik"], "teil"],
           ["sn.mu12.1.03", "Rhythmus und Melodie beim Sprechen: Verse rhythmisieren", "1/2", ["sachkunde:mu-rhythmus", "lesen:silben"], "ja"],
           ["sn.mu12.1.04", "Grundlagen des Singens: Haltung, Atmung, Tonbildung", "1/2", ["sachkunde:mu-stimme"], "ja"],
-          ["sn.mu12.1.05", "Im Klassengesang singen, Kanon-Vorübungen, etwa sechs Lieder auswendig", "1/2", ["echtewelt:singen"], "aussen"]
+          ["sn.mu12.1.05", "Im Klassengesang singen, Kanon-Vorübungen, etwa sechs Lieder auswendig", "1/2", ["atelier:lieder", "echtewelt:singen"], "aussen"]
         ],
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
           ["sn.mu12.2.01", "Klänge erzeugen, Klangeigenschaften und Klangfarben untersuchen", "1/2", ["sachkunde:mu-instrumente1", "atelier:musik"], "ja"],
@@ -921,7 +921,7 @@
         1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
           ["sn.mu4.1.01", "Mit Melodie- und Rhythmusbausteinen Musik erfinden", "4", ["atelier:musik", "sachkunde:mu-rhythmus4"], "ja"],
           ["sn.mu4.1.02", "Singen: Haltung, Atmung, Tonraum, zweistimmige Lieder", "4", ["sachkunde:mu-stimme", "echtewelt:singen"], "aussen"],
-          ["sn.mu4.1.03", "Lieder verschiedener Zeiten und Kulturen, auch englische, etwa zehn auswendig", "4", ["echtewelt:singen", "englisch:en-party"], "aussen"]
+          ["sn.mu4.1.03", "Lieder verschiedener Zeiten und Kulturen, auch englische, etwa zehn auswendig", "4", ["atelier:lieder", "echtewelt:singen", "englisch:en-year"], "aussen"]
         ],
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
           ["sn.mu4.2.01", "Improvisieren, Themen verklanglichen", "4", ["atelier:musik"], "ja"],

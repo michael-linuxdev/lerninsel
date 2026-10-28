@@ -1,4 +1,4 @@
-// Lernkartei für Deutsch und Sachunterricht (Mathe hat ihre eigene in spiele/mathe/mathe.js, gleiche Abstände).
+// Lernkartei für Deutsch, Sachunterricht (und weitere Fächer), Englisch und Sorbisch (Mathe hat ihre eigene in spiele/mathe/mathe.js, gleiche Abstände).
 // Beim ersten Fehler wird der Schritt (reine Daten aus geschichte.js / werkstatt.js / themen.js) gemerkt.
 // Fällige Karten kommen als kurze Wiederholung an den Anfang des nächsten Kapitels/Themas:
 // falsch → morgen, dann nach 3 und 7 Tagen; dreimal (an verschiedenen Tagen) richtig = gemeistert → goldener Lernfund.
@@ -12,8 +12,10 @@
   // Nur Schritte, die ohne ihr Kapitel verständlich sind
   const GEEIGNET = { deutsch: ["artikel", "bild", "hoeren", "wort", "luecke", "wo", "wortart", "verlaengern", "silben", "satz"], sachkunde: ["wahl", "daumen"],
     lesen: ["anlaut", "silbenwort", "schreibwort"] };
+  GEEIGNET.englisch = GEEIGNET.sorbisch = ["lesen", "deutsch", "hoeren", "wahl"];   // Wortschritte aus spiele/englisch/ und spiele/sorbisch/ (29.10.2026)
   ["kunst", "musik", "werken", "sport", "ethik"].forEach(f => GEEIGNET[f] = GEEIGNET.sachkunde);   // weitere Fächer auf der Sachunterricht-Seite (?fach=)   // lesen: spiele/lesen/ (NA-30/31), Schritte { typ: "anlaut", wort, ziel } und { typ: "silbenwort", wort }
-  const schluessel = (s) => [s.typ, s.wort, s.frage, s.satz, s.sag].filter(Boolean).join("|").slice(0, 120);
+  const wortVon = (w) => w && typeof w === "object" ? (w.en || w.so || w.de) : w;   // Englisch/Sorbisch: Wort als Objekt { en|so, de, … }
+  const schluessel = (s) => [s.typ, wortVon(s.wort), s.frage, s.satz, s.sag].filter(Boolean).join("|").slice(0, 120);
 
   function lade() { return Object.assign({ deutsch: [], sachkunde: [] }, S.lade("lernkartei") || {}); }
   const speichere = (d) => S.speichere("lernkartei", d);

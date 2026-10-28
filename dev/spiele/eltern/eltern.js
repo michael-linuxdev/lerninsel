@@ -221,7 +221,7 @@
     const summe = (k) => tage.reduce((n, t) => n + (t[k] || 0), 0), lernTage = tage.filter(t => t.lern > 0 || t.aufgaben > 0).length;
     const max = Math.max(10, ...tage.map(t => Math.max(t.lern, t.spiel)));
     const faelligN = (mathe.fehler || []).filter(f => !f.faellig || f.faellig <= heuteIso()).length +
-      (window.Lernkartei ? Lernkartei.anzahlFaellig("deutsch") + Lernkartei.anzahlFaellig("sachkunde") : 0);
+      (window.Lernkartei ? ["deutsch", "sachkunde", "englisch", "sorbisch"].reduce((n, f) => n + Lernkartei.anzahlFaellig(f), 0) : 0);
     const tipps = [];
     if (lernTage < 4) tipps.push("Lieber jeden Tag 10 Minuten als einmal lange: Eine feste Lernzeit hilft, z. B. direkt nach dem Mittagessen.");
     schwach.slice(0, 2).forEach(o => tipps.push(`Übt gemeinsam „${o.s.name}“: ${ALLTAG[o.s.id] || "im Alltag kleine Rechenaufgaben stellen"}.`));
@@ -448,9 +448,13 @@
   }
   // Deutsch (Paket D1): eigene Texte lesen, Aufnahmen anhören, Aufnehmen erlauben. Alles liegt nur in der IndexedDB dieses Geräts.
   function deutschKarte() {
-    const an = !!(((S.lade("eltern") || {}).deutsch || {}).aufnehmen);
+    const an = !!(((S.lade("eltern") || {}).deutsch || {}).aufnehmen), schrift = ((S.lade("eltern") || {}).deutsch || {}).schrift || "sas";
     return `<div class="karte" id="deutsch-karte">
-      <h2>✏️ Deutsch: eigene Texte und Aufnahmen</h2>
+      <h2>✏️ Deutsch: Schreibschrift, eigene Texte und Aufnahmen</h2>
+      <div class="zeit-raster"><label>Schreibschrift üben (Lesen und Schreiben → „Schreibschrift“)<select id="d-schrift">
+        <option value="sas" ${schrift !== "aus" ? "selected" : ""}>Schulausgangsschrift (Sachsen und andere Länder)</option>
+        <option value="aus" ${schrift === "aus" ? "selected" : ""}>Aus – die Schule nutzt eine andere Schrift</option></select></label></div>
+      <p class="klein">Bisher gibt es die Kleinbuchstaben und verbundene Wörter der Schulausgangsschrift; Großbuchstaben, Vereinfachte und Lateinische Ausgangsschrift folgen. Die Formen sind nachgebildet – bitte mit der Schreibtabelle der Schule vergleichen. Das Kind findet seine eigenen Texte und Aufnahmen unter „Mein Ich“ → „Mein Heft“.</p>
       <label class="schalter-z"><input type="checkbox" id="d-aufnehmen" ${an ? "checked" : ""}> Mein Kind darf sich in der Wörter-Werkstatt selbst aufnehmen (Gedicht vortragen, Geschichte nacherzählen, Buchtipp)</label>
       <p class="klein">Die Aufnahmen bleiben nur auf diesem Gerät, werden nie hochgeladen und nicht mit dem Spielstand übertragen. Das Gerät fragt beim ersten Mal nach dem Mikrofon. Ist der Schalter aus, fallen die Aufnahme-Schritte still weg.${window.Eigenes && !Eigenes.kannAufnehmen() ? " <b>Dieser Browser kann nicht aufnehmen.</b>" : ""}</p>
       <div class="knoepfe"><button class="knopf haupt" id="d-speichern">Speichern</button></div>
@@ -463,7 +467,7 @@
   const kapitelName = (id) => ((window.WERKSTATT || []).find(k => k.id === id) || {}).name || id;
   const datum = (t) => { const d = new Date(t); return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}, ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`; };
   function deutschKnoepfe() {
-    $("d-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.deutsch = Object.assign({}, e.deutsch || {}, { aufnehmen: $("d-aufnehmen").checked }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+    $("d-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.deutsch = Object.assign({}, e.deutsch || {}, { aufnehmen: $("d-aufnehmen").checked, schrift: $("d-schrift").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
     if (!window.Eigenes) return;
     const urls = [];
     const fuelle = () => Eigenes.alle().then(liste => {

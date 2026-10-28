@@ -17,7 +17,7 @@ function lade(dateien) {
   return ctx;
 }
 const DATEN = ["spiele/mathe/aufgaben.js", "spiele/deutsch/geschichte.js", "spiele/medien/lektionen.js", "spiele/sachkunde/themen.js", "spiele/sachkunde/faecher.js", "spiele/sachkunde/religion.js", "spiele/deutsch/werkstatt.js", "spiele/englisch/lektionen.js", "spiele/sorbisch/lektionen.js"];
-const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "inhalte/deutsch/schreiben.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan/laender/sachsen-punkte.js", "shared/lehrplan.js"];
+const LEHRPLAN = ["shared/lehrplan/kern.js", "shared/inhalte.js", "inhalte/deutsch/anlaute.js", "inhalte/deutsch/lesetexte.js", "inhalte/deutsch/schreiben.js", "inhalte/deutsch/schreibschrift.js", "shared/lehrplan/laender/sachsen.js", "shared/lehrplan/laender/sachsen-punkte.js", "shared/lehrplan.js"];
 const w = lade(DATEN.concat(LEHRPLAN));
 const K = w.LernzielKern, I = w.Inhalte, L = w.LEHRPLAN;
 
@@ -99,7 +99,7 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder I
 
 pruefe("Sachsen in voller Tiefe: Deutsch Kl. 1/2, 3 und 4 – jeder Inhaltspunkt zugeordnet, Zuordnungen zeigen auf echte Kapitel, LB-Abdeckung passt zu den Punkten", () => {
   const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
-  const LESEN = ["anlaute", "silben", "texte", "spuren", "legen", "tafel"];
+  const LESEN = ["anlaute", "silben", "texte", "spuren", "legen", "tafel", "schreibschrift"];
   const gibt = (a) => { const [art, id] = a.split(":");
     if (art === "werkstatt") return w.WERKSTATT.some(k => k.id === id);
     if (art === "deutsch") return w.GESCHICHTE.some(k => k.id === id);
@@ -188,9 +188,9 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
 });
 
-pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und „My Portfolio“ je Klasse, Kl. 1/2 ohne Englisch, Zählung 17 / 5 / 0, alle Inhaltspunkte zugeordnet", () => {
+pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und „My Portfolio“ je Klasse, Kl. 1/2 ohne Englisch, Zählung 18 / 4 / 0, alle Inhaltspunkte zugeordnet", () => {
   const n = { ja: 0, teil: 0, nein: 0 }, echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8"), ids = new Set();
-  const soll = { 3: [40, { ja: 37, teil: 2, nein: 0, aussen: 1 }], 4: [33, { ja: 28, teil: 3, nein: 0, aussen: 2 }] };
+  const soll = { 3: [40, { ja: 38, teil: 1, nein: 0, aussen: 1 }], 4: [33, { ja: 28, teil: 3, nein: 0, aussen: 2 }] };
   [3, 4].forEach(k => { const lb = L.fuer("sachsen", "englisch", k), m = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
     assert.strictEqual(lb.length, 11);
     lb.forEach(x => { n[x.abdeckung]++; x.lz.forEach(id => assert.ok(K.ziel(id), id));
@@ -200,7 +200,7 @@ pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und �
         if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("englisch:")), p.id); });
       assert.strictEqual(x.abdeckung, x.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein") ? "teil" : "ja", `Englisch ${k} ${x.titel}`); });
     assert.strictEqual(z, soll[k][0]); assert.deepStrictEqual(m, soll[k][1]); });
-  assert.deepStrictEqual({ ...n }, { ja: 17, teil: 5, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 18, teil: 4, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "englisch", 2).length, 0);
   const benutzt = new Set(); [3, 4].forEach(k => L.fuer("sachsen", "englisch", k).forEach(x => x.punkte.forEach(p => p.app.forEach(a => benutzt.add(a)))));
   w.ENGLISCH.forEach(l => assert.ok(benutzt.has("englisch:" + l.id), l.id + " kommt in keinem Inhaltspunkt vor"));
@@ -211,7 +211,7 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jede
   const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8"), alleThemen = w.THEMEN.concat(w.FACH_THEMEN);
   const gibt = (a) => { const [art, id] = a.split(":");
     return art === "sachkunde" ? alleThemen.some(t => t.id === id) : art === "echtewelt" ? echt.includes(`["${id}", `) : art === "englisch" ? w.ENGLISCH.some(l => l.id === id)
-      : ["atelier:malen", "atelier:musik", "gefuehle:alle", "lesen:silben"].includes(a); };
+      : ["atelier:malen", "atelier:musik", "atelier:lieder", "gefuehle:alle", "lesen:silben"].includes(a); };
   const soll = { kunst: [3, 3, 3], musik: [4, 4, 4], werken: [3, 2, 3], sport: [6, 5, 5], ethik: [4, 4, 4], evreligion: [4, 4, 4], kareligion: [4, 4, 4] };   // Lernbereiche Kl. 1/2, 3, 4
   const benutzt = new Set(), z = {};
   Object.entries(soll).forEach(([f, [n12, n3, n4]]) => {

@@ -87,6 +87,11 @@
   .spuren-bild { font-size: 5rem; }
   #spuren-wort { font-size: 1.4rem; font-weight: 600; margin: 0; text-align: center; }
   .spuren { width: min(62vh, 78vw); height: auto; background: #fff; border-radius: 28px; box-shadow: 0 7px 0 rgba(58,160,224,.22); touch-action: none; user-select: none; -webkit-user-select: none; }
+  .spuren.breit { width: min(94vw, 980px, 150vh); }
+  .spuren-main.breit-main { flex-direction: column-reverse; gap: 10px; }
+  .spuren-main.breit-main .spuren-seite { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .spuren-main.breit-main .spuren-bild { font-size: 2.6rem; }
+  .weg[hidden] { display: none; }
   @media (max-width: 640px) { .spuren-main { flex-direction: column-reverse; } .spuren-seite { flex-direction: row; flex-wrap: wrap; justify-content: center; } .spuren-bild { font-size: 3rem; } .spuren { width: 92vw; } }
   /* Wörter legen */
   .faecher { display: flex; justify-content: center; gap: 8px; margin: 10px 0 18px; flex-wrap: wrap; }
@@ -114,6 +119,7 @@
       <button class="weg" id="weg-silben"><span class="emoji">🌈</span>Silben lesen<small>Lies das Wort und finde das Bild</small></button>
       <button class="weg" id="weg-texte"><span class="emoji">📖</span>Lesetexte<small>Kurze Geschichten mit Fragen</small></button>
       <button class="weg" id="weg-spuren"><span class="emoji">✍️</span>Buchstaben nachspuren<small>Mit dem Finger schreiben</small></button>
+      <button class="weg" id="weg-sas"><span class="emoji">✒️</span>Schreibschrift<small>Schulausgangsschrift: Buchstaben und Wörter</small></button>
       <button class="weg" id="weg-legen"><span class="emoji">🧩</span>Wörter legen<small>Hör das Wort und lege es</small></button>
     </div>
     <p class="stand" id="stand"></p>
@@ -144,7 +150,7 @@
 </section>
 
 <section class="ansicht" id="spuren-ansicht" hidden>
-  <div class="oben"><button class="knopf rund zurueck" aria-label="Zurück">⬅️</button><h1>✍️ Nachspuren</h1><div class="fortschritt" aria-hidden="true"><span id="spuren-balken"></span></div></div>
+  <div class="oben"><button class="knopf rund zurueck" aria-label="Zurück">⬅️</button><h1 id="spuren-titel">✍️ Nachspuren</h1><div class="fortschritt" aria-hidden="true"><span id="spuren-balken"></span></div></div>
   <main class="spuren-main">
     <div class="spuren-seite"><div class="spuren-bild" id="spuren-bild" aria-hidden="true"></div><p id="spuren-wort"></p>
       <button class="knopf" id="spuren-nochmal">🔁 Nochmal</button><button class="knopf" id="spuren-weiter">⏭️ Weiter</button></div>
@@ -193,6 +199,7 @@
 <script src="../../inhalte/deutsch/anlaute.js"></script>
 <script src="../../inhalte/deutsch/lesetexte.js"></script>
 <script src="../../inhalte/deutsch/schreiben.js"></script>
+<script src="../../inhalte/deutsch/schreibschrift.js"></script>
 <script src="../../shared/koennen.js"></script>
 <script src="lesen.js"></script>
 </body>

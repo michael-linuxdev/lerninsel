@@ -152,6 +152,7 @@
         <button class="kachel k2" data-m="rhythmus"><span class="e">👏</span>Rhythmus<small>Hör zu und klatsch nach</small></button>
         <button class="kachel k3" data-m="hoertest"><span class="e">👂</span>Hoch oder tief?<small>Laut oder leise?</small></button>
         <button class="kachel k4" data-m="melodie"><span class="e">🎼</span>Meine Melodie<small>Selbst komponieren</small></button>
+        <button class="kachel k1" data-m="singen"><span class="e">🎤</span>Mitsingen<small>Lieder mit Text</small></button>
       </div>
       <button class="knopf" data-zu="start" style="margin-top:14px">⬅️ Zurück zu Paula</button>
     </div>
@@ -174,6 +175,12 @@
       <div><button class="knopf haupt gross-k" data-ht="0">1️⃣ Der erste</button><button class="knopf haupt gross-k" data-ht="1">2️⃣ Der zweite</button></div>
       <p class="lage" id="ht-text"></p>
       <div><button class="knopf" id="ht-hoeren">🔁 Nochmal hören</button><button class="knopf" id="ht-weiter" hidden>➡️ Weiter</button><button class="knopf" data-m="menue">⬅️ Zurück</button></div>
+    </div>
+    <div class="m-teil karte" id="m-singen" hidden>
+      <h2>🎤 Mitsingen</h2>
+      <div class="lieder" id="sing-liste"></div>
+      <div id="sing-lied" style="margin:12px 0"></div>
+      <button class="knopf" data-m="menue">⬅️ Zurück</button>
     </div>
     <div class="m-teil karte" id="m-melodie" hidden>
       <h2>🎼 Meine Melodie</h2>
@@ -220,6 +227,7 @@
 <script src="../../shared/figuren.js"></script>
 <script src="../../shared/bilder.js"></script>
 <script src="vorlagen.js"></script>
+<script src="../../shared/lieder.js"></script>
 <script src="musik.js"></script>
 <script src="atelier.js"></script>
 </body>

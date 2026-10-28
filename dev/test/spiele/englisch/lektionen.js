@@ -1,7 +1,7 @@
 // Englisch mit Papagei Paula (Englisch-Einstieg, Kl. 3–4 und Übergang 5; nach den Grundschul-Lehrplänen der Länder, GeR-Niveau A1 angebahnt).
 // Lektion: { id, lb, stufe, lz, name, e, farbe, grund, intro: { de, ru }, woerter: [{ en, de, ru, e }], extra: [Schritte], ende: { de, ru } }
 // Aus den Wörtern entstehen automatisch: Wortkarten (anhören, nachsprechen), Hören („Welches Bild?“), Lesen („Welches Bild?“), Übersetzen („Wie heißt das auf Englisch?“).
-// Zusätzliche Schritt-Typen in extra:
+// Zusätzliche Schritt-Typen in extra (dazu lied { id, ru } = Lied/Reim aus shared/lieder.js zum Mitsingen, ohne Bewertung):
 //   satz { de, ru, woerter: ["I", "like", "apples."], e? }   – englischen Satz aus Wörtern bauen
 //   wahl { frage, ru, optionen: [richtig, falsch, falsch], e?, warum? } – Antwort auf Englisch wählen (erste Option richtig)
 // lb: Lernbereich des Lehrplans Sachsen 2019 (1 Me, my family … 10 Around the year, 11 My Portfolio); die Übersicht ist danach gruppiert.
@@ -16,6 +16,7 @@ window.ENGLISCH = [
       { en: "please", de: "bitte", ru: "пожалуйста", e: "🙏" }, { en: "thank you", de: "danke", ru: "спасибо", e: "💐" },
       { en: "yes", de: "ja", ru: "да", e: "👍" }, { en: "no", de: "nein", ru: "нет", e: "👎" }],
     extra: [
+      { typ: "lied", id: "sleeping", ru: "Пой вместе: «Are you sleeping?» — это «Братец Яков» по-английски." },
       { typ: "satz", de: "Stell dich vor: „Ich heiße Mia.“", ru: "Представься: «Меня зовут Мия».", woerter: ["My", "name", "is", "Mia."], e: "🙋" },
       { typ: "wahl", frage: "Jemand fragt: „How are you?“ Was antwortest du?", ru: "Тебя спрашивают: «How are you?» Что ответишь?", optionen: ["I'm fine, thank you.", "Good night.", "I'm eight."], e: "🙂", warum: "„How are you?“ heißt „Wie geht es dir?“ – „I'm fine“ heißt „Mir geht es gut“." }],
     ende: { de: "Super! Sag heute zu deiner Familie einmal „Good morning“ oder „Good night“.", ru: "Супер! Скажи сегодня своей семье «Good morning» или «Good night»." }
@@ -42,6 +43,7 @@ window.ENGLISCH = [
       { en: "seven", de: "sieben", ru: "семь", e: "7️⃣" }, { en: "eight", de: "acht", ru: "восемь", e: "8️⃣" }, { en: "nine", de: "neun", ru: "девять", e: "9️⃣" },
       { en: "ten", de: "zehn", ru: "десять", e: "🔟" }],
     extra: [
+      { typ: "lied", id: "buckle", ru: "Говори вместе: считалка «One, two, buckle my shoe»." },
       { typ: "satz", de: "Sag, wie alt du bist: „Ich bin acht.“", ru: "Скажи, сколько тебе лет: «Мне восемь».", woerter: ["I", "am", "eight."], e: "🎂" },
       { typ: "wahl", frage: "Two + three = ?", ru: "Два плюс три = ?", optionen: ["five", "four", "six"], e: "➕" }],
     ende: { de: "Klasse! Zähl heute deine Stifte auf Englisch.", ru: "Класс! Посчитай сегодня свои карандаши по-английски." }
@@ -54,6 +56,7 @@ window.ENGLISCH = [
       { en: "fish", de: "Fisch", ru: "рыба", e: "🐟" }, { en: "horse", de: "Pferd", ru: "лошадь", e: "🐴" }, { en: "cow", de: "Kuh", ru: "корова", e: "🐮" },
       { en: "pig", de: "Schwein", ru: "свинья", e: "🐷" }, { en: "mouse", de: "Maus", ru: "мышь", e: "🐭" }],
     extra: [
+      { typ: "lied", id: "macdonald", ru: "Пой вместе: «Old MacDonald had a farm»." },
       { typ: "satz", de: "Bau den Satz: „Ich habe einen Hund.“", ru: "Составь предложение: «У меня есть собака».", woerter: ["I", "have", "a", "dog."], e: "🐶" },
       { typ: "wahl", frage: "Welches Tier sagt „moo“?", ru: "Какое животное говорит «му»?", optionen: ["cow", "cat", "bird"], e: "🐮" }],
     ende: { de: "Prima! Welches Tier magst du am liebsten? Sag es auf Englisch!", ru: "Отлично! Какое животное тебе нравится больше всего? Скажи по-английски!" }
@@ -103,6 +106,7 @@ window.ENGLISCH = [
       { en: "winter", de: "Winter", ru: "зима", e: "⛄" }, { en: "birthday", de: "Geburtstag", ru: "день рождения", e: "🎂" }, { en: "Christmas", de: "Weihnachten", ru: "Рождество", e: "🎄" },
       { en: "Easter", de: "Ostern", ru: "Пасха", e: "🐣" }, { en: "Halloween", de: "Halloween", ru: "Хэллоуин", e: "🎃" }],
     extra: [
+      { typ: "lied", id: "twinkle", ru: "Пой вместе: «Twinkle, twinkle, little star»." },
       { typ: "satz", de: "Sing mit: „Happy birthday to you!“", ru: "Спой вместе: «Happy birthday to you!»", woerter: ["Happy", "birthday", "to", "you!"], e: "🎂" },
       { typ: "wahl", frage: "Welcher Monat kommt nach January?", ru: "Какой месяц идёт после January?", optionen: ["February", "December", "June"], e: "📅", warum: "Die Monate: January, February, March, April, May, June, July, August, September, October, November, December." },
       { typ: "wahl", frage: "In welchem Monat ist Christmas?", ru: "В каком месяце Рождество?", optionen: ["December", "July", "March"], e: "🎄" },
@@ -153,6 +157,7 @@ window.ENGLISCH = [
       { en: "windy", de: "windig", ru: "ветрено", e: "💨" }, { en: "snowy", de: "verschneit", ru: "снежно", e: "❄️" }, { en: "hot", de: "heiß", ru: "жарко", e: "🥵" },
       { en: "cold", de: "kalt", ru: "холодно", e: "🥶" }, { en: "rainbow", de: "Regenbogen", ru: "радуга", e: "🌈" }],
     extra: [
+      { typ: "lied", id: "rain", ru: "Пой вместе: «Rain, rain, go away»." },
       { typ: "satz", de: "Bau den Satz: „Heute ist es sonnig.“", ru: "Составь предложение: «Сегодня солнечно».", woerter: ["It", "is", "sunny", "today."], e: "☀️" },
       { typ: "wahl", frage: "Es regnet und du nimmst einen Schirm. Wie ist das Wetter?", ru: "Идёт дождь, и ты берёшь зонтик. Какая погода?", optionen: ["rainy", "sunny", "hot"], e: "☂️" },
       { typ: "wahl", frage: "Draußen ist es neblig: Man sieht kaum etwas. Wie sagt man das?", ru: "На улице туман: почти ничего не видно. Как это сказать?", optionen: ["It's foggy.", "It's sunny.", "It's hot."], e: "🌫️" },
@@ -316,6 +321,7 @@ window.ENGLISCH.push(
       { en: "palace", de: "Palast", ru: "дворец", e: "🏰" }, { en: "taxi", de: "Taxi", ru: "такси", e: "🚕" },
       { en: "underground", de: "U-Bahn", ru: "метро", e: "🚇" }, { en: "London Eye", de: "Riesenrad London Eye", ru: "колесо обозрения London Eye", e: "🎡" }],
     extra: [
+      { typ: "lied", id: "london", ru: "Пой вместе: «London Bridge is falling down»." },
       { typ: "wahl", frage: "Wie heißt der Fluss in London?", ru: "Как называется река в Лондоне?", optionen: ["the Thames", "the Elbe", "the Rhine"], e: "🏞️", warum: "Die Themse (the Thames). Die Elbe fließt durch Dresden." },
       { typ: "satz", de: "Sag: „Ich mag London. Ich mag den Fluss.“", ru: "Скажи: «Мне нравится Лондон. Мне нравится река».", woerter: ["I", "like", "London.", "I", "like", "the", "river."], e: "💂" },
       { typ: "wahl", frage: "Auf welcher Straßenseite fahren die Autos in England?", ru: "По какой стороне дороги ездят машины в Англии?", optionen: ["on the left", "on the right", "in the middle"], e: "🚗", warum: "In Großbritannien fährt man links – also beim Überqueren erst nach rechts schauen!" }],

@@ -24,7 +24,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     return { ctx, p };
   }
-  const sichtbar = (p) => p.evaluate(() => [...document.querySelectorAll("#lektionen .lek")].length);
+  const sichtbar = (p) => p.evaluate(() => [...document.querySelectorAll("#lektionen .lek:not([data-lied])")].length);
 
   // ---------- Startseite: Tür „Englisch“ ----------
   for (const [breite, hoehe, art] of [[1180, 820, "quer"], [820, 1180, "iPad hoch"], [390, 760, "Handy"]]) {
@@ -59,6 +59,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       if (l.ende || !l.s) break;
       if (!(await passt(p))) { scroll = true; console.log(`    Scrollleiste: ${id} Schritt ${l.pos} (${l.s.typ})`); }
       const s = l.s;
+      if (s.typ === "lied") { await p.click(".lied-spielen"); await p.waitForSelector(".silbe.an, .lied-zeile.an", { timeout: 3000 }).catch(() => { haengt = true; }); await p.click("#weiter"); await p.waitForTimeout(80); continue; }
       if (s.typ === "sag" || s.typ === "karten") {
         if (s.typ === "karten") { await p.click(".wortkarte >> nth=0"); if (BILDER && id === "en-colours") await bild(p, `englisch-karten-${art}`); }
         await p.click("#weiter"); await p.waitForTimeout(80); continue;

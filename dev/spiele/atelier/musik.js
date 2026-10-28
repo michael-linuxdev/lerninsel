@@ -48,7 +48,7 @@
   }
 
   // ---------- Bereiche ----------
-  const TEILE = ["menue", "xylo", "rhythmus", "hoertest", "melodie"];
+  const TEILE = ["menue", "xylo", "rhythmus", "hoertest", "melodie", "singen"];
   let laeufer = [];
   const stoppe = () => { laeufer.forEach(clearTimeout); laeufer = []; };
   const spaeter = (fn, ms) => laeufer.push(setTimeout(fn, ms));
@@ -57,6 +57,7 @@
     xylo: ["Tippe auf die Klangstäbe. Lange Stäbe klingen tief, kurze klingen hoch. Oder spiel ein Lied mit – der leuchtende Stab ist dran.", "Длинные пластинки звучат низко, короткие – высоко."],
     rhythmus: ["Hör gut zu! Ich klatsche einen Rhythmus vor. Dann tippst du ihn auf der Trommel nach.", "Слушай внимательно и повтори ритм на барабане."],
     hoertest: ["Ich spiele zwei Töne. Hör genau hin!", "Я сыграю два звука. Слушай внимательно!"],
+    singen: ["Sing mit! Ich spiele die Melodie, und die Silben leuchten, wenn du sie singst.", "Пой вместе! Я играю мелодию, а слоги светятся."],
     melodie: ["Erfinde deine eigene Melodie! Vielleicht tanzen bald die Tiere auf der Insel dazu.", "Придумай свою мелодию!"]
   };
   // Paula sagt etwas (deutsch und in der Hilfesprache, damit beide immer zusammenpassen)
@@ -64,7 +65,8 @@
   function teil(n) {
     stoppe(); TEILE.forEach(t => { $("m-" + t).hidden = t !== n; });
     sag(...TEXTE[n]);
-    if (n === "xylo") zeigeXylo(); if (n === "rhythmus") rhStart(); if (n === "hoertest") htStart(); if (n === "melodie") zeigeRaster();
+    if (n === "xylo") zeigeXylo(); if (n === "rhythmus") rhStart(); if (n === "hoertest") htStart(); if (n === "melodie") zeigeRaster(); if (n === "singen") zeigeSingen();
+    if (n !== "singen" && window.Lieder) Lieder.stopp();
     scrollTo(0, 0);
   }
   document.querySelectorAll("[data-m]").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); audio(); teil(b.dataset.m); }));
@@ -231,6 +233,20 @@
     $("mel-liste").querySelectorAll("[data-mel]").forEach(b => b.addEventListener("click", () => { mel = lade().melodien[+b.dataset.mel].slice(); zeigeRaster(); spieleMelodie(mel); }));
   }
 
+  // ---------- Mitsingen (shared/lieder.js): gemeinfreie Kinderlieder mit Text, Silben leuchten im Takt ----------
+  function zeigeSingen(id) {
+    const liste = window.Lieder ? Lieder.alle("de") : [], m = lade(); m.gesungen = m.gesungen || {};
+    $("sing-liste").innerHTML = liste.map(l => `<button class="knopf${l.id === id ? " an" : ""}" data-sing="${l.id}">${m.gesungen[l.id] ? "⭐ " : "🎤 "}${l.titel}</button>`).join("");
+    $("sing-liste").querySelectorAll("[data-sing]").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); audio(); zeigeSingen(b.dataset.sing); }));
+    const l = liste.find(x => x.id === id) || liste[0]; if (!l) return;
+    if (!id) $("sing-liste").firstElementChild.classList.add("an");
+    Lieder.zeige($("sing-lied"), l.id, { fertig: () => {
+      const d = lade(); d.gesungen = d.gesungen || {}; const neu = !d.gesungen[l.id]; d.gesungen[l.id] = 1; speichere(d);
+      gib(2); if (neu) fund(`Musik: „${l.titel}“ mitgesungen`, "sing:" + l.id, "🎤");
+      sag(`Schön gesungen! „${l.titel}“ kannst du jetzt auch ohne Tablet singen.`, "Красиво спел(а)!");
+    } });
+  }
+
   window.MusikEcke = { zeige: () => teil("menue"), teil, LIEDER, TOENE, klang, lade };
-  window.__musik = { rh: () => rh, ht: () => ht, lied: () => ({ lied: lied && lied.id, pos, vorspiel }), mel: () => mel, RHYTHMEN, ACHTEL };
+  window.__musik = { singen: zeigeSingen, rh: () => rh, ht: () => ht, lied: () => ({ lied: lied && lied.id, pos, vorspiel }), mel: () => mel, RHYTHMEN, ACHTEL };
 })();

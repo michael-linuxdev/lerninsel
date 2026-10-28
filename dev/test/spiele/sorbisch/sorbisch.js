@@ -112,10 +112,20 @@
       .concat([{ typ: "sag", text: k.ende.de, ru: k.ende.ru, letzte: true }]);
   }
 
+  // Lernkartei (shared/lernkartei.js): Wörter, die letztes Mal knifflig waren, kommen nach der Begrüßung als kurze Wiederholung
+  // (falsch → morgen, dann nach 3 und 7 Tagen; Wiederholungen zählen nicht gegen die Sterne).
+  function mitWiederholung(schritte) {
+    if (!window.Lernkartei) return schritte;
+    const karten = Lernkartei.faellige("sorbisch", 3).map(s => s.typ === "hoeren" && !hatEnglisch() ? Object.assign({}, s, { typ: "lesen" }) : s);
+    if (!karten.length) return schritte;
+    const intro = { typ: "sag", text: "Kurz wiederholen: Diese Wörter waren letztes Mal knifflig.", ru: "Коротко повторим: эти слова в прошлый раз были трудными." };
+    return [schritte[0], intro, ...karten, ...schritte.slice(1)];
+  }
+
   let lauf = null;
   function starte(i, lernstand) {
     const k = lernstand || L[i];
-    lauf = { i, k, schritte: k.lernstand ? k.schritte : baue(k), pos: 0, fehler: 0, falsch: new Set() };
+    lauf = { i, k, schritte: k.lernstand ? k.schritte : mitWiederholung(baue(k)), pos: 0, fehler: 0, falsch: new Set() };
     document.body.style.setProperty("--grund", k.grund); document.body.style.setProperty("--akzent", k.farbe);
     $("lektion-name").textContent = k.name;
     $("paula-gross").innerHTML = F.papagei("papagei");
@@ -212,6 +222,9 @@
       lauf.gesperrt = true;
       if (lauf.versuche === 0 && window.Charakter) Charakter.gib("sorbisch", 1);
       if (lauf.versuche === 0 && window.Koennen) Koennen.melde(lz, true);
+      const sk = lauf.schritte[lauf.pos];
+      if (lauf.versuche === 0 && sk && sk.__karte && window.Lernkartei && Lernkartei.richtig("sorbisch", sk) && window.Lernfunde && sk.wort)
+        Lernfunde.merke({ fach: "sorbisch", art: "gemeistert", e: "💪", text: `${sk.wort.so} = ${sk.wort.de} – jetzt weißt du es!`, schluessel: "sok:" + sk.wort.so, melden: true });
       if (knopf) knopf.classList.add("richtig");
       document.querySelectorAll("#aufgabe .option").forEach(o => o.disabled = true);
       h.className = "hinweis gut"; h.innerHTML = `${LOB[Math.floor(Math.random() * LOB.length)]}${erklaerung ? ` <span class="erklaerung">${erklaerung}</span>` : ""}`;
@@ -221,7 +234,8 @@
       return;
     }
     lauf.versuche++;
-    if (lauf.versuche === 1) { lauf.fehler++; if (window.Koennen) Koennen.melde(lz, false); const sj = lauf.schritte[lauf.pos]; if (sj && sj.__kap) lauf.falsch.add(sj.__kap); }
+    if (lauf.versuche === 1) { const sj = lauf.schritte[lauf.pos]; if (!(sj && sj.__karte)) lauf.fehler++; if (window.Koennen) Koennen.melde(lz, false); if (sj && sj.__kap) lauf.falsch.add(sj.__kap);
+      if (window.Lernkartei && sj && !lauf.k.lernstand) Lernkartei.falsch("sorbisch", sj); }
     S.ton("nein"); if (knopf) { knopf.classList.add("falsch"); knopf.disabled = true; }
     h.className = "hinweis nein"; h.textContent = "Fast! Versuch es nochmal.";
   }

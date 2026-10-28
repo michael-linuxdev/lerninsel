@@ -72,6 +72,9 @@
   $("weg-silben").addEventListener("click", () => runde("silben"));
   $("weg-texte").addEventListener("click", texte);
   $("weg-spuren").addEventListener("click", () => spurenRunde());
+  $("weg-sas").addEventListener("click", () => spurenRunde("sas"));
+  // Schreibschrift nur, wenn die Eltern sie nicht ausgeschaltet haben (Schule nutzt eine andere Schrift): eltern.deutsch.schrift = "sas" | "aus"
+  $("weg-sas").hidden = !window.SCHREIBSCHRIFT || (((S.lade("eltern") || {}).deutsch || {}).schrift === "aus");
   $("weg-legen").addEventListener("click", () => legenRunde());
 
   // ---------- Buchstaben-Tafel ----------
@@ -334,17 +337,46 @@
     return out;
   }
   let spur = null;
-  function spurenRunde() {
+  const SAS = window.SCHREIBSCHRIFT;
+  // Schreibschrift (Schulausgangsschrift): drei noch wenig geübte Kleinbuchstaben, dann ein Wort aus schon geübten Buchstaben
+  function sasRunde() {
+    const sas = daten().sas || {}, reihe = SAS.reihe;
+    const wahl = reihe.slice().sort((x, y) => Math.min(2, sas[x] || 0) - Math.min(2, sas[y] || 0) || reihe.indexOf(x) - reihe.indexOf(y)).slice(0, 3);
+    const kann = (z) => (sas[z] || 0) > 0 || wahl.includes(z);
+    const passend = SAS.woerter.filter(w => [...w].every(kann)), wort = passend.length ? passend[Math.floor(Math.random() * passend.length)] : SAS.woerter[0];
+    spur = { zeichen: wahl.concat([wort]), i: 0, fertig: 0, modus: "sas" };
+    zeige("spuren"); $("spuren-ende").hidden = true; $("spuren").style.display = "";
+    spurZeichen();
+  }
+  function spurenRunde(modus) {
+    if (modus === "sas" && SAS) return sasRunde();
     const sp = daten().sp || {};
     const wahl = REIHE.filter(b => SCHRIFT[b]).sort((x, y) => Math.min(2, sp[x] || 0) - Math.min(2, sp[y] || 0) || REIHE.indexOf(x) - REIHE.indexOf(y)).slice(0, 3);
     const zeichen = [];
     wahl.forEach(b => { zeichen.push(b); if (SCHRIFT[b.toLowerCase()]) zeichen.push(b.toLowerCase()); });
-    spur = { zeichen, i: 0, fertig: 0 };
+    spur = { zeichen, i: 0, fertig: 0, modus: "druck" };
     zeige("spuren"); $("spuren-ende").hidden = true; $("spuren").style.display = "";
     spurZeichen();
   }
   function spurZeichen() {
     const z = spur.zeichen[spur.i];
+    $("spuren-titel").textContent = spur.modus === "sas" ? "✒️ Schreibschrift" : "✍️ Nachspuren";
+    if (spur.modus === "sas") {
+      const r = SAS.baue(z), wort = z.length > 1;
+      spur.striche = r.striche.map(p => ({ p, cp: pruefpunkte(p), k: 0 })); spur.s = 0;
+      const rand = Math.max(0, (100 - r.breite) / 2);   // einzelne Buchstaben mittig, Wörter so breit wie nötig
+      spur.vb = [r.links - rand, Math.max(100, r.breite)];
+      $("spuren").setAttribute("viewBox", `${spur.vb[0]} -5 ${spur.vb[1]} 130`);
+      $("spuren").style.width = wort ? `min(94vw, 980px, calc((100vh - 230px) * ${(spur.vb[1] / 130).toFixed(2)}))` : "";   // ganzes Wort passt auf den Bildschirm $("spuren").classList.toggle("breit", wort); $("spuren").parentElement.classList.toggle("breit-main", wort);
+      $("spuren-bild").textContent = wort ? "📝" : "✒️";
+      $("spuren-wort").textContent = wort ? `Wort: ${z}` : `kleines ${z}`;
+      $("spuren-balken").style.width = Math.round(100 * spur.i / spur.zeichen.length) + "%";
+      $("spuren-rueck").textContent = "";
+      spurZeichnen();
+      sprich(wort ? `Schreib das Wort ${z} in Schreibschrift. Fang beim Punkt an und schreib ohne abzusetzen.` : `Schreib das kleine ${z} in Schreibschrift. Fang beim Punkt an.`);
+      return;
+    }
+    spur.vb = [0, 100]; $("spuren").setAttribute("viewBox", "0 -10 100 130"); $("spuren").classList.remove("breit"); $("spuren").style.width = ""; $("spuren").parentElement.classList.remove("breit-main");
     spur.striche = SCHRIFT[z].map(st => { const p = strichPunkte(st); return { p, cp: pruefpunkte(p), k: 0 }; });
     spur.s = 0;
     const gross = z.toUpperCase(), a = A.find(x => x.b === gross || x.b === gross[0]), w = a ? wort(a.w[0]) : null;
@@ -358,7 +390,9 @@
   const linie = (p) => p.map(q => q[0].toFixed(1) + "," + q[1].toFixed(1)).join(" ");
   function spurZeichnen() {
     const svg = $("spuren"); let h = "";
-    h += `<line x1="2" y1="45" x2="98" y2="45" stroke="#D9E8F5" stroke-width="1" stroke-dasharray="3 3"/><line x1="2" y1="90" x2="98" y2="90" stroke="#9CC9EA" stroke-width="1.5"/>`;
+    const [x0, b] = spur.vb || [0, 100], x1 = x0 + b;
+    if (spur.modus === "sas") h += `<line x1="${x0 + 2}" y1="10" x2="${x1 - 2}" y2="10" stroke="#EEF3F9" stroke-width="1"/><line x1="${x0 + 2}" y1="115" x2="${x1 - 2}" y2="115" stroke="#EEF3F9" stroke-width="1"/>`;
+    h += `<line x1="${x0 + 2}" y1="45" x2="${x1 - 2}" y2="45" stroke="#D9E8F5" stroke-width="1" stroke-dasharray="3 3"/><line x1="${x0 + 2}" y1="90" x2="${x1 - 2}" y2="90" stroke="#9CC9EA" stroke-width="1.5"/>`;
     spur.striche.forEach(st => { h += st.p.length === 1 ? `<circle cx="${st.p[0][0]}" cy="${st.p[0][1]}" r="5" fill="#E6E1F0"/>` : `<polyline points="${linie(st.p)}" fill="none" stroke="#E6E1F0" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>`; });
     spur.striche.forEach((st, i) => {
       if (i < spur.s) h += st.p.length === 1 ? `<circle cx="${st.p[0][0]}" cy="${st.p[0][1]}" r="4.5" fill="#2E9C5A"/>` : `<polyline points="${linie(st.p)}" fill="none" stroke="#2E9C5A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>`;
@@ -401,11 +435,14 @@
   function spurFertig() {
     spurZeichnen();
     const z = spur.zeichen[spur.i];
-    const d = daten(); d.sp = d.sp || {}; d.sp[z.toUpperCase()] = Math.min(9, (d.sp[z.toUpperCase()] || 0) + (z === z.toLowerCase() ? 1 : 0)); S.speichere("lesen", d);
+    const d = daten();
+    if (spur.modus === "sas") { d.sas = d.sas || {}; [...new Set(z)].forEach(c => { d.sas[c] = Math.min(9, (d.sas[c] || 0) + 1); }); }
+    else { d.sp = d.sp || {}; d.sp[z.toUpperCase()] = Math.min(9, (d.sp[z.toUpperCase()] || 0) + (z === z.toLowerCase() ? 1 : 0)); }
+    S.speichere("lesen", d);
     spur.fertig++; kn(LZ.spuren, true);
     if (C) C.gib("deutsch", 1);
     const lob = LOB[Math.floor(Math.random() * LOB.length)];
-    $("spuren-rueck").textContent = `${lob} Das ist ${z}.`;
+    $("spuren-rueck").textContent = spur.modus === "sas" ? `${lob} ${z.length > 1 ? "Ein schön verbundenes Wort!" : "Das ist ein " + z + "."}` : `${lob} Das ist ${z}.`;
     if (S.ton) S.ton("juhu");
     sprich(lob);
     setTimeout(spurNaechstes, 1000);
@@ -414,13 +451,13 @@
     spur.i++;
     if (spur.i < spur.zeichen.length) { spurZeichen(); return; }
     $("spuren-balken").style.width = "100%";
-    const b = spur.zeichen.filter(z => z === z.toUpperCase()).join(", ");
-    if (window.Lernfunde) Lernfunde.merke({ fach: "deutsch", art: "schreiben", e: "✍️", text: `Geschrieben: ${b}`, schluessel: "spur:" + b });
+    const b = spur.modus === "sas" ? spur.zeichen.join(", ") : spur.zeichen.filter(z => z === z.toUpperCase()).join(", ");
+    if (window.Lernfunde) Lernfunde.merke({ fach: "deutsch", art: "schreiben", e: spur.modus === "sas" ? "✒️" : "✍️", text: `${spur.modus === "sas" ? "In Schreibschrift geschrieben" : "Geschrieben"}: ${b}`, schluessel: (spur.modus === "sas" ? "sas:" : "spur:") + b });
     $("spuren").style.display = "none"; $("spuren-rueck").textContent = "";
     $("spuren-ende").hidden = false;
     $("spuren-ende").innerHTML = `<div class="gross">✍️</div><p>Du hast ${spur.fertig} Buchstaben geschrieben: ${spur.zeichen.join(" ")}</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="knopf haupt" id="spuren-mehr">🔁 Noch mehr</button><button class="knopf" id="spuren-start">🔤 Übersicht</button></div>`;
-    $("spuren-mehr").onclick = spurenRunde; $("spuren-start").onclick = start;
+    const modus = spur.modus; $("spuren-mehr").onclick = () => spurenRunde(modus); $("spuren-start").onclick = start;
   }
   $("spuren-nochmal").addEventListener("click", () => { if (spur) spurZeichen(); });
   $("spuren-weiter").addEventListener("click", () => { if (spur && spur.i < spur.zeichen.length) spurNaechstes(); });
@@ -511,7 +548,7 @@
     ziel: () => lauf && lauf.ziele[lauf.i], stand: () => daten(),
     texte, text, textAntworte, textRichtig: () => tlauf ? tlauf.optionen.findIndex(o => o.richtig) : -1, textFrageNr: () => tlauf ? tlauf.f : -1,
     silbenWoerter: () => SILBENWOERTER.length,
-    spurenRunde, spurZeichen: () => spur && spur.zeichen[spur.i], spurNr: () => spur ? spur.i : -1,
+    spurenRunde, spurZeichen: () => spur && spur.zeichen[spur.i], spurNr: () => spur ? spur.i : -1, spurStrich: () => spur ? spur.s : -1, spurStriche: () => spur ? spur.striche.length : 0,
     // Prüfpunkte des aktuellen Strichs in Bildschirm-Koordinaten (für den Test: Finger entlangführen)
     spurPunkte: () => { const st = spur && spur.striche[spur.s]; if (!st) return []; const svg = $("spuren"), m = svg.getScreenCTM();
       return st.cp.map(([x, y]) => { const pt = svg.createSVGPoint(); pt.x = x; pt.y = y; const q = pt.matrixTransform(m); return [q.x, q.y]; }); },
