@@ -8,7 +8,7 @@ const M = window.Mathe;
 let n = 0;
 const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
 
-for (const [weg, liste, anzahl] of [["Kl. 1", M.STATIONEN_K1, 22], ["Kl. 2", M.STATIONEN, 45], ["Kl. 3", M.STATIONEN_K3, 35], ["Kl. 4", M.STATIONEN_K4, 26], ["Übergang 5", M.STATIONEN_K5, 16]]) {
+for (const [weg, liste, anzahl] of [["Kl. 1", M.STATIONEN_K1, 22], ["Kl. 2", M.STATIONEN, 45], ["Kl. 3", M.STATIONEN_K3, 35], ["Kl. 4", M.STATIONEN_K4, 26], ["Übergang 5", M.STATIONEN_K5, 26]]) {
   pruefe(`${weg}: ${anzahl} Stationen, je 400 gültige Aufgaben`, () => {
     assert.strictEqual(liste.length, anzahl);
     for (const s of liste) {

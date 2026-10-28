@@ -46,7 +46,7 @@ const NEU5 = ["k5grosszahl", "k5teiler", "k5terme", "k5geometrie", "k5raum", "k5
     return { sterne, passt };
   }
 
-  for (const [stufe, weg, neu, anzahl, ersteJeLb] of [["1", "k1", NEU1, 22, ["k1wuerfel", "k1muster", "k1geld", "k1daten"]], ["5", "k5", NEU5, 16, ["k5fit", "k5komma", "k5koordinaten", "k5mittel"]]]) {
+  for (const [stufe, weg, neu, anzahl, ersteJeLb] of [["1", "k1", NEU1, 22, ["k1wuerfel", "k1muster", "k1geld", "k1daten"]], ["5", "k5", NEU5, 26, ["k5fit", "k5komma", "k5koordinaten", "k5mittel"]]]) {
     const { ctx, p } = await kind(stufe);
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     const ids = await p.evaluate((w) => Mathe[w].map(s => s.id), weg === "k1" ? "STATIONEN_K1" : "STATIONEN_K5");
@@ -65,13 +65,13 @@ const NEU5 = ["k5grosszahl", "k5teiler", "k5terme", "k5geometrie", "k5raum", "k5
       const zu = await p.evaluate(() => document.getElementById("urkunde-ziel").classList.contains("zu"));
       await p.click("#urkunde-ziel"); await p.waitForTimeout(300);
       const u = await p.evaluate(() => { const x = document.getElementById("urkunde"); return x ? x.textContent : ""; });
-      erwarte(!zu && /Übergang 5: 10 von 16/.test(u), `Urkunde „Fit für Klasse 5“ bleibt mit den ursprünglichen 10 Stationen erreichbar (${(u.match(/Übergang 5: [^,]*/) || [""])[0]})`);
+      erwarte(!zu && /Übergang 5: 10 von 26/.test(u), `Urkunde „Fit für Klasse 5“ bleibt mit den ursprünglichen 10 Stationen erreichbar (${(u.match(/Übergang 5: [^,]*/) || [""])[0]})`);
       await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(300);
       if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); }
       await p.waitForSelector(".lp-punkte");
-      const ue = await p.evaluate(() => document.querySelectorAll("li[data-punkt^='sn.ue5']").length);
-      erwarte(ue === 15, `Elternbereich Stufe 5: 15 Übergangs-Punkte Mathe (${ue})`);
-      if (BILDER) { await p.evaluate(() => { const li = document.querySelector("li[data-punkt^='sn.ue5']"); li.closest("details").open = true; li.scrollIntoView(); }); await p.screenshot({ path: `${BILDER}/mathe15-eltern-ue5.png` }); }
+      const ue = await p.evaluate(() => document.querySelectorAll("li[data-punkt^='sn.os5']").length);
+      erwarte(ue === 25, `Elternbereich Stufe 5: 25 Punkte Mathe Klasse 5 Oberschule (${ue})`);
+      if (BILDER) { await p.evaluate(() => { const li = document.querySelector("li[data-punkt^='sn.os5']"); li.closest("details").open = true; li.scrollIntoView(); }); await p.screenshot({ path: `${BILDER}/mathe15-eltern-ue5.png` }); }
     } else {
       await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(300);
       if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); }

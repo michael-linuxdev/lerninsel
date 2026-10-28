@@ -1348,26 +1348,89 @@
       }
     }
   };
-  // Übergang in Klasse 5 (Mathe): VORLÄUFIG – der Lehrplantext Kl. 5 (Oberschule/Gymnasium) liegt noch nicht vor. Grundlage: was der
-  // Grundschul-Lehrplan Kl. 4 als Basis legt, und die üblichen Startthemen der 5. Klasse (beide Schularten). Kein Lernbereich des
-  // Grundschul-Profils – wird nur für Kinder in der Stufe „Übergang 5“ im Elternbereich gezeigt.
-  P.uebergang = { stand: "vorläufig – ohne Lehrplantext Klasse 5", mathe: [
-    ["sn.ue5.ma.01", "Schriftlich rechnen in allen vier Grundrechenarten sicher, mit Überschlag (Basis aus Kl. 4)", "5", ["mathe:k5fit", "mathe:k4malmehr", "mathe:k4geteilt"], "ja"],
-    ["sn.ue5.ma.02", "Große Zahlen bis zur Milliarde, Zehnerpotenzen, runden", "5", ["mathe:k5grosszahl", "mathe:k4million"], "ja"],
-    ["sn.ue5.ma.03", "Teiler, Vielfache, Primzahlen, Primfaktorzerlegung, größter gemeinsamer Teiler, kleinstes gemeinsames Vielfaches", "5", ["mathe:k5teiler", "mathe:k4primzahl"], "ja"],
-    ["sn.ue5.ma.04", "Terme mit Klammern, Punkt vor Strich, Rechengesetze, Variable und einfache Gleichungen", "5", ["mathe:k5klammer", "mathe:k5terme"], "ja"],
-    ["sn.ue5.ma.05", "Brüche: Bruchteile darstellen, von Mengen bestimmen, vergleichen", "5", ["mathe:k5bruchbild", "mathe:k5bruchvon", "mathe:k5bruchvergleich"], "ja"],
-    ["sn.ue5.ma.06", "Kommazahlen bei Größen", "5", ["mathe:k5komma", "mathe:k5groessen"], "ja"],
-    ["sn.ue5.ma.07", "Koordinatensystem", "5", ["mathe:k5koordinaten"], "ja"],
-    ["sn.ue5.ma.08", "Winkelarten, Winkelgröße in Grad schätzen und messen", "5", ["mathe:k5winkel", "mathe:k5geometrie"], "teil"],
-    ["sn.ue5.ma.09", "Symmetrieachsen, Abstand Punkt–Gerade", "5", ["mathe:k5geometrie"], "ja"],
-    ["sn.ue5.ma.10", "Flächeninhalt und Umfang von Rechteck und Quadrat berechnen, Flächeneinheiten umrechnen", "5", ["mathe:k5raum", "mathe:k4flaeche"], "ja"],
-    ["sn.ue5.ma.11", "Volumen und Oberfläche von Quader und Würfel", "5", ["mathe:k5raum", "mathe:k4volumen"], "ja"],
-    ["sn.ue5.ma.12", "Genau zeichnen mit Geodreieck und Zirkel", "5", ["echtewelt:lineal", "echtewelt:zirkel"], "aussen"],
-    ["sn.ue5.ma.13", "Größen über mehrere Einheiten umrechnen, Maßstab", "5", ["mathe:k5groessen", "mathe:k4massstab"], "ja"],
-    ["sn.ue5.ma.14", "Sachaufgaben in mehreren Schritten", "5", ["mathe:k5sach"], "ja"],
-    ["sn.ue5.ma.15", "Daten auswerten: Mittelwert, Diagramme", "5", ["mathe:k5mittel", "mathe:k4diagramme"], "ja"]
-  ].map(([id, text, kl, app, abdeckung]) => ({ id, text, kl, app, abdeckung })) };
+  // Übergang in Klasse 5 (Mathe) nach den Lehrplänen Oberschule (2019) und Gymnasium (2021) Sachsen, Klassenstufe 5 (29.10.2026; PDFs vom
+  // Auftraggeber, nur zusammengefasst). Kein Lernbereich des Grundschul-Profils – wird nur für Kinder in der Stufe „Übergang 5“ im
+  // Elternbereich gezeigt, je nach Eltern-Wahl eltern.mathe.schulart = "os" | "gy" (Standard Oberschule). P.uebergang.mathe = alle Punkte beider Schularten.
+  const zuPunkt = ([id, text, kl, app, abdeckung]) => ({ id, text, kl, app, abdeckung });
+  P.uebergang = { stand: "Lehrplan Mathematik Klasse 5: Oberschule 2019, Gymnasium 2021", schularten: {
+    os: { name: "Oberschule", quelle: "Lehrplan Oberschule Mathematik (2019), Klassenstufe 5", lb: [
+      { nr: 1, titel: "Natürliche Zahlen", punkte: [
+        ["sn.os5.1.01", "Natürliche Zahlen veranschaulichen, schätzen, runden, vergleichen und ordnen – auch große Zahlen, am Zahlenstrahl", "5", ["mathe:k5grosszahl", "mathe:k4million", "mathe:k4runden"], "ja"],
+        ["sn.os5.1.02", "Potenzschreibweise, abgetrennte Zehnerpotenzen", "5", ["mathe:k5grosszahl"], "ja"],
+        ["sn.os5.1.03", "Grundrechenarten mündlich, halbschriftlich und schriftlich, Überschlag", "5", ["mathe:k5fit", "mathe:k4malmehr", "mathe:k4runden"], "ja"],
+        ["sn.os5.1.04", "Rechenstrategien, Rechengesetze und Vorrangregeln", "5", ["mathe:k5klammer", "mathe:k5terme", "mathe:k4geschickt"], "ja"],
+        ["sn.os5.1.05", "Schriftlich dividieren durch einen einstelligen Divisor", "5", ["mathe:k4geteilt", "mathe:k5fit"], "ja"],
+        ["sn.os5.1.06", "Quadratzahlen bis 20² im Kopf, Quadratwurzel als Umkehrung", "5", ["mathe:k5quadrat"], "ja"],
+        ["sn.os5.1.07", "Einfache Gleichungen und Ungleichungen inhaltlich lösen, Textgleichungen", "5", ["mathe:k5gleichung", "mathe:k5terme"], "ja"],
+        ["sn.os5.1.08", "Teilbarkeit: Vielfache, Teiler, Regeln für 3, 4 und 6, Primzahlen", "5", ["mathe:k5teiler", "mathe:k4teilbar", "mathe:k4primzahl"], "ja"]
+      ].map(zuPunkt) },
+      { nr: 2, titel: "Gemeine Brüche, Dezimalzahlen und Größen", punkte: [
+        ["sn.os5.2.01", "Brüche erkennen und darstellen: an Figuren, echte und unechte Brüche, am Zahlenstrahl", "5", ["mathe:k5bruchbild", "mathe:k5bruchvon", "mathe:k5kuerzen"], "teil"],
+        ["sn.os5.2.02", "Zehnerbrüche und Dezimalzahlen ineinander umwandeln, Stellenwerttafel erweitern", "5", ["mathe:k5dezimal"], "ja"],
+        ["sn.os5.2.03", "Brüche vergleichen, ordnen und abschätzen", "5", ["mathe:k5bruchvergleich"], "ja"],
+        ["sn.os5.2.04", "Dezimalzahlen runden", "5", ["mathe:k5dezimal"], "ja"],
+        ["sn.os5.2.05", "Dezimalzahlen addieren, subtrahieren, mit einstelligen Zahlen und Zehnerpotenzen multiplizieren und dividieren", "5", ["mathe:k5dezrechnen"], "ja"],
+        ["sn.os5.2.06", "Prozentschreibweise für einfache Anteile (1 %, 10 %, 20 %, 25 %, 50 %, 75 %, 100 %)", "5", ["mathe:k5prozent"], "ja"],
+        ["sn.os5.2.07", "Sachaufgaben mit Geld, Länge, Masse und Zeit: Schreibweisen, Umrechnen, Dezi, Zenti, Milli", "5", ["mathe:k5komma", "mathe:k5groessen", "mathe:k5sach"], "ja"]
+      ].map(zuPunkt) },
+      { nr: 3, titel: "Geometrische Grundformen", punkte: [
+        ["sn.os5.3.01", "Koordinate und Koordinatensystem (erster Quadrant)", "5", ["mathe:k5koordinaten"], "ja"],
+        ["sn.os5.3.02", "Parallel, senkrecht, schneiden einander", "5", ["mathe:k5lage"], "ja"],
+        ["sn.os5.3.03", "Winkel messen und zeichnen, Winkelarten", "5", ["mathe:k5lage", "mathe:k5winkel", "echtewelt:lineal"], "aussen"],
+        ["sn.os5.3.04", "Würfel skizzieren, Körpernetz, Schrägbild, Körpermodell bauen", "5", ["mathe:k3netze", "mathe:k4schraegbild", "echtewelt:bauplan"], "teil"],
+        ["sn.os5.3.05", "Umfang und Flächeninhalt von Figuren aus Rechtecken, Flächeneinheiten", "5", ["mathe:k5raum", "mathe:k4flaeche", "mathe:k3umfang"], "ja"],
+        ["sn.os5.3.06", "Oberfläche und Volumen des Würfels, Volumeneinheiten", "5", ["mathe:k5raum", "mathe:k4volumen"], "ja"]
+      ].map(zuPunkt) },
+      { nr: 4, titel: "Symmetrie und deckungsgleiche Figuren", punkte: [
+        ["sn.os5.4.01", "Spiegelungen und Verschiebungen in Natur, Kunst und Technik, Symmetrieachse", "5", ["mathe:k5bewegung", "mathe:k5geometrie", "mathe:k3spiegel"], "ja"],
+        ["sn.os5.4.02", "Symmetrische und deckungsgleiche Figuren zeichnen: Geradenspiegelung, Verschiebung, Original und Bild", "5", ["mathe:k5bewegung", "echtewelt:lineal"], "aussen"]
+      ].map(zuPunkt) },
+      { nr: 9, titel: "Wahlbereiche (freiwillig)", punkte: [
+        ["sn.os5.9.01", "Wie die Menschen zählen und rechnen lernten: Zahlzeichen, Rechnen auf den Linien", "5", ["mathe:k4roemisch", "mathe:k4rechenbrett"], "ja"],
+        ["sn.os5.9.02", "Meine neue Klasse: Daten erfassen, Mittelwert, Möglichkeiten zählen", "5", ["mathe:k5mittel", "mathe:k5moeglich", "echtewelt:umfrage"], "ja"]
+      ].map(zuPunkt) }
+    ] },
+    gy: { name: "Gymnasium", quelle: "Lehrplan Gymnasium Mathematik (2019/2021), Klassenstufe 5", lb: [
+      { nr: 1, titel: "Arbeiten mit natürlichen Zahlen", punkte: [
+        ["sn.gy5.1.01", "Natürliche Zahlen veranschaulichen, schätzen, runden, vergleichen und ordnen", "5", ["mathe:k5grosszahl", "mathe:k4runden"], "ja"],
+        ["sn.gy5.1.02", "Rechenstrategien, Rechengesetze, Überschlag; einfache Gleichungen inhaltlich lösen", "5", ["mathe:k5klammer", "mathe:k5terme", "mathe:k5gleichung", "mathe:k5fit"], "ja"],
+        ["sn.gy5.1.03", "Potenzieren: Zehnerpotenzen, Quadratzahlen bis 20²", "5", ["mathe:k5grosszahl", "mathe:k5quadrat"], "ja"],
+        ["sn.gy5.1.04", "Dividieren im Kopf und schriftlich (bis dreistellig durch einstellig, auch mit Rest), Probe", "5", ["mathe:k4geteilt", "mathe:k3rest"], "ja"],
+        ["sn.gy5.1.05", "Teiler, Primzahlen, Teilbarkeitsregeln für 3, 4 und 6, einfache Primfaktorzerlegung", "5", ["mathe:k5teiler", "mathe:k4teilbar", "mathe:k4primzahl"], "ja"]
+      ].map(zuPunkt) },
+      { nr: 2, titel: "Gemeine Brüche und Dezimalzahlen", punkte: [
+        ["sn.gy5.2.01", "Brüche darstellen an Figuren, Körpern und am Zahlenstrahl, Anteile von Größen", "5", ["mathe:k5bruchbild", "mathe:k5bruchvon"], "teil"],
+        ["sn.gy5.2.02", "Kürzen und Erweitern, echte und unechte Brüche", "5", ["mathe:k5kuerzen"], "ja"],
+        ["sn.gy5.2.03", "Stellenwerttafel erweitern, Prozentschreibweise für ausgewählte Anteile", "5", ["mathe:k5dezimal", "mathe:k5prozent"], "ja"],
+        ["sn.gy5.2.04", "Brüche, Dezimalzahlen und Prozentangaben ineinander umwandeln", "5", ["mathe:k5dezimal", "mathe:k5prozent"], "ja"],
+        ["sn.gy5.2.05", "Vergleichen, ordnen, abschätzen und runden", "5", ["mathe:k5bruchvergleich", "mathe:k5dezimal"], "ja"],
+        ["sn.gy5.2.06", "Dezimalzahlen addieren, subtrahieren, mit einstelligen Zahlen und Zehnerpotenzen multiplizieren und dividieren", "5", ["mathe:k5dezrechnen"], "ja"],
+        ["sn.gy5.2.07", "Arithmetisches Mittel", "5", ["mathe:k5mittel"], "ja"]
+      ].map(zuPunkt) },
+      { nr: 3, titel: "Lagebeziehungen geometrischer Objekte", punkte: [
+        ["sn.gy5.3.01", "Punkte und Strecken im Koordinatensystem, parallele und senkrechte Geraden", "5", ["mathe:k5koordinaten", "mathe:k5lage"], "ja"],
+        ["sn.gy5.3.02", "Winkel zeichnen, messen und bezeichnen, Winkelarten", "5", ["mathe:k5winkel", "mathe:k5lage", "echtewelt:lineal"], "aussen"],
+        ["sn.gy5.3.03", "Scheitel-, Neben-, Stufen- und Wechselwinkel und ihre Eigenschaften", "5", ["mathe:k5winkelpaare"], "ja"],
+        ["sn.gy5.3.04", "Symmetrie im Alltag: Muster, Achsen- und Punktsymmetrie, Verschiebung, Drehung und Spiegelung unterscheiden", "5", ["mathe:k5bewegung", "mathe:k3ornament", "mathe:k4parkett"], "ja"],
+        ["sn.gy5.3.05", "Geradenspiegelung zeichnen und beschreiben, gleiche Seiten und Winkel", "5", ["mathe:k5bewegung", "mathe:k3spiegel", "echtewelt:lineal"], "aussen"]
+      ].map(zuPunkt) },
+      { nr: 4, titel: "Rechtecke und Quader", punkte: [
+        ["sn.gy5.4.01", "Umfang und Flächeninhalt von Rechtecken: Formeln, Einheiten, zusammengesetzte Figuren", "5", ["mathe:k5raum", "mathe:k4flaeche", "mathe:k3umfang"], "ja"],
+        ["sn.gy5.4.02", "Quader darstellen: Grundriss, Seitenansichten, Schrägbild, Körpernetz", "5", ["mathe:k3ansicht", "mathe:k3plaene", "mathe:k4schraegbild", "mathe:k3netze"], "ja"],
+        ["sn.gy5.4.03", "Aus Quadern zusammengesetzte Körper", "5", ["mathe:k3wuerfelbau", "mathe:k4schraegbild"], "ja"],
+        ["sn.gy5.4.04", "Oberfläche und Volumen von Quadern, Volumeneinheiten und Hohlmaße", "5", ["mathe:k5raum", "mathe:k4volumen", "mathe:k4liter"], "ja"]
+      ].map(zuPunkt) },
+      { nr: 5, titel: "Vernetzung: Mathematik im Alltag", punkte: [
+        ["sn.gy5.5.01", "Sachaufgaben mit Größen, Einheiten von Zeit, Masse, Länge, Fläche und Volumen umrechnen", "5", ["mathe:k5sach", "mathe:k5groessen"], "ja"],
+        ["sn.gy5.5.02", "Sinnvoll runden, mit Näherungswerten umgehen, Fahrpläne, Schätzaufgaben (Fermi)", "5", ["mathe:k4reise", "mathe:k3daten", "mathe:k4runden"], "teil"],
+        ["sn.gy5.5.03", "Ein Alltagsprojekt mathematisch planen (Spendenaktion, Sportfest, weniger Verpackungsmüll)", "5", ["echtewelt:umfrage", "echtewelt:einkauf"], "aussen"]
+      ].map(zuPunkt) },
+      { nr: 9, titel: "Wahlbereiche (freiwillig)", punkte: [
+        ["sn.gy5.9.01", "Mathematische Puzzles und Spiele", "5", ["mathe:k3knobeln", "mathe:k5moeglich"], "ja"],
+        ["sn.gy5.9.02", "Zählen und Rechnen – einst und jetzt", "5", ["mathe:k4roemisch", "mathe:k4rechenbrett"], "ja"]
+      ].map(zuPunkt) }
+    ] } } };
+  P.uebergang.mathe = [].concat(...Object.values(P.uebergang.schularten).map(s => [].concat(...s.lb.map(l => l.punkte))));
   Object.entries(PUNKTE).forEach(([fach, stufen]) => Object.entries(stufen).forEach(([st, lbs]) => Object.entries(lbs).forEach(([nr, liste]) => {
     const lb = (((P.faecher[fach] || {}).stufen || {})[st] || []).find(x => x.nr === +nr);
     if (lb) lb.punkte = liste.map(([id, text, kl, app, abdeckung]) => ({ id, text, kl, app, abdeckung }));

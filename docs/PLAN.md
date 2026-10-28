@@ -1693,3 +1693,26 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
   Ohne die Freigabe (Eintrag aus `ENTWURF_FREI` entfernen) zeigt die Hauptseite wieder nur geprüfte Lektionen – der Test `sorbisch` prüft beides.
 - Hauptseite und /dev unterscheiden sich jetzt nur noch im eigenen Spielstand und der DEV-Marke.
 
+### Stand 29.10.2026, abends (Lücken in den Hauptfächern, Mathe Klasse 5 nach den Lehrplänen)
+- **Mein Heft** (`spiele/heft/`, „Mein Ich“ → „📓 Mein Heft“, auch oben in der Werkstatt): Das Kind findet seine Texte und Aufnahmen aus der Werkstatt
+  wieder, lässt Texte vorlesen und hört sich selbst. Daten bleiben in der eigenen IndexedDB (`shared/eigenes.js`); löschen nur im Elternbereich.
+- **Schreibschrift** (Lesen und Schreiben → „✒️ Schreibschrift“): **Schulausgangsschrift** (Pflicht im Deutsch-Lehrplan Sachsen 2025, Kl. 1/2) – alle
+  Kleinbuchstaben einschließlich ä, ö, ü, ß und 34 verbundene Wörter mit dem Finger nachspuren (`inhalte/deutsch/schreibschrift.js`, Formen von Hand
+  nachgebildet, leicht geneigt; Daten `lesen.sas`). Eltern-Schalter `eltern.deutsch.schrift` = `sas` | `aus`. **Offen:** Großbuchstaben, Vereinfachte
+  und Lateinische Ausgangsschrift; Formen bitte mit der Schreibtabelle der Schule vergleichen (Rückmeldung erwünscht).
+- **Lernkartei Englisch und Sorbisch:** falsch beantwortete Wörter kommen am nächsten Tag (dann nach 3 und 7 Tagen) als „Kurz wiederholen“ an den Anfang
+  der nächsten Lektion; zählt nicht gegen die Sterne; gemeistert = Lernfund.
+- **Lieder und Reime zum Mitsingen** (`shared/lieder.js`): gemeinfreie Lieder mit Melodie (Web Audio) und leuchtenden Silben. Englisch: „Songs and rhymes“
+  (Twinkle Twinkle, Are You Sleeping, Old MacDonald, London Bridge, Rain Rain Go Away, One Two Buckle My Shoe) und Lied-Schritte in sechs Lektionen;
+  Atelier → Musik-Ecke → „🎤 Mitsingen“ (Alle meine Entchen, Hänschen klein, Bruder Jakob). Englisch Kl. 3 LB 1 jetzt ✅ (Englisch 18/4/0).
+- **Mathe Klasse 5** nach den Lehrplänen **Oberschule (2019) und Gymnasium (2021)** (PDFs vom Auftraggeber): Die vorläufige Übergangsliste ist ersetzt durch
+  die echten Lernbereiche Klasse 5 (Oberschule 4 LB + Wahlbereiche, 25 Punkte; Gymnasium 5 LB + Wahlbereiche, 26 Punkte). **10 neue Stationen** am Ende
+  des Wegs „Übergang 5“ (jetzt 26): Quadratzahlen und Wurzeln, Gleichungen und Ungleichungen, Dezimalzahlen verstehen, mit Dezimalzahlen rechnen,
+  Prozent (einfache Anteile), Brüche kürzen und erweitern, Parallel/senkrecht/Winkelarten, Neben- und Scheitelwinkel, Spiegeln/Verschieben/Drehen,
+  Möglichkeiten zählen. Urkunde zählt weiter nur die ursprünglichen 10. Eltern-Wahl `eltern.mathe.schulart` = `os` | `gy` (Karte „Mathe wie in der
+  Schule“); der Elternbereich zeigt bei Stufe „Übergang 5“ die Lernbereiche der gewählten Schulart. Ehrlich offen: Brüche am Zahlenstrahl, Würfel
+  zeichnen/Schrägbild zeichnen, Fermi-Aufgaben (teilweise); Winkel messen/zeichnen, Figuren spiegeln zeichnen, Projekte (draußen/Papier).
+- **Tests:** neu `luecken` (Heft, Schreibschrift, Englisch-Lernkartei, Lieder) und `mathe5` (10 neue Stationen über die Tasten, Schulart im Elternbereich);
+  angepasst `lehrplan`, `mathe-generatoren`, `mathe15`, `uebergang5`, `englisch`, `schuljahr2`; Rauchtest 60 Seitenaufrufe.
+- **Nächstes:** Rückmeldung Sorbisch-Prüfung; Großbuchstaben der Schulausgangsschrift; Klasse 5 Deutsch/Englisch nach Lehrplan (PDFs nötig); iPad-Test.
+

@@ -197,7 +197,10 @@
       <p class="klein">✅ gut abgedeckt · ◐ teilweise · ○ noch nicht in der App · 🌍 gehört nach draußen oder aufs Papier (dazu gibt es Echte-Welt-Aufgaben). In den aufklappbaren Inhaltspunkten: ✅ geübt · 🟡 teilweise · ⭕ fehlt noch.</p>
       ${L.zaehle ? (() => { const e = L.zaehle(land, k.klasse).errechnet; return `<p class="klein">Zum Vergleich, aus den Lernzielen der Inhalte errechnet (gut = mindestens drei Inhalte mit zusammen 30 Aufgaben und Wiederholung in der Lernkartei): ${e.ja} gut, ${e.teil} teilweise, ${e.nein} noch nicht.</p>`; })() : ""}
       ${faecher}
-      ${stufe.code === "5" && L.laender[land].uebergang ? `<h3 class="lp-fach">🎒 Übergang in Klasse 5 – Mathe <span class="klein">(${L.laender[land].uebergang.stand})</span></h3><p class="klein">Was die 5. Klasse voraussetzt und womit sie üblicherweise beginnt (Matheweg „Übergang 5“).</p>${punkteHtml(L.laender[land].uebergang.mathe)}` : ""}
+      ${stufe.code === "5" && L.laender[land].uebergang ? (() => { const U = L.laender[land].uebergang, sa = (((S.lade("eltern") || {}).mathe || {}).schulart) === "gy" ? "gy" : "os", A = U.schularten[sa];
+        return `<h3 class="lp-fach" id="lp-uebergang" data-schulart="${sa}">🎒 Klasse 5 – Mathe am ${A.name} <span class="klein">(${A.quelle})</span></h3><p class="klein">Was die 5. Klasse ${sa === "gy" ? "am Gymnasium" : "an der Oberschule"} lernt und was der Matheweg „Übergang 5“ davon schon übt. Schulart umstellen: Karte „Mathe wie in der Schule“.</p>` +
+          `<ul class="lp-liste">${A.lb.map(l => { const z = l.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein") ? "teil" : l.punkte.filter(p => p.abdeckung === "aussen").length >= l.punkte.filter(p => p.abdeckung === "ja").length ? "aussen" : "ja";
+            return `<li><span class="zeichen">${zeichen[z]}</span><b>${l.nr === 9 ? "" : `LB ${l.nr}: `}${l.titel}</b>${punkteHtml(l.punkte)}</li>`; }).join("")}</ul>`; })() : ""}
       <p class="klein">Quelle: Lehrpläne Grundschule des Freistaates Sachsen (schulportal.sachsen.de), KMK-Bildungsstandards Primarbereich.</p>
     </div>`;
   }
@@ -366,6 +369,7 @@
       <div class="zeit-raster"><label>Schriftlich minus<select id="m-minus">
         <option value="abziehen" ${m === "abziehen" ? "selected" : ""}>Abziehen mit Entbündeln („tausche einen Zehner“)</option>
         <option value="ergaenzen" ${m === "ergaenzen" ? "selected" : ""}>Ergänzen („von 7 bis 13 sind 6, merke 1“)</option></select></label>
+        <label>Schulart ab Klasse 5 (für „Übergang 5“)<select id="m-schulart"><option value="os" ${(((S.lade("eltern") || {}).mathe || {}).schulart) !== "gy" ? "selected" : ""}>Oberschule</option><option value="gy" ${(((S.lade("eltern") || {}).mathe || {}).schulart) === "gy" ? "selected" : ""}>Gymnasium</option></select></label>
         <label>Gerade in der Schule<select id="m-schule"><option value="" ${!schule ? "selected" : ""}>Keine Angabe (Matheweg der Reihe nach)</option>${Object.entries(LB_NAMEN).map(([k, n]) => `<option value="${k}" ${schule === k ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
       <p class="klein">„Gerade in der Schule“: Der Matheweg markiert diesen Lernbereich und schlägt seine nächste Station zuerst vor. Alle anderen Stationen bleiben offen wie bisher.</p>
       ${lernstandHtml()}
@@ -486,7 +490,7 @@
     $("en-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.englisch = Object.assign({}, e.englisch || {}, { ab: $("en-ab").value, schule: $("en-schule").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
   function matheKnoepfe() {
-    $("m-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.mathe = Object.assign({}, e.mathe || {}, { minus: $("m-minus").value, schule: $("m-schule").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+    $("m-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.mathe = Object.assign({}, e.mathe || {}, { minus: $("m-minus").value, schule: $("m-schule").value, schulart: $("m-schulart").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
   function echteWeltKnoepfe() {
     $("ew-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.echtewelt = { selbst: $("ew-selbst").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });

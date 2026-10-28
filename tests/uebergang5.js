@@ -35,7 +35,7 @@ const DEUTSCH = ["w-fachbegriffe", "w-lesestrategien"], THEMEN_NEU = ["lernen-le
     const { ctx, p } = await kind("5", breite, hoehe, art === "quer");
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     const w = await wegInfo(p);
-    erwarte(w.an === "k5" && w.stationen === 16 && w.erste === "Fit aus Klasse 4" && w.knoepfe === 5, `${art}: Stufe 5 startet auf „Übergang 5“ mit 16 Stationen (${w.an}, ${w.stationen})`);
+    erwarte(w.an === "k5" && w.stationen === 26 && w.erste === "Fit aus Klasse 4" && w.knoepfe === 5, `${art}: Stufe 5 startet auf „Übergang 5“ mit 26 Stationen (${w.an}, ${w.stationen})`);
     erwarte(await passt(p), `${art}: Matheweg ohne waagerechte Scrollleiste (5 Weg-Knöpfe)`);
     await bild(p, "ue5-weg-" + art);
     if (art === "quer") {
@@ -58,8 +58,8 @@ const DEUTSCH = ["w-fachbegriffe", "w-lesestrategien"], THEMEN_NEU = ["lernen-le
       erwarte(await p.evaluate(() => { const z = document.getElementById("urkunde-ziel"); return !!z && z.classList.contains("zu"); }), "Ziel „Urkunde“ am Ende von Übergang 5, noch gesperrt");
       await p.evaluate(() => { const d = Spielwelt.lade("mathe") || {}; d.k5 = d.k5 || {}; d.k4 = d.k4 || {}; Mathe.STATIONEN_K5.forEach(s => { d.k5[s.id] = 3; }); Mathe.STATIONEN_K4.forEach(s => { d.k4[s.id] = 2; }); Spielwelt.speichere("mathe", d); });
       await p.reload(); await p.waitForSelector("#urkunde-ziel"); await p.click("#urkunde-ziel"); await p.waitForTimeout(300);
-      erwarte(await p.evaluate(() => { const u = document.getElementById("urkunde"); return !!u && /Fit für Klasse 5/.test(u.textContent) && /Übergang 5: 16 von 16/.test(u.textContent) && !document.getElementById("urkunde-weiter"); }),
-        "Urkunde „Fit für Klasse 5“ mit 16 von 16 Stationen");
+      erwarte(await p.evaluate(() => { const u = document.getElementById("urkunde"); return !!u && /Fit für Klasse 5/.test(u.textContent) && /Übergang 5: 26 von 26/.test(u.textContent) && !document.getElementById("urkunde-weiter"); }),
+        "Urkunde „Fit für Klasse 5“ mit 26 von 26 Stationen");
       await bild(p, "ue5-urkunde"); await p.click("#urkunde-zu");
       // Von der Kl.-4-Urkunde geht es zum Übergang 5
       await p.click('.weg-wahl[data-weg="k4"]'); await p.waitForTimeout(300); await p.click("#urkunde-ziel"); await p.waitForTimeout(300);

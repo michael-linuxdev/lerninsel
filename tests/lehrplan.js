@@ -90,11 +90,13 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder I
         p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id) : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
         if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(mathe|werkstatt):/.test(a)), p.id); }); });
     assert.strictEqual(ids2.size, zahl, "Kl. " + st); assert.deepStrictEqual(m, soll, "Kl. " + st);
-  }  // Übergang 5 (vorläufig, eigene Liste)
+  }  // Übergang 5: Lehrpläne Klasse 5 Oberschule und Gymnasium
   const ue = L.laender.sachsen.uebergang, u = { ja: 0, teil: 0, nein: 0, aussen: 0 };
-  assert.ok(ue && /vorläufig/.test(ue.stand));
+  assert.ok(ue && /Oberschule 2019, Gymnasium 2021/.test(ue.stand) && ue.schularten.os.lb.length === 5 && ue.schularten.gy.lb.length === 6);
+  const k5 = new Set(); ue.mathe.forEach(p => p.app.forEach(a => k5.add(a)));
+  w.Mathe.STATIONEN_K5.forEach(s => assert.ok(k5.has("mathe:" + s.id), s.id + " kommt in keinem Kl.-5-Punkt vor"));
   ue.mathe.forEach(p => { u[p.abdeckung]++; p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : echt.includes(`["${id}", `), `${p.id}: ${a}`); }); });
-  assert.deepStrictEqual(u, { ja: 13, teil: 1, nein: 0, aussen: 1 });
+  assert.deepStrictEqual(u, { ja: 42, teil: 4, nein: 0, aussen: 5 });   // Oberschule 25 + Gymnasium 26 Punkte
 });
 
 pruefe("Sachsen in voller Tiefe: Deutsch Kl. 1/2, 3 und 4 – jeder Inhaltspunkt zugeordnet, Zuordnungen zeigen auf echte Kapitel, LB-Abdeckung passt zu den Punkten", () => {

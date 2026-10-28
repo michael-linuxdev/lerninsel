@@ -1974,6 +1974,106 @@
   ];
   STATIONEN_K4.push(...STATIONEN_K4_VOLL);
 
+  // ---------- Klasse 5 nach den Lehrplänen Oberschule (2019) und Gymnasium (2021) Sachsen: neue Stationen (29.10.2026) ----------
+  const dz = (z, n) => (z / Math.pow(10, n)).toFixed(n).replace(".", ",");          // ganze Zahl z als Dezimalzahl mit n Nachkommastellen
+  const dzk = (x) => String(+x.toFixed(6)).replace(".", ",");                       // Dezimalzahl ohne überflüssige Nullen
+  // Zwei Geraden, die sich unter dem Winkel w schneiden; markiert ist der Winkel α (oben rechts)
+  function kreuzBild(w) {
+    const p = `stroke="${D}" stroke-width="5" stroke-linecap="round"`, rad = w * Math.PI / 180, cx = 160, cy = 90, L = 140;
+    const bogen = (a0, a1, r, f) => { const x0 = cx + r * Math.cos(a0), y0 = cy - r * Math.sin(a0), x1 = cx + r * Math.cos(a1), y1 = cy - r * Math.sin(a1); return `<path d="M${cx} ${cy} L${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 0 0 ${x1.toFixed(1)} ${y1.toFixed(1)} Z" fill="${f}" opacity=".55"/>`; };
+    return `<svg viewBox="0 0 320 180" style="max-height:190px" role="img" aria-label="Zwei Geraden schneiden sich">` +
+      bogen(0, rad, 38, "#FFC83D") + bogen(rad, Math.PI, 30, "#9FD3F5") +
+      `<line x1="${cx - L}" y1="${cy}" x2="${cx + L}" y2="${cy}" ${p}/><line x1="${(cx - L * Math.cos(rad)).toFixed(1)}" y1="${(cy + L * Math.sin(rad)).toFixed(1)}" x2="${(cx + L * Math.cos(rad)).toFixed(1)}" y2="${(cy - L * Math.sin(rad)).toFixed(1)}" ${p}/>` +
+      `<text x="${(cx + 56 * Math.cos(rad / 2)).toFixed(1)}" y="${(cy - 56 * Math.sin(rad / 2) + 8).toFixed(1)}" font-size="24" font-weight="700" fill="${D}">α</text>` +
+      `<text x="${(cx + 52 * Math.cos((rad + Math.PI) / 2)).toFixed(1)}" y="${(cy - 52 * Math.sin((rad + Math.PI) / 2) + 8).toFixed(1)}" font-size="24" font-weight="700" fill="${D}">β</text></svg>`;
+  }
+  // Figur (Fähnchen) und ihr Bild nach Spiegelung, Verschiebung oder Drehung
+  function bewegungBild(art) {
+    const f = (dx, dy, sx, rot) => `<g transform="translate(${dx} ${dy}) ${rot ? `rotate(${rot})` : ""} scale(${sx} 1)"><path d="M0 40 L0 -40 L36 -26 L0 -12" fill="none" stroke="${D}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="0" cy="40" r="5" fill="#E5484D"/></g>`;
+    const achse = `<line x1="160" y1="10" x2="160" y2="170" stroke="#E5484D" stroke-width="3" stroke-dasharray="8 6"/>`;
+    const g = { spiegel: f(110, 90, 1) + achse + f(210, 90, -1), verschieb: f(70, 90, 1) + f(220, 90, 1) + `<path d="M100 150 L200 150 m-14 -9 l14 9 l-14 9" fill="none" stroke="#E5484D" stroke-width="3"/>`,
+      dreh: f(120, 90, 1) + f(200, 90, 1, 180) + `<circle cx="160" cy="90" r="5" fill="#2F86C8"/>` }[art];
+    return `<svg viewBox="0 0 320 180" style="max-height:190px" role="img" aria-label="Figur und Bild">${g}</svg>`;
+  }
+  const STATIONEN_K5_SEK = [
+    { id: "k5quadrat", lb: "zo", zusatz: true, stufe: "5", lz: ["ma.zo.19", "ma.zo.17"], name: "Quadratzahlen und Wurzeln", icon: "🟩",
+      neu: () => { const art = r(1, 4), n = r(11, 20), k = r(2, 10);
+        if (art === 1) return zahl(`${n}²`, n * n, `${n}² = ${n} · ${n} = ${n * n}. Tipp: ${n} · 10 + ${n} · ${n - 10}.`, { max: 3 });
+        if (art === 2) return zahl("", n, `${n} · ${n} = ${n * n}, also ist ${n} die Quadratwurzel von ${n * n}.`, { frage: `Welche Zahl mal sich selbst ergibt ${n * n}? (√${n * n})`, nurLuecke: true });
+        if (art === 3) { const q = k * k; return wahlAufgabe("Welche Zahl ist eine Quadratzahl?", q, [q + 1, q + k, q - 2].filter(x => x > 1 && Math.sqrt(x) % 1 !== 0), `${k} · ${k} = ${q}. Quadratzahlen: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, …`); }
+        return zahl(`√${k * k} + ${n}²`, k + n * n, `√${k * k} = ${k}, ${n}² = ${n * n}, zusammen ${k + n * n}.`, { max: 3 }); } },
+    { id: "k5gleichung", lb: "zo", zusatz: true, stufe: "5", lz: ["ma.ms.06", "ma.zo.17"], name: "Gleichungen und Ungleichungen", icon: "⚖️",
+      neu: () => { const art = r(1, 5);
+        if (art === 1) { const a = r(120, 580), y = r(105, 399); return zahl(`${a} + y = ${a + y}   y = ?`, y, `Umkehraufgabe: ${a + y} ${M} ${a} = ${y}.`, { max: 3 }); }
+        if (art === 2) { const a = r(400, 900), x = r(110, a - 100); return zahl(`${a} ${M} x = ${a - x}   x = ?`, x, `Was fehlt von ${a - x} bis ${a}? ${a} ${M} ${a - x} = ${x}.`, { max: 3 }); }
+        if (art === 3) { const a = r(5, 20), b = a + r(4, 15); return zahl("", b - a, `y + ${a} < ${b} gilt für y = 0, 1, …, ${b - a - 1}. Das sind ${b - a} Zahlen (die 0 zählt mit).`, { frage: `Wie viele natürliche Zahlen y erfüllen y + ${a} < ${b}? (Die 0 ist auch eine natürliche Zahl.)`, nurLuecke: true }); }
+        if (art === 4) { const p = wahl([42, 36, 24, 48, 30, 56]), t = [2, 3, 4, 6, 7, 8].filter(d => p % d === 0 && p / d < 10 && p / d > 1), a = wahl(t.length ? t : [6]), b = p / a;
+          return wahlAufgabe(`x · y = ${p}. Welches Zahlenpaar passt?`, `x = ${a}, y = ${b}`, [`x = ${a}, y = ${b + 1}`, `x = ${a + 1}, y = ${b}`, `x = ${a}, y = ${p - a}`], `Probe: ${a} · ${b} = ${p}.`); }
+        const z = r(12, 60), d = r(11, 39); return zahl("", z, `Rückwärts rechnen: ${z + d} ${M} ${d} = ${z}.`, { frage: `Ich denke mir eine Zahl, addiere ${d} und erhalte ${z + d}. Wie heißt meine Zahl?`, nurLuecke: true }); } },
+    { id: "k5dezimal", lb: "zo", zusatz: true, stufe: "5", lz: ["ma.zo.19", "ma.gm.10"], name: "Dezimalzahlen verstehen", icon: "🔟",
+      neu: () => { const art = r(1, 5);
+        if (art === 1) { const z = r(1, 9), n = wahl([1, 2]), nenner = n === 1 ? 10 : 100, zz = n === 1 ? z : r(1, 99);
+          return wahlAufgabe(`Schreibe ${zz}/${nenner} als Dezimalzahl.`, dz(zz, n), [dz(zz, n === 1 ? 2 : 1), dz(zz * 10, n), dz(zz, 3)], `Zehntel: eine Stelle hinter dem Komma, Hundertstel: zwei Stellen. ${zz}/${nenner} = ${dz(zz, n)}.`); }
+        if (art === 2) { const h = r(11, 99); return zahl("", h, `0,${h} heißt ${h} Hundertstel = ${h}/100.`, { frage: `0,${h} = ?/100`, nurLuecke: true }); }
+        if (art === 3) { const z = r(1001, 9999), auf = Math.round(z / 100); return wahlAufgabe(`Runde ${dz(z, 3)} auf Zehntel.`, dz(auf, 1), [dz(auf + 1, 1), dz(Math.floor(z / 100), 1) === dz(auf, 1) ? dz(auf - 1, 1) : dz(Math.floor(z / 100), 1), dz(Math.round(z / 10), 2)], `Schau auf die Hundertstelstelle: ${String(z)[2]} – ${+String(z)[2] >= 5 ? "aufrunden" : "abrunden"}.`); }
+        if (art === 4) { const e = r(1, 9), a = e * 100 + r(10, 99), b = a - r(1, 9) * 10 + 5, c = Math.floor(a / 10) * 100 + 5; const L = [[a, 2], [b, 2], [c, 3]], gr = L.reduce((m, x) => x[0] / Math.pow(10, x[1]) > m[0] / Math.pow(10, m[1]) ? x : m);
+          return wahlAufgabe("Welche Zahl ist am größten?", dz(gr[0], gr[1]), L.map(x => dz(x[0], x[1])), "Vergleiche Stelle für Stelle von links: erst die Einer, dann die Zehntel, dann die Hundertstel."); }
+        const z = r(1001, 9999), st = wahl([["Zehntelstelle", 1], ["Hundertstelstelle", 2], ["Tausendstelstelle", 3]]); return zahl("", +String(z)[st[1]], `${dz(z, 3)}: Nach dem Komma kommen Zehntel, Hundertstel, Tausendstel.`, { frage: `Welche Ziffer steht in ${dz(z, 3)} an der ${st[0]}?`, nurLuecke: true }); } },
+    { id: "k5dezrechnen", lb: "zo", zusatz: true, stufe: "5", lz: ["ma.zo.19", "ma.zo.16"], name: "Mit Dezimalzahlen rechnen", icon: "🧮",
+      neu: () => { const art = r(1, 5);
+        if (art === 1) { const a = r(11, 99), b = r(11, 99); return wahlAufgabe(`${dz(a, 1)} + ${dz(b, 1)} = ?`, dz(a + b, 1), [dz(a + b, 2), dz(a + b + 10, 1), dz(a + b - 1, 1)], "Komma unter Komma schreiben, dann wie gewohnt rechnen."); }
+        if (art === 2) { const a = r(300, 999), b = r(101, a - 50); return wahlAufgabe(`${dz(a, 2)} ${M} ${dz(b, 2)} = ?`, dz(a - b, 2), [dz(a - b, 1), dz(a - b + 10, 2), dz(a - b - 1, 2)], "Komma unter Komma, Stelle unter Stelle – Überschlag hilft beim Prüfen."); }
+        if (art === 3) { const a = r(11, 99), k = r(2, 9); return wahlAufgabe(`${dz(a, 1)} · ${k} = ?`, dz(a * k, 1), [dz(a * k, 2), dz(a * k, 0), dz(a * k + k, 1)], `Rechne ${a} · ${k} = ${a * k} und setze das Komma: eine Stelle wie bei ${dz(a, 1)}.`); }
+        if (art === 4) { const a = r(11, 999), p = wahl([10, 100, 1000]), n = String(p).length - 1, mal = Math.random() < 0.5;
+          const ok = mal ? dzk(a / 10 * p) : dzk(a / 10 / p), falsch = mal ? [dzk(a / 10 * p * 10), dzk(a / 10 * p / 10), dzk(a / 10 / p)] : [dzk(a / 10 / p * 10), dzk(a / 10 / p / 10), dzk(a / 10 * p)];
+          return wahlAufgabe(`${dz(a, 1)} ${mal ? "·" : ":"} ${tz(p)} = ?`, ok, falsch, `${mal ? "Mal" : "Geteilt durch"} ${tz(p)}: Das Komma rückt ${n} ${n === 1 ? "Stelle" : "Stellen"} nach ${mal ? "rechts" : "links"}.`); }
+        const k = r(2, 9), q = r(11, 99); return wahlAufgabe(`${dz(q * k, 1)} : ${k} = ?`, dz(q, 1), [dz(q, 2), dz(q * 10, 1), dz(q + 1, 1)], `Teile wie ohne Komma: ${q * k} : ${k} = ${q}, dann eine Stelle nach dem Komma.`); } },
+    { id: "k5prozent", lb: "zo", zusatz: true, stufe: "5", lz: ["ma.zo.19"], name: "Prozent: einfache Anteile", icon: "💯",
+      neu: () => { const A = [["0,01", "1/100", 1], ["0,1", "1/10", 10], ["0,2", "1/5", 20], ["0,25", "1/4", 25], ["0,5", "1/2", 50], ["0,75", "3/4", 75], ["1", "1/1", 100]], w = wahl(A), art = r(1, 4);
+        if (art === 1) return zahl("", w[2], `${w[0]} = ${w[2]} Hundertstel = ${w[2]} %.`, { frage: `${w[0]} = ? %`, nurLuecke: true, einheit: "%" });
+        if (art === 2) return wahlAufgabe(`Welcher Bruch passt zu ${w[2]} %?`, w[1], A.map(x => x[1]).filter(x => x !== w[1]).sort(() => Math.random() - 0.5), `${w[2]} % = ${w[2]}/100 = ${w[1]}.`);
+        if (art === 3) { const g = wahl([20, 40, 60, 80, 100, 200, 120]), x = wahl(A.slice(1, 6)), erg = g * x[2] / 100; if (erg % 1) return zahl("", g / 2, `50 % ist die Hälfte: ${g} : 2 = ${g / 2}.`, { frage: `Wie viel sind 50 % von ${g}?`, nurLuecke: true });
+          return zahl("", erg, `${x[2]} % = ${x[1]}. ${x[1]} von ${g} = ${erg}.`, { frage: `Wie viel sind ${x[2]} % von ${g}?`, nurLuecke: true }); }
+        const k = wahl([[2, 4], [3, 4], [1, 4], [4, 5], [1, 10], [7, 10]]); return zahl("", k[0] * 100 / k[1], `${k[0]}/${k[1]} = ${k[0] * 100 / k[1]}/100 = ${k[0] * 100 / k[1]} %.`, { frage: `${k[0]} von ${k[1]} Feldern sind bunt. Wie viel Prozent sind das?`, nurLuecke: true, einheit: "%", bild: bruchBild(k[0], k[1], "streifen") }); } },
+    { id: "k5kuerzen", lb: "zo", zusatz: true, stufe: "5", lz: ["ma.zo.19"], name: "Brüche kürzen und erweitern", icon: "✂️",
+      neu: () => { const art = r(1, 5), z = r(1, 4), n = z + r(1, 5), k = r(2, 6);
+        if (art === 1) return zahl("", z * k, `Erweitern heißt: Zähler und Nenner mit derselben Zahl malnehmen. ${z}/${n} = ${z * k}/${n * k}.`, { frage: `Erweitere ${z}/${n} auf ?/${n * k}.`, nurLuecke: true });
+        if (art === 2) return zahl("", n, `Kürzen heißt: Zähler und Nenner durch dieselbe Zahl teilen. ${z * k}/${n * k} = ${z}/${n} (gekürzt mit ${k}).`, { frage: `Kürze ${z * k}/${n * k} mit ${k}: ${z}/?`, nurLuecke: true });
+        if (art === 3) { const b = wahl([[3, 4, "echter Bruch"], [5, 4, "unechter Bruch"], [7, 3, "unechter Bruch"], [2, 9, "echter Bruch"], [9, 9, "unechter Bruch"]]); return wahlAufgabe(`${b[0]}/${b[1]} ist ein …`, b[2], ["echter Bruch", "unechter Bruch"], "Echt: Zähler kleiner als Nenner (weniger als ein Ganzes). Unecht: Zähler mindestens so groß wie der Nenner."); }
+        if (art === 4) { const b = wahl([[1, 2], [1, 3], [2, 3], [3, 4], [2, 5]]), m = r(2, 5); return wahlAufgabe(`Welcher Bruch ist genauso groß wie ${b[0]}/${b[1]}?`, `${b[0] * m}/${b[1] * m}`, [`${b[0] + m}/${b[1] + m}`, `${b[0] * m}/${b[1] + m}`, `${b[0]}/${b[1] * m}`], `Zähler und Nenner mit ${m} malnehmen: ${b[0] * m}/${b[1] * m}.`); }
+        const u = wahl([[7, 4], [5, 2], [11, 3], [9, 4], [13, 5], [8, 3]]), g = Math.floor(u[0] / u[1]), rest = u[0] % u[1];
+        return wahlAufgabe(`${u[0]}/${u[1]} als gemischte Zahl:`, `${g} ${rest}/${u[1]}`, [`${g + 1} ${rest}/${u[1]}`, `${g} ${u[1] - rest}/${u[1]}`, `${rest} ${g}/${u[1]}`], `${u[0]} : ${u[1]} = ${g} Rest ${rest}, also ${g} Ganze und ${rest}/${u[1]}.`); } },
+    { id: "k5lage", lb: "rf", zusatz: true, stufe: "5", lz: ["ma.rf.10", "ma.rf.05"], name: "Parallel, senkrecht, Winkelarten", icon: "📏",
+      neu: () => { const art = r(1, 4);
+        if (art === 1) { const w = wahl(["parallel", "senkrecht", "schneiden"]); return wahlAufgabe("Wie liegen die beiden Geraden zueinander?", { parallel: "parallel zueinander", senkrecht: "senkrecht aufeinander", schneiden: "sie schneiden sich (nicht senkrecht)" }[w], ["parallel zueinander", "senkrecht aufeinander", "sie schneiden sich (nicht senkrecht)"], "Parallel: überall gleicher Abstand, sie treffen sich nie. Senkrecht: rechter Winkel (90°).", { bild: linienBild(w) }); }
+        if (art === 2) { const f = wahl([["Rechteck", 2, 4], ["Quadrat", 2, 4], ["Parallelogramm", 2, 0], ["Trapez (kein Parallelogramm)", 1, null]]), parallel = f[2] === null || Math.random() < 0.5;
+          return zahl("", parallel ? f[1] : f[2], parallel ? `Ein ${f[0]} hat ${f[1]} ${f[1] === 1 ? "Paar" : "Paare"} paralleler Seiten.` : `${f[2] ? `Im ${f[0]} sind alle 4 Winkel rechte Winkel.` : `Im ${f[0]} gibt es keinen rechten Winkel (wenn es kein Rechteck ist).`}`, { frage: parallel ? `Wie viele Paare paralleler Seiten hat ein ${f[0]}?` : `Wie viele rechte Winkel hat ein ${f[0]}?`, nurLuecke: true }); }
+        if (art === 3) { const w = r(2, 34) * 5; const art2 = w < 90 ? "spitzer Winkel" : w === 90 ? "rechter Winkel" : w < 180 ? "stumpfer Winkel" : w === 180 ? "gestreckter Winkel" : "überstumpfer Winkel";
+          return wahlAufgabe(`Ein Winkel ist ${w}° groß. Das ist ein …`, art2, ["spitzer Winkel", "rechter Winkel", "stumpfer Winkel", "überstumpfer Winkel"], "spitz < 90° · recht = 90° · stumpf zwischen 90° und 180° · überstumpf > 180°."); }
+        const w = wahl([35, 50, 65, 110, 125, 140]); return wahlAufgabe("Welcher Winkel ist das ungefähr?", `${w}°`, [`${180 - w}°`, `${w < 90 ? w + 40 : w - 40}°`, `${w < 90 ? 90 - w : 270 - w}°`], `${w < 90 ? "Spitz – kleiner als der rechte Winkel" : "Stumpf – größer als der rechte Winkel"}. Halte das Geodreieck an: etwa ${w}°.`, { bild: linienBild("winkel", w) }); } },
+    { id: "k5winkelpaare", lb: "rf", zusatz: true, stufe: "5", lz: ["ma.rf.10"], name: "Nebenwinkel und Scheitelwinkel", icon: "✖️",
+      neu: () => { const w = r(5, 16) * 5, art = r(1, 3);
+        if (art === 1) return zahl("", 180 - w, `α und β liegen nebeneinander auf einer Geraden: zusammen 180°. β = 180° ${M} ${w}° = ${180 - w}°.`, { frage: `α = ${w}°. Wie groß ist der Nebenwinkel β?`, nurLuecke: true, einheit: "°", bild: kreuzBild(w) });
+        if (art === 2) return zahl("", w, `Scheitelwinkel liegen sich am Schnittpunkt gegenüber und sind gleich groß: ${w}°.`, { frage: `α = ${w}°. Wie groß ist der Scheitelwinkel von α (gegenüber)?`, nurLuecke: true, einheit: "°", bild: kreuzBild(w) });
+        const s = wahl([["Nebenwinkel", "ergänzen sich zu 180°"], ["Scheitelwinkel", "sind gleich groß"], ["Stufenwinkel an parallelen Geraden", "sind gleich groß"], ["Wechselwinkel an parallelen Geraden", "sind gleich groß"]]);
+        return wahlAufgabe(`${s[0]} …`, s[1], ["ergänzen sich zu 180°", "sind gleich groß", "ergänzen sich zu 90°"], "Nebenwinkel: zusammen 180°. Scheitel-, Stufen- und Wechselwinkel (an Parallelen): gleich groß."); } },
+    { id: "k5bewegung", lb: "rf", zusatz: true, stufe: "5", lz: ["ma.rf.05"], name: "Spiegeln, Verschieben, Drehen", icon: "🔄",
+      neu: () => { const art = r(1, 3);
+        if (art === 1) { const b = wahl(["spiegel", "verschieb", "dreh"]), name = { spiegel: "Spiegelung an der Achse", verschieb: "Verschiebung", dreh: "Drehung um den Punkt" }[b];
+          return wahlAufgabe("Wie ist das rechte Fähnchen aus dem linken entstanden?", name, ["Spiegelung an der Achse", "Verschiebung", "Drehung um den Punkt"], "Spiegelung: seitenverkehrt. Verschiebung: gleiche Richtung, nur woanders. Drehung: steht auf dem Kopf.", { bild: bewegungBild(b) }); }
+        if (art === 2) { const s = wahl([["S", "punktsymmetrisch"], ["Z", "punktsymmetrisch"], ["N", "punktsymmetrisch"], ["A", "achsensymmetrisch"], ["M", "achsensymmetrisch"], ["T", "achsensymmetrisch"], ["H", "beides"], ["O", "beides"], ["F", "keins von beiden"], ["R", "keins von beiden"]]);
+          return wahlAufgabe(`Der Buchstabe ${s[0]} ist …`, s[1], ["achsensymmetrisch", "punktsymmetrisch", "beides", "keins von beiden"], "Achsensymmetrisch: an einer Linie spiegeln. Punktsymmetrisch: um einen halben Kreis (180°) drehen – sieht gleich aus."); }
+        const s = wahl([["eine Strecke", "gleich lang"], ["ein Winkel", "gleich groß"], ["eine Figur", "deckungsgleich"]]);
+        return wahlAufgabe(`Beim Spiegeln ist das Bild von ${s[0]} zum Original …`, s[1], ["gleich lang", "gleich groß", "deckungsgleich", "doppelt so groß", "halb so groß"].filter(x => x === s[1] || /doppelt|halb/.test(x)), "Spiegeln, Verschieben und Drehen ändern weder Längen noch Winkel – Original und Bild sind deckungsgleich."); } },
+    { id: "k5moeglich", lb: "dz", zusatz: true, stufe: "5", lz: ["ma.dz.08", "ma.pk.04"], name: "Möglichkeiten zählen", icon: "🔢",
+      neu: () => { const art = r(1, 4);
+        if (art === 1) { const n = r(2, 5), f = [1, 1, 2, 6, 24, 120][n]; return zahl("", f, `Für den ersten Platz gibt es ${n} Kinder, für den zweiten ${n - 1}, … also ${Array.from({ length: n }, (_, i) => n - i).join(" · ")} = ${f}.`, { frage: `Auf wie viele Arten können sich ${n} Kinder für ein Foto nebeneinander aufstellen?`, nurLuecke: true }); }
+        if (art === 2) { const a = r(2, 5), b = r(2, 4); return zahl("", a * b, `Zu jedem der ${a} T-Shirts passen ${b} Hosen: ${a} · ${b} = ${a * b}.`, { frage: `${a} T-Shirts und ${b} Hosen. Wie viele verschiedene Kleidungen kannst du anziehen?`, nurLuecke: true }); }
+        if (art === 3) { const n = r(3, 6); return zahl("", n * (n - 1) / 2, `Jedes Kind gibt jedem anderen einmal die Hand: ${n} · ${n - 1} : 2 = ${n * (n - 1) / 2}.`, { frage: `${n} Kinder geben sich gegenseitig einmal die Hand. Wie viele Händedrücke sind das?`, nurLuecke: true }); }
+        const z = wahl([[2, 3], [3, 4], [2, 4]]); const anz = z[1] * (z[1] - 1) * (z[0] === 3 ? z[1] - 2 : 1); return zahl("", anz, `Ziffer für die erste Stelle: ${z[1]} Möglichkeiten, dann ${z[1] - 1}${z[0] === 3 ? `, dann ${z[1] - 2}` : ""}: ${anz}.`, { frage: `Wie viele ${z[0]}-stellige Zahlen kannst du aus ${z[1]} verschiedenen Ziffernkarten legen (jede Karte nur einmal, keine 0)?`, nurLuecke: true }); } }
+  ];
+  STATIONEN_K5.push(...STATIONEN_K5_SEK);
+
   // Eine Runde: verschiedene Aufgaben ohne Doppelte
   function runde(station, anzahl = 10) {
     const s = STATIONEN.find(x => x.id === station) || STATIONEN_K1.find(x => x.id === station) || STATIONEN_K3.find(x => x.id === station) || STATIONEN_K4.find(x => x.id === station) || STATIONEN_K5.find(x => x.id === station);

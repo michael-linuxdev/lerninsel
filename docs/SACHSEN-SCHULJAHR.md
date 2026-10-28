@@ -23,6 +23,7 @@ Die Seiten des Schulportals (`schulportal.sachsen.de/lplandb`) sind aus der Arbe
 | Ev. und Kath. Religion | 2004/2009/2019 | ✅ liegt vor | ✅ liegt vor |
 | Sorbisch (Fremdsprache / Muttersprache) | 2019 / 2004 | ✅ Fremdsprache eingearbeitet (Eltern-Wahl, Wörter in Prüfung); Muttersprache nicht | ✅ Fremdsprache |
 | Englisch | 2019 | – (Pflicht erst ab Kl. 3) | ✅ liegt vor |
+| Mathematik Klasse 5 (Oberschule 2019, Gymnasium 2021) | 2019/2021 | ✅ eingearbeitet (Übergang 5, 29.10.2026) | – |
 
 Regel bleibt: Lehrplantexte **nur zusammenfassen**, nie wörtlich übernehmen; jeder Punkt bekommt eine Lernziel-ID.
 

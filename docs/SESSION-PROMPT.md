@@ -12,7 +12,7 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen** – dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
 Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
-## 1. Stand (29.10.2026)
+## 1. Stand (29.10.2026, abends)
 ### Was es gibt (Inhalte)
 - **Mathe (Biber Benno):** fünf Wege, je Station 10 Aufgaben, Lernkartei, Einstufung (Kl. 2), Eltern-Wahl der Subtraktion (Abziehen/Ergänzen).
   **Kl. 1/Vorschule 22** · **Kl. 2 45** · **Kl. 3 35** · **Kl. 4 26** · **Übergang 5** 16 (vorläufig). Freischalten je Lernbereich, Lernbereichs-Kacheln
@@ -31,13 +31,16 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Religion (ev./kath.): 37 Themen** nach den sächsischen Lehrplänen, Reiter „Religion“ nur nach Eltern-Wahl (`eltern.ethik.unterricht`).
 - **Sorbisch (Obersorbisch, Papagei Paula): 23 Lektionen** nur nach Eltern-Wahl (`eltern.sorbisch.an`); alle Wörter sind Entwürfe, stehen aber seit 29.10. auch auf der
   Hauptseite (Entscheidung „vollständig nach main“, `ENTWURF_FREI` mit `hsb`); Prüfstand in `spiele/sorbisch/geprueft.js`. Prüfliste `spiele/sorbisch/pruefen.html`. Keine sorbische Stimme: nur Lesen.
+- **Neu 29.10. abends:** „Mein Heft“ (eigene Texte/Aufnahmen), Schreibschrift (Schulausgangsschrift, Kleinbuchstaben und Wörter), Lernkartei für Englisch
+  und Sorbisch, Lieder und Reime zum Mitsingen (Englisch „Songs and rhymes“, Atelier „Mitsingen“), **Mathe Klasse 5 nach den Lehrplänen Oberschule und
+  Gymnasium** (Weg „Übergang 5“ mit 26 Stationen, Eltern-Wahl Schulart).
 - Weiter: Medien (Tablet-Führerschein), Gefühle, Atelier (Malen, Musik), Schach, Insel in zwei Looks, Story/Tutorial E1–E8, Können je Lernziel, Elternbericht.
 
 ### Lehrplan Sachsen (`shared/lehrplan/laender/sachsen.js` + Inhaltspunkte in `sachsen-punkte.js`)
 - **Mathe und Deutsch nach Fassung 2025**, Sachunterricht, Englisch, Kunst, Musik, Werken, Sport nach Fassung 2019, Ethik 2004/2019 – **alle gegen die PDFs geprüft.**
 - **Mathe Grundschule vollständig** (120 Punkte). **Deutsch** 179 Punkte (166 geübt, 7 teilweise, 6 Papier). **Sachunterricht** 99 Pflicht-Punkte
   (94/2/3). **Englisch** 73 Punkte (65/5/3).
-- **Lernbereiche Mathe, Deutsch, SU (45): 37 gut, 8 teilweise, 0 fehlt** (Mathe 12/0, Deutsch 9/6, SU 16/2). **Englisch (22, mit „My Portfolio“): 17/5/0.**
+- **Lernbereiche Mathe, Deutsch, SU (45): 37 gut, 8 teilweise, 0 fehlt** (Mathe 12/0, Deutsch 9/6, SU 16/2). **Englisch (22, mit „My Portfolio“): 18/4/0.**
 - **Kunst 45 Punkte (32/1/12 draußen), Musik 48 (34/3/11), Werken 34 (24/1/9), Sport 42 (14/0/28), Ethik 43 (43/0/0). Sorbisch 47 (26/14/7, nur mit Wahl).** Lernbereiche, die vor allem
   nach draußen gehören, zeigen 🌍 (`abdeckung: "aussen"`, nur in den neuen Fächern).
 - „Teilweise“ heißt ehrlich: braucht einen Menschen oder ein Werkzeug, das die App nicht hat (Lautlesen mit Rückmeldung, Formatieren am Gerät,
@@ -53,8 +56,8 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 
 ### Bekannte Baustellen
 - **Schuljahres-Gerüst** („Zeig, was du kannst“, „gerade in der Schule“) gibt es jetzt für alle vier Fächer (Mathe, Deutsch, SU, Englisch).
-- Kinder sehen ihre eigenen Texte noch nicht selbst („Mein Heft“); Handschrift-Übung fehlt (nur Echte Welt).
-- Englisch ohne Lernkartei; Lieder/Reime zum Mitsingen fehlen.
+- Schreibschrift: Großbuchstaben, Vereinfachte und Lateinische Ausgangsschrift fehlen; Formen der SAS bitte mit der Schule vergleichen.
+- Lieder: bisher 9 (6 englisch, 3 deutsch); Melodie ohne Gesangsstimme (Kinder singen selbst).
 - Satz-Bauen/Ordnen werten jetzt den Wortlaut (doppelte Wörter austauschbar) – war vorher ein stiller Fehler in Englisch.
 - Nur russische Übersetzungs-Entwürfe (alle neuen Kapitel/Themen/Lektionen haben ru-Entwürfe); Ukrainisch u. a. fehlen. Ton über die Gerätestimme.
 - Länderprofile außer Sachsen fehlen (NA-47); Heimat-Themen für andere Länder fehlen.
