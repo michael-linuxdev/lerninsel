@@ -47,6 +47,16 @@
   .ich .name { font-size: 2rem; font-weight: 700; margin: 0; }
   .ich .titel { display: inline-block; margin-top: 4px; padding: 4px 14px; border-radius: 999px; background: var(--pflaume); color: #fff; font-weight: 600; }
   .ich .gesamt { margin: 4px 0 0; color: var(--pflaume-hell); font-weight: 600; }
+  /* (30.10.2026) Kopf-Karte mit Farbverlauf, Balken zur Gesamtstufe und zwei Zahlen (Sterne, Gelerntes) – keine Serien, kein Druck */
+  .karte.ich { background: linear-gradient(120deg, #FFFFFF 0%, #FFF7EC 55%, #FFEBD6 100%); }
+  .ich-info { flex: 1; min-width: 0; }
+  .gesamt-balken { width: min(260px, 100%); height: 12px; border-radius: 999px; background: #EFE6FF; overflow: hidden; margin-top: 4px; }
+  .gesamt-balken i { display: block; height: 100%; min-width: 6px; border-radius: 999px; background: linear-gradient(90deg, #B58CF0, var(--pflaume)); }
+  .ich-zahlen { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .ich-zahl { display: grid; justify-items: center; min-width: 92px; padding: 8px 12px; border-radius: 18px; background: #fff; box-shadow: 0 4px 0 rgba(75,35,128,.08); }
+  .ich-zahl b { font-size: 1.5rem; line-height: 1.1; }
+  .ich-zahl span { font-size: .85rem; color: var(--pflaume-hell); font-weight: 600; }
+  @media (max-width: 620px) { .karte.ich { flex-wrap: wrap; } .ich-zahlen { width: 100%; justify-content: flex-start; } .ich-zahl { min-width: 0; flex: 1; } }
   .vorteile { text-align: left; display: grid; gap: 6px; }
   .vorteile h3 { margin: 0; font-size: 1.1rem; }
   .vorteil { background: #FFF6D6; border-radius: 14px; padding: 8px 12px; font-size: 1rem; font-weight: 500; }
@@ -202,7 +212,9 @@
         <p class="name" id="name"></p>
         <span class="titel" id="titel"></span>
         <p class="gesamt" id="gesamt"></p>
+        <div class="gesamt-balken" aria-hidden="true"><i id="gesamt-balken"></i></div>
       </div>
+      <div class="ich-zahlen" id="ich-zahlen"></div>
     </div>
     <nav class="ich-reiter" role="tablist" aria-label="Bereiche">
       <button role="tab" data-reiter="heute" class="an">🌞 Heute</button>

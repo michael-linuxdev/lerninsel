@@ -1793,3 +1793,12 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Tests:** `leistung` misst die ausgeblendeten Minispiele nicht mehr, sondern prüft, dass sie zur Insel leiten (war seit dem Ausblenden rot).
   Warnung (kein Fehler): große Wald-Welt mit Hügeln in „schön“ ca. 155 000 statt höchstens 150 000 Dreiecke – in Teil 2 prüfen (Gras/Bäume).
 - **Nächstes:** Optik Teil 2 – 3D-Insel weiter (Gras ruhiger, Nachbarn/Tiere), Tiere und Meine Ecke; danach Story NA-17, NA-18, NA-16.
+
+### Stand 30.10.2026, Optik Teil 2 (Gras, Tiere, Meine Ecke, Mathe)
+- **Gras ruhiger:** Halme kürzer und breiter, Farbe aus der Bodenfarbe (nur etwas dunkler statt fast schwarzgrüner Spitzen), weniger Halme (560 statt 700),
+  sanftere Bewegung. Große Welten (R > 16): Nadelbäume mit 8 statt 10 Segmenten, Gelände mit 80 statt 96 Segmenten – Wald groß mit Hügeln ca. 148 000 Dreiecke, `leistung` „alles im Budget“.
+- **Nachbarn und Tiere:** Nahaufnahmen geprüft – die Nachbarn sind stimmig; das eigene Tier war neben dem Kind kaum zu sehen und ist jetzt je Stufe
+  etwas größer (0,7 / 0,92 / 1,15 statt 0,6 / 0,8 / 1).
+- **Meine Ecke:** Kopf-Karte mit Farbverlauf, Balken zur Gesamtstufe und zwei Zahlen (⭐ Sterne, 🌱 schon gelernt) – bewusst keine Serien/Tage-in-Folge.
+- **Mathe:** Lernbereichs-Kacheln mit Fortschrittsbalken; „gerade in der Schule“ im selben Gelb wie auf den anderen Fachseiten.
+- **Nächstes:** Story NA-17 (Kapitel 1–2), NA-18 (Inselchronik im Album), NA-16 (Weihnachts-QR-Geschenk – Auswahl der Geschenke offen).

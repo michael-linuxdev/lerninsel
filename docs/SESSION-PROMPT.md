@@ -89,7 +89,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (Inhalte fertig seit 30.10.2026; davor: Lehrplan Sachsen in voller Tiefe, Entscheidung 27.10.2026)
-0. **Optik verbessern** (Reihenfolge des Auftraggebers; Teil 1 erledigt: Jungen, 3D-Figur, Wasser, Fachseiten-Gruppen, Startseiten-Türen) – Teil 2: Insel weiter (Gras ruhiger, Nachbarn, Tiere), Meine Ecke, Mathe-Kopf an den neuen Stil; **danach Story** NA-17, NA-18, NA-16. iPad-Rückmeldung und Sorbisch-Prüfung jederzeit einarbeiten.
+0. **Optik** erledigt (Teil 1: Jungen, 3D-Figur, Wasser, Fachseiten-Gruppen, Startseiten-Türen; Teil 2: Gras ruhiger, Tiere größer, Meine Ecke, Mathe-Lernbereiche mit Balken) – Rückmeldung vom iPad abwarten; **danach Story** NA-17, NA-18, NA-16. iPad-Rückmeldung und Sorbisch-Prüfung jederzeit einarbeiten.
 **Arbeitsliste: `docs/SACHSEN-SCHULJAHR.md` – zuerst lesen.** Maßstab „wie ein Schuljahr“ (jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr,
 Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen.
 

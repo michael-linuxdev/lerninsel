@@ -99,7 +99,7 @@ const boden = [];
 const deko = new Group();
 if (!WELT.insel) {
   // Gelände: Ringe um die Mitte, Höhe aus der Welt, Farben je Höhe (Gras, Fels, Schneekuppen, Strand)
-  const ringe = EINFACH ? Math.round(WELT.R * 1.4) : Math.round(WELT.R * 2), segs = EINFACH ? 64 : 96, RA = WELT.R + 1.2;   // NA-29: etwas gröberes Gelände in „schön“
+  const ringe = EINFACH ? Math.round(WELT.R * 1.4) : Math.round(WELT.R * 2), segs = EINFACH ? 64 : WELT.R > 16 ? 80 : 96, RA = WELT.R + 1.2;   // NA-29: etwas gröberes Gelände in „schön“
   const pos = [], farb = [], idx = [];
   const cG = new Color(GRAS), cS = new Color(WINTERLICH && WELT.biom !== "wueste" ? "#F3E9D8" : WELT.B.sand), cF = new Color(WELT.B.fels), cW = new Color("#FFFFFF"), c = new Color();
   for (let i = 0; i <= ringe; i++) {
@@ -164,7 +164,7 @@ function baum(x, z, k = 1, i = 0) {
 // Nadelbaum, Palme, Kaktus für die eigenen Welten
 function nadelbaum(x, z, k) {
   const b = new Group(), f = WINTERLICH ? "#3E8E5A" : "#3F9A5C";
-  const sg = EINFACH ? 7 : 10;   // Segmente (NA-29)
+  const sg = EINFACH ? 7 : WELT.R > 16 ? 8 : 10;   // Segmente (NA-29; große Welten 8, damit das Dreiecks-Budget hält)
   b.add(setze(teil(new CylinderGeometry(0.16 * k, 0.24 * k, 1.0 * k, sg), "#8A5A34", { umriss: DEKO_KONTUR }), 0, 0.5 * k, 0));
   [[1.15, 1.3, 1.1], [0.9, 1.1, 1.9], [0.62, 0.9, 2.6]].forEach(([r, h, y]) => b.add(setze(teil(new ConeGeometry(r * k, h * k, sg), f, { umriss: DEKO_KONTUR }), 0, y * k, 0)));
   if (WINTERLICH) b.add(setze(teil(new ConeGeometry(0.4 * k, 0.5 * k, sg), "#FFFFFF"), 0, 3.0 * k, 0));
@@ -438,16 +438,17 @@ starr.push([station, [windrad]], [windrad]);
 // ---------- Wehendes Gras ----------
 let halme = null; const halmDaten = [];
 const MIT_GRAS = WELT.insel ? SAISON !== "winter" : !WINTERLICH && !["wueste"].includes(WELT.biom) && !(JAHRESZEIT_GRAS && SAISON === "winter");
-const HALME = WELT.insel ? 700 : Math.min(900, Math.round(700 * (WELT.rand / 12.9) ** 2));
+// (30.10.2026) Gras ruhiger: Halme kürzer und breiter, Farbe nur etwas dunkler als der Boden (vorher fast schwarzgrüne Spitzen), etwas weniger Halme
+const HALME = WELT.insel ? 560 : Math.min(560, Math.round(560 * (WELT.rand / 12.9) ** 2));
 if (!EINFACH && MIT_GRAS) {
-  const geo = new ConeGeometry(0.06, 0.45, 4); geo.translate(0, 0.22, 0);
-  halme = new InstancedMesh(geo, mat(WELT.biom === "strand" ? "#7FC25A" : SAISON === "herbst" ? "#7FB24A" : "#5FB548"), HALME);
+  const geo = new ConeGeometry(0.075, 0.34, 4); geo.translate(0, 0.16, 0);
+  halme = new InstancedMesh(geo, mat("#" + new Color(GRAS).multiplyScalar(0.86).getHexString()), HALME);
   const o = new Object3D();
   const HX = WELT.insel ? -5 : P.haus[0], HZ = WELT.insel ? -4.5 : P.haus[1], RW = WELT.insel ? 10.5 : WELT.rand - 2.4;
   for (let i = 0; i < HALME; i++) {
     const w = Math.random() * Math.PI * 2, r = 2 + Math.sqrt(Math.random()) * RW, x = Math.cos(w) * r, z = Math.sin(w) * r;
     if (Math.hypot(x - HX, z - HZ) < 2.6 || (WELT.see && Math.hypot(x - WELT.see.x, z - WELT.see.z) < WELT.see.r + 0.4)) { halmDaten.push({ x: 0, z: 0, p: 0, s: 0 }); o.scale.setScalar(0); o.updateMatrix(); halme.setMatrixAt(i, o.matrix); continue; }
-    halmDaten.push({ x, z, y: bodenY(x, z), p: Math.random() * 6, s: 0.6 + Math.random() * 0.8 });
+    halmDaten.push({ x, z, y: bodenY(x, z), p: Math.random() * 6, s: 0.6 + Math.random() * 0.6 });
     o.position.set(x, bodenY(x, z), z); o.scale.setScalar(halmDaten[i].s); o.updateMatrix(); halme.setMatrixAt(i, o.matrix);
   }
   halme.receiveShadow = true; scene.add(halme);
@@ -570,7 +571,7 @@ function tierModell(art, f, stufe) {
     for (let i = 0; i < 4; i++) k.add(setze(teil(new ConeGeometry(0.06, 0.16, 8), D, { dicke: 1.12 }), 0, 0.78 - i * 0.03, 0.15 - i * 0.2));
     [-1, 1].forEach(s => { const fl = teil(kugel(0.3), L); fl.scale.set(0.15, 0.6, 0.8); setze(fl, 0.32 * s, 0.75, -0.05); fl.rotation.z = 0.6 * s; k.add(fl); }); }
   t.userData = { k, schwanz };
-  t.scale.setScalar([0.6, 0.8, 1][Math.max(0, Math.min(2, stufe || 0))]);
+  t.scale.setScalar([0.7, 0.92, 1.15][Math.max(0, Math.min(2, stufe || 0))]);   // (30.10.2026) etwas größer – neben dem Kind ging das Tier unter
   return t;
 }
 let tier = null, nest = null;
@@ -1388,7 +1389,7 @@ function bild() {
   if (halme && !RUHIG && !sparen && (bildNr++ & 1) === 0) {   // Gras nur jedes zweite Bild bewegen
     for (let i = 0; i < halmDaten.length; i++) {
       const h = halmDaten[i]; if (!h.s) continue;
-      halmO.position.set(h.x, h.y, h.z); halmO.scale.setScalar(h.s); halmO.rotation.set(Math.sin(t * 1.8 + h.p + h.x * 0.3) * 0.18, 0, Math.cos(t * 1.5 + h.p) * 0.12);
+      halmO.position.set(h.x, h.y, h.z); halmO.scale.setScalar(h.s); halmO.rotation.set(Math.sin(t * 1.4 + h.p + h.x * 0.3) * 0.12, 0, Math.cos(t * 1.2 + h.p) * 0.08);
       halmO.updateMatrix(); halme.setMatrixAt(i, halmO.matrix);
     }
     halme.instanceMatrix.needsUpdate = true;

@@ -283,7 +283,8 @@
     box.innerHTML = lbs.map(k => { const st = ST.filter(s => s.lb === k), fertig = st.filter(s => bestes(s.id) > 0).length, ls = (d.lernstand || {})[WEG + ":" + k];
       return `<div class="lb-kachel${k === schule ? " schule" : ""}" data-lb="${k}"><div class="lb-kopf"><span class="lb-icon">${LB[k][0]}</span><b>${LB[k][1]}</b></div>` +
         `<div class="lb-stand">${fertig} von ${st.length} Stationen${ls ? ` · zuletzt gezeigt: ${ls.richtig} von ${ls.n}` : ""}</div>` +
-        (k === schule ? `<div class="lb-schule">📌 Gerade in der Schule</div>` : "") +
+        `<div class="lb-balken" aria-hidden="true"><i style="width:${Math.round(fertig / st.length * 100)}%"></i></div>` +
+        (k === schule ? `<div class="lb-schule"><span class="schule-marke">📌 Gerade in der Schule</span></div>` : "") +
         `<button class="knopf lb-zeig" data-lb="${k}">🔍 Zeig, was du kannst</button></div>`; }).join("");
     box.querySelectorAll(".lb-zeig").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); starteLernstand(b.dataset.lb); }));
   }

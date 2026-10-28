@@ -30,6 +30,9 @@
     if (md.fuehrerschein) { kachel("fs-link", "🪪", "Mein Tablet-Führerschein"); fs.href = "../medien/#fuehrerschein"; }
     else { kachel("fs-link", "🪪", `Tablet-Führerschein: ${ok} von ${anz}`); fs.href = "../medien/"; }
     $("gesamt").textContent = `Gesamtstufe ${C.gesamt()} von ${C.sichtbareFaehigkeiten().length * C.MAX}`;
+    $("gesamt-balken").style.width = Math.round(C.gesamt() / Math.max(1, C.sichtbareFaehigkeiten().length * C.MAX) * 100) + "%";
+    { const funde = window.Lernfunde ? Lernfunde.baum().summe : 0;
+      $("ich-zahlen").innerHTML = `<div class="ich-zahl"><b>⭐ ${S.sterne()}</b><span>Sterne</span></div>` + (window.Lernfunde ? `<div class="ich-zahl"><b>🌱 ${funde}</b><span>schon gelernt</span></div>` : ""); }
 
     // Superkräfte (Vorteile)
     const vorteile = [];
