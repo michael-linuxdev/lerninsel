@@ -1,13 +1,14 @@
 // Englisch mit Papagei Paula (Englisch-Einstieg, Kl. 3–4 und Übergang 5; nach den Grundschul-Lehrplänen der Länder, GeR-Niveau A1 angebahnt).
-// Lektion: { id, stufe, lz, name, e, farbe, grund, intro: { de, ru }, woerter: [{ en, de, ru, e }], extra: [Schritte], ende: { de, ru } }
+// Lektion: { id, lb, stufe, lz, name, e, farbe, grund, intro: { de, ru }, woerter: [{ en, de, ru, e }], extra: [Schritte], ende: { de, ru } }
 // Aus den Wörtern entstehen automatisch: Wortkarten (anhören, nachsprechen), Hören („Welches Bild?“), Lesen („Welches Bild?“), Übersetzen („Wie heißt das auf Englisch?“).
 // Zusätzliche Schritt-Typen in extra:
 //   satz { de, ru, woerter: ["I", "like", "apples."], e? }   – englischen Satz aus Wörtern bauen
 //   wahl { frage, ru, optionen: [richtig, falsch, falsch], e?, warum? } – Antwort auf Englisch wählen (erste Option richtig)
+// lb: Lernbereich des Lehrplans Sachsen 2019 (1 Me, my family … 10 Around the year, 11 My Portfolio); die Übersicht ist danach gruppiert.
 // Russische Texte sind Entwürfe (SPRACHEN.md); englische Wörter werden mit der englischen Gerätestimme vorgelesen.
 window.ENGLISCH = [
   {
-    id: "en-hello", stufe: 3, lz: ["en.sp.01", "en.hv.01"], name: "Hello! – Begrüßen", e: "👋", farbe: "#E0574A", grund: "#FFECE8",
+    id: "en-hello", lb: 1, stufe: 3, lz: ["en.sp.01", "en.hv.01"], name: "Hello! – Begrüßen", e: "👋", farbe: "#E0574A", grund: "#FFECE8",
     intro: { de: "Hello, {name}! Ich bin Paula. Papageien sprechen gern nach – und ich kann Englisch! Hör zu und sprich mir nach.", ru: "Hello, {name}! Я Паула. Попугаи любят повторять — а я умею говорить по-английски! Слушай и повторяй за мной." },
     woerter: [
       { en: "hello", de: "hallo", ru: "привет", e: "👋" }, { en: "goodbye", de: "auf Wiedersehen", ru: "до свидания", e: "🚶" },
@@ -20,7 +21,7 @@ window.ENGLISCH = [
     ende: { de: "Super! Sag heute zu deiner Familie einmal „Good morning“ oder „Good night“.", ru: "Супер! Скажи сегодня своей семье «Good morning» или «Good night»." }
   },
   {
-    id: "en-colours", stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "Colours – Farben", e: "🎨", farbe: "#7B55B8", grund: "#EFE6FF",
+    id: "en-colours", lb: 2, stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "Colours – Farben", e: "🎨", farbe: "#7B55B8", grund: "#EFE6FF",
     intro: { de: "Farben heißen auf Englisch „colours“. Hör genau hin – manche klingen ganz anders als auf Deutsch.", ru: "Цвета по-английски — «colours». Слушай внимательно — некоторые звучат совсем не так, как по-немецки." },
     woerter: [
       { en: "red", de: "rot", ru: "красный", e: "🔴" }, { en: "blue", de: "blau", ru: "синий", e: "🔵" }, { en: "green", de: "grün", ru: "зелёный", e: "🟢" },
@@ -33,7 +34,7 @@ window.ENGLISCH = [
     ende: { de: "Toll! Such zu Hause etwas, das „green“ ist, und sag es laut.", ru: "Здорово! Найди дома что-нибудь «green» и скажи это вслух." }
   },
   {
-    id: "en-numbers", stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "Numbers – Zahlen bis 10", e: "🔢", farbe: "#2FA37C", grund: "#E3F7EF",
+    id: "en-numbers", lb: 1, stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "Numbers – Zahlen bis 10", e: "🔢", farbe: "#2FA37C", grund: "#E3F7EF",
     intro: { de: "Jetzt zählen wir auf Englisch von eins bis zehn: one, two, three …", ru: "Теперь считаем по-английски от одного до десяти: one, two, three …" },
     woerter: [
       { en: "one", de: "eins", ru: "один", e: "1️⃣" }, { en: "two", de: "zwei", ru: "два", e: "2️⃣" }, { en: "three", de: "drei", ru: "три", e: "3️⃣" },
@@ -46,7 +47,7 @@ window.ENGLISCH = [
     ende: { de: "Klasse! Zähl heute deine Stifte auf Englisch.", ru: "Класс! Посчитай сегодня свои карандаши по-английски." }
   },
   {
-    id: "en-animals", stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "Animals – Tiere", e: "🐶", farbe: "#B5701A", grund: "#FFF1D9",
+    id: "en-animals", lb: 8, stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "Animals – Tiere", e: "🐶", farbe: "#B5701A", grund: "#FFF1D9",
     intro: { de: "Tiere auf Englisch! Manche Wörter kennst du vielleicht schon.", ru: "Животные по-английски! Некоторые слова ты, может быть, уже знаешь." },
     woerter: [
       { en: "dog", de: "Hund", ru: "собака", e: "🐶" }, { en: "cat", de: "Katze", ru: "кошка", e: "🐱" }, { en: "bird", de: "Vogel", ru: "птица", e: "🐦" },
@@ -58,7 +59,7 @@ window.ENGLISCH = [
     ende: { de: "Prima! Welches Tier magst du am liebsten? Sag es auf Englisch!", ru: "Отлично! Какое животное тебе нравится больше всего? Скажи по-английски!" }
   },
   {
-    id: "en-body", stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "My body – Mein Körper", e: "👂", farbe: "#E0578F", grund: "#FFE8F1",
+    id: "en-body", lb: 2, stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "My body – Mein Körper", e: "👂", farbe: "#E0578F", grund: "#FFE8F1",
     intro: { de: "Zeig mit: Wenn ich „nose“ sage, tippst du auf deine Nase!", ru: "Показывай: когда я скажу «nose», дотронься до своего носа!" },
     woerter: [
       { en: "eye", de: "Auge", ru: "глаз", e: "👁️" }, { en: "ear", de: "Ohr", ru: "ухо", e: "👂" }, { en: "nose", de: "Nase", ru: "нос", e: "👃" },
@@ -70,7 +71,7 @@ window.ENGLISCH = [
     ende: { de: "Super! Spiel mit deiner Familie „Touch your …“ – wer zeigt am schnellsten?", ru: "Супер! Поиграй с семьёй в «Touch your …» — кто покажет быстрее?" }
   },
   {
-    id: "en-food", stufe: 3, lz: ["en.ws.01", "en.sp.02"], name: "Food – Essen", e: "🍎", farbe: "#D2502A", grund: "#FDECE4",
+    id: "en-food", lb: 4, stufe: 3, lz: ["en.ws.01", "en.sp.02"], name: "Food – Essen", e: "🍎", farbe: "#D2502A", grund: "#FDECE4",
     intro: { de: "Was isst du gern? Heute lernst du Essen auf Englisch – und den Satz „I like …“.", ru: "Что ты любишь есть? Сегодня — еда по-английски и фраза «I like …»." },
     woerter: [
       { en: "apple", de: "Apfel", ru: "яблоко", e: "🍎" }, { en: "banana", de: "Banane", ru: "банан", e: "🍌" }, { en: "bread", de: "Brot", ru: "хлеб", e: "🍞" },
@@ -82,7 +83,7 @@ window.ENGLISCH = [
     ende: { de: "Lecker! Sag beim Essen heute einmal „I like …“.", ru: "Вкусно! Скажи сегодня за едой «I like …»." }
   },
   {
-    id: "en-home", stufe: 3, lz: ["en.ws.01", "en.sp.02"], name: "At home – Zuhause", e: "🏠", farbe: "#C2337A", grund: "#FDEAF3",
+    id: "en-home", lb: 3, stufe: 3, lz: ["en.ws.01", "en.sp.02"], name: "At home – Zuhause", e: "🏠", farbe: "#C2337A", grund: "#FDEAF3",
     intro: { de: "Komm mit in Paulas Haus! Heute lernst du Zimmer und Sachen im Haus – und wo etwas ist: in, on, under.", ru: "Пойдём в дом Паулы! Сегодня — комнаты и вещи в доме, и где что находится: in, on, under." },
     woerter: [
       { en: "house", de: "Haus", ru: "дом", e: "🏠" }, { en: "kitchen", de: "Küche", ru: "кухня", e: "🍳" }, { en: "bathroom", de: "Badezimmer", ru: "ванная", e: "🛁" },
@@ -95,7 +96,7 @@ window.ENGLISCH = [
     ende: { de: "Super! Geh heute durch deine Wohnung und sag die Zimmer auf Englisch.", ru: "Супер! Пройдись сегодня по квартире и назови комнаты по-английски." }
   },
   {
-    id: "en-year", stufe: 3, lz: ["en.ik.01", "en.ws.02"], name: "Around the year – Das Jahr", e: "🎃", farbe: "#E8A33D", grund: "#FFF1D9",
+    id: "en-year", lb: 10, stufe: 3, lz: ["en.ik.01", "en.ws.02"], name: "Around the year – Das Jahr", e: "🎃", farbe: "#E8A33D", grund: "#FFF1D9",
     intro: { de: "Durch das Jahr! Jahreszeiten und Feste auf Englisch. In England feiert man Halloween, Christmas und Easter – und natürlich Geburtstag.", ru: "Круглый год! Времена года и праздники по-английски. В Англии празднуют Halloween, Christmas и Easter — и, конечно, день рождения." },
     woerter: [
       { en: "spring", de: "Frühling", ru: "весна", e: "🌱" }, { en: "summer", de: "Sommer", ru: "лето", e: "🏖️" }, { en: "autumn", de: "Herbst", ru: "осень", e: "🍂" },
@@ -109,7 +110,7 @@ window.ENGLISCH = [
     ende: { de: "Klasse! Welches Fest kommt als Nächstes? Sag es auf Englisch!", ru: "Класс! Какой праздник будет следующим? Скажи по-английски!" }
   },
   {
-    id: "en-family", stufe: 4, lz: ["en.ws.02", "en.sp.02"], name: "Family – Familie", e: "👨‍👩‍👧", farbe: "#2F86C8", grund: "#E5F1FB",
+    id: "en-family", lb: 1, stufe: 4, lz: ["en.ws.02", "en.sp.02"], name: "Family – Familie", e: "👨‍👩‍👧", farbe: "#2F86C8", grund: "#E5F1FB",
     intro: { de: "Heute geht es um die Familie. Mit „This is my …“ kannst du jemanden vorstellen.", ru: "Сегодня — семья. С фразой «This is my …» можно кого-то представить." },
     woerter: [
       { en: "mother", de: "Mutter", ru: "мама", e: "👩" }, { en: "father", de: "Vater", ru: "папа", e: "👨" }, { en: "sister", de: "Schwester", ru: "сестра", e: "👧" },
@@ -121,7 +122,7 @@ window.ENGLISCH = [
     ende: { de: "Schön! Stell jemanden aus deiner Familie auf Englisch vor: „This is my …“.", ru: "Хорошо! Представь кого-нибудь из семьи по-английски: «This is my …»." }
   },
   {
-    id: "en-school", stufe: 4, lz: ["en.ws.02", "en.le.01"], name: "School – Schulsachen", e: "🎒", farbe: "#E8A33D", grund: "#FFF1D9",
+    id: "en-school", lb: 6, stufe: 4, lz: ["en.ws.02", "en.le.01"], name: "School – Schulsachen", e: "🎒", farbe: "#E8A33D", grund: "#FFF1D9",
     intro: { de: "Was ist in deinem Ranzen? Lies die englischen Wörter und finde das Bild.", ru: "Что у тебя в рюкзаке? Читай английские слова и находи картинку." },
     woerter: [
       { en: "book", de: "Buch", ru: "книга", e: "📕" }, { en: "pen", de: "Füller/Kuli", ru: "ручка", e: "🖊️" }, { en: "pencil", de: "Bleistift", ru: "карандаш", e: "✏️" },
@@ -133,7 +134,7 @@ window.ENGLISCH = [
     ende: { de: "Klasse! Zeig morgen beim Packen auf deine Sachen und sag die englischen Wörter.", ru: "Класс! Завтра, собирая рюкзак, показывай на вещи и называй их по-английски." }
   },
   {
-    id: "en-clothes", stufe: 4, lz: ["en.ws.02", "en.le.01"], name: "Clothes – Kleidung", e: "👕", farbe: "#3AA0E0", grund: "#E1F3FF",
+    id: "en-clothes", lb: 2, stufe: 4, lz: ["en.ws.02", "en.le.01"], name: "Clothes – Kleidung", e: "👕", farbe: "#3AA0E0", grund: "#E1F3FF",
     intro: { de: "Was ziehst du heute an? Kleidung auf Englisch – mit Farben kannst du sie beschreiben.", ru: "Что ты сегодня надеваешь? Одежда по-английски — с цветами её можно описать." },
     woerter: [
       { en: "T-shirt", de: "T-Shirt", ru: "футболка", e: "👕" }, { en: "trousers", de: "Hose", ru: "брюки", e: "👖" }, { en: "dress", de: "Kleid", ru: "платье", e: "👗" },
@@ -145,7 +146,7 @@ window.ENGLISCH = [
     ende: { de: "Toll! Beschreib morgen früh deine Kleidung auf Englisch: „My T-shirt is …“.", ru: "Здорово! Завтра утром опиши свою одежду по-английски: «My T-shirt is …»." }
   },
   {
-    id: "en-weather", stufe: 4, lz: ["en.ws.02", "en.sp.02"], name: "Weather – Wetter", e: "🌦️", farbe: "#1F8FB8", grund: "#E2F4FB",
+    id: "en-weather", lb: 2, stufe: 4, lz: ["en.ws.02", "en.sp.02"], name: "Weather – Wetter", e: "🌦️", farbe: "#1F8FB8", grund: "#E2F4FB",
     intro: { de: "Wie ist das Wetter? Auf Englisch sagt man: „It is sunny.“ – „Es ist sonnig.“", ru: "Какая погода? По-английски говорят: «It is sunny.» — «Солнечно»." },
     woerter: [
       { en: "sunny", de: "sonnig", ru: "солнечно", e: "☀️" }, { en: "rainy", de: "regnerisch", ru: "дождливо", e: "🌧️" }, { en: "cloudy", de: "bewölkt", ru: "облачно", e: "☁️" },
@@ -159,7 +160,7 @@ window.ENGLISCH = [
     ende: { de: "Prima! Schau morgen aus dem Fenster und sag: „It is …“.", ru: "Отлично! Завтра посмотри в окно и скажи: «It is …»." }
   },
   {
-    id: "en-hobbies", stufe: 5, lz: ["en.sp.03", "en.ws.02"], name: "Hobbies – Über mich", e: "⚽", farbe: "#2E9C5A", grund: "#E3F7EF",
+    id: "en-hobbies", lb: 7, stufe: 5, lz: ["en.sp.03", "en.ws.02"], name: "Hobbies – Über mich", e: "⚽", farbe: "#2E9C5A", grund: "#E3F7EF",
     intro: { de: "In Klasse 5 erzählst du auf Englisch über dich: Alter, Herkunft und Hobbys. Los geht's!", ru: "В 5-м классе ты рассказываешь о себе по-английски: возраст, откуда ты и хобби. Поехали!" },
     woerter: [
       { en: "football", de: "Fußball", ru: "футбол", e: "⚽" }, { en: "swimming", de: "Schwimmen", ru: "плавание", e: "🏊" }, { en: "reading", de: "Lesen", ru: "чтение", e: "📖" },
@@ -175,7 +176,7 @@ window.ENGLISCH = [
 // ---------- Schuljahr Englisch (Lehrplan Sachsen 2019, Kl. 3 und 4): eine Lektion je Lücke aus der Bestandsaufnahme (28.10.2026) ----------
 window.ENGLISCH.push(
   {
-    id: "en-feelings", stufe: 3, lz: ["en.sp.01", "en.hv.01"], name: "How are you? – Gefühle", e: "😊", farbe: "#E8A33D", grund: "#FFF1D9",
+    id: "en-feelings", lb: 1, stufe: 3, lz: ["en.sp.01", "en.hv.01"], name: "How are you? – Gefühle", e: "😊", farbe: "#E8A33D", grund: "#FFF1D9",
     intro: { de: "„How are you?“ heißt „Wie geht es dir?“. Heute lernst du, wie du auf Englisch sagst, wie du dich fühlst.", ru: "«How are you?» значит «Как дела?». Сегодня учимся говорить по-английски, как ты себя чувствуешь." },
     woerter: [
       { en: "happy", de: "fröhlich", ru: "радостный", e: "😄" }, { en: "sad", de: "traurig", ru: "грустный", e: "😢" },
@@ -189,7 +190,7 @@ window.ENGLISCH.push(
     ende: { de: "Super! Frag heute jemanden „How are you?“ – und warte auf die Antwort.", ru: "Супер! Спроси сегодня кого-нибудь «How are you?» — и дождись ответа." }
   },
   {
-    id: "en-numbers2", stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "Numbers – bis 100", e: "💯", farbe: "#2FA37C", grund: "#E3F7EF",
+    id: "en-numbers2", lb: 4, stufe: 3, lz: ["en.ws.01", "en.hv.01"], name: "Numbers – bis 100", e: "💯", farbe: "#2FA37C", grund: "#E3F7EF",
     intro: { de: "Nach ten kommen eleven und twelve. Ab dreizehn hängt man „-teen“ an: thirteen, fourteen … Die Zehner enden auf „-ty“: twenty, thirty …", ru: "После ten идут eleven и twelve. С тринадцати добавляют «-teen»: thirteen, fourteen… Десятки заканчиваются на «-ty»: twenty, thirty…" },
     woerter: [
       { en: "eleven", de: "elf", ru: "одиннадцать", e: "1️⃣1️⃣" }, { en: "twelve", de: "zwölf", ru: "двенадцать", e: "🕛" },
@@ -203,7 +204,7 @@ window.ENGLISCH.push(
     ende: { de: "Klasse! Zähl beim Treppensteigen auf Englisch – bis twenty schaffst du es bestimmt.", ru: "Класс! Считай ступеньки по-английски — до twenty точно получится." }
   },
   {
-    id: "en-shopping", stufe: 3, lz: ["en.sp.02", "en.ws.01"], name: "Let's go shopping – Einkaufen", e: "🛍️", farbe: "#C2337A", grund: "#FDEAF3",
+    id: "en-shopping", lb: 5, stufe: 3, lz: ["en.sp.02", "en.ws.01"], name: "Let's go shopping – Einkaufen", e: "🛍️", farbe: "#C2337A", grund: "#FDEAF3",
     intro: { de: "In England bezahlt man mit Pfund und Pence. Im Laden fragst du: „How much is it?“ – Wie viel kostet das?", ru: "В Англии платят фунтами и пенсами. В магазине спрашивают: «How much is it?» — Сколько это стоит?" },
     woerter: [
       { en: "shop", de: "Laden", ru: "магазин", e: "🏪" }, { en: "money", de: "Geld", ru: "деньги", e: "💰" },
@@ -218,7 +219,7 @@ window.ENGLISCH.push(
     ende: { de: "Super! Spiel mit deiner Familie Kaufladen – auf Englisch.", ru: "Супер! Поиграй с семьёй в магазин — по-английски." }
   },
   {
-    id: "en-subjects", stufe: 3, lz: ["en.ws.02", "en.hv.01"], name: "At school – Fächer, Tage, Uhrzeit", e: "🏫", farbe: "#3AA0E0", grund: "#E1F3FF",
+    id: "en-subjects", lb: 6, stufe: 3, lz: ["en.ws.02", "en.hv.01"], name: "At school – Fächer, Tage, Uhrzeit", e: "🏫", farbe: "#3AA0E0", grund: "#E1F3FF",
     intro: { de: "Welche Fächer hast du heute? Auf Englisch heißt Mathe „maths“, Kunst „art“ und Sport „PE“. Und die Wochentage beginnen mit Monday.", ru: "Какие у тебя сегодня предметы? По-английски математика — «maths», рисование — «art», физкультура — «PE». А дни недели начинаются с Monday." },
     woerter: [
       { en: "maths", de: "Mathe", ru: "математика", e: "➗" }, { en: "English", de: "Englisch", ru: "английский", e: "🇬🇧" },
@@ -235,7 +236,7 @@ window.ENGLISCH.push(
     ende: { de: "Toll! Sag morgen früh deinen Stundenplan auf Englisch auf.", ru: "Отлично! Завтра утром расскажи своё расписание по-английски." }
   },
   {
-    id: "en-trip", stufe: 3, lz: ["en.ws.02", "en.sp.02"], name: "Let's go on a trip – Ausflug", e: "🚆", farbe: "#2F6FB8", grund: "#E5EFFB",
+    id: "en-trip", lb: 9, stufe: 3, lz: ["en.ws.02", "en.sp.02"], name: "Let's go on a trip – Ausflug", e: "🚆", farbe: "#2F6FB8", grund: "#E5EFFB",
     intro: { de: "Wir machen einen Ausflug! Mit dem Bus, dem Zug oder dem Flugzeug – ans Meer oder in die Berge.", ru: "Мы едем на экскурсию! На автобусе, поезде или самолёте — к морю или в горы." },
     woerter: [
       { en: "bus", de: "Bus", ru: "автобус", e: "🚌" }, { en: "train", de: "Zug", ru: "поезд", e: "🚆" },
@@ -249,7 +250,7 @@ window.ENGLISCH.push(
     ende: { de: "Gute Reise! Mit welchem Verkehrsmittel fährst du am liebsten? Sag es auf Englisch.", ru: "Счастливого пути! На чём ты больше всего любишь ездить? Скажи по-английски." }
   },
   {
-    id: "en-party", stufe: 3, lz: ["en.ik.01", "en.sp.02"], name: "Party time – Glückwünsche", e: "🎉", farbe: "#E0574A", grund: "#FFECE8",
+    id: "en-party", lb: 10, stufe: 3, lz: ["en.ik.01", "en.sp.02"], name: "Party time – Glückwünsche", e: "🎉", farbe: "#E0574A", grund: "#FFECE8",
     intro: { de: "Feste feiern auf Englisch! Zu jedem Fest gibt es einen Glückwunsch: Happy Birthday, Merry Christmas, Happy Easter …", ru: "Празднуем по-английски! К каждому празднику есть поздравление: Happy Birthday, Merry Christmas, Happy Easter…" },
     woerter: [
       { en: "party", de: "Party", ru: "вечеринка", e: "🥳" }, { en: "present", de: "Geschenk", ru: "подарок", e: "🎁" },
@@ -264,7 +265,7 @@ window.ENGLISCH.push(
     ende: { de: "Toll! Schreib eine Karte mit „Happy Birthday“ für das nächste Geburtstagskind in deiner Familie.", ru: "Отлично! Напиши открытку «Happy Birthday» для следующего именинника в семье." }
   },
   {
-    id: "en-everywhere", stufe: 3, lz: ["en.ik.01", "en.ws.01"], name: "English everywhere – Englisch im Alltag", e: "🌐", farbe: "#7B55B8", grund: "#EFE6FF",
+    id: "en-everywhere", lb: 1, stufe: 3, lz: ["en.ik.01", "en.ws.01"], name: "English everywhere – Englisch im Alltag", e: "🌐", farbe: "#7B55B8", grund: "#EFE6FF",
     intro: { de: "Du kennst schon viele englische Wörter! Sie stecken in Spielen, Essen, Kleidung und am Computer. Englisch ist eine Sprache, die auf der ganzen Welt gesprochen wird.", ru: "Ты уже знаешь много английских слов! Они есть в играх, еде, одежде и на компьютере. На английском говорят во всём мире." },
     woerter: [
       { en: "computer", de: "Computer", ru: "компьютер", e: "💻" }, { en: "smartphone", de: "Smartphone", ru: "смартфон", e: "📱" },
@@ -278,7 +279,7 @@ window.ENGLISCH.push(
   },
   // ---------- Klasse 4 ----------
   {
-    id: "en-furniture", stufe: 4, lz: ["en.ws.01", "en.sp.02"], name: "At home – Möbel", e: "🛋️", farbe: "#8A6E2F", grund: "#F7F0DD",
+    id: "en-furniture", lb: 3, stufe: 4, lz: ["en.ws.01", "en.sp.02"], name: "At home – Möbel", e: "🛋️", farbe: "#8A6E2F", grund: "#F7F0DD",
     intro: { de: "In jedem Zimmer stehen Möbel. Heute lernst du sie auf Englisch – und sagst, wo etwas ist: in the kitchen, next to the bed …", ru: "В каждой комнате стоит мебель. Сегодня учим её по-английски — и говорим, где что находится: in the kitchen, next to the bed…" },
     woerter: [
       { en: "bed", de: "Bett", ru: "кровать", e: "🛏️" }, { en: "sofa", de: "Sofa", ru: "диван", e: "🛋️" },
@@ -293,7 +294,7 @@ window.ENGLISCH.push(
     ende: { de: "Super! Mach eine Führung durch eure Wohnung: „This is the kitchen …“", ru: "Супер! Проведи экскурсию по квартире: «This is the kitchen…»" }
   },
   {
-    id: "en-zoo", stufe: 4, lz: ["en.ws.01", "en.hv.01"], name: "At the zoo – Wilde Tiere", e: "🦁", farbe: "#E8A33D", grund: "#FFF1D9",
+    id: "en-zoo", lb: 8, stufe: 4, lz: ["en.ws.01", "en.hv.01"], name: "At the zoo – Wilde Tiere", e: "🦁", farbe: "#E8A33D", grund: "#FFF1D9",
     intro: { de: "Im Zoo leben Tiere aus der ganzen Welt. Manche sind in der freien Natur vom Aussterben bedroht – Zoos helfen, sie zu schützen.", ru: "В зоопарке живут животные со всего мира. Некоторым в дикой природе грозит исчезновение — зоопарки помогают их сохранить." },
     woerter: [
       { en: "lion", de: "Löwe", ru: "лев", e: "🦁" }, { en: "elephant", de: "Elefant", ru: "слон", e: "🐘" },
@@ -307,7 +308,7 @@ window.ENGLISCH.push(
     ende: { de: "Toll! Mach einen Tier-Steckbrief auf Englisch: „It's … It has got … It can …“", ru: "Отлично! Сделай анкету животного по-английски: «It's… It has got… It can…»" }
   },
   {
-    id: "en-london", stufe: 4, lz: ["en.ik.01", "en.ws.02"], name: "London – die Hauptstadt", e: "🎡", farbe: "#C2337A", grund: "#FDEAF3",
+    id: "en-london", lb: 9, stufe: 4, lz: ["en.ik.01", "en.ws.02"], name: "London – die Hauptstadt", e: "🎡", farbe: "#C2337A", grund: "#FDEAF3",
     intro: { de: "London ist die Hauptstadt von England und Großbritannien. Durch die Stadt fließt die Themse, die roten Busse haben zwei Stockwerke, und der Glockenturm heißt Big Ben.", ru: "Лондон — столица Англии и Великобритании. Через город течёт Темза, красные автобусы двухэтажные, а часовая башня называется Биг-Бен." },
     woerter: [
       { en: "Big Ben", de: "Big Ben (Glockenturm)", ru: "Биг-Бен", e: "🕰️" }, { en: "bridge", de: "Brücke", ru: "мост", e: "🌉" },
@@ -321,7 +322,7 @@ window.ENGLISCH.push(
     ende: { de: "Super! Wenn du einmal nach London fährst: „A ticket for the London Eye, please!“", ru: "Супер! Если поедешь в Лондон: «A ticket for the London Eye, please!»" }
   },
   {
-    id: "en-cafe", stufe: 4, lz: ["en.sp.02", "en.ws.01"], name: "In the café – Bestellen", e: "☕", farbe: "#B5701A", grund: "#FFF1D9",
+    id: "en-cafe", lb: 4, stufe: 4, lz: ["en.sp.02", "en.ws.01"], name: "In the café – Bestellen", e: "☕", farbe: "#B5701A", grund: "#FFF1D9",
     intro: { de: "Im Café oder Snackbar bestellst du höflich: „I'd like …, please.“ Typisch englisch sind fish and chips, Pfannkuchen und Tee.", ru: "В кафе вежливо заказывают: «I'd like…, please.» Типично английские — fish and chips, блины и чай." },
     woerter: [
       { en: "menu", de: "Speisekarte", ru: "меню", e: "📋" }, { en: "pancake", de: "Pfannkuchen", ru: "блин", e: "🥞" },
@@ -335,7 +336,7 @@ window.ENGLISCH.push(
     ende: { de: "Lecker! Spiel zu Hause Café: Einer bestellt auf Englisch, der andere bringt das Essen.", ru: "Вкусно! Поиграйте дома в кафе: один заказывает по-английски, другой приносит еду." }
   },
   {
-    id: "en-dates", stufe: 4, lz: ["en.ik.01", "en.ws.02"], name: "Festivals and dates – Feste und Datum", e: "💝", farbe: "#E0574A", grund: "#FFECE8",
+    id: "en-dates", lb: 10, stufe: 4, lz: ["en.ik.01", "en.ws.02"], name: "Festivals and dates – Feste und Datum", e: "💝", farbe: "#E0574A", grund: "#FFECE8",
     intro: { de: "In Großbritannien und Amerika feiert man besondere Tage: Valentine's Day im Februar, Pancake Day vor der Fastenzeit, Thanksgiving in Amerika im November. Für das Datum braucht man Ordnungszahlen: first, second, third …", ru: "В Великобритании и Америке отмечают особые дни: День святого Валентина в феврале, Блинный день перед постом, День благодарения в Америке в ноябре. Для даты нужны порядковые числа: first, second, third…" },
     woerter: [
       { en: "first", de: "erste", ru: "первый", e: "🥇" }, { en: "second", de: "zweite", ru: "второй", e: "🥈" },
@@ -349,7 +350,7 @@ window.ENGLISCH.push(
     ende: { de: "Toll! Welches englische Fest gefällt dir am besten? Mal eine Karte dazu!", ru: "Отлично! Какой английский праздник тебе нравится больше всего? Нарисуй к нему открытку!" }
   },
   {
-    id: "en-sports", stufe: 4, lz: ["en.ws.02", "en.sp.03"], name: "Sports and games – Sport", e: "🏏", farbe: "#2E9C5A", grund: "#E3F7EF",
+    id: "en-sports", lb: 7, stufe: 3, lz: ["en.ws.02", "en.sp.03"], name: "Sports and games – Sport", e: "🏏", farbe: "#2E9C5A", grund: "#E3F7EF",
     intro: { de: "Fußball spielt man auf der ganzen Welt. In England ist auch Cricket beliebt, in Amerika American Football. Welchen Sport magst du?", ru: "В футбол играют во всём мире. В Англии популярен ещё крикет, в Америке — американский футбол. Какой спорт любишь ты?" },
     woerter: [
       { en: "cricket", de: "Cricket", ru: "крикет", e: "🏏" }, { en: "tennis", de: "Tennis", ru: "теннис", e: "🎾" },
@@ -363,7 +364,7 @@ window.ENGLISCH.push(
     ende: { de: "Super! Mach mit deiner Familie eine Top-3-Liste eurer Lieblingssportarten – auf Englisch.", ru: "Супер! Составь с семьёй топ-3 любимых видов спорта — по-английски." }
   },
   {
-    id: "en-portfolio", stufe: 4, lz: ["en.sp.03", "en.ik.01"], name: "My languages – Mein Sprachenpass", e: "🛂", farbe: "#1F8FB8", grund: "#E2F4FB",
+    id: "en-portfolio", lb: 11, stufe: 3, lz: ["en.sp.03", "en.ik.01"], name: "My languages – Mein Sprachenpass", e: "🛂", farbe: "#1F8FB8", grund: "#E2F4FB",
     intro: { de: "In deinem Sprachenpass steht, welche Sprachen du kannst – auch die Sprache deiner Familie! In deine Sprachenmappe kommen deine besten Arbeiten. So siehst du, was du schon alles kannst.", ru: "В твоём языковом паспорте записано, какие языки ты знаешь, — и язык твоей семьи! В языковую папку кладёшь свои лучшие работы. Так видно, сколько ты уже умеешь." },
     woerter: [
       { en: "English", de: "Englisch", ru: "английский", e: "🇬🇧" }, { en: "German", de: "Deutsch", ru: "немецкий", e: "🇩🇪" },

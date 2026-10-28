@@ -1,4 +1,4 @@
-// Test Schuljahr Deutsch und Sachunterricht (28.10.2026): Eltern-Einstellung „gerade in der Schule“ je Fach (Lernbereich steht oben und ist
+// Test Schuljahr Deutsch, Sachunterricht und Englisch (28.10.2026): Eltern-Einstellung „gerade in der Schule“ je Fach (Lernbereich steht oben und ist
 // markiert), „Zeig, was du kannst“ je Lernbereich echt durchgespielt (ein absichtlicher Fehler), Ergebnis ohne Sterne/Kapitelwertung,
 // „Üben:“-Knopf zum ersten unsicheren Kapitel/Thema, Ergebnisse im Elternbereich. Quer und hoch.
 // Aufruf: sh tests/laufen.sh schuljahr2   (Screenshots mit BILDER=<ordner>)
@@ -117,9 +117,36 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(!sEnde.themen.some(t => /lernstand/.test(t)) && sEnde.anzahl === 61, `${art}: keine Themenwertung, die Themenliste bleibt bei 61`);
     if (BILDER) await p.screenshot({ path: `${BILDER}/schuljahr2-sachkunde-ende-${art}.png` });
 
+    // --- Englisch ---
+    await zuEltern(p); await p.selectOption("#en-schule", "5"); await p.click("#en-speichern"); await p.waitForTimeout(100);
+    await p.goto(BASIS + "spiele/englisch/"); await p.waitForSelector("#lektionen .en-gruppe");
+    const en = await p.evaluate(() => { const gr = [...document.querySelectorAll(".en-gruppe")]; return { erste: gr[0].dataset.lb, markiert: gr[0].classList.contains("schule"), gruppen: gr.length, knoepfe: gr.filter(x => x.querySelector(".lernstand-knopf")).length, lek: document.querySelectorAll("#lektionen .lek").length }; });
+    erwarte(en.erste === "5" && en.markiert && en.gruppen === 11 && en.knoepfe === 11 && en.lek === 26, `${art}: Englisch – 11 Lernbereiche, „Let's go shopping“ oben und markiert, überall „Zeig, was du kannst“ (${en.gruppen}, ${en.knoepfe}, ${en.lek} Lektionen)`);
+    if (BILDER) await p.screenshot({ path: `${BILDER}/schuljahr2-englisch-${art}.png` });
+    await p.click('.en-gruppe[data-lb="1"] .lernstand-knopf'); await p.waitForSelector("#lektion-ansicht:not([hidden])");
+    const eAnz = await p.evaluate(() => __englisch.lauf.schritte.length - 1);
+    let eFalsch = true, eBreit = false;
+    for (let runden = 0; runden < 30; runden++) {
+      const l = await p.evaluate(() => { const l = __englisch.lauf; return { ende: !document.getElementById("ende-ansicht").hidden, pos: l.pos, s: l.schritte[l.pos] }; });
+      if (l.ende || !l.s) break;
+      if (!(await passt(p))) eBreit = true;
+      const s = l.s;
+      if (s.typ === "sag") { await p.click("#weiter"); await p.waitForTimeout(60); continue; }
+      const ziel = s.typ === "deutsch" ? s.wort.en : s.wort.e;
+      if (eFalsch) { eFalsch = false; await p.evaluate(([z, t]) => [...document.querySelectorAll("#aufgabe .option")].find(b => t === "deutsch" ? b.textContent !== z : !b.textContent.includes(z)).click(), [ziel, s.typ]); await p.waitForTimeout(60); }
+      await p.evaluate(([z, t]) => [...document.querySelectorAll("#aufgabe .option:not([disabled])")].find(b => t === "deutsch" ? b.textContent === z : b.textContent.includes(z)).click(), [ziel, s.typ]);
+      await p.waitForTimeout(60);
+      await p.evaluate((pos) => __englisch.schritt(pos + 1), l.pos);
+    }
+    const eEnde = await p.evaluate(() => ({ titel: document.getElementById("ende-titel").textContent, ls: (Spielwelt.lade("englisch") || {}).lernstand, lek: Object.keys((Spielwelt.lade("englisch") || {}).lektionen || {}) }));
+    const e1 = (eEnde.ls || {})["k3:1"] || {};
+    erwarte(/danke fürs Zeigen/.test(eEnde.titel) && eAnz >= 8 && e1.n >= 2 && e1.richtig === e1.n - 1 && !eBreit && !eEnde.lek.length,
+      `${art}: Englisch „Me, my family and my friends“ – ${eAnz} Wörter aus ${e1.n} Lektionen, ein Fehler, Ergebnis gespeichert, keine Lektionswertung`);
+
     // --- Elternbereich: Ergebnisse ---
     await zuEltern(p);
-    const el = await p.evaluate(() => ({ de: document.querySelector("#lernstand-deutsch").textContent, su: document.querySelector("#lernstand-sachkunde").textContent }));
+    const el = await p.evaluate(() => ({ de: document.querySelector("#lernstand-deutsch").textContent, su: document.querySelector("#lernstand-sachkunde").textContent, en: document.querySelector("#lernstand-englisch").textContent }));
+    erwarte(/Kl\. 3 · Me, my family and my friends/.test(el.en) && /noch üben/.test(el.en), `${art}: Elternbereich zeigt das Englisch-Ergebnis`);
     erwarte(/Kl\. 3 · Schreiben/.test(el.de) && /noch üben/.test(el.de) && /Kl\. 3 · Pflanzen und Tiere/.test(el.su) && /noch üben/.test(el.su),
       `${art}: Elternbereich zeigt beide Ergebnisse mit „noch üben“`);
     if (BILDER) { await p.evaluate(() => document.querySelector("#schuljahr-karte").scrollIntoView()); await p.screenshot({ path: `${BILDER}/schuljahr2-eltern-${art}.png` }); }
@@ -133,5 +160,5 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
 
   await browser.close();
   if (fehler.length) { console.log("❌ Fehler:\n" + fehler.map(f => "  - " + f).join("\n")); process.exit(1); }
-  console.log("✅ Schuljahr-Deutsch-und-SU-Test bestanden.");
+  console.log("✅ Schuljahr-Deutsch-SU-Englisch-Test bestanden.");
 })().catch(err => { console.error(err); process.exit(1); });

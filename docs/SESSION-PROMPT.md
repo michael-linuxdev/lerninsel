@@ -24,7 +24,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Sachunterricht (Eule Ella): 61 Themen, nach sechs Lernbereichen gruppiert**, u. a. Mein Körper gehört mir, Licht und Schatten, Luft und Schall,
   Wetter, Wasserkreislauf, Karten lesen, Waldtiere, Boden, Radfahrprüfung; Heimatkunde nur für Sachsen (`land: "sn"`): Unser Bundesland
   Sachsen, Mein Landkreis, Sachsen entdecken.
-- **Englisch (Papagei Paula): 27 Lektionen** (u. a. neu: Gefühle, Zahlen bis 100, Einkaufen, Fächer/Tage/Uhrzeit, Ausflug, London, Café, Zootiere,
+- **Englisch (Papagei Paula): 27 Lektionen, nach den 11 Lernbereichen gruppiert** (u. a. neu: Gefühle, Zahlen bis 100, Einkaufen, Fächer/Tage/Uhrzeit, Ausflug, London, Café, Zootiere,
   Feste und Datum, Sportarten, Sprachenpass). Englische Gerätestimme, ohne Stimme Lesen statt Hören. Eltern-Einstellung Beginn ab Kl. 1 oder 3.
 - Weiter: Medien (Tablet-Führerschein), Gefühle, Atelier (Malen, Musik), Schach, Insel in zwei Looks, Story/Tutorial E1–E8, Können je Lernziel, Elternbericht.
 
@@ -45,9 +45,10 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - Kl.-3/4-Inhalte bleiben **ab der Klasse davor** sichtbar (Werkstatt, Sachthemen, Englisch).
 
 ### Bekannte Baustellen
-- **Schuljahres-Gerüst** („Zeig, was du kannst“, „gerade in der Schule“) gibt es für Mathe, Deutsch und Sachunterricht – Englisch fehlt noch.
+- **Schuljahres-Gerüst** („Zeig, was du kannst“, „gerade in der Schule“) gibt es jetzt für alle vier Fächer (Mathe, Deutsch, SU, Englisch).
 - Kinder sehen ihre eigenen Texte noch nicht selbst („Mein Heft“); Handschrift-Übung fehlt (nur Echte Welt).
 - Englisch ohne Lernkartei; Lieder/Reime zum Mitsingen fehlen.
+- Satz-Bauen/Ordnen werten jetzt den Wortlaut (doppelte Wörter austauschbar) – war vorher ein stiller Fehler in Englisch.
 - Nur russische Übersetzungs-Entwürfe (alle neuen Kapitel/Themen/Lektionen haben ru-Entwürfe); Ukrainisch u. a. fehlen. Ton über die Gerätestimme.
 - Länderprofile außer Sachsen fehlen (NA-47); Heimat-Themen für andere Länder fehlen.
 - Grafik eingefroren mit offenen Paketen NA-29b (Handy-Leistung) und NA-29 Teil 2.
@@ -70,8 +71,8 @@ Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ab
 
 1. **Mathe, Deutsch, Sachunterricht und Englisch sind gegen die Lehrpläne geprüft und ausgebaut** (Stand 28.10.). Rest ehrlich „teilweise“
    (siehe oben).
-2. **Schuljahres-Gerüst Deutsch und SU ist fertig** (28.10. mittags, Test `schuljahr2`). Offen: **Englisch** (Lektionen einem Lernbereich zuordnen,
-   „Zeig, was du kannst“ aus den Wörtern der Lektionen, „gerade in der Schule“).
+2. **Schuljahres-Gerüst für Deutsch, SU und Englisch ist fertig** (28.10. mittags, Test `schuljahr2`). Werkstatt, Sachthemen und Englisch-Lektionen
+   sind nach Lernbereichen gruppiert.
 3. **Kunst, Musik, Werken, Sport, Ethik** – sobald die PDFs da sind: Punkte in `sachsen-punkte.js` (neue Fächer im Profil), Atelier/Musik
    ausbauen, Rest als Echte-Welt-Aufgaben.
 4. Vorschläge an den Auftraggeber: „Mein Heft“ (eigene Texte), Handschrift-Übung, Englisch-Lernkartei, Lieder/Reime.

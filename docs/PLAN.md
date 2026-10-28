@@ -1594,7 +1594,7 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Offen / nächstes Paket:** Schuljahres-Gerüst („Zeig, was du kannst“, „gerade in der Schule“) für Deutsch, SU und Englisch; Kunst, Musik,
   Werken, Sport, Ethik (PDFs fehlen); „Mein Heft“ (eigene Texte für Kinder); Handschrift-Übung; ukrainische Übersetzungen.
 
-### Stand 28.10.2026, mittags (Schuljahres-Gerüst für Deutsch und Sachunterricht)
+### Stand 28.10.2026, mittags (Schuljahres-Gerüst für Deutsch, Sachunterricht und Englisch)
 - **„Zeig, was du kannst“ je Lernbereich** jetzt auch in der **Wörter-Werkstatt** (5 Lernbereiche) und bei **Eule Ella** (6 Lernbereiche): Knopf
   unter jeder Lernbereichs-Überschrift. Aufgaben nur aus Kapiteln/Themen **der eigenen Klasse** (Kl. 1/2 = eine Stufe), je Kapitel/Thema eine,
   bei wenigen Kapiteln bis zu drei, höchstens 10 (Deutsch: Lücke, Wort, Hörtext, Blitz, Silben, Wortart, Verlängern, Artikel, Verbessern;
@@ -1603,5 +1603,11 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Eltern-Einstellung „gerade in der Schule“** für Deutsch und SU (neue Karte „Deutsch und Sachunterricht wie im Schuljahr“): der Lernbereich
   steht oben und ist markiert; ohne Einstellung die Lehrplan-Reihenfolge. Die Karte zeigt die letzten Ergebnisse mit „noch üben“.
 - **Test:** neu `tests/schuljahr2.js` (quer und hoch, ein absichtlicher Fehler je Durchgang, Elternbereich, Zurücksetzen).
-- **Offen:** dasselbe für Englisch (Lektionen tragen noch keinen Lernbereich; Zuordnung über die Inhaltspunkte möglich); Kunst, Musik,
-  Werken, Sport, Ethik (PDFs fehlen).
+- **Englisch (gleicher Tag):** Lektionen tragen jetzt `lb` (Lernbereich 1–11 des Lehrplans), die Übersicht ist danach gruppiert (Kl.-3-Lektionen
+  in Kl. 4 eingeklappt). „Zeig, was du kannst“ je Lernbereich aus den Wörtern der Lektionen der eigenen Klasse (Kl. 3; Kl. 4: Kl. 3 und 4 –
+  Spiralcurriculum), Hören/Lesen/Übersetzen gemischt; „gerade in der Schule“ in der Englisch-Karte des Elternbereichs; Ergebnis in
+  `englisch.lernstand`. „Sports and games“ und „Sprachenpass“ jetzt Stufe 3 (Lehrplan: My hobbies und My Portfolio schon in Kl. 3; die
+  Sportarten sind genau die Kl.-3-Beispiele), damit jeder Lernbereich in Kl. 3 eine Lektion hat.
+- **Fehler behoben (vom Test gefunden):** Satz-Bauen in Englisch wertete einen richtig gelegten Satz als falsch, wenn ein Wort doppelt vorkommt
+  („I like London. I like the river.“) und das Kind das andere gleiche Wort antippte. Jetzt zählt der Wortlaut (ebenso bei „ordnen“ in Deutsch).
+- **Offen:** Kunst, Musik, Werken, Sport, Ethik (PDFs fehlen); „Mein Heft“; Handschrift-Übung; Englisch-Lernkartei.

@@ -370,18 +370,21 @@
   }
   // Englisch (Englisch-Einstieg): Beginn je nach Bundesland/Schule – meist Kl. 3, in manchen Ländern früher
   function englischKarte() {
-    const ab = ((S.lade("eltern") || {}).englisch || {}).ab || "3";
+    const ab = ((S.lade("eltern") || {}).englisch || {}).ab || "3", enSchule = ((S.lade("eltern") || {}).englisch || {}).schule || "";
     return `<div class="karte">
       <h2>🦜 Englisch wie in der Schule</h2>
       <div class="zeit-raster"><label>Englisch zeigen<select id="en-ab">
         <option value="3" ${ab === "3" ? "selected" : ""}>Wie in den meisten Ländern: ab Klasse 3 (erste Lektionen schon in Klasse 2)</option>
-        <option value="1" ${ab === "1" ? "selected" : ""}>Schon ab Klasse 1 (wenn die Schule früh mit Englisch beginnt)</option></select></label></div>
+        <option value="1" ${ab === "1" ? "selected" : ""}>Schon ab Klasse 1 (wenn die Schule früh mit Englisch beginnt)</option></select></label>
+        <label>Gerade in der Schule<select id="en-schule"><option value="">Keine Angabe</option>${Object.entries(EN_LB).map(([k, n]) => `<option value="${k}" ${String(enSchule) === k ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
+      <h3>„Zeig, was du kannst“</h3>${lernstandListe("englisch", EN_LB, window.ENGLISCH || [], "lernstand-englisch")}
       <p class="klein">Englische Wörter liest die englische Stimme des Geräts vor. Fehlt sie: iPad → Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Englisch. Ohne Stimme werden Hör-Aufgaben zu Lese-Aufgaben.</p>
       <div class="knoepfe"><button class="knopf haupt" id="en-speichern">Speichern</button></div>
     </div>`;
   }
   // ---------- Schuljahr Deutsch und Sachunterricht (28.10.2026): „gerade in der Schule“ und „Zeig, was du kannst“ ----------
   const DE_LB = { sz: "Sprechen und Zuhören", sc: "Schreiben", le: "Lesen", tm: "Texte und Medien", su: "Sprache untersuchen" };
+  const EN_LB = { 1: "Me, my family and my friends", 2: "My body and my clothes", 3: "At home", 4: "Food and drink", 5: "Let's go shopping", 6: "At school", 7: "My hobbies", 8: "Animals", 9: "Let's go on a trip", 10: "Around the year", 11: "My Portfolio" };
   const SU_LB = { zl: "Zusammen leben und lernen", kg: "Mein Körper und meine Gesundheit", pt: "Pflanzen und Tiere", un: "Unbelebte Natur", rz: "Raum und Zeit", ex: "Forschen, Medien, Schuljahre" };
   function lernstandListe(fach, namen, liste, id) {
     const ls = (S.lade(fach) || {}).lernstand || {}, eintraege = Object.entries(ls).sort((a, b) => (b[1].am || "").localeCompare(a[1].am || ""));
@@ -445,7 +448,7 @@
     fuelle();
   }
   function englischKnoepfe() {
-    $("en-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.englisch = Object.assign({}, e.englisch || {}, { ab: $("en-ab").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+    $("en-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.englisch = Object.assign({}, e.englisch || {}, { ab: $("en-ab").value, schule: $("en-schule").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
   function matheKnoepfe() {
     $("m-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.mathe = Object.assign({}, e.mathe || {}, { minus: $("m-minus").value, schule: $("m-schule").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });

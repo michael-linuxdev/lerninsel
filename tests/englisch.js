@@ -37,7 +37,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   }
 
   // ---------- Sichtbarkeit je Klasse ----------
-  for (const [stufe, anzahl] of [["1", 0], ["2", 15], ["3", 26], ["4", 27], ["5", 27]]) {
+  for (const [stufe, anzahl] of [["1", 0], ["2", 17], ["3", 26], ["4", 27], ["5", 27]]) {
     const { ctx, p } = await kind(stufe);
     await p.goto(BASIS + "spiele/englisch/"); await p.waitForTimeout(400);
     const n = await sichtbar(p), hinweis = await p.evaluate(() => document.getElementById("intro-text").textContent);
@@ -45,7 +45,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     if (stufe === "1") {
       await p.evaluate(() => { const e = Spielwelt.lade("eltern") || {}; e.englisch = { ab: "1" }; Spielwelt.speichere("eltern", e); });
       await p.reload(); await p.waitForTimeout(400);
-      erwarte(await sichtbar(p) === 15, "Klasse 1 mit Eltern-Einstellung „ab Klasse 1“: die 15 Lektionen der Stufe 3 sichtbar");
+      erwarte(await sichtbar(p) === 17, "Klasse 1 mit Eltern-Einstellung „ab Klasse 1“: die 17 Lektionen der Stufe 3 sichtbar");
     }
     await ctx.close();
   }

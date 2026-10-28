@@ -383,7 +383,7 @@
         }));
         zeichne();
         pruefen.addEventListener("click", () => {
-          const richtig = lauf.gewaehlt.every((n, pos) => karten[n].idx === pos);
+          const richtig = lauf.gewaehlt.every((n, pos) => karten[n].t === s.teile[pos]);   // Wortlaut zählt, gleiche Karten sind austauschbar
           if (richtig) liste.classList.add("richtig");
           antwort(null, richtig, () => s.teile.join(" "), () => {
             // Falsch: die richtigen Karten vorn bleiben liegen, der Rest geht zurück
