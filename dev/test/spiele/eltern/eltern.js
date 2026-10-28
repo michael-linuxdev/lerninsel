@@ -505,7 +505,7 @@
 
   // ---------- Stärken: „Heute habe ich gesehen, dass du …“ ----------
   // Geschichte und Einführung (Story-Zustand aus shared/ereignisse.js)
-  const TUTORIAL = ["E2", "E3", "E4", "E5", "E6", "E7", "E8"];
+  const TUTORIAL = ["E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"];
   function storyKarte() {
     const St = window.Story; if (!St) return "";
     const st = St.zustand(), e1 = St.etappe("E1");
@@ -548,6 +548,25 @@
     });
   }
 
+  // QR-Geschenk (NA-16): scannen oder einfügen, prüfen (Signatur, einmal je Kind), Paket wartet am Steg
+  function geschenkKnoepfe() {
+    const G = window.Geschenk, m = $("geschenk-meldung"); if (!G || !m) return;
+    let stopp = null;
+    const loese = async (text) => {
+      const r = await G.einloesen(text);
+      if (r.ok) { S.ton("juhu"); m.textContent = `✅ Eingelöst: ${r.geschenk.e} ${r.geschenk.name}. Das Paket liegt jetzt am Steg der Insel.`; $("geschenk-text").value = ""; }
+      else { S.ton("nein"); m.textContent = "❌ " + (G.GRUND[r.grund] || "Das hat nicht geklappt."); }
+      return r.ok;
+    };
+    $("geschenk-ok").addEventListener("click", () => loese($("geschenk-text").value));
+    $("geschenk-scan").addEventListener("click", async () => {
+      const v = $("geschenk-video");
+      if (stopp) { stopp(); stopp = null; v.hidden = true; $("geschenk-scan").textContent = "📷 Code scannen"; return; }
+      try { v.hidden = false; $("geschenk-scan").textContent = "⏹️ Kamera aus"; m.textContent = "Halte den Code vor die Kamera.";
+        stopp = await G.scanne(v, async (text) => { if (await loese(text) && stopp) { stopp(); stopp = null; v.hidden = true; $("geschenk-scan").textContent = "📷 Code scannen"; } }); }
+      catch (e) { v.hidden = true; $("geschenk-scan").textContent = "📷 Code scannen"; m.textContent = "Die Kamera ist nicht erlaubt. Du kannst den Code auch einfügen."; }
+    });
+  }
   function zeitKnoepfe() {
     if (!Z) return;
     const wert = (id) => Math.max(0, parseInt($(id).value, 10) || 0);
@@ -680,6 +699,16 @@
         <div class="knoepfe"><button class="knopf haupt" id="erwachsen">👤 Als Erwachsener spielen</button><button class="knopf" id="kind-aendern">Ändern</button><button class="knopf" id="neu-laden">🔄 App neu laden</button></div>
         <p class="klein">„Als Erwachsener spielen“ öffnet für eine Stunde alles, ohne Sperren und Zeitgrenzen; dabei werden keine Sterne und kein Fortschritt fürs Kind gespeichert (bis „Beenden“ oder die App geschlossen wird). „App neu laden“ holt die neueste Version. Der Spielstand bleibt erhalten.</p>
       </div>
+      <div class="karte" id="geschenk-karte">
+        <h2>🎁 Geschenk-Code einlösen</h2>
+        <p>Mit einem Geschenk-Code der Lerninsel bekommt <b>${S.profil.name}</b> ein Paket am Steg der Insel (z. B. einen Tannenbaum fürs Zimmer). Jeder Code gilt einmal je Kind; gefälschte Codes werden erkannt.</p>
+        ${window.Geschenk && window.Geschenk.eingerichtet ? "" : `<p class="hinweis">Auf diesem Gerät sind Geschenk-Codes noch nicht eingerichtet (es fehlt der öffentliche Schlüssel der Lerninsel).</p>`}
+        <div class="knoepfe"><button class="knopf" id="geschenk-scan">📷 Code scannen</button></div>
+        <video id="geschenk-video" playsinline muted hidden style="width:100%;max-width:360px;border-radius:18px;margin:8px 0"></video>
+        <label class="feld-zeile">Oder Code einfügen: <input id="geschenk-text" type="text" autocomplete="off" spellcheck="false" style="width:100%"></label>
+        <div class="knoepfe"><button class="knopf haupt" id="geschenk-ok">Einlösen</button></div>
+        <p id="geschenk-meldung" class="klein" aria-live="polite"></p>
+      </div>
       <div class="karte">
         <h2>Hinweise</h2>
         <p>Alle Daten bleiben nur auf diesem Tablet, nichts wird ins Internet geschickt. Den Spielstand kannst du auf der Startseite unter „💾 Spielstand“ sichern oder aufs andere Tablet übertragen.</p>
@@ -695,6 +724,7 @@
     // Einführung E2–E8 überspringen (still: zählt nicht als neue Etappe); E3 öffnet Kapitel 1 wie in der Szene „Erste Frucht“
     if ($("tutorial-weg")) $("tutorial-weg").addEventListener("click", () => { TUTORIAL.forEach(e => window.Story.etappeFertig(e, true)); window.Story.setzeKapitel(1); S.meldung("Einführung übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
+    geschenkKnoepfe();
     zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); sorbischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }

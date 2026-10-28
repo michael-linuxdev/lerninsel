@@ -1,0 +1,18 @@
+{
+ "hinweis": "NUR FÜR TESTS – nicht der echte Schlüssel der Lerninsel. Codes mit diesem Schlüssel werden in der App abgelehnt.",
+ "privat": {
+  "key_ops": [
+   "sign"
+  ],
+  "ext": true,
+  "kty": "EC",
+  "x": "HwTOcJh2skKb7Lnj_Pep0567w46IzOqeRekCfGXzgic",
+  "y": "8yqFRtgA2tGS0D5pNJnEg3n39bDZKM0oCkwdds7Ys9A",
+  "crv": "P-256",
+  "d": "J8HL2_ah-wPQHiGvmoQKh1lwhTI0PpIuI3eiGWbIcyw"
+ },
+ "oeffentlich": {
+  "x": "HwTOcJh2skKb7Lnj_Pep0567w46IzOqeRekCfGXzgic",
+  "y": "8yqFRtgA2tGS0D5pNJnEg3n39bDZKM0oCkwdds7Ys9A"
+ }
+}

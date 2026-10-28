@@ -47,6 +47,17 @@
   .gross .knopf { min-height: 54px; }
   .info { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
   .info p { margin: 10px 0 0; font-weight: 500; }
+  /* Inselchronik (NA-18): jede gesehene Szene noch einmal ansehen */
+  .chronik { display: grid; gap: 12px; max-width: 760px; margin: 0 auto; padding: 0; list-style: none; }
+  .chronik li { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 22px; padding: 10px 14px; box-shadow: 0 5px 0 rgba(0,0,0,.07); }
+  .chronik .kopf { width: 64px; height: 64px; flex: none; border-radius: 18px; background: #FFF4E0; display: grid; place-items: center; font-size: 2.2rem; overflow: hidden; }
+  .chronik .kopf svg { width: 100%; height: 100%; }
+  .chronik .was { flex: 1; min-width: 0; }
+  .chronik .was b { display: block; font-size: 1.2rem; }
+  .chronik .was span { color: var(--pflaume-hell); font-weight: 600; font-size: .95rem; }
+  .chronik .nr { font-weight: 700; color: var(--pflaume-hell); min-width: 1.6em; text-align: right; }
+  .chronik .knopf { min-height: 52px; flex: none; }
+  .chronik-leer { text-align: center; font-size: 1.15rem; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -68,6 +79,10 @@
 <script src="../../shared/zeit.js" data-art="neutral"></script>
 <script src="../../shared/sprache.js"></script>
 <script src="../../shared/sticker.js"></script>
+<script src="../../shared/figuren.js"></script>
+<script src="../../shared/zeige.js"></script>
+<script src="../../shared/szene.js"></script>
+<script src="../../shared/szenen.js"></script>
 <script src="album.js"></script>
 </body>
 </html>

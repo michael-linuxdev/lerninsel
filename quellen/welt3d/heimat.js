@@ -744,6 +744,44 @@ NACHBARN.forEach(n => {
   }, aktion, 2.3);
 });
 
+// ---------- Kapitel 2 „Fipsis Karte“ (NA-17): neuer Weg von Fipsi zu einem Wegweiser ----------
+// Die Schilder zeigen nur Wörter, die das Kind schon hatte (K.wortSchilder); ohne Wörter zeigen sie Pfeile.
+// Kostet nach dem Verschmelzen wenige Zeichenaufrufe (Steine + Pfosten) plus je Schild einen (eigene Textur).
+let kartenweg = null;
+function wortTafel(wort, farbe) {
+  const c = document.createElement("canvas"); c.width = 256; c.height = 96;
+  const x = c.getContext("2d"); x.fillStyle = farbe; x.beginPath(); x.roundRect ? x.roundRect(4, 4, 248, 88, 22) : x.rect(4, 4, 248, 88); x.fill();
+  x.lineWidth = 6; x.strokeStyle = "#3b1f63"; x.stroke();
+  x.fillStyle = "#3b1f63"; x.textAlign = "center"; x.textBaseline = "middle";
+  if (wort) { let gr = 58; do { x.font = `700 ${gr}px Fredoka, "Trebuchet MS", sans-serif`; gr -= 4; } while (x.measureText(wort).width > 220 && gr > 26); x.fillText(wort, 128, 52); }
+  else { x.beginPath(); x.moveTo(60, 48); x.lineTo(176, 48); x.lineWidth = 12; x.stroke(); x.beginPath(); x.moveTo(196, 48); x.lineTo(160, 22); x.lineTo(160, 74); x.closePath(); x.fill(); }
+  const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace;
+  const g = new Group(), m = new MeshBasicMaterial({ map: t });
+  const vorn = new Mesh(new PlaneGeometry(1.15, 0.43), m), hinten = new Mesh(new PlaneGeometry(1.15, 0.43), m);
+  vorn.position.z = 0.035; hinten.position.z = -0.035; hinten.rotation.y = Math.PI; g.add(vorn, hinten);
+  g.add(teil(new BoxGeometry(1.2, 0.48, 0.06), farbe));
+  return g;
+}
+function zeigeKartenweg() {
+  if (kartenweg) return;
+  const [fx, fz] = P.fipsi, [kx, kz] = P.kartenweg, n = Math.max(3, Math.round(Math.hypot(kx - fx, kz - fz) / 0.9));
+  kartenweg = new Group(); scene.add(kartenweg);
+  const steine = new Group(); kartenweg.add(steine);
+  for (let i = 1; i < n; i++) {   // flache Steine von Fipsi bis zum Wegweiser, leicht geschlängelt
+    const f = i / n, x = fx + (kx - fx) * f + Math.sin(f * 6) * 0.25, z = fz + (kz - fz) * f + Math.cos(f * 5) * 0.2;
+    const st = teil(new CylinderGeometry(0.36, 0.4, 0.1, 14), "#E8D3A8", { umriss: false }); st.receiveShadow = true; setze(st, x, bodenY(x, z) + 0.04, z); steine.add(st);
+  }
+  verschmelzeLokal(steine, []);
+  const pfosten = new Group(), y0 = bodenY(kx, kz); pfosten.position.set(kx, y0, kz); pfosten.rotation.y = Math.atan2(fx - kx, fz - kz); kartenweg.add(pfosten);
+  pfosten.add(setze(teil(new CylinderGeometry(0.07, 0.09, 2.3, 8), "#9A6A3F"), 0, 1.15, 0));
+  pfosten.add(setze(teil(new ConeGeometry(0.13, 0.22, 8), "#F28C38"), 0, 2.4, 0));
+  const woerter = K.wortSchilder(3), farben = ["#FFF3E6", "#FFE7C2", "#FFDCC8"];
+  for (let i = 0; i < 3; i++) { const t = wortTafel(woerter[i] || "", farben[i]); t.position.set(0, 1.95 - i * 0.52, 0.1); t.rotation.y = (i % 2 ? -1 : 1) * 0.35; pfosten.add(t); }
+  block(kx, kz, 0.5);
+  antippbar(pfosten, () => zeigeAntwort(K.antwort("wegweiser")), ...K.aktionFuer("wegweiser"));
+}
+if (window.Story && Story.kapitel() >= 2) zeigeKartenweg();
+
 // ---------- Wissensbaum ----------
 // Wächst mit allen Lernfunden seit Beginn (shared/lernfunde.js), jeder Fund von heute hängt als leuchtende Frucht daran.
 // Ohne Lernen passiert nichts Schlimmes: der Baum bleibt einfach, wie er ist (kein Welken, keine Strafe).
@@ -1490,7 +1528,7 @@ $("welt-zu").addEventListener("click", () => { S.ton("tipp"); $("welt").hidden =
 // einen Tannenbaum fürs Zimmer und eine Schleife fürs Tier. Das Paket wartet, bis es geöffnet wird (auch nach Weihnachten).
 // Im Dezember trägt Pixels Boot eine Lichterkette. Außerhalb des Dezembers ist der Prolog gleich, nur ohne Paket.
 // Regeln (wann es ein Paket gibt, was beim Öffnen passiert) im Insel-Kern; hier Aussehen und Wegnehmen.
-const weihnachtsPaket = K.weihnachtsPaket;
+const weihnachtsPaket = K.paketDa;   // Weihnachts-Paket oder eingelöster Geschenk-Code (NA-16)
 let paket = null;
 if (weihnachtsPaket()) {
   paket = new Group(); const y = bodenY(PAKET_POS.x, PAKET_POS.z);
@@ -1506,7 +1544,8 @@ function oeffnePaket() {
   if (!paket || !weihnachtsPaket()) return;
   const r = K.oeffnePaket(); if (!r) return;
   if (r.zimmer) stelleMoebel();
-  scene.remove(paket); tippbar.splice(tippbar.indexOf(paket), 1); paket = null; naechstes = null;
+  // weitere eingelöste Geschenke warten: das Paket bleibt liegen, bis alle offen sind
+  if (!weihnachtsPaket()) { scene.remove(paket); tippbar.splice(tippbar.indexOf(paket), 1); paket = null; naechstes = null; }
   S.ton("juhu");
   sprechblase(...r.blase, null);
 }
@@ -1566,7 +1605,7 @@ function spieleStory(id) {
   const b = def.blasen, I = window.Insel;
   if (id === "erst-lernen") { b[0].zeige = I.ort("sonnenuhr"); b[2].zeige = I.ort("eule"); }
   if (id === "sonne") { b[0].zeige = I.ort("sonnenuhr"); b[0].beim = zeigeSonnenuhr; }
-  if (id === "weihnachtspaket") { b.forEach(x => { x.zeige = () => paket ? I.bildschirm(paket.position.x, paket.position.y + 0.8, paket.position.z) : null; }); b[1].bis = (weiter) => { const t = setInterval(() => { if (!paket) { clearInterval(t); weiter(); } }, 200); return () => clearInterval(t); }; }
+  if (id === "weihnachtspaket" || id === "geschenkpaket") { b.forEach(x => { x.zeige = () => paket ? I.bildschirm(paket.position.x, paket.position.y + 0.8, paket.position.z) : null; }); b[1].bis = (weiter) => { const t = setInterval(() => { if (!paket) { clearInterval(t); weiter(); } }, 200); return () => clearInterval(t); }; }
   if (id === "erste-frucht") { b[0].zeige = I.ort("wissensbaum"); b[2].beim = () => { St.setzeKapitel(1); nebelWeicht(); }; }
   // E4–E8 (NA-14): Zeigehand und Warten; Auslöser und Texte kommen aus Kern und shared/szenen.js
   const warte = (pruef) => (weiter) => { const tt = setInterval(() => { if (pruef()) { clearInterval(tt); weiter(); } }, 200); return () => clearInterval(tt); };
@@ -1575,10 +1614,13 @@ function spieleStory(id) {
   if (id === "spielorte") b[0].zeige = I.ort("ballons");
   if (id === "merkkiste") { const wer = K.merkkisteBei(); b.forEach(x => { x.wer = wer; x.zeige = I.ort(wer === "eule" ? "eule" : "fipsi"); }); }
   if (id === "gefuehle") b.forEach(x => { x.zeige = I.ort("baer"); });
+  if (id === "fipsis-karte") { b[0].zeige = I.ort("fipsi"); b[1].beim = zeigeKartenweg; b[1].zeige = I.ort("kartenweg"); b[2].zeige = I.ort("kartenweg"); }
+  if (id === "atelier") b.forEach(x => { x.zeige = I.ort("buehne"); });
   storyLaeuft = true;
   Sz.spiele(def).then(() => {
     storyLaeuft = false;
     K.storyFertig(def);
+    if (id === "fipsis-karte") zeigeKartenweg();   // auch beim Überspringen
     nebelWeicht();
     if (id === "ei" && !tier && $("blase").hidden) zeigeAntwort(K.antwort("nest"));
     setTimeout(naechsteStory, 1200);
@@ -1587,7 +1629,7 @@ function spieleStory(id) {
 let storyLaeuft = false;
 // Welche Szene dran ist, entscheidet der Insel-Kern (gleich für beide Looks)
 function naechsteStory() {
-  const id = K.naechsteStory({ paket: !!paket, prolog: !!prolog, drinnen, laeuft: storyLaeuft, test: q.has("szene") });
+  const id = K.naechsteStory({ paket: paket ? weihnachtsPaket() : false, prolog: !!prolog, drinnen, laeuft: storyLaeuft, test: q.has("szene") });
   if (id) spieleStory(id);
 }
 setTimeout(naechsteStory, 900);
@@ -1614,4 +1656,4 @@ function teileZaehlen() {
   return scene.children.map(o => { let n = 0, d = 0; o.traverseVisible(m => { if (m.isMesh || m.isPoints || m.isLineSegments) { n++; const g = m.geometry; d += g.index ? g.index.count / 3 : (g.attributes.position ? g.attributes.position.count / 3 : 0); } }); return { name: o.type + (o.userData.tipp ? "*" : "") + (o.userData.aktion ? ":" + o.userData.aktion[1] : ""), x: Math.round(o.position.x), z: Math.round(o.position.z), meshes: n, dreiecke: Math.round(d) }; })
     .filter(x => x.meshes > 0).sort((a, b) => b.meshes - a.meshes);
 }
-window.__heimat = { teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };

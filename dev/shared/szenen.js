@@ -27,6 +27,11 @@
     { wer: "robo", text: { de: "Frohe Weihnachten, {name}! Am Steg liegt ein Paket für dich.", ru: "С Рождеством, {name}! У причала лежит подарок для тебя.", status: E } },
     { wer: "robo", text: { de: "Lauf hin und mach es auf!", ru: "Подойди и открой его!", status: E } }
   ] });
+  // QR-Geschenk (NA-16): einmal erklärt; spätere Geschenke liegen einfach am Steg
+  Sz.registriere("geschenkpaket", { titel: "Ein Geschenk am Steg", blasen: [
+    { wer: "robo", text: { de: "Piep, {name}! Jemand hat dir ein Geschenk geschickt. Es liegt am Steg.", ru: "Пип, {name}! Тебе прислали подарок. Он лежит у причала.", status: E } },
+    { wer: "robo", text: { de: "Lauf hin und mach es auf!", ru: "Подойди и открой его!", status: E } }
+  ] });
 })();
 
 // ---------- Tutorial E2 „Erst lernen“ und Szene „Die Sonne geht auf“, E3 „Erste Frucht“ = Kapitel 1 „Der Spross“ (NA-13) ----------
@@ -75,5 +80,23 @@
   Sz.registriere("gefuehle", { titel: "Wie geht es dir?", etappe: "E8", blasen: [
     { wer: "baer", text: { de: "Hallo {name}! Ich bin Bruni. Wie geht es dir heute?", ru: "Привет, {name}! Я Бруни. Как ты сегодня?", status: E } },
     { wer: "baer", text: { de: "Bei mir kannst du zeigen, wie du dich fühlst. Und wenn du müde bist, machen wir zusammen eine Pause.", ru: "У меня можно показать, что ты чувствуешь. А если устанешь, мы вместе сделаем перерыв.", status: E } }
+  ] });
+})();
+
+// ---------- Kapitel 2 „Fipsis Karte“ und Etappe E9 „Atelier“ (NA-17) ----------
+// Auslöser im Insel-Kern (KAPITEL, ETAPPEN); Zeigehand und der neue Weg in heimat.js (spieleStory).
+(function () {
+  const Sz = window.Szene; if (!Sz) return;
+  const E = { ru: "entwurf" };
+  Sz.registriere("fipsis-karte", { titel: "Fipsis Karte", kapitel: 2, blasen: [
+    { wer: "fipsi", text: { de: "{name}, schau mal! Ich habe ein Stück von meiner Schatzkarte gefunden!", ru: "{name}, смотри! Я нашла кусочек своей карты сокровищ!", status: E } },
+    { wer: "fipsi", text: { de: "Darauf ist ein Weg eingezeichnet – und da ist er schon! Er führt zu einem Wegweiser.", ru: "На ней нарисована тропинка – и вот она! Она ведёт к указателю.", status: E } },
+    { wer: "fipsi", text: { de: "Auf den Schildern stehen Wörter, die du schon kennst. Lies sie mal laut!", ru: "На табличках написаны слова, которые ты уже знаешь. Прочитай их вслух!", status: E } },
+    { wer: "fipsi", text: { de: "Mit jedem neuen Wort finden wir mehr von der Karte. Wann immer du magst, üben wir weiter.", ru: "С каждым новым словом мы находим больше карты. Когда захочешь, продолжим.", status: E } }
+  ] });
+  Sz.registriere("atelier", { titel: "Paulas Atelier", etappe: "E9", blasen: [
+    { wer: "papagei", text: { de: "Hallo {name}! Ich bin Paula. Auf meiner Bühne spielt Musik – und im Atelier wird gemalt!", ru: "Привет, {name}! Я Паула. На моей сцене играет музыка – а в ателье рисуют!", status: E } },
+    { wer: "papagei", text: { de: "Male ein Bild oder erfinde eine Melodie. Dein neuestes Bild steht dann auf der Staffelei in deinem Zimmer.", ru: "Нарисуй картину или придумай мелодию. Твоя новая картина будет стоять на мольберте в твоей комнате.", status: E } },
+    { wer: "papagei", text: { de: "Und deine Melodie spiele ich hier auf der Bühne – dann tanzen alle mit!", ru: "А твою мелодию я сыграю здесь на сцене – и все будут танцевать!", status: E } }
   ] });
 })();

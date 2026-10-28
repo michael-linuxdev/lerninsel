@@ -1802,3 +1802,22 @@ Lehrplantexte nur zusammengefasst, alle Punkte in `shared/lehrplan/laender/sachs
 - **Meine Ecke:** Kopf-Karte mit Farbverlauf, Balken zur Gesamtstufe und zwei Zahlen (⭐ Sterne, 🌱 schon gelernt) – bewusst keine Serien/Tage-in-Folge.
 - **Mathe:** Lernbereichs-Kacheln mit Fortschrittsbalken; „gerade in der Schule“ im selben Gelb wie auf den anderen Fachseiten.
 - **Nächstes:** Story NA-17 (Kapitel 1–2), NA-18 (Inselchronik im Album), NA-16 (Weihnachts-QR-Geschenk – Auswahl der Geschenke offen).
+
+### Stand 30.10.2026, Story NA-17, NA-18, NA-16
+- **NA-17 Kapitel 2 „Fipsis Karte“** (Kapitel 1 „Der Spross“ gab es schon als Szene „erste-frucht“): Kapitelbogen `KAPITEL` im Insel-Kern statt eigener
+  `shared/kapitel.js` (wie `ETAPPEN`, gleiche Regeln: nie rückwärts, keine Fristen, höchstens zwei Neuerungen am Tag). Bedingung 5 Lernfunde + 1 geschafftes
+  Deutsch-Kapitel → Fipsi findet ein Kartenstück, ein Steinweg führt zu einem Wegweiser; die drei Schilder zeigen nur Wörter, die das Kind schon hatte
+  (Lernkartei/Lernfunde Deutsch), sonst Pfeile; antippen → Fipsi liest sie vor. Standard-Insel: Wegende bei (−6,5 | 2,0), eigene Welten suchen einen freien Platz.
+- **E9 „Atelier“**: nach Kapitel 1 ab dem dritten Tag zeigt Paula Bühne und Atelier; wer schon gemalt oder komponiert hat, bekommt E9 still;
+  „Einführung überspringen“ im Elternbereich schließt E9 ein.
+- **NA-18 Inselchronik**: Reiter „📜 Inselchronik“ im Stickeralbum (`#chronik`): alle gesehenen Szenen in Reihenfolge mit Figur und Datum, ▶ spielt sie mit
+  Vorlesen noch einmal ab (ohne Doppel-Einträge).
+- **NA-16 QR-Geschenk** (Technik fertig, Geschenk-Auswahl noch offen): `shared/geschenk.js` prüft signierte Codes offline (ECDSA P-256 über WebCrypto),
+  jeder Code einmal je Kind, Fälschungen/Veränderungen/unbekannte Geschenke werden freundlich abgelehnt. Einlösen im Elternbereich („Kinder & Gerät“:
+  Kamera oder einfügen), das Geschenk liegt dann als Paket am Steg (eigene Szene „Ein Geschenk am Steg“, mehrere Pakete nacheinander). Geschenke:
+  Tannenbaum, Schleife, jedes Möbel, Tier-Zubehör, 1–10 Sterne, optional ein Zettel-Text. Generator `quellen/geschenk-erzeugen.js` (Node, beim
+  Auftraggeber; legt den privaten Schlüssel nur außerhalb des Repos ab, gibt QR als SVG aus). **Solange der öffentliche Schlüssel des Auftraggebers
+  nicht in `OEFFENTLICH` steht, wird jeder Code abgelehnt** (Hinweis im Elternbereich).
+- **Tests:** neu `kapitel`, `chronik`, `geschenk` (Test-Schlüssel `tests/geschenk-testschluessel.json`, ausdrücklich nur für Tests).
+- **Offen:** Schlüsselpaar beim Auftraggeber erzeugen und den öffentlichen Teil eintragen; Geschenk-Auswahl für Weihnachten 2026 festlegen.
+- **Nächstes:** Kapitel 3 „Bennos Brücke“ braucht den Bauplatz (Minispiele ausgeblendet) – vorher Minispiele neu denken; sonst iPad-Rückmeldung einarbeiten.

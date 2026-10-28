@@ -33,7 +33,8 @@
       start: [1, 2], tier: [2.5, 3], haus: [-5, -4.5, 0.35], station: [-1.8, -6.3, 0.3], nest: [-2.2, -6.2],
       eule: [8.5, -3, -1.2], fipsi: [-7.6, -0.6, 1.0], robo: [5.5, 8.5, -2.6], biber: [2, -8, 0.2], schild: [3.3, -8.5, 0.2],
       wissensbaum: [-3.2, 2.2], ballons: [10, 6], truhe: [-1, 13.6],
-      lauf: [6, 10.2], kart: [-8.6, 8.2], bau: [11.2, -5], baer: [-3.7, 6.9, 2.6], schach: [1.5, 6.8, 3.0], buehne: [4.4, -0.8, -1.4]
+      lauf: [6, 10.2], kart: [-8.6, 8.2], bau: [11.2, -5], baer: [-3.7, 6.9, 2.6], schach: [1.5, 6.8, 3.0], buehne: [4.4, -0.8, -1.4],
+      kartenweg: [-6.5, 2.0]   // Kapitel 2 (NA-17): Ende des neuen Wegs von Fipsi aus
     },
     baeume: [[-9, -6, 1.1], [-7.5, 3.2, 0.9], [7.5, -7, 1], [10.5, 1, 1.1], [3, -10, 0.85], [-3.5, 9.8, 0.8], [-11, -1, 0.75], [1.5, 11, 0.7], [-11.5, 6, 0.8]].map(([x, z, k], i) => ({ x, z, k, i })),
     steine: [[4.5, 3.6, 0.6], [5.2, 4.1, 0.35], [-6, 6.5, 0.5]],
@@ -196,9 +197,19 @@
     const [y, m, t] = datum.split("-").map(Number); if (m !== 12 || t > 26) return null;
     const id = "weihnachten-" + y; return St.hatGeschenk(id) ? null : id;
   }
-  // Öffnet das Paket (nur Spielstand). Ergebnis: { id, zimmer: true, wenn der Tannenbaum aufgestellt wurde, blase: [...] } oder null
+  // Liegt ein Paket am Steg? "weihnachten-JJJJ" (Weihnachts-Sonderstart), "qr" (eingelöster Geschenk-Code, NA-16) oder null
+  const qrPaket = () => !!(W.Geschenk && W.Geschenk.pakete().length);
+  const paketDa = () => weihnachtsPaket() || (qrPaket() ? "qr" : null);
+  // Öffnet das Paket (nur Spielstand). Ergebnis: { id, zimmer: true, wenn etwas ins Zimmer gestellt wurde, blase: [...] } oder null
   function oeffnePaket() {
-    const id = weihnachtsPaket(); if (!id) return null;
+    const id = weihnachtsPaket();
+    if (!id && qrPaket()) {
+      const r = W.Geschenk.oeffne(); if (!r) return null;
+      const g = r.geschenk, extra = r.zimmer ? " Es steht schon in deinem Haus!" : g.art === "zubehoer" ? " Schau mal bei deinem Tier!" : "";
+      return { id: "qr", zimmer: r.zimmer, blase: ["robo", `${g.e} Ein Geschenk für dich`, `Im Paket ist ${g.name}!${extra}${r.n ? ` Dazu steht auf einem Zettel: „${r.n}“` : ""}`,
+        S().paar(["", "В посылке подарок для тебя!"])[1]] };
+    }
+    if (!id) return null;
     W.Story.merkeGeschenk(id);
     S().schalteFrei("moebel-tannenbaum", 0);
     // Tannenbaum gleich auf einen freien Platz im Zimmer stellen (kann mit „Einrichten“ weggeräumt werden)
@@ -221,7 +232,8 @@
     const St = W.Story, Sz = W.Szene;
     if (!St || !Sz || lage.prolog || lage.drinnen || lage.laeuft || Sz.laeuft || !St.etappe("E1") || lage.test) return null;
     const Zt = W.Zeit, st = Zt ? Zt.status() : { frei: true, spielen: true }, frei = st.frei;
-    if (lage.paket && !St.gesehen("weihnachtspaket")) return "weihnachtspaket";
+    if (lage.paket === "qr" && !St.gesehen("geschenkpaket")) return "geschenkpaket";
+    if (lage.paket && lage.paket !== "qr" && !St.gesehen("weihnachtspaket")) return "weihnachtspaket";
     if (!St.etappe("E2")) {
       if (frei) St.etappeFertig("E2");
       else if (St.darfNeueEtappe()) return st.spielen ? "sonne" : "erst-lernen";
@@ -235,6 +247,7 @@
       if (e.genutzt()) { St.etappeFertig(e.id, true); continue; }
       if (St.darfNeueEtappe() && e.faellig(st)) return e.szene;
     }
+    for (const k of KAPITEL) if (St.kapitel() === k.n - 1 && St.darfNeueEtappe() && k.faellig()) return k.szene;
     return null;
   }
   // Tutorial-Etappen E4–E8 (KONZEPT „Etappen“): Szene, Auslöser, „schon genutzt“ (für Kinder, die das schon kennen)
@@ -249,8 +262,28 @@
     { id: "E6", szene: "spielorte", faellig: (st) => !S().MINISPIELE_AUS && st.spielen && !st.frei && profi(), genutzt: () => W.Story.zustand().etappen.E1 === 1 },
     { id: "E7", szene: "merkkiste", faellig: () => faelligeKarten() > 0,
       genutzt: () => { const k = S().lade("lernkartei") || {}; return ["deutsch", "sachkunde"].some(f => (k[f] || []).some(c => c.stufe >= 2)); } },
-    { id: "E8", szene: "gefuehle", faellig: () => tageSeitE1() >= 1, genutzt: () => Object.keys((S().lade("gefuehle") || {}).tage || {}).length > 0 }
+    { id: "E8", szene: "gefuehle", faellig: () => tageSeitE1() >= 1, genutzt: () => Object.keys((S().lade("gefuehle") || {}).tage || {}).length > 0 },
+    // E9 Atelier (NA-17): nach Kapitel 1 und ab dem dritten Tag zeigt Paula Malen und Musik
+    { id: "E9", szene: "atelier", faellig: () => W.Story.kapitel() >= 1 && tageSeitE1() >= 2,
+      genutzt: () => { const a = S().lade("atelier") || {}; return (a.gemalt || 0) > 0 || (a.wand || []).length > 0 || Object.keys(a.melodien || {}).length > 0; } }
   ];
+  // ======================================================================================================
+  // Kapitelbogen (KONZEPT „Kapitelbogen“, NA-17): Kapitel öffnen sich über Lernfunde UND eine kleine Bedingung im Fach der Figur.
+  // Nie rückwärts, keine Fristen. Kapitel 1 „Der Spross“ öffnet die Szene „erste-frucht“ (E3).
+  // ======================================================================================================
+  const deutschFertig = () => Object.values(((S().lade("deutsch") || {}).kapitel) || {}).filter(x => x > 0).length;
+  const KAPITEL = [
+    { n: 2, szene: "fipsis-karte", titel: "Fipsis Karte", bedingung: "5 Lernfunde und ein Deutsch-Kapitel",
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 5 && deutschFertig() >= 1 }
+  ];
+  // Wörter für Fipsis Wegweiser: nur Wörter, die das Kind schon hatte (Lernkartei Deutsch, Lernfunde in Deutsch), höchstens n, ohne Dopplungen
+  function wortSchilder(n = 3) {
+    const aus = [], dazu = (w) => { w = String(w || "").trim(); if (/^[A-Za-zÄÖÜäöüß-]{2,14}$/.test(w) && !aus.some(x => x.toLowerCase() === w.toLowerCase())) aus.push(w); };
+    const k = (S().lade("lernkartei") || {}).deutsch || [];
+    k.slice().reverse().forEach(c => { const s = c.s || {}; dazu(s.wort || (typeof c.k === "string" && c.k.startsWith("wort|") ? c.k.slice(5) : "")); });
+    if (W.Lernfunde) W.Lernfunde.letzteTage(60).filter(f => f.fach === "deutsch").forEach(f => dazu(String(f.text || "").replace(/^Neues Wort: /, "").split(/[ ,–]/)[0]));
+    return aus.slice(0, n);
+  }
   // Wer spricht in der Merkkisten-Szene? Fipsi (Deutsch) oder Ella (Sachunterricht)
   const merkkisteBei = () => (W.Lernkartei && W.Lernkartei.anzahlFaellig("deutsch") === 0 && W.Lernkartei.anzahlFaellig("sachkunde") > 0 ? "eule" : "fipsi");
   // nach dem Ende einer Story-Szene
@@ -354,6 +387,13 @@
     const SU = { x: STEG.x + 2.1, z: Math.min(RMAX_LAUF - 1.1, STEG.z0 + 0.6) };
     const PAKET_POS = { x: STEG.x + 0.95, z: STEG.z0 + 0.15 };
     const HAUS_DREH = WELT.insel ? 0.35 : P.haus[2];
+    // Kapitel 2 (NA-17): Der neue Weg führt von Fipsi ein Stück nach außen zu einem Wegweiser – Platz ohne Baum und ohne anderen Ort
+    if (!P.kartenweg) {
+      const [fx, fz] = P.fipsi, w0 = Math.atan2(fz, fx), andere = Object.entries(P).filter(([k]) => !["fipsi", "kartenweg"].includes(k)).map(([, v]) => v);
+      const kand = [0.6, -0.6, 1.1, -1.1, 0, 1.6, -1.6].map(d => { let x = fx + Math.cos(w0 + d) * 3.2, z = fz + Math.sin(w0 + d) * 3.2; const r = Math.hypot(x, z), m = RMAX_LAUF - 1.6; if (r > m) { x *= m / r; z *= m / r; } return [x, z]; });
+      const frei = ([x, z]) => WELT.baeume.every(b => Math.hypot(b.x - x, b.z - z) > 1.8) && andere.every(v => Math.hypot(v[0] - x, v[1] - z) > 2) && !(WELT.see && Math.hypot(x - WELT.see.x, z - WELT.see.z) < WELT.see.r + 1);
+      P.kartenweg = kand.find(frei) || kand[0];
+    }
     // Vor der Haustür (dort kommt man beim Rausgehen an)
     const vorDerTuer = () => ({ x: P.haus[0] + Math.sin(HAUS_DREH) * 2.75, z: P.haus[1] + Math.cos(HAUS_DREH) * 2.75, dreh: HAUS_DREH });
     // Nebel je Stufe (Weite für die runde Darstellung, r = Radius des Nebelbands, a = Deckkraft)
@@ -381,7 +421,9 @@
       nest: { x: P.nest[0], z: P.nest[1], h: 0.8 },
       ballons: { x: P.ballons[0], z: P.ballons[1], h: 2.4 },
       fipsi: { x: P.fipsi[0], z: P.fipsi[1], h: 1.4 },
-      baer: { x: P.baer[0], z: P.baer[1], h: 1.6 }
+      baer: { x: P.baer[0], z: P.baer[1], h: 1.6 },
+      buehne: { x: P.buehne[0], z: P.buehne[1], h: 1.8 },
+      kartenweg: { x: P.kartenweg[0], z: P.kartenweg[1], h: 1.4 }
     };
     return { WELT, P, ZX, ZX_GRENZE, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, HAUS_DREH, vorDerTuer, NEBEL, nachbarn, ORTE };
   }
@@ -483,6 +525,11 @@
       case "truhe": if (bald(id)) return baldBlase("🏝️", "Schatz-Strand"); return spielort(() => profi() ? blase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "../welt3d/insel.html") : fuehrerschein());
       case "schach": return blase("🐢", "Tilda am Schachtisch", `Hallo ${name()}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?", "../schach/");
       case "buehne": return paulaAntwort();
+      case "wegweiser": {   // Kapitel 2 (NA-17): Fipsis Wegweiser zeigt Wörter, die das Kind schon hatte
+        const w = wortSchilder(3);
+        return blase("fipsi", "Fipsis Wegweiser", w.length ? `Auf den Schildern steht: ${w.join(", ")}. Lies die Wörter laut – du kennst sie schon!` : "Hier kommen bald Wörter hin, die du bei mir lernst. Komm in die Schatzkarte!",
+          w.length ? "На табличках слова, которые ты уже знаешь. Прочитай их вслух!" : "Скоро здесь будут слова, которые ты выучишь у меня.", "../deutsch/");
+      }
       case "station": return wetterAntwort(lage.wetter);
       case "wissensbaum": return wissensbaumText();
       case "sonnenuhr": return { blase: [...sonnenuhrText(), null] };
@@ -522,7 +569,7 @@
   // Aufschrift des Aktionsknopfs je Station (emoji, Wort) und Reichweite (Weltmaß)
   const AKTION = {
     haus: [["🚪", "Reingehen"], 3.4], ballons: [["🎈", "Spielen"], 1.9], truhe: [["🔓", "Öffnen"], 1.9], schach: [["♟️", "Schach"], 2.4], buehne: [["🎵", "Musik"], 2.6],
-    station: [["🌦️", "Ansehen"], 1.9], album: [["📒", "Album"], 1.6], bett: [["🛏️", "Ansehen"], 2.2], schrank: [["🚪", "Öffnen"], 2.0], spiegel: [["🪞", "Reinschauen"], 1.6], wissensbaum: [["🌳", "Ansehen"], 2.2], sonnenuhr: [["☀️", "Ansehen"], 1.9], paket: [["🎁", "Öffnen"], 1.8], nachbar: [["💬", "Reden"], 2.3]
+    station: [["🌦️", "Ansehen"], 1.9], album: [["📒", "Album"], 1.6], bett: [["🛏️", "Ansehen"], 2.2], schrank: [["🚪", "Öffnen"], 2.0], spiegel: [["🪞", "Reinschauen"], 1.6], wissensbaum: [["🌳", "Ansehen"], 2.2], sonnenuhr: [["☀️", "Ansehen"], 1.9], paket: [["🎁", "Öffnen"], 1.8], nachbar: [["💬", "Reden"], 2.3], wegweiser: [["🪧", "Lesen"], 2.0]
   };
   const aktionFuer = (id) => (bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
@@ -533,7 +580,8 @@
     BIOME, GROESSEN, HUEGEL, STANDARD, FARBEN, erzeuge, neuerSeed, wunsch, zeit, erstelle,
     // Regeln und Zustände
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
-    weihnachtsPaket, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
+    weihnachtsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
+    KAPITEL, wortSchilder, deutschFertig,
     // Zimmer
     PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel,
     // Wetter

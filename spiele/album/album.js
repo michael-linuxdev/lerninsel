@@ -10,6 +10,9 @@
   const hl = S.hilfe && S.hilfe();
   const WIE = { lernen: "Gibt es fürs Lernen", entdecken: "Gibt es fürs Entdecken auf der Insel", feste: "Gibt es an Festtagen" };
   let aktiv = Math.max(0, ST.SEITEN.findIndex(s => s.sticker.some(([id]) => neu.has(id))));
+  // Inselchronik (NA-18): eigener Reiter hinter den Sticker-Seiten; #chronik öffnet ihn direkt
+  const CHRONIK = ST.SEITEN.length, Sz = window.Szene, Sto = window.Story;
+  if (location.hash === "#chronik") aktiv = CHRONIK;
 
   const st = ST.stand();
   $("zaehler").textContent = `${st.hat} / ${st.gesamt}`;
@@ -19,10 +22,25 @@
     $("reiter").innerHTML = ST.SEITEN.map((s, i) => {
       const n = s.sticker.filter(([id]) => d.hat[id]).length, punkt = s.sticker.some(([id]) => neu.has(id));
       return `<button role="tab" aria-selected="${i === aktiv}" class="${i === aktiv ? "an" : ""}" data-i="${i}">${s.sticker[0][1]} ${s.name} ${n}/${s.sticker.length}${punkt ? '<span class="punkt"></span>' : ""}</button>`;
-    }).join("");
+    }).join("") + (Sz && Sto ? `<button role="tab" aria-selected="${aktiv === CHRONIK}" class="${aktiv === CHRONIK ? "an" : ""}" data-i="${CHRONIK}">📜 Inselchronik ${Sto.chronik().length}</button>` : "");
+  }
+  // der aktive Reiter soll sichtbar sein (die Leiste ist breiter als der Bildschirm)
+  const zeigeReiter = () => { const an = $("reiter").querySelector(".an"); if (an) $("reiter").scrollLeft = Math.max(0, an.offsetLeft - 16); };
+  const MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+  const datum = (d) => { const [, m, t] = String(d || "").split("-").map(Number); return m ? `${t}. ${MONATE[m - 1]}` : ""; };
+  function chronik(el) {
+    const liste = Sto.chronik().filter(x => Sz.def(x.s));
+    el.style.background = "#FFF8EC";
+    el.innerHTML = `<h2>📜 Inselchronik</h2><p class="klein">Alles, was auf deiner Insel passiert ist – tippe auf ▶, dann erzählen es dir die Figuren noch einmal.</p>` +
+      (liste.length ? `<ol class="chronik">${liste.map((x, i) => { const def = Sz.def(x.s), wer = def.blasen[0] && def.blasen[0].wer, F = window.Figuren;
+        const kopf = F && F[wer] ? F[wer]("") : ((Sz.FIGUREN[wer] || {}).e || "📜");
+        return `<li data-s="${x.s}"><span class="nr">${i + 1}.</span><span class="kopf">${kopf}</span><span class="was"><b>${def.titel || x.s}</b><span>${datum(x.d)}</span></span><button class="knopf haupt" data-spiele="${x.s}" aria-label="${def.titel || x.s} ansehen">▶ Ansehen</button></li>`; }).join("")}</ol>`
+        : `<p class="chronik-leer">Noch ist deine Chronik leer. Auf der Insel warten die ersten Geschichten auf dich!</p>`);
   }
   function seite() {
-    const s = ST.SEITEN[aktiv], el = $("seite");
+    const el = $("seite");
+    if (aktiv === CHRONIK) { chronik(el); return; }
+    const s = ST.SEITEN[aktiv];
     el.style.background = s.farbe;
     const voll = s.sticker.every(([id]) => d.hat[id]);
     el.innerHTML = `<h2>${s.name}${voll ? " 🏆" : ""}</h2><p class="klein">${voll ? "Seite komplett!" : WIE[s.woher]}${hl && hl.code === "ru" ? " · " + s.ru : ""}</p>
@@ -48,7 +66,11 @@
     const h = $("g-hoer"); if (h) h.addEventListener("click", () => { SP && SP.sprich(x.name, "de-DE"); if (hl && hl.code === "ru") setTimeout(() => SP.sprich(x.ru, hl.tts), 900); });
   }
   $("reiter").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; aktiv = +b.dataset.i; reiter(); seite(); S.ton("tipp"); });
-  $("seite").addEventListener("click", (e) => { const b = e.target.closest(".st"); if (b) { S.ton("tipp"); gross(b.dataset.id); } });
+  $("seite").addEventListener("click", (e) => {
+    const sp = e.target.closest("[data-spiele]"); if (sp) { S.ton("tipp"); Sz.spiele(sp.dataset.spiele, { chronik: false }); return; }
+    const b = e.target.closest(".st"); if (b) { S.ton("tipp"); gross(b.dataset.id); }
+  });
   $("gross").addEventListener("click", (e) => { if (e.target.id === "gross") $("gross").hidden = true; });
-  reiter(); seite();
+  reiter(); seite(); zeigeReiter();
+  window.__album = { chronik: () => (Sto ? Sto.chronik() : []), zeige: (i) => { aktiv = i; reiter(); seite(); }, CHRONIK };
 })();

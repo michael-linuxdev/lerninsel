@@ -72,6 +72,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - **Insel-Tests (`tutorial`, `prolog`) wackeln, wenn parallel andere Browser-Tests laufen** – allein laufen lassen; einmal gescheitert heißt nicht kaputt.
 
 ### Offene Fragen an den Auftraggeber
+- **QR-Geschenke (NA-16):** Schlüsselpaar mit `node quellen/geschenk-erzeugen.js schluessel <Ordner außerhalb des Repos>` erzeugen und den öffentlichen Teil (x, y) eintragen lassen; welche Geschenke zu Weihnachten 2026 (Vorschlag: Tannenbaum + Schleife, wie beim Weihnachts-Sonderstart)?
 - **iPad-10-Test** (in /dev): **Elternbereich → „Deutsch und Sachunterricht wie im Schuljahr“ einstellen, dann in Werkstatt und bei Eule Ella
   „Zeig, was du kannst“ ausprobieren**; **Deutsch-Werkstatt** (Gruppen nach Lernbereichen, „Wiederholen aus früheren Klassen“ aufklappen, „Gut zuhören“ –
   liest das iPad den Text vor?, „Blitzwörter“ – ist das Aufblitzen gut lesbar?, „Ein Elfchen dichten“), **Sachunterricht** (Gruppen, „Mein Körper
@@ -89,7 +90,7 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Diese Nach
 - Weihnachtsgeschenke (NA-16), Muttersprachlerinnen für ru/uk, Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (Inhalte fertig seit 30.10.2026; davor: Lehrplan Sachsen in voller Tiefe, Entscheidung 27.10.2026)
-0. **Optik** erledigt (Teil 1: Jungen, 3D-Figur, Wasser, Fachseiten-Gruppen, Startseiten-Türen; Teil 2: Gras ruhiger, Tiere größer, Meine Ecke, Mathe-Lernbereiche mit Balken) – Rückmeldung vom iPad abwarten; **danach Story** NA-17, NA-18, NA-16. iPad-Rückmeldung und Sorbisch-Prüfung jederzeit einarbeiten.
+0. **Optik** erledigt (Teil 1: Jungen, 3D-Figur, Wasser, Fachseiten-Gruppen, Startseiten-Türen; Teil 2: Gras ruhiger, Tiere größer, Meine Ecke, Mathe-Lernbereiche mit Balken) – Rückmeldung vom iPad abwarten; **Story** NA-17 (Kapitel 2 + E9), NA-18 (Inselchronik) und NA-16 (QR-Geschenk, Technik) erledigt – offen: Schlüssel des Auftraggebers eintragen, Geschenk-Auswahl; danach Kapitel 3 erst mit neuen Minispielen. iPad-Rückmeldung und Sorbisch-Prüfung jederzeit einarbeiten.
 **Arbeitsliste: `docs/SACHSEN-SCHULJAHR.md` – zuerst lesen.** Maßstab „wie ein Schuljahr“ (jeder Inhaltspunkt geübt, Reihenfolge wie im Schuljahr,
 Wiederholung, Lernstands-Prüfung je Lernbereich – ohne Fristen und Noten). Ablauf: Fragerunde, dann in größeren Schritten bauen, testen, pushen.
 
