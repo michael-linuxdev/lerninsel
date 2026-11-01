@@ -85,9 +85,14 @@
   #laden .ware .e { font-size: 2rem; line-height: 1.1; }
   #laden .ware .e i { display: inline-block; width: 36px; height: 36px; border-radius: 10px; box-shadow: inset 0 0 0 3px rgba(0,0,0,.08); }
   #laden .ware span:last-child { font-size: .95rem; font-weight: 600; opacity: .85; }
+  #insel-laedt { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; background: linear-gradient(#A8DDF5, #CFEFC0); font: 600 1.5rem Fredoka, sans-serif; color: #3b1f63; pointer-events: none; }
+  #insel-laedt[hidden] { display: none; }
+  #insel-laedt span { display: block; font-size: 4rem; text-align: center; animation: wach 1.6s ease-in-out infinite; }
+  @keyframes wach { 50% { transform: translateY(-10px); } }
 </style>
 </head>
 <body>
+<div id="insel-laedt" role="status"><div><span aria-hidden="true">🏝️</span>Die Insel wacht auf …</div></div>
 <div id="buehne"></div>
 <div class="leiste">
   <a class="knopf" href="../../" aria-label="Zur Startseite">⬅️</a>

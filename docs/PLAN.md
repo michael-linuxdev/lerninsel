@@ -1978,3 +1978,19 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   - Feste Wartezeiten in älteren Tests.
   - Ballon-Wiese und Schatz-Strand sind noch „🚧“.
 - **Nächstes:** iPad-Rückmeldung, dann Wörter-Angeln (Schatz-Strand) und Rhythmus-Boot (Ballon-Wiese, Kapitel 4).
+
+### Stand 01.11.2026, spät (Auftrag: 3D-Leistung, Emojis durch Sprites, Figuren neu, Gestaltung aus einem Guss – „durchziehen, vorher einmal fragen“)
+- **Fragerunde:**
+  - Emojis: Mischung – eigene Sprites für Figuren, Navigation, Türen und Orte (~120), alle übrigen aus einem freien Set als Atlas.
+  - Figuren: gleiche Figuren, neu gezeichnet.
+  - Gestaltung: erst eine Vorschau zur Abstimmung.
+  - Leistung: Insel in „schön“, Start und Laden, Handys und ältere Geräte.
+- **Erledigt – 3D-Leistung:** schrittweise Auflösung, günstigere Schatten jedes zweite Bild, Wasser und Gras im Shader, vorab übersetzte Shader mit Ladeanzeige. Details in `GRAFIK.md`. Alle 3D-Tests sind grün.
+  - Messung unter Swiftshader: Die CPU ist im Betrieb kaum ausgelastet. Das Ruckeln auf dem iPad kommt also sehr wahrscheinlich von der Pixellast der Grafikkarte; genau dort setzt der Regler an.
+  - **Am iPad prüfen.**
+- **Erledigt – Stil-Vorschau** `spiele/stil/` (in /dev unter `/dev/spiele/stil/`):
+  - Zwei Varianten: A „Insel bunt“ mit Kontur, B „weich und ruhig“.
+  - Die sieben Figuren neu gezeichnet (`figuren-neu.js`, je drei Gesichter), dazu Beispielseiten.
+  - Emoji-Vergleich System, Noto und Fluent. Abdeckung der 802 Emojis der App: Noto 761 (die übrigen aus dem aktuellen Noto-Archiv), Fluent 669.
+- **Wartet auf die Wahl des Auftraggebers:** Variante A oder B (oder eine Mischung) und das Emoji-Set. Danach folgen: eigene Sprites, Emoji-Atlas mit Ersetzung zur Laufzeit (ein Baustein statt 5.500 Textstellen), Figuren 2D und 3D, Gestaltung auf allen Seiten.
+- **Lizenzen:** Emoji-Sets sind MIT (Fluent) bzw. Apache 2.0 (Noto-Bilder). Das erweitert die Regel „nur CC0/OFL“; nach der Wahl in `CLAUDE.md` nachziehen.

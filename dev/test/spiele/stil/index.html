@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stil-Vorschau</title>
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/schrift/fredoka.css">
+<style>
+  /* Vorschau zur Abstimmung (01.11.2026) – nicht Teil der Kinder-Navigation, nicht offline gespeichert */
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Fredoka", system-ui, sans-serif; background: #EEE9F6; color: #2E2240; }
+  header { position: sticky; top: 0; z-index: 5; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: max(10px, env(safe-area-inset-top)) 16px 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  header h1 { margin: 0; font-size: 1.3rem; flex: 1; min-width: 200px; }
+  .wahl button { font: inherit; font-weight: 600; font-size: 1.05rem; border: 0; border-radius: 999px; padding: 10px 18px; background: #EEE9F6; color: inherit; cursor: pointer; }
+  .wahl button.an { background: #4B2380; color: #fff; }
+  main { max-width: 1100px; margin: 0 auto; padding: 16px; display: grid; gap: 22px; }
+  section.block { border-radius: 26px; padding: 18px; }
+  section.block > h2 { margin: 0 0 4px; font-size: 1.45rem; }
+  section.block > p.erkl { margin: 0 0 14px; opacity: .8; }
+
+  /* ---------- Variante A: Insel bunt ---------- */
+  .var-a { --grund: #FFF6E8; --karte: #fff; --text: #3B1F63; --text2: #7A5F9E; --haupt: #4B2380; --haupt-text: #fff; --akzent: #FFC83D; --gut: #2E9C5A; --nein: #E0574A;
+    --rund: 26px; --knopf-schatten: 0 6px 0 rgba(59,31,99,.22); --karte-schatten: 0 7px 0 rgba(59,31,99,.08); --rand: none; --kontur: 3px solid #3B1F63; }
+  /* ---------- Variante B: weich und ruhig ---------- */
+  .var-b { --grund: #F3F6FB; --karte: #fff; --text: #2D3350; --text2: #6B7290; --haupt: #5B6CD9; --haupt-text: #fff; --akzent: #FFB86B; --gut: #3BAA7A; --nein: #E2736B;
+    --rund: 22px; --knopf-schatten: 0 6px 16px rgba(60,72,140,.18); --karte-schatten: 0 10px 28px rgba(40,50,90,.08); --rand: 1px solid #E4E8F2; --kontur: 0; }
+  .var { background: var(--grund); color: var(--text); }
+  .var .karte { background: var(--karte); border-radius: var(--rund); box-shadow: var(--karte-schatten); border: var(--rand); padding: 16px; }
+  .var .knopf { font: inherit; font-weight: 700; font-size: 1.2rem; border: 0; min-height: 60px; padding: 0 26px; border-radius: 999px; background: var(--karte); color: var(--text); box-shadow: var(--knopf-schatten); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+  .var-b .knopf { border: var(--rand); }
+  .var .knopf.haupt { background: var(--haupt); color: var(--haupt-text); border: 0; }
+  .var .knopf.gut { background: var(--gut); color: #fff; } .var .knopf.nein { background: var(--nein); color: #fff; }
+  .var .knopf:active { transform: translateY(3px); }
+  .reihe { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .farben { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+  .farbe { border-radius: 16px; padding: 46px 10px 8px; font-size: .9rem; font-weight: 600; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.3); }
+  .schrift h3 { margin: 0; font-size: 2rem; } .schrift p { margin: 4px 0; font-size: 1.25rem; } .schrift small { color: var(--text2); font-size: 1rem; }
+
+  /* Figuren */
+  .figuren { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .figur { text-align: center; font-weight: 600; }
+  .figur .bild { background: var(--karte); border-radius: var(--rund); box-shadow: var(--karte-schatten); border: var(--rand); padding: 10px; }
+  .figur svg { width: 100%; height: auto; display: block; }
+  .ausdruecke { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 6px; }
+  .ausdruecke svg { background: var(--karte); border-radius: 14px; border: var(--rand); }
+
+  /* Beispielseiten */
+  .beispiele { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .geraet { border-radius: 28px; background: var(--grund); border: 6px solid #2E2240; overflow: hidden; }
+  .geraet .kopf { display: flex; align-items: center; gap: 10px; padding: 12px; }
+  .geraet .kopf h4 { margin: 0; flex: 1; font-size: 1.15rem; }
+  .geraet .sterne { background: var(--karte); border-radius: 999px; padding: 6px 12px; font-weight: 700; box-shadow: var(--knopf-schatten); border: var(--rand); }
+  .tueren { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 12px 12px; }
+  .tuer { border-radius: var(--rund); padding: 10px; color: #fff; font-weight: 700; font-size: 1.05rem; min-height: 120px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--knopf-schatten); }
+  .tuer svg { width: 64px; height: 70px; align-self: flex-end; }
+  .var-b .tuer { box-shadow: 0 8px 20px rgba(40,50,90,.12); }
+  .aufgabe { padding: 0 12px 14px; display: grid; gap: 10px; }
+  .aufgabe .frage { font-size: 1.5rem; font-weight: 700; text-align: center; }
+  .aufgabe .bildchen { display: flex; justify-content: center; gap: 8px; }
+  .aufgabe .bildchen img, .aufgabe .bildchen span { width: 52px; height: 52px; font-size: 44px; line-height: 52px; text-align: center; }
+  .antworten { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .antworten .knopf { justify-content: center; font-size: 1.6rem; padding: 0; }
+  .blase { display: flex; gap: 10px; align-items: flex-end; padding: 0 12px 14px; }
+  .blase svg { width: 90px; flex: none; }
+  .blase .text { background: var(--karte); border-radius: var(--rund); padding: 12px 14px; font-size: 1.15rem; font-weight: 500; box-shadow: var(--karte-schatten); border: var(--rand); position: relative; }
+  .var-a .blase .text { border: var(--kontur); }
+
+  /* Emojis */
+  table.emoji { border-collapse: separate; border-spacing: 6px; width: 100%; }
+  table.emoji th { text-align: left; font-size: 1rem; padding-right: 8px; white-space: nowrap; }
+  table.emoji td { background: #fff; border-radius: 12px; text-align: center; padding: 4px; }
+  table.emoji td img { width: 44px; height: 44px; display: block; margin: auto; }
+  table.emoji td span { font-size: 38px; line-height: 44px; }
+  .scroll { overflow-x: auto; }
+  .hinweis { background: #FFF3C4; border-radius: 16px; padding: 10px 14px; font-size: 1.05rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🎨 Stil-Vorschau Lerninsel</h1>
+  <div class="wahl" role="tablist"><button data-v="a" class="an">Variante A · Insel bunt</button> <button data-v="b">Variante B · weich und ruhig</button></div>
+</header>
+<main>
+  <p class="hinweis">Bitte auf dem iPad ansehen (quer und hoch) und dann sagen: <b>Variante A oder B</b> (oder eine Mischung, z. B. „Figuren aus A, Seiten aus B“) und <b>Noto oder Fluent</b> für die Emojis.</p>
+
+  <section class="block var" id="v-figuren">
+    <h2>1. Die Figuren (neu gezeichnet)</h2>
+    <p class="erkl">Gleiche Namen und Rollen, einheitlicher Stil. Darunter je drei Gesichter: froh, staunt, denkt nach. Auf der Insel bekommen sie passende 3D-Modelle.</p>
+    <div class="figuren" id="figuren"></div>
+  </section>
+
+  <section class="block var" id="v-grund">
+    <h2>2. Farben, Schrift, Knöpfe</h2>
+    <div class="farben" id="farben"></div>
+    <div class="karte schrift" style="margin-top:14px"><h3>Überschrift: Was weißt du über Igel?</h3><p>Fließtext: Igel schlafen im Winter. Sie fressen Käfer und Würmer.</p><small>Kleiner Hinweis für Erwachsene</small></div>
+    <div class="reihe" style="margin-top:14px"><button class="knopf haupt">▶️ Los geht's</button><button class="knopf">🔊 Vorlesen</button><button class="knopf gut">✓ Richtig</button><button class="knopf nein">Nochmal</button></div>
+  </section>
+
+  <section class="block var" id="v-beispiele">
+    <h2>3. Beispielseiten</h2>
+    <div class="beispiele">
+      <div class="geraet"><div class="kopf"><h4>Hallo Mira!</h4><span class="sterne">⭐ 12</span></div><div class="tueren" id="tueren"></div></div>
+      <div class="geraet"><div class="kopf"><h4>🧮 Matheweg</h4><span class="sterne">⭐ 12</span></div>
+        <div class="aufgabe"><div class="frage">Wie viele Äpfel sind es?</div><div class="bildchen" id="aepfel"></div>
+        <div class="antworten"><button class="knopf">3</button><button class="knopf gut">4</button><button class="knopf">5</button></div></div></div>
+      <div class="geraet"><div class="kopf"><h4>🏝️ Auf der Insel</h4></div><div class="blase" id="blase"></div><div class="aufgabe"><button class="knopf haupt" style="justify-content:center">Weiter ▶</button></div></div>
+    </div>
+  </section>
+
+  <section class="block" style="background:#fff">
+    <h2>4. Emojis: gleiches Bild auf jedem Gerät</h2>
+    <p class="erkl">Oben das, was dein Gerät heute zeigt (auf dem iPad: Apple). Darunter die beiden freien Sets. Figuren, Türen, Orte und Navigation zeichne ich selbst im gewählten Stil; alle übrigen Emojis in den Lerninhalten kommen aus dem gewählten Set.</p>
+    <div class="scroll"><table class="emoji" id="emoji"></table></div>
+    <p class="erkl" style="margin-top:10px"><b>Noto</b> (Google, Apache 2.0): deckt alle 802 Emojis der App ab (41 neuere aus dem aktuellen Noto-Archiv). <b>Fluent</b> (Microsoft, MIT): moderner, flacher Look; bei 133 (vor allem Personen) muss ich die Namen nachtragen.</p>
+  </section>
+</main>
+<script src="figuren-neu.js"></script>
+<script>
+(function () {
+  const F = window.FigurenNeu, $ = (id) => document.getElementById(id);
+  let v = "a";
+  const FARBEN = { a: [["Grund", "#FFF6E8", "#3B1F63"], ["Text", "#3B1F63"], ["Haupt", "#4B2380"], ["Akzent", "#FFC83D", "#3B1F63"], ["Richtig", "#2E9C5A"], ["Nochmal", "#E0574A"]],
+    b: [["Grund", "#F3F6FB", "#2D3350"], ["Text", "#2D3350"], ["Haupt", "#5B6CD9"], ["Akzent", "#FFB86B", "#2D3350"], ["Richtig", "#3BAA7A"], ["Nochmal", "#E2736B"]] };
+  const TUEREN = { a: [["Mathe", "#2FA37C", "biber"], ["Deutsch", "#E0574A", "fipsi"], ["Sachunterricht", "#1F8F8A", "eule"], ["Insel", "#2F86C8", "robo"]],
+    b: [["Mathe", "#5FBF9B", "biber"], ["Deutsch", "#EE8B7F", "fipsi"], ["Sachunterricht", "#5AB3B0", "eule"], ["Insel", "#6E9BE0", "robo"]] };
+  function zeichne() {
+    document.querySelectorAll(".var").forEach(el => { el.classList.toggle("var-a", v === "a"); el.classList.toggle("var-b", v === "b"); });
+    $("figuren").innerHTML = F.LISTE.map(n => `<div class="figur"><div class="bild">${F.svg(n, v, "froh")}</div>${F.NAMEN[n]}<div class="ausdruecke">${["froh", "staunt", "denkt"].map(a => F.svg(n, v, a)).join("")}</div></div>`).join("");
+    $("farben").innerHTML = FARBEN[v].map(([n, c, t]) => `<div class="farbe" style="background:${c};${t ? `color:${t};text-shadow:none;border:1px solid rgba(0,0,0,.08)` : ""}">${n}<br>${c}</div>`).join("");
+    $("tueren").innerHTML = TUEREN[v].map(([n, c, fig]) => `<div class="tuer" style="background:${c}">${n}${F.svg(fig, v, "froh")}</div>`).join("");
+    $("aepfel").innerHTML = '<img src="emoji/noto/1f34e.svg" alt="">'.repeat(4);
+    $("blase").innerHTML = F.svg("eule", v, "staunt") + `<div class="text">Mira, komm mal mit! Neben dem Wissensbaum ist ein Garten aufgewacht.</div>`;
+  }
+  document.querySelectorAll("[data-v]").forEach(b => b.addEventListener("click", () => { v = b.dataset.v; document.querySelectorAll("[data-v]").forEach(x => x.classList.toggle("an", x === b)); zeichne(); }));
+  fetch("emoji/probe.json").then(r => r.json()).then(l => {
+    const zeile = (titel, fn) => `<tr><th>${titel}</th>${l.map(fn).join("")}</tr>`;
+    $("emoji").innerHTML = zeile("Dein Gerät", ([e]) => `<td><span>${e}</span></td>`) + zeile("Noto", ([, h]) => `<td><img src="emoji/noto/${h}.svg" alt=""></td>`) + zeile("Fluent", ([, h]) => `<td><img src="emoji/fluent/${h}.svg" alt=""></td>`);
+  });
+  zeichne();
+  window.__stil = { zeichne, setze: (x) => { v = x; zeichne(); } };
+})();
+</script>
+</body>
+</html>

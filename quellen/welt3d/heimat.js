@@ -4,7 +4,7 @@
 // Test-Parameter: ?stunde=21  ?monat=12  (Jahreszeit/Nacht ausprobieren)
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Color, Fog, HemisphereLight, DirectionalLight, Clock, SRGBColorSpace,
-  PCFSoftShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide, DoubleSide,
+  PCFShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide, DoubleSide,
   CylinderGeometry, SphereGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry, PlaneGeometry,
   LatheGeometry, ExtrudeGeometry, Shape, Vector2, Vector3, DataTexture, RedFormat, NearestFilter, InstancedMesh,
   Object3D, Matrix4, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, BufferAttribute, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
@@ -33,10 +33,15 @@ const RUHIG = !!(window.Zeit && window.Zeit.regeln().ruhig); // ruhige Darstellu
 
 // ---------- Renderer, Szene, Licht ----------
 const renderer = new WebGLRenderer({ antialias: !EINFACH, powerPreference: "high-performance" });
-renderer.setPixelRatio(EINFACH ? 1 : Math.min(window.devicePixelRatio || 1, 1.5));
+// Auflösung (01.11.2026): passt sich dem Gerät an (AUFL_MAX … 1); die zuletzt gute Stufe merkt sich das Tablet, damit es gleich flüssig startet
+const AUFL_KEY = "lerninsel.aufloesung", AUFL_MAX = EINFACH ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+let aufl = EINFACH ? 1 : Math.max(1, Math.min(AUFL_MAX, +(lies(AUFL_KEY) || AUFL_MAX) || AUFL_MAX));
+renderer.setPixelRatio(aufl);
 renderer.outputColorSpace = SRGBColorSpace;
 renderer.shadowMap.enabled = !EINFACH;
-renderer.shadowMap.type = PCFSoftShadowMap;
+// PCF statt PCFSoft (günstiger auf Tablet-Grafikchips); die Schattenkarte wird nur jedes zweite Bild neu gezeichnet (siehe bild())
+renderer.shadowMap.type = PCFShadowMap;
+renderer.shadowMap.autoUpdate = false;
 $("buehne").appendChild(renderer.domElement);
 
 const scene = new Scene();
@@ -47,7 +52,7 @@ const camera = new PerspectiveCamera(40, 1, 0.1, 200);
 scene.add(new HemisphereLight(NACHT ? "#8FA6E8" : "#FFF4E0", NACHT ? "#2C3E5C" : "#8CCB6E", NACHT ? 0.7 : DAEMMER ? 1.1 : 1.3));
 const sonne = new DirectionalLight(NACHT ? "#AFC4FF" : DAEMMER ? "#FFC28A" : "#FFE9C7", NACHT ? 0.6 : DAEMMER ? 1.6 : 2.2);
 sonne.castShadow = !EINFACH;
-sonne.shadow.mapSize.set(1024, 1024); sonne.shadow.radius = 6; sonne.shadow.bias = -0.0006; sonne.shadow.normalBias = 0.03;
+sonne.shadow.mapSize.set(1024, 1024); sonne.shadow.radius = 3; sonne.shadow.bias = -0.0006; sonne.shadow.normalBias = 0.03;
 Object.assign(sonne.shadow.camera, { left: -18, right: 18, top: 18, bottom: -18, near: 1, far: 60 });
 scene.add(sonne); scene.add(sonne.target);
 
@@ -144,7 +149,18 @@ const wasserGeo = new PlaneGeometry(140, 140, EINFACH ? 1 : 48, EINFACH ? 1 : 48
 wasserGeo.rotateX(-Math.PI / 2);   // (30.10.2026) stand versehentlich im Kommentar – in „einfach“, „ruhig“ und beim Sparen war das Wasser eine senkrechte Wand
 const wasser = new Mesh(wasserGeo, new MeshToonMaterial({ color: NACHT ? "#2E5F8C" : "#5EC3E6", gradientMap: verlauf, transparent: true, opacity: 0.92 }));
 wasser.position.y = -0.55; wasser.receiveShadow = true; scene.add(wasser);
-const wasserBasis = Float32Array.from(wasserGeo.attributes.position.array);
+// Wellen (01.11.2026) im Vertex-Shader statt jedes Bild in JavaScript (2401 Punkte + Normalen) – spart CPU auf Tablets und Handys
+const ZEIT = { value: 0 };   // gemeinsame Zeit für Wasser und Gras; steht still bei „ruhig“, „einfach“ und beim Sparen
+if (!EINFACH) wasser.material.onBeforeCompile = (sh) => {
+  sh.uniforms.uZeit = ZEIT;
+  sh.vertexShader = "uniform float uZeit;\n" + sh.vertexShader
+    .replace("#include <beginnormal_vertex>", `float wA = position.x * 0.35 + uZeit * 1.4, wB = position.z * 0.3 + uZeit * 1.1;
+      vec3 objectNormal = normalize(vec3(-0.035 * cos(wA), 1.0, 0.03 * sin(wB)));
+      #ifdef USE_TANGENT
+        vec3 objectTangent = vec3(tangent.xyz);
+      #endif`)
+    .replace("#include <begin_vertex>", "vec3 transformed = vec3(position); transformed.y += sin(wA) * 0.1 + cos(wB) * 0.1;");
+};
 { const schaum = new Mesh(new TorusGeometry(WELT.insel ? 15.9 : WELT.R + 0.9, 0.18, 8, 80), new MeshBasicMaterial({ color: "#EAFBFF" })); schaum.rotation.x = Math.PI / 2; schaum.position.y = -0.48; scene.add(schaum); }
 
 // ---------- Bäume (Farbe nach Jahreszeit), Steine, Blumen ----------
@@ -471,7 +487,18 @@ const MIT_GRAS = WELT.insel ? SAISON !== "winter" : !WINTERLICH && !["wueste"].i
 const HALME = WELT.insel ? 560 : Math.min(560, Math.round(560 * (WELT.rand / 12.9) ** 2));
 if (!EINFACH && MIT_GRAS) {
   const geo = new ConeGeometry(0.075, 0.34, 4); geo.translate(0, 0.16, 0);
-  halme = new InstancedMesh(geo, mat("#" + new Color(GRAS).multiplyScalar(0.86).getHexString()), HALME);
+  // eigenes Material (nicht aus dem mat()-Speicher): das Wiegen im Wind läuft im Vertex-Shader (01.11.2026, vorher jedes zweite Bild 560 Matrizen in JavaScript)
+  const halmMat = new MeshToonMaterial({ color: "#" + new Color(GRAS).multiplyScalar(0.86).getHexString(), gradientMap: verlauf });
+  halmMat.onBeforeCompile = (sh) => {
+    sh.uniforms.uZeit = ZEIT;
+    sh.vertexShader = "uniform float uZeit;\n" + sh.vertexShader.replace("#include <begin_vertex>", `vec3 transformed = vec3(position);
+      #ifdef USE_INSTANCING
+        vec3 hp = vec3(instanceMatrix[3]); float ph = hp.x * 1.7 + hp.z * 2.3;
+        transformed.z += sin(uZeit * 1.4 + ph + hp.x * 0.3) * 0.12 * position.y;
+        transformed.x += cos(uZeit * 1.2 + ph) * 0.08 * position.y;
+      #endif`);
+  };
+  halme = new InstancedMesh(geo, halmMat, HALME);
   const o = new Object3D();
   const HX = WELT.insel ? -5 : P.haus[0], HZ = WELT.insel ? -4.5 : P.haus[1], RW = WELT.insel ? 10.5 : WELT.rand - 2.4;
   for (let i = 0; i < HALME; i++) {
@@ -1412,21 +1439,35 @@ function wegVonHindernissen(p, r) {
   const RMAX = WELT.insel ? 14.6 : WELT.R - 0.6, l = Math.hypot(p.x, p.z); if (l > RMAX) { p.x *= RMAX / l; p.z *= RMAX / l; }
 }
 // ---------- Automatisch sparen, wenn das Tablet nicht hinterherkommt ----------
-// In den ersten Sekunden wird gemessen; unter 30 Bildern pro Sekunde: keine Schatten, Auflösung 1, Wasser und Gras ruhig.
+// Seit 01.11.2026 schrittweise (regleAufloesung): erst die Auflösung senken, erst bei Stufe 1 und unter 30 Bildern/s: keine Schatten, Wasser und Gras ruhig.
 // Das Tablet merkt es sich (localStorage), damit es beim nächsten Mal gleich flüssig startet.
 const SPAR_KEY = "lerninsel.sparen";
-let sparen = false, bildNr = 0, messBilder = 0, gemessen = false;
+let sparen = false, bildNr = 0;
 function spare(melden) {
   if (sparen) return; sparen = true;
   sonne.castShadow = false; renderer.shadowMap.enabled = false; mats.forEach(m => { m.needsUpdate = true; }); scene.traverse(o => { if (o.material && !Array.isArray(o.material)) o.material.needsUpdate = true; });
-  renderer.setPixelRatio(1); groesse();
-  try { localStorage.setItem(SPAR_KEY, "1"); } catch (e) { /* egal */ }
+  aufl = 1; renderer.setPixelRatio(1); groesse();
+  try { localStorage.setItem(SPAR_KEY, String(Date.now())); } catch (e) { /* egal */ }
   if (melden) $("info").textContent = "🌿 Die Grafik ist jetzt etwas einfacher, damit alles flüssig läuft.";
 }
-if (!EINFACH && lies(SPAR_KEY) === "1") spare(false);
+// gemerktes Sparen gilt 3 Tage, dann wird wieder „schön“ versucht (vorher für immer – auch wenn es nur einmal kurz geruckelt hat)
+{ const g = lies(SPAR_KEY), alt = g === "1" ? 0 : +g; if (!EINFACH && g && (g === "1" || Date.now() - alt < 3 * 86400000)) { if (g === "1") try { localStorage.setItem(SPAR_KEY, String(Date.now())); } catch (e) { /* egal */ } spare(false); } }
+// Auflösung regeln (01.11.2026): jede Sekunde Bilder zählen. Unter 45 Bildern/s eine Stufe (0,125) tiefer, bei 1,0 und unter 30 Bildern/s
+// zweimal hintereinander: sparen (keine Schatten). Über 58 Bildern/s vier Sekunden lang: eine Stufe höher (bis AUFL_MAX).
+let reglerZeit = 0, reglerBilder = 0, gutSek = 0, schlechtSek = 0;
+function regleAufloesung(dtEcht) {
+  if (EINFACH || window.__keinSparen) return;
+  reglerZeit += dtEcht; reglerBilder++;
+  if (reglerZeit < 1) return;
+  const fps = reglerBilder / reglerZeit; reglerZeit = 0; reglerBilder = 0;
+  if (uhr.elapsedTime < 2) return;   // Start (Shader, Aufbau) nicht mitzählen
+  if (fps < 45 && aufl > 1) { aufl = Math.max(1, aufl - 0.125); renderer.setPixelRatio(aufl); groesse(); gutSek = 0; try { localStorage.setItem(AUFL_KEY, String(aufl)); } catch (e) { /* egal */ } return; }
+  if (fps < 30 && aufl <= 1 && !sparen) { if (++schlechtSek >= 2) spare(true); return; }
+  schlechtSek = 0;
+  if (fps > 58 && aufl < AUFL_MAX && !sparen) { if (++gutSek >= 4) { gutSek = 0; aufl = Math.min(AUFL_MAX, aufl + 0.125); renderer.setPixelRatio(aufl); groesse(); try { localStorage.setItem(AUFL_KEY, String(aufl)); } catch (e) { /* egal */ } } } else gutSek = 0;
+}
 function bild() {
-  const dt = Math.min(uhr.getDelta(), 0.05), t = uhr.elapsedTime;
-  if (!gemessen && !EINFACH && !window.__keinSparen) { if (t > 1.5) messBilder++; if (t >= 5.5) { gemessen = true; if (messBilder / 4 < 30) spare(true); } }
+  const dtEcht = uhr.getDelta(), dt = Math.min(dtEcht, 0.05), t = uhr.elapsedTime; bild.dt = dtEcht;
   const u = ich.userData; let geht = false;
   let ix = eingabe.x, iz = eingabe.z;
   if (tasten["arrowleft"] || tasten["a"]) ix -= 1; if (tasten["arrowright"] || tasten["d"]) ix += 1;
@@ -1499,19 +1540,7 @@ function bild() {
   ballons.children.forEach(b => { if (b.userData.p !== undefined) b.position.y = 2.3 + (b.userData.p % 2) * 0.35 + Math.sin(t * 1.5 + b.userData.p) * 0.12; });
   for (let i = herzListe.length - 1; i >= 0; i--) { const h = herzListe[i]; h.userData.t += dt; h.position.y += dt * h.userData.v; h.material.opacity = 1 - h.userData.t; if (h.userData.t > 1) { scene.remove(h); herzListe.splice(i, 1); } }
 
-  if (!EINFACH && !RUHIG && !sparen) {
-    const a = wasserGeo.attributes.position;
-    for (let i = 0; i < a.count; i++) { const x = wasserBasis[i * 3], z = wasserBasis[i * 3 + 2]; a.setY(i, Math.sin(x * 0.35 + t * 1.4) * 0.1 + Math.cos(z * 0.3 + t * 1.1) * 0.1); }
-    a.needsUpdate = true; wasserGeo.computeVertexNormals();
-  }
-  if (halme && !RUHIG && !sparen && (bildNr++ & 1) === 0) {   // Gras nur jedes zweite Bild bewegen
-    for (let i = 0; i < halmDaten.length; i++) {
-      const h = halmDaten[i]; if (!h.s) continue;
-      halmO.position.set(h.x, h.y, h.z); halmO.scale.setScalar(h.s); halmO.rotation.set(Math.sin(t * 1.4 + h.p + h.x * 0.3) * 0.12, 0, Math.cos(t * 1.2 + h.p) * 0.08);
-      halmO.updateMatrix(); halme.setMatrixAt(i, halmO.matrix);
-    }
-    halme.instanceMatrix.needsUpdate = true;
-  }
+  if (!EINFACH && !RUHIG && !sparen) ZEIT.value = t;   // Wasser und Gras bewegen sich im Shader
   if (schnee) { const a = schnee.geometry.attributes.position; for (let i = 0; i < a.count; i++) { let y = a.getY(i) - dt * 1.2; if (y < 0) y = 16; a.setY(i, y); a.setX(i, a.getX(i) + Math.sin(t + i) * dt * 0.2); } a.needsUpdate = true; }
   if (drinnen) { const gl = moebelObj && Object.values(moebelObj); gl.forEach(o => { if (o.userData.dreh) o.userData.dreh.rotation.y += dt * 0.5; if (o.userData.fische) o.userData.fische.children.forEach((f, i) => { f.position.x = Math.sin(t * (0.8 + i * 0.3) + i * 2) * 0.35; f.rotation.y = Math.cos(t * (0.8 + i * 0.3) + i * 2) > 0 ? 0 : Math.PI; }); }); }
   pruefeNaehe();
@@ -1532,10 +1561,17 @@ function bild() {
   camera.position.set(blick.x + Math.sin(gw) * Math.cos(nw) * ab, blick.y + Math.sin(nw) * ab, blick.z + Math.cos(gw) * Math.cos(nw) * ab);
   camera.lookAt(blick);
   sonne.position.set(ich.position.x + 10, 18, ich.position.z + 8); sonne.target.position.copy(ich.position);
+  if (renderer.shadowMap.enabled && (bildNr++ & 1) === 0) renderer.shadowMap.needsUpdate = true;   // Schatten jedes zweite Bild
+  regleAufloesung(bild.dt);
   renderer.render(scene, camera);
   requestAnimationFrame(bild);
 }
-requestAnimationFrame(bild);
+// Start (01.11.2026): Shader vorab übersetzen (ohne die Seite zu blockieren), dann erst zeichnen; bis dahin „Die Insel wacht auf …“
+{
+  const los = () => { requestAnimationFrame(bild); requestAnimationFrame(() => requestAnimationFrame(() => { const l = $("insel-laedt"); if (l) l.hidden = true; })); };
+  let gestartet = false; const einmal = () => { if (!gestartet) { gestartet = true; los(); } };
+  if (renderer.compileAsync) { renderer.compileAsync(scene, camera).then(einmal, einmal); setTimeout(einmal, 4000); } else einmal();
+}
 zeigeLernmodus(); if (!NACHT) zeigeWetterInfo();
 if (window.Sticker) setTimeout(() => { window.Sticker.feste(); if (NACHT && !q.has("stunde")) window.Sticker.entdecke("w-mond"); }, 1200);
 if (q.get("drinnen") === "1" && spielZeit()) reingehen();

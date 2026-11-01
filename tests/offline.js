@@ -31,7 +31,9 @@ pruefe("Jede von einer HTML-Seite geladene lokale Datei steht in START", () => {
     for (const m of t.matchAll(/<(?:script[^>]*\ssrc|link[^>]*\shref)=["']([^"']+)["']/g)) {
       let u = m[1]; if (/^(https?:|data:|\/\/|#)/.test(u)) continue; u = u.split(/[?#]/)[0];
       const rel = path.relative(root, path.resolve(path.dirname(f), u)).split(path.sep).join("/");
-      if (!inListe.has(norm(rel)) && !NICHT_OFFLINE.has(rel) && !NICHT_OFFLINE.has(path.relative(root, f))) fehlt.add(rel + " ← " + path.relative(root, f));
+      const seite = path.relative(root, f).split(path.sep).join("/");
+      if (seite.startsWith("spiele/stil/")) continue;   // Stil-Vorschau zur Abstimmung: absichtlich nicht offline
+      if (!inListe.has(norm(rel)) && !NICHT_OFFLINE.has(rel) && !NICHT_OFFLINE.has(seite)) fehlt.add(rel + " ← " + seite);
     }
   }
   assert.deepStrictEqual([...fehlt], [], "fehlt in sw.js:\n  " + [...fehlt].join("\n  "));

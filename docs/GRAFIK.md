@@ -126,3 +126,12 @@ nicht rendern, Animationen außerhalb der Kamera pausieren.
    und schreibt Zeichenaufrufe/Dreiecke in eine Tabelle; Bilder/s unter Swiftshader sind nicht aussagekräftig, Zählwerte schon).
 6. Später möglich: Modelle in Blender (per Skript, Ausgabe glTF + meshopt) – nur wenn prozedurale Figuren nicht reichen;
    dann `GLTFLoader` und Budget oben prüfen.
+
+## Leistung, Stand 01.11.2026
+- **Auflösung passt sich an** (`regleAufloesung` in `heimat.js`): Sie startet mit der zuletzt guten Stufe (`lerninsel.aufloesung`, höchstens 1,5).
+  - Unter 45 Bildern/s geht sie in Schritten von 0,125 bis 1,0 herunter, über 58 Bildern/s (4 s lang) wieder herauf.
+  - Erst bei Stufe 1,0 und unter 30 Bildern/s wird gespart (keine Schatten). Das gemerkte Sparen gilt 3 Tage (vorher für immer).
+- **Schatten:** `PCFShadowMap` statt `PCFSoftShadowMap`, Radius 3. Die Schattenkarte wird nur jedes zweite Bild neu gezeichnet (`shadowMap.autoUpdate = false`).
+- **Wasserwellen und wehendes Gras** laufen im Vertex-Shader (`onBeforeCompile`, Uniform `ZEIT`) statt jedes Bild in JavaScript.
+- **Start:** `renderer.compileAsync` übersetzt die Shader vor dem ersten Bild; bis dahin zeigt die Seite „Die Insel wacht auf …“ (`#insel-laedt`).
+- **Abschalten im Test:** `window.__keinSparen = true` schaltet Regler und Sparen ab, wie bisher.
