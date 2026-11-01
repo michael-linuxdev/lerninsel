@@ -1,0 +1,97 @@
+// Node-Test Fehler-Ursachen im Matheweg (02.11.2026, Vorbild Bastion): Denkfehler werden an typischen falschen Antworten erkannt,
+// Kontrastaufgaben treffen genau den Denkfehler (1000 Startzahlen), die Diagnose läuft aufgefallen → vermutet → arbeit → aufgelöst → wieder,
+// der Schrittweg prüft schriftliches Plus/Minus Stelle für Stelle, und jede Erklär-Einheit ist vollständig und stimmig.
+// Aufruf: node tests/mathe-fehler.js
+const assert = require("assert");
+global.window = global;
+require("../spiele/mathe/fehler.js");
+require("../spiele/mathe/erklaeren.js");
+const F = global.MatheFehler, E = global.MatheErklaeren, M = "−";
+let n = 0;
+const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
+const auf = (text, antwort) => ({ text, antwort: String(antwort), art: "zahl" });
+let saat = 11; const zz = () => { saat = (saat * 1103515245 + 12345) % 2147483648; return saat / 2147483648; };
+
+pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", () => {
+  const fall = [[auf("34 + 28", 62), 52, "uebertrag"], [auf("34 + 28", 62), 72, "uebertragdoppelt"], [auf(`52 ${M} 27`, 25), 35, "kleinvongross"],
+    [auf(`61 ${M} 28`, 33), 43, "borgen"], [auf("3 · 4", 12), 7, "op"], [auf(`9 ${M} 3`, 6), 12, "op"], [auf("5 + 3", 8), 7, "zaehlen"],
+    [auf(`9 ${M} 3`, 6), 7, "zaehlen"], [auf("34 + 5", 39), 84, "stellenwert"], [auf("7 · 8", 56), 63, "malreihe"], [auf("7 · 8", 56), 48, "malreihe"],
+    [{ text: "", antwort: "632", ops: { a: 347, b: 285, op: "+" } }, 522, "uebertrag"]];
+  for (const [a, w, id] of fall) { const e = F.erkenne(a, w); assert.ok(e && e.id === id, `${a.text || a.ops.a + "+" + a.ops.b} → ${w}: erwartet ${id}, bekam ${e && e.id}`); assert.strictEqual(e.lang.length, 3); assert.ok(e.kurz.length > 10); }
+  assert.strictEqual(F.erkenne(auf("34 + 28", 62), 62), null, "richtige Antwort ist kein Fehler");
+  assert.strictEqual(F.erkenne(auf("34 + 28", 62), 17), null, "unbekannter Fehler bleibt unbekannt");
+  assert.strictEqual(F.erkenne(auf("Wie viele?", 5), 4), null, "Textaufgaben ohne Rechnung werden nicht gedeutet");
+});
+
+pruefe("jede Kontrastaufgabe passt zum Denkfehler (1000 Startzahlen je Denkfehler) und ist richtig gerechnet", () => {
+  const basis = { op: auf("5 + 3", 8), kleinvongross: auf(`52 ${M} 27`, 25), borgen: auf(`61 ${M} 28`, 33), uebertrag: auf("34 + 28", 62), uebertragdoppelt: auf("34 + 28", 62),
+    stellenwert: auf("34 + 5", 39), zaehlen: auf("5 + 3", 8), malreihe: auf("7 · 8", 56) };
+  for (const f of F.KATALOG) {
+    for (let i = 0; i < 1000; i++) {
+      const [k] = F.kontraste(basis[f.id], f.id, zz), o = F.lies(k);
+      const c = o.op === "+" ? o.a + o.b : o.op === M ? o.a - o.b : o.op === "·" ? o.a * o.b : o.a / o.b;
+      assert.strictEqual(+k.antwort, c, `${f.id}: ${k.text}`); assert.ok(c >= 0 && Number.isInteger(c), `${f.id}: ${k.text}`); assert.strictEqual(k.kontrast, f.id);
+      if (f.id === "uebertrag" || f.id === "uebertragdoppelt") assert.ok(F._h.hatUebertrag(o.a, o.b), k.text);
+      if (f.id === "kleinvongross" || f.id === "borgen") assert.ok(F._h.hatBorgen(o.a, o.b) && F._h.kleinVonGross(o.a, o.b) !== c, k.text);
+      if (f.id === "malreihe") assert.strictEqual(o.a, 7, "gleiche Reihe wie die falsche Aufgabe");
+    }
+  }
+});
+
+pruefe("Diagnose: aufgefallen → vermutet (2× in 10 Aufgaben) → arbeit → aufgelöst (2 Kontraste richtig) → wieder da", () => {
+  const d = {};
+  F.zaehle(d); assert.strictEqual(F.melde(d, "uebertrag"), "aufgefallen");
+  for (let i = 0; i < 12; i++) F.zaehle(d);
+  assert.strictEqual(F.melde(d, "uebertrag"), "aufgefallen", "zweimal, aber weit auseinander: nur aufgefallen");
+  F.zaehle(d); F.zaehle(d); assert.strictEqual(F.melde(d, "uebertrag"), "vermutet");
+  F.inArbeit(d, "uebertrag"); assert.strictEqual(d.fv.uebertrag.s, "arbeit");
+  assert.strictEqual(F.kontrastErgebnis(d, "uebertrag", true), "arbeit");
+  assert.strictEqual(F.kontrastErgebnis(d, "uebertrag", true), "aufgeloest");
+  F.zaehle(d); assert.strictEqual(F.melde(d, "uebertrag"), "wieder");
+  F.inArbeit(d, "uebertrag"); F.kontrastErgebnis(d, "uebertrag", true);
+  F.zaehle(d); assert.strictEqual(F.melde(d, "uebertrag"), "vermutet", "neuer Treffer in Arbeit setzt zurück");
+  assert.strictEqual(d.fv.uebertrag.k, 0);
+  assert.ok(JSON.stringify(d).length < 200, "Spielstand bleibt klein");
+  assert.deepStrictEqual(F.liste(d).map(x => x.id), ["uebertrag"]);
+});
+
+pruefe("Schrittweg: Ziffern je Stelle, Übertrag vergessen und kleinere von größerer werden an der Stelle erkannt", () => {
+  const p = F.schritte({ text: "", antwort: "632", ops: { a: 347, b: 285, op: "+" } });
+  assert.deepStrictEqual(p.liste.map(s => s.ziffer), [2, 3, 6]);
+  assert.ok(F.pruefeSchritt(p.o, p.liste[0], 2).ok);
+  assert.strictEqual(F.pruefeSchritt(p.o, p.liste[1], 2).fv, "uebertrag", "4 + 8 ohne die gemerkte 1");
+  assert.strictEqual(F.pruefeSchritt(p.o, p.liste[0], 12).fv, "uebertrag", "12 statt 2 geschrieben");
+  const m = F.schritte({ text: "", antwort: "376", ops: { a: 523, b: 147, op: M } });
+  assert.deepStrictEqual(m.liste.map(s => s.ziffer), [6, 7, 3]);
+  assert.strictEqual(F.pruefeSchritt(m.o, m.liste[0], 4).fv, "kleinvongross", "7 − 3 statt 13 − 7");
+  assert.strictEqual(F.pruefeSchritt(m.o, m.liste[2], 4).fv, "borgen", "Hunderter: 5 − 1 statt 4 − 1");
+  assert.ok(F.pruefeSchritt(m.o, m.liste[2], 9, "ergaenzen").hinweis.length > 10);
+  // zufällige Aufgaben: die Ziffern ergeben immer das Ergebnis
+  for (let i = 0; i < 1000; i++) {
+    const a = 100 + Math.floor(zz() * 899), b = 100 + Math.floor(zz() * (a - 100)), plus = zz() < 0.5 && a + b < 1000;
+    const s = F.schritte({ text: "", antwort: String(plus ? a + b : a - b), ops: { a, b, op: plus ? "+" : M } });
+    assert.strictEqual(+s.liste.map(x => x.ziffer).reverse().join(""), plus ? a + b : a - b, `${a} ${plus ? "+" : M} ${b}`);
+  }
+});
+
+pruefe("Erklär-Einheiten: feste Reihenfolge, ergänzte Antwort unter den Optionen, Denkfehler der Gegenbeispiele im Katalog", () => {
+  const REIHE = ["ziel", "beispiel", "ergaenzen", "gegenbeispiel", "merksatz"];
+  const alle = Object.entries(E.ERKLAERUNGEN).flatMap(([id, e]) => Array.isArray(e) ? [[id, e]] : Object.entries(e).map(([v, x]) => [id + "/" + v, x]));
+  assert.ok(alle.length >= 7);
+  for (const [id, schritte] of alle) {
+    assert.deepStrictEqual(schritte.map(s => s.typ), REIHE, id);
+    for (const s of schritte) {
+      assert.ok(s.text && s.text.length < 160, `${id}: Text zu lang (${s.typ})`);
+      if (s.typ === "ergaenzen") assert.ok(s.optionen.includes(s.antwort) && new Set(s.optionen).size === s.optionen.length, id);
+      if (s.typ === "gegenbeispiel") { assert.ok(F.KATALOG.some(f => f.id === s.fv), `${id}: Denkfehler ${s.fv}`); assert.strictEqual(s.stimmt, false); }
+      if (s.typ === "beispiel") assert.ok(s.zeilen.length >= 2);
+    }
+  }
+  // Gegenbeispiele: Robos falsche Antwort ergibt wirklich den genannten Denkfehler
+  const rechnung = /(\d+) ([+−·]) (\d+) = (\d+)/;
+  for (const [id, schritte] of alle) { const g = schritte.find(s => s.typ === "gegenbeispiel"), m = rechnung.exec(g.text);
+    if (!m) continue; const a = +m[1], b = +m[3], op = m[2], c = op === "+" ? a + b : op === M ? a - b : a * b;
+    assert.strictEqual(F.erkenne({ text: "", antwort: String(c), ops: { a, b, op } }, +m[4]).id, g.fv, `${id}: ${m[0]}`); }
+});
+
+console.log(`✅ Mathe-Fehler-Ursachen: ${n} Prüfungen bestanden.`);

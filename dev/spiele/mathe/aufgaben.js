@@ -675,11 +675,11 @@
         return zahl("", j, `${k * j} Sticker gerecht auf ${k} Kinder verteilt: ${k * j} : ${k} = ${j}.`, { frage: `${n} verteilt ${k * j} Sticker gerecht an ${k} Kinder. Wie viele bekommt jedes Kind?`, nurLuecke: true }); } },
     { id: "k3schriftplus", stufe: "3", lz: ["ma.zo.13"], name: "Schriftlich plus", icon: "🧮",
       neu: () => { let a, b; do { a = r(105, 789); b = r(102, 999 - a); } while (b < 100 || (Math.random() < 0.7 && (a % 10) + (b % 10) < 10 && (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10) < 10));
-        return zahl("", a + b, schriftPlusHilfe(a, b), { frage: "Rechne schriftlich: Fang bei den Einern an.", bild: schriftBild(a, b, "+"), nurLuecke: true }); } },
+        return zahl("", a + b, schriftPlusHilfe(a, b), { frage: "Rechne schriftlich: Fang bei den Einern an.", bild: schriftBild(a, b, "+"), nurLuecke: true, ops: { a, b, op: "+" } }); } },
     { id: "k3schriftminus", stufe: "3", lz: ["ma.zo.13"], name: "Schriftlich minus", icon: "🧾",
       neu: () => { let a, b, x, y; do { a = r(300, 999); b = r(101, a - 100); x = stellen(a); y = stellen(b); }
         while ((x[2] < y[2] && x[1] === 0) || (x[1] - (x[2] < y[2] ? 1 : 0) < y[1] && x[0] - 1 < y[0]) || (Math.random() < 0.6 && x[2] >= y[2] && x[1] >= y[1]));
-        return zahl("", a - b, schriftMinusHilfe(a, b), { frage: "Rechne schriftlich: Fang bei den Einern an.", bild: schriftBild(a, b, M), nurLuecke: true }); } },
+        return zahl("", a - b, schriftMinusHilfe(a, b), { frage: "Rechne schriftlich: Fang bei den Einern an.", bild: schriftBild(a, b, M), nurLuecke: true, ops: { a, b, op: M } }); } },
     { id: "k3netz", stufe: "3", lz: ["ma.rf.07"], name: "Würfelnetze", icon: "🎲",
       neu: () => { const soll = Math.random() < 0.5; let z; do z = zufallsNetz(); while (istWuerfelnetz(z) !== soll);
         return { text: "", frage: "Kann man aus dieser Form einen Würfel falten?", antwort: soll ? "ja" : "nein", art: "wahl", optionen: ["ja", "nein"], nurLuecke: true, bild: netzBild(z),

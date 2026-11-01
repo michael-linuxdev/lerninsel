@@ -224,12 +224,87 @@
   // ---------- Runde ----------
   let lauf = null; // { nr, station, liste, pos, fehlerErste, versuch, ergebnis[], eingabe }
 
-  function starte(nr) {
+  // ---------- Erst erklären (02.11.2026, Vorbild Bastion): Angebot vor dem ersten Rechnen einer Station mit Erklär-Einheit ----------
+  const ME = () => window.MatheErklaeren, MF = () => window.MatheFehler;
+  const istNeu = (id) => !bestes(id) && !((daten().stat || {})[id]) && !((daten().erklaert || {})[id]);
+  function starte(nr, ohneAngebot) {
+    const station = ST[nr];
+    if (!ohneAngebot && ME() && ME().hat(station.id) && istNeu(station.id)) return angebot(nr);
+    starteRunde(nr);
+  }
+  function angebot(nr) {
+    const station = ST[nr];
+    lauf = null; $("station-name").textContent = station.name; zeige("rechnen"); $("punkte").innerHTML = ""; erklaerKnopf(null);
+    $("tafel").innerHTML = `<div class="erklaer-karte" id="angebot"><div class="benno klein">${window.Figuren ? Figuren.biber("") : ""}</div>
+      <h2>Das ist neu für dich.</h2><p class="frage gross">Soll ich es dir erst erklären?</p></div>`;
+    $("eingabe").innerHTML = `<div class="erklaer-knoepfe"><button class="knopf haupt" id="erklaer-ja">💡 Erklär es mir</button><button class="knopf" id="erklaer-nein">Ich kann das schon</button></div>`;
+    $("erklaer-ja").addEventListener("click", () => { S.ton("tipp"); erklaere(station.id, () => starteRunde(nr)); });
+    $("erklaer-nein").addEventListener("click", () => { S.ton("tipp"); starteRunde(nr); });
+  }
+  // Erklär-Einheit Schritt für Schritt; fertig() danach (z. B. die Runde starten oder zur Aufgabe zurück)
+  function erklaere(id, fertig) {
+    const schritte = ME().fuer(id), titel = (stationVon(id) || {}).name || "";
+    const alt = lauf; let i = 0, versuche = 0;
+    erklaerKnopf(null); $("punkte").innerHTML = schritte.map((_, k) => `<span class="punkt${k === 0 ? " jetzt" : ""}"></span>`).join("");
+    const knopfWeiter = (text, fn) => { $("eingabe").innerHTML = `<button class="knopf weiter" id="weiter">${text}</button>`; $("weiter").addEventListener("click", () => { S.ton("tipp"); fn(); }); };
+    const figur = (wer) => window.Figuren && Figuren[wer] ? `<div class="erklaer-figur">${Figuren[wer]("")}</div>` : "";
+    function schritt() {
+      const st = schritte[i]; versuche = 0;
+      $("punkte").innerHTML = schritte.map((_, k) => `<span class="punkt${k < i ? " gut" : k === i ? " jetzt" : ""}"></span>`).join("");
+      const kopf = `<p class="erklaer-titel">💡 ${titel}</p>`;
+      if (st.typ === "ziel" || st.typ === "merksatz") {
+        $("tafel").innerHTML = kopf + `<div class="erklaer-karte ${st.typ}">${figur("biber")}<p class="erklaer-text">${st.typ === "merksatz" ? "<b>Merke dir:</b> " : ""}${st.text}</p></div>`;
+        return knopfWeiter(i === schritte.length - 1 ? "Los geht's! ➜" : "Weiter ➜", weiter);
+      }
+      if (st.typ === "beispiel") {
+        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${figur("biber")}<p class="erklaer-text">${st.text}</p>${st.bild ? `<div class="bild">${st.bild()}</div>` : ""}
+          <ol class="erklaer-zeilen">${st.zeilen.map(z => `<li>${z}</li>`).join("")}</ol></div>`;
+        return knopfWeiter("Weiter ➜", weiter);
+      }
+      if (st.typ === "ergaenzen") {
+        const opt = st.optionen.slice().sort((x, y) => (x.length - y.length) || x.localeCompare(y));
+        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${figur("biber")}<p class="erklaer-text">${st.text}</p><p class="frage gross">${st.frage.replace("?", '<span class="luecke leer" id="luecke"></span>')}</p><p class="rueck" id="rueck"></p></div>`;
+        $("eingabe").innerHTML = `<div class="wahl-tasten drei">${opt.map(o => `<button class="taste erklaer-wahl" data-e="${o}">${o}</button>`).join("")}</div>`;
+        $("eingabe").querySelectorAll("[data-e]").forEach(b => b.addEventListener("click", () => {
+          if (b.dataset.e === st.antwort) { S.ton("juhu"); $("luecke").textContent = st.antwort; $("luecke").className = "luecke richtig"; $("rueck").className = "rueck gut"; $("rueck").textContent = "Genau!"; knopfWeiter("Weiter ➜", weiter); }
+          else { S.ton("nein"); versuche++; b.style.background = "#FFE1DD"; b.disabled = true; $("rueck").className = "rueck nein"; $("rueck").textContent = versuche > 1 ? `Es ist ${st.antwort}. Schau noch einmal ins Beispiel.` : "Fast – schau noch einmal genau hin."; if (versuche > 1) knopfWeiter("Weiter ➜", weiter); }
+        }));
+        return;
+      }
+      if (st.typ === "gegenbeispiel") {
+        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${figur("robo")}<p class="erklaer-text">${st.text}</p><p class="rueck" id="rueck"></p><div class="hilfe" id="warum" hidden></div></div>`;
+        $("eingabe").innerHTML = `<div class="wahl-tasten"><button class="taste erklaer-wahl" data-g="ja">👍 Stimmt</button><button class="taste erklaer-wahl" data-g="nein">👎 Stimmt nicht</button></div>`;
+        $("eingabe").querySelectorAll("[data-g]").forEach(b => b.addEventListener("click", () => {
+          const gut = (b.dataset.g === "ja") === st.stimmt;
+          S.ton(gut ? "juhu" : "nein"); $("rueck").className = "rueck " + (gut ? "gut" : "nein");
+          $("rueck").textContent = gut ? "Richtig erkannt – Robo hat sich vertan!" : "Hm, schau genau – da ist ein Fehler drin.";
+          $("warum").hidden = false; $("warum").innerHTML = `<b>So ist es richtig:</b>${st.warum}`;
+          knopfWeiter("Weiter ➜", weiter);
+        }));
+      }
+    }
+    function weiter() {
+      i++;
+      if (i < schritte.length) return schritt();
+      const d = daten(); d.erklaert = d.erklaert || {}; d.erklaert[id] = 1; S.speichere("mathe", d);
+      lauf = alt; fertig();
+    }
+    schritt();
+  }
+  // 💡 in der Kopfzeile: Erklärung der Station jederzeit wieder ansehen (nicht in Training, Einstufung und „Zeig, was du kannst“)
+  function erklaerKnopf(id) {
+    let b = $("erklaer-knopf");
+    if (!b) { b = document.createElement("button"); b.id = "erklaer-knopf"; b.className = "knopf rund"; b.setAttribute("aria-label", "Erklären"); b.textContent = "💡"; $("punkte").before(b); }
+    b.hidden = !(id && ME() && ME().hat(id));
+    b.onclick = () => { S.ton("tipp"); const l = lauf; erklaere(id, () => { lauf = l; $("station-name").textContent = l.station.name; zeigeAufgabe(); }); };
+  }
+  function starteRunde(nr) {
     const station = ST[nr];
     const liste = window.Mathe.runde(station.id, 10).map(a => Object.assign(a, { wieder: false, station: station.id }));
     lauf = { nr, station, liste, pos: 0, fehler: 0, versuch: 0, ergebnis: [], eingabe: "", gesperrt: false };
     $("station-name").textContent = station.name;
     zeige("rechnen");
+    erklaerKnopf(station.id);
     zeigeAufgabe();
   }
 
@@ -360,6 +435,7 @@
 
   function zeigeAufgabe() {
     const a = lauf.liste[lauf.pos];
+    { const b = $("erklaer-knopf"); if (b && (lauf.training || lauf.einstufung || lauf.lernstand)) b.hidden = true; }
     lauf.versuch = 0; lauf.eingabe = ""; lauf.gesperrt = false;
     zeigePunkte();
 
@@ -401,7 +477,7 @@
   }
 
   function tippe(ziffer) {
-    if (lauf.gesperrt || lauf.eingabe.length >= ((lauf.liste[lauf.pos] || {}).max || 3)) return;
+    if (lauf.gesperrt || lauf.eingabe.length >= (lauf.weg ? 2 : ((lauf.liste[lauf.pos] || {}).max || 3))) return;
     if (lauf.eingabe === "0") lauf.eingabe = "";
     lauf.eingabe += ziffer; S.ton("tipp"); aktualisiereLuecke();
   }
@@ -409,20 +485,23 @@
 
   function pruefe(wert) {
     if (lauf.gesperrt) return;
+    if (lauf.weg) return pruefeWeg();
     const a = lauf.liste[lauf.pos];
     if (a.art === "zahl" && !lauf.eingabe) { S.ton("nein"); $("rueck").className = "rueck nein"; $("rueck").textContent = "Tippe zuerst eine Zahl."; return; }
     const antwort = a.art === "wahl" ? wert : String(parseInt(lauf.eingabe, 10));
     const luecke = $("luecke"), rueck = $("rueck");
     if (a.art === "wahl" && luecke) luecke.textContent = wert;
 
+    if (lauf.versuch === 0 && MF()) { const d = daten(); MF().zaehle(d); S.speichere("mathe", d); }
     if (antwort === a.antwort) {
       lauf.gesperrt = true;
+      const aufgeloest = a.kontrast && kontrastFertig(a, lauf.versuch === 0);
       if (!lauf.ergebnis[lauf.pos]) lauf.ergebnis[lauf.pos] = "gut";
       if (lauf.einstufung || lauf.lernstand) lauf.erst[lauf.pos] = lauf.versuch === 0;
       if (lauf.versuch === 0 && !a.wieder) { statistik(a, true); C() && C().gib("mathe", 1); if (KN()) KN().melde(lzVon(a.station), true); }
       if (luecke) luecke.className = "luecke richtig";
       markiereWahl(wert, true);
-      rueck.className = "rueck gut"; rueck.textContent = LOB[Math.floor(Math.random() * LOB.length)];
+      rueck.className = "rueck gut"; rueck.textContent = aufgeloest ? `Super – „${aufgeloest}“ hast du jetzt im Griff! 💪` : LOB[Math.floor(Math.random() * LOB.length)];
       S.ton("juhu");
       const dieser = lauf; setTimeout(() => { if (lauf === dieser) naechste(); }, 950); // nicht weiterblättern, wenn inzwischen eine andere Runde läuft
       return;
@@ -443,14 +522,22 @@
     S.ton("nein");
     if (luecke) { luecke.className = "luecke falsch"; }
     markiereWahl(wert, false);
+    // Fehler-Ursache (02.11.2026): typische falsche Antworten einem Denkfehler zuordnen
+    const fv = a.art === "zahl" && MF() && !lauf.einstufung && !lauf.lernstand ? MF().erkenne(a, antwort) : null;
+    // Schriftlich plus/minus: „Zeig mir deinen Weg“ – die Stellen einzeln prüfen
+    if (lauf.versuch === 1 && MF() && SCHRITTWEG.includes(a.station) && !lauf.einstufung && !lauf.lernstand && MF().schritte(a)) { lauf.gesperrt = true; setTimeout(() => starteWeg(a), 600); return; }
+    let zustand = "";
+    if (fv && lauf.versuch === 1) { const d = daten(); zustand = MF().melde(d, fv.id); S.speichere("mathe", d); }
+    if (fv && lauf.versuch === 1 && (zustand === "vermutet" || zustand === "wieder")) { lauf.gesperrt = true; setTimeout(() => zeigeDenkfehler(a, fv), 500); return; }
     if (lauf.versuch === 1) {
-      rueck.className = "rueck nein"; rueck.textContent = "Fast! Versuch es nochmal.";
+      rueck.className = "rueck nein"; rueck.textContent = fv ? `Fast! ${fv.kurz} Versuch es nochmal.` : "Fast! Versuch es nochmal.";
+      if (fv) rueck.classList.add("lang");
       lauf.gesperrt = true;
       setTimeout(() => {
         lauf.gesperrt = false; lauf.eingabe = "";
         if (a.art === "wahl") { if (luecke) { luecke.className = "luecke leer"; luecke.textContent = ""; } zeigeEingabe(a); }
         else aktualisiereLuecke();
-      }, 750);
+      }, fv ? 1200 : 750);
       return;
     }
 
@@ -460,7 +547,84 @@
     if (!a.wieder && !lauf.einstufung && !lauf.lernstand) lauf.liste.push(Object.assign({}, a, { wieder: true }));
     rueck.className = "rueck"; rueck.textContent = "";
     if (luecke) { luecke.className = "luecke loesung"; luecke.textContent = a.antwort; }
-    $("hilfe-platz").innerHTML = `<div class="hilfe"><b>Die Lösung ist ${a.antwort}${a.einheit ? " " + a.einheit : ""}.</b>${a.hilfe}</div>`;
+    $("hilfe-platz").innerHTML = `<div class="hilfe"><b>Die Lösung ist ${a.antwort}${a.einheit ? " " + a.einheit : ""}.</b>${fv ? `<span class="denkfehler">Denkfehler: ${fv.name}. ${fv.kurz}</span> ` : ""}${a.hilfe}</div>`;
+    $("eingabe").innerHTML = `<button class="knopf weiter" id="weiter">Weiter</button>`;
+    $("weiter").addEventListener("click", () => { S.ton("tipp"); naechste(); });
+    zeigePunkte();
+  }
+
+  // ---------- Denkfehler (lange Erklärung, Kontrastaufgaben) ----------
+  const SCHRITTWEG = ["k3schriftplus", "k3schriftminus"];
+  function zeigeDenkfehler(a, fv) {
+    const hatErkl = ME() && ME().hat(a.station);
+    $("hilfe-platz").innerHTML = `<div class="hilfe denkfehler-karte" id="denkfehler"><b>🔍 ${fv.name}</b>
+      <p><span>So denkst du gerade:</span> ${fv.lang[0]}</p><p><span>Warum das nicht stimmt:</span> ${fv.lang[1]}</p><p><span>So stimmt es:</span> ${fv.lang[2]}</p></div>`;
+    $("rueck").textContent = "";
+    $("eingabe").innerHTML = `<div class="erklaer-knoepfe"><button class="knopf haupt weiter" id="weiter">Verstanden – nochmal versuchen</button>${hatErkl ? `<button class="knopf" id="nochmal-erklaeren">💡 Nochmal erklären</button>` : ""}</div>`;
+    const zurueck = () => {
+      const d = daten(); MF().inArbeit(d, fv.id); S.speichere("mathe", d);
+      // zwei Kontrastaufgaben gleich nach dieser Aufgabe
+      const k = MF().kontraste(a, fv.id).map(x => Object.assign(x, { station: a.station, wieder: true }));
+      lauf.liste.splice(lauf.pos + 1, 0, ...k);
+      $("hilfe-platz").innerHTML = ""; lauf.gesperrt = false; lauf.eingabe = "";
+      const l = $("luecke"); if (l) { l.className = "luecke leer"; l.textContent = ""; }
+      $("rueck").className = "rueck"; $("rueck").textContent = "Jetzt du – und danach zwei Aufgaben, die genau das üben.";
+      zeigeEingabe(a); aktualisiereLuecke(); zeigePunkte();
+    };
+    $("weiter").addEventListener("click", () => { S.ton("tipp"); zurueck(); });
+    if (hatErkl) $("nochmal-erklaeren").addEventListener("click", () => { S.ton("tipp"); const l = lauf, pos = l.pos; erklaere(a.station, () => { lauf = l; lauf.pos = pos; $("station-name").textContent = l.station.name; zeigeAufgabe(); const d = daten(); MF().inArbeit(d, fv.id); S.speichere("mathe", d);
+      lauf.liste.splice(lauf.pos + 1, 0, ...MF().kontraste(a, fv.id).map(x => Object.assign(x, { station: a.station, wieder: true }))); zeigePunkte(); }); });
+  }
+  // Kontrastaufgabe beantwortet: gibt den Namen des Denkfehlers zurück, wenn er damit aufgelöst ist
+  function kontrastFertig(a, erster) {
+    const d = daten(), s = MF().kontrastErgebnis(d, a.kontrast, erster); S.speichere("mathe", d);
+    if (s !== "aufgeloest") return "";
+    const f = MF().KATALOG.find(x => x.id === a.kontrast);
+    if (window.Lernfunde) Lernfunde.merke({ fach: "mathe", art: "gemeistert", e: "🔍", text: `Denkfehler „${f.name}“ aufgelöst!`, schluessel: "fv:" + a.kontrast + ":" + tagIn(0), melden: true });
+    return f.name;
+  }
+
+  // ---------- Zeig mir deinen Weg (schriftlich plus und minus) ----------
+  const minusArt = () => (((S.lade("eltern") || {}).mathe || {}).minus) === "ergaenzen" ? "ergaenzen" : "abziehen";
+  function starteWeg(a) {
+    const p = MF().schritte(a);
+    lauf.weg = { a, p, i: 0, versuch: 0, erste: -1, fvs: [] };
+    lauf.eingabe = ""; lauf.gesperrt = false;
+    zeigeWegSchritt("Zeig mir deinen Weg! Wir gehen die Stellen von rechts nach links durch.");
+  }
+  function zeigeWegSchritt(info) {
+    const w = lauf.weg, s = w.p.liste[w.i];
+    const erledigt = w.p.liste.slice(0, w.i).map((x, k) => `<li class="${x.gezeigt ? "gezeigt" : "gut"}">${x.gezeigt ? "So geht es:" : "✓"} ${MF().stelleName(k).replace(/n$/, "")}: ${x.ziffer}${x.aus ? (w.p.o.op === "+" ? " – merke 1" : " – 1 geborgt") : ""}</li>`).join("");
+    $("tafel").innerHTML = (w.a.bild ? `<div class="bild">${w.a.bild}</div>` : "") +
+      `<p class="frage">${info || ""}</p>${erledigt ? `<ul class="weg-liste">${erledigt}</ul>` : ""}` +
+      `<div class="ausdruck klein" id="ausdruck">Ziffer bei den ${MF().stelleName(s.i)}: §</div><p class="rueck" id="rueck"></p><div id="hilfe-platz"></div>`;
+    zeigeEingabe({ art: "zahl" });
+    $("eingabe").insertAdjacentHTML("beforeend", `<button class="knopf klein" id="weg-ueberspringen">Weiter ohne Weg</button>`);
+    $("weg-ueberspringen").addEventListener("click", () => { S.ton("tipp"); beendeWeg(true); });
+    aktualisiereLuecke();
+  }
+  function pruefeWeg() {
+    const w = lauf.weg, s = w.p.liste[w.i];
+    if (!lauf.eingabe) { S.ton("nein"); return; }
+    const r = MF().pruefeSchritt(w.p.o, s, lauf.eingabe, minusArt());
+    if (r.ok) { S.ton("juhu"); w.i++; w.versuch = 0; lauf.eingabe = ""; return w.i < w.p.liste.length ? zeigeWegSchritt("Richtig! Weiter mit der nächsten Stelle.") : beendeWeg(); }
+    S.ton("nein"); w.versuch++; if (w.erste < 0) w.erste = s.i; if (r.fv && !w.fvs.includes(r.fv)) w.fvs.push(r.fv);
+    if (w.versuch === 1) { $("rueck").className = "rueck nein lang"; $("rueck").textContent = r.hinweis; lauf.eingabe = ""; const l = $("luecke"); if (l) { l.className = "luecke falsch"; } setTimeout(aktualisiereLuecke, 600); return; }
+    // zweiter Fehler an dieser Stelle: richtige Ziffer zeigen und mit ihr weiterrechnen
+    s.gezeigt = true; w.i++; w.versuch = 0; lauf.eingabe = "";
+    if (w.i < w.p.liste.length) zeigeWegSchritt(`Bei den ${MF().stelleName(s.i)} gehört die ${s.ziffer} hin. Weiter mit der nächsten Stelle.`); else beendeWeg();
+  }
+  function beendeWeg(ohne) {
+    const w = lauf.weg, a = w.a; lauf.weg = null;
+    if (ohne) { zeigeAufgabe(); lauf.versuch = 1; $("rueck").className = "rueck nein"; $("rueck").textContent = "Versuch es nochmal."; return; }
+    // Denkfehler aus den Schritten zählen für die Diagnose wie Fehlerbilder
+    if (w.fvs.length) { const d = daten(); w.fvs.forEach(id => MF().melde(d, id)); S.speichere("mathe", d); }
+    const text = w.erste < 0 ? "Alle Schritte stimmen – am Ende hast du dich nur vertippt. Das passiert!" : `Dein Fehler lag bei den ${MF().stelleName(w.erste)}.`;
+    const fvName = w.fvs.length ? MF().KATALOG.find(x => x.id === w.fvs[0]).name : "";
+    if (!lauf.ergebnis[lauf.pos]) { lauf.ergebnis[lauf.pos] = "nochmal"; lauf.fehler++; }
+    if (!a.wieder && !lauf.einstufung && !lauf.lernstand) lauf.liste.push(Object.assign({}, a, { wieder: true }));
+    $("tafel").innerHTML = (a.bild ? `<div class="bild">${a.bild}</div>` : "") + `<div class="ausdruck klein">Ergebnis: <span class="luecke loesung">${a.antwort}</span></div>` +
+      `<div class="hilfe" id="weg-ende"><b>${text}</b>${fvName ? `<span class="denkfehler">Denkfehler: ${fvName}.</span> ` : ""}${a.hilfe}</div>`;
     $("eingabe").innerHTML = `<button class="knopf weiter" id="weiter">Weiter</button>`;
     $("weiter").addEventListener("click", () => { S.ton("tipp"); naechste(); });
     zeigePunkte();
@@ -538,14 +702,14 @@
   document.addEventListener("keydown", (e) => {
     if ($("rechnen-ansicht").hidden || !lauf) return;
     const a = lauf.liste[lauf.pos];
-    if (/^[0-9]$/.test(e.key) && a.art === "zahl") tippe(e.key);
+    if (/^[0-9]$/.test(e.key) && (a.art === "zahl" || lauf.weg)) tippe(e.key);
     else if (e.key === "Backspace") loesche();
-    else if (e.key === "Enter") { const w = $("weiter"); if (w) w.click(); else if (a.art === "zahl") pruefe(); }
+    else if (e.key === "Enter") { const w = $("weiter"); if (w) w.click(); else if (a.art === "zahl" || lauf.weg) pruefe(); }
   });
   $("zum-weg").addEventListener("click", () => { S.ton("tipp"); lauf = null; zeige("weg"); zeichneWeg(); });
   let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (!$("weg-ansicht").hidden) zeichneWeg(); }, 150); });
 
   zeichneWeg();
   if (new URLSearchParams(location.search).has("training")) starteTraining();
-  window.__mathe = { faellig, tagIn, starteEinstufung, starteLernstand, zeige: (n) => { lauf.pos = n; zeigeAufgabe(); }, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte, starteTraining, zeigeUrkunde, get lauf() { return lauf; } }; // für Tests
+  window.__mathe = { faellig, tagIn, starteEinstufung, starteLernstand, zeige: (n) => { lauf.pos = n; zeigeAufgabe(); }, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte: (n, mitAngebot) => starte(n, !mitAngebot), starteRunde, starteTraining, zeigeUrkunde, erklaere, setzeAufgabe: (a) => { lauf.liste[lauf.pos] = Object.assign({ wieder: false, station: lauf.station.id }, a); zeigeAufgabe(); }, get lauf() { return lauf; } }; // für Tests
 })();
