@@ -86,7 +86,8 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   // 3) zwei Fehler → Lösungshilfe, es geht trotzdem weiter
   await laden(); await p.click("#los");
   const a = await p.evaluate(() => __baeckerei.lauf().aktuell);
-  for (let i = 0; i < 2; i++) { for (const w of a.b.waren) await p.click(`[data-ware="${w.id}"]`); await p.click(`[data-ware="${a.b.waren[0].id}"]`); await p.click("#fertig"); await p.waitForTimeout(120); }
+  // sicher falsch: von der ersten Sorte mehr als 3 Stück (Bestellungen haben höchstens 3)
+  for (let i = 0; i < 2; i++) { for (let k = 0; k < 4; k++) await p.click(`[data-ware="${a.b.waren[0].id}"]`); await p.click("#fertig"); await p.waitForTimeout(120); }
   erwarte(/💡/.test(await p.textContent("#hinweis")) && !!(await p.$("#naechster")), "nach zwei Fehlern zeigt Benno die Lösung, weiter geht es trotzdem");
 
   // 4) Vorschule, Kl. 1, Kl. 3: je eine ganze Runde; Geld passend zur Klasse

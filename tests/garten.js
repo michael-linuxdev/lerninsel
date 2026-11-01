@@ -40,7 +40,7 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   erwarte(samen.includes("tomate") && !samen.includes("mais"), `Samen nach Klasse (Kl. 2: Tomate ja, Mais erst ab Kl. 3): ${samen.join(", ")}`);
   await p.click('[data-samen="kresse"]');
   await p.waitForSelector('[data-beet="0"][data-art="samen"]');
-  await p.click('[data-giessen="0"]'); await p.waitForTimeout(1100);
+  await p.click('[data-giessen="0"]'); await p.waitForSelector('[data-beet="0"][data-art="keim"]', { timeout: 8000 }).catch(() => {});
   erwarte(await p.$('[data-beet="0"][data-art="keim"]') !== null, "nach dem Gießen: ein Keim");
   erwarte(await p.isDisabled('[data-beet="0"] .knopf'), "heute schon gegossen → Knopf „Morgen wieder“");
   // Sonnenblume ins zweite Beet (über das freie Beet selbst)
@@ -49,7 +49,7 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
 
   // 3) Tag 2: gießen → reif; Ernte-Frage erst falsch, dann richtig
   await tag(26); await garten();
-  await p.click('[data-giessen="0"]'); await p.waitForTimeout(1100);
+  await p.click('[data-giessen="0"]'); await p.waitForSelector('[data-beet="0"][data-art="reif"]', { timeout: 8000 }).catch(() => {});
   erwarte(await p.$('[data-beet="0"][data-art="reif"]') !== null, "Tag 2: Kresse ist reif");
   const sterne0 = await p.evaluate(() => Spielwelt.sterne());
   await p.click('[data-ernten="0"]'); await p.waitForSelector("[data-antwort]");
@@ -64,8 +64,8 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   erwarte(/garten:kresse/.test(d.fund), "Lernfund für die erste Ernte");
 
   // 4) zweite Kresse: kein Stern mehr
-  await p.click('[data-saeen="0"]'); await p.click('[data-samen="kresse"]'); await p.click('[data-giessen="0"]'); await p.waitForTimeout(1000);
-  await tag(27); await garten(); await p.click('[data-giessen="0"]'); await p.waitForTimeout(1000);
+  await p.click('[data-saeen="0"]'); await p.click('[data-samen="kresse"]'); await p.click('[data-giessen="0"]'); await p.waitForSelector('[data-beet="0"] [data-giessen]:disabled, [data-beet="0"] [data-ernten]', { timeout: 8000 });
+  await tag(27); await garten(); await p.click('[data-giessen="0"]'); await p.waitForSelector('[data-beet="0"] [data-giessen]:disabled, [data-beet="0"] [data-ernten]', { timeout: 8000 });
   await p.click('[data-ernten="0"]'); await p.click('[data-antwort="0"]'); await p.click("#ernte-ok");
   const s2 = await p.evaluate(() => ({ korb: Garten.lade().korb.kresse, sterne: Spielwelt.sterne() }));
   erwarte(s2.korb === 2 && s2.sterne === d.sterne, `zweite Kresse: im Korb (${s2.korb}), kein neuer Stern`);
