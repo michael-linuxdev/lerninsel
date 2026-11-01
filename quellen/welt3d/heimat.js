@@ -188,24 +188,53 @@ WELT.baeume.forEach(({ x, z, k, i, typ }) => typ === "nadel" ? nadelbaum(x, z, k
 WELT.steine.forEach(([x, z, r]) => {
   const st = teil(kugel(r, 20, 14), WELT.insel ? "#A7A9B8" : WELT.B.fels); st.scale.y = 0.65; setze(st, x, bodenY(x, z) + r * 0.3, z); deko.add(st); block(x, z, r);
 });
+// Blumen als InstancedMesh (Performance + Code-Qualität, 01.11.2026): weniger Objekte, kein späteres Verschmelzen nötig für die Stiele
 if (!WELT.insel && WELT.blumen.length && !(JAHRESZEIT_GRAS && SAISON === "winter")) {
   const BL = [WELT.farbe, WELT.farbe, "#FFD84D", "#FFFFFF", WELT.farbe, "#B28DFF", "#FF9E5E"];
-  WELT.blumen.forEach(([x, z, i]) => {
-    const f = new Group();
-    f.add(setze(new Mesh(new CylinderGeometry(0.03, 0.03, 0.4, 4), mat("#3E9E55")), 0, 0.2, 0));
-    f.add(setze(teil(kugel(0.14, 12, 8), BL[i % BL.length], { dicke: 1.15 }), 0, 0.45, 0));
-    f.position.set(x, bodenY(x, z), z); deko.add(f);
+  const stielGeo = new CylinderGeometry(0.03, 0.03, 0.4, 4); stielGeo.translate(0, 0.2, 0);
+  const blumeGeo = kugel(0.14, 12, 8); blumeGeo.translate(0, 0.45, 0);
+  const stiele = new InstancedMesh(stielGeo, mat("#3E9E55"), WELT.blumen.length);
+  const o = new Object3D();
+  const farben = new Map();
+  WELT.blumen.forEach(([x, z, i], idx) => {
+    const y = bodenY(x, z);
+    o.position.set(x, y, z); o.updateMatrix(); stiele.setMatrixAt(idx, o.matrix);
+    const c = BL[i % BL.length];
+    if (!farben.has(c)) farben.set(c, []);
+    farben.get(c).push({ x, y, z });
+  });
+  stiele.receiveShadow = true; scene.add(stiele);
+  farben.forEach((liste, farbe) => {
+    const im = new InstancedMesh(blumeGeo, mat(farbe), liste.length);
+    liste.forEach((p, i) => { o.position.set(p.x, p.y, p.z); o.updateMatrix(); im.setMatrixAt(i, o.matrix); });
+    im.receiveShadow = true; scene.add(im);
   });
 }
 if (WELT.insel && SAISON !== "winter") {
   const BL = ["#FF6F91", "#FFD84D", "#FFFFFF", "#B28DFF", "#FF9E5E"], n = SAISON === "fruehling" ? 44 : 26;
+  const positionen = [];
   for (let i = 0; i < n; i++) {
     const w = i * 2.399, r = 4 + (i * 37 % 70) / 10, x = Math.cos(w) * r, z = Math.sin(w) * r;
     if (Math.hypot(x + 5, z + 4.5) < 3.4) continue;
-    const f = new Group();
-    f.add(setze(new Mesh(new CylinderGeometry(0.03, 0.03, 0.4, 4), mat("#3E9E55")), 0, 0.2, 0));
-    f.add(setze(teil(kugel(0.14, 12, 8), BL[i % BL.length], { dicke: 1.15 }), 0, 0.45, 0));
-    f.position.set(x, 0.25, z); deko.add(f);
+    positionen.push({ x, z, c: BL[i % BL.length] });
+  }
+  if (positionen.length) {
+    const stielGeo = new CylinderGeometry(0.03, 0.03, 0.4, 4); stielGeo.translate(0, 0.2, 0);
+    const blumeGeo = kugel(0.14, 12, 8); blumeGeo.translate(0, 0.45, 0);
+    const stiele = new InstancedMesh(stielGeo, mat("#3E9E55"), positionen.length);
+    const o = new Object3D();
+    const farben = new Map();
+    positionen.forEach((p, idx) => {
+      o.position.set(p.x, 0.25, p.z); o.updateMatrix(); stiele.setMatrixAt(idx, o.matrix);
+      if (!farben.has(p.c)) farben.set(p.c, []);
+      farben.get(p.c).push(p);
+    });
+    stiele.receiveShadow = true; scene.add(stiele);
+    farben.forEach((liste, farbe) => {
+      const im = new InstancedMesh(blumeGeo, mat(farbe), liste.length);
+      liste.forEach((p, i) => { o.position.set(p.x, 0.25, p.z); o.updateMatrix(); im.setMatrixAt(i, o.matrix); });
+      im.receiveShadow = true; scene.add(im);
+    });
   }
 }
 

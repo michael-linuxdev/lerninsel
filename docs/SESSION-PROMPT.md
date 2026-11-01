@@ -17,6 +17,8 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 1. Stand (01.11.2026, abends)
+**Neu am 01.11.2026 (Performance Insel):** Blumen auf der Insel und in großen Welten sind jetzt `InstancedMesh` (Stiel + Blüte je Farbe) statt vieler einzelner Meshes, die danach verschmolzen wurden. Weniger Objekte, etwas weniger Speicher und Zeichenaufrufe, besonders bei vielen Blumen. Kein visueller Unterschied (Kontur an den kleinen Blüten bewusst weggelassen).
+
 **Neu am 01.11.2026, zweiter Teil: alle geplanten Pakete umgesetzt** (Details in `docs/PLAN.md`, „Stand 01.11.2026, abends“):
 - **Insel-Garten** (Ella, Kapitel 1, Etappe E6): säen, gießen über echte Tage, ernten mit Sachunterricht-Fragen; die Beete wachsen auf der Insel sichtbar mit.
 - **Tierpflege-Station** (Bruni, Kapitel 2): acht Wildtiere versorgen und am nächsten Tag auswildern, Sonderfall Rehkitz.

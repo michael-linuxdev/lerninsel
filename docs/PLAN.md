@@ -1,4 +1,12 @@
-# Gesamtplan Spielwelt (Stand 25.10.2026, nur Planung)
+# Gesamtplan Spielwelt
+
+### Stand 01.11.2026 (Performance Insel – Blumen)
+- Blumen (Insel + große Welten) von einzelnen Meshes + Verschmelzen auf `InstancedMesh` umgestellt.
+- Stiele und Blüten je Farbe als InstancedMesh direkt in die Szene (nicht in `deko`, damit sie nicht falsch verschmolzen werden).
+- Kleine visuelle Vereinfachung: keine Kontur mehr an den Blüten (bei der Größe unsichtbar, spart Aufrufe).
+- Ziel: weniger Objekte und etwas bessere Performance auf dem iPad 10 bei vielen Blumen.
+
+ (Stand 25.10.2026, nur Planung)
 
 > **Neu: Abschnitt „Neuausrichtung 26.10.2026“ am Ende dieses Dokuments.** Er enthält die gültige Reihenfolge und den
 > Arbeitspaket-Backlog. Alle Abschnitte davor bleiben als Historie stehen.
