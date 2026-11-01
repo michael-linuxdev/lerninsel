@@ -52,7 +52,7 @@
       } else mund = `<path d="M${m.x - 12} ${m.y - 2} Q${m.x} ${m.y + 10} ${m.x + 12} ${m.y - 2}" stroke="${D}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
     }
     const wangen = [-1, 1].map(s => `<ellipse cx="${k.x + s * k.r * 0.62}" cy="${k.y + k.r * 0.32}" rx="${k.r * 0.13}" ry="${k.r * 0.09}" fill="#FF7FA6" opacity=".5"/>`).join("");
-    return augen + wangen + mund + extra;
+    return augen + mund + extra;   // ohne rosa Wangen (01.11.2026)
   }
 
   // ---------- Arten ----------

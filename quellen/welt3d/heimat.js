@@ -578,7 +578,7 @@ function figur(look) {
   if (haarId === "undercut") haarteil(kugel(0.5), 0, 0.42, 0.05, 1, 0.55, 1);
   // Gesicht
   augen(kopf, 0.2, 0.02, 0.53);
-  [-1, 1].forEach(s => { const w = new Mesh(new CircleGeometry(0.09, 16), new MeshBasicMaterial({ color: "#FF9FB2", transparent: true, opacity: 0.6 })); setze(w, 0.33 * s, -0.12, 0.49); w.rotation.y = 0.5 * s; kopf.add(w); });
+  // (01.11.2026) keine rosa Wangen mehr
   const mund = new Mesh(new TorusGeometry(0.07, 0.018, 6, 12, Math.PI), AUGE); mund.rotation.z = Math.PI; setze(mund, 0, -0.15, 0.55); kopf.add(mund);
   // Extras aus dem Kleiderschrank (eine Auswahl in 3D)
   const ex = look.extras || {}, hat = (id) => ex[id];
@@ -687,7 +687,7 @@ function eule() {
   g.userData.koerper = k;
   return g;
 }
-// Fipsi wie in der 2D-Zeichnung: sitzender Fuchs mit großem Kopf, weißer Gesichtsmaske, rosa Innenohren und Wangen
+// Fipsi wie in der 2D-Zeichnung: sitzender Fuchs mit großem Kopf, weißer Gesichtsmaske, rosa Innenohren (ohne Wangen seit 01.11.2026)
 function fipsi() {
   const g = new Group(), O = "#F28C38", W = "#FFF3E6", D2 = "#5C3A21";
   const k = new Group(); g.add(k);
@@ -706,7 +706,6 @@ function fipsi() {
   [-1, 1].forEach(s => {
     const ohr = teil(new ConeGeometry(0.2, 0.46, 16), O); setze(ohr, 0.34 * s, 0.5, -0.02); ohr.rotation.z = -0.32 * s; kopf.add(ohr);
     const innen = new Mesh(new ConeGeometry(0.11, 0.28, 12), mat("#FFC3A0")); setze(innen, 0.33 * s, 0.47, 0.08); innen.rotation.z = -0.32 * s; kopf.add(innen);
-    const w = new Mesh(new CircleGeometry(0.08, 16), new MeshBasicMaterial({ color: "#FF7FA6", transparent: true, opacity: 0.5 })); setze(w, 0.36 * s, -0.12, 0.44); w.rotation.y = 0.55 * s; kopf.add(w);
   });
   augen(kopf, 0.19, 0.04, 0.44, 0.075);
   const nase = new Mesh(kugel(0.07, 14, 10), AUGE); nase.scale.set(1.3, 1, 0.8); setze(nase, 0, -0.08, 0.53); kopf.add(nase);

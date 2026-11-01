@@ -17,7 +17,7 @@ Jedes Emoji der App bekommt ein eigenes, kleines SVG-Bild. Gemeinsamer Stil, dam
 - Farben freundlich und klar, nicht grell. Palette (Richtwerte): Rot `#E8574F`, Orange `#F59A3C`, Gelb `#FFC94A`, Grün `#5DBB63`, Türkis `#3FB6B2`,
   Blau `#4C8FE0`, Lila `#8B6FD6`, Rosa `#F28DB2`, Braun `#B07A4F`, Haut `#F6C9A0` (Hauttöne bei 🏻–🏿 nur, wenn das Emoji sie hat), Grau `#9AA3B5`,
   dunkle Details `#3D3A5C` (Augen, Pupillen).
-- Gesichter (Smileys, Menschen): runde Köpfe, Augen als dunkle Ovale mit kleinem weißen Glanzpunkt, Wangen `#FF9FB2` mit `opacity=".5"`.
+- Gesichter (Smileys, Menschen): runde Köpfe, Augen als dunkle Ovale mit kleinem weißen Glanzpunkt. **Keine rosa Wangen** (Wunsch des Auftraggebers).
 - Menschen: freundlich, neutral, kindgerecht; Kleidung einfach.
 
 ## Teil-Dateien

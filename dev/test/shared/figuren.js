@@ -16,7 +16,7 @@
       <circle cx="83" cy="75" r="3" fill="#fff"/><circle cx="123" cy="75" r="3" fill="#fff"/>
       <ellipse cx="100" cy="96" rx="8" ry="6" fill="${D}"/>
       <path d="M91 106 Q100 114 109 106" stroke="${D}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <circle cx="70" cy="98" r="7" fill="#FF7FA6" opacity=".45"/><circle cx="130" cy="98" r="7" fill="#FF7FA6" opacity=".45"/>
+      
     </svg>`;
   }
   function robo(klasse = "robo") {
@@ -69,7 +69,7 @@
       <ellipse cx="100" cy="92" rx="10" ry="7" fill="${D}"/>
       <path d="M92 101 Q100 106 108 101" stroke="${D}" stroke-width="3" fill="none" stroke-linecap="round"/>
       <rect x="91" y="104" width="8" height="12" rx="2" fill="#fff" ${s.replace('stroke-width="4"', 'stroke-width="2.5"')}/><rect x="101" y="104" width="8" height="12" rx="2" fill="#fff" ${s.replace('stroke-width="4"', 'stroke-width="2.5"')}/>
-      <circle cx="68" cy="96" r="7" fill="#FF7FA6" opacity=".4"/><circle cx="132" cy="96" r="7" fill="#FF7FA6" opacity=".4"/>
+      
       <path d="M52 50 Q54 18 100 16 Q146 18 148 50 Z" fill="#FFC83D" ${s}/><path d="M42 50 H158 Q160 58 152 58 H48 Q40 58 42 50 Z" fill="#FFB020" ${s}/><rect x="94" y="16" width="12" height="34" rx="4" fill="#FFB020"/>
     </svg>`;
   }
@@ -91,7 +91,7 @@
       <circle cx="78" cy="72" r="8" fill="${D}"/><circle cx="122" cy="72" r="8" fill="${D}"/><circle cx="81" cy="69" r="3" fill="#fff"/><circle cx="125" cy="69" r="3" fill="#fff"/>
       <ellipse cx="100" cy="88" rx="10" ry="7" fill="${D}"/>
       <path d="M88 100 Q100 110 112 100" stroke="${D}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <circle cx="66" cy="94" r="8" fill="#FF7FA6" opacity=".45"/><circle cx="134" cy="94" r="8" fill="#FF7FA6" opacity=".45"/>
+      
     </svg>`;
   }
   // Papagei Paula: Atelier (Malen und Musik) – bunte Federn, Malerinnen-Mütze, Pinsel
@@ -110,7 +110,7 @@
       <path d="M58 46 Q100 6 142 40 Q150 52 132 50 Q100 30 70 52 Q52 58 58 46 Z" fill="#7B55B8" ${s}/><circle cx="104" cy="22" r="8" fill="#7B55B8" ${s}/>
       <circle cx="86" cy="68" r="8" fill="${D}"/><circle cx="114" cy="68" r="8" fill="${D}"/><circle cx="89" cy="65" r="3" fill="#fff"/><circle cx="117" cy="65" r="3" fill="#fff"/>
       <path d="M90 82 Q100 76 110 82 Q110 100 100 106 Q92 98 90 82 Z" fill="#FFC83D" ${s}/>
-      <circle cx="74" cy="86" r="7" fill="#FF7FA6" opacity=".5"/><circle cx="126" cy="86" r="7" fill="#FF7FA6" opacity=".5"/>
+      
     </svg>`;
   }
   // Schildkröte Tilda (Schach, 30.10.2026): runder Panzer mit Waben, Kopf vorn, Halstuch
@@ -125,7 +125,7 @@
       <path d="M68 84 Q100 98 132 84 L126 100 Q100 108 74 100 Z" fill="#E0578F" ${s}/>
       <circle cx="86" cy="52" r="8" fill="${D}"/><circle cx="114" cy="52" r="8" fill="${D}"/><circle cx="89" cy="49" r="3" fill="#fff"/><circle cx="117" cy="49" r="3" fill="#fff"/>
       <path d="M88 70 Q100 80 112 70" stroke="${D}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <circle cx="74" cy="66" r="7" fill="#FF7FA6" opacity=".45"/><circle cx="126" cy="66" r="7" fill="#FF7FA6" opacity=".45"/>
+      
     </svg>`;
   }
   window.Figuren = { fipsi, robo, eule, biber, baer, papagei, tilda };

@@ -29,7 +29,7 @@
       : ausdruck === "denkt" ? `<path d="M${mx - 10} ${mundY + 4} Q${mx} ${mundY} ${mx + 12} ${mundY + 2}" fill="none" stroke="${D}" stroke-width="4" stroke-linecap="round"/>`
       : `<path d="M${mx - 14} ${mundY} Q${mx} ${mundY + 16} ${mx + 14} ${mundY}" fill="${opt.mundFuell || "none"}" stroke="${D}" stroke-width="4" stroke-linecap="round"/>`;
     const wangen = `<ellipse cx="${x1 - r * 0.9}" cy="${y + r * 1.6}" rx="${r * 0.62}" ry="${r * 0.38}" fill="#FF8FA8" opacity=".55"/><ellipse cx="${x2 + r * 0.9}" cy="${y + r * 1.6}" rx="${r * 0.62}" ry="${r * 0.38}" fill="#FF8FA8" opacity=".55"/>`;
-    return auge(x1) + auge(x2) + (opt.ohneMund ? "" : mund) + (opt.ohneWangen ? "" : wangen);
+    return auge(x1) + auge(x2) + (opt.ohneMund ? "" : mund);   // keine rosa Wangen (Wunsch des Auftraggebers 01.11.2026)
   }
   const svg = (s, inhalt) => `<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>${s.defs.join("")}</defs>${s.schatten}${inhalt}</svg>`;
 

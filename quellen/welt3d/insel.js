@@ -88,8 +88,7 @@ if (pruefeZugang()) {
   const zopf = schatten(new Mesh(new SphereGeometry(0.22, 10, 8), lam("#A8693A"))); zopf.position.set(0, 1.25, -0.38); zopf.scale.set(1, 1.5, 1); figur.add(zopf);
   const augeMat = new MeshBasicMaterial({ color: "#2a1a3a" });
   [-0.13, 0.13].forEach(x => { const a = new Mesh(new SphereGeometry(0.055, 8, 6), augeMat); a.position.set(x, 1.38, 0.34); figur.add(a); });
-  const wangeMat = new MeshBasicMaterial({ color: "#FF9DB8" });
-  [-0.22, 0.22].forEach(x => { const a = new Mesh(new SphereGeometry(0.05, 8, 6), wangeMat); a.position.set(x, 1.28, 0.3); a.scale.z = 0.4; figur.add(a); });
+  // (01.11.2026) keine rosa Wangen mehr
   [-0.32, 0.32].forEach((x, i) => { const arm = new Mesh(new CylinderGeometry(0.07, 0.07, 0.5, 6), beinMat); arm.position.set(x, 0.75, 0); arm.rotation.z = i ? -0.35 : 0.35; figur.add(arm); });
   const blob = new Mesh(new CircleGeometry(0.5, 20), new MeshBasicMaterial({ color: "#000000", transparent: true, opacity: 0.22, depthWrite: false }));
   blob.rotation.x = -Math.PI / 2; scene.add(blob);

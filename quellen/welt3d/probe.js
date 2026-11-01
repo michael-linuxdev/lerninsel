@@ -225,8 +225,7 @@ function figur() {
     a.scale.set(1, RUND ? 1.35 : 1, 0.6); setze(a, 0.2 * s, 0.02, 0.53); kopf.add(a);
     if (RUND) {
       a.add(setze(new Mesh(new SphereGeometry(0.03, 8, 6), new MeshBasicMaterial({ color: "#ffffff" })), 0.025, 0.03, 0.06));
-      const w = new Mesh(new CircleGeometry(0.09, 16), new MeshBasicMaterial({ color: "#FF9FB2", transparent: true, opacity: 0.6 }));
-      setze(w, 0.33 * s, -0.12, 0.49); w.rotation.y = 0.5 * s; kopf.add(w);
+      // (01.11.2026) keine rosa Wangen mehr
     }
   });
   const mund = new Mesh(new TorusGeometry(0.07, 0.018, 6, 12, Math.PI), augeMat);

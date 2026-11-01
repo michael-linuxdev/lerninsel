@@ -77,7 +77,6 @@
       return kreis(97, 124, 11, haut) + `<path d="M95 119 q-5 5 0 10" stroke="${innen}" stroke-width="3" fill="none" stroke-linecap="round"/>` +
         kreis(203, 124, 11, haut) + `<path d="M205 119 q5 5 0 10" stroke="${innen}" stroke-width="3" fill="none" stroke-linecap="round"/>` +
         kreis(150, 118, 54, haut) +
-        `<circle cx="117" cy="147" r="9.5" fill="#FF7FA6" opacity=".42"/><circle cx="183" cy="147" r="9.5" fill="#FF7FA6" opacity=".42"/>` +
         `<path d="M147 140 Q150 143.5 153 140" stroke="${D}" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".5"/>`;
     },
     unterhemd: () => flaeche("M118 192 L126 192 L130 210 Q150 218 170 210 L174 192 L182 192 Q186 245 186 302 Q150 312 114 302 Q114 245 118 192 Z", "#ffffff"),
