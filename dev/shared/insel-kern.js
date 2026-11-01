@@ -492,7 +492,7 @@
   // Spiele, die noch entstehen: seit 30.10.2026 alle fünf Minispiele (ausgeblendet, werden neu gedacht – Spielwelt.MINISPIELE_AUS)
   const bald = (id) => !!S().MINISPIELE_AUS && ["ballons", "truhe", "insel", "lauf", "kart", "bau"].includes(id);
   // Neue Orte (01.11.2026) an den Plätzen der ausgeblendeten Minispiele: Garten (Kapitel 1), Tierpflege-Station (Kapitel 2), Bäckerei (öffnet Kapitel 3)
-  const NEU_FERTIG = { garten: true, baeckerei: true };
+  const NEU_FERTIG = { garten: true, baeckerei: true, tierstation: true };
   function ortOffen(id) {
     const k = W.Story ? W.Story.kapitel() : 0;
     if (id === "garten") return S().offen(k >= 1);
@@ -630,7 +630,13 @@
     const d = S().lade("baeckerei") || {};
     return blase("biber", "Bäckerei Benno", d.tage ? `Hallo ${name()}! Heute kommen wieder fünf Kunden. Hilfst du mir an der Theke?` : `Hallo ${name()}! Meine Bäckerei ist offen. Packst du die Bestellungen und rechnest mit dem Geld?`, "Помоги мне в пекарне!", "../baeckerei/");
   }
-  const tierstationAntwort = () => (W.InselNeu && W.InselNeu.tierstation ? W.InselNeu.tierstation() : null);
+  function tierstationAntwort() {
+    if (!ortOffen("tierstation")) return blase("🩹", "Tierpflege-Station – noch zu", "Bruni richtet hier eine Station für kranke Wildtiere ein. Sie öffnet in Kapitel 2 – lern weiter bei Fipsi!", "Станция для диких животных откроется в главе 2.");
+    const d = S().lade("tierstation") || {}, g = d.gast;
+    const de = !g ? `Hallo ${name()}! Heute braucht wieder ein Tier Hilfe. Kommst du in die Station?`
+      : g.ruht && g.ruht < isoJetzt() ? "Das Tier in der Station ist wieder fit! Wir können es auswildern." : g.ruht ? "Pssst – das Tier in der Station schläft und erholt sich." : "Ein Tier in der Station wartet auf deine Hilfe.";
+    return blase("baer", "Brunis Tierpflege-Station", de, "Станция Бруни для животных.", "../tierstation/");
+  }
   AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
   const aktionFuer = (id) => (bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 

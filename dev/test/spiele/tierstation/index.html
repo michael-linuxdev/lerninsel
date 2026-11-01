@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Tierpflege-Station</title>
+<meta name="theme-color" content="#E6F5EA">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  html, body { min-height: 100%; }
+  body { background: linear-gradient(#E6F5EA 0 55%, #CFEFC0 55% 100%); background-attachment: fixed; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; min-width: 0; }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .mitte { max-width: 1040px; margin: 0 auto; padding: 10px 16px 30px; display: grid; gap: 12px; }
+  .ansicht[hidden] { display: none !important; }
+  .kunde { display: flex; gap: 12px; align-items: center; }
+  .kunde .figur { font-size: 3.6rem; flex: none; }
+  .blase { background: #fff; border-radius: 24px; padding: 12px 18px; font-size: 1.3rem; font-weight: 600; box-shadow: 0 6px 0 rgba(0,0,0,.08); flex: 1; display: flex; gap: 10px; align-items: center; }
+  .blase p { margin: 0; flex: 1; line-height: 1.35; }
+  .blase .ru { display: block; font-size: 1rem; color: var(--pflaume-hell); margin-top: 4px; font-weight: 500; }
+  .vorlesen { flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--himmel); font-size: 1.5rem; }
+  .fortschritt { display: flex; gap: 8px; justify-content: center; font-size: 1.6rem; }
+  .fortschritt span { opacity: .3; } .fortschritt span.an { opacity: 1; }
+  .theke { background: #B9732E; border-radius: 24px; padding: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 10px; box-shadow: 0 7px 0 rgba(0,0,0,.15); }
+  .ware { background: #FFF6E8; border-radius: 18px; padding: 8px 4px; display: grid; justify-items: center; font-weight: 700; font-size: 1.05rem; gap: 2px; min-height: 104px; }
+  .ware .e { font-size: 2.6rem; line-height: 1.1; }
+  .ware small { font-weight: 600; color: #8A5A34; font-size: 1rem; }
+  .ware:active, .muenze:active { transform: translateY(3px); }
+  .tablett { background: #fff; border-radius: 22px; padding: 10px 14px; min-height: 76px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 2.2rem; box-shadow: inset 0 0 0 4px #F0DDBF; }
+  .tablett .leer { font-size: 1.1rem; color: var(--pflaume-hell); }
+  .tablett button { font-size: 2.2rem; background: none; padding: 0 2px; }
+  .zeile { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .zeile .knopf { min-height: 60px; font-size: 1.2rem; }
+  .eingabe { display: grid; gap: 10px; justify-items: center; }
+  .anzeige { background: #fff; border-radius: 18px; min-width: 220px; padding: 10px 18px; font-size: 2.2rem; font-weight: 700; text-align: center; box-shadow: inset 0 0 0 4px #F0DDBF; }
+  .tasten { display: grid; grid-template-columns: repeat(4, 76px); gap: 8px; }
+  .tasten button { height: 64px; border-radius: 18px; background: #fff; font-size: 1.7rem; font-weight: 700; box-shadow: 0 5px 0 rgba(0,0,0,.1); }
+  .tasten button.ok { background: var(--wiese, #2E9C5A); color: #fff; }
+  .geld { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .muenze { width: 84px; height: 84px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFF2B0, #E0B23C); font-weight: 800; font-size: 1.15rem; box-shadow: 0 5px 0 rgba(0,0,0,.15); color: #5A3A10; }
+  .muenze.ct { background: radial-gradient(circle at 35% 30%, #FFD9B0, #C27A3C); width: 72px; height: 72px; }
+  .muenze.schein { border-radius: 12px; width: 112px; height: 64px; background: linear-gradient(135deg, #CFE6FF, #8FB8E8); color: #24406B; }
+  .hinweis { text-align: center; font-size: 1.25rem; font-weight: 600; min-height: 1.6em; }
+  .hinweis.ja { color: #1E7A44; } .hinweis.nein { color: #B23A2E; }
+  .patient { background: #fff; border-radius: 26px; padding: 16px; display: grid; justify-items: center; gap: 6px; box-shadow: 0 6px 0 rgba(0,0,0,.08); text-align: center; }
+  .patient .tier { font-size: 6rem; line-height: 1; }
+  .patient .tier.schlaeft { filter: saturate(.6); animation: atmen 2.6s ease-in-out infinite; }
+  @keyframes atmen { 50% { transform: scale(1.04, .97); } }
+  .patient h2 { margin: 0; font-size: 1.6rem; }
+  .patient .haken { display: flex; gap: 14px; font-size: 1.15rem; font-weight: 600; flex-wrap: wrap; justify-content: center; }
+  .patient .haken span { opacity: .45; } .patient .haken span.an { opacity: 1; }
+  .wahl { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .wahl .knopf { min-height: 70px; font-size: 1.2rem; }
+  .wahl .knopf.falsch { background: #FFD9D4; } .wahl .knopf.richtig { background: #CFF2D8; }
+  .frage-titel { font-size: 1.35rem; font-weight: 700; text-align: center; margin: 6px 0 10px; }
+  .ausgewildert { background: #fff; border-radius: 20px; padding: 10px 16px; font-weight: 600; font-size: 1.15rem; box-shadow: 0 5px 0 rgba(0,0,0,.06); }
+  .ende { text-align: center; display: grid; gap: 12px; justify-items: center; }
+  .ende .gross { font-size: 4rem; }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../welt3d/heimat.html" aria-label="Zur Insel">🏝️</a>
+  <h1>🩹 Tierpflege-Station</h1>
+  <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
+</div>
+<main class="mitte">
+  <section class="ansicht" id="zu" hidden>
+    <div class="blase"><p>🔒 Bruni öffnet ihre Tierpflege-Station in Kapitel 2. Lern weiter – dann ist sie für dich da!</p></div>
+  </section>
+  <section class="ansicht" id="station" hidden>
+    <div class="kunde"><div class="figur">🐻</div><div class="blase"><p id="bruni-text"></p><button class="vorlesen" data-vorlesen="bruni-text" aria-label="Vorlesen">🔊</button></div></div>
+    <div class="patient" id="patient"></div>
+    <div id="frage"></div>
+    <div class="hinweis" id="hinweis" role="status"></div>
+    <div class="zeile" id="aktionen"></div>
+    <div class="ausgewildert" id="ausgewildert"></div>
+  </section>
+</main>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../shared/koennen.js"></script>
+<script src="../../shared/tiere.js"></script>
+<script src="../../shared/tierpflege.js"></script>
+<script src="station.js"></script>
+</body>
+</html>
