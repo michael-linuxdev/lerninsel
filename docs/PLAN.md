@@ -2078,3 +2078,28 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
     zuerst die Pilot-Erklärungen und den Denkfehler-Katalog; dann mit Kindern ausprobieren (Stufe 3).
   - Mehr Denkfehler (Einmaleins-Verwechslungen, Geteilt, Größen umrechnen, Uhrzeit) und Erklär-Einheiten für weitere Stationen; Schrittweg auch für schriftlich mal/geteilt (Kl. 4).
   - Vorlesen in den Erklär-Einheiten (🔊-Knopf, Seite lädt `sprache.js` noch nicht).
+
+### Stand 02.11.2026, Rückmeldung des Auftraggebers (Auftrag für die nächste Sitzung)
+- **Rückmeldung:** „Tiere in 2D müssen um Längen besser werden. Kleiderschrank muss ebenfalls viel besser werden. Kein Kind versteht das“ –
+  „das“ = **die neuen Mathe-Erklärungen** (Erklär-Einheiten, Denkfehler-Texte, Schrittweg).
+- **Fragerunde (beantwortet):**
+  - Tiere 2D: **detailreich gezeichnet** wie ein gutes Kinderbuch – Dreiviertelansicht, echte Anatomie, Fellzeichnung, Licht und Schatten in zwei
+    Farbstufen; Welpe/Kätzchen tapsig (großer Kopf, große Pfoten, kurze Schnauze), erwachsen schlank. Gilt für Hund, Katze, Drache (alle Stufen).
+  - Kleiderschrank: **alles** schlecht – die Figur selbst (dünn, steif, Strichbeine, Schlauch-Arme → wie ein richtiges Kind: Proportionen, Hände,
+    lockere Pose), die Kleidung (billig, Puffärmel, flach → Stoff, Falten, Schatten), die Bedienung (ohne Lesen anziehen können, weniger Knöpfe,
+    antippen = anziehen, klarer Ablauf) und Hintergrund/Zimmer (leer, unpassend).
+  - Vorgehen: **erst Vorschau mit 2–3 Entwürfen**, der Auftraggeber wählt, dann wird alles umgebaut.
+- **Stand der Vorschau:** Hund-Entwurf (drei Stufen, zwei Varianten: a = dunkle Kontur Stil A, b = feine Kontur im Fellton) in
+  `quellen/entwuerfe/hund-entwurf.js` (Funktion `hund(stufe, stil)`), Bild `quellen/entwuerfe/hund-entwurf.png`. Noch nicht in der App.
+  Kinderfigur-Entwürfe fehlen noch.
+- **Nächste Sitzung, in dieser Reihenfolge:**
+  1. **Vorschau fertigstellen und vorlegen:** Hund (Entwurf verbessern), Katze und Drache je 3 Stufen in derselben Qualität; neue Kinderfigur
+     (Junge und Mädchen, 2 Varianten) mit ein paar Kleidungsstücken; Skizze der neuen Kleiderschrank-Bedienung und eines schöneren Zimmers.
+     Als Seite `spiele/stil/` (Vorschau) oder Bilder zeigen, Auswahl per Frage-Werkzeug.
+  2. Nach der Wahl: `shared/tiere.js` neu (Hund, Katze, Drache), Zubehör anpassen, Test `tier`.
+  3. Nach der Wahl: Kleiderschrank neu – neue Figur in `spiele/anziehen/teile.js`/`figur.js` (alle Teile neu zeichnen; **Teile-IDs behalten**, damit
+     gespeicherte Looks gültig bleiben), neue Bedienung in `spiel.js`, Orte/Zimmer neu; Tests `anziehen`, `dashboard` (Meine Ecke), Rauchtest.
+  4. **Mathe-Erklärungen kindgerecht:** Texte in `spiele/mathe/erklaeren.js` und `fehler.js` für Kl. 1–3 umschreiben – kurze Sätze, keine
+     Fachwörter („Denkfehler“, „Fehlvorstellung“, „Stelle“ vermeiden), mehr Bild als Text (Zehnerstangen/Plättchen statt Rechenzeilen), Benno spricht,
+     🔊 Vorlesen; lange Erklärung ohne die drei Überschriften („So denkst du gerade …“); Schrittweg mit markierter Spalte im Rechenbild statt
+     „Ziffer bei den Zehnern“. Mit dem Auftraggeber an 2–3 Beispielen abstimmen, dann `tests/mathe-fehler.js`/`fehlerursachen.js` anpassen.
