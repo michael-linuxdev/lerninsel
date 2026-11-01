@@ -43,6 +43,9 @@ Aufwand: S ≈ 1 Sitzung, M ≈ 2–3, L ≈ 4+ (eine Sitzung ≈ ein Arbeitstag
 | Schach mit Tilda | Rätsel/Denken | Vorausdenken | Leuchtturm (Kap. 6) | immer (Lernen) | `spiele/schach/` | Bauern-Rennen für Jüngere (S) |
 | Atelier Malen/Musik | Kreativ | Kunst, Musik | Paulas Fest | immer (Lernen) | `spiele/atelier/` | – |
 
+> **Stand 01.11.2026:** Insel-Garten (`spiele/garten/`), Tierpflege-Station (`spiele/tierstation/`) und Bäckerei Benno (`spiele/baeckerei/`) sind gebaut.
+> Sie stehen an den Plätzen von Sternenlauf, Kart und Bauplatz. Als Seiten (2D) brauchen sie keine Spielzeit (Garten neutral, Bäckerei/Station = Lernen).
+
 ### Neu (priorisiert)
 | Prio | Spiel | Vorliebe | Kurzbeschreibung | Lernbezug | Story-Bezug | Freischaltung | Aufwand |
 |---|---|---|---|---|---|---|---|

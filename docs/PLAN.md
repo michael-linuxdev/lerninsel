@@ -1936,3 +1936,37 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
 - **Offen aus dem Review (Wartbarkeit, eigenes Paket):** gemeinsames Modul für Englisch/Sorbisch (135 gleiche Zeilen), Fachdaten nach Bedarf nachladen
   (Elternbereich lädt ~2 MB Skripte), feste `waitForTimeout` in Tests durch Bedingungen ersetzen, eigene Tests für Tier, Schach, Gefühle, Duell;
   `dev/` künftig per Action bauen statt einchecken (würde das Repo halbieren – braucht Umstellung von GitHub Pages, Entscheidung des Auftraggebers).
+
+### Stand 01.11.2026, abends (Auftrag: „Alle geplanten Neuerungen durchziehen“)
+- **Insel-Garten** (Paket 1):
+  - Umsetzung: `shared/garten.js` und `spiele/garten/`. 9 Pflanzen je Klasse, ein Wachstumsschritt pro Tag mit Gießen, nichts welkt. Die Ernte-Frage von Ella zählt für „Können“ und Lernfunde. Einen Stern gibt es nur für die erste Ernte je Pflanze. Beete: 3 in Vorschule/Kl. 1, 4 in Kl. 2, 6 ab Kl. 3.
+  - Auf der Insel stehen die echten Beete am Platz des Sternenlaufs.
+  - Etappe E6 „spielorte“ zeigt jetzt den Garten; die alte Szene bleibt für `MINISPIELE_AUS = false`. Der Garten ist ab Kapitel 1 offen.
+  - Entscheidung: Die Seite selbst ist 2D (Emoji/HTML, leicht für das iPad), auf der Insel wachsen die Beete in 3D mit. Die Seite ist „neutral“ und verbraucht keine Spielzeit (ruhig, Gießen dauert Sekunden).
+- **Bäckerei Benno** (Paket 2):
+  - Umsetzung: `spiele/baeckerei/`, Lernseite. 5 Kunden je Tag mit den Aufgaben packen, Preis, passend bezahlen und Wechselgeld.
+  - Geld je Stufe: Vorschule/Kl. 1 ganze Euro bis 10 €, Kl. 2 bis 100 €, ab Kl. 3 mit Komma (Preise als Vielfache von 5 ct, Münzen ab 5 ct).
+  - Nach zwei Fehlern zeigt Benno die Lösung. Sterne gibt es für den ersten Tag (2) und den ersten fehlerfreien Tag (1).
+  - Kapitel 3 „Bennos Bäckerei“ (10 Lernfunde, 3 Matheweg-Stationen) mit Szene. Die Bäckerei steht am Platz der Kart-Bahn und ersetzt „Bennos Brücke“, solange die Minispiele aus sind.
+- **Tierpflege-Station** (Paket 3):
+  - Umsetzung: `spiele/tierstation/`, Lernseite mit 8 Wildtieren je Klasse.
+  - Je Tier drei Fragen (Futter, Pflege, Zuhause). Das Tier ruht über Nacht und wird frühestens am nächsten Tag ausgewildert; nichts verfällt.
+  - Sonderfall Rehkitz: liegen lassen.
+  - Das eigene Tier passt mit auf (nur Text). Die Station steht am Platz des Bauplatzes und ist ab Kapitel 2 offen.
+- **Verbessert** (Paket 4, ohne vorherige Fragerunde, weil der Auftraggeber „durchziehen“ wollte – am iPad prüfen lassen):
+  - Schach: Bauern-Rennen für Jüngere und ein Tipp-Knopf.
+  - Duell: Rückblick auf die Fehler des Kindes.
+  - Gefühle: Hilfe-Karte mit Vertrauensperson, Nummer gegen Kummer 116 111 und „Dein Körper gehört dir“. Vorher fehlte die 116 111; das hatte der neue Test `gefuehle` gefunden.
+  - Atelier: Spiegel-Malen.
+  - Testuhr: Tierpflege, Familie und die Wochenansichten im Elternbereich nehmen jetzt `__jetzt`.
+- **NA-60 Teil 2** (Paket 5):
+  - `fuerAeltere` an 4 Szenen-Blasen; für Vorschule/Kl. 1 entfallen sie, außer Blasen mit Hooks. Die Szenen-Schrift ist dort größer.
+  - „Heute für dich“ schlägt Kindern, die die Klasse wiederholen, das Fach mit dem wackeligsten Lernziel vor.
+- **Aufräumen** (Paket 6):
+  - `shared/sprachkurs.js` mit den bisher wortgleich doppelten Teilen von Englisch und Sorbisch.
+  - Neue Tests: `tier`, `schach`, `gefuehle`, `duell` (Helfer), `garten`, `baeckerei`, `tierstation`, `verbessert`, `na60b`. Die GitHub-Prüfung führt die neuen Tests mit aus.
+- **Offen:**
+  - Fachdaten im Elternbereich nach Bedarf laden: zurückgestellt, weil es ein asynchrones Zeichnen des Lernstands braucht – eigenes Paket.
+  - Feste Wartezeiten in älteren Tests.
+  - Ballon-Wiese und Schatz-Strand sind noch „🚧“.
+- **Nächstes:** iPad-Rückmeldung, dann Wörter-Angeln (Schatz-Strand) und Rhythmus-Boot (Ballon-Wiese, Kapitel 4).

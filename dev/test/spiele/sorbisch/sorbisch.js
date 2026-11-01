@@ -9,28 +9,21 @@
   const MUTTER = (((S.lade("eltern") || {}).sorbisch || {}).art) === "mutter";
   const L0 = (MUTTER ? window.SORBISCH_MUTTER : window.SORBISCH) || [];
   const $ = (id) => document.getElementById(id);
-  const HL = () => S.hilfe() || { code: "ru", kurz: "RU", tts: "ru-RU", name: "Russisch" };
-  const mische = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const { HL, mische, name, mitName, klasse, heute, paulaSpricht, sprichDe, zeige, blase, weiterKnopf, aufWeiter } = window.Sprachkurs.werkzeuge({ $, daten: () => daten(), weiter: () => weiter() });   // shared/sprachkurs.js
   const LOB = window.SORBISCH_LOB || ["Super!"];
   const FREI = window.SORBISCH_FREI || [], ALLE = S.entwurfErlaubt ? S.entwurfErlaubt("hsb") : false;   // alle Lektionen, solange Entwürfe freigegeben sind; sonst nur geprüfte
   const L = L0.filter(k => ALLE || FREI.includes(k.id));
-  const name = () => S.profil.name || "du";
-  const mitName = (t) => (t || "").replace(/\{name\}/g, name());
 
   function daten() { const d = Object.assign({ lektionen: {}, vorlesen: true, ru: true }, S.lade("sorbisch") || {}); if (!S.hilfeRu()) d.ru = false; return d; }
   function speichere(d) { S.speichere("sorbisch", d); }
   const bestes = (id) => daten().lektionen[id] || 0;
-  const klasse = () => ((S.stufe && S.stufe()) || {}).klasse || 2;
   const sichtbar = (k) => klasse() >= k.stufe - 1;   // Kl.-1/2-Lektionen ab Kl. 1, Kl.-3/4-Lektionen ab Kl. 2
 
   // Keine sorbische Stimme: Hör-Aufgaben entfallen, sorbische Wörter werden nicht vorgelesen
   const hatEnglisch = () => false;
-  function paulaSpricht(an) { const f = $("paula-gross").firstElementChild; if (f) f.classList.toggle("spricht", an); }
   function sprichEn() { }
-  function sprichDe(text) { if (!daten().vorlesen || !text) return; paulaSpricht(true); SP.sprich(text, "de-DE", () => paulaSpricht(false)); }
 
   // ---------- Übersicht ----------
-  function zeige(n) { ["liste", "lektion", "ende"].forEach(v => $(v + "-ansicht").hidden = v !== n); scrollTo(0, 0); }
   function zeichneListe() {
     $("sterne").textContent = S.sterne();
     $("paula-klein").innerHTML = F.papagei("");
@@ -76,8 +69,6 @@
   const EN_LB = (MUTTER ? window.SORBISCH_MUTTER_LB : window.SORBISCH_LB) || [];
   const enKlasse = () => klasse();
   const lernstandLektionen = (nr) => L.filter(k => (k.lb || 1) === nr && sichtbar(k) && (klasse() >= 3 || k.stufe < 3));
-  const pad2 = (n) => String(n).padStart(2, "0");
-  const heute = () => { const d = window.__jetzt ? new Date(window.__jetzt) : new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; };
   function starteLernstand(nr) {
     const lek = mische(lernstandLektionen(nr)), je = Math.min(MUTTER ? 3 : 4, Math.ceil(10 / Math.max(1, lek.length))), arten = hatEnglisch() ? ["hoeren", "deutsch", "lesen"] : ["lesen", "deutsch"];
     // Muttersprache: Aufgaben (Wahl, Lesetext) aus den festen Schritten der Lektionen
@@ -141,19 +132,9 @@
     zeige("lektion"); schritt();
   }
 
-  function blase(html, gesprochen, ru) {
-    const d = daten();
-    $("blase").innerHTML = mitName(html) + `<div class="blase-knoepfe">` + (SP.verfuegbar() ? `<button class="klein-knopf" id="nochmal" aria-label="Nochmal vorlesen">🔊</button>` : "") +
-      (d.ru && ru ? `<button class="klein-knopf" id="ru-knopf" lang="${HL().code}">${HL().kurz}</button>` : "") + `</div><p class="ru-text" id="ru-text" lang="${HL().code}" hidden></p>`;
-    const nh = $("nochmal"); if (nh) nh.addEventListener("click", () => SP.sprich(mitName(gesprochen), "de-DE"));
-    const rk = $("ru-knopf"); if (rk) rk.addEventListener("click", () => { const r = $("ru-text"); r.hidden = !r.hidden; r.textContent = mitName(ru); if (!r.hidden && SP.hat(HL().tts)) SP.sprich(mitName(ru), HL().tts); });
-    if (gesprochen) sprichDe(mitName(gesprochen));
-  }
   const hinweis = `<p class="hinweis" id="hinweis"></p>`;
   // Muttersprache: Aufgabe auf Sorbisch groß, deutsche Hilfe klein darunter (vorgelesen wird nur das Deutsche)
   const soText = (so, de) => `<span lang="hsb" class="so-text">${so}</span>${de ? `<span class="de-hilfe">${de}</span>` : ""}`;
-  const weiterKnopf = (t = "Weiter") => `<button class="knopf weiter" id="weiter">${t}</button>`;
-  const aufWeiter = () => $("weiter").addEventListener("click", () => { S.ton("tipp"); weiter(); });
 
   function schritt() {
     const s = lauf.schritte[lauf.pos], A = $("aufgabe"), k = lauf.k;

@@ -16,7 +16,21 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 **Ablauf:** Einrichten und `sh tests/laufen.sh` (muss grün sein) → **Fragerunde** (höchstens 4 Fragen; iPad-Rückmeldung zuerst, gemeldete Fehler
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
-## 1. Stand (01.11.2026)
+## 1. Stand (01.11.2026, abends)
+**Neu am 01.11.2026, zweiter Teil: alle geplanten Pakete umgesetzt** (Details in `docs/PLAN.md`, „Stand 01.11.2026, abends“):
+- **Insel-Garten** (Ella, Kapitel 1, Etappe E6): säen, gießen über echte Tage, ernten mit Sachunterricht-Fragen; die Beete wachsen auf der Insel sichtbar mit.
+- **Tierpflege-Station** (Bruni, Kapitel 2): acht Wildtiere versorgen und am nächsten Tag auswildern, Sonderfall Rehkitz.
+- **Bäckerei Benno** (Kapitel 3): Bestellungen packen, Preise, passend bezahlen, Wechselgeld – Geld je Klasse.
+- **Verbessert:**
+  - Schach: Bauern-Rennen und Tipp.
+  - Duell: Rückblick auf die falsch beantworteten Aufgaben.
+  - Gefühle: Hilfe-Karte mit 116 111.
+  - Atelier: Spiegel-Malen.
+- **NA-60 Teil 2:**
+  - Kürzere Szenen und größere Schrift für Vorschule und Kl. 1.
+  - „Heute für dich“ schlägt Kindern, die die Klasse wiederholen, das wackeligste Fach vor.
+- **Aufräumen:** `shared/sprachkurs.js` für Englisch/Sorbisch; neue Tests `tier`, `schach`, `gefuehle`, `duell`, `garten`, `baeckerei`, `tierstation`, `verbessert`, `na60b`.
+
 **Neu am 01.11.2026: Code-Review mit Korrekturen** (Details in `docs/PLAN.md`, „Stand 01.11.2026“; Tests `robust` und `offline`):
 - Datenverlust behoben: Die Sicherung in IndexedDB wurde bei leerem localStorage überschrieben. Ein gelöschtes Kind kam zurück. Zwei Tabs überschrieben sich.
 - „Erst lernen“ dichter: „PIN vergessen?“ nur noch mit Zufallsaufgabe nach 60 s und Hinweis an die Eltern. Die Eltern-Anmeldung gilt 15 Minuten.
@@ -84,20 +98,26 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
   nur der Auftraggeber mit `quellen/geschenk-erzeugen.js`.
 - **Ferien:** `FERIEN_SN` in `shared/core.js` reicht bis Sommer 2030 und muss danach nachgetragen werden. Die Termine stammen aus der Websuche
   (sachsen.de war nicht erreichbar) und sollten einmal gegengeprüft werden.
-- **NA-60 Teil 2 fehlt:**
-  - Ton und Story nach Alter: kürzere Szenen für Jüngere brauchen eigene Kurzfassungen.
-  - Kl. 1 mehr Bilder und kürzere Texte, ab Kl. 3 mehr Text.
-  - Gezielte Lücken nach dem Wiederholen in „Heute für dich“.
+- **NA-60:** Kürzere Szenen gibt es nur über `fuerAeltere` (4 Blasen markiert). Mehr Text ab Kl. 3 in den Inhalten selbst ist nicht umgesetzt.
+- **Ballon-Wiese und Schatz-Strand** zeigen weiter „🚧“. Vorschlag: Wörter-Angeln und Rhythmus-Boot (siehe unten).
 - **Schreibschrift:** Vereinfachte und Lateinische Ausgangsschrift fehlen.
 - **Übersetzungen:** nur russische Entwürfe, Ukrainisch u. a. fehlen.
 - **Länderprofile:** Nur Sachsen ist da (NA-47).
 - **Insel-Tests:** `tutorial`, `prolog`, `kapitel`, `geschenk` und `geburtstag` allein laufen lassen; unter Last wackeln sie.
-- **Aus dem Review offen (Wartbarkeit):** gemeinsames Modul Englisch/Sorbisch, Fachdaten nach Bedarf laden, feste Wartezeiten in Tests, Tests für Tier,
-  Schach, Gefühle, Duell; `dev/` per Action bauen statt einchecken (Entscheidung des Auftraggebers, braucht Umstellung von GitHub Pages).
+- **Aus dem Review offen (Wartbarkeit):**
+  - Fachdaten im Elternbereich nach Bedarf laden (~2 MB Skripte; braucht asynchrones Zeichnen der Lernstand-Teile).
+  - Feste Wartezeiten in älteren Tests ersetzen.
+  - Weitere gemeinsame Teile der Sprachkurse zusammenführen (Schritt-Darstellung).
+  - `dev/` per Action bauen statt einchecken: Entscheidung des Auftraggebers, braucht eine Umstellung von GitHub Pages.
 
 ### Offene Fragen an den Auftraggeber
 - **iPad-10-Test (in /dev), bisher nicht erfolgt.** Bitte ansehen:
-  0. Neu 01.11.: Elternbereich nach 15 Minuten wieder mit PIN; „PIN vergessen?“ (Zufallsaufgabe nach einer Minute); Schrift sieht aus wie vorher.
+  0. Neu 01.11.:
+     - Elternbereich nach 15 Minuten wieder mit PIN; „PIN vergessen?“ (Zufallsaufgabe nach einer Minute); Schrift sieht aus wie vorher.
+     - Insel: Garten, Tierpflege-Station und Bäckerei an den alten Spielorten.
+       In /dev/test sind alle offen; in /dev öffnen sie mit Kapitel 1, 2 und 3.
+     - Garten über zwei Tage gießen; Bäckerei in Kl. 1 und Kl. 3; Tierstation mit eigenem Tier.
+     - Schach: Bauern-Rennen; Gefühle: Hilfe-Karte; Atelier: „Spiegeln“.
   1. Vorschul-Startseite: ein Kind mit Stufe „Vorschule“ anlegen.
   2. Vorlesen nur über 🔊: reicht das, ist der Knopf gut zu finden?
   3. „Heute für dich“ und Tagesaufgaben je Klasse.
@@ -114,19 +134,13 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - Muttersprachlerinnen und Muttersprachler für ru/uk; Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (in dieser Reihenfolge)
-1. **Insel-Garten** (3D „Rund“, neuer Ort auf der Insel):
-   - Säen, gießen und ernten über echte Tage, mit Sachunterricht-Bezug (Pflanzen, Wetter, Jahreszeiten; Eule Ella).
-   - Schwierigkeit nach Alter/Klasse.
-   - Nichts geht verloren und es gibt keine Fristen: Pflanzen welken nicht, sie warten nur.
-   - Belegt einen der „🚧 Hier entsteht etwas Neues“-Orte, Test-Haken, Eintrag in `SEITEN_3D`, Leistung auch in Stufe „einfach“ prüfen.
-   - Eigener Test mit echtem Durchklicken über mehrere Tage (`__testJetzt`).
-   - Etappe E6 auf das neue Spiel umstellen.
-2. **Bäckerei Benno:**
-   - Geld und Rechnen mit Bezug zum Matheweg (Kl. 1 bis 10 €, Kl. 2 bis 100 €, ab Kl. 3 mit Komma).
-   - Öffnet **Kapitel 3** im Kapitelbogen `KAPITEL` (ersetzt „Bennos Brücke“ am Bauplatz).
-3. **Tierpflege-Station:** füttern, pflegen, Tierwissen (SU-Lernziele), verbunden mit dem eigenen Tier.
-4. **Schach, Kopfrechen-Duell, Gefühle und Atelier deutlich verbessern.** Vorher den Auftraggeber fragen, was dort am meisten stört.
-5. **NA-60 Teil 2:** Ton und Story nach Alter, Lesestärke je Klasse, Lücken nach dem Wiederholen.
+1. **iPad-Rückmeldung** zu Garten, Bäckerei und Tierstation einarbeiten: Fehler zuerst, je mit Test.
+2. **Wörter-Angeln** (Katalog Prio 2, Kapitel 2, Fipsi) auf dem Platz des Schatz-Strands:
+   - Fische mit Bildern angeln und dem richtigen Artikel-Eimer geben.
+   - Die Wörter kommen aus dem Wortschatz-Kern (DaZ).
+3. **Rhythmus-Boot** (Paula, Kapitel 4) auf dem Platz der Ballon-Wiese: im Takt tippen. Dazu Kapitel 4 im Kapitelbogen.
+4. **Elternbereich schneller:** Fachdaten erst laden, wenn der Reiter „Lernstand“ geöffnet wird.
+5. **Insel-Garten erweitern** (nur wenn gewünscht): Ernte in der Bäckerei verbacken (Möhrenkuchen) als Verbindung der Orte.
 
 Jederzeit dazwischen: iPad-Rückmeldung einarbeiten (Fehler zuerst), Sorbisch-Korrekturen in `spiele/sorbisch/lektionen.js` und `geprueft.js`,
 den öffentlichen QR-Schlüssel in `OEFFENTLICH` eintragen, sobald er da ist. Arbeitsliste für den Lehrplan bleibt `docs/SACHSEN-SCHULJAHR.md`.

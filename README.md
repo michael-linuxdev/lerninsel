@@ -91,6 +91,9 @@ spiele/atelier/, gefuehle/, schach/  Atelier, Gefühle, Schach
 spiele/album/           Stickeralbum und Inselchronik
 spiele/anziehen/        Kleiderschrank (teile.js, figur.js)
 spiele/tier/            Haustier
+spiele/garten/          Insel-Garten mit Ella (säen, gießen über Tage, ernten; Logik in shared/garten.js)
+spiele/baeckerei/       Bäckerei Benno (Geld und Rechnen je Klasse, Kapitel 3)
+spiele/tierstation/     Tierpflege-Station mit Bruni (Wildtiere versorgen und auswildern, Kapitel 2)
 spiele/ich/             Meine Ecke (Reiter Heute, Meine Woche, Ich kann, Meine Sachen)
 spiele/eltern/          Elternbereich mit PIN und Reitern
 spiele/welt3d/          3D-Insel (gebaut, nicht von Hand ändern)
