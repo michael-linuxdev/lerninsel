@@ -5,7 +5,7 @@
   const S = window.Spielwelt; if (!S) return;
   const pad = (n) => String(n).padStart(2, "0");
   const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  const heute = () => window.__heute || iso(new Date());
+  const heute = () => (S.heute ? S.heute() : window.__heute || iso(new Date()));
   const lade = () => Object.assign({ momente: [] }, S.lade("familie") || {});
   function merke(art, text) {
     const d = lade(); d.momente.push({ a: art, d: heute(), t: String(text || "").slice(0, 90) }); d.momente = d.momente.slice(-80); S.speichere("familie", d);

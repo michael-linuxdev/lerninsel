@@ -257,7 +257,7 @@
     if (!window.Zeit || !window.Zeit.verlauf) return "";
     const v = window.Zeit.verlauf(), tage = [];
     for (let i = 6; i >= 0; i--) {
-      const d = new Date(); d.setDate(d.getDate() - i);
+      const d = new Date(window.__jetzt || Date.now()); d.setDate(d.getDate() - i);
       const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
       tage.push(Object.assign({ tag: iso, lern: 0, aufgaben: 0, spiel: 0, name: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"][d.getDay()] }, v.find(x => x.tag === iso) || {}));
     }
@@ -306,7 +306,7 @@
     const esc2 = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     const d = S.lade("gefuehle"); if (!d) return "";
     const tage = [], E = { froh: "😊", ruhig: "😌", muede: "🥱", traurig: "😢", wuetend: "😠", aengstlich: "😟", aufgeregt: "🤩" };
-    for (let i = 6; i >= 0; i--) { const t = new Date(); t.setDate(t.getDate() - i); tage.push(`${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`); }
+    for (let i = 6; i >= 0; i--) { const t = new Date(window.__jetzt || Date.now()); t.setDate(t.getDate() - i); tage.push(`${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`); }
     const bew = tage.reduce((n, t) => n + ((d.bewegung || {})[t] || 0), 0);
     const gef = d.teilen ? tage.filter(t => (d.tage || {})[t]).map(t => `${E[d.tage[t]] || "❔"} ${t.slice(8)}.${t.slice(5, 7)}.`).join(" · ") : "";
     return `<h3 style="margin:10px 0 6px;font-size:1.05rem">💗 Gefühle und Bewegung</h3>
@@ -625,7 +625,7 @@
     });
   }
 
-  const heuteIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+  const heuteIso = () => { const d = new Date(window.__jetzt || Date.now()); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
   const wannWieder = (f) => !f.faellig || f.faellig <= heuteIso() ? "· heute dran" : `· wieder am ${f.faellig.slice(8)}.${f.faellig.slice(5, 7)}.`;
 
   // ---------- Übersicht ----------

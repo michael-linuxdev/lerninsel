@@ -55,8 +55,10 @@
     document.querySelectorAll(".face").forEach(x => x.classList.toggle("an", x === b));
     $("antwort").hidden = false; $("antwort-text").textContent = g[4]; sprich(g[4]);
     $("antwort-knoepfe").innerHTML = ["traurig", "wuetend", "aengstlich", "aufgeregt"].includes(g[0]) ? `<button class="knopf haupt" data-zu="ruhe">🌬️ Ruhig werden</button>` : g[0] === "muede" ? `<button class="knopf haupt" data-zu="bewegen">🤸 Bewegungs-Minute</button>` : "";
+    $("hilfe-kurz").hidden = !["traurig", "aengstlich", "wuetend"].includes(g[0]);   // Vertrauenspersonen und Nummer gegen Kummer (116 111)
     $("antwort-knoepfe").querySelectorAll("[data-zu]").forEach(x => x.addEventListener("click", () => { zeige(x.dataset.zu); if (x.dataset.zu === "bewegen") bewegen(); }));
   });
+  { const hv = $("hilfe-vorlesen"); if (hv) hv.addEventListener("click", () => { if (SP) { SP.knopf && SP.knopf(); SP.sprich($("hilfe-karte").innerText.replace(/[🤝📞]/gu, "").replace("116 111", "1 1 6 1 1 1").replace(/Vorlesen$/, "")); } }); }
   $("teilen").addEventListener("change", () => { const d = lade(); d.teilen = $("teilen").checked; speichere(d); S.ton("tipp"); });
 
   // ---------- Ballon-Atmen ----------

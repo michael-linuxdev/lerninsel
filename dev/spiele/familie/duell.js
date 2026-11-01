@@ -25,7 +25,7 @@
   const kindStufe = () => Math.max(1, Math.min(4, S.kind().klasse || 2));
   let erwStufe = 5, laeuft = false, zeit = 0, timer = null;
   const spieler = {
-    kind: { punkte: 0, sperre: 0, a: null, stufe: kindStufe(), el: $("kind") },
+    kind: { punkte: 0, sperre: 0, a: null, stufe: kindStufe(), el: $("kind"), knifflig: [] },
     erw: { punkte: 0, sperre: 0, a: null, stufe: erwStufe, el: $("erw") }
   };
   function zeige(sp) {
@@ -43,6 +43,7 @@
       if (s.punkte >= ZIEL) return ende();
       zeige(sp);
     } else {
+      if (sp === "kind" && !s.knifflig.some(x => x.t === s.a.t)) s.knifflig.push({ t: s.a.t, l: s.a.l });   // für den Rückblick am Ende
       S.ton("nein"); knopf.classList.add("falsch"); s.sperre = Date.now() + 1000; s.el.classList.add("pause");
       setTimeout(() => { s.el.classList.remove("pause"); }, 1000);
     }
@@ -51,7 +52,7 @@
 
   function start() {
     spieler.kind.stufe = kindStufe(); spieler.erw.stufe = erwStufe;
-    ["kind", "erw"].forEach(sp => { spieler[sp].punkte = 0; spieler[sp].sperre = 0; zeige(sp); });
+    ["kind", "erw"].forEach(sp => { spieler[sp].punkte = 0; spieler[sp].sperre = 0; spieler[sp].knifflig = []; zeige(sp); });
     zeit = 0; laeuft = true; $("start").hidden = true; $("ende").hidden = true;
     clearInterval(timer); timer = setInterval(() => { zeit++; $("uhr").textContent = Math.max(0, DAUER - zeit); if (zeit >= DAUER) ende(); }, 1000);
     $("uhr").textContent = DAUER;
@@ -61,6 +62,10 @@
     const k = spieler.kind.punkte, e = spieler.erw.punkte, name = S.profil.name || "Kind";
     const text = k > e ? `🏆 ${name} gewinnt ${k} : ${e}!` : k < e ? `Die Erwachsenen gewinnen ${e} : ${k} – Revanche?` : `Unentschieden ${k} : ${e}!`;
     $("ende-text").textContent = text; $("ende").hidden = false; S.ton("juhu");
+    // Rückblick (01.11.2026): die Aufgaben, bei denen das Kind danebenlag – zum gemeinsamen Nachrechnen, ohne Wertung
+    const kn = (spieler.kind.knifflig || []).slice(0, 4), rb = $("rueckblick");
+    rb.hidden = !kn.length;
+    rb.innerHTML = kn.length ? `<p style="margin:6px 0 4px;font-weight:600">Zum gemeinsamen Nachrechnen:</p><p class="knifflig" style="font-size:1.4rem;font-weight:700;margin:0 0 8px">${kn.map(x => `${x.t} = ${x.l}`).join(" &nbsp;·&nbsp; ")}</p>` : "";
     if (window.Familie) Familie.merke("duell", `${name} ${k} : ${e} Erwachsene`);
     if (C) C.ereignis("mathe-runde");
   }

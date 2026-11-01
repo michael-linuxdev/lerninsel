@@ -3,7 +3,9 @@
 (function () {
   const S = window.Spielwelt, C = window.Charakter, R = window.Schach, SP = window.Sprache, $ = (id) => document.getElementById(id);
   const ZEICHEN = { K: "♚", Q: "♛", R: "♜", B: "♝", N: "♞", P: "♟" };
-  const daten = () => Object.assign({ lektionen: {}, raetsel: {}, siege: {} }, S.lade("schach") || {});
+  const daten = () => Object.assign({ lektionen: {}, raetsel: {}, siege: {}, rennen: 0 }, S.lade("schach") || {});
+  // Bauern-Rennen (01.11.2026, für Jüngere): nur Bauern; wer zuerst die letzte Reihe erreicht (oder der Gegner nicht mehr ziehen kann), gewinnt
+  const RENNEN = "wPa2 wPb2 wPc2 wPd2 wPe2 wPf2 wPg2 wPh2 bPa7 bPb7 bPc7 bPd7 bPe7 bPf7 bPg7 bPh7";
   const speichere = (d) => S.speichere("schach", d);
   const sprich = (t) => { if (SP && SP.sprich) SP.sprich(t, "de-DE"); };
   const tilda = (t) => { $("tilda-text").textContent = t; };
@@ -62,6 +64,7 @@
       return zeichne();
     }
     if (modus === "raetsel") return pruefeRaetsel();
+    if (modus === "rennen") return rennenZug();
     amZug = R.gegner(amZug); zeichne(); nachZug();
   }
   function nachZug() {
@@ -91,7 +94,41 @@
 
   // ---------- Modi starten ----------
   function zeigeBereich(n) { ["auswahl", "spiel"].forEach(v => { $(v).hidden = v !== n; }); scrollTo(0, 0); }
-  function neuesBrett(stellung, m) { b = R.aufstellen(stellung); amZug = R.WEISS; wahl = null; ziele = []; letzter = null; sterne = new Set(); fertig = false; modus = m; $("nochmal").hidden = true; $("brett").classList.remove("gedreht"); $("drehen-zeile").hidden = m !== "zwei"; zeigeBereich("spiel"); }
+  function neuesBrett(stellung, m) { b = R.aufstellen(stellung); amZug = R.WEISS; wahl = null; ziele = []; letzter = null; sterne = new Set(); fertig = false; modus = m; $("nochmal").hidden = true; $("tipp").hidden = !(m === "ki" || m === "rennen"); $("brett").classList.remove("gedreht"); $("drehen-zeile").hidden = m !== "zwei"; zeigeBereich("spiel"); }
+  // ---------- Bauern-Rennen ----------
+  function rennenSieger() { if (b.includes("Q")) return R.WEISS; if (b.includes("q")) return R.SCHWARZ; return null; }
+  function rennenZug() {
+    let sieger = rennenSieger();
+    if (!sieger) { amZug = R.SCHWARZ; if (!R.zuege(b, R.SCHWARZ).length) sieger = R.WEISS; }
+    zeichne(); if (sieger) return rennenEnde(sieger);
+    denkt = true; tilda("Tilda überlegt … 🐢");
+    setTimeout(() => {
+      const z = R.kiZug(b, R.SCHWARZ, 1); denkt = false;
+      if (z) { b = R.ziehe(b, z); letzter = z; }
+      amZug = R.WEISS; let s = rennenSieger(); if (!s && !R.zuege(b, R.WEISS).length) s = R.SCHWARZ;
+      zeichne(); if (s) return rennenEnde(s);
+      tilda("Du bist dran! Bauern ziehen geradeaus und schlagen schräg.");
+    }, 350);
+  }
+  function rennenEnde(sieger) {
+    fertig = true; zeichne(); $("nochmal").hidden = false;
+    if (sieger === R.WEISS) {
+      const d = daten(), erster = !d.rennen; d.rennen = (d.rennen || 0) + 1; speichere(d);
+      if (erster) { S.gibSterne(1); if (window.Lernfunde) Lernfunde.merke({ fach: "schach", art: "rennen", e: "🏁", text: "Schach: Bauern-Rennen gewonnen – Bauern ziehen geradeaus und schlagen schräg", schluessel: "rennen" }); }
+      if (C && C.gib) C.gib("mathe", 1);
+      tilda(erster ? "Geschafft! Dein Bauer ist angekommen – dafür gibt es einen Stern ⭐." : "Geschafft! Dein Bauer ist angekommen! 🎉"); S.ton("juhu");
+    } else { tilda("Diesmal war Tilda schneller. Langsam und klug – nochmal?"); S.ton("tipp"); }
+  }
+  function starteRennen() {
+    neuesBrett(RENNEN, "rennen"); $("spiel-titel").textContent = "🏁 Bauern-Rennen";
+    tilda("Bring einen Bauern ans andere Ende! Bauern ziehen geradeaus – am Anfang auch zwei Felder – und schlagen schräg."); zeichne();
+  }
+  // Tipp (gegen Tilda und im Rennen): Tilda zeigt einen guten Zug
+  $("tipp").addEventListener("click", () => {
+    if (fertig || denkt || amZug !== R.WEISS) return;
+    const z = R.kiZug(b, R.WEISS, 2); if (!z) return;
+    wahl = z.von; ziele = [z.nach]; S.ton("tipp"); zeichne(); tilda(`Wie wäre es mit ${R.name(z.von)} nach ${R.name(z.nach)}? Tippe auf das grüne Feld.`);
+  });
   function starteLektion(l) {
     lektion = l; neuesBrett(l.stellung, "lernen");
     sterne = new Set(l.sterne.map(R.feld));
@@ -127,7 +164,7 @@
   function starteZwei() {
     neuesBrett(R.START, "zwei"); $("spiel-titel").textContent = "👨‍👧 Schach zu zweit"; tilda("Weiß fängt an. Danach seid ihr abwechselnd dran."); zeichne();
   }
-  $("nochmal").addEventListener("click", () => { S.ton("tipp"); if (modus === "lernen") { const i = LEKTIONEN.indexOf(lektion); starteLektion(LEKTIONEN[(i + 1) % LEKTIONEN.length]); } else if (modus === "raetsel") starteRaetsel((raetsel + 1) % RAETSEL.length); else if (modus === "ki") starteKi(kiStufe); else starteZwei(); });
+  $("nochmal").addEventListener("click", () => { S.ton("tipp"); if (modus === "lernen") { const i = LEKTIONEN.indexOf(lektion); starteLektion(LEKTIONEN[(i + 1) % LEKTIONEN.length]); } else if (modus === "raetsel") starteRaetsel((raetsel + 1) % RAETSEL.length); else if (modus === "ki") starteKi(kiStufe); else if (modus === "rennen") starteRennen(); else starteZwei(); });
   $("zurueck").addEventListener("click", () => { S.ton("tipp"); auswahl(); });
   $("drehen").addEventListener("change", () => $("brett").classList.toggle("gedreht", $("drehen").checked && amZug === R.SCHWARZ));
 
@@ -136,12 +173,14 @@
     $("lektionen").innerHTML = LEKTIONEN.map((l, i) => `<button class="kachel ${d.lektionen[l.id] ? "fertig" : ""}" data-l="${i}"><span class="e">${l.e}</span>${l.name}${d.lektionen[l.id] ? "<small>✅ gelernt</small>" : ""}</button>`).join("");
     $("raetsel").innerHTML = RAETSEL.map((r, i) => `<button class="kachel klein ${d.raetsel[i] ? "fertig" : ""}" data-r="${i}"><span class="e">🧩</span>${i + 1}${d.raetsel[i] ? " ✅" : ""}</button>`).join("");
     $("ki-zahl").textContent = Object.keys(d.siege).length ? `Siege gegen Tilda: ${Object.entries(d.siege).map(([s, n]) => `${["", "leicht", "mittel", "schwer"][s]} ${n}×`).join(", ")}` : "";
+    $("rennen-zahl").textContent = d.rennen ? `Bauern-Rennen gewonnen: ${d.rennen}×` : "";
     tilda(`Hallo ${S.profil.name || "du"}! Ich bin Tilda, die Schach-Schildkröte. Langsam und klug gewinnt! Was möchtest du machen?`);
   }
   $("lektionen").addEventListener("click", e => { const k = e.target.closest("[data-l]"); if (k) { S.ton("tipp"); starteLektion(LEKTIONEN[+k.dataset.l]); } });
   $("raetsel").addEventListener("click", e => { const k = e.target.closest("[data-r]"); if (k) { S.ton("tipp"); starteRaetsel(+k.dataset.r); } });
   document.querySelectorAll("[data-ki]").forEach(k => k.addEventListener("click", () => { S.ton("tipp"); starteKi(+k.dataset.ki); }));
   $("zu-zweit").addEventListener("click", () => { S.ton("tipp"); starteZwei(); });
+  $("rennen").addEventListener("click", () => { S.ton("tipp"); starteRennen(); });
   auswahl();
-  window.__schach = { starteLektion: (i) => starteLektion(LEKTIONEN[i]), starteRaetsel, starteKi, zug, get brett() { return b; }, LEKTIONEN, RAETSEL };
+  window.__schach = { starteLektion: (i) => starteLektion(LEKTIONEN[i]), starteRaetsel, starteKi, starteRennen, zug, stellung: (t) => { b = R.aufstellen(t); zeichne(); }, get brett() { return b; }, LEKTIONEN, RAETSEL };
 })();

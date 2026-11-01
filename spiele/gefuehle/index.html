@@ -60,6 +60,9 @@
   .folge { background: #FFF6D6; border-radius: 20px; padding: 14px; font-size: 1.15rem; text-align: left; max-width: 620px; margin: 10px auto; }
   .impuls { background: #E3F7EF; border-radius: 16px; padding: 10px 14px; margin: 10px auto; max-width: 620px; text-align: left; }
   .geschichten { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 10px; }
+  .hilfe-karte p { font-size: 1.12rem; line-height: 1.45; margin: 0 0 10px; }
+  .telefon { display: inline-block; background: #FFF3C4; border-radius: 999px; padding: 2px 12px; font-weight: 700; color: inherit; text-decoration: none; white-space: nowrap; }
+  .hilfe-kurz { font-size: 1.1rem; margin: 10px 0 0; }
 </style>
 </head>
 <body>
@@ -77,6 +80,13 @@
       <button class="kachel k4" data-oeffne="bewegen"><span class="e">🤸</span>Bewegungs-Minute<small>Mach mit Fipsi mit!</small></button>
       <button class="kachel k5" data-oeffne="miteinander"><span class="e">🤝</span>Miteinander<small>Was würdest du tun?</small></button>
     </div>
+    <div class="karte hilfe-karte" id="hilfe-karte" style="margin-top:16px">
+      <h2>🤝 Wenn es dir nicht gut geht</h2>
+      <p>Sprich mit einem Erwachsenen, dem du vertraust: Mama, Papa, Oma, Opa, deine Lehrerin oder dein Lehrer. Du bist nicht allein.</p>
+      <p>Du kannst auch kostenlos bei der <b>Nummer gegen Kummer</b> anrufen: <a class="telefon" href="tel:116111">📞 116 111</a> (Montag bis Samstag, 14 bis 20 Uhr). Dort hört dir jemand zu – du musst deinen Namen nicht sagen.</p>
+      <p><b>Dein Körper gehört dir.</b> Wenn dich etwas oder jemand komisch fühlen lässt, darfst du Nein sagen und es weitererzählen.</p>
+      <button class="knopf" id="hilfe-vorlesen" aria-label="Vorlesen">🔊 Vorlesen</button>
+    </div>
   </section>
 
   <section class="ansicht" id="barometer-ansicht" hidden>
@@ -84,7 +94,7 @@
       <h2>Wie fühlst du dich heute?</h2>
       <p class="klein">Es gibt kein richtig oder falsch. Alle Gefühle sind okay.</p>
       <div class="faces" id="faces"></div>
-      <div class="antwort" id="antwort" hidden><div class="bruni-zeile"><div class="bruni" aria-hidden="true" style="width:80px;height:84px"></div><p id="antwort-text"></p></div><div id="antwort-knoepfe"></div></div>
+      <div class="antwort" id="antwort" hidden><div class="bruni-zeile"><div class="bruni" aria-hidden="true" style="width:80px;height:84px"></div><p id="antwort-text"></p></div><div id="antwort-knoepfe"></div><p class="hilfe-kurz" id="hilfe-kurz" hidden>Du kannst auch kostenlos die <b>Nummer gegen Kummer</b> anrufen: <a class="telefon" href="tel:116111">📞 116 111</a></p></div>
       <div id="verlauf"></div>
       <label class="teilen"><input type="checkbox" id="teilen"> Meine Eltern dürfen sehen, wie es mir ging</label>
       <button class="knopf" data-zu="start">⬅️ Zurück zu Bruni</button>

@@ -97,6 +97,10 @@
   .dlg .knopf { margin: 6px; min-height: 58px; }
   .wissen-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 18px 16px 0; }
   .wissen-links .knopf { text-decoration: none; min-height: 56px; display: inline-flex; align-items: center; }
+  /* Spiegel-Malen (01.11.2026): gestrichelte Mittellinie, alles wird gespiegelt mitgemalt */
+  .leinwand-rahmen { position: relative; }
+  .leinwand-rahmen.spiegel::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; border-left: 3px dashed rgba(123,85,184,.55); pointer-events: none; }
+  #spiegeln[aria-pressed="true"] { background: #EADFFF; box-shadow: inset 0 0 0 3px #7B55B8; }
 </style>
 </head>
 <body>
@@ -125,6 +129,7 @@
         <div class="aktionen">
           <button class="knopf" id="mal-zurueck">⬅️ Zurück</button>
           <button class="knopf" id="zurueck-schritt">↩️ Rückgängig</button>
+          <button class="knopf" id="spiegeln" aria-pressed="false">🦋 Spiegeln</button>
           <button class="knopf" id="neu">🧽 Neu</button>
           <button class="knopf haupt" id="fertig">✅ Fertig – aufhängen</button>
         </div>

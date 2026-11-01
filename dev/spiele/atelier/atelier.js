@@ -58,7 +58,10 @@
   const GROESSEN = [6, 16, 34];
   const STEMPEL = ["⭐", "❤️", "🌸", "🦋", "🐾", "☀️", "🌙", "🍀", "🐟", "🎈", "🍎", "🌲"];
   let farbe = FARBEN[3], werkzeug = "pinsel", groesse = 1, stempel = STEMPEL[0], hue = 0;
-  let undo = [], geaendert = false, bildId = null, letzter = null;
+  let undo = [], geaendert = false, bildId = null, letzter = null, spiegel = false;
+  // Spiegel-Malen: Pinsel, Regenbogen, Radierer und Stempel malen spiegelbildlich mit (Symmetrie, Kunst/Mathe)
+  $("spiegeln").addEventListener("click", () => { spiegel = !spiegel; $("spiegeln").setAttribute("aria-pressed", String(spiegel)); $("rahmen").classList.toggle("spiegel", spiegel); S.ton("tipp"); });
+  const sp = ([x, y]) => [W - x, y];
 
   $("farben").innerHTML = FARBEN.map(f => `<button class="farbe" data-f="${f}" style="background:${f}" aria-label="Farbe ${f}"></button>`).join("");
   $("werkzeuge").innerHTML = WERKZEUGE.map(([id, e, t]) => `<button class="wz" data-w="${id}" aria-label="${t}">${e}<small>${t}</small></button>`).join("");
@@ -95,8 +98,9 @@
     g.lineCap = "round"; g.lineJoin = "round"; g.lineWidth = breite;
     if (werkzeug === "regenbogen") { hue = (hue + 4) % 360; g.strokeStyle = `hsl(${hue} 90% 58%)`; } else g.strokeStyle = werkzeug === "radierer" ? "#FFFFFF" : farbe;
     g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0] + 0.01, b[1]); g.stroke();
+    if (spiegel) { const a2 = sp(a), b2 = sp(b); g.beginPath(); g.moveTo(a2[0], a2[1]); g.lineTo(b2[0] + 0.01, b2[1]); g.stroke(); }
   }
-  function stempeln([x, y]) { const gr = [44, 80, 130][groesse]; g.font = `${gr}px sans-serif`; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(stempel, x, y); }
+  function stempeln([x, y]) { const gr = [44, 80, 130][groesse]; g.font = `${gr}px sans-serif`; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(stempel, x, y); if (spiegel) g.fillText(stempel, W - x, y); }
   cv.addEventListener("pointerdown", (e) => {
     e.preventDefault(); const p = punkt(e); merkeSchritt(); geaendert = true;
     if (werkzeug === "eimer") { fuelle(Math.round(p[0]), Math.round(p[1]), farbe); S.ton("tipp"); return; }
@@ -267,6 +271,6 @@
     $("frage-dlg").hidden = false;
   }
 
-  window.__atelier = { fuelle, oeffneMalen, sichern, g, AUFTRAEGE, zeige };
+  window.__atelier = { fuelle, oeffneMalen, sichern, g, AUFTRAEGE, zeige, spiegel: () => spiegel };
   if (/[?&]musik\b/.test(location.search)) zeige("musik"); else start();
 })();

@@ -1,6 +1,7 @@
 // Haustier-Pflege: Ei, Wärme, Schlüpfen, Satt/Freude/Freundschaft, Leckerli, Zubehör.
 // Daten in profil.daten.tier. Nie Strafe: Werte sinken langsam, das Tier wird nur hungrig oder müde.
 (function () {
+  const jetzt = () => window.__jetzt || Date.now();   // Testuhr beachten
   const S = window.Spielwelt, T = window.Tiere;
   if (!S || !T) return;
   const WAERME_ZIEL = 3, STUFE_AB = [0, 25, 70];
@@ -8,14 +9,14 @@
 
   function lade() {
     const d = Object.assign({ phase: null, ei: null, waerme: 0, eiGewaermt: null, art: null, farbe: 0, name: "",
-      freundschaft: 0, satt: 70, freude: 70, zeit: Date.now(), besitz: {}, traegt: {}, leckerli: 3, heute: null }, S.lade("tier") || {});
+      freundschaft: 0, satt: 70, freude: 70, zeit: jetzt(), besitz: {}, traegt: {}, leckerli: 3, heute: null }, S.lade("tier") || {});
     if (!d.heute || d.heute.datum !== heute()) d.heute = { datum: heute(), fs: 0, spiel: 0, streichel: 0 };
     // Werte sinken mit der Zeit (pro Tag etwa ein Drittel), nie unter 0
-    const tage = Math.max(0, (Date.now() - (d.zeit || Date.now())) / 86400000);
+    const tage = Math.max(0, (jetzt() - (d.zeit || jetzt())) / 86400000);
     if (d.phase === "tier" && tage > 0.01) {
       d.satt = Math.max(0, d.satt - 35 * tage); d.freude = Math.max(0, d.freude - 30 * tage);
     }
-    d.zeit = Date.now();
+    d.zeit = jetzt();
     return d;
   }
   const speichere = (d) => S.speichere("tier", d);
@@ -74,7 +75,7 @@
     },
     ausdruck(d) {
       if (d.satt < 25 || d.freude < 20) return "traurig";
-      const h = new Date().getHours();
+      const h = new Date(jetzt()).getHours();
       if (h >= 21 || h < 6) return "schlaeft";
       return "froh";
     },
@@ -82,10 +83,10 @@
       const n = d.name || "Dein Tier";
       if (d.satt < 25) return `${n} hat Hunger! Mach eine Tagesaufgabe, dann gibt es Leckerli.`;
       if (d.freude < 20) return `${n} ist ein bisschen traurig. Spielst du mit ihm?`;
-      const h = new Date().getHours();
+      const h = new Date(jetzt()).getHours();
       if (h >= 21 || h < 6) return `Pssst … ${n} schläft. Gute Nacht!`;
       if (d.satt > 85 && d.freude > 85) return `${n} ist rundum glücklich!`;
-      return ["Schön, dass du da bist!", "Spielen wir?", "Ich habe dich vermisst!", "Hast du heute schon gerechnet?", "Kraul mich mal!"][new Date().getDate() % 5];
+      return ["Schön, dass du da bist!", "Spielen wir?", "Ich habe dich vermisst!", "Hast du heute schon gerechnet?", "Kraul mich mal!"][new Date(jetzt()).getDate() % 5];
     }
   };
   window.TierPflege = Pflege;
