@@ -944,7 +944,58 @@ const ORT_BAU = {
     return g;
   }
 };
+// Seit 01.11.2026 stehen an den Plätzen der ausgeblendeten Minispiele die neuen Orte: Insel-Garten, Bäckerei Benno, Tierpflege-Station.
+// Der Garten zeigt die echten Beete des Kindes (wächst mit); Bäckerei und Station sind feste Häuschen.
+const NEU_ORT = S.MINISPIELE_AUS ? { lauf: "garten", kart: "baeckerei", bau: "tierstation" } : {};
+const NEU_BAU = {
+  garten() {
+    const g = new Group(), G = window.Garten, d = G ? G.lade() : { beete: [] };
+    const beete = d.beete.slice(0, 3);
+    [-1.05, 0, 1.05].forEach((bx, i) => {
+      g.add(setze(teil(new BoxGeometry(0.9, 0.22, 1.5), "#7A4A2A", { dicke: 1.03 }), bx, 0.11, 0));
+      const z = G ? G.zustand(beete[i] || null) : { art: "leer" };
+      if (z.art === "leer" || z.art === "samen") return;
+      const h = z.art === "keim" ? 0.25 : z.art === "pflanze" ? 0.5 : 0.65;
+      [-0.4, 0.15].forEach(pz => {
+        g.add(setze(teil(new ConeGeometry(0.18, h, 7), "#4FAF4F", { dicke: 1.08 }), bx, 0.22 + h / 2, pz));
+        if (z.art === "reif") g.add(setze(teil(kugel(0.16, 12, 8), z.p.farbe), bx, 0.25 + h, pz));
+      });
+    });
+    // kleiner Zaun und Gießkanne
+    [-1.6, 1.6].forEach(fx => g.add(setze(teil(new BoxGeometry(0.08, 0.6, 1.8), "#E9D3A6", { dicke: 1.05 }), fx, 0.3, 0)));
+    const kanne = teil(new CylinderGeometry(0.16, 0.2, 0.32, 10), "#3AA0E0"); g.add(setze(kanne, 1.35, 0.16, 0.95));
+    return g;
+  },
+  baeckerei() {
+    const g = new Group();
+    g.add(setze(teil(new BoxGeometry(2.0, 1.4, 1.5), "#FFE3B8", { dicke: 1.03 }), 0, 0.7, 0));
+    const dach = teil(new ConeGeometry(1.6, 0.9, 4), "#C9573A", { dicke: 1.04 }); dach.rotation.y = Math.PI / 4; g.add(setze(dach, 0, 1.85, 0));
+    g.add(setze(teil(new BoxGeometry(1.5, 0.12, 0.5), "#B9732E"), 0, 0.85, 0.95));
+    [[-0.45, "#E8A33D"], [0, "#D98B2B"], [0.45, "#F2C46B"]].forEach(([bx, f]) => { const b = teil(kugel(0.17, 12, 8), f); b.scale.set(1.4, 0.7, 1); g.add(setze(b, bx, 1.0, 0.95)); });
+    g.add(setze(teil(new CylinderGeometry(0.12, 0.12, 0.6, 10), "#9A9A9A"), 0.6, 2.0, -0.3));
+    return g;
+  },
+  tierstation() {
+    const g = new Group();
+    g.add(setze(teil(new BoxGeometry(1.8, 1.2, 1.4), "#DFF3E4", { dicke: 1.03 }), 0, 0.6, 0));
+    const dach = teil(new BoxGeometry(2.1, 0.18, 1.7), "#4FAF62", { dicke: 1.04 }); g.add(setze(dach, 0, 1.3, 0));
+    // rotes Kreuz als Zeichen der Station
+    g.add(setze(new Mesh(new BoxGeometry(0.5, 0.14, 0.04), mat("#E0453A")), 0, 0.85, 0.72));
+    g.add(setze(new Mesh(new BoxGeometry(0.14, 0.5, 0.04), mat("#E0453A")), 0, 0.85, 0.72));
+    // Igel-Körbchen davor
+    g.add(setze(teil(new CylinderGeometry(0.35, 0.28, 0.2, 12), "#C9955E"), 1.2, 0.1, 0.8));
+    const igel = teil(kugel(0.2, 10, 8), "#7A5A44"); igel.scale.set(1.2, 0.8, 1); g.add(setze(igel, 1.2, 0.28, 0.8));
+    return g;
+  }
+};
 ["lauf", "kart", "bau"].forEach(id => {
+  const neu = NEU_ORT[id];
+  if (neu && NEU_BAU[neu]) {
+    const [x, z] = P[id], o = NEU_BAU[neu](); o.position.set(x, bodenY(x, z), z); o.rotation.y = Math.atan2(-x, -z); scene.add(o); block(x, z, 1.2);
+    if (!K.ortOffen(neu)) { const sp = schildSprite("🔒"); sp.position.set(0, 2.8, 0); o.add(sp); o.traverse(m => { if (m.material && m.material.color && !m.isSprite) m.material = grauMat(m.material); }); }
+    antippbar(o, () => zeigeAntwort(K.antwort(neu)), ...K.aktionFuer(neu)); starr.push([o]);
+    return;
+  }
   const [x, z] = P[id], o = ORT_BAU[id](); o.position.set(x, bodenY(x, z), z); o.rotation.y = Math.atan2(-x, -z); scene.add(o); block(x, z, 1.2);
   const frei = istFrei(id), info = SPIELE[id];
   if (!frei) { const sp = schildSprite("🔒"); sp.position.set(0, 3.2, 0); o.add(sp); o.traverse(m => { if (m.material && m.material.color && !m.isSprite) m.material = grauMat(m.material); }); }
@@ -1611,7 +1662,7 @@ function spieleStory(id) {
   const warte = (pruef) => (weiter) => { const tt = setInterval(() => { if (pruef()) { clearInterval(tt); weiter(); } }, 200); return () => clearInterval(tt); };
   if (id === "sterne") { b[0].zeige = "#sterne"; b[1].zeige = I.ort("haus"); b[1].bis = warte(() => drinnen); b[2].zeige = "#einrichten"; b[2].bis = warte(() => window.Einrichten && window.Einrichten.offen); }
   if (id === "ei") b.forEach(x => { x.zeige = I.ort("nest"); });
-  if (id === "spielorte") b[0].zeige = I.ort("ballons");
+  if (id === "spielorte") b.forEach(x => { x.zeige = I.ort(S.MINISPIELE_AUS ? "garten" : "ballons"); });
   if (id === "merkkiste") { const wer = K.merkkisteBei(); b.forEach(x => { x.wer = wer; x.zeige = I.ort(wer === "eule" ? "eule" : "fipsi"); }); }
   if (id === "gefuehle") b.forEach(x => { x.zeige = I.ort("baer"); });
   if (id === "fipsis-karte") { b[0].zeige = I.ort("fipsi"); b[1].beim = zeigeKartenweg; b[1].zeige = I.ort("kartenweg"); b[2].zeige = I.ort("kartenweg"); }

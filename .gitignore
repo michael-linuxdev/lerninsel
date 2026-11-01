@@ -6,3 +6,4 @@ node_modules/
 bilder/
 screenshots/
 *.log
+.claude/

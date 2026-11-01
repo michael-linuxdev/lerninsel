@@ -75,12 +75,16 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     await p.goto(BASIS); await spielzeit(p);
     await p.evaluate(() => { const m = Spielwelt.lade("medien"); m.fuehrerschein = "2026-10-01"; Spielwelt.speichere("medien", m);
       Spielwelt.speichere("lernkartei", { deutsch: [{ k: "wort|Apfel", s: { typ: "wort", wort: "Apfel" }, stufe: 1, faellig: "2000-01-01" }], sachkunde: [] }); });
-    // E6 „Spielorte“ wartet, solange die Minispiele ausgeblendet sind (seit 30.10.2026) – direkt E7
-    await p.goto(INSEL); await warteSzene(p, "merkkiste");
+    // E6 zeigt seit 01.11.2026 den Insel-Garten (Ella), danach E7
+    await p.goto(INSEL); await warteSzene(p, "spielorte");
+    a = await szene(p);
+    erwarte(a.wer === "eule" && a.zeigt, "E6: Ella zeigt auf den Insel-Garten");
+    await weiter(p); await weiter(p); await weiter(p);
+    await warteSzene(p, "merkkiste");
     a = await szene(p);
     erwarte(a.wer === "fipsi" && a.zeigt, "E7: Fipsi zeigt auf sich – die Merkkiste wartet");
     await weiter(p); await weiter(p);
-    erwarte(await p.evaluate(() => !Story.etappe("E6") && Story.etappe("E7")), "E7 erledigt, E6 wartet auf die Minispiele");
+    erwarte(await p.evaluate(() => Story.etappe("E6") && Story.etappe("E7")), "E6 (Garten) und E7 erledigt");
 
     // Tag 4 (23.10.): Bruni fragt, wie es geht (E8)
     await tag(p, 23);
@@ -88,8 +92,8 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     a = await szene(p);
     erwarte(a.wer === "baer" && a.zeigt, "E8: Bruni fragt, wie es dir geht");
     await weiter(p); await weiter(p);
-    const ende = await p.evaluate(() => ({ e: ["E4", "E5", "E7", "E8"].every(e => Story.etappe(e)), chronik: Story.chronik().map(x => x.s) }));
-    erwarte(ende.e && ["sterne", "ei", "merkkiste", "gefuehle"].every(x => ende.chronik.includes(x)) && !ende.chronik.includes("spielorte"), `Etappen ohne Minispiele erledigt, Chronik: ${ende.chronik.join(", ")}`);
+    const ende = await p.evaluate(() => ({ e: ["E4", "E5", "E6", "E7", "E8"].every(e => Story.etappe(e)), chronik: Story.chronik().map(x => x.s) }));
+    erwarte(ende.e && ["sterne", "ei", "spielorte", "merkkiste", "gefuehle"].every(x => ende.chronik.includes(x)), `Etappen mit Garten erledigt, Chronik: ${ende.chronik.join(", ")}`);
     await ctx.close();
   }
 

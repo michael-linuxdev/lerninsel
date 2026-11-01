@@ -6,7 +6,7 @@ const fs = require("fs"), path = require("path"), assert = require("assert");
 const root = path.resolve(__dirname, "..");
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
 const liste = [...sw.match(/const START = \[([\s\S]*?)\];/)[1].matchAll(/"([^"]+)"/g)].map(m => m[1]);
-const AUSSER = new Set(["dev", "quellen", "docs", "tests", ".git", "node_modules"]);
+const AUSSER = new Set(["dev", "quellen", "docs", "tests", ".git", ".github", ".claude", "node_modules"]);
 // Absichtlich nicht offline: Probeszene (nur zum Vergleichen der Grafikstile), Prüfseiten für Übersetzungen
 const NICHT_OFFLINE = new Set(["spiele/welt3d/probe.html", "spiele/welt3d/probe.js"]);
 function alle(d, aus = []) {

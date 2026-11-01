@@ -282,7 +282,9 @@
       genutzt: () => { const d = zimmerDaten(); return Object.keys(d.plaetze).length > 0 || d.wand !== "rosa"; } },
     { id: "E5", szene: "ei", faellig: () => !!W.TierPflege, genutzt: () => { const d = tierDaten(); return !!d && (d.phase === "ei" || d.phase === "tier"); } },
     // E6 wartet, solange die Minispiele ausgeblendet sind (Spielwelt.MINISPIELE_AUS)
-    { id: "E6", szene: "spielorte", faellig: (st) => !S().MINISPIELE_AUS && st.spielen && !st.frei && profi(), genutzt: () => W.Story.zustand().etappen.E1 === 1 },
+    // seit 01.11.2026: E6 zeigt den Insel-Garten (öffnet mit Kapitel 1); wer schon gesät hat, bekommt die Etappe still
+    { id: "E6", szene: "spielorte", faellig: (st) => S().MINISPIELE_AUS ? W.Story.kapitel() >= 1 : (st.spielen && !st.frei && profi()),
+      genutzt: () => S().MINISPIELE_AUS ? !!(S().lade("garten") && (S().lade("garten").beete || []).some(Boolean) || Object.keys((S().lade("garten") || {}).korb || {}).length) : W.Story.zustand().etappen.E1 === 1 },
     { id: "E7", szene: "merkkiste", faellig: () => faelligeKarten() > 0,
       genutzt: () => { const k = S().lade("lernkartei") || {}; return ["deutsch", "sachkunde"].some(f => (k[f] || []).some(c => c.stufe >= 2)); } },
     { id: "E8", szene: "gefuehle", faellig: () => tageSeitE1() >= 1, genutzt: () => Object.keys((S().lade("gefuehle") || {}).tage || {}).length > 0 },
@@ -448,6 +450,10 @@
       buehne: { x: P.buehne[0], z: P.buehne[1], h: 1.8 },
       kartenweg: { x: P.kartenweg[0], z: P.kartenweg[1], h: 1.4 }
     };
+    // neue Orte an den Plätzen der ausgeblendeten Minispiele (01.11.2026)
+    if (P.lauf) ORTE.garten = { x: P.lauf[0], z: P.lauf[1], h: 1.2 };
+    if (P.kart) ORTE.baeckerei = { x: P.kart[0], z: P.kart[1], h: 2.0 };
+    if (P.bau) ORTE.tierstation = { x: P.bau[0], z: P.bau[1], h: 1.6 };
     return { WELT, P, ZX, ZX_GRENZE, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, HAUS_DREH, vorDerTuer, NEBEL, nachbarn, ORTE };
   }
 
@@ -479,6 +485,22 @@
   const istFrei = (id) => S().offen(baumStufe() >= ((SPIELE[id] || {}).stufe || 0));
   // Spiele, die noch entstehen: seit 30.10.2026 alle fünf Minispiele (ausgeblendet, werden neu gedacht – Spielwelt.MINISPIELE_AUS)
   const bald = (id) => !!S().MINISPIELE_AUS && ["ballons", "truhe", "insel", "lauf", "kart", "bau"].includes(id);
+  // Neue Orte (01.11.2026) an den Plätzen der ausgeblendeten Minispiele: Garten (Kapitel 1), Tierpflege-Station (Kapitel 2), Bäckerei (öffnet Kapitel 3)
+  const NEU_FERTIG = { garten: true };
+  function ortOffen(id) {
+    const k = W.Story ? W.Story.kapitel() : 0;
+    if (id === "garten") return S().offen(k >= 1);
+    if (id === "tierstation") return S().offen(k >= 2);
+    if (id === "baeckerei") return S().offen(k >= 3);
+    return true;
+  }
+  function gartenAntwort() {
+    if (!ortOffen("garten")) return blase("🌱", "Der Insel-Garten – noch zu", "Der Garten wacht auf, wenn auf deinem Wissensbaum die erste Frucht wächst. Lern etwas Neues bei Ella, Fipsi oder Benno!", "Сад проснётся, когда на дереве знаний вырастет первый плод.");
+    const G = W.Garten, l = G ? G.lage() : { reif: 0, durstig: 0, leer: 3, z: [] };
+    const de = l.reif ? `Hurra, ${l.reif === 1 ? "eine Pflanze ist" : `${l.reif} Pflanzen sind`} reif! Komm ernten.` : l.durstig ? `${l.durstig === 1 ? "Eine Pflanze hat" : `${l.durstig} Pflanzen haben`} Durst. Gießt du sie?`
+      : l.leer === l.z.length ? `Hallo ${name()}! Hier ist dein Garten. Säst du etwas?` : "Alles gegossen! Morgen wachsen deine Pflanzen weiter.";
+    return blase("eule", "Ellas Insel-Garten", de, "Это твой сад. Посей, полей и собери урожай!", "../garten/");
+  }
   const baldBlase = (e, titel) => blase("🚧", `${e} ${titel}`, "Hier entsteht etwas Neues! Bald kannst du hier wieder spielen.", "Здесь появится что-то новое! Скоро здесь снова можно будет играть.");
   const ORT_TEXT = {
     lauf: ["Der Sternenlauf", "Lauf so schnell du kannst und sammle Sterne! Wische, um auszuweichen.", "Беги и собирай звёзды!", "../welt3d/lauf.html"],
@@ -548,6 +570,9 @@
       case "truhe": if (bald(id)) return baldBlase("🏝️", "Schatz-Strand"); return spielort(() => profi() ? blase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "../welt3d/insel.html") : fuehrerschein());
       case "schach": return blase("🐢", "Tilda am Schachtisch", `Hallo ${name()}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?", "../schach/");
       case "buehne": return paulaAntwort();
+      case "garten": return gartenAntwort();
+      case "baeckerei": if (!NEU_FERTIG.baeckerei) return baldBlase("🥨", "Bäckerei Benno"); return baeckereiAntwort();
+      case "tierstation": if (!NEU_FERTIG.tierstation) return baldBlase("🩹", "Tierpflege-Station"); return tierstationAntwort();
       case "wegweiser": {   // Kapitel 2 (NA-17): Fipsis Wegweiser zeigt Wörter, die das Kind schon hatte
         const w = wortSchilder(3);
         return blase("fipsi", "Fipsis Wegweiser", w.length ? `Auf den Schildern steht: ${w.join(", ")}. Lies die Wörter laut – du kennst sie schon!` : "Hier kommen bald Wörter hin, die du bei mir lernst. Komm in die Schatzkarte!",
@@ -594,11 +619,14 @@
     haus: [["🚪", "Reingehen"], 3.4], ballons: [["🎈", "Spielen"], 1.9], truhe: [["🔓", "Öffnen"], 1.9], schach: [["♟️", "Schach"], 2.4], buehne: [["🎵", "Musik"], 2.6],
     station: [["🌦️", "Ansehen"], 1.9], album: [["📒", "Album"], 1.6], bett: [["🛏️", "Ansehen"], 2.2], schrank: [["🚪", "Öffnen"], 2.0], spiegel: [["🪞", "Reinschauen"], 1.6], wissensbaum: [["🌳", "Ansehen"], 2.2], sonnenuhr: [["☀️", "Ansehen"], 1.9], paket: [["🎁", "Öffnen"], 1.8], nachbar: [["💬", "Reden"], 2.3], wegweiser: [["🪧", "Lesen"], 2.0]
   };
+  const baeckereiAntwort = () => (W.InselNeu && W.InselNeu.baeckerei ? W.InselNeu.baeckerei() : null);
+  const tierstationAntwort = () => (W.InselNeu && W.InselNeu.tierstation ? W.InselNeu.tierstation() : null);
+  AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
   const aktionFuer = (id) => (bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
   W.InselKern = {
     // Stationen
-    SPIELE, istFrei, baumStufe, antwort, nachbarAntwort, fundFuer, aktionFuer, FRUCHT, fruchtFarbe, spieleMelodie,
+    SPIELE, istFrei, baumStufe, antwort, ortOffen, NEU_FERTIG, nachbarAntwort, fundFuer, aktionFuer, FRUCHT, fruchtFarbe, spieleMelodie,
     // Welt
     BIOME, GROESSEN, HUEGEL, STANDARD, FARBEN, erzeuge, neuerSeed, wunsch, zeit, erstelle,
     // Regeln und Zustände

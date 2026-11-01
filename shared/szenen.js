@@ -75,9 +75,15 @@
     { wer: "robo", text: { de: "Such dir ein Ei aus und wärme es jeden Tag ein bisschen. Dann schlüpft dein Tier!", ru: "Выбери яйцо и каждый день немного согревай его. Тогда вылупится твой питомец!", status: E } },
     { wer: "robo", text: { de: "Dein Tier ist nie böse, wenn du mal keine Zeit hast. Es freut sich einfach, wenn du kommst.", ru: "Твой питомец никогда не обижается, если у тебя нет времени. Он просто радуется, когда ты приходишь.", status: E } }
   ] });
-  Sz.registriere("spielorte", { titel: "Die Spielorte sind wach", etappe: "E6", blasen: [
+  // E6: seit 01.11.2026 der Insel-Garten (die alten Spielorte sind ausgeblendet); mit MINISPIELE_AUS = false gilt wieder die alte Szene
+  if (!(window.Spielwelt && window.Spielwelt.MINISPIELE_AUS)) Sz.registriere("spielorte", { titel: "Die Spielorte sind wach", etappe: "E6", blasen: [
     { wer: "robo", text: { de: "Die Sonne scheint, die Spielorte sind wach! Die Ballon-Wiese wartet auf dich.", ru: "Солнце светит, места для игр проснулись! Поляна с шариками ждёт тебя.", status: E } },
     { wer: "robo", text: { de: "Spiel eine Runde! Wenn die Sonne untergeht, ist die Spielzeit für heute vorbei – morgen geht es weiter.", ru: "Сыграй раунд! Когда солнце сядет, время игры на сегодня закончится – завтра продолжим.", status: E } }
+  ] });
+  else Sz.registriere("spielorte", { titel: "Der Insel-Garten", etappe: "E6", blasen: [
+    { wer: "eule", text: { de: "{name}, komm mal mit! Neben dem Wissensbaum ist ein Garten aufgewacht.", ru: "{name}, пойдём! Рядом с деревом знаний проснулся сад.", status: E } },
+    { wer: "eule", text: { de: "Hier säst du Samen und gießt sie jeden Tag einmal. Dann wachsen sie.", ru: "Здесь ты сеешь семена и поливаешь их раз в день. Тогда они растут.", status: E } },
+    { wer: "eule", text: { de: "Keine Sorge: Deine Pflanzen werden nie welk. Sie warten auf dich.", ru: "Не волнуйся: твои растения никогда не завянут. Они ждут тебя.", status: E } }
   ] });
   Sz.registriere("merkkiste", { titel: "Die Merkkiste", etappe: "E7", blasen: [
     { wer: "fipsi", text: { de: "Psst, {name}! In meiner Merkkiste liegt etwas, das du schon einmal geübt hast.", ru: "Псс, {name}! В моём сундучке лежит то, что ты уже упражнял(а).", status: E } },
