@@ -33,6 +33,46 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     return { emo: d.querySelectorAll(".emo").length, text: d.textContent, feld: i.value, unbekannt: (() => { const x = document.createElement("p"); x.textContent = "🛸"; document.body.appendChild(x); return x; })() && true };
   });
   erwarte(nach.emo === 2 && nach.text === "Ich mag 🍎 und 🦊" && nach.feld === "🍎", "neuer Inhalt: 🍎 und 🦊 ersetzt, textContent unverändert, Eingabefeld unberührt");
+  // Noto in Stil A: Kontur ohne SVG-Filter (zwei <use>), ids je Anzeige eindeutig, keine Wangen
+  const noto = await p.evaluate(async () => {
+    const d = document.createElement("div"); d.textContent = "😊😊🍎🍎"; document.body.appendChild(d);
+    await new Promise(r => setTimeout(r, 120));
+    const ids = [...document.querySelectorAll(".emo [id]")].map(e => e.id);
+    const roh = Object.values(window.LERN_ICONS), smiley = window.LERN_ICONS["1f60a"];
+    const zielOk = [...d.querySelectorAll("use")].length === 8 && [...d.querySelectorAll("use")].every(u => { const z = document.getElementById(u.getAttribute("href").slice(1)); return z && u.closest("svg").contains(z); });
+    return { anzahl: roh.length, filter: roh.filter(s => s.includes("<filter")).length, use: roh.filter(s => (s.match(/<use href='#n[0-9a-f]+-b'/g) || []).length === 2).length,
+      doppelt: ids.length - new Set(ids).size, zielOk, wangen: /url\(#n1f60a-SVGljKj4yZw\)|url\(#n1f60a-SVGBJFSCeLy\)/.test(smiley) };
+  });
+  erwarte(noto.anzahl >= 770 && noto.filter === 0 && noto.use === noto.anzahl, `Noto in Stil A: ${noto.anzahl} Bilder, keins mit SVG-Filter, jedes mit Kontur-Kopie über <use>`);
+  erwarte(noto.doppelt === 0 && noto.zielOk, "gleiches Emoji mehrfach: ids je Anzeige eindeutig, jedes <use> zeigt ins eigene Bild");
+  erwarte(!noto.wangen, "keine rosa Wangen (😊 ohne Noto-Wangen)");
+  // 📦 hat bei Noto ein großes Rechteck außerhalb des Bildes: es darf weder zu sehen sein noch Klicks abfangen
+  await p.evaluate(() => {
+    window.__klicks = { a: 0, b: 0 };
+    const w = document.createElement("div"); w.style.cssText = "position:fixed;left:20px;top:300px;z-index:99;display:flex;gap:4px;font-size:40px";
+    w.innerHTML = '<button id="pk-a" style="width:90px;height:90px">📦</button><button id="pk-b" style="width:90px;height:90px">B</button>';
+    document.body.appendChild(w); w.querySelector("#pk-a").onclick = () => __klicks.a++; w.querySelector("#pk-b").onclick = () => __klicks.b++;
+  });
+  await p.waitForTimeout(150);
+  await p.click("#pk-a", { timeout: 3000 }); await p.click("#pk-b", { timeout: 3000 });
+  const pk = await p.evaluate(() => ({ k: __klicks, emo: !!document.querySelector("#pk-a .emo"), ov: getComputedStyle(document.querySelector("#pk-a .emo svg")).overflow }));
+  erwarte(pk.emo && pk.k.a === 1 && pk.k.b === 1 && pk.ov === "hidden", "📦: Bild am Rand abgeschnitten, Klicks auf den Knopf und den Nachbarn kommen an");
+  // Atelier: Stempel zeichnet das Noto-Bild (mit Kontur #3B1F63) auf die Leinwand
+  await p.goto(BASIS + "spiele/atelier/"); await p.waitForLoadState("load");
+  await p.evaluate(() => window.EmojiBereit.then(E => E.lade("🍎")));
+  await p.evaluate(() => __atelier.oeffneMalen({})); await p.waitForTimeout(300);
+  await p.click('.wz[data-w="stempel"]');
+  const stempelKnopf = await p.evaluate(() => { const b = [...document.querySelectorAll("#stempel button")].find(x => x.dataset.s === "🍎"); return !!b; });
+  if (stempelKnopf) await p.click('#stempel button[data-s="🍎"]');
+  const st = await p.evaluate(async () => {
+    const cv = document.getElementById("leinwand"), r = cv.getBoundingClientRect(), s = document.querySelector("#stempel .an, #stempel [aria-pressed='true']");
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2, stempel: s ? s.dataset.s : null };
+  });
+  await p.evaluate(() => window.EmojiBereit.then(E => Promise.all([...document.querySelectorAll("#stempel button")].map(b => E.lade(b.dataset.s)))));
+  await p.mouse.click(st.x, st.y); await p.waitForTimeout(150);
+  const kontur = await p.evaluate(() => { const g = __atelier.g, d = g.getImageData(512 - 70, 384 - 70, 140, 140).data; let n = 0;
+    for (let i = 0; i < d.length; i += 4) if (Math.abs(d[i] - 0x3B) < 30 && Math.abs(d[i + 1] - 0x1F) < 30 && Math.abs(d[i + 2] - 0x63) < 30) n++; return n; });
+  erwarte(kontur > 40, `Atelier: Stempel als Noto-Bild mit Kontur gezeichnet (${kontur} Konturpunkte)`);
   // Seiten mit vielen Emojis öffnen ohne Fehler
   for (const s of ["spiele/sachkunde/", "spiele/mathe/", "spiele/garten/", "spiele/ich/"]) { await p.goto(BASIS + s); await p.waitForLoadState("load"); await p.waitForTimeout(400); }
   erwarte(await p.evaluate(() => document.querySelectorAll(".emo").length > 0), "weitere Seiten (Sachunterricht, Mathe, Garten, Meine Ecke) laufen mit den Bildern");

@@ -5,8 +5,8 @@
 set -e
 cd "$(dirname "$0")/.."
 # Cache-Version automatisch aus dem Inhalt aller Dateien der Seite (ändert sich nur, wenn sich etwas ändert)
-# Eigene Bilder statt Emojis neu bauen (shared/icons.js aus quellen/icons/*.js)
-node quellen/icons-bauen.js >/dev/null
+# Emoji-Bilder neu bauen (shared/icons.js: Noto-Emojis aus quellen/noto/ in Stil A, siehe quellen/noto-stil-a.py)
+python3 -I quellen/noto-stil-a.py >/dev/null
 # Nur diese Teile gehören zur Seite (feste Liste: liegengebliebene Dateien im Stamm landen so nie in /dev)
 SEITE="index.html manifest.webmanifest sw.js shared spiele inhalte icons"
 HASH=$(find $SEITE -type f ! -name 'sw.js' -print0 | LC_ALL=C sort -z | xargs -0 sha1sum | sha1sum | cut -c1-10)

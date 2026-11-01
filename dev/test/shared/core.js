@@ -546,7 +546,8 @@
     const wurzel = (document.currentScript && document.currentScript.dataset.root) || "./";
     if (((profil.daten.eltern || {}).bilder) !== "geraet" && !window.__ohneBilder) {
       const lade = (datei, dann) => { const s = document.createElement("script"); s.src = wurzel + datei; s.async = false; if (dann) s.onload = dann; document.head.appendChild(s); };
-      lade("shared/icons.js"); lade("shared/emoji.js");
+      // EmojiBereit: für Canvas/3D (wartet, bis EmojiBild da ist; ohne Bilder bleibt es undefined → Text)
+      window.EmojiBereit = new Promise((fertig) => { lade("shared/icons.js"); lade("shared/emoji.js", () => fertig(window.EmojiBild || null)); });
     }
   }
   if ("serviceWorker" in navigator && location.protocol === "https:") {

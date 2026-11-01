@@ -1,45 +1,26 @@
-# Eigene Bilder statt Emojis – Stil A „Insel bunt“ (01.11.2026, Wahl des Auftraggebers)
+# Emoji-Bilder der Lerninsel – Noto in Stil A (01.11.2026, Wahl des Auftraggebers)
 
-Jedes Emoji der App bekommt ein eigenes, kleines SVG-Bild. Gemeinsamer Stil, damit alles aus einem Guss wirkt:
+Jedes Emoji der App wird beim Anzeigen durch ein Bild ersetzt (`shared/emoji.js`), damit es auf jedem Gerät gleich aussieht.
+Die Bilder sind die **Noto-Emojis von Google (Apache 2.0)**, umgesetzt in **Stil A „Insel bunt“**. Selbst zeichnen ist verworfen (zu einfach bzw. zu aufwendig).
 
-## Leitlinie (Wahl des Auftraggebers 01.11.2026): **einfach, aber sauber**
-Piktogramme im Insel-Stil: klare, symmetrische Formen, wenige Teile (meist 2–6), flache Farben **ohne Schattenton und ohne Verlauf**, gleich starke Kontur
-(`$K`/`$L` = 2,5 px), höchstens ein kleiner weißer Glanzpunkt. Tiere als **Kopf von vorn** (Ohren, Schnauze, Augen), Menschen als Kopf mit Schultern.
-Keine Kritzel- und Zusatzlinien, keine kleinen Muster. Lieber eine große, eindeutige Silhouette als viele Details.
+## Regeln (freigegeben: „Gut so, für alle“)
+- Verläufe werden zu **zwei harten Farbstufen** (Lichtton = Farbe bei 25 %, Grundton = Farbe bei 70 %, Grenze bei 48 %), wie die Toon-Grafik der Insel.
+  Durchsichtige Verläufe (Glanz, Schein, Schatten) bleiben weich.
+- **Dünne Lerninsel-Kontur** `#3B1F63` außen herum (5,2 Einheiten im 128er-Raster). Sie entsteht ohne SVG-Filter: Die Formen werden zweimal mit `<use>`
+  gezeichnet; die hintere Kopie wird über CSS-Variablen (`--k` Farbe, `--w` Breite, `--v` blendet Glanz und Schatten aus) zur dunklen Silhouette.
+- **Keine rosa Wangen**: Noto-Wangen (Verläufe in `#ff4747`/`#ed7770`, die ins Durchsichtige auslaufen) werden entfernt.
+- Zahlen in Pfaden auf eine Nachkommastelle gerundet (über absolute Koordinaten, damit sich nichts aufsummiert).
 
-## Form
-- `viewBox="0 0 64 64"` (das Bauskript setzt das `<svg>` drumherum – in den Teil-Dateien steht **nur der Inhalt**).
-- Das Motiv füllt etwa 52–58 px der 64 px, mittig, mit etwas Luft am Rand.
-- **Dunkle Kontur wie bei den Figuren:** jede Hauptform mit `stroke="#3B1F63" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"`
-  (kleine Details wie Augen, Glanz, Wangen ohne Kontur). Formen rund und freundlich.
-- Feine Linien (Stiele, Schnurrhaare, Zeiger) ebenfalls in `#3B1F63`, 2,5–3 px.
-- Wenige Formen (meist 3–10), gut erkennbar auch bei 24 px Größe. Keine Schrift im Bild (Ausnahme: Ziffern bei den Zahlen-Tasten, Buchstaben bei 🔤🔠 und Flaggen-Kennung).
-- Höchstens etwa **1.500 Zeichen je Bild** (das Bauskript warnt darüber).
+## Dateien
+- `liste.json` – alle Emojis der App (nach Teilen). Neue Emojis hier eintragen.
+- `quellen/noto/<hex>.svg` – Noto-Originale (eine Datei je Emoji), Lizenz `quellen/noto/LICENSE`.
+- `quellen/noto-holen.py` – holt neue Originale aus den npm-Paketen `@iconify-json/noto` und `@svgmoji/noto` (Aufruf im Kopf der Datei).
+- `quellen/noto-stil-a.py` – baut `shared/icons.js` (läuft in `quellen/dev-bauen.sh`); Sonderfälle in `AUSNAHMEN`.
+- `quellen/noto-pruefbogen.js` – Prüfbogen aller Bilder als PNG (64 px mit Original daneben, 24 px).
 
-## Farbe und Licht
-- **Flache, kräftige Farben** `#RRGGBB` (wie die Figuren in Variante A). Verläufe `G()`/`V()` nur ausnahmsweise (z. B. Himmel, Wasser).
-- Ein kleiner Glanz auf runden Dingen: `<ellipse … fill="#fff" opacity=".35"/>` oben links.
-- Farben freundlich und klar, nicht grell. Palette (Richtwerte): Rot `#E8574F`, Orange `#F59A3C`, Gelb `#FFC94A`, Grün `#5DBB63`, Türkis `#3FB6B2`,
-  Blau `#4C8FE0`, Lila `#8B6FD6`, Rosa `#F28DB2`, Braun `#B07A4F`, Haut `#F6C9A0` (Hauttöne bei 🏻–🏿 nur, wenn das Emoji sie hat), Grau `#9AA3B5`,
-  dunkle Details `#3D3A5C` (Augen, Pupillen).
-- Gesichter (Smileys, Menschen): runde Köpfe, Augen als dunkle Ovale mit kleinem weißen Glanzpunkt. **Keine rosa Wangen** (Wunsch des Auftraggebers).
-- Menschen: freundlich, neutral, kindgerecht; Kleidung einfach.
+## Neues Emoji aufnehmen
+1. In `liste.json` eintragen.
+2. `npm pack @iconify-json/noto` und `npm pack @svgmoji/noto` in einen Ordner außerhalb des Repos, dann `python3 -I quellen/noto-holen.py …`.
+3. `sh quellen/dev-bauen.sh`, Prüfbogen ansehen.
 
-## Kurzzeichen
-- `$K` = Kontur einer Fläche (`stroke="#3B1F63" stroke-width="3"`, runde Ecken), `$L` = Linie ohne Füllung in derselben Farbe. Beispiel: `<circle cx="32" cy="32" r="20" fill="#FFC94A"$K/>`.
-
-## Teil-Dateien
-`quellen/icons/<teil>.js`:
-```js
-module.exports = {
-  "🍎": `<path d="M32 18c…" fill="G(#E8574F)"/><path d="M33 17q4-8 10-8" stroke="#6B4A33" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="24" cy="28" rx="5" ry="7" fill="#fff" opacity=".35"/>`,
-  …
-};
-```
-- Schlüssel = das Emoji genau wie in `liste.json` (mit oder ohne `️`, das Skript gleicht ab).
-- **Keine eigenen `id`-Attribute** und keine `<defs>` (nur `G()`/`V()` benutzen), kein `<text>` außer bei Ziffern/Buchstaben (dann `font-family="Fredoka, sans-serif"`, `font-weight="700"`).
-
-## Bauen und prüfen
-- `node quellen/icons-bauen.js` → `shared/icons.js` (alle Bilder) und `quellen/icons/bogen.html` (Prüfbogen mit allen Bildern in 64 und 24 px).
-- `node quellen/icons-bauen.js --teil <teil>` baut nur den Prüfbogen eines Teils (`quellen/icons/bogen-<teil>.html`).
-- Prüfbogen als Bild: `node quellen/icons-bogen-bild.js <teil> <ausgabe.png>` (Playwright).
+Emojis ohne Noto-Bild (Würfel ⚀–⚅, ©) und reine Textzeichen (→ ✓ ✗ ← ↑ ↓ ⌫ ⇧ ✕ ↰ ↱ ➜ ✦ ♚ ♛ ♜ ♝ ♞) bleiben System-Zeichen.

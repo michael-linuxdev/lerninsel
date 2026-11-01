@@ -64,7 +64,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
   Ballon-Wiese und Schatz-Strand zeigen „🚧 Hier entsteht etwas Neues“, die Seiten leiten zur Insel, keine Tagesaufgabe dafür. Code bleibt für
   den Neuentwurf. **Seit 01.11.2026 stehen an den Plätzen von Sternenlauf, Kart und Bauplatz die neuen Orte** Insel-Garten (Kapitel 1, E6),
   Tierpflege-Station (Kapitel 2) und Bäckerei Benno (Kapitel 3) – siehe Kurzreferenz. Schach, Kopfrechen-Duell, Gefühle und Atelier bleiben.
-  Keine fremden urheberrechtlich geschützten Figuren; fremde Dateien nur CC0/OFL und dann in `docs/LIZENZEN.md`.
+  Keine fremden urheberrechtlich geschützten Figuren; fremde Dateien nur CC0/OFL und dann in `docs/LIZENZEN.md` (Ausnahme: Noto-Emoji-Bilder, Apache 2.0, `quellen/noto/LICENSE`).
 - Lerninhalte nur zusammenfassen und Lernziel-IDs zuordnen, nie Lehrpläne wörtlich abschreiben.
 - Commits als `michael-linuxdev <336864235+michael-linuxdev@users.noreply.github.com>`, Nachricht auf Deutsch
   (`git -c user.name=michael-linuxdev -c user.email=336864235+michael-linuxdev@users.noreply.github.com commit …`).
@@ -114,10 +114,13 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
   Ablauf je Stufe `packen|preis|bezahlen|wechsel`, Daten `baeckerei` = `{ tage, fehlerfrei }`), öffnet mit `KAPITEL` n 3 `bennos-baeckerei` (10 Lernfunde + `matheFertig()` ≥ 3).
   **Tierpflege-Station** `spiele/tierstation/station.js` (`__tierstation`: `TIERE` mit `g`, `ab`, `lz`, Fragen `futter|pflege|ort`, Sonderfall `kitz`; Daten `tierstation` = `{ gast, frei, fragen }`;
   Auswildern frühestens am nächsten Tag). Sterne nur für neue Ziele (erste Ernte je Pflanze, erster Tag/erster fehlerfreier Tag, erstes Mal je Tier).
-- **Eigene Bilder statt Emojis** (01.11.2026, Stil A „Insel bunt“ mit Kontur): Quellen `quellen/icons/*.js` (Regeln `quellen/icons/STIL.md`, Liste `liste.json` = 784 Emojis der App,
-  Kurzzeichen `$K`/`$L`), gebaut von `node quellen/icons-bauen.js` → `shared/icons.js` (läuft auch in `dev-bauen.sh`). `shared/emoji.js` (von `core.js` nachgeladen) ersetzt beim Anzeigen jedes
-  bekannte Emoji durch `<span class="emo"><span class="emo-t">🍎</span><svg…></span>` – **textContent bleibt gleich** (Tests, Vorlesen); Eingabefelder/`option`/`canvas`/SVG und
-  `data-emoji="aus"` bleiben unberührt; Emojis ohne eigenes Bild bleiben System-Emojis. Eltern-Schalter `eltern.bilder = "geraet"` (Emojis des Geräts). Test `bilder`, Haken `__emoji`.
+- **Emoji-Bilder: Noto in Stil A** (01.11.2026, ersetzt die selbst gezeichneten): Originale `quellen/noto/<hex>.svg` (Noto Emoji, Apache 2.0; neue holen mit `quellen/noto-holen.py`),
+  Liste `quellen/icons/liste.json`, gebaut von `python3 -I quellen/noto-stil-a.py` → `shared/icons.js` (läuft in `dev-bauen.sh`; Regeln `quellen/icons/STIL.md`: zwei harte Farbstufen,
+  Kontur `#3B1F63` als zweite `<use>`-Kopie über CSS-Variablen statt Filter, Noto-Wangen entfernt; Prüfbogen `node quellen/noto-pruefbogen.js <ordner> 64 orig`).
+  `shared/emoji.js` (von `core.js` nachgeladen) ersetzt beim Anzeigen jedes bekannte Emoji durch `<span class="emo"><span class="emo-t">🍎</span><svg…></span>` – **textContent bleibt gleich**
+  (Tests, Vorlesen), ids je Anzeige eindeutig, Bilder abgeschnitten und ohne Klicks (`pointer-events:none`); Eingabefelder/`option`/`canvas`/SVG und `data-emoji="aus"` bleiben unberührt;
+  Würfel ⚀–⚅, © und Textzeichen bleiben System-Zeichen. Canvas/3D: `window.EmojiBereit` (Promise → `EmojiBild` oder null) mit `EmojiBild.lade(e)` → Image, `EmojiBild.zeichne(g, e, x, y, größe)`
+  (Insel-Schilder `schildSprite`, Pinnwand, Atelier-Stempel). Eltern-Schalter `eltern.bilder = "geraet"` (Emojis des Geräts). Test `bilder`, Haken `__emoji`.
   Figuren: `shared/figuren.js` (Stil A, ohne rosa Wangen; Ella braun, ohne Federohren), `FigurenNeu.svg(name, "a", "froh"|"staunt"|"denkt")`.
 - Szenen für Jüngere (NA-60 Teil 2): Blase mit `fuerAeltere: true` entfällt für Vorschule/Kl. 1 (nicht bei Hooks `beim`/`bis`, nicht für Erwachsene, nicht mit `Szene.spiele(id, { voll: true })`);
   Szenen-Schrift dann größer (`.szene.jung`). „Heute für dich“ schlägt Wiederholern das Fach mit dem wackeligsten Lernziel vor.

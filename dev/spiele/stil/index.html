@@ -110,12 +110,13 @@
 
   <section class="block" style="background:#fff">
     <h2>4. Emojis: gleiches Bild auf jedem Gerät</h2>
-    <p class="erkl">Oben das, was dein Gerät heute zeigt (auf dem iPad: Apple). Darunter die beiden freien Sets. Figuren, Türen, Orte und Navigation zeichne ich selbst im gewählten Stil; alle übrigen Emojis in den Lerninhalten kommen aus dem gewählten Set.</p>
+    <p class="erkl">Oben das, was dein Gerät zeigt (auf dem iPad: Apple). Darunter die Bilder der Lerninsel: Noto-Emojis (Google) in Stil A – zwei harte Farbstufen, dunkle Kontur, keine Wangen.</p>
     <div class="scroll"><table class="emoji" id="emoji"></table></div>
-    <p class="erkl" style="margin-top:10px"><b>Noto</b> (Google, Apache 2.0): deckt alle 802 Emojis der App ab (41 neuere aus dem aktuellen Noto-Archiv). <b>Fluent</b> (Microsoft, MIT): moderner, flacher Look; bei 133 (vor allem Personen) muss ich die Namen nachtragen.</p>
+    <p class="erkl" style="margin-top:10px"><b>Gewählt: Noto</b> (Google, Apache 2.0) in Stil A, für alle Emojis der App (gebaut von <code>quellen/noto-stil-a.py</code>, Lizenz in <code>quellen/noto/LICENSE</code>).</p>
   </section>
 </main>
 <script src="../../shared/figuren.js"></script>
+<script src="../../shared/icons.js"></script>
 <script>
 (function () {
   const F = window.FigurenNeu, $ = (id) => document.getElementById(id);
@@ -129,13 +130,13 @@
     $("figuren").innerHTML = F.LISTE.map(n => `<div class="figur"><div class="bild">${F.svg(n, v, "froh")}</div>${F.NAMEN[n]}<div class="ausdruecke">${["froh", "staunt", "denkt"].map(a => F.svg(n, v, a)).join("")}</div></div>`).join("");
     $("farben").innerHTML = FARBEN[v].map(([n, c, t]) => `<div class="farbe" style="background:${c};${t ? `color:${t};text-shadow:none;border:1px solid rgba(0,0,0,.08)` : ""}">${n}<br>${c}</div>`).join("");
     $("tueren").innerHTML = TUEREN[v].map(([n, c, fig]) => `<div class="tuer" style="background:${c}">${n}${F.svg(fig, v, "froh")}</div>`).join("");
-    $("aepfel").innerHTML = '<img src="emoji/noto/1f34e.svg" alt="">'.repeat(4);
+    $("aepfel").innerHTML = ((window.LERN_ICONS || {})["1f34e"] || "🍎").replace("<svg ", '<svg width="44" height="44" ').repeat(4);
     $("blase").innerHTML = F.svg("eule", v, "staunt") + `<div class="text">Mira, komm mal mit! Neben dem Wissensbaum ist ein Garten aufgewacht.</div>`;
   }
   document.querySelectorAll("[data-v]").forEach(b => b.addEventListener("click", () => { v = b.dataset.v; document.querySelectorAll("[data-v]").forEach(x => x.classList.toggle("an", x === b)); zeichne(); }));
   fetch("emoji/probe.json").then(r => r.json()).then(l => {
     const zeile = (titel, fn) => `<tr><th>${titel}</th>${l.map(fn).join("")}</tr>`;
-    $("emoji").innerHTML = zeile("Dein Gerät", ([e]) => `<td><span>${e}</span></td>`) + zeile("Noto", ([, h]) => `<td><img src="emoji/noto/${h}.svg" alt=""></td>`) + zeile("Fluent", ([, h]) => `<td><img src="emoji/fluent/${h}.svg" alt=""></td>`);
+    $("emoji").innerHTML = zeile("Dein Gerät", ([e]) => `<td><span>${e}</span></td>`) + zeile("Lerninsel", ([, h]) => `<td>${(window.LERN_ICONS || {})[h] ? window.LERN_ICONS[h].replace("<svg ", '<svg width="44" height="44" ') : ""}</td>`);
   });
   zeichne();
   window.__stil = { zeichne, setze: (x) => { v = x; zeichne(); } };

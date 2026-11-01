@@ -77,6 +77,7 @@
   $("werkzeuge").addEventListener("click", (e) => { const b = e.target.closest(".wz"); if (!b) return; werkzeug = b.dataset.w; S.ton("tipp"); markiere(); });
   $("groessen").addEventListener("click", (e) => { const b = e.target.closest(".wz"); if (!b) return; groesse = +b.dataset.g; S.ton("tipp"); markiere(); });
   $("stempel").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; stempel = b.dataset.s; S.ton("tipp"); markiere(); });
+  if (window.EmojiBereit) window.EmojiBereit.then(E => E && STEMPEL.forEach(s => E.lade(s)));   // Stempel-Bilder vorladen
 
   // Leinwand so groß wie möglich, aber ganz sichtbar (4:3), damit Finger-Position und Bild genau übereinstimmen
   function passeAn() {
@@ -100,7 +101,12 @@
     g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0] + 0.01, b[1]); g.stroke();
     if (spiegel) { const a2 = sp(a), b2 = sp(b); g.beginPath(); g.moveTo(a2[0], a2[1]); g.lineTo(b2[0] + 0.01, b2[1]); g.stroke(); }
   }
-  function stempeln([x, y]) { const gr = [44, 80, 130][groesse]; g.font = `${gr}px sans-serif`; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(stempel, x, y); if (spiegel) g.fillText(stempel, W - x, y); }
+  // Stempel als Noto-Bild (Stil A), solange es noch lädt bzw. ohne Bilder als Geräte-Emoji
+  function stempeln([x, y]) {
+    const gr = [44, 80, 130][groesse], E = window.EmojiBild;
+    if (E && E.hat(stempel)) { E.zeichne(g, stempel, x, y, gr * 1.15); if (spiegel) E.zeichne(g, stempel, W - x, y, gr * 1.15); return; }
+    g.font = `${gr}px sans-serif`; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(stempel, x, y); if (spiegel) g.fillText(stempel, W - x, y);
+  }
   cv.addEventListener("pointerdown", (e) => {
     e.preventDefault(); const p = punkt(e); merkeSchritt(); geaendert = true;
     if (werkzeug === "eimer") { fuelle(Math.round(p[0]), Math.round(p[1]), farbe); S.ton("tipp"); return; }

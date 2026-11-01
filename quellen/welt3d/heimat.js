@@ -965,6 +965,11 @@ function schildSprite(text) {
   g2.fillStyle = "rgba(255,255,255,.92)"; g2.beginPath(); g2.arc(64, 64, 56, 0, Math.PI * 2); g2.fill();
   g2.font = "64px sans-serif"; g2.textAlign = "center"; g2.textBaseline = "middle"; g2.fillText(text, 64, 70);
   const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace;
+  // Noto-Bild (Stil A) statt Geräte-Emoji, sobald es geladen ist
+  if (window.EmojiBereit) window.EmojiBereit.then(E => E && E.lade(text)).then(img => {
+    if (!img) return; g2.clearRect(0, 0, 128, 128); g2.fillStyle = "rgba(255,255,255,.92)"; g2.beginPath(); g2.arc(64, 64, 56, 0, Math.PI * 2); g2.fill();
+    g2.drawImage(img, 28, 28, 72, 72); t.needsUpdate = true;
+  });
   const sp = new Sprite(new SpriteMaterial({ map: t, depthTest: false })); sp.scale.set(0.9, 0.9, 1); return sp;
 }
 // Graue Fassung eines Materials für gesperrte Orte – je Ausgangsmaterial nur einmal, damit Verschmelzen wirkt (NA-29)
@@ -1103,17 +1108,22 @@ WAND_HINTEN.userData.lebt = WAND_SEITE.userData.lebt = true;   // Farbe ändert 
     g2.fillStyle = "#4B2380"; g2.font = "bold 34px Fredoka, sans-serif"; g2.textAlign = "center"; g2.fillText("Das habe ich gelernt", 256, 44);
     const zettel = funde.slice(0, 8);
     if (!zettel.length) zettel.push({ e: "🌱", f: "", leer: true });
-    zettel.forEach((f, i) => {
+    const malZettel = () => zettel.forEach((f, i) => {
       const x = 22 + (i % 4) * 122, y = 70 + Math.floor(i / 4) * 120, neu = i < heute;
       g2.save(); g2.translate(x + 50, y + 50); g2.rotate(((i * 37) % 9 - 4) * 0.025);
       g2.fillStyle = "rgba(0,0,0,.18)"; g2.fillRect(-46, -42, 100, 100);
       g2.fillStyle = f.a === "gemeistert" ? "#FFE7A3" : FARBE[f.f] || "#FFF6E0"; g2.fillRect(-50, -46, 100, 100);
       if (neu) { g2.strokeStyle = "#FFC83D"; g2.lineWidth = 6; g2.strokeRect(-50, -46, 100, 100); }
-      g2.font = "54px sans-serif"; g2.textAlign = "center"; g2.textBaseline = "middle"; g2.fillText(f.e || "⭐", 0, 8);
+      g2.fillStyle = "#4B2380";
+      if (window.EmojiBild) window.EmojiBild.zeichne(g2, f.e || "⭐", 0, 8, 62);
+      else { g2.font = "54px sans-serif"; g2.textAlign = "center"; g2.textBaseline = "middle"; g2.fillText(f.e || "⭐", 0, 8); }
       g2.fillStyle = "#E0457B"; g2.beginPath(); g2.arc(0, -36, 7, 0, Math.PI * 2); g2.fill();
       g2.restore();
     });
+    malZettel();
     const tex = new CanvasTexture(c); tex.colorSpace = SRGBColorSpace;
+    // Noto-Bilder nachladen und die Zettel neu malen (die Zettel decken die alten Zeichen ganz ab)
+    if (window.EmojiBereit) window.EmojiBereit.then(E => E && Promise.all(zettel.map(f => E.lade(f.e || "⭐")))).then(l => { if (l) { malZettel(); tex.needsUpdate = true; } });
     const wand = new Group(); wand.position.set(4.06, 1.95, 0.9); wand.rotation.y = -Math.PI / 2; zimmer.add(wand); zimmerEigen.push(wand); starr.push([wand]);
     wand.add(teil(new BoxGeometry(1.72, 1.1, 0.06), "#8A5A34", { dicke: 1.03 }));
     wand.add(setze(new Mesh(new PlaneGeometry(1.6, 1.0), new MeshBasicMaterial({ map: tex })), 0, 0, 0.035));
