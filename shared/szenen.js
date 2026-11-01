@@ -73,7 +73,7 @@
   Sz.registriere("ei", { titel: "Das Nest", etappe: "E5", blasen: [
     { wer: "robo", text: { de: "Siehst du das Nest neben deinem Haus? Dort kann ein Haustier wohnen.", ru: "Видишь гнездо рядом с домом? Там может жить питомец.", status: E } },
     { wer: "robo", text: { de: "Such dir ein Ei aus und wärme es jeden Tag ein bisschen. Dann schlüpft dein Tier!", ru: "Выбери яйцо и каждый день немного согревай его. Тогда вылупится твой питомец!", status: E } },
-    { wer: "robo", text: { de: "Dein Tier ist nie böse, wenn du mal keine Zeit hast. Es freut sich einfach, wenn du kommst.", ru: "Твой питомец никогда не обижается, если у тебя нет времени. Он просто радуется, когда ты приходишь.", status: E } }
+    { fuerAeltere: true, wer: "robo", text: { de: "Dein Tier ist nie böse, wenn du mal keine Zeit hast. Es freut sich einfach, wenn du kommst.", ru: "Твой питомец никогда не обижается, если у тебя нет времени. Он просто радуется, когда ты приходишь.", status: E } }
   ] });
   // E6: seit 01.11.2026 der Insel-Garten (die alten Spielorte sind ausgeblendet); mit MINISPIELE_AUS = false gilt wieder die alte Szene
   if (!(window.Spielwelt && window.Spielwelt.MINISPIELE_AUS)) Sz.registriere("spielorte", { titel: "Die Spielorte sind wach", etappe: "E6", blasen: [
@@ -104,17 +104,17 @@
     { wer: "fipsi", text: { de: "{name}, schau mal! Ich habe ein Stück von meiner Schatzkarte gefunden!", ru: "{name}, смотри! Я нашла кусочек своей карты сокровищ!", status: E } },
     { wer: "fipsi", text: { de: "Darauf ist ein Weg eingezeichnet – und da ist er schon! Er führt zu einem Wegweiser.", ru: "На ней нарисована тропинка – и вот она! Она ведёт к указателю.", status: E } },
     { wer: "fipsi", text: { de: "Auf den Schildern stehen Wörter, die du schon kennst. Lies sie mal laut!", ru: "На табличках написаны слова, которые ты уже знаешь. Прочитай их вслух!", status: E } },
-    { wer: "fipsi", text: { de: "Mit jedem neuen Wort finden wir mehr von der Karte. Wann immer du magst, üben wir weiter.", ru: "С каждым новым словом мы находим больше карты. Когда захочешь, продолжим.", status: E } }
+    { fuerAeltere: true, wer: "fipsi", text: { de: "Mit jedem neuen Wort finden wir mehr von der Karte. Wann immer du magst, üben wir weiter.", ru: "С каждым новым словом мы находим больше карты. Когда захочешь, продолжим.", status: E } }
   ] });
   // Kapitel 3 (01.11.2026): Bennos Bäckerei öffnet
   Sz.registriere("bennos-baeckerei", { titel: "Bennos Bäckerei", kapitel: 3, blasen: [
     { wer: "biber", text: { de: "{name}, rate mal, was ich gebaut habe! Eine Bäckerei!", ru: "{name}, угадай, что я построил! Пекарню!", status: E } },
-    { wer: "biber", text: { de: "Brötchen, Brezeln, Kuchen – alles frisch gebacken. Die Tiere der Insel kaufen bei mir ein.", ru: "Булочки, крендели, пироги – всё свежее. Звери острова покупают у меня.", status: E } },
+    { fuerAeltere: true, wer: "biber", text: { de: "Brötchen, Brezeln, Kuchen – alles frisch gebacken. Die Tiere der Insel kaufen bei mir ein.", ru: "Булочки, крендели, пироги – всё свежее. Звери острова покупают у меня.", status: E } },
     { wer: "biber", text: { de: "Hilfst du mir an der Theke? Wir packen die Bestellungen und rechnen mit dem Geld.", ru: "Поможешь мне за прилавком? Мы собираем заказы и считаем деньги.", status: E } }
   ] });
   Sz.registriere("atelier", { titel: "Paulas Atelier", etappe: "E9", blasen: [
     { wer: "papagei", text: { de: "Hallo {name}! Ich bin Paula. Auf meiner Bühne spielt Musik – und im Atelier wird gemalt!", ru: "Привет, {name}! Я Паула. На моей сцене играет музыка – а в ателье рисуют!", status: E } },
     { wer: "papagei", text: { de: "Male ein Bild oder erfinde eine Melodie. Dein neuestes Bild steht dann auf der Staffelei in deinem Zimmer.", ru: "Нарисуй картину или придумай мелодию. Твоя новая картина будет стоять на мольберте в твоей комнате.", status: E } },
-    { wer: "papagei", text: { de: "Und deine Melodie spiele ich hier auf der Bühne – dann tanzen alle mit!", ru: "А твою мелодию я сыграю здесь на сцене – и все будут танцевать!", status: E } }
+    { fuerAeltere: true, wer: "papagei", text: { de: "Und deine Melodie spiele ich hier auf der Bühne – dann tanzen alle mit!", ru: "А твою мелодию я сыграю здесь на сцене – и все будут танцевать!", status: E } }
   ] });
 })();

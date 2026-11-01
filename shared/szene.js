@@ -87,13 +87,19 @@
     szenen[id] = Object.assign({ id }, def); return true;
   }
 
+  const jung = () => { try { const S = window.Spielwelt; if (!S || (S.erwachsen && S.erwachsen())) return false; const k = S.kind(); return k.stufe === "vs" || (k.klasse || 2) <= 1; } catch (e) { return false; } };
   function spiele(szene, opt = {}) {
     const def = typeof szene === "string" ? szenen[szene] : szene;
     if (!def || !def.blasen || !def.blasen.length) return Promise.resolve({ fehlt: true });
     if (aktiv) ende(true);
     baue();
     return new Promise((fertig) => {
-      aktiv = { def: Object.assign({}, def, { blasen: def.blasen.slice(0, MAX_BLASEN) }), nr: -1, fertig, opt };
+      // NA-60 Teil 2 (01.11.2026): Für Vorschule und Klasse 1 fallen Blasen mit fuerAeltere: true weg (kürzere Szenen);
+      // Blasen mit Hooks (beim/bis) bleiben immer, Erwachsene und opt.voll sehen alles
+      let blasen = def.blasen.slice(0, MAX_BLASEN);
+      if (!opt.voll && jung()) { const kurz = blasen.filter(b => !b.fuerAeltere || b.beim || b.bis); if (kurz.length) blasen = kurz; }
+      aktiv = { def: Object.assign({}, def, { blasen }), nr: -1, fertig, opt };
+      el.classList.toggle("jung", !opt.voll && jung());
       el.hidden = false; zeigeTon();
       $("szene-weg").textContent = ersetze(TEXTE.ueberspringen.de);
       weiter();

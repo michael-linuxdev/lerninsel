@@ -335,6 +335,7 @@
 <script src="shared/core.js" data-root="./"></script>
 <script src="shared/ereignisse.js"></script>
 <script src="shared/charakter.js"></script>
+<script src="shared/koennen.js"></script>
 <script src="shared/lernfunde.js"></script>
 <script src="shared/echtewelt.js"></script>
 <script src="shared/zeit.js" data-art="neutral"></script>
@@ -422,6 +423,12 @@
     const pfad = (l) => !l ? "spiele/ich/" : l.startsWith("../") ? "spiele/" + l.slice(3) : l.startsWith("#") ? "spiele/ich/" + l : l;
     let v = null;
     if ((k.luecken || []).length) v = ["🔍", `Kleiner Check: Klasse ${k.luecken[0]}`, "freiwillig", "spiele/ich/"];
+    // NA-60 Teil 2: Wer die Klasse wiederholt, bekommt gezielt das Fach mit dem wackeligsten Lernziel (aus „Mein Können“) vorgeschlagen
+    if (!v && k.wiederholt === S.schuljahrAm() && window.Koennen) {
+      const d = Koennen.daten(), FACH = { ma: ["🧮", "Mathe", "spiele/mathe/"], de: ["🦊", "Deutsch", "spiele/deutsch/"], su: ["🦉", "Sachunterricht", "spiele/sachkunde/"], en: ["🦜", "Englisch", "spiele/englisch/"] };
+      const wack = Object.keys(d).filter(z => FACH[z.slice(0, 2)]).map(z => [z, Koennen.standVon(z)]).filter(([, s]) => s <= 2).sort((a, b) => a[1] - b[1])[0];
+      if (wack) { const f = FACH[wack[0].slice(0, 2)]; v = [f[0], `${f[1]}: üben, was noch wackelt`, "gezielt für dich", f[2]]; }
+    }
     if (!v && C && C.aufgaben) { const a = C.aufgaben().find(x => !x.erledigt); if (a) v = [a.emoji, a.titel, "Tagesaufgabe", pfad(a.link)]; }
     if (!v) { const F = [["mathe", "🧮", "Mathe", "spiele/mathe/"], ["deutsch", "🦊", "Deutsch", "spiele/deutsch/"], ["sachkunde", "🦉", "Sachunterricht", "spiele/sachkunde/"], ["englisch", "🦜", "Englisch", "spiele/englisch/"]]
       .find(([f]) => (e[f] || {}).schule); if (F) v = [F[1], F[2], "gerade in der Schule", F[3]]; }
