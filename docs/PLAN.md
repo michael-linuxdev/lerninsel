@@ -1994,3 +1994,17 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   - Emoji-Vergleich System, Noto und Fluent. Abdeckung der 802 Emojis der App: Noto 761 (die übrigen aus dem aktuellen Noto-Archiv), Fluent 669.
 - **Wartet auf die Wahl des Auftraggebers:** Variante A oder B (oder eine Mischung) und das Emoji-Set. Danach folgen: eigene Sprites, Emoji-Atlas mit Ersetzung zur Laufzeit (ein Baustein statt 5.500 Textstellen), Figuren 2D und 3D, Gestaltung auf allen Seiten.
 - **Lizenzen:** Emoji-Sets sind MIT (Fluent) bzw. Apache 2.0 (Noto-Bilder). Das erweitert die Regel „nur CC0/OFL“; nach der Wahl in `CLAUDE.md` nachziehen.
+
+### Stand 01.11.2026, nachts (Figuren, Emojis, Stil)
+- **Stil A „Insel bunt“ gewählt.** Figuren neu in `shared/figuren.js`, in der App eingebaut, Ella auch in 3D:
+  - Ella braun, niedlich, ohne Federohren und ohne Brille.
+  - Rosa Wangen überall entfernt, auch beim Kind und bei Fipsi in 3D, beim Haustier und im Kleiderschrank.
+- **Eigene Bilder statt Emojis:**
+  - Ersatz-Baustein `shared/emoji.js` mit Eltern-Schalter „Emojis des Geräts“ (`eltern.bilder = "geraet"`) und Test `bilder` ist eingebaut.
+  - Bisher stehen dort 114 selbst gezeichnete Bilder. Der Auftraggeber fand sie nicht gut genug.
+  - Nach dem Vergleich von fünf freien Sets fiel die Wahl auf **Noto (Apache 2.0) in Stil A**: dünne Kontur, zwei Farbstufen. Freigegeben „für alle“, die Umsetzung folgt in der nächsten Sitzung.
+  - Werkzeug: `quellen/noto-stil-a.py`. Auftrag und Schritte stehen in `docs/SESSION-PROMPT.md`, Abschnitt 0.
+- **3D-Leistung:**
+  - Auflösung passt sich an, günstigere Schatten jedes zweite Bild, Wasser und Gras im Shader, Shader werden vorab übersetzt.
+  - Auf dem iPad noch nicht geprüft.
+- **Offen:** Gestaltung Stil A auf allen Seiten angleichen. Emoji-Stellen in Canvas und 3D (Schilder auf der Insel, Stempel im Atelier).

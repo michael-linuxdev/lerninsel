@@ -23,8 +23,8 @@ function baue(hex, inhalt) {
     return `url(#${id})`;
   };
   // Kurzzeichen: $K = Kontur einer Fläche, $L = Linie (ohne Füllung) – beide in #3B1F63 (Stil A)
-  inhalt = inhalt.replace(/\$K/g, ' stroke="#3B1F63" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"')
-    .replace(/\$L/g, ' stroke="#3B1F63" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round"');
+  inhalt = inhalt.replace(/\$K/g, ' stroke="#3B1F63" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"')
+    .replace(/\$L/g, ' stroke="#3B1F63" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"');
   const koerper = inhalt.replace(/\b([GV])\((#[0-9a-fA-F]{6})\)/g, (_, a, f) => verlauf(a, f)).replace(/\s+/g, " ").trim();
   return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">${defs.length ? `<defs>${defs.join("")}</defs>` : ""}${koerper}</svg>`;
 }

@@ -2,10 +2,15 @@
 
 Jedes Emoji der App bekommt ein eigenes, kleines SVG-Bild. Gemeinsamer Stil, damit alles aus einem Guss wirkt:
 
+## Leitlinie (Wahl des Auftraggebers 01.11.2026): **einfach, aber sauber**
+Piktogramme im Insel-Stil: klare, symmetrische Formen, wenige Teile (meist 2–6), flache Farben **ohne Schattenton und ohne Verlauf**, gleich starke Kontur
+(`$K`/`$L` = 2,5 px), höchstens ein kleiner weißer Glanzpunkt. Tiere als **Kopf von vorn** (Ohren, Schnauze, Augen), Menschen als Kopf mit Schultern.
+Keine Kritzel- und Zusatzlinien, keine kleinen Muster. Lieber eine große, eindeutige Silhouette als viele Details.
+
 ## Form
 - `viewBox="0 0 64 64"` (das Bauskript setzt das `<svg>` drumherum – in den Teil-Dateien steht **nur der Inhalt**).
 - Das Motiv füllt etwa 52–58 px der 64 px, mittig, mit etwas Luft am Rand.
-- **Dunkle Kontur wie bei den Figuren:** jede Hauptform mit `stroke="#3B1F63" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`
+- **Dunkle Kontur wie bei den Figuren:** jede Hauptform mit `stroke="#3B1F63" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"`
   (kleine Details wie Augen, Glanz, Wangen ohne Kontur). Formen rund und freundlich.
 - Feine Linien (Stiele, Schnurrhaare, Zeiger) ebenfalls in `#3B1F63`, 2,5–3 px.
 - Wenige Formen (meist 3–10), gut erkennbar auch bei 24 px Größe. Keine Schrift im Bild (Ausnahme: Ziffern bei den Zahlen-Tasten, Buchstaben bei 🔤🔠 und Flaggen-Kennung).
