@@ -106,6 +106,12 @@
     { wer: "fipsi", text: { de: "Auf den Schildern stehen Wörter, die du schon kennst. Lies sie mal laut!", ru: "На табличках написаны слова, которые ты уже знаешь. Прочитай их вслух!", status: E } },
     { wer: "fipsi", text: { de: "Mit jedem neuen Wort finden wir mehr von der Karte. Wann immer du magst, üben wir weiter.", ru: "С каждым новым словом мы находим больше карты. Когда захочешь, продолжим.", status: E } }
   ] });
+  // Kapitel 3 (01.11.2026): Bennos Bäckerei öffnet
+  Sz.registriere("bennos-baeckerei", { titel: "Bennos Bäckerei", kapitel: 3, blasen: [
+    { wer: "biber", text: { de: "{name}, rate mal, was ich gebaut habe! Eine Bäckerei!", ru: "{name}, угадай, что я построил! Пекарню!", status: E } },
+    { wer: "biber", text: { de: "Brötchen, Brezeln, Kuchen – alles frisch gebacken. Die Tiere der Insel kaufen bei mir ein.", ru: "Булочки, крендели, пироги – всё свежее. Звери острова покупают у меня.", status: E } },
+    { wer: "biber", text: { de: "Hilfst du mir an der Theke? Wir packen die Bestellungen und rechnen mit dem Geld.", ru: "Поможешь мне за прилавком? Мы собираем заказы и считаем деньги.", status: E } }
+  ] });
   Sz.registriere("atelier", { titel: "Paulas Atelier", etappe: "E9", blasen: [
     { wer: "papagei", text: { de: "Hallo {name}! Ich bin Paula. Auf meiner Bühne spielt Musik – und im Atelier wird gemalt!", ru: "Привет, {name}! Я Паула. На моей сцене играет музыка – а в ателье рисуют!", status: E } },
     { wer: "papagei", text: { de: "Male ein Bild oder erfinde eine Melodie. Dein neuestes Bild steht dann auf der Staffelei in deinem Zimmer.", ru: "Нарисуй картину или придумай мелодию. Твоя новая картина будет стоять на мольберте в твоей комнате.", status: E } },

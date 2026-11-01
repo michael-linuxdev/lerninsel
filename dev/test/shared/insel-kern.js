@@ -297,9 +297,14 @@
   // Nie rückwärts, keine Fristen. Kapitel 1 „Der Spross“ öffnet die Szene „erste-frucht“ (E3).
   // ======================================================================================================
   const deutschFertig = () => Object.values(((S().lade("deutsch") || {}).kapitel) || {}).filter(x => x > 0).length;
+  // geschaffte Matheweg-Stationen über alle Wege
+  const matheFertig = () => { const m = S().lade("mathe") || {}; return ["k1", "k2", "k3", "k4", "k5"].reduce((n, w) => n + Object.values(m[w] || {}).filter(x => x > 0).length, 0); };
   const KAPITEL = [
     { n: 2, szene: "fipsis-karte", titel: "Fipsis Karte", bedingung: "5 Lernfunde und ein Deutsch-Kapitel",
-      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 5 && deutschFertig() >= 1 }
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 5 && deutschFertig() >= 1 },
+    // 01.11.2026: Kapitel 3 öffnet Bennos Bäckerei (ersetzt „Bennos Brücke“ am Bauplatz, solange die Minispiele ausgeblendet sind)
+    { n: 3, szene: "bennos-baeckerei", titel: "Bennos Bäckerei", bedingung: "10 Lernfunde und 3 Stationen auf dem Matheweg",
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 10 && matheFertig() >= 3 }
   ];
   // Wörter für Fipsis Wegweiser: nur Wörter, die das Kind schon hatte (Lernkartei Deutsch, Lernfunde in Deutsch), höchstens n, ohne Dopplungen
   function wortSchilder(n = 3) {
@@ -447,6 +452,7 @@
       ballons: { x: P.ballons[0], z: P.ballons[1], h: 2.4 },
       fipsi: { x: P.fipsi[0], z: P.fipsi[1], h: 1.4 },
       baer: { x: P.baer[0], z: P.baer[1], h: 1.6 },
+      biber: { x: P.biber[0], z: P.biber[1], h: 1.4 },
       buehne: { x: P.buehne[0], z: P.buehne[1], h: 1.8 },
       kartenweg: { x: P.kartenweg[0], z: P.kartenweg[1], h: 1.4 }
     };
@@ -486,7 +492,7 @@
   // Spiele, die noch entstehen: seit 30.10.2026 alle fünf Minispiele (ausgeblendet, werden neu gedacht – Spielwelt.MINISPIELE_AUS)
   const bald = (id) => !!S().MINISPIELE_AUS && ["ballons", "truhe", "insel", "lauf", "kart", "bau"].includes(id);
   // Neue Orte (01.11.2026) an den Plätzen der ausgeblendeten Minispiele: Garten (Kapitel 1), Tierpflege-Station (Kapitel 2), Bäckerei (öffnet Kapitel 3)
-  const NEU_FERTIG = { garten: true };
+  const NEU_FERTIG = { garten: true, baeckerei: true };
   function ortOffen(id) {
     const k = W.Story ? W.Story.kapitel() : 0;
     if (id === "garten") return S().offen(k >= 1);
@@ -619,7 +625,11 @@
     haus: [["🚪", "Reingehen"], 3.4], ballons: [["🎈", "Spielen"], 1.9], truhe: [["🔓", "Öffnen"], 1.9], schach: [["♟️", "Schach"], 2.4], buehne: [["🎵", "Musik"], 2.6],
     station: [["🌦️", "Ansehen"], 1.9], album: [["📒", "Album"], 1.6], bett: [["🛏️", "Ansehen"], 2.2], schrank: [["🚪", "Öffnen"], 2.0], spiegel: [["🪞", "Reinschauen"], 1.6], wissensbaum: [["🌳", "Ansehen"], 2.2], sonnenuhr: [["☀️", "Ansehen"], 1.9], paket: [["🎁", "Öffnen"], 1.8], nachbar: [["💬", "Reden"], 2.3], wegweiser: [["🪧", "Lesen"], 2.0]
   };
-  const baeckereiAntwort = () => (W.InselNeu && W.InselNeu.baeckerei ? W.InselNeu.baeckerei() : null);
+  function baeckereiAntwort() {
+    if (!ortOffen("baeckerei")) return blase("🥨", "Bäckerei Benno – noch zu", "Benno backt schon heimlich! Seine Bäckerei öffnet in Kapitel 3. Dafür brauchst du 10 Lernfunde und 3 geschaffte Stationen auf dem Matheweg.", "Пекарня Бенно откроется в главе 3.");
+    const d = S().lade("baeckerei") || {};
+    return blase("biber", "Bäckerei Benno", d.tage ? `Hallo ${name()}! Heute kommen wieder fünf Kunden. Hilfst du mir an der Theke?` : `Hallo ${name()}! Meine Bäckerei ist offen. Packst du die Bestellungen und rechnest mit dem Geld?`, "Помоги мне в пекарне!", "../baeckerei/");
+  }
   const tierstationAntwort = () => (W.InselNeu && W.InselNeu.tierstation ? W.InselNeu.tierstation() : null);
   AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
   const aktionFuer = (id) => (bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
@@ -632,7 +642,7 @@
     // Regeln und Zustände
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
     weihnachtsPaket, geburtstagsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
-    KAPITEL, wortSchilder, deutschFertig,
+    KAPITEL, wortSchilder, deutschFertig, matheFertig,
     // Zimmer
     PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel,
     // Wetter
