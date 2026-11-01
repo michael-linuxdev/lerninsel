@@ -1,0 +1,8 @@
+# Liegengebliebenes aus Tests und lokalen Werkzeugen (nie ausliefern)
+node_modules/
+*.neu
+*.bak
+.DS_Store
+bilder/
+screenshots/
+*.log

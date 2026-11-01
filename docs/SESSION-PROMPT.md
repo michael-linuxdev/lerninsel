@@ -16,7 +16,15 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 **Ablauf:** Einrichten und `sh tests/laufen.sh` (muss grün sein) → **Fragerunde** (höchstens 4 Fragen; iPad-Rückmeldung zuerst, gemeldete Fehler
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
-## 1. Stand (30.10.2026, spät)
+## 1. Stand (01.11.2026)
+**Neu am 01.11.2026: Code-Review mit Korrekturen** (Details in `docs/PLAN.md`, „Stand 01.11.2026“; Tests `robust` und `offline`):
+- Datenverlust behoben: Die Sicherung in IndexedDB wurde bei leerem localStorage überschrieben. Ein gelöschtes Kind kam zurück. Zwei Tabs überschrieben sich.
+- „Erst lernen“ dichter: „PIN vergessen?“ nur noch mit Zufallsaufgabe nach 60 s und Hinweis an die Eltern. Die Eltern-Anmeldung gilt 15 Minuten.
+  Spielstand laden setzt das Zeitkonto nicht mehr zurück. „Noch 0 Minuten“ lässt sich nicht weglernen.
+- Namen ohne HTML-Zeichen; Schrift Fredoka lokal (kein Google Fonts mehr); Service Worker holt Seiten zuerst aus dem Netz.
+- GitHub Action `.github/workflows/tests.yml` prüft jeden Push (Node-Tests, Rauchtest, `robust`, /dev frisch gebaut).
+
+### Stand 30.10.2026, spät
 Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zuletzt erledigt (alle Tests grün, alles auf `main`):
 - **Optik Teil 1 und 2:** Jungen-Kleidung (Test `anziehen`), 3D-Figur mit Rumpf, Wasser-Wand in „einfach“ behoben, Fachseiten im gemeinsamen
   Gruppen-Stil, Lernbegleiter auf den Türen, Gras ruhiger, Tiere größer, Meine Ecke und Mathe-Lernbereiche mit Balken.
@@ -84,9 +92,12 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - **Übersetzungen:** nur russische Entwürfe, Ukrainisch u. a. fehlen.
 - **Länderprofile:** Nur Sachsen ist da (NA-47).
 - **Insel-Tests:** `tutorial`, `prolog`, `kapitel`, `geschenk` und `geburtstag` allein laufen lassen; unter Last wackeln sie.
+- **Aus dem Review offen (Wartbarkeit):** gemeinsames Modul Englisch/Sorbisch, Fachdaten nach Bedarf laden, feste Wartezeiten in Tests, Tests für Tier,
+  Schach, Gefühle, Duell; `dev/` per Action bauen statt einchecken (Entscheidung des Auftraggebers, braucht Umstellung von GitHub Pages).
 
 ### Offene Fragen an den Auftraggeber
 - **iPad-10-Test (in /dev), bisher nicht erfolgt.** Bitte ansehen:
+  0. Neu 01.11.: Elternbereich nach 15 Minuten wieder mit PIN; „PIN vergessen?“ (Zufallsaufgabe nach einer Minute); Schrift sieht aus wie vorher.
   1. Vorschul-Startseite: ein Kind mit Stufe „Vorschule“ anlegen.
   2. Vorlesen nur über 🔊: reicht das, ist der Knopf gut zu finden?
   3. „Heute für dich“ und Tagesaufgaben je Klasse.

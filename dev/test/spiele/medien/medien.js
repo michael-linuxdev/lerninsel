@@ -329,7 +329,7 @@
     const d = daten(); d.lektionen[l.id] = Math.max(vorher, sterne);
     const inselVorher = S.inselOffen();
     const neuFuehrerschein = !d.fuehrerschein && L.every(x => d.lektionen[x.id] > 0);
-    if (neuFuehrerschein) { d.fuehrerschein = new Date().toISOString().slice(0, 10); gewinn += 3; }
+    if (neuFuehrerschein) { d.fuehrerschein = Spielwelt.heute(); gewinn += 3; }
     speichere(d);
     if (gewinn) S.gibSterne(gewinn);
     if (window.Lernfunde) Lernfunde.merke({ fach: "tablet", art: "lektion", e: l.e, text: `Tablet-Führerschein: ${l.name}`, schluessel: "t:" + l.id });

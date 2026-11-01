@@ -4,7 +4,7 @@
   const S = window.Spielwelt, T = window.Tiere;
   if (!S || !T) return;
   const WAERME_ZIEL = 3, STUFE_AB = [0, 25, 70];
-  const heute = () => (window.Charakter ? Charakter.heute() : new Date().toISOString().slice(0, 10));
+  const heute = () => (window.Charakter ? Charakter.heute() : Spielwelt.heute());
 
   function lade() {
     const d = Object.assign({ phase: null, ei: null, waerme: 0, eiGewaermt: null, art: null, farbe: 0, name: "",
@@ -34,7 +34,7 @@
       d.phase = "tier"; d.art = T.EIER[d.ei].art; d.farbe = Math.floor(Math.random() * 3);
       d.satt = 80; d.freude = 90; d.geschluepft = heute(); speichere(d); return d;
     },
-    nenne(name) { const d = lade(); d.name = String(name).trim().slice(0, 16); speichere(d); },
+    nenne(name) { const d = lade(); d.name = Spielwelt.sauber(name, 16); speichere(d); },
     fuettern() {
       const d = lade(); if (d.phase !== "tier" || d.leckerli < 1) return null;
       const vorher = stufe(d);

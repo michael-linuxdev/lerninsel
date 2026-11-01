@@ -84,7 +84,9 @@
   const GEBURT_OK = (g) => /^\d{4}-\d{2}-\d{2}$/.test(g) && !isNaN(new Date(g + "T12:00:00")) && +g.slice(0, 4) > 2000;
   const heuteDatum = () => new Date(window.__jetzt || Date.now());
   function alterAus(g, am = heuteDatum()) {
-    const [y, m, t] = g.split("-").map(Number);
+    const [y, m, t0] = g.split("-").map(Number);
+    // 29.2. zählt in Nicht-Schaltjahren am 28.2. (wie letzterGeburtstag)
+    const t = m === 2 && t0 === 29 && new Date(am.getFullYear(), 1, 29).getMonth() !== 1 ? 28 : t0;
     let a = am.getFullYear() - y; if (am.getMonth() + 1 < m || (am.getMonth() + 1 === m && am.getDate() < t)) a--;
     return Math.max(3, Math.min(14, a));
   }
@@ -97,6 +99,9 @@
     return j > y ? { datum: iso(j), alter: j - y, jahr: j, heute: iso(j) === h } : null;
   }
   const leeresProfil = () => ({ name: "", sterne: 0, freigeschaltet: [], ton: true, daten: {}, stand: 0 });
+  // Namen und kurze Texte, die das Kind oder ein importierter Spielstand liefert: ohne HTML-Zeichen (sie landen auch in innerHTML)
+  const sauber = (t, max = 20) => String(t == null ? "" : t).replace(/[<>&"'`\u0000-\u001f]/g, "").trim().slice(0, max);
+  const esc = (t) => String(t == null ? "" : t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   // ---------- localStorage ----------
   const lesenK = (k) => { try { return JSON.parse(localStorage.getItem(k)) || null; } catch (e) { return null; } };
@@ -134,36 +139,54 @@
     })).catch(() => false);
   }
   let dbTimer = null;
+  // abgeglichen: Erst wenn die Kopie in IndexedDB gelesen ist, darf das Profil dorthin geschrieben werden – sonst überschreibt ein
+  // frisch angelegter (leerer) Stand die Sicherung, bevor sie wiederhergestellt werden kann (Review 01.11.2026).
+  // verworfen: Das aktive Kind wurde gelöscht – sein Profil darf nicht mehr gespeichert werden (auch nicht beim Verlassen der Seite).
+  // War localStorage beim Laden leer, bleibt ein neuer Stand bis zum Abgleich nur im Speicher: sonst fände die nächste Seite (z. B. nach
+  // der Weiterleitung in den Elternbereich) einen „neueren“ leeren Stand in localStorage und hielte die Sicherung für veraltet.
+  let abgeglichen = false, dbOffen = false, lokalOffen = false, verworfen = false;
+  function dbSpaeter() { if (!abgeglichen) { dbOffen = true; return; } clearTimeout(dbTimer); dbTimer = setTimeout(() => dbSchreiben(profil), 250); }
   // Im Erwachsenen-Modus wird Spielfortschritt nicht gespeichert (keine Sterne, kein Fortschritt fürs Kind)
   function speichern() {
-    if (!TEST && erwachsen()) return;
+    if ((!TEST && erwachsen()) || verworfen) return;
     profil.stand = Date.now();
+    if (!abgeglichen && !lokalBeimLaden) { lokalOffen = true; return; }
     lokalSchreiben(profil);
-    clearTimeout(dbTimer);
-    dbTimer = setTimeout(() => dbSchreiben(profil), 250);
+    dbSpaeter();
   }
   // Beim Verlassen der Seite sofort sichern
-  addEventListener("pagehide", () => { if (!TEST && erwachsen()) return; clearTimeout(dbTimer); dbSchreiben(profil); });
+  addEventListener("pagehide", () => {
+    if ((!TEST && erwachsen()) || verworfen) return;
+    // Seite wird verlassen, bevor der Abgleich fertig ist: nur echte Eingaben (Name, Einrichtung) sichern, keinen leeren Stand
+    if (!abgeglichen) { if (lokalOffen && (profil.name || (profil.daten.eltern && profil.daten.eltern.eingerichtet))) lokalSchreiben(profil); return; }
+    clearTimeout(dbTimer); dbSchreiben(profil);
+  });
   // Einstellungen immer speichern, auch im Erwachsenen-Modus: Änderung auf den gespeicherten Stand anwenden,
   // damit vorübergehender Fortschritt des Erwachsenen nicht mitgespeichert wird
   function speichernFest(aendern) {
     aendern(profil);
+    if (verworfen) return;
     if (TEST || !erwachsen()) { speichern(); return; }
     const p = lokalLesen() || leeresProfil();
     aendern(p); p.stand = Date.now();
-    lokalSchreiben(p); dbSchreiben(p);
+    lokalSchreiben(p); if (abgeglichen) dbSchreiben(p); else dbOffen = true;
   }
 
   // ---------- Spielstand prüfen (für Datei und QR-Code) ----------
   function bereinige(p) {
     if (!p || typeof p !== "object") return null;
     const n = leeresProfil();
-    n.name = typeof p.name === "string" ? p.name.trim().slice(0, 20) : "";
+    n.name = typeof p.name === "string" ? sauber(p.name) : "";
     n.sterne = Number.isFinite(p.sterne) && p.sterne >= 0 ? Math.floor(p.sterne) : 0;
     n.freigeschaltet = Array.isArray(p.freigeschaltet) ? p.freigeschaltet.filter(x => typeof x === "string").slice(0, 500) : [];
     n.ton = p.ton !== false;
     n.daten = p.daten && typeof p.daten === "object" && !Array.isArray(p.daten) ? p.daten : {};
     if (n.daten.eltern && n.daten.eltern.kind) kindMigrieren(n.daten.eltern.kind);
+    // Freitexte, die in Seiten als HTML landen, kurz und ohne HTML-Zeichen halten (präparierte Spielstände per Datei/QR)
+    const o = (x) => x && typeof x === "object" && !Array.isArray(x);
+    if (o(n.daten.tier) && n.daten.tier.name != null) n.daten.tier.name = sauber(n.daten.tier.name, 16);
+    const ort = o(n.daten.eltern) && o(n.daten.eltern.kind) ? n.daten.eltern.kind.ort : null;
+    if (o(ort)) { ort.name = sauber(ort.name, 60); ort.region = sauber(ort.region, 60); }
     n.stand = Number.isFinite(p.stand) ? p.stand : 0;
     return n;
   }
@@ -171,7 +194,7 @@
   // ---------- Haushalt laden (bei Bedarf aus dem alten Einzelprofil anlegen) ----------
   function bereinigeHaushalt(h) {
     if (!h || typeof h !== "object" || !Array.isArray(h.kinder) || !h.kinder.length) return null;
-    const kinder = h.kinder.filter(k => k && /^k[0-9a-z]{1,12}$/.test(k.id)).map(k => ({ id: k.id, name: String(k.name || "").slice(0, 20) })).slice(0, 8);
+    const kinder = h.kinder.filter(k => k && /^k[0-9a-z]{1,12}$/.test(k.id)).map(k => ({ id: k.id, name: sauber(k.name || "") })).slice(0, 8);
     if (!kinder.length) return null;
     return { aktiv: kinder.some(k => k.id === h.aktiv) ? h.aktiv : kinder[0].id, kinder, pin: typeof h.pin === "string" ? h.pin : null, stand: Number.isFinite(h.stand) ? h.stand : 0 };
   }
@@ -185,6 +208,7 @@
   let KEY = profilKey(haushalt.aktiv);
 
   let profil = bereinige(lokalLesen()) || leeresProfil();
+  const lokalBeimLaden = !!lokalLesen(), standBeimLaden = profil.stand;
 
   // Haushalt mit der zweiten Kopie abgleichen
   dbLesen(HKEY).then((kopie) => {
@@ -196,18 +220,35 @@
   });
 
   // Spielstand des aktiven Kindes mit der zweiten Kopie abgleichen
+  // Verglichen wird mit dem Stand beim Laden: Was diese Seite seitdem gespeichert hat (z. B. die Story-Migration eines leeren Profils),
+  // darf eine echte Sicherung nicht verdrängen.
+  const schluesselBeimLaden = KEY;
   dbLesen().then((kopie) => {
     const k = bereinige(kopie);
-    const lokalDa = !!lokalLesen();
-    if (k && (!lokalDa || k.stand > profil.stand)) {
-      // localStorage war leer oder älter: aus IndexedDB wiederherstellen
-      lokalSchreiben(k);
-      if (!sessionStorage.getItem((PRE + "wiederhergestellt"))) {
-        sessionStorage.setItem((PRE + "wiederhergestellt"), "1");
-        location.reload();
-      }
-    } else if (lokalDa && (!k || profil.stand > k.stand)) {
-      dbSchreiben(profil);
+    if (verworfen || KEY !== schluesselBeimLaden) return;
+    if (k && (!lokalBeimLaden || k.stand > standBeimLaden)) {
+      // localStorage war leer oder älter: aus IndexedDB wiederherstellen (auch im Speicher, falls nicht neu geladen wird)
+      k.stand = Math.max(k.stand, Date.now());
+      profil = k; lokalSchreiben(k);
+      abgeglichen = true; dbOffen = false;
+      let neu = false;
+      try { if (!sessionStorage.getItem(PRE + "wiederhergestellt")) { sessionStorage.setItem(PRE + "wiederhergestellt", "1"); neu = true; } } catch (e) { /* egal */ }
+      if (neu) location.reload();
+      return;
+    }
+    abgeglichen = true;
+    if (lokalOffen) { lokalSchreiben(profil); lokalOffen = false; }
+    if (lokalLesen() && (!k || profil.stand > k.stand || dbOffen)) dbSchreiben(profil);
+    dbOffen = false;
+  });
+
+  // Andere Seite (Tab, Split View) hat den Spielstand geändert: übernehmen, damit diese Seite ihn nicht mit einem alten Stand überschreibt.
+  // Eine Seite schreibt danach nur noch ihre eigenen Teile (Spielwelt.speichere(spiel, …)) auf den neuen Stand.
+  addEventListener("storage", (e) => {
+    if (e.key === KEY && e.newValue && !verworfen) {
+      const neu = bereinige(lesenK(KEY)); if (neu && neu.stand > profil.stand) profil = neu;
+    } else if (e.key === HKEY && e.newValue) {
+      const h = bereinigeHaushalt(lesenK(HKEY)); if (h && h.stand > haushalt.stand) { haushalt.kinder = h.kinder; haushalt.pin = h.pin; haushalt.stand = h.stand; }
     }
   });
 
@@ -226,6 +267,9 @@
     erwachsen,
     setzeErwachsen(minuten) { try { if (minuten) sessionStorage.setItem(ERW, String(Date.now() + minuten * 60000)); else sessionStorage.removeItem(ERW); } catch (e) { /* egal */ } },
     get profil() { return profil; },
+    sauber, esc,
+    // Heutiges Datum "JJJJ-MM-TT" in Ortszeit (Tests: window.__heute oder window.__jetzt)
+    heute() { if (window.__heute) return window.__heute; return isoTag(new Date(window.__jetzt || Date.now())); },
     speicherSchutz,                    // Promise<boolean>
     // "Annas", aber "Max'"
     genitiv(n) { n = n || profil.name || ""; return /[sßxz]$/i.test(n) ? n + "’" : n + "s"; },
@@ -319,7 +363,7 @@
     // Feste Textpaare: [deutsch, russisch] (alt) oder { de, ru, uk } → [deutsch, hilfe]
     paar(x) { const h = Spielwelt.hilfe(); if (Array.isArray(x)) return [x[0], h && h.code === "ru" ? x[1] || "" : ""]; return [x.de, h ? x[h.code] || "" : ""]; },
     setzeName(n) {
-      const name = String(n).trim().slice(0, 20); speichernFest(p => { p.name = name; });
+      const name = sauber(n); speichernFest(p => { p.name = name; });
       const e = haushalt.kinder.find(k => k.id === haushalt.aktiv); if (e && e.name !== name) { e.name = name; haushaltSpeichern(); }
     },
     // ---------- Mehrere Kinder pro Tablet ----------
@@ -329,12 +373,16 @@
     neuesKind() {
       if (haushalt.kinder.length >= 8) return null;
       let n = 2; while (haushalt.kinder.some(k => k.id === "k" + n)) n++;
-      const id = "k" + n; haushalt.kinder.push({ id, name: "" }); haushaltSpeichern(); return id;
+      const id = "k" + n;
+      // Reste eines früher gelöschten Kindes mit derselben Nummer entfernen (sonst erbt das neue Kind dessen Spielstand)
+      try { localStorage.removeItem(profilKey(id)); } catch (e) { /* egal */ }
+      db().then(d => d.transaction(DB_STORE, "readwrite").objectStore(DB_STORE).delete(profilKey(id))).catch(() => {});
+      haushalt.kinder.push({ id, name: "" }); haushaltSpeichern(); return id;
     },
     entferneKind(id) {
       if (haushalt.kinder.length <= 1) return false;
       haushalt.kinder = haushalt.kinder.filter(k => k.id !== id);
-      if (haushalt.aktiv === id) haushalt.aktiv = haushalt.kinder[0].id;
+      if (haushalt.aktiv === id) { haushalt.aktiv = haushalt.kinder[0].id; verworfen = true; clearTimeout(dbTimer); }
       haushaltSpeichern();
       try { localStorage.removeItem(profilKey(id)); } catch (e) { /* egal */ }
       db().then(d => d.transaction(DB_STORE, "readwrite").objectStore(DB_STORE).delete(profilKey(id))).catch(() => {});
@@ -373,10 +421,17 @@
       return bereinige(obj.profil);
     },
     importiere(neu) {
+      // Ein geladener Spielstand darf das heutige Zeitkonto und die Zeitregeln dieses Geräts nicht zurücksetzen
+      // (sonst: morgens sichern, spielen, abends wieder laden = neue Spielzeit). Auf einem neuen Gerät gibt es noch nichts zu behalten.
+      const alt = profil.daten || {}, heute = Spielwelt.heute();
+      neu.daten = neu.daten || {};
+      if (alt.zeit && alt.zeit.tag === heute) neu.daten.zeit = alt.zeit;
+      else if (neu.daten.zeit && neu.daten.zeit.tag === heute) delete neu.daten.zeit;
+      if (alt.eltern && alt.eltern.eingerichtet && alt.eltern.zeit) { neu.daten.eltern = Object.assign({}, neu.daten.eltern || {}, { zeit: alt.eltern.zeit }); }
       profil = neu;
       profil.stand = Date.now();
       lokalSchreiben(profil);
-      clearTimeout(dbTimer);
+      clearTimeout(dbTimer); abgeglichen = true; dbOffen = false;
       return dbSchreiben(profil);
     },
 

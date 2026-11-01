@@ -9,7 +9,7 @@
   const daten = () => Object.assign({ mal: {}, theater: {}, pass: [] }, S.lade("vorlesen") || {});
   const speichere = (d) => S.speichere("vorlesen", d);
   const klasse = () => ((S.stufe && S.stufe()) || {}).klasse || 2;
-  const heute = () => { const d = window.__jetzt ? new Date(window.__jetzt) : new Date(); return d.toISOString().slice(0, 10); };
+  const heute = () => Spielwelt.heute();
   const sprich = (t, fertig) => { if (SP && SP.verfuegbar && SP.verfuegbar()) SP.sprich(t, "de-DE", fertig); else if (fertig) setTimeout(fertig, 400); };
   const RICHT = { 1: [20, 40], 2: [50, 70], 3: [80, 100], 4: [100, 120] };   // grobe Orientierung (Wörter pro Minute), keine Bewertung
 

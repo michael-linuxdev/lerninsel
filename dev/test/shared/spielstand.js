@@ -151,7 +151,7 @@
   // Datei sichern
   async function sichern() {
     const text = JSON.stringify(S.exportiere(), null, 1);
-    const tag = new Date().toISOString().slice(0, 10);
+    const tag = S.heute();
     const name = `${(S.profil.name || "spielwelt").toLowerCase()}-spielstand-${tag}.json`;
     const datei = new File([text], name, { type: "application/json" });
     if (navigator.canShare && navigator.canShare({ files: [datei] })) {

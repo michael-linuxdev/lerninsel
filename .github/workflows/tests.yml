@@ -1,0 +1,32 @@
+# Prüft jeden Push auf main (Review 01.11.2026): Node-Tests, Offline-Liste, Rauchtest über alle Seiten, Robustheit,
+# und ob /dev frisch gebaut ist. Was auf main liegt, ist sofort live – ein rotes Kreuz hier heißt: sofort reparieren.
+name: Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/../pw-browsers
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Playwright und Chromium
+        run: |
+          npm i --no-save --no-package-lock playwright@1
+          npx playwright install --with-deps chromium
+      - name: /dev ist frisch gebaut
+        run: |
+          sh quellen/dev-bauen.sh
+          git status --porcelain -- dev sw.js
+          test -z "$(git status --porcelain -- dev sw.js)" || { echo "::error::/dev bzw. sw.js sind nicht aktuell – sh quellen/dev-bauen.sh ausführen und committen"; exit 1; }
+      - name: Node-Tests und Rauchtest
+        run: sh tests/laufen.sh
+      - name: Robustheit (Spielstand, Zeitkonto, Elternbereich)
+        run: PORT=8798 sh tests/laufen.sh robust

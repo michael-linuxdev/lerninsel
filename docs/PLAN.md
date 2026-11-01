@@ -1906,3 +1906,33 @@ Tagesaufgaben und Startseite sind für alle Klassen gleich; Englisch steht schon
   kürzere Texte in Kl. 1 bzw. mehr Text ab Kl. 3 inhaltlich, gezielte Lücken nach Wiederholen in „Heute für dich“; Spiel-Schwierigkeit nach Alter kommt mit
   den neuen Insel-Spielen.
 - Test `altersgerecht`; `dashboard` angepasst (Kl. 2 drei Lern-Türen, Vorschule drei, Kl. 3 vier).
+
+### Stand 01.11.2026, Code-Review und Korrekturen (Auftrag: „Review das Repo“, dann „Setze alles um, was du für sinnvoll hältst“)
+Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetzt, alles mit Test `robust` bzw. `offline`:
+- **Datenverlust behoben:** War localStorage leer (Safari räumt auf), legte `ereignisse.js` sofort einen Story-Stand an; das leere Profil galt dann als
+  „neuer“ als die Sicherung in IndexedDB und überschrieb sie. Jetzt: Bis zum Abgleich mit IndexedDB schreibt `core.js` nichts nach IndexedDB, und ein
+  neuer Stand bleibt nur im Speicher, wenn localStorage beim Laden leer war (auch über Weiterleitungen hinweg). Verglichen wird mit dem Stand beim Laden.
+- **Gelöschtes aktives Kind kam zurück** (pagehide schrieb es wieder, `neuesKind()` vergab die Nummer neu): Profil wird nach dem Löschen nie mehr gespeichert;
+  `neuesKind()` räumt Reste unter der neuen Nummer weg.
+- **Zwei Seiten gleichzeitig** (Split View, zweiter Tab): `storage`-Ereignis übernimmt den neueren Stand, eine Seite überschreibt nur noch ihre eigenen Teile.
+- **„Erst lernen“-Schlupflöcher:** „PIN vergessen?“ fragte immer 17 × 13 – jetzt Zufallsaufgabe (zweistellig × zweistellig) nach 60 s Wartezeit, danach
+  Hinweis-Karte `#pin-hinweis` im Elternbereich (Test-Haken `window.__pinWarten`). Anmeldung im Elternbereich gilt 15 Minuten (vorher bis zum Beenden
+  der App). Spielstand laden (Datei/QR, ohne PIN erreichbar) behält das heutige Zeitkonto und die Zeitregeln des Geräts. „Noch 0 Minuten“ (`Zeit.noch`) setzt
+  einen Deckel für heute (`zeit.deckel`), den weiteres Lernen nicht mehr aufhebt.
+- **HTML-Zeichen in Namen:** `Spielwelt.sauber()` entfernt `< > & " ' \`` aus Kinder-, Tier- und Ortsnamen (beim Eintippen und bei jedem Laden/Import);
+  `Spielwelt.esc()` für neue Stellen. Vorher konnte ein präparierter Spielstand-QR Skript im Elternbereich ausführen.
+- **Schrift Fredoka lokal** (`shared/schrift/`, OFL, in `docs/LIZENZEN.md`) statt Google Fonts – keine IP-Adresse mehr an Google.
+- **Service Worker:** Seiten zuerst aus dem Netz (höchstens 3 s, offline aus dem Speicher), damit HTML und Skripte derselben Version zusammenpassen;
+  `icons/icon-180.png` ergänzt; „App neu laden“ in /dev meldet nicht mehr den Service Worker der Hauptseite ab.
+- **Ein Datum für alle:** `Spielwelt.heute()` (Ortszeit, beachtet `__heute`/`__jetzt`) in Zeit, Charakter, Tierpflege, Vorlesen, Medien, Spielstand-Datei
+  (vorher teils UTC → zwischen 0 und 1/2 Uhr „gestern“). Geburtstag 29.2.: `alterAus` zählt im Nicht-Schaltjahr wie `letzterGeburtstag` am 28.2.
+- **Build:** `dev-bauen.sh` kopiert nur noch eine feste Liste (`index.html manifest.webmanifest sw.js shared spiele inhalte icons`), sed auch auf macOS;
+  `bauen.sh` baut erst in einen Zwischenordner (ein Fehler lässt keinen halben Stand liegen); `.gitignore`; `faecher.js` ergänzt `FACH_SEITEN` statt es zu
+  überschreiben (Ladereihenfolge mit `religion.js` egal).
+- **Tests:** neuer Node-Test `offline` (jede von HTML geladene Datei steht in `sw.js`, kein toter Eintrag) in `laufen.sh`; `laufen.sh` prüft, ob der Port frei
+  ist und der Server antwortet. **GitHub Action** `.github/workflows/tests.yml`: bei jedem Push Node-Tests, Rauchtest, `robust` und „/dev frisch gebaut“.
+- **Bewusst nicht geändert:** `/dev/test` bleibt öffentlich (Testmodus des Auftraggebers; eigener Spielstand). Lernzeit zählt weiter über Eingaben in der
+  letzten Minute (Antworten statt Tippen zu zählen wäre ein eigenes Paket). Ruhezeit hängt an der Geräteuhr (gegen Kinder kaum zu verhindern).
+- **Offen aus dem Review (Wartbarkeit, eigenes Paket):** gemeinsames Modul für Englisch/Sorbisch (135 gleiche Zeilen), Fachdaten nach Bedarf nachladen
+  (Elternbereich lädt ~2 MB Skripte), feste `waitForTimeout` in Tests durch Bedingungen ersetzen, eigene Tests für Tier, Schach, Gefühle, Duell;
+  `dev/` künftig per Action bauen statt einchecken (würde das Repo halbieren – braucht Umstellung von GitHub Pages, Entscheidung des Auftraggebers).

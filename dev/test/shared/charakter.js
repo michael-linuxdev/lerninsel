@@ -74,6 +74,7 @@
   const pad = (n) => String(n).padStart(2, "0");
   function heute() {
     if (window.__heute) return window.__heute; // nur für Tests
+    if (window.Spielwelt && Spielwelt.heute) return Spielwelt.heute();
     const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   }
   function wocheVon(datum) { // Montag dieser Woche

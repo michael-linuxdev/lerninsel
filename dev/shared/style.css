@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
+@import url("schrift/fredoka.css");   /* lokal (OFL), keine Anfrage an Google Fonts */
 
 /* hidden muss immer gewinnen – sonst bleiben z. B. .knopf-Elemente trotz hidden sichtbar */
 [hidden] { display: none !important; }

@@ -3,6 +3,12 @@
   const $ = (id) => document.getElementById(id);
   const inhalt = $("inhalt");
   const SITZUNG = S.vorsilbe + "eltern";
+  // Anmeldung im Elternbereich gilt 15 Minuten (sonst bliebe sie in der iPad-App offen, bis die App beendet wird)
+  const SITZUNG_MIN = 15;
+  const sitzungAn = () => { try { sessionStorage.setItem(SITZUNG, String(Date.now() + SITZUNG_MIN * 60000)); } catch (e) { /* egal */ } };
+  const sitzungOffen = () => { try { return +sessionStorage.getItem(SITZUNG) > Date.now(); } catch (e) { return false; } };
+  // „PIN vergessen?“: Zurücksetzen mit einer zufälligen Rechenaufgabe nach einer Wartezeit; die Eltern sehen danach einen Hinweis
+  const PIN_ZURUECK = S.vorsilbe + "pin-zurueck", PIN_WARTEN = 60;
   const hash = (t) => { let h = 5381; for (const c of "pin:" + t) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0; return h.toString(36); };
   const eltern = () => S.lade("eltern") || {};
 
@@ -27,14 +33,32 @@
         if ($("pin2").value.trim() !== p1) { f.textContent = "Die beiden PINs sind verschieden."; return; }
         S.setzePin(hash(p1));
       } else if (S.pin() !== hash(p1)) { f.textContent = "Die PIN stimmt nicht."; $("pin1").value = ""; return; }
-      sessionStorage.setItem(SITZUNG, "1");
+      sitzungAn();
       if (S.eingerichtet()) uebersicht(); else einrichtung(false);
     });
     const v = $("pin-vergessen");
-    if (v) v.addEventListener("click", () => {
-      const a = prompt("Zum Zurücksetzen: Wie viel ist 17 × 13?");
-      if (a && a.trim() === "221") { S.setzePin(null); pinSeite(); }
-      else if (a !== null) f.textContent = "Leider falsch.";
+    if (v) v.addEventListener("click", pinVergessen);
+  }
+  function pinVergessen() {
+    const z = () => 23 + Math.floor(Math.random() * 67), a = z(), b = z();
+    inhalt.innerHTML = `<div class="karte pin" id="pin-zurueck-karte">
+      <h2>PIN zurücksetzen</h2>
+      <p>Nur für Erwachsene: Rechne <b>${a} × ${b}</b>. Die Eingabe öffnet sich nach einer Minute. Nach dem Zurücksetzen zeigt der Elternbereich einen Hinweis.</p>
+      <input id="pin-z-antwort" type="text" inputmode="numeric" autocomplete="off" aria-label="Ergebnis" disabled>
+      <p class="fehler" id="pin-z-fehler"></p>
+      <button class="knopf haupt" id="pin-z-ok" disabled>Noch <span id="pin-z-n">${PIN_WARTEN}</span> Sekunden</button>
+      <button class="knopf" id="pin-z-zurueck" style="box-shadow:none;background:transparent">Zurück</button>
+    </div>`;
+    let n = window.__pinWarten != null ? window.__pinWarten : PIN_WARTEN;
+    const ok = $("pin-z-ok"), feld = $("pin-z-antwort");
+    const frei = () => { ok.disabled = false; feld.disabled = false; ok.textContent = "PIN zurücksetzen"; feld.focus(); };
+    const t = setInterval(() => { n--; const el = $("pin-z-n"); if (el) el.textContent = n; if (n <= 0) { clearInterval(t); if ($("pin-z-ok")) frei(); } }, 1000);
+    if (n <= 0) { clearInterval(t); frei(); }
+    $("pin-z-zurueck").addEventListener("click", () => { clearInterval(t); pinSeite(); });
+    ok.addEventListener("click", () => {
+      if (feld.value.trim() !== String(a * b)) { $("pin-z-fehler").textContent = "Leider falsch."; clearInterval(t); setTimeout(pinVergessen, 1500); return; }
+      try { localStorage.setItem(PIN_ZURUECK, String(Date.now())); } catch (e) { /* egal */ }
+      S.setzePin(null); pinSeite();
     });
   }
 
@@ -55,7 +79,7 @@
       <h2>${bearbeiten ? "Kind und Einstellungen" : "Angaben zum Kind"}</h2>
       <p class="klein">Alles bleibt nur auf diesem Tablet.</p>
       <label>Vorname (so wird das Kind begrüßt)<input id="e-name" maxlength="20" autocomplete="off" autocapitalize="words" value="${(S.profil.name || "").replace(/"/g, "&quot;")}"></label>
-      <label>Geburtsdatum (für das Alter und ein Geburtstagsgeschenk auf der Insel)<input type="date" id="e-geburt" value="${k.geburt || ""}" min="2008-01-01" max="${new Date(window.__jetzt || Date.now()).toISOString().slice(0, 10)}"></label>
+      <label>Geburtsdatum (für das Alter und ein Geburtstagsgeschenk auf der Insel)<input type="date" id="e-geburt" value="${k.geburt || ""}" min="2008-01-01" max="${S.heute()}"></label>
       <div class="zwei">
         <label>Alter<select id="e-alter">${option([4, 5, 6, 7, 8, 9, 10, 11].map(n => [n, n + " Jahre"]), k.alter)}</select></label>
         <label>Stufe<select id="e-stufe">${option(S.STUFEN.map(x => [x.code, x.name]), k.stufe)}</select></label>
@@ -145,7 +169,8 @@
     try {
       const vorsilbe = S.umgebung === "prod" ? "spielwelt-" : S.umgebung + "-";
       if (window.caches) for (const k of await caches.keys()) if (k.startsWith(vorsilbe)) await caches.delete(k);
-      if (navigator.serviceWorker) for (const r of await navigator.serviceWorker.getRegistrations()) if (location.href.startsWith(r.scope)) await r.unregister();
+      // nur die eigene Registrierung (die mit dem längsten passenden Bereich): /dev darf den Service Worker der Hauptseite nicht abmelden
+      if (navigator.serviceWorker) { const eigene = (await navigator.serviceWorker.getRegistrations()).filter(r => location.href.startsWith(r.scope)).sort((x, y) => y.scope.length - x.scope.length)[0]; if (eigene) await eigene.unregister(); }
     } catch (e) { /* trotzdem neu laden */ }
     location.reload();
   }
@@ -644,6 +669,9 @@
         <button role="tab" data-teil="ueberblick" class="an">📊 Überblick</button><button role="tab" data-teil="lernstand">📘 Lernstand</button><button role="tab" data-teil="schule">🏫 Wie in der Schule</button><button role="tab" data-teil="zeit">⏰ Zeit & Regeln</button><button role="tab" data-teil="kinder">👨‍👩‍👧 Kinder & Gerät</button>
       </nav>
       <section class="eltern-teil" data-teil="ueberblick" role="tabpanel">
+      ${(() => { let z = 0; try { z = +localStorage.getItem(PIN_ZURUECK); } catch (e) { /* egal */ } return z ? `<div class="karte" id="pin-hinweis"><h2>🔑 Die PIN wurde neu festgelegt</h2>
+        <p>Am ${new Date(z).toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" })} wurde die PIN über „PIN vergessen?“ zurückgesetzt. Wart ihr das nicht, legt bitte eine neue PIN fest (unten bei „Kinder und PIN“).</p>
+        <button class="knopf" id="pin-hinweis-ok">Verstanden</button></div>` : ""; })()}
       ${S.schuljahrOffen() ? `<div class="karte" id="schuljahr-frage"><h2>🎒 Neues Schuljahr ${S.schuljahrAm()}/${String(S.schuljahrAm() + 1).slice(2)}</h2>
         <p>Ist <b>${S.profil.name}</b> jetzt in der Stufe „${S.STUFEN.find(x => x.code === S.NAECHSTE_STUFE[S.kind().stufe]).name}“? Bis ihr antwortet, bleibt alles wie bisher. Was ${S.profil.name} schon erreicht hat, bleibt in jedem Fall erhalten.</p>
         <div class="knoepfe"><button class="knopf haupt" id="sj-ja">Ja, ${S.STUFEN.find(x => x.code === S.NAECHSTE_STUFE[S.kind().stufe]).name}</button>
@@ -748,6 +776,7 @@
       </section>
 `;
     $("pin-neu").addEventListener("click", () => { S.setzePin(null); sessionStorage.removeItem(SITZUNG); pinSeite(); });
+    const ph = $("pin-hinweis-ok"); if (ph) ph.addEventListener("click", () => { try { localStorage.removeItem(PIN_ZURUECK); } catch (e) { /* egal */ } $("pin-hinweis").remove(); });
     $("erwachsen").addEventListener("click", () => { S.setzeErwachsen(60); location.href = "../../"; });
     $("kind-aendern").addEventListener("click", () => einrichtung(true));
     if ($("geburt-eintragen")) $("geburt-eintragen").addEventListener("click", () => einrichtung(true));
@@ -799,5 +828,5 @@
     $("abmelden").addEventListener("click", () => { sessionStorage.removeItem(SITZUNG); location.href = "../ich/"; });
   }
 
-  if (sessionStorage.getItem(SITZUNG) && S.pin()) { if (S.eingerichtet()) uebersicht(); else einrichtung(false); } else pinSeite();
+  if (sitzungOffen() && S.pin()) { if (S.eingerichtet()) uebersicht(); else einrichtung(false); } else pinSeite();
 })();

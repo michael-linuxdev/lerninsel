@@ -2,12 +2,21 @@
 // danach auch ohne Internet geladen. Bei Internet wird im Hintergrund aktualisiert.
 // /dev hat einen eigenen Cache, damit sich Test- und echte Seite nicht gegenseitig löschen
 const VORSILBE = self.registration.scope.includes("/dev/test/") ? "test-" : self.registration.scope.includes("/dev/") ? "dev-" : "";
-const CACHE = VORSILBE + "spielwelt-d5f1941fc5";
+const CACHE = VORSILBE + "spielwelt-546eac5892";
 const START = [
   "./",
   "index.html",
   "manifest.webmanifest",
   "shared/style.css",
+  "shared/schrift/fredoka.css",
+  "shared/schrift/fredoka-latin-400-normal.woff2",
+  "shared/schrift/fredoka-latin-ext-400-normal.woff2",
+  "shared/schrift/fredoka-latin-500-normal.woff2",
+  "shared/schrift/fredoka-latin-ext-500-normal.woff2",
+  "shared/schrift/fredoka-latin-600-normal.woff2",
+  "shared/schrift/fredoka-latin-ext-600-normal.woff2",
+  "shared/schrift/fredoka-latin-700-normal.woff2",
+  "shared/schrift/fredoka-latin-ext-700-normal.woff2",
   "shared/config.js",
   "shared/core.js",
   "shared/ereignisse.js",
@@ -22,6 +31,7 @@ const START = [
   "shared/vendor/jsQR.js",
   "icons/icon.svg",
   "icons/icon-192.png",
+  "icons/icon-180.png",
   "spiele/anziehen/",
   "spiele/anziehen/teile.js",
   "spiele/anziehen/spiel.js",
@@ -155,8 +165,19 @@ self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
   const url = new URL(e.request.url);
   const eigen = url.origin === location.origin;
-  const schrift = url.hostname.endsWith("fonts.googleapis.com") || url.hostname.endsWith("fonts.gstatic.com");
-  if (!eigen && !schrift) return;
+  if (!eigen) return;   // seit 01.11.2026 keine fremden Schriften mehr (Fredoka liegt in shared/schrift/)
+
+  // Seiten (HTML) zuerst aus dem Netz (höchstens 3 s), damit HTML und Skripte derselben Version zusammenpassen; offline aus dem Speicher
+  if (e.request.mode === "navigate") {
+    e.respondWith(caches.open(CACHE).then(async (cache) => {
+      const alt = await cache.match(e.request, { ignoreSearch: true });
+      const netz = fetch(e.request).then((antwort) => { if (antwort && antwort.ok) cache.put(e.request, antwort.clone()); return antwort; });
+      if (!alt) return netz;
+      const frist = new Promise((ok) => setTimeout(() => ok(alt), 3000));
+      return Promise.race([netz.then((a) => (a && a.ok ? a : alt)).catch(() => alt), frist]);
+    }));
+    return;
+  }
 
   e.respondWith(
     caches.open(CACHE).then(async (cache) => {

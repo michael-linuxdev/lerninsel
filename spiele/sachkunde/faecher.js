@@ -12,7 +12,7 @@
     dinge: dinge.map(([t, r, gruppe]) => ({ t, ru: r, gruppe })) });
   const ende = (text, ru) => info("Geschafft!", "🦉", text, ru);
 
-  window.FACH_SEITEN = {
+  window.FACH_SEITEN = Object.assign(window.FACH_SEITEN || {}, {
     kunst: { name: "Kunst", e: "🎨", intro: "In Kunst entdecken wir Farben, Formen, Bilder und Künstler. Malen kannst du im Atelier!",
       lb: [["ku1", "🖌️ Flächiges Gestalten: Farben, Linien, Drucken"], ["ku2", "🏺 Körperhaft-räumliches Gestalten: Formen und Bauen"], ["ku3", "🎭 Aktionsbetontes Gestalten: Kunst mit dem Körper"]] },
     musik: { name: "Musik", e: "🎵", intro: "In Musik geht es um Stimme, Instrumente, Rhythmus und berühmte Musik. Mitspielen kannst du im Atelier bei Papagei Paula!",
@@ -23,7 +23,7 @@
       lb: [["sp1", "🏃 Laufen, Springen, Werfen"], ["sp2", "⚽ Spiele und Fair Play"], ["sp3", "🤸 Turnen"], ["sp4", "💃 Gymnastik und Tanz"], ["sp5", "🏊 Schwimmen"], ["sp6", "⛷️ Wintersport"]] },
     ethik: { name: "Ethik", e: "💭", intro: "In Ethik denken wir zusammen nach: über uns, über andere, über Feste und über unsere Welt.",
       lb: [["et1", "🙂 Ich im Wir"], ["et2", "🤝 Miteinander"], ["et3", "🕯️ Voneinander: Feste und Religionen"], ["et4", "🌍 Wir in der Welt"]] }
-  };
+  });
 
   const T = window.FACH_THEMEN = [];
   const neu = (fach, t) => T.push(Object.assign({ fach }, t));

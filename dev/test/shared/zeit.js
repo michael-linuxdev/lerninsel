@@ -27,7 +27,7 @@
 
   // ---------- Tageswerte ----------
   const pad = (n) => String(n).padStart(2, "0");
-  const heute = () => { if (window.__heute) return window.__heute; const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+  const heute = () => S.heute ? S.heute() : (window.__heute || (() => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; })());
   // Vergangene Tage für den Wochenbericht (höchstens 60 Tage)
   function merkeTag(alt) {
     if (!alt || !alt.tag || (!alt.lernSek && !alt.spielSek && !alt.aufgaben)) return;
@@ -67,7 +67,8 @@
     const L = Math.max(1, Math.round(r.lernMin * fw)) * 60, A = Math.max(1, Math.round(r.lernAufgaben * fw));
     const bloecke = Math.max(Math.floor(d.lernSek / L), Math.floor(d.aufgaben / A));
     const tagesGrenze = r.maxSpiel * 60 + d.extraMin * 60;
-    const erlaubt = Math.min(bloecke * r.spielMin * 60 + d.extraMin * 60, tagesGrenze);
+    // deckel: von den Eltern festgelegte Grenze für heute (Zeit.noch) – weiteres Lernen hebt sie nicht wieder auf
+    const erlaubt = Math.min(bloecke * r.spielMin * 60 + d.extraMin * 60, tagesGrenze, Number.isFinite(d.deckel) ? d.deckel : Infinity);
     const rest = Math.max(0, erlaubt - d.spielSek);
     const genug = d.spielSek >= tagesGrenze;
     const fortschritt = Math.min(1, Math.max((d.lernSek % L) / L, (d.aufgaben % A) / A));
@@ -213,7 +214,7 @@
 
   const Zeit = {
     ART, regeln, setzeRegeln, empfehlung, status, aufgabe, inRuhe,
-    extra(min) { const d = tag(); d.extraMin += min; speichere(d); },
+    extra(min) { const d = tag(); d.extraMin += min; if (Number.isFinite(d.deckel)) d.deckel += min * 60; speichere(d); },
     // Eltern legen die restliche Spielzeit für heute direkt fest („Du darfst noch x Minuten spielen“).
     // Gilt auch ohne Lernen (bewusste Ausnahme der Eltern) und kann auch verkürzen (0 = für heute Schluss).
     // Umsetzung über extraMin (darf negativ oder krumm sein), damit Tagesgrenze und Anzeige wie gewohnt funktionieren. Ruhezeit gilt weiter.
@@ -222,6 +223,7 @@
       const st = status(), d = tag(), r = st.regeln;
       const basis = Math.min(st.bloecke * r.spielMin * 60, r.maxSpiel * 60) + d.extraMin * 60 - d.spielSek;
       d.extraMin += (min * 60 - basis) / 60;
+      d.deckel = d.spielSek + min * 60;
       d.geschenk = { min, gezeigt: false };
       speichere(d); document.dispatchEvent(new CustomEvent("zeit-aenderung"));
       return status();
