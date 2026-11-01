@@ -20,6 +20,9 @@ Jedes Emoji der App bekommt ein eigenes, kleines SVG-Bild. Gemeinsamer Stil, dam
 - Gesichter (Smileys, Menschen): runde Köpfe, Augen als dunkle Ovale mit kleinem weißen Glanzpunkt. **Keine rosa Wangen** (Wunsch des Auftraggebers).
 - Menschen: freundlich, neutral, kindgerecht; Kleidung einfach.
 
+## Kurzzeichen
+- `$K` = Kontur einer Fläche (`stroke="#3B1F63" stroke-width="3"`, runde Ecken), `$L` = Linie ohne Füllung in derselben Farbe. Beispiel: `<circle cx="32" cy="32" r="20" fill="#FFC94A"$K/>`.
+
 ## Teil-Dateien
 `quellen/icons/<teil>.js`:
 ```js

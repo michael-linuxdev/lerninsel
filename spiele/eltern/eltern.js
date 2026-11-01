@@ -757,6 +757,7 @@
         <h2>🔊 Vorlesen</h2>
         <p>Texte werden vorgelesen, wenn ${S.profil.name || "das Kind"} auf 🔊 tippt. So kann ${S.profil.name || "es"} selbst entscheiden, wann es zuhört.</p>
         <label class="schalter-z"><input type="checkbox" id="vl-auto" ${(eltern().vorlesen || {}).auto ? "checked" : ""}> Automatisch vorlesen (wie früher: jede Sprechblase und Aufgabe wird sofort vorgelesen)</label>
+        <label class="schalter-z"><input type="checkbox" id="eigene-bilder" ${eltern().bilder !== "geraet" ? "checked" : ""}> Eigene Bilder der Lerninsel statt der Emojis des Geräts (überall gleich, im Stil der Figuren)</label>
       </div>
       <div class="karte" id="geschenk-karte">
         <h2>🎁 Geschenk-Code einlösen</h2>
@@ -793,6 +794,7 @@
     if ($("tutorial-weg")) $("tutorial-weg").addEventListener("click", () => { TUTORIAL.forEach(e => window.Story.etappeFertig(e, true)); window.Story.setzeKapitel(1); S.meldung("Einführung übersprungen."); uebersicht(); });
     const en = $("einst-neu"); if (en) en.addEventListener("click", () => { const m = S.lade("mathe") || {}; delete m.einstufung; m.einstufungAngebot = true; m.k2 = m.k2 || {}; S.speichere("mathe", m); S.meldung("Der Test wird beim nächsten Öffnen des Matheweges angeboten."); uebersicht(); });
     geschenkKnoepfe();
+    if ($("eigene-bilder")) $("eigene-bilder").addEventListener("change", () => { const e = eltern(); e.bilder = $("eigene-bilder").checked ? "" : "geraet"; S.speichere("eltern", e); S.meldung("Gespeichert – gilt ab der nächsten Seite."); });
     if ($("vl-auto")) $("vl-auto").addEventListener("change", () => { const e = eltern(); e.vorlesen = { auto: $("vl-auto").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });
     if ($("fe-modus")) { const sp = () => { const e = eltern(); e.ferien = { modus: $("fe-modus").checked, weniger: $("fe-weniger").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); };
       $("fe-modus").addEventListener("change", sp); $("fe-weniger").addEventListener("change", sp); }

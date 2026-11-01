@@ -22,6 +22,9 @@ function baue(hex, inhalt) {
       : `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${hell(farbe, 0.3)}"/><stop offset="1" stop-color="${dunkel(farbe, 0.1)}"/></linearGradient>`);
     return `url(#${id})`;
   };
+  // Kurzzeichen: $K = Kontur einer Fläche, $L = Linie (ohne Füllung) – beide in #3B1F63 (Stil A)
+  inhalt = inhalt.replace(/\$K/g, ' stroke="#3B1F63" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"')
+    .replace(/\$L/g, ' stroke="#3B1F63" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round"');
   const koerper = inhalt.replace(/\b([GV])\((#[0-9a-fA-F]{6})\)/g, (_, a, f) => verlauf(a, f)).replace(/\s+/g, " ").trim();
   return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">${defs.length ? `<defs>${defs.join("")}</defs>` : ""}${koerper}</svg>`;
 }
@@ -39,10 +42,13 @@ function pruefe(svg) {
 
 const teile = Object.keys(liste).filter(t => !nurTeil || t === nurTeil);
 const alle = {}, fehlt = [], warn = [];
+// Alle Bild-Dateien im Ordner zusammenführen (Teil-Dateien und Pakete wie paket1.js); bei doppelten Schlüsseln gewinnt die spätere Datei (alphabetisch)
+const norm = {};
+fs.readdirSync(ORDNER).filter(f => f.endsWith(".js")).sort().forEach(f => {
+  const datei = path.join(ORDNER, f); delete require.cache[require.resolve(datei)];
+  Object.entries(require(datei)).forEach(([k, v]) => { norm[k.replace(/\uFE0F/g, "")] = v; });
+});
 for (const t of teile) {
-  const datei = path.join(ORDNER, t + ".js"); let daten = {};
-  if (fs.existsSync(datei)) { delete require.cache[require.resolve(datei)]; daten = require(datei); }
-  const norm = {}; Object.entries(daten).forEach(([k, v]) => { norm[k.replace(/️/g, "")] = v; });
   for (const [e, name] of liste[t]) {
     const inhalt = norm[e.replace(/️/g, "")];
     if (!inhalt) { fehlt.push(`${t}: ${e} ${name}`); continue; }

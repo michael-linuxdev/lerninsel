@@ -2,7 +2,7 @@
 // danach auch ohne Internet geladen. Bei Internet wird im Hintergrund aktualisiert.
 // /dev hat einen eigenen Cache, damit sich Test- und echte Seite nicht gegenseitig löschen
 const VORSILBE = self.registration.scope.includes("/dev/test/") ? "test-" : self.registration.scope.includes("/dev/") ? "dev-" : "";
-const CACHE = VORSILBE + "spielwelt-6f83cf9ee2";
+const CACHE = VORSILBE + "spielwelt-38b73a4aad";
 const START = [
   "./",
   "index.html",
@@ -19,6 +19,8 @@ const START = [
   "shared/schrift/fredoka-latin-ext-700-normal.woff2",
   "shared/config.js",
   "shared/core.js",
+  "shared/icons.js",
+  "shared/emoji.js",
   "shared/ereignisse.js",
   "shared/geschenk.js",
   "shared/zeige.js",

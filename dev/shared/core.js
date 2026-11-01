@@ -541,6 +541,14 @@
     if (document.body) leiste(); else addEventListener("DOMContentLoaded", leiste);
   }
 
+  // Eigene Bilder statt Emojis (01.11.2026): Bilder und Ersatz-Baustein nachladen (Eltern können die Emojis des Geräts behalten: eltern.bilder = "geraet")
+  {
+    const wurzel = (document.currentScript && document.currentScript.dataset.root) || "./";
+    if (((profil.daten.eltern || {}).bilder) !== "geraet" && !window.__ohneBilder) {
+      const lade = (datei, dann) => { const s = document.createElement("script"); s.src = wurzel + datei; s.async = false; if (dann) s.onload = dann; document.head.appendChild(s); };
+      lade("shared/icons.js"); lade("shared/emoji.js");
+    }
+  }
   if ("serviceWorker" in navigator && location.protocol === "https:") {
     const tiefe = (document.currentScript && document.currentScript.dataset.root) || "./";
     navigator.serviceWorker.register(tiefe + "sw.js").catch(() => {});
