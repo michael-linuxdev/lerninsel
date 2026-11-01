@@ -49,7 +49,7 @@
         : `<path d="M73 80 Q82 70 91 80" fill="none" stroke="#7CF0FF" stroke-width="6" stroke-linecap="round"/><path d="M109 80 Q118 70 127 80" fill="none" stroke="#7CF0FF" stroke-width="6" stroke-linecap="round"/><path d="M86 95 Q100 106 114 95" fill="none" stroke="#7CF0FF" stroke-width="5" stroke-linecap="round"/>`}`); },
 
     eule(stil, a) { const s = bau(stil); return svg(s, `
-      <path d="M46 72 L42 28 Q60 38 74 44 Q100 36 126 44 Q140 38 158 28 L154 72 Q170 112 160 162 Q148 204 100 204 Q52 204 40 162 Q30 112 46 72 Z" fill="${s.f("#B98A66")}"${s.k()}/>
+      <path d="M100 34 Q154 34 158 84 Q170 120 160 162 Q148 204 100 204 Q52 204 40 162 Q30 120 42 84 Q46 34 100 34 Z" fill="${s.f("#B98A66")}"${s.k()}/>
       <ellipse cx="100" cy="152" rx="40" ry="44" fill="${s.f("#F7E6CF")}"/>
       <path d="M80 140 q6 6 12 0 M100 140 q6 6 12 0 M88 158 q6 6 12 0 M108 158 q6 6 12 0 M98 176 q6 6 12 0" fill="none" stroke="#D9B48F" stroke-width="3" stroke-linecap="round"/>
       <path d="M44 104 Q26 132 40 168 Q54 150 56 118 Z" fill="${s.f("#9C6E4E")}"${s.k()}/><path d="M156 104 Q174 132 160 168 Q146 150 144 118 Z" fill="${s.f("#9C6E4E")}"${s.k()}/>
