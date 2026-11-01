@@ -103,6 +103,20 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await weiter();
   erwarte(await p.evaluate(() => !!document.getElementById("ausdruck") && !__mathe.lauf.weg), "Weiter: nächste Aufgabe");
 
+  // ---------- Startzahl: gemerkter Fehler nur als Station + Startzahl, beim Training wieder dieselbe Aufgabe ----------
+  await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k2"; d.fehler = []; Spielwelt.speichere("mathe", d); });
+  await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(400);
+  await p.evaluate((n) => __mathe.starte(n), await nr("plus20")); await p.waitForTimeout(300);
+  const a0 = await p.evaluate(() => __mathe.lauf.liste[__mathe.lauf.pos]);
+  const falsch = String(+a0.antwort + 3);
+  await tippe(falsch); await p.waitForTimeout(1400); await tippe(falsch); await p.waitForTimeout(300);
+  const f = await p.evaluate(() => Spielwelt.lade("mathe").fehler.slice(-1)[0]);
+  erwarte(f && f.saat === a0.saat && f.station === "plus20" && !f.hilfe && JSON.stringify(f).length < 160, `gemerkter Fehler kompakt: Station + Startzahl (${JSON.stringify(f).length} Zeichen)`);
+  await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.fehler.forEach(x => { x.faellig = "2000-01-01"; }); Spielwelt.speichere("mathe", d); });
+  await p.evaluate(() => __mathe.starteTraining()); await p.waitForTimeout(300);
+  const t = await p.evaluate((saat) => __mathe.lauf.liste.find(x => x.ausFehler && x.saat === saat), a0.saat);
+  erwarte(t && t.text === a0.text && t.antwort === a0.antwort && t.hilfe === a0.hilfe, `Training: dieselbe Aufgabe aus der Startzahl wiederhergestellt (${a0.text})`);
+
   await browser.close();
   if (fehler.length) { console.log("❌ Fehler:\n" + fehler.map(f => "  - " + f).join("\n")); process.exit(1); }
   console.log("✅ Fehler-Ursachen-Test bestanden.");

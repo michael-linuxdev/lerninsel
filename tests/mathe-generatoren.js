@@ -47,4 +47,34 @@ pruefe("Jede Runde hat 10 verschiedene Aufgaben; keine Funktion in aufgaben.js i
   const namen = (require("fs").readFileSync(require("path").join(__dirname, "..", "spiele/mathe/aufgaben.js"), "utf8").match(/^  function (\w+)/gm) || []);
   assert.deepStrictEqual(namen.filter((n, i) => namen.indexOf(n) !== i), []);
 });
+pruefe("Startzahl: dieselbe Startzahl gibt dieselbe Aufgabe (alle Stationen, je 30 Startzahlen), verschiedene Startzahlen geben Vielfalt", () => {
+  const ohneIds = (a) => JSON.stringify(a).replace(/(id=\\"|url\(#|href=\\"#)[^"\\)]*/g, "$1");
+  for (const s of [].concat(M.STATIONEN_K1, M.STATIONEN, M.STATIONEN_K3, M.STATIONEN_K4, M.STATIONEN_K5)) {
+    const texte = new Set();
+    for (let saat = 1; saat <= 30; saat++) {
+      const a = M.aufgabe(s.id, saat * 7919), b = M.aufgabe(s.id, saat * 7919);
+      assert.strictEqual(ohneIds(a), ohneIds(b), `${s.id}: Startzahl ${saat * 7919} nicht eindeutig`);
+      assert.strictEqual(a.saat, saat * 7919);
+      texte.add(a.text + "|" + (a.frage || "") + "|" + a.antwort + "|" + ohneIds(a.bild || ""));
+    }
+    assert.ok(texte.size >= 4, `${s.id}: zu wenig Vielfalt über Startzahlen (${texte.size})`);
+  }
+  assert.ok(M.runde("plus20", 10).every(a => Number.isInteger(a.saat)), "Runden-Aufgaben tragen ihre Startzahl");
+});
+pruefe("Plus und Minus: 1000 Startzahlen je Station, Ergebnis auf zweitem Weg nachgerechnet", () => {
+  const RECHNUNG = /^(\d+) ([+−·:]) (\d+)$/;
+  let geprueft = 0;
+  for (const s of [].concat(M.STATIONEN_K1, M.STATIONEN, M.STATIONEN_K3)) {
+    for (let saat = 0; saat < 1000; saat++) {
+      const a = M.aufgabe(s.id, saat), m = RECHNUNG.exec(a.text || "");
+      const o = a.ops || (m && { a: +m[1], op: m[2], b: +m[3] });
+      if (!o || a.text.includes("?")) continue;
+      const c = o.op === "+" ? o.a + o.b : o.op === "−" ? o.a - o.b : o.op === "·" ? o.a * o.b : o.a / o.b;
+      assert.strictEqual(+a.antwort, c, `${s.id} (Startzahl ${saat}): ${a.text || o.a + o.op + o.b} = ${a.antwort}`);
+      assert.ok(c >= 0 && Number.isInteger(c), `${s.id}: ${a.text}`);
+      geprueft++;
+    }
+  }
+  assert.ok(geprueft > 10000, "zu wenige Rechnungen geprüft: " + geprueft);
+});
 console.log(`✅ Mathe-Generatoren: ${n} Prüfungen bestanden.`);

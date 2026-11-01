@@ -678,6 +678,13 @@
         <button class="knopf" id="sj-bleibt">Nein, bleibt in „${S.stufe().name}“</button></div>
         <div class="knoepfe"><select id="sj-andere" aria-label="Andere Stufe">${S.STUFEN.map(x => `<option value="${x.code}">${x.name}</option>`).join("")}</select><button class="knopf" id="sj-andere-ok">Andere Stufe übernehmen</button></div>
         <p class="klein">Bleibt ${S.profil.name} in der Klasse, sieht ${S.profil.name} davon nichts; die App schlägt dann gezielt vor, was in dieser Klasse noch fehlt. Bei einer übersprungenen Klasse bietet die App einen freiwilligen Lücken-Check an.</p></div>` : ""}
+      ${(() => {   // Sicherungs-Erinnerung (02.11.2026, Vorbild Bastion): einmal im Monat eine Datei sichern; die erste Erinnerung nach 7 Tagen
+        const el = S.lade("eltern") || {}, letzte = el.sicherung || "", heute = S.heute();
+        if (!el.seit) { el.seit = heute; S.speichere("eltern", el); }
+        const tage = (a) => Math.round((new Date(heute) - new Date(a)) / 86400000);
+        const faellig = letzte ? tage(letzte) >= 30 : tage(el.seit || heute) >= 7;
+        return faellig ? `<div class="karte" id="sicherung-erinnerung"><h2>💾 Zeit für eine Sicherung</h2><p>${letzte ? `Die letzte Sicherung war am ${letzte.slice(8)}.${letzte.slice(5, 7)}.${letzte.slice(0, 4)}.` : "Der Spielstand wurde noch nie gesichert."} Alles liegt nur auf diesem Tablet. Mit einer Sicherungsdatei geht nichts verloren – auch nicht, wenn das Tablet kaputtgeht oder ein neues kommt.</p><p class="klein">So geht es: Startseite → 💾 Spielstand → „Als Datei sichern“. Wir erinnern einmal im Monat.</p></div>` : "";
+      })()}
       ${S.kind().geburt ? "" : `<div class="karte" id="geburt-fehlt"><h2>🎂 Geburtsdatum eintragen</h2><p>Mit dem Geburtsdatum stimmt das Alter immer (Bildschirmzeit nach Alter), und am Geburtstag wartet ein Geschenk am Steg der Insel – auch wenn ${S.profil.name || "das Kind"} erst ein paar Tage später spielt.</p><div class="knoepfe"><button class="knopf haupt" id="geburt-eintragen">Jetzt eintragen</button></div></div>`}
       <div class="karte">
         <h2>${S.profil.name || "Spielstand"} auf einen Blick</h2>

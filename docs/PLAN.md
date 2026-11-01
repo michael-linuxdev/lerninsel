@@ -2035,3 +2035,46 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   - Stil A auf allen Seiten (Kopfzeile, Karten-Radius 26 px, Kontur bei Sprechblasen).
   - iPad-Test der neuen Figuren und Bilder, besonders Leistung auf Seiten mit vielen Bildern.
   - Spielfigur in 3D könnte noch eigene Proportionen bekommen (kürzere Beine).
+
+### Stand 02.11.2026, Sitzung „Was die Lerninsel von Bastion lernen kann“ + Figuren, Tier, Junge/Mädchen
+- **Auftrag:** Ideen aus dem Nachfolger-Projekt Bastion übernehmen (Fehler-Ursachen, Erst erklären, Weg zeigen, Prüfstand, Startzahl,
+  Update-Hinweis, Sicherung, keine Zufallsbelohnungen) und dazu: keine Kulleraugen, Junge/Mädchen deutlicher, Begleiter-Tier nicht wie Fipsi
+  (Hund, Katze, Drache mit echten Stufen), Tilda in 2D mit Frisur („besonders in Sachsen nicht hinzunehmen“ ohne).
+- **Fragerunde:** alte Füchse werden Hunde · Sticker sucht das Kind aus · normale Augen für **alle** Figuren · alle vier Bastion-Pakete.
+  **Konflikt:** Eine parallele Sitzung hatte am 01.11. abends Kulleraugen, Wangen und Kindchenschema eingebaut. Entscheidung des Auftraggebers
+  (02.11.): **normale Augen, keine Wangen, keine großen Köpfe**; alles andere aus jener Sitzung bleibt (Begleiter-Zeichen statt Emoji, Handy-Korrekturen, Tests).
+- **Erledigt – Figuren:** normale Augen in 2D (`shared/figuren.js`, Eule mit Bernstein-Iris) und 3D (`augen()` in `heimat.js`/`figur3d.js`);
+  Spielfigur mit weißem, mandelförmigem Auge und Iris; Kindchenschema-Proportionen zurückgenommen (`Figur.KOPF`/`BUESTE` bleiben als Ausschnitte).
+  Tilda mit braunen Locken und lila Schleife (2D und 3D).
+- **Erledigt – Mein Tier:** Hund (Welpe → Junghund → Hund) statt Fuchs; Katze realistischer (Kätzchen → junge Katze → Katze, Schlitzpupille, Schwanz
+  um die Pfoten); Drache mit sichtbaren Stufen (Schlüpfling in der Eierschale → Jungdrache → großer Drache mit langem Hals, großen Flügeln, Zacken).
+  `Tiere.stufenName(art, st)`; Wald-Ei heißt Pfoten-Ei (id `wald` bleibt). Alte Füchse werden beim Laden zu Hunden (Name, Stufe, Zubehör bleiben).
+  3D-Modell je Stufe (Baby großer Kopf/kurze Beine, groß lange Beine/Schnauze). Test `tier` angepasst.
+- **Erledigt – Junge/Mädchen:** Gesicht (Wimpern + feine Brauen bzw. kräftige gerade Brauen + kantiges Kinn), Startkleidung, Kleiderschrank sortiert
+  (eigene und neutrale Teile vorn, die übrigen hinter „＋ Mehr Sachen“, nichts entfernt; Reiter „Kostüme“ bzw. „Kleider“), Zimmer im Kleiderschrank
+  und auf der Insel (Farben, Straßen-Teppich/Fußball/Raketen-Poster bzw. Blumen-Teppich/Wimpelkette/Herz-Poster; Startwand Himmelblau bzw. Rosa
+  kostenlos). „Keine Angabe“ bleibt wie bisher. Test `anziehen` erweitert.
+- **Erledigt – Sticker selbst aussuchen** statt Zufall (Regel „keine Zufallsbelohnungen“): nach 6 Aufgaben eine Wahl, höchstens 3 am Tag, keine
+  Doppelten; Auswahl-Karte im Album. Test `sticker`.
+- **Erledigt – Matheweg wie Bastion:**
+  - `spiele/mathe/fehler.js`: 8 Denkfehler mit Erkennungsregel, kurzer und langer Erklärung (So denkst du – Warum nicht – So stimmt es),
+    Kontrastaufgaben; Diagnose aufgefallen → vermutet (2× in 10 Aufgaben) → wird geübt → aufgelöst (2 Kontraste richtig, Lernfund) → wieder da.
+    Elternbereich: „Denkfehler im Blick“.
+  - `spiele/mathe/erklaeren.js`: Erklär-Einheiten (Ziel, Beispiel, Ergänzen, Robos Fehler, Merksatz) für k1plus10, plusUeber, minusUeber, mal1,
+    k3schriftplus, k3schriftminus (beide Minus-Verfahren). Angebot vor dem ersten Rechnen, 💡 jederzeit; Abschluss in `mathe.erklaert`.
+  - „Zeig mir deinen Weg“ bei schriftlich plus/minus: Stelle für Stelle, zwei Versuche je Stelle, „Dein Fehler lag bei den Zehnern“.
+  - **Startzahl:** alle Generatoren über `zz()` (sfc32); `Mathe.aufgabe(station, saat)` ist eindeutig. Gemerkte Fehler nur noch
+    `{ station, saat, text, antwort, am, stufe, faellig }` (~120 Zeichen statt mit Hilfe und Optionen); Aufgaben mit Bild kommen jetzt auch in die Lernkartei.
+  - Tests: `mathe-fehler` (Node, 1000 Startzahlen je Denkfehler), `mathe-generatoren` (Startzahl eindeutig, 10 000+ Rechnungen nachgerechnet),
+    `fehlerursachen` (echt durchgeklickt).
+- **Erledigt – Prüfstand:** `node quellen/pruefstand.js` zählt je Bereich die Stufen 0–3 (Entwurf, maschinell, fachlich, mit Kindern) mit Prüfsumme
+  in `quellen/pruefstand.json`. **Heute: 0 von 471 Lerninhalten von einem Menschen geprüft.** Test `pruefstand`.
+- **Erledigt – Sicherung und Update:** Elternbereich erinnert an die Sicherungsdatei (zuerst nach 7 Tagen, dann monatlich; `eltern.sicherung`, `eltern.seit`), Test `sicherung`.
+  Neue Version: freundlicher Hinweis „Jetzt aktualisieren / Später“ auf der Startseite (sonst kurze Meldung). **Entscheidung:** `skipWaiting` bleibt,
+  weil Seiten zuerst aus dem Netz kommen und Skripte aus dem Speicher – ein wartender Service Worker würde HTML und Skripte verschiedener Stände mischen.
+- **Offen / nächste Schritte:**
+  - iPad-Test: neue Augen, Tiere (alle 3 Stufen), Jungen-/Mädchen-Zimmer, Erklär-Einheiten und Schrittweg auf dem Tablet.
+  - **Prüfen statt bauen** (wichtigste Lehre aus Bastion): Inhalte mit `node quellen/pruefstand.js setzen --stufe 2 --pruefer <Kürzel> …` als geprüft markieren,
+    zuerst die Pilot-Erklärungen und den Denkfehler-Katalog; dann mit Kindern ausprobieren (Stufe 3).
+  - Mehr Denkfehler (Einmaleins-Verwechslungen, Geteilt, Größen umrechnen, Uhrzeit) und Erklär-Einheiten für weitere Stationen; Schrittweg auch für schriftlich mal/geteilt (Kl. 4).
+  - Vorlesen in den Erklär-Einheiten (🔊-Knopf, Seite lädt `sprache.js` noch nicht).

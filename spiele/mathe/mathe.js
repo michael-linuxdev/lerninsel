@@ -43,17 +43,21 @@
     const st = d.stat[a.station] = d.stat[a.station] || { r: 0, f: 0 };
     if (richtig) st.r++; else st.f++;
     d.fehler = d.fehler || [];
-    if (!richtig && !a.bild) {
+    // Seit 02.11.2026 mit Startzahl: gemerkt werden nur Station, Startzahl, Text (für Lernfunde) und Ergebnis – die Aufgabe entsteht beim
+    // Wiederholen neu aus Mathe.aufgabe(station, saat). So passen auch Aufgaben mit Bild in die Lernkartei, und der Spielstand bleibt klein.
+    const gleich = (x) => a.saat != null && x.saat != null ? x.station === a.station && x.saat === a.saat : !!a.text && x.text === a.text;
+    if (!richtig && (a.saat != null || !a.bild) && !a.kontrast) {
       const { station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort, max } = a;
-      d.fehler = d.fehler.filter(x => x.text !== text);
-      d.fehler.push({ station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort, max, am: Date.now(), stufe: 1, faellig: tagIn(ABSTAND[1]) });
+      d.fehler = d.fehler.filter(x => !gleich(x));
+      d.fehler.push(a.saat != null ? { station, saat: a.saat, text: text || frage || "", antwort, am: Date.now(), stufe: 1, faellig: tagIn(ABSTAND[1]) }
+        : { station, text, antwort, art, optionen, frage, einheit, hilfe, nurLuecke, wort, max, am: Date.now(), stufe: 1, faellig: tagIn(ABSTAND[1]) });
       d.fehler = d.fehler.slice(-40);
     }
     if (richtig && a.ausFehler) {
-      const f = d.fehler.find(x => x.text === a.text);
+      const f = d.fehler.find(gleich);
       if (f) {
         const stufe = (f.stufe || 1) + 1;
-        if (stufe >= ABSTAND.length) { d.fehler = d.fehler.filter(x => x !== f); d.gelernt = (d.gelernt || 0) + 1; gemeistert(f); }
+        if (stufe >= ABSTAND.length) { d.fehler = d.fehler.filter(x => x !== f); d.gelernt = (d.gelernt || 0) + 1; gemeistert(a.saat != null ? a : f); }
         else { f.stufe = stufe; f.faellig = tagIn(ABSTAND[stufe]); }
       }
     }
@@ -410,7 +414,7 @@
     const offeneIds = offen.map(s => s.id);
     // zuerst fällige Wiederholungen (höchstens 4), älteste zuerst
     let liste = (d.fehler || []).filter(f => offeneIds.includes(f.station) && faellig(f)).sort((x, y) => (x.faellig || "").localeCompare(y.faellig || "")).slice(0, 4)
-      .map(f => Object.assign({}, f, { ausFehler: true, wieder: false }));
+      .map(f => Object.assign({}, f.saat != null && window.Mathe.aufgabe ? (window.Mathe.aufgabe(f.station, f.saat) || f) : f, { station: f.station, ausFehler: true, wieder: false }));
     const rest = 8 - liste.length;
     schwach.forEach((s, i) => {
       const n = schwach.length === 1 ? rest : i === 0 ? Math.ceil(rest / 2) : Math.floor(rest / 2);

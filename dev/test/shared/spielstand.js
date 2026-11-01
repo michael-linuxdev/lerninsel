@@ -149,19 +149,22 @@
   }
 
   // Datei sichern
+  // Datum der letzten Sicherung (für die monatliche Erinnerung im Elternbereich)
+  const gesichert = () => { const e = S.lade("eltern") || {}; e.sicherung = S.heute(); S.speichere("eltern", e); };
   async function sichern() {
     const text = JSON.stringify(S.exportiere(), null, 1);
     const tag = S.heute();
     const name = `${(S.profil.name || "spielwelt").toLowerCase()}-spielstand-${tag}.json`;
     const datei = new File([text], name, { type: "application/json" });
     if (navigator.canShare && navigator.canShare({ files: [datei] })) {
-      try { await navigator.share({ files: [datei], title: "Spielstand" }); S.meldung("Spielstand gesichert."); return; }
+      try { await navigator.share({ files: [datei], title: "Spielstand" }); gesichert(); S.meldung("Spielstand gesichert."); return; }
       catch (e) { if (e.name === "AbortError") return; }
     }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(datei); a.download = name;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+    gesichert();
     S.meldung("Gespeichert im Ordner „Downloads“.");
   }
 

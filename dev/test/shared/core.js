@@ -554,5 +554,22 @@
   if ("serviceWorker" in navigator && location.protocol === "https:") {
     const tiefe = (document.currentScript && document.currentScript.dataset.root) || "./";
     navigator.serviceWorker.register(tiefe + "sw.js").catch(() => {});
+    // Neue Version (02.11.2026, Vorbild Bastion: nie still mitten in der Sitzung): Die offene Seite rechnet mit ihrem Stand zu Ende;
+    // der neue Stand gilt ab der nächsten Seite. Wir sagen es einmal freundlich an – auf der Startseite mit Knopf zum Neuladen.
+    // (skipWaiting bleibt: Seiten kommen zuerst aus dem Netz, Skripte aus dem Speicher – so passen HTML und Skripte immer zusammen.)
+    const hatteSW = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!hatteSW || window.__neueVersionGemeldet) return;
+      window.__neueVersionGemeldet = true;
+      const start = /\/(index\.html)?$/.test(location.pathname) && !location.pathname.includes("/spiele/");
+      if (start && document.body) {
+        const k = document.createElement("div"); k.id = "neue-version"; k.className = "neue-version";
+        k.innerHTML = `<span>✨ Es gibt eine neue Version der Lerninsel.</span><button class="knopf haupt" id="nv-jetzt">Jetzt aktualisieren</button><button class="knopf" id="nv-spaeter">Später</button>`;
+        k.style.cssText = "position:fixed;inset-inline:12px;inset-block-end:12px;z-index:50;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;background:#fff;border-radius:22px;padding:12px 16px;box-shadow:0 6px 0 rgba(59,31,99,.18),0 0 0 3px #3B1F63;font-weight:600";
+        document.body.appendChild(k);
+        k.querySelector("#nv-jetzt").addEventListener("click", () => location.reload());
+        k.querySelector("#nv-spaeter").addEventListener("click", () => k.remove());
+      } else if (window.Spielwelt && Spielwelt.meldung) Spielwelt.meldung("✨ Neue Version geladen – sie gilt ab der nächsten Seite.");
+    });
   }
 })();

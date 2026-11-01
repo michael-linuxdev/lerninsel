@@ -16,20 +16,25 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 **Ablauf:** Einrichten und `sh tests/laufen.sh` (muss grün sein) → **Fragerunde** (höchstens 4 Fragen; iPad-Rückmeldung zuerst, gemeldete Fehler
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
-## 0. Auftrag für die nächste Sitzung: Gestaltung Stil A auf allen Seiten, dann iPad-Rückmeldung
-Erledigt am 01.11.2026 (Details in `docs/PLAN.md`, „Stand 01.11.2026, Sitzung Noto-Emojis und niedlichere Figuren“):
-- **Alle Emojis als Noto-Bilder in Stil A** (`quellen/noto/`, `quellen/noto-stil-a.py`, `shared/icons.js`), Kontur ohne Filter, Lizenz Apache 2.0.
-- **Kein Begleiter mehr als Emoji**: Begleiter-Zeichen `\uE101`–`\uE107` (`FigurenNeu.ZEICHEN`), überall als Zeichnung.
-- **Begleiter, Spielfigur und Tier niedlicher**, in 2D und auf der Insel in 3D (Kulleraugen, dezente Wangen, große Köpfe).
+## 0. Auftrag für die nächste Sitzung: iPad-Rückmeldung, dann „Prüfen statt Bauen“
+Erledigt am 02.11.2026 (Details in `docs/PLAN.md`, „Stand 02.11.2026, Sitzung Was die Lerninsel von Bastion lernen kann“):
+- **Normale Augen** für alle Figuren (2D und 3D), keine Wangen, keine großen Köpfe (Entscheidung des Auftraggebers; ersetzt das Kindchenschema vom 01.11.).
+- **Tilda mit Frisur**, **Hund statt Fuchs**, Katze und Drache mit echten Wachstumsstufen.
+- **Junge/Mädchen deutlich verschieden**: Gesicht, Startkleidung, Kleiderschrank („Mehr Sachen“), Zimmer (Kleiderschrank und Insel).
+- **Sticker selbst aussuchen** statt Zufall.
+- **Matheweg nach Bastion**: Denkfehler erkennen und erklären (`spiele/mathe/fehler.js`), Erklär-Einheiten (`erklaeren.js`), „Zeig mir deinen Weg“, Startzahl für alle Aufgaben.
+- **Prüfstand** (`node quellen/pruefstand.js`), **Sicherungs-Erinnerung**, Hinweis bei neuer Version.
 
 **Nächste Schritte:**
-1. **Gestaltung Stil A auf allen Seiten** (Wahl des Auftraggebers): `shared/style.css` und die Seiten mit eigenen Stilen angleichen.
-   - Gleiche Kopfzeile `.oben` mit rundem Heim-Knopf (`.knopf.rund`), Karten-Radius 26 px, Knopf-Schatten wie auf der Startseite, dunkle Kontur `#3B1F63` an Sprechblasen.
-   - Achtung: `.szene` bekommt zeitweise die Klasse `oben` – Regeln für die Kopfzeile mit `:not(.szene)` schreiben.
-   - Danach Screenshots aller Seiten quer und hoch ansehen, dazu Handy-Breite 390 px (kein waagrechtes Überlaufen).
-2. **iPad-Rückmeldung** zu Figuren, Bildern und Leistung einarbeiten – Fehler zuerst, je mit Test.
+1. **iPad-Rückmeldung** zu Augen, Tieren, Zimmern, Erklär-Einheiten und Schrittweg einarbeiten – Fehler zuerst, je mit Test.
+2. **Prüfen statt Bauen:** Mit dem Auftraggeber die Pilot-Erklärungen und den Denkfehler-Katalog durchgehen und mit
+   `node quellen/pruefstand.js setzen --stufe 2 --pruefer <Kürzel> erklaeren:plusUeber denkfehler:uebertrag …` vermerken. Keine neuen Inhaltsmengen, bevor geprüft wird.
+3. Danach: weitere Denkfehler und Erklär-Einheiten (Einmaleins, Geteilt, Größen, Uhr), Schrittweg für schriftlich mal/geteilt, 🔊 in den Erklärungen.
+4. Gestaltung Stil A auf allen Seiten (aus der Sitzung vom 01.11. offen).
 
-## 1. Stand (01.11.2026, nachts)
+## 1. Stand (02.11.2026)
+**Neu am 02.11.2026:** siehe Abschnitt 0. Neue Tests: `sticker`, `fehlerursachen`, `sicherung` (Browser), `mathe-fehler`, `pruefstand` (Node, laufen in `sh tests/laufen.sh` mit).
+
 **Neu am 01.11.2026, letzte Sitzung:** Noto-Emojis in Stil A für alle 773 Emojis. Begleiter erscheinen nie mehr als Emoji. Begleiter, Spielfigur und Tier sind niedlicher, in 2D und 3D.
 Wangen sind erlaubt, aber dezent. Mehrere Tests zählten `span`s und wurden angepasst; Medien und Chronik passen wieder aufs Handy.
 
@@ -155,10 +160,11 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - Muttersprachlerinnen und Muttersprachler für ru/uk; Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (in dieser Reihenfolge)
-1. **Gestaltung Stil A auf allen Seiten** (Abschnitt 0).
-2. **iPad-Rückmeldung** zu Figuren (2D und Insel), Noto-Bildern, Garten, Bäckerei, Tierstation und Leistung einarbeiten – Fehler zuerst, je mit Test.
-3. **Wörter-Angeln** (Schatz-Strand, Kapitel 2) und **Rhythmus-Boot** (Ballon-Wiese, Kapitel 4).
-4. Elternbereich schneller (Fachdaten erst beim Reiter „Lernstand“ laden).
+1. **iPad-Rückmeldung** zu Figuren (2D und Insel), Tieren, Zimmern, Erklär-Einheiten, Schrittweg, Noto-Bildern und Leistung – Fehler zuerst, je mit Test.
+2. **Prüfen statt Bauen** (Abschnitt 0, Schritt 2).
+3. **Gestaltung Stil A auf allen Seiten.**
+4. **Wörter-Angeln** (Schatz-Strand, Kapitel 2) und **Rhythmus-Boot** (Ballon-Wiese, Kapitel 4).
+5. Elternbereich schneller (Fachdaten erst beim Reiter „Lernstand“ laden).
 
 Jederzeit dazwischen: iPad-Rückmeldung einarbeiten (Fehler zuerst), Sorbisch-Korrekturen in `spiele/sorbisch/lektionen.js` und `geprueft.js`,
 den öffentlichen QR-Schlüssel in `OEFFENTLICH` eintragen, sobald er da ist. Arbeitsliste für den Lehrplan bleibt `docs/SACHSEN-SCHULJAHR.md`.
