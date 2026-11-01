@@ -1,132 +1,132 @@
-// Die Figuren der App als 2D-Zeichnungen (SVG), z. B. für Sprechblasen auf der Insel.
-// Quelle: dieselben Zeichnungen wie in Deutsch (Fipsi), Tablet-Profi (Robo Pixel) und Sachunterricht (Eule Ella), Mathe (Biber Benno).
+// Die Figuren der App als 2D-Zeichnungen (SVG), Stil A „Insel bunt“ (neu gezeichnet am 01.11.2026, Wahl des Auftraggebers):
+// Robo Pixel, Eule Ella (braun, ohne Federohren), Fipsi, Biber Benno, Bärin Bruni, Papagei Paula, Schildkröte Tilda – ohne rosa Wangen.
+// Figuren.<name>(klasse) → SVG mit class=klasse (für Sprechblasen, Türen, Seiten). FigurenNeu.svg(name, stil, ausdruck) für Ausdrücke
+// ("froh" | "staunt" | "denkt") und die Stil-Vorschau (stil "a" = Insel bunt, "b" = weich).
 (function () {
-  function fipsi(klasse = "fipsi") {
-    const D = "#3b1f63", O = "#F28C38", W = "#FFF3E6";
-    return `<svg class="${klasse}" viewBox="0 0 200 200" aria-hidden="true">
-      <path d="M134 170 Q198 160 188 100 Q180 72 160 92 Q174 134 124 150 Z" fill="${O}" stroke="${D}" stroke-width="4" stroke-linejoin="round"/>
-      <path d="M188 100 Q180 72 160 92 Q172 96 182 112 Z" fill="${W}" stroke="${D}" stroke-width="4" stroke-linejoin="round"/>
-      <ellipse cx="100" cy="154" rx="42" ry="38" fill="${O}" stroke="${D}" stroke-width="4"/>
-      <ellipse cx="100" cy="164" rx="24" ry="24" fill="${W}"/>
-      <ellipse cx="80" cy="190" rx="14" ry="8" fill="#5C3A21" stroke="${D}" stroke-width="3"/><ellipse cx="120" cy="190" rx="14" ry="8" fill="#5C3A21" stroke="${D}" stroke-width="3"/>
-      <path d="M50 72 L58 16 L88 48 Q100 44 112 48 L142 16 L150 72 Q152 116 100 124 Q48 116 50 72 Z" fill="${O}" stroke="${D}" stroke-width="4" stroke-linejoin="round"/>
-      <path d="M62 30 L65 58 L82 47 Z M138 30 L135 58 L118 47 Z" fill="#FFC3A0"/>
-      <path d="M64 86 Q100 70 136 86 Q132 120 100 122 Q68 120 64 86 Z" fill="${W}"/>
-      <circle cx="80" cy="78" r="8" fill="${D}"/><circle cx="120" cy="78" r="8" fill="${D}"/>
-      <circle cx="83" cy="75" r="3" fill="#fff"/><circle cx="123" cy="75" r="3" fill="#fff"/>
-      <ellipse cx="100" cy="96" rx="8" ry="6" fill="${D}"/>
-      <path d="M91 106 Q100 114 109 106" stroke="${D}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      
-    </svg>`;
+  let zaehler = 0;
+  const D = "#3b1f63";
+  function bau(stil) {
+    const id = "f" + (++zaehler), defs = [];
+    const kontur = stil === "a" ? ` stroke="${D}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"` : "";
+    const hell = (hex, k) => { const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255, m = (c) => Math.round(c + (255 - c) * k); return `rgb(${m(r)},${m(g)},${m(b)})`; };
+    const dunkel = (hex, k) => { const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255, m = (c) => Math.round(c * (1 - k)); return `rgb(${m(r)},${m(g)},${m(b)})`; };
+    // Füllung: Stil a flach, Stil b weicher Verlauf (oben heller, unten etwas dunkler)
+    const f = (hex) => {
+      if (stil === "a") return hex;
+      const g = id + "g" + defs.length;
+      defs.push(`<radialGradient id="${g}" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="${hell(hex, 0.35)}"/><stop offset="0.6" stop-color="${hex}"/><stop offset="1" stop-color="${dunkel(hex, 0.12)}"/></radialGradient>`);
+      return `url(#${g})`;
+    };
+    const k = (extra = "") => kontur + extra;
+    return { f, k, kontur, defs, schatten: `<ellipse cx="100" cy="210" rx="56" ry="8" fill="rgba(59,31,99,${stil === "a" ? 0.18 : 0.12})"/>` };
   }
-  function robo(klasse = "robo") {
-    const D = "#3b1f63";
-    return `<svg class="${klasse}" viewBox="0 0 200 210" aria-hidden="true">
-      <line x1="100" y1="34" x2="100" y2="12" stroke="${D}" stroke-width="5"/><circle cx="100" cy="12" r="9" fill="#FFC83D" stroke="${D}" stroke-width="4"/>
-      <rect x="40" y="34" width="120" height="92" rx="30" fill="#7FC6F5" stroke="${D}" stroke-width="5"/>
-      <rect x="56" y="50" width="88" height="58" rx="20" fill="#E8F6FF" stroke="${D}" stroke-width="4"/>
-      <circle cx="82" cy="78" r="10" fill="${D}"/><circle cx="118" cy="78" r="10" fill="${D}"/><circle cx="85" cy="74" r="3.5" fill="#fff"/><circle cx="121" cy="74" r="3.5" fill="#fff"/>
-      <path d="M86 96 Q100 106 114 96" stroke="${D}" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <rect x="30" y="66" width="12" height="30" rx="6" fill="#FF9BC8" stroke="${D}" stroke-width="4"/><rect x="158" y="66" width="12" height="30" rx="6" fill="#FF9BC8" stroke="${D}" stroke-width="4"/>
-      <rect x="58" y="132" width="84" height="62" rx="20" fill="#7FC6F5" stroke="${D}" stroke-width="5"/>
-      <rect x="78" y="146" width="44" height="30" rx="8" fill="#fff" stroke="${D}" stroke-width="3"/><circle cx="92" cy="161" r="5" fill="#5CCBA6"/><circle cx="108" cy="161" r="5" fill="#FF6F61"/>
-      <path d="M58 150 Q36 160 34 182" stroke="${D}" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M58 150 Q36 160 34 182" stroke="#7FC6F5" stroke-width="6" stroke-linecap="round" fill="none"/>
-      <path d="M142 150 Q164 140 170 118" stroke="${D}" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M142 150 Q164 140 170 118" stroke="#7FC6F5" stroke-width="6" stroke-linecap="round" fill="none"/>
-      <rect x="70" y="192" width="20" height="14" rx="5" fill="${D}"/><rect x="110" y="192" width="20" height="14" rx="5" fill="${D}"/>
-    </svg>`;
+  // Augen und Mund (gemeinsam): x1/x2 = Augenmitte, y = Höhe, r = Größe
+  function gesicht(s, x1, x2, y, r, mundY, ausdruck, opt = {}) {
+    const pupille = (x) => ausdruck === "denkt" ? `<circle cx="${x + r * 0.3}" cy="${y - r * 0.35}" r="${r * 0.48}" fill="${D}"/>` : `<circle cx="${x}" cy="${y + r * 0.1}" r="${r * (ausdruck === "staunt" ? 0.42 : 0.55)}" fill="${D}"/>`;
+    const glanz = (x) => `<circle cx="${x - r * 0.18}" cy="${y - r * 0.2}" r="${r * 0.2}" fill="#fff"/>`;
+    const auge = (x) => opt.ohneWeiss ? pupille(x) + glanz(x) : `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * 1.12}" fill="#fff"${s.kontur ? ` stroke="${D}" stroke-width="3.5"` : ""}/>` + pupille(x) + glanz(x);
+    const mx = (x1 + x2) / 2;
+    const mund = ausdruck === "staunt" ? `<ellipse cx="${mx}" cy="${mundY + 4}" rx="7" ry="9" fill="${D}"/>`
+      : ausdruck === "denkt" ? `<path d="M${mx - 10} ${mundY + 4} Q${mx} ${mundY} ${mx + 12} ${mundY + 2}" fill="none" stroke="${D}" stroke-width="4" stroke-linecap="round"/>`
+      : `<path d="M${mx - 14} ${mundY} Q${mx} ${mundY + 16} ${mx + 14} ${mundY}" fill="${opt.mundFuell || "none"}" stroke="${D}" stroke-width="4" stroke-linecap="round"/>`;
+    const wangen = `<ellipse cx="${x1 - r * 0.9}" cy="${y + r * 1.6}" rx="${r * 0.62}" ry="${r * 0.38}" fill="#FF8FA8" opacity=".55"/><ellipse cx="${x2 + r * 0.9}" cy="${y + r * 1.6}" rx="${r * 0.62}" ry="${r * 0.38}" fill="#FF8FA8" opacity=".55"/>`;
+    return auge(x1) + auge(x2) + (opt.ohneMund ? "" : mund);   // keine rosa Wangen (Wunsch des Auftraggebers 01.11.2026)
   }
-  function eule(klasse = "eule") {
-    const D = "#3b1f63";
-    const s = `stroke="${D}" stroke-width="4" stroke-linejoin="round"`;
-    return `<svg class="${klasse}" viewBox="10 20 200 240" aria-hidden="true">
-      <path d="M50 70 L70 40 L84 66 Z M170 70 L150 40 L136 66 Z" fill="#A0693F" ${s}/>
-      <ellipse cx="110" cy="150" rx="74" ry="92" fill="#B8804A" ${s}/><ellipse cx="110" cy="176" rx="46" ry="60" fill="#F3DEC0" ${s}/>
-      ${[0, 1, 2, 3].map(i => `<path d="M${90 + (i % 2) * 20} ${150 + i * 18} q10 8 20 0" stroke="#C9A26B" stroke-width="3" fill="none"/>`).join("")}
-      <circle cx="82" cy="104" r="28" fill="#fff" ${s}/><circle cx="138" cy="104" r="28" fill="#fff" ${s}/>
-      <circle cx="86" cy="106" r="13" fill="${D}"/><circle cx="134" cy="106" r="13" fill="${D}"/><circle cx="90" cy="101" r="5" fill="#fff"/><circle cx="138" cy="101" r="5" fill="#fff"/>
-      <circle cx="82" cy="104" r="34" fill="none" stroke="#7B55B8" stroke-width="5"/><circle cx="138" cy="104" r="34" fill="none" stroke="#7B55B8" stroke-width="5"/><path d="M116 100 h-12" stroke="#7B55B8" stroke-width="5"/>
-      <path d="M100 128 L110 146 L120 128 Z" fill="#FFB03B" ${s}/>
-      <path d="M38 150 Q20 190 50 220 Q60 180 50 150 Z M182 150 Q200 190 170 220 Q160 180 170 150 Z" fill="#A0693F" ${s}/>
-      <path d="M86 238 l-8 12 M96 240 l0 14 M124 240 l0 14 M134 238 l8 12" stroke="#FFB03B" stroke-width="6" stroke-linecap="round"/>
-      <path d="M70 56 L150 56 L156 66 L64 66 Z" fill="${D}"/><rect x="92" y="40" width="36" height="18" fill="${D}"/><path d="M150 60 q16 6 10 28" stroke="#FFC83D" stroke-width="4" fill="none"/></svg>`;
-  }
-  // Biber Benno (Mathe): braun, großer flacher Schwanz mit Gittermuster, zwei große Zähne, gelber Bauarbeiterhelm mit Zollstock
-  function biber(klasse = "biber") {
-    const D = "#3b1f63", B = "#A86A3D", H = "#F3DEC0", s = `stroke="${D}" stroke-width="4" stroke-linejoin="round"`;
-    return `<svg class="${klasse}" viewBox="0 0 200 210" aria-hidden="true">
-      <path d="M128 168 Q190 150 196 186 Q170 206 126 190 Z" fill="#6B4A3A" ${s}/>
-      <path d="M140 172 L184 182 M146 184 L188 176 M150 170 L160 198 M168 168 L176 198" stroke="#8A6650" stroke-width="3"/>
-      <ellipse cx="100" cy="150" rx="48" ry="44" fill="${B}" ${s}/>
-      <ellipse cx="100" cy="160" rx="28" ry="28" fill="${H}"/>
-      <ellipse cx="76" cy="194" rx="16" ry="9" fill="#5C3A21" ${s}/><ellipse cx="124" cy="194" rx="16" ry="9" fill="#5C3A21" ${s}/>
-      <ellipse cx="54" cy="136" rx="12" ry="18" fill="${B}" ${s} transform="rotate(25 54 136)"/>
-      <g transform="rotate(-20 152 120)"><rect x="140" y="98" width="14" height="52" rx="3" fill="#FFC83D" ${s}/><path d="M140 110h8M140 122h6M140 134h8M140 146h6" stroke="${D}" stroke-width="2"/></g>
-      <ellipse cx="150" cy="134" rx="12" ry="16" fill="${B}" ${s}/>
-      <circle cx="60" cy="52" r="15" fill="${B}" ${s}/><circle cx="140" cy="52" r="15" fill="${B}" ${s}/><circle cx="60" cy="52" r="7" fill="#E9A7A0"/><circle cx="140" cy="52" r="7" fill="#E9A7A0"/>
-      <ellipse cx="100" cy="82" rx="54" ry="48" fill="${B}" ${s}/>
-      <ellipse cx="100" cy="100" rx="32" ry="24" fill="${H}"/>
-      <circle cx="80" cy="76" r="8" fill="${D}"/><circle cx="120" cy="76" r="8" fill="${D}"/><circle cx="83" cy="73" r="3" fill="#fff"/><circle cx="123" cy="73" r="3" fill="#fff"/>
-      <ellipse cx="100" cy="92" rx="10" ry="7" fill="${D}"/>
-      <path d="M92 101 Q100 106 108 101" stroke="${D}" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <rect x="91" y="104" width="8" height="12" rx="2" fill="#fff" ${s.replace('stroke-width="4"', 'stroke-width="2.5"')}/><rect x="101" y="104" width="8" height="12" rx="2" fill="#fff" ${s.replace('stroke-width="4"', 'stroke-width="2.5"')}/>
-      
-      <path d="M52 50 Q54 18 100 16 Q146 18 148 50 Z" fill="#FFC83D" ${s}/><path d="M42 50 H158 Q160 58 152 58 H48 Q40 58 42 50 Z" fill="#FFB020" ${s}/><rect x="94" y="16" width="12" height="34" rx="4" fill="#FFB020"/>
-    </svg>`;
-  }
-  // Bärin Bruni (Gefühle und Miteinander): hellbraun, runder Bauch, rosa Schal, trägt eine Laterne mit Herz
-  function baer(klasse = "baer") {
-    const D = "#3b1f63", B = "#C98E5A", H = "#F3DEC0", s = `stroke="${D}" stroke-width="4" stroke-linejoin="round"`;
-    return `<svg class="${klasse}" viewBox="0 0 200 210" aria-hidden="true">
-      <ellipse cx="100" cy="150" rx="52" ry="48" fill="${B}" ${s}/>
-      <ellipse cx="100" cy="160" rx="30" ry="30" fill="${H}"/>
-      <ellipse cx="74" cy="196" rx="18" ry="10" fill="#8A5A34" ${s}/><ellipse cx="126" cy="196" rx="18" ry="10" fill="#8A5A34" ${s}/>
-      <ellipse cx="50" cy="140" rx="13" ry="20" fill="${B}" ${s} transform="rotate(20 50 140)"/>
-      <path d="M152 120 q22 4 22 26" stroke="${D}" stroke-width="4" fill="none"/>
-      <rect x="160" y="146" width="28" height="34" rx="8" fill="#FFF1C2" ${s}/><path d="M174 172 l-8 -8 a5 5 0 0 1 8 -6 a5 5 0 0 1 8 6 z" fill="#FF5C8A"/>
-      <ellipse cx="150" cy="132" rx="13" ry="18" fill="${B}" ${s}/>
-      <path d="M62 112 Q100 128 138 112 L134 124 Q100 140 66 124 Z" fill="#FF9BC8" ${s}/>
-      <circle cx="58" cy="44" r="18" fill="${B}" ${s}/><circle cx="142" cy="44" r="18" fill="${B}" ${s}/><circle cx="58" cy="44" r="9" fill="#E9A7A0"/><circle cx="142" cy="44" r="9" fill="#E9A7A0"/>
-      <ellipse cx="100" cy="78" rx="56" ry="48" fill="${B}" ${s}/>
-      <ellipse cx="100" cy="96" rx="26" ry="20" fill="${H}"/>
-      <circle cx="78" cy="72" r="8" fill="${D}"/><circle cx="122" cy="72" r="8" fill="${D}"/><circle cx="81" cy="69" r="3" fill="#fff"/><circle cx="125" cy="69" r="3" fill="#fff"/>
-      <ellipse cx="100" cy="88" rx="10" ry="7" fill="${D}"/>
-      <path d="M88 100 Q100 110 112 100" stroke="${D}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      
-    </svg>`;
-  }
-  // Papagei Paula: Atelier (Malen und Musik) – bunte Federn, Malerinnen-Mütze, Pinsel
-  function papagei(klasse = "papagei") {
-    const D = "#3b1f63", s = `stroke="${D}" stroke-width="4" stroke-linejoin="round"`;
-    return `<svg class="${klasse}" viewBox="0 0 200 210" aria-hidden="true">
-      <path d="M86 168 L70 206 L92 204 L100 172 Z" fill="#2F86C8" ${s}/><path d="M104 170 L112 206 L132 200 L116 166 Z" fill="#FFC83D" ${s}/>
-      <ellipse cx="100" cy="126" rx="46" ry="54" fill="#E8453C" ${s}/>
-      <ellipse cx="100" cy="140" rx="26" ry="32" fill="#FFB26B"/>
-      <path d="M58 104 Q30 130 46 172 Q66 160 74 128 Z" fill="#2FA37C" ${s}/><path d="M50 150 Q58 160 66 150" stroke="#FFC83D" stroke-width="5" fill="none"/>
-      <path d="M142 104 Q170 128 158 168 Q138 158 128 128 Z" fill="#2FA37C" ${s}/>
-      <path d="M150 140 L184 98" stroke="#9A6A3F" stroke-width="7" stroke-linecap="round"/><path d="M184 98 l8 -12 l-2 14 z" fill="#FF5C8A" ${s}/>
-      <path d="M84 176 l-4 10 M92 178 l0 10 M110 178 l0 10 M118 176 l4 10" stroke="#F2A33A" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="100" cy="70" r="40" fill="#E8453C" ${s}/>
-      <ellipse cx="100" cy="74" rx="24" ry="22" fill="#FFF4E6"/>
-      <path d="M58 46 Q100 6 142 40 Q150 52 132 50 Q100 30 70 52 Q52 58 58 46 Z" fill="#7B55B8" ${s}/><circle cx="104" cy="22" r="8" fill="#7B55B8" ${s}/>
-      <circle cx="86" cy="68" r="8" fill="${D}"/><circle cx="114" cy="68" r="8" fill="${D}"/><circle cx="89" cy="65" r="3" fill="#fff"/><circle cx="117" cy="65" r="3" fill="#fff"/>
-      <path d="M90 82 Q100 76 110 82 Q110 100 100 106 Q92 98 90 82 Z" fill="#FFC83D" ${s}/>
-      
-    </svg>`;
-  }
-  // Schildkröte Tilda (Schach, 30.10.2026): runder Panzer mit Waben, Kopf vorn, Halstuch
-  function tilda(klasse = "tilda") {
-    const D = "#3b1f63", G = "#8BCB6A", P = "#3F8E52", s = `stroke="${D}" stroke-width="4" stroke-linejoin="round"`;
-    return `<svg class="${klasse}" viewBox="0 0 200 200" aria-hidden="true">
-      <ellipse cx="62" cy="168" rx="18" ry="14" fill="${G}" ${s}/><ellipse cx="138" cy="168" rx="18" ry="14" fill="${G}" ${s}/>
-      <path d="M28 150 Q30 76 100 70 Q170 76 172 150 Z" fill="${P}" ${s}/>
-      <path d="M100 82 l18 12 v20 l-18 12 l-18 -12 v-20 z M52 122 l16 -10 l16 10 v18 h-32 z M116 122 l16 -10 l16 10 v18 h-32 z" fill="#6FB25A" stroke="#2E6E3E" stroke-width="3" stroke-linejoin="round"/>
-      <path d="M22 150 Q100 166 178 150 Q180 162 170 164 Q100 178 30 164 Q20 162 22 150 Z" fill="#E9D27A" ${s}/>
-      <ellipse cx="100" cy="56" rx="40" ry="36" fill="${G}" ${s}/>
-      <path d="M68 84 Q100 98 132 84 L126 100 Q100 108 74 100 Z" fill="#E0578F" ${s}/>
-      <circle cx="86" cy="52" r="8" fill="${D}"/><circle cx="114" cy="52" r="8" fill="${D}"/><circle cx="89" cy="49" r="3" fill="#fff"/><circle cx="117" cy="49" r="3" fill="#fff"/>
-      <path d="M88 70 Q100 80 112 70" stroke="${D}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      
-    </svg>`;
-  }
-  window.Figuren = { fipsi, robo, eule, biber, baer, papagei, tilda };
+  const svg = (s, inhalt) => `<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>${s.defs.join("")}</defs>${s.schatten}${inhalt}</svg>`;
+
+  const FIGUREN = {
+    robo(stil, a) { const s = bau(stil); return svg(s, `
+      <line x1="100" y1="34" x2="100" y2="16" stroke="${D}" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="14" r="9" fill="${s.f("#FF5C7A")}"${s.k()}/>
+      <rect x="66" y="128" width="68" height="64" rx="18" fill="${s.f("#58B7F0")}"${s.k()}/>
+      <rect x="80" y="146" width="40" height="26" rx="8" fill="${s.f("#E8F5FF")}"${s.k(' stroke-width="3.5"')}/>
+      <circle cx="90" cy="159" r="5" fill="#FF5C7A"/><circle cx="100" cy="159" r="5" fill="#FFC83D"/><circle cx="110" cy="159" r="5" fill="#5CCBA6"/>
+      <rect x="44" y="140" width="22" height="14" rx="7" fill="${s.f("#58B7F0")}"${s.k()}/><rect x="134" y="140" width="22" height="14" rx="7" fill="${s.f("#58B7F0")}"${s.k()}/>
+      <rect x="76" y="190" width="18" height="16" rx="6" fill="${s.f("#3A8FD0")}"${s.k()}/><rect x="106" y="190" width="18" height="16" rx="6" fill="${s.f("#3A8FD0")}"${s.k()}/>
+      <rect x="42" y="34" width="116" height="96" rx="30" fill="${s.f("#7FCBF5")}"${s.k()}/>
+      <rect x="56" y="50" width="88" height="62" rx="20" fill="${s.f("#2E2B47")}"${s.k(' stroke-width="3.5"')}/>
+      <rect x="36" y="68" width="10" height="26" rx="5" fill="${s.f("#FFC83D")}"${s.k(' stroke-width="3.5"')}/><rect x="154" y="68" width="10" height="26" rx="5" fill="${s.f("#FFC83D")}"${s.k(' stroke-width="3.5"')}/>
+      ${a === "staunt" ? `<circle cx="82" cy="78" r="9" fill="#7CF0FF"/><circle cx="118" cy="78" r="9" fill="#7CF0FF"/><ellipse cx="100" cy="99" rx="6" ry="7" fill="#7CF0FF"/>`
+        : a === "denkt" ? `<rect x="73" y="74" width="18" height="6" rx="3" fill="#7CF0FF"/><circle cx="118" cy="77" r="8" fill="#7CF0FF"/><path d="M90 99 H112" stroke="#7CF0FF" stroke-width="5" stroke-linecap="round"/>`
+        : `<path d="M73 80 Q82 70 91 80" fill="none" stroke="#7CF0FF" stroke-width="6" stroke-linecap="round"/><path d="M109 80 Q118 70 127 80" fill="none" stroke="#7CF0FF" stroke-width="6" stroke-linecap="round"/><path d="M86 95 Q100 106 114 95" fill="none" stroke="#7CF0FF" stroke-width="5" stroke-linecap="round"/>`}`); },
+
+    eule(stil, a) { const s = bau(stil); return svg(s, `
+      <ellipse cx="100" cy="160" rx="46" ry="44" fill="${s.f("#B98A66")}"${s.k()}/>
+      <ellipse cx="100" cy="168" rx="28" ry="30" fill="${s.f("#F7E6CF")}"/>
+      <path d="M88 160 q6 6 12 0 M100 172 q6 6 12 0 M86 180 q6 6 12 0" fill="none" stroke="#D9B48F" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="60" cy="150" rx="13" ry="22" fill="${s.f("#9C6E4E")}"${s.k()} transform="rotate(24 60 150)"/><ellipse cx="140" cy="150" rx="13" ry="22" fill="${s.f("#9C6E4E")}"${s.k()} transform="rotate(-24 140 150)"/>
+      <path d="M72 204 l6 -9 l6 9 Z M116 204 l6 -9 l6 9 Z" fill="${s.f("#F59A3C")}"${s.k(' stroke-width="3.5"')}/>
+      <ellipse cx="100" cy="84" rx="62" ry="54" fill="${s.f("#C49470")}"${s.k()}/>
+      <path d="M100 40 q-4 -12 6 -16 q-2 8 4 14" fill="${s.f("#C49470")}"${s.k(' stroke-width="4"')}/>
+      <path d="M100 66 Q86 50 72 54 Q50 60 52 84 Q54 108 78 110 Q92 110 100 100 Q108 110 122 110 Q146 108 148 84 Q150 60 128 54 Q114 50 100 66 Z" fill="${s.f("#FFF1DC")}"/>
+      ${gesicht(s, 78, 122, 82, 12, 0, a, { ohneMund: true })}
+      <path d="M93 98 L107 98 L100 110 Z" fill="${s.f("#F59A3C")}"${s.k(' stroke-width="3.5"')}/>
+      ${a === "staunt" ? `<ellipse cx="100" cy="120" rx="5" ry="6" fill="${D}"/>` : a === "denkt" ? "" : `<path d="M92 116 Q100 122 108 116" fill="none" stroke="${D}" stroke-width="3.5" stroke-linecap="round"/>`}`); },
+
+    fipsi(stil, a) { const s = bau(stil); return svg(s, `
+      <path d="M140 176 Q196 168 186 108 Q178 84 160 100 Q172 140 128 156 Z" fill="${s.f("#F28C38")}"${s.k()}/><path d="M186 108 Q178 84 160 100 Q172 102 182 118 Z" fill="#FFF3E6"/>
+      <ellipse cx="100" cy="160" rx="44" ry="42" fill="${s.f("#F28C38")}"${s.k()}/><ellipse cx="100" cy="170" rx="26" ry="26" fill="${s.f("#FFF3E6")}"/>
+      <ellipse cx="78" cy="202" rx="14" ry="7" fill="${s.f("#5C3A21")}"${s.k(' stroke-width="3.5"')}/><ellipse cx="122" cy="202" rx="14" ry="7" fill="${s.f("#5C3A21")}"${s.k(' stroke-width="3.5"')}/>
+      <ellipse cx="66" cy="150" rx="11" ry="16" fill="${s.f("#F28C38")}"${s.k()} transform="rotate(20 66 150)"/><ellipse cx="134" cy="150" rx="11" ry="16" fill="${s.f("#F28C38")}"${s.k()} transform="rotate(-20 134 150)"/>
+      <path d="M46 78 L52 18 L88 50 Z" fill="${s.f("#F28C38")}"${s.k()}/><path d="M154 78 L148 18 L112 50 Z" fill="${s.f("#F28C38")}"${s.k()}/>
+      <path d="M56 62 L58 32 L78 50 Z M144 62 L142 32 L122 50 Z" fill="#5C3A21"/>
+      <path d="M40 80 Q40 40 100 40 Q160 40 160 80 Q160 128 100 132 Q40 128 40 80 Z" fill="${s.f("#F7A04F")}"${s.k()}/>
+      <path d="M62 104 Q100 92 138 104 Q132 132 100 134 Q68 132 62 104 Z" fill="${s.f("#FFF3E6")}"/>
+      ${gesicht(s, 78, 122, 84, 11, 112, a)}<ellipse cx="100" cy="104" rx="8" ry="6" fill="${D}"/>`); },
+
+    biber(stil, a) { const s = bau(stil); return svg(s, `
+      <ellipse cx="158" cy="186" rx="34" ry="16" fill="${s.f("#6B4A33")}"${s.k()} transform="rotate(-18 158 186)"/>
+      <path d="M134 178 l40 -14 M140 190 l40 -14" stroke="#8E6A4E" stroke-width="3"/>
+      <ellipse cx="100" cy="158" rx="50" ry="46" fill="${s.f("#A8754E")}"${s.k()}/><ellipse cx="100" cy="166" rx="30" ry="30" fill="${s.f("#E8C9A6")}"/>
+      <ellipse cx="78" cy="202" rx="14" ry="7" fill="${s.f("#6B4A33")}"${s.k(' stroke-width="3.5"')}/><ellipse cx="122" cy="202" rx="14" ry="7" fill="${s.f("#6B4A33")}"${s.k(' stroke-width="3.5"')}/>
+      <ellipse cx="66" cy="146" rx="11" ry="16" fill="${s.f("#A8754E")}"${s.k()} transform="rotate(20 66 146)"/><ellipse cx="134" cy="146" rx="11" ry="16" fill="${s.f("#A8754E")}"${s.k()} transform="rotate(-20 134 146)"/>
+      <circle cx="58" cy="50" r="15" fill="${s.f("#A8754E")}"${s.k()}/><circle cx="142" cy="50" r="15" fill="${s.f("#A8754E")}"${s.k()}/>
+      <ellipse cx="100" cy="84" rx="60" ry="52" fill="${s.f("#B8845A")}"${s.k()}/>
+      <ellipse cx="100" cy="108" rx="30" ry="22" fill="${s.f("#E8C9A6")}"/>
+      ${gesicht(s, 78, 122, 76, 11, 112, a, { ohneMund: true })}<ellipse cx="100" cy="100" rx="10" ry="7" fill="${D}"/>
+      <rect x="91" y="112" width="18" height="18" rx="4" fill="#fff"${s.k(' stroke-width="3"')}/><line x1="100" y1="112" x2="100" y2="130" stroke="${D}" stroke-width="2.5"/>
+      ${a === "staunt" ? `<ellipse cx="100" cy="136" rx="5" ry="4" fill="${D}"/>` : ""}`); },
+
+    baer(stil, a) { const s = bau(stil); return svg(s, `
+      <ellipse cx="100" cy="158" rx="54" ry="48" fill="${s.f("#C98A55")}"${s.k()}/><ellipse cx="100" cy="166" rx="32" ry="32" fill="${s.f("#F2D3B0")}"/>
+      <path d="M86 150 q14 -14 28 0 q-14 22 -28 0 Z" fill="#FF7FA0" opacity=".85"/>
+      <ellipse cx="76" cy="204" rx="16" ry="8" fill="${s.f("#8E5C35")}"${s.k(' stroke-width="3.5"')}/><ellipse cx="124" cy="204" rx="16" ry="8" fill="${s.f("#8E5C35")}"${s.k(' stroke-width="3.5"')}/>
+      <ellipse cx="66" cy="146" rx="11" ry="16" fill="${s.f("#C98A55")}"${s.k()} transform="rotate(20 66 146)"/><ellipse cx="134" cy="146" rx="11" ry="16" fill="${s.f("#C98A55")}"${s.k()} transform="rotate(-20 134 146)"/>
+      <circle cx="52" cy="44" r="19" fill="${s.f("#C98A55")}"${s.k()}/><circle cx="148" cy="44" r="19" fill="${s.f("#C98A55")}"${s.k()}/>
+      <circle cx="52" cy="44" r="9" fill="#F2B7A0"/><circle cx="148" cy="44" r="9" fill="#F2B7A0"/>
+      <ellipse cx="100" cy="82" rx="62" ry="54" fill="${s.f("#D69A62")}"${s.k()}/>
+      <ellipse cx="100" cy="104" rx="28" ry="20" fill="${s.f("#F2D3B0")}"/>
+      ${gesicht(s, 76, 124, 74, 10, 108, a)}<ellipse cx="100" cy="96" rx="10" ry="7" fill="${D}"/>`); },
+
+    papagei(stil, a) { const s = bau(stil); return svg(s, `
+      <path d="M86 186 L70 216 L92 200 L100 218 L108 200 L130 216 L114 186 Z" fill="${s.f("#3A8FD0")}"${s.k()}/>
+      <ellipse cx="100" cy="150" rx="46" ry="52" fill="${s.f("#4CC27A")}"${s.k()}/>
+      <ellipse cx="62" cy="152" rx="18" ry="40" fill="${s.f("#2E9C5A")}"${s.k()} transform="rotate(14 62 152)"/><ellipse cx="138" cy="152" rx="18" ry="40" fill="${s.f("#2E9C5A")}"${s.k()} transform="rotate(-14 138 152)"/>
+      <path d="M62 148 l-6 22 M138 148 l6 22" stroke="#FFC83D" stroke-width="5" stroke-linecap="round"/>
+      <path d="M80 40 Q86 10 100 22 Q112 8 120 40 Z" fill="${s.f("#FF5C5C")}"${s.k()}/>
+      <circle cx="100" cy="80" r="50" fill="${s.f("#FF6B5C")}"${s.k()}/>
+      <ellipse cx="100" cy="92" rx="34" ry="28" fill="${s.f("#FFE7DA")}"/>
+      ${gesicht(s, 80, 120, 76, 11, 0, a, { ohneMund: true })}
+      <path d="M86 92 Q100 82 116 92 Q122 104 112 122 Q108 108 100 106 Q92 104 86 100 Z" fill="${s.f("#FFC83D")}"${s.k(' stroke-width="3.5"')}/>
+      <path d="M90 102 Q100 112 108 108 Q104 118 96 116 Q90 112 90 102 Z" fill="${s.f("#E8A62E")}"${s.k(' stroke-width="3"')}/>
+      <ellipse cx="86" cy="204" rx="10" ry="5" fill="#8E5C35"/><ellipse cx="114" cy="204" rx="10" ry="5" fill="#8E5C35"/>`); },
+
+    tilda(stil, a) { const s = bau(stil); return svg(s, `
+      <ellipse cx="54" cy="196" rx="16" ry="10" fill="${s.f("#7FCB6A")}"${s.k()}/><ellipse cx="146" cy="196" rx="16" ry="10" fill="${s.f("#7FCB6A")}"${s.k()}/>
+      <rect x="82" y="84" width="36" height="30" rx="14" fill="${s.f("#8FD67A")}"${s.k()}/>
+      <path d="M30 178 Q30 104 100 100 Q170 104 170 178 Z" fill="${s.f("#4FAF62")}"${s.k()}/>
+      <path d="M100 112 L124 126 L124 152 L100 166 L76 152 L76 126 Z" fill="${s.f("#7FCB6A")}" opacity=".9"/>
+      <path d="M48 160 L66 148 L66 128 M152 160 L134 148 L134 128" fill="none" stroke="#2E7D45" stroke-width="3.5" stroke-linecap="round"/>
+      <rect x="26" y="172" width="148" height="16" rx="8" fill="${s.f("#E8D9A0")}"${s.k()}/>
+      <ellipse cx="100" cy="62" rx="44" ry="40" fill="${s.f("#8FD67A")}"${s.k()}/>
+      ${gesicht(s, 84, 116, 56, 10, 80, a)}
+      <path d="M70 26 Q100 6 130 26 L126 34 Q100 22 74 34 Z" fill="${s.f("#7B55B8")}"${s.k(' stroke-width="3.5"')}/>`); }
+  };
+  const NAMEN = { robo: "Robo Pixel", eule: "Eule Ella", fipsi: "Fipsi", biber: "Biber Benno", baer: "Bärin Bruni", papagei: "Papagei Paula", tilda: "Schildkröte Tilda" };
+  window.FigurenNeu = { svg: (n, stil = "a", ausdruck = "froh") => FIGUREN[n](stil, ausdruck), NAMEN, LISTE: Object.keys(FIGUREN) };
+})();
+
+// Gewohnte Schnittstelle der App (vorher eigene Zeichnungen je Seite): Figuren.fipsi("fipsi") usw.
+(function () {
+  const F = window.FigurenNeu, mit = (name) => (klasse = name, ausdruck = "froh") => F.svg(name, "a", ausdruck).replace("<svg ", `<svg class="${klasse}" `);
+  window.Figuren = { fipsi: mit("fipsi"), robo: mit("robo"), eule: mit("eule"), biber: mit("biber"), baer: mit("baer"), papagei: mit("papagei"), tilda: mit("tilda") };
 })();

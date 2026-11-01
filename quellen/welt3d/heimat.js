@@ -658,32 +658,27 @@ const NEST = new Vector3(P.nest[0], bodenY(P.nest[0], P.nest[1]), P.nest[1]);
 }
 
 // ---------- Nachbarn ----------
-// Eule Ella wie in der 2D-Zeichnung: braun, cremefarbener Bauch, große Augen mit lila Brille, Doktorhut mit gelber Quaste
+// Eule Ella wie in der 2D-Zeichnung (01.11.2026): braun, großer runder Kopf auf kleinem Körper, helles Gesichtsfeld, große Augen,
+// keine Federohren (nur eine kleine Feder-Locke), cremefarbener Bauch, Flügel als Arme
 function eule() {
-  const g = new Group(), BR = "#B8804A", DK = "#A0693F", CR = "#F3DEC0";
+  const g = new Group(), BR = "#B98A66", KO = "#C49470", DK = "#9C6E4E", CR = "#F7E6CF", GE = "#FFF1DC";
   const stumpf = teil(new CylinderGeometry(0.55, 0.65, 0.5, 20), "#9A6A3F"); setze(stumpf, 0, 0.25, 0); g.add(stumpf);
   const ringe = teil(new CylinderGeometry(0.42, 0.42, 0.02, 20), "#C9955E", { umriss: false }); setze(ringe, 0, 0.51, 0); g.add(ringe);
   const k = new Group(); k.position.y = 0.5; g.add(k);
-  const b = teil(kugel(0.62), BR, { dicke: 1.04 }); b.scale.set(1, 1.12, 0.95); setze(b, 0, 0.72, 0); k.add(b);
-  const bauch = teil(kugel(0.44), CR, { umriss: false }); bauch.scale.set(0.95, 1.1, 0.5); setze(bauch, 0, 0.55, 0.34); k.add(bauch);
-  for (let i = 0; i < 3; i++) { const f = new Mesh(new TorusGeometry(0.08, 0.018, 6, 12, Math.PI), mat("#C9A26B")); f.rotation.z = Math.PI; setze(f, (i - 1) * 0.16, 0.5 + (i % 2) * 0.14, 0.56); k.add(f); }
+  const b = teil(kugel(0.46), BR, { dicke: 1.05 }); b.scale.set(1, 1.02, 0.92); setze(b, 0, 0.46, 0); k.add(b);
+  const bauch = teil(kugel(0.32), CR, { umriss: false }); bauch.scale.set(0.95, 1.05, 0.5); setze(bauch, 0, 0.42, 0.27); k.add(bauch);
+  for (let i = 0; i < 3; i++) { const f = new Mesh(new TorusGeometry(0.06, 0.015, 6, 12, Math.PI), mat("#D9B48F")); f.rotation.z = Math.PI; setze(f, (i - 1) * 0.12, 0.4 + (i % 2) * 0.1, 0.43); k.add(f); }
+  const kopf = teil(kugel(0.56), KO, { dicke: 1.04 }); kopf.scale.set(1.08, 0.94, 0.95); setze(kopf, 0, 1.18, 0); k.add(kopf);
+  const locke = teil(new ConeGeometry(0.07, 0.2, 10), KO); setze(locke, 0.03, 1.72, 0.05); locke.rotation.z = -0.5; k.add(locke);
   [-1, 1].forEach(s => {
-    const auge = teil(kugel(0.2), "#FFFFFF", { dicke: 1.06 }); auge.scale.z = 0.6; setze(auge, 0.21 * s, 0.98, 0.48); k.add(auge);
-    const pupille = new Mesh(kugel(0.1, 16, 12), AUGE); pupille.scale.z = 0.5; setze(pupille, 0.22 * s, 0.97, 0.6); k.add(pupille);
-    k.add(setze(new Mesh(kugel(0.04, 8, 6), WEISS), 0.25 * s, 1.01, 0.65));
-    const brille = new Mesh(new TorusGeometry(0.24, 0.035, 10, 28), mat("#7B55B8")); setze(brille, 0.21 * s, 0.98, 0.57); k.add(brille);
-    const ohr = teil(new ConeGeometry(0.12, 0.3, 14), DK); setze(ohr, 0.38 * s, 1.42, 0); ohr.rotation.z = -0.35 * s; k.add(ohr);
-    const fl = teil(kugel(0.32), DK); fl.scale.set(0.35, 0.95, 0.7); setze(fl, 0.6 * s, 0.62, 0); fl.rotation.z = 0.25 * s; k.add(fl);
-    const fuss = teil(kugel(0.09), "#FFB03B", { dicke: 1.12 }); fuss.scale.set(1.5, 0.6, 1.3); setze(fuss, 0.18 * s, 0.03, 0.3); k.add(fuss);
+    const maske = teil(kugel(0.24), GE, { umriss: false }); maske.scale.set(1, 1, 0.4); setze(maske, 0.2 * s, 1.18, 0.42); k.add(maske);
+    const auge = teil(kugel(0.14), "#FFFFFF", { dicke: 1.06 }); auge.scale.z = 0.55; setze(auge, 0.2 * s, 1.2, 0.5); k.add(auge);
+    const pupille = new Mesh(kugel(0.08, 16, 12), AUGE); pupille.scale.z = 0.5; setze(pupille, 0.21 * s, 1.19, 0.57); k.add(pupille);
+    k.add(setze(new Mesh(kugel(0.03, 8, 6), WEISS), 0.23 * s, 1.22, 0.61));
+    const fl = teil(kugel(0.24), DK); fl.scale.set(0.42, 0.85, 0.6); setze(fl, 0.45 * s, 0.5, 0.05); fl.rotation.z = 0.45 * s; k.add(fl);
+    const fuss = teil(kugel(0.08), "#F59A3C", { dicke: 1.12 }); fuss.scale.set(1.5, 0.6, 1.3); setze(fuss, 0.16 * s, 0.03, 0.26); k.add(fuss);
   });
-  k.add(setze(new Mesh(new BoxGeometry(0.07, 0.04, 0.05), mat("#7B55B8")), 0, 0.99, 0.6));
-  const schnabel = teil(new ConeGeometry(0.08, 0.18, 12), "#FFB03B", { dicke: 1.12 }); schnabel.rotation.x = Math.PI; setze(schnabel, 0, 0.78, 0.6); k.add(schnabel);
-  // Doktorhut
-  const hut = new Group(); hut.position.set(0, 1.42, -0.02); hut.rotation.x = -0.12; k.add(hut);
-  hut.add(setze(teil(new CylinderGeometry(0.26, 0.28, 0.16, 18), "#3b1f63"), 0, 0, 0));
-  hut.add(setze(teil(new BoxGeometry(0.85, 0.06, 0.85), "#3b1f63", { dicke: 1.04 }), 0, 0.1, 0));
-  const quaste = teil(new CylinderGeometry(0.02, 0.02, 0.32, 6), "#FFC83D", { umriss: false }); setze(quaste, 0.36, -0.04, 0.2); hut.add(quaste);
-  hut.add(setze(teil(kugel(0.06), "#FFC83D", { dicke: 1.12 }), 0.36, -0.22, 0.2));
+  const schnabel = teil(new ConeGeometry(0.07, 0.15, 12), "#F59A3C", { dicke: 1.12 }); schnabel.rotation.x = Math.PI; setze(schnabel, 0, 1.0, 0.56); k.add(schnabel);
   g.userData.koerper = k;
   return g;
 }

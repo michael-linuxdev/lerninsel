@@ -47,6 +47,7 @@
 
   // ---------- Robo Pixel ----------
   function robo(klasse = "robo") {
+    if (window.Figuren) return window.Figuren.robo(klasse);   // neue Figur (Stil A, 01.11.2026)
     const D = "#3b1f63";
     return `<svg class="${klasse}" viewBox="0 0 200 210" aria-hidden="true">
       <line x1="100" y1="34" x2="100" y2="12" stroke="${D}" stroke-width="5"/><circle cx="100" cy="12" r="9" fill="#FFC83D" stroke="${D}" stroke-width="4"/>

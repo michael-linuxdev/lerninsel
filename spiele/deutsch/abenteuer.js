@@ -23,6 +23,7 @@
 
   // ---------- Fipsi ----------
   function fipsi(klasse = "fipsi") {
+    if (window.Figuren) return window.Figuren.fipsi(klasse);   // neue Figur (Stil A, 01.11.2026); die alte Zeichnung bleibt als Rückfall
     const D = "#3b1f63", O = "#F28C38", W = "#FFF3E6";
     return `<svg class="${klasse}" viewBox="0 0 200 200" aria-hidden="true">
       <path d="M134 170 Q198 160 188 100 Q180 72 160 92 Q174 134 124 150 Z" fill="${O}" stroke="${D}" stroke-width="4" stroke-linejoin="round"/>

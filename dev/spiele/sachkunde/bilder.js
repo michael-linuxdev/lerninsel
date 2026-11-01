@@ -145,7 +145,7 @@
       if (!B[name]) return `<div class="gross-emoji ${klasse}" aria-hidden="true">${name}</div>`;
       return `<svg class="sachbild ${klasse}" viewBox="${VB[name] || "0 0 220 260"}" aria-hidden="true">${B[name]}</svg>`;
     },
-    eule: (klasse = "eule") => `<svg class="${klasse}" viewBox="10 20 200 240" aria-hidden="true">${B.eule}</svg>`,
+    eule: (klasse = "eule") => window.Figuren ? window.Figuren.eule(klasse) : `<svg class="${klasse}" viewBox="10 20 200 240" aria-hidden="true">${B.eule}</svg>`,   // neue Ella (Stil A, 01.11.2026)
     stammbaum
   };
 
