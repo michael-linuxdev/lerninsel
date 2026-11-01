@@ -23,6 +23,11 @@
   .blatt { max-width: 1100px; margin: 12px auto 40px; padding: 0 16px; }
   .seite { border-radius: 30px; padding: 20px; box-shadow: 0 8px 0 rgba(160,100,40,.12); }
   .seite h2 { margin: 0 0 4px; font-size: 1.6rem; }
+  .auswahl { background: #FFF4D6; margin-block-end: 16px; border: 4px dashed #F2B33D; }
+  .st.wahl { cursor: pointer; }
+  .auswahl .feld { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); max-width: none; gap: 10px; }
+  .auswahl .st .e { font-size: 2.3rem; }
+  .auswahl .st b { font-size: .85rem; }
   .seite .klein { margin: 0 0 16px; font-weight: 600; color: var(--pflaume-hell); }
   .feld { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 760px; margin: 0 auto; }
   @media (max-width: 520px) { .feld { grid-template-columns: repeat(2, 1fr); } }
@@ -68,6 +73,7 @@
   <div class="knopf zaehler" id="zaehler"></div>
 </div>
 <div class="info"><p id="wie"></p></div>
+<div class="seite auswahl" id="auswahl" hidden></div>
 <div class="reiter" id="reiter" role="tablist"></div>
 <div class="blatt"><div class="seite" id="seite"></div></div>
 <div class="gross" id="gross" hidden><div class="karte" id="gross-karte"></div></div>

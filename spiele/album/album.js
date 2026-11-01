@@ -16,7 +16,23 @@
 
   const st = ST.stand();
   $("zaehler").textContent = `${st.hat} / ${st.gesamt}`;
-  $("wie").textContent = `Alle ${ST.PRO_STICKER} gelösten Aufgaben gibt es einen Sticker (bis zu ${ST.MAX_TAG} am Tag). Wetter-Sticker findest du auf der Insel, Fest-Sticker an Festtagen.`;
+  $("wie").textContent = `Alle ${ST.PRO_STICKER} gelösten Aufgaben darfst du dir einen Sticker aussuchen (bis zu ${ST.MAX_TAG} am Tag). Wetter-Sticker findest du auf der Insel, Fest-Sticker an Festtagen.`;
+  // Sticker aussuchen (02.11.2026, statt Zufall): offene Wahlen als Karte über dem Album
+  function auswahl() {
+    const n = ST.wahl ? ST.wahl() : 0, el = $("auswahl"); if (!el) return;
+    el.hidden = !n;
+    if (!n) return;
+    el.innerHTML = `<h2>🎁 Such dir ${n > 1 ? `${n} Sticker` : "einen Sticker"} aus!</h2><p class="klein">Tippe auf den Sticker, den du haben möchtest.</p>
+      <div class="feld">${ST.fehlend().map(id => { const x = ST.ALLE[id]; return `<button class="st hat wahl" data-wahl="${id}"><span class="e">${x.e}</span><b>${x.name}</b></button>`; }).join("")}</div>`;
+  }
+  $("auswahl") && $("auswahl").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-wahl]"); if (!b) return;
+    if (ST.waehle(b.dataset.wahl)) {
+      Object.assign(d, ST.daten()); neu.add(b.dataset.wahl); S.ton("juhu");
+      aktiv = Math.max(0, ST.SEITEN.findIndex(s2 => s2.sticker.some(([id]) => id === b.dataset.wahl)));
+      $("zaehler").textContent = `${ST.stand().hat} / ${ST.stand().gesamt}`; auswahl(); reiter(); seite(); zeigeReiter(); ST.gesehen();
+    }
+  });
 
   function reiter() {
     $("reiter").innerHTML = ST.SEITEN.map((s, i) => {
@@ -71,6 +87,6 @@
     const b = e.target.closest(".st"); if (b) { S.ton("tipp"); gross(b.dataset.id); }
   });
   $("gross").addEventListener("click", (e) => { if (e.target.id === "gross") $("gross").hidden = true; });
-  reiter(); seite(); zeigeReiter();
-  window.__album = { chronik: () => (Sto ? Sto.chronik() : []), zeige: (i) => { aktiv = i; reiter(); seite(); }, CHRONIK };
+  reiter(); seite(); zeigeReiter(); auswahl();
+  window.__album = { chronik: () => (Sto ? Sto.chronik() : []), zeige: (i) => { aktiv = i; reiter(); seite(); }, CHRONIK, auswahl };
 })();

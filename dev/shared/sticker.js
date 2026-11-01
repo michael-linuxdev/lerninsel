@@ -1,4 +1,6 @@
-// Stickeralbum: Sticker gibt es fürs Lernen (alle 6 gelösten Aufgaben einer, höchstens 3 am Tag),
+// Stickeralbum: Sticker gibt es fürs Lernen (alle 6 gelösten Aufgaben darf man sich einen aussuchen, höchstens 3 am Tag),
+// seit 02.11.2026 ohne Zufall (Wahl des Auftraggebers, Regel „keine Zufallsbelohnungen“ aus Bastion): Das Kind wählt einen noch fehlenden Lern-Sticker
+// im Album (Sticker.wahl() = offene Wahlen, Sticker.waehle(id)); sind alle da, gibt es keine Doppelten mehr.
 // fürs Entdecken auf der Insel (echtes Wetter, Nacht) und an Festtagen (Deutschland und Russland).
 // Doppelte Sticker werden gezählt – zum Tauschen per QR später.
 (function () {
@@ -39,7 +41,7 @@
   const heuteStr = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   const jetzt = () => new Date(window.__jetzt || Date.now());
 
-  function daten() { return Object.assign({ hat: {}, neu: [], tag: "", heute: 0, aufgaben: 0 }, S.lade("sticker") || {}); }
+  function daten() { return Object.assign({ hat: {}, neu: [], tag: "", heute: 0, aufgaben: 0, wahl: 0 }, S.lade("sticker") || {}); }
   function speichere(d) { S.speichere("sticker", d); }
   function melde(st, neu) {
     const C = window.Charakter, titel = neu ? `🌟 Neuer Sticker: ${st.e} ${st.name}` : `${st.e} ${st.name} – schon da!`;
@@ -56,10 +58,11 @@
     melde(st, neu);
     return neu;
   }
-  function zufall() {
-    const d = daten(), fehlt = LERN_POOL.filter(id => !d.hat[id]);
-    const pool = fehlt.length && Math.random() < 0.8 ? fehlt : LERN_POOL;
-    return pool[Math.floor(Math.random() * pool.length)];
+  // Noch fehlende Lern-Sticker (zum Aussuchen)
+  const fehlend = (d = daten()) => LERN_POOL.filter(id => !d.hat[id]);
+  function waehle(id) {
+    const d = daten(); if (!d.wahl || !fehlend(d).includes(id)) return false;
+    d.wahl--; gib(id, d); speichere(d); return true;
   }
   // Entdecken: jeder Sticker nur einmal
   function entdecke(id) { const d = daten(); if (d.hat[id]) return false; return gib(id); }
@@ -79,7 +82,11 @@
     const d = daten(), h = heuteStr(jetzt());
     if (d.tag !== h) { d.tag = h; d.heute = 0; d.aufgaben = 0; }
     d.aufgaben++;
-    if (d.aufgaben >= PRO_STICKER && d.heute < MAX_TAG) { d.aufgaben = 0; d.heute++; gib(zufall(), d); }
+    if (d.aufgaben >= PRO_STICKER && d.heute < MAX_TAG && fehlend(d).length > d.wahl) {
+      d.aufgaben = 0; d.heute++; d.wahl++;
+      const C2 = window.Charakter, t = "🎁 Du darfst dir einen Sticker aussuchen!", x = "Öffne dein Stickeralbum und such dir einen aus.";
+      if (C2 && C2.hinweis) C2.hinweis(t, x, "#C2337A"); else if (S.meldung) S.meldung(t);
+    }
     speichere(d);
   }
   const C = window.Charakter;
@@ -89,5 +96,6 @@
   }
   function gesehen() { const d = daten(); d.neu = []; speichere(d); }
   function stand() { const d = daten(); return { hat: Object.keys(d.hat).length, gesamt: Object.keys(ALLE).length, neu: d.neu.length }; }
-  window.Sticker = { SEITEN, ALLE, daten, gib, zufall, entdecke, feste, gesehen, stand, PRO_STICKER, MAX_TAG };
+  const wahl = () => Math.min(daten().wahl || 0, fehlend().length);
+  window.Sticker = { SEITEN, ALLE, daten, gib, waehle, wahl, fehlend, entdecke, feste, gesehen, stand, PRO_STICKER, MAX_TAG };
 })();
