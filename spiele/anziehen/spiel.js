@@ -5,12 +5,15 @@
   const HAARFARBEN = ["#F4CD6A", "#D9A04E", "#A8693A", "#5C3A21", "#2A2230", "#C9542B", "#FF8CC6", "#9B6BE0", "#4FA8F0", "#6ED8B8"];
   const STOFF = ["#FF6F61", "#C2337A", "#FF9BC8", "#7B55B8", "#3AA0E0", "#5CCBA6", "#9BD34A", "#FFC83D", "#FFFFFF", "#2E2B47"];
 
+  // Junge/Mädchen (02.11.2026): eigene und neutrale Teile zuerst, die übrigen hinter „Mehr Sachen“
+  const GESCHLECHT = (S && S.kind ? S.kind().geschlecht : "n") || "n";
+  const mehrOffen = {};
   const KATEGORIEN = [
     { id: "figur", name: "Ich", icon: "🙂", teile: P.gesichter, farben: HAUT, platz: "figur" },
-    { id: "haare", name: "Haare", icon: "💇", teile: P.haare, farben: HAARFARBEN, platz: "haare" },
+    { id: "haare", name: "Haare", icon: GESCHLECHT === "m" ? "✂️" : "💇", teile: P.haare, farben: HAARFARBEN, platz: "haare" },
     { id: "oben", name: "Oben", icon: "👚", teile: P.oberteile, farben: STOFF, platz: "oberteil", leer: true },
     { id: "unten", name: "Unten", icon: "🩳", teile: P.unterteile, farben: STOFF, platz: "unterteil", leer: true },
-    { id: "kleider", name: "Kleider & Anzüge", icon: ((window.Spielwelt && Spielwelt.kind && Spielwelt.kind().geschlecht) === "m" ? "🦸" : "👗"), teile: P.kleider, farben: STOFF, platz: "kleid", leer: true },
+    { id: "kleider", name: { m: "Kostüme", w: "Kleider" }[GESCHLECHT] || "Kleider & Anzüge", icon: GESCHLECHT === "m" ? "🦸" : "👗", teile: P.kleider, farben: STOFF, platz: "kleid", leer: true },
     { id: "schuhe", name: "Schuhe", icon: "👟", teile: P.schuhe, farben: STOFF, platz: "schuhe", leer: true },
     { id: "extras", name: "Extras", icon: "👑", teile: P.extras, farben: STOFF.concat(["#FFE27A"]), platz: "extras", mehrere: true },
     { id: "orte", name: "Orte", icon: "🏞️", teile: P.orte, farben: null, platz: "ort" }
@@ -106,7 +109,11 @@
       b.addEventListener("click", () => { zustand[k.platz] = null; aenderung(); });
       gitter.appendChild(b);
     }
-    k.teile.forEach(t => {
+    const andere = (t) => (GESCHLECHT === "m" || GESCHLECHT === "w") && t.fuer && t.fuer !== GESCHLECHT;
+    const getragen = (t) => k.mehrere ? !!zustand.extras[t.id] : gewaehlt(k) === t.id;
+    const vorn = k.teile.filter(t => !andere(t) || getragen(t)), hinten = k.teile.filter(t => andere(t) && !getragen(t));
+    const liste = mehrOffen[k.id] ? vorn.concat(hinten) : vorn;
+    liste.forEach(t => {
       const frei = (!t.preis && !t.belohnung) || S.istFrei("anziehen." + t.id);
       const an = k.mehrere ? !!zustand.extras[t.id] : gewaehlt(k) === t.id;
       const b = document.createElement("button");
@@ -117,6 +124,13 @@
       b.addEventListener("click", () => waehle(k, t, frei));
       gitter.appendChild(b);
     });
+    if (hinten.length) {
+      const m = document.createElement("button");
+      m.className = "mehr-knopf"; m.id = "mehr-sachen";
+      m.innerHTML = mehrOffen[k.id] ? "▲ Weniger zeigen" : `＋ Mehr Sachen <small>(${hinten.length})</small>`;
+      m.addEventListener("click", () => { mehrOffen[k.id] = !mehrOffen[k.id]; S.ton("tipp"); zeigeTeile(); });
+      gitter.appendChild(m);
+    }
   }
 
   function zeigeFarben() {

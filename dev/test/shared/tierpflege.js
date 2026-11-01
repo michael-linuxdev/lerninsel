@@ -10,6 +10,7 @@
   function lade() {
     const d = Object.assign({ phase: null, ei: null, waerme: 0, eiGewaermt: null, art: null, farbe: 0, name: "",
       freundschaft: 0, satt: 70, freude: 70, zeit: jetzt(), besitz: {}, traegt: {}, leckerli: 3, heute: null }, S.lade("tier") || {});
+    if (d.art === "fuchs") d.art = "hund";   // 02.11.2026: der Fuchs sah aus wie Fipsi – alte Füchse werden Hunde (Name, Stufe, Zubehör bleiben)
     if (!d.heute || d.heute.datum !== heute()) d.heute = { datum: heute(), fs: 0, spiel: 0, streichel: 0 };
     // Werte sinken mit der Zeit (pro Tag etwa ein Drittel), nie unter 0
     const tage = Math.max(0, (jetzt() - (d.zeit || jetzt())) / 86400000);

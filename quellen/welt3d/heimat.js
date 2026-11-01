@@ -72,22 +72,12 @@ function teil(geo, farbe, { umriss = true, dicke = 1.06, schatten = true } = {})
 const kugel = (r, a = 28, b = 20) => new SphereGeometry(r, Math.max(8, Math.ceil(a * (EINFACH ? 0.4 : 0.55))), Math.max(6, Math.ceil(b * (EINFACH ? 0.4 : 0.55))));
 const setze = (o, x, y, z) => { o.position.set(x, y, z); return o; };
 const AUGE = new MeshBasicMaterial({ color: "#2E2240" }), WEISS = new MeshBasicMaterial({ color: "#ffffff" });
-// Kulleraugen (01.11.2026, „niedlicher“): größer, zwei Glanzpunkte; dazu dezente Wangen auf der Kopfoberfläche
-// (der Kopf hat seine Mitte im Ursprung von eltern – der Radius ergibt sich aus der Lage der Augen)
-const WANGE = new MeshBasicMaterial({ color: "#FF8FA8", transparent: true, opacity: 0.42, depthWrite: false });
-const NACH_VORN = new Vector3(0, 0, 1);
-function augen(eltern, abstand, y, z, r = 0.075, wangen = true) {
-  r *= 1.25;
-  const R = Math.hypot(abstand, y, z);
+// Normale Augen statt Kulleraugen (02.11.2026, Wunsch des Auftraggebers; ersetzt die Kulleraugen vom 01.11.): klein, kaum höher als breit,
+// ein kleiner Glanzpunkt, keine Wangen. Der Parameter wangen bleibt für alte Aufrufe, wird aber nicht mehr benutzt.
+function augen(eltern, abstand, y, z, r = 0.075, wangen = false) {   // eslint-disable-line no-unused-vars
   [-1, 1].forEach(s => {
-    const a = new Mesh(kugel(r, 14, 10), AUGE); a.scale.set(1, 1.25, 0.6); setze(a, abstand * s, y, z); eltern.add(a);
-    a.add(setze(new Mesh(kugel(r * 0.42, 8, 6), WEISS), -r * 0.28, r * 0.42, r * 0.75));
-    a.add(setze(new Mesh(kugel(r * 0.2, 8, 6), WEISS), r * 0.36, -r * 0.38, r * 0.78));
-    if (!wangen) return;
-    const wx = (abstand + r * 0.85) * s, wy = y - r * 1.55, wz = Math.sqrt(Math.max(0.0001, R * R - wx * wx - wy * wy));
-    const n = new Vector3(wx, wy, wz).normalize();
-    const w = new Mesh(new CircleGeometry(r * 0.78, 18), WANGE); w.scale.y = 0.62; w.quaternion.setFromUnitVectors(NACH_VORN, n);
-    w.position.copy(n).multiplyScalar(R + 0.006); w.renderOrder = 2; eltern.add(w);
+    const a = new Mesh(kugel(r * 0.72, 14, 10), AUGE); a.scale.set(1, 1.12, 0.55); setze(a, abstand * s, y, z); eltern.add(a);
+    a.add(setze(new Mesh(kugel(r * 0.2, 8, 6), WEISS), r * 0.24, r * 0.26, r * 0.6));
   });
 }
 
@@ -568,7 +558,7 @@ function figur(look) {
     a.rotation.z = 0.25 * s; koerper.add(a); return a;
   });
   // Kopf und Frisur
-  const kopf = new Group(); kopf.position.y = 1.9; kopf.scale.setScalar(1.18); koerper.add(kopf);   // (01.11.2026) Kindchenschema: großer Kopf
+  const kopf = new Group(); kopf.position.y = 1.85; koerper.add(kopf);   // (02.11.2026) wieder normale Kopfgröße statt Kindchenschema
   kopf.add(teil(kugel(0.58), haut, { dicke: 1.04 }));
   const kappe = teil(new SphereGeometry(0.62, 28, 20, 0, Math.PI * 2, 0, Math.PI * 0.55), haarF, { dicke: 1.04 });
   kappe.position.set(0, 0.04, -0.04); kappe.rotation.x = -0.35; kopf.add(kappe);
@@ -589,7 +579,18 @@ function figur(look) {
   if ((haarId === "wuschel" || haarId === "kurzlocken") && !bedeckt) { const r = haarId === "wuschel" ? 0.22 : 0.17; [[-0.36, 0.4], [-0.12, 0.55], [0.12, 0.55], [0.36, 0.4], [0, 0.42]].forEach(([x, y]) => haarteil(kugel(r), x, y, 0.2)); }
   if (haarId === "undercut") haarteil(kugel(0.5), 0, 0.42, 0.05, 1, 0.55, 1);
   // Gesicht
-  augen(kopf, 0.21, 0.0, 0.53, 0.08);
+  augen(kopf, 0.2, 0.02, 0.53);
+  // Junge/Mädchen (02.11.2026): Mädchen mit Wimpern und feinen Brauen, Jungen mit kräftigen geraden Brauen und breiteren Schultern
+  const form = (look.figur && look.figur.form) || (() => { try { return window.Spielwelt.kind().geschlecht; } catch (e) { return "n"; } })();
+  [-1, 1].forEach(s => {
+    if (form === "w") {
+      [0, 1].forEach(i => { const w = new Mesh(new BoxGeometry(0.012, 0.05, 0.012), AUGE); w.position.set(s * (0.245 + i * 0.022), 0.075 + i * 0.012, 0.52 - i * 0.01); w.rotation.z = -s * (0.6 + i * 0.3); kopf.add(w); });
+      const b = new Mesh(new BoxGeometry(0.11, 0.014, 0.02), AUGE); b.position.set(s * 0.2, 0.14, 0.53); b.rotation.z = -s * 0.12; kopf.add(b);
+    } else if (form === "m") {
+      const b = new Mesh(new BoxGeometry(0.13, 0.03, 0.025), AUGE); b.position.set(s * 0.2, 0.13, 0.53); b.rotation.z = s * 0.06; kopf.add(b);
+    }
+  });
+  if (form === "m") koerper.children.forEach(c => { if (c.geometry && c.geometry.type === "SphereGeometry" && Math.abs(c.position.y - 1.15) < 0.01) c.scale.set(1.14, 1, 1.05); });
   // (01.11.2026) keine rosa Wangen mehr
   const mund = new Mesh(new TorusGeometry(0.07, 0.018, 6, 12, Math.PI), AUGE); mund.rotation.z = Math.PI; setze(mund, 0, -0.15, 0.55); kopf.add(mund);
   // Extras aus dem Kleiderschrank (eine Auswahl in 3D)
@@ -617,29 +618,35 @@ ich.position.set(WELT.insel ? 1 : P.start[0] + 1, 0.25, WELT.insel ? 2 : P.start
 const TP = window.TierPflege, T = window.Tiere;
 const tierDaten = TP ? TP.lade() : null;
 function tierModell(art, f, stufe) {
+  // 02.11.2026: Hund statt Fuchs; Proportionen je Stufe (Baby: großer Kopf, kurze Beine – groß: langer Körper, lange Beine)
+  if (art === "fuchs") art = "hund";
+  const st = Math.max(0, Math.min(2, stufe || 0));
   const t = new Group(), k = new Group(); t.add(k);
   const H = f.h, L = f.l, D = f.d;
-  const leib = teil(new CapsuleGeometry(0.28, 0.5, 6, 16), H); leib.rotation.x = Math.PI / 2; setze(leib, 0, 0.45, 0); k.add(leib);
-  const bauch = teil(kugel(0.24), L, { umriss: false }); bauch.scale.set(1, 0.8, 1.6); setze(bauch, 0, 0.36, 0.05); k.add(bauch);
-  const kopf = new Group(); kopf.position.set(0, 0.9, 0.42); kopf.scale.setScalar(1.2); k.add(kopf);   // (01.11.2026) größerer Kopf, niedlicher
-  kopf.add(teil(kugel(art === "katze" ? 0.34 : 0.32), H));
-  const schnauze = teil(kugel(art === "drache" ? 0.18 : 0.14, 14, 10), art === "katze" ? L : art === "drache" ? H : L);
-  schnauze.scale.set(1, 0.8, art === "katze" ? 0.7 : 1.25); setze(schnauze, 0, -0.08, 0.28); kopf.add(schnauze);
-  kopf.add(setze(new Mesh(kugel(0.045), art === "katze" ? new MeshBasicMaterial({ color: "#FF8FA3" }) : AUGE), 0, -0.03, art === "katze" ? 0.4 : 0.47));
-  augen(kopf, 0.135, 0.07, 0.27, 0.06);
+  const bl = [0.1, 0.17, 0.24][st], ll = [0.36, 0.5, 0.62][st], kopfS = [1.25, 1.08, 1][st];
+  const leib = teil(new CapsuleGeometry(art === "katze" ? 0.24 : 0.28, ll, 6, 16), H); leib.rotation.x = Math.PI / 2; setze(leib, 0, 0.3 + bl, 0); k.add(leib);
+  const bauch = teil(kugel(0.24), L, { umriss: false }); bauch.scale.set(1, 0.8, 1.6); setze(bauch, 0, 0.22 + bl, 0.05); k.add(bauch);
+  const kopf = new Group(); kopf.position.set(0, 0.7 + bl, 0.3 + ll * 0.4); kopf.scale.setScalar(kopfS); k.add(kopf);
+  kopf.add(teil(kugel(art === "katze" ? 0.3 : 0.3), H));
+  const lang = art === "hund" ? [1.1, 1.4, 1.7][st] : art === "drache" ? [1, 1.25, 1.5][st] : 0.7;
+  const schnauze = teil(kugel(art === "drache" ? 0.17 : art === "hund" ? 0.15 : 0.13, 14, 10), art === "drache" ? H : L);
+  schnauze.scale.set(1, 0.8, lang); setze(schnauze, 0, -0.08, 0.22 + 0.05 * lang); kopf.add(schnauze);
+  kopf.add(setze(new Mesh(kugel(0.045), art === "katze" ? new MeshBasicMaterial({ color: "#E88A9C" }) : AUGE), 0, -0.03, art === "katze" ? 0.33 : 0.22 + 0.15 * lang));
+  augen(kopf, 0.12, 0.07, 0.26, 0.055);
   [-1, 1].forEach(s => {
-    if (art === "drache") { const h = teil(new ConeGeometry(0.06, 0.24, 10), "#FFE7A8", { dicke: 1.12 }); setze(h, 0.14 * s, 0.32, -0.08); h.rotation.z = -0.3 * s; kopf.add(h); }
-    else { const o = teil(new ConeGeometry(art === "katze" ? 0.13 : 0.12, art === "katze" ? 0.22 : 0.3, 12), H); setze(o, 0.17 * s, 0.32, -0.02); o.rotation.z = -0.25 * s; kopf.add(o); }
+    if (art === "drache") { if (st) { const h = teil(new ConeGeometry(0.05 + st * 0.01, 0.12 + st * 0.08, 10), "#FFE7A8", { dicke: 1.12 }); setze(h, 0.13 * s, 0.3, -0.08); h.rotation.z = -0.3 * s; kopf.add(h); } }
+    else if (art === "hund") { const o = teil(kugel(0.14, 12, 10), D); o.scale.set(0.45, [1.25, 1.05, 0.9][st], 0.8); setze(o, 0.28 * s, 0.02, -0.02); o.rotation.z = 0.25 * s; kopf.add(o); }   // Schlappohren
+    else { const o = teil(new ConeGeometry(0.11, [0.3, 0.26, 0.22][st], 12), H); setze(o, 0.16 * s, 0.3, -0.02); o.rotation.z = -0.25 * s; kopf.add(o); }
   });
-  [[-0.15, 0.25], [0.15, 0.25], [-0.15, -0.25], [0.15, -0.25]].forEach(([x, z]) => k.add(setze(teil(new CapsuleGeometry(0.07, 0.18, 4, 10), art === "fuchs" ? D : H), x, 0.15, z)));
-  const schwanz = new Group(); schwanz.position.set(0, 0.55, -0.45); k.add(schwanz);
-  if (art === "fuchs") { const s1 = teil(kugel(0.22, 16, 12), H); s1.scale.set(1, 1, 1.8); setze(s1, 0, 0.12, -0.3); schwanz.add(s1); schwanz.add(setze(teil(kugel(0.14), L), 0, 0.2, -0.68)); }
-  else if (art === "katze") { const s1 = teil(new CapsuleGeometry(0.06, 0.6, 4, 10), H); s1.rotation.x = -0.9; setze(s1, 0, 0.25, -0.22); schwanz.add(s1); }
-  else { const s1 = teil(new ConeGeometry(0.16, 0.8, 14), H); s1.rotation.x = -1.9; setze(s1, 0, -0.1, -0.35); schwanz.add(s1);
-    for (let i = 0; i < 4; i++) k.add(setze(teil(new ConeGeometry(0.06, 0.16, 8), D, { dicke: 1.12 }), 0, 0.78 - i * 0.03, 0.15 - i * 0.2));
-    [-1, 1].forEach(s => { const fl = teil(kugel(0.3), L); fl.scale.set(0.15, 0.6, 0.8); setze(fl, 0.32 * s, 0.75, -0.05); fl.rotation.z = 0.6 * s; k.add(fl); }); }
+  [[-0.14, 0.2], [0.14, 0.2], [-0.14, -0.2], [0.14, -0.2]].forEach(([x, z]) => k.add(setze(teil(new CapsuleGeometry(0.07, bl + 0.06, 4, 10), H), x, (bl + 0.2) / 2, z * (1 + ll))));
+  const schwanz = new Group(); schwanz.position.set(0, 0.35 + bl, -0.2 - ll * 0.5); k.add(schwanz);
+  if (art === "hund") { const s1 = teil(new CapsuleGeometry(0.06, 0.3 + st * 0.08, 4, 10), H); s1.rotation.x = -0.6; setze(s1, 0, 0.14, -0.1); schwanz.add(s1); }
+  else if (art === "katze") { const s1 = teil(new CapsuleGeometry(0.05, 0.45 + st * 0.12, 4, 10), H); s1.rotation.x = -0.9; setze(s1, 0, 0.22, -0.16); schwanz.add(s1); }
+  else { const s1 = teil(new ConeGeometry(0.15, 0.5 + st * 0.2, 14), H); s1.rotation.x = -1.9; setze(s1, 0, -0.1, -0.3); schwanz.add(s1);
+    for (let i = 0; i < 1 + st * 2; i++) k.add(setze(teil(new ConeGeometry(0.05, 0.14, 8), D, { dicke: 1.12 }), 0, 0.58 + bl - i * 0.02, 0.1 - i * 0.18));
+    [-1, 1].forEach(s => { const fl = teil(kugel(0.3), L); fl.scale.set(0.15, [0.3, 0.6, 0.9][st], [0.45, 0.8, 1.1][st]); setze(fl, 0.3 * s, 0.55 + bl, -0.05); fl.rotation.z = 0.6 * s; k.add(fl); }); }
   t.userData = { k, schwanz };
-  t.scale.setScalar([0.7, 0.92, 1.15][Math.max(0, Math.min(2, stufe || 0))]);   // (30.10.2026) etwas größer – neben dem Kind ging das Tier unter
+  t.scale.setScalar([0.75, 0.95, 1.15][st]);   // (30.10.2026) etwas größer – neben dem Kind ging das Tier unter
   return t;
 }
 let tier = null, nest = null;
@@ -733,7 +740,6 @@ function robo() {
   const schirm = teil(new CapsuleGeometry(0.28, 0.3, 6, 20), "#2E2B47", { umriss: false }); schirm.rotation.z = Math.PI / 2; schirm.scale.set(1, 1, 0.25); setze(schirm, 0, 0, 0.29); kopf.add(schirm);
   [-1, 1].forEach(s => {
     const auge = new Mesh(new TorusGeometry(0.075, 0.025, 6, 14, Math.PI), LEUCHT); setze(auge, 0.15 * s, 0.03, 0.37); kopf.add(auge);
-    const w = new Mesh(new CircleGeometry(0.06, 14), WANGE); w.scale.y = 0.6; setze(w, 0.27 * s, -0.09, 0.365); kopf.add(w);
     const ohr = teil(new CylinderGeometry(0.07, 0.07, 0.12, 14), "#FFC83D"); ohr.rotation.z = Math.PI / 2; setze(ohr, 0.66 * s, 0, 0); kopf.add(ohr);
   });
   const mund = new Mesh(new TorusGeometry(0.07, 0.022, 6, 14, Math.PI), LEUCHT); mund.rotation.z = Math.PI; setze(mund, 0, -0.1, 0.37); kopf.add(mund);
@@ -938,8 +944,11 @@ antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe"
   const t = new Group(); t.position.set(0.95, 0, 0.2); t.rotation.y = -1.2; g.add(t);
   const panzer = teil(new SphereGeometry(0.42, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), "#4FAF62"); panzer.scale.set(1, 0.85, 1.15); setze(panzer, 0, 0.18, 0); t.add(panzer);
   t.add(setze(teil(new CylinderGeometry(0.43, 0.43, 0.08, 18), "#E8D9A0"), 0, 0.17, 0));
-  const kopf = new Group(); kopf.position.set(0, 0.42, 0.5); t.add(kopf); kopf.add(teil(kugel(0.25, 16, 12), "#8FD06A")); augen(kopf, 0.1, 0.03, 0.22, 0.045);
-  { const band = teil(new TorusGeometry(0.22, 0.04, 8, 20), "#7B55B8"); band.rotation.x = Math.PI / 2 - 0.3; setze(band, 0, 0.1, -0.02); kopf.add(band); }   // lila Stirnband wie in 2D
+  const kopf = new Group(); kopf.position.set(0, 0.32, 0.5); t.add(kopf); kopf.add(teil(kugel(0.17, 14, 10), "#8FD06A")); augen(kopf, 0.07, 0.04, 0.14, 0.035);
+  // Frisur (02.11.2026): braune Locken mit lila Schleife wie in 2D
+  [[0, 0.15, -0.02, 0.09], [-0.08, 0.13, 0.03, 0.07], [0.08, 0.13, 0.03, 0.07], [-0.11, 0.07, -0.05, 0.07], [0.11, 0.07, -0.05, 0.07], [0, 0.11, -0.1, 0.08]]
+    .forEach(([hx, hy, hz, hr]) => kopf.add(setze(teil(kugel(hr, 10, 8), "#9A5530", { dicke: 1.08 }), hx, hy, hz)));
+  [-1, 1].forEach(s2 => { const sl = teil(new ConeGeometry(0.04, 0.08, 8), "#7B55B8", { dicke: 1.1 }); sl.rotation.z = s2 * Math.PI / 2; kopf.add(setze(sl, 0.09 + s2 * 0.05, 0.22, 0)); });
   [[-0.3, 0.35], [0.3, 0.35], [-0.3, -0.35], [0.3, -0.35]].forEach(([fx, fz]) => t.add(setze(teil(kugel(0.1, 10, 8), "#8FD06A"), fx, 0.07, fz)));
   antippbar(g, () => zeigeAntwort(K.antwort("schach")), ...K.aktionFuer("schach")); starr.push([g]);
 }
@@ -1091,11 +1100,35 @@ WAND_HINTEN.userData.lebt = WAND_SEITE.userData.lebt = true;   // Farbe ändert 
   wand(8.4, 3.2, 0.25, 0, -3.7, WAND_HINTEN); wand(0.25, 3.2, 7.4, -4.2, 0, WAND_SEITE); wand(0.25, 3.2, 7.4, 4.2, 0, WAND_SEITE);
   zimmer.add(setze(teil(new BoxGeometry(1.8, 1.2, 0.08), fensterMat, { dicke: 1.04 }), 0, 2.1, -3.55));
   zimmer.add(setze(new Mesh(new BoxGeometry(0.08, 1.2, 0.1), mat("#FFFFFF")), 0, 2.1, -3.5));
-  const teppich = new Mesh(new CylinderGeometry(1.6, 1.6, 0.04, 40), mat("#B7A4F2")); teppich.position.set(0, 0.27, 0.6); teppich.receiveShadow = true; zimmer.add(teppich);
+  // Junge und Mädchen (02.11.2026): eigene Farben und Deko im Zimmer (Ansprache aus dem Elternbereich; „keine Angabe“ = wie bisher)
+  const GESCHLECHT = K.geschlecht ? K.geschlecht() : "n", JUNGE = GESCHLECHT === "m", MAEDCHEN = GESCHLECHT === "w";
+  const ZF = JUNGE ? { teppich: "#7FBF6A", decke: "#3A7BD5", schrank: "#2F6FB3", tuer: "#4A8FD6" }
+    : MAEDCHEN ? { teppich: "#C9A8F2", decke: "#F59AC0", schrank: "#C2337A", tuer: "#E0579A" }
+    : { teppich: "#B7A4F2", decke: "#7FC6F5", schrank: "#C2337A", tuer: "#E0579A" };
+  const teppich = new Mesh(new CylinderGeometry(1.6, 1.6, 0.04, 40), mat(ZF.teppich)); teppich.position.set(0, 0.27, 0.6); teppich.receiveShadow = true; zimmer.add(teppich);
+  if (JUNGE) {
+    // Straßen-Teppich, Fußball, Raketen-Poster
+    const strasse = new Mesh(new TorusGeometry(1.05, 0.14, 4, 40), mat("#5B5B66")); strasse.rotation.x = Math.PI / 2; strasse.scale.z = 0.2; strasse.position.set(0, 0.3, 0.6); zimmer.add(strasse);
+    const ball = teil(kugel(0.22), "#FFFFFF"); setze(ball, 1.3, 0.47, 1.9); zimmer.add(ball);
+    [[0, 0.22, 0], [0.19, 0.08, 0.08], [-0.17, 0.06, 0.12], [0.05, -0.05, 0.21]].forEach(([x, y, z]) => ball.add(setze(new Mesh(kugel(0.07, 8, 6), mat("#2A2230")), x, y, z)));
+    const poster = new Group(); poster.position.set(-1.9, 2.1, -3.55); zimmer.add(poster);
+    poster.add(setze(teil(new BoxGeometry(1.0, 1.3, 0.04), "#1F2A5A", { dicke: 1.03 }), 0, 0, 0));
+    const rakete = teil(new CapsuleGeometry(0.12, 0.45, 4, 12), "#FFFFFF"); rakete.rotation.z = -0.5; poster.add(setze(rakete, 0, 0.05, 0.05));
+    [-1, 1].forEach(s2 => poster.add(setze(teil(new BoxGeometry(0.08, 0.16, 0.03), "#E8463B"), -0.12 + s2 * 0.1, -0.22 + s2 * 0.05, 0.06)));
+    [[0.3, 0.45], [-0.32, 0.4], [0.35, -0.4], [-0.3, -0.45]].forEach(([x, y]) => poster.add(setze(new Mesh(kugel(0.04, 6, 4), mat("#FFE27A")), x, y, 0.04)));
+  } else if (MAEDCHEN) {
+    // Blumen-Teppich, Wimpelkette, Herz-Poster
+    [0, 1, 2, 3, 4, 5].forEach(i => { const a = i / 6 * Math.PI * 2; const b = new Mesh(new CylinderGeometry(0.22, 0.22, 0.05, 16), mat(i % 2 ? "#FF9BC8" : "#FFE27A")); b.position.set(Math.cos(a) * 1.05, 0.3, 0.6 + Math.sin(a) * 1.05); zimmer.add(b); });
+    for (let i = 0; i < 9; i++) { const w = teil(new ConeGeometry(0.16, 0.3, 3), ["#FF6F9F", "#FFC83D", "#9B6BE0", "#5CCBA6"][i % 4], { dicke: 1.05 }); w.rotation.x = Math.PI; setze(w, -3.2 + i * 0.36, 2.95 - Math.sin(i / 8 * Math.PI) * 0.25, -3.5); zimmer.add(w); }
+    const poster = new Group(); poster.position.set(-1.9, 2.1, -3.55); zimmer.add(poster);
+    poster.add(setze(teil(new BoxGeometry(1.0, 1.3, 0.04), "#FFF1F7", { dicke: 1.03 }), 0, 0, 0));
+    [-1, 1].forEach(s2 => poster.add(setze(new Mesh(kugel(0.17, 12, 10), mat("#E8336B")), s2 * 0.12, 0.08, 0.04)));
+    const spitze = new Mesh(new ConeGeometry(0.25, 0.32, 4), mat("#E8336B")); spitze.rotation.z = Math.PI; spitze.rotation.y = Math.PI / 4; poster.add(setze(spitze, 0, -0.12, 0.04));
+  }
   // Bett
   const bett = new Group(); bett.position.set(-2.9, 0.25, -2.2); zimmer.add(bett); zimmerEigen.push(bett);
   bett.add(setze(teil(new BoxGeometry(1.8, 0.5, 2.6), "#9A6A3F", { dicke: 1.03 }), 0, 0.25, 0));
-  bett.add(setze(teil(new BoxGeometry(1.7, 0.2, 1.8), "#7FC6F5", { dicke: 1.03 }), 0, 0.6, 0.35));
+  bett.add(setze(teil(new BoxGeometry(1.7, 0.2, 1.8), ZF.decke, { dicke: 1.03 }), 0, 0.6, 0.35));
   const kissen = teil(kugel(0.4), "#FFFFFF"); kissen.scale.set(1.6, 0.5, 0.9); bett.add(setze(kissen, 0, 0.65, -0.85));
   block(ZX - 2.9, -2.2, 1.4);
   // Stickeralbum liegt auf dem Bett
@@ -1107,8 +1140,8 @@ WAND_HINTEN.userData.lebt = WAND_SEITE.userData.lebt = true;   // Farbe ändert 
   antippbar(bett, () => zeigeAntwort(K.antwort("bett", { tier: tier ? tierDaten.name || "dein Tier" : null })), ...K.aktionFuer("bett"));
   // Kleiderschrank
   const schrank = new Group(); schrank.position.set(2.8, 0.25, -3.0); zimmer.add(schrank); zimmerEigen.push(schrank); starr.push([schrank]);
-  schrank.add(setze(teil(new BoxGeometry(2.0, 2.6, 0.9), "#C2337A", { dicke: 1.03 }), 0, 1.3, 0));
-  [-0.48, 0.48].forEach(x => { schrank.add(setze(teil(new BoxGeometry(0.9, 2.3, 0.06), "#E0579A", { dicke: 1.02 }), x, 1.3, 0.47)); schrank.add(setze(teil(kugel(0.07), "#FFC83D", { dicke: 1.15 }), x * 0.25, 1.35, 0.53)); });
+  schrank.add(setze(teil(new BoxGeometry(2.0, 2.6, 0.9), ZF.schrank, { dicke: 1.03 }), 0, 1.3, 0));
+  [-0.48, 0.48].forEach(x => { schrank.add(setze(teil(new BoxGeometry(0.9, 2.3, 0.06), ZF.tuer, { dicke: 1.02 }), x, 1.3, 0.47)); schrank.add(setze(teil(kugel(0.07), "#FFC83D", { dicke: 1.15 }), x * 0.25, 1.35, 0.53)); });
   schrank.add(setze(teil(new BoxGeometry(0.5, 0.3, 0.05), "#FFFFFF", { dicke: 1.08 }), 0, 2.35, 0.52));
   block(ZX + 2.8, -3.0, 1.2);
   antippbar(schrank, () => zeigeAntwort(K.antwort("schrank")), ...K.aktionFuer("schrank"));

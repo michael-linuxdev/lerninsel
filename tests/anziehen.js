@@ -36,7 +36,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const neu = ["scheitel", "igel", "wuschel", "kurzlocken", "afro", "undercut", "schulterlang", "trikot", "hemd", "polo", "dinoshirt", "raketenshirt", "heldenshirt",
       "cargo", "bermuda", "ritter", "astronaut", "pirat", "feuerwehr", "dinokostuem", "fussballschuhe", "sneaker", "cap", "piratenhut", "augenklappe", "maske", "fliege", "fussball", "kuscheldino", "schwert"];
     erwarte(neu.every(id => a.ids.includes(id)) && new Set(a.ids).size === a.ids.length, `alle ${neu.length} neuen Teile da, keine doppelten IDs (Anzahl je Reiter: ${a.n.join("/")})`);
-    erwarte(await p.evaluate(() => [...document.querySelectorAll(".reiter")].some(r => /Kleider & Anzüge/.test(r.textContent) && /🦸/.test(r.textContent))), "Reiter „Kleider & Anzüge“ mit 🦸");
+    erwarte(await p.evaluate(() => [...document.querySelectorAll(".reiter")].some(r => /Kostüme/.test(r.textContent) && /🦸/.test(r.textContent))), "Reiter „Kostüme“ mit 🦸");
     // Jede Kachel in jedem Reiter hat eine sichtbare Vorschau
     const leer = [];
     const nReiter = await p.evaluate(() => document.querySelectorAll(".reiter").length);
@@ -51,6 +51,14 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       }).map(b => b.getAttribute("aria-label"))));
     }
     erwarte(leer.length === 0, `jede Kachel zeigt eine Vorschau${leer.length ? " – leer: " + leer.join(", ") : ""}`);
+    // Junge/Mädchen (02.11.2026): Kleider liegen beim Jungen hinter „Mehr Sachen“, gehen aber nicht verloren
+    await reiter(p, "Kostüme");
+    const vorher = await p.evaluate(() => ({ ball: !!document.querySelector('.teil[aria-label^="Ballkleid"]'), ritter: !!document.querySelector('.teil[aria-label^="Ritter-Rüstung"]'), mehr: !!document.getElementById("mehr-sachen") }));
+    await p.click("#mehr-sachen"); await p.waitForTimeout(150);
+    const nachher = await p.evaluate(() => !!document.querySelector('.teil[aria-label^="Ballkleid"]'));
+    erwarte(!vorher.ball && vorher.ritter && vorher.mehr && nachher, "Junge: Kostüme vorn, Kleider erst nach „Mehr Sachen“");
+    const gesicht = await p.evaluate(() => { const o = __anziehen.STANDARD(); return { m: Figur.zeichnePortraet(o), oben: o.oberteil.id, unten: o.unterteil.id }; });
+    erwarte(gesicht.oben === "raketenshirt" && gesicht.unten === "cargo" && /M96 114 Q96 62/.test(gesicht.m), "Junge: eigene Startkleidung (Raketen-Shirt, Cargohose) und kantigeres Kinn");
     // Echt antippen
     await reiter(p, "Extras"); await tippe(p, "Basecap");
     if (BILDER) await p.screenshot({ path: `${BILDER}/anziehen-junge-extras.png` });
@@ -66,6 +74,11 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const { ctx, p } = await kind("w", "Mira");
     const m = await p.evaluate(() => ({ haare: __anziehen.STANDARD().haare.id, kleider: [...document.querySelectorAll(".reiter")].some(r => /👗/.test(r.textContent)) }));
     erwarte(m.haare !== "scheitel" && m.kleider, `Mädchen: eigener Standard (${m.haare}), Reiter mit 👗`);
+    await reiter(p, "Kleider");
+    const w = await p.evaluate(() => ({ ritter: !!document.querySelector('.teil[aria-label^="Ritter-Rüstung"]'), ball: !!document.querySelector('.teil[aria-label^="Ballkleid"]'), mehr: !!document.getElementById("mehr-sachen"),
+      schleife: !!__anziehen.STANDARD().extras.schleife }));
+    erwarte(!w.ritter && w.ball && w.mehr && w.schleife, "Mädchen: Kleider vorn, Kostüme hinter „Mehr Sachen“, Start mit Schleife");
+    if (BILDER) await p.screenshot({ path: `${BILDER}/anziehen-maedchen.png` });
     await ctx.close();
   }
 

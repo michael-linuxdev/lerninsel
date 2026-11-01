@@ -76,8 +76,7 @@
       const innen = ton(haut, -0.15);
       return kreis(97, 124, 11, haut) + `<path d="M95 119 q-5 5 0 10" stroke="${innen}" stroke-width="3" fill="none" stroke-linecap="round"/>` +
         kreis(203, 124, 11, haut) + `<path d="M205 119 q5 5 0 10" stroke="${innen}" stroke-width="3" fill="none" stroke-linecap="round"/>` +
-        kreis(150, 118, 54, haut) +
-        `<ellipse cx="119" cy="146" rx="10" ry="6" fill="#FF8FA8" opacity=".32"/><ellipse cx="181" cy="146" rx="10" ry="6" fill="#FF8FA8" opacity=".32"/>` +
+        (form === "m" ? flaeche("M96 114 Q96 62 150 64 Q204 62 204 114 Q206 150 188 162 Q170 174 150 174 Q130 174 112 162 Q94 150 96 114 Z", haut) : kreis(150, 118, 54, haut)) +
         `<path d="M147 140 Q150 143.5 153 140" stroke="${D}" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".5"/>`;
     },
     unterhemd: () => flaeche("M118 192 L126 192 L130 210 Q150 218 170 210 L174 192 L182 192 Q186 245 186 302 Q150 312 114 302 Q114 245 118 192 Z", "#ffffff"),
@@ -85,13 +84,22 @@
   };
 
   // ---------- Gesicht ----------
-  const brauen = (hoch = 0) => linie(`M119 ${106 - hoch} Q129 ${100 - hoch} 139 ${106 - hoch} M161 ${106 - hoch} Q171 ${100 - hoch} 181 ${106 - hoch}`, D, 3.5);
-  const auge = (x, g = 1.12) =>
-    `<ellipse cx="${x}" cy="128" rx="${8.5 * g}" ry="${10.5 * g}" fill="${D}"/>` +
-    `<ellipse cx="${x}" cy="${129.5}" rx="${6 * g}" ry="${7.5 * g}" fill="#7A4A2A"/>` +
-    `<circle cx="${x}" cy="130" r="${3.6 * g}" fill="#1E1030"/>` +
-    `<circle cx="${x + 3 * g}" cy="${123.5}" r="${3.2 * g}" fill="#fff"/><circle cx="${x - 2.8 * g}" cy="${133}" r="${1.5 * g}" fill="#fff"/>` +
-    linie(`M${x + (x < 150 ? -8 : 8) * g} ${120 - g * 2} l${x < 150 ? -5 : 5} -4`, D, 2.5);
+  // 02.11.2026: normale Augen statt Kulleraugen (weißes, mandelförmiges Auge mit Iris) und Junge/Mädchen deutlich verschieden:
+  // Mädchen mit Wimpern und schmalen, geschwungenen Brauen, Jungen mit geraden, kräftigen Brauen und kantigerem Kinn.
+  // form = "m" | "w" | "n" (keine Angabe = dazwischen); gesetzt von Figur.zeichneFigur über Puppe.setzeForm().
+  let form = "n";
+  const setzeForm = (f) => { form = f === "m" || f === "w" ? f : "n"; };
+  const brauen = (hoch = 0) => form === "m"
+    ? linie(`M117 ${107 - hoch} L139 ${104 - hoch} M161 ${104 - hoch} L183 ${107 - hoch}`, D, 5)
+    : form === "w" ? linie(`M120 ${106 - hoch} Q130 ${98 - hoch} 140 ${104 - hoch} M160 ${104 - hoch} Q170 ${98 - hoch} 180 ${106 - hoch}`, D, 2.8)
+    : linie(`M119 ${106 - hoch} Q129 ${100 - hoch} 139 ${106 - hoch} M161 ${106 - hoch} Q171 ${100 - hoch} 181 ${106 - hoch}`, D, 3.5);
+  const auge = (x, g = 1) => {
+    const w = 9.5 * g, h = 7 * g, y = 128, aussen = x < 150 ? -1 : 1;
+    return `<path d="M${x - w} ${y} Q${x} ${y - h * 2.1} ${x + w} ${y} Q${x} ${y + h * 1.7} ${x - w} ${y} Z" fill="#fff" stroke="${D}" stroke-width="2.2" stroke-linejoin="round"/>` +
+      `<circle cx="${x}" cy="${y - 0.6 * g}" r="${5 * g}" fill="#7A4A2A"/><circle cx="${x}" cy="${y - 0.6 * g}" r="${2.5 * g}" fill="#1E1030"/><circle cx="${x + 1.6 * g}" cy="${y - 1.8 * g}" r="${1.2 * g}" fill="#fff"/>` +
+      linie(`M${x - w} ${y} Q${x} ${y - h * 2.1} ${x + w} ${y}`, D, form === "w" ? 3.6 : 3) +
+      (form === "w" ? linie(`M${x + aussen * w} ${y} l${aussen * 4} -4 M${x + aussen * (w - 3.5)} ${y - h * 1.15} l${aussen * 3} -4.5`, D, 2.4) : "");
+  };
   const augeZu = (x) => linie(`M${x - 9} 129 Q${x} 119 ${x + 9} 129`, D, 4);
   const mundLaecheln = linie("M137 151 Q150 164 163 151", D, 4);
   const gesichter = [
@@ -378,9 +386,18 @@
   // ---------- Orte (Hintergründe, 460 x 620) ----------
   const wolke = (x, y, s, c = "#fff") => `<g fill="${c}"><circle cx="${x}" cy="${y}" r="${22 * s}"/><circle cx="${x + 24 * s}" cy="${y - 10 * s}" r="${26 * s}"/><circle cx="${x + 50 * s}" cy="${y}" r="${20 * s}"/><rect x="${x}" y="${y}" width="${50 * s}" height="${20 * s}" rx="${10 * s}"/></g>`;
   const baum = (x, y, s) => `<rect x="${x - 10 * s}" y="${y}" width="${20 * s}" height="${90 * s}" rx="6" fill="#A0693F"/>` + [[0, -10, 44], [-30, 18, 32], [30, 18, 32]].map(([dx, dy, r]) => `<circle cx="${x + dx * s}" cy="${y + dy * s}" r="${r * s}" fill="#5DB84A"/>`).join("") + `<circle cx="${x - 12 * s}" cy="${y - 22 * s}" r="${12 * s}" fill="#7ACB62"/>`;
+  // Jungen-Zimmer (02.11.2026): blaue Wand mit Sternen, Raketen-Poster, Fußball, Straßen-Teppich
+  const zimmerJunge = () => `<rect width="460" height="620" fill="#D6E9FA"/>` + [0, 1, 2, 3, 4, 5, 6, 7].map(i => stern(30 + i * 60, 30 + (i % 2) * 20, 7, "#B8D6F2", false)).join("") +
+    `<rect y="470" width="460" height="150" fill="#D9B48A"/>` + [520, 570].map(y => `<path d="M0 ${y} H460" stroke="#C49A6C" stroke-width="3"/>`).join("") +
+    `<rect x="318" y="70" width="112" height="132" rx="10" fill="#BFE6FF" stroke="#fff" stroke-width="10"/><path d="M374 70 V202 M318 136 H430" stroke="#fff" stroke-width="8"/>` +
+    `<path d="M306 60 Q330 140 308 214 M442 60 Q418 140 440 214" stroke="#3A7BD5" stroke-width="16" fill="none" stroke-linecap="round"/>` +
+    `<rect x="28" y="90" width="84" height="100" rx="6" fill="#1F2A5A" stroke="#7FA8D8" stroke-width="6"/><g transform="translate(70 140) rotate(30)"><path d="M0 -30 Q12 -16 10 12 L-10 12 Q-12 -16 0 -30 Z" fill="#fff" stroke="${D}" stroke-width="2"/><circle cy="-8" r="4.5" fill="#4FA8F0"/><path d="M-10 4 L-18 16 L-9 12 Z M10 4 L18 16 L9 12 Z" fill="#E8463B"/><path d="M-6 13 Q0 26 6 13 Z" fill="#FFC83D"/></g>` +
+    `<rect x="20" y="380" width="70" height="92" rx="8" fill="#E3F0FB" stroke="#9CC0E6" stroke-width="4"/><path d="M30 404 H80 M30 428 H80 M30 452 H80" stroke="#9CC0E6" stroke-width="3"/>` +
+    `<ellipse cx="230" cy="562" rx="180" ry="30" fill="#7FBF6A"/><ellipse cx="230" cy="562" rx="140" ry="20" fill="none" stroke="#5B5B66" stroke-width="10"/><ellipse cx="230" cy="562" rx="140" ry="20" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="8 8"/>` +
+    kreis(410, 540, 22, "#fff") + `<path d="M410 530 l8 6 l-3 9 h-10 l-3 -9 z" fill="${D}"/>`;
   const orte = [
     { id: "zimmer", name: "Zimmer",
-      teil: () => `<rect width="460" height="620" fill="#F1E2FF"/>` + [0, 1, 2, 3, 4, 5, 6, 7].map(i => `<circle cx="${30 + i * 60}" cy="${30 + (i % 2) * 20}" r="6" fill="#E4CCF7"/>`).join("") +
+      teil: () => form === "m" ? zimmerJunge() : `<rect width="460" height="620" fill="#F1E2FF"/>` + [0, 1, 2, 3, 4, 5, 6, 7].map(i => `<circle cx="${30 + i * 60}" cy="${30 + (i % 2) * 20}" r="6" fill="#E4CCF7"/>`).join("") +
         `<rect y="470" width="460" height="150" fill="#E9C59A"/>` + [520, 570].map(y => `<path d="M0 ${y} H460" stroke="#D4A774" stroke-width="3"/>`).join("") +
         `<rect x="318" y="70" width="112" height="132" rx="10" fill="#BFE6FF" stroke="#fff" stroke-width="10"/><path d="M374 70 V202 M318 136 H430" stroke="#fff" stroke-width="8"/>` +
         `<path d="M306 60 Q330 140 308 214 M442 60 Q418 140 440 214" stroke="#FF9BC8" stroke-width="16" fill="none" stroke-linecap="round"/>` +
@@ -455,7 +472,7 @@
   const zuerst = (liste, neue, nachId) => { const i = liste.findIndex(t => t.id === nachId); liste.splice(i < 0 ? 0 : i + 1, 0, ...neue); };
   zuerst(haare, [
     { id: "scheitel", name: "Seitenscheitel",
-      hinten: c => flaeche("M92 126 Q88 48 150 46 Q212 48 208 126 L204 146 Q150 138 96 146 Z", c),
+      hinten: c => flaeche("M94 118 Q90 48 150 46 Q210 48 206 118 L204 124 Q150 116 96 124 Z", c),   // kurz, Ohren frei (02.11.2026)
       vorne: c => flaeche("M94 118 Q94 50 150 48 Q206 50 206 118 Q204 94 188 84 Q150 70 120 90 Q102 102 94 118 Z", c) + linie("M120 54 Q128 70 120 90", detail(c), 3) + kappeGlanz(c) },
     { id: "igel", name: "Igel-Frisur",
       hinten: c => flaeche("M92 128 Q88 52 150 50 Q212 52 208 128 L204 148 Q150 140 96 148 Z", c),
@@ -570,5 +587,16 @@
       teil: c => linie("M86 356 L58 262", D, 13) + linie("M86 356 L58 262", c, 8) + linie("M72 330 L98 322", D, 10) + linie("M72 330 L98 322", "#8A5A34", 6) + glanz("M80 340 L64 284", c, 2.5) }
   ], null);
 
-  window.Puppe = { D, ton, koerper, gesichter, haare, oberteile, unterteile, kleider, schuhe, extras, orte };
+  // Wem gehört ein Teil zuerst? (02.11.2026, Junge und Mädchen stärker unterscheiden): Im Kleiderschrank stehen die eigenen und die
+  // neutralen Teile vorn; die übrigen liegen hinter „Mehr Sachen“ (nichts wird entfernt). Ohne Angabe sieht man alles wie bisher.
+  const FUER = {
+    w: ["lang", "wellen", "zoepfe", "seitenzopf", "dutt", "spacebuns", "bob", "puffs", "pferd", "schulterlang", "herzshirt", "bluse", "sterntop", "glitzertop", "regenbogenpulli", "strickjacke",
+      "rock", "karorock", "leggings", "tuell", "sommer", "blumen", "latzkleid", "fee", "ball", "buchstabenkleid", "glitzer", "regenbogenkleid", "meerjungfrau", "ballerina", "glitzerschuhe",
+      "schleife", "blume", "haarreif", "einhorn", "ohrringe", "kette", "armband", "tasche", "zauberstab", "fluegel", "katzenohren", "verliebt"],
+    m: ["scheitel", "igel", "wuschel", "kurzlocken", "undercut", "kurz", "trikot", "hemd", "polo", "dinoshirt", "raketenshirt", "heldenshirt", "cargo", "bermuda",
+      "ritter", "astronaut", "pirat", "feuerwehr", "dinokostuem", "fussballschuhe", "sneaker", "cap", "piratenhut", "augenklappe", "maske", "fliege", "fussball", "kuscheldino", "schwert"]
+  };
+  [gesichter, haare, oberteile, unterteile, kleider, schuhe, extras].forEach(l => l.forEach(t => { t.fuer = FUER.w.includes(t.id) ? "w" : FUER.m.includes(t.id) ? "m" : ""; }));
+
+  window.Puppe = { D, ton, koerper, gesichter, haare, oberteile, unterteile, kleider, schuhe, extras, orte, setzeForm, FUER };
 })();

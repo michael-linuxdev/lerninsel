@@ -31,7 +31,7 @@
     $("laden-titel").textContent = "🛋️ Zimmer einrichten"; $("laden-text").textContent = text || "Kaufe Möbel mit deinen Sternen und stell sie auf. Gekauftes bleibt für immer deins.";
     const karte = (id, e, name, preis, info, extra) => `<button class="ware${k.besitzt(id, preis) ? " hat" : ""}" ${extra}><span class="e">${e}</span><b>${name}</b><span>${k.besitzt(id, preis) ? info : `⭐ ${preis}`}</span></button>`;
     L.innerHTML = `<h3>Möbel</h3><div class="waren">` + MOEBEL.filter(m => !m.geschenk || S().istFrei("moebel-" + m.id)).map(m => { const steht = PLAETZE.find(pl => d.plaetze[pl.id] === m.id); return karte("moebel-" + m.id, m.e, m.name, m.preis, steht ? `✓ ${steht.name}` : "✓ Hinstellen", `data-moebel="${m.id}"`); }).join("")
-      + `</div><h3>Wandfarbe</h3><div class="waren">` + k.WANDFARBEN.map(w => karte("wand-" + w.id, `<i style="background:${w.farbe[0]}"></i>`, w.name, w.preis, d.wand === w.id ? "✓ an der Wand" : "✓ Streichen", `data-wand="${w.id}"`)).join("") + `</div>`;
+      + `</div><h3>Wandfarbe</h3><div class="waren">` + k.WANDFARBEN.map(w => karte("wand-" + w.id, `<i style="background:${w.farbe[0]}"></i>`, w.name, k.wandPreis ? k.wandPreis(w) : w.preis, d.wand === w.id ? "✓ an der Wand" : "✓ Streichen", `data-wand="${w.id}"`)).join("") + `</div>`;
   }
   function kaufe(id, preis) {
     if (K().besitzt(id, preis)) return true;
@@ -42,7 +42,7 @@
     const b = ev.target.closest("button"); if (!b) return;
     const k = K(), d = k.zimmerDaten(), speichern = () => { S().speichere("zimmer", d); opt.neu(); };
     if (b.dataset.moebel) { const m = k.MOEBEL.find(x => x.id === b.dataset.moebel); if (kaufe("moebel-" + m.id, m.preis)) { wahl = m.id; zeige(); } return; }
-    if (b.dataset.wand) { const w = k.WANDFARBEN.find(x => x.id === b.dataset.wand); if (kaufe("wand-" + w.id, w.preis)) { d.wand = w.id; speichern(); zeige("Frisch gestrichen!"); } return; }
+    if (b.dataset.wand) { const w = k.WANDFARBEN.find(x => x.id === b.dataset.wand); if (kaufe("wand-" + w.id, k.wandPreis ? k.wandPreis(w) : w.preis)) { d.wand = w.id; speichern(); zeige("Frisch gestrichen!"); } return; }
     if (b.dataset.zurueck) { wahl = null; zeige(); return; }
     const raus = () => Object.keys(d.plaetze).forEach(p => { if (d.plaetze[p] === wahl) delete d.plaetze[p]; });
     if (b.dataset.weg) { raus(); speichern(); wahl = null; zeige("Weggeräumt. Du kannst es jederzeit wieder hinstellen."); return; }

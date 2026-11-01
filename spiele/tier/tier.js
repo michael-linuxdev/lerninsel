@@ -2,7 +2,7 @@
   const S = window.Spielwelt, T = window.Tiere, P = window.TierPflege;
   const $ = (id) => document.getElementById(id);
   const VB = "-30 -40 360 320";
-  const NAMEN = { drache: ["Funki", "Flammi", "Drako", "Rubin"], einhorn: ["Luna", "Glitzer", "Sternchen", "Rosalie"], fuchs: ["Flocke", "Rusty", "Fips", "Ronja"], katze: ["Mimi", "Schnurri", "Mia", "Tiger"] };
+  const NAMEN = { drache: ["Funki", "Flammi", "Drako", "Rubin"], einhorn: ["Luna", "Glitzer", "Sternchen", "Rosalie"], hund: ["Bello", "Struppi", "Bruno", "Lotte"], katze: ["Mimi", "Schnurri", "Mia", "Tiger"] };
   let ausdruckJetzt = null, ausdruckTimer = null;
 
   function zeige(n) { ["wahl", "ei", "tier"].forEach(v => $(v + "-ansicht").hidden = v !== n); }
@@ -83,14 +83,14 @@
     $("titel").textContent = d.name ? `${d.name}` : "Mein Tier";
     $("tier-bild").innerHTML = `<svg viewBox="${VB}">${T.zeichneTier({ art: d.art, farbe: d.farbe, stufe: st, ausdruck: ausdruck || ausdruckJetzt || P.ausdruck(d), zubehoer: d.traegt })}</svg>`;
     $("tier-name").textContent = d.name || art.name;
-    $("tier-stufe").textContent = `${art.name}, ${T.STUFEN[st]}`;
+    $("tier-stufe").textContent = `${art.name}, ${T.stufenName(d.art, st)}`;
     $("tier-text").textContent = P.stimmung(d);
     const naechste = P.STUFE_AB[st + 1];
     const balken = (icon, name, w, farbe, unten) => `<div class="wert">${icon} ${name}<div class="balken"><span style="width:${Math.round(w)}%;background:${farbe}"></span></div>${unten ? `<small>${unten}</small>` : ""}</div>`;
     $("werte").innerHTML =
       balken("🍽️", "Satt", d.satt, "#FFB03B") + balken("😊", "Freude", d.freude, "#5CCBA6") +
       balken("❤️", "Freundschaft", naechste ? (d.freundschaft - P.STUFE_AB[st]) / (naechste - P.STUFE_AB[st]) * 100 : 100, "#E0457B",
-        naechste ? `Noch ${naechste - d.freundschaft} bis „${T.STUFEN[st + 1]}“` : "Ganz groß geworden!");
+        naechste ? `Noch ${naechste - d.freundschaft} bis „${T.stufenName(d.art, st + 1)}“` : "Ganz groß geworden!");
     $("leckerli").textContent = `Füttern (${d.leckerli})`;
     $("fuettern").disabled = d.leckerli < 1;
   }
@@ -114,9 +114,9 @@
     setTimeout(() => {
       S.ton("juhu");
       dialog(`<h2>${d.name} ist gewachsen!</h2><svg viewBox="${VB}" style="width:220px">${T.zeichneTier({ art: d.art, farbe: d.farbe, stufe: st, ausdruck: "lacht", zubehoer: d.traegt })}</svg>
-        <p>Jetzt: <b>${T.STUFEN[st]}</b>. Eure Freundschaft wird immer größer!</p><div class="dknoepfe"><button class="knopf haupt" id="ok">Juhu!</button></div>`);
+        <p>Jetzt: <b>${T.stufenName(d.art, st)}</b>. Eure Freundschaft wird immer größer!</p><div class="dknoepfe"><button class="knopf haupt" id="ok">Juhu!</button></div>`);
       $("ok").onclick = () => { zu(); zeichne(); };
-      if (window.Charakter) Charakter.hinweis("🌱 Gewachsen!", `${d.name} ist jetzt ${T.STUFEN[st]}.`, "#2FA37C");
+      if (window.Charakter) Charakter.hinweis("🌱 Gewachsen!", `${d.name} ist gewachsen: ${T.stufenName(d.art, st)}.`, "#2FA37C");
     }, 900);
   }
 
@@ -129,7 +129,7 @@
     const vorher = P.lade(); if (vorher.leckerli < 1) return;
     const btn = $("fuettern").getBoundingClientRect(), ziel = $("tier-bild").getBoundingClientRect();
     const f = document.createElement("span"); f.className = "flieger";
-    f.textContent = { drache: "🌶️", einhorn: "🍓", fuchs: "🍎", katze: "🐟" }[vorher.art] || "🍪";
+    f.textContent = { drache: "🌶️", einhorn: "🍓", hund: "🥩", katze: "🐟" }[vorher.art] || "🍪";
     f.style.left = btn.left + btn.width / 2 - 24 + "px"; f.style.top = btn.top + "px";
     document.body.appendChild(f);
     requestAnimationFrame(() => { f.style.left = ziel.left + ziel.width / 2 - 24 + "px"; f.style.top = ziel.top + ziel.height * 0.45 + "px"; f.style.transform = "scale(.6)"; });

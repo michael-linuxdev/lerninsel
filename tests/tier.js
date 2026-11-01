@@ -2,7 +2,7 @@
 // über drei Tage wärmen (einmal am Tag selbst, zweites Antippen bleibt ohne Wirkung, Tagesaufgabe wärmt mit), schlüpfen,
 // Namen mit HTML-Zeichen eintippen (wird gesäubert), umbenennen per Vorschlag, streicheln, füttern bis „Füttern (0)“, spielen,
 // Zubehör (zu wenig Sterne → nichts gekauft; kaufen, ausziehen, anziehen), am nächsten Tag Leckerli aus einer Lernrunde und
-// Wachsen zur Stufe „Kind“. Daten werden in Spielwelt.lade("tier") geprüft. Keine Konsolenfehler, keine waagerechte Scrollleiste.
+// Wachsen zur Stufe „Junghund“ (Hund statt Fuchs seit 02.11.2026, alter Fuchs wird Hund). Daten werden in Spielwelt.lade("tier") geprüft. Keine Konsolenfehler, keine waagerechte Scrollleiste.
 // Die Uhr wird über localStorage "__testJetzt" gesetzt (wie tests/tutorial.js), damit der Test Tage vorstellen kann.
 // Aufruf: sh tests/laufen.sh tier
 const { chromium } = require("playwright");
@@ -52,7 +52,7 @@ const TAG = (n) => new Date(2026, 9, 25 + n, 15, 0).getTime();
     await p.click('[data-ei="wald"]'); await p.waitForSelector("#dialog:not([hidden])");
     await p.click("#ja"); await p.waitForTimeout(200);
     let d = await tier(p);
-    erwarte(d.phase === "ei" && d.ei === "wald" && d.waerme === 0 && await p.evaluate(() => !document.getElementById("ei-ansicht").hidden && /Wald-Ei/.test(document.getElementById("titel").textContent)), "Wald-Ei gewählt, Ei-Ansicht mit Titel");
+    erwarte(d.phase === "ei" && d.ei === "wald" && d.waerme === 0 && await p.evaluate(() => !document.getElementById("ei-ansicht").hidden && /Pfoten-Ei/.test(document.getElementById("titel").textContent)), "Pfoten-Ei gewählt, Ei-Ansicht mit Titel");
 
     // Tag 1: einmal wärmen, zweites Mal geht nicht
     await p.click("#ei-bild"); await p.waitForTimeout(200);
@@ -78,7 +78,7 @@ const TAG = (n) => new Date(2026, 9, 25 + n, 15, 0).getTime();
     erwarte(await p.evaluate(() => /knackt/.test(document.getElementById("ei-text").textContent)) && (await tier(p)).phase === "ei", "Ei knackt nach dem Antippen, noch nicht geschlüpft");
     await p.click("#ei-bild"); await p.waitForSelector("#name-feld");
     d = await tier(p);
-    erwarte(d.phase === "tier" && d.art === "fuchs" && d.geschluepft === "2026-10-26" && await p.evaluate(() => /Fuchs/i.test(document.querySelector("#dkarte h2").textContent)), "geschlüpft: ein Fuchs (Datum gemerkt), Namensdialog offen");
+    erwarte(d.phase === "tier" && d.art === "hund" && d.geschluepft === "2026-10-26" && await p.evaluate(() => /Hund/i.test(document.querySelector("#dkarte h2").textContent)), "geschlüpft: ein Hund (Datum gemerkt), Namensdialog offen");
     if (BILDER) await p.screenshot({ path: `${BILDER}/tier-geschluepft.png` });
     await p.click("#name-ok"); await p.waitForTimeout(150);
     erwarte(await p.evaluate(() => !document.getElementById("dialog").hidden) && !(await tier(p)).name, "ohne Namen bleibt der Dialog offen");
@@ -88,8 +88,8 @@ const TAG = (n) => new Date(2026, 9, 25 + n, 15, 0).getTime();
     const titel = await p.evaluate(() => ({ t: document.getElementById("titel").textContent, n: document.getElementById("tier-name").textContent, b: document.querySelectorAll("#titel b, #tier-name b, #tier-text b").length }));
     erwarte(d.name === "bFips/b" && titel.t === "bFips/b" && titel.n === "bFips/b" && titel.b === 0, `Name mit HTML-Zeichen gesäubert gespeichert und angezeigt („${d.name}“)`);
     await p.click("#umbenennen"); await p.waitForSelector("#name-feld");
-    await p.click('[data-n="Ronja"]'); await p.click("#name-ok"); await p.waitForTimeout(250);
-    erwarte((await tier(p)).name === "Ronja" && await p.evaluate(() => document.getElementById("titel").textContent === "Ronja"), "umbenannt per Vorschlag: Ronja");
+    await p.click('[data-n="Lotte"]'); await p.click("#name-ok"); await p.waitForTimeout(250);
+    erwarte((await tier(p)).name === "Lotte" && await p.evaluate(() => document.getElementById("titel").textContent === "Lotte"), "umbenannt per Vorschlag: Lotte");
 
     // Streicheln (Freundschaft nur einmal am Tag)
     d = await tier(p); const fs0 = d.freundschaft;
@@ -106,7 +106,7 @@ const TAG = (n) => new Date(2026, 9, 25 + n, 15, 0).getTime();
     for (let i = 0; i < 4; i++) { await p.click("#spielen"); await p.waitForTimeout(950); }
     d = await tier(p);
     erwarte(d.freundschaft === fs0 + 16 && d.heute.spiel === 3 && d.freude === 100, `viermal gespielt: Freude voll, Freundschaft nur dreimal (+6) → ${d.freundschaft}`);
-    erwarte(await p.evaluate(() => /Noch \d+ bis „Kind“/.test(document.getElementById("werte").textContent)), "Freundschafts-Balken zeigt, wie viel bis „Kind“ fehlt");
+    erwarte(await p.evaluate(() => /Noch \d+ bis „Junghund“/.test(document.getElementById("werte").textContent)), "Freundschafts-Balken zeigt, wie viel bis „Junghund“ fehlt");
 
     // Zubehör: zu wenig Sterne, dann kaufen, aus- und anziehen
     await p.evaluate(() => Spielwelt.gibSterne(1 - Spielwelt.sterne()));
@@ -139,10 +139,13 @@ const TAG = (n) => new Date(2026, 9, 25 + n, 15, 0).getTime();
     await p.click("#fuettern");
     await p.waitForFunction(() => /gewachsen/.test((document.querySelector("#dialog:not([hidden]) h2") || {}).textContent || ""), null, { timeout: 5000 });
     d = await tier(p);
-    erwarte(d.freundschaft >= 25 && await p.evaluate(() => /Ronja ist gewachsen/.test(document.querySelector("#dkarte h2").textContent) && /Kind/.test(document.querySelector("#dkarte").textContent)), `Freundschaft ${d.freundschaft}: „Ronja ist gewachsen!“ – jetzt Kind`);
+    erwarte(d.freundschaft >= 25 && await p.evaluate(() => /Lotte ist gewachsen/.test(document.querySelector("#dkarte h2").textContent) && /Junghund/.test(document.querySelector("#dkarte").textContent)), `Freundschaft ${d.freundschaft}: „Lotte ist gewachsen!“ – jetzt Junghund`);
     if (BILDER) await p.screenshot({ path: `${BILDER}/tier-gewachsen.png` });
     await p.click("#ok"); await p.waitForTimeout(250);
-    erwarte(await p.evaluate(() => document.getElementById("dialog").hidden && /Fuchs, Kind/.test(document.getElementById("tier-stufe").textContent)), "Namensschild zeigt „Fuchs, Kind“");
+    erwarte(await p.evaluate(() => document.getElementById("dialog").hidden && /Hund, Junghund/.test(document.getElementById("tier-stufe").textContent)), "Namensschild zeigt „Hund, Junghund“");
+    // Alter Spielstand mit Fuchs (vor 02.11.2026) wird zum Hund, Name und Freundschaft bleiben
+    const alt = await p.evaluate(() => { const t = Spielwelt.lade("tier"); t.art = "fuchs"; Spielwelt.speichere("tier", t); const n = TierPflege.lade(); return { art: n.art, name: n.name, fs: n.freundschaft, bild: /augen/.test(Tiere.zeichneTier({ art: "fuchs" })) }; });
+    erwarte(alt.art === "hund" && alt.name === "Lotte" && alt.fs >= 25 && alt.bild, "alter Fuchs wird zum Hund (Name und Freundschaft bleiben)");
     await ctx.close();
   }
 

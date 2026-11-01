@@ -22,8 +22,9 @@ export const setze = (o, x, y, z) => { o.position.set(x, y, z); return o; };
 const AUGE = new MeshBasicMaterial({ color: "#2E2240" }), WEISS = new MeshBasicMaterial({ color: "#ffffff" });
 function augen(eltern, abstand, y, z, r = 0.075) {
   [-1, 1].forEach(s => {
-    const a = new Mesh(kugel(r, 14, 10), AUGE); a.scale.set(1, 1.35, 0.6); setze(a, abstand * s, y, z); eltern.add(a);
-    a.add(setze(new Mesh(kugel(r * 0.4, 8, 6), WEISS), r * 0.33, r * 0.4, r * 0.8));
+    // Normale Augen statt Kulleraugen (02.11.2026): kleiner, kaum höher als breit, kleiner Glanzpunkt
+    const a = new Mesh(kugel(r * 0.72, 14, 10), AUGE); a.scale.set(1, 1.12, 0.55); setze(a, abstand * s, y, z); eltern.add(a);
+    a.add(setze(new Mesh(kugel(r * 0.2, 8, 6), WEISS), r * 0.24, r * 0.26, r * 0.6));
   });
 }
 
@@ -80,6 +81,17 @@ function figur(look) {
   if (haarId === "bob") haarteil(kugel(0.62), 0, -0.12, -0.12, 1.04, 0.75, 0.9);
   // Gesicht
   augen(kopf, 0.2, 0.02, 0.53);
+  // Junge/Mädchen (02.11.2026): Mädchen mit Wimpern und feinen Brauen, Jungen mit kräftigen geraden Brauen und breiteren Schultern
+  const form = (look.figur && look.figur.form) || (() => { try { return window.Spielwelt.kind().geschlecht; } catch (e) { return "n"; } })();
+  [-1, 1].forEach(s => {
+    if (form === "w") {
+      [0, 1].forEach(i => { const w = new Mesh(new BoxGeometry(0.012, 0.05, 0.012), AUGE); w.position.set(s * (0.245 + i * 0.022), 0.075 + i * 0.012, 0.52 - i * 0.01); w.rotation.z = -s * (0.6 + i * 0.3); kopf.add(w); });
+      const b = new Mesh(new BoxGeometry(0.11, 0.014, 0.02), AUGE); b.position.set(s * 0.2, 0.14, 0.53); b.rotation.z = -s * 0.12; kopf.add(b);
+    } else if (form === "m") {
+      const b = new Mesh(new BoxGeometry(0.13, 0.03, 0.025), AUGE); b.position.set(s * 0.2, 0.13, 0.53); b.rotation.z = s * 0.06; kopf.add(b);
+    }
+  });
+  if (form === "m") koerper.children.forEach(c => { if (c.geometry && c.geometry.type === "SphereGeometry" && Math.abs(c.position.y - 1.15) < 0.01) c.scale.set(1.14, 1, 1.05); });
   // (01.11.2026) keine rosa Wangen mehr
   const mund = new Mesh(new TorusGeometry(0.07, 0.018, 6, 12, Math.PI), AUGE); mund.rotation.z = Math.PI; setze(mund, 0, -0.15, 0.55); kopf.add(mund);
   // Extras aus dem Kleiderschrank (eine Auswahl in 3D)

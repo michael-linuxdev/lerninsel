@@ -279,7 +279,7 @@
   const faelligeKarten = () => (W.Lernkartei ? W.Lernkartei.anzahlFaellig("deutsch") + W.Lernkartei.anzahlFaellig("sachkunde") : 0);
   const ETAPPEN = [
     { id: "E4", szene: "sterne", faellig: (st) => st.spielen && S().sterne() >= 4,
-      genutzt: () => { const d = zimmerDaten(); return Object.keys(d.plaetze).length > 0 || d.wand !== "rosa"; } },
+      genutzt: () => { const d = zimmerDaten(); return Object.keys(d.plaetze).length > 0 || d.wand !== standardWand(); } },
     { id: "E5", szene: "ei", faellig: () => !!W.TierPflege, genutzt: () => { const d = tierDaten(); return !!d && (d.phase === "ei" || d.phase === "tier"); } },
     // E6 wartet, solange die Minispiele ausgeblendet sind (Spielwelt.MINISPIELE_AUS)
     // seit 01.11.2026: E6 zeigt den Insel-Garten (öffnet mit Kapitel 1); wer schon gesät hat, bekommt die Etappe still
@@ -347,13 +347,17 @@
     { id: "tannenbaum", name: "Tannenbaum", e: "🎄", preis: 0, geschenk: true, text: "Ein Geschenk von Robo Pixel. Frohe Weihnachten! Mit „Einrichten“ kannst du ihn wegräumen." }
   ];
   const WANDFARBEN = [
-    { id: "rosa", name: "Rosa", farbe: ["#FFD9E6", "#FFE9C2"], preis: 0 },
+    { id: "rosa", name: "Rosa", farbe: ["#FFD9E6", "#FFE9C2"], preis: 0 },   // bleibt für alle kostenlos (alte Zimmer)
     { id: "mint", name: "Mint", farbe: ["#C9F2E3", "#EAF8F1"], preis: 3 },
     { id: "himmel", name: "Himmelblau", farbe: ["#CFE6FF", "#EEF5FF"], preis: 3 },
     { id: "sonne", name: "Sonnengelb", farbe: ["#FFE9A8", "#FFF5D6"], preis: 3 },
     { id: "lila", name: "Lavendel", farbe: ["#E3D6FF", "#F3EDFF"], preis: 3 }
   ];
-  const zimmerDaten = () => Object.assign({ plaetze: {}, wand: "rosa" }, S().lade("zimmer") || {});
+  // Junge und Mädchen unterscheiden sich stärker (02.11.2026): Jungen starten mit himmelblauer Wand, Mädchen mit rosa; die eigene Startfarbe ist kostenlos
+  const geschlecht = () => { try { return S().kind().geschlecht || "n"; } catch (e) { return "n"; } };
+  const standardWand = () => geschlecht() === "m" ? "himmel" : "rosa";
+  const wandPreis = (w) => w.id === standardWand() ? 0 : w.preis;
+  const zimmerDaten = () => Object.assign({ plaetze: {}, wand: standardWand() }, S().lade("zimmer") || {});
   // Zettel der Pinnwand: Lernfunde der letzten 7 Tage (gezeigt werden höchstens 8), neu = von heute
   function pinnwandZettel() {
     const L = W.Lernfunde; if (!L) return [];
@@ -650,7 +654,7 @@
     weihnachtsPaket, geburtstagsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
     KAPITEL, wortSchilder, deutschFertig, matheFertig,
     // Zimmer
-    PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel,
+    PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel, wandPreis, standardWand, geschlecht,
     // Wetter
     WETTER_KEY, WETTER_ART, WETTER_TEXT, wetterCache, wetterSatz, wetterSticker, holeWetter, startWetter
   };
