@@ -24,7 +24,7 @@
   };
   const ABLAUF = { vs: ["packen", "packen", "bezahlen", "packen", "bezahlen"], a: ["packen", "preis", "bezahlen", "packen", "wechsel"], b: ["packen", "preis", "bezahlen", "wechsel", "preis"], c: ["preis", "bezahlen", "wechsel", "packen", "wechsel"] };
   const GELD = { vs: [100, 200], a: [100, 200, 500, 1000], b: [100, 200, 500, 1000, 2000, 5000], c: [5, 10, 20, 50, 100, 200, 500, 1000] };   // alle Preise ab Kl. 3 sind Vielfache von 5 ct
-  const KUNDEN = [["🦊", "Fipsi"], ["🦉", "Ella"], ["🐻", "Bruni"], ["🦜", "Paula"], ["🐢", "Tilda"], ["🤖", "Robo Pixel"]];
+  const KUNDEN = [["\uE103", "Fipsi"], ["\uE102", "Ella"], ["\uE105", "Bruni"], ["\uE106", "Paula"], ["\uE107", "Tilda"], ["\uE101", "Robo Pixel"]];
   const LZ = { vs: "ma.gm.02", a: "ma.gm.02", b: "ma.gm.04", c: "ma.gm.04" };
   const mitKomma = () => stufe() === "c";
   const euro = (ct) => mitKomma() ? (ct / 100).toFixed(2).replace(".", ",") + " €" : Math.round(ct / 100) + " €";

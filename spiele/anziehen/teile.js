@@ -77,6 +77,7 @@
       return kreis(97, 124, 11, haut) + `<path d="M95 119 q-5 5 0 10" stroke="${innen}" stroke-width="3" fill="none" stroke-linecap="round"/>` +
         kreis(203, 124, 11, haut) + `<path d="M205 119 q5 5 0 10" stroke="${innen}" stroke-width="3" fill="none" stroke-linecap="round"/>` +
         kreis(150, 118, 54, haut) +
+        `<ellipse cx="119" cy="146" rx="10" ry="6" fill="#FF8FA8" opacity=".32"/><ellipse cx="181" cy="146" rx="10" ry="6" fill="#FF8FA8" opacity=".32"/>` +
         `<path d="M147 140 Q150 143.5 153 140" stroke="${D}" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".5"/>`;
     },
     unterhemd: () => flaeche("M118 192 L126 192 L130 210 Q150 218 170 210 L174 192 L182 192 Q186 245 186 302 Q150 312 114 302 Q114 245 118 192 Z", "#ffffff"),
@@ -85,7 +86,7 @@
 
   // ---------- Gesicht ----------
   const brauen = (hoch = 0) => linie(`M119 ${106 - hoch} Q129 ${100 - hoch} 139 ${106 - hoch} M161 ${106 - hoch} Q171 ${100 - hoch} 181 ${106 - hoch}`, D, 3.5);
-  const auge = (x, g = 1) =>
+  const auge = (x, g = 1.12) =>
     `<ellipse cx="${x}" cy="128" rx="${8.5 * g}" ry="${10.5 * g}" fill="${D}"/>` +
     `<ellipse cx="${x}" cy="${129.5}" rx="${6 * g}" ry="${7.5 * g}" fill="#7A4A2A"/>` +
     `<circle cx="${x}" cy="130" r="${3.6 * g}" fill="#1E1030"/>` +

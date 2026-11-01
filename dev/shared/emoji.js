@@ -3,7 +3,12 @@
 // nur das Aussehen ändert sich. Emojis ohne eigenes Bild bleiben, wie sie sind – so können die Bilder paketweise dazukommen.
 // Wird von core.js nachgeladen. Ausnahmen: Eingabefelder, <option>, <canvas>, SVG, Elemente mit data-emoji="aus". Test-Haken: window.__emoji.
 (function () {
-  const ICONS = window.LERN_ICONS; if (!ICONS || window.__emoji) return;
+  if (window.__emoji) return;
+  // Ohne Noto-Bilder (Eltern-Wahl „Emojis des Geräts“) werden nur die Begleiter-Zeichen ersetzt
+  const nurFiguren = !window.LERN_ICONS;
+  const ICONS = Object.assign({}, window.LERN_ICONS || {});
+  const FIG = new Set();
+  if (window.FigurenNeu && FigurenNeu.ZEICHEN) for (const [n, z] of Object.entries(FigurenNeu.ZEICHEN)) { const h = z.codePointAt(0).toString(16); ICONS[h] = FigurenNeu.mini(n); FIG.add(h); }
   const hex = (e) => [...e].filter(c => c !== "️").map(c => c.codePointAt(0).toString(16)).join("-");
   const zeichen = (h) => h.split("-").map(x => String.fromCodePoint(parseInt(x, 16))).join("");
   const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -17,6 +22,7 @@
   const stil = document.createElement("style");
   stil.textContent = ".emo{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.22em;position:relative;line-height:0;flex:none;pointer-events:none}" +
     ".emo>svg{width:100%;height:100%;display:block;overflow:hidden}" +   // hidden: manche Noto-Bilder haben Formen weit außerhalb (z. B. 📦); die Kontur passt in die viewBox
+    ".emo.fig{width:1.45em;height:1.45em;vertical-align:-.36em}" +
     ".emo>.emo-t{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}";
   document.head.appendChild(stil);
 
@@ -39,7 +45,7 @@
       // ids je Anzeige eindeutig (Kontur über <use>, Verläufe): sonst zeigt eine Kopie in einem versteckten Teil ins Leere
       const p = "n" + h.replace(/-/g, "") + "-", svg = roh.split(p).join(p + (++nr) + "-");
       if (m.index > pos) teile.appendChild(document.createTextNode(text.slice(pos, m.index)));
-      const s = document.createElement("span"); s.className = "emo"; s.setAttribute("aria-hidden", "true");
+      const s = document.createElement("span"); s.className = FIG.has(h) ? "emo fig" : "emo"; s.setAttribute("aria-hidden", "true");
       s.innerHTML = `<span class="emo-t">${m[0]}</span>${svg}`;
       teile.appendChild(s); pos = m.index + m[0].length;
     }
@@ -67,7 +73,7 @@
   });
   function start() { durchsuche(document.body); beobachter.observe(document.body, { childList: true, subtree: true, characterData: true }); }
   if (document.body) start(); else addEventListener("DOMContentLoaded", start);
-  window.__emoji = { anzahl: () => Object.keys(ICONS).length, durchsuche, hat: (e) => !!ICONS[hex(e)] };
+  window.__emoji = { anzahl: () => Object.keys(ICONS).length - FIG.size, figuren: FIG.size, nurFiguren, durchsuche, hat: (e) => !!ICONS[hex(e)] };
   // Für Canvas und 3D (Schilder auf der Insel, Pinnwand, Atelier-Stempel): Bild als Image laden und zeichnen
   const bilder = new Map();
   function lade(e) {

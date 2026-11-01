@@ -20,7 +20,7 @@
         <p>${art === "text" ? "Dein Heft ist noch leer. In der Wörter-Werkstatt kannst du eigene Texte schreiben – sie landen dann hier." :
           E && E.darfAufnehmen && E.darfAufnehmen() ? "Noch keine Aufnahmen. In der Wörter-Werkstatt kannst du dich beim Vorlesen aufnehmen." :
           "Noch keine Aufnahmen. Sich selbst aufnehmen können deine Eltern im Elternbereich erlauben."}</p>
-        <a class="knopf haupt" href="../deutsch/">🦊 Zur Wörter-Werkstatt</a></div>`;
+        <a class="knopf haupt" href="../deutsch/">\uE103 Zur Wörter-Werkstatt</a></div>`;
       return;
     }
     B.innerHTML = l.map((e, i) => { const k = kapitel(e.kapitel);

@@ -56,7 +56,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
 - Sprache: Deutsch, kindgerecht; alle neuen Texte als Sprachschlüssel `{ de, ru, … }`; Hilfesprache nur, wenn gewählt. Neue Übersetzungen
   bekommen einen Prüfstatus (`entwurf`/`geprueft`/`kindgerecht`); **keine ungeprüfte Maschinenübersetzung im Kinder-UI** (Entwürfe nur in /dev; Ausnahmen nach Entscheidung des Auftraggebers in `Spielwelt.ENTWURF_FREI`: `ru`, `hsb`).
 - Story- und Tutorial-Texte: höchstens 4 Sprechblasen je Szene, jede Zeile vorlesbar, ohne Lesen bedienbar (Zeigehand, Leuchten, Ton).
-- Gestaltung (01.11.2026, Wahl des Auftraggebers): **Stil A „Insel bunt“** – kräftige Farben, dunkle Kontur `#3B1F63`, Knöpfe mit festem Schatten; keine rosa Wangen an Figuren.
+- Gestaltung (01.11.2026, Wahl des Auftraggebers): **Stil A „Insel bunt“** – kräftige Farben, dunkle Kontur `#3B1F63`, Knöpfe mit festem Schatten. **Figuren niedlich** (Kindchenschema: großer Kopf, große dunkle Kulleraugen mit zwei Glanzpunkten); Wangen erlaubt, aber dezent (blass, klein – nicht übertrieben). **Kein Begleiter (Robo, Ella, Fipsi, Benno, Bruni, Paula, Tilda) wird je als Emoji gezeigt** – in Texten und Daten steht `Figuren.ZEICHEN.<name>` (Zeichen `\uE101`…`\uE107`), auf der Insel das 3D-Modell.
 - Grafik: **ein Look, „Rund“ (three.js)** – der Look „Pixel“ ist seit 30.10.2026 entfernt (Entscheidung des Auftraggebers; im Git-Verlauf erhalten).
   Neue 3D-Teile sparsam (feste Deko in die Gruppe `deko` vor `verschmelze(deko)`, dann kosten sie kaum Zeichenaufrufe) und immer auch in Stufe
   „einfach“ prüfen. Ohne gespeicherte Wahl gilt `Spielwelt.grafikStandard()` (kürzere Bildschirmseite < 500 CSS-Pixel → „einfach“).
@@ -121,7 +121,12 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
   (Tests, Vorlesen), ids je Anzeige eindeutig, Bilder abgeschnitten und ohne Klicks (`pointer-events:none`); Eingabefelder/`option`/`canvas`/SVG und `data-emoji="aus"` bleiben unberührt;
   Würfel ⚀–⚅, © und Textzeichen bleiben System-Zeichen. Canvas/3D: `window.EmojiBereit` (Promise → `EmojiBild` oder null) mit `EmojiBild.lade(e)` → Image, `EmojiBild.zeichne(g, e, x, y, größe)`
   (Insel-Schilder `schildSprite`, Pinnwand, Atelier-Stempel). Eltern-Schalter `eltern.bilder = "geraet"` (Emojis des Geräts). Test `bilder`, Haken `__emoji`.
-  Figuren: `shared/figuren.js` (Stil A, ohne rosa Wangen; Ella braun, ohne Federohren), `FigurenNeu.svg(name, "a", "froh"|"staunt"|"denkt")`.
+  Figuren: `shared/figuren.js` (Stil A, Kulleraugen, dezente Wangen; Ella braun, ohne Federohren), `FigurenNeu.svg(name, "a", "froh"|"staunt"|"denkt")`, `FigurenNeu.mini(name)` (Kopf und Schultern).
+  **Begleiter-Zeichen** (01.11.2026): `FigurenNeu.ZEICHEN` = robo `\uE101`, eule `\uE102`, fipsi `\uE103`, biber `\uE104`, baer `\uE105`, papagei `\uE106`, tilda `\uE107` (in HTML `&#xE103;`) –
+  `emoji.js` ersetzt sie überall durch `<span class="emo fig">` mit der Zeichnung (auch bei Eltern-Wahl „Geräte-Emojis“ und auf Canvas über `EmojiBild`), `core.js` lädt `figuren.js` dafür nach;
+  Vorlesen lässt sie weg. Echte Tiere in Lerninhalten (Fuchs, Eule, Bär …) bleiben Emojis. Test `bilder` prüft, dass kein Begleiter-Emoji neben seinem Namen steht.
+  Spielfigur 2D (`spiele/anziehen/figur.js`): Kopf 1,3-fach, Körper 0,9 × 0,66 per Transformation (Teile-IDs und Koordinaten in `teile.js` bleiben). 3D: `augen(kopf, abstand, y, z, r)` in `heimat.js`
+  setzt Kulleraugen und Wangen auf die Kopfoberfläche (Kopfmitte = Ursprung); Test-Haken `__heimat.figuren()` (Positionen der Nachbarn, Paula, Tilda, Tier).
 - Szenen für Jüngere (NA-60 Teil 2): Blase mit `fuerAeltere: true` entfällt für Vorschule/Kl. 1 (nicht bei Hooks `beim`/`bis`, nicht für Erwachsene, nicht mit `Szene.spiele(id, { voll: true })`);
   Szenen-Schrift dann größer (`.szene.jung`). „Heute für dich“ schlägt Wiederholern das Fach mit dem wackeligsten Lernziel vor.
 - Sprachkurse: gemeinsame Werkzeuge in `shared/sprachkurs.js` (`Sprachkurs.werkzeuge({ $, daten, weiter })` → HL, mische, mitName, klasse, heute, zeige, blase, sprichDe, weiterKnopf, aufWeiter);

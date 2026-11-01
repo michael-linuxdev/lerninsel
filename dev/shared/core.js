@@ -544,11 +544,12 @@
   // Eigene Bilder statt Emojis (01.11.2026): Bilder und Ersatz-Baustein nachladen (Eltern können die Emojis des Geräts behalten: eltern.bilder = "geraet")
   {
     const wurzel = (document.currentScript && document.currentScript.dataset.root) || "./";
-    if (((profil.daten.eltern || {}).bilder) !== "geraet" && !window.__ohneBilder) {
-      const lade = (datei, dann) => { const s = document.createElement("script"); s.src = wurzel + datei; s.async = false; if (dann) s.onload = dann; document.head.appendChild(s); };
-      // EmojiBereit: für Canvas/3D (wartet, bis EmojiBild da ist; ohne Bilder bleibt es undefined → Text)
-      window.EmojiBereit = new Promise((fertig) => { lade("shared/icons.js"); lade("shared/emoji.js", () => fertig(window.EmojiBild || null)); });
-    }
+    const lade = (datei, dann) => { const s = document.createElement("script"); s.src = wurzel + datei; s.async = false; if (dann) s.onload = dann; document.head.appendChild(s); };
+    // Figuren immer (Begleiter-Zeichen → Zeichnung, Figuren.ZEICHEN), Noto-Bilder nur ohne Eltern-Wahl „Emojis des Geräts“
+    if (!window.FigurenNeu) lade("shared/figuren.js");
+    const mitBildern = ((profil.daten.eltern || {}).bilder) !== "geraet" && !window.__ohneBilder;
+    // EmojiBereit: für Canvas/3D (wartet, bis EmojiBild da ist)
+    window.EmojiBereit = new Promise((fertig) => { if (mitBildern) lade("shared/icons.js"); lade("shared/emoji.js", () => fertig(window.EmojiBild || null)); });
   }
   if ("serviceWorker" in navigator && location.protocol === "https:") {
     const tiefe = (document.currentScript && document.currentScript.dataset.root) || "./";

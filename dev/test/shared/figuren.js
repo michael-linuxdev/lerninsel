@@ -1,5 +1,5 @@
 // Die Figuren der App als 2D-Zeichnungen (SVG), Stil A „Insel bunt“ (neu gezeichnet am 01.11.2026, Wahl des Auftraggebers):
-// Robo Pixel, Eule Ella (braun, ohne Federohren), Fipsi, Biber Benno, Bärin Bruni, Papagei Paula, Schildkröte Tilda – ohne rosa Wangen.
+// Robo Pixel, Eule Ella (braun, ohne Federohren), Fipsi, Biber Benno, Bärin Bruni, Papagei Paula, Schildkröte Tilda – niedlich: Kulleraugen, dezente Wangen (01.11.2026).
 // Figuren.<name>(klasse) → SVG mit class=klasse (für Sprechblasen, Türen, Seiten). FigurenNeu.svg(name, stil, ausdruck) für Ausdrücke
 // ("froh" | "staunt" | "denkt") und die Stil-Vorschau (stil "a" = Insel bunt, "b" = weich).
 (function () {
@@ -7,7 +7,7 @@
   const D = "#3b1f63";
   function bau(stil) {
     const id = "f" + (++zaehler), defs = [];
-    const kontur = stil === "a" ? ` stroke="${D}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"` : "";
+    const kontur = stil === "a" ? ` stroke="${D}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"` : "";
     const hell = (hex, k) => { const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255, m = (c) => Math.round(c + (255 - c) * k); return `rgb(${m(r)},${m(g)},${m(b)})`; };
     const dunkel = (hex, k) => { const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255, m = (c) => Math.round(c * (1 - k)); return `rgb(${m(r)},${m(g)},${m(b)})`; };
     // Füllung: Stil a flach, Stil b weicher Verlauf (oben heller, unten etwas dunkler)
@@ -21,16 +21,21 @@
     return { f, k, kontur, defs, schatten: `<ellipse cx="100" cy="210" rx="56" ry="8" fill="rgba(59,31,99,${stil === "a" ? 0.18 : 0.12})"/>` };
   }
   // Augen und Mund (gemeinsam): x1/x2 = Augenmitte, y = Höhe, r = Größe
+  // Kulleraugen (dunkel, zwei Glanzpunkte), kleiner Mund, dezente Wangen (Wunsch des Auftraggebers 01.11.2026: niedlicher, Wangen ja, aber nicht übertrieben)
   function gesicht(s, x1, x2, y, r, mundY, ausdruck, opt = {}) {
-    const pupille = (x) => ausdruck === "denkt" ? `<circle cx="${x + r * 0.3}" cy="${y - r * 0.35}" r="${r * 0.48}" fill="${D}"/>` : `<circle cx="${x}" cy="${y + r * 0.1}" r="${r * (ausdruck === "staunt" ? 0.42 : 0.55)}" fill="${D}"/>`;
-    const glanz = (x) => `<circle cx="${x - r * 0.18}" cy="${y - r * 0.2}" r="${r * 0.2}" fill="#fff"/>`;
-    const auge = (x) => opt.ohneWeiss ? pupille(x) + glanz(x) : `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * 1.12}" fill="#fff"${s.kontur ? ` stroke="${D}" stroke-width="3.5"` : ""}/>` + pupille(x) + glanz(x);
+    const R = r * 1.18;
+    const auge = (x) => {
+      if (ausdruck === "denkt") return `<ellipse cx="${x}" cy="${y}" rx="${R * 0.9}" ry="${R * 1.05}" fill="${D}"/><circle cx="${x + R * 0.32}" cy="${y - R * 0.45}" r="${R * 0.36}" fill="#fff"/><circle cx="${x - R * 0.2}" cy="${y + R * 0.35}" r="${R * 0.16}" fill="#fff"/>`;
+      const g = ausdruck === "staunt" ? 1.15 : 1;
+      return `<ellipse cx="${x}" cy="${y}" rx="${R * 0.92 * g}" ry="${R * 1.12 * g}" fill="${D}"/><circle cx="${x - R * 0.3}" cy="${y - R * 0.42}" r="${R * 0.4 * g}" fill="#fff"/><circle cx="${x + R * 0.36}" cy="${y + R * 0.38}" r="${R * 0.17 * g}" fill="#fff"/>`;
+    };
     const mx = (x1 + x2) / 2;
-    const mund = ausdruck === "staunt" ? `<ellipse cx="${mx}" cy="${mundY + 4}" rx="7" ry="9" fill="${D}"/>`
-      : ausdruck === "denkt" ? `<path d="M${mx - 10} ${mundY + 4} Q${mx} ${mundY} ${mx + 12} ${mundY + 2}" fill="none" stroke="${D}" stroke-width="4" stroke-linecap="round"/>`
-      : `<path d="M${mx - 14} ${mundY} Q${mx} ${mundY + 16} ${mx + 14} ${mundY}" fill="${opt.mundFuell || "none"}" stroke="${D}" stroke-width="4" stroke-linecap="round"/>`;
-    const wangen = `<ellipse cx="${x1 - r * 0.9}" cy="${y + r * 1.6}" rx="${r * 0.62}" ry="${r * 0.38}" fill="#FF8FA8" opacity=".55"/><ellipse cx="${x2 + r * 0.9}" cy="${y + r * 1.6}" rx="${r * 0.62}" ry="${r * 0.38}" fill="#FF8FA8" opacity=".55"/>`;
-    return auge(x1) + auge(x2) + (opt.ohneMund ? "" : mund);   // keine rosa Wangen (Wunsch des Auftraggebers 01.11.2026)
+    const mund = ausdruck === "staunt" ? `<ellipse cx="${mx}" cy="${mundY + 3}" rx="5" ry="6" fill="${D}"/>`
+      : ausdruck === "denkt" ? `<path d="M${mx - 6} ${mundY + 3} Q${mx + 2} ${mundY} ${mx + 9} ${mundY + 2}" fill="none" stroke="${D}" stroke-width="3.5" stroke-linecap="round"/>`
+      : `<path d="M${mx - 9} ${mundY} Q${mx - 4.5} ${mundY + 7} ${mx} ${mundY + 1} Q${mx + 4.5} ${mundY + 7} ${mx + 9} ${mundY}" fill="none" stroke="${D}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+    const wy = y + R * (opt.wangeY || 1.55), wx = R * (opt.wangeX || 0.75);
+    const wangen = opt.ohneWangen ? "" : `<ellipse cx="${x1 - wx}" cy="${wy}" rx="${R * 0.62}" ry="${R * 0.36}" fill="#FF8FA8" opacity=".38"/><ellipse cx="${x2 + wx}" cy="${wy}" rx="${R * 0.62}" ry="${R * 0.36}" fill="#FF8FA8" opacity=".38"/>`;
+    return wangen + auge(x1) + auge(x2) + (opt.ohneMund ? "" : mund);
   }
   const svg = (s, inhalt) => `<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>${s.defs.join("")}</defs>${s.schatten}${inhalt}</svg>`;
 
@@ -45,6 +50,7 @@
       <rect x="42" y="34" width="116" height="96" rx="30" fill="${s.f("#7FCBF5")}"${s.k()}/>
       <rect x="56" y="50" width="88" height="62" rx="20" fill="${s.f("#2E2B47")}"${s.k(' stroke-width="3.5"')}/>
       <rect x="36" y="68" width="10" height="26" rx="5" fill="${s.f("#FFC83D")}"${s.k(' stroke-width="3.5"')}/><rect x="154" y="68" width="10" height="26" rx="5" fill="${s.f("#FFC83D")}"${s.k(' stroke-width="3.5"')}/>
+      <ellipse cx="68" cy="96" rx="7" ry="4.5" fill="#FF8FA8" opacity=".75"/><ellipse cx="132" cy="96" rx="7" ry="4.5" fill="#FF8FA8" opacity=".75"/>
       ${a === "staunt" ? `<circle cx="82" cy="78" r="9" fill="#7CF0FF"/><circle cx="118" cy="78" r="9" fill="#7CF0FF"/><ellipse cx="100" cy="99" rx="6" ry="7" fill="#7CF0FF"/>`
         : a === "denkt" ? `<rect x="73" y="74" width="18" height="6" rx="3" fill="#7CF0FF"/><circle cx="118" cy="77" r="8" fill="#7CF0FF"/><path d="M90 99 H112" stroke="#7CF0FF" stroke-width="5" stroke-linecap="round"/>`
         : `<path d="M73 80 Q82 70 91 80" fill="none" stroke="#7CF0FF" stroke-width="6" stroke-linecap="round"/><path d="M109 80 Q118 70 127 80" fill="none" stroke="#7CF0FF" stroke-width="6" stroke-linecap="round"/><path d="M86 95 Q100 106 114 95" fill="none" stroke="#7CF0FF" stroke-width="5" stroke-linecap="round"/>`}`); },
@@ -105,9 +111,9 @@
       <path d="M80 40 Q86 10 100 22 Q112 8 120 40 Z" fill="${s.f("#FF5C5C")}"${s.k()}/>
       <circle cx="100" cy="80" r="50" fill="${s.f("#FF6B5C")}"${s.k()}/>
       <ellipse cx="100" cy="92" rx="34" ry="28" fill="${s.f("#FFE7DA")}"/>
-      ${gesicht(s, 80, 120, 76, 11, 0, a, { ohneMund: true })}
-      <path d="M86 92 Q100 82 116 92 Q122 104 112 122 Q108 108 100 106 Q92 104 86 100 Z" fill="${s.f("#FFC83D")}"${s.k(' stroke-width="3.5"')}/>
-      <path d="M90 102 Q100 112 108 108 Q104 118 96 116 Q90 112 90 102 Z" fill="${s.f("#E8A62E")}"${s.k(' stroke-width="3"')}/>
+      ${gesicht(s, 79, 121, 78, 11.5, 0, a, { ohneMund: true, wangeY: 1.35, wangeX: 0.6 })}
+      <g transform="translate(100 104) scale(.8) translate(-100 -98)"><path d="M86 92 Q100 82 116 92 Q122 104 112 122 Q108 108 100 106 Q92 104 86 100 Z" fill="${s.f("#FFC83D")}"${s.k(' stroke-width="4.5"')}/>
+      <path d="M90 102 Q100 112 108 108 Q104 118 96 116 Q90 112 90 102 Z" fill="${s.f("#E8A62E")}"${s.k(' stroke-width="4"')}/></g>
       <ellipse cx="86" cy="204" rx="10" ry="5" fill="#8E5C35"/><ellipse cx="114" cy="204" rx="10" ry="5" fill="#8E5C35"/>`); },
 
     tilda(stil, a) { const s = bau(stil); return svg(s, `
@@ -117,12 +123,17 @@
       <path d="M100 112 L124 126 L124 152 L100 166 L76 152 L76 126 Z" fill="${s.f("#7FCB6A")}" opacity=".9"/>
       <path d="M48 160 L66 148 L66 128 M152 160 L134 148 L134 128" fill="none" stroke="#2E7D45" stroke-width="3.5" stroke-linecap="round"/>
       <rect x="26" y="172" width="148" height="16" rx="8" fill="${s.f("#E8D9A0")}"${s.k()}/>
-      <ellipse cx="100" cy="62" rx="44" ry="40" fill="${s.f("#8FD67A")}"${s.k()}/>
-      ${gesicht(s, 84, 116, 56, 10, 80, a)}
-      <path d="M70 26 Q100 6 130 26 L126 34 Q100 22 74 34 Z" fill="${s.f("#7B55B8")}"${s.k(' stroke-width="3.5"')}/>`); }
+      <ellipse cx="100" cy="66" rx="54" ry="48" fill="${s.f("#8FD67A")}"${s.k()}/>
+      ${gesicht(s, 80, 120, 64, 11, 88, a)}
+      <path d="M62 30 Q100 6 138 30 L133 38 Q100 22 67 38 Z" fill="${s.f("#7B55B8")}"${s.k(' stroke-width="3.5"')}/>`); }
   };
   const NAMEN = { robo: "Robo Pixel", eule: "Eule Ella", fipsi: "Fipsi", biber: "Biber Benno", baer: "Bärin Bruni", papagei: "Papagei Paula", tilda: "Schildkröte Tilda" };
-  window.FigurenNeu = { svg: (n, stil = "a", ausdruck = "froh") => FIGUREN[n](stil, ausdruck), NAMEN, LISTE: Object.keys(FIGUREN) };
+  // Begleiter dürfen nie als Emoji erscheinen (Wunsch des Auftraggebers 01.11.2026): In Texten und Daten steht statt 🦊 das Zeichen
+  // Figuren.ZEICHEN.fipsi (Unicode-Privatbereich); shared/emoji.js ersetzt es überall durch die Zeichnung (auch ohne Noto-Bilder, auch auf Canvas).
+  const ZEICHEN = { robo: "\uE101", eule: "\uE102", fipsi: "\uE103", biber: "\uE104", baer: "\uE105", papagei: "\uE106", tilda: "\uE107" };
+  // kleines Bild (Kopf und Schultern) für die Stelle eines Emojis
+  const mini = (n, ausdruck = "froh") => FIGUREN[n]("a", ausdruck).replace('viewBox="0 0 200 220"', 'viewBox="14 -4 172 172"').replace(/<ellipse cx="100" cy="210"[^>]*\/>/, "");
+  window.FigurenNeu = { svg: (n, stil = "a", ausdruck = "froh") => FIGUREN[n](stil, ausdruck), NAMEN, LISTE: Object.keys(FIGUREN), ZEICHEN, mini };
 })();
 
 // Gewohnte Schnittstelle der App (vorher eigene Zeichnungen je Seite): Figuren.fipsi("fipsi") usw.

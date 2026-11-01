@@ -72,10 +72,22 @@ function teil(geo, farbe, { umriss = true, dicke = 1.06, schatten = true } = {})
 const kugel = (r, a = 28, b = 20) => new SphereGeometry(r, Math.max(8, Math.ceil(a * (EINFACH ? 0.4 : 0.55))), Math.max(6, Math.ceil(b * (EINFACH ? 0.4 : 0.55))));
 const setze = (o, x, y, z) => { o.position.set(x, y, z); return o; };
 const AUGE = new MeshBasicMaterial({ color: "#2E2240" }), WEISS = new MeshBasicMaterial({ color: "#ffffff" });
-function augen(eltern, abstand, y, z, r = 0.075) {
+// Kulleraugen (01.11.2026, „niedlicher“): größer, zwei Glanzpunkte; dazu dezente Wangen auf der Kopfoberfläche
+// (der Kopf hat seine Mitte im Ursprung von eltern – der Radius ergibt sich aus der Lage der Augen)
+const WANGE = new MeshBasicMaterial({ color: "#FF8FA8", transparent: true, opacity: 0.42, depthWrite: false });
+const NACH_VORN = new Vector3(0, 0, 1);
+function augen(eltern, abstand, y, z, r = 0.075, wangen = true) {
+  r *= 1.25;
+  const R = Math.hypot(abstand, y, z);
   [-1, 1].forEach(s => {
-    const a = new Mesh(kugel(r, 14, 10), AUGE); a.scale.set(1, 1.35, 0.6); setze(a, abstand * s, y, z); eltern.add(a);
-    a.add(setze(new Mesh(kugel(r * 0.4, 8, 6), WEISS), r * 0.33, r * 0.4, r * 0.8));
+    const a = new Mesh(kugel(r, 14, 10), AUGE); a.scale.set(1, 1.25, 0.6); setze(a, abstand * s, y, z); eltern.add(a);
+    a.add(setze(new Mesh(kugel(r * 0.42, 8, 6), WEISS), -r * 0.28, r * 0.42, r * 0.75));
+    a.add(setze(new Mesh(kugel(r * 0.2, 8, 6), WEISS), r * 0.36, -r * 0.38, r * 0.78));
+    if (!wangen) return;
+    const wx = (abstand + r * 0.85) * s, wy = y - r * 1.55, wz = Math.sqrt(Math.max(0.0001, R * R - wx * wx - wy * wy));
+    const n = new Vector3(wx, wy, wz).normalize();
+    const w = new Mesh(new CircleGeometry(r * 0.78, 18), WANGE); w.scale.y = 0.62; w.quaternion.setFromUnitVectors(NACH_VORN, n);
+    w.position.copy(n).multiplyScalar(R + 0.006); w.renderOrder = 2; eltern.add(w);
   });
 }
 
@@ -556,7 +568,7 @@ function figur(look) {
     a.rotation.z = 0.25 * s; koerper.add(a); return a;
   });
   // Kopf und Frisur
-  const kopf = new Group(); kopf.position.y = 1.85; koerper.add(kopf);
+  const kopf = new Group(); kopf.position.y = 1.9; kopf.scale.setScalar(1.18); koerper.add(kopf);   // (01.11.2026) Kindchenschema: großer Kopf
   kopf.add(teil(kugel(0.58), haut, { dicke: 1.04 }));
   const kappe = teil(new SphereGeometry(0.62, 28, 20, 0, Math.PI * 2, 0, Math.PI * 0.55), haarF, { dicke: 1.04 });
   kappe.position.set(0, 0.04, -0.04); kappe.rotation.x = -0.35; kopf.add(kappe);
@@ -577,7 +589,7 @@ function figur(look) {
   if ((haarId === "wuschel" || haarId === "kurzlocken") && !bedeckt) { const r = haarId === "wuschel" ? 0.22 : 0.17; [[-0.36, 0.4], [-0.12, 0.55], [0.12, 0.55], [0.36, 0.4], [0, 0.42]].forEach(([x, y]) => haarteil(kugel(r), x, y, 0.2)); }
   if (haarId === "undercut") haarteil(kugel(0.5), 0, 0.42, 0.05, 1, 0.55, 1);
   // Gesicht
-  augen(kopf, 0.2, 0.02, 0.53);
+  augen(kopf, 0.21, 0.0, 0.53, 0.08);
   // (01.11.2026) keine rosa Wangen mehr
   const mund = new Mesh(new TorusGeometry(0.07, 0.018, 6, 12, Math.PI), AUGE); mund.rotation.z = Math.PI; setze(mund, 0, -0.15, 0.55); kopf.add(mund);
   // Extras aus dem Kleiderschrank (eine Auswahl in 3D)
@@ -609,12 +621,12 @@ function tierModell(art, f, stufe) {
   const H = f.h, L = f.l, D = f.d;
   const leib = teil(new CapsuleGeometry(0.28, 0.5, 6, 16), H); leib.rotation.x = Math.PI / 2; setze(leib, 0, 0.45, 0); k.add(leib);
   const bauch = teil(kugel(0.24), L, { umriss: false }); bauch.scale.set(1, 0.8, 1.6); setze(bauch, 0, 0.36, 0.05); k.add(bauch);
-  const kopf = new Group(); kopf.position.set(0, 0.85, 0.42); k.add(kopf);
+  const kopf = new Group(); kopf.position.set(0, 0.9, 0.42); kopf.scale.setScalar(1.2); k.add(kopf);   // (01.11.2026) größerer Kopf, niedlicher
   kopf.add(teil(kugel(art === "katze" ? 0.34 : 0.32), H));
   const schnauze = teil(kugel(art === "drache" ? 0.18 : 0.14, 14, 10), art === "katze" ? L : art === "drache" ? H : L);
   schnauze.scale.set(1, 0.8, art === "katze" ? 0.7 : 1.25); setze(schnauze, 0, -0.08, 0.28); kopf.add(schnauze);
   kopf.add(setze(new Mesh(kugel(0.045), art === "katze" ? new MeshBasicMaterial({ color: "#FF8FA3" }) : AUGE), 0, -0.03, art === "katze" ? 0.4 : 0.47));
-  augen(kopf, 0.13, 0.06, 0.27, 0.055);
+  augen(kopf, 0.135, 0.07, 0.27, 0.06);
   [-1, 1].forEach(s => {
     if (art === "drache") { const h = teil(new ConeGeometry(0.06, 0.24, 10), "#FFE7A8", { dicke: 1.12 }); setze(h, 0.14 * s, 0.32, -0.08); h.rotation.z = -0.3 * s; kopf.add(h); }
     else { const o = teil(new ConeGeometry(art === "katze" ? 0.13 : 0.12, art === "katze" ? 0.22 : 0.3, 12), H); setze(o, 0.17 * s, 0.32, -0.02); o.rotation.z = -0.25 * s; kopf.add(o); }
@@ -672,12 +684,10 @@ function eule() {
   const locke = teil(new ConeGeometry(0.07, 0.2, 10), KO); setze(locke, 0.03, 1.72, 0.05); locke.rotation.z = -0.5; k.add(locke);
   [-1, 1].forEach(s => {
     const maske = teil(kugel(0.24), GE, { umriss: false }); maske.scale.set(1, 1, 0.4); setze(maske, 0.2 * s, 1.18, 0.42); k.add(maske);
-    const auge = teil(kugel(0.14), "#FFFFFF", { dicke: 1.06 }); auge.scale.z = 0.55; setze(auge, 0.2 * s, 1.2, 0.5); k.add(auge);
-    const pupille = new Mesh(kugel(0.08, 16, 12), AUGE); pupille.scale.z = 0.5; setze(pupille, 0.21 * s, 1.19, 0.57); k.add(pupille);
-    k.add(setze(new Mesh(kugel(0.03, 8, 6), WEISS), 0.23 * s, 1.22, 0.61));
     const fl = teil(kugel(0.24), DK); fl.scale.set(0.42, 0.85, 0.6); setze(fl, 0.45 * s, 0.5, 0.05); fl.rotation.z = 0.45 * s; k.add(fl);
     const fuss = teil(kugel(0.08), "#F59A3C", { dicke: 1.12 }); fuss.scale.set(1.5, 0.6, 1.3); setze(fuss, 0.16 * s, 0.03, 0.26); k.add(fuss);
   });
+  { const kg = new Group(); kg.position.set(0, 1.18, 0); k.add(kg); augen(kg, 0.2, 0.03, 0.53, 0.1); }
   const schnabel = teil(new ConeGeometry(0.07, 0.15, 12), "#F59A3C", { dicke: 1.12 }); schnabel.rotation.x = Math.PI; setze(schnabel, 0, 1.0, 0.56); k.add(schnabel);
   g.userData.koerper = k;
   return g;
@@ -695,7 +705,7 @@ function fipsi() {
   const bauch = teil(kugel(0.28), W, { umriss: false }); bauch.scale.set(1, 1, 0.5); setze(bauch, 0, 0.36, 0.3); k.add(bauch);
   [-1, 1].forEach(s => { const f = teil(kugel(0.13), D2, { dicke: 1.1 }); f.scale.set(1.2, 0.6, 1.4); setze(f, 0.2 * s, 0.05, 0.26); k.add(f); });
   // Kopf
-  const kopf = new Group(); kopf.position.y = 1.12; k.add(kopf);
+  const kopf = new Group(); kopf.position.y = 1.16; kopf.scale.setScalar(1.12); k.add(kopf);
   const schaedel = teil(kugel(0.52), O, { dicke: 1.04 }); schaedel.scale.set(1.1, 0.95, 0.95); kopf.add(schaedel);
   const maske = teil(kugel(0.36), W, { umriss: false }); maske.scale.set(1.15, 0.72, 0.6); setze(maske, 0, -0.16, 0.3); kopf.add(maske);
   [-1, 1].forEach(s => {
@@ -710,16 +720,26 @@ function fipsi() {
   g.userData.koerper = k; g.userData.schwanz = sw;
   return g;
 }
+// Robo Pixel wie in der 2D-Zeichnung (01.11.2026): runder blauer Kopf mit dunklem Bildschirm, leuchtende Lach-Augen, Wangen, gelbe Ohren, Antenne
 function robo() {
-  const g = new Group();
-  g.add(setze(teil(new CapsuleGeometry(0.38, 0.4, 6, 18), "#7FC6F5"), 0, 0.75, 0));
-  const k = teil(new BoxGeometry(0.9, 0.65, 0.65), "#7FC6F5"); setze(k, 0, 1.6, 0); g.add(k);
-  const sch = teil(new BoxGeometry(0.66, 0.42, 0.05), "#E8F6FF", { dicke: 1.08 }); setze(sch, 0, 1.6, 0.34); g.add(sch);
-  [-1, 1].forEach(s => g.add(setze(new Mesh(kugel(0.07), AUGE), 0.15 * s, 1.63, 0.38)));
-  [-1, 1].forEach(s => g.add(setze(teil(new CapsuleGeometry(0.07, 0.2, 4, 10), "#FF9BC8"), 0.5 * s, 1.6, 0)));
-  g.add(setze(new Mesh(new CylinderGeometry(0.02, 0.02, 0.3, 6), mat("#3b1f63")), 0, 2.05, 0));
-  g.add(setze(teil(kugel(0.09), "#FFC83D", { dicke: 1.12 }), 0, 2.22, 0));
-  [-1, 1].forEach(s => { const a = teil(new CapsuleGeometry(0.07, 0.35, 4, 10), "#FF9BC8"); setze(a, 0.5 * s, 0.85, 0); a.rotation.z = 0.3 * s; g.add(a); });
+  const g = new Group(), BL = "#58B7F0", HB = "#7FCBF5", LEUCHT = new MeshBasicMaterial({ color: "#7CF0FF" });
+  const k = new Group(); g.add(k);
+  k.add(setze(teil(new CapsuleGeometry(0.36, 0.3, 6, 18), BL), 0, 0.72, 0));
+  k.add(setze(teil(new BoxGeometry(0.34, 0.2, 0.06), "#E8F5FF", { dicke: 1.08 }), 0, 0.78, 0.36));
+  ["#FF5C7A", "#FFC83D", "#5CCBA6"].forEach((f, i) => k.add(setze(new Mesh(kugel(0.035, 8, 6), new MeshBasicMaterial({ color: f })), (i - 1) * 0.09, 0.78, 0.4)));
+  [-1, 1].forEach(s => { k.add(setze(teil(new CapsuleGeometry(0.09, 0.08, 4, 10), "#3A8FD0"), 0.17 * s, 0.18, 0.02)); const a = teil(new CapsuleGeometry(0.07, 0.28, 4, 10), BL); setze(a, 0.46 * s, 0.78, 0); a.rotation.z = 0.35 * s; k.add(a); });
+  const kopf = new Group(); kopf.position.y = 1.55; k.add(kopf);
+  const schaedel = teil(new CapsuleGeometry(0.42, 0.34, 8, 24), HB, { dicke: 1.04 }); schaedel.rotation.z = Math.PI / 2; schaedel.scale.set(1, 1, 0.82); kopf.add(schaedel);
+  const schirm = teil(new CapsuleGeometry(0.28, 0.3, 6, 20), "#2E2B47", { umriss: false }); schirm.rotation.z = Math.PI / 2; schirm.scale.set(1, 1, 0.25); setze(schirm, 0, 0, 0.29); kopf.add(schirm);
+  [-1, 1].forEach(s => {
+    const auge = new Mesh(new TorusGeometry(0.075, 0.025, 6, 14, Math.PI), LEUCHT); setze(auge, 0.15 * s, 0.03, 0.37); kopf.add(auge);
+    const w = new Mesh(new CircleGeometry(0.06, 14), WANGE); w.scale.y = 0.6; setze(w, 0.27 * s, -0.09, 0.365); kopf.add(w);
+    const ohr = teil(new CylinderGeometry(0.07, 0.07, 0.12, 14), "#FFC83D"); ohr.rotation.z = Math.PI / 2; setze(ohr, 0.66 * s, 0, 0); kopf.add(ohr);
+  });
+  const mund = new Mesh(new TorusGeometry(0.07, 0.022, 6, 14, Math.PI), LEUCHT); mund.rotation.z = Math.PI; setze(mund, 0, -0.1, 0.37); kopf.add(mund);
+  kopf.add(setze(new Mesh(new CylinderGeometry(0.02, 0.02, 0.26, 6), mat("#3b1f63")), 0, 0.5, 0));
+  kopf.add(setze(teil(kugel(0.09), "#FF5C7A", { dicke: 1.12 }), 0, 0.66, 0));
+  g.userData.koerper = k;
   return g;
 }
 // Biber Benno (Mathe): brauner Körper, cremefarbener Bauch und Schnauze, zwei große Zähne, flacher Gitter-Schwanz, gelber Helm
@@ -732,7 +752,7 @@ function biber() {
   const bauch = teil(kugel(0.3), H, { umriss: false }); bauch.scale.set(1, 1.05, 0.5); setze(bauch, 0, 0.4, 0.32); k.add(bauch);
   [-1, 1].forEach(s => { const f = teil(kugel(0.14), D2, { dicke: 1.1 }); f.scale.set(1.3, 0.6, 1.4); setze(f, 0.22 * s, 0.05, 0.26); k.add(f); });
   [-1, 1].forEach(s => { const a = teil(kugel(0.13), B); a.scale.set(0.8, 1.3, 0.8); setze(a, 0.42 * s, 0.55, 0.15); k.add(a); });
-  const kopf = new Group(); kopf.position.y = 1.15; k.add(kopf);
+  const kopf = new Group(); kopf.position.y = 1.2; kopf.scale.setScalar(1.12); k.add(kopf);
   const schaedel = teil(kugel(0.5), B, { dicke: 1.04 }); schaedel.scale.set(1.08, 0.95, 0.95); kopf.add(schaedel);
   const schnauze = teil(kugel(0.28), H, { umriss: false }); schnauze.scale.set(1.2, 0.8, 0.7); setze(schnauze, 0, -0.14, 0.34); kopf.add(schnauze);
   [-1, 1].forEach(s => { const o = teil(kugel(0.13), B); o.scale.set(1, 1, 0.6); setze(o, 0.4 * s, 0.32, -0.05); kopf.add(o); });
@@ -754,11 +774,11 @@ function baer() {
   [-1, 1].forEach(s => { const f = teil(kugel(0.16), "#8A5A34", { dicke: 1.1 }); f.scale.set(1.3, 0.6, 1.4); setze(f, 0.24 * s, 0.06, 0.26); k.add(f); });
   [-1, 1].forEach(s => { const a = teil(kugel(0.15), B); a.scale.set(0.8, 1.3, 0.8); setze(a, 0.48 * s, 0.6, 0.12); k.add(a); });
   const schal = teil(new TorusGeometry(0.34, 0.09, 10, 24), "#FF9BC8"); schal.rotation.x = Math.PI / 2; setze(schal, 0, 0.92, 0.02); k.add(schal);
-  const kopf = new Group(); kopf.position.y = 1.3; k.add(kopf);
+  const kopf = new Group(); kopf.position.y = 1.34; kopf.scale.setScalar(1.12); k.add(kopf);
   const schaedel = teil(kugel(0.5), B, { dicke: 1.04 }); kopf.add(schaedel);
   const schnauze = teil(kugel(0.24), H, { umriss: false }); schnauze.scale.set(1.15, 0.85, 0.7); setze(schnauze, 0, -0.12, 0.38); kopf.add(schnauze);
   [-1, 1].forEach(s => { const o = teil(kugel(0.17), B); o.scale.set(1, 1, 0.6); setze(o, 0.36 * s, 0.38, -0.02); kopf.add(o); const oi = new Mesh(kugel(0.09, 10, 8), mat("#E9A7A0")); setze(oi, 0.36 * s, 0.38, 0.06); kopf.add(oi); });
-  augen(kopf, 0.17, 0.08, 0.44, 0.07);
+  augen(kopf, 0.17, 0.08, 0.48, 0.07);
   const nase = new Mesh(kugel(0.08, 14, 10), AUGE); nase.scale.set(1.3, 0.9, 0.8); setze(nase, 0, -0.05, 0.62); kopf.add(nase);
   // Laterne mit Herz
   const lat = new Group(); lat.position.set(0.62, 0.55, 0.25); k.add(lat);
@@ -918,7 +938,8 @@ antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe"
   const t = new Group(); t.position.set(0.95, 0, 0.2); t.rotation.y = -1.2; g.add(t);
   const panzer = teil(new SphereGeometry(0.42, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), "#4FAF62"); panzer.scale.set(1, 0.85, 1.15); setze(panzer, 0, 0.18, 0); t.add(panzer);
   t.add(setze(teil(new CylinderGeometry(0.43, 0.43, 0.08, 18), "#E8D9A0"), 0, 0.17, 0));
-  const kopf = new Group(); kopf.position.set(0, 0.32, 0.5); t.add(kopf); kopf.add(teil(kugel(0.17, 14, 10), "#8FD06A")); augen(kopf, 0.07, 0.04, 0.14, 0.035);
+  const kopf = new Group(); kopf.position.set(0, 0.42, 0.5); t.add(kopf); kopf.add(teil(kugel(0.25, 16, 12), "#8FD06A")); augen(kopf, 0.1, 0.03, 0.22, 0.045);
+  { const band = teil(new TorusGeometry(0.22, 0.04, 8, 20), "#7B55B8"); band.rotation.x = Math.PI / 2 - 0.3; setze(band, 0, 0.1, -0.02); kopf.add(band); }   // lila Stirnband wie in 2D
   [[-0.3, 0.35], [0.3, 0.35], [-0.3, -0.35], [0.3, -0.35]].forEach(([fx, fz]) => t.add(setze(teil(kugel(0.1, 10, 8), "#8FD06A"), fx, 0.07, fz)));
   antippbar(g, () => zeigeAntwort(K.antwort("schach")), ...K.aktionFuer("schach")); starr.push([g]);
 }
@@ -927,17 +948,15 @@ antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe"
 let tanzBis = 0;
 const paula = (() => {
   const g = new Group(), k = new Group(); g.add(k);
-  const leib = teil(kugel(0.36), "#E8453C"); leib.scale.set(1, 1.25, 0.95); setze(leib, 0, 0.62, 0); k.add(leib);
-  const bauch = teil(kugel(0.24), "#FFB26B", { umriss: false }); bauch.scale.set(1, 1.2, 0.5); setze(bauch, 0, 0.56, 0.22); k.add(bauch);
-  [-1, 1].forEach(s => { const f = teil(kugel(0.22), "#2FA37C"); f.scale.set(0.45, 1.1, 0.9); setze(f, 0.36 * s, 0.66, -0.02); f.rotation.z = -0.25 * s; k.add(f); });
-  const schwanz = teil(new BoxGeometry(0.2, 0.5, 0.06), "#2F86C8"); setze(schwanz, 0, 0.2, -0.3); schwanz.rotation.x = 0.5; k.add(schwanz);
+  const leib = teil(kugel(0.36), "#4CC27A"); leib.scale.set(1, 1.2, 0.95); setze(leib, 0, 0.6, 0); k.add(leib);
+  [-1, 1].forEach(s => { const f = teil(kugel(0.22), "#2E9C5A"); f.scale.set(0.45, 1.1, 0.9); setze(f, 0.36 * s, 0.64, -0.02); f.rotation.z = -0.25 * s; k.add(f); });
+  const schwanz = teil(new BoxGeometry(0.2, 0.5, 0.06), "#3A8FD0"); setze(schwanz, 0, 0.2, -0.3); schwanz.rotation.x = 0.5; k.add(schwanz);
   [-1, 1].forEach(s => k.add(setze(teil(kugel(0.07, 8, 6), "#F2A33A"), 0.12 * s, 0.12, 0.05)));
-  const kopf = new Group(); kopf.position.y = 1.15; k.add(kopf);
-  kopf.add(teil(kugel(0.3), "#E8453C")); const ges = teil(kugel(0.2), "#FFF4E6", { umriss: false }); ges.scale.set(1, 0.9, 0.5); setze(ges, 0, 0, 0.18); kopf.add(ges);
-  augen(kopf, 0.09, 0.05, 0.25, 0.045);
-  const schnabel = teil(new ConeGeometry(0.08, 0.22, 10), "#FFC83D"); schnabel.rotation.x = Math.PI / 2 + 0.5; setze(schnabel, 0, -0.08, 0.32); kopf.add(schnabel);
-  const muetze = teil(new CylinderGeometry(0.3, 0.26, 0.1, 18), "#7B55B8"); setze(muetze, 0.03, 0.27, -0.02); muetze.rotation.z = -0.2; kopf.add(muetze);
-  kopf.add(setze(teil(kugel(0.06, 8, 6), "#7B55B8"), 0.06, 0.36, -0.02));
+  const kopf = new Group(); kopf.position.y = 1.12; kopf.scale.setScalar(1.15); k.add(kopf);
+  kopf.add(teil(kugel(0.34), "#FF6B5C")); const ges = teil(kugel(0.24), "#FFE7DA", { umriss: false }); ges.scale.set(1.1, 0.95, 0.5); setze(ges, 0, -0.02, 0.2); kopf.add(ges);
+  augen(kopf, 0.11, 0.05, 0.31, 0.05);
+  const schnabel = teil(new ConeGeometry(0.065, 0.16, 10), "#FFC83D"); schnabel.rotation.x = Math.PI / 2 + 0.6; setze(schnabel, 0, -0.1, 0.36); kopf.add(schnabel);
+  [-0.12, 0, 0.12].forEach((x, i) => { const f = teil(new ConeGeometry(0.06, 0.2, 8), "#FF5C5C"); setze(f, x, 0.36, -0.04); f.rotation.z = -x * 2; kopf.add(f); });   // Federschopf
   g.userData.koerper = k; return g;
 })();
 {
@@ -1778,4 +1797,4 @@ function teileZaehlen() {
   return scene.children.map(o => { let n = 0, d = 0; o.traverseVisible(m => { if (m.isMesh || m.isPoints || m.isLineSegments) { n++; const g = m.geometry; d += g.index ? g.index.count / 3 : (g.attributes.position ? g.attributes.position.count / 3 : 0); } }); return { name: o.type + (o.userData.tipp ? "*" : "") + (o.userData.aktion ? ":" + o.userData.aktion[1] : ""), x: Math.round(o.position.x), z: Math.round(o.position.z), meshes: n, dreiecke: Math.round(d) }; })
     .filter(x => x.meshes > 0).sort((a, b) => b.meshes - a.meshes);
 }
-window.__heimat = { teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };

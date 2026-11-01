@@ -10,12 +10,12 @@
   const S = window.Spielwelt; if (!S) return;
   const MAX_TAG = 5, TAGE = 60;
   const FAECHER = {
-    mathe: { e: "🦫", name: "Mathe" },
-    deutsch: { e: "🦊", name: "Deutsch" },
-    sachkunde: { e: "🦉", name: "Sachunterricht" },
-    englisch: { e: "🦜", name: "Englisch" },
+    mathe: { e: "\uE104", name: "Mathe" },
+    deutsch: { e: "\uE103", name: "Deutsch" },
+    sachkunde: { e: "\uE102", name: "Sachunterricht" },
+    englisch: { e: "\uE106", name: "Englisch" },
     sorbisch: { e: "🪺", name: "Sorbisch" },
-    tablet: { e: "🤖", name: "Tablet" },
+    tablet: { e: "\uE101", name: "Tablet" },
     welt: { e: "🌍", name: "Echte Welt" },
     schach: { e: "♟️", name: "Schach" },
     kunst: { e: "🎨", name: "Kunst" },
@@ -28,11 +28,15 @@
   const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   const heute = () => window.__heute || (window.Charakter ? window.Charakter.heute() : iso(new Date()));
 
+  const ALT_E = { mathe: "🦫", deutsch: "🦊", sachkunde: "🦉", englisch: "🦜", tablet: "🤖" };
   function lade() {
     const d = S.lade("lernfunde") || {}; d.tage = d.tage || {};
     // Dauerhafte Zähler und Schatzkammer (werden nicht mit den 60 Tagen gekürzt); alte Spielstände einmalig aus den Tagen füllen
     if (!d.z) { d.z = {}; d.schatz = d.schatz || []; Object.entries(d.tage).forEach(([tag, l]) => l.forEach(f => zaehle(d, f, tag))); }
     d.schatz = d.schatz || [];
+    // Ältere Spielstände: Fach-Zeichen waren Emojis der Begleiter (🦊 für Deutsch …) – beim Lesen durch die Begleiter-Zeichen ersetzen
+    const neuE = (f) => { if (f && ALT_E[f.f] && f.e === ALT_E[f.f]) f.e = FAECHER[f.f].e; };
+    Object.values(d.tage).forEach(l => l.forEach(neuE)); d.schatz.forEach(neuE);
     return d;
   }
   // Zähler: je Art (gemeistert, welt, wort …), je Fach (f:mathe …), erklärt; Schätze = gemeisterte, erklärte und Echte-Welt-Funde

@@ -12,7 +12,7 @@
     { id: "entdecker", name: "Entdecker-Mut", icon: "🧭", farbe: "#D08A1E", woher: "3D-Welt" },
     { id: "sachkunde", name: "Welt-Wissen", icon: "🌍", farbe: "#1F8F8A", woher: "Sachunterricht mit Eule Ella" },
     { id: "kreativ", name: "Kreativ-Funke", icon: "🎨", farbe: "#C2337A", woher: "Atelier mit Papagei Paula" },
-    { id: "englisch", name: "Englisch-Ohr", icon: "🦜", farbe: "#2F86C8", woher: "Englisch mit Papagei Paula" },
+    { id: "englisch", name: "Englisch-Ohr", icon: "\uE106", farbe: "#2F86C8", woher: "Englisch mit Papagei Paula" },
     // Sorbisch (28.10.2026): nur sichtbar, wenn die Eltern Sorbisch eingeschaltet haben
     { id: "sorbisch", name: "Sorbisch-Ohr", icon: "🪺", farbe: "#1F8F8A", woher: "Sorbisch mit Papagei Paula", nurMitWahl: () => !!(((S.lade("eltern") || {}).sorbisch || {}).an) }
   ];
@@ -147,9 +147,9 @@
     { id: "ballon", emoji: "🎈", titel: "Ballon-Party", text: "Spiele eine Runde Ballon-Party.", ereignis: "ballon-runde", skill: "entdecker", link: "../welt3d/ballons.html", dreiD: true },
     { id: "insel", emoji: "🏝️", titel: "Insel-Schatz", text: "Finde den Schatz auf der Insel.", ereignis: "insel-schatz", skill: "entdecker", link: "../welt3d/insel.html", dreiD: true },
     { id: "foto", emoji: "📸", titel: "Neuer Look", text: "Zieh deiner Figur etwas an und mach ein Foto.", ereignis: "anziehen-foto", skill: "tablet", link: "../anziehen/" },
-    { id: "kapitel", emoji: "🦊", titel: "Abenteuer", text: "Spiele ein Kapitel mit Fipsi (auch eins von früher).", ereignis: "deutsch-kapitel", skill: "deutsch", link: "../deutsch/" },
+    { id: "kapitel", emoji: "\uE103", titel: "Abenteuer", text: "Spiele ein Kapitel mit Fipsi (auch eins von früher).", ereignis: "deutsch-kapitel", skill: "deutsch", link: "../deutsch/" },
     { id: "lektion", emoji: "🪪", titel: "Tablet-Profi", text: "Mach eine Lektion im Tablet-Führerschein.", ereignis: "tablet-lektion", skill: "tablet", link: "../medien/" },
-    { id: "thema", emoji: "🦉", titel: "Sachunterricht", text: "Entdecke mit Eule Ella ein Thema (auch eins von früher).", ereignis: "sachkunde-thema", skill: "sachkunde", link: "../sachkunde/" },
+    { id: "thema", emoji: "\uE102", titel: "Sachunterricht", text: "Entdecke mit Eule Ella ein Thema (auch eins von früher).", ereignis: "sachkunde-thema", skill: "sachkunde", link: "../sachkunde/" },
     { id: "station", emoji: "🗺️", titel: "Matheweg", text: "Spiele eine Station auf dem Matheweg.", ereignis: "mathe-runde", skill: "mathe", link: "../mathe/" }
   ];
   function aufgaben() {
@@ -167,7 +167,7 @@
       rucksack: { id: "rucksack", emoji: "🎒", titel: "Vorschul-Rucksack", text: "Spiel ein Spiel aus deinem Rucksack.", ereignis: "vorschule-spiel", skill: "entdecker", link: "../vorschule/" },
       zahlen: { id: "zahlen", emoji: "🔢", titel: "Zahlen-Station", text: "Spiele eine Station auf dem Matheweg.", ereignis: "mathe-runde", skill: "mathe", link: "../mathe/" },
       laute: { id: "laute", emoji: "🔤", titel: "Laute und Silben", text: "Löse 5 Aufgaben mit Lauten, Silben oder Wörtern.", ereignis: "lesen-runde", skill: "deutsch", link: "../lesen/" },
-      englisch: { id: "englisch", emoji: "🦜", titel: "Englisch mit Paula", text: "Mach eine Englisch-Lektion (auch eine von früher).", ereignis: "englisch-lektion", skill: "englisch", link: "../englisch/" }
+      englisch: { id: "englisch", emoji: "\uE106", titel: "Englisch mit Paula", text: "Mach eine Englisch-Lektion (auch eine von früher).", ereignis: "englisch-lektion", skill: "englisch", link: "../englisch/" }
     };
     const englischDa = ["3", "4", "5"].includes(st) || ((S.lade("eltern") || {}).englisch || {}).ab === "1";
     const liste = st === "vs" ? [A.rucksack, A.zahlen, ferien ? A.ferien : A.laute]

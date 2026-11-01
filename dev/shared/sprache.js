@@ -58,6 +58,7 @@
     stopp() { if (synth && (synth.speaking || synth.pending)) { synth.cancel(); abgebrochen = Date.now(); } },
     sprich(text, lang = "de-DE", fertig) {
       if (!synth || !text || !darf()) { if (fertig) fertig(); return; }
+      text = String(text).replace(/[\uE100-\uE1FF]/g, "");   // Begleiter-Zeichen (Figuren.ZEICHEN) nicht vorlesen
       lade();
       const u = new SpeechSynthesisUtterance(text);
       const v = stimmeFuer(lang);

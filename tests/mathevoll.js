@@ -79,7 +79,7 @@ const WEGE = [["1", "k1", ["k1rechtslinks", "k1vornhinten", "k1legen"]], ["2", "
         }
         await p.waitForFunction((v) => !document.querySelector("#ende-ansicht").hidden || __deutsch.lauf.pos !== v, x.pos, { timeout: 6000 });
       }
-      const ende = await p.evaluate(() => !document.querySelector("#ende-ansicht").hidden && document.querySelectorAll("#ende-sterne span:not(.leer)").length);
+      const ende = await p.evaluate(() => !document.querySelector("#ende-ansicht").hidden && document.querySelectorAll("#ende-sterne > span:not(.leer)").length);
       erwarte(ende === 3, `Werkstatt „Rechengeschichten erfinden“: drei eigene Geschichten geschrieben, bis zum Ende, 3 Sterne (${ende})`);
     }
     await ctx.close();

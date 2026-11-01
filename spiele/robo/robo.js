@@ -119,7 +119,7 @@
       const d = daten(), neu = !d.fertig[nr]; d.fertig[nr] = bausteine(prog); speichere(d);
       meldung(nr + 1 < LEVELS.length ? "🎉 Geschafft! Robo ist am Ziel." : "🎉 Alle Aufgaben gelöst – du kannst programmieren!", "gut"); S.ton("juhu"); sprich("Geschafft!");
       if (neu) { if (C) C.gib("tablet", 2); if (neu && Object.keys(d.fertig).length === 1) S.gibSterne(1);
-        if (window.Lernfunde && (nr === 0 || nr === 8 || nr === LEVELS.length - 1)) Lernfunde.merke({ fach: "tablet", art: "programmieren", e: "🤖", schluessel: "robo:" + nr, text: nr === 8 ? "Programmieren: Schleifen wiederholen Befehle" : nr === 0 ? "Programmieren: Befehle in der richtigen Reihenfolge" : "Programmieren: alle Robo-Aufgaben gelöst" }); }
+        if (window.Lernfunde && (nr === 0 || nr === 8 || nr === LEVELS.length - 1)) Lernfunde.merke({ fach: "tablet", art: "programmieren", e: "\uE101", schluessel: "robo:" + nr, text: nr === 8 ? "Programmieren: Schleifen wiederholen Befehle" : nr === 0 ? "Programmieren: Befehle in der richtigen Reihenfolge" : "Programmieren: alle Robo-Aufgaben gelöst" }); }
       const w = document.createElement("button"); w.className = "knopf haupt"; w.id = "weiter"; w.textContent = nr + 1 < LEVELS.length ? "➡️ Nächste Aufgabe" : "Zur Übersicht";
       w.addEventListener("click", () => { S.ton("tipp"); if (nr + 1 < LEVELS.length) starte(nr + 1); else zeigeListe(); });
       $("meldung").appendChild(document.createElement("br")); $("meldung").appendChild(w);

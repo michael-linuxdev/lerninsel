@@ -16,7 +16,7 @@
   function zeichne() {
     $("sterne").textContent = S.sterne();
     const look = (S.lade("anziehen") || {}).aktuell || window.Figur.STANDARD();
-    $("portraet").innerHTML = `<svg viewBox="55 20 190 220" aria-label="Deine Figur">${window.Figur.zeichneFigur(look)}</svg>`;
+    $("portraet").innerHTML = `<svg viewBox="${window.Figur.BUESTE}" aria-label="Deine Figur">${window.Figur.zeichneFigur(look)}</svg>`;
     $("name").textContent = name();
     const tier = window.TierPflege && TierPflege.lade();
     // Kacheln in „Meine Sachen“: großes Symbol + Text
@@ -34,7 +34,7 @@
       if (box) { box.hidden = !lk.length;
         if (lk.length) { const kl = lk[0];
           box.innerHTML = `<h2>🔍 Kleiner Check: Klasse ${kl}</h2><p>Du hast eine Klasse übersprungen – toll! Wenn du magst, schau, ob du alles aus Klasse ${kl} schon kannst. Was noch fehlt, üben wir dann.</p>
-            <div class="knoepfe"><a class="knopf" href="../mathe/?weg=k${kl}">🧮 Mathe Kl. ${kl}</a><a class="knopf" href="../deutsch/">🦊 Deutsch</a><a class="knopf" href="../sachkunde/">🦉 Sachunterricht</a></div>
+            <div class="knoepfe"><a class="knopf" href="../mathe/?weg=k${kl}">🧮 Mathe Kl. ${kl}</a><a class="knopf" href="../deutsch/">\uE103 Deutsch</a><a class="knopf" href="../sachkunde/">\uE102 Sachunterricht</a></div>
             <p class="klein">Bei Deutsch und Sachunterricht findest du die Themen unter „Wiederholen aus früheren Klassen“.</p>`; } } }
     $("gesamt").textContent = `Gesamtstufe ${C.gesamt()} von ${C.sichtbareFaehigkeiten().length * C.MAX}`;
     $("gesamt-balken").style.width = Math.round(C.gesamt() / Math.max(1, C.sichtbareFaehigkeiten().length * C.MAX) * 100) + "%";
@@ -97,7 +97,7 @@
   // Heute neu: konkrete Lernfunde des Tages (shared/lernfunde.js)
   // NA-50: Können je Fach als wachsende Pflanze – ohne Noten, ohne Prozentzahlen. Erst sichtbar, wenn etwas geübt wurde.
   const PFLANZEN = ["🌰", "🌱", "🌿", "🪴", "🌳"];
-  const KN_FAECHER = [["Mathe", "🦫", ["ma."]], ["Deutsch", "🦊", ["de.", "daz."]], ["Sachunterricht", "🦉", ["su."]]];
+  const KN_FAECHER = [["Mathe", "\uE104", ["ma."]], ["Deutsch", "\uE103", ["de.", "daz."]], ["Sachunterricht", "\uE102", ["su."]]];
   function zeichneKoennen() {
     const el = $("koennen"), K = window.Koennen; if (!el || !K) return;
     const d = K.daten(), ids = Object.keys(d);

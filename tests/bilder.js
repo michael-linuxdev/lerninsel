@@ -73,6 +73,20 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   const kontur = await p.evaluate(() => { const g = __atelier.g, d = g.getImageData(512 - 70, 384 - 70, 140, 140).data; let n = 0;
     for (let i = 0; i < d.length; i += 4) if (Math.abs(d[i] - 0x3B) < 30 && Math.abs(d[i + 1] - 0x1F) < 30 && Math.abs(d[i + 2] - 0x63) < 30) n++; return n; });
   erwarte(kontur > 40, `Atelier: Stempel als Noto-Bild mit Kontur gezeichnet (${kontur} Konturpunkte)`);
+  // Begleiter nie als Emoji (01.11.2026): Vorschul-Rucksack, Meine Ecke, Sachunterricht zeigen Zeichnungen, auf keiner Seite steht ein Begleiter-Emoji neben seinem Namen
+  const BEGLEITER = { "🦊": "Fipsi", "🦉": "Ella", "🦫": "Benno", "🐻": "Bruni", "🦜": "Paula", "🐢": "Tilda", "🤖": "Robo" };
+  for (const s of ["spiele/vorschule/", "spiele/ich/", "spiele/schach/", "spiele/gefuehle/", "spiele/heft/", "spiele/baeckerei/", "spiele/garten/", "spiele/tierstation/", "spiele/medien/", ""]) {
+    await p.goto(BASIS + s); await p.waitForLoadState("load"); await p.waitForTimeout(450);
+    const r = await p.evaluate((B) => {
+      const text = document.body.innerText, falsch = [];
+      for (const [e, n] of Object.entries(B)) { const i = text.indexOf(e); if (i >= 0 && text.slice(Math.max(0, i - 40), i + 40).includes(n)) falsch.push(e + " " + n); }
+      return { falsch, fig: document.querySelectorAll(".emo.fig svg").length };
+    }, BEGLEITER);
+    erwarte(r.falsch.length === 0, `${s || "Startseite"}: kein Begleiter als Emoji (${r.fig} Begleiter-Zeichnungen)` + (r.falsch.length ? " – gefunden: " + r.falsch.join(", ") : ""));
+  }
+  await p.goto(BASIS + "spiele/vorschule/"); await p.waitForLoadState("load"); await p.waitForTimeout(450);
+  const fipsi = await p.evaluate(() => ({ fig: !!document.querySelector(".intro .emo.fig svg"), noto: document.querySelector(".intro").textContent.includes("🦊"), zeichen: document.querySelector(".intro").textContent.includes("\uE103") }));
+  erwarte(fipsi.fig && !fipsi.noto && fipsi.zeichen, "Vorschul-Rucksack: Fipsi als Zeichnung, nicht als Fuchs-Emoji");
   // Seiten mit vielen Emojis öffnen ohne Fehler
   for (const s of ["spiele/sachkunde/", "spiele/mathe/", "spiele/garten/", "spiele/ich/"]) { await p.goto(BASIS + s); await p.waitForLoadState("load"); await p.waitForTimeout(400); }
   erwarte(await p.evaluate(() => document.querySelectorAll(".emo").length > 0), "weitere Seiten (Sachunterricht, Mathe, Garten, Meine Ecke) laufen mit den Bildern");
@@ -80,7 +94,9 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   // Eltern-Wahl: Emojis des Geräts
   await p.evaluate(() => { const e = Spielwelt.lade("eltern"); e.bilder = "geraet"; Spielwelt.speichere("eltern", e); });
   await p.goto(BASIS); await p.waitForLoadState("load"); await p.waitForTimeout(500);
-  erwarte(await p.evaluate(() => !window.__emoji && document.querySelectorAll(".emo").length === 0), "Eltern-Wahl „Emojis des Geräts“: kein Ersatz");
+  erwarte(await p.evaluate(() => window.__emoji && __emoji.nurFiguren && document.querySelectorAll(".emo:not(.fig)").length === 0), "Eltern-Wahl „Emojis des Geräts“: keine Noto-Bilder (nur die Begleiter bleiben Zeichnungen)");
+  await p.goto(BASIS + "spiele/vorschule/"); await p.waitForLoadState("load"); await p.waitForTimeout(500);
+  erwarte(await p.evaluate(() => !!document.querySelector(".intro .emo.fig svg")), "auch mit Geräte-Emojis: Fipsi im Vorschul-Rucksack als Zeichnung");
   await browser.close();
   if (fehler.length) { console.log("❌ Fehler:\n  " + fehler.join("\n  ")); process.exit(1); }
   console.log("✅ Bilder-Test bestanden.");

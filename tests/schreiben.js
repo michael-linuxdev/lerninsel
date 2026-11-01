@@ -82,7 +82,7 @@ const NEU = ["w-reime", "w-einladung", "w-bildergeschichte", "w-gedicht-vortrage
       // Warten, bis der nächste Schritt (oder das Ende) da ist – richtige Antworten blättern nach gut 2 s selbst weiter
       await p.waitForFunction((v) => !document.querySelector("#ende-ansicht").hidden || __deutsch.lauf.pos !== v, vorher, { timeout: 6000 });
     }
-    const ende = await p.evaluate(() => !document.querySelector("#ende-ansicht").hidden && document.querySelectorAll("#ende-sterne span:not(.leer)").length);
+    const ende = await p.evaluate(() => !document.querySelector("#ende-ansicht").hidden && document.querySelectorAll("#ende-sterne > span:not(.leer)").length);
     return { ok, sterne: ende };
   }
 

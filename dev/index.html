@@ -359,7 +359,7 @@
     S.kinder().forEach(k => {
       const p = S.profilVon(k.id), look = (p && p.daten.anziehen && p.daten.anziehen.aktuell) || Figur.STANDARD(p && p.daten.eltern && p.daten.eltern.kind ? p.daten.eltern.kind.geschlecht : "n");
       const b = document.createElement("button"); b.className = "wer-kind";
-      b.innerHTML = `<span class="bild"><svg viewBox="60 40 180 180">${Figur.zeichneFigur(look)}</svg></span>${k.name || "Neues Kind"}`;
+      b.innerHTML = `<span class="bild"><svg viewBox="${Figur.KOPF}">${Figur.zeichneFigur(look)}</svg></span>${k.name || "Neues Kind"}`;
       b.addEventListener("click", () => { S.ton("juhu"); S.wechsleKind(k.id); location.reload(); });
       liste.appendChild(b);
     });
@@ -425,12 +425,12 @@
     if ((k.luecken || []).length) v = ["🔍", `Kleiner Check: Klasse ${k.luecken[0]}`, "freiwillig", "spiele/ich/"];
     // NA-60 Teil 2: Wer die Klasse wiederholt, bekommt gezielt das Fach mit dem wackeligsten Lernziel (aus „Mein Können“) vorgeschlagen
     if (!v && k.wiederholt === S.schuljahrAm() && window.Koennen) {
-      const d = Koennen.daten(), FACH = { ma: ["🧮", "Mathe", "spiele/mathe/"], de: ["🦊", "Deutsch", "spiele/deutsch/"], su: ["🦉", "Sachunterricht", "spiele/sachkunde/"], en: ["🦜", "Englisch", "spiele/englisch/"] };
+      const d = Koennen.daten(), FACH = { ma: ["🧮", "Mathe", "spiele/mathe/"], de: ["\uE103", "Deutsch", "spiele/deutsch/"], su: ["\uE102", "Sachunterricht", "spiele/sachkunde/"], en: ["\uE106", "Englisch", "spiele/englisch/"] };
       const wack = Object.keys(d).filter(z => FACH[z.slice(0, 2)]).map(z => [z, Koennen.standVon(z)]).filter(([, s]) => s <= 2).sort((a, b) => a[1] - b[1])[0];
       if (wack) { const f = FACH[wack[0].slice(0, 2)]; v = [f[0], `${f[1]}: üben, was noch wackelt`, "gezielt für dich", f[2]]; }
     }
     if (!v && C && C.aufgaben) { const a = C.aufgaben().find(x => !x.erledigt); if (a) v = [a.emoji, a.titel, "Tagesaufgabe", pfad(a.link)]; }
-    if (!v) { const F = [["mathe", "🧮", "Mathe", "spiele/mathe/"], ["deutsch", "🦊", "Deutsch", "spiele/deutsch/"], ["sachkunde", "🦉", "Sachunterricht", "spiele/sachkunde/"], ["englisch", "🦜", "Englisch", "spiele/englisch/"]]
+    if (!v) { const F = [["mathe", "🧮", "Mathe", "spiele/mathe/"], ["deutsch", "\uE103", "Deutsch", "spiele/deutsch/"], ["sachkunde", "\uE102", "Sachunterricht", "spiele/sachkunde/"], ["englisch", "\uE106", "Englisch", "spiele/englisch/"]]
       .find(([f]) => (e[f] || {}).schule); if (F) v = [F[1], F[2], "gerade in der Schule", F[3]]; }
     if (!v) v = ["🌍", "Eine Echte-Welt-Idee", "für draußen", "spiele/ich/#echte-welt"];
     el.innerHTML = `<span class="e" aria-hidden="true">${v[0]}</span><span><small>Heute für dich · ${v[2]}</small>${v[1]}</span>`;
@@ -465,7 +465,7 @@
   const medien = S.lade("medien");
   // Meine Ecke: Figur, Titel und Tagesaufgaben
   const look = (S.lade("anziehen") || {}).aktuell || Figur.STANDARD();
-  document.getElementById("ich-bild").innerHTML = `<svg viewBox="60 40 180 180">${Figur.zeichneFigur(look)}</svg>`;
+  document.getElementById("ich-bild").innerHTML = `<svg viewBox="${Figur.KOPF}">${Figur.zeichneFigur(look)}</svg>`;
   document.getElementById("ich-titel").textContent = Charakter.titel();
   const offenAufgaben = Charakter.aufgaben().filter(a => !a.erledigt).length;
   const neuHeute = window.Lernfunde ? Lernfunde.heute().length : 0;

@@ -37,6 +37,7 @@
   .lek.zu .emoji { filter: grayscale(1); opacity: .5; }
   .lek.jetzt { box-shadow: 0 0 0 5px var(--pflaume-hell), 0 7px 0 rgba(75,35,128,.18); }
   @media (max-width: 760px) { .lektionen { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .lektionen { grid-template-columns: 1fr; } }
   .fs-knopf { display: block; margin: 22px auto 0; min-height: 66px; font-size: 1.35rem; }
 
   /* Lektion */
@@ -158,7 +159,7 @@
   </div>
   <div class="intro"><span id="robo-klein"></span><p id="intro-text"></p></div>
   <div class="lektionen" id="lektionen"></div>
-  <p style="text-align:center;margin:16px" id="robo-zeile"><a class="knopf haupt" id="robo-link" href="../robo/">🤖 Robo programmieren</a></p>
+  <p style="text-align:center;margin:16px" id="robo-zeile"><a class="knopf haupt" id="robo-link" href="../robo/">&#xE101; Robo programmieren</a></p>
   <script>/* Robo-Programmieren ab Klasse 3 (NA-60) */ addEventListener("DOMContentLoaded", function () { const S = window.Spielwelt, st = S && S.stufe && (S.stufe() || {}).code; if (st && !["3", "4", "5"].includes(st)) { const z = document.getElementById("robo-zeile"); if (z) z.hidden = true; } });</script>
   <button class="knopf haupt fs-knopf" id="fs-zeigen" hidden>🪪 Meinen Führerschein ansehen</button>
 </section>

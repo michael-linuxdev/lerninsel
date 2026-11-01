@@ -73,7 +73,7 @@
     if (R.imSchach(b, amZug)) tilda(amZug === R.WEISS ? "Achtung, dein König steht im Schach! Schütze ihn." : "Schach! Gut gemacht.");
     else tilda(modus === "zwei" ? (amZug === R.WEISS ? "Weiß ist am Zug." : "Schwarz ist am Zug.") : "Du bist dran – tippe auf eine weiße Figur.");
     if (modus === "ki" && amZug === R.SCHWARZ) {
-      denkt = true; tilda("Tilda denkt nach … 🐢");
+      denkt = true; tilda("Tilda denkt nach … \uE107");
       setTimeout(() => { const z = R.kiZug(b, R.SCHWARZ, kiStufe); denkt = false; if (z) { b = R.ziehe(b, z); letzter = z; amZug = R.WEISS; zeichne(); nachZug(); } }, 350);
     }
     if (modus === "zwei") $("brett").classList.toggle("gedreht", $("drehen").checked && amZug === R.SCHWARZ);
@@ -101,7 +101,7 @@
     let sieger = rennenSieger();
     if (!sieger) { amZug = R.SCHWARZ; if (!R.zuege(b, R.SCHWARZ).length) sieger = R.WEISS; }
     zeichne(); if (sieger) return rennenEnde(sieger);
-    denkt = true; tilda("Tilda überlegt … 🐢");
+    denkt = true; tilda("Tilda überlegt … \uE107");
     setTimeout(() => {
       const z = R.kiZug(b, R.SCHWARZ, 1); denkt = false;
       if (z) { b = R.ziehe(b, z); letzter = z; }
@@ -159,7 +159,7 @@
   }
   function starteKi(stufe) {
     kiStufe = stufe; neuesBrett(R.START, "ki");
-    $("spiel-titel").textContent = `🐢 Gegen Tilda (${["", "leicht", "mittel", "schwer"][stufe]})`; tilda("Du spielst Weiß und fängst an. Tippe auf eine Figur, dann auf ein grünes Feld."); zeichne();
+    $("spiel-titel").textContent = `\uE107 Gegen Tilda (${["", "leicht", "mittel", "schwer"][stufe]})`; tilda("Du spielst Weiß und fängst an. Tippe auf eine Figur, dann auf ein grünes Feld."); zeichne();
   }
   function starteZwei() {
     neuesBrett(R.START, "zwei"); $("spiel-titel").textContent = "👨‍👧 Schach zu zweit"; tilda("Weiß fängt an. Danach seid ihr abwechselnd dran."); zeichne();

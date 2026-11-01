@@ -447,7 +447,7 @@ window.ENGLISCH.push(
       { typ: "wahl", frage: "Welche Geste passt zu „I don't know.“?", ru: "Какой жест подходит к «I don't know»?", optionen: ["🤷 Schultern hochziehen", "👋 winken", "👍 Daumen hoch"], e: "❓", warum: "„I don't know“ – dazu zuckt man mit den Schultern." },
       { typ: "wahl", frage: "Welche Geste passt zu „Come here, please!“?", ru: "Какой жест подходит к «Come here, please!»?", optionen: ["🫴 mit der Hand heranwinken", "🙅 Arme kreuzen", "😴 Augen zu"], e: "🙋", warum: "Mit der Hand heranwinken heißt: Komm her!" },
       { typ: "wahl", frage: "Welches Gesicht passt zu „Wow! A present for me?“", ru: "Какое лицо подходит к «Wow! A present for me?»", optionen: ["surprised 😮", "tired 🥱", "angry 😠"], e: "🎁", warum: "Bei einer Überraschung macht man große Augen: surprised." },
-      { typ: "rolle", szene: "Spiel mit Gesicht und Händen!", ru: "Играй лицом и руками!", rollen: { a: "🦜 Paula", b: "🙂 Du" }, ich: "b", zeilen: [
+      { typ: "rolle", szene: "Spiel mit Gesicht und Händen!", ru: "Играй лицом и руками!", rollen: { a: "\uE106 Paula", b: "🙂 Du" }, ich: "b", zeilen: [
         ["a", "Show me: I'm happy!", "Zeig mir: Ich bin fröhlich!"], ["b", "I'm happy! 😄", "Ich bin fröhlich!"], ["a", "Show me: I'm tired!", "Zeig mir: Ich bin müde!"], ["b", "I'm tired! 🥱", "Ich bin müde!"],
         ["a", "Show me: I don't know!", "Zeig mir: Ich weiß nicht!"], ["b", "I don't know! 🤷", "Ich weiß nicht!"]] }],
     ende: { de: "Super! Gesichter und Gesten verstehen Menschen überall – das hilft, wenn dir ein Wort fehlt.", ru: "Супер! Мимику и жесты понимают везде." }

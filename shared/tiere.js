@@ -26,15 +26,15 @@
 
   function masse(stufe) {
     return [
-      { k: { x: 150, y: 132, r: 64 }, b: { x: 150, y: 222, rx: 50, ry: 44 } },
-      { k: { x: 150, y: 112, r: 57 }, b: { x: 150, y: 206, rx: 66, ry: 56 } },
-      { k: { x: 150, y: 96, r: 53 }, b: { x: 150, y: 194, rx: 80, ry: 66 } }
+      { k: { x: 150, y: 128, r: 68 }, b: { x: 150, y: 224, rx: 48, ry: 42 } },
+      { k: { x: 150, y: 112, r: 64 }, b: { x: 150, y: 210, rx: 60, ry: 52 } },
+      { k: { x: 150, y: 100, r: 62 }, b: { x: 150, y: 200, rx: 72, ry: 60 } }
     ][Math.max(0, Math.min(2, stufe))];
   }
 
   // ---------- Gesicht ----------
   function gesicht(k, stufe, ausdruck) {
-    const g = stufe === 0 ? 1.12 : 1, ex = k.r * 0.38, ey = k.y + k.r * 0.05, rx = k.r * 0.17 * g, ry = rx * 1.25;
+    const g = stufe === 0 ? 1.12 : 1, ex = k.r * 0.4, ey = k.y + k.r * 0.08, rx = k.r * 0.21 * g, ry = rx * 1.22;
     const m = { x: k.x, y: k.y + k.r * 0.45 };
     let augen, mund, extra = "";
     if (ausdruck === "lacht") {
@@ -51,8 +51,8 @@
         extra = [-1, 1].map(s => `<path d="M${k.x + s * (ex + rx)} ${ey - ry - 3} L${k.x + s * (ex - rx * 0.6)} ${ey - ry - 12}" stroke="${D}" stroke-width="4" stroke-linecap="round"/>`).join("");
       } else mund = `<path d="M${m.x - 12} ${m.y - 2} Q${m.x} ${m.y + 10} ${m.x + 12} ${m.y - 2}" stroke="${D}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
     }
-    const wangen = [-1, 1].map(s => `<ellipse cx="${k.x + s * k.r * 0.62}" cy="${k.y + k.r * 0.32}" rx="${k.r * 0.13}" ry="${k.r * 0.09}" fill="#FF7FA6" opacity=".5"/>`).join("");
-    return augen + mund + extra;   // ohne rosa Wangen (01.11.2026)
+    const wangen = [-1, 1].map(s => `<ellipse cx="${k.x + s * k.r * 0.66}" cy="${k.y + k.r * 0.36}" rx="${k.r * 0.14}" ry="${k.r * 0.085}" fill="#FF7FA6" opacity=".35"/>`).join("");
+    return wangen + augen + mund + extra;   // dezente Wangen (Wunsch des Auftraggebers 01.11.2026: ja, aber nicht übertrieben)
   }
 
   // ---------- Arten ----------

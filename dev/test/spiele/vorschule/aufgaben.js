@@ -6,13 +6,13 @@
 //   sag = zusätzlich vorgelesen (z. B. „Ba – na – ne“); warum = Erklärung nach der richtigen Antwort (vorgelesen).
 window.VORSCHULE_BEREICHE = [
   { id: "mathe", name: "Zahlen und Formen", e: "🔢", farbe: "#2FA37C", text: "Mathematische Bildung: zählen, vergleichen, Formen und Muster",
-    links: [["spiele/mathe/", "Matheweg: Würfelbilder, Zählen, Muster", "🦫"]] },
+    links: [["spiele/mathe/", "Matheweg: Würfelbilder, Zählen, Muster", "\uE104"]] },
   { id: "sprache", name: "Sprechen und Hören", e: "🗣️", farbe: "#E0574A", text: "Kommunikative Bildung: Reime, Silben, Anlaute, Geschichten",
-    links: [["spiele/lesen/", "Laute und Buchstaben: Gleicher Anfang, Nachspuren", "🦊"]] },
+    links: [["spiele/lesen/", "Laute und Buchstaben: Gleicher Anfang, Nachspuren", "\uE103"]] },
   { id: "natur", name: "Natur entdecken", e: "🌱", farbe: "#1F8F8A", text: "Naturwissenschaftliche Bildung: Tiere, Pflanzen, Wasser, Jahreszeiten",
-    links: [["spiele/sachkunde/", "Sachunterricht mit Eule Ella", "🦉"]] },
+    links: [["spiele/sachkunde/", "Sachunterricht mit Eule Ella", "\uE102"]] },
   { id: "koerper", name: "Körper und Gesundheit", e: "🧼", farbe: "#3AA0E0", text: "Somatische Bildung: Körper, Sinne, gesund essen, Hygiene, Bewegung",
-    links: [["spiele/gefuehle/", "Bewegung mit Bärin Bruni", "🐻"]] },
+    links: [["spiele/gefuehle/", "Bewegung mit Bärin Bruni", "\uE105"]] },
   { id: "sozial", name: "Miteinander", e: "🤝", farbe: "#E0578F", text: "Soziale Bildung: Gefühle, Regeln, helfen, sicher unterwegs",
     links: [["spiele/gefuehle/", "Gefühle mit Bärin Bruni", "💗"]] },
   { id: "kunst", name: "Malen und Musik", e: "🎨", farbe: "#E07A2E", text: "Ästhetische Bildung: Farben, Klänge, Instrumente",

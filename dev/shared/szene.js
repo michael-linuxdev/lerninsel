@@ -14,9 +14,9 @@
   const S = window.Spielwelt; if (!S) return;
   const MAX_BLASEN = 4;
   const FIGUREN = {
-    robo: { name: "Robo Pixel", e: "🤖" }, eule: { name: "Eule Ella", e: "🦉" }, fipsi: { name: "Fuchs Fipsi", e: "🦊" },
-    biber: { name: "Biber Benno", e: "🦫" }, baer: { name: "Bärin Bruni", e: "🐻" }, papagei: { name: "Papagei Paula", e: "🦜" },
-    tilda: { name: "Tilda", e: "🐢" }
+    robo: { name: "Robo Pixel", e: "\uE101" }, eule: { name: "Eule Ella", e: "\uE102" }, fipsi: { name: "Fuchs Fipsi", e: "\uE103" },
+    biber: { name: "Biber Benno", e: "\uE104" }, baer: { name: "Bärin Bruni", e: "\uE105" }, papagei: { name: "Papagei Paula", e: "\uE106" },
+    tilda: { name: "Tilda", e: "\uE107" }
   };
   const TEXTE = {
     weiter: { de: "Weiter", ru: "Дальше", status: { ru: "entwurf" } },

@@ -66,11 +66,11 @@ const TAG = (n) => new Date(2026, 9, 25 + n, 15, 0).getTime();
     // nächster Tag: müde
     await p.evaluate((t) => localStorage.setItem("__testJetzt", String(t)), TAG(1));
     await p.goto(BASIS + "spiele/gefuehle/?zu=barometer"); await p.waitForTimeout(400);
-    erwarte(await sichtbar(p, "barometer") && await p.locator("#faces .face.an").count() === 0 && await p.locator("#verlauf .verlauf span").count() === 1, "Tag 2 (?zu=barometer): noch nichts gewählt, Verlauf zeigt gestern");
+    erwarte(await sichtbar(p, "barometer") && await p.locator("#faces .face.an").count() === 0 && await p.locator("#verlauf .verlauf > span").count() === 1, "Tag 2 (?zu=barometer): noch nichts gewählt, Verlauf zeigt gestern");
     await p.click('#faces [data-g="muede"]'); await p.waitForTimeout(200);
     erwarte((await daten(p)).tage["2026-10-26"] === "muede" && await p.isVisible('#antwort-knoepfe [data-zu="bewegen"]'), "müde: gespeichert, Knopf „Bewegungs-Minute“");
     await p.reload(); await p.waitForTimeout(400);
-    erwarte(await p.locator("#verlauf .verlauf span").count() === 2, "Verlauf zeigt beide Tage");
+    erwarte(await p.locator("#verlauf .verlauf > span").count() === 2, "Verlauf zeigt beide Tage");
 
     // ---------- Ruhig werden ----------
     await p.goto(BASIS + "spiele/gefuehle/"); await p.waitForTimeout(400);

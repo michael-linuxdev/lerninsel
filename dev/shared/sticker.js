@@ -6,7 +6,7 @@
   if (!S) return;
   const SEITEN = [
     { id: "insel", name: "Inselbewohner", ru: "Жители острова", farbe: "#FFE3B8", woher: "lernen", sticker: [
-      ["eule", "🦉", "Eule Ella", "Сова Элла"], ["fipsi", "🦊", "Fipsi", "Фипси"], ["robo", "🤖", "Robo Pixel", "Робо Пиксель"], ["drache", "🐉", "Drache", "Дракон"],
+      ["eule", "\uE102", "Eule Ella", "Сова Элла"], ["fipsi", "\uE103", "Fipsi", "Фипси"], ["robo", "\uE101", "Robo Pixel", "Робо Пиксель"], ["drache", "🐉", "Drache", "Дракон"],
       ["katze", "🐈", "Katze", "Кошка"], ["igel", "🦔", "Igel", "Ёжик"], ["hoernchen", "🐿️", "Eichhörnchen", "Белка"], ["kaefer", "🐞", "Marienkäfer", "Божья коровка"]] },
     { id: "wetter", name: "Wetter", ru: "Погода", farbe: "#D6EEFF", woher: "entdecken", sticker: [
       ["w-klar", "☀️", "Sonne", "Солнце", "Scheint die Sonne bei dir? Schau auf der Insel!"], ["w-wolken", "⛅", "Wolken", "Облака", "Wolkentag auf der Insel"],

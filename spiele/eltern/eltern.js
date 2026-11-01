@@ -418,7 +418,7 @@
   function englischKarte() {
     const ab = ((S.lade("eltern") || {}).englisch || {}).ab || "3", enSchule = ((S.lade("eltern") || {}).englisch || {}).schule || "";
     return `<div class="karte">
-      <h2>🦜 Englisch wie in der Schule</h2>
+      <h2>\uE106 Englisch wie in der Schule</h2>
       <div class="zeit-raster"><label>Englisch zeigen<select id="en-ab">
         <option value="3" ${ab === "3" ? "selected" : ""}>Wie in den meisten Ländern: ab Klasse 3 (erste Lektionen schon in Klasse 2)</option>
         <option value="1" ${ab === "1" ? "selected" : ""}>Schon ab Klasse 1 (wenn die Schule früh mit Englisch beginnt)</option></select></label>

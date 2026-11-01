@@ -2008,3 +2008,30 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   - Auflösung passt sich an, günstigere Schatten jedes zweite Bild, Wasser und Gras im Shader, Shader werden vorab übersetzt.
   - Auf dem iPad noch nicht geprüft.
 - **Offen:** Gestaltung Stil A auf allen Seiten angleichen. Emoji-Stellen in Canvas und 3D (Schilder auf der Insel, Stempel im Atelier).
+
+### Stand 01.11.2026, Sitzung „Noto-Emojis und niedlichere Figuren“
+- **Fragerunde:** noch kein iPad-Test; Pakete „Noto-Emojis + Stil A“; Kontur vorberechnen statt Filter; nichts gesperrt.
+  Während der Sitzung neuer Auftrag: **Kein Begleiter je als Emoji** (Fipsi im Vorschul-Rucksack war ein Fuchs-Emoji), **alle Begleiter niedlicher**,
+  **Wangen erlaubt, aber dezent**, **Spielfigur und Tier neu**, **auf der Insel müssen alle Figuren immer toll aussehen**.
+- **Erledigt – Emoji-Bilder aus Noto in Stil A** (gepusht):
+  - 773 Bilder aus `quellen/noto/` (Apache 2.0, `quellen/noto/LICENSE`), gebaut von `quellen/noto-stil-a.py` → `shared/icons.js` (2,7 MB, gzip 0,75 MB).
+  - Kontur ohne SVG-Filter: Formen einmal in `<defs>`, zweimal per `<use>`; die hintere Kopie färbt sich über CSS-Variablen dunkel. Beim Scrollen 60 Bilder/s bei vierfacher CPU-Drosselung.
+  - Würfel ⚀–⚅ und © haben kein Noto-Bild und bleiben System-Zeichen. Noto-Wangen bleiben entfernt (wer sie wieder will: `WANGEN = set()` im Skript).
+  - Fehler dabei behoben: 📦 hatte ein Rechteck außerhalb des Bildes, das Klicks abfing (jetzt abgeschnitten, `pointer-events: none`). Medien und Chronik liefen auf dem Handy über.
+  - Tests, die `span`s zählten, angepasst (`gefuehle`, `schreiben`, `mathevoll`).
+  - Canvas/3D: `EmojiBild`/`EmojiBereit` für Insel-Schilder, Pinnwand und Atelier-Stempel.
+- **Erledigt – Begleiter nie als Emoji:** eigene Zeichen ``–`` (`FigurenNeu.ZEICHEN`). `emoji.js` ersetzt sie überall durch die Zeichnung, auch bei „Geräte-Emojis“.
+  Rund 45 Stellen umgestellt: Vorschul-Rucksack, Fach-Knöpfe, Tagesaufgaben, Lernfunde (alte Spielstände werden beim Lesen umgestellt), Sticker, Schach/Tilda, Gefühle/Schildkröte, Bäckerei-Kunden,
+  Garten, Tierstation, Lesetexte „Fipsi“ und „Benno baut“, Englisch-Rolle Paula. Echte Tiere in Lerninhalten bleiben Emojis. Test `bilder` prüft zehn Seiten.
+- **Erledigt – niedlichere Figuren:**
+  - 2D-Begleiter: Kulleraugen mit zwei Glanzpunkten, kleiner Mund, dezente Wangen; Paulas Schnabel kleiner, Tildas Kopf größer, Robo mit Leucht-Wangen.
+  - Spielfigur 2D: Kindchenschema (Kopf 1,3-fach, Körper kürzer). Die Teile-IDs bleiben, darum passen gespeicherte Looks weiter. Neue Ausschnitte `Figur.KOPF`/`Figur.BUESTE`.
+  - Tiere 2D: größerer Kopf, größere Augen, dezente Wangen.
+  - 3D (Insel): gemeinsame `augen()` mit größeren Augen, zwei Glanzpunkten und Wangen auf der Kopfoberfläche; Köpfe größer.
+    Robo neu mit Bildschirm-Gesicht, Paula in ihren 2D-Farben, Tilda mit größerem Kopf und Stirnband. Brunis Augen steckten im Kopf (behoben).
+  - Test-Haken `__heimat.figuren()`.
+- **Entscheidungen:** Begleiter-Zeichen statt Bilder je Seite; Wangen dezent (Deckkraft ca. 0,4); Noto-Wangen bleiben weg; Stil A auf allen Seiten auf die nächste Sitzung verschoben.
+- **Offen:**
+  - Stil A auf allen Seiten (Kopfzeile, Karten-Radius 26 px, Kontur bei Sprechblasen).
+  - iPad-Test der neuen Figuren und Bilder, besonders Leistung auf Seiten mit vielen Bildern.
+  - Spielfigur in 3D könnte noch eigene Proportionen bekommen (kürzere Beine).

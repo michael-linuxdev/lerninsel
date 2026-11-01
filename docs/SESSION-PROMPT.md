@@ -16,46 +16,23 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 **Ablauf:** Einrichten und `sh tests/laufen.sh` (muss grün sein) → **Fragerunde** (höchstens 4 Fragen; iPad-Rückmeldung zuerst, gemeldete Fehler
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
-## 0. Auftrag für diese Sitzung: Emojis aus Noto in Stil A, dann Gestaltung Stil A überall
-Der Auftraggeber hat am 01.11.2026 entschieden (Fragerunde ist damit erledigt, nur bei Unklarem nachfragen):
-- **Gestaltung: Stil A „Insel bunt“**: kräftige Farben, dunkle Kontur `#3B1F63`, Knöpfe mit festem Schatten. Vorschau unter `spiele/stil/` (Variante A).
-- **Figuren** (`shared/figuren.js`, schon in der App, auch Ella in 3D):
-  - Ella ist braun und so niedlich wie die anderen, hat keine Federohren (nur eine Feder-Locke) und keine Brille.
-  - **Keine rosa Wangen** – nirgends im Spiel, auch nicht bei neuen Bildern.
-- **Emojis: alle 784 Emojis der App aus Noto (Google, Apache 2.0) in Stil A umsetzen.**
-  - Der Weg ist freigegeben („Gut so, für alle“): dünne Lerninsel-Kontur außen herum, Verläufe als zwei harte Farbstufen wie die Toon-Grafik der Insel.
-  - Das Werkzeug ist fertig: `quellen/noto-stil-a.py` (Regeln im Kopf der Datei).
-  - Die 114 selbst gezeichneten Bilder (`quellen/icons/paket1.js` u. a.) werden dadurch ersetzt. Selbst zeichnen ist verworfen: zu einfach bzw. zu aufwendig.
+## 0. Auftrag für die nächste Sitzung: Gestaltung Stil A auf allen Seiten, dann iPad-Rückmeldung
+Erledigt am 01.11.2026 (Details in `docs/PLAN.md`, „Stand 01.11.2026, Sitzung Noto-Emojis und niedlichere Figuren“):
+- **Alle Emojis als Noto-Bilder in Stil A** (`quellen/noto/`, `quellen/noto-stil-a.py`, `shared/icons.js`), Kontur ohne Filter, Lizenz Apache 2.0.
+- **Kein Begleiter mehr als Emoji**: Begleiter-Zeichen `\uE101`–`\uE107` (`FigurenNeu.ZEICHEN`), überall als Zeichnung.
+- **Begleiter, Spielfigur und Tier niedlicher**, in 2D und auf der Insel in 3D (Kulleraugen, dezente Wangen, große Köpfe).
 
-**Schritte:**
-1. **Quellen holen** (in einen eigenen Ordner im Scratchpad, nicht ins Repo):
-   - `npm pack @svgmoji/noto`, daraus `package/sprites/all.svg`.
-   - Die rund 41 Emojis, die im Sprite fehlen (vor allem neuere wie 🪺 🪪 🐦‍⬛ 🛝 🫘 🪈 🛟 🫏 🪼 🪸 🩵 🪇 🛞 🫙 🫲 🫴), als `svg/emoji_u<hex>.svg` aus `https://raw.githubusercontent.com/googlefonts/noto-emoji/main/svg/` laden.
-   - Reine Textzeichen bleiben System-Zeichen und kommen nicht in die Liste: → ✓ ✗ ← ↑ ↓ ⌫ ⇧ ✕ ↰ ↱ ➜ ✦ ♚ ♛ ♜ ♝ ♞.
-2. **Bauen:** `python3 -I quellen/noto-stil-a.py <all.svg> quellen/icons/liste.json shared/icons.js <ordner-einzeln>`.
-   - Danach in `quellen/dev-bauen.sh` den Aufruf `node quellen/icons-bauen.js` durch diesen Schritt ersetzen oder das Bauskript so umstellen, dass es nicht mehr überschreibt.
-   - Die Noto-Quelldateien müssen dafür reproduzierbar im Repo liegen. Vorschlag: die gekürzten Original-SVGs der 784 Emojis in `quellen/noto/`; das Bauskript liest dann daraus.
-3. **Prüfen:**
-   - Prüfbogen aller Bilder in 64 und 24 px als PNG (Playwright) ansehen. Missratene Umsetzungen einzeln nachbessern (Ausnahme-Liste im Skript), z. B. bei sehr hellen Emojis mit fast nur Weiß.
-   - Größe von `shared/icons.js` messen (Ziel: unter ~2 MB). Sonst Noto-SVGs verkleinern (Zahlen runden, Leerzeichen raus) oder pro Seite nur die benutzten laden.
-   - **Leistung auf dem iPad:** Jedes Bild hat einen SVG-Filter (Kontur). Seiten mit sehr vielen Emojis (Sachunterricht-Listen, Werkstatt) gegen das Leistungsbudget testen.
-     Wenn es zu langsam ist: die Kontur beim Bauen als zweite, mit `stroke` versehene Kopie der Formen vorberechnen statt als Filter.
-4. **Einbauen** – das ist schon vorhanden: `shared/emoji.js` ersetzt jedes bekannte Emoji beim Anzeigen, `textContent` bleibt gleich; Eltern-Schalter „Emojis des Geräts“ (`eltern.bilder = "geraet"`).
-   Danach testen: `bilder`, Rauchtest, große Lerntests (`sachkundevoll`, `deutschvoll`, `englisch`, `tafel`, `vorschule`, `faechervoll`).
-5. **Lizenz:**
-   - `quellen/noto/LICENSE` (Apache 2.0) ins Repo legen, mit dem Hinweis „verändert: Stil A der Lerninsel (Farbstufen, Kontur)“.
-   - In `docs/LIZENZEN.md` eintragen und in `CLAUDE.md` die Regel „fremde Dateien nur CC0/OFL“ um „Noto-Emoji-Bilder (Apache 2.0)“ ergänzen.
-   - Die Emoji-Proben in `spiele/stil/emoji/` (Noto, Fluent) dürfen danach gelöscht werden.
-6. **Gestaltung Stil A auf allen Seiten:**
-   - `shared/style.css` und die Seiten mit eigenen Stilen angleichen: Kontur und Knopf-Schatten wie auf der Startseite, gleiche Kopfzeile mit rundem Heim-Knopf, Karten-Radius 26 px.
-   - Screenshots aller Seiten quer und hoch ansehen.
-   - Canvas- und 3D-Stellen mit Emojis prüfen: Schilder auf der Insel (`schildSprite`), Stempel im Atelier. Dort die Noto-Bilder über `Image()` aus `LERN_ICONS` zeichnen.
+**Nächste Schritte:**
+1. **Gestaltung Stil A auf allen Seiten** (Wahl des Auftraggebers): `shared/style.css` und die Seiten mit eigenen Stilen angleichen.
+   - Gleiche Kopfzeile `.oben` mit rundem Heim-Knopf (`.knopf.rund`), Karten-Radius 26 px, Knopf-Schatten wie auf der Startseite, dunkle Kontur `#3B1F63` an Sprechblasen.
+   - Achtung: `.szene` bekommt zeitweise die Klasse `oben` – Regeln für die Kopfzeile mit `:not(.szene)` schreiben.
+   - Danach Screenshots aller Seiten quer und hoch ansehen, dazu Handy-Breite 390 px (kein waagrechtes Überlaufen).
+2. **iPad-Rückmeldung** zu Figuren, Bildern und Leistung einarbeiten – Fehler zuerst, je mit Test.
 
-**Hinweis zum Repo-Stand:**
-- Uncommittet sind evtl. noch die Bild-Vorgaben „einfach, aber sauber“ (Kontur 2,5 px in `quellen/icons-bauen.js`, `quellen/icons/STIL.md`). Sie sind durch die Noto-Entscheidung hinfällig: zurücksetzen oder mitcommitten.
-- `quellen/noto-stil-a.py` ist neu.
+## 1. Stand (01.11.2026, nachts)
+**Neu am 01.11.2026, letzte Sitzung:** Noto-Emojis in Stil A für alle 773 Emojis. Begleiter erscheinen nie mehr als Emoji. Begleiter, Spielfigur und Tier sind niedlicher, in 2D und 3D.
+Wangen sind erlaubt, aber dezent. Mehrere Tests zählten `span`s und wurden angepasst; Medien und Chronik passen wieder aufs Handy.
 
-## 1. Stand (01.11.2026, abends)
 **Neu am 01.11.2026 (Performance Insel):** Blumen auf der Insel und in großen Welten sind jetzt `InstancedMesh` (Stiel + Blüte je Farbe) statt vieler einzelner Meshes, die danach verschmolzen wurden. Weniger Objekte, etwas weniger Speicher und Zeichenaufrufe, besonders bei vielen Blumen. Kein visueller Unterschied (Kontur an den kleinen Blüten bewusst weggelassen).
 
 **Neu am 01.11.2026, zweiter Teil: alle geplanten Pakete umgesetzt** (Details in `docs/PLAN.md`, „Stand 01.11.2026, abends“):
@@ -153,7 +130,10 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 
 ### Offene Fragen an den Auftraggeber
 - **iPad-10-Test (in /dev), bisher nicht erfolgt.** Bitte ansehen:
-  0. Neu 01.11.:
+  0. Neu 01.11., letzte Sitzung: Emoji-Bilder (Noto) auf allen Seiten, Begleiter überall als Zeichnung (z. B. Vorschul-Rucksack), niedlichere Figuren auf der Startseite,
+     im Kleiderschrank, beim Tier und auf der Insel (Nachbarn, Paula auf der Bühne, Tilda am Schachtisch). Gefallen die Wangen so (dezent)? Sollen die Noto-Smileys ihre Wangen zurückbekommen?
+     Läuft die Sachunterricht-Liste mit vielen Bildern flüssig?
+  0b. Neu 01.11.:
      - Elternbereich nach 15 Minuten wieder mit PIN; „PIN vergessen?“ (Zufallsaufgabe nach einer Minute); Schrift sieht aus wie vorher.
      - Insel: Garten, Tierpflege-Station und Bäckerei an den alten Spielorten.
        In /dev/test sind alle offen; in /dev öffnen sie mit Kapitel 1, 2 und 3.
@@ -175,11 +155,10 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - Muttersprachlerinnen und Muttersprachler für ru/uk; Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (in dieser Reihenfolge)
-1. **Emojis aus Noto in Stil A** (Abschnitt 0, Schritte 1–5).
-2. **Gestaltung Stil A auf allen Seiten** (Abschnitt 0, Schritt 6).
-3. **iPad-Rückmeldung** zu Garten, Bäckerei, Tierstation, neuen Figuren, Leistung der Insel (adaptive Auflösung) einarbeiten – Fehler zuerst, je mit Test.
-4. **Wörter-Angeln** (Schatz-Strand, Kapitel 2) und **Rhythmus-Boot** (Ballon-Wiese, Kapitel 4).
-5. Elternbereich schneller (Fachdaten erst beim Reiter „Lernstand“ laden).
+1. **Gestaltung Stil A auf allen Seiten** (Abschnitt 0).
+2. **iPad-Rückmeldung** zu Figuren (2D und Insel), Noto-Bildern, Garten, Bäckerei, Tierstation und Leistung einarbeiten – Fehler zuerst, je mit Test.
+3. **Wörter-Angeln** (Schatz-Strand, Kapitel 2) und **Rhythmus-Boot** (Ballon-Wiese, Kapitel 4).
+4. Elternbereich schneller (Fachdaten erst beim Reiter „Lernstand“ laden).
 
 Jederzeit dazwischen: iPad-Rückmeldung einarbeiten (Fehler zuerst), Sorbisch-Korrekturen in `spiele/sorbisch/lektionen.js` und `geprueft.js`,
 den öffentlichen QR-Schlüssel in `OEFFENTLICH` eintragen, sobald er da ist. Arbeitsliste für den Lehrplan bleibt `docs/SACHSEN-SCHULJAHR.md`.

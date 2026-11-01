@@ -29,24 +29,29 @@
     const gesicht = finde(P.gesichter, o.figur.id) || P.gesichter[0];
     const ex = (ebene) => P.extras.filter(e => e.ebene === ebene && o.extras[e.id]).map(e => e.teil(o.extras[e.id].farbe)).join("");
 
-    let s = ex("ruecken");
-    if (haar) s += haar.hinten(o.haare.farbe);
+    // Kindchenschema (01.11.2026): Kopf 1,3-fach, Körper 0,9 × 0,66 um den Hals; danach alles nach unten, damit die Füße auf dem Boden bleiben
+    // Körper breiter und kürzer (Kinderproportionen), am Ende alles 1,12-fach um die Füße (y 557), damit die Figur im Bild groß genug bleibt
+    const GANZ = "translate(150 557) scale(1.12) translate(-150 -557) translate(0 132)";
+    const HALS = "150 170", KOPF = `${GANZ} translate(${HALS}) scale(1.3) translate(-150 -170)`, KOERPER = `${GANZ} translate(${HALS}) scale(.9 .66) translate(-150 -170)`;
+    let k = "";   // Körper und Kleidung
+    k += ex("ruecken");
     const ohneBeine = !!(kleid && kleid.ohneBeine);
-    s += P.koerper.hinten(haut, ohneBeine);
-    if (!ober && !kleid) s += P.koerper.unterhemd();
-    if (!unter && !kleid) s += P.koerper.unterhose();
+    k += P.koerper.hinten(haut, ohneBeine);
+    if (!ober && !kleid) k += P.koerper.unterhemd();
+    if (!unter && !kleid) k += P.koerper.unterhose();
     // Bei Kleidern liegen die Schuhe unter dem Rock, bei Hosen darüber (Stiefel über der Hose)
-    if (kleid) { if (schuh && !ohneBeine) s += schuh.teil(o.schuhe.farbe); s += kleid.rock(o.kleid.farbe); }
-    else { if (unter) s += unter.teil(o.unterteil.farbe); if (schuh) s += schuh.teil(o.schuhe.farbe); }
-    if (kleid) s += kleid.rumpf(o.kleid.farbe);
-    else if (ober) s += ober.rumpf(o.oberteil.farbe);
-    s += P.koerper.arme(haut);
-    if (kleid) s += kleid.aermel(o.kleid.farbe);
-    else if (ober) s += ober.aermel(o.oberteil.farbe);
-    s += ex("hand") + ex("hals");
-    s += P.koerper.kopf(haut) + gesicht.teil();
-    if (haar) s += haar.vorne(o.haare.farbe);
-    s += ex("kopf");
+    if (kleid) { if (schuh && !ohneBeine) k += schuh.teil(o.schuhe.farbe); k += kleid.rock(o.kleid.farbe); }
+    else { if (unter) k += unter.teil(o.unterteil.farbe); if (schuh) k += schuh.teil(o.schuhe.farbe); }
+    if (kleid) k += kleid.rumpf(o.kleid.farbe);
+    else if (ober) k += ober.rumpf(o.oberteil.farbe);
+    k += P.koerper.arme(haut);
+    if (kleid) k += kleid.aermel(o.kleid.farbe);
+    else if (ober) k += ober.aermel(o.oberteil.farbe);
+    k += ex("hand") + ex("hals");
+    let kopf = P.koerper.kopf(haut) + gesicht.teil();
+    if (haar) kopf += haar.vorne(o.haare.farbe);
+    kopf += ex("kopf");
+    let s = (haar ? `<g transform="${KOPF}">${haar.hinten(o.haare.farbe)}</g>` : "") + `<g transform="${KOERPER}">${k}</g><g transform="${KOPF}">${kopf}</g>`;
     return s;
   }
   function zeichneBild(o) {
@@ -55,6 +60,8 @@
   }
 
   // Nur die Figur ohne Hintergrund, z. B. für kleine Porträts
-  function zeichnePortraet(o) { return `<svg viewBox="40 0 220 330" aria-hidden="true">${zeichneFigur(o)}</svg>`; }
-  window.Figur = { STANDARD, zeichneFigur, zeichneBild, zeichnePortraet };
+  function zeichnePortraet(o) { return `<svg viewBox="25 95 250 345" aria-hidden="true">${zeichneFigur(o)}</svg>`; }
+  // Ausschnitte für das Kindchenschema (01.11.2026): KOPF = Kopf und Schultern (quadratisch), BUESTE = bis zum Bauch
+  const KOPF = "48 92 204 204", BUESTE = "40 88 220 260";
+  window.Figur = { STANDARD, zeichneFigur, zeichneBild, zeichnePortraet, KOPF, BUESTE };
 })();

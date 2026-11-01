@@ -6,18 +6,18 @@
 (function () {
   const T = [
     // ---------- Klasse 1: zwei bis drei kurze Sätze ----------
-    { id: "lt.01", stufe: "1", titel: "Fipsi", bild: "🦊", lz: ["de.le.04"],
+    { id: "lt.01", stufe: "1", titel: "Fipsi", bild: "\uE103", lz: ["de.le.04"],
       text: "Fip-si ist ein Fuchs. Fip-si ist rot. Er hat ei-nen lan-gen Schwanz.",
-      fragen: [{ frage: "Wer ist Fipsi?", optionen: [{ t: "ein Fuchs", e: "🦊" }, { t: "ein Hund", e: "🐶" }, { t: "ein Bär", e: "🐻" }] },
+      fragen: [{ frage: "Wer ist Fipsi?", optionen: [{ t: "ein Fuchs", e: "\uE103" }, { t: "ein Hund", e: "🐶" }, { t: "ein Bär", e: "🐻" }] },
         { frage: "Welche Farbe hat Fipsi?", optionen: [{ t: "rot", e: "🔴" }, { t: "blau", e: "🔵" }, { t: "grün", e: "🟢" }] }] },
     { id: "lt.02", stufe: "1", titel: "Im Park", bild: "⚽", lz: ["de.le.04", "su.na.04"],
       text: "Die Son-ne scheint. Mi-a geht in den Park. Sie hat ei-nen Ball.",
       fragen: [{ frage: "Was hat Mia?", optionen: [{ t: "einen Ball", e: "⚽" }, { t: "ein Buch", e: "📖" }, { t: "einen Hut", e: "🎩" }] },
         { frage: "Wie ist das Wetter?", optionen: [{ t: "Die Sonne scheint.", e: "☀️" }, { t: "Es regnet.", e: "🌧️" }, { t: "Es schneit.", e: "❄️" }] }] },
-    { id: "lt.03", stufe: "1", titel: "Benno baut", bild: "🦫", lz: ["de.le.04", "su.te.02"],
+    { id: "lt.03", stufe: "1", titel: "Benno baut", bild: "\uE104", lz: ["de.le.04", "su.te.02"],
       text: "Ben-no ist ein Bi-ber. Er baut ei-nen Damm. Er zählt die Stäm-me.",
       fragen: [{ frage: "Was baut Benno?", optionen: [{ t: "einen Damm", e: "🪵" }, { t: "ein Haus", e: "🏠" }, { t: "ein Auto", e: "🚗" }] },
-        { frage: "Wer ist Benno?", optionen: [{ t: "ein Biber", e: "🦫" }, { t: "ein Fuchs", e: "🦊" }, { t: "eine Eule", e: "🦉" }] }] },
+        { frage: "Wer ist Benno?", optionen: [{ t: "ein Biber", e: "\uE104" }, { t: "ein Fuchs", e: "🦊" }, { t: "eine Eule", e: "🦉" }] }] },
     { id: "lt.04", stufe: "1", titel: "Regen", bild: "☂️", lz: ["de.le.04", "su.na.04"],
       text: "Es reg-net. Le-a nimmt den Schirm. Sie springt in die Pfüt-ze.",
       fragen: [{ frage: "Was nimmt Lea?", optionen: [{ t: "den Schirm", e: "☂️" }, { t: "den Ball", e: "⚽" }, { t: "ein Eis", e: "🍦" }] },

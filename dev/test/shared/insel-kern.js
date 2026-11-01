@@ -574,7 +574,7 @@
     switch (id) {
       case "ballons": if (bald(id)) return baldBlase("🎈", "Ballon-Wiese"); return spielort(() => profi() ? blase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", "Лопни как можно больше шариков!", "../welt3d/ballons.html") : fuehrerschein());
       case "truhe": if (bald(id)) return baldBlase("🏝️", "Schatz-Strand"); return spielort(() => profi() ? blase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "../welt3d/insel.html") : fuehrerschein());
-      case "schach": return blase("🐢", "Tilda am Schachtisch", `Hallo ${name()}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?", "../schach/");
+      case "schach": return blase("tilda", "Tilda am Schachtisch", `Hallo ${name()}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?", "../schach/");
       case "buehne": return paulaAntwort();
       case "garten": return gartenAntwort();
       case "baeckerei": if (!NEU_FERTIG.baeckerei) return baldBlase("🥨", "Bäckerei Benno"); return baeckereiAntwort();

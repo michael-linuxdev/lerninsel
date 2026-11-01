@@ -76,12 +76,12 @@
   function schildkroete() {
     stoppe(); let runde = 0; const t = $("schild-text"), k = $("schild");
     const los = () => {
-      if (runde >= 3) { t.textContent = "Toll! Die Schildkröte ist ganz ruhig geworden – und du?"; k.textContent = "🐢"; fertigUebung("schildkroete"); return; }
+      if (runde >= 3) { t.textContent = "Toll! Die Schildkröte ist ganz ruhig geworden – und du?"; k.textContent = "\uE107"; fertigUebung("schildkroete"); return; }
       let n = 5; k.textContent = "🥚"; k.classList.add("klein"); t.textContent = "Zieh dich zusammen wie eine Schildkröte in ihrem Panzer … zähl langsam mit: 5"; sprich("Zieh dich zusammen wie eine Schildkröte");
-      const iv = setInterval(() => { n--; if (n > 0) t.textContent = `… ${n}`; else { clearInterval(iv); k.textContent = "🐢"; k.classList.remove("klein"); t.textContent = "Und jetzt langsam wieder herauskommen und strecken!"; runde++; laeufer.push(setTimeout(los, 3500)); } }, 1200);
+      const iv = setInterval(() => { n--; if (n > 0) t.textContent = `… ${n}`; else { clearInterval(iv); k.textContent = "\uE107"; k.classList.remove("klein"); t.textContent = "Und jetzt langsam wieder herauskommen und strecken!"; runde++; laeufer.push(setTimeout(los, 3500)); } }, 1200);
       laeufer.push(iv);
     };
-    k.textContent = "🐢"; t.textContent = "Die Schildkröte hilft dir, wenn alles zu viel ist."; laeufer.push(setTimeout(los, 1500));
+    k.textContent = "\uE107"; t.textContent = "Die Schildkröte hilft dir, wenn alles zu viel ist."; laeufer.push(setTimeout(los, 1500));
   }
   // ---------- Wut-Ballon ----------
   let wutGroesse = 0.4, pustet = false, platzt = 0;

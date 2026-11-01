@@ -142,7 +142,7 @@
     overlay(`<div style="font-size:4rem">${vorbei ? "⏰" : "🌱"}</div><h2 style="margin:6px 0">${vorbei ? "Spielzeit vorbei!" : "Erst lernen, dann spielen"}</h2>${vorbei ? idee() : ""}
       <p style="font-size:1.2rem;line-height:1.4">Noch ${st.fehltMin} Minuten lernen oder ${st.fehltAufgaben} Aufgaben richtig lösen, dann darfst du ${st.regeln.spielMin} Minuten spielen.</p>
       ${leiste(st)}
-      <div>${(S.stufe && (S.stufe() || {}).code === "vs") ? knopf("spiele/vorschule/", "🎒 Vorschul-Rucksack", true) : ""}${knopf("spiele/mathe/", "🧮 Mathe", true)}${knopf("spiele/deutsch/", "🦊 Deutsch", true)}${knopf("spiele/sachkunde/", "🦉 Sachunterricht", true)}${knopf("spiele/englisch/", "🦜 Englisch", true)}${(((S.lade("eltern") || {}).sorbisch || {}).an) ? knopf("spiele/sorbisch/", "🪺 Sorbisch", true) : ""}${knopf("spiele/medien/", "🤖 Tablet", true)}</div>
+      <div>${(S.stufe && (S.stufe() || {}).code === "vs") ? knopf("spiele/vorschule/", "🎒 Vorschul-Rucksack", true) : ""}${knopf("spiele/mathe/", "🧮 Mathe", true)}${knopf("spiele/deutsch/", "\uE103 Deutsch", true)}${knopf("spiele/sachkunde/", "\uE102 Sachunterricht", true)}${knopf("spiele/englisch/", "\uE106 Englisch", true)}${(((S.lade("eltern") || {}).sorbisch || {}).an) ? knopf("spiele/sorbisch/", "🪺 Sorbisch", true) : ""}${knopf("spiele/medien/", "\uE101 Tablet", true)}</div>
       ${knopf("", "🏠 Zur Startseite", false)}`);
   }
   function entferneOverlay() { const o = document.getElementById("zeit-overlay"); if (o) o.remove(); }
@@ -196,11 +196,11 @@
       const r = regeln();
       d.seitPause = (d.seitPause || 0) + TICK; d.seitWasser = (d.seitWasser || 0) + TICK;
       if (r.fokus && d.seitPause >= 300) { d.seitPause = 0; speichere(d); bewegungspause(); return; }
-      if (d.seitWasser >= 1200 && C()) { d.seitWasser = 0; speichere(d); C().hinweis("🦉 Ella sagt:", "Trink einen Schluck Wasser! Das hilft beim Denken.", "#1F8F8A"); }
+      if (d.seitWasser >= 1200 && C()) { d.seitWasser = 0; speichere(d); C().hinweis("\uE102 Ella sagt:", "Trink einen Schluck Wasser! Das hilft beim Denken.", "#1F8F8A"); }
     };
     window.__zeitSpiel = (d) => {
       d.seitAugen = (d.seitAugen || 0) + TICK;
-      if (d.seitAugen >= 900 && C()) { d.seitAugen = 0; speichere(d); C().hinweis("🤖 Pixel sagt:", "Augenpause! Schau 20 Sekunden aus dem Fenster in die Ferne.", "#2F86C8"); }
+      if (d.seitAugen >= 900 && C()) { d.seitAugen = 0; speichere(d); C().hinweis("\uE101 Pixel sagt:", "Augenpause! Schau 20 Sekunden aus dem Fenster in die Ferne.", "#2F86C8"); }
     };
   }
   // Ruhige Darstellung: keine Animationen und Übergänge
