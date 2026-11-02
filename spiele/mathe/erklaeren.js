@@ -6,7 +6,7 @@
 //   { typ: "gegenbeispiel", text, stimmt: false, fv, warum } Robo rechnet falsch; fv = Fehler aus fehler.js
 //   { typ: "geschichte", text, bilder: [{ satz, bild }] }    C „Bildergeschichte“ zum Merken: drei Bilder, je ein Satz; text = Merksatz
 // bild ist eine Funktion → SVG (Bausteine in BILD, auch für die Fehler-Hinweise: bildFuer(fv, o)).
-// Einheiten: k1plus10, plusUeber, minusUeber, mal1, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
+// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
 // Abschluss wird in mathe.erklaert[station] = 1 gemerkt; das Angebot kommt nur, wenn die Station noch nie gerechnet wurde.
 (function (W) {
   const M = "−", D = "#3B1F63", ROT = "#FF6F61", BLAU = "#4FA8F0", STANGE = "#FFB547";
@@ -100,6 +100,8 @@
       if (fv === "zaehlen" && o.b <= 6) return strahl(o.a, o.b, o.op === M ? "-" : "+");
       if (fv === "stellenwert" && o.a < 100) return feld({ z: Z(o.a), rot: E(o.a), warten: Math.min(9, o.b) });
       if (fv === "malreihe" && o.a <= 10 && o.b <= 10) return reihen(o.a, o.b);
+      if ((fv === "geteiltminus" || fv === "geteiltreihe") && o.op === ":" && o.b <= 10 && o.a / o.b <= 10) return reihen(o.b, o.a / o.b);
+      if (fv === "malnull") return reihen(Math.max(1, Math.min(10, o.a || o.b)), 0, 2);
     } catch (e) { /* ohne Bild */ }
     return "";
   }
@@ -161,6 +163,21 @@
         { satz: "So oft, wie die Zahl sagt.", bild: () => reihen(5, 3, 3) },
         { satz: "Zähl in Schritten: 5, 10, 15.", bild: () => reihen(5, 3, 3) }] }
     ],
+    // Geteilt (04.11.2026): Wie oft passt die Zahl hinein? Reihen legen, bis alle Punkte da sind
+    geteilt: [
+      { typ: "zeigen", text: "12 : 3", bilder: [
+        { satz: "12 : 3 heißt: Wie oft passt die 3 in die 12?", bild: () => reihen(3, 0, 4) },
+        { satz: "Eine Reihe mit 3. Das sind 3.", bild: () => reihen(3, 1, 4) },
+        { satz: "Noch zwei Reihen: 6, 9.", bild: () => reihen(3, 3, 4) },
+        { satz: "Vier Reihen: 12. Also 12 : 3 = 4.", bild: () => reihen(3, 4, 4) }] },
+      { typ: "machen", text: "Jetzt du: Tipp auf ➕, bis 12 Punkte da sind.", art: "gruppen", a: 4, b: 3, geteilt: true },
+      { typ: "ergaenzen", text: "Jetzt rechnest du: Wie oft passt die 5 in die 20?", frage: "20 : 5 = ?", antwort: "4", optionen: ["4", "5", "15"] },
+      { typ: "gegenbeispiel", text: "Robo rechnet: 15 : 3 = 12. Stimmt das?", stimmt: false, fv: "geteiltminus", warum: "Robo hat minus gerechnet. Wie oft passt die 3 in die 15? 3, 6, 9, 12, 15. Fünfmal. Also 5." },
+      { typ: "geschichte", text: "Geteilt heißt: Wie oft passt die Zahl hinein?", bilder: [
+        { satz: "Erst die große Zahl anschauen.", bild: () => reihen(3, 0, 4) },
+        { satz: "Reihen legen, immer gleich viele.", bild: () => reihen(3, 2, 4) },
+        { satz: "Die Reihen zählen: 4.", bild: () => reihen(3, 4, 4) }] }
+    ],
     k3schriftplus: [
       { typ: "zeigen", text: "347 + 285 schriftlich", bilder: [
         { satz: "Schreib die Zahlen genau untereinander.", bild: () => schrift(347, 285, "+", 0) },
@@ -206,6 +223,7 @@
       ]
     }
   };
+  ERKLAERUNGEN.mal2 = ERKLAERUNGEN.mal1; ERKLAERUNGEN.mal3 = ERKLAERUNGEN.mal1;   // gleiche Idee „die gleiche Zahl mehrmals“
   const verfahren = () => { try { return ((W.Spielwelt && W.Spielwelt.lade("eltern")) || {}).mathe?.minus === "ergaenzen" ? "ergaenzen" : "abziehen"; } catch (e) { return "abziehen"; } };
   function fuer(station) { const e = ERKLAERUNGEN[station]; if (!e) return null; return Array.isArray(e) ? e : e[verfahren()] || e.abziehen; }
   W.MatheErklaeren = { ERKLAERUNGEN, fuer, hat: (s) => !!ERKLAERUNGEN[s], BILD, bildFuer };

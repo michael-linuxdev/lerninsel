@@ -290,8 +290,10 @@
         const bild = () => st.art === "gruppen" ? B.reihen(st.b, zeilen, st.a) + `<button class="knopf haupt plus-reihe" id="plus-reihe" ${zeilen >= st.a ? "disabled" : ""} aria-label="Noch eine Reihe">➕ ${st.b}</button>`
           : B.feld({ z, rot, blau, leer, warten: st.art === "dazu" ? rest : 0, tipp: !warte, nimm: st.art === "weg" && !warte && rest > 0 });
         const ende = () => {
-          $("eingabe").innerHTML = ""; satzNach(`Geschafft! ${st.a} ${zeichen} ${st.b} = ${fertigZahl}.`);
-          $("machen-ergebnis").textContent = `${st.a} ${zeichen} ${st.b} = ${fertigZahl}`; $("machen-ergebnis").hidden = false;
+          // geteilt (04.11.2026): Reihen legen, Ergebnis als Geteilt-Aufgabe „12 : 3 = 4“
+          const rechnung = st.geteilt ? `${fertigZahl} : ${st.b} = ${st.a}` : `${st.a} ${zeichen} ${st.b} = ${fertigZahl}`;
+          $("eingabe").innerHTML = ""; satzNach(st.geteilt ? `Geschafft! ${st.a} Reihen. ${rechnung}.` : `Geschafft! ${rechnung}.`);
+          $("machen-ergebnis").textContent = rechnung; $("machen-ergebnis").hidden = false;
           knopfWeiter("Weiter ➜", weiter);
         };
         const male = () => { $("machen-bild").innerHTML = bild(); const pr = $("plus-reihe"); if (pr) pr.addEventListener("click", tippReihe); };

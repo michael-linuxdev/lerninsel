@@ -40,7 +40,7 @@
   // ---------- Katalog ----------
   const KATALOG = [
     { id: "op", name: "Rechenzeichen verwechselt",
-      erkenne: (o, w) => (o.op === "+" && o.a > o.b && w === o.a - o.b) || (o.op === M && w === o.a + o.b) || (o.op === "·" && w === o.a + o.b && o.a * o.b !== o.a + o.b) || (o.op === ":" && w === o.a * o.b),
+      erkenne: (o, w) => (o.op === "+" && o.a > o.b && w === o.a - o.b) || (o.op === M && w === o.a + o.b) || (o.op === "·" && o.a && o.b && w === o.a + o.b && o.a * o.b !== o.a + o.b) || (o.op === ":" && w === o.a * o.b),
       kurz: (o) => `Schau aufs Zeichen: Da steht ${o.op === "·" ? "mal" : o.op === ":" ? "geteilt" : o.op === "+" ? "plus" : "minus"}.`,
       lang: (o) => [`Da steht ${({ "+": "plus", [M]: "minus", "·": "mal", ":": "geteilt" })[o.op]}, nicht ${({ "+": "minus", [M]: "plus", "·": "plus", ":": "mal" })[o.op]}.`,
         `${o.a} ${o.op} ${o.b} heißt: ${({ "+": "dazutun", [M]: "wegnehmen", "·": `${o.b}-mal die ${o.a}`, ":": `${o.a} in ${o.b} gleiche Teile` })[o.op]}.`,
@@ -89,12 +89,34 @@
         `Darum: ${o.a} ${o.op} ${o.b} = ${o.c}.`],
       kontrast: (o, zz) => { const op = zz() < 0.6 ? "+" : M, b = r(zz, 2, 5), a = r(zz, 4, 14) + (op === M ? b : 0); return zr(op, a, b, `Zähle ${b} Schritte – der erste Schritt geht schon weg von der Startzahl.`); } },
     { id: "malreihe", name: "Eine Reihe daneben",
-      erkenne: (o, w) => o.op === "·" && w > 0 && w !== o.c && (w === o.c + o.a || w === o.c - o.a || w === o.c + o.b || w === o.c - o.b),
+      erkenne: (o, w) => o.op === "·" && o.a && o.b && w > 0 && w !== o.c && (w === o.c + o.a || w === o.c - o.a || w === o.c + o.b || w === o.c - o.b),
       kurz: (o) => `Fast! Ein Schritt zu viel oder zu wenig. Zähl nach: ${o.b}-mal die ${o.a}.`,
       lang: (o) => [`Du bist einen Schritt verrutscht.`,
         `${o.a} · ${o.b} heißt: ${o.b}-mal die ${o.a}.`,
         `Zähl in ${o.a}er-Schritten. Dann: ${o.a} · ${o.b} = ${o.c}.`],
-      kontrast: (o, zz) => { const a = o.a > 1 && o.a <= 10 ? o.a : r(zz, 3, 9), b = r(zz, 3, 9); return zr("·", a, b, `${b}-mal die ${a}: Zähle die Schritte genau.`); } }
+      kontrast: (o, zz) => { const a = o.a > 1 && o.a <= 10 ? o.a : r(zz, 3, 9), b = r(zz, 3, 9); return zr("·", a, b, `${b}-mal die ${a}: Zähle die Schritte genau.`); } },
+    // (04.11.2026) Einmaleins und Geteilt: mal 0, geteilt mit minus verwechselt, eine Gruppe daneben
+    { id: "malnull", name: "Mal 0 nicht als „keinmal“ verstanden",
+      erkenne: (o, w) => o.op === "·" && (o.a === 0 || o.b === 0) && w !== 0 && (w === o.a + o.b || w === 1),
+      kurz: () => "Mal 0 heißt: keinmal. Da ist nichts. Also 0.",
+      lang: (o) => { const n = o.a || o.b; return [`${o.a} · ${o.b} heißt: ${o.a}-mal die ${o.b}.`,
+        o.a === 0 ? `Keinmal die ${o.b}: Da liegt nichts.` : `${o.a}-mal nichts: Da liegt auch nichts.`,
+        `Darum: ${o.a} · ${o.b} = 0. Mit ${n} oder jeder anderen Zahl.`]; },
+      kontrast: (o, zz) => { const n = r(zz, 2, 9); return zz() < 0.5 ? zr("·", n, 0, `${n}-mal nichts ist nichts.`) : zr("·", 0, n, `Keinmal die ${n}: nichts.`); } },
+    { id: "geteiltminus", name: "Geteilt mit Minus verwechselt",
+      erkenne: (o, w) => o.op === ":" && w === o.a - o.b && w !== o.c,
+      kurz: () => "Da steht geteilt, nicht minus. Wie oft passt die Zahl hinein?",
+      lang: (o) => [`Da steht geteilt, nicht minus.`,
+        `${o.a} : ${o.b} heißt: Wie oft passt die ${o.b} in die ${o.a}?`,
+        `Zähl in ${o.b}er-Schritten bis ${o.a}. Das geht ${o.c}-mal. Also ${o.c}.`],
+      kontrast: (o, zz) => { const b = o.b > 1 && o.b <= 10 ? o.b : r(zz, 2, 5), q = r(zz, 3, 9); return zr(":", b * q, b, `Wie oft passt die ${b} in die ${b * q}? Zähl in ${b}er-Schritten.`); } },
+    { id: "geteiltreihe", name: "Geteilt: eine Gruppe daneben",
+      erkenne: (o, w) => o.op === ":" && w > 0 && (w === o.c + 1 || w === o.c - 1),
+      kurz: (o) => `Fast! Zähl nach: Wie oft passt die ${o.b} in die ${o.a}?`,
+      lang: (o) => [`Du bist eine Gruppe verrutscht.`,
+        `Zähl in ${o.b}er-Schritten: ${Array.from({ length: Math.min(o.c, 10) }, (_, i) => o.b * (i + 1)).join(", ")}.`,
+        `Das sind ${o.c} Schritte. Also ${o.a} : ${o.b} = ${o.c}.`],
+      kontrast: (o, zz) => { const b = o.b > 1 && o.b <= 10 ? o.b : r(zz, 2, 9), q = r(zz, 3, 9); return zr(":", b * q, b, `Zähl in ${b}er-Schritten bis ${b * q}.`); } }
   ];
   const fv = (id) => KATALOG.find(f => f.id === id);
   // Aufgabe in derselben Form wie zahl() in aufgaben.js

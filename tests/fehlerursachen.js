@@ -100,6 +100,27 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await weiter(); await p.click('[data-e="53"]'); await weiter(); await p.click('[data-g="nein"]'); await weiter(); await weiter();
   erwarte(await p.evaluate(() => __mathe.lauf && __mathe.lauf.station.id === "plusUeber" && !!document.getElementById("ausdruck")), "💡-Erklärung durchgeklickt, zurück zur Aufgabe");
 
+  // ---------- Geteilt (04.11.2026): Erklär-Einheit echt durchgeklickt, Denkfehler „minus statt geteilt“ ----------
+  await p.click("#zum-weg"); await p.waitForTimeout(200);
+  await p.evaluate((n) => __mathe.starte(n, true), await nr("geteilt")); await p.waitForTimeout(300);
+  await p.click("#erklaer-ja"); await p.waitForTimeout(200);
+  erwarte(await p.evaluate(() => /Wie oft passt die 3 in die 12/.test(document.getElementById("satz").textContent) && !!document.querySelector(".erklaer-bild svg")), "Geteilt: Benno fragt „Wie oft passt die 3 in die 12?“ mit Bild");
+  for (let k = 0; k < 3; k++) { await p.click("#weiter"); await p.waitForTimeout(150); }
+  await bild(p, "fu-geteilt-zeigen");
+  await weiter();
+  for (let k = 0; k < 4; k++) { await p.click("#plus-reihe"); await p.waitForTimeout(80); }
+  erwarte(await p.evaluate(() => document.getElementById("machen-ergebnis").textContent === "12 : 3 = 4"), "Geteilt selbst machen: viermal ➕ – 12 Punkte in Dreier-Reihen, „12 : 3 = 4“");
+  await weiter(); await p.click('[data-e="4"]'); await p.waitForTimeout(150); await weiter();
+  await p.click('[data-g="nein"]'); await p.waitForTimeout(150);
+  erwarte(await p.evaluate(() => /minus/.test(document.getElementById("warum").textContent) && !!document.querySelector("#warum svg")), "Robo rechnet 15 : 3 = 12: Begründung mit Bild");
+  await bild(p, "fu-geteilt-robo");
+  await weiter(); await weiter();
+  erwarte(await p.evaluate(() => __mathe.lauf && __mathe.lauf.station.id === "geteilt" && (Spielwelt.lade("mathe").erklaert || {}).geteilt === 1), "Geteilt: Erklärung bis zum Ende, Runde startet");
+  await p.evaluate(() => __mathe.setzeAufgabe({ text: "15 : 3", antwort: "5", art: "zahl", hilfe: "Denke an das Einmaleins." }));
+  await tippe(12); await p.waitForTimeout(300);
+  erwarte(await p.evaluate(() => /geteilt, nicht minus/.test(document.getElementById("rueck").textContent)) && await fv("geteiltminus") === "aufgefallen", "15 : 3 = 12: Hinweis „geteilt, nicht minus“, Denkfehler aufgefallen");
+  await p.waitForTimeout(1300);
+
   // ---------- Zeig mir deinen Weg ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k3"; Spielwelt.speichere("mathe", d); });
   await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);

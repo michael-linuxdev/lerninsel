@@ -16,7 +16,8 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
   const fall = [[auf("34 + 28", 62), 52, "uebertrag"], [auf("34 + 28", 62), 72, "uebertragdoppelt"], [auf(`52 ${M} 27`, 25), 35, "kleinvongross"],
     [auf(`61 ${M} 28`, 33), 43, "borgen"], [auf("3 · 4", 12), 7, "op"], [auf(`9 ${M} 3`, 6), 12, "op"], [auf("5 + 3", 8), 7, "zaehlen"],
     [auf(`9 ${M} 3`, 6), 7, "zaehlen"], [auf("34 + 5", 39), 84, "stellenwert"], [auf("7 · 8", 56), 63, "malreihe"], [auf("7 · 8", 56), 48, "malreihe"],
-    [{ text: "", antwort: "632", ops: { a: 347, b: 285, op: "+" } }, 522, "uebertrag"]];
+    [{ text: "", antwort: "632", ops: { a: 347, b: 285, op: "+" } }, 522, "uebertrag"],
+    [auf("6 · 0", 0), 6, "malnull"], [auf("0 · 7", 0), 7, "malnull"], [auf("15 : 3", 5), 12, "geteiltminus"], [auf("24 : 4", 6), 7, "geteiltreihe"], [auf("24 : 4", 6), 5, "geteiltreihe"], [auf("12 : 3", 4), 36, "op"]];
   for (const [a, w, id] of fall) { const e = F.erkenne(a, w); assert.ok(e && e.id === id, `${a.text || a.ops.a + "+" + a.ops.b} → ${w}: erwartet ${id}, bekam ${e && e.id}`); assert.strictEqual(e.lang.length, 3); assert.ok(e.kurz.length > 10); }
   assert.strictEqual(F.erkenne(auf("34 + 28", 62), 62), null, "richtige Antwort ist kein Fehler");
   assert.strictEqual(F.erkenne(auf("34 + 28", 62), 17), null, "unbekannter Fehler bleibt unbekannt");
@@ -25,7 +26,8 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
 
 pruefe("jede Kontrastaufgabe passt zum Denkfehler (1000 Startzahlen je Denkfehler) und ist richtig gerechnet", () => {
   const basis = { op: auf("5 + 3", 8), kleinvongross: auf(`52 ${M} 27`, 25), borgen: auf(`61 ${M} 28`, 33), uebertrag: auf("34 + 28", 62), uebertragdoppelt: auf("34 + 28", 62),
-    stellenwert: auf("34 + 5", 39), zaehlen: auf("5 + 3", 8), malreihe: auf("7 · 8", 56) };
+    stellenwert: auf("34 + 5", 39), zaehlen: auf("5 + 3", 8), malreihe: auf("7 · 8", 56),
+    malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6) };
   for (const f of F.KATALOG) {
     for (let i = 0; i < 1000; i++) {
       const [k] = F.kontraste(basis[f.id], f.id, zz), o = F.lies(k);
@@ -34,6 +36,8 @@ pruefe("jede Kontrastaufgabe passt zum Denkfehler (1000 Startzahlen je Denkfehle
       if (f.id === "uebertrag" || f.id === "uebertragdoppelt") assert.ok(F._h.hatUebertrag(o.a, o.b), k.text);
       if (f.id === "kleinvongross" || f.id === "borgen") assert.ok(F._h.hatBorgen(o.a, o.b) && F._h.kleinVonGross(o.a, o.b) !== c, k.text);
       if (f.id === "malreihe") assert.strictEqual(o.a, 7, "gleiche Reihe wie die falsche Aufgabe");
+      if (f.id === "malnull") assert.ok(o.op === "·" && (o.a === 0 || o.b === 0), k.text);
+      if (f.id.startsWith("geteilt")) assert.ok(o.op === ":" && o.b === (f.id === "geteiltminus" ? 3 : 4) && o.a % o.b === 0, k.text);
     }
   }
 });
@@ -93,13 +97,13 @@ pruefe("Erklär-Einheiten (kindgerecht, 03.11.2026): feste Reihenfolge zeigen �
   }
   // Fehler-Hinweise für Kinder: drei kurze Sätze ohne Fachwörter
   const o = { a: 34, b: 28, op: "+", c: 62 };
-  for (const f of F.KATALOG) { const l = f.lang(Object.assign({}, o, f.id === "op" ? { op: "·", a: 4, b: 2, c: 8 } : f.id.includes("borgen") || f.id === "kleinvongross" ? { op: "−", a: 52, b: 27, c: 25 } : {}));
+  for (const f of F.KATALOG) { const l = f.lang(Object.assign({}, o, f.id === "op" ? { op: "·", a: 4, b: 2, c: 8 } : f.id.includes("borgen") || f.id === "kleinvongross" ? { op: "−", a: 52, b: 27, c: 25 } : f.id === "malnull" ? { op: "·", a: 6, b: 0, c: 0 } : f.id.startsWith("geteilt") ? { op: ":", a: 54, b: 6, c: 9 } : {}));
     assert.strictEqual(l.length, 3, f.id); l.forEach(t => { assert.ok(t.length <= 100, `${f.id}: ${t}`); assert.ok(!FACHWORT.test(t), `${f.id}: Fachwort: ${t}`); }); }
   assert.ok(/<svg/.test(E.bildFuer("uebertrag", o)) && /<svg/.test(E.bildFuer("zaehlen", { a: 5, b: 3, op: "+", c: 8 })), "Bilder zu den Fehlern");
   // Gegenbeispiele: Robos falsche Antwort ergibt wirklich den genannten Denkfehler
-  const rechnung = /(\d+) ([+−·]) (\d+) = (\d+)/;
+  const rechnung = /(\d+) ([+−·:]) (\d+) = (\d+)/;
   for (const [id, schritte] of alle) { const g = schritte.find(s => s.typ === "gegenbeispiel"), m = rechnung.exec(g.text);
-    if (!m) continue; const a = +m[1], b = +m[3], op = m[2], c = op === "+" ? a + b : op === M ? a - b : a * b;
+    if (!m) continue; const a = +m[1], b = +m[3], op = m[2], c = op === "+" ? a + b : op === M ? a - b : op === ":" ? a / b : a * b;
     assert.strictEqual(F.erkenne({ text: "", antwort: String(c), ops: { a, b, op } }, +m[4]).id, g.fv, `${id}: ${m[0]}`); }
 });
 
