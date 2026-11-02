@@ -643,9 +643,9 @@
 
   const STATIONEN_K3 = [
     { id: "k3stellen", stufe: "3", lz: ["ma.zo.12"], name: "Zahlen bis 1000", icon: "💯",
-      neu: () => { const n = r(101, 999); return zahl("", n, `${Math.floor(n / 100)} Hunderter, ${Math.floor(n / 10) % 10} Zehner und ${n % 10} Einer sind ${n}.`, { frage: "Welche Zahl ist das?", bild: stellenBild(n), nurLuecke: true }); } },
+      neu: () => { const n = r(101, 999); return Object.assign(zahl("", n, `${Math.floor(n / 100)} Hunderter, ${Math.floor(n / 10) % 10} Zehner und ${n % 10} Einer sind ${n}.`, { frage: "Welche Zahl ist das?", bild: stellenBild(n), nurLuecke: true }), { stellen: n }); } },
     { id: "k3runden", stufe: "3", lz: ["ma.zo.12"], name: "Runden", icon: "≈",
-      neu: () => { const n = r(101, 989), z = Math.round(n / 10) * 10; return zahl("", z, `Schau auf die Einer: ${n % 10}. ${n % 10 >= 5 ? "Ab 5 wird aufgerundet" : "Unter 5 wird abgerundet"} → ${z}.`, { frage: `Runde ${n} auf Zehner.`, nurLuecke: true }); } },
+      neu: () => { const n = r(101, 989), z = Math.round(n / 10) * 10; return Object.assign(zahl("", z, `Schau auf die Einer: ${n % 10}. ${n % 10 >= 5 ? "Ab 5 wird aufgerundet" : "Unter 5 wird abgerundet"} → ${z}.`, { frage: `Runde ${n} auf Zehner.`, nurLuecke: true }), { runden: n }); } },
     { id: "k3plus", stufe: "3", lz: ["ma.zo.13"], name: "Plus bis 1000", icon: "+",
       neu: () => { const a = r(120, 600), b = r(110, 999 - a); return zahl(`${a} + ${b}`, a + b, `Erst die Hunderter: ${Math.floor(a / 100) * 100} + ${Math.floor(b / 100) * 100}. Dann Zehner und Einer dazu. Ergebnis: ${a + b}.`); } },
     { id: "k3minus", stufe: "3", lz: ["ma.zo.13"], name: "Minus bis 1000", icon: M,
@@ -2116,5 +2116,5 @@
     return liste;
   }
 
-  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, STATIONEN_K5, runde, aufgabe, _sfc32: sfc32, _k3: { istWuerfelnetz, zufallsNetz, roemisch, istPrim, wuerfelGebaeude }, _bilder: { zehnerBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
+  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, STATIONEN_K5, runde, aufgabe, _sfc32: sfc32, _k3: { istWuerfelnetz, zufallsNetz, roemisch, istPrim, wuerfelGebaeude }, _bilder: { zehnerBild, stellenBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
 })();

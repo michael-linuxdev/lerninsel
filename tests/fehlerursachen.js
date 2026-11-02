@@ -220,6 +220,36 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   erwarte(await p.evaluate(() => /fängt bei 2 an/.test(document.getElementById("rueck").textContent)) && await fv("linealende") === "aufgefallen", "7 statt 5 cm: Hinweis „Der Stift fängt bei 2 an“, Denkfehler „nur das Ende abgelesen“");
   await p.waitForTimeout(1300);
 
+  // ---------- Kl. 3 (04.11.2026): Zahl bauen, Runden; Denkfehler „Null weggelassen“ und „falsch gerundet“ ----------
+  await p.evaluate(() => { window.__fertig = false; __mathe.erklaere("k3stellen", () => { window.__fertig = true; }); }); await p.waitForTimeout(200);
+  for (let k = 0; k < 4; k++) await weiter();
+  await p.click('.bauen[data-s="0"]'); await p.click('.bauen[data-s="0"]'); await p.click('.bauen[data-s="0"]'); await p.waitForTimeout(100);
+  const genug = await p.evaluate(() => /schon genug Hunderter/.test(document.getElementById("satz").textContent));
+  for (const [i, n] of [[1, 4], [2, 3]]) for (let k = 0; k < n; k++) { await p.click(`.bauen[data-s="${i}"]`); await p.waitForTimeout(60); }
+  erwarte(genug && await p.evaluate(() => document.getElementById("machen-ergebnis").textContent === "243"), "Zahl bauen: 2 Hunderter (der dritte zu viel – Hinweis), 4 Zehner, 3 Einzelne – 243");
+  await bild(p, "fu-k3-bauen");
+  await weiter(); await p.click('[data-e="508"]'); await p.waitForTimeout(150); await weiter();
+  await p.click('[data-g="nein"]'); await p.waitForTimeout(150); await weiter(); await weiter();
+  erwarte(await p.evaluate(() => window.__fertig), "Zahlen bis 1000: Erklärung bis zum Ende");
+  await p.evaluate(() => { window.__fertig = false; __mathe.erklaere("k3runden", () => { window.__fertig = true; }); }); await p.waitForTimeout(200);
+  for (let k = 0; k < 4; k++) await weiter();
+  await p.click('#machen-bild .zehn[data-z="350"]'); await p.waitForTimeout(100);
+  const runter = await p.evaluate(() => /Unter 5 geht es runter/.test(document.getElementById("satz").textContent));
+  await p.click('#machen-bild .zehn[data-z="340"]'); await p.waitForTimeout(100);
+  erwarte(runter && await p.evaluate(() => document.getElementById("machen-ergebnis").textContent === "342 ≈ 340"), "Runden: erst 350 (Hinweis „Unter 5 geht es runter“), dann 340 – 342 ≈ 340");
+  await bild(p, "fu-k3-runden");
+  await weiter(); await p.click('[data-e="270"]'); await p.waitForTimeout(150); await weiter();
+  await p.click('[data-g="nein"]'); await p.waitForTimeout(150); await weiter(); await weiter();
+  erwarte(await p.evaluate(() => window.__fertig), "Runden: Erklärung bis zum Ende");
+  await p.evaluate(() => __mathe.setzeAufgabe({ text: "", frage: "Welche Zahl ist das?", antwort: "305", art: "zahl", nurLuecke: true, stellen: 305, hilfe: "3 Hunderter, 0 Zehner, 5 Einer" }));
+  await tippe(35); await p.waitForTimeout(300);
+  erwarte(await p.evaluate(() => /Null darf nicht fehlen/.test(document.getElementById("rueck").textContent)) && await fv("nullvergessen") === "aufgefallen", "35 statt 305: Hinweis „Die Null darf nicht fehlen“");
+  await p.waitForTimeout(1300); await tippe(305); await p.waitForTimeout(1200);
+  await p.evaluate(() => __mathe.setzeAufgabe({ text: "", frage: "Runde 386 auf Zehner.", antwort: "390", art: "zahl", nurLuecke: true, runden: 386, hilfe: "Ab 5 aufrunden." }));
+  await tippe(380); await p.waitForTimeout(300);
+  erwarte(await p.evaluate(() => /Ab 5 geht es hoch/.test(document.getElementById("rueck").textContent)) && await fv("falschgerundet") === "aufgefallen", "386 auf 380 gerundet: Hinweis „Ab 5 geht es hoch“");
+  await p.waitForTimeout(1300);
+
   // ---------- Zeig mir deinen Weg ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k3"; Spielwelt.speichere("mathe", d); });
   await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);

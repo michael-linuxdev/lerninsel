@@ -6,7 +6,7 @@
 //   { typ: "gegenbeispiel", text, stimmt: false, fv, warum } Robo rechnet falsch; fv = Fehler aus fehler.js
 //   { typ: "geschichte", text, bilder: [{ satz, bild }] }    C „Bildergeschichte“ zum Merken: drei Bilder, je ein Satz; text = Merksatz
 // bild ist eine Funktion → SVG (Bausteine in BILD, auch für die Fehler-Hinweise: bildFuer(fv, o)).
-// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, geld, laenge, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
+// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, geld, laenge, k3stellen, k3runden, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
 // Abschluss wird in mathe.erklaert[station] = 1 gemerkt; das Angebot kommt nur, wenn die Station noch nie gerechnet wurde.
 (function (W) {
   const M = "−", D = "#3B1F63", ROT = "#FF6F61", BLAU = "#4FA8F0", STANGE = "#FFB547";
@@ -137,7 +137,35 @@
     if (tipp && schritte < l) s += `<rect class="cm" data-k="${schritte}" x="${X(start + schritte)}" y="10" width="40" height="128" rx="8" fill="${BLAU}" opacity=".18" style="cursor:pointer"/>`;
     return s + `</svg>`;
   }
-  const BILD = { feld, reihen, strahl, schrift, uhr, geld, lineal };
+  // Hunderter, Zehner, Einer (04.11.2026): drei Spalten mit Platten, Stangen, Punkten und der Zahl darunter; ziel = Zahl zum Nachbauen (graue Ziffern)
+  function stellen(h, z, e, { ziffern = true } = {}) {
+    const PL = "#FF9F5A", ST = STANGE;
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 200" class="erkl-bild erkl-stellen" role="img" aria-label="${h} Hunderter, ${z} Zehner, ${e} Einer">`;
+    [["Hunderter", 10, 150, "#FFE3D1"], ["Zehner", 165, 150, "#FFF1C9"], ["Einer", 320, 120, "#FFE0DD"]].forEach(([t, x, w, f]) =>
+      s += `<rect x="${x}" y="4" width="${w}" height="${ziffern ? 192 : 150}" rx="12" fill="${f}" stroke="${D}" stroke-width="2"/><text x="${x + w / 2}" y="24" text-anchor="middle" font-size="15" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${t}</text>`);
+    for (let i = 0; i < h; i++) { const x = 20 + (i % 3) * 44, y = 34 + Math.floor(i / 3) * 42;   // bis zu 9 Platten im Raster 3 × 3
+      s += `<rect x="${x}" y="${y}" width="40" height="38" rx="3" fill="${PL}" stroke="${D}" stroke-width="2"/>` + [1, 2, 3].map(k => `<line x1="${x + k * 10}" y1="${y}" x2="${x + k * 10}" y2="${y + 38}" stroke="${D}" stroke-width=".7" opacity=".35"/><line x1="${x}" y1="${y + k * 9.5}" x2="${x + 40}" y2="${y + k * 9.5}" stroke="${D}" stroke-width=".7" opacity=".35"/>`).join(""); }
+    for (let i = 0; i < z; i++) s += `<rect x="${176 + i * 14}" y="36" width="11" height="106" rx="3" fill="${ST}" stroke="${D}" stroke-width="2"/>`;
+    for (let i = 0; i < e; i++) s += `<circle cx="${342 + (i % 3) * 38}" cy="${52 + Math.floor(i / 3) * 34}" r="13" fill="${ROT}" stroke="${D}" stroke-width="2.5"/>`;
+    if (ziffern) [[85, h], [240, z], [380, e]].forEach(([x, d]) => s += `<text x="${x}" y="186" text-anchor="middle" font-size="34" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${d}</text>`);
+    return s + `</svg>`;
+  }
+  // Runden (04.11.2026): Zahlenstrahl von Zehner zu Zehner, n markiert; pfeil = zum näheren Zehner; tipp = die beiden Zehner sind antippbar
+  function runden(n, { pfeil = false, tipp = false, einer = false } = {}) {
+    const z0 = Math.floor(n / 10) * 10, X = (k) => 40 + k * 40, k = n - z0, hoch = k >= 5;
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 150" class="erkl-bild erkl-runden" role="img" aria-label="${n} zwischen ${z0} und ${z0 + 10}">` +
+      `<line x1="${X(0)}" y1="90" x2="${X(10)}" y2="90" stroke="${D}" stroke-width="4"/>` +
+      `<line x1="${X(5)}" y1="50" x2="${X(5)}" y2="112" stroke="#B9A9D9" stroke-width="2.5" stroke-dasharray="5 5"/>`;
+    for (let i = 0; i <= 10; i++) s += `<line x1="${X(i)}" y1="${i % 5 ? 82 : 74}" x2="${X(i)}" y2="${i % 5 ? 98 : 106}" stroke="${D}" stroke-width="${i % 5 ? 2 : 3}"/>`;
+    [0, 10].forEach(i => s += `<g${tipp ? ` class="zehn" data-z="${z0 + i}" style="cursor:pointer"` : ""}><rect x="${X(i) - 34}" y="110" width="68" height="34" rx="10" fill="${tipp ? "#F4EEFF" : "#fff"}" stroke="${tipp ? BLAU : "none"}" stroke-width="2.5"/>` +
+      `<text x="${X(i)}" y="135" text-anchor="middle" font-size="22" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${z0 + i}</text></g>`);
+    s += `<text x="${X(5)}" y="132" text-anchor="middle" font-size="15" fill="#8A7BAA" font-family="Fredoka, sans-serif">${z0 + 5}</text>`;
+    if (pfeil) { const ziel = hoch ? 10 : 0; s += `<path d="M${X(k)} 66 Q${(X(k) + X(ziel)) / 2} 30 ${X(ziel)} 66" fill="none" stroke="${BLAU}" stroke-width="4"/><path d="M${X(ziel) - 9} 58 L${X(ziel) + 9} 58 L${X(ziel)} 74 Z" fill="${BLAU}" stroke="${BLAU}" stroke-width="2" stroke-linejoin="round"/>`; }
+    s += `<circle cx="${X(k)}" cy="90" r="10" fill="${ROT}" stroke="${D}" stroke-width="2.5"/>` +
+      `<text x="${X(k)}" y="${pfeil ? 24 : 58}" text-anchor="middle" font-size="22" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${einer ? `${Math.floor(n / 10)}<tspan fill="${ROT}">${n % 10}</tspan>` : n}</text>`;
+    return s + `</svg>`;
+  }
+  const BILD = { feld, reihen, strahl, schrift, uhr, geld, lineal, stellen, runden };
 
   // ---------- Bilder für die Fehler-Hinweise (fehler.js liefert die Texte) ----------
   function bildFuer(fv, o) {
@@ -154,6 +182,8 @@
       if ((fv === "zeigervertauscht" || fv === "stundedaneben") && o.uhr) return uhr(o.uhr.h, o.uhr.m, { zeige: "kurz" });
       if (fv === "muenzenzaehlen" && o.geld) return geld(o.geld, { gezaehlt: o.geld.length, summen: true });
       if (fv === "linealende" && o.lineal) return lineal(o.lineal.start, o.lineal.l, { schritte: o.lineal.l });
+      if (fv === "nullvergessen" && o.stellen) return stellen(Math.floor(o.c / 100), Math.floor(o.c / 10) % 10, o.c % 10);
+      if (fv === "falschgerundet" && o.runden) return runden(o.runden, { pfeil: true, einer: true });
       if (fv === "malnull") return reihen(Math.max(1, Math.min(10, o.a || o.b)), 0, 2);
     } catch (e) { /* ohne Bild */ }
     return "";
@@ -303,6 +333,35 @@
         { satz: "Wo fängt der Stift an?", bild: () => lineal(3, 4) },
         { satz: "Zähl die Schritte bis zum Ende.", bild: () => lineal(3, 4, { schritte: 4 }) },
         { satz: "So viele Zentimeter ist er lang.", bild: () => lineal(3, 4, { schritte: 4 }) }] }
+    ],
+    // Kl. 3 (04.11.2026): Hunderter, Zehner, Einer – die Null hält den Platz frei
+    k3stellen: [
+      { typ: "zeigen", text: "Welche Zahl ist das?", bilder: [
+        { satz: "Eine Platte sind 100. Das ist ein Hunderter.", bild: () => stellen(1, 0, 0, { ziffern: false }) },
+        { satz: "Hier sind 2 Hunderter, 4 Zehner und 3 Einzelne.", bild: () => stellen(2, 4, 3, { ziffern: false }) },
+        { satz: "Darunter schreiben wir: 2, 4, 3. Das ist 243.", bild: () => stellen(2, 4, 3) },
+        { satz: "Keine Zehner? Dann steht dort eine 0: 203.", bild: () => stellen(2, 0, 3) }] },
+      { typ: "machen", text: "Jetzt du: Bau die Zahl 243.", art: "bauen", a: 243, b: 1 },
+      { typ: "ergaenzen", text: "Jetzt du: 5 Hunderter, keine Zehner, 8 Einzelne.", frage: "Das ist die Zahl ?", antwort: "508", optionen: ["508", "58", "580"] },
+      { typ: "gegenbeispiel", text: "Robo sieht 3 Hunderter, keine Zehner und 6 Einzelne. Er schreibt 36. Stimmt das?", stimmt: false, fv: "nullvergessen", warum: "Robo hat die Null weggelassen. Die Null zeigt: keine Zehner. Also 306." },
+      { typ: "geschichte", text: "Hunderter, Zehner, Einzelne – und die Null hält den Platz frei.", bilder: [
+        { satz: "Erst die Hunderter zählen.", bild: () => stellen(3, 0, 6, { ziffern: false }) },
+        { satz: "Keine Zehner? Dann eine 0.", bild: () => stellen(3, 0, 6) },
+        { satz: "Zum Schluss die Einzelnen: 306.", bild: () => stellen(3, 0, 6) }] }
+    ],
+    k3runden: [
+      { typ: "zeigen", text: "Runde 347 auf Zehner.", bilder: [
+        { satz: "347 liegt zwischen 340 und 350.", bild: () => runden(347) },
+        { satz: "Schau auf die letzte Zahl: 7.", bild: () => runden(347, { einer: true }) },
+        { satz: "7 ist näher an 350.", bild: () => runden(347, { einer: true, pfeil: true }) },
+        { satz: "Also ist 347 ungefähr 350. Ab 5 geht es hoch.", bild: () => runden(347, { pfeil: true }) }] },
+      { typ: "machen", text: "Jetzt du: 342 – welcher Zehner ist näher? Tipp ihn an.", art: "runden", a: 342, b: 1 },
+      { typ: "ergaenzen", text: "Runde 265 auf Zehner. Bei 5 geht es hoch.", frage: "265 ist ungefähr ?", antwort: "270", optionen: ["260", "270", "300"] },
+      { typ: "gegenbeispiel", text: "Robo rundet 386 auf Zehner. Er sagt: 380. Stimmt das?", stimmt: false, fv: "falschgerundet", warum: "Hinten steht eine 6. Das ist 5 oder mehr. Darum geht es hoch: 390." },
+      { typ: "geschichte", text: "Unter 5 geht es runter, ab 5 geht es hoch.", bilder: [
+        { satz: "Zwischen welchen Zehnern liegt die Zahl?", bild: () => runden(523) },
+        { satz: "Unter 5: runter.", bild: () => runden(523, { pfeil: true, einer: true }) },
+        { satz: "Ab 5: hoch.", bild: () => runden(526, { pfeil: true, einer: true }) }] }
     ],
     // Minus bis 10 (04.11.2026): Es geht etwas weg
     k1minus10: [

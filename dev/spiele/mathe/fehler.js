@@ -19,6 +19,8 @@
   // ---------- Aufgabe lesen ----------
   function lies(a) {
     if (!a) return null;
+    if (a.stellen) return { stellen: a.stellen, op: "stellen", c: +a.antwort };   // Kl. 3 (04.11.2026)
+    if (a.runden) return { runden: a.runden, op: "runden", c: +a.antwort };
     if (a.lineal) return { lineal: a.lineal, op: "lineal", c: +a.antwort };   // Länge (04.11.2026)
     if (a.meter) return { meter: a.meter, op: "meter", c: +a.antwort };
     if (a.geld) return { geld: a.geld, op: "geld", c: +a.antwort };   // Geld (04.11.2026): Münzen zählen
@@ -184,6 +186,30 @@
       kurz: () => "1 Meter sind 100 Zentimeter.",
       lang: (o) => [`Ein Meter ist so lang wie 100 Zentimeter.`, `${o.meter} Meter sind ${o.meter}-mal 100.`, `Also ${o.meter} m = ${o.meter * 100} cm.`],
       kontrast: (o, zz) => { let m; do { m = r(zz, 1, 9); } while (m === o.meter); return { text: `${m} m = ? cm`, antwort: String(m * 100), art: "zahl", einheit: "", meter: m, max: 3, hilfe: `1 m sind 100 cm. ${m} m sind ${m * 100} cm.` }; } });
+  // Kl. 3 (04.11.2026): Null weggelassen (305 → 35), falsch gerundet
+  const ohneNull = (c) => +String(c).replace(/0/g, "");
+  function stellenAufgabe(zz) {
+    let n; do { n = r(zz, 101, 990); } while (!/0/.test(String(n).slice(1)));
+    const B = W.Mathe && W.Mathe._bilder && W.Mathe._bilder.stellenBild;
+    return { text: "", frage: "Welche Zahl ist das?", antwort: String(n), art: "zahl", nurLuecke: true, stellen: n, bild: B ? B(n) : undefined,
+      hilfe: `${Math.floor(n / 100)} Hunderter, ${Math.floor(n / 10) % 10} Zehner und ${n % 10} Einer sind ${n}.` };
+  }
+  function rundenAufgabe(zz, hoch) {
+    let n; do { n = r(zz, 101, 989); } while ((n % 10 >= 5) !== hoch || n % 10 === 0);
+    const z = Math.round(n / 10) * 10;
+    return { text: "", frage: `Runde ${n} auf Zehner.`, antwort: String(z), art: "zahl", nurLuecke: true, runden: n,
+      hilfe: `Schau auf die Einer: ${n % 10}. ${hoch ? "Ab 5 wird aufgerundet" : "Unter 5 wird abgerundet"} → ${z}.` };
+  }
+  KATALOG.push({ id: "nullvergessen", name: "Null weggelassen (305 → 35)",
+      erkenne: (o, w) => !!o.stellen && /0/.test(String(o.c)) && o.c >= 100 && w === ohneNull(o.c),
+      kurz: (o) => `Die Null darf nicht fehlen. Sie zeigt: keine ${Math.floor(o.c / 10) % 10 === 0 ? "Zehner" : "Einzelnen"}.`,
+      lang: (o) => [`Du hast die Null weggelassen.`, `Das sind ${Math.floor(o.c / 100)} Hunderter, ${Math.floor(o.c / 10) % 10} Zehner und ${o.c % 10} Einzelne.`, `Die Null hält den Platz frei: ${o.c}.`],
+      kontrast: (o, zz) => stellenAufgabe(zz) },
+    { id: "falschgerundet", name: "Falsch gerundet (auf- und abrunden verwechselt)",
+      erkenne: (o, w) => !!o.runden && o.runden % 10 !== 0 && w === (o.runden % 10 >= 5 ? Math.floor(o.runden / 10) * 10 : Math.ceil(o.runden / 10) * 10),
+      kurz: (o) => o.runden % 10 >= 5 ? `Hinten steht ${o.runden % 10}. Ab 5 geht es hoch.` : `Hinten steht ${o.runden % 10}. Unter 5 geht es runter.`,
+      lang: (o) => [`Schau auf die letzte Zahl: ${o.runden % 10}.`, o.runden % 10 >= 5 ? `Das ist 5 oder mehr. Dann geht es zum nächsten Zehner hoch.` : `Das ist weniger als 5. Dann bleibt der Zehner.`, `Darum ist ${o.runden} ungefähr ${o.c}.`],
+      kontrast: (o, zz) => rundenAufgabe(zz, o.runden % 10 >= 5) });
   const fv = (id) => KATALOG.find(f => f.id === id);
   // Aufgabe in derselben Form wie zahl() in aufgaben.js
   function zr(op, a, b, hilfe) {
@@ -253,5 +279,5 @@
   }
   const stelleName = (i) => STELLE[i];
 
-  W.MatheFehler = { KATALOG, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, zahlwort, uhrAufgabe, geldAufgabe, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
+  W.MatheFehler = { KATALOG, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, zahlwort, uhrAufgabe, geldAufgabe, stellenAufgabe, rundenAufgabe, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
 })(typeof window !== "undefined" ? window : globalThis);

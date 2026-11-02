@@ -287,6 +287,41 @@
         const fertigZahl = st.art === "dazu" ? st.a + st.b : st.art === "weg" ? st.a - st.b : st.a * st.b;
         const zeichen = st.art === "dazu" ? "+" : st.art === "weg" ? "−" : "·";
         const satzNach = (t) => { $("satz").textContent = t; };
+        // Zahl bauen (04.11.2026): Hunderter, Zehner, Einer dazulegen, bis die Zahl stimmt
+        if (st.art === "bauen") {
+          const ziel = [Math.floor(st.a / 100), Math.floor(st.a / 10) % 10, st.a % 10], hab = [0, 0, 0], NAME = ["Hunderter", "Zehner", "Einzelne"];
+          $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("biber", st.text)}<div class="erklaer-bild" id="machen-bild"></div><p class="frage gross" id="machen-ergebnis" hidden></p></div>`;
+          hoer();
+          $("eingabe").innerHTML = `<div class="wahl-tasten drei">${NAME.map((n, i) => `<button class="taste bauen" data-s="${i}">➕ ${["100", "10", "1"][i]}</button>`).join("")}</div>`;
+          const male = () => { $("machen-bild").innerHTML = B.stellen(hab[0], hab[1], hab[2]); };
+          male();
+          $("eingabe").querySelectorAll(".bauen").forEach(k => k.addEventListener("click", () => {
+            const i = +k.dataset.s; if (hab.join() === ziel.join()) return;
+            if (hab[i] >= ziel[i]) { $("satz").textContent = `Das sind schon genug ${NAME[i]}. Wir wollen ${st.a}.`; return; }
+            hab[i]++; S.ton("tipp"); male();
+            if (hab.join() !== ziel.join()) { $("satz").textContent = `${hab[0]} Hunderter, ${hab[1]} Zehner, ${hab[2]} Einzelne. Weiter!`; return; }
+            $("satz").textContent = `Geschafft! Das ist ${st.a}.`; $("eingabe").innerHTML = "";
+            $("machen-ergebnis").textContent = String(st.a); $("machen-ergebnis").hidden = false;
+            knopfWeiter("Weiter ➜", weiter);
+          }));
+          return;
+        }
+        // Runden (04.11.2026): den näheren Zehner antippen
+        if (st.art === "runden") {
+          const z = Math.round(st.a / 10) * 10; let fertig = false;
+          $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("biber", st.text)}<div class="erklaer-bild" id="machen-bild"></div><p class="frage gross" id="machen-ergebnis" hidden></p></div>`;
+          hoer(); $("eingabe").innerHTML = "";
+          $("machen-bild").innerHTML = B.runden(st.a, { tipp: true, einer: true });
+          $("machen-bild").addEventListener("click", (e) => {
+            const t = e.target.closest(".zehn"); if (!t || fertig) return;
+            if (+t.dataset.z !== z) { $("satz").textContent = `Schau auf die letzte Zahl: ${st.a % 10}. ${st.a % 10 >= 5 ? "Ab 5 geht es hoch." : "Unter 5 geht es runter."}`; return; }
+            fertig = true; S.ton("tipp"); $("machen-bild").innerHTML = B.runden(st.a, { pfeil: true, einer: true });
+            $("satz").textContent = `Geschafft! ${st.a} ist ungefähr ${z}.`;
+            $("machen-ergebnis").textContent = `${st.a} ≈ ${z}`; $("machen-ergebnis").hidden = false;
+            knopfWeiter("Weiter ➜", weiter);
+          });
+          return;
+        }
         // Lineal (04.11.2026): Zentimeter für Zentimeter antippen
         if (st.art === "lineal") {
           let n = 0;
