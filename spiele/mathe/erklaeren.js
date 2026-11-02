@@ -6,7 +6,7 @@
 //   { typ: "gegenbeispiel", text, stimmt: false, fv, warum } Robo rechnet falsch; fv = Fehler aus fehler.js
 //   { typ: "geschichte", text, bilder: [{ satz, bild }] }    C „Bildergeschichte“ zum Merken: drei Bilder, je ein Satz; text = Merksatz
 // bild ist eine Funktion → SVG (Bausteine in BILD, auch für die Fehler-Hinweise: bildFuer(fv, o)).
-// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, geld, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
+// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, geld, laenge, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
 // Abschluss wird in mathe.erklaert[station] = 1 gemerkt; das Angebot kommt nur, wenn die Station noch nie gerechnet wurde.
 (function (W) {
   const M = "−", D = "#3B1F63", ROT = "#FF6F61", BLAU = "#4FA8F0", STANGE = "#FFB547";
@@ -120,7 +120,24 @@
     });
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${x} ${summen ? 112 : 90}" class="erkl-bild erkl-geld" role="img" aria-label="Münzen">${s}</svg>`;
   }
-  const BILD = { feld, reihen, strahl, schrift, uhr, geld };
+  // Lineal (04.11.2026): 0–12 cm, Stift von start bis start + l, schritte = so viele Zentimeter-Bögen sind schon gezählt, tipp = nächster Zentimeter antippbar
+  function lineal(start, l, { schritte = 0, tipp = false } = {}) {
+    const X = (cm) => 20 + cm * 40;
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 150" class="erkl-bild erkl-lineal" role="img" aria-label="Lineal: Stift von ${start} bis ${start + l}">` +
+      `<rect x="6" y="78" width="508" height="58" rx="6" fill="#FFE27A" stroke="${D}" stroke-width="3"/>`;
+    for (let k = 0; k <= 24; k++) { const x = 20 + k * 20, lang = k % 2 === 0;
+      s += `<line x1="${x}" y1="78" x2="${x}" y2="${lang ? 98 : 90}" stroke="${D}" stroke-width="${lang ? 2.5 : 1.5}"/>` +
+        (lang ? `<text x="${x}" y="120" text-anchor="middle" font-size="17" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${k / 2}</text>` : ""); }
+    // Stift
+    s += `<path d="M${X(start)} 52 L${X(start + l) - 22} 52 L${X(start + l)} 62 L${X(start + l) - 22} 72 L${X(start)} 72 Z" fill="#7B9BFF" stroke="${D}" stroke-width="3" stroke-linejoin="round"/>` +
+      `<path d="M${X(start + l) - 22} 52 L${X(start + l)} 62 L${X(start + l) - 22} 72 Z" fill="#F7D9B5" stroke="${D}" stroke-width="2.5" stroke-linejoin="round"/>` +
+      `<line x1="${X(start)}" y1="76" x2="${X(start)}" y2="100" stroke="${ROT}" stroke-width="3"/><line x1="${X(start + l)}" y1="76" x2="${X(start + l)}" y2="100" stroke="${ROT}" stroke-width="3"/>`;
+    for (let k = 0; k < schritte; k++) s += `<path d="M${X(start + k)} 50 Q${X(start + k) + 20} 14 ${X(start + k + 1)} 50" fill="none" stroke="${BLAU}" stroke-width="3"/>` +
+      `<text x="${X(start + k) + 20}" y="24" text-anchor="middle" font-size="16" font-weight="700" fill="${BLAU}" font-family="Fredoka, sans-serif">${k + 1}</text>`;
+    if (tipp && schritte < l) s += `<rect class="cm" data-k="${schritte}" x="${X(start + schritte)}" y="10" width="40" height="128" rx="8" fill="${BLAU}" opacity=".18" style="cursor:pointer"/>`;
+    return s + `</svg>`;
+  }
+  const BILD = { feld, reihen, strahl, schrift, uhr, geld, lineal };
 
   // ---------- Bilder für die Fehler-Hinweise (fehler.js liefert die Texte) ----------
   function bildFuer(fv, o) {
@@ -136,6 +153,7 @@
       if (fv === "dreher" && o.c < 100) return feld({ z: Z(o.c), rot: E(o.c) });
       if ((fv === "zeigervertauscht" || fv === "stundedaneben") && o.uhr) return uhr(o.uhr.h, o.uhr.m, { zeige: "kurz" });
       if (fv === "muenzenzaehlen" && o.geld) return geld(o.geld, { gezaehlt: o.geld.length, summen: true });
+      if (fv === "linealende" && o.lineal) return lineal(o.lineal.start, o.lineal.l, { schritte: o.lineal.l });
       if (fv === "malnull") return reihen(Math.max(1, Math.min(10, o.a || o.b)), 0, 2);
     } catch (e) { /* ohne Bild */ }
     return "";
@@ -270,6 +288,21 @@
         { satz: "Die größte zuerst.", bild: () => geld([50, 10, 2]) },
         { satz: "Weiterzählen: 50, 60, 62.", bild: () => geld([50, 10, 2], { gezaehlt: 3, summen: true }) },
         { satz: "Das sind 62 Cent.", bild: () => geld([50, 10, 2], { gezaehlt: 3, summen: true }) }] }
+    ],
+    // Länge (04.11.2026): am Anfang ansetzen, Zentimeter zählen
+    laenge: [
+      { typ: "zeigen", text: "Wie lang ist der Stift?", bilder: [
+        { satz: "Der Stift fängt bei der 0 an.", bild: () => lineal(0, 7) },
+        { satz: "Er hört bei der 7 auf. Er ist 7 cm lang.", bild: () => lineal(0, 7, { schritte: 7 }) },
+        { satz: "Dieser Stift fängt bei der 2 an.", bild: () => lineal(2, 5) },
+        { satz: "Von 2 bis 7 sind es 5 Schritte. Er ist 5 cm lang.", bild: () => lineal(2, 5, { schritte: 5 }) }] },
+      { typ: "machen", text: "Jetzt du: Tipp die Zentimeter an, von der 2 bis zum Ende.", art: "lineal", a: 2, b: 4 },
+      { typ: "ergaenzen", text: "Der Stift fängt bei 3 an und hört bei 9 auf.", frage: "Er ist ? cm lang.", antwort: "6", optionen: ["6", "9", "12"] },
+      { typ: "gegenbeispiel", text: "Der Stift fängt bei 2 an und hört bei 8 auf. Robo sagt: „8 cm.“ Stimmt das?", stimmt: false, fv: "linealende", warum: "Robo hat nur das Ende abgelesen. Von 2 bis 8 sind es 6 Schritte. Also 6 cm." },
+      { typ: "geschichte", text: "Schau, wo der Stift anfängt. Dann die Schritte zählen.", bilder: [
+        { satz: "Wo fängt der Stift an?", bild: () => lineal(3, 4) },
+        { satz: "Zähl die Schritte bis zum Ende.", bild: () => lineal(3, 4, { schritte: 4 }) },
+        { satz: "So viele Zentimeter ist er lang.", bild: () => lineal(3, 4, { schritte: 4 }) }] }
     ],
     // Minus bis 10 (04.11.2026): Es geht etwas weg
     k1minus10: [

@@ -19,6 +19,8 @@
   // ---------- Aufgabe lesen ----------
   function lies(a) {
     if (!a) return null;
+    if (a.lineal) return { lineal: a.lineal, op: "lineal", c: +a.antwort };   // Länge (04.11.2026)
+    if (a.meter) return { meter: a.meter, op: "meter", c: +a.antwort };
     if (a.geld) return { geld: a.geld, op: "geld", c: +a.antwort };   // Geld (04.11.2026): Münzen zählen
     if (a.uhr) return { uhr: a.uhr, op: "uhr", c: a.antwort };   // Uhr (04.11.2026): Auswahl-Aufgabe mit Stunde/Minute
     if (a.ops) return Object.assign({ c: +a.antwort }, a.ops);
@@ -170,6 +172,18 @@
     kurz: () => "Zähl nicht die Münzen. Zähl, was draufsteht.",
     lang: (o) => [`Du hast die Münzen gezählt.`, `Jede Münze ist so viel wert, wie draufsteht.`, `Zusammen: ${o.geld.join(" + ")} = ${o.c}.`],
     kontrast: (o, zz) => geldAufgabe(zz) });
+  // Länge (04.11.2026): am Lineal nur das Ende abgelesen; 1 m für 10 cm gehalten
+  function aus(station, zz, passt) { for (let i = 0; i < 200 && W.Mathe; i++) { const t = W.Mathe.aufgabe(station, Math.floor(zz() * 4294967296)); if (t && passt(t)) return t; } return null; }
+  KATALOG.push({ id: "linealende", name: "Länge: am Lineal nur das Ende abgelesen",
+      erkenne: (o, w) => !!o.lineal && o.lineal.start > 0 && w === o.lineal.start + o.lineal.l,
+      kurz: (o) => `Der Stift fängt bei ${o.lineal.start} an, nicht bei 0. Zähl die Schritte.`,
+      lang: (o) => [`Du hast nur das Ende abgelesen.`, `Der Stift fängt bei ${o.lineal.start} an, nicht bei 0.`, `Von ${o.lineal.start} bis ${o.lineal.start + o.lineal.l} sind es ${o.lineal.l} Schritte. Also ${o.lineal.l} cm.`],
+      kontrast: (o, zz) => aus("laenge", zz, (t) => t.lineal && t.lineal.start > 0) || { text: "", frage: "Wie lang ist der Stift?", antwort: "5", art: "zahl", einheit: "cm", nurLuecke: true, lineal: { start: 2, l: 5 }, hilfe: "Von 2 bis 7 sind es 5 cm." } },
+    { id: "meter", name: "Länge: 1 m für 10 cm gehalten",
+      erkenne: (o, w) => !!o.meter && (w === o.meter * 10 || w === o.meter) && w !== o.c,
+      kurz: () => "1 Meter sind 100 Zentimeter.",
+      lang: (o) => [`Ein Meter ist so lang wie 100 Zentimeter.`, `${o.meter} Meter sind ${o.meter}-mal 100.`, `Also ${o.meter} m = ${o.meter * 100} cm.`],
+      kontrast: (o, zz) => { let m; do { m = r(zz, 1, 9); } while (m === o.meter); return { text: `${m} m = ? cm`, antwort: String(m * 100), art: "zahl", einheit: "", meter: m, max: 3, hilfe: `1 m sind 100 cm. ${m} m sind ${m * 100} cm.` }; } });
   const fv = (id) => KATALOG.find(f => f.id === id);
   // Aufgabe in derselben Form wie zahl() in aufgaben.js
   function zr(op, a, b, hilfe) {

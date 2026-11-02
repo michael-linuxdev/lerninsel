@@ -201,6 +201,25 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   erwarte(await p.evaluate(() => /was draufsteht/.test(document.getElementById("rueck").textContent)) && await fv("muenzenzaehlen") === "aufgefallen", "3 statt 25 Cent: Hinweis „Zähl, was draufsteht“, Denkfehler „Münzen gezählt“");
   await p.waitForTimeout(1300);
 
+  // ---------- Länge (04.11.2026): Zentimeter selbst abzählen, Denkfehler „nur das Ende abgelesen“ ----------
+  await p.click("#zum-weg"); await p.waitForTimeout(200);
+  await p.evaluate((n) => __mathe.starte(n, true), await nr("laenge")); await p.waitForTimeout(300);
+  await p.click("#erklaer-ja"); await p.waitForTimeout(200);
+  for (let k = 0; k < 3; k++) { await p.click("#weiter"); await p.waitForTimeout(150); }
+  await weiter();
+  for (let i = 0; i < 4; i++) { await p.click("#machen-bild .cm"); await p.waitForTimeout(100); }
+  erwarte(await p.evaluate(() => document.getElementById("machen-ergebnis").textContent === "4 cm" && document.querySelectorAll("#machen-bild path[stroke='#4FA8F0']").length === 4), "Länge selbst abzählen: vier Zentimeter-Bögen von 2 bis 6 – 4 cm");
+  await bild(p, "fu-laenge-machen");
+  await weiter(); await p.click('[data-e="6"]'); await p.waitForTimeout(150); await weiter();
+  await p.click('[data-g="nein"]'); await p.waitForTimeout(150);
+  const linealBild = await p.evaluate(() => !!document.querySelector("#warum svg"));
+  await weiter(); await weiter();
+  erwarte(linealBild && await p.evaluate(() => __mathe.lauf && __mathe.lauf.station.id === "laenge" && (Spielwelt.lade("mathe").erklaert || {}).laenge === 1), "Länge: Robos Fehler mit Bild, Erklärung bis zum Ende, Runde startet");
+  await p.evaluate(() => __mathe.setzeAufgabe({ text: "", frage: "Achtung, der Stift fängt nicht bei 0 an! Wie lang ist er?", antwort: "5", art: "zahl", einheit: "cm", nurLuecke: true, lineal: { start: 2, l: 5 }, hilfe: "Von 2 bis 7: 5 cm." }));
+  await tippe(7); await p.waitForTimeout(300);
+  erwarte(await p.evaluate(() => /fängt bei 2 an/.test(document.getElementById("rueck").textContent)) && await fv("linealende") === "aufgefallen", "7 statt 5 cm: Hinweis „Der Stift fängt bei 2 an“, Denkfehler „nur das Ende abgelesen“");
+  await p.waitForTimeout(1300);
+
   // ---------- Zeig mir deinen Weg ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k3"; Spielwelt.speichere("mathe", d); });
   await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);

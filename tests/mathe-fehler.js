@@ -4,6 +4,8 @@
 // Aufruf: node tests/mathe-fehler.js
 const assert = require("assert");
 global.window = global;
+global.localStorage = { getItem: () => null, setItem: () => {} };
+require("../spiele/mathe/aufgaben.js");
 require("../spiele/mathe/fehler.js");
 require("../spiele/mathe/erklaeren.js");
 const F = global.MatheFehler, E = global.MatheErklaeren, M = "−";
@@ -20,7 +22,9 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
     [auf("6 · 0", 0), 6, "malnull"], [auf("0 · 7", 0), 7, "malnull"], [auf("15 : 3", 5), 12, "geteiltminus"], [auf("24 : 4", 6), 7, "geteiltreihe"], [auf("24 : 4", 6), 5, "geteiltreihe"], [auf("12 : 3", 4), 36, "op"],
     [auf("34 + 28", 62), 26, "dreher"], [{ text: "", frage: "Welche Zahl ist das?", antwort: "47", art: "zahl" }, 74, "dreher"], [auf("45 + 2", 47), 74, "dreher"],
     [F.uhrAufgabe(2, 0, zz), "12:10", "zeigervertauscht"], [F.uhrAufgabe(4, 30, zz), "6:20", "zeigervertauscht"], [F.uhrAufgabe(4, 30, zz), "5:30", "stundedaneben"], [F.uhrAufgabe(9, 0, zz), "8:00", "stundedaneben"],
-    [{ text: "", frage: "Wie viel Geld ist das?", antwort: "25", art: "zahl", geld: [10, 10, 5] }, 3, "muenzenzaehlen"], [{ text: "", frage: "Wie viel Geld ist das?", antwort: "52", art: "zahl", geld: [50, 2] }, 25, "dreher"]];
+    [{ text: "", frage: "Wie viel Geld ist das?", antwort: "25", art: "zahl", geld: [10, 10, 5] }, 3, "muenzenzaehlen"], [{ text: "", frage: "Wie viel Geld ist das?", antwort: "52", art: "zahl", geld: [50, 2] }, 25, "dreher"],
+    [{ text: "", antwort: "5", art: "zahl", lineal: { start: 2, l: 5 } }, 7, "linealende"], [{ text: "3 m = ? cm", antwort: "300", art: "zahl", meter: 3 }, 30, "meter"], [{ text: "3 m = ? cm", antwort: "300", art: "zahl", meter: 3 }, 3, "meter"]];
+  assert.strictEqual(F.erkenne({ text: "", antwort: "5", art: "zahl", lineal: { start: 0, l: 5 } }, 5), null);
   assert.strictEqual(F.erkenne({ text: "", antwort: "40", art: "zahl" }, 4), null, "40 → 4 ist kein Dreher");
   assert.strictEqual(F.erkenne({ text: "", antwort: "44", art: "zahl" }, 44), null);
   assert.deepStrictEqual([13, 16, 17, 21, 47, 52, 99].map(F.zahlwort), ["dreizehn", "sechzehn", "siebzehn", "einundzwanzig", "siebenundvierzig", "zweiundfünfzig", "neunundneunzig"]);
@@ -33,10 +37,12 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
 pruefe("jede Kontrastaufgabe passt zum Denkfehler (1000 Startzahlen je Denkfehler) und ist richtig gerechnet", () => {
   const basis = { op: auf("5 + 3", 8), kleinvongross: auf(`52 ${M} 27`, 25), borgen: auf(`61 ${M} 28`, 33), uebertrag: auf("34 + 28", 62), uebertragdoppelt: auf("34 + 28", 62),
     stellenwert: auf("34 + 5", 39), zaehlen: auf("5 + 3", 8), malreihe: auf("7 · 8", 56),
-    malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6), dreher: auf("34 + 28", 62), zeigervertauscht: F.uhrAufgabe(4, 30, zz), stundedaneben: F.uhrAufgabe(4, 0, zz), muenzenzaehlen: F.geldAufgabe(zz) };
+    malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6), dreher: auf("34 + 28", 62), zeigervertauscht: F.uhrAufgabe(4, 30, zz), stundedaneben: F.uhrAufgabe(4, 0, zz), muenzenzaehlen: F.geldAufgabe(zz), linealende: { text: "", antwort: "5", art: "zahl", lineal: { start: 2, l: 5 } }, meter: { text: "3 m = ? cm", antwort: "300", art: "zahl", meter: 3 } };
   for (const f of F.KATALOG) {
     for (let i = 0; i < 1000; i++) {
       const [k] = F.kontraste(basis[f.id], f.id, zz), o = F.lies(k);
+      if (o.lineal) { assert.ok(o.lineal.start > 0 && +k.antwort === o.lineal.l && /^<svg/.test(k.bild), k.frage); continue; }
+      if (o.meter) { assert.ok(+k.antwort === o.meter * 100 && o.meter !== 3, k.text); continue; }
       if (o.geld) { assert.strictEqual(+k.antwort, o.geld.reduce((x, y) => x + y, 0)); assert.ok(o.geld.length !== +k.antwort && +k.antwort < 100, k.hilfe); continue; }
       if (o.uhr) { assert.ok(k.optionen.includes(k.antwort) && new Set(k.optionen).size === k.optionen.length && k.optionen.length >= 3 && o.uhr.h !== basis[f.id].uhr.h, f.id); assert.strictEqual(k.kontrast, f.id); continue; }
       const c = o.op === "+" ? o.a + o.b : o.op === M ? o.a - o.b : o.op === "·" ? o.a * o.b : o.a / o.b;
@@ -98,14 +104,14 @@ pruefe("Erklär-Einheiten (kindgerecht, 03.11.2026): feste Reihenfolge zeigen �
       assert.ok(!FACHWORT.test(s.text + " " + (s.warum || "") + " " + (s.bilder || []).map(b => b.satz).join(" ")), `${id}: Fachwort im Kindertext (${s.typ})`);
       if (s.bilder) for (const b of s.bilder) { assert.ok(b.satz.length <= 90, `${id}: Satz zu lang: ${b.satz}`); assert.ok(/^<svg/.test(b.bild()), `${id}: Bild fehlt`); }
       if (s.typ === "geschichte") assert.strictEqual(s.bilder.length, 3, id);
-      if (s.typ === "machen") assert.ok(s.art === "uhr" ? s.a >= 1 && s.a <= 12 : s.art === "geld" ? s.muenzen.length >= 2 && s.muenzen.every((w, i) => i === 0 || w <= s.muenzen[i - 1]) : ["dazu", "weg", "gruppen"].includes(s.art) && s.a > 0 && s.b > 0 && (s.art !== "weg" || s.a > s.b), id);
+      if (s.typ === "machen") assert.ok(s.art === "uhr" ? s.a >= 1 && s.a <= 12 : s.art === "lineal" ? s.a >= 0 && s.b > 0 && s.a + s.b <= 12 : s.art === "geld" ? s.muenzen.length >= 2 && s.muenzen.every((w, i) => i === 0 || w <= s.muenzen[i - 1]) : ["dazu", "weg", "gruppen"].includes(s.art) && s.a > 0 && s.b > 0 && (s.art !== "weg" || s.a > s.b), id);
       if (s.typ === "ergaenzen") assert.ok(s.optionen.includes(s.antwort) && new Set(s.optionen).size === s.optionen.length, id);
       if (s.typ === "gegenbeispiel") { assert.ok(F.KATALOG.some(f => f.id === s.fv), `${id}: Denkfehler ${s.fv}`); assert.strictEqual(s.stimmt, false); }
     }
   }
   // Fehler-Hinweise für Kinder: drei kurze Sätze ohne Fachwörter
   const o = { a: 34, b: 28, op: "+", c: 62 };
-  for (const f of F.KATALOG) { const l = f.lang(Object.assign({}, o, f.id === "op" ? { op: "·", a: 4, b: 2, c: 8 } : f.id.includes("borgen") || f.id === "kleinvongross" ? { op: "−", a: 52, b: 27, c: 25 } : f.id === "malnull" ? { op: "·", a: 6, b: 0, c: 0 } : f.id.startsWith("geteilt") ? { op: ":", a: 54, b: 6, c: 9 } : f.id === "zeigervertauscht" || f.id === "stundedaneben" ? { op: "uhr", uhr: { h: 4, m: 30 }, c: "4:30" } : f.id === "muenzenzaehlen" ? { op: "geld", geld: [50, 20, 10, 5, 2], c: 87 } : {}));
+  for (const f of F.KATALOG) { const l = f.lang(Object.assign({}, o, f.id === "op" ? { op: "·", a: 4, b: 2, c: 8 } : f.id.includes("borgen") || f.id === "kleinvongross" ? { op: "−", a: 52, b: 27, c: 25 } : f.id === "malnull" ? { op: "·", a: 6, b: 0, c: 0 } : f.id.startsWith("geteilt") ? { op: ":", a: 54, b: 6, c: 9 } : f.id === "zeigervertauscht" || f.id === "stundedaneben" ? { op: "uhr", uhr: { h: 4, m: 30 }, c: "4:30" } : f.id === "muenzenzaehlen" ? { op: "geld", geld: [50, 20, 10, 5, 2], c: 87 } : f.id === "linealende" ? { op: "lineal", lineal: { start: 4, l: 11 }, c: 11 } : f.id === "meter" ? { op: "meter", meter: 5, c: 500 } : {}));
     assert.strictEqual(l.length, 3, f.id); l.forEach(t => { assert.ok(t.length <= 100, `${f.id}: ${t}`); assert.ok(!FACHWORT.test(t), `${f.id}: Fachwort: ${t}`); }); }
   assert.ok(/<svg/.test(E.bildFuer("uebertrag", o)) && /<svg/.test(E.bildFuer("zaehlen", { a: 5, b: 3, op: "+", c: 8 })), "Bilder zu den Fehlern");
   // Gegenbeispiele: Robos falsche Antwort ergibt wirklich den genannten Denkfehler

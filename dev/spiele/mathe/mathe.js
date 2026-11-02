@@ -287,6 +287,23 @@
         const fertigZahl = st.art === "dazu" ? st.a + st.b : st.art === "weg" ? st.a - st.b : st.a * st.b;
         const zeichen = st.art === "dazu" ? "+" : st.art === "weg" ? "−" : "·";
         const satzNach = (t) => { $("satz").textContent = t; };
+        // Lineal (04.11.2026): Zentimeter für Zentimeter antippen
+        if (st.art === "lineal") {
+          let n = 0;
+          $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("biber", st.text)}<div class="erklaer-bild" id="machen-bild"></div><p class="frage gross" id="machen-ergebnis" hidden></p></div>`;
+          hoer(); $("eingabe").innerHTML = "";
+          const male = () => { $("machen-bild").innerHTML = B.lineal(st.a, st.b, { schritte: n, tipp: true }); };
+          male();
+          $("machen-bild").addEventListener("click", (e) => {
+            if (!e.target.closest(".cm") || n >= st.b) return;
+            n++; S.ton("tipp"); male();
+            if (n < st.b) { $("satz").textContent = `${n}. Weiter!`; return; }
+            $("satz").textContent = `Geschafft! Von ${st.a} bis ${st.a + st.b} sind es ${st.b} Schritte: ${st.b}\u00A0cm.`;
+            $("machen-ergebnis").textContent = `${st.b} cm`; $("machen-ergebnis").hidden = false;
+            knopfWeiter("Weiter ➜", weiter);
+          });
+          return;
+        }
         // Geld (04.11.2026): Münzen antippen, Benno zählt mit
         if (st.art === "geld") {
           let n = 0; const m = st.muenzen, summe = (k) => m.slice(0, k).reduce((x, y) => x + y, 0);
