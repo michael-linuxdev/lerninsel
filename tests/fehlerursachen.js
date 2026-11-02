@@ -293,6 +293,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   const el = await p.evaluate(() => { const d = document.getElementById("denkfehler-eltern"); return d ? { n: d.querySelectorAll("li").length, t: d.textContent } : null; });
   erwarte(el && el.n >= 5 && /Zu Hause:/.test(el.t) && /Zahl verdreht/.test(el.t), `Elternbereich: ${el ? el.n : 0} Denkfehler mit Zustand und Tipp „Zu Hause“`);
   await p.evaluate(() => document.getElementById("denkfehler-eltern").scrollIntoView()); await bild(p, "fu-eltern");
+  erwarte(await p.evaluate(() => { const t = document.querySelector('section.eltern-teil[data-teil="lernstand"]').textContent; return /Sachunterricht: \d+ von \d+ geschafft/.test(t) && !/Meine Familie –/.test(t); }), "Elternbereich: Sachunterricht als „n von N geschafft“ statt aller Themen mit „–“");
 
   // ---------- Startzahl: gemerkter Fehler nur als Station + Startzahl, beim Training wieder dieselbe Aufgabe ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k2"; d.fehler = []; Spielwelt.speichere("mathe", d); });

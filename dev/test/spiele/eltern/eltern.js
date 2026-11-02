@@ -552,6 +552,11 @@
       <p class="klein">Das Kind kann die Ankunft jederzeit selbst bei Robo Pixel wiederholen („Wie ging das nochmal?“). Nichts geht verloren, es gibt keine Fristen.</p>
     </div>`;
   }
+  // (04.11.2026) Statt aller Themen mit „–“ nur „n von N“ und die geschafften mit Sternen (offene Themen stehen unter „Was übt die App?“)
+  function geschafftListe(liste, sterne) {
+    const fertig = (liste || []).filter(t => sterne && sterne[t.id]);
+    return `${fertig.length} von ${(liste || []).length} geschafft${fertig.length ? ": " + fertig.map(t => `${S.esc ? S.esc(t.name) : t.name} ${"⭐".repeat(sterne[t.id])}`).join(", ") : " – noch keins angefangen"}`;
+  }
   function staerkenKarte() {
     if (!window.Staerken) return "";
     const ST = window.Staerken, m = ST.meine();
@@ -725,8 +730,8 @@
       </div>
       <div class="karte">
         <h2>Deutsch, Sachunterricht, Tablet-Führerschein und 3D-Welt</h2>
-        <p><b>Abenteuer:</b> ${window.GESCHICHTE.map(k => `${k.name} ${deutsch.kapitel && deutsch.kapitel[k.id] ? "⭐".repeat(deutsch.kapitel[k.id]) : "–"}`).join(", ")}</p>
-        <p><b>Sachunterricht:</b> ${(() => { const sk = S.lade("sachkunde") || {}; return window.THEMEN.map(t => `${t.name} ${sk.themen && sk.themen[t.id] ? "⭐".repeat(sk.themen[t.id]) : "–"}`).join(", "); })()}</p>
+        <p><b>Abenteuer:</b> ${geschafftListe(window.GESCHICHTE, deutsch.kapitel)}</p>
+        <p><b>Sachunterricht:</b> ${geschafftListe(window.THEMEN, (S.lade("sachkunde") || {}).themen)}</p>
         <p><b>Führerschein:</b> ${medien.fuehrerschein ? `bestanden am ${medien.fuehrerschein.split("-").reverse().join(".")}` : `${window.LEKTIONEN.filter(l => medien.lektionen && medien.lektionen[l.id]).length} von ${window.LEKTIONEN.length} Lektionen`}</p>
         <p><b>Haustier:</b> ${(() => { const t = S.lade("tier"); return !t || !t.phase ? "noch kein Ei ausgesucht" : t.phase === "ei" ? `Ei wird gewärmt (${t.waerme || 0} von 3)` : `${t.name || "ohne Namen"}, Freundschaft ${t.freundschaft || 0}, ${t.leckerli || 0} Leckerli`; })()}</p>
         <p><b>3D-Welt:</b> Ballon-Rekord ${(welt.ballon && welt.ballon.rekord) || 0} Punkte, Insel-Schatz ${(welt.insel && welt.insel.geschafft) || 0}× gefunden</p>
