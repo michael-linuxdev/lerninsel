@@ -41,7 +41,9 @@
     }).join("") + (Sz && Sto ? `<button role="tab" aria-selected="${aktiv === CHRONIK}" class="${aktiv === CHRONIK ? "an" : ""}" data-i="${CHRONIK}">📜 Inselchronik ${Sto.chronik().length}</button>` : "");
   }
   // der aktive Reiter soll sichtbar sein (die Leiste ist breiter als der Bildschirm)
-  const zeigeReiter = () => { const an = $("reiter").querySelector(".an"); if (an) $("reiter").scrollLeft = Math.max(0, an.offsetLeft - 16); };
+  // (04.11.2026) nur scrollen, wenn der gewählte Reiter nicht ganz zu sehen ist (offsetLeft zählte den Seitenrand mit – der erste Reiter war angeschnitten)
+  const zeigeReiter = () => { const r = $("reiter"), an = r.querySelector(".an"); if (!an) return; const a = an.getBoundingClientRect(), b = r.getBoundingClientRect();
+    if (a.left < b.left || a.right > b.right) r.scrollLeft += a.left - b.left - 16; };
   const MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
   const datum = (d) => { const [, m, t] = String(d || "").split("-").map(Number); return m ? `${t}. ${MONATE[m - 1]}` : ""; };
   function chronik(el) {
