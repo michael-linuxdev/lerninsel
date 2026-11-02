@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entwürfe zur Auswahl</title>
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/schrift/fredoka.css">
+<style>
+  /* Vorschau zur Abstimmung (03.11.2026) – nicht Teil der Kinder-Navigation, nicht offline gespeichert */
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Fredoka", system-ui, sans-serif; background: #EEE9F6; color: #2E2240; }
+  header { position: sticky; top: 0; z-index: 5; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: max(10px, env(safe-area-inset-top)) 16px 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  header h1 { margin: 0; font-size: 1.25rem; flex: 1; min-width: 180px; }
+  header a { font-weight: 600; color: #4B2380; text-decoration: none; background: #EEE9F6; border-radius: 999px; padding: 8px 14px; }
+  main { max-width: 1180px; margin: 0 auto; padding: 16px; display: grid; gap: 22px; }
+  section.block { background: #fff; border-radius: 26px; padding: 18px; box-shadow: 0 6px 0 rgba(59,31,99,.12); }
+  section.block > h2 { margin: 0 0 4px; font-size: 1.45rem; }
+  p.erkl { margin: 0 0 12px; opacity: .8; }
+  .reihe { display: grid; grid-template-columns: 130px repeat(3, 1fr); gap: 8px; align-items: center; margin-bottom: 8px; }
+  .reihe .name { font-weight: 700; font-size: 1.05rem; }
+  .reihe .name small { display: block; font-weight: 500; opacity: .7; }
+  .karte { background: #F5F9FF; border-radius: 18px; padding: 4px; }
+  .karte svg { width: 100%; height: auto; display: block; }
+  .karte .unter { text-align: center; font-size: .9rem; opacity: .75; padding-bottom: 4px; }
+  .knoepfe { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 12px; }
+  .knoepfe button, .k { font: inherit; font-weight: 600; border: 0; border-radius: 999px; padding: 9px 16px; background: #EEE9F6; color: inherit; cursor: pointer; }
+  .knoepfe button.an { background: #4B2380; color: #fff; }
+  .figuren { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .figuren .karte svg { max-height: 360px; }
+  .buchstabe { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #4B2380; color: #fff; font-weight: 700; margin-right: 6px; }
+  /* Kleiderschrank-Entwurf */
+  .schrank { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 14px; background: #FFF4E6; border-radius: 26px; padding: 12px; }
+  .buehne { position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 600 / 560; box-shadow: 0 0 0 3px #3B1F63; }
+  .buehne > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .buehne .fig { position: absolute; left: 25%; width: 50%; top: 0; height: 100%; }
+  .buehne .fig svg { width: 100%; height: 100%; }
+  .hopp { animation: hopp .45s ease; }
+  @keyframes hopp { 30% { transform: translateY(-14px) scale(1.02); } 60% { transform: translateY(2px); } }
+  .rechts { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .fächer { display: flex; gap: 10px; justify-content: space-between; }
+  .fach { flex: 1; aspect-ratio: 1; max-width: 86px; border: 0; border-radius: 22px; background: #fff; box-shadow: 0 5px 0 rgba(59,31,99,.15); font-size: 2.2rem; cursor: pointer; display: grid; place-items: center; }
+  .fach.an { background: #FFD84D; box-shadow: 0 0 0 4px #3B1F63, 0 5px 0 rgba(59,31,99,.25); }
+  .kacheln { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .kachel { position: relative; border: 0; border-radius: 20px; background: #fff; box-shadow: 0 5px 0 rgba(59,31,99,.15); aspect-ratio: 1; padding: 8px; cursor: pointer; }
+  .kachel svg { width: 100%; height: 100%; }
+  .kachel.an { box-shadow: 0 0 0 4px #5FCDA8, 0 5px 0 rgba(59,31,99,.15); }
+  .kachel.an::after { content: "✓"; position: absolute; right: -6px; top: -6px; width: 30px; height: 30px; border-radius: 50%; background: #5FCDA8; color: #fff; font-weight: 700; display: grid; place-items: center; box-shadow: 0 0 0 3px #fff; }
+  .farben { display: flex; gap: 10px; justify-content: center; }
+  .farbe { width: 48px; height: 48px; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 0 0 3px #3B1F63; cursor: pointer; }
+  .farbe.an { transform: scale(1.15); box-shadow: 0 0 0 4px #3B1F63, 0 0 0 9px #FFD84D; }
+  .unten-leiste { display: flex; gap: 10px; justify-content: space-between; }
+  .rund { width: 64px; height: 64px; border-radius: 50%; border: 0; background: #fff; font-size: 1.8rem; box-shadow: 0 5px 0 rgba(59,31,99,.15); cursor: pointer; }
+  /* Mathe-Entwürfe */
+  .mathe { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+  .variante { background: #EFFAF5; border-radius: 22px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .variante h3 { margin: 0; font-size: 1.15rem; }
+  .benno-zeile { display: flex; gap: 10px; align-items: center; }
+  .benno-zeile .b { width: 64px; flex: none; }
+  .benno-zeile .b svg { width: 100%; height: auto; }
+  .sprech { background: #fff; border-radius: 18px; padding: 10px 14px; font-size: 1.3rem; font-weight: 600; flex: 1; box-shadow: 0 3px 0 rgba(59,31,99,.1); min-height: 64px; display: flex; align-items: center; gap: 8px; }
+  .sprech .hoer { margin-left: auto; flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #E9F3FF; font-size: 1.3rem; cursor: pointer; }
+  .feld-bild { width: 100%; height: auto; display: block; }
+  .gross { font-size: 2.4rem; font-weight: 700; text-align: center; color: #2E7D5B; }
+  .weiter { align-self: center; font-size: 2rem; width: 84px; height: 64px; border-radius: 999px; border: 0; background: #5FCDA8; color: #fff; box-shadow: 0 5px 0 #3E9C7C; cursor: pointer; }
+  .punkte-n { display: flex; gap: 6px; justify-content: center; }
+  .punkte-n span { width: 12px; height: 12px; border-radius: 50%; background: #CFE9DE; }
+  .punkte-n span.da { background: #2E7D5B; }
+  .comic { display: grid; gap: 8px; }
+  .comic div { background: #fff; border-radius: 14px; padding: 6px 10px; font-weight: 600; font-size: 1.15rem; display: grid; grid-template-columns: 34px 1fr; gap: 4px 8px; align-items: center; }
+  .comic div b { grid-row: span 2; width: 34px; height: 34px; border-radius: 50%; background: #2E7D5B; color: #fff; display: grid; place-items: center; }
+  .vergleich { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .vergleich > div { border-radius: 20px; padding: 14px; }
+  .vorher { background: #FFF0EE; } .nachher { background: #EFFAF5; }
+  .vergleich p { margin: 6px 0; font-size: 1.15rem; }
+  @media (max-width: 760px) {
+    .reihe { grid-template-columns: 1fr 1fr 1fr; } .reihe .name { grid-column: 1 / -1; }
+    .figuren { grid-template-columns: repeat(3, 1fr); }
+    .schrank { grid-template-columns: 1fr; }
+    .vergleich { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Entwürfe zur Auswahl (03.11.2026)</h1>
+  <a href="#tiere">Tiere</a><a href="#kinder">Kinderfigur</a><a href="#schrank">Kleiderschrank</a><a href="#mathe">Mathe-Erklärung</a>
+</header>
+<main>
+  <section class="block" id="tiere">
+    <h2>🐾 Mein Tier in 2D</h2>
+    <p class="erkl">Je Tier: <b>heute</b> (alt), <span class="buchstabe">A</span><b>dunkle Kontur</b> (wie Stil A der App) und <span class="buchstabe">B</span><b>feine Kontur im Fellton</b> (weicher, mehr wie ein Bilderbuch).
+      Dreiviertelansicht, zwei Schattenstufen, Fell- und Schuppen-Zeichnung; Baby → Kind → groß.</p>
+    <div class="knoepfe" id="tier-farbe"><button data-f="0" class="an">Farbe 1</button><button data-f="1">Farbe 2</button><button data-f="2">Farbe 3</button></div>
+    <div id="tier-raster"></div>
+  </section>
+
+  <section class="block" id="kinder">
+    <h2>🧒 Kinderfigur</h2>
+    <p class="erkl">Heute (links) und neu: Kinderproportionen, Hände mit Daumen, lockere Pose (Gewicht auf einem Bein, Hand an der Hüfte), Stoff mit Falten und Schatten.
+      <span class="buchstabe">a</span><b>Kinderbuch</b> (Kopf etwas größer, weicher) · <span class="buchstabe">b</span><b>schlanker, etwas älter</b>.</p>
+    <div class="figuren" id="kinder-raster"></div>
+  </section>
+
+  <section class="block" id="schrank">
+    <h2>🚪 Kleiderschrank – Bedienung ohne Lesen</h2>
+    <p class="erkl">Zum Ausprobieren: oben die Fächer als große Bilder (Oberteil, Hose/Rock, Schuhe), darunter die Sachen als Bilder.
+      <b>Antippen = anziehen</b> (die Figur hüpft), darunter die Farben als Kleckse. ↩ nimmt den letzten Schritt zurück, 🔊 sagt, was gerade offen ist. Keine Wörter nötig.</p>
+    <div class="knoepfe" id="schrank-wahl"><button data-g="m" class="an">Junge</button><button data-g="w">Mädchen</button><button data-v="a" class="an">Figur a</button><button data-v="b">Figur b</button></div>
+    <div class="schrank">
+      <div class="buehne" id="buehne"></div>
+      <div class="rechts">
+        <div class="fächer" id="faecher">
+          <button class="fach an" data-fach="oben" aria-label="Oberteile">👕</button>
+          <button class="fach" data-fach="unten" aria-label="Hosen und Röcke">👖</button>
+          <button class="fach" data-fach="schuhe" aria-label="Schuhe">👟</button>
+        </div>
+        <div class="kacheln" id="sachen"></div>
+        <div class="farben" id="farben"></div>
+        <div class="unten-leiste"><button class="rund" id="zurueck" aria-label="Zurück">↩</button><button class="rund" id="hoeren" aria-label="Vorlesen">🔊</button><button class="rund" id="fertig" aria-label="Fertig">✅</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="mathe">
+    <h2>🦫 Mathe-Erklärung: 8 + 5 (über die 10)</h2>
+    <p class="erkl">Drei Arten, dasselbe zu erklären – kurze Sätze ohne Fachwörter, das Bild zeigt es, 🔊 liest vor. Welche verstehen Kinder am besten?</p>
+    <div class="mathe">
+      <div class="variante" id="var-a">
+        <h3><span class="buchstabe">A</span>Schritt für Schritt</h3>
+        <div class="benno-zeile"><div class="b" data-benno></div><div class="sprech"><span class="satz"></span><button class="hoer" aria-label="Vorlesen">🔊</button></div></div>
+        <div class="bild"></div><div class="gross" hidden></div>
+        <div class="punkte-n"></div>
+        <button class="weiter" aria-label="Weiter" data-emoji="aus">▶</button>
+      </div>
+      <div class="variante" id="var-b">
+        <h3><span class="buchstabe">B</span>Selbst machen</h3>
+        <div class="benno-zeile"><div class="b" data-benno></div><div class="sprech"><span class="satz"></span><button class="hoer" aria-label="Vorlesen">🔊</button></div></div>
+        <div class="bild"></div><div class="gross" hidden></div>
+        <button class="k nochmal" hidden>↻ Nochmal</button>
+      </div>
+      <div class="variante" id="var-c">
+        <h3><span class="buchstabe">C</span>Bildergeschichte</h3>
+        <div class="benno-zeile"><div class="b" data-benno></div><div class="sprech"><span class="satz">So rechnest du 8 + 5.</span><button class="hoer" aria-label="Vorlesen">🔊</button></div></div>
+        <div class="comic"></div>
+        <div class="gross">8 + 5 = 13</div>
+      </div>
+    </div>
+    <h3 style="margin:18px 0 8px">Wenn ein Kind sich verrechnet (Beispiel: 34 + 28, das Kind schreibt 52)</h3>
+    <div class="vergleich">
+      <div class="vorher"><b>Heute</b><div id="fehler-vorher"></div></div>
+      <div class="nachher"><b>Neu</b> – Benno spricht, Bild zuerst<div id="fehler-nachher"></div></div>
+    </div>
+  </section>
+</main>
+<script src="../../shared/figuren.js"></script>
+<script src="../../shared/icons.js"></script>
+<script src="../../shared/emoji.js"></script>
+<script src="../../shared/tiere.js"></script>
+<script src="../anziehen/teile.js"></script>
+<script src="../anziehen/figur.js"></script>
+<script src="entwurf/tiere.js"></script>
+<script src="entwurf/kind.js"></script>
+<script src="entwurf/mathe.js"></script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const sprich = (t) => { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = 0.9; speechSynthesis.speak(u); } catch (e) { /* ohne Stimme */ } };
+  // ---------- Tiere ----------
+  let farbe = 0;
+  const alt = (art, st) => (window.Tiere ? `<svg viewBox="0 0 300 300">${Tiere.zeichneTier({ art, farbe, stufe: st })}</svg>` : "");
+  function tiere() {
+    const namen = { hund: ["Hund", "Welpe · Junghund · Hund"], katze: ["Katze", "Kätzchen · junge Katze · Katze"], drache: ["Drache", "Schlüpfling · Jungdrache · Drache"] };
+    $("tier-raster").innerHTML = ["hund", "katze", "drache"].map(art =>
+      [["heute", (st) => alt(art, st)], ["A", (st) => TiereEntwurf.svg(art, st, "a", farbe)], ["B", (st) => TiereEntwurf.svg(art, st, "b", farbe)]].map(([was, f]) =>
+        `<div class="reihe"><div class="name">${was === "heute" ? namen[art][0] + " – heute" : `<span class="buchstabe">${was}</span>${namen[art][0]}`}<small>${namen[art][1]}</small></div>` +
+        [0, 1, 2].map(st => `<div class="karte">${f(st)}</div>`).join("") + `</div>`).join("")).join("<hr style='border:0;border-top:2px dashed #E4DAF6;margin:14px 0'>");
+  }
+  $("tier-farbe").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; farbe = +b.dataset.f; [...$("tier-farbe").children].forEach(x => x.classList.toggle("an", x === b)); tiere(); });
+  tiere();
+  // ---------- Kinder ----------
+  const W_FARBEN = { g: "w", oben: "#FF9BC8", unten: "#8E63D6", schuh: "#E0457B", haar: "#6B3E22" };
+  const altFigur = (g) => `<svg viewBox="40 0 220 560">${(window.Puppe && Puppe.setzeForm && Puppe.setzeForm(g), Figur.zeichneFigur(Figur.STANDARD(g)))}</svg>`;
+  $("kinder-raster").innerHTML = [["Junge heute", altFigur("m")], ["Mädchen heute", altFigur("w")],
+    ["Junge a", KindEntwurf.figur({ g: "m", variante: "a" })], ["Mädchen a", KindEntwurf.figur(Object.assign({ variante: "a" }, W_FARBEN))],
+    ["Junge b", KindEntwurf.figur({ g: "m", variante: "b" })], ["Mädchen b", KindEntwurf.figur(Object.assign({ variante: "b" }, W_FARBEN))]]
+    .map(([t, s]) => `<div class="karte">${s}<div class="unter">${t}</div></div>`).join("");
+  // ---------- Kleiderschrank ----------
+  const SACHEN = {
+    oben: [{ art: "rakete", motiv: "rakete" }, { art: "herz", motiv: "herz" }, { art: "tshirt", motiv: "" }],
+    unten: [{ art: "jeans" }, { art: "rock" }],
+    schuhe: [{ art: "sneaker" }, { art: "ballerina" }]
+  };
+  const FARBEN = ["#E8463B", "#FF9BC8", "#FFD84D", "#5FCDA8", "#4FA8F0", "#8E63D6", "#4A6FA5"];
+  const NAMEN = { oben: "Oberteile", unten: "Hosen und Röcke", schuhe: "Schuhe" };
+  let g = "m", v = "a", fach = "oben";
+  const start = (g) => g === "m" ? { oben: "#2E6FB8", motiv: "rakete", unten: "#4A6FA5", untenArt: "jeans", schuh: "#E8463B", schuhArt: "sneaker", haar: "#A8693A" }
+    : { oben: "#FF9BC8", motiv: "herz", unten: "#8E63D6", untenArt: "rock", schuh: "#E0457B", schuhArt: "ballerina", haar: "#6B3E22" };
+  let look = start(g), verlauf = [];
+  function zeichneBuehne(hopp) {
+    $("buehne").innerHTML = KindEntwurf.zimmer(g) + `<div class="fig${hopp ? " hopp" : ""}">${KindEntwurf.figur(Object.assign({ g, variante: v }, look))}</div>`;
+  }
+  function zeichneSachen() {
+    const aktFarbe = fach === "oben" ? look.oben : fach === "unten" ? look.unten : look.schuh;
+    $("sachen").innerHTML = SACHEN[fach].map((s, i) => {
+      const an = fach === "oben" ? look.motiv === s.motiv : fach === "unten" ? look.untenArt === s.art : look.schuhArt === s.art;
+      return `<button class="kachel${an ? " an" : ""}" data-i="${i}">${KindEntwurf.teilBild(s.art, aktFarbe)}</button>`;
+    }).join("");
+    $("farben").innerHTML = FARBEN.map(c => `<button class="farbe${c === aktFarbe ? " an" : ""}" data-c="${c}" style="background:${c}" aria-label="Farbe"></button>`).join("");
+  }
+  const merke = () => { verlauf.push(JSON.stringify(look)); if (verlauf.length > 30) verlauf.shift(); };
+  $("faecher").addEventListener("click", (e) => { const b = e.target.closest(".fach"); if (!b) return; fach = b.dataset.fach; [...$("faecher").children].forEach(x => x.classList.toggle("an", x === b)); zeichneSachen(); sprich(NAMEN[fach]); });
+  $("sachen").addEventListener("click", (e) => { const b = e.target.closest(".kachel"); if (!b) return; const s = SACHEN[fach][+b.dataset.i]; merke();
+    if (fach === "oben") look.motiv = s.motiv; else if (fach === "unten") look.untenArt = s.art; else look.schuhArt = s.art; zeichneBuehne(true); zeichneSachen(); });
+  $("farben").addEventListener("click", (e) => { const b = e.target.closest(".farbe"); if (!b) return; merke();
+    if (fach === "oben") look.oben = b.dataset.c; else if (fach === "unten") look.unten = b.dataset.c; else look.schuh = b.dataset.c; zeichneBuehne(true); zeichneSachen(); });
+  $("zurueck").addEventListener("click", () => { if (!verlauf.length) return; look = JSON.parse(verlauf.pop()); zeichneBuehne(true); zeichneSachen(); });
+  $("hoeren").addEventListener("click", () => sprich(NAMEN[fach]));
+  $("fertig").addEventListener("click", () => { sprich("Toll siehst du aus!"); zeichneBuehne(true); });
+  $("schrank-wahl").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.g) { g = b.dataset.g; look = start(g); verlauf = []; } if (b.dataset.v) v = b.dataset.v;
+    [...$("schrank-wahl").children].forEach(x => { if (x.dataset.g) x.classList.toggle("an", x.dataset.g === g); if (x.dataset.v) x.classList.toggle("an", x.dataset.v === v); });
+    zeichneBuehne(); zeichneSachen(); });
+  zeichneBuehne(); zeichneSachen();
+  // ---------- Mathe ----------
+  const benno = window.FigurenNeu ? FigurenNeu.svg("biber", "a", "froh") : "🦫";
+  document.querySelectorAll("[data-benno]").forEach(b => { b.innerHTML = benno; });
+  // A: Schritt für Schritt
+  { const el = $("var-a"), S = MatheEntwurf.SCHRITTE_A; let n = 0;
+    const zeige = () => { const s = S[n]; el.querySelector(".satz").textContent = s.satz; el.querySelector(".bild").innerHTML = s.bild();
+      const gr = el.querySelector(".gross"); gr.hidden = !s.gross; gr.textContent = s.gross || "";
+      el.querySelector(".punkte-n").innerHTML = S.map((_, i) => `<span class="${i <= n ? "da" : ""}"></span>`).join("");
+      el.querySelector(".weiter").textContent = n === S.length - 1 ? "↻" : "▶"; };
+    el.querySelector(".weiter").addEventListener("click", () => { n = (n + 1) % S.length; zeige(); });
+    el.querySelector(".hoer").addEventListener("click", () => sprich(S[n].satz)); zeige(); }
+  // B: Selbst machen – blaue Punkte antippen
+  { const el = $("var-b"); let oben = 0, unten = 0;
+    const satz = () => oben + unten === 0 ? "8 rote. Tipp die 5 blauen an!" : oben < 2 ? "Noch einer, dann ist die Reihe voll." : oben === 2 && unten === 0 ? "Voll! Das sind 10. Weiter!" : unten < 3 ? `10 und ${unten}.` : "10 und 3 sind 13!";
+    const zeige = () => { el.querySelector(".satz").textContent = satz(); el.querySelector(".bild").innerHTML = MatheEntwurf.feld(8, oben, unten, 5 - oben - unten, { gross: true, tippbar: true });
+      const fertig = oben + unten === 5; el.querySelector(".gross").hidden = !fertig; el.querySelector(".gross").textContent = "8 + 5 = 13"; el.querySelector(".nochmal").hidden = !fertig; };
+    el.querySelector(".bild").addEventListener("click", (e) => { if (!e.target.closest(".wartet")) return; if (oben < 2) oben++; else unten++; zeige(); });
+    el.querySelector(".nochmal").addEventListener("click", () => { oben = unten = 0; zeige(); });
+    el.querySelector(".hoer").addEventListener("click", () => sprich(satz())); zeige(); }
+  // C: Bildergeschichte
+  { const el = $("var-c"); el.querySelector(".comic").innerHTML = MatheEntwurf.GESCHICHTE_C.map((s, i) => `<div><b>${i + 1}</b>${s.bild()}<span>${s.satz}</span></div>`).join("");
+    el.querySelector(".hoer").addEventListener("click", () => sprich("So rechnest du 8 plus 5. " + MatheEntwurf.GESCHICHTE_C.map(s => s.satz).join(" "))); }
+  // Fehler vorher/nachher
+  $("fehler-vorher").innerHTML = `<p style="opacity:.75">Denkfehler „Übertrag vergessen“ – So denkst du gerade · Warum das nicht stimmt · So stimmt es:</p>` + MatheEntwurf.FEHLER.vorher.map(t => `<p>${t}</p>`).join("");
+  $("fehler-nachher").innerHTML = `<div class="benno-zeile" style="margin:8px 0"><div class="b">${benno}</div><div class="sprech" style="font-size:1.15rem">Fast! Schau mal. <button class="hoer" id="f-hoer" aria-label="Vorlesen">🔊</button></div></div>` +
+    MatheEntwurf.stellenBild() + MatheEntwurf.FEHLER.nachher.map(t => `<p>${t}</p>`).join("");
+  $("f-hoer").addEventListener("click", () => sprich("Fast! Schau mal. " + MatheEntwurf.FEHLER.nachher.join(" ")));
+})();
+</script>
+</body>
+</html>
