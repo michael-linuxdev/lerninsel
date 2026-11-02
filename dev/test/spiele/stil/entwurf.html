@@ -84,7 +84,7 @@
 <body>
 <header>
   <h1>Entwürfe zur Auswahl (03.11.2026)</h1>
-  <a href="#tiere">Tiere</a><a href="#kinder">Kinderfigur</a><a href="#schrank">Kleiderschrank</a><a href="#mathe">Mathe-Erklärung</a>
+  <a href="#tiere">Tiere</a><a href="#kinder2">Kinder neu</a><a href="#kinder">Kinderfigur</a><a href="#schrank">Kleiderschrank</a><a href="#mathe">Mathe-Erklärung</a>
 </header>
 <main>
   <section class="block" id="tiere">
@@ -93,6 +93,15 @@
       Dreiviertelansicht, zwei Schattenstufen, Fell- und Schuppen-Zeichnung; Baby → Kind → groß.</p>
     <div class="knoepfe" id="tier-farbe"><button data-f="0" class="an">Farbe 1</button><button data-f="1">Farbe 2</button><button data-f="2">Farbe 3</button></div>
     <div id="tier-raster"></div>
+  </section>
+
+  <section class="block" id="kinder2">
+    <h2>🧒 Kinderfigur – neu (Entwurf 2, Kinderbuch)</h2>
+    <p class="erkl">Nach Ihrer Wahl „alle neu, eher Kinderbuch“: kräftigere Arme und Beine mit Knien und Waden, offene Hand mit Daumen, Hand an der Hüfte, Füße mit Zehen,
+      Pony mit Strähnen, normale Augen. Erst nach Ihrer Freigabe wird die Kleidung (alle Teile) dafür neu gezeichnet.</p>
+    <div class="figuren" id="kinder2-raster"></div>
+    <h3 style="margin:14px 0 6px">Ausdrücke</h3><div class="figuren" id="kinder2-ausdruck" style="grid-template-columns:repeat(7,1fr)"></div>
+    <h3 style="margin:14px 0 6px">Hauttöne</h3><div class="figuren" id="kinder2-haut" style="grid-template-columns:repeat(6,1fr)"></div>
   </section>
 
   <section class="block" id="kinder">
@@ -161,6 +170,7 @@
 <script src="../anziehen/figur.js"></script>
 <script src="entwurf/tiere.js"></script>
 <script src="entwurf/kind.js"></script>
+<script src="entwurf/kind2.js"></script>
 <script src="entwurf/mathe.js"></script>
 <script>
 (function () {
@@ -185,6 +195,15 @@
     ["Junge a", KindEntwurf.figur({ g: "m", variante: "a" })], ["Mädchen a", KindEntwurf.figur(Object.assign({ variante: "a" }, W_FARBEN))],
     ["Junge b", KindEntwurf.figur({ g: "m", variante: "b" })], ["Mädchen b", KindEntwurf.figur(Object.assign({ variante: "b" }, W_FARBEN))]]
     .map(([t, s]) => `<div class="karte">${s}<div class="unter">${t}</div></div>`).join("");
+  // ---------- Kinder neu (Entwurf 2) ----------
+  if (window.Kind2) {
+    $("kinder2-raster").innerHTML = [["Junge heute", altFigur("m")], ["Mädchen heute", altFigur("w")], ["Junge neu", Kind2.kind({ g: "m" })], ["Mädchen neu", Kind2.kind({ g: "w" })],
+      ["keine Angabe neu", Kind2.kind({ g: "n" })], ["Junge neu", Kind2.kind({ g: "m", haut: Kind2.HAUT[4], haar: Kind2.HAAR[4] })]].map(([t, x]) => `<div class="karte">${x}<div class="unter">${t}</div></div>`).join("");
+    const kopf = (svg) => svg.replace("0 0 300 560", "80 20 140 170");
+    const NAMEN = { laecheln: "Lächeln", lachen: "Lachen", zwinkern: "Zwinkern", staunen: "Staunen", verliebt: "Verliebt", frech: "Frech", cool: "Verträumt" };
+    $("kinder2-ausdruck").innerHTML = Kind2.AUSDRUECKE.map((a, i) => `<div class="karte">${kopf(Kind2.kind({ g: ["m", "w", "n"][i % 3], ausdruck: a, haar: Kind2.HAAR[i % 6] }))}<div class="unter">${NAMEN[a]}</div></div>`).join("");
+    $("kinder2-haut").innerHTML = Kind2.HAUT.map((h, i) => `<div class="karte">${kopf(Kind2.kind({ g: ["m", "w", "n"][i % 3], haut: h, haar: Kind2.HAAR[(i + 2) % 6] }))}</div>`).join("");
+  }
   // ---------- Kleiderschrank ----------
   const SACHEN = {
     oben: [{ art: "rakete", motiv: "rakete" }, { art: "herz", motiv: "herz" }, { art: "tshirt", motiv: "" }],
