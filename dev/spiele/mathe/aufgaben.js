@@ -1313,7 +1313,7 @@
         if (!liste.includes(f)) liste[0] = f;
         return zahl("", liste.filter(x => x === f).length, `Mach für jedes ${f} einen Strich und zähle: ${liste.filter(x => x === f).length}.`, { frage: `Für eine Strichliste: Wie oft kommt ${f} vor?`, bild: emojiReihe(liste, 40), nurLuecke: true });
       } },
-    { id: "figuren", lb: "rf", lz: ["ma.rf.03", "ma.rf.04"], name: "Figuren und Körper genau", icon: "🔷",
+    { id: "figuren", lb: "rf", lz: ["ma.rf.03", "ma.rf.04"], name: "Figuren und Körper genau", icon: "\uE111",
       neu: () => {
         const art = r(1, 7);
         if (art === 1) { const f = wahl(["fuenfeck", "sechseck"]); return wahlAufgabe("Die Figur hat mehr als 4 Ecken. Wie heißt sie?", "Vieleck", ["Viereck", "Kreis", "Dreieck"], "Figuren mit vielen geraden Seiten und Ecken heißen Vielecke.", { bild: formBild(f, "#C27BFF") }); }
@@ -1671,7 +1671,7 @@
           : zahl("", a + b - b, `${a + b} ${M} ${b} = ${a}.`, { frage: `${a + b} ${t} sind da. ${b} gehen weg. Wie viele bleiben?`, bild: emojiReihe(Array(a + b).fill(t), 40), nurLuecke: true }); } },
     { id: "k1lage", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.01", "ma.rf.02"], name: "Oben, unten, links, rechts", icon: "↔️",
       neu: () => STATIONEN.find(s => s.id === "lage").neu() },
-    { id: "k1formen", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.03", "ma.rf.04", "ma.zo.01"], name: "Formen entdecken", icon: "🔷",
+    { id: "k1formen", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.03", "ma.rf.04", "ma.zo.01"], name: "Formen entdecken", icon: "\uE111",
       neu: () => { const art = r(1, 4);
         // Formen gleich gefärbt und gleich groß (03.11.2026): eigene Zeichen statt bunter Form-Emojis, im Bild über formenReihe
         const F = ["\uE111", "\uE112", "\uE110"];

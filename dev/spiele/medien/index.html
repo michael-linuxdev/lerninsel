@@ -15,6 +15,7 @@
   .ansicht[hidden] { display: none !important; }
   .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
   .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; min-width: 0; }
+  @media (max-width: 480px) { .oben h1 { font-size: 1.3rem; hyphens: auto; overflow-wrap: anywhere; } }   /* (04.11.2026) „Tablet-Führerschein“ nicht abschneiden */
   .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
   .sterne b { font-size: 1.4rem; }
 

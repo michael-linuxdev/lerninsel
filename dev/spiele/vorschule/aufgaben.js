@@ -29,7 +29,7 @@ window.VORSCHULE = [
     { frage: "Wie viele Bälle? ⚽⚽⚽⚽", ru: "Сколько мячей? ⚽⚽⚽⚽", optionen: ["⚃", "⚂", "⚄"], warum: "Vier Bälle – vier Punkte." },
     { frage: "Wo sind mehr? Tipp auf die Gruppe mit mehr Tieren.", ru: "Где больше? Нажми на группу, где больше животных.", optionen: ["🐟🐟🐟🐟", "🐟🐟", "🐟"], warum: "Vier Fische sind mehr als zwei." }] },
   // Formen: eigene Zeichen \uE110 Kreis, \uE111 Dreieck, \uE112 Viereck (gleiche Farbe und Größe, shared/emoji.js) – keine bunten Form-Emojis
-  { id: "vs-formen", bereich: "mathe", name: "Kreis, Dreieck, Viereck", e: "🔷", lz: ["ma.rf.02"], aufgaben: [
+  { id: "vs-formen", bereich: "mathe", name: "Kreis, Dreieck, Viereck", e: "\uE111", lz: ["ma.rf.02"], aufgaben: [
     { frage: "Welche Form ist ein Kreis?", ru: "Какая фигура — круг?", optionen: ["\uE110", "\uE111", "\uE112"], warum: "Der Kreis ist ganz rund." },
     { frage: "Welche Form ist ein Dreieck? Es hat drei Ecken.", ru: "Какая фигура — треугольник? У него три угла.", optionen: ["\uE111", "\uE110", "\uE112"], warum: "Ein Dreieck hat drei Ecken." },
     { frage: "Welche Form ist ein Viereck? Es hat vier Ecken.", ru: "Какая фигура — четырёхугольник? У него четыре угла.", optionen: ["\uE112", "\uE110", "\uE111"], warum: "Ein Viereck hat vier Ecken." },
