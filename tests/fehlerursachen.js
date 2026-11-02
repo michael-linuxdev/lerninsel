@@ -148,6 +148,20 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await weiter(); await weiter();
   erwarte(await p.evaluate(() => window.__fertig), "Minus bis 10: Erklärung bis zum Ende");
 
+  // Bis 20 und Ergänzen (04.11.2026): über den Test-Haken echt durchgeklickt
+  for (const [id, art, n, erg, wahl] of [["plus20", "wartet", 5, "8 + 5 = 13", "13"], ["minus20", "nimm", 5, "13 − 5 = 8", "8"], ["ergaenzen", "wartet", 6, "34 + 6 = 40", "3"]]) {
+    await p.evaluate((id) => { window.__fertig = false; __mathe.erklaere(id, () => { window.__fertig = true; }); }, id); await p.waitForTimeout(200);
+    for (let k = 0; k < 4; k++) await weiter();
+    for (let k = 0; k < n; k++) { await p.click(`#machen-bild .${art} >> nth=0`); await p.waitForTimeout(80); if (k === 1 || k === 2) await p.waitForTimeout(250); }
+    await p.waitForTimeout(200);
+    const e = await p.evaluate(() => document.getElementById("machen-ergebnis").textContent);
+    await weiter(); await p.click(`[data-e="${wahl}"]`); await p.waitForTimeout(150); await weiter();
+    await p.click('[data-g="nein"]'); await p.waitForTimeout(150);
+    const bildDa = await p.evaluate(() => !!document.querySelector("#warum svg"));
+    await weiter(); await weiter();
+    erwarte(e === erg && bildDa && await p.evaluate(() => window.__fertig), `Erklärung ${id}: selbst gemacht (${e}), Robos Fehler mit Bild, bis zum Ende`);
+  }
+
   // ---------- Zeig mir deinen Weg ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k3"; Spielwelt.speichere("mathe", d); });
   await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);

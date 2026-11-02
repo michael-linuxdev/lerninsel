@@ -6,7 +6,7 @@
 //   { typ: "gegenbeispiel", text, stimmt: false, fv, warum } Robo rechnet falsch; fv = Fehler aus fehler.js
 //   { typ: "geschichte", text, bilder: [{ satz, bild }] }    C „Bildergeschichte“ zum Merken: drei Bilder, je ein Satz; text = Merksatz
 // bild ist eine Funktion → SVG (Bausteine in BILD, auch für die Fehler-Hinweise: bildFuer(fv, o)).
-// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
+// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
 // Abschluss wird in mathe.erklaert[station] = 1 gemerkt; das Angebot kommt nur, wenn die Station noch nie gerechnet wurde.
 (function (W) {
   const M = "−", D = "#3B1F63", ROT = "#FF6F61", BLAU = "#4FA8F0", STANGE = "#FFB547";
@@ -164,6 +164,49 @@
         { satz: "So oft, wie die Zahl sagt.", bild: () => reihen(5, 3, 3) },
         { satz: "Zähl in Schritten: 5, 10, 15.", bild: () => reihen(5, 3, 3) }] }
     ],
+    // Bis 20 und Ergänzen (04.11.2026): erst die 10 voll machen bzw. erst bis zur 10 zurück
+    plus20: [
+      { typ: "zeigen", text: "8 + 5 – über die 10", bilder: [
+        { satz: "Das sind 8 Punkte.", bild: F({ rot: 8 }) },
+        { satz: "5 kommen dazu.", bild: F({ rot: 8, warten: 5 }) },
+        { satz: "2 machen die 10 voll.", bild: F({ rot: 8, blau: 2, warten: 3 }) },
+        { satz: "Die volle 10 ist ein Zehner. 3 sind noch übrig: 13.", bild: F({ z: 1, blau: 3, neu: true }) }] },
+      { typ: "machen", text: "Jetzt du: Tipp die blauen Punkte an.", art: "dazu", a: 8, b: 5 },
+      { typ: "ergaenzen", text: "Jetzt rechnest du: 7 + 6. Erst 3 bis zur 10.", frage: "10 + 3 = ?", antwort: "13", optionen: ["12", "13", "3"] },
+      { typ: "gegenbeispiel", text: "Robo zählt bei 9 + 4: „9, 10, 11, 12.“ Er sagt 12. Stimmt das?", stimmt: false, fv: "zaehlen", warum: "Bei der 9 ist Robo schon. 4 weiter: 10, 11, 12, 13. Also 13." },
+      { typ: "geschichte", text: "Erst die 10 voll machen, dann den Rest.", bilder: [
+        { satz: "Erst die 10 voll machen.", bild: F({ rot: 8, blau: 2, warten: 3 }) },
+        { satz: "Die volle 10 wird ein Zehner.", bild: F({ z: 1, neu: true, warten: 3 }) },
+        { satz: "Dann den Rest dazu.", bild: F({ z: 1, blau: 3 }) }] }
+    ],
+    minus20: [
+      { typ: "zeigen", text: `13 ${M} 5 – unter die 10`, bilder: [
+        { satz: "13 sind ein Zehner und 3 Einzelne.", bild: F({ z: 1, rot: 3 }) },
+        { satz: "5 sollen weg. Erst die 3.", bild: F({ z: 1, leer: 3 }) },
+        { satz: "Jetzt tauschen wir den Zehner in 10 Einzelne.", bild: F({ z: 1, tausch: true }) },
+        { satz: "Noch 2 weg. Übrig sind 8.", bild: F({ rot: 8, leer: 2 }) }] },
+      { typ: "machen", text: "Jetzt du: Tipp 5 rote Punkte weg.", art: "weg", a: 13, b: 5 },
+      { typ: "ergaenzen", text: `Jetzt rechnest du: 15 ${M} 7. Erst 5 weg, dann bist du bei 10.`, frage: `10 ${M} 2 = ?`, antwort: "8", optionen: ["8", "12", "2"] },
+      { typ: "gegenbeispiel", text: `Robo rechnet: 14 ${M} 6 = 12. Er sagt: „4 ${M} 6 geht nicht, also 6 ${M} 4.“ Stimmt das?`, stimmt: false, fv: "kleinvongross", warum: `Umdrehen geht nicht. Erst 4 weg, dann bist du bei 10. Noch 2 weg: 8.` },
+      { typ: "geschichte", text: "Erst bis zur 10 zurück, dann den Rest weg.", bilder: [
+        { satz: "Erst die Einzelnen weg.", bild: F({ z: 1, leer: 3 }) },
+        { satz: "Reicht es nicht? Tausch den Zehner.", bild: F({ z: 1, tausch: true }) },
+        { satz: "Dann den Rest weg.", bild: F({ rot: 8, leer: 2 }) }] }
+    ],
+    ergaenzen: [
+      { typ: "zeigen", text: "34 + ? = 40", bilder: [
+        { satz: "34 sind 3 Zehner und 4 Einzelne.", bild: F({ z: 3, rot: 4 }) },
+        { satz: "Bis zur 40 muss die 10 voll werden.", bild: F({ z: 3, rot: 4, warten: 6 }) },
+        { satz: "6 Punkte machen die 10 voll.", bild: F({ z: 3, rot: 4, blau: 6 }) },
+        { satz: "Jetzt sind es 40. Es fehlen also 6.", bild: F({ z: 4, neu: true }) }] },
+      { typ: "machen", text: "Jetzt du: Mach die 10 voll. Tipp die blauen Punkte an.", art: "dazu", a: 34, b: 6 },
+      { typ: "ergaenzen", text: "Jetzt rechnest du: Wie viele fehlen bis zur 60?", frage: "57 + ? = 60", antwort: "3", optionen: ["3", "7", "13"] },
+      { typ: "gegenbeispiel", text: "Robo rechnet: 36 + 4 = 30. Stimmt das?", stimmt: false, fv: "uebertrag", warum: "6 und 4 machen die 10 voll. Daraus wird ein Zehner. Also 40." },
+      { typ: "geschichte", text: "Ergänzen heißt: Wie viele fehlen, bis die 10 voll ist?", bilder: [
+        { satz: "Schau, wie viele schon da sind.", bild: F({ z: 3, rot: 4 }) },
+        { satz: "Füll die 10 auf.", bild: F({ z: 3, rot: 4, blau: 6 }) },
+        { satz: "Zähl, wie viele du dazugetan hast.", bild: F({ z: 4, neu: true }) }] }
+    ],
     // Minus bis 10 (04.11.2026): Es geht etwas weg
     k1minus10: [
       { typ: "zeigen", text: `5 ${M} 2`, bilder: [
@@ -253,7 +296,7 @@
       ]
     }
   };
-  ERKLAERUNGEN.mal2 = ERKLAERUNGEN.mal1; ERKLAERUNGEN.mal3 = ERKLAERUNGEN.mal1;   // gleiche Idee „die gleiche Zahl mehrmals“
+  ERKLAERUNGEN.k1plus20 = ERKLAERUNGEN.plus20; ERKLAERUNGEN.mal2 = ERKLAERUNGEN.mal1; ERKLAERUNGEN.mal3 = ERKLAERUNGEN.mal1;   // gleiche Idee „die gleiche Zahl mehrmals“
   const verfahren = () => { try { return ((W.Spielwelt && W.Spielwelt.lade("eltern")) || {}).mathe?.minus === "ergaenzen" ? "ergaenzen" : "abziehen"; } catch (e) { return "abziehen"; } };
   function fuer(station) { const e = ERKLAERUNGEN[station]; if (!e) return null; return Array.isArray(e) ? e : e[verfahren()] || e.abziehen; }
   W.MatheErklaeren = { ERKLAERUNGEN, fuer, hat: (s) => !!ERKLAERUNGEN[s], BILD, bildFuer };
