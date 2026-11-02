@@ -212,7 +212,7 @@
       lang: (o) => [`Schau auf die letzte Zahl: ${o.runden % 10}.`, o.runden % 10 >= 5 ? `Das ist 5 oder mehr. Dann geht es zum nächsten Zehner hoch.` : `Das ist weniger als 5. Dann bleibt der Zehner.`, `Darum ist ${o.runden} ungefähr ${o.c}.`],
       kontrast: (o, zz) => rundenAufgabe(zz, o.runden % 10 >= 5) });
   // Einheiten (04.11.2026): 1 kg = 1000 g, nicht 100 g – eine Null zu wenig oder zu viel
-  const WORT = { kg: "Kilogramm", g: "Gramm", km: "Kilometer", m: "Meter", "€": "Euro", ct: "Cent" };
+  const WORT = { kg: "Kilogramm", g: "Gramm", km: "Kilometer", m: "Meter", "€": "Euro", ct: "Cent", l: "Liter", ml: "Milliliter" };
   KATALOG.push({ id: "umrechnen", name: "Einheiten: eine Null zu wenig oder zu viel (1 kg = 100 g)",
     erkenne: (o, w) => !!o.umrechnen && w !== o.c && [o.umrechnen.n * o.umrechnen.f / 10, o.umrechnen.n * o.umrechnen.f * 10, o.umrechnen.n].includes(w),
     kurz: (o) => `1 ${WORT[o.umrechnen.von]} sind ${o.umrechnen.f} ${WORT[o.umrechnen.nach]}.`,

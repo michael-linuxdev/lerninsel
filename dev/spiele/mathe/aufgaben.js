@@ -773,7 +773,7 @@
         const a = r(3, 9), b = r(11, 19); return zahl(`${a} · ${b}`, a * b, `Zerlege: ${a} · 10 = ${a * 10} und ${a} · ${b - 10} = ${a * (b - 10)}. Zusammen ${a * b}.`); } },
     { id: "k4liter", stufe: "4", lz: ["ma.gm.09"], name: "Liter und Milliliter", icon: "🧃",
       neu: () => { if (zz() < 0.5) { const l = r(1, 9), halb = zz() < 0.3; const ml = l * 1000 + (halb ? 500 : 0);
-          return zahl("", ml, `1 l sind 1000 ml. ${l}${halb ? ",5" : ""} l sind ${ml} ml.`, { frage: `Wie viele Milliliter sind ${l}${halb ? ",5" : ""} l?`, einheit: "ml", nurLuecke: true, max: 7 }); }
+          return Object.assign(zahl("", ml, `1 l sind 1000 ml. ${l}${halb ? ",5" : ""} l sind ${ml} ml.`, { frage: `Wie viele Milliliter sind ${l}${halb ? ",5" : ""} l?`, einheit: "ml", nurLuecke: true, max: 7 }), halb ? {} : { umrechnen: { n: l, f: 1000, von: "l", nach: "ml" } }); }
         const d = wahl([["ein Löffel Saft", "ml"], ["eine Badewanne voll Wasser", "l"], ["ein Glas Milch", "ml"], ["ein Eimer Wasser", "l"], ["eine Flasche Medizin-Tropfen", "ml"], ["ein Aquarium", "l"]]);
         return { text: "", frage: `Misst man ${d[0]} eher in ml oder in l?`, antwort: d[1], art: "wahl", optionen: ["ml", "l"], nurLuecke: true,
           hilfe: (d[1] === "l" ? `${d[0]} – das ist viel, man misst in Litern.` : `${d[0]} – das ist wenig, man misst in Millilitern.`).replace(/^./, c => c.toUpperCase()) }; } },
