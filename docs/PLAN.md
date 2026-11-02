@@ -2169,6 +2169,6 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
 - **Erledigt – Schrittweg „Schriftlich geteilt“ (Kl. 4):** von links, „Wie oft passt die 4 in die 24?“, Rest klein und blau vor der nächsten Zahl (`schrift(a, b, ":")`),
   Hinweise „Zu viel“, „Da passt noch mehr hinein“, „Denk an den Rest“; neuer Denkfehler „Rest nicht mitgenommen“ (nur im Schrittweg erkennbar).
 - **Erledigt – Deutsch-Werkstatt:** beim ersten Fehler ein kurzer Tipp je Schritt-Art (`TIPP_TYP` in `abenteuer.js`, ein Schritt kann mit `hilfe` einen eigenen Tipp setzen)
-  statt nur „Fast! Versuch es nochmal.“ (Tipps vorerst nur Deutsch, wie der alte Satz; russische Hilfe offen).
-- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für mehrstellig mal; Werkstatt-Tipps auf Russisch (Hilfesprache); weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
+  statt nur „Fast! Versuch es nochmal.“ – mit russischer Hilfe (Entwurf, nur bei gewählter Hilfesprache).
+- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für mehrstellig mal; russische Hilfe für Mathe-Erklärungen und Denkfehler-Texte (fehlt bisher); weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
   Extras der 3D-Figur an die neuen Zeichnungen angleichen.
