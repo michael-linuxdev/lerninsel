@@ -60,6 +60,7 @@
   // Schriftlich rechnen, Stelle für Stelle von rechts: bis = wie viele Stellen schon fertig sind (0 = nur hingeschrieben)
   // verfahren (minus): "abziehen" (getauschte Ziffer durchgestrichen, neue klein darüber) oder "ergaenzen" (kleine 1 unten links)
   function schrift(a, b, op, bis = 0, verfahren = "abziehen", markiere = -1) {
+    if (op === "·") return schriftMal(a, b, bis, markiere);
     const x = String(a).split("").reverse().map(Number), y = String(b).split("").reverse().map(Number), n = Math.max(x.length, y.length);
     const erg = [], klein = {}, oben = {};
     let c = 0;
@@ -163,6 +164,22 @@
     if (pfeil) { const ziel = hoch ? 10 : 0; s += `<path d="M${X(k)} 66 Q${(X(k) + X(ziel)) / 2} 30 ${X(ziel)} 66" fill="none" stroke="${BLAU}" stroke-width="4"/><path d="M${X(ziel) - 9} 58 L${X(ziel) + 9} 58 L${X(ziel)} 74 Z" fill="${BLAU}" stroke="${BLAU}" stroke-width="2" stroke-linejoin="round"/>`; }
     s += `<circle cx="${X(k)}" cy="90" r="10" fill="${ROT}" stroke="${D}" stroke-width="2.5"/>` +
       `<text x="${X(k)}" y="${pfeil ? 24 : 58}" text-anchor="middle" font-size="22" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${einer ? `${Math.floor(n / 10)}<tspan fill="${ROT}">${n % 10}</tspan>` : n}</text>`;
+    return s + `</svg>`;
+  }
+  // Schriftlich mal mit einer einstelligen Zahl (04.11.2026): 347 · 5, Ergebnis Stelle für Stelle, gemerkte Zahlen klein und blau
+  function schriftMal(a, b, bis = 0, markiere = -1) {
+    const x = String(a).split("").reverse().map(Number), erg = String(a * b).split("").reverse().map(Number), merk = {};
+    let c = 0; x.forEach((d, i) => { const p = d * b + c; c = Math.floor(p / 10); if (c) merk[i + 1] = c; });
+    const spalten = Math.max(x.length, erg.length), w = 46, x0 = 30, breite = x0 + spalten * w + 110, sx = (i) => x0 + (spalten - 1 - i) * w + w / 2;
+    const ziffer = (z, i, yy, extra = "") => `<text x="${sx(i)}" y="${yy}" font-size="34" text-anchor="middle" fill="${D}" font-weight="700" font-family="Fredoka, sans-serif" ${extra}>${z}</text>`;
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${breite} 170" class="erkl-bild" role="img" aria-label="${a} mal ${b} schriftlich">`;
+    if (markiere >= 0) s += `<rect x="${sx(markiere) - w / 2 + 3}" y="20" width="${w - 6}" height="140" rx="10" fill="#FFF3C4"/>`;
+    x.forEach((z, i) => { s += ziffer(z, i, 62); });
+    s += `<text x="${sx(0) + 40}" y="62" font-size="34" text-anchor="middle" fill="${D}" font-weight="700" font-family="Fredoka, sans-serif">·</text>` +
+      `<text x="${sx(0) + 76}" y="62" font-size="34" text-anchor="middle" fill="${D}" font-weight="700" font-family="Fredoka, sans-serif">${b}</text>` +
+      `<line x1="${x0 - 6}" y1="84" x2="${breite - 14}" y2="84" stroke="${D}" stroke-width="3.5"/>`;
+    Object.keys(merk).forEach(k => { k = +k; if (k <= bis && k < spalten) s += `<text x="${sx(k)}" y="108" font-size="18" text-anchor="middle" fill="${BLAU}" font-weight="700" font-family="Fredoka, sans-serif">${merk[k]}</text>`; });
+    erg.forEach((z, i) => { if (i < bis) s += ziffer(z, i, 148); });
     return s + `</svg>`;
   }
   const BILD = { feld, reihen, strahl, schrift, uhr, geld, lineal, stellen, runden };

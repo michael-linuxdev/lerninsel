@@ -261,14 +261,29 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await tippe(2); await p.waitForTimeout(250);
   erwarte(await p.evaluate(() => /Zehnern/.test(document.getElementById("ausdruck").textContent) && document.querySelectorAll(".weg-liste .gut").length === 1), "Einer richtig (2) ✓, weiter zu den Zehnern");
   await tippe(2); await p.waitForTimeout(250);
-  erwarte(await p.evaluate(() => /Übertrag/.test(document.getElementById("rueck").textContent)), "Zehner 2 statt 3: Hinweis auf den vergessenen Übertrag");
+  erwarte(await p.evaluate(() => /kleine 1/.test(document.getElementById("rueck").textContent) && !/Übertrag|Ziffer|Stelle/.test(document.getElementById("tafel").textContent) && !!document.querySelector(".weg-bild svg rect[fill='#FFF3C4']")), "Zehner 2 statt 3: Hinweis „Denk an die kleine 1“, Rechenbild mit markierter Spalte, keine Fachwörter");
   await bild(p, "fu-weg");
   await p.waitForTimeout(700); await tippe(3); await p.waitForTimeout(250); await tippe(6); await p.waitForTimeout(300);
-  erwarte(await p.evaluate(() => /Dein Fehler lag bei den Zehnern/.test(document.getElementById("weg-ende").textContent) && /Übertrag vergessen/.test(document.getElementById("weg-ende").textContent)), "Ende: „Dein Fehler lag bei den Zehnern“, Denkfehler benannt");
+  erwarte(await p.evaluate(() => /Dein Fehler lag bei den Zehnern/.test(document.getElementById("weg-ende").textContent) && /muss mit/.test(document.getElementById("weg-ende").textContent) && !/Denkfehler|Übertrag/.test(document.getElementById("tafel").textContent)), "Ende: „Dein Fehler lag bei den Zehnern“ mit kurzem Satz, ohne Fehlernamen");
   await bild(p, "fu-weg-ende");
   erwarte(await fv("uebertrag") === "wieder", "Denkfehler aus dem Schrittweg zählt für die Diagnose (war aufgelöst → wieder da)");
   await weiter();
   erwarte(await p.evaluate(() => !!document.getElementById("ausdruck") && !__mathe.lauf.weg), "Weiter: nächste Aufgabe");
+
+  // ---------- Schriftlich mal (04.11.2026): Schrittweg mit gemerkter Zahl ----------
+  await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k4"; Spielwelt.speichere("mathe", d); });
+  await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);
+  await p.evaluate(() => __mathe.starte(Mathe.STATIONEN_K4.findIndex(s => s.id === "k4malschrift"), true)); await p.waitForTimeout(300);
+  if (await p.isVisible("#erklaer-nein")) { await p.click("#erklaer-nein"); await p.waitForTimeout(300); }
+  await p.evaluate(() => __mathe.setzeAufgabe({ text: "347 · 5", antwort: "1735", art: "zahl", frage: "Rechne schriftlich: Fang bei den Einern an.", hilfe: "…", max: 7 }));
+  await tippe(1535); await p.waitForTimeout(900);
+  erwarte(await p.evaluate(() => /Zeig mir deinen Weg/.test(document.getElementById("tafel").textContent) && /Einern/.test(document.getElementById("ausdruck").textContent)), "schriftlich mal falsch: Schrittweg beginnt bei den Einern");
+  await tippe(5); await p.waitForTimeout(250); await tippe(0); await p.waitForTimeout(250);
+  erwarte(await p.evaluate(() => /gemerkte 3/.test(document.getElementById("rueck").textContent) && /merke 3/.test(document.querySelector(".weg-liste").textContent)), "Zehner 0 statt 3: Hinweis „Denk an die gemerkte 3“");
+  await bild(p, "fu-weg-mal");
+  await p.waitForTimeout(700); await tippe(3); await p.waitForTimeout(250); await tippe(7); await p.waitForTimeout(250); await tippe(1); await p.waitForTimeout(300);
+  erwarte(await p.evaluate(() => /Dein Fehler lag bei den Zehnern/.test(document.getElementById("weg-ende").textContent)), "schriftlich mal: „Dein Fehler lag bei den Zehnern“");
+  await weiter();
 
   // ---------- Startzahl: gemerkter Fehler nur als Station + Startzahl, beim Training wieder dieselbe Aufgabe ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k2"; d.fehler = []; Spielwelt.speichere("mathe", d); });

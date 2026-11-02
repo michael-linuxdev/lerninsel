@@ -69,7 +69,7 @@
       kontrast: (o, zz) => KATALOG[1].kontrast(o, zz) },
     { id: "uebertrag", name: "Übertrag vergessen",
       erkenne: (o, w) => o.op === "+" && hatUebertrag(o.a, o.b) && w === ohneUebertrag(o.a, o.b) && w !== o.c,
-      kurz: (o) => { const x = stellen(o.a)[0], y = stellen(o.b)[0]; return x + y >= 10 ? `${x} + ${y} = ${x + y}. Der Zehner muss mit zu den Zehnern.` : "Kommt 10 oder mehr heraus, wandert eine 1 nach links."; },
+      kurz: (o) => { if (o.op === "·") return "Die Zahl, die du dir merkst, kommt links dazu."; const x = stellen(o.a)[0], y = stellen(o.b)[0]; return x + y >= 10 ? `${x} + ${y} = ${x + y}. Der Zehner muss mit zu den Zehnern.` : "Kommt 10 oder mehr heraus, wandert eine 1 nach links."; },
       lang: (o) => { const x = stellen(o.a)[0], y = stellen(o.b)[0]; return [x + y >= 10 ? `${x} und ${y} sind ${x + y}.` : "Irgendwo kommt 10 oder mehr heraus.",
         `Aus 10 Einzelnen machst du einen Zehner. Er wandert nach links.`,
         `Darum: ${o.a} + ${o.b} = ${o.c}.`]; },
@@ -251,7 +251,13 @@
   // ---------- Schrittweg: schriftlich plus und minus ----------
   // Stellen von rechts; je Stelle: Ziffern x, y, Übertrag/Borgen vorher (ein), richtige Ziffer, Übertrag danach (aus)
   function schritte(a) {
-    const o = lies(a); if (!o || (o.op !== "+" && o.op !== M)) return null;
+    const o = lies(a); if (!o || (o.op !== "+" && o.op !== M && !(o.op === "·" && o.b < 10 && o.a >= 10))) return null;
+    if (o.op === "·") {   // (04.11.2026) schriftlich mal mit einstelliger Zahl: von rechts, die gemerkte Zahl kommt links dazu
+      const x = stellen(o.a), liste = []; let ein = 0;
+      x.forEach((xi, i) => { const p = xi * o.b + ein; liste.push({ i, x: xi, y: o.b, ein, ziffer: p % 10, aus: Math.floor(p / 10), summe: p }); ein = Math.floor(p / 10); });
+      if (ein) liste.push({ i: x.length, x: 0, y: o.b, ein, ziffer: ein, aus: 0, summe: ein, vorn: true });
+      return { o, liste };
+    }
     const x = stellen(o.a), y = stellen(o.b), z = stellen(o.c), n = Math.max(x.length, y.length, z.length), liste = [];
     let ein = 0;
     for (let i = 0; i < n; i++) {
@@ -263,19 +269,26 @@
     return { o, liste };
   }
   // Prüft eine Ziffer an einer Stelle: { ok, fv? (id), hinweis }
+  // (04.11.2026) Hinweise kindgerecht: kurze Sätze, keine Fachwörter („Übertrag“, „Ziffer“, „Stelle“), die kleine 1 statt Übertrag
   function pruefeSchritt(o, s, wert, art = "abziehen") {
     const w = +wert, st = STELLE[s.i], st1 = STELLE1[s.i];
     if (w === s.ziffer) return { ok: true };
+    if (o.op === "·") {
+      if (s.vorn) return { ok: false, fv: "uebertrag", hinweis: `Du hast dir zuletzt ${s.ein} gemerkt. Die kommt jetzt nach vorn.` };
+      if (s.ein && w === (s.x * s.y) % 10) return { ok: false, fv: "uebertrag", hinweis: `Denk an die gemerkte ${s.ein}: ${s.x} · ${s.y} + ${s.ein} = ${s.summe}.` };
+      if (String(wert).length > 1 && w === s.summe) return { ok: false, fv: "uebertrag", hinweis: `${s.summe} ist mehr als 9. Schreib nur die ${s.ziffer} hin. Die ${s.aus} merkst du dir für links.` };
+      return { ok: false, hinweis: `${s.x} · ${s.y}${s.ein ? " + " + s.ein : ""} = ${s.summe}. Was schreibst du bei den ${st} hin?` };
+    }
     if (o.op === "+") {
-      if (s.ein && w === (s.x + s.y) % 10) return { ok: false, fv: "uebertrag", hinweis: `Denk an den Übertrag: Von der Stelle davor ist noch 1 dazugekommen. ${s.x} + ${s.y} + 1 = ${s.summe}.` };
-      if (String(wert).length > 1 && +wert === s.summe) return { ok: false, fv: "uebertrag", hinweis: `${s.summe} ist mehr als 9: Schreibe nur die ${s.ziffer} bei den ${st} – die 1 wandert als Übertrag weiter.` };
-      return { ok: false, hinweis: `Bei den ${st}: ${s.x} + ${s.y}${s.ein ? " + 1 (Übertrag)" : ""} = ${s.summe}. Welche Ziffer schreibst du?` };
+      if (s.ein && w === (s.x + s.y) % 10) return { ok: false, fv: "uebertrag", hinweis: `Denk an die kleine 1 von rechts: ${s.x} + ${s.y} + 1 = ${s.summe}.` };
+      if (String(wert).length > 1 && +wert === s.summe) return { ok: false, fv: "uebertrag", hinweis: `${s.summe} ist mehr als 9. Schreib nur die ${s.ziffer} hin. Die kleine 1 wandert nach links.` };
+      return { ok: false, hinweis: `${s.x} + ${s.y}${s.ein ? " + 1" : ""} = ${s.summe}. Was schreibst du bei den ${st} hin?` };
     }
     const oben = s.x - s.ein;
-    if (s.aus && w === Math.abs(oben - s.y)) return { ok: false, fv: "kleinvongross", hinweis: `Bei den ${st} steht oben ${oben} und unten ${s.y}. Du darfst nicht umdrehen: Hol dir einen ${STELLE1[s.i + 1] || "Zehner"} dazu – ${oben + 10} ${M} ${s.y}.` };
-    if (s.ein && w === s.ziffer + 1) return { ok: false, fv: "borgen", hinweis: art === "ergaenzen" ? `Denk an den Übertrag: Unten kommt 1 dazu, also ${s.y + 1} bis ${s.x}${s.x < s.y + 1 ? " (+10)" : ""}.` : `Du hast vorhin einen ${st1} weggenommen – oben steht jetzt nur noch ${oben}.` };
+    if (s.aus && w === Math.abs(oben - s.y)) return { ok: false, fv: "kleinvongross", hinweis: `Oben ${oben}, unten ${s.y}. Umdrehen geht nicht. Tausch einen ${STELLE1[s.i + 1] || "Zehner"}: ${oben + 10} ${M} ${s.y}.` };
+    if (s.ein && w === s.ziffer + 1) return { ok: false, fv: "borgen", hinweis: art === "ergaenzen" ? `Denk an die kleine 1 unten: von ${s.y + 1} bis ${s.x}${s.x < s.y + 1 ? " (+10)" : ""}.` : `Du hast vorhin einen ${st1} getauscht. Oben steht jetzt nur noch ${oben}.` };
     const satz = art === "ergaenzen" ? `Von ${s.y + s.ein} bis ${s.aus ? s.x + 10 : s.x} sind es ${s.ziffer}.` : `${s.aus ? oben + 10 : oben} ${M} ${s.y} = ${s.ziffer}.`;
-    return { ok: false, hinweis: `Bei den ${st}: ${satz.replace(/\.$/, "")} – versuch es nochmal.` };
+    return { ok: false, hinweis: `Bei den ${st}: ${satz.replace(/\.$/, "")}. Versuch es nochmal.` };
   }
   const stelleName = (i) => STELLE[i];
 

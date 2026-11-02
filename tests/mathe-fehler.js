@@ -88,6 +88,18 @@ pruefe("Schrittweg: Ziffern je Stelle, Übertrag vergessen und kleinere von grö
   assert.strictEqual(F.pruefeSchritt(m.o, m.liste[0], 4).fv, "kleinvongross", "7 − 3 statt 13 − 7");
   assert.strictEqual(F.pruefeSchritt(m.o, m.liste[2], 4).fv, "borgen", "Hunderter: 5 − 1 statt 4 − 1");
   assert.ok(F.pruefeSchritt(m.o, m.liste[2], 9, "ergaenzen").hinweis.length > 10);
+  for (const [pp, i, w, art] of [[p, 1, 2], [p, 0, 12], [p, 1, 5], [m, 0, 4], [m, 2, 4], [m, 1, 9], [m, 2, 9, "ergaenzen"]]) {
+    const h = F.pruefeSchritt(pp.o, pp.liste[i], w, art).hinweis; assert.ok(!/Übertrag|Ziffer|Stelle|Denkfehler/.test(h) && h.length <= 100, `Hinweis kindgerecht: ${h}`); }
+  // schriftlich mal (04.11.2026): 347 · 5 = 1735 – gemerkte Zahl vergessen wird erkannt, die vordere gemerkte Zahl ist ein eigener Schritt
+  const mal = F.schritte({ text: "347 · 5", antwort: "1735", art: "zahl" });
+  assert.deepStrictEqual(mal.liste.map(s => s.ziffer), [5, 3, 7, 1]);
+  assert.strictEqual(F.pruefeSchritt(mal.o, mal.liste[1], 0).fv, "uebertrag", "4 · 5 = 20 ohne die gemerkte 3");
+  assert.strictEqual(F.pruefeSchritt(mal.o, mal.liste[0], 35).fv, "uebertrag", "35 statt 5 geschrieben");
+  assert.ok(F.pruefeSchritt(mal.o, mal.liste[3], 0).hinweis.includes("nach vorn"));
+  assert.strictEqual(F.schritte({ text: "34 · 56", antwort: "1904", art: "zahl" }), null, "mehrstellig mal: kein Schrittweg");
+  assert.ok(/^<svg/.test(E.BILD.schrift(347, 5, "·", 2, "", 2)) && /<text[^>]*>3<\/text>/.test(E.BILD.schrift(347, 5, "·", 2, "", 2)));
+  for (let i = 0; i < 500; i++) { const a = 112 + Math.floor(zz() * 887), b = 3 + Math.floor(zz() * 7), sm = F.schritte({ text: `${a} · ${b}`, antwort: String(a * b), art: "zahl" });
+    assert.strictEqual(+sm.liste.map(x => x.ziffer).reverse().join(""), a * b, `${a} · ${b}`); }
   // zufällige Aufgaben: die Ziffern ergeben immer das Ergebnis
   for (let i = 0; i < 1000; i++) {
     const a = 100 + Math.floor(zz() * 899), b = 100 + Math.floor(zz() * (a - 100)), plus = zz() < 0.5 && a + b < 1000;
