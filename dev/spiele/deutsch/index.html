@@ -18,7 +18,9 @@
   .oben h1 { margin: 0; font-size: 1.7rem; flex: 1; min-width: 0; }
   .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
   /* (30.10.2026) Handy: sechs runde Knöpfe passen nicht in eine Zeile – Titel neben 🏠, die anderen Knöpfe darunter */
-  @media (max-width: 480px) { #karte-ansicht .oben { flex-wrap: wrap; row-gap: 10px; } #karte-ansicht .oben h1 { flex-basis: calc(100% - 72px); font-size: 1.45rem; } }
+  @media (max-width: 480px) { #karte-ansicht .oben { flex-wrap: wrap; row-gap: 10px; } #karte-ansicht .oben h1 { flex-basis: calc(100% - 72px); font-size: 1.45rem; }
+    /* (04.11.2026) zweite Zeile: vier Knöpfe und Sterne passen nebeneinander */
+    #karte-ansicht .oben { column-gap: 8px; } #karte-ansicht .oben .knopf.rund:not(:first-child) { width: 50px; height: 50px; min-width: 50px; min-height: 50px; padding: 0; font-size: 1.3rem; } #karte-ansicht .oben .sterne { margin-left: auto; } }
   .sterne b { font-size: 1.4rem; }
 
   /* ---------- Karte ---------- */
