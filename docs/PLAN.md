@@ -2168,5 +2168,7 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   am 04.11. kurz online: Kachel-Symbol verriet eine Antwort – sofort behoben).
 - **Erledigt – Schrittweg „Schriftlich geteilt“ (Kl. 4):** von links, „Wie oft passt die 4 in die 24?“, Rest klein und blau vor der nächsten Zahl (`schrift(a, b, ":")`),
   Hinweise „Zu viel“, „Da passt noch mehr hinein“, „Denk an den Rest“; neuer Denkfehler „Rest nicht mitgenommen“ (nur im Schrittweg erkennbar).
-- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für mehrstellig mal; weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
+- **Erledigt – Deutsch-Werkstatt:** beim ersten Fehler ein kurzer Tipp je Schritt-Art (`TIPP_TYP` in `abenteuer.js`, ein Schritt kann mit `hilfe` einen eigenen Tipp setzen)
+  statt nur „Fast! Versuch es nochmal.“ (Tipps vorerst nur Deutsch, wie der alte Satz; russische Hilfe offen).
+- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für mehrstellig mal; Werkstatt-Tipps auf Russisch (Hilfesprache); weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
   Extras der 3D-Figur an die neuen Zeichnungen angleichen.

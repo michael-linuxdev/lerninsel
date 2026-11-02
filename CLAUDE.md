@@ -233,7 +233,7 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
   (Zettel, Elfchen: nur Länge/Pflichtwörter). Jedes Kapitel hat `lb` (`sz`|`sc`|`le`|`tm`|`su` = Lernbereich Deutsch 2025); die Werkstatt zeigt die
   Kapitel danach gruppiert, Kapitel früherer Klassen (Kl. 1/2 = eine Stufe) eingeklappt. Eigene Texte/Aufnahmen: `Eigenes.speichere/alle/loesche/url`
   (`shared/eigenes.js`, eigene IndexedDB, nie im Spielstand), `Eigenes.darfAufnehmen()`, `__deutsch.pruefeText(text, schritt)`.
-  Renderer in `spiele/deutsch/abenteuer.js` (`schritt()`/`switch`), Antwort über `antwort(knopf, richtig, beiRichtig)`.
+  Renderer in `spiele/deutsch/abenteuer.js` (`schritt()`/`switch`), Antwort über `antwort(knopf, richtig, beiRichtig)`; beim ersten Fehler Tipp aus `TIPP_TYP[typ]` oder Schritt-Feld `hilfe`.
 - Englisch (`spiele/englisch/lektionen.js`): `{ id, lb (1–11 = Lernbereich Lehrplan 2019, Übersicht danach gruppiert), stufe, lz, name, e, farbe, grund, intro: { de, ru }, woerter: [{ en, de, ru, e }], extra: [satz|wahl], ende }`;
   Schritte entstehen in `englisch.js` (`baue(k)`) aus den Wörtern; jedes Wort braucht ein eigenes Emoji. Test-Haken `__englisch` (starte, schritt, lauf, sichtbar).
   Eltern-Einstellung `eltern.englisch.ab` = `"3"` | `"1"`, `eltern.englisch.schule` = `"1"`…`"11"` | `""`; „Zeig, was du kannst“: `__englisch.starteLernstand(nr)`,
