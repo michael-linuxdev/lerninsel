@@ -25,7 +25,13 @@ Rückmeldung des Auftraggebers vom 02.11.2026 (Fragerunde schon beantwortet, Det
 - **Mathe-Erklärungen: „Kein Kind versteht das“** – kurze Sätze, keine Fachwörter, mehr Bild, Vorlesen.
 - **Vorgehen: zuerst eine Vorschau mit 2–3 Entwürfen zeigen und wählen lassen, dann umbauen.**
 
-## 1. Stand (02.11.2026)
+## 1. Stand (04.11.2026)
+**Neu am 04.11.2026:** Kleiderschrank-Extras neu gezeichnet (Dinge in der Hand werden gehalten, Hüte/Mützen mit Schatten), Matheweg mit neuen Denkfehlern
+(„Zahl verdreht“, mal 0, zwei Geteilt-Fehler) und neuen Erklär-Einheiten (Geteilt, Minus bis 10, Zehner und Einer). Details in `docs/PLAN.md`, „Stand 04.11.2026“.
+**Im iPad testen (in /dev):** Kleiderschrank → Extras (Ball, Teddy, Tasche, Mützen); Matheweg Kl. 2 → „Geteilt“ und „Zehner und Einer“ neu öffnen („Erklär es mir“),
+bei „Welche Zahl ist das?“ absichtlich verdreht eintippen (z. B. 25 statt 52).
+
+### Stand 02.11.2026
 **Neu am 02.11.2026:** siehe Abschnitt 0. Neue Tests: `sticker`, `fehlerursachen`, `sicherung` (Browser), `mathe-fehler`, `pruefstand` (Node, laufen in `sh tests/laufen.sh` mit).
 
 **Neu am 01.11.2026, letzte Sitzung:** Noto-Emojis in Stil A für alle 773 Emojis. Begleiter erscheinen nie mehr als Emoji. Begleiter, Spielfigur und Tier sind niedlicher, in 2D und 3D.

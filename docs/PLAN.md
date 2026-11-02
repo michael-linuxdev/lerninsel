@@ -2130,3 +2130,19 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   umgerechnet auf die neue Figur (**offen: neu zeichnen**). Neues Zimmer (Junge/Mädchen/keine Angabe), ↩ Zurück, 🔊. Gleiche Teile-IDs – gespeicherte Looks bleiben.
   Eltern-Schalter „Zeichnungen wie bis 02.11.2026“ zeigt die alte Figur. Startseite, Meine Ecke und Insel-Seiten zeigen die neue Figur. Test `anziehen` erweitert.
   **Offen:** Nachbarskinder auf der Insel (3D) an die neue Figur angleichen (Wunsch des Auftraggebers), Extras neu zeichnen, übrige Orte im neuen Stil.
+
+### Stand 04.11.2026, Sitzung „Produktverantwortlicher“ (Auftrag: „Optimiere ohne zu fragen, bis das Kontingent leer ist“)
+- **Erledigt – Kleiderschrank, Extras neu gezeichnet** (`spiele/anziehen/teile2.js`, `NEU_EXTRA`):
+  - Dinge in der Hand werden **wirklich gehalten**: Fußball, Teddy (am Arm gehalten), Kuschel-Dino, Handtasche (Henkel in der Faust), Holzschwert (Griff in der Faust,
+    Klinge nach unten), Zauberstab, Luftballon, Armband am Handgelenk. Die Finger liegen über dem Griff (`finger()`, nur an der Figur, nicht in der Kachel).
+  - Hüte und Mützen mit Schatten- und Lichtstufe: Basecap mit Schirm, Bommelmütze mit Rippen, Weihnachtsmütze, Krone, Sonnenhut, Entdecker-Hut, Piratenhut; dazu Schal,
+    Pixelbrille auf Augenhöhe, Ohrringe am Ohrläppchen. Jedes neue Teil hat einen eigenen Kachel-Ausschnitt (`sicht`). Übrige Extras (Brillen, Maske, Ohren, Haarreif,
+    Kopfhörer, Kette, Fliege, Umhang, Flügel) sind weiter die umgerechneten alten Zeichnungen – sie sehen ordentlich aus.
+  - Test `anziehen`: Hand-Extras neu, im Arm gedreht, Finger nur an der Figur, Pixelbrille auf Augenhöhe.
+- **Erledigt – Matheweg, mehr Hilfe bei Fehlern:**
+  - Neue Denkfehler in `fehler.js`: **„Zahl verdreht“** (62 → 26; im Deutschen wegen „zweiundsechzig“ häufig – Hinweis mit Zahlwort und Zehnerbild, greift auch bei
+    Aufgaben ohne Rechnung wie „Welche Zahl ist das?“), **mal 0**, **Geteilt mit Minus verwechselt**, **Geteilt: eine Gruppe daneben** – je mit Bild und Kontrastaufgaben.
+  - Neue Erklär-Einheiten (gleicher Aufbau A/B/C): **Geteilt** („Wie oft passt die 3 in die 12?“, Reihen legen, Ergebnis „12 : 3 = 4“), **Minus bis 10** (Kl. 1),
+    **Zehner und Einer**; die Einmaleins-Erklärung gilt auch für „3 und 4“ und „6 bis 9“.
+  - Tests `mathe-fehler` (Node) und `fehlerursachen` (alle neuen Einheiten echt durchgeklickt).
+- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Erklär-Einheiten für Uhr, Geld, Ergänzen; Extras der 3D-Figur an die neuen Zeichnungen angleichen.
