@@ -2149,5 +2149,8 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   **„Uhrzeit“** (eigene Uhr-Zeichnung `BILD.uhr`; das Kind stellt 4 Uhr selbst ein: neue Schritt-Art `machen` mit `art: "uhr"`) und **„Geld“** (Münzen `BILD.geld`, das Kind tippt
   die Münzen groß nach klein an, Benno zählt mit: `art: "geld"`, `muenzen`). Neue Denkfehler **„Zeiger vertauscht“**, **„Stunde daneben“** (erstmals auch bei Auswahl-Aufgaben:
   Uhr-Aufgaben tragen `uhr: { h, m }`) und **„Münzen gezählt statt Werte addiert“** (Geld-Aufgaben tragen `geld: [Münzen]`). Hochformat iPad und Handy geprüft (nichts scrollt).
-- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für schriftlich mal/geteilt (Kl. 4); Erklär-Einheiten für Länge und Kl. 3;
+- **Erledigt – dritter Teil:** „Länge“ (eigenes Lineal `BILD.lineal`, Zentimeter selbst abzählen: `art: "lineal"`), Kl. 3 „Zahlen bis 1000“ (`BILD.stellen`, Zahl aus
+  Hundertern/Zehnern/Einern bauen: `art: "bauen"`) und „Runden“ (`BILD.runden`, näheren Zehner antippen: `art: "runden"`). Denkfehler „am Lineal nur das Ende abgelesen“,
+  „1 m = 10 cm“, „Null weggelassen“ (305 → 35), „falsch gerundet“ (Aufgaben tragen `lineal`, `meter`, `stellen`, `runden`). Erklär-Einheiten jetzt für 20 Stationen.
+- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für schriftlich mal/geteilt (Kl. 4); weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
   Extras der 3D-Figur an die neuen Zeichnungen angleichen.
