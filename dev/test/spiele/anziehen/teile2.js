@@ -329,9 +329,108 @@
     handL: "translate(-2 17)", handR: "translate(15 15)"
   };
   const extraTransform = (t) => t.ebene === "hand" ? EXTRA_TRANSFORM[LINKE_HAND.includes(t.id) ? "handL" : "handR"] : EXTRA_TRANSFORM[t.ebene] || "";
-  const extras = mit(P.extras, (t) => ({ teil: (c) => `<g transform="${extraTransform(t)}">${t.teil(c)}</g>` }));
+  // Neu gezeichnet (04.11.2026): Dinge in der Hand werden wirklich gehalten (die Finger liegen über dem Griff), Pixelbrille auf Augenhöhe,
+  // Ohrringe am Ohrläppchen. Koordinaten direkt in der neuen Figur; Hand-Teile im gedrehten Arm (AL/AR). sicht = Ausschnitt für die Kachel.
+  let mitHand = false;
+  const kr = (x, y, r) => `M${x - r} ${y} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0 Z`;
+  const ell = (x, y, rx, ry) => `M${x - rx} ${y} a${rx} ${ry} 0 1 0 ${2 * rx} 0 a${rx} ${ry} 0 1 0 ${-2 * rx} 0 Z`;
+  const fuenfeck = (x, y, r, w = -90) => "M" + [0, 1, 2, 3, 4].map(i => { const a = (w + i * 72) * Math.PI / 180; return `${(x + r * Math.cos(a)).toFixed(1)} ${(y + r * Math.sin(a)).toFixed(1)}`; }).join(" L") + " Z";
+  const sternPfad = (x, y, r) => "M" + Array.from({ length: 10 }, (_, i) => { const a = (-90 + i * 36) * Math.PI / 180, q = i % 2 ? r * 0.45 : r; return `${(x + q * Math.cos(a)).toFixed(1)} ${(y + q * Math.sin(a)).toFixed(1)}`; }).join(" L") + " Z";
+  // Finger, die sich um den Griff schließen (nur an der Figur, nicht in der Kachel)
+  const finger = (rechts) => {
+    if (!mitHand) return "";
+    const h = hautJetzt, d = rechts ? "M197 366 C197 378 198 386 202 389 C206 392 213 391 216 388 C219 385 219 376 219 366 C212 370 204 370 197 366 Z"
+      : "M103 366 C103 378 102 386 98 389 C94 392 87 391 84 388 C81 385 81 376 81 366 C88 370 96 370 103 366 Z";
+    const l = rechts ? "M203 372 C203 378 204 384 206 388 M210 372 C210 378 211 384 212 389" : "M97 372 C97 378 96 384 94 388 M90 372 C90 378 89 384 88 389";
+    const rand = d.replace(/ C\S+ \S+ \S+ \S+ \S+ \S+ Z$/, "");   // nur die Fingerkuppen umranden, oben geht die Hand weich über
+    return flaeche(d, h, form(rechts ? "M213 370 L222 370 L222 392 L213 392 Z" : "M78 370 L87 370 L87 392 L78 392 Z", dunkel(h, 0.16), 0.7), { kontur: false }) + strich(rand, KF, KW) + strich(l, dunkel(h, 0.35), 1.3, 0.8);
+  };
+  // gedrehter Ausschnitt: lokales Rechteck im Arm → viewBox um alle vier Ecken
+  const sichtIm = (pose, x, y, w, h) => {
+    const r = pose.grad * Math.PI / 180, [px, py] = pose.um, pt = [[x, y], [x + w, y], [x, y + h], [x + w, y + h]].map(([a, b]) => [px + (a - px) * Math.cos(r) - (b - py) * Math.sin(r), py + (a - px) * Math.sin(r) + (b - py) * Math.cos(r)]);
+    const xs = pt.map(q => q[0]), ys = pt.map(q => q[1]), x0 = Math.min(...xs), y0 = Math.min(...ys);
+    return [x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0].map(v => Math.round(v)).join(" ");
+  };
+  const imArm = (rechts, inhalt) => `<g transform="${rechts ? AR : AL}">${inhalt}${finger(rechts)}</g>`;
+  const NEU_EXTRA = {
+    fussball: { sicht: sichtIm(POSE.armR, 188, 378, 52, 52), teil: (c) => {
+      const p = weissOderDunkel(c) ? "#2E2B47" : dunkel(c, 0.5), x = 214, y = 404, r = 22;
+      const flecken = [0, 1, 2, 3, 4].map(i => { const a = (-90 + i * 72) * Math.PI / 180, fx = x + 19 * Math.cos(a), fy = y + 19 * Math.sin(a); return form(fuenfeck(fx, fy, 7, -90 + i * 72 + 36), p) + strich(`M${(x + 7 * Math.cos(a)).toFixed(1)} ${(y + 7 * Math.sin(a)).toFixed(1)} L${(x + 13 * Math.cos(a)).toFixed(1)} ${(y + 13 * Math.sin(a)).toFixed(1)}`, p, 1.6); }).join("");
+      return imArm(true, flaeche(kr(x, y, r), c, form(kr(x + 7, y + 7, r), dunkel(c, 0.14), 0.9) + form(fuenfeck(x, y, 7.5), p) + flecken + form(ell(x - 8, y - 10, 5, 3), "#fff", 0.6)));
+    } },
+    teddy: { sicht: sichtIm(POSE.armR, 186, 370, 54, 96), teil: (c) => {
+      const d = dunkel(c, 0.22), l = hell(c, 0.5);
+      return imArm(true,
+        flaeche("M203 372 C201 386 202 400 206 412 L216 410 C214 398 213 386 212 372 Z", c, form("M209 372 L214 372 L216 410 L211 410 Z", d, 0.7)) +       // Arm, an dem das Kind ihn hält
+        flaeche(ell(207, 456, 7, 6), c) + flaeche(ell(225, 456, 7, 6), c, form(ell(225, 458, 4, 3), l)) +
+        flaeche(ell(216, 438, 15, 17), c, form("M222 424 C232 432 232 448 222 456 L236 456 L236 424 Z", d, 0.8) + form(ell(216, 442, 8, 9), l)) +
+        flaeche(ell(230, 432, 5, 8), c) +
+        flaeche(kr(203, 397, 6), c, form(kr(203, 397, 3), l)) + flaeche(kr(227, 397, 6), c, form(kr(227, 397, 3), l)) +
+        flaeche(kr(215, 408, 15), c, form("M222 396 C232 402 232 416 222 422 L234 422 L234 396 Z", d, 0.8) + form(ell(215, 414, 7, 5), l)) +
+        `<circle cx="210" cy="405" r="2.2" fill="${KF}"/><circle cx="220" cy="405" r="2.2" fill="${KF}"/><ellipse cx="215" cy="411.5" rx="2.6" ry="1.8" fill="${KF}"/>` +
+        strich("M212 415 C214 417 216 417 218 415", KF, 1.4) +
+        `<path d="M216 446 C210 441 211 436 214 436 C215 436 216 437 216 438 C216 437 217 436 218 436 C221 436 222 441 216 446 Z" fill="#E8336B"/>`);
+    } },
+    kuscheldino: { sicht: sichtIm(POSE.armR, 172, 362, 82, 66), teil: (c) => {
+      const d = dunkel(c, 0.22), l = hell(c, 0.55), z = hell(c, 0.25);
+      return imArm(true,
+        [194, 203, 212, 221].map((x, i) => flaeche(`M${x - 5} ${386 - (i === 0 ? -2 : 0)} L${x} ${376 - (i % 2) * 2} L${x + 5} ${386 - (i === 0 ? -2 : 0)} Z`, z, "", { kw: 2 })).join("") +
+        flaeche("M194 398 C186 402 178 410 172 418 C182 418 192 414 198 408 Z", c, form("M172 418 C182 418 192 414 198 408 L198 420 L172 420 Z", d, 0.8)) +
+        flaeche(ell(204, 414, 5, 8), c) + flaeche(ell(222, 414, 5, 8), c, form(ell(223, 417, 3, 4), d, 0.7)) +
+        flaeche("M226 392 C232 386 234 380 236 374 L246 376 C244 384 240 394 232 402 Z", c) +
+        flaeche(ell(212, 400, 22, 15), c, form("M212 404 C222 404 230 400 234 396 L236 416 L190 416 Z", d, 0.8) + form(ell(212, 406, 12, 6), l)) +
+        flaeche(ell(242, 372, 12, 10), c, form(ell(246, 376, 7, 4), l)) +
+        `<circle cx="245" cy="369" r="2.3" fill="${KF}"/><circle cx="244.3" cy="368.2" r=".8" fill="#fff"/>` + strich("M240 377 C244 380 249 379 252 376", KF, 1.4));
+    } },
+    tasche: { sicht: sichtIm(POSE.armR, 184, 366, 54, 72), teil: (c) => {
+      const d = dunkel(c, 0.22);
+      return imArm(true,
+        strich("M196 402 C195 384 200 372 208 372 C216 372 222 384 222 402", KF, 7) + strich("M196 402 C195 384 200 372 208 372 C216 372 222 384 222 402", dunkel(c, 0.3), 3.5) +
+        flaeche("M188 404 C188 400 191 398 195 398 L223 398 C227 398 230 400 230 404 L232 428 C232 432 229 434 225 434 L193 434 C189 434 186 432 186 428 Z", c,
+          form("M214 398 L232 398 L232 434 L214 434 Z", d, 0.75) + form("M188 404 L192 404 L190 430 L186 430 Z", hell(c, 0.4), 0.7)) +
+        flaeche("M187 404 C187 400 191 398 195 398 L223 398 C227 398 231 400 231 404 L229 414 C220 418 198 418 189 414 Z", dunkel(c, 0.12)) +
+        flaeche(kr(209, 415, 4), "#FFC83D", "", { kw: 2 }) + strich("M192 426 L226 426", dunkel(c, 0.35), 1.3, 0.6));
+    } },
+    schwert: { sicht: sichtIm(POSE.armL, 70, 346, 44, 140), teil: (c) => {
+      const d = dunkel(c, 0.25);
+      return imArm(false,
+        flaeche("M86 400 L98 400 L98 466 L92 480 L86 466 Z", c, form("M92 400 L98 400 L98 466 L92 480 Z", d, 0.75) + form("M88 404 L90 404 L90 462 L88 462 Z", hell(c, 0.5), 0.8)) +
+        strich("M92 410 L92 466", dunkel(c, 0.4), 1.2, 0.6) +
+        flaeche("M74 392 C74 389 76 388 79 388 L105 388 C108 388 110 389 110 392 C110 395 108 396 105 396 L79 396 C76 396 74 395 74 392 Z", "#8A5A34", form("M74 392 L110 392 L110 396 L74 396 Z", "#6B4426")) +
+        flaeche("M88 356 L96 356 L96 388 L88 388 Z", "#6B4426", strich("M88 362 L96 366 M88 370 L96 374 M88 378 L96 382", "#4A2E1A", 1.4)) +
+        flaeche(kr(92, 354, 5.5), "#8A5A34"));
+    } },
+    zauberstab: { sicht: sichtIm(POSE.armL, 30, 270, 80, 126), teil: (c) => {
+      return imArm(false,
+        strich("M96 392 L62 302", KF, 8) + strich("M96 392 L62 302", "#fff", 4) + strich("M90 376 L84 360 M78 344 L72 328", "#B58CF0", 4) +
+        flaeche(sternPfad(60, 294, 18), c, form("M60 294 L80 294 L80 320 L60 320 Z", dunkel(c, 0.18), 0.8) + form(sternPfad(55, 288, 5), "#fff", 0.6)) +
+        form(sternPfad(36, 278, 5), c) + form(sternPfad(84, 270, 4), c) + form(sternPfad(34, 316, 3.5), c));
+    } },
+    ballon: { sicht: sichtIm(POSE.armL, 18, 150, 84, 244), teil: (c) => {
+      return imArm(false,
+        strich("M93 392 C88 340 70 300 72 262 C73 248 62 240 56 228", KF, 1.8) +
+        flaeche("M56 228 L50 236 L62 236 Z", dunkel(c, 0.15), "", { kw: 2 }) +
+        flaeche(ell(56, 192, 30, 36), c, form("M66 160 C88 176 90 214 64 228 L96 228 L96 160 Z", dunkel(c, 0.18), 0.85) + form("M38 186 C38 172 46 164 54 162 C46 170 42 178 42 188 Z", "#fff", 0.7)));
+    } },
+    armband: { sicht: sichtIm(POSE.armL, 74, 328, 38, 26), teil: (c) => {
+      const p = [[82, 340], [86.5, 342.4], [91.5, 343.4], [96.5, 343], [101.5, 341.4]];
+      return `<g transform="${AL}">` + strich("M80 339 C88 345 98 345 104 340", KF, 1.6) + p.map(([x, y], i) => flaeche(kr(x, y, 3.4), i % 2 ? c : "#FFC83D", form(kr(x - 1, y - 1, 1.2), "#fff", 0.7), { kw: 1.8 })).join("") + "</g>";
+    } },
+    pixelbrille: { sicht: "84 88 132 52", teil: (c) => {
+      const glas = (x) => `<path d="M${x - 18} 106 h36 v4 h4 v12 h-4 v4 h-36 v-4 h-4 v-12 h4 Z" fill="${c}" stroke="${KF}" stroke-width="2.4" stroke-linejoin="round"/>` +
+        `<rect x="${x - 12}" y="110" width="8" height="4" fill="#fff"/><rect x="${x - 4}" y="114" width="4" height="4" fill="#fff" opacity=".8"/>`;
+      return `<rect x="92" y="109" width="20" height="5" fill="${c}" stroke="${KF}" stroke-width="2"/><rect x="188" y="109" width="20" height="5" fill="${c}" stroke="${KF}" stroke-width="2"/>` +
+        `<rect x="145" y="110" width="10" height="5" fill="${c}" stroke="${KF}" stroke-width="2"/>` + glas(129) + glas(171);
+    } },
+    ohrringe: { sicht: "76 116 148 42", teil: (c) => [[89, 1], [211, -1]].map(([x]) =>
+      strich(`M${x} 130 L${x} 136`, dunkel(c, 0.3), 1.6) + flaeche(kr(x, 131, 2.6), c, "", { kw: 1.6 }) +
+      flaeche(`M${x} 136 C${x - 6} 142 ${x - 6} 150 ${x} 152 C${x + 6} 150 ${x + 6} 142 ${x} 136 Z`, c, form(`M${x - 2} 141 C${x - 3} 144 ${x - 3} 147 ${x - 1} 149`, "#fff", 0.6), { kw: 1.8 })).join("") }
+  };
+  const extras = mit(P.extras, (t) => NEU_EXTRA[t.id] ? { teil: NEU_EXTRA[t.id].teil, sicht: NEU_EXTRA[t.id].sicht, neuGezeichnet: true }
+    : { teil: (c) => `<g transform="${extraTransform(t)}">${t.teil(c)}</g>` });
   // Ausschnitt eines alten Extra-Bildes (viewBox) in neue Koordinaten umrechnen
   function extraSicht(t, vb) {
+    if (t.sicht) return t.sicht;
     const [x, y, w, h] = vb.split(" ").map(Number), tr = extraTransform(t);
     const m = /translate\((-?[\d.]+) (-?[\d.]+)\)(?: scale\(([\d.]+)\))?/.exec(tr);
     if (!m) return vb;
@@ -377,8 +476,8 @@
     if (schuh && !ohneBeine) s += schuh.teil(o.schuhe.farbe);
     s += k.arme;
     if (kl) s += kl.oben(o.kleid.farbe); else s += ober ? ober.teil(o.oberteil.farbe) : k.hemd;
-    s += ex("hand") + ex("hals");
-    hautJetzt = haut;
+    hautJetzt = haut; mitHand = true;
+    s += ex("hand") + ex("hals"); mitHand = false;
     s += K.kopf(haut, geschlecht) + ges.teil() + (haar ? haar.vorne(o.haare.farbe) : "") + ex("kopf");
     return s;
   }

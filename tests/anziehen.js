@@ -101,6 +101,15 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const nachZ = await bildJetzt();
     erwarte(mitKleid === "sommer" && nachZ === vorZ && await p.evaluate(() => document.getElementById("zurueck").disabled), "↩ Zurück: Sommerkleid angezogen, Zurück getippt – alles wie vorher");
     erwarte(await p.isVisible("#hoeren"), "🔊 im Kleiderschrank sichtbar");
+    // Neu gezeichnete Extras (04.11.2026): Hand-Teile im gedrehten Arm mit Fingern darüber (nur an der Figur), eigene Kachel-Ausschnitte
+    const ex = await p.evaluate(() => {
+      const P = Figur.P, o = __anziehen.STANDARD(), hand = ["fussball", "teddy", "kuscheldino", "tasche", "schwert", "zauberstab", "ballon"];
+      return hand.map(id => { const t = P.extras.find(e => e.id === id); o.extras = { [id]: { farbe: t.farbe } };
+        const fig = Figur.zeichneFigur(o), allein = t.teil(t.farbe), vb = P.extraSicht(t, "0 0 1 1").split(" ").map(Number);
+        return t.neuGezeichnet && /rotate\(/.test(allein) && fig.length > Figur.zeichneFigur(Object.assign({}, o, { extras: {} })).length + allein.length && vb[2] > 30 && vb[3] > 30; });
+    });
+    erwarte(ex.every(Boolean), "Extras in der Hand: neu gezeichnet, im Arm gedreht, Finger nur an der Figur, eigener Kachel-Ausschnitt");
+    erwarte(await p.evaluate(() => { const t = Figur.P.extras.find(e => e.id === "pixelbrille"); return t.neuGezeichnet && /y="10[69]"/.test(t.teil("#2E2B47")); }), "Pixelbrille auf Augenhöhe");
     // Eltern-Schalter „Zeichnungen wie bis 02.11.2026“: alte Figur
     await p.evaluate(() => { const e = Spielwelt.lade("eltern"); e.zeichnung = "alt"; Spielwelt.speichere("eltern", e); });
     await p.goto(BASIS + "spiele/anziehen/"); await p.waitForTimeout(500);
