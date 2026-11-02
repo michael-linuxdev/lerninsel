@@ -6,7 +6,7 @@
 //   { typ: "gegenbeispiel", text, stimmt: false, fv, warum } Robo rechnet falsch; fv = Fehler aus fehler.js
 //   { typ: "geschichte", text, bilder: [{ satz, bild }] }    C „Bildergeschichte“ zum Merken: drei Bilder, je ein Satz; text = Merksatz
 // bild ist eine Funktion → SVG (Bausteine in BILD, auch für die Fehler-Hinweise: bildFuer(fv, o)).
-// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, geld, laenge, k3stellen, k3runden, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
+// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, geld, laenge, k3stellen, k3runden, k3rest, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
 // Abschluss wird in mathe.erklaert[station] = 1 gemerkt; das Angebot kommt nur, wenn die Station noch nie gerechnet wurde.
 (function (W) {
   const M = "−", D = "#3B1F63", ROT = "#FF6F61", BLAU = "#4FA8F0", STANGE = "#FFB547";
@@ -37,8 +37,12 @@
     return s + `</svg>`;
   }
   // Punkte in Reihen: zeilen × je (für „mal“)
-  function reihen(je, zeilen, max = zeilen) {
-    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${je * 34 + 70} ${max * 34 + 14}" class="erkl-bild" role="img" aria-label="${zeilen}-mal ${je}">`;
+  // rest (04.11.2026): eine Zeile mit übrigen Punkten (gelb, „Rest“) unter den Reihen
+  function reihen(je, zeilen, max = zeilen, rest = 0) {
+    const zr = rest ? 1 : 0;
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${je * 34 + 70} ${(max + zr) * 34 + 14}" class="erkl-bild" role="img" aria-label="${zeilen}-mal ${je}${rest ? ` und ${rest} übrig` : ""}">`;
+    if (rest) { const y = 22 + max * 34; for (let k = 0; k < rest; k++) s += `<circle cx="${22 + k * 34}" cy="${y}" r="13" fill="#FFD84D" stroke="${D}" stroke-width="2.5"/>`;
+      s += `<text x="${je * 34 + 18}" y="${y + 7}" font-size="18" font-weight="700" fill="#B07A00" font-family="Fredoka, sans-serif">Rest</text>`; }
     for (let z = 0; z < max; z++) {
       for (let k = 0; k < je; k++) s += z < zeilen ? `<circle cx="${22 + k * 34}" cy="${22 + z * 34}" r="13" fill="${z % 2 ? BLAU : ROT}" stroke="${D}" stroke-width="2.5"/>` : `<circle cx="${22 + k * 34}" cy="${22 + z * 34}" r="9" fill="none" stroke="#D9D0EA" stroke-width="2" stroke-dasharray="3 4"/>`;
       if (z < zeilen) s += `<text x="${je * 34 + 18}" y="${29 + z * 34}" font-size="20" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${je * (z + 1)}</text>`;
@@ -408,6 +412,21 @@
         { satz: "Erst die Zehner zählen.", bild: F({ z: 4 }) },
         { satz: "Dann die Einzelnen.", bild: F({ z: 4, rot: 7 }) },
         { satz: "Zehner zuerst schreiben: 47.", bild: F({ z: 4, rot: 7 }) }] }
+    ],
+    // Teilen mit Rest (04.11.2026): Reihen legen – was nicht mehr für eine ganze Reihe reicht, ist der Rest
+    k3rest: [
+      { typ: "zeigen", text: "17 : 5", bilder: [
+        { satz: "17 Punkte. Wir legen Reihen mit 5.", bild: () => reihen(5, 0, 3, 0) },
+        { satz: "Eine, zwei, drei Reihen: 15 Punkte.", bild: () => reihen(5, 3, 3) },
+        { satz: "2 bleiben übrig. Für eine Reihe reicht das nicht.", bild: () => reihen(5, 3, 3, 2) },
+        { satz: "Also 17 : 5 = 3 Rest 2.", bild: () => reihen(5, 3, 3, 2) }] },
+      { typ: "machen", text: "Jetzt du: 14 : 4. Tipp auf ➕, bis es nicht mehr reicht.", art: "gruppen", a: 3, b: 4, rest: 2 },
+      { typ: "ergaenzen", text: "Jetzt rechnest du: 23 : 5. Vier Reihen sind 20.", frage: "23 : 5 = 4 Rest ?", antwort: "3", optionen: ["3", "4", "5"] },
+      { typ: "gegenbeispiel", text: "Robo teilt 15 durch 4. Er sagt: „3 Reihen, Rest 5.“ Stimmt das?", stimmt: false, fv: "geteiltreihe", warum: "Mit 5 übrig passt noch eine Reihe mit 4 hinein. Richtig sind 3 Reihen und Rest 3." },
+      { typ: "geschichte", text: "Der Rest ist immer kleiner als eine ganze Reihe.", bilder: [
+        { satz: "Reihen legen.", bild: () => reihen(5, 2, 3) },
+        { satz: "Bis keine ganze Reihe mehr passt.", bild: () => reihen(5, 3, 3) },
+        { satz: "Was übrig ist, ist der Rest.", bild: () => reihen(5, 3, 3, 2) }] }
     ],
     // Geteilt (04.11.2026): Wie oft passt die Zahl hinein? Reihen legen, bis alle Punkte da sind
     geteilt: [

@@ -241,6 +241,14 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await weiter(); await p.click('[data-e="270"]'); await p.waitForTimeout(150); await weiter();
   await p.click('[data-g="nein"]'); await p.waitForTimeout(150); await weiter(); await weiter();
   erwarte(await p.evaluate(() => window.__fertig), "Runden: Erklärung bis zum Ende");
+  await p.evaluate(() => { window.__fertig = false; __mathe.erklaere("k3rest", () => { window.__fertig = true; }); }); await p.waitForTimeout(200);
+  for (let k = 0; k < 4; k++) await weiter();
+  for (let k = 0; k < 3; k++) { await p.click("#plus-reihe"); await p.waitForTimeout(80); }
+  erwarte(await p.evaluate(() => document.getElementById("machen-ergebnis").textContent === "14 : 4 = 3 Rest 2" && document.querySelectorAll("#machen-bild circle[fill='#FFD84D']").length === 2), "Teilen mit Rest: drei Reihen mit 4, 2 gelbe Punkte übrig – 14 : 4 = 3 Rest 2");
+  await bild(p, "fu-k3-rest");
+  await weiter(); await p.click('[data-e="3"]'); await p.waitForTimeout(150); await weiter();
+  await p.click('[data-g="nein"]'); await p.waitForTimeout(150); await weiter(); await weiter();
+  erwarte(await p.evaluate(() => window.__fertig), "Teilen mit Rest: Erklärung bis zum Ende");
   await p.evaluate(() => __mathe.setzeAufgabe({ text: "", frage: "Welche Zahl ist das?", antwort: "305", art: "zahl", nurLuecke: true, stellen: 305, hilfe: "3 Hunderter, 0 Zehner, 5 Einer" }));
   await tippe(35); await p.waitForTimeout(300);
   erwarte(await p.evaluate(() => /Null darf nicht fehlen/.test(document.getElementById("rueck").textContent)) && await fv("nullvergessen") === "aufgefallen", "35 statt 305: Hinweis „Die Null darf nicht fehlen“");
