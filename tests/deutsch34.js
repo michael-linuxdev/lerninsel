@@ -86,6 +86,16 @@ const NEU = ["w-praeteritum", "w-perfekt", "w-satzglieder", "w-satzzeichen", "w-
     }
     await ctx.close();
   }
+  // (04.11.2026) erster Fehler: kurzer Tipp je Schritt-Art statt nur „Versuch es nochmal“
+  {
+    const { ctx, p } = await kind("3", 1180, 820);
+    const r = await p.evaluate(() => { const i = WERKSTATT.findIndex(k => k.schritte.some(x => x.typ === "luecke" && x.optionen && x.optionen.length > 1)); __deutsch.starte(i, WERKSTATT);
+      const s = __deutsch.lauf.k.schritte.findIndex(x => x.typ === "luecke" && x.optionen && x.optionen.length > 1); __deutsch.schritt(s); return __deutsch.lauf.k.schritte[s].optionen[1]; });
+    await p.waitForTimeout(150);
+    await p.evaluate((t) => [...document.querySelectorAll(".optionen .option")].find(b => b.textContent === t).click(), r); await p.waitForTimeout(150);
+    erwarte(await p.evaluate(() => /Fast! Lies den ganzen Satz/.test(document.getElementById("hinweis").textContent)), "Werkstatt: erster Fehler bei einer Lücke – Tipp „Lies den ganzen Satz mit jedem Wort“");
+    await ctx.close();
+  }
   await browser.close();
   if (fehler.length) { console.log("❌ Fehler:\n" + fehler.map(f => "  - " + f).join("\n")); process.exit(1); }
   console.log("✅ Deutsch-Kl.-3/4-Test bestanden.");

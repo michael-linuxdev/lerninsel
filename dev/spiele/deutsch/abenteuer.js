@@ -631,9 +631,26 @@
       $("weiter").addEventListener("click", () => { lauf.gesperrt = false; S.ton("tipp"); weiter(); });
       return;
     }
-    h.textContent = "Fast! Versuch es nochmal.";
+    // (04.11.2026) beim ersten Fehler ein kurzer Tipp, wie man es herausfindet (je Schritt-Art), statt nur „Versuch es nochmal“
+    const tipp = lauf.versuche === 1 && schrittJetzt ? (schrittJetzt.hilfe || TIPP_TYP[schrittJetzt.typ] || "") : "";
+    h.textContent = tipp ? `Fast! ${tipp}` : "Fast! Versuch es nochmal.";
     beiFalsch && beiFalsch();
   }
+  const TIPP_TYP = {
+    artikel: "Sprich es laut: der, die oder das – was klingt richtig?",
+    verlaengern: "Mach das Wort länger, wie bei „ein Hund – zwei Hunde“. Dann hörst du es.",
+    silben: "Klatsch das Wort langsam mit. Jeder Klatscher ist eine Silbe.",
+    wortart: "Kann man es anfassen? Namenwort. Kann man es tun? Tunwort. Sagt es, wie etwas ist? Wiewort.",
+    luecke: "Lies den ganzen Satz mit jedem Wort. Welches passt?",
+    wort: "Schau dir das Bild noch einmal genau an.",
+    wo: "Schau genau, wo das Ding im Bild ist.",
+    hoertext: "Hör den Text noch einmal an.",
+    blitz: "Schau auf den Anfang und das Ende vom Wort.",
+    bild: "Hör noch einmal genau hin.",
+    hoeren: "Hör noch einmal genau hin.",
+    ordnen: "Was passiert zuerst? Was danach?",
+    satz: "Lies deinen Satz leise vor. Wer tut etwas? Was tut er?"
+  };
 
   function weiter() { SP.stopp(); if (aufnahmeEnde) { aufnahmeEnde(); aufnahmeEnde = null; } lauf.pos++; schritt(); }
 
