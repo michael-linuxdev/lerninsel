@@ -2116,3 +2116,8 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   - Kinderfigur: **„Alle neu, eher Kinderbuch“** (Proportionen wie Entwurf a).
   - Kleiderschrank: **so umbauen** (Fächer als Bilder, Antippen = anziehen, Farbkleckse, ↩, 🔊, schöneres Zimmer; Teile-IDs bleiben).
   - Mathe-Erklärungen: **alle drei Arten** (A Schritt für Schritt, B selbst machen, C Bildergeschichte) und **der neue Fehler-Hinweis** („Fast! Schau mal.“ + Bild + 3 kurze Sätze).
+- **Erledigt – Mathe-Erklärungen kindgerecht:** neue Schritte `zeigen` (A) → `machen` (B, Punkte selbst antippen, die volle 10 wird ein Zehner, Zehner tauschen,
+  Reihen mit ➕) → ergänzen → Robos Fehler (mit Bild) → `geschichte` (C) für alle 7 Einheiten; Bilder: Zehnerstangen + Zehnerfeld, Reihen, Zahlenstrahl,
+  schriftliches Rechnen Stelle für Stelle (getauschte Ziffern, kleine Einsen). Fehler-Hinweis „Fast! Schau mal.“ mit Bild und drei kurzen Sätzen statt
+  „So denkst du gerade / Warum … / So stimmt es“; der Fehlername steht nur noch im Elternbereich. Die Mathe-Seite lädt jetzt `sprache.js` (🔊 überall).
+  Tests `mathe-fehler` (keine Fachwörter, Satzlänge, Bilder) und `fehlerursachen` (echt durchgeklickt).

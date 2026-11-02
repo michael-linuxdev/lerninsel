@@ -145,6 +145,26 @@
   .erklaer-titel { margin: 0; font-weight: 700; color: var(--pflaume-hell); }
   .erklaer-zeilen { text-align: start; font-size: 1.3rem; line-height: 1.5; margin: 0; padding-inline-start: 1.4em; }
   .erklaer-knoepfe { display: flex; flex-direction: column; gap: 12px; }
+  /* Kindgerechte Erklärungen (03.11.2026): Sprechblase mit Figur und 🔊, Bild zuerst */
+  .erklaer-zeile { display: flex; align-items: center; gap: 10px; width: 100%; text-align: start; }
+  .erklaer-zeile .erklaer-figur svg { width: 72px; height: 72px; }
+  .erklaer-blase { flex: 1; margin: 0; background: #fff; border-radius: 18px; padding: 10px 14px; font-size: 1.35rem; font-weight: 600; line-height: 1.3; box-shadow: 0 0 0 3px #E4DAF6; display: flex; align-items: center; gap: 8px; }
+  .erklaer-blase span { flex: 1; }
+  .vorlesen-knopf { flex: none; width: 46px; height: 46px; border-radius: 50%; border: 0; background: #E9F3FF; font-size: 1.3rem; cursor: pointer; }
+  .erklaer-bild { width: 100%; }
+  .erklaer-bild svg { width: 100%; height: auto; max-height: 30dvh; display: block; margin: 0 auto; }
+  .mini-punkte { display: flex; gap: 6px; justify-content: center; }
+  .mini-punkte span { width: 12px; height: 12px; border-radius: 50%; background: #E4DAF6; }
+  .mini-punkte span.da { background: var(--pflaume, #4B2380); }
+  .knopf.blaettern { font-size: 2rem; min-width: 110px; }
+  .geschichte { display: grid; gap: 8px; width: 100%; }
+  .geschichte > div { display: grid; grid-template-columns: 34px minmax(0, 1fr) minmax(0, 1fr); gap: 8px; align-items: center; background: #F6F2FC; border-radius: 14px; padding: 6px 10px; text-align: start; font-weight: 600; }
+  .geschichte > div > b { width: 32px; height: 32px; border-radius: 50%; background: #5FCDA8; color: #fff; display: grid; place-items: center; }
+  .geschichte .erklaer-bild svg { max-height: 12dvh; }
+  .plus-reihe { margin: 8px auto 0; display: block; font-size: 1.4rem; }
+  .denkfehler-karte p { margin: 6px 0; font-size: 1.2rem; }
+  .denkfehler-karte .erklaer-blase { font-size: 1.3rem; }
+  .erklaer-karte:has(.erklaer-bild), .erklaer-karte:has(.geschichte) { max-width: min(600px, 100%); width: 100%; }
   .erklaer-knoepfe .knopf { font-size: 1.3rem; min-height: 64px; }
   .weg-liste { list-style: none; margin: 0; padding: 0; font-size: 1.15rem; font-weight: 600; }
   .weg-liste .gut { color: #1F8A63; } .weg-liste .gezeigt { color: #B88A10; }
@@ -267,6 +287,7 @@
 <script src="../../shared/echtewelt.js"></script>
 <script src="../../shared/zeit.js" data-art="lernen"></script>
 <script src="../../shared/figuren.js"></script>
+<script src="../../shared/sprache.js"></script>
 <script src="../../shared/koennen.js"></script>
 <script src="aufgaben.js"></script>
 <script src="fehler.js"></script>

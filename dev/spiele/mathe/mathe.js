@@ -247,42 +247,102 @@
   }
   // Erklär-Einheit Schritt für Schritt; fertig() danach (z. B. die Runde starten oder zur Aufgabe zurück)
   function erklaere(id, fertig) {
+    // Kindgerecht (03.11.2026): zeigen (Schritt für Schritt) → machen (selbst tippen) → ergänzen → Robos Fehler → Bildergeschichte.
+    // Jede Sprechblase hat 🔊 (liest nur auf Knopfdruck vor). Test-Haken: __mathe.erklaere(id, fertig).
     const schritte = ME().fuer(id), titel = (stationVon(id) || {}).name || "";
     const alt = lauf; let i = 0, versuche = 0;
     erklaerKnopf(null); $("punkte").innerHTML = schritte.map((_, k) => `<span class="punkt${k === 0 ? " jetzt" : ""}"></span>`).join("");
     const knopfWeiter = (text, fn) => { $("eingabe").innerHTML = `<button class="knopf weiter" id="weiter">${text}</button>`; $("weiter").addEventListener("click", () => { S.ton("tipp"); fn(); }); };
     const figur = (wer) => window.Figuren && Figuren[wer] ? `<div class="erklaer-figur">${Figuren[wer]("")}</div>` : "";
+    // Sprechblase mit Figur und 🔊
+    const blase = (wer, text, id2 = "satz") => `<div class="erklaer-zeile">${figur(wer)}<p class="erklaer-blase"><span id="${id2}">${text}</span><button class="vorlesen-knopf" id="${id2}-hoer" aria-label="Vorlesen">🔊</button></p></div>`;
+    const hoer = (id2 = "satz") => { const b = $(id2 + "-hoer"); if (b) b.addEventListener("click", () => { if (window.Sprache) Sprache.sprich($(id2).textContent); }); };
     function schritt() {
       const st = schritte[i]; versuche = 0;
       $("punkte").innerHTML = schritte.map((_, k) => `<span class="punkt${k < i ? " gut" : k === i ? " jetzt" : ""}"></span>`).join("");
       const kopf = `<p class="erklaer-titel">💡 ${titel}</p>`;
-      if (st.typ === "ziel" || st.typ === "merksatz") {
-        $("tafel").innerHTML = kopf + `<div class="erklaer-karte ${st.typ}">${figur("biber")}<p class="erklaer-text">${st.typ === "merksatz" ? "<b>Merke dir:</b> " : ""}${st.text}</p></div>`;
-        return knopfWeiter(i === schritte.length - 1 ? "Los geht's! ➜" : "Weiter ➜", weiter);
+      const letzter = i === schritte.length - 1;
+      // A „Schritt für Schritt“ und C „Bildergeschichte“
+      if (st.typ === "zeigen") {
+        let n = 0;
+        const zeige = () => {
+          const b = st.bilder[n];
+          $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("biber", b.satz)}<div class="erklaer-bild">${b.bild()}</div><div class="mini-punkte">${st.bilder.map((_, k) => `<span class="${k <= n ? "da" : ""}"></span>`).join("")}</div></div>`;
+          hoer();
+          if (n < st.bilder.length - 1) { $("eingabe").innerHTML = `<button class="knopf weiter blaettern" id="weiter" aria-label="Weiter" data-emoji="aus">▶</button>`; $("weiter").addEventListener("click", () => { S.ton("tipp"); n++; zeige(); }); }
+          else knopfWeiter("Weiter ➜", weiter);
+        };
+        return zeige();
       }
-      if (st.typ === "beispiel") {
-        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${figur("biber")}<p class="erklaer-text">${st.text}</p>${st.bild ? `<div class="bild">${st.bild()}</div>` : ""}
-          <ol class="erklaer-zeilen">${st.zeilen.map(z => `<li>${z}</li>`).join("")}</ol></div>`;
-        return knopfWeiter("Weiter ➜", weiter);
+      if (st.typ === "geschichte") {
+        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("biber", st.text)}<div class="geschichte">${st.bilder.map((b, k) => `<div><b>${k + 1}</b><div class="erklaer-bild">${b.bild()}</div><span>${b.satz}</span></div>`).join("")}</div></div>`;
+        $("satz-hoer").addEventListener("click", () => { if (window.Sprache) Sprache.sprich(st.text + " " + st.bilder.map(b => b.satz).join(" ")); });
+        return knopfWeiter(letzter ? "Los geht's! ➜" : "Weiter ➜", weiter);
+      }
+      // B „Selbst machen“: Punkte antippen
+      if (st.typ === "machen") {
+        const B = ME().BILD;
+        let z = Math.floor(st.a / 10), rot = st.a % 10, blau = 0, leer = 0, rest = st.b, zeilen = 0, warte = false;
+        if (st.art === "weg" && rot === 0 && z > 0) { z--; rot = 10; }
+        const fertigZahl = st.art === "dazu" ? st.a + st.b : st.art === "weg" ? st.a - st.b : st.a * st.b;
+        const zeichen = st.art === "dazu" ? "+" : st.art === "weg" ? "−" : "·";
+        const satzNach = (t) => { $("satz").textContent = t; };
+        const bild = () => st.art === "gruppen" ? B.reihen(st.b, zeilen, st.a) + `<button class="knopf haupt plus-reihe" id="plus-reihe" ${zeilen >= st.a ? "disabled" : ""} aria-label="Noch eine Reihe">➕ ${st.b}</button>`
+          : B.feld({ z, rot, blau, leer, warten: st.art === "dazu" ? rest : 0, tipp: !warte, nimm: st.art === "weg" && !warte && rest > 0 });
+        const ende = () => {
+          $("eingabe").innerHTML = ""; satzNach(`Geschafft! ${st.a} ${zeichen} ${st.b} = ${fertigZahl}.`);
+          $("machen-ergebnis").textContent = `${st.a} ${zeichen} ${st.b} = ${fertigZahl}`; $("machen-ergebnis").hidden = false;
+          knopfWeiter("Weiter ➜", weiter);
+        };
+        const male = () => { $("machen-bild").innerHTML = bild(); const pr = $("plus-reihe"); if (pr) pr.addEventListener("click", tippReihe); };
+        function tippReihe() { if (zeilen >= st.a) return; S.ton("tipp"); zeilen++; satzNach(zeilen < st.a ? `${zeilen}-mal ${st.b}: ${zeilen * st.b}. Noch einmal!` : `${zeilen}-mal ${st.b}: ${zeilen * st.b}.`); male(); if (zeilen >= st.a) ende(); }
+        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("biber", st.text)}<div class="erklaer-bild" id="machen-bild"></div><p class="frage gross" id="machen-ergebnis" hidden></p></div>`;
+        hoer(); $("eingabe").innerHTML = ""; male();
+        $("machen-bild").addEventListener("click", (e) => {
+          if (warte || st.art === "gruppen") return;
+          if (st.art === "dazu" && e.target.closest(".wartet") && rest > 0) {
+            S.ton("tipp"); rest--; blau++;
+            if (rot + blau === 10) {
+              warte = true; satzNach(`Die 10 ist voll! Daraus wird ein Zehner.`); male();
+              setTimeout(() => { z++; rot = 0; blau = 0; warte = false; satzNach(rest ? `Das sind ${z * 10}. Weiter!` : ""); male(); if (!rest) ende(); }, window.__testSchnell ? 60 : 900);
+              return;
+            }
+            satzNach(rest ? `${z * 10 + rot + blau}. Weiter!` : ""); male(); if (!rest) ende();
+          }
+          if (st.art === "weg" && e.target.closest(".nimm") && rest > 0) {
+            S.ton("tipp"); rest--; rot--; leer++;
+            if (rot === 0 && rest > 0) {
+              warte = true; satzNach("Leer! Wir tauschen einen Zehner in 10 Einzelne."); male();
+              setTimeout(() => { z--; rot = 10; leer = 0; warte = false; satzNach(`Noch ${rest} weg.`); male(); }, window.__testSchnell ? 60 : 1000);
+              return;
+            }
+            satzNach(rest ? `Noch ${rest} weg.` : ""); male(); if (!rest) ende();
+          }
+        });
+        return;
       }
       if (st.typ === "ergaenzen") {
         const opt = st.optionen.slice().sort((x, y) => (x.length - y.length) || x.localeCompare(y));
-        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${figur("biber")}<p class="erklaer-text">${st.text}</p><p class="frage gross">${st.frage.replace("?", '<span class="luecke leer" id="luecke"></span>')}</p><p class="rueck" id="rueck"></p></div>`;
+        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("biber", st.text)}<p class="frage gross">${st.frage.replace("?", '<span class="luecke leer" id="luecke"></span>')}</p><p class="rueck" id="rueck"></p></div>`;
+        hoer();
         $("eingabe").innerHTML = `<div class="wahl-tasten drei">${opt.map(o => `<button class="taste erklaer-wahl" data-e="${o}">${o}</button>`).join("")}</div>`;
         $("eingabe").querySelectorAll("[data-e]").forEach(b => b.addEventListener("click", () => {
           if (b.dataset.e === st.antwort) { S.ton("juhu"); $("luecke").textContent = st.antwort; $("luecke").className = "luecke richtig"; $("rueck").className = "rueck gut"; $("rueck").textContent = "Genau!"; knopfWeiter("Weiter ➜", weiter); }
-          else { S.ton("nein"); versuche++; b.style.background = "#FFE1DD"; b.disabled = true; $("rueck").className = "rueck nein"; $("rueck").textContent = versuche > 1 ? `Es ist ${st.antwort}. Schau noch einmal ins Beispiel.` : "Fast – schau noch einmal genau hin."; if (versuche > 1) knopfWeiter("Weiter ➜", weiter); }
+          else { S.ton("nein"); versuche++; b.style.background = "#FFE1DD"; b.disabled = true; $("rueck").className = "rueck nein"; $("rueck").textContent = versuche > 1 ? `Es ist ${st.antwort}. Schau noch einmal aufs Bild.` : "Fast – schau noch einmal genau hin."; if (versuche > 1) knopfWeiter("Weiter ➜", weiter); }
         }));
         return;
       }
       if (st.typ === "gegenbeispiel") {
-        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${figur("robo")}<p class="erklaer-text">${st.text}</p><p class="rueck" id="rueck"></p><div class="hilfe" id="warum" hidden></div></div>`;
+        $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("robo", st.text)}<p class="rueck" id="rueck"></p><div class="hilfe" id="warum" hidden></div></div>`;
+        hoer();
         $("eingabe").innerHTML = `<div class="wahl-tasten"><button class="taste erklaer-wahl" data-g="ja">👍 Stimmt</button><button class="taste erklaer-wahl" data-g="nein">👎 Stimmt nicht</button></div>`;
         $("eingabe").querySelectorAll("[data-g]").forEach(b => b.addEventListener("click", () => {
           const gut = (b.dataset.g === "ja") === st.stimmt;
           S.ton(gut ? "juhu" : "nein"); $("rueck").className = "rueck " + (gut ? "gut" : "nein");
-          $("rueck").textContent = gut ? "Richtig erkannt – Robo hat sich vertan!" : "Hm, schau genau – da ist ein Fehler drin.";
-          $("warum").hidden = false; $("warum").innerHTML = `<b>So ist es richtig:</b>${st.warum}`;
+          $("rueck").textContent = gut ? "Richtig erkannt – Robo hat sich vertan!" : "Schau genau – Robo hat sich vertan.";
+          const bf = ME().bildFuer && MF() ? ME().bildFuer(st.fv, MF().lies({ text: (/(\d+) ([+−·:]) (\d+)/.exec(st.text) || [""])[0], antwort: "" })) : "";
+          $("warum").hidden = false; $("warum").innerHTML = `${bf ? `<div class="erklaer-bild">${bf}</div>` : ""}<span id="warum-t">${st.warum}</span> <button class="vorlesen-knopf" id="warum-t-hoer" aria-label="Vorlesen">🔊</button>`;
+          hoer("warum-t");
           knopfWeiter("Weiter ➜", weiter);
         }));
       }
@@ -551,7 +611,7 @@
     if (!a.wieder && !lauf.einstufung && !lauf.lernstand) lauf.liste.push(Object.assign({}, a, { wieder: true }));
     rueck.className = "rueck"; rueck.textContent = "";
     if (luecke) { luecke.className = "luecke loesung"; luecke.textContent = a.antwort; }
-    $("hilfe-platz").innerHTML = `<div class="hilfe"><b>Die Lösung ist ${a.antwort}${a.einheit ? " " + a.einheit : ""}.</b>${fv ? `<span class="denkfehler">Denkfehler: ${fv.name}. ${fv.kurz}</span> ` : ""}${a.hilfe}</div>`;
+    $("hilfe-platz").innerHTML = `<div class="hilfe"><b>Die Lösung ist ${a.antwort}${a.einheit ? " " + a.einheit : ""}.</b>${fv ? `<span class="denkfehler">${fv.kurz}</span> ` : ""}${a.hilfe}</div>`;
     $("eingabe").innerHTML = `<button class="knopf weiter" id="weiter">Weiter</button>`;
     $("weiter").addEventListener("click", () => { S.ton("tipp"); naechste(); });
     zeigePunkte();
@@ -561,8 +621,11 @@
   const SCHRITTWEG = ["k3schriftplus", "k3schriftminus"];
   function zeigeDenkfehler(a, fv) {
     const hatErkl = ME() && ME().hat(a.station);
-    $("hilfe-platz").innerHTML = `<div class="hilfe denkfehler-karte" id="denkfehler"><b>🔍 ${fv.name}</b>
-      <p><span>So denkst du gerade:</span> ${fv.lang[0]}</p><p><span>Warum das nicht stimmt:</span> ${fv.lang[1]}</p><p><span>So stimmt es:</span> ${fv.lang[2]}</p></div>`;
+    // Kindgerecht (03.11.2026): Benno spricht, Bild zuerst, drei kurze Sätze ohne Überschriften, 🔊; der Name des Fehlers steht nur im Elternbereich
+    const bild = ME() && ME().bildFuer ? ME().bildFuer(fv.id, MF().lies(a)) : "";
+    $("hilfe-platz").innerHTML = `<div class="hilfe denkfehler-karte" id="denkfehler"><div class="erklaer-zeile">${window.Figuren ? `<div class="erklaer-figur">${Figuren.biber("")}</div>` : ""}<p class="erklaer-blase"><span>Fast! Schau mal.</span><button class="vorlesen-knopf" id="fehler-hoer" aria-label="Vorlesen">🔊</button></p></div>
+      ${bild ? `<div class="erklaer-bild">${bild}</div>` : ""}${fv.lang.map(t => `<p>${t}</p>`).join("")}</div>`;
+    $("fehler-hoer").addEventListener("click", () => { if (window.Sprache) Sprache.sprich("Fast! Schau mal. " + fv.lang.join(" ")); });
     $("rueck").textContent = "";
     $("eingabe").innerHTML = `<div class="erklaer-knoepfe"><button class="knopf haupt weiter" id="weiter">Verstanden – nochmal versuchen</button>${hatErkl ? `<button class="knopf" id="nochmal-erklaeren">💡 Nochmal erklären</button>` : ""}</div>`;
     const zurueck = () => {

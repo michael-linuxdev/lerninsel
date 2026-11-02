@@ -1,6 +1,7 @@
 // Test Fehler-Ursachen, Erst erklären und „Zeig mir deinen Weg“ im Matheweg (02.11.2026, Vorbild Bastion) – echt durchgeklickt:
-// - neue Station „Plus über den Zehner“: Angebot „Erst erklären?“, Erklärung bis zum Ende (Beispiel, Ergänzen, Robos Fehler, Merksatz), dann die Runde
-// - 34 + 28 = 52 → kurze Erklärung „Übertrag“; zweimal → lange Erklärung in drei Teilen, zwei Kontrastaufgaben, beide richtig → aufgelöst
+// - neue Station „Plus über den Zehner“: Angebot „Erst erklären?“, kindgerechte Erklärung bis zum Ende (03.11.2026: Schritt für Schritt mit ▶,
+//   selbst Punkte antippen – die volle 10 wird ein Zehner –, ergänzen, Robos Fehler, Bildergeschichte; 🔊 an jeder Blase), dann die Runde
+// - 34 + 28 = 52 → kurze Erklärung; zweimal → „Fast! Schau mal.“ mit Bild und drei kurzen Sätzen, zwei Kontrastaufgaben, beide richtig → aufgelöst
 // - zweiter Besuch: kein Angebot mehr, 💡 öffnet die Erklärung jederzeit
 // - Schriftlich plus: falsches Ergebnis → Schrittweg Stelle für Stelle, Übertrag vergessen an der Zehnerstelle erkannt, „Dein Fehler lag bei den Zehnern“
 // Aufruf: sh tests/laufen.sh fehlerursachen
@@ -24,6 +25,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
   await p.evaluate(() => { for (let i = 0; i < 12; i++) Zeit.aufgabe(); Spielwelt.speichere("mathe", { weg: "k2" }); });
   await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);
+  await p.evaluate(() => { window.__testSchnell = true; });
 
   const weiter = async () => { await p.click("#weiter"); await p.waitForTimeout(200); };
   const tippe = async (zahl) => { for (const z of String(zahl)) await p.click(`.taste[data-ziffer="${z}"]`); await p.click('.taste[data-tun="ok"]'); };
@@ -35,21 +37,35 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   erwarte(await p.isVisible("#angebot") && await p.isVisible("#erklaer-ja") && await p.isVisible("#erklaer-nein"), "neue Station: Angebot „Erst erklären?“ mit zwei Knöpfen");
   await bild(p, "fu-angebot");
   await p.click("#erklaer-ja"); await p.waitForTimeout(200);
-  erwarte(await p.evaluate(() => /über den Zehner/.test(document.getElementById("tafel").textContent)), "Schritt 1: Ziel in einem Satz");
+  {
+    const blase = await p.evaluate(() => ({ t: document.getElementById("satz").textContent, hoer: !!document.getElementById("satz-hoer"), bild: !!document.querySelector(".erklaer-bild svg") }));
+    erwarte(/38 sind 3 Zehner/.test(blase.t) && blase.hoer && blase.bild, "A Schritt für Schritt: Benno sagt einen Satz, 🔊 daneben, Bild darunter");
+  }
+  await bild(p, "fu-zeigen");
+  for (let k = 0; k < 3; k++) { await p.click("#weiter"); await p.waitForTimeout(150); }   // ▶ ▶ ▶
+  erwarte(await p.evaluate(() => /43/.test(document.getElementById("satz").textContent) && /Weiter/.test(document.getElementById("weiter").textContent)), "nach dreimal ▶: letzter Satz (43), dann Weiter");
   await weiter();
-  erwarte(await p.evaluate(() => document.querySelectorAll(".erklaer-zeilen li").length === 3), "Schritt 2: vorgerechnetes Beispiel in drei Zeilen");
-  await bild(p, "fu-beispiel");
+  // B Selbst machen: 5 blaue Punkte antippen, nach dem zweiten ist die 10 voll und wird ein Zehner
+  erwarte(!(await p.isVisible("#weiter")) && await p.evaluate(() => document.querySelectorAll("#machen-bild .wartet").length === 5), "B Selbst machen: 5 blaue Punkte warten, noch kein Weiter");
+  await p.click("#machen-bild .wartet >> nth=0"); await p.waitForTimeout(80); await p.click("#machen-bild .wartet >> nth=0"); await p.waitForTimeout(80);
+  await p.waitForTimeout(200);
+  erwarte(await p.evaluate(() => /40/.test(document.getElementById("satz").textContent) && document.querySelectorAll("#machen-bild rect[height='78']").length === 4), "die 10 ist voll und wird ein Zehner: jetzt 40");
+  await bild(p, "fu-machen");
+  await p.waitForTimeout(300);
+  for (let k = 0; k < 3; k++) { await p.click("#machen-bild .wartet >> nth=0"); await p.waitForTimeout(80); }
+  erwarte(await p.evaluate(() => /38 \+ 5 = 43/.test(document.getElementById("machen-ergebnis").textContent) && document.querySelectorAll("#machen-bild rect[height='78']").length === 4), "alle getippt: 4 Zehner und 3 – „38 + 5 = 43“");
   await weiter();
   await p.click('[data-e="52"]'); await p.waitForTimeout(150);
-  erwarte(await p.evaluate(() => /genau hin/.test(document.getElementById("rueck").textContent)) && !(await p.isVisible("#weiter")), "Schritt 3: falsch ergänzt → freundlicher Hinweis, noch kein Weiter");
+  erwarte(await p.evaluate(() => /genau hin/.test(document.getElementById("rueck").textContent)) && !(await p.isVisible("#weiter")), "Ergänzen: falsch → freundlicher Hinweis, noch kein Weiter");
   await p.click('[data-e="53"]'); await p.waitForTimeout(150);
-  erwarte(await p.evaluate(() => document.getElementById("luecke").textContent === "53"), "Schritt 3: richtig ergänzt (53)");
+  erwarte(await p.evaluate(() => document.getElementById("luecke").textContent === "53"), "Ergänzen: richtig (53)");
   await weiter();
   await p.click('[data-g="nein"]'); await p.waitForTimeout(150);
-  erwarte(await p.isVisible("#warum") && await p.evaluate(() => /Robo hat sich vertan/.test(document.getElementById("rueck").textContent)), "Schritt 4: Robos Fehler erkannt, Begründung sichtbar");
+  erwarte(await p.isVisible("#warum") && await p.evaluate(() => /Robo hat sich vertan/.test(document.getElementById("rueck").textContent) && !!document.querySelector("#warum svg")), "Robos Fehler erkannt, Begründung mit Bild");
   await bild(p, "fu-gegenbeispiel");
   await weiter();
-  erwarte(await p.evaluate(() => /Merke dir/.test(document.getElementById("tafel").textContent)), "Schritt 5: Merksatz");
+  erwarte(await p.evaluate(() => document.querySelectorAll(".geschichte > div").length === 3 && /10 voll/.test(document.getElementById("tafel").textContent)), "C Bildergeschichte: drei Bilder mit je einem Satz");
+  await bild(p, "fu-geschichte");
   await weiter();
   let l = await p.evaluate(() => ({ st: __mathe.lauf && __mathe.lauf.station.id, erkl: (Spielwelt.lade("mathe").erklaert || {}).plusUeber, n: __mathe.lauf && __mathe.lauf.liste.length }));
   erwarte(l.st === "plusUeber" && l.erkl === 1 && l.n === 10, "nach der Erklärung startet die Runde, Erklärung gemerkt");
@@ -62,8 +78,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await p.waitForTimeout(1300); await tippe(62); await p.waitForTimeout(1200);
   await p.evaluate(() => __mathe.setzeAufgabe({ text: "45 + 37", antwort: "82", art: "zahl", hilfe: "Erst die Zehner, dann die Einer." }));
   await tippe(72); await p.waitForTimeout(800);
-  erwarte(await p.isVisible("#denkfehler") && await p.evaluate(() => document.querySelectorAll("#denkfehler p").length === 3 && /Übertrag vergessen/.test(document.getElementById("denkfehler").textContent)) && await fv("uebertrag") === "vermutet",
-    "zweites Mal: lange Erklärung in drei Teilen (So denkst du – Warum nicht – So stimmt es)");
+  erwarte(await p.isVisible("#denkfehler") && await p.evaluate(() => { const k = document.getElementById("denkfehler"); return k.querySelectorAll(":scope > p").length === 3 && /Fast! Schau mal/.test(k.textContent) && !!k.querySelector(".erklaer-bild svg") && !!document.getElementById("fehler-hoer") && !/Übertrag|Denkfehler/.test(k.textContent); }) && await fv("uebertrag") === "vermutet",
+    "zweites Mal: „Fast! Schau mal.“ mit Bild, 🔊 und drei kurzen Sätzen ohne Fachwörter");
   await bild(p, "fu-lang");
   const pos = await p.evaluate(() => __mathe.lauf.pos);
   await p.click("#weiter"); await p.waitForTimeout(250);
@@ -79,8 +95,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await p.evaluate((n) => __mathe.starte(n, true), await nr("plusUeber")); await p.waitForTimeout(300);
   erwarte(!(await p.isVisible("#angebot")) && await p.isVisible("#erklaer-knopf"), "zweiter Besuch: kein Angebot mehr, 💡 in der Kopfzeile");
   await p.click("#erklaer-knopf"); await p.waitForTimeout(200);
-  for (let i = 0; i < 2; i++) await weiter();
-  await p.click('[data-e="53"]'); await weiter(); await p.click('[data-g="nein"]'); await weiter(); await weiter();
+  for (let k = 0; k < 4; k++) await weiter();   // ▶ ▶ ▶ Weiter
+  for (let k = 0; k < 5; k++) { await p.click("#machen-bild .wartet >> nth=0"); await p.waitForTimeout(k === 1 ? 300 : 80); }
+  await weiter(); await p.click('[data-e="53"]'); await weiter(); await p.click('[data-g="nein"]'); await weiter(); await weiter();
   erwarte(await p.evaluate(() => __mathe.lauf && __mathe.lauf.station.id === "plusUeber" && !!document.getElementById("ausdruck")), "💡-Erklärung durchgeklickt, zurück zur Aufgabe");
 
   // ---------- Zeig mir deinen Weg ----------

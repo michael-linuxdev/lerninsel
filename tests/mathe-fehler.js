@@ -74,19 +74,28 @@ pruefe("Schrittweg: Ziffern je Stelle, Übertrag vergessen und kleinere von grö
   }
 });
 
-pruefe("Erklär-Einheiten: feste Reihenfolge, ergänzte Antwort unter den Optionen, Denkfehler der Gegenbeispiele im Katalog", () => {
-  const REIHE = ["ziel", "beispiel", "ergaenzen", "gegenbeispiel", "merksatz"];
+pruefe("Erklär-Einheiten (kindgerecht, 03.11.2026): feste Reihenfolge zeigen → machen → ergänzen → Robos Fehler → Bildergeschichte, kurze Sätze, jedes Bild zeichnet", () => {
+  const REIHE = ["zeigen", "machen", "ergaenzen", "gegenbeispiel", "geschichte"];
   const alle = Object.entries(E.ERKLAERUNGEN).flatMap(([id, e]) => Array.isArray(e) ? [[id, e]] : Object.entries(e).map(([v, x]) => [id + "/" + v, x]));
   assert.ok(alle.length >= 7);
+  const FACHWORT = /Übertrag|Stelle|Ziffer|addier|subtrahier|Summand|Minuend|Subtrahend|Denkfehler/i;
   for (const [id, schritte] of alle) {
     assert.deepStrictEqual(schritte.map(s => s.typ), REIHE, id);
     for (const s of schritte) {
-      assert.ok(s.text && s.text.length < 160, `${id}: Text zu lang (${s.typ})`);
+      assert.ok(s.text && s.text.length < 120, `${id}: Text zu lang (${s.typ})`);
+      assert.ok(!FACHWORT.test(s.text + " " + (s.warum || "") + " " + (s.bilder || []).map(b => b.satz).join(" ")), `${id}: Fachwort im Kindertext (${s.typ})`);
+      if (s.bilder) for (const b of s.bilder) { assert.ok(b.satz.length <= 90, `${id}: Satz zu lang: ${b.satz}`); assert.ok(/^<svg/.test(b.bild()), `${id}: Bild fehlt`); }
+      if (s.typ === "geschichte") assert.strictEqual(s.bilder.length, 3, id);
+      if (s.typ === "machen") assert.ok(["dazu", "weg", "gruppen"].includes(s.art) && s.a > 0 && s.b > 0 && (s.art !== "weg" || s.a > s.b), id);
       if (s.typ === "ergaenzen") assert.ok(s.optionen.includes(s.antwort) && new Set(s.optionen).size === s.optionen.length, id);
       if (s.typ === "gegenbeispiel") { assert.ok(F.KATALOG.some(f => f.id === s.fv), `${id}: Denkfehler ${s.fv}`); assert.strictEqual(s.stimmt, false); }
-      if (s.typ === "beispiel") assert.ok(s.zeilen.length >= 2);
     }
   }
+  // Fehler-Hinweise für Kinder: drei kurze Sätze ohne Fachwörter
+  const o = { a: 34, b: 28, op: "+", c: 62 };
+  for (const f of F.KATALOG) { const l = f.lang(Object.assign({}, o, f.id === "op" ? { op: "·", a: 4, b: 2, c: 8 } : f.id.includes("borgen") || f.id === "kleinvongross" ? { op: "−", a: 52, b: 27, c: 25 } : {}));
+    assert.strictEqual(l.length, 3, f.id); l.forEach(t => { assert.ok(t.length <= 100, `${f.id}: ${t}`); assert.ok(!FACHWORT.test(t), `${f.id}: Fachwort: ${t}`); }); }
+  assert.ok(/<svg/.test(E.bildFuer("uebertrag", o)) && /<svg/.test(E.bildFuer("zaehlen", { a: 5, b: 3, op: "+", c: 8 })), "Bilder zu den Fehlern");
   // Gegenbeispiele: Robos falsche Antwort ergibt wirklich den genannten Denkfehler
   const rechnung = /(\d+) ([+−·]) (\d+) = (\d+)/;
   for (const [id, schritte] of alle) { const g = schritte.find(s => s.typ === "gegenbeispiel"), m = rechnung.exec(g.text);
