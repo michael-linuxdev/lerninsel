@@ -16,6 +16,11 @@
     AUGEN[n].map(([c, z]) => `<circle cx="${36 + c * 28}" cy="${36 + z * 28}" r="10.5" fill="#3B1F63"/>`).join("") + `</svg>`;
   for (let n = 1; n <= 6; n++) ICONS[(0x267f + n).toString(16)] = wuerfel(n);
   ICONS["1f3b2"] = wuerfel(5);
+  // Formen zum Erkennen (iPad-Meldung 03.11.2026: 🔵/🔺/🟦 waren verschieden farbig und groß): eigene Zeichen \uE110 Kreis, \uE111 Dreieck,
+  // \uE112 Viereck (Quadrat), \uE113 Rechteck – gleiche Farbe, gleiche Größe; dieselbe Zeichnung wie formSvg in spiele/mathe/aufgaben.js. Vorlesen lässt sie weg.
+  const FORM = { e110: '<circle cx="64" cy="64" r="46"/>', e111: '<path d="M64 14 L116 106 H12 Z" stroke-linejoin="round"/>',
+    e112: '<rect x="20" y="20" width="88" height="88" rx="6"/>', e113: '<rect x="8" y="34" width="112" height="60" rx="6"/>' };
+  for (const [h, f] of Object.entries(FORM)) ICONS[h] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><g fill="#4FA8F0" stroke="#3B1F63" stroke-width="7">${f}</g></svg>`;
   const hex = (e) => [...e].filter(c => c !== "️").map(c => c.codePointAt(0).toString(16)).join("-");
   const zeichen = (h) => h.split("-").map(x => String.fromCodePoint(parseInt(x, 16))).join("");
   const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

@@ -6,6 +6,7 @@
 //     verlässt, bekommt sie nicht noch einmal (3D-Insel).
 //  4. „Würfel überall einheitlich“ → ⚀–⚅ und 🎲 werden als derselbe Stil-A-Würfel gezeichnet wie in Mathe.
 //  5. „Kein Einhorn im Tablet-Führerschein“ → Wisch-Übung ohne 🦄.
+//  6. (03.11.) „Kreis, Dreieck, Viereck sind unterschiedlich farbig und groß“ → eigene Formzeichen \uE110–\uE113, eine Farbe, eine Größe.
 // Aufruf: sh tests/laufen.sh ipad   (Screenshots mit BILDER=<ordner>)
 const { chromium } = require("playwright");
 const fs = require("fs");
@@ -93,6 +94,16 @@ const KACHEL_SEITEN = ["", "spiele/mathe/", "spiele/deutsch/", "spiele/medien/",
     const w = await p.evaluate(() => [...document.querySelectorAll(".emo")].filter(e => /[⚀-⚅]/u.test(e.textContent)).map(e => ({ t: e.textContent, kreise: e.querySelectorAll("svg circle").length, rand: !!e.querySelector('svg rect[stroke="#3B1F63"]') })));
     erwarte(w.length === 3 && w.every(x => x.rand && x.kreise === "⚀⚁⚂⚃⚄⚅".indexOf(x.t) + 1), `Vorschule: Würfel ⚀–⚅ als Stil-A-Würfel mit passenden Augen (${w.map(x => x.t + x.kreise).join(" ")})`);
     await bild(p, "ipad-wuerfel-vorschule");
+    // 6. (Meldung 03.11.) Kreis, Dreieck, Viereck gleich gefärbt und gleich groß – nur die Form unterscheidet sich
+    await p.evaluate(() => __vorschule.starte("vs-formen")); await p.waitForTimeout(400);
+    const formen = await p.evaluate(() => [...document.querySelectorAll(".emo svg g[fill]")].filter(g => g.closest("button")).map(g => { const r = g.getBoundingClientRect(); return { fill: g.getAttribute("fill"), b: Math.round(r.width), h: Math.round(r.height) }; }));
+    const gr = formen.map(f => Math.max(f.b, f.h));
+    erwarte(formen.length === 3 && new Set(formen.map(f => f.fill)).size === 1 && Math.max(...gr) - Math.min(...gr) <= 8,
+      `Vorschule: Kreis, Dreieck, Viereck in einer Farbe und gleich groß (${formen.map(f => f.fill + " " + f.b + "×" + f.h).join(", ")})`);
+    await bild(p, "ipad-formen-vorschule");
+    const vs = fs.readFileSync(__dirname + "/../spiele/vorschule/aufgaben.js", "utf8").split('id: "vs-formen"')[1].split('id: "vs-vergleichen"')[0];
+    const k1 = fs.readFileSync(__dirname + "/../spiele/mathe/aufgaben.js", "utf8").split('id: "k1formen"')[1].split('id: "k1geld"')[0];
+    erwarte(!/🔵|🔺|🟦|🟩|🟧|🔴/u.test(vs + k1) && /\\uE110/.test(vs) && /\\uE110/.test(k1), "Formen-Aufgaben (Vorschule, Matheweg Kl. 1) ohne bunte Form-Emojis");
     const ein = await p.evaluate(() => { const d = document.createElement("div"); d.textContent = "🎲"; document.body.appendChild(d); return new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(d.querySelectorAll(".emo svg circle").length)))); });
     erwarte(ein === 5, "🎲 ist derselbe Würfel (fünf Augen) statt des roten Noto-Würfels");
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);

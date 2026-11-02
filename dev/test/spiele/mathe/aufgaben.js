@@ -1054,6 +1054,11 @@
   const REGAL = ["🍎", "⚽", "🧸", "📚", "🎈", "🚗", "🐱", "🌵", "⏰", "🎁", "🍌", "🦆"];
   const emojiReihe = (liste, groesse = 54) => `<svg viewBox="0 0 ${liste.length * (groesse + 8) + 8} ${groesse + 22}" style="max-height:110px" role="img" aria-label="Reihe">` +
     liste.map((e, i) => `<text x="${8 + i * (groesse + 8) + groesse / 2}" y="${groesse + 4}" text-anchor="middle" font-size="${groesse}" fill="${D}" font-family="Fredoka, Arial">${e}</text>`).join("") + `</svg>`;
+  // Formen in einer Reihe: gleiche Farbe, gleiche Größe (dieselbe Zeichnung wie \uE110–\uE113 in shared/emoji.js)
+  const FORM_SVG = { "\uE110": '<circle cx="64" cy="64" r="46"/>', "\uE111": '<path d="M64 14 L116 106 H12 Z" stroke-linejoin="round"/>',
+    "\uE112": '<rect x="20" y="20" width="88" height="88" rx="6"/>', "\uE113": '<rect x="8" y="34" width="112" height="60" rx="6"/>' };
+  const formenReihe = (liste, groesse = 54) => `<svg viewBox="0 0 ${liste.length * (groesse + 8) + 8} ${groesse + 16}" style="max-height:110px" role="img" aria-label="Reihe von Formen">` +
+    liste.map((e, i) => `<g transform="translate(${8 + i * (groesse + 8)} 8) scale(${groesse / 128})" fill="#4FA8F0" stroke="${D}" stroke-width="7">${FORM_SVG[e] || ""}</g>`).join("") + `</svg>`;
   // Regal mit 3 × 3 Fächern (Lagebeziehungen)
   function regalBild(g) {
     const w = 92, h = 84; let s = `<rect x="4" y="4" width="${g[0].length * w + 12}" height="${g.length * h + 12}" rx="8" fill="#FFF3D6" stroke="${D}" stroke-width="3"/>`;
@@ -1668,12 +1673,14 @@
       neu: () => STATIONEN.find(s => s.id === "lage").neu() },
     { id: "k1formen", lb: "rf", zusatz: true, stufe: "1", lz: ["ma.rf.03", "ma.rf.04", "ma.zo.01"], name: "Formen entdecken", icon: "🔷",
       neu: () => { const art = r(1, 4);
-        if (art === 1) { const f = wahl(["🔺", "🟦", "🔵"]), anders = wahl(["🔺", "🟦", "🔵"].filter(x => x !== f)), reihe = Array(5).fill(f); reihe[r(0, 4)] = anders;
-          return wahlAufgabe("Welche Form passt nicht dazu?", anders, ["🔺", "🟦", "🔵"], "Vergleiche die Formen: Eine ist anders.", { bild: emojiReihe(reihe) }); }
-        if (art === 2) { const reihe = Array.from({ length: r(6, 9) }, () => wahl(["🔺", "🟦", "🔵"])), f = wahl(["🔺", "🟦", "🔵"]); if (!reihe.includes(f)) reihe[0] = f;
-          const n = reihe.filter(x => x === f).length, name = { "🔺": "Dreiecke", "🟦": "Vierecke", "🔵": "Kreise" }[f];
-          return zahl("", n, `Zeige auf jedes und zähle: ${n}.`, { frage: `Wie viele ${name} siehst du?`, bild: emojiReihe(reihe, 44), nurLuecke: true }); }
-        if (art === 3) { const s = wahl([["ein Teller", "Kreis"], ["eine Tür", "Rechteck"], ["ein Fenster", "Rechteck"], ["eine Uhr an der Wand", "Kreis"], ["ein Stück Pizza", "Dreieck"], ["ein Fliese", "Quadrat"]]);
+        // Formen gleich gefärbt und gleich groß (03.11.2026): eigene Zeichen statt bunter Form-Emojis, im Bild über formenReihe
+        const F = ["\uE111", "\uE112", "\uE110"];
+        if (art === 1) { const f = wahl(F), anders = wahl(F.filter(x => x !== f)), reihe = Array(5).fill(f); reihe[r(0, 4)] = anders;
+          return wahlAufgabe("Welche Form passt nicht dazu?", anders, F, "Vergleiche die Formen: Eine ist anders.", { bild: formenReihe(reihe) }); }
+        if (art === 2) { const reihe = Array.from({ length: r(6, 9) }, () => wahl(F)), f = wahl(F); if (!reihe.includes(f)) reihe[0] = f;
+          const n = reihe.filter(x => x === f).length, name = { "\uE111": "Dreiecke", "\uE112": "Vierecke", "\uE110": "Kreise" }[f];
+          return zahl("", n, `Zeige auf jedes und zähle: ${n}.`, { frage: `Wie viele ${name} siehst du?`, bild: formenReihe(reihe, 44), nurLuecke: true }); }
+        if (art === 3) { const s = wahl([["ein Teller", "Kreis"], ["eine Tür", "Rechteck"], ["ein Fenster", "Rechteck"], ["eine Uhr an der Wand", "Kreis"], ["ein Stück Pizza", "Dreieck"], ["eine Fliese", "Quadrat"]]);
           return wahlAufgabe(`Welche Form hat ${s[0]}?`, s[1], ["Kreis", "Dreieck", "Rechteck", "Quadrat"], `${s[0]} – ${s[1]}.`); }
         return wahlAufgabe("Was kann rollen?", "⚽", ["🎲", "📦"], "Der Ball ist eine Kugel – rund ohne Ecken. Würfel und Kiste haben Ecken."); } },
     { id: "k1geld", lb: "gm", zusatz: true, stufe: "1", lz: ["ma.gm.02"], name: "Geld bis 20 Euro", icon: "🪙",
