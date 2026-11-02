@@ -18,7 +18,8 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
     [auf(`9 ${M} 3`, 6), 7, "zaehlen"], [auf("34 + 5", 39), 84, "stellenwert"], [auf("7 · 8", 56), 63, "malreihe"], [auf("7 · 8", 56), 48, "malreihe"],
     [{ text: "", antwort: "632", ops: { a: 347, b: 285, op: "+" } }, 522, "uebertrag"],
     [auf("6 · 0", 0), 6, "malnull"], [auf("0 · 7", 0), 7, "malnull"], [auf("15 : 3", 5), 12, "geteiltminus"], [auf("24 : 4", 6), 7, "geteiltreihe"], [auf("24 : 4", 6), 5, "geteiltreihe"], [auf("12 : 3", 4), 36, "op"],
-    [auf("34 + 28", 62), 26, "dreher"], [{ text: "", frage: "Welche Zahl ist das?", antwort: "47", art: "zahl" }, 74, "dreher"], [auf("45 + 2", 47), 74, "dreher"]];
+    [auf("34 + 28", 62), 26, "dreher"], [{ text: "", frage: "Welche Zahl ist das?", antwort: "47", art: "zahl" }, 74, "dreher"], [auf("45 + 2", 47), 74, "dreher"],
+    [F.uhrAufgabe(2, 0, zz), "12:10", "zeigervertauscht"], [F.uhrAufgabe(4, 30, zz), "6:20", "zeigervertauscht"], [F.uhrAufgabe(4, 30, zz), "5:30", "stundedaneben"], [F.uhrAufgabe(9, 0, zz), "8:00", "stundedaneben"]];
   assert.strictEqual(F.erkenne({ text: "", antwort: "40", art: "zahl" }, 4), null, "40 → 4 ist kein Dreher");
   assert.strictEqual(F.erkenne({ text: "", antwort: "44", art: "zahl" }, 44), null);
   assert.deepStrictEqual([13, 16, 17, 21, 47, 52, 99].map(F.zahlwort), ["dreizehn", "sechzehn", "siebzehn", "einundzwanzig", "siebenundvierzig", "zweiundfünfzig", "neunundneunzig"]);
@@ -31,10 +32,11 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
 pruefe("jede Kontrastaufgabe passt zum Denkfehler (1000 Startzahlen je Denkfehler) und ist richtig gerechnet", () => {
   const basis = { op: auf("5 + 3", 8), kleinvongross: auf(`52 ${M} 27`, 25), borgen: auf(`61 ${M} 28`, 33), uebertrag: auf("34 + 28", 62), uebertragdoppelt: auf("34 + 28", 62),
     stellenwert: auf("34 + 5", 39), zaehlen: auf("5 + 3", 8), malreihe: auf("7 · 8", 56),
-    malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6), dreher: auf("34 + 28", 62) };
+    malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6), dreher: auf("34 + 28", 62), zeigervertauscht: F.uhrAufgabe(4, 30, zz), stundedaneben: F.uhrAufgabe(4, 0, zz) };
   for (const f of F.KATALOG) {
     for (let i = 0; i < 1000; i++) {
       const [k] = F.kontraste(basis[f.id], f.id, zz), o = F.lies(k);
+      if (o.uhr) { assert.ok(k.optionen.includes(k.antwort) && new Set(k.optionen).size === k.optionen.length && k.optionen.length >= 3 && o.uhr.h !== basis[f.id].uhr.h, f.id); assert.strictEqual(k.kontrast, f.id); continue; }
       const c = o.op === "+" ? o.a + o.b : o.op === M ? o.a - o.b : o.op === "·" ? o.a * o.b : o.a / o.b;
       assert.strictEqual(+k.antwort, c, `${f.id}: ${k.text}`); assert.ok(c >= 0 && Number.isInteger(c), `${f.id}: ${k.text}`); assert.strictEqual(k.kontrast, f.id);
       if (f.id === "uebertrag" || f.id === "uebertragdoppelt") assert.ok(F._h.hatUebertrag(o.a, o.b), k.text);
@@ -94,14 +96,14 @@ pruefe("Erklär-Einheiten (kindgerecht, 03.11.2026): feste Reihenfolge zeigen �
       assert.ok(!FACHWORT.test(s.text + " " + (s.warum || "") + " " + (s.bilder || []).map(b => b.satz).join(" ")), `${id}: Fachwort im Kindertext (${s.typ})`);
       if (s.bilder) for (const b of s.bilder) { assert.ok(b.satz.length <= 90, `${id}: Satz zu lang: ${b.satz}`); assert.ok(/^<svg/.test(b.bild()), `${id}: Bild fehlt`); }
       if (s.typ === "geschichte") assert.strictEqual(s.bilder.length, 3, id);
-      if (s.typ === "machen") assert.ok(["dazu", "weg", "gruppen"].includes(s.art) && s.a > 0 && s.b > 0 && (s.art !== "weg" || s.a > s.b), id);
+      if (s.typ === "machen") assert.ok(s.art === "uhr" ? s.a >= 1 && s.a <= 12 : ["dazu", "weg", "gruppen"].includes(s.art) && s.a > 0 && s.b > 0 && (s.art !== "weg" || s.a > s.b), id);
       if (s.typ === "ergaenzen") assert.ok(s.optionen.includes(s.antwort) && new Set(s.optionen).size === s.optionen.length, id);
       if (s.typ === "gegenbeispiel") { assert.ok(F.KATALOG.some(f => f.id === s.fv), `${id}: Denkfehler ${s.fv}`); assert.strictEqual(s.stimmt, false); }
     }
   }
   // Fehler-Hinweise für Kinder: drei kurze Sätze ohne Fachwörter
   const o = { a: 34, b: 28, op: "+", c: 62 };
-  for (const f of F.KATALOG) { const l = f.lang(Object.assign({}, o, f.id === "op" ? { op: "·", a: 4, b: 2, c: 8 } : f.id.includes("borgen") || f.id === "kleinvongross" ? { op: "−", a: 52, b: 27, c: 25 } : f.id === "malnull" ? { op: "·", a: 6, b: 0, c: 0 } : f.id.startsWith("geteilt") ? { op: ":", a: 54, b: 6, c: 9 } : {}));
+  for (const f of F.KATALOG) { const l = f.lang(Object.assign({}, o, f.id === "op" ? { op: "·", a: 4, b: 2, c: 8 } : f.id.includes("borgen") || f.id === "kleinvongross" ? { op: "−", a: 52, b: 27, c: 25 } : f.id === "malnull" ? { op: "·", a: 6, b: 0, c: 0 } : f.id.startsWith("geteilt") ? { op: ":", a: 54, b: 6, c: 9 } : f.id === "zeigervertauscht" || f.id === "stundedaneben" ? { op: "uhr", uhr: { h: 4, m: 30 }, c: "4:30" } : {}));
     assert.strictEqual(l.length, 3, f.id); l.forEach(t => { assert.ok(t.length <= 100, `${f.id}: ${t}`); assert.ok(!FACHWORT.test(t), `${f.id}: Fachwort: ${t}`); }); }
   assert.ok(/<svg/.test(E.bildFuer("uebertrag", o)) && /<svg/.test(E.bildFuer("zaehlen", { a: 5, b: 3, op: "+", c: 8 })), "Bilder zu den Fehlern");
   // Gegenbeispiele: Robos falsche Antwort ergibt wirklich den genannten Denkfehler

@@ -19,6 +19,7 @@
   // ---------- Aufgabe lesen ----------
   function lies(a) {
     if (!a) return null;
+    if (a.uhr) return { uhr: a.uhr, op: "uhr", c: a.antwort };   // Uhr (04.11.2026): Auswahl-Aufgabe mit Stunde/Minute
     if (a.ops) return Object.assign({ c: +a.antwort }, a.ops);
     const m = /^(\d+) ([+−·:]) (\d+)$/.exec(a.text || "");
     // (04.11.2026) ohne Rechnung (z. B. „Welche Zahl ist das?“) nur das Ergebnis – reicht für „Zahl verdreht“
@@ -136,6 +137,26 @@
       do { op = o.op === M ? M : "+"; a = r(zz, 12, 80); b = r(zz, 3, 19); if (op === M) { const t = a; a = Math.max(t, b) + 20; } c = op === "+" ? a + b : a - b; } while (!dreht(c));
       return zr(op, a, b, "Erst die Zehner hinschreiben, dann die Einer.");
     } });
+  // Uhr (04.11.2026): Zeiger vertauscht, Stunde daneben (bei halb/Viertel ist der kurze Zeiger schon über die Zahl hinaus)
+  const uhrText = (h, m) => `${((h - 1 + 12) % 12) + 1}:${String(m).padStart(2, "0")}`;
+  const uhrWort = (h, m) => ({ 0: `${h} Uhr`, 30: `halb ${(h % 12) + 1}`, 15: `Viertel nach ${h}`, 45: `Viertel vor ${(h % 12) + 1}` })[m] || uhrText(h, m) + " Uhr";
+  function uhrAufgabe(h, m, zz) {
+    const richtig = uhrText(h, m), falsch = [uhrText(m === 0 ? 12 : Math.round(m / 5), (h % 12) * 5), uhrText(h + 1, m), uhrText(h - 1, m), uhrText(h, (m + 30) % 60)].filter((x, i, l) => x !== richtig && l.indexOf(x) === i);
+    const opt = [richtig, ...falsch.slice(0, 3)].map(x => [zz(), x]).sort((x, y) => x[0] - y[0]).map(x => x[1]);
+    const B = (W.Mathe && W.Mathe._bilder && W.Mathe._bilder.uhrBild) || (W.MatheErklaeren && W.MatheErklaeren.BILD.uhr);
+    return { text: "", frage: "Wie spät ist es?", antwort: richtig, art: "wahl", optionen: opt, bild: B ? B(h, m) : undefined, nurLuecke: true, uhr: { h, m },
+      hilfe: `Der kurze Zeiger zeigt die Stunde, der lange die Minuten. Es ist ${richtig} Uhr, also ${uhrWort(h, m)}.` };
+  }
+  KATALOG.push({ id: "zeigervertauscht", name: "Uhr: Stunden- und Minutenzeiger vertauscht",
+      erkenne: (o, w) => !!o.uhr && w === uhrText(o.uhr.m === 0 ? 12 : Math.round(o.uhr.m / 5), (o.uhr.h % 12) * 5) && w !== o.c,
+      kurz: () => "Der kurze Zeiger zeigt die Stunde, der lange die Minuten.",
+      lang: (o) => [`Du hast die Zeiger verwechselt.`, `Der kurze Zeiger zeigt die Stunde: ${o.uhr.h}.`, `Darum ist es ${uhrWort(o.uhr.h, o.uhr.m)}.`],
+      kontrast: (o, zz) => { let h; do { h = r(zz, 1, 12); } while (h === o.uhr.h); return uhrAufgabe(h, o.uhr.m, zz); } },
+    { id: "stundedaneben", name: "Uhr: Stunde daneben abgelesen",
+      erkenne: (o, w) => !!o.uhr && (w === uhrText(o.uhr.h + 1, o.uhr.m) || w === uhrText(o.uhr.h - 1, o.uhr.m)) && w !== o.c,
+      kurz: (o) => o.uhr.m ? "Schau genau: Der kurze Zeiger ist schon über die Zahl hinaus." : `Schau genau: Der kurze Zeiger zeigt auf die ${o.uhr.h}.`,
+      lang: (o) => [`Schau genau auf den kurzen Zeiger.`, o.uhr.m ? `Er ist an der ${o.uhr.h} vorbei, aber noch nicht bei der ${(o.uhr.h % 12) + 1}.` : `Er zeigt genau auf die ${o.uhr.h}.`, `Darum ist es ${uhrWort(o.uhr.h, o.uhr.m)}.`],
+      kontrast: (o, zz) => { let h; do { h = r(zz, 1, 12); } while (h === o.uhr.h); return uhrAufgabe(h, o.uhr.m === 0 ? 30 : o.uhr.m, zz); } });
   const fv = (id) => KATALOG.find(f => f.id === id);
   // Aufgabe in derselben Form wie zahl() in aufgaben.js
   function zr(op, a, b, hilfe) {
@@ -145,7 +166,8 @@
 
   // Welche Denkfehler passen zu dieser falschen Antwort? (höchstens einer, in Katalog-Reihenfolge)
   function erkenne(a, wert) {
-    const o = lies(a), w = +wert; if (!o || !isFinite(w) || w === o.c) return null;
+    const o = lies(a); if (!o) return null;
+    const w = o.uhr ? String(wert) : +wert; if ((!o.uhr && !isFinite(w)) || w === o.c) return null;
     const f = KATALOG.find(x => x.erkenne(o, w));
     return f ? { id: f.id, name: f.name, kurz: f.kurz(o), lang: f.lang(o) } : null;
   }
@@ -204,5 +226,5 @@
   }
   const stelleName = (i) => STELLE[i];
 
-  W.MatheFehler = { KATALOG, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, zahlwort, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
+  W.MatheFehler = { KATALOG, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, zahlwort, uhrAufgabe, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
 })(typeof window !== "undefined" ? window : globalThis);

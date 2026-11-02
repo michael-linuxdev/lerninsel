@@ -162,6 +162,26 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(e === erg && bildDa && await p.evaluate(() => window.__fertig), `Erklärung ${id}: selbst gemacht (${e}), Robos Fehler mit Bild, bis zum Ende`);
   }
 
+  // ---------- Uhrzeit (04.11.2026): Erklärung mit Stunde einstellen, Denkfehler „Zeiger vertauscht“ bei Auswahl-Aufgaben ----------
+  await p.click("#zum-weg"); await p.waitForTimeout(200);
+  await p.evaluate((n) => __mathe.starte(n, true), await nr("uhr")); await p.waitForTimeout(300);
+  await p.click("#erklaer-ja"); await p.waitForTimeout(200);
+  erwarte(await p.evaluate(() => !!document.querySelector(".erkl-uhr")), "Uhr: Erklärung mit Uhr-Bild");
+  for (let k = 0; k < 3; k++) { await p.click("#weiter"); await p.waitForTimeout(150); }
+  await weiter();
+  await p.click('#machen-bild .uhrzahl[data-h="2"]'); await p.waitForTimeout(120);
+  const uhrFalsch = await p.evaluate(() => /Tipp auf die 4/.test(document.getElementById("satz").textContent) && !document.getElementById("weiter"));
+  await p.click('#machen-bild .uhrzahl[data-h="4"]'); await p.waitForTimeout(120);
+  erwarte(uhrFalsch && await p.evaluate(() => document.getElementById("machen-ergebnis").textContent === "4 Uhr"), "Uhr selbst stellen: erst die 2 (freundlicher Hinweis), dann die 4 – 4 Uhr");
+  await bild(p, "fu-uhr-machen");
+  await weiter(); await p.click('[data-e="7"]'); await p.waitForTimeout(150); await weiter();
+  await p.click('[data-g="nein"]'); await p.waitForTimeout(150); await weiter(); await weiter();
+  erwarte(await p.evaluate(() => __mathe.lauf && __mathe.lauf.station.id === "uhr" && (Spielwelt.lade("mathe").erklaert || {}).uhr === 1), "Uhr: Erklärung bis zum Ende, Runde startet");
+  await p.evaluate(() => __mathe.setzeAufgabe(MatheFehler.uhrAufgabe(4, 30, () => 0.3)));
+  await p.click('.taste[data-wert="6:20"]'); await p.waitForTimeout(300);
+  erwarte(await p.evaluate(() => /kurze Zeiger zeigt die Stunde/.test(document.getElementById("rueck").textContent)) && await fv("zeigervertauscht") === "aufgefallen", "halb 5 als 6:20 gewählt: Hinweis „Der kurze Zeiger zeigt die Stunde“, Denkfehler „Zeiger vertauscht“");
+  await p.waitForTimeout(1300);
+
   // ---------- Zeig mir deinen Weg ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k3"; Spielwelt.speichere("mathe", d); });
   await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);

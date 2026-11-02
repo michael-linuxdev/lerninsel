@@ -6,7 +6,7 @@
 //   { typ: "gegenbeispiel", text, stimmt: false, fv, warum } Robo rechnet falsch; fv = Fehler aus fehler.js
 //   { typ: "geschichte", text, bilder: [{ satz, bild }] }    C „Bildergeschichte“ zum Merken: drei Bilder, je ein Satz; text = Merksatz
 // bild ist eine Funktion → SVG (Bausteine in BILD, auch für die Fehler-Hinweise: bildFuer(fv, o)).
-// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
+// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
 // Abschluss wird in mathe.erklaert[station] = 1 gemerkt; das Angebot kommt nur, wenn die Station noch nie gerechnet wurde.
 (function (W) {
   const M = "−", D = "#3B1F63", ROT = "#FF6F61", BLAU = "#4FA8F0", STANGE = "#FFB547";
@@ -88,7 +88,22 @@
     erg.forEach((z, i) => { if (i < bis && !(i === erg.length - 1 && z === 0 && erg.length > 1)) s += ziffer(z, i, 180); });
     return s + `</svg>`;
   }
-  const BILD = { feld, reihen, strahl, schrift };
+  // Uhr (04.11.2026): kurzer Zeiger rot (Stunde), langer blau (Minuten); zeige = "kurz" | "lang" leuchtet gelb hinterlegt; tipp = Zahlen antippbar
+  function uhr(h, m = 0, { zeige = "", tipp = false, ohneKurz = false } = {}) {
+    const wS = ((h % 12) + m / 60) * 30, wM = m * 6, R = (w, r) => [100 + Math.sin(w * Math.PI / 180) * r, 100 - Math.cos(w * Math.PI / 180) * r];
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="erkl-bild erkl-uhr" role="img" aria-label="Uhr: ${h} Uhr${m ? " " + m : ""}">` +
+      `<circle cx="100" cy="100" r="94" fill="#fff" stroke="${D}" stroke-width="6"/>`;
+    for (let i = 1; i <= 12; i++) { const [x, y] = R(i * 30, 70), [x1, y1] = R(i * 30, 84), [x2, y2] = R(i * 30, 92);
+      s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${D}" stroke-width="4"/>` +
+        (tipp ? `<g class="uhrzahl" data-h="${i}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="15" fill="#F4EEFF" stroke="#D9D0EA" stroke-width="2"/>` : "<g>") +
+        `<text x="${x}" y="${y + 7}" text-anchor="middle" font-size="20" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${i}</text></g>`; }
+    const zeiger = (w, l, farbe, dick, an) => { const [x, y] = R(w, l); return (an ? `<line x1="100" y1="100" x2="${x}" y2="${y}" stroke="#FFD84D" stroke-width="${dick + 10}" stroke-linecap="round" opacity=".8"/>` : "") +
+      `<line x1="100" y1="100" x2="${x}" y2="${y}" stroke="${farbe}" stroke-width="${dick}" stroke-linecap="round"/>`; };
+    if (!ohneKurz) s += zeiger(wS, 38, ROT, 10, zeige === "kurz");
+    s += zeiger(wM, 56, BLAU, 6, zeige === "lang");
+    return s + `<circle cx="100" cy="100" r="8" fill="${D}"/></svg>`;
+  }
+  const BILD = { feld, reihen, strahl, schrift, uhr };
 
   // ---------- Bilder für die Fehler-Hinweise (fehler.js liefert die Texte) ----------
   function bildFuer(fv, o) {
@@ -102,6 +117,7 @@
       if (fv === "malreihe" && o.a <= 10 && o.b <= 10) return reihen(o.a, o.b);
       if ((fv === "geteiltminus" || fv === "geteiltreihe") && o.op === ":" && o.b <= 10 && o.a / o.b <= 10) return reihen(o.b, o.a / o.b);
       if (fv === "dreher" && o.c < 100) return feld({ z: Z(o.c), rot: E(o.c) });
+      if ((fv === "zeigervertauscht" || fv === "stundedaneben") && o.uhr) return uhr(o.uhr.h, o.uhr.m, { zeige: "kurz" });
       if (fv === "malnull") return reihen(Math.max(1, Math.min(10, o.a || o.b)), 0, 2);
     } catch (e) { /* ohne Bild */ }
     return "";
@@ -206,6 +222,21 @@
         { satz: "Schau, wie viele schon da sind.", bild: F({ z: 3, rot: 4 }) },
         { satz: "Füll die 10 auf.", bild: F({ z: 3, rot: 4, blau: 6 }) },
         { satz: "Zähl, wie viele du dazugetan hast.", bild: F({ z: 4, neu: true }) }] }
+    ],
+    // Uhrzeit (04.11.2026): kurzer Zeiger = Stunde, langer Zeiger oben = genau, unten = halb
+    uhr: [
+      { typ: "zeigen", text: "Wie spät ist es?", bilder: [
+        { satz: "Die Uhr hat einen kurzen und einen langen Zeiger.", bild: () => uhr(3, 0) },
+        { satz: "Der kurze Zeiger zeigt die Stunde. Hier auf die 3.", bild: () => uhr(3, 0, { zeige: "kurz" }) },
+        { satz: "Der lange Zeiger zeigt nach oben auf die 12. Das heißt: genau.", bild: () => uhr(3, 0, { zeige: "lang" }) },
+        { satz: "Also ist es genau 3 Uhr.", bild: () => uhr(3, 0) }] },
+      { typ: "machen", text: "Jetzt du: Stell 4 Uhr ein. Tipp auf die Zahl für den kurzen Zeiger.", art: "uhr", a: 4, b: 0 },
+      { typ: "ergaenzen", text: "Der kurze Zeiger zeigt auf die 7. Der lange zeigt nach oben.", frage: "Es ist ? Uhr.", antwort: "7", optionen: ["7", "12", "6"] },
+      { typ: "gegenbeispiel", text: "Der kurze Zeiger zeigt auf die 2, der lange nach oben. Robo sagt: „12 Uhr.“ Stimmt das?", stimmt: false, fv: "zeigervertauscht", warum: "Robo hat die Zeiger verwechselt. Der kurze zeigt die Stunde: 2. Also 2 Uhr." },
+      { typ: "geschichte", text: "Kurz zeigt die Stunde. Lang oben heißt: genau.", bilder: [
+        { satz: "Erst den kurzen Zeiger suchen.", bild: () => uhr(5, 0, { zeige: "kurz" }) },
+        { satz: "Lang oben heißt genau, lang unten heißt halb.", bild: () => uhr(5, 30, { zeige: "lang" }) },
+        { satz: "Bei halb ist der kurze schon über die Zahl hinaus.", bild: () => uhr(5, 30, { zeige: "kurz" }) }] }
     ],
     // Minus bis 10 (04.11.2026): Es geht etwas weg
     k1minus10: [

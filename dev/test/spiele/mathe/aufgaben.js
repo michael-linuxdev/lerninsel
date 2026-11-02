@@ -391,7 +391,7 @@
         falsch.delete(richtig);
         const opt = mische([richtig, ...mische([...falsch]).slice(0, 3)]);
         const worte = { 0: `${h} Uhr`, 30: `halb ${(h % 12) + 1}`, 15: `Viertel nach ${h}`, 45: `Viertel vor ${(h % 12) + 1}` }[m];
-        return { text: "", frage: "Wie spät ist es?", antwort: richtig, art: "wahl", optionen: opt, bild: uhrBild(h, m), nurLuecke: true,
+        return { text: "", frage: "Wie spät ist es?", antwort: richtig, art: "wahl", optionen: opt, bild: uhrBild(h, m), nurLuecke: true, uhr: { h, m },
           hilfe: `Der kurze Zeiger zeigt die Stunde, der lange die Minuten. Es ist ${richtig} Uhr, also ${worte}.` };
       } },
     { id: "kalender", lz: ["ma.gm.07", "su.hi.02"], name: "Woche, Monat, Jahr", icon: "📅",

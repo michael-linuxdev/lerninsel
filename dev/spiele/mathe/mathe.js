@@ -287,6 +287,24 @@
         const fertigZahl = st.art === "dazu" ? st.a + st.b : st.art === "weg" ? st.a - st.b : st.a * st.b;
         const zeichen = st.art === "dazu" ? "+" : st.art === "weg" ? "−" : "·";
         const satzNach = (t) => { $("satz").textContent = t; };
+        // Uhr (04.11.2026): Zahl antippen → der kurze Zeiger dreht dorthin; richtig = st.a
+        if (st.art === "uhr") {
+          let gestellt = 0;
+          $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("biber", st.text)}<div class="erklaer-bild" id="machen-bild"></div><p class="frage gross" id="machen-ergebnis" hidden></p></div>`;
+          hoer(); $("eingabe").innerHTML = "";
+          const male = () => { $("machen-bild").innerHTML = B.uhr(gestellt || 12, 0, { tipp: gestellt !== st.a, ohneKurz: !gestellt }); };
+          male();
+          $("machen-bild").addEventListener("click", (e) => {
+            const z = e.target.closest(".uhrzahl"); if (!z || gestellt === st.a) return;
+            gestellt = +z.dataset.h; S.ton("tipp"); male();
+            if (gestellt === st.a) {
+              $("satz").textContent = `Geschafft! Kurz auf der ${st.a}, lang oben: ${st.a} Uhr.`;
+              $("machen-ergebnis").textContent = `${st.a} Uhr`; $("machen-ergebnis").hidden = false;
+              knopfWeiter("Weiter ➜", weiter);
+            } else $("satz").textContent = `Das ist ${gestellt} Uhr. Wir wollen ${st.a} Uhr. Tipp auf die ${st.a}.`;
+          });
+          return;
+        }
         const bild = () => st.art === "gruppen" ? B.reihen(st.b, zeilen, st.a) + `<button class="knopf haupt plus-reihe" id="plus-reihe" ${zeilen >= st.a ? "disabled" : ""} aria-label="Noch eine Reihe">➕ ${st.b}</button>`
           : B.feld({ z, rot, blau, leer, warten: st.art === "dazu" ? rest : 0, tipp: !warte, nimm: st.art === "weg" && !warte && rest > 0 });
         const ende = () => {
@@ -589,7 +607,7 @@
     if (luecke) { luecke.className = "luecke falsch"; }
     markiereWahl(wert, false);
     // Fehler-Ursache (02.11.2026): typische falsche Antworten einem Denkfehler zuordnen
-    const fv = a.art === "zahl" && MF() && !lauf.einstufung && !lauf.lernstand ? MF().erkenne(a, antwort) : null;
+    const fv = (a.art === "zahl" || a.uhr) && MF() && !lauf.einstufung && !lauf.lernstand ? MF().erkenne(a, antwort) : null;
     // Schriftlich plus/minus: „Zeig mir deinen Weg“ – die Stellen einzeln prüfen
     if (lauf.versuch === 1 && MF() && SCHRITTWEG.includes(a.station) && !lauf.einstufung && !lauf.lernstand && MF().schritte(a)) { lauf.gesperrt = true; setTimeout(() => starteWeg(a), 600); return; }
     let zustand = "";
