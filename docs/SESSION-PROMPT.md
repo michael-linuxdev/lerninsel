@@ -27,7 +27,7 @@ Rückmeldung des Auftraggebers vom 02.11.2026 (Fragerunde schon beantwortet, Det
 
 ## 1. Stand (04.11.2026)
 **Neu am 04.11.2026:** Kleiderschrank-Extras neu gezeichnet (Dinge in der Hand werden gehalten, Hüte/Mützen mit Schatten), Matheweg mit neuen Denkfehlern
-(„Zahl verdreht“, mal 0, zwei Geteilt-Fehler) und neuen Erklär-Einheiten (Geteilt, Minus bis 10, Zehner und Einer, Plus/Minus bis 20, Ergänzen, Uhrzeit, Geld) samt Denkfehlern für Uhr und Geld. Details in `docs/PLAN.md`, „Stand 04.11.2026“.
+(„Zahl verdreht“, mal 0, zwei Geteilt-Fehler) und neuen Erklär-Einheiten (Geteilt, Minus bis 10, Zehner und Einer, Plus/Minus bis 20, Ergänzen, Uhrzeit, Geld) samt Denkfehlern für Uhr und Geld; später auch Länge, Kl. 3 (Zahlen bis 1000, Runden, Teilen mit Rest), Kl. 1 (Zerlegen, Verdoppeln) – zusammen 23 Einheiten und 20 Denkfehler. „Zeig mir deinen Weg“ ist kindgerecht und kann schriftlich mal. Elternbereich: Denkfehler mit Tipp für zu Hause. Details in `docs/PLAN.md`, „Stand 04.11.2026“.
 **Im iPad testen (in /dev):** Kleiderschrank → Extras (Ball, Teddy, Tasche, Mützen); Matheweg Kl. 2 → „Geteilt“ und „Zehner und Einer“ neu öffnen („Erklär es mir“),
 bei „Welche Zahl ist das?“ absichtlich verdreht eintippen (z. B. 25 statt 52); „Uhrzeit“ und „Geld“ neu öffnen (Uhr selbst stellen, Münzen antippen).
 

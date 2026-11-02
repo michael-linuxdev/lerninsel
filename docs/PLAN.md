@@ -2162,5 +2162,9 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   - Album: erster Reiter nicht mehr angeschnitten. Deutsch auf dem Handy: Kopfzeile in zwei statt drei Zeilen. „Erst lernen“-Knöpfe mit Abstand nach dem Emoji.
   - Atelier: Seitenregeln (`.auftrag span`, `.takt span`) verzerrten Emoji-Bilder. **Der Rauchtest prüft jetzt auf allen Seiten, dass kein `span.emo` verzerrt ist**
     (neue Seitenregeln für `span` immer mit `>` schreiben).
+- **Erledigt – vierter Teil:** Denkfehler „Einheiten: eine Null zu wenig oder zu viel“ (kg → g, km → m, l → ml, € → ct; Aufgaben tragen `umrechnen: { n, f, von, nach }`),
+  Erklär-Einheiten „Teilen mit Rest“ (Reihen mit gelber Rest-Zeile, `machen` „gruppen“ mit `rest`), „Zahlen zerlegen“, „Verdoppeln“. Formen-Kacheln ohne bunte Form-Emojis.
+  **Stand: 23 Stationen mit Erklär-Einheit, 20 Denkfehler** (alle mit Eltern-Tipp). Push nur noch über ein Skript, das bei rotem Test abbricht (ein roter Stand war
+  am 04.11. kurz online: Kachel-Symbol verriet eine Antwort – sofort behoben).
 - **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für schriftlich geteilt und mehrstellig mal; weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
   Extras der 3D-Figur an die neuen Zeichnungen angleichen.
