@@ -182,6 +182,25 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   erwarte(await p.evaluate(() => /kurze Zeiger zeigt die Stunde/.test(document.getElementById("rueck").textContent)) && await fv("zeigervertauscht") === "aufgefallen", "halb 5 als 6:20 gewählt: Hinweis „Der kurze Zeiger zeigt die Stunde“, Denkfehler „Zeiger vertauscht“");
   await p.waitForTimeout(1300);
 
+  // ---------- Geld (04.11.2026): Münzen selbst antippen, Denkfehler „Münzen gezählt“ ----------
+  await p.click("#zum-weg"); await p.waitForTimeout(200);
+  await p.evaluate((n) => __mathe.starte(n, true), await nr("geld")); await p.waitForTimeout(300);
+  await p.click("#erklaer-ja"); await p.waitForTimeout(200);
+  for (let k = 0; k < 3; k++) { await p.click("#weiter"); await p.waitForTimeout(150); }
+  await weiter();
+  await p.click('#machen-bild .muenze[data-i="2"]'); await p.waitForTimeout(100);
+  const erstGross = await p.evaluate(() => /Erst die große Münze: 50/.test(document.getElementById("satz").textContent));
+  for (let i = 0; i < 4; i++) { await p.click(`#machen-bild .muenze[data-i="${i}"]`); await p.waitForTimeout(100); }
+  erwarte(erstGross && await p.evaluate(() => document.getElementById("machen-ergebnis").textContent === "76 Cent"), "Geld selbst zählen: erst die große Münze, dann 50, 70, 75, 76 – 76 Cent");
+  await bild(p, "fu-geld-machen");
+  await weiter(); await p.click('[data-e="72"]'); await p.waitForTimeout(150); await weiter();
+  await p.click('[data-g="nein"]'); await p.waitForTimeout(150); await weiter(); await weiter();
+  erwarte(await p.evaluate(() => __mathe.lauf && __mathe.lauf.station.id === "geld" && (Spielwelt.lade("mathe").erklaert || {}).geld === 1), "Geld: Erklärung bis zum Ende, Runde startet");
+  await p.evaluate(() => __mathe.setzeAufgabe({ text: "", frage: "Wie viel Geld ist das?", antwort: "25", art: "zahl", einheit: "ct", nurLuecke: true, geld: [10, 10, 5], hilfe: "10 ct + 10 ct + 5 ct = 25 ct" }));
+  await tippe(3); await p.waitForTimeout(300);
+  erwarte(await p.evaluate(() => /was draufsteht/.test(document.getElementById("rueck").textContent)) && await fv("muenzenzaehlen") === "aufgefallen", "3 statt 25 Cent: Hinweis „Zähl, was draufsteht“, Denkfehler „Münzen gezählt“");
+  await p.waitForTimeout(1300);
+
   // ---------- Zeig mir deinen Weg ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k3"; Spielwelt.speichere("mathe", d); });
   await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);

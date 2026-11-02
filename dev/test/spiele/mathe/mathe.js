@@ -287,6 +287,24 @@
         const fertigZahl = st.art === "dazu" ? st.a + st.b : st.art === "weg" ? st.a - st.b : st.a * st.b;
         const zeichen = st.art === "dazu" ? "+" : st.art === "weg" ? "−" : "·";
         const satzNach = (t) => { $("satz").textContent = t; };
+        // Geld (04.11.2026): Münzen antippen, Benno zählt mit
+        if (st.art === "geld") {
+          let n = 0; const m = st.muenzen, summe = (k) => m.slice(0, k).reduce((x, y) => x + y, 0);
+          $("tafel").innerHTML = kopf + `<div class="erklaer-karte">${blase("biber", st.text)}<div class="erklaer-bild" id="machen-bild"></div><p class="frage gross" id="machen-ergebnis" hidden></p></div>`;
+          hoer(); $("eingabe").innerHTML = "";
+          const male = () => { $("machen-bild").innerHTML = B.geld(m, { gezaehlt: n, tipp: true, summen: true }); };
+          male();
+          $("machen-bild").addEventListener("click", (e) => {
+            const g = e.target.closest(".muenze"); if (!g || n >= m.length) return;
+            if (+g.dataset.i !== n) { $("satz").textContent = `Erst die große Münze: ${m[n]} Cent.`; return; }
+            n++; S.ton("tipp"); male();
+            if (n < m.length) { $("satz").textContent = `${summe(n)}. Weiter!`; return; }
+            $("satz").textContent = `Geschafft! ${m.join(" + ")} = ${summe(n)} Cent.`;
+            $("machen-ergebnis").textContent = `${summe(n)} Cent`; $("machen-ergebnis").hidden = false;
+            knopfWeiter("Weiter ➜", weiter);
+          });
+          return;
+        }
         // Uhr (04.11.2026): Zahl antippen → der kurze Zeiger dreht dorthin; richtig = st.a
         if (st.art === "uhr") {
           let gestellt = 0;

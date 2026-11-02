@@ -6,7 +6,7 @@
 //   { typ: "gegenbeispiel", text, stimmt: false, fv, warum } Robo rechnet falsch; fv = Fehler aus fehler.js
 //   { typ: "geschichte", text, bilder: [{ satz, bild }] }    C „Bildergeschichte“ zum Merken: drei Bilder, je ein Satz; text = Merksatz
 // bild ist eine Funktion → SVG (Bausteine in BILD, auch für die Fehler-Hinweise: bildFuer(fv, o)).
-// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
+// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, geld, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
 // Abschluss wird in mathe.erklaert[station] = 1 gemerkt; das Angebot kommt nur, wenn die Station noch nie gerechnet wurde.
 (function (W) {
   const M = "−", D = "#3B1F63", ROT = "#FF6F61", BLAU = "#4FA8F0", STANGE = "#FFB547";
@@ -103,7 +103,24 @@
     s += zeiger(wM, 56, BLAU, 6, zeige === "lang");
     return s + `<circle cx="100" cy="100" r="8" fill="${D}"/></svg>`;
   }
-  const BILD = { feld, reihen, strahl, schrift, uhr };
+  // Münzen (04.11.2026): Reihe von Cent-Münzen, groß nach klein; gezaehlt = so viele sind schon gezählt (mit Häkchen), tipp = antippbar
+  function geld(liste, { gezaehlt = 0, tipp = false, summen = false } = {}) {
+    const r = (w) => w >= 10 ? 34 : 28, gold = (w) => w >= 10;
+    let x = 8, s = "", sum = 0;
+    liste.forEach((w, i) => {
+      const rr = r(w), cx = x + rr, cy = 44, fertig = i < gezaehlt; sum += w;
+      s += `<g${tipp && !fertig ? ` class="muenze" data-i="${i}" style="cursor:pointer"` : ""}${fertig && tipp ? ' opacity=".55"' : ""}>` +
+        `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${gold(w) ? "#F2C94C" : "#D9895B"}" stroke="${D}" stroke-width="3"/>` +
+        `<circle cx="${cx}" cy="${cy}" r="${rr - 6}" fill="none" stroke="${gold(w) ? "#C9A227" : "#B06A3E"}" stroke-width="2"/>` +
+        `<text x="${cx}" y="${cy + 3}" text-anchor="middle" font-size="${rr > 30 ? 22 : 19}" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${w}</text>` +
+        `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-size="11" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">CENT</text></g>` +
+        (summen && i < gezaehlt ? `<text x="${cx}" y="${cy + 58}" text-anchor="middle" font-size="18" font-weight="700" fill="${BLAU}" font-family="Fredoka, sans-serif">${sum}</text>` : "") +
+        (fertig && tipp ? `<path d="M${cx - 10} ${cy - rr + 2} l6 6 l12 -12" fill="none" stroke="#2E9C5A" stroke-width="4" stroke-linecap="round"/>` : "");
+      x += rr * 2 + 10;
+    });
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${x} ${summen ? 112 : 90}" class="erkl-bild erkl-geld" role="img" aria-label="Münzen">${s}</svg>`;
+  }
+  const BILD = { feld, reihen, strahl, schrift, uhr, geld };
 
   // ---------- Bilder für die Fehler-Hinweise (fehler.js liefert die Texte) ----------
   function bildFuer(fv, o) {
@@ -118,6 +135,7 @@
       if ((fv === "geteiltminus" || fv === "geteiltreihe") && o.op === ":" && o.b <= 10 && o.a / o.b <= 10) return reihen(o.b, o.a / o.b);
       if (fv === "dreher" && o.c < 100) return feld({ z: Z(o.c), rot: E(o.c) });
       if ((fv === "zeigervertauscht" || fv === "stundedaneben") && o.uhr) return uhr(o.uhr.h, o.uhr.m, { zeige: "kurz" });
+      if (fv === "muenzenzaehlen" && o.geld) return geld(o.geld, { gezaehlt: o.geld.length, summen: true });
       if (fv === "malnull") return reihen(Math.max(1, Math.min(10, o.a || o.b)), 0, 2);
     } catch (e) { /* ohne Bild */ }
     return "";
@@ -237,6 +255,21 @@
         { satz: "Erst den kurzen Zeiger suchen.", bild: () => uhr(5, 0, { zeige: "kurz" }) },
         { satz: "Lang oben heißt genau, lang unten heißt halb.", bild: () => uhr(5, 30, { zeige: "lang" }) },
         { satz: "Bei halb ist der kurze schon über die Zahl hinaus.", bild: () => uhr(5, 30, { zeige: "kurz" }) }] }
+    ],
+    // Geld (04.11.2026): mit der größten Münze anfangen und weiterzählen
+    geld: [
+      { typ: "zeigen", text: "Wie viel Geld ist das?", bilder: [
+        { satz: "Leg die Münzen so: die größte zuerst.", bild: () => geld([20, 10, 5, 2]) },
+        { satz: "Fang mit der größten an: 20.", bild: () => geld([20, 10, 5, 2], { gezaehlt: 1, summen: true }) },
+        { satz: "Dann weiterzählen: 30, 35, 37.", bild: () => geld([20, 10, 5, 2], { gezaehlt: 4, summen: true }) },
+        { satz: "Das sind 37 Cent.", bild: () => geld([20, 10, 5, 2], { gezaehlt: 4, summen: true }) }] },
+      { typ: "machen", text: "Jetzt du: Tipp die Münzen an. Fang mit der größten an.", art: "geld", a: 1, b: 1, muenzen: [50, 20, 5, 1] },
+      { typ: "ergaenzen", text: "Jetzt du: 50 Cent, 20 Cent und 2 Cent.", frage: "Das sind ? Cent.", antwort: "72", optionen: ["72", "27", "3"] },
+      { typ: "gegenbeispiel", text: "Robo hat 10, 10 und 5 Cent. Er zählt: „1, 2, 3 – drei Cent.“ Stimmt das?", stimmt: false, fv: "muenzenzaehlen", warum: "Robo hat die Münzen gezählt. Jede ist so viel wert, wie draufsteht: 10, 20, 25. Also 25 Cent." },
+      { typ: "geschichte", text: "Mit der größten Münze anfangen und weiterzählen.", bilder: [
+        { satz: "Die größte zuerst.", bild: () => geld([50, 10, 2]) },
+        { satz: "Weiterzählen: 50, 60, 62.", bild: () => geld([50, 10, 2], { gezaehlt: 3, summen: true }) },
+        { satz: "Das sind 62 Cent.", bild: () => geld([50, 10, 2], { gezaehlt: 3, summen: true }) }] }
     ],
     // Minus bis 10 (04.11.2026): Es geht etwas weg
     k1minus10: [

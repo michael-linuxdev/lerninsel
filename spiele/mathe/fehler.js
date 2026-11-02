@@ -19,6 +19,7 @@
   // ---------- Aufgabe lesen ----------
   function lies(a) {
     if (!a) return null;
+    if (a.geld) return { geld: a.geld, op: "geld", c: +a.antwort };   // Geld (04.11.2026): Münzen zählen
     if (a.uhr) return { uhr: a.uhr, op: "uhr", c: a.antwort };   // Uhr (04.11.2026): Auswahl-Aufgabe mit Stunde/Minute
     if (a.ops) return Object.assign({ c: +a.antwort }, a.ops);
     const m = /^(\d+) ([+−·:]) (\d+)$/.exec(a.text || "");
@@ -157,6 +158,18 @@
       kurz: (o) => o.uhr.m ? "Schau genau: Der kurze Zeiger ist schon über die Zahl hinaus." : `Schau genau: Der kurze Zeiger zeigt auf die ${o.uhr.h}.`,
       lang: (o) => [`Schau genau auf den kurzen Zeiger.`, o.uhr.m ? `Er ist an der ${o.uhr.h} vorbei, aber noch nicht bei der ${(o.uhr.h % 12) + 1}.` : `Er zeigt genau auf die ${o.uhr.h}.`, `Darum ist es ${uhrWort(o.uhr.h, o.uhr.m)}.`],
       kontrast: (o, zz) => { let h; do { h = r(zz, 1, 12); } while (h === o.uhr.h); return uhrAufgabe(h, o.uhr.m === 0 ? 30 : o.uhr.m, zz); } });
+  // Geld (04.11.2026): Münzen gezählt statt ihre Werte addiert
+  function geldAufgabe(zz) {
+    let st, s; do { st = Array.from({ length: r(zz, 3, 4) }, () => [1, 2, 5, 10, 20, 50][r(zz, 0, 5)]).sort((x, y) => y - x); s = st.reduce((x, y) => x + y, 0); } while (s > 99 || s === st.length);
+    const B = W.Mathe && W.Mathe._bilder && W.Mathe._bilder.geldBild;
+    return { text: "", frage: "Wie viel Geld ist das?", antwort: String(s), art: "zahl", einheit: "ct", nurLuecke: true, geld: st, bild: B ? B(st, "ct") : (W.MatheErklaeren ? W.MatheErklaeren.BILD.geld(st) : undefined),
+      hilfe: `Fang mit der größten Münze an und zähl weiter: ${st.join(" ct + ")} ct = ${s} ct` };
+  }
+  KATALOG.push({ id: "muenzenzaehlen", name: "Geld: Münzen gezählt statt Werte addiert",
+    erkenne: (o, w) => !!o.geld && w === o.geld.length && w !== o.c,
+    kurz: () => "Zähl nicht die Münzen. Zähl, was draufsteht.",
+    lang: (o) => [`Du hast die Münzen gezählt.`, `Jede Münze ist so viel wert, wie draufsteht.`, `Zusammen: ${o.geld.join(" + ")} = ${o.c}.`],
+    kontrast: (o, zz) => geldAufgabe(zz) });
   const fv = (id) => KATALOG.find(f => f.id === id);
   // Aufgabe in derselben Form wie zahl() in aufgaben.js
   function zr(op, a, b, hilfe) {
@@ -226,5 +239,5 @@
   }
   const stelleName = (i) => STELLE[i];
 
-  W.MatheFehler = { KATALOG, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, zahlwort, uhrAufgabe, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
+  W.MatheFehler = { KATALOG, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, zahlwort, uhrAufgabe, geldAufgabe, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
 })(typeof window !== "undefined" ? window : globalThis);
