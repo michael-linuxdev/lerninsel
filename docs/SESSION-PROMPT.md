@@ -16,16 +16,16 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 **Ablauf:** Einrichten und `sh tests/laufen.sh` (muss grün sein) → **Fragerunde** (höchstens 4 Fragen; iPad-Rückmeldung zuerst, gemeldete Fehler
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
-## 0. Auftrag für die nächste Sitzung: Tiere 2D, Kleiderschrank, kindgerechte Mathe-Erklärungen
-Rückmeldung des Auftraggebers vom 02.11.2026 (Fragerunde schon beantwortet, Details in `docs/PLAN.md`, „Stand 02.11.2026, Rückmeldung des Auftraggebers“):
-- **Tiere in 2D „um Längen besser“:** detailreich wie ein gutes Kinderbuch (Dreiviertelansicht, Anatomie, Fell, zwei Schattenstufen), Hund/Katze/Drache je 3 Stufen.
-  Erster Hund-Entwurf: `quellen/entwuerfe/hund-entwurf.js` und `.png` (Varianten a = dunkle Kontur, b = feine Kontur).
-- **Kleiderschrank „viel besser“:** neue Figur (richtige Kinderproportionen, Hände, lockere Pose), schöne Kleidung (Stoff, Falten, Schatten),
-  Bedienung ohne Lesen, schöneres Zimmer/Orte. Teile-IDs behalten.
-- **Mathe-Erklärungen: „Kein Kind versteht das“** – kurze Sätze, keine Fachwörter, mehr Bild, Vorlesen.
-- **Vorgehen: zuerst eine Vorschau mit 2–3 Entwürfen zeigen und wählen lassen, dann umbauen.**
+## 0. Auftrag für die nächste Sitzung
+Der Auftrag vom 02.11. (Tiere 2D, Kleiderschrank, kindgerechte Mathe-Erklärungen) ist erledigt. Zuerst die **iPad-Rückmeldung** holen (Fragerunde), dann:
+1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test). Letzte Rückmeldung: „Die Münzen müssen wieder echter aussehen“ – umgesetzt, bitte bestätigen lassen.
+2. **Rhythmus-Boot** (Ballon-Wiese, Kapitel 4) nach dem Muster von Wörter-Angeln (2D-Seite, Ort auf der Insel über den Kern, Test).
+3. Russische Hilfe für Mathe-Erklärungen und Denkfehler-Texte (fehlt bisher ganz auf der Mathe-Seite).
+4. Elternbereich schneller (Fachdaten erst beim Reiter „Lernstand“ laden).
 
 ## 1. Stand (04.11.2026)
+**Zuletzt (04.11.2026, abends):** Wörter-Angeln an Fipsis Angelsteg (Schatz-Strand, ab Kapitel 2, Test `angeln`); Geld-Erklärung wieder mit echten Münzen.
+**Im iPad testen (in /dev):** Insel → Schatz-Strand → „Angeln“ (in /dev/test sofort offen): Fisch antippen, Eimer wählen, einmal absichtlich falsch.
 **Neu am 04.11.2026:** Kleiderschrank-Extras neu gezeichnet (Dinge in der Hand werden gehalten, Hüte/Mützen mit Schatten), Matheweg mit neuen Denkfehlern
 („Zahl verdreht“, mal 0, zwei Geteilt-Fehler) und neuen Erklär-Einheiten (Geteilt, Minus bis 10, Zehner und Einer, Plus/Minus bis 20, Ergänzen, Uhrzeit, Geld) samt Denkfehlern für Uhr und Geld; später auch Länge, Kl. 3 (Zahlen bis 1000, Runden, Teilen mit Rest), Kl. 1 (Zerlegen, Verdoppeln) – zusammen 23 Einheiten und 20 Denkfehler. „Zeig mir deinen Weg“ ist kindgerecht und kann schriftlich mal. Elternbereich: Denkfehler mit Tipp für zu Hause. Details in `docs/PLAN.md`, „Stand 04.11.2026“.
 **Im iPad testen (in /dev):** Kleiderschrank → Extras (Ball, Teddy, Tasche, Mützen); Matheweg Kl. 2 → „Geteilt“ und „Zehner und Einer“ neu öffnen („Erklär es mir“),

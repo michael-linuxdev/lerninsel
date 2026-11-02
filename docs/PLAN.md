@@ -2170,5 +2170,12 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   Hinweise „Zu viel“, „Da passt noch mehr hinein“, „Denk an den Rest“; neuer Denkfehler „Rest nicht mitgenommen“ (nur im Schrittweg erkennbar).
 - **Erledigt – Deutsch-Werkstatt:** beim ersten Fehler ein kurzer Tipp je Schritt-Art (`TIPP_TYP` in `abenteuer.js`, ein Schritt kann mit `hilfe` einen eigenen Tipp setzen)
   statt nur „Fast! Versuch es nochmal.“ – mit russischer Hilfe (Entwurf, nur bei gewählter Hilfesprache).
-- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für mehrstellig mal; russische Hilfe für Mathe-Erklärungen und Denkfehler-Texte (fehlt bisher); weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
+- **Erledigt – Wörter-Angeln (NA-61):** Seite `spiele/angeln/` (`__angeln`) an Fipsis Angelsteg, der Schatz-Strand der Insel führt ab Kapitel 2 dorthin
+  (vorher Hinweis „öffnet in Kapitel 2“; Kern `angelnAntwort`, Knopf 🎣 „Angeln“). Fische mit Bildern antippen, Artikel-Eimer der/die/das (Farben und Formen aus
+  `Wortschatz.ARTIKEL`), Wörter = Nomen mit Bild passend zur Klasse; erster Fehler „Sprich es laut …“, zweiter Fehler Lösung, der Fisch kommt einmal wieder.
+  Sterne nur für neue Wörter beim ersten Versuch, höchstens 3 am Tag. Daten `angeln` = `{ richtig, falsch, neu }`. Test `angeln`.
+- **Rückmeldung des Auftraggebers (04.11., abends):** „Die Münzen müssen wieder echter aussehen“ → Geld-Erklärung nutzt wieder die echten Euro-Münzen aus dem Matheweg
+  (`Mathe._bilder.muenze`). Bitte auf dem iPad bestätigen.
+- **Hinweis Tests:** `vorschule` wackelt unter starker paralleler Last (einzeln grün). Push nur noch über ein Skript, das bei Rot abbricht.
+- **Offen / nächste Schritte:** iPad-Test der neuen Extras, Erklärungen, Münzen und des Angelstegs; Rhythmus-Boot (Ballon-Wiese, Kapitel 4); Schrittweg für mehrstellig mal; russische Hilfe für Mathe-Erklärungen und Denkfehler-Texte (fehlt bisher); weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
   Extras der 3D-Figur an die neuen Zeichnungen angleichen.
