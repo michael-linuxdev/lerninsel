@@ -6,7 +6,7 @@
 //   { typ: "gegenbeispiel", text, stimmt: false, fv, warum } Robo rechnet falsch; fv = Fehler aus fehler.js
 //   { typ: "geschichte", text, bilder: [{ satz, bild }] }    C „Bildergeschichte“ zum Merken: drei Bilder, je ein Satz; text = Merksatz
 // bild ist eine Funktion → SVG (Bausteine in BILD, auch für die Fehler-Hinweise: bildFuer(fv, o)).
-// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, geld, laenge, k3stellen, k3runden, k3rest, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
+// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, plus20 (auch k1plus20), minus20, ergaenzen, uhr, geld, laenge, k3stellen, k3runden, k3rest, k1zerlegen, k1doppelt, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
 // Abschluss wird in mathe.erklaert[station] = 1 gemerkt; das Angebot kommt nur, wenn die Station noch nie gerechnet wurde.
 (function (W) {
   const M = "−", D = "#3B1F63", ROT = "#FF6F61", BLAU = "#4FA8F0", STANGE = "#FFB547";
@@ -383,6 +383,34 @@
         { satz: "Zwischen welchen Zehnern liegt die Zahl?", bild: () => runden(523) },
         { satz: "Unter 5: runter.", bild: () => runden(523, { pfeil: true, einer: true }) },
         { satz: "Ab 5: hoch.", bild: () => runden(526, { pfeil: true, einer: true }) }] }
+    ],
+    // Kl. 1 (04.11.2026): Zerlegen und Verdoppeln mit dem Zehnerfeld
+    k1zerlegen: [
+      { typ: "zeigen", text: "7 = 3 + ?", bilder: [
+        { satz: "Wir wollen 7 Punkte haben.", bild: F({ rot: 0 }) },
+        { satz: "3 rote sind schon da.", bild: F({ rot: 3 }) },
+        { satz: "Wie viele fehlen bis 7? Wir legen blaue dazu.", bild: F({ rot: 3, warten: 4 }) },
+        { satz: "4 blaue. Also 7 = 3 + 4.", bild: F({ rot: 3, blau: 4 }) }] },
+      { typ: "machen", text: "Jetzt du: Mach aus 3 die 7. Tipp die blauen Punkte an.", art: "dazu", a: 3, b: 4 },
+      { typ: "ergaenzen", text: "Jetzt du: 8 Punkte. 5 sind rot.", frage: "8 = 5 + ?", antwort: "3", optionen: ["3", "8", "13"] },
+      { typ: "gegenbeispiel", text: "Robo zählt bei 6 = 2 + ?: „2, 3, 4, 5, 6.“ Er sagt 5. Stimmt das?", stimmt: false, fv: "zaehlen", warum: "Bei der 2 ist Robo schon. Weiter: 3, 4, 5, 6. Das sind 4 Schritte. Also 4." },
+      { typ: "geschichte", text: "Eine Zahl hat zwei Teile: rot und blau.", bilder: [
+        { satz: "Erst die roten zählen.", bild: F({ rot: 3 }) },
+        { satz: "Dann bis zur Zahl auffüllen.", bild: F({ rot: 3, blau: 4 }) },
+        { satz: "Die blauen sind der fehlende Teil.", bild: F({ rot: 3, blau: 4 }) }] }
+    ],
+    k1doppelt: [
+      { typ: "zeigen", text: "4 + 4", bilder: [
+        { satz: "Das sind 4 Punkte.", bild: F({ rot: 4 }) },
+        { satz: "Doppelt heißt: noch einmal genauso viele.", bild: F({ rot: 4, warten: 4 }) },
+        { satz: "4 und 4 sind 8. Das Doppelte von 4 ist 8.", bild: F({ rot: 4, blau: 4 }) }] },
+      { typ: "machen", text: "Jetzt du: Verdopple die 3. Tipp die blauen Punkte an.", art: "dazu", a: 3, b: 3 },
+      { typ: "ergaenzen", text: "Jetzt rechnest du: das Doppelte von 5.", frage: "5 + 5 = ?", antwort: "10", optionen: ["10", "15", "6"] },
+      { typ: "gegenbeispiel", text: "Robo rechnet: 4 + 4 = 7. Stimmt das?", stimmt: false, fv: "zaehlen", warum: "Robo hat die 4 mitgezählt. 4 und noch einmal 4 sind 8." },
+      { typ: "geschichte", text: "Doppelt heißt: zweimal gleich viele.", bilder: [
+        { satz: "Erst einmal.", bild: F({ rot: 4 }) },
+        { satz: "Noch einmal genauso viele.", bild: F({ rot: 4, warten: 4 }) },
+        { satz: "Alle zusammen zählen.", bild: F({ rot: 4, blau: 4 }) }] }
     ],
     // Minus bis 10 (04.11.2026): Es geht etwas weg
     k1minus10: [
