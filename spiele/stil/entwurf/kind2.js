@@ -90,38 +90,33 @@
   // Ein einziger Umriss für Hals, Schultern, Arme, Hände, Rumpf, Beine und Füße (wie im Kinderbuch) – nichts wirkt angesetzt.
   // Linke Hälfte als Bézier-Segmente [c1x, c1y, c2x, c2y, x, y]; die rechte Hälfte ist gespiegelt und rückwärts durchlaufen.
   const START = [139, 158];
+  // 7. Feld = Teil: "arm" (dreht mit dem Arm), "achsel" (nur der erste Kontrollpunkt dreht), "bein", "schritt"
   const LINKS = [
-    [139, 170, 139, 180, 139, 186],      // Hals
-    [128, 190, 118, 191, 111, 196],      // Schulter
-    [102, 201, 97, 211, 95, 226],        // runde Schulter (Deltamuskel)
-    [92, 246, 90, 266, 88, 284],         // Oberarm außen bis Ellbogen (leicht vom Körper weg)
-    [86, 302, 84, 322, 83, 340],         // Unterarm außen bis Handgelenk
-    [80, 345, 77, 354, 77, 364],         // Handkante
-    [77, 372, 78, 380, 81, 383],         // kleiner Finger
-    [83, 384, 84, 382, 85, 381],
-    [86, 386, 88, 390, 91, 389],         // Ringfinger
-    [92, 388, 92, 386, 93, 385],
-    [94, 390, 97, 393, 99, 391],         // Mittelfinger
-    [100, 390, 100, 387, 101, 386],
-    [102, 389, 105, 389, 106, 385],      // Zeigefinger
-    [107, 381, 106, 376, 105, 372],
-    [108, 372, 111, 368, 111, 362],      // Daumen setzt ab
-    [111, 356, 107, 350, 103, 348],
-    [104, 328, 105, 306, 107, 288],      // Unterarm innen bis Ellbogen
-    [109, 270, 113, 252, 119, 238],      // Oberarm innen bis Achsel
-    [117, 254, 114, 270, 114, 284],      // Rumpf bis Taille
-    [113, 296, 110, 304, 110, 316],      // Hüfte
-    [107, 358, 108, 398, 112, 428],      // Oberschenkel außen bis Knie
-    [113, 444, 108, 462, 110, 486],      // Wade
-    [111, 498, 115, 506, 116, 512],      // Knöchel
-    [111, 518, 106, 524, 106, 531],      // Fuß außen
-    [106, 538, 110, 541, 116, 541],
-    [124, 541, 133, 541, 139, 540],      // Sohle bis großer Zeh
-    [145, 539, 147, 534, 146, 528],
-    [145, 522, 144, 518, 143, 515],      // Fuß innen
-    [142, 510, 141, 505, 141, 498],      // Knöchel innen
-    [143, 476, 142, 450, 143, 430],      // Wade innen bis Knie
-    [145, 398, 149, 364, 150, 340]       // Oberschenkel innen bis Schritt
+    [139, 170, 139, 180, 139, 186],              // Hals
+    [128, 190, 118, 191, 111, 196],              // Schulter
+    [102, 201, 97, 211, 95, 226],                // runde Schulter (Deltamuskel)
+    [92, 246, 90, 266, 88, 284, "arm"],          // Oberarm außen bis Ellbogen (leicht vom Körper weg)
+    [86, 302, 84, 322, 83, 340, "arm"],          // Unterarm außen bis Handgelenk
+    [82, 348, 81, 358, 81, 368, "arm"],          // Handkante (schmal, leicht gewölbt)
+    [81, 378, 84, 386, 89, 389, "arm"],          // Finger rund geschlossen
+    [93, 391, 98, 389, 100, 385, "arm"],
+    [102, 380, 103, 370, 103, 360, "arm"],       // Zeigefinger-Seite hinauf
+    [103, 354, 103, 350, 103, 348, "arm"],
+    [104, 328, 105, 306, 107, 288, "arm"],       // Unterarm innen bis Ellbogen
+    [109, 270, 113, 252, 119, 238, "achsel"],    // Oberarm innen bis Achsel
+    [117, 254, 114, 270, 114, 284],              // Rumpf bis Taille
+    [113, 296, 110, 304, 110, 316],              // Hüfte
+    [107, 358, 108, 398, 112, 428, "bein"],      // Oberschenkel außen bis Knie
+    [113, 444, 108, 462, 110, 486, "bein"],      // Wade
+    [111, 498, 115, 506, 116, 512, "bein"],      // Knöchel
+    [111, 518, 106, 524, 106, 531, "bein"],      // Fuß außen
+    [106, 538, 110, 541, 116, 541, "bein"],
+    [124, 541, 133, 541, 139, 540, "bein"],      // Sohle bis großer Zeh
+    [145, 539, 147, 534, 146, 528, "bein"],
+    [145, 522, 144, 518, 143, 515, "bein"],      // Fuß innen
+    [142, 510, 141, 505, 141, 498, "bein"],      // Knöchel innen
+    [143, 476, 142, 450, 143, 430, "bein"],      // Wade innen bis Knie
+    [145, 398, 149, 364, 150, 340, "schritt"]    // Oberschenkel innen bis Schritt
   ];
   const spiegel = (x) => +(300 - x).toFixed(1);
   // Pose: Arme schwingen leicht vom Körper weg (rechts mehr), rechtes Bein ist Spielbein und steht etwas nach außen.
@@ -130,22 +125,20 @@
   const dreh = ([x, y], [px, py], grad) => { const w = grad * Math.PI / 180, c = Math.cos(w), sn = Math.sin(w); return [+(px + (x - px) * c - (y - py) * sn).toFixed(1), +(py + (x - px) * sn + (y - py) * c).toFixed(1)]; };
   function segmente(spiegeln) {
     let p0 = spiegeln ? [spiegel(START[0]), START[1]] : START;
-    return LINKS.map(([a, b, c, e, x, y]) => { const f = (q) => spiegeln ? [spiegel(q[0]), q[1]] : q; const sg = { p0, c1: f([a, b]), c2: f([c, e]), p: f([x, y]) }; p0 = sg.p; return sg; });
+    return LINKS.map(([a, b, c, e, x, y, teil]) => { const f = (q) => spiegeln ? [spiegel(q[0]), q[1]] : q; const sg = { p0, c1: f([a, b]), c2: f([c, e]), p: f([x, y]), teil }; p0 = sg.p; return sg; });
   }
-  function bewege(sg, von, bis, pose, ende = true) {
-    for (let i = von; i <= bis; i++) {
-      const s2 = sg[i];
-      s2.c1 = dreh(s2.c1, pose.um, pose.grad); s2.c2 = dreh(s2.c2, pose.um, pose.grad);
-      if (i < bis || ende) s2.p = dreh(s2.p, pose.um, pose.grad);
-      if (i + 1 < sg.length) sg[i + 1].p0 = s2.p;
-    }
+  // dreht alle Abschnitte eines Teils; beim folgenden Abschnitt (Achsel/Schritt) nur den ersten Kontrollpunkt
+  function bewege(sg, teil, ende, pose) {
+    sg.forEach((s2, i) => {
+      if (s2.teil === teil) {
+        s2.c1 = dreh(s2.c1, pose.um, pose.grad); s2.c2 = dreh(s2.c2, pose.um, pose.grad); s2.p = dreh(s2.p, pose.um, pose.grad);
+        if (i + 1 < sg.length) sg[i + 1].p0 = s2.p;
+      } else if (s2.teil === ende) s2.c1 = dreh(s2.c1, pose.um, pose.grad);
+    });
   }
-  // Abschnitte in LINKS: Arm 3–16 (Achsel-Abschnitt 17 nur am Anfang), Bein 20–29 (Schritt-Abschnitt 30 nur am Anfang)
   function umriss() {
     const L = segmente(false), R = segmente(true);
-    bewege(L, 3, 16, POSE.armL); L[17].c1 = dreh(L[17].c1, POSE.armL.um, POSE.armL.grad);
-    bewege(R, 3, 16, POSE.armR); R[17].c1 = dreh(R[17].c1, POSE.armR.um, POSE.armR.grad);
-    bewege(R, 20, 29, POSE.beinR); R[30].c1 = dreh(R[30].c1, POSE.beinR.um, POSE.beinR.grad);
+    bewege(L, "arm", "achsel", POSE.armL); bewege(R, "arm", "achsel", POSE.armR); bewege(R, "bein", "schritt", POSE.beinR);
     let d = `M${L[0].p0.join(" ")}`;
     L.forEach(q => { d += ` C${q.c1.join(" ")} ${q.c2.join(" ")} ${q.p.join(" ")}`; });
     for (let i = R.length - 1; i >= 0; i--) { const q = R[i]; d += ` C${q.c2.join(" ")} ${q.c1.join(" ")} ${q.p0.join(" ")}`; }
@@ -166,8 +159,12 @@
       form("M114 350 C112 380 114 410 117 426 L121 426 C119 410 117 380 118 350 Z", l, 0.55) +                   // Licht linker Oberschenkel
       form("M100 534 L148 534 L148 542 L100 542 Z", s) + gedreht(POSE.beinR, form("M152 534 L204 534 L204 544 L152 544 Z", s));                      // Sohlen
     const linien =
-      gedreht(POSE.armL, strich("M92 284 C95 288 100 289 104 286", t, 1.5, 0.7) + strich("M84 372 C88 374 96 374 102 371", t, 1.2, 0.45) + strich("M104 360 C102 364 102 368 104 371", t, 1.4, 0.8)) +
-      gedreht(POSE.armR, strich("M208 284 C205 288 200 289 196 286", t, 1.5, 0.7) + strich("M216 372 C212 374 204 374 198 371", t, 1.2, 0.45) + strich("M196 360 C198 364 198 368 196 371", t, 1.4, 0.8)) +
+      gedreht(POSE.armL, strich("M92 284 C95 288 100 289 104 286", t, 1.5, 0.7) + strich("M87 388 C87 384 88 380 89 377 M94 390 C94 386 94 382 95 378", t, 1.3, 0.75) + strich("M82 370 C87 373 95 374 102 371", t, 1.1, 0.3) +
+        flaeche("M99 350 C98 358 98 364 99 370 C100 374 104 374 105 369 C107 362 106 355 103 349 Z", haut, form("M104 356 C106 361 106 366 104 370 L108 370 L108 356 Z", s, 0.9), { kontur: false }) +
+        strich("M99 354 C98 360 98 365 99 370 C100 374 104 374 105 369 C106 364 106 359 105 355", KF, 2.4)) +   // Daumen wächst ohne Kante aus der Hand
+      gedreht(POSE.armR, strich("M208 284 C205 288 200 289 196 286", t, 1.5, 0.7) + strich("M213 388 C213 384 212 380 211 377 M206 390 C206 386 206 382 205 378", t, 1.3, 0.75) + strich("M218 370 C213 373 205 374 198 371", t, 1.1, 0.3) +
+        flaeche("M201 350 C202 358 202 364 201 370 C200 374 196 374 195 369 C193 362 194 355 197 349 Z", haut, form("M196 356 C194 361 194 366 196 370 L192 370 L192 356 Z", s, 0.9), { kontur: false }) +
+        strich("M201 354 C202 360 202 365 201 370 C200 374 196 374 195 369 C194 364 194 359 195 355", KF, 2.4)) +
       strich("M118 424 C123 430 133 430 139 424", t, 1.5, 0.6) + gedreht(POSE.beinR, strich("M182 424 C177 430 167 430 161 424", t, 1.5, 0.6) + strich("M188 536 l0 4 M180 537 l0 4 M172 537 l0 3", t, 1.3, 0.6)) +
       strich("M112 536 l0 4 M120 537 l0 4 M128 537 l0 3", t, 1.3, 0.6) + strich("M150 338 L150 344", t, 1.4, 0.5);
     return {
