@@ -2166,5 +2166,7 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   Erklär-Einheiten „Teilen mit Rest“ (Reihen mit gelber Rest-Zeile, `machen` „gruppen“ mit `rest`), „Zahlen zerlegen“, „Verdoppeln“. Formen-Kacheln ohne bunte Form-Emojis.
   **Stand: 23 Stationen mit Erklär-Einheit, 20 Denkfehler** (alle mit Eltern-Tipp). Push nur noch über ein Skript, das bei rotem Test abbricht (ein roter Stand war
   am 04.11. kurz online: Kachel-Symbol verriet eine Antwort – sofort behoben).
-- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für schriftlich geteilt und mehrstellig mal; weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
+- **Erledigt – Schrittweg „Schriftlich geteilt“ (Kl. 4):** von links, „Wie oft passt die 4 in die 24?“, Rest klein und blau vor der nächsten Zahl (`schrift(a, b, ":")`),
+  Hinweise „Zu viel“, „Da passt noch mehr hinein“, „Denk an den Rest“; neuer Denkfehler „Rest nicht mitgenommen“ (nur im Schrittweg erkennbar).
+- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für mehrstellig mal; weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
   Extras der 3D-Figur an die neuen Zeichnungen angleichen.
