@@ -2155,5 +2155,12 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
 - **Erledigt – „Zeig mir deinen Weg“ kindgerecht:** Rechenbild mit gelb markierter Spalte („Was kommt bei den Zehnern hin?“) statt „Ziffer bei den Zehnern“,
   Hinweise ohne Fachwörter („Denk an die kleine 1 von rechts“, „Umdrehen geht nicht. Tausch einen Zehner“), am Ende ein kurzer Satz statt „Denkfehler: …“ (der Name
   steht nur im Elternbereich). **Neu für „Schriftlich mal“ (Kl. 4)** mit einstelliger Zahl: gemerkte Zahl, eigener Schritt für die vordere Zahl, Bild `schrift(a, b, "·")`.
+- **Erledigt – Eltern und Feinschliff (Rundgang iPad quer und Handy 390 × 760):**
+  - Elternbereich: Denkfehler als Liste mit Zustand und **einem Tipp für zu Hause** je Denkfehler (`MatheFehler.TIPP`); Abenteuer/Sachunterricht als „n von N geschafft“
+    statt einer Textwand aller Themen mit „–“.
+  - Porträts der Kinderfigur (Startseite, Meine Ecke, Kinderwahl, `svg.fig-klein`): Konturen wachsen mit – die Augen wirkten wie dunkle Ringe.
+  - Album: erster Reiter nicht mehr angeschnitten. Deutsch auf dem Handy: Kopfzeile in zwei statt drei Zeilen. „Erst lernen“-Knöpfe mit Abstand nach dem Emoji.
+  - Atelier: Seitenregeln (`.auftrag span`, `.takt span`) verzerrten Emoji-Bilder. **Der Rauchtest prüft jetzt auf allen Seiten, dass kein `span.emo` verzerrt ist**
+    (neue Seitenregeln für `span` immer mit `>` schreiben).
 - **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für schriftlich geteilt und mehrstellig mal; weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
   Extras der 3D-Figur an die neuen Zeichnungen angleichen.
