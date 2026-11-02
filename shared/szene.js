@@ -9,6 +9,7 @@
 //   Szene.registriere("prolog", { blasen: [ { wer: "robo", text: { de: "Hallo {name}!", ru: "…", status: { ru: "entwurf" } },
 //     zeige: "#knopf" | () => ({ x, y }) | { ziel, schieben: [80, 0] }, bis: (weiter) => aufraeumen } ] })
 //   await Szene.spiele("prolog")       → Promise, wenn die Szene zu Ende ist ({ uebersprungen })
+//   Szene.spiele(id, { beiLetzter: () => … }) → läuft, sobald die letzte Blase erscheint (z. B. Etappe schon dann als erledigt merken)
 // Nach core.js, ereignisse.js, sprache.js, figuren.js und zeige.js laden (fehlende Teile werden übersprungen).
 (function () {
   const S = window.Spielwelt; if (!S) return;
@@ -139,6 +140,12 @@
     $("szene-punkte").innerHTML = aktiv.def.blasen.map((_, i) => `<span class="${i === aktiv.nr ? "da" : ""}"></span>`).join("");
     // Etwas passiert in der Welt, sobald die Blase erscheint (z. B. der Nebel weicht)
     if (typeof b.beim === "function") { try { b.beim(); } catch (e) { console.warn(e); } }
+    // Die letzte Blase ist erschienen: Die Szene gilt als gesehen, auch wenn das Kind jetzt die Seite verlässt
+    // (iPad-Meldung 02.11.2026: „Erst lernen“ sagt „Komm zu mir …“ – wer gleich losging, bekam den Sonnenuhr-Hinweis bei jedem Besuch neu).
+    if (letzte) {
+      if (aktiv.def.chronik !== false && aktiv.opt.chronik !== false && aktiv.def.id && window.Story) window.Story.merkeSzene(aktiv.def.id);
+      if (typeof aktiv.opt.beiLetzter === "function") { try { aktiv.opt.beiLetzter(); } catch (e) { console.warn(e); } }
+    }
     // Zeigehand
     if (b.zeige && window.Zeige) {
       const z = b.zeige, istOpt = z && typeof z === "object" && !(z instanceof Element) && "ziel" in z;

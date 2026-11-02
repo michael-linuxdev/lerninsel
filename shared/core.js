@@ -573,3 +573,49 @@
     });
   }
 })();
+
+// Kachel-Raster ausgleichen (iPad-Meldung 02.11.2026: „Manchmal zweite Zeile nur für eine Kachel“).
+// Stünde in der letzten Zeile eines Rasters genau eine Kachel, verteilen wir die letzten beiden Zeilen gleichmäßiger:
+// 3/1 → 2/2, 3/3/1 → 3/2/2, 4/1 → 3/2, 2/1 → 2/(1 breit). Die Spaltenzahl bleibt die der Seite (auch bei auto-fill);
+// dafür bekommt das Raster vorübergehend L = kgV(c, c−1, 2) Spalten und jede Kachel eine passende Spanne.
+// Gilt für .lektionen, .kacheln, .zeit-raster und alles mit data-ausgleich. Test: tests/ipad.js.
+(function () {
+  if (typeof document === "undefined") return;
+  const WAHL = ".lektionen, .kacheln, .zeit-raster, [data-ausgleich]";
+  const ggt = (a, b) => (b ? ggt(b, a % b) : a), kgv = (a, b) => (a * b) / ggt(a, b);
+  function gleiche(el) {
+    if (el.dataset.ausgleich === "aus") return;
+    el.style.gridTemplateColumns = "";
+    const kinder = [...el.children];
+    kinder.forEach(k => { if (k.dataset.ausgleichSpan) { k.style.gridColumn = ""; delete k.dataset.ausgleichSpan; } });
+    const cs = getComputedStyle(el);
+    if (!cs.display.includes("grid")) return;
+    const sichtbar = kinder.filter(k => k.getClientRects().length && getComputedStyle(k).position !== "absolute");
+    const c = cs.gridTemplateColumns.split(" ").filter(Boolean).length;
+    const n = sichtbar.length;
+    if (c < 2 || n <= c || n % c !== 1) return;
+    // nur einfache Raster: keine Kachel mit eigener Spanne
+    if (sichtbar.some(k => { const g = getComputedStyle(k); return g.gridColumnStart !== "auto" || g.gridColumnEnd !== "auto"; })) return;
+    if (c === 2) { const l = sichtbar[n - 1]; l.style.gridColumn = "1 / -1"; l.dataset.ausgleichSpan = "1"; return; }
+    const L = kgv(kgv(c, c - 1), 2);
+    el.style.gridTemplateColumns = `repeat(${L}, minmax(0, 1fr))`;
+    sichtbar.forEach((k, i) => {
+      const span = i >= n - 2 ? L / 2 : i >= n - (c + 1) ? L / (c - 1) : L / c;
+      k.style.gridColumn = `span ${span}`; k.dataset.ausgleichSpan = "1";
+    });
+  }
+  let geplant = false;
+  function alle() {
+    if (geplant) return; geplant = true;
+    requestAnimationFrame(() => { geplant = false; document.querySelectorAll(WAHL).forEach(gleiche); });
+  }
+  window.RasterAusgleich = { alle, gleiche };
+  const los = () => {
+    alle();
+    new MutationObserver(m => { if (m.some(x => x.type === "childList" && (x.target.matches?.(WAHL) || [...x.addedNodes].some(a => a.nodeType === 1 && (a.matches(WAHL) || a.querySelector?.(WAHL)))))) alle(); })
+      .observe(document.body, { childList: true, subtree: true });
+    addEventListener("resize", alle);
+    addEventListener("click", () => setTimeout(alle, 30), true);   // Reiter/aufklappen: Raster werden erst dann sichtbar
+  };
+  if (document.body) los(); else document.addEventListener("DOMContentLoaded", los);
+})();

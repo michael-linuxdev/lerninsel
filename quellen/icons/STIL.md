@@ -23,4 +23,4 @@ Die Bilder sind die **Noto-Emojis von Google (Apache 2.0)**, umgesetzt in **Stil
 2. `npm pack @iconify-json/noto` und `npm pack @svgmoji/noto` in einen Ordner außerhalb des Repos, dann `python3 -I quellen/noto-holen.py …`.
 3. `sh quellen/dev-bauen.sh`, Prüfbogen ansehen.
 
-Emojis ohne Noto-Bild (Würfel ⚀–⚅, ©) und reine Textzeichen (→ ✓ ✗ ← ↑ ↓ ⌫ ⇧ ✕ ↰ ↱ ➜ ✦ ♚ ♛ ♜ ♝ ♞) bleiben System-Zeichen.
+Würfel ⚀–⚅ und 🎲 zeichnet `shared/emoji.js` selbst (ein Stil-A-Würfel wie in Mathe). Emojis ohne Noto-Bild (©) und reine Textzeichen (→ ✓ ✗ ← ↑ ↓ ⌫ ⇧ ✕ ↰ ↱ ➜ ✦ ♚ ♛ ♜ ♝ ♞) bleiben System-Zeichen.

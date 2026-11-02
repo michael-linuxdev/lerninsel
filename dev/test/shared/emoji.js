@@ -9,6 +9,13 @@
   const ICONS = Object.assign({}, window.LERN_ICONS || {});
   const FIG = new Set();
   if (window.FigurenNeu && FigurenNeu.ZEICHEN) for (const [n, z] of Object.entries(FigurenNeu.ZEICHEN)) { const h = z.codePointAt(0).toString(16); ICONS[h] = FigurenNeu.mini(n); FIG.add(h); }
+  // Würfel überall gleich (iPad-Meldung 02.11.2026): ⚀–⚅ und 🎲 als ein Würfel in Stil A – dieselbe Zeichnung wie in Mathe (wuerfelInnen in spiele/mathe/aufgaben.js)
+  const AUGEN = { 1: [[1, 1]], 2: [[0, 0], [2, 2]], 3: [[0, 0], [1, 1], [2, 2]], 4: [[0, 0], [2, 0], [0, 2], [2, 2]], 5: [[0, 0], [2, 0], [1, 1], [0, 2], [2, 2]], 6: [[0, 0], [2, 0], [0, 1], [2, 1], [0, 2], [2, 2]] };
+  const wuerfel = (n) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect x="8" y="8" width="112" height="112" rx="24" fill="#fff"/>` +
+    `<path d="M8 94h112v2a24 24 0 0 1-24 24H32A24 24 0 0 1 8 96z" fill="#E4DAF6"/><rect x="8" y="8" width="112" height="112" rx="24" fill="none" stroke="#3B1F63" stroke-width="7"/>` +
+    AUGEN[n].map(([c, z]) => `<circle cx="${36 + c * 28}" cy="${36 + z * 28}" r="10.5" fill="#3B1F63"/>`).join("") + `</svg>`;
+  for (let n = 1; n <= 6; n++) ICONS[(0x267f + n).toString(16)] = wuerfel(n);
+  ICONS["1f3b2"] = wuerfel(5);
   const hex = (e) => [...e].filter(c => c !== "️").map(c => c.codePointAt(0).toString(16)).join("-");
   const zeichen = (h) => h.split("-").map(x => String.fromCodePoint(parseInt(x, 16))).join("");
   const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -22,6 +29,9 @@
   const stil = document.createElement("style");
   stil.textContent = ".emo{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.22em;position:relative;line-height:0;flex:none;pointer-events:none}" +
     ".emo>svg{width:100%;height:100%;display:block;overflow:hidden}" +   // hidden: manche Noto-Bilder haben Formen weit außerhalb (z. B. 📦); die Kontur passt in die viewBox
+    // Alte Seitenregeln wie „.gruppen .option svg { width: 80px }“ dürfen die Emoji-Bilder nicht vergrößern (iPad-Meldung 02.11.: 🪔 über „Lichterfeste“).
+    // :not(#emo-x) hebt die Spezifität über jede Klassen-Regel, !important über deren !important.
+    ".emo>svg:not(#emo-x){width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0!important;position:static!important;flex:none!important;transform:none!important;animation:none!important;border:0!important;box-shadow:none!important}" +
     ".emo.fig{width:1.45em;height:1.45em;vertical-align:-.36em}" +
     ".emo>.emo-t{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}";
   document.head.appendChild(stil);

@@ -227,7 +227,7 @@
 
       case "wischen": {
         blase(s.text, S.ht(s));
-        const bilder = ["🐶", "🌈", "🚀", "🦄"];
+        const bilder = ["🐶", "🌈", "🚀", "🐬"];   // ohne Einhorn (Wunsch des Auftraggebers 02.11.2026)
         A.innerHTML = `<div class="feld" id="feld"><div class="karussell" id="kar">${bilder.map(b => `<div>${b}</div>`).join("")}</div></div><div class="punkte" id="pkt"></div>`;
         let idx = 0, fertig = false;
         const zeigeP = () => { $("pkt").innerHTML = bilder.map((_, i) => `<span class="${i === idx ? "an" : ""}"></span>`).join(""); $("kar").style.transform = `translateX(${-idx * 100}%)`; };

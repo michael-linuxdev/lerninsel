@@ -376,8 +376,7 @@
             hilfe: { sicher: `Alle Kugeln sind ${gefragt}. Darum ist es sicher.`, möglich: `Es gibt ${gefragt}e Kugeln, aber auch andere. Darum ist es möglich.`, unmöglich: `Im Beutel ist keine ${gefragt}e Kugel. Darum ist es unmöglich.` }[antwort] };
         }
         const satz = wahl([["eine 6", "möglich", "Der Würfel hat die Zahlen 1 bis 6. Die 6 kann kommen, muss aber nicht."], ["eine 7", "unmöglich", "Auf einem Würfel gibt es keine 7."], ["eine Zahl kleiner als 7", "sicher", "Alle Zahlen auf dem Würfel (1 bis 6) sind kleiner als 7."], ["eine gerade Zahl", "möglich", "2, 4 und 6 sind gerade – aber 1, 3 und 5 können auch kommen."], ["eine 0", "unmöglich", "Auf einem Würfel gibt es keine 0."], ["eine Zahl von 1 bis 6", "sicher", "Jeder Wurf zeigt eine Zahl von 1 bis 6."]]);
-        const augen = [[50, 50], [130, 130], [50, 130], [130, 50], [90, 90]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="14" fill="${D}"/>`).join("");
-        const wuerfel = `<svg viewBox="0 0 180 180" class="bild-uhr" role="img" aria-label="Würfel"><rect x="12" y="12" width="156" height="156" rx="30" fill="#fff" stroke="${D}" stroke-width="7"/>${augen}</svg>`;
+        const wuerfel = `<svg viewBox="0 0 128 128" class="bild-uhr" role="img" aria-label="Würfel">${wuerfelInnen(5)}</svg>`;
         return { text: "", frage: `Du würfelst einmal mit einem normalen Würfel. Dass du ${satz[0]} würfelst, ist …`, antwort: satz[1], art: "wahl", optionen: OPT, bild: wuerfel, nurLuecke: true, hilfe: satz[2] };
       } },
     { id: "uhr", lz: ["ma.gm.06", "ma.gm.03"], name: "Uhrzeit", icon: "🕒",
@@ -410,9 +409,14 @@
   // Würfelbild: Augen 1–6 in der vertrauten Anordnung
   const AUGEN = { 1: [[1, 1]], 2: [[0, 0], [2, 2]], 3: [[0, 0], [1, 1], [2, 2]], 4: [[0, 0], [2, 0], [0, 2], [2, 2]],
     5: [[0, 0], [2, 0], [1, 1], [0, 2], [2, 2]], 6: [[0, 0], [2, 0], [0, 1], [2, 1], [0, 2], [2, 2]] };
+  // Ein Würfel überall (02.11.2026): dieselbe Zeichnung wie ⚀–⚅/🎲 in shared/emoji.js (Feld 0–128, Würfel 8–120)
+  function wuerfelInnen(n) {
+    return `<rect x="8" y="8" width="112" height="112" rx="24" fill="#fff"/><path d="M8 94h112v2a24 24 0 0 1-24 24H32A24 24 0 0 1 8 96z" fill="#E4DAF6"/>` +
+      `<rect x="8" y="8" width="112" height="112" rx="24" fill="none" stroke="#3B1F63" stroke-width="7"/>` +
+      AUGEN[n].map(([c, z]) => `<circle cx="${36 + c * 28}" cy="${36 + z * 28}" r="10.5" fill="#3B1F63"/>`).join("");
+  }
   function wuerfel(n, x) {
-    return `<g transform="translate(${x} 6)"><rect width="108" height="108" rx="20" fill="#fff" stroke="#3b1f63" stroke-width="5"/>` +
-      AUGEN[n].map(([c, z]) => `<circle cx="${24 + c * 30}" cy="${24 + z * 30}" r="11" fill="#3b1f63"/>`).join("") + `</g>`;
+    return `<g transform="translate(${x - 6} -2) scale(.964)">${wuerfelInnen(n)}</g>`;
   }
   function wuerfelBild(a, b) {
     const w = b ? 250 : 120;
