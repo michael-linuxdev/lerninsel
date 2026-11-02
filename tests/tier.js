@@ -144,8 +144,24 @@ const TAG = (n) => new Date(2026, 9, 25 + n, 15, 0).getTime();
     await p.click("#ok"); await p.waitForTimeout(250);
     erwarte(await p.evaluate(() => document.getElementById("dialog").hidden && /Hund, Junghund/.test(document.getElementById("tier-stufe").textContent)), "Namensschild zeigt „Hund, Junghund“");
     // Alter Spielstand mit Fuchs (vor 02.11.2026) wird zum Hund, Name und Freundschaft bleiben
-    const alt = await p.evaluate(() => { const t = Spielwelt.lade("tier"); t.art = "fuchs"; Spielwelt.speichere("tier", t); const n = TierPflege.lade(); return { art: n.art, name: n.name, fs: n.freundschaft, bild: /augen/.test(Tiere.zeichneTier({ art: "fuchs" })) }; });
+    const alt = await p.evaluate(() => { const t = Spielwelt.lade("tier"); t.art = "fuchs"; Spielwelt.speichere("tier", t); const n = TierPflege.lade(); return { art: n.art, name: n.name, fs: n.freundschaft, bild: /tier-kopf/.test(Tiere.zeichneTier({ art: "fuchs" })) }; });
     erwarte(alt.art === "hund" && alt.name === "Lotte" && alt.fs >= 25 && alt.bild, "alter Fuchs wird zum Hund (Name und Freundschaft bleiben)");
+    // Neue Zeichnung (03.11.2026, Entwurf A) ist Standard; der Eltern-Schalter „Zeichnungen wie bis 02.11.2026“ – echt angetippt – zeigt die alte
+    const zeichnung = () => p.evaluate(() => { const h = document.getElementById("tier-bild").innerHTML; return { neu: /clipPath/.test(h) && /tier-kopf/.test(h), alt: /class="augen"/.test(h) }; });
+    await p.goto(BASIS + "spiele/tier/"); await p.waitForTimeout(400);
+    let z = await zeichnung();
+    erwarte(z.neu && !z.alt, "Mein Tier: neue Zeichnung (Dreiviertelansicht mit Schattenstufen) ist Standard");
+    await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(400);
+    if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForSelector(".eltern-reiter"); }
+    for (const t of ["zeit", "kinder", "ueberblick", "schule", "lernstand"]) { if (await p.isVisible("#alte-zeichnung")) break; await p.click(`.eltern-reiter [data-teil="${t}"]`); await p.waitForTimeout(200); }
+    await p.check("#alte-zeichnung"); await p.waitForTimeout(200);
+    await p.goto(BASIS + "spiele/tier/"); await p.waitForTimeout(400);
+    z = await zeichnung();
+    erwarte(z.alt && !z.neu, "Eltern-Schalter „Zeichnungen wie bis 02.11.2026“: Tier wieder in der alten Zeichnung");
+    await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(400);
+    if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForSelector(".eltern-reiter"); }
+    for (const t of ["zeit", "kinder", "ueberblick", "schule", "lernstand"]) { if (await p.isVisible("#alte-zeichnung")) break; await p.click(`.eltern-reiter [data-teil="${t}"]`); await p.waitForTimeout(200); }
+    await p.uncheck("#alte-zeichnung"); await p.waitForTimeout(200);
     await ctx.close();
   }
 

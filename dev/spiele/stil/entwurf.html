@@ -168,7 +168,7 @@
   const sprich = (t) => { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = 0.9; speechSynthesis.speak(u); } catch (e) { /* ohne Stimme */ } };
   // ---------- Tiere ----------
   let farbe = 0;
-  const alt = (art, st) => (window.Tiere ? `<svg viewBox="0 0 300 300">${Tiere.zeichneTier({ art, farbe, stufe: st })}</svg>` : "");
+  const alt = (art, st) => (window.Tiere ? `<svg viewBox="0 0 300 300">${Tiere.zeichneTier({ art, farbe, stufe: st, stil: "alt" })}</svg>` : "");
   function tiere() {
     const namen = { hund: ["Hund", "Welpe · Junghund · Hund"], katze: ["Katze", "Kätzchen · junge Katze · Katze"], drache: ["Drache", "Schlüpfling · Jungdrache · Drache"] };
     $("tier-raster").innerHTML = ["hund", "katze", "drache"].map(art =>

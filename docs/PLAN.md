@@ -2103,3 +2103,16 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
      Fachwörter („Denkfehler“, „Fehlvorstellung“, „Stelle“ vermeiden), mehr Bild als Text (Zehnerstangen/Plättchen statt Rechenzeilen), Benno spricht,
      🔊 Vorlesen; lange Erklärung ohne die drei Überschriften („So denkst du gerade …“); Schrittweg mit markierter Spalte im Rechenbild statt
      „Ziffer bei den Zehnern“. Mit dem Auftraggeber an 2–3 Beispielen abstimmen, dann `tests/mathe-fehler.js`/`fehlerursachen.js` anpassen.
+
+### Stand 03.11.2026, Sitzung „Produktreife“ (Auftrag: „Wir wollen zur Produktreife kommen. Gib alles.“)
+- **Fragerunde:** iPad-Meldungen (unten), Vorrang „Optik-Auftrag und Qualität parallel“, Entwürfe wählt der Auftraggeber in der Sitzung, nichts ist tabu.
+- **Erledigt – iPad-Meldungen (Test `ipad`, auch in CI):** einzelne Kachel in der letzten Zeile (Raster-Ausgleich in `core.js`: 3/1 → 2/2, 3/3/1 → 3/2/2),
+  Emoji über Text bei „Lichterfeste“ (alte Regel `.gruppen .option svg` vergrößerte Emoji-Bilder; `.emo>svg` jetzt immun), Sonnenuhr-Hinweis kam immer
+  wieder (Szene gilt mit der letzten Blase als gesehen, `beiLetzter`), Würfel überall gleich (⚀–⚅, 🎲 und Mathe-Bilder = ein Stil-A-Würfel),
+  kein Einhorn im Tablet-Führerschein (Delfin), **Kreis/Dreieck/Viereck gleich gefärbt und gleich groß** (eigene Zeichen ``–``, Vorschule und Matheweg Kl. 1).
+- **Entwürfe** (`spiele/stil/entwurf.html`) und **Wahl des Auftraggebers (03.11.2026):**
+  - Tiere 2D: **Entwurf A** (dunkle Kontur, Dreiviertelansicht, Schatten- und Lichtstufe) → **eingebaut** in `shared/tiere.js` (alle Ausdrücke, Zubehör neu
+    gezeichnet, `Tiere.portraet()` für die Startseite). Alte Zeichnung per Eltern-Schalter „Zeichnungen wie bis 02.11.2026“ (`eltern.zeichnung = "alt"`).
+  - Kinderfigur: **„Alle neu, eher Kinderbuch“** (Proportionen wie Entwurf a).
+  - Kleiderschrank: **so umbauen** (Fächer als Bilder, Antippen = anziehen, Farbkleckse, ↩, 🔊, schöneres Zimmer; Teile-IDs bleiben).
+  - Mathe-Erklärungen: **alle drei Arten** (A Schritt für Schritt, B selbst machen, C Bildergeschichte) und **der neue Fehler-Hinweis** („Fast! Schau mal.“ + Bild + 3 kurze Sätze).

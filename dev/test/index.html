@@ -477,7 +477,7 @@
   if (!tier.phase) { tb.innerHTML = `<svg viewBox="40 30 220 250">${Tiere.zeichneEi("kuschel")}</svg>`; tz.textContent = "🥚 Such dir ein Ei aus!"; }
   else if (tier.phase === "ei") { tb.innerHTML = `<svg viewBox="40 30 220 250">${Tiere.zeichneEi(tier.ei)}</svg>`; tz.textContent = tier.waerme >= TierPflege.WAERME_ZIEL ? "✨ Gleich schlüpft es!" : `🔥 Wärme ${tier.waerme} von ${TierPflege.WAERME_ZIEL}`; }
   else {
-    tb.innerHTML = `<svg viewBox="40 0 220 230">${Tiere.zeichneTier({ art: tier.art, farbe: tier.farbe, stufe: TierPflege.stufe(tier), ausdruck: TierPflege.ausdruck(tier), zubehoer: tier.traegt })}</svg>`;
+    tb.innerHTML = `<svg viewBox="${Tiere.portraet ? Tiere.portraet(tier.art, TierPflege.stufe(tier)) : "40 0 220 230"}">${Tiere.zeichneTier({ art: tier.art, farbe: tier.farbe, stufe: TierPflege.stufe(tier), ausdruck: TierPflege.ausdruck(tier), zubehoer: tier.traegt })}</svg>`;
     document.getElementById("tier-name").textContent = tier.name || "Mein Tier";
     tz.textContent = tier.satt < 25 ? "😋 hat Hunger" : tier.freude < 20 ? "🥺 möchte spielen" : `🍪 ${tier.leckerli} Leckerli`;
   }
