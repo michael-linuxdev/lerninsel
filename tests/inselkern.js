@@ -228,9 +228,10 @@ pruefe("Spielort: ohne Spielzeit schläft er, ohne Führerschein gesperrt, sonst
   assert.strictEqual(u.K.antwort("schach").blase[4], "../schach/", "Tilda geht auch ohne Spielzeit");
 });
 
-pruefe("Minispiele ausgeblendet (30.10.2026): alle fünf Orte zeigen „bald“ ohne Ziel, Aktionsknopf „Ansehen“", () => {
+pruefe("Minispiele ausgeblendet (30.10.2026): vier Orte zeigen „bald“ ohne Ziel, Aktionsknopf „Ansehen“; der Schatz-Strand ist seit 04.11. Fipsis Angelsteg", () => {
   const u = neueUmgebung({ zeit: SPIELEN, funde: 20, speicher: { medien: { fuehrerschein: true } }, minispieleAus: true });
-  ["ballons", "truhe", "lauf", "kart", "bau"].forEach(id => { const b = u.K.antwort(id).blase;
+  { const b = u.K.antwort("truhe").blase; assert.ok(b[0] === "fipsi" && /Angelsteg/.test(b[1]), "Strand: Angelsteg"); assert.deepStrictEqual(u.K.aktionFuer("truhe")[0], ["🎣", "Angeln"]); }
+  ["ballons", "lauf", "kart", "bau"].forEach(id => { const b = u.K.antwort(id).blase;
     assert.ok(b[0] === "🚧" && /entsteht etwas Neues/.test(b[2]) && !b[4], id); assert.deepStrictEqual(u.K.aktionFuer(id)[0], ["🚧", "Ansehen"], id); });
   assert.strictEqual(u.K.antwort("schach").blase[4], "../schach/", "Schach bleibt");
 });

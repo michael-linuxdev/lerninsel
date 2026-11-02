@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Fipsis Angelsteg</title>
+<meta name="theme-color" content="#CFEFFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  /* Wörter-Angeln (04.11.2026, NA-61): Fische mit Bildern angeln und dem richtigen Artikel-Eimer geben – Schatz-Strand, ab Kapitel 2 */
+  html, body { min-height: 100%; }
+  body { background: linear-gradient(#DDF3FF 0 34%, #F6E1A6 34% 100%); background-attachment: fixed; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; min-width: 0; }
+  @media (max-width: 480px) { .oben h1 { font-size: 1.35rem; } }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .mitte { max-width: 1040px; margin: 0 auto; padding: 10px 16px 30px; display: grid; gap: 14px; }
+  .fipsi { display: flex; gap: 12px; align-items: center; }
+  .fipsi .figur { font-size: 3.4rem; flex: none; }
+  .blase { background: #fff; border-radius: 24px; padding: 12px 18px; font-size: 1.25rem; font-weight: 500; box-shadow: 0 6px 0 rgba(0,0,0,.08); flex: 1; display: flex; gap: 10px; align-items: center; }
+  .blase p { margin: 0; flex: 1; line-height: 1.35; }
+  .blase .ru { display: block; font-size: 1rem; color: var(--pflaume-hell); margin-top: 4px; }
+  .vorlesen { flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--himmel); font-size: 1.5rem; }
+  /* Teich mit schwimmenden Fischen */
+  .teich { position: relative; height: 230px; border-radius: 40px; overflow: hidden; background: radial-gradient(ellipse at 50% 30%, #7FD3F7, #3AA0E0 70%, #2A7FC0); border: 5px solid #3B1F63; box-shadow: inset 0 -12px 0 rgba(0,0,0,.12); }
+  .teich::before { content: ""; position: absolute; inset: 14px 30px auto; height: 10px; border-radius: 99px; background: rgba(255,255,255,.35); }
+  .fisch { position: absolute; display: flex; align-items: center; gap: 0; background: none; border: 0; padding: 0; cursor: pointer; animation: schwimm var(--dauer, 9s) ease-in-out infinite alternate; }
+  .fisch .koerper { width: 86px; height: 62px; border-radius: 50% 40% 40% 50%; background: var(--farbe, #FFB547); border: 4px solid #3B1F63; display: grid; place-items: center; font-size: 2.1rem; position: relative; }
+  .fisch .koerper::after { content: ""; position: absolute; left: 14px; top: 16px; width: 9px; height: 9px; border-radius: 50%; background: #3B1F63; box-shadow: 2px -2px 0 -1px #fff inset; }
+  /* Kopf links (Auge), Schwanzflosse rechts: Spitze am Körper, Fächer nach außen */
+  .fisch .flosse { width: 0; height: 0; border-top: 22px solid transparent; border-bottom: 22px solid transparent; border-right: 30px solid #3B1F63; margin-left: -6px; position: relative; }
+  .fisch .flosse::after { content: ""; position: absolute; left: 7px; top: -15px; border-top: 15px solid transparent; border-bottom: 15px solid transparent; border-right: 19px solid var(--farbe, #FFB547); }
+  .fisch .bild { margin-left: 18px; }
+  .fisch.weg { animation: none; opacity: 0; transform: translateY(-80px) scale(.6); transition: all .5s; pointer-events: none; }
+  @keyframes schwimm { from { transform: translateX(0); } to { transform: translateX(var(--weit, 220px)); } }
+  .stand { text-align: center; font-weight: 700; font-size: 1.15rem; color: var(--pflaume); }
+  /* Angel-Karte und Eimer */
+  .karte { background: #fff; border-radius: 28px; padding: 16px; box-shadow: 0 6px 0 rgba(0,0,0,.08); text-align: center; display: grid; gap: 10px; }
+  .karte[hidden] { display: none; }
+  .gefangen { display: flex; justify-content: center; align-items: center; gap: 14px; }
+  .gefangen .gross { font-size: 4rem; line-height: 1; }
+  .gefangen .wort { font-size: 2.2rem; font-weight: 700; }
+  .gefangen .art { display: inline-block; min-width: 2.6em; border-bottom: 4px dashed #C9B8EA; color: transparent; margin-right: .2em; }
+  .gefangen .art.da { color: inherit; border-color: transparent; }
+  .eimer { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .eimer button { min-height: 104px; border-radius: 24px 24px 34px 34px; border: 5px solid #3B1F63; color: #fff; font-size: 1.9rem; font-weight: 700; display: grid; place-items: center; gap: 0; box-shadow: 0 6px 0 rgba(0,0,0,.15); }
+  .eimer button small { font-size: 1.3rem; opacity: .9; }
+  .eimer button.falsch { opacity: .35; }
+  .eimer button.richtig { outline: 6px solid #FFD84D; }
+  .hinweis { min-height: 1.6em; font-size: 1.15rem; font-weight: 600; margin: 0; }
+  .hinweis.gut { color: #2E9C5A; } .hinweis.nein { color: #C2337A; }
+  .hinweis .ru { display: block; font-size: .95rem; font-weight: 500; color: var(--pflaume-hell); }
+  .ende { text-align: center; }
+  .ende .eimer-liste { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 10px 0; }
+  .ende .eimer-liste span { background: #F2F8EC; border-radius: 999px; padding: 4px 12px; font-weight: 600; }
+  .zu-oder { text-align: center; }
+  .zu-oder[hidden], .teich[hidden], .stand[hidden] { display: none; }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../welt3d/heimat.html" aria-label="Zur Insel">🏝️</a>
+  <h1>🎣 Fipsis Angelsteg</h1>
+  <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
+</div>
+<main class="mitte">
+  <section class="fipsi">
+    <div class="figur" aria-hidden="true">&#xE103;</div>
+    <div class="blase"><p id="fipsi-text"></p><button class="vorlesen" id="fipsi-vorlesen" aria-label="Vorlesen">🔊</button></div>
+  </section>
+  <section class="teich" id="teich" aria-label="Teich mit Fischen"></section>
+  <p class="stand" id="stand"></p>
+  <section class="karte" id="karte" hidden>
+    <div class="gefangen"><span class="gross" id="g-bild"></span><span class="wort"><span class="art" id="g-art">der</span><span id="g-wort"></span></span><button class="vorlesen" id="g-hoeren" aria-label="Wort anhören">🔊</button></div>
+    <div class="eimer" id="eimer"></div>
+    <p class="hinweis" id="hinweis"></p>
+  </section>
+  <section class="karte ende" id="ende" hidden></section>
+  <section class="zu-oder" id="zu" hidden>
+    <div class="blase" style="justify-content:center"><p>🔒 Fipsis Angelsteg öffnet in Kapitel 2. Lern weiter bei Ella, Fipsi und Benno – dann holt Fipsi dich ab!</p></div>
+  </section>
+</main>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/koennen.js"></script>
+<script src="../../inhalte/woerter/bestand.js"></script>
+<script src="../../inhalte/woerter/d0.js"></script>
+<script src="../../shared/woerter.js"></script>
+<script src="angeln.js"></script>
+</body>
+</html>

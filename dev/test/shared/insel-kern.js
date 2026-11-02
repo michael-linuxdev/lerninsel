@@ -577,7 +577,7 @@
   function antwort(id, lage = {}) {
     switch (id) {
       case "ballons": if (bald(id)) return baldBlase("🎈", "Ballon-Wiese"); return spielort(() => profi() ? blase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", "Лопни как можно больше шариков!", "../welt3d/ballons.html") : fuehrerschein());
-      case "truhe": if (bald(id)) return baldBlase("🏝️", "Schatz-Strand"); return spielort(() => profi() ? blase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "../welt3d/insel.html") : fuehrerschein());
+      case "truhe": if (bald(id)) return angelnAntwort(); return spielort(() => profi() ? blase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "../welt3d/insel.html") : fuehrerschein());
       case "schach": return blase("tilda", "Tilda am Schachtisch", `Hallo ${name()}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?", "../schach/");
       case "buehne": return paulaAntwort();
       case "garten": return gartenAntwort();
@@ -634,6 +634,11 @@
     const d = S().lade("baeckerei") || {};
     return blase("biber", "Bäckerei Benno", d.tage ? `Hallo ${name()}! Heute kommen wieder fünf Kunden. Hilfst du mir an der Theke?` : `Hallo ${name()}! Meine Bäckerei ist offen. Packst du die Bestellungen und rechnest mit dem Geld?`, "Помоги мне в пекарне!", "../baeckerei/");
   }
+  // Wörter-Angeln (04.11.2026, NA-61): Fipsis Angelsteg am Schatz-Strand, öffnet mit Kapitel 2
+  function angelnAntwort() {
+    if (!(W.Story && S().offen(W.Story.kapitel() >= 2))) return blase("fipsi", "Fipsis Angelsteg – noch zu", "Hier baut Fipsi einen Angelsteg. Er öffnet in Kapitel 2 – lern weiter bei Fipsi!", "Здесь Фипси строит причал для рыбалки. Он откроется в главе 2.");
+    return blase("fipsi", "Fipsis Angelsteg", `Hallo ${name()}! Im Teich schwimmen Fische mit Bildern. Hilfst du mir, sie in den richtigen Eimer zu legen – der, die oder das?`, "В пруду плавают рыбы с картинками. Поможешь разложить их по вёдрам: der, die или das?", "../angeln/");
+  }
   function tierstationAntwort() {
     if (!ortOffen("tierstation")) return blase("🩹", "Tierpflege-Station – noch zu", "Bruni richtet hier eine Station für kranke Wildtiere ein. Sie öffnet in Kapitel 2 – lern weiter bei Fipsi!", "Станция для диких животных откроется в главе 2.");
     const d = S().lade("tierstation") || {}, g = d.gast;
@@ -642,7 +647,7 @@
     return blase("baer", "Brunis Tierpflege-Station", de, "Станция Бруни для животных.", "../tierstation/");
   }
   AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
-  const aktionFuer = (id) => (bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
+  const aktionFuer = (id) => (id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
   W.InselKern = {
     // Stationen

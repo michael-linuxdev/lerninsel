@@ -111,20 +111,24 @@
   }
   // Münzen (04.11.2026): Reihe von Cent-Münzen, groß nach klein; gezaehlt = so viele sind schon gezählt (mit Häkchen), tipp = antippbar
   function geld(liste, { gezaehlt = 0, tipp = false, summen = false } = {}) {
-    const r = (w) => w >= 10 ? 34 : 28, gold = (w) => w >= 10;
+    // (04.11.2026, Wunsch des Auftraggebers) echte Euro-Münzen wie im Matheweg (aufgaben.js muenze), sonst einfache Kreise
+    const echt = W.Mathe && W.Mathe._bilder && W.Mathe._bilder.muenze;
+    const r = (w) => echt ? ({ 1: 16.25, 2: 18.75, 5: 21.25, 10: 19.75, 20: 22.25, 50: 24.25 }[w] || 20) * 1.9 : (w >= 10 ? 34 : 28), gold = (w) => w >= 10;
+    const cy = echt ? 50 : 44, unten = echt ? 122 : cy + 58;
     let x = 8, s = "", sum = 0;
     liste.forEach((w, i) => {
-      const rr = r(w), cx = x + rr, cy = 44, fertig = i < gezaehlt; sum += w;
+      const rr = r(w), cx = x + rr, fertig = i < gezaehlt; sum += w;
       s += `<g${tipp && !fertig ? ` class="muenze" data-i="${i}" style="cursor:pointer"` : ""}${fertig && tipp ? ' opacity=".55"' : ""}>` +
+        (echt ? echt(cx, cy, w).svg :
         `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${gold(w) ? "#F2C94C" : "#D9895B"}" stroke="${D}" stroke-width="3"/>` +
         `<circle cx="${cx}" cy="${cy}" r="${rr - 6}" fill="none" stroke="${gold(w) ? "#C9A227" : "#B06A3E"}" stroke-width="2"/>` +
         `<text x="${cx}" y="${cy + 3}" text-anchor="middle" font-size="${rr > 30 ? 22 : 19}" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${w}</text>` +
-        `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-size="11" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">CENT</text></g>` +
-        (summen && i < gezaehlt ? `<text x="${cx}" y="${cy + 58}" text-anchor="middle" font-size="18" font-weight="700" fill="${BLAU}" font-family="Fredoka, sans-serif">${sum}</text>` : "") +
+        `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-size="11" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">CENT</text>`) + `</g>` +
+        (summen && i < gezaehlt ? `<text x="${cx}" y="${unten}" text-anchor="middle" font-size="18" font-weight="700" fill="${BLAU}" font-family="Fredoka, sans-serif">${sum}</text>` : "") +
         (fertig && tipp ? `<path d="M${cx - 10} ${cy - rr + 2} l6 6 l12 -12" fill="none" stroke="#2E9C5A" stroke-width="4" stroke-linecap="round"/>` : "");
       x += rr * 2 + 10;
     });
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${x} ${summen ? 112 : 90}" class="erkl-bild erkl-geld" role="img" aria-label="Münzen">${s}</svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${x} ${summen ? unten + 10 : cy * 2 + 4}" class="erkl-bild erkl-geld" role="img" aria-label="Münzen">${s}</svg>`;
   }
   // Lineal (04.11.2026): 0–12 cm, Stift von start bis start + l, schritte = so viele Zentimeter-Bögen sind schon gezählt, tipp = nächster Zentimeter antippbar
   function lineal(start, l, { schritte = 0, tipp = false } = {}) {

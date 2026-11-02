@@ -2116,5 +2116,5 @@
     return liste;
   }
 
-  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, STATIONEN_K5, runde, aufgabe, _sfc32: sfc32, _k3: { istWuerfelnetz, zufallsNetz, roemisch, istPrim, wuerfelGebaeude }, _bilder: { zehnerBild, stellenBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
+  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, STATIONEN_K5, runde, aufgabe, _sfc32: sfc32, _k3: { istWuerfelnetz, zufallsNetz, roemisch, istPrim, wuerfelGebaeude }, _bilder: { muenze, zehnerBild, stellenBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
 })();
