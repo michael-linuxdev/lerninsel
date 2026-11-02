@@ -2152,5 +2152,8 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
 - **Erledigt – dritter Teil:** „Länge“ (eigenes Lineal `BILD.lineal`, Zentimeter selbst abzählen: `art: "lineal"`), Kl. 3 „Zahlen bis 1000“ (`BILD.stellen`, Zahl aus
   Hundertern/Zehnern/Einern bauen: `art: "bauen"`) und „Runden“ (`BILD.runden`, näheren Zehner antippen: `art: "runden"`). Denkfehler „am Lineal nur das Ende abgelesen“,
   „1 m = 10 cm“, „Null weggelassen“ (305 → 35), „falsch gerundet“ (Aufgaben tragen `lineal`, `meter`, `stellen`, `runden`). Erklär-Einheiten jetzt für 20 Stationen.
-- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für schriftlich mal/geteilt (Kl. 4); weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
+- **Erledigt – „Zeig mir deinen Weg“ kindgerecht:** Rechenbild mit gelb markierter Spalte („Was kommt bei den Zehnern hin?“) statt „Ziffer bei den Zehnern“,
+  Hinweise ohne Fachwörter („Denk an die kleine 1 von rechts“, „Umdrehen geht nicht. Tausch einen Zehner“), am Ende ein kurzer Satz statt „Denkfehler: …“ (der Name
+  steht nur im Elternbereich). **Neu für „Schriftlich mal“ (Kl. 4)** mit einstelliger Zahl: gemerkte Zahl, eigener Schritt für die vordere Zahl, Bild `schrift(a, b, "·")`.
+- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für schriftlich geteilt und mehrstellig mal; weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
   Extras der 3D-Figur an die neuen Zeichnungen angleichen.
