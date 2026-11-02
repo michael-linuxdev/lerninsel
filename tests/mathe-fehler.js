@@ -40,7 +40,7 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
 pruefe("jede Kontrastaufgabe passt zum Denkfehler (1000 Startzahlen je Denkfehler) und ist richtig gerechnet", () => {
   const basis = { op: auf("5 + 3", 8), kleinvongross: auf(`52 ${M} 27`, 25), borgen: auf(`61 ${M} 28`, 33), uebertrag: auf("34 + 28", 62), uebertragdoppelt: auf("34 + 28", 62),
     stellenwert: auf("34 + 5", 39), zaehlen: auf("5 + 3", 8), malreihe: auf("7 · 8", 56),
-    malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6), dreher: auf("34 + 28", 62), zeigervertauscht: F.uhrAufgabe(4, 30, zz), stundedaneben: F.uhrAufgabe(4, 0, zz), muenzenzaehlen: F.geldAufgabe(zz), linealende: { text: "", antwort: "5", art: "zahl", lineal: { start: 2, l: 5 } }, meter: { text: "3 m = ? cm", antwort: "300", art: "zahl", meter: 3 }, nullvergessen: { text: "", antwort: "305", art: "zahl", stellen: 305 }, falschgerundet: { text: "", antwort: "390", art: "zahl", runden: 386 }, umrechnen: { text: "", antwort: "3000", art: "zahl", umrechnen: { n: 3, f: 1000, von: "kg", nach: "g" } } };
+    malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6), dreher: auf("34 + 28", 62), zeigervertauscht: F.uhrAufgabe(4, 30, zz), stundedaneben: F.uhrAufgabe(4, 0, zz), muenzenzaehlen: F.geldAufgabe(zz), linealende: { text: "", antwort: "5", art: "zahl", lineal: { start: 2, l: 5 } }, meter: { text: "3 m = ? cm", antwort: "300", art: "zahl", meter: 3 }, nullvergessen: { text: "", antwort: "305", art: "zahl", stellen: 305 }, falschgerundet: { text: "", antwort: "390", art: "zahl", runden: 386 }, umrechnen: { text: "", antwort: "3000", art: "zahl", umrechnen: { n: 3, f: 1000, von: "kg", nach: "g" } }, restvergessen: auf("864 : 4", 216) };
   for (const f of F.KATALOG) {
     for (let i = 0; i < 1000; i++) {
       const [k] = F.kontraste(basis[f.id], f.id, zz), o = F.lies(k);
@@ -104,6 +104,15 @@ pruefe("Schrittweg: Ziffern je Stelle, Übertrag vergessen und kleinere von grö
   assert.ok(/^<svg/.test(E.BILD.schrift(347, 5, "·", 2, "", 2)) && /<text[^>]*>3<\/text>/.test(E.BILD.schrift(347, 5, "·", 2, "", 2)));
   for (let i = 0; i < 500; i++) { const a = 112 + Math.floor(zz() * 887), b = 3 + Math.floor(zz() * 7), sm = F.schritte({ text: `${a} · ${b}`, antwort: String(a * b), art: "zahl" });
     assert.strictEqual(+sm.liste.map(x => x.ziffer).reverse().join(""), a * b, `${a} · ${b}`); }
+  // schriftlich geteilt (04.11.2026): 864 : 4 = 216 von links, Rest vor die nächste Zahl
+  const gt = F.schritte({ text: "864 : 4", antwort: "216", art: "zahl" });
+  assert.deepStrictEqual(gt.liste.map(s => [s.z, s.ziffer]), [[8, 2], [6, 1], [24, 6]]);
+  assert.strictEqual(F.pruefeSchritt(gt.o, gt.liste[2], 1).fv, "restvergessen", "4 : 4 statt 24 : 4");
+  assert.ok(/Zu viel/.test(F.pruefeSchritt(gt.o, gt.liste[2], 7).hinweis) && /noch mehr/.test(F.pruefeSchritt(gt.o, gt.liste[2], 5).hinweis));
+  assert.deepStrictEqual(F.schritte({ text: "156 : 3", antwort: "52", art: "zahl" }).liste.map(s => [s.z, s.ziffer]), [[15, 5], [6, 2]], "erste Zahl zu klein: zwei Ziffern zusammen");
+  assert.ok(/^<svg/.test(E.BILD.schrift(864, 4, ":", 1)));
+  for (let i = 0; i < 500; i++) { const b = 2 + Math.floor(zz() * 8), q = Math.ceil(100 / b) + 1 + Math.floor(zz() * (Math.floor(999 / b) - Math.ceil(100 / b) - 1)), sg = F.schritte({ text: `${q * b} : ${b}`, antwort: String(q), art: "zahl" });
+    assert.strictEqual(+sg.liste.map(x => x.ziffer).join(""), q, `${q * b} : ${b}`); assert.ok(sg.liste.every(x => x.rest < b && x.ziffer < 10)); }
   // zufällige Aufgaben: die Ziffern ergeben immer das Ergebnis
   for (let i = 0; i < 1000; i++) {
     const a = 100 + Math.floor(zz() * 899), b = 100 + Math.floor(zz() * (a - 100)), plus = zz() < 0.5 && a + b < 1000;

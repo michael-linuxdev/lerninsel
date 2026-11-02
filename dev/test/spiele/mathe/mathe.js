@@ -708,7 +708,7 @@
   }
 
   // ---------- Denkfehler (lange Erklärung, Kontrastaufgaben) ----------
-  const SCHRITTWEG = ["k3schriftplus", "k3schriftminus", "k4malschrift"];
+  const SCHRITTWEG = ["k3schriftplus", "k3schriftminus", "k4malschrift", "k4geteilt"];
   function zeigeDenkfehler(a, fv) {
     const hatErkl = ME() && ME().hat(a.station);
     // Kindgerecht (03.11.2026): Benno spricht, Bild zuerst, drei kurze Sätze ohne Überschriften, 🔊; der Name des Fehlers steht nur im Elternbereich
@@ -747,16 +747,16 @@
     const p = MF().schritte(a);
     lauf.weg = { a, p, i: 0, versuch: 0, erste: -1, fvs: [] };
     lauf.eingabe = ""; lauf.gesperrt = false;
-    zeigeWegSchritt("Zeig mir deinen Weg! Wir rechnen von rechts nach links.");
+    zeigeWegSchritt(p.o.op === ":" ? "Zeig mir deinen Weg! Beim Teilen rechnen wir von links nach rechts." : "Zeig mir deinen Weg! Wir rechnen von rechts nach links.");
   }
   function zeigeWegSchritt(info) {
     const w = lauf.weg, s = w.p.liste[w.i];
-    const erledigt = w.p.liste.slice(0, w.i).map((x, k) => `<li class="${x.gezeigt ? "gezeigt" : "gut"}">${x.gezeigt ? "So geht es:" : "✓"} ${MF().stelleName(k).replace(/n$/, "")}: ${x.ziffer}${x.aus ? (w.p.o.op === "+" ? " – merke 1" : w.p.o.op === "·" ? ` – merke ${x.aus}` : " – einen getauscht") : ""}</li>`).join("");
+    const erledigt = w.p.liste.slice(0, w.i).map((x, k) => `<li class="${x.gezeigt ? "gezeigt" : "gut"}">${x.gezeigt ? "So geht es:" : "✓"} ${w.p.o.op === ":" ? `${x.z} : ${x.y} = ${x.ziffer}${x.rest ? `, Rest ${x.rest}` : ""}` : `${MF().stelleName(x.i).replace(/n$/, "")}: ${x.ziffer}`}${x.aus && w.p.o.op !== ":" ? (w.p.o.op === "+" ? " – merke 1" : w.p.o.op === "·" ? ` – merke ${x.aus}` : " – einen getauscht") : ""}</li>`).join("");
     // (04.11.2026) kindgerecht: Rechenbild mit gelb markierter Spalte statt „Ziffer bei den Zehnern“
     const bildWeg = ME() && ME().BILD ? ME().BILD.schrift(w.p.o.a, w.p.o.b, w.p.o.op, w.i, minusArt(), w.i) : (w.a.bild || "");
     $("tafel").innerHTML = (bildWeg ? `<div class="bild weg-bild">${bildWeg}</div>` : "") +
       `<p class="frage">${info || ""}</p>${erledigt ? `<ul class="weg-liste">${erledigt}</ul>` : ""}` +
-      `<div class="ausdruck klein" id="ausdruck">Was kommt bei den ${MF().stelleName(s.i)} hin? §</div><p class="rueck" id="rueck"></p><div id="hilfe-platz"></div>`;
+      `<div class="ausdruck klein" id="ausdruck">${w.p.o.op === ":" ? `Wie oft passt die ${s.y} in die ${s.z}?` : `Was kommt bei den ${MF().stelleName(s.i)} hin?`} §</div><p class="rueck" id="rueck"></p><div id="hilfe-platz"></div>`;
     zeigeEingabe({ art: "zahl" });
     $("eingabe").insertAdjacentHTML("beforeend", `<button class="knopf klein" id="weg-ueberspringen">Weiter ohne Weg</button>`);
     $("weg-ueberspringen").addEventListener("click", () => { S.ton("tipp"); beendeWeg(true); });
@@ -766,12 +766,12 @@
     const w = lauf.weg, s = w.p.liste[w.i];
     if (!lauf.eingabe) { S.ton("nein"); return; }
     const r = MF().pruefeSchritt(w.p.o, s, lauf.eingabe, minusArt());
-    if (r.ok) { S.ton("juhu"); w.i++; w.versuch = 0; lauf.eingabe = ""; return w.i < w.p.liste.length ? zeigeWegSchritt("Richtig! Weiter nach links.") : beendeWeg(); }
+    if (r.ok) { S.ton("juhu"); w.i++; w.versuch = 0; lauf.eingabe = ""; return w.i < w.p.liste.length ? zeigeWegSchritt(w.p.o.op === ":" ? "Richtig! Weiter nach rechts." : "Richtig! Weiter nach links.") : beendeWeg(); }
     S.ton("nein"); w.versuch++; if (w.erste < 0) w.erste = s.i; if (r.fv && !w.fvs.includes(r.fv)) w.fvs.push(r.fv);
     if (w.versuch === 1) { $("rueck").className = "rueck nein lang"; $("rueck").textContent = r.hinweis; lauf.eingabe = ""; const l = $("luecke"); if (l) { l.className = "luecke falsch"; } setTimeout(aktualisiereLuecke, 600); return; }
     // zweiter Fehler an dieser Stelle: richtige Ziffer zeigen und mit ihr weiterrechnen
     s.gezeigt = true; w.i++; w.versuch = 0; lauf.eingabe = "";
-    if (w.i < w.p.liste.length) zeigeWegSchritt(`Bei den ${MF().stelleName(s.i)} gehört die ${s.ziffer} hin. Weiter nach links.`); else beendeWeg();
+    if (w.i < w.p.liste.length) zeigeWegSchritt(w.p.o.op === ":" ? `Die ${s.y} passt ${s.ziffer}-mal in die ${s.z}. Weiter nach rechts.` : `Bei den ${MF().stelleName(s.i)} gehört die ${s.ziffer} hin. Weiter nach links.`); else beendeWeg();
   }
   function beendeWeg(ohne) {
     const w = lauf.weg, a = w.a; lauf.weg = null;

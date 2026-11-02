@@ -293,6 +293,21 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   erwarte(await p.evaluate(() => /Dein Fehler lag bei den Zehnern/.test(document.getElementById("weg-ende").textContent)), "schriftlich mal: „Dein Fehler lag bei den Zehnern“");
   await weiter();
 
+  // ---------- Schriftlich geteilt (04.11.2026): Schrittweg von links, Rest vergessen ----------
+  await p.evaluate(() => __mathe.starte(Mathe.STATIONEN_K4.findIndex(s => s.id === "k4geteilt"), true)); await p.waitForTimeout(300);
+  if (await p.isVisible("#erklaer-nein")) { await p.click("#erklaer-nein"); await p.waitForTimeout(300); }
+  await p.evaluate(() => __mathe.setzeAufgabe({ text: "864 : 4", antwort: "216", art: "zahl", frage: "Teile schriftlich von links nach rechts.", hilfe: "…", max: 7 }));
+  await tippe(211); await p.waitForTimeout(900);
+  erwarte(await p.evaluate(() => /von links nach rechts/.test(document.getElementById("tafel").textContent) && /Wie oft passt die 4 in die 8/.test(document.getElementById("ausdruck").textContent)), "schriftlich geteilt falsch: Schrittweg „Wie oft passt die 4 in die 8?“");
+  await tippe(2); await p.waitForTimeout(250); await tippe(1); await p.waitForTimeout(250);
+  erwarte(await p.evaluate(() => /in die 24/.test(document.getElementById("ausdruck").textContent) && /6 : 4 = 1, Rest 2/.test(document.querySelector(".weg-liste").textContent)), "dritter Schritt: Rest 2 wandert vor die 4 – „Wie oft passt die 4 in die 24?“");
+  await tippe(1); await p.waitForTimeout(250);
+  erwarte(await p.evaluate(() => /Denk an den Rest 2/.test(document.getElementById("rueck").textContent)), "1 statt 6: Hinweis „Denk an den Rest 2 von vorher“");
+  await bild(p, "fu-weg-geteilt");
+  await p.waitForTimeout(700); await tippe(6); await p.waitForTimeout(300);
+  erwarte(await p.evaluate(() => !!document.getElementById("weg-ende")) && await fv("restvergessen") === "aufgefallen", "schriftlich geteilt: Ende, Denkfehler „Rest nicht mitgenommen“ gemerkt");
+  await weiter();
+
   // ---------- Elternbereich (04.11.2026): Denkfehler mit Namen, Zustand und Tipp für zu Hause ----------
   await p.evaluate(() => { window.__elternAlle = true; });
   await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(400);

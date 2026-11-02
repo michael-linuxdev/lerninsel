@@ -65,6 +65,7 @@
   // verfahren (minus): "abziehen" (getauschte Ziffer durchgestrichen, neue klein darüber) oder "ergaenzen" (kleine 1 unten links)
   function schrift(a, b, op, bis = 0, verfahren = "abziehen", markiere = -1) {
     if (op === "·") return schriftMal(a, b, bis, markiere);
+    if (op === ":") return schriftGeteilt(a, b, bis);
     const x = String(a).split("").reverse().map(Number), y = String(b).split("").reverse().map(Number), n = Math.max(x.length, y.length);
     const erg = [], klein = {}, oben = {};
     let c = 0;
@@ -168,6 +169,21 @@
     if (pfeil) { const ziel = hoch ? 10 : 0; s += `<path d="M${X(k)} 66 Q${(X(k) + X(ziel)) / 2} 30 ${X(ziel)} 66" fill="none" stroke="${BLAU}" stroke-width="4"/><path d="M${X(ziel) - 9} 58 L${X(ziel) + 9} 58 L${X(ziel)} 74 Z" fill="${BLAU}" stroke="${BLAU}" stroke-width="2" stroke-linejoin="round"/>`; }
     s += `<circle cx="${X(k)}" cy="90" r="10" fill="${ROT}" stroke="${D}" stroke-width="2.5"/>` +
       `<text x="${X(k)}" y="${pfeil ? 24 : 58}" text-anchor="middle" font-size="22" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${einer ? `${Math.floor(n / 10)}<tspan fill="${ROT}">${n % 10}</tspan>` : n}</text>`;
+    return s + `</svg>`;
+  }
+  // Schriftlich geteilt (04.11.2026): 864 : 4 = 216; bis = fertige Schritte; die Zahl, die gerade geteilt wird, ist gelb; Reste klein und blau vor der nächsten Zahl
+  function schriftGeteilt(a, b, bis = 0) {
+    const d = String(a).split("").map(Number), q = String(a / b).split("").map(Number), w = 40, x0 = 20;
+    const schritte = []; { let p = d[0] < b ? 1 : 0, r = 0, z = d[0] < b ? d[0] * 10 + d[1] : d[0], von = 0; while (p < d.length) { const e = Math.floor(z / b); schritte.push({ von, p, z, rest: z - e * b }); r = z - e * b; von = p + 1; p++; z = r * 10 + d[p]; } }
+    const breite = x0 + (d.length + 3 + q.length) * w + 20, X = (i) => x0 + i * w + w / 2;
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${breite} 110" class="erkl-bild" role="img" aria-label="${a} geteilt durch ${b} schriftlich">`;
+    const st = schritte[Math.min(bis, schritte.length - 1)];
+    if (bis < schritte.length) s += `<rect x="${X(bis === 0 ? 0 : st.p) - w / 2 + 2 - (bis === 0 ? 0 : 0)}" y="18" width="${(bis === 0 ? st.p + 1 : 1) * w - 4}" height="62" rx="10" fill="#FFF3C4"/>`;
+    const T = (x, y, t, gr = 34, f = D) => `<text x="${x}" y="${y}" font-size="${gr}" text-anchor="middle" fill="${f}" font-weight="700" font-family="Fredoka, sans-serif">${t}</text>`;
+    d.forEach((z, i) => { s += T(X(i), 64, z); });
+    schritte.forEach((sc, k) => { if (k < bis && sc.rest && sc.p + 1 < d.length) s += T(X(sc.p + 1) - 16, 34, sc.rest, 18, BLAU); });
+    s += T(X(d.length) - 4, 64, ":") + T(X(d.length + 1) - 8, 64, b) + T(X(d.length + 2) - 8, 64, "=");
+    q.forEach((z, i) => { if (i < bis) s += T(X(d.length + 3 + i) - 8, 64, z); else s += `<line x1="${X(d.length + 3 + i) - 22}" y1="72" x2="${X(d.length + 3 + i) + 6}" y2="72" stroke="#D9D0EA" stroke-width="3"/>`; });
     return s + `</svg>`;
   }
   // Schriftlich mal mit einer einstelligen Zahl (04.11.2026): 347 · 5, Ergebnis Stelle für Stelle, gemerkte Zahlen klein und blau

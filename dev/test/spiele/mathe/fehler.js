@@ -219,6 +219,12 @@
     lang: (o) => { const u = o.umrechnen; return [`Zähl die Nullen genau.`, `1 ${WORT[u.von]} sind ${u.f} ${WORT[u.nach]}.`, `${u.n}-mal ${u.f} sind ${u.n * u.f}. Also ${u.n * u.f} ${u.nach}.`]; },
     kontrast: (o, zz) => { const u = o.umrechnen; let n; do { n = r(zz, 2, 9); } while (n === u.n);
       return { text: "", frage: `Wie viele ${WORT[u.nach]} sind ${n} ${u.von}?`, antwort: String(n * u.f), art: "zahl", einheit: u.nach, nurLuecke: true, max: 7, umrechnen: Object.assign({}, u, { n }), hilfe: `1 ${u.von} sind ${u.f} ${u.nach}. ${n} ${u.von} sind ${n * u.f} ${u.nach}.` }; } });
+  // Schriftlich geteilt (04.11.2026): der Rest wird nicht vor die nächste Zahl geschrieben – nur im Schrittweg erkennbar
+  KATALOG.push({ id: "restvergessen", name: "Schriftlich geteilt: Rest nicht mitgenommen",
+    erkenne: () => false,
+    kurz: () => "Der Rest wandert vor die nächste Zahl.",
+    lang: (o) => [`Du hast den Rest vergessen.`, `Was übrig bleibt, schreibst du vor die nächste Zahl.`, `Dann rechnest du damit weiter: ${o.a} : ${o.b} = ${o.c}.`],
+    kontrast: (o, zz) => { const b = o.b > 1 && o.b < 10 ? o.b : r(zz, 3, 7); let q, a; do { q = r(zz, 21, Math.floor(999 / b)); a = q * b; } while (a < 100 || Math.floor(a / 100) % b === 0); return zr(":", a, b, "Teile von links. Der Rest wandert vor die nächste Zahl."); } });
   const fv = (id) => KATALOG.find(f => f.id === id);
   // Aufgabe in derselben Form wie zahl() in aufgaben.js
   function zr(op, a, b, hilfe) {
@@ -273,6 +279,7 @@
     linealende: "Gegenstände messen, die nicht bei 0 anfangen, und die Zentimeter-Schritte abzählen.",
     meter: "Mit einem Zollstock zeigen: 1 Meter hat 100 Zentimeter.",
     nullvergessen: "Zahlen in eine Tabelle H | Z | E schreiben – leere Felder bekommen eine 0.",
+    restvergessen: "Mit Geld teilen: 7 Zehner-Münzen auf 3 Kinder – der übrige Zehner wird in Einer getauscht und weiterverteilt.",
     umrechnen: "Beim Einkaufen und Wiegen fragen: „Wie viel Gramm sind 1 Kilo?“ – Packungen mit 1000 g zeigen.",
     falschgerundet: "Beim Einkaufen Preise runden: „Ist 3,47 € näher an 3,40 € oder an 3,50 €?“"
   };
@@ -283,7 +290,16 @@
   // ---------- Schrittweg: schriftlich plus und minus ----------
   // Stellen von rechts; je Stelle: Ziffern x, y, Übertrag/Borgen vorher (ein), richtige Ziffer, Übertrag danach (aus)
   function schritte(a) {
-    const o = lies(a); if (!o || (o.op !== "+" && o.op !== M && !(o.op === "·" && o.b < 10 && o.a >= 10))) return null;
+    const o = lies(a); if (!o || (o.op !== "+" && o.op !== M && !(o.op === "·" && o.b < 10 && o.a >= 10) && !(o.op === ":" && o.b < 10 && o.a >= 10 * o.b && o.a % o.b === 0))) return null;
+    if (o.op === ":") {   // (04.11.2026) schriftlich geteilt: von links, der Rest wandert vor die nächste Zahl
+      const d = String(o.a).split("").map(Number), liste = []; let rest = 0, pos = 0;
+      if (d[0] < o.b) { liste.push({ pos: 1, x: d[0] * 10 + d[1], ein: 0, z: d[0] * 10 + d[1] }); pos = 2; } else { liste.push({ pos: 0, x: d[0], ein: 0, z: d[0] }); pos = 1; }
+      for (; pos <= d.length; pos++) {
+        const L = liste[liste.length - 1]; L.y = o.b; L.ziffer = Math.floor(L.z / o.b); L.rest = L.z - L.ziffer * o.b; L.i = d.length - 1 - L.pos; rest = L.rest;
+        if (pos < d.length) liste.push({ pos, x: d[pos], ein: rest, z: rest * 10 + d[pos] });
+      }
+      return { o, liste };
+    }
     if (o.op === "·") {   // (04.11.2026) schriftlich mal mit einstelliger Zahl: von rechts, die gemerkte Zahl kommt links dazu
       const x = stellen(o.a), liste = []; let ein = 0;
       x.forEach((xi, i) => { const p = xi * o.b + ein; liste.push({ i, x: xi, y: o.b, ein, ziffer: p % 10, aus: Math.floor(p / 10), summe: p }); ein = Math.floor(p / 10); });
@@ -305,6 +321,12 @@
   function pruefeSchritt(o, s, wert, art = "abziehen") {
     const w = +wert, st = STELLE[s.i], st1 = STELLE1[s.i];
     if (w === s.ziffer) return { ok: true };
+    if (o.op === ":") {
+      if (s.ein && w === Math.floor(s.x / s.y)) return { ok: false, fv: "restvergessen", hinweis: `Denk an den Rest ${s.ein} von vorher. Er kommt vor die ${s.x}: Das sind ${s.z}.` };
+      if (w * s.y > s.z) return { ok: false, hinweis: `Zu viel: ${w} · ${s.y} = ${w * s.y}. Das ist mehr als ${s.z}.` };
+      if ((w + 1) * s.y <= s.z) return { ok: false, hinweis: `Da passt noch mehr hinein: ${w + 1} · ${s.y} = ${(w + 1) * s.y}.` };
+      return { ok: false, hinweis: `Wie oft passt die ${s.y} in die ${s.z}? Denk an die ${s.y}er-Reihe.` };
+    }
     if (o.op === "·") {
       if (s.vorn) return { ok: false, fv: "uebertrag", hinweis: `Du hast dir zuletzt ${s.ein} gemerkt. Die kommt jetzt nach vorn.` };
       if (s.ein && w === (s.x * s.y) % 10) return { ok: false, fv: "uebertrag", hinweis: `Denk an die gemerkte ${s.ein}: ${s.x} · ${s.y} + ${s.ein} = ${s.summe}.` };
