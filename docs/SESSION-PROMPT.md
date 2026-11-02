@@ -27,9 +27,9 @@ Rückmeldung des Auftraggebers vom 02.11.2026 (Fragerunde schon beantwortet, Det
 
 ## 1. Stand (04.11.2026)
 **Neu am 04.11.2026:** Kleiderschrank-Extras neu gezeichnet (Dinge in der Hand werden gehalten, Hüte/Mützen mit Schatten), Matheweg mit neuen Denkfehlern
-(„Zahl verdreht“, mal 0, zwei Geteilt-Fehler) und neuen Erklär-Einheiten (Geteilt, Minus bis 10, Zehner und Einer). Details in `docs/PLAN.md`, „Stand 04.11.2026“.
+(„Zahl verdreht“, mal 0, zwei Geteilt-Fehler) und neuen Erklär-Einheiten (Geteilt, Minus bis 10, Zehner und Einer, Plus/Minus bis 20, Ergänzen, Uhrzeit, Geld) samt Denkfehlern für Uhr und Geld. Details in `docs/PLAN.md`, „Stand 04.11.2026“.
 **Im iPad testen (in /dev):** Kleiderschrank → Extras (Ball, Teddy, Tasche, Mützen); Matheweg Kl. 2 → „Geteilt“ und „Zehner und Einer“ neu öffnen („Erklär es mir“),
-bei „Welche Zahl ist das?“ absichtlich verdreht eintippen (z. B. 25 statt 52).
+bei „Welche Zahl ist das?“ absichtlich verdreht eintippen (z. B. 25 statt 52); „Uhrzeit“ und „Geld“ neu öffnen (Uhr selbst stellen, Münzen antippen).
 
 ### Stand 02.11.2026
 **Neu am 02.11.2026:** siehe Abschnitt 0. Neue Tests: `sticker`, `fehlerursachen`, `sicherung` (Browser), `mathe-fehler`, `pruefstand` (Node, laufen in `sh tests/laufen.sh` mit).

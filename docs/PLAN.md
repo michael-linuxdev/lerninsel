@@ -2145,4 +2145,9 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   - Neue Erklär-Einheiten (gleicher Aufbau A/B/C): **Geteilt** („Wie oft passt die 3 in die 12?“, Reihen legen, Ergebnis „12 : 3 = 4“), **Minus bis 10** (Kl. 1),
     **Zehner und Einer**; die Einmaleins-Erklärung gilt auch für „3 und 4“ und „6 bis 9“.
   - Tests `mathe-fehler` (Node) und `fehlerursachen` (alle neuen Einheiten echt durchgeklickt).
-- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Erklär-Einheiten für Uhr, Geld, Ergänzen; Extras der 3D-Figur an die neuen Zeichnungen angleichen.
+- **Erledigt – weitere Erklär-Einheiten und Denkfehler (zweiter Teil):** „Plus bis 20“ (auch Kl. 1 „Plus und minus bis 20“), „Minus bis 20“, „Ergänzen“,
+  **„Uhrzeit“** (eigene Uhr-Zeichnung `BILD.uhr`; das Kind stellt 4 Uhr selbst ein: neue Schritt-Art `machen` mit `art: "uhr"`) und **„Geld“** (Münzen `BILD.geld`, das Kind tippt
+  die Münzen groß nach klein an, Benno zählt mit: `art: "geld"`, `muenzen`). Neue Denkfehler **„Zeiger vertauscht“**, **„Stunde daneben“** (erstmals auch bei Auswahl-Aufgaben:
+  Uhr-Aufgaben tragen `uhr: { h, m }`) und **„Münzen gezählt statt Werte addiert“** (Geld-Aufgaben tragen `geld: [Münzen]`). Hochformat iPad und Handy geprüft (nichts scrollt).
+- **Offen / nächste Schritte:** iPad-Test der neuen Extras und Erklärungen; Schrittweg für schriftlich mal/geteilt (Kl. 4); Erklär-Einheiten für Länge und Kl. 3;
+  Extras der 3D-Figur an die neuen Zeichnungen angleichen.
