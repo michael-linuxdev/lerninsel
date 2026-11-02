@@ -108,7 +108,7 @@
     return o;
   }
   const wurzel = (document.querySelector("script[data-root]") || {}).dataset ? document.querySelector("script[data-root]").dataset.root : "./";
-  const knopf = (href, text, haupt) => `<a href="${wurzel}${href}" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 20px;margin:6px;border-radius:999px;text-decoration:none;font-weight:700;font-size:1.1rem;${haupt ? "background:#4B2380;color:#fff" : "background:#F1EAFF;color:#4B2380"}">${text}</a>`;
+  const knopf = (href, text, haupt) => `<a href="${wurzel}${href}" style="display:inline-flex;align-items:center;justify-content:center;gap:.35em;min-height:56px;padding:0 20px;margin:6px;border-radius:999px;text-decoration:none;font-weight:700;font-size:1.1rem;${haupt ? "background:#4B2380;color:#fff" : "background:#F1EAFF;color:#4B2380"}">${text}</a>`;
   function leiste(st) {
     const p = Math.round(st.fortschritt * 100);
     return `<div style="margin:14px auto;max-width:420px"><div style="height:22px;border-radius:999px;background:#EEE6FB;overflow:hidden"><div style="height:100%;width:${p}%;background:linear-gradient(90deg,#5CCBA6,#2E9C5A);border-radius:999px"></div></div>
