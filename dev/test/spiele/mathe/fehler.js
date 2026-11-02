@@ -21,7 +21,8 @@
     if (!a) return null;
     if (a.ops) return Object.assign({ c: +a.antwort }, a.ops);
     const m = /^(\d+) ([+−·:]) (\d+)$/.exec(a.text || "");
-    if (!m || (a.text || "").includes("?")) return null;
+    // (04.11.2026) ohne Rechnung (z. B. „Welche Zahl ist das?“) nur das Ergebnis – reicht für „Zahl verdreht“
+    if (!m || (a.text || "").includes("?")) return /^\d+$/.test(String(a.antwort)) ? { a: null, b: null, op: "", c: +a.antwort } : null;
     return { a: +m[1], op: m[2], b: +m[3], c: +a.antwort };
   }
 
@@ -118,6 +119,23 @@
         `Das sind ${o.c} Schritte. Also ${o.a} : ${o.b} = ${o.c}.`],
       kontrast: (o, zz) => { const b = o.b > 1 && o.b <= 10 ? o.b : r(zz, 2, 9), q = r(zz, 3, 9); return zr(":", b * q, b, `Zähl in ${b}er-Schritten bis ${b * q}.`); } }
   ];
+  // Zahlwort 13–99 („siebenundvierzig“) für „Zahl verdreht“
+  function zahlwort(n) {
+    const E1 = ["", "ein", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun"], Z1 = ["", "zehn", "zwanzig", "dreißig", "vierzig", "fünfzig", "sechzig", "siebzig", "achtzig", "neunzig"];
+    const z = Math.floor(n / 10), e = n % 10;
+    if (z === 1) return ({ 6: "sechzehn", 7: "siebzehn" })[e] || E1[e] + "zehn";
+    return (e ? E1[e] + "und" : "") + Z1[z];
+  }
+  const dreht = (c) => c >= 13 && c < 100 && c % 10 !== 0 && Math.floor(c / 10) !== c % 10;
+  KATALOG.push({ id: "dreher", name: "Zahl verdreht (Zehner und Einer vertauscht)",
+    erkenne: (o, w) => dreht(o.c) && w === (o.c % 10) * 10 + Math.floor(o.c / 10),
+    kurz: (o) => `Verdreht? Man sagt „${zahlwort(o.c)}“. Geschrieben kommt die ${Math.floor(o.c / 10)} zuerst.`,
+    lang: (o) => [`Du hast die Zahl verdreht.`, `Wir sagen „${zahlwort(o.c)}“. Die ${o.c % 10} hört man zuerst.`, `Geschrieben kommt die ${Math.floor(o.c / 10)} zuerst: ${o.c}.`],
+    kontrast: (o, zz) => {
+      let a, b, op, c;
+      do { op = o.op === M ? M : "+"; a = r(zz, 12, 80); b = r(zz, 3, 19); if (op === M) { const t = a; a = Math.max(t, b) + 20; } c = op === "+" ? a + b : a - b; } while (!dreht(c));
+      return zr(op, a, b, "Erst die Zehner hinschreiben, dann die Einer.");
+    } });
   const fv = (id) => KATALOG.find(f => f.id === id);
   // Aufgabe in derselben Form wie zahl() in aufgaben.js
   function zr(op, a, b, hilfe) {
@@ -186,5 +204,5 @@
   }
   const stelleName = (i) => STELLE[i];
 
-  W.MatheFehler = { KATALOG, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
+  W.MatheFehler = { KATALOG, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, zahlwort, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
 })(typeof window !== "undefined" ? window : globalThis);

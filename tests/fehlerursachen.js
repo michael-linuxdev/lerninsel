@@ -121,6 +121,33 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   erwarte(await p.evaluate(() => /geteilt, nicht minus/.test(document.getElementById("rueck").textContent)) && await fv("geteiltminus") === "aufgefallen", "15 : 3 = 12: Hinweis „geteilt, nicht minus“, Denkfehler aufgefallen");
   await p.waitForTimeout(1300);
 
+  // ---------- Zehner und Einer + „Zahl verdreht“ (04.11.2026) ----------
+  await p.click("#zum-weg"); await p.waitForTimeout(200);
+  await p.evaluate((n) => __mathe.starte(n, true), await nr("zehner")); await p.waitForTimeout(300);
+  await p.click("#erklaer-ja"); await p.waitForTimeout(200);
+  for (let k = 0; k < 3; k++) { await p.click("#weiter"); await p.waitForTimeout(150); }
+  erwarte(await p.evaluate(() => /siebenundvierzig/.test(document.getElementById("satz").textContent)), "Zehner: „4 Zehner und 7 Einzelne: 47 – siebenundvierzig“");
+  await weiter();
+  for (let k = 0; k < 7; k++) { await p.click("#machen-bild .wartet >> nth=0"); await p.waitForTimeout(80); }
+  erwarte(await p.evaluate(() => document.getElementById("machen-ergebnis").textContent === "40 + 7 = 47"), "Zehner selbst machen: 7 Einzelne zu 4 Zehnern getippt – 47");
+  await weiter(); await p.click('[data-e="63"]'); await p.waitForTimeout(150); await weiter();
+  await p.click('[data-g="nein"]'); await p.waitForTimeout(150); await weiter(); await weiter();
+  erwarte(await p.evaluate(() => __mathe.lauf && __mathe.lauf.station.id === "zehner" && (Spielwelt.lade("mathe").erklaert || {}).zehner === 1), "Zehner: Erklärung bis zum Ende, Runde startet");
+  await p.evaluate(() => __mathe.setzeAufgabe({ text: "", frage: "Welche Zahl ist das?", antwort: "52", art: "zahl", nurLuecke: true, hilfe: "5 Zehner und 2 Einer sind 52" }));
+  await tippe(25); await p.waitForTimeout(300);
+  erwarte(await p.evaluate(() => /zweiundfünfzig/.test(document.getElementById("rueck").textContent)) && await fv("dreher") === "aufgefallen", "52 als 25 geschrieben: Hinweis „Man sagt zweiundfünfzig …“, Denkfehler „Zahl verdreht“");
+  await p.waitForTimeout(1300);
+  // Minus bis 10 (Kl. 1) über den Test-Haken echt durchgeklickt
+  await p.evaluate(() => { window.__fertig = false; __mathe.erklaere("k1minus10", () => { window.__fertig = true; }); }); await p.waitForTimeout(200);
+  for (let k = 0; k < 3; k++) await weiter();
+  for (let k = 0; k < 2; k++) { await p.click("#machen-bild .nimm >> nth=0"); await p.waitForTimeout(80); }
+  erwarte(await p.evaluate(() => document.getElementById("machen-ergebnis").textContent === "5 − 2 = 3"), "Minus bis 10: 2 Punkte weggetippt – 5 − 2 = 3");
+  await weiter(); await p.click('[data-e="4"]'); await p.waitForTimeout(150); await weiter();
+  await p.click('[data-g="nein"]'); await p.waitForTimeout(150);
+  erwarte(await p.evaluate(() => !!document.querySelector("#warum svg")), "Robo zählt die 8 mit: Begründung mit Zahlenstrahl");
+  await weiter(); await weiter();
+  erwarte(await p.evaluate(() => window.__fertig), "Minus bis 10: Erklärung bis zum Ende");
+
   // ---------- Zeig mir deinen Weg ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k3"; Spielwelt.speichere("mathe", d); });
   await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);

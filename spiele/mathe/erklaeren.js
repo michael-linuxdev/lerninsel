@@ -6,7 +6,7 @@
 //   { typ: "gegenbeispiel", text, stimmt: false, fv, warum } Robo rechnet falsch; fv = Fehler aus fehler.js
 //   { typ: "geschichte", text, bilder: [{ satz, bild }] }    C „Bildergeschichte“ zum Merken: drei Bilder, je ein Satz; text = Merksatz
 // bild ist eine Funktion → SVG (Bausteine in BILD, auch für die Fehler-Hinweise: bildFuer(fv, o)).
-// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
+// Einheiten: k1plus10, plusUeber, minusUeber, mal1 (auch mal2, mal3), geteilt, k1minus10, zehner, k3schriftplus, k3schriftminus (minus in beiden Verfahren: abziehen | ergaenzen).
 // Abschluss wird in mathe.erklaert[station] = 1 gemerkt; das Angebot kommt nur, wenn die Station noch nie gerechnet wurde.
 (function (W) {
   const M = "−", D = "#3B1F63", ROT = "#FF6F61", BLAU = "#4FA8F0", STANGE = "#FFB547";
@@ -101,6 +101,7 @@
       if (fv === "stellenwert" && o.a < 100) return feld({ z: Z(o.a), rot: E(o.a), warten: Math.min(9, o.b) });
       if (fv === "malreihe" && o.a <= 10 && o.b <= 10) return reihen(o.a, o.b);
       if ((fv === "geteiltminus" || fv === "geteiltreihe") && o.op === ":" && o.b <= 10 && o.a / o.b <= 10) return reihen(o.b, o.a / o.b);
+      if (fv === "dreher" && o.c < 100) return feld({ z: Z(o.c), rot: E(o.c) });
       if (fv === "malnull") return reihen(Math.max(1, Math.min(10, o.a || o.b)), 0, 2);
     } catch (e) { /* ohne Bild */ }
     return "";
@@ -162,6 +163,35 @@
         { satz: "Immer gleich viele.", bild: () => reihen(5, 1, 3) },
         { satz: "So oft, wie die Zahl sagt.", bild: () => reihen(5, 3, 3) },
         { satz: "Zähl in Schritten: 5, 10, 15.", bild: () => reihen(5, 3, 3) }] }
+    ],
+    // Minus bis 10 (04.11.2026): Es geht etwas weg
+    k1minus10: [
+      { typ: "zeigen", text: `5 ${M} 2`, bilder: [
+        { satz: "Das sind 5 Punkte.", bild: F({ rot: 5 }) },
+        { satz: "2 kommen weg.", bild: F({ rot: 3, leer: 2 }) },
+        { satz: `3 sind übrig. Also 5 ${M} 2 = 3.`, bild: F({ rot: 3 }) }] },
+      { typ: "machen", text: "Jetzt du: Tipp 2 rote Punkte weg.", art: "weg", a: 5, b: 2 },
+      { typ: "ergaenzen", text: "Jetzt rechnest du.", frage: `7 ${M} 3 = ?`, antwort: "4", optionen: ["3", "4", "10"] },
+      { typ: "gegenbeispiel", text: `Robo zählt bei 8 ${M} 3: „8, 7, 6.“ Er sagt 6. Stimmt das?`, stimmt: false, fv: "zaehlen", warum: "Bei der 8 ist Robo schon. 3 zurück: 7, 6, 5. Also 5." },
+      { typ: "geschichte", text: "Minus heißt: Es geht etwas weg.", bilder: [
+        { satz: "Erst alle zählen.", bild: F({ rot: 5 }) },
+        { satz: "Dann kommen welche weg.", bild: F({ rot: 3, leer: 2 }) },
+        { satz: "Zum Schluss die übrigen zählen.", bild: F({ rot: 3 }) }] }
+    ],
+    // Zehner und Einer (04.11.2026): erst die Zehner, dann die Einzelnen – gegen „Zahl verdreht“
+    zehner: [
+      { typ: "zeigen", text: "Welche Zahl ist das?", bilder: [
+        { satz: "Eine Stange hat 10 Punkte. Das ist ein Zehner.", bild: F({ z: 1 }) },
+        { satz: "Hier sind 4 Zehner: 10, 20, 30, 40.", bild: F({ z: 4 }) },
+        { satz: "Dazu kommen 7 Einzelne.", bild: F({ z: 4, rot: 7 }) },
+        { satz: "4 Zehner und 7 Einzelne: 47. Man sagt „siebenundvierzig“.", bild: F({ z: 4, rot: 7 }) }] },
+      { typ: "machen", text: "Jetzt du: Tipp die 7 blauen Punkte an.", art: "dazu", a: 40, b: 7 },
+      { typ: "ergaenzen", text: "Jetzt du: 6 Zehner und 3 Einzelne.", frage: "Das ist die Zahl ?", antwort: "63", optionen: ["63", "36", "9"] },
+      { typ: "gegenbeispiel", text: "Robo sieht 5 Zehner und 2 Einzelne. Er schreibt 25. Stimmt das?", stimmt: false, fv: "dreher", warum: "Die Zehner kommen zuerst. 5 Zehner und 2 Einzelne sind 52. Man sagt „zweiundfünfzig“." },
+      { typ: "geschichte", text: "Erst die Zehner schreiben, dann die Einzelnen.", bilder: [
+        { satz: "Erst die Zehner zählen.", bild: F({ z: 4 }) },
+        { satz: "Dann die Einzelnen.", bild: F({ z: 4, rot: 7 }) },
+        { satz: "Zehner zuerst schreiben: 47.", bild: F({ z: 4, rot: 7 }) }] }
     ],
     // Geteilt (04.11.2026): Wie oft passt die Zahl hinein? Reihen legen, bis alle Punkte da sind
     geteilt: [

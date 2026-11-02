@@ -17,8 +17,12 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
     [auf(`61 ${M} 28`, 33), 43, "borgen"], [auf("3 · 4", 12), 7, "op"], [auf(`9 ${M} 3`, 6), 12, "op"], [auf("5 + 3", 8), 7, "zaehlen"],
     [auf(`9 ${M} 3`, 6), 7, "zaehlen"], [auf("34 + 5", 39), 84, "stellenwert"], [auf("7 · 8", 56), 63, "malreihe"], [auf("7 · 8", 56), 48, "malreihe"],
     [{ text: "", antwort: "632", ops: { a: 347, b: 285, op: "+" } }, 522, "uebertrag"],
-    [auf("6 · 0", 0), 6, "malnull"], [auf("0 · 7", 0), 7, "malnull"], [auf("15 : 3", 5), 12, "geteiltminus"], [auf("24 : 4", 6), 7, "geteiltreihe"], [auf("24 : 4", 6), 5, "geteiltreihe"], [auf("12 : 3", 4), 36, "op"]];
-  for (const [a, w, id] of fall) { const e = F.erkenne(a, w); assert.ok(e && e.id === id, `${a.text || a.ops.a + "+" + a.ops.b} → ${w}: erwartet ${id}, bekam ${e && e.id}`); assert.strictEqual(e.lang.length, 3); assert.ok(e.kurz.length > 10); }
+    [auf("6 · 0", 0), 6, "malnull"], [auf("0 · 7", 0), 7, "malnull"], [auf("15 : 3", 5), 12, "geteiltminus"], [auf("24 : 4", 6), 7, "geteiltreihe"], [auf("24 : 4", 6), 5, "geteiltreihe"], [auf("12 : 3", 4), 36, "op"],
+    [auf("34 + 28", 62), 26, "dreher"], [{ text: "", frage: "Welche Zahl ist das?", antwort: "47", art: "zahl" }, 74, "dreher"], [auf("45 + 2", 47), 74, "dreher"]];
+  assert.strictEqual(F.erkenne({ text: "", antwort: "40", art: "zahl" }, 4), null, "40 → 4 ist kein Dreher");
+  assert.strictEqual(F.erkenne({ text: "", antwort: "44", art: "zahl" }, 44), null);
+  assert.deepStrictEqual([13, 16, 17, 21, 47, 52, 99].map(F.zahlwort), ["dreizehn", "sechzehn", "siebzehn", "einundzwanzig", "siebenundvierzig", "zweiundfünfzig", "neunundneunzig"]);
+  for (const [a, w, id] of fall) { const e = F.erkenne(a, w); assert.ok(e && e.id === id, `${a.text || (a.ops ? a.ops.a + "+" + a.ops.b : a.frage)} → ${w}: erwartet ${id}, bekam ${e && e.id}`); assert.strictEqual(e.lang.length, 3); assert.ok(e.kurz.length > 10); }
   assert.strictEqual(F.erkenne(auf("34 + 28", 62), 62), null, "richtige Antwort ist kein Fehler");
   assert.strictEqual(F.erkenne(auf("34 + 28", 62), 17), null, "unbekannter Fehler bleibt unbekannt");
   assert.strictEqual(F.erkenne(auf("Wie viele?", 5), 4), null, "Textaufgaben ohne Rechnung werden nicht gedeutet");
@@ -27,7 +31,7 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
 pruefe("jede Kontrastaufgabe passt zum Denkfehler (1000 Startzahlen je Denkfehler) und ist richtig gerechnet", () => {
   const basis = { op: auf("5 + 3", 8), kleinvongross: auf(`52 ${M} 27`, 25), borgen: auf(`61 ${M} 28`, 33), uebertrag: auf("34 + 28", 62), uebertragdoppelt: auf("34 + 28", 62),
     stellenwert: auf("34 + 5", 39), zaehlen: auf("5 + 3", 8), malreihe: auf("7 · 8", 56),
-    malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6) };
+    malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6), dreher: auf("34 + 28", 62) };
   for (const f of F.KATALOG) {
     for (let i = 0; i < 1000; i++) {
       const [k] = F.kontraste(basis[f.id], f.id, zz), o = F.lies(k);
