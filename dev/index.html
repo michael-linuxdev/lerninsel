@@ -361,7 +361,7 @@
     S.kinder().forEach(k => {
       const p = S.profilVon(k.id), look = (p && p.daten.anziehen && p.daten.anziehen.aktuell) || Figur.STANDARD(p && p.daten.eltern && p.daten.eltern.kind ? p.daten.eltern.kind.geschlecht : "n");
       const b = document.createElement("button"); b.className = "wer-kind";
-      b.innerHTML = `<span class="bild"><svg viewBox="${Figur.KOPF}">${Figur.zeichneFigur(look)}</svg></span>${k.name || "Neues Kind"}`;
+      b.innerHTML = `<span class="bild"><svg class="fig-klein" viewBox="${Figur.KOPF}">${Figur.zeichneFigur(look)}</svg></span>${k.name || "Neues Kind"}`;
       b.addEventListener("click", () => { S.ton("juhu"); S.wechsleKind(k.id); location.reload(); });
       liste.appendChild(b);
     });
@@ -467,7 +467,7 @@
   const medien = S.lade("medien");
   // Meine Ecke: Figur, Titel und Tagesaufgaben
   const look = (S.lade("anziehen") || {}).aktuell || Figur.STANDARD();
-  document.getElementById("ich-bild").innerHTML = `<svg viewBox="${Figur.KOPF}">${Figur.zeichneFigur(look)}</svg>`;
+  document.getElementById("ich-bild").innerHTML = `<svg class="fig-klein" viewBox="${Figur.KOPF}">${Figur.zeichneFigur(look)}</svg>`;
   document.getElementById("ich-titel").textContent = Charakter.titel();
   const offenAufgaben = Charakter.aufgaben().filter(a => !a.erledigt).length;
   const neuHeute = window.Lernfunde ? Lernfunde.heute().length : 0;

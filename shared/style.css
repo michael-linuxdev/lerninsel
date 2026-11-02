@@ -139,3 +139,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .su-gruppe .lek .emoji, .en-gruppe .lek .emoji { grid-row: auto; }
   .su-gruppe > .lernstand-knopf, .en-gruppe > .lernstand-knopf, .werk-gruppe > .lernstand-knopf { grid-column: 1; justify-self: start; }
 }
+
+/* (04.11.2026) Kleine Porträts der Kinderfigur: Konturen wachsen mit der Figur mit (sonst wirken 3 px Kontur und Augenränder im Porträt zu schwer) */
+svg.fig-klein [vector-effect] { vector-effect: none; }

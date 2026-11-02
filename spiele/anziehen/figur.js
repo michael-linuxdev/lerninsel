@@ -67,7 +67,7 @@
   }
 
   // Nur die Figur ohne Hintergrund, z. B. für kleine Porträts
-  function zeichnePortraet(o) { return `<svg viewBox="${P.neu ? "40 0 220 330" : "40 0 220 330"}" aria-hidden="true">${zeichneFigur(o)}</svg>`; }
+  function zeichnePortraet(o) { return `<svg class="fig-klein" viewBox="${P.neu ? "40 0 220 330" : "40 0 220 330"}" aria-hidden="true">${zeichneFigur(o)}</svg>`; }
   // Ausschnitte: KOPF = Kopf und Schultern (quadratisch), BUESTE = bis zum Bauch
   const KOPF = P.KOPF || "50 34 200 200", BUESTE = P.BUESTE || "40 20 220 280";
   window.Figur = { STANDARD, zeichneFigur, zeichneBild, zeichnePortraet, KOPF, BUESTE, P, neu: !!P.neu };

@@ -16,7 +16,7 @@
   function zeichne() {
     $("sterne").textContent = S.sterne();
     const look = (S.lade("anziehen") || {}).aktuell || window.Figur.STANDARD();
-    $("portraet").innerHTML = `<svg viewBox="${window.Figur.BUESTE}" aria-label="Deine Figur">${window.Figur.zeichneFigur(look)}</svg>`;
+    $("portraet").innerHTML = `<svg class="fig-klein" viewBox="${window.Figur.BUESTE}" aria-label="Deine Figur">${window.Figur.zeichneFigur(look)}</svg>`;
     $("name").textContent = name();
     const tier = window.TierPflege && TierPflege.lade();
     // Kacheln in „Meine Sachen“: großes Symbol + Text
