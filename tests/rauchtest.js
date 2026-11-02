@@ -35,6 +35,10 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       const q = await neueSeite(ctx, `${s || "start"} (${lage})`);
       await q.goto(BASIS + s); await q.waitForTimeout(500);
       if (!(await q.evaluate(() => !!window.__ereignisse && !!(Spielwelt.profil.daten.story)))) fehler.push(`${s || "start"} (${lage}): Ereignisse/Story fehlen`);
+      // (04.11.2026) Emoji-Bilder (span.emo) dürfen von Seitenregeln wie „.x span { width … }“ nicht mitgetroffen werden: kein Hintergrund, nicht breiter als 3 Zeilenhöhen
+      const emoFalsch = await q.evaluate(() => [...document.querySelectorAll(".emo")].filter(e => { const c = getComputedStyle(e), r = e.getBoundingClientRect(); const fs = parseFloat(c.fontSize) || 16;
+        return r.width > 0 && (r.width > fs * 3.2 || (c.backgroundColor !== "rgba(0, 0, 0, 0)" && c.backgroundColor !== "transparent")); }).slice(0, 3).map(e => (e.parentElement.className || e.parentElement.tagName) + ":" + e.textContent.trim()));
+      if (emoFalsch.length) fehler.push(`${s || "start"} (${lage}): Emoji-Bild von einer Seitenregel verzerrt: ${emoFalsch.join(", ")}`);
       // ein Thema/eine Lektion antippen, wo es Kacheln gibt
       const kachel = await q.$(".lek:not(.zu)");
       if (kachel) { await kachel.click(); await q.waitForTimeout(400); const w = await q.$("#weiter"); if (w) { await w.click(); await q.waitForTimeout(300); } }
