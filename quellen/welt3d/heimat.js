@@ -516,6 +516,7 @@ if (!EINFACH && MIT_GRAS) {
 const LANG = ["lang", "wellen", "locken"], KURZ = ["bob", "kurz", "scheitel", "undercut", "igel", "wuschel", "kurzlocken", "afro", "schulterlang"], HOSEN = ["hose", "jeans", "jogging", "leggings", "cargo", "bermuda"];
 // Anzüge aus „Kleider & Anzüge“ (30.10.2026) haben Hosenbeine statt Rock
 const ANZUG = { ritter: "#B8C2CF", astronaut: "#F4F6FA", pirat: "#3A3550", feuerwehr: null, dinokostuem: null };
+const WEISS_AUGE = new MeshBasicMaterial({ color: "#FFFFFF" }), IRIS = new MeshBasicMaterial({ color: "#6B4A2E" });
 function figur(look) {
   const f = new Group(), haut = look.figur.farbe, haarF = (look.haare && look.haare.farbe) || "#8A5A34", haarId = (look.haare && look.haare.id) || "lang";
   const koerper = new Group(); f.add(koerper);
@@ -531,34 +532,36 @@ function figur(look) {
   if (kleid && !anzug) {
     const lang = langesKleid ? 0.5 : 0;
     const profil = [new Vector2(0.01, -lang), new Vector2(0.52 + lang * 0.25, -lang), new Vector2(0.48 + lang * 0.2, 0.15 - lang * 0.5), new Vector2(0.34, 0.55), new Vector2(0.28, 0.8), new Vector2(0.01, 0.85)];
-    koerper.add(setze(teil(new LatheGeometry(profil, 28), unten), 0, 0.42, 0));
-    koerper.add(setze(teil(kugel(0.3, 20, 14), oben), 0, 1.15, 0));
+    koerper.add(setze(teil(new LatheGeometry(profil, 28), unten), 0, 0.56, 0));
+    koerper.add(setze(teil(new CapsuleGeometry(0.27, 0.36, 6, 20), oben), 0, 1.3, 0));
   } else {
     if (!hose && !shorts) {
       const profil = [new Vector2(0.01, 0), new Vector2(0.5, 0), new Vector2(0.46, 0.14), new Vector2(0.31, 0.5), new Vector2(0.01, 0.52)];
-      koerper.add(setze(teil(new LatheGeometry(profil, 28), unten), 0, 0.42, 0));
-    } else koerper.add(setze(teil(new CylinderGeometry(0.29, 0.31, 0.26, 20), unten), 0, 0.8, 0));
-    koerper.add(setze(teil(new CapsuleGeometry(0.27, 0.3, 6, 20), oben), 0, 1.13, 0));
+      koerper.add(setze(teil(new LatheGeometry(profil, 28), unten), 0, 0.56, 0));
+    } else koerper.add(setze(teil(new CylinderGeometry(0.29, 0.31, 0.26, 20), unten), 0, 0.96, 0));
+    koerper.add(setze(teil(new CapsuleGeometry(0.27, 0.36, 6, 20), oben), 0, 1.3, 0));
   }
   // Beine
   const beine = [-0.15, 0.15].map(x => {
-    const b = new Group(); b.position.set(x, 0.48, 0);
+    const b = new Group(); b.position.set(x, 0.92, 0);
     if (!ohneBeine) {
-      b.add(setze(teil(new CapsuleGeometry(0.09, 0.3, 4, 12), haut), 0, -0.22, 0));
-      if (hose || shorts) { const h = teil(new CapsuleGeometry(0.11, shorts ? 0.16 : 0.5, 4, 12), unten); setze(h, 0, shorts ? 0.2 : 0.0, 0); b.add(h); }
-      b.add(setze(teil(kugel(0.13), schuhF, { dicke: 1.12 }), 0, -0.42, 0.05));
+      b.add(setze(teil(new CapsuleGeometry(0.1, 0.62, 4, 12), haut), 0, -0.42, 0));
+      if (hose || shorts) { const h = teil(new CapsuleGeometry(0.12, shorts ? 0.18 : 0.66, 4, 12), unten); setze(h, 0, shorts ? -0.12 : -0.4, 0); b.add(h); }
+      b.add(setze(teil(kugel(0.14), schuhF, { dicke: 1.12 }), 0, -0.84, 0.06));
     }
     koerper.add(b); return b;
   });
   // Arme
   const arme = [-1, 1].map(s => {
-    const a = new Group(); a.position.set(0.33 * s, 1.22, 0);
-    a.add(setze(teil(new CapsuleGeometry(0.08, 0.32, 4, 12), oben), 0, -0.2, 0));
-    a.add(setze(teil(kugel(0.09), haut, { dicke: 1.12 }), 0, -0.44, 0));
-    a.rotation.z = 0.25 * s; koerper.add(a); return a;
+    const a = new Group(); a.position.set(0.32 * s, 1.52, 0);
+    a.add(setze(teil(new CapsuleGeometry(0.085, 0.5, 4, 12), oben), 0, -0.32, 0));
+    a.add(setze(teil(kugel(0.1), haut, { dicke: 1.12 }), 0, -0.66, 0));
+    a.rotation.z = 0.24 * s; koerper.add(a); return a;
   });
   // Kopf und Frisur
-  const kopf = new Group(); kopf.position.y = 1.85; koerper.add(kopf);   // (02.11.2026) wieder normale Kopfgröße statt Kindchenschema
+  // (03.11.2026) Proportionen wie die freigegebene 2D-Figur: Kopf etwa ein Drittel kleiner, längere Beine und Arme, Hände an der Hüfte
+  const kopf = new Group(); kopf.position.y = 2.02; kopf.scale.setScalar(0.72); koerper.add(kopf);
+  koerper.add(setze(teil(new CylinderGeometry(0.1, 0.11, 0.2, 14), haut), 0, 1.66, 0));   // Hals   // (02.11.2026) wieder normale Kopfgröße statt Kindchenschema
   kopf.add(teil(kugel(0.58), haut, { dicke: 1.04 }));
   const kappe = teil(new SphereGeometry(0.62, 28, 20, 0, Math.PI * 2, 0, Math.PI * 0.55), haarF, { dicke: 1.04 });
   kappe.position.set(0, 0.04, -0.04); kappe.rotation.x = -0.35; kopf.add(kappe);
@@ -579,7 +582,13 @@ function figur(look) {
   if ((haarId === "wuschel" || haarId === "kurzlocken") && !bedeckt) { const r = haarId === "wuschel" ? 0.22 : 0.17; [[-0.36, 0.4], [-0.12, 0.55], [0.12, 0.55], [0.36, 0.4], [0, 0.42]].forEach(([x, y]) => haarteil(kugel(r), x, y, 0.2)); }
   if (haarId === "undercut") haarteil(kugel(0.5), 0, 0.42, 0.05, 1, 0.55, 1);
   // Gesicht
-  augen(kopf, 0.2, 0.02, 0.53);
+  // Augen wie die 2D-Figur (03.11.2026): weißes Auge mit brauner Iris, dunkler Pupille und Glanzpunkt – nicht übergroß
+  [-1, 1].forEach(s => {
+    const w = new Mesh(kugel(0.085, 16, 12), WEISS_AUGE); w.scale.set(1.15, 0.8, 0.45); setze(w, 0.2 * s, 0.02, 0.52); kopf.add(w);
+    const iris = new Mesh(kugel(0.052, 14, 10), IRIS); iris.scale.set(1, 1, 0.5); setze(iris, 0.2 * s, 0.015, 0.555); kopf.add(iris);
+    const pupille = new Mesh(kugel(0.027, 10, 8), AUGE); pupille.scale.set(1, 1, 0.5); setze(pupille, 0.2 * s, 0.015, 0.575); kopf.add(pupille);
+    kopf.add(setze(new Mesh(kugel(0.016, 6, 5), new MeshBasicMaterial({ color: "#ffffff" })), 0.2 * s - 0.02, 0.04, 0.585));
+  });
   // Junge/Mädchen (02.11.2026): Mädchen mit Wimpern und feinen Brauen, Jungen mit kräftigen geraden Brauen und breiteren Schultern
   const form = (look.figur && look.figur.form) || (() => { try { return window.Spielwelt.kind().geschlecht; } catch (e) { return "n"; } })();
   [-1, 1].forEach(s => {
@@ -590,7 +599,7 @@ function figur(look) {
       const b = new Mesh(new BoxGeometry(0.13, 0.03, 0.025), AUGE); b.position.set(s * 0.2, 0.13, 0.53); b.rotation.z = s * 0.06; kopf.add(b);
     }
   });
-  if (form === "m") koerper.children.forEach(c => { if (c.geometry && c.geometry.type === "SphereGeometry" && Math.abs(c.position.y - 1.15) < 0.01) c.scale.set(1.14, 1, 1.05); });
+  if (form === "m") koerper.children.forEach(c => { if (c.geometry && c.geometry.type === "CapsuleGeometry" && Math.abs(c.position.y - 1.3) < 0.01) c.scale.set(1.1, 1, 1.05); });
   // (01.11.2026) keine rosa Wangen mehr
   const mund = new Mesh(new TorusGeometry(0.07, 0.018, 6, 12, Math.PI), AUGE); mund.rotation.z = Math.PI; setze(mund, 0, -0.15, 0.55); kopf.add(mund);
   // Extras aus dem Kleiderschrank (eine Auswahl in 3D)
@@ -604,9 +613,9 @@ function figur(look) {
   if (hat("cap")) { const c = farbe("cap", "#3AA0E0"); const k = teil(new SphereGeometry(0.62, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), c); k.scale.set(1, 0.72, 1); kopf.add(setze(k, 0, 0.26, -0.02)); kopf.add(setze(teil(kugel(0.06), c), 0, 0.71, -0.02)); const sch = teil(new CylinderGeometry(0.4, 0.4, 0.05, 20, 1, false, -Math.PI / 2, Math.PI), c); sch.rotation.x = 0.12; setze(sch, 0, 0.3, 0.36); kopf.add(sch); }
   if (hat("piratenhut")) { const c = farbe("piratenhut", "#2E2B47"); const h = teil(new ConeGeometry(0.75, 0.5, 3), c); h.rotation.y = Math.PI; setze(h, 0, 0.62, -0.02); kopf.add(h); }
   if (hat("schleife")) [-1, 1].forEach(s => kopf.add(setze(teil(kugel(0.13), farbe("schleife", "#FF6F9F")), 0.18 * s + 0.35, 0.5, 0.1)));
-  if (hat("fluegel")) [-1, 1].forEach(s => { const fl = teil(kugel(0.45), new MeshToonMaterial({ color: farbe("fluegel", "#BDE7FF"), gradientMap: verlauf, transparent: true, opacity: 0.7 })); fl.scale.set(0.25, 1, 0.6); setze(fl, 0.32 * s, 1.35, -0.38); fl.rotation.z = 0.5 * s; koerper.add(fl); });
-  if (hat("umhang")) { const u = teil(new CylinderGeometry(0.32, 0.6, 1.1, 20, 1, true, Math.PI * 0.6, Math.PI * 0.8), farbe("umhang", "#C2337A")); u.material = u.material.clone(); u.material.side = 2; setze(u, 0, 0.85, 0); koerper.add(u); }
-  if (hat("schal")) { const sc = teil(new TorusGeometry(0.24, 0.08, 10, 24), farbe("schal", "#FF6F61")); setze(sc, 0, 1.38, 0); sc.rotation.x = Math.PI / 2; koerper.add(sc); }
+  if (hat("fluegel")) [-1, 1].forEach(s => { const fl = teil(kugel(0.45), new MeshToonMaterial({ color: farbe("fluegel", "#BDE7FF"), gradientMap: verlauf, transparent: true, opacity: 0.7 })); fl.scale.set(0.25, 1, 0.6); setze(fl, 0.32 * s, 1.5, -0.38); fl.rotation.z = 0.5 * s; koerper.add(fl); });
+  if (hat("umhang")) { const u = teil(new CylinderGeometry(0.32, 0.6, 1.1, 20, 1, true, Math.PI * 0.6, Math.PI * 0.8), farbe("umhang", "#C2337A")); u.material = u.material.clone(); u.material.side = 2; setze(u, 0, 1.05, 0); koerper.add(u); }
+  if (hat("schal")) { const sc = teil(new TorusGeometry(0.24, 0.08, 10, 24), farbe("schal", "#FF6F61")); setze(sc, 0, 1.6, 0); sc.rotation.x = Math.PI / 2; koerper.add(sc); }
   f.userData = { koerper, beine, arme, kopf };
   return f;
 }
