@@ -26,7 +26,7 @@
   const RUMPF = "M114 196 C126 186 174 186 186 196 C194 214 195 238 192 258 C192 278 194 292 193 306 C172 316 128 316 107 306 C106 292 108 278 108 258 C105 238 106 214 114 196 Z";
   const BEIN_L = "M109 298 C104 338 106 374 113 404 C109 424 109 448 115 474 C118 492 120 506 121 516 L144 516 C145 504 148 486 150 466 C152 446 150 422 149 404 C152 372 153 340 152 304 Z";
   const BEIN_R = "M150 304 C151 340 153 372 156 404 C155 424 157 448 162 470 C166 490 171 506 174 516 L197 516 C196 504 196 488 196 468 C198 446 196 422 192 404 C196 372 198 338 192 298 Z";
-  const ARM_L = "M115 197 C100 206 94 234 93 262 C92 288 90 312 89 334 L114 337 C115 314 118 292 120 270 C122 250 126 228 130 208 Z";
+  const ARM_L = "M120 192 C104 192 95 204 93 224 C91 244 92 260 94 272 C92 292 90 312 88 330 L111 334 C113 314 116 294 118 274 C120 258 122 244 124 232 C128 214 128 200 120 192 Z";
   const ARM_R = "M168 194 C195 202 215 224 226 251 C230 263 228 274 218 282 C210 289 203 296 198 302 L180 291 C186 284 193 277 200 268 C193 251 183 236 163 220 Z";
   const HAND_L = "M88 330 C81 339 80 352 83 362 C85 369 87 375 91 377 C94 379 96 377 96 374 C98 379 102 380 104 376 C107 380 111 379 112 374 C115 376 118 372 117 366 C119 356 118 342 115 332 Z";
   const HAND_R = "M199 291 C193 284 181 283 175 290 C170 297 171 308 179 312 C187 316 197 313 201 306 Z";
@@ -37,6 +37,21 @@
     n: "M150 40 C182 40 207 62 207 98 C207 127 198 148 184 162 C173 173 161 178 150 178 C139 178 127 173 116 162 C102 148 93 127 93 98 C93 62 118 40 150 40 Z",
     m: "M150 40 C182 40 207 62 207 98 C207 126 200 146 188 160 C177 172 163 178 150 178 C137 178 123 172 112 160 C100 146 93 126 93 98 C93 62 118 40 150 40 Z"
   };
+
+
+  // Hand (03.11.2026, Rückmeldung „Hände“): Handrücken, vier Finger mit Zwischenräumen und Nägeln, abgesetzter Daumen; Ursprung = Handgelenk,
+  // Finger zeigen nach +y; gedreht und gespiegelt an Arm und Hüfte gesetzt
+  function hand(x, y, winkel, haut, spiegel = 1, gross = 1) {
+    const s = dunkel(haut, 0.16), t = dunkel(haut, 0.32), l = hell(haut, 0.3);
+    const HAND = "M-11 -6 C-11 -4 -11 -3 -11 -2 C-13 6 -14 14 -13 21 C-13 28 -12 34 -8 37 C-5 39 -3 37 -3 34 C-2 39 2 41 4 38 C6 41 10 41 11 37 C13 39 16 37 15 33 C16 26 15 18 14 10 C13 5 12 1 11 -2 Z";
+    const DAUMEN = "M9 5 C13 8 15 14 15 20 C15 24 12 25 10 23 C10 18 10 13 8 10 Z";
+    return `<g transform="translate(${x} ${y}) rotate(${winkel}) scale(${spiegel * gross} ${gross})">` +
+      flaeche(HAND, haut, form("M4 -4 L16 -4 L16 42 L6 42 C8 30 8 14 4 -4 Z", s) + form("M-10 4 C-11 12 -11 20 -10 26 L-7 26 C-8 20 -8 12 -7 4 Z", l, 0.6), { kontur: false }) +
+      strich(HAND.replace(" Z", "")) +   // Kontur ohne Kante am Handgelenk
+      strich("M-3 34 C-3 30 -3 27 -2 25 M4 38 C4 33 4 29 4 26 M11 37 C11 33 10 29 10 26", t, 1.4) +
+      strich("M-9 24 C-5 22 4 22 13 24", t, 1.2, 0.5) +
+      flaeche(DAUMEN, haut, form("M13 9 C15 13 16 18 15 23 L18 23 L18 9 Z", s, 0.8)) + `</g>`;
+  }
 
   function koerper(haut) {
     const s = dunkel(haut, 0.16), t = dunkel(haut, 0.3), l = hell(haut, 0.3);
@@ -52,13 +67,11 @@
       waesche: flaeche("M119 194 L130 192 C136 205 164 205 170 192 L181 194 C191 216 192 250 190 280 L193 306 C172 316 128 316 107 306 L110 280 C108 250 109 216 119 194 Z", "#FFFFFF",
           form("M160 196 C184 214 190 260 188 316 L200 316 L200 196 Z", "#E9E3F2")) +
         flaeche("M107 296 C128 305 172 305 193 296 L196 332 C184 338 168 338 158 336 L151 324 L144 336 C132 338 116 338 105 332 Z", "#FFFFFF", form("M150 300 L196 296 L196 340 L158 340 Z", "#E9E3F2")),
-      // linker Arm: Kontur nur außen und innen ab der Achsel – keine Naht über der Schulter
-      armL: flaeche(ARM_L, haut, form("M120 204 C114 236 113 286 112 340 L130 340 L130 204 Z", s) + form("M102 230 C99 260 98 290 98 320 L103 320 C103 290 104 260 107 230 Z", l, 0.5), { kontur: false }) +
-        strich("M113 198 C100 206 94 234 93 262 C92 288 90 312 89 334") + strich("M123 236 C121 248 120 260 120 270 C118 292 115 314 114 337") +
-        strich("M103 268 C106 272 110 272 113 268", t, 1.4, 0.6) +   // Ellbogen
-        flaeche(HAND_L, haut, form("M106 334 C113 348 115 362 108 376 L122 376 L122 334 Z", s)) +
-        strich("M96 364 L96 374 M104 365 L104 376 M111 364 L111 373", t, 1.4) +
-        flaeche("M114 338 C122 341 124 352 119 359 C116 361 114 358 115 354 Z", haut, form("M117 344 C121 348 121 354 118 358 L116 356 Z", s, 0.8)),   // Daumen
+      // linker Arm (03.11.2026, „Linker Arm auch anpassen“): runde Schulter, kommt hinter dem Rumpf hervor, Ellbogen leicht gebeugt
+      armL: flaeche(ARM_L, haut, form("M112 196 C122 214 120 260 112 340 L130 340 L130 196 Z", s) + form("M99 214 C96 236 96 262 97 296 L102 296 C101 262 101 236 104 214 Z", l, 0.55), { kontur: false }) +
+        strich("M128 208 C126 200 124 194 120 192 C104 192 95 204 93 224 C91 244 92 260 94 272 C92 292 90 312 88 330") + strich("M124 232 C122 244 120 258 118 274 C116 294 113 314 111 334") +
+        strich("M96 268 C99 272 104 273 108 270", t, 1.4, 0.6),
+      handL: hand(99, 330, 4, haut, 1),
       // rechter Arm (Hand an der Hüfte): Oberarm kommt hinter dem Rumpf hervor (armRHinten), Unterarm und Hand liegen davor –
       // so wächst der Arm aus der Schulter statt angesetzt zu wirken (Rückmeldung 03.11.2026: „Der rechte Arm ist angebaut“)
       armRHinten: flaeche("M160 194 C186 192 208 208 220 232 C228 248 228 262 218 270 C208 260 198 248 188 240 C178 232 168 228 160 226 Z", haut,
@@ -67,8 +80,7 @@
           form("M218 250 C224 262 222 274 214 282 L226 286 L232 250 Z", s), { kontur: false }) +
         strich("M224 246 C230 258 228 271 219 280 C211 288 204 295 199 301") + strich("M213 250 C209 258 205 263 200 268 C193 276 187 283 181 290") +
         strich("M213 258 C217 260 219 264 219 268", t, 1.4, 0.6) +
-        flaeche(HAND_R, haut, form("M175 302 C180 310 192 312 201 306 L201 318 L172 318 Z", s)) +
-        strich("M185 291 C183 295 183 300 185 304 M191 290 C189 294 189 299 191 303 M197 293 C195 296 195 300 196 303", t, 1.3),
+        hand(190, 294, 42, haut, -1, 0.95),
       hals: flaeche("M139 160 L139 190 C146 194 154 194 161 190 L161 160 Z", haut, form("M139 160 L161 160 L161 180 C154 186 146 186 139 180 Z", s))
     };
   }
@@ -143,7 +155,7 @@
   function kind({ g = "n", haut = HAUT[1], haar = HAAR[2], frisur, ausdruck = "laecheln", waesche = true } = {}) {
     const k = koerper(haut), h = HAARE[frisur || (g === "m" ? "scheitel" : g === "w" ? "lang" : "bob")](haar);
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 560"><ellipse cx="160" cy="540" rx="74" ry="8" fill="#3B1F63" opacity=".13"/>` +
-      h.hinten + k.armRHinten + k.beine + k.rumpf + (waesche ? k.waesche : "") + k.armL + k.hals + k.armR + kopf(haut, g) + gesicht(g, ausdruck, haut) + h.vorne + `</svg>`;
+      h.hinten + k.armRHinten + k.beine + k.armL + k.rumpf + (waesche ? k.waesche : "") + k.handL + k.hals + k.armR + kopf(haut, g) + gesicht(g, ausdruck, haut) + h.vorne + `</svg>`;
   }
   W.Kind2 = { kind, HAUT, HAAR, AUSDRUECKE: ["laecheln", "lachen", "zwinkern", "staunen", "verliebt", "frech", "cool"] };
 })(window);
