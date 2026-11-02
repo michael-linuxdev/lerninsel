@@ -632,25 +632,29 @@
       return;
     }
     // (04.11.2026) beim ersten Fehler ein kurzer Tipp, wie man es herausfindet (je Schritt-Art), statt nur „Versuch es nochmal“
-    const tipp = lauf.versuche === 1 && schrittJetzt ? (schrittJetzt.hilfe || TIPP_TYP[schrittJetzt.typ] || "") : "";
-    h.textContent = tipp ? `Fast! ${tipp}` : "Fast! Versuch es nochmal.";
+    const tipp = lauf.versuche === 1 && schrittJetzt ? (schrittJetzt.hilfe ? { de: schrittJetzt.hilfe } : TIPP_TYP[schrittJetzt.typ]) : null;
+    h.textContent = tipp ? `Fast! ${tipp.de}` : "Fast! Versuch es nochmal.";
+    if (tipp && S.ht(tipp)) h.insertAdjacentHTML("beforeend", `<br><small lang="ru">${S.esc ? S.esc(S.ht(tipp)) : S.ht(tipp)}</small>`);
     beiFalsch && beiFalsch();
   }
+  // Tipps je Schritt-Art mit russischer Hilfe (Entwurf, nur sichtbar, wenn die Hilfesprache gewählt ist)
+  const E = { ru: "entwurf" };
   const TIPP_TYP = {
-    artikel: "Sprich es laut: der, die oder das – was klingt richtig?",
-    verlaengern: "Mach das Wort länger, wie bei „ein Hund – zwei Hunde“. Dann hörst du es.",
-    silben: "Klatsch das Wort langsam mit. Jeder Klatscher ist eine Silbe.",
-    wortart: "Kann man es anfassen? Namenwort. Kann man es tun? Tunwort. Sagt es, wie etwas ist? Wiewort.",
-    luecke: "Lies den ganzen Satz mit jedem Wort. Welches passt?",
-    wort: "Schau dir das Bild noch einmal genau an.",
-    wo: "Schau genau, wo das Ding im Bild ist.",
-    hoertext: "Hör den Text noch einmal an.",
-    blitz: "Schau auf den Anfang und das Ende vom Wort.",
-    bild: "Hör noch einmal genau hin.",
-    hoeren: "Hör noch einmal genau hin.",
-    ordnen: "Was passiert zuerst? Was danach?",
-    satz: "Lies deinen Satz leise vor. Wer tut etwas? Was tut er?"
+    artikel: { de: "Sprich es laut: der, die oder das – was klingt richtig?", ru: "Скажи вслух: der, die или das – что звучит правильно?", status: E },
+    verlaengern: { de: "Mach das Wort länger, wie bei „ein Hund – zwei Hunde“. Dann hörst du es.", ru: "Сделай слово длиннее, как «ein Hund – zwei Hunde». Тогда ты услышишь.", status: E },
+    silben: { de: "Klatsch das Wort langsam mit. Jeder Klatscher ist eine Silbe.", ru: "Хлопай слово медленно. Каждый хлопок – это слог.", status: E },
+    wortart: { de: "Kann man es anfassen? Namenwort. Kann man es tun? Tunwort. Sagt es, wie etwas ist? Wiewort.", ru: "Можно потрогать? Существительное. Можно делать? Глагол. Говорит, какое что-то? Прилагательное.", status: E },
+    luecke: { de: "Lies den ganzen Satz mit jedem Wort. Welches passt?", ru: "Прочитай всё предложение с каждым словом. Какое подходит?", status: E },
+    wort: { de: "Schau dir das Bild noch einmal genau an.", ru: "Посмотри ещё раз внимательно на картинку.", status: E },
+    wo: { de: "Schau genau, wo das Ding im Bild ist.", ru: "Посмотри внимательно, где эта вещь на картинке.", status: E },
+    hoertext: { de: "Hör den Text noch einmal an.", ru: "Послушай текст ещё раз.", status: E },
+    blitz: { de: "Schau auf den Anfang und das Ende vom Wort.", ru: "Посмотри на начало и конец слова.", status: E },
+    bild: { de: "Hör noch einmal genau hin.", ru: "Послушай ещё раз внимательно.", status: E },
+    hoeren: { de: "Hör noch einmal genau hin.", ru: "Послушай ещё раз внимательно.", status: E },
+    ordnen: { de: "Was passiert zuerst? Was danach?", ru: "Что происходит сначала? Что потом?", status: E },
+    satz: { de: "Lies deinen Satz leise vor. Wer tut etwas? Was tut er?", ru: "Прочитай своё предложение про себя. Кто что делает?", status: E }
   };
+
 
   function weiter() { SP.stopp(); if (aufnahmeEnde) { aufnahmeEnde(); aufnahmeEnde = null; } lauf.pos++; schritt(); }
 
