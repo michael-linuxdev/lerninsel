@@ -244,8 +244,30 @@
     if (richtig) { e.k++; if (e.k >= 2) { e.s = "aufgeloest"; e.k = 0; } }
     return e.s;
   }
+  // Tipps für Eltern (04.11.2026): eine kurze Idee für zu Hause je Denkfehler, ohne Arbeitsblatt
+  const TIPP = {
+    op: "Vor dem Rechnen das Zeichen laut vorlesen lassen: „plus“, „minus“, „mal“.",
+    kleinvongross: "Mit Münzen spielen: Reicht es nicht, wird ein 10-Cent-Stück in zehn 1-Cent-Stücke getauscht.",
+    borgen: "Beim Tauschen sichtbar machen: den getauschten Zehner wirklich wegnehmen (Münze, Stange, Strich).",
+    uebertrag: "Zehn 1-Cent-Münzen gegen ein 10-Cent-Stück tauschen – „aus 10 Einzelnen wird ein Zehner“.",
+    uebertragdoppelt: "Die kleine 1 nach dem Dazurechnen durchstreichen lassen, dann wird sie nicht doppelt gezählt.",
+    stellenwert: "Zahlen mit Geld legen: 34 Cent = drei 10-Cent-Stücke und vier 1-Cent-Stücke.",
+    zaehlen: "Auf einer Treppe oder einem Zahlenstrahl hüpfen: Der erste Sprung geht schon weg von der Startzahl.",
+    malreihe: "Einmaleins-Reihen beim Treppensteigen oder Klatschen mitsprechen (3, 6, 9, …).",
+    malnull: "Ganz konkret fragen: „Dreimal nichts – wie viel ist das?“",
+    geteiltminus: "Geteilt als Verteilen spielen: 12 Gummibärchen gerecht auf 3 Teller verteilen.",
+    geteiltreihe: "Beim Teilen die Reihe mitzählen und die Schritte mit den Fingern zeigen.",
+    dreher: "Zahlen diktieren und zuerst die Zehner schreiben lassen – auch wenn man „zweiundsechzig“ sagt.",
+    zeigervertauscht: "Eine echte Uhr anschauen: erst den kurzen Zeiger suchen, dann den langen.",
+    stundedaneben: "Bei „halb“ zeigen: Der kurze Zeiger steht zwischen zwei Zahlen.",
+    muenzenzaehlen: "Beim Einkaufen echtes Kleingeld zählen lassen, mit der größten Münze anfangen.",
+    linealende: "Gegenstände messen, die nicht bei 0 anfangen, und die Zentimeter-Schritte abzählen.",
+    meter: "Mit einem Zollstock zeigen: 1 Meter hat 100 Zentimeter.",
+    nullvergessen: "Zahlen in eine Tabelle H | Z | E schreiben – leere Felder bekommen eine 0.",
+    falschgerundet: "Beim Einkaufen Preise runden: „Ist 3,47 € näher an 3,40 € oder an 3,50 €?“"
+  };
   const ZUSTAND = { aufgefallen: "einmal aufgefallen", vermutet: "kommt öfter vor", arbeit: "wird geübt", aufgeloest: "aufgelöst ✓", wieder: "ist wieder da" };
-  function liste(d) { return Object.entries(d.fv || {}).filter(([id, e]) => fv(id) && e.s).map(([id, e]) => ({ id, name: fv(id).name, s: e.s, text: ZUSTAND[e.s] })); }
+  function liste(d) { return Object.entries(d.fv || {}).filter(([id, e]) => fv(id) && e.s).map(([id, e]) => ({ id, name: fv(id).name, s: e.s, text: ZUSTAND[e.s], tipp: TIPP[id] || "" })); }
   function kontraste(a, id, zz = Math.random) { const o = lies(a), f = fv(id); return o && f ? [f.kontrast(o, zz), f.kontrast(o, zz)].map(k => Object.assign(k, { kontrast: id })) : []; }
 
   // ---------- Schrittweg: schriftlich plus und minus ----------
@@ -292,5 +314,5 @@
   }
   const stelleName = (i) => STELLE[i];
 
-  W.MatheFehler = { KATALOG, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, zahlwort, uhrAufgabe, geldAufgabe, stellenAufgabe, rundenAufgabe, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
+  W.MatheFehler = { KATALOG, TIPP, lies, erkenne, melde, zaehle, inArbeit, kontrastErgebnis, liste, kontraste, schritte, pruefeSchritt, stelleName, ZUSTAND, zahlwort, uhrAufgabe, geldAufgabe, stellenAufgabe, rundenAufgabe, _h: { ohneUebertrag, kleinVonGross, borgenVergessen, hatUebertrag, hatBorgen } };
 })(typeof window !== "undefined" ? window : globalThis);

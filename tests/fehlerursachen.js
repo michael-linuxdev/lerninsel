@@ -285,6 +285,15 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   erwarte(await p.evaluate(() => /Dein Fehler lag bei den Zehnern/.test(document.getElementById("weg-ende").textContent)), "schriftlich mal: „Dein Fehler lag bei den Zehnern“");
   await weiter();
 
+  // ---------- Elternbereich (04.11.2026): Denkfehler mit Namen, Zustand und Tipp für zu Hause ----------
+  await p.evaluate(() => { window.__elternAlle = true; });
+  await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(400);
+  if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(500); }
+  await p.evaluate(() => { window.__elternAlle = true; if (window.__eltern && __eltern.teil) __eltern.teil("lernstand"); }); await p.waitForTimeout(300);
+  const el = await p.evaluate(() => { const d = document.getElementById("denkfehler-eltern"); return d ? { n: d.querySelectorAll("li").length, t: d.textContent } : null; });
+  erwarte(el && el.n >= 5 && /Zu Hause:/.test(el.t) && /Zahl verdreht/.test(el.t), `Elternbereich: ${el ? el.n : 0} Denkfehler mit Zustand und Tipp „Zu Hause“`);
+  await p.evaluate(() => document.getElementById("denkfehler-eltern").scrollIntoView()); await bild(p, "fu-eltern");
+
   // ---------- Startzahl: gemerkter Fehler nur als Station + Startzahl, beim Training wieder dieselbe Aufgabe ----------
   await p.evaluate(() => { const d = Spielwelt.lade("mathe"); d.weg = "k2"; d.fehler = []; Spielwelt.speichere("mathe", d); });
   await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(400);

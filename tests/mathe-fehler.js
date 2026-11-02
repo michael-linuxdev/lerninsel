@@ -74,6 +74,8 @@ pruefe("Diagnose: aufgefallen → vermutet (2× in 10 Aufgaben) → arbeit → a
   F.zaehle(d); assert.strictEqual(F.melde(d, "uebertrag"), "vermutet", "neuer Treffer in Arbeit setzt zurück");
   assert.strictEqual(d.fv.uebertrag.k, 0);
   assert.ok(JSON.stringify(d).length < 200, "Spielstand bleibt klein");
+  for (const f of F.KATALOG) assert.ok(F.TIPP[f.id] && F.TIPP[f.id].length < 140, `Eltern-Tipp für ${f.id}`);
+  assert.ok(F.liste(d)[0].tipp.length > 10);
   assert.deepStrictEqual(F.liste(d).map(x => x.id), ["uebertrag"]);
 });
 
