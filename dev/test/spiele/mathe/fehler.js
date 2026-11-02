@@ -22,6 +22,7 @@
     if (a.stellen) return { stellen: a.stellen, op: "stellen", c: +a.antwort };   // Kl. 3 (04.11.2026)
     if (a.runden) return { runden: a.runden, op: "runden", c: +a.antwort };
     if (a.lineal) return { lineal: a.lineal, op: "lineal", c: +a.antwort };   // Länge (04.11.2026)
+    if (a.umrechnen) return { umrechnen: a.umrechnen, op: "umrechnen", c: +a.antwort };   // kg → g, km → m, € → ct (04.11.2026)
     if (a.meter) return { meter: a.meter, op: "meter", c: +a.antwort };
     if (a.geld) return { geld: a.geld, op: "geld", c: +a.antwort };   // Geld (04.11.2026): Münzen zählen
     if (a.uhr) return { uhr: a.uhr, op: "uhr", c: a.antwort };   // Uhr (04.11.2026): Auswahl-Aufgabe mit Stunde/Minute
@@ -210,6 +211,14 @@
       kurz: (o) => o.runden % 10 >= 5 ? `Hinten steht ${o.runden % 10}. Ab 5 geht es hoch.` : `Hinten steht ${o.runden % 10}. Unter 5 geht es runter.`,
       lang: (o) => [`Schau auf die letzte Zahl: ${o.runden % 10}.`, o.runden % 10 >= 5 ? `Das ist 5 oder mehr. Dann geht es zum nächsten Zehner hoch.` : `Das ist weniger als 5. Dann bleibt der Zehner.`, `Darum ist ${o.runden} ungefähr ${o.c}.`],
       kontrast: (o, zz) => rundenAufgabe(zz, o.runden % 10 >= 5) });
+  // Einheiten (04.11.2026): 1 kg = 1000 g, nicht 100 g – eine Null zu wenig oder zu viel
+  const WORT = { kg: "Kilogramm", g: "Gramm", km: "Kilometer", m: "Meter", "€": "Euro", ct: "Cent" };
+  KATALOG.push({ id: "umrechnen", name: "Einheiten: eine Null zu wenig oder zu viel (1 kg = 100 g)",
+    erkenne: (o, w) => !!o.umrechnen && w !== o.c && [o.umrechnen.n * o.umrechnen.f / 10, o.umrechnen.n * o.umrechnen.f * 10, o.umrechnen.n].includes(w),
+    kurz: (o) => `1 ${WORT[o.umrechnen.von]} sind ${o.umrechnen.f} ${WORT[o.umrechnen.nach]}.`,
+    lang: (o) => { const u = o.umrechnen; return [`Zähl die Nullen genau.`, `1 ${WORT[u.von]} sind ${u.f} ${WORT[u.nach]}.`, `${u.n}-mal ${u.f} sind ${u.n * u.f}. Also ${u.n * u.f} ${u.nach}.`]; },
+    kontrast: (o, zz) => { const u = o.umrechnen; let n; do { n = r(zz, 2, 9); } while (n === u.n);
+      return { text: "", frage: `Wie viele ${WORT[u.nach]} sind ${n} ${u.von}?`, antwort: String(n * u.f), art: "zahl", einheit: u.nach, nurLuecke: true, max: 7, umrechnen: Object.assign({}, u, { n }), hilfe: `1 ${u.von} sind ${u.f} ${u.nach}. ${n} ${u.von} sind ${n * u.f} ${u.nach}.` }; } });
   const fv = (id) => KATALOG.find(f => f.id === id);
   // Aufgabe in derselben Form wie zahl() in aufgaben.js
   function zr(op, a, b, hilfe) {
@@ -264,6 +273,7 @@
     linealende: "Gegenstände messen, die nicht bei 0 anfangen, und die Zentimeter-Schritte abzählen.",
     meter: "Mit einem Zollstock zeigen: 1 Meter hat 100 Zentimeter.",
     nullvergessen: "Zahlen in eine Tabelle H | Z | E schreiben – leere Felder bekommen eine 0.",
+    umrechnen: "Beim Einkaufen und Wiegen fragen: „Wie viel Gramm sind 1 Kilo?“ – Packungen mit 1000 g zeigen.",
     falschgerundet: "Beim Einkaufen Preise runden: „Ist 3,47 € näher an 3,40 € oder an 3,50 €?“"
   };
   const ZUSTAND = { aufgefallen: "einmal aufgefallen", vermutet: "kommt öfter vor", arbeit: "wird geübt", aufgeloest: "aufgelöst ✓", wieder: "ist wieder da" };

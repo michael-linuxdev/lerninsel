@@ -652,7 +652,7 @@
       neu: () => { const a = r(300, 999), b = r(110, a - 50); return zahl(`${a} ${M} ${b}`, a - b, `Erst die Hunderter abziehen: ${a} ${M} ${Math.floor(b / 100) * 100} = ${a - Math.floor(b / 100) * 100}. Dann den Rest: ${a - b}.`); } },
     { id: "k3gewicht", stufe: "3", lz: ["ma.gm.08"], name: "Gramm und Kilogramm", icon: "⚖️",
       neu: () => {
-        if (zz() < 0.5) { const kg = r(1, 9); return zahl("", kg * 1000, `1 kg sind 1000 g. ${kg} kg sind ${kg * 1000} g.`, { frage: `Wie viel Gramm sind ${kg} kg?`, einheit: "g", nurLuecke: true, max: 7 }); }
+        if (zz() < 0.5) { const kg = r(1, 9); return Object.assign(zahl("", kg * 1000, `1 kg sind 1000 g. ${kg} kg sind ${kg * 1000} g.`, { frage: `Wie viel Gramm sind ${kg} kg?`, einheit: "g", nurLuecke: true, max: 7 }), { umrechnen: { n: kg, f: 1000, von: "kg", nach: "g" } }); }
         const d = wahl([["eine Feder", "g"], ["ein Apfel", "g"], ["ein Fahrrad", "kg"], ["ein Hund", "kg"], ["ein Brief", "g"], ["ein Kind", "kg"]]);
         return { text: "", frage: `Wiegt man ${d[0]} eher in g oder in kg?`, antwort: d[1], art: "wahl", optionen: ["g", "kg"], nurLuecke: true,
           hilfe: d[1] === "g" ? `${d[0]} ist leicht – man wiegt in Gramm.` : `${d[0]} ist schwer – man wiegt in Kilogramm.` };
@@ -669,7 +669,7 @@
         return zahl("", erg, `${n} : ${art[1]} = ${teil}${art[0] === "drei Viertel" ? `, dreimal so viel: ${erg}` : ""}.`, { frage: `Wie viel ist ${art[0]} von ${n}?`, nurLuecke: true }); } },
     { id: "k3laenge", stufe: "3", lz: ["ma.gm.05", "ma.gm.09"], name: "Meter und Kilometer", icon: "🛣️",
       neu: () => {
-        if (zz() < 0.5) { const km = r(1, 9); return zahl("", km * 1000, `1 km sind 1000 m. ${km} km sind ${km * 1000} m.`, { frage: `Wie viele Meter sind ${km} km?`, einheit: "m", nurLuecke: true, max: 7 }); }
+        if (zz() < 0.5) { const km = r(1, 9); return Object.assign(zahl("", km * 1000, `1 km sind 1000 m. ${km} km sind ${km * 1000} m.`, { frage: `Wie viele Meter sind ${km} km?`, einheit: "m", nurLuecke: true, max: 7 }), { umrechnen: { n: km, f: 1000, von: "km", nach: "m" } }); }
         const d = wahl([["der Weg zur Nachbarstadt", "km"], ["die Länge eines Klassenzimmers", "m"], ["die Höhe eines Hauses", "m"], ["eine Fahrt mit dem Zug", "km"], ["ein Lauf um den Sportplatz", "m"]]);
         return { text: "", frage: `Misst man ${d[0]} eher in m oder in km?`, antwort: d[1], art: "wahl", optionen: ["m", "km"], nurLuecke: true,
           hilfe: d[1] === "km" ? `${d[0]} ist sehr lang – man misst in Kilometern.` : `${d[0]} – das misst man in Metern.` };
@@ -1213,7 +1213,7 @@
     { id: "euro", lb: "gm", lz: ["ma.gm.04", "ma.gm.02"], name: "Euro und Cent", icon: "💶",
       neu: () => {
         const art = r(1, 7);
-        if (art === 1) { const e = r(1, 9); return zahl(`${e} € = ? ct`, e * 100, `1 € sind 100 ct, also sind ${e} € ${e * 100} ct.`); }
+        if (art === 1) { const e = r(1, 9); return Object.assign(zahl(`${e} € = ? ct`, e * 100, `1 € sind 100 ct, also sind ${e} € ${e * 100} ct.`), { umrechnen: { n: e, f: 100, von: "€", nach: "ct" } }); }
         if (art === 2) { const e = r(1, 9), c = r(1, 19) * 5; return zahl(`${e} € ${c} ct = ? ct`, e * 100 + c, `${e} € sind ${e * 100} ct, dazu ${c} ct: ${e * 100 + c} ct.`); }
         if (art === 3) { const e = r(1, 9), c = wahl([5, 10, 20, 25, 50, 75, 90, 8]);
           return wahlAufgabe(`Wie schreibt man ${e} € ${c} ct mit Komma?`, euro(e * 100 + c), [euro(e * 100 + (c < 10 ? c * 10 : c % 10 ? (c % 10) * 10 + Math.floor(c / 10) : c / 10)), `${e}${c},00 €`, euro((e + 1) * 100 + c)], `Nach dem Komma stehen immer zwei Ziffern für die Cent: ${euro(e * 100 + c)}.`); }
