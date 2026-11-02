@@ -180,10 +180,209 @@
     tuell: { rock: { lang: 396, weit: 22, tuell: true } }, cargo: { hose: { bis: 520, cargo: true } }, bermuda: { hose: { bis: 452, cargo: true } }
   };
 
+
+  // ---------- Kleider und Kostüme ----------
+  // Ein Kleid hat unten (Rock/Beine, liegt unter den Armen) und oben (Oberteil mit Ärmeln, liegt über den Armen)
+  const BUCHSTABEN = (c) => ["A", "B", "C", "D", "E", "F"].map((b, i) => `<text x="${108 + (i % 3) * 32}" y="${260 + Math.floor(i / 3) * 70}" font-size="20" font-weight="700" fill="${akzent(c)}" font-family="Fredoka, sans-serif">${b}</text>`).join("");
+  const BLUMEN = (c) => Array.from({ length: 16 }, (_, i) => { const x = 100 + (i * 41) % 110, y = 230 + (i * 37) % 170; return [0, 72, 144, 216, 288].map(w => `<circle cx="${x + Math.cos(w * Math.PI / 180) * 4}" cy="${y + Math.sin(w * Math.PI / 180) * 4}" r="3.4" fill="${i % 2 ? "#FFFFFF" : "#FFD84D"}"/>`).join("") + `<circle cx="${x}" cy="${y}" r="2.4" fill="${i % 2 ? "#FFD84D" : "#FF6F61"}"/>`; }).join("");
+  function kleid(art) {
+    const oben = (c) => oberteil({ aermel: art.aermel || "ohne", ausschnitt: art.ausschnitt ?? 6, muster: art.muster, saum: 304, motiv: art.motiv })(c);
+    const unten = (c) => rock({ lang: art.lang || 420, weit: art.weit ?? 16, muster: art.muster, tuell: art.tuell })(c);
+    return { oben, unten };
+  }
+  // Ganzkörper-Kostüme: Oberteil (lang) + Hose aus denselben Bausteinen, dazu eigene Details
+  function kostuem(art) {
+    const oben = (c) => oberteil({ aermel: "lang", buendchen: true, ...(art.oben || {}) })(art.farbeOben || c) + (art.obenExtra ? art.obenExtra(c) : "");
+    const unten = (c) => hose({ bis: 520, ...(art.unten || {}) })(art.farbeUnten || c) + (art.untenExtra ? art.untenExtra(c) : "");
+    return { oben, unten };
+  }
+  const meerjungfrau = (c) => {
+    const s = dunkel(c, 0.22), l = hell(c, 0.35);
+    const d = "M110 296 C130 304 170 304 190 296 C196 340 194 400 184 450 C176 488 164 510 160 522 C176 518 196 524 206 540 C184 548 162 546 150 536 C138 546 116 548 94 540 C104 524 124 518 140 522 C136 510 124 488 116 450 C106 400 104 340 110 296 Z";
+    const schuppen = Array.from({ length: 30 }, (_, i) => { const x = 116 + (i % 6) * 14 + (Math.floor(i / 6) % 2) * 7, y = 320 + Math.floor(i / 6) * 34; return `<path d="M${x - 7} ${y} C${x - 7} ${y + 8} ${x + 7} ${y + 8} ${x + 7} ${y}" fill="none" stroke="${l}" stroke-width="2"/>`; }).join("");
+    return flaeche(d, c, schuppen + form("M150 300 C166 360 170 440 160 522 L210 540 L210 300 Z", s, 0.6) + form("M120 330 C116 380 118 420 126 460 L132 460 C126 420 124 380 126 330 Z", l, 0.5)) +
+      strich("M150 522 L150 536 M140 524 C134 530 120 536 106 538 M160 524 C166 530 180 536 194 538", dunkel(c, 0.35), 1.6, 0.7);
+  };
+  const KLEIDER = {
+    sommer: kleid({ aermel: "ohne", lang: 410 }), blumen: kleid({ aermel: "kurz", lang: 414, muster: "blumen" }),
+    latzkleid: { oben: (c) => oberteil({ aermel: "kurz" })("#FFFFFF") + flaeche("M126 238 L174 238 L178 300 L122 300 Z", c, form("M164 238 L174 238 L178 300 L168 300 Z", dunkel(c, 0.2))) +
+        strich("M128 240 L126 196 M172 240 L174 196", c, 7) + `<circle cx="130" cy="244" r="3.4" fill="#FFD84D" stroke="${KF}" stroke-width="1.4"/><circle cx="170" cy="244" r="3.4" fill="#FFD84D" stroke="${KF}" stroke-width="1.4"/>` +
+        flaeche("M138 256 L162 256 L162 276 L138 276 Z", dunkel(c, 0.08)),
+      unten: (c) => rock({ lang: 404, weit: 12 })(c) },
+    fee: kleid({ aermel: "ohne", lang: 402, weit: 26, tuell: true, muster: "glitzer" }), ball: kleid({ aermel: "kurz", lang: 520, weit: 46, muster: "glitzer", tuell: true }),
+    buchstabenkleid: kleid({ aermel: "kurz", lang: 412, muster: "buchstaben" }), glitzer: kleid({ aermel: "ohne", lang: 410, muster: "glitzer" }),
+    regenbogenkleid: kleid({ aermel: "kurz", lang: 412, muster: "regenbogen" }),
+    meerjungfrau: { oben: (c) => oberteil({ aermel: "ohne", muster: "glitzer", saum: 304 })(c), unten: meerjungfrau, ohneBeine: true },
+    ritter: kostuem({ farbeOben: "#B8C2CF", farbeUnten: "#6B7280", oben: { muster: "kette" }, obenExtra: (c) => flaeche("M124 220 L176 220 L176 300 C166 312 134 312 124 300 Z", c, form("M150 220 L176 220 L176 300 L150 310 Z", dunkel(c, 0.18))) + flaeche("M138 238 L162 238 L162 256 C162 268 150 276 150 276 C150 276 138 268 138 256 Z", "#FFD84D") }),
+    astronaut: kostuem({ farbeOben: "#F4F6FA", farbeUnten: "#F4F6FA", obenExtra: () => flaeche("M128 236 L172 236 L172 268 L128 268 Z", "#4FA8F0", `<circle cx="140" cy="252" r="5" fill="#FF6F61"/><circle cx="160" cy="252" r="5" fill="#FFD84D"/>`) + `<g transform="${AL}">${flaeche("M86 224 L102 224 L102 240 L86 240 Z", "#E8463B")}</g>`,
+      untenExtra: () => strich("M104 304 L196 304", "#9AA3B2", 6) + strich("M116 440 L142 440", "#9AA3B2", 4) + `<g transform="${BR}">${strich("M158 440 L184 440", "#9AA3B2", 4)}</g>` }),
+    pirat: kostuem({ farbeOben: "#FFFFFF", farbeUnten: "#3A3442", oben: { muster: "streifen" }, unten: { bis: 470 },
+      obenExtra: (c) => flaeche("M112 196 L136 190 L140 300 L110 300 Z", c) + flaeche("M188 196 L164 190 L160 300 L190 300 Z", c) + flaeche("M108 292 L192 292 L192 308 L108 308 Z", "#E8463B"),
+      untenExtra: () => "" }),
+    feuerwehr: kostuem({ farbeOben: "#2E3A59", farbeUnten: "#2E3A59", obenExtra: () => strich("M108 286 L192 286", "#FFD84D", 7) + `<g transform="${AL}">${strich("M84 318 L106 318", "#FFD84D", 6)}</g><g transform="${AR}">${strich("M194 318 L216 318", "#FFD84D", 6)}</g>`,
+      untenExtra: () => strich("M110 480 L144 480", "#FFD84D", 6) + `<g transform="${BR}">${strich("M156 480 L192 480", "#FFD84D", 6)}</g>` }),
+    dinokostuem: kostuem({ oben: { kapuze: true }, obenExtra: (c) => flaeche("M128 230 C126 260 130 296 150 304 C170 296 174 260 172 230 Z", hell(c, 0.45)) +
+        [0, 1, 2, 3].map(i => flaeche(`M${190 + i * 2} ${206 + i * 24} l14 8 l-12 10 Z`, dunkel(c, 0.2))).join(""),
+      untenExtra: (c) => flaeche("M186 300 C214 310 236 330 246 360 C232 350 214 344 196 342 Z", c, form("M196 330 C216 334 232 344 246 360 L246 370 L196 344 Z", dunkel(c, 0.2))) })
+  };
+  MUSTER.blumen = BLUMEN; MUSTER.buchstaben = BUCHSTABEN;
+  MUSTER.kette = (c) => Array.from({ length: 60 }, (_, i) => `<circle cx="${70 + (i % 12) * 14 + (Math.floor(i / 12) % 2) * 7}" cy="${200 + Math.floor(i / 12) * 14}" r="4.5" fill="none" stroke="${dunkel(c, 0.3)}" stroke-width="1.6"/>`).join("") +
+    Array.from({ length: 60 }, (_, i) => `<circle cx="${70 + (i % 12) * 14 + (Math.floor(i / 12) % 2) * 7}" cy="${270 + Math.floor(i / 12) * 14}" r="4.5" fill="none" stroke="${dunkel(c, 0.3)}" stroke-width="1.6"/>`).join("");
+
+  // ---------- Schuhe ----------
+  // Fuß links ungedreht, rechts mit der Bein-Drehung; Stiefel bekommen einen Schaft aus dem Bein-Stück
+  const SCHUH_L = "M103 529 C103 516 114 508 127 508 C139 508 148 514 149 524 C150 534 148 541 140 543 L110 543 C104 543 101 537 103 529 Z";
+  const SCHUH_R = "M197 529 C197 516 186 508 173 508 C161 508 152 514 151 524 C150 534 152 541 160 543 L190 543 C196 543 199 537 197 529 Z";
+  function schuh(art) {
+    return (c) => {
+      const s = dunkel(c, 0.22), l = hell(c, 0.4), sohle = art.sohle || "#FFFFFF";
+      const paar = (d, rechts) => {
+        let g = flaeche(d, c, form(rechts ? "M150 528 L200 528 L200 546 L150 546 Z" : "M100 528 L150 528 L150 546 L100 546 Z", s, 0.55) +
+          form(rechts ? "M178 512 C188 514 192 520 192 526 L186 526 C186 520 184 516 176 514 Z" : "M122 512 C112 514 108 520 108 526 L114 526 C114 520 116 516 124 514 Z", l, 0.7));
+        if (art.sohle !== "keine") g += flaeche(rechts ? "M150 536 L198 536 C199 541 196 545 190 545 L158 545 C152 545 149 541 150 536 Z" : "M102 536 L150 536 C151 541 148 545 142 545 L110 545 C104 545 101 541 102 536 Z", sohle, "", { kw: 2.4 });
+        if (art.schnuer) g += strich(rechts ? "M164 514 l10 4 M166 520 l10 4" : "M136 514 l-10 4 M134 520 l-10 4", "#FFFFFF", 2.4);
+        if (art.schleife) g += `<circle cx="${rechts ? 160 : 140}" cy="512" r="4" fill="${l}" stroke="${KF}" stroke-width="1.6"/>`;
+        if (art.glitzer) g += [0, 1, 2, 3, 4].map(i => `<circle cx="${(rechts ? 160 : 112) + i * 7}" cy="${520 + (i % 2) * 6}" r="1.8" fill="#fff"/>`).join("");
+        if (art.stollen) g += [0, 1, 2, 3].map(i => `<rect x="${(rechts ? 156 : 106) + i * 11}" y="544" width="5" height="6" rx="1.5" fill="${KF}"/>`).join("");
+        if (art.rollen) g += [0, 1].map(i => `<circle cx="${(rechts ? 164 : 116) + i * 22}" cy="551" r="6" fill="#FFD84D" stroke="${KF}" stroke-width="2.4"/>`).join("") + strich(rechts ? "M156 545 L192 545" : "M108 545 L144 545", "#9AA3B2", 4);
+        if (art.riemen) g = strich(rechts ? "M156 516 L194 524 M154 530 L196 532" : "M144 516 L106 524 M146 530 L104 532", c, 6) + strich(rechts ? "M156 516 L194 524 M154 530 L196 532" : "M144 516 L106 524 M146 530 L104 532", KF, 1.4, 0.6) +
+          flaeche(rechts ? "M150 538 L198 538 C199 542 196 545 190 545 L158 545 C152 545 149 542 150 538 Z" : "M102 538 L150 538 C151 542 148 545 142 545 L110 545 C104 545 101 542 102 538 Z", dunkel(c, 0.3), "", { kw: 2.2 });
+        if (art.hase) g += flaeche(rechts ? "M164 512 C160 494 164 484 168 486 C172 488 172 500 170 512 Z M176 512 C176 494 182 486 186 490 C188 494 184 504 180 514 Z" : "M136 512 C140 494 136 484 132 486 C128 488 128 500 130 512 Z M124 512 C124 494 118 486 114 490 C112 494 116 504 120 514 Z", c, form(rechts ? "M166 494 L168 494 L168 508 L166 508 Z" : "M132 494 L134 494 L134 508 L132 508 Z", "#FFB3C7")) +
+          `<circle cx="${rechts ? 168 : 132}" cy="522" r="2" fill="${KF}"/><circle cx="${rechts ? 180 : 120}" cy="522" r="2" fill="${KF}"/>`;
+        return rechts ? `<g transform="${BR}">${g}</g>` : g;
+      };
+      const schaft = art.schaft ? stueck(T.beine, [[`M60 ${art.schaft} L150 ${art.schaft} L150 545 L60 545 Z`], [`M150 ${art.schaft} L240 ${art.schaft} L240 545 L150 545 Z`, BR]], c,
+        form("M136 470 L156 470 L156 545 L136 545 Z", s, 0.6) + `<g transform="${BR}">${form("M176 470 L200 470 L200 545 L176 545 Z", s)}</g>` + (art.glanz ? strich("M114 " + (art.schaft + 10) + " L116 520", l, 4, 0.8) : ""),
+        strich(`M104 ${art.schaft} L152 ${art.schaft}`, KF, KW) + `<g transform="${BR}">${strich(`M148 ${art.schaft} L200 ${art.schaft}`, KF, KW)}</g>`) : "";
+      return schaft + paar(SCHUH_L, false) + paar(SCHUH_R, true);
+    };
+  }
+  const SCHUHE = {
+    turn: { schnuer: true }, ballerina: { schleife: true, sohle: "keine" }, glitzerschuhe: { schleife: true, glitzer: true, sohle: "keine" }, sandalen: { riemen: true },
+    stiefel: { schaft: 466, sohle: "#5C3A21" }, gummi: { schaft: 478, glanz: true, sohle: "#3A3442" }, rollschuhe: { schaft: 500, schnuer: true, rollen: true },
+    hasen: { hase: true, sohle: "#FFE3EC" }, fussballschuhe: { stollen: true, schnuer: true, sohle: "#2E2B47" }, sneaker: { schaft: 498, schnuer: true }
+  };
+
+
+  // ---------- Frisuren ----------
+  // Kopf: Mitte (150, 108), Schädel oben y 40, Seiten x 93/207, Kinn 178. Jede Frisur hat hinten (hinter Körper und Kopf) und vorne (über dem Kopf).
+  const H = K.HAARE;
+  const glanz = (f) => form("M112 52 C124 40 142 34 158 34 C138 44 126 54 118 68 Z", hell(f, 0.45), 0.8);
+  const kappe = (f, rand) => flaeche(`M92 112 C85 58 118 30 152 30 C186 30 216 56 208 112 ${rand} Z`, f, form("M162 32 C194 40 214 64 208 112 L196 112 L180 32 Z", dunkel(f, 0.2)) + glanz(f));
+  const RAENDER = {
+    pony: "C204 98 198 88 188 82 C170 90 150 92 128 88 C114 92 102 100 92 112",
+    seite: "C204 96 198 84 188 76 C176 86 154 94 120 88 C108 94 100 102 92 112",
+    mitte: "C204 98 196 84 182 76 C170 76 158 66 152 56 C146 66 132 76 118 78 C104 84 96 98 92 112",
+    zacken: "C207 100 204 92 199 86 L195 94 L189 79 L179 89 L173 73 L161 85 L154 70 L141 86 L133 74 L121 91 L113 81 L106 97 C100 102 95 108 92 112",
+    wuschel: "C210 104 206 98 202 94 L198 100 L192 88 L184 96 L180 82 L170 92 L164 78 L156 92 L148 76 L140 92 L132 80 L124 94 L116 84 L110 100 L102 96 C98 104 94 108 92 112",
+    locken: "C212 104 204 96 198 96 C196 88 188 84 182 88 C178 80 170 78 164 84 C158 76 148 76 142 84 C136 78 126 80 122 88 C114 84 106 90 106 96 C98 96 92 104 92 112"
+  };
+  const zopf = (x, y, n, f, rechts) => Array.from({ length: n }, (_, i) => flaeche(`M${x - 11 + (rechts ? 1 : -1) * i * 0.6} ${y + i * 20} C${x - 13} ${y + i * 20 + 10} ${x - 9} ${y + i * 20 + 20} ${x} ${y + i * 20 + 22} C${x + 9} ${y + i * 20 + 20} ${x + 13} ${y + i * 20 + 10} ${x + 11} ${y + i * 20} C${x + 6} ${y + i * 20 - 4} ${x - 6} ${y + i * 20 - 4} ${x - 11} ${y + i * 20} Z`, i % 2 ? dunkel(f, 0.08) : f, form(`M${x} ${y + i * 20} L${x + 14} ${y + i * 20} L${x + 14} ${y + i * 20 + 24} L${x} ${y + i * 20 + 24} Z`, dunkel(f, 0.2)))).join("");
+  const band = (x, y, c = "#FF6F61") => `<ellipse cx="${x}" cy="${y}" rx="9" ry="6" fill="${c}" stroke="${KF}" stroke-width="2.4"/>`;
+  const dutt = (x, y, r, f) => flaeche(`M${x - r} ${y} C${x - r} ${y - r * 1.2} ${x + r} ${y - r * 1.2} ${x + r} ${y} C${x + r} ${y + r * 1.1} ${x - r} ${y + r * 1.1} ${x - r} ${y} Z`, f, form(`M${x} ${y - r} L${x + r + 2} ${y - r} L${x + r + 2} ${y + r} L${x} ${y + r} Z`, dunkel(f, 0.2)) + strich(`M${x - r * 0.6} ${y - r * 0.2} C${x - r * 0.2} ${y - r * 0.6} ${x + r * 0.3} ${y - r * 0.5} ${x + r * 0.6} ${y}`, dunkel(f, 0.35), 1.6, 0.7));
+  // Locken-Wolke (Afro, Puffs): Kreis aus weichen Bögen
+  const puff = (x, y, r, f) => {
+    const n = Math.max(10, Math.round(r / 4)), pt = (w, rr) => [(x + Math.cos(w) * rr).toFixed(1), (y + Math.sin(w) * rr).toFixed(1)];
+    let d = `M${pt(0, r).join(" ")}`;
+    for (let i = 0; i < n; i++) { const w0 = i * 2 * Math.PI / n, w1 = (i + 1) * 2 * Math.PI / n; d += ` Q${pt((w0 + w1) / 2, r + r * 0.16).join(" ")} ${pt(w1, r).join(" ")}`; }
+    return flaeche(d + " Z", f, form(`M${x + r * 0.15} ${y - r - 8} L${x + r + 10} ${y - r - 8} L${x + r + 10} ${y + r + 8} L${x + r * 0.15} ${y + r + 8} Z`, dunkel(f, 0.2)) +
+      Array.from({ length: Math.round(r / 6) }, (_, i) => { const [cx, cy] = pt(i * 2.4, r * 0.55); return strich(`M${cx - 5} ${cy} C${cx - 5} ${cy - 6} ${+cx + 5} ${cy - 6} ${+cx + 5} ${cy}`, dunkel(f, 0.32), 1.4, 0.6); }).join(""), { kw: 2.6 });
+  };
+  const lockenHinten = (f, bis) => flaeche(`M90 90 ${Array.from({ length: 9 }, (_, i) => `C${78 - (i % 2) * 6} ${100 + i * (bis - 100) / 9} ${78 - (i % 2) * 6} ${100 + (i + 1) * (bis - 100) / 9} 90 ${100 + (i + 1) * (bis - 100) / 9}`).join(" ")} L210 ${bis} ${Array.from({ length: 9 }, (_, i) => `C${222 + (i % 2) * 6} ${bis - i * (bis - 100) / 9} ${222 + (i % 2) * 6} ${bis - (i + 1) * (bis - 100) / 9} 210 ${bis - (i + 1) * (bis - 100) / 9}`).join(" ")} Z`, dunkel(f, 0.12), form("M150 80 L150 300 L240 300 L240 80 Z", dunkel(f, 0.28)));
+  const FRISUR = {
+    lang: (f) => H.lang(f), scheitel: (f) => H.scheitel(f), bob: (f) => H.bob(f),
+    wellen: (f) => ({ hinten: lockenHinten(f, 262), vorne: H.lang(f).vorne }),
+    zoepfe: (f) => ({ hinten: zopf(84, 132, 6, f) + zopf(216, 132, 6, f, true) + band(84, 254) + band(216, 254), vorne: kappe(f, RAENDER.mitte) }),
+    seitenzopf: (f) => ({ hinten: zopf(204, 140, 7, f, true) + band(206, 282, "#5CCBA6"), vorne: kappe(f, RAENDER.seite) }),
+    dutt: (f) => ({ hinten: dutt(150, 36, 24, f) + band(150, 58, "#FF9BC8"), vorne: kappe(f, RAENDER.mitte) }),
+    spacebuns: (f) => ({ hinten: dutt(110, 44, 20, f) + dutt(190, 44, 20, f), vorne: kappe(f, RAENDER.pony) }),
+    kurz: (f) => ({ hinten: "", vorne: kappe(f, RAENDER.pony) }),
+    locken: (f) => ({ hinten: lockenHinten(f, 220), vorne: kappe(f, RAENDER.locken) }),
+    puffs: (f) => ({ hinten: puff(92, 52, 26, f) + puff(208, 52, 26, f), vorne: kappe(f, RAENDER.mitte) }),
+    pferd: (f) => ({ hinten: flaeche("M196 76 C226 80 236 120 228 170 C224 200 214 220 206 232 C210 200 212 160 204 120 Z", dunkel(f, 0.08), form("M216 90 C230 120 228 170 210 228 L236 228 L236 90 Z", dunkel(f, 0.22))) + band(200, 82, "#7B55B8"), vorne: kappe(f, RAENDER.seite) }),
+    igel: (f) => ({ hinten: "", vorne: flaeche("M92 112 C86 76 96 52 108 40 L112 22 L124 36 L134 16 L144 32 L154 12 L162 30 L174 16 L180 34 L194 24 L194 44 C210 60 214 86 208 112 C204 100 198 92 192 88 C170 92 140 92 108 88 C100 94 96 102 92 112 Z", f, form("M170 30 L194 24 L194 44 C210 60 214 86 208 112 L196 112 Z", dunkel(f, 0.2)) + glanz(f)) }),
+    wuschel: (f) => ({ hinten: "", vorne: kappe(f, RAENDER.wuschel) }),
+    kurzlocken: (f) => ({ hinten: "", vorne: kappe(f, RAENDER.locken) + [[118, 52], [138, 42], [160, 42], [180, 52]].map(([x, y]) => strich(`M${x - 6} ${y} C${x - 6} ${y - 7} ${x + 6} ${y - 7} ${x + 6} ${y}`, dunkel(f, 0.35), 1.6, 0.7)).join("") }),
+    afro: (f) => ({ hinten: puff(150, 80, 72, f), vorne: kappe(f, RAENDER.locken) }),
+    undercut: (f) => ({ hinten: "", vorne: flaeche("M100 104 C96 80 100 66 108 60 L192 60 C200 66 204 80 200 104 Z", dunkel(f, 0.35), "", { kw: 2 }) +
+      flaeche("M100 76 C98 46 124 26 156 28 C188 30 210 52 204 80 C190 70 176 68 160 70 C136 72 116 70 100 76 Z", f, form("M164 30 C194 36 210 56 204 80 L192 74 L180 30 Z", dunkel(f, 0.2)) + glanz(f)) }),
+    schulterlang: (f) => ({ hinten: flaeche("M94 90 C86 130 88 180 98 214 C120 222 180 222 202 214 C212 180 214 130 206 90 Z", dunkel(f, 0.15), form("M150 80 L150 230 L220 230 L220 80 Z", dunkel(f, 0.3))), vorne: H.lang(f).vorne })
+  };
+
   // ---------- Listen (Namen, Preise, Belohnungen, „für wen“ aus teile.js) ----------
   const mit = (alt, neu) => alt.map(t => Object.assign({}, t, neu(t) || {}));
   const oberteile = mit(P.oberteile, (t) => { const f = OBEN[t.id] ? oberteil(OBEN[t.id]) : oberteil({ aermel: "kurz" }); return { rumpf: f, aermel: () => "", teil: f }; });
   const unterteile = mit(P.unterteile, (t) => { const a = UNTEN[t.id] || { hose: {} }, f = a.rock ? rock(a.rock) : hose(a.hose); return { teil: f }; });
 
-  W.Puppe2 = { oberteile, unterteile, _intern: { stueck, maske, M, MUSTER, MOTIV, oberteil, hose, rock } };
+  const kleider = mit(P.kleider, (t) => { const k = KLEIDER[t.id] || kleid({}); return { rumpf: k.oben, aermel: () => "", rock: k.unten, oben: k.oben, unten: k.unten, ohneBeine: !!k.ohneBeine }; });
+  const schuhe = mit(P.schuhe, (t) => ({ teil: schuh(SCHUHE[t.id] || {}) }));
+  const haare = mit(P.haare, (t) => { const f = FRISUR[t.id] || FRISUR.kurz; return { hinten: (c) => f(c).hinten, vorne: (c) => f(c).vorne }; });
+  // Gesichter: die sieben Ausdrücke der neuen Figur (Form Junge/Mädchen/keine Angabe über setzeForm)
+  let geschlecht = "n", hautJetzt = K.HAUT[1];
+  const setzeForm = (f) => { geschlecht = f === "m" || f === "w" ? f : "n"; };
+  const gesichter = mit(P.gesichter, (t) => ({ teil: () => K.gesicht(geschlecht, t.id, hautJetzt) }));
+  const koerper = { kopf: (haut) => { hautJetzt = haut; return K.kopf(haut, geschlecht); } };
+  // Extras: vorerst die bewährten Zeichnungen, auf die neue Figur umgerechnet (Kopf größer und höher, Hände an der neuen Stelle)
+  const LINKE_HAND = ["armband", "zauberstab", "ballon", "schwert"];
+  const EXTRA_TRANSFORM = {
+    kopf: "translate(150 104) scale(1.08) translate(-150 -118)", hals: "translate(0 -5)", ruecken: "translate(0 -4)",
+    handL: "translate(-2 17)", handR: "translate(15 15)"
+  };
+  const extraTransform = (t) => t.ebene === "hand" ? EXTRA_TRANSFORM[LINKE_HAND.includes(t.id) ? "handL" : "handR"] : EXTRA_TRANSFORM[t.ebene] || "";
+  const extras = mit(P.extras, (t) => ({ teil: (c) => `<g transform="${extraTransform(t)}">${t.teil(c)}</g>` }));
+  // Ausschnitt eines alten Extra-Bildes (viewBox) in neue Koordinaten umrechnen
+  function extraSicht(t, vb) {
+    const [x, y, w, h] = vb.split(" ").map(Number), tr = extraTransform(t);
+    const m = /translate\((-?[\d.]+) (-?[\d.]+)\)(?: scale\(([\d.]+)\))?/.exec(tr);
+    if (!m) return vb;
+    if (m[3]) { const sk = +m[3]; return [150 + (x - 150) * sk, 104 + (y - 118) * sk, w * sk, h * sk].map(v => Math.round(v)).join(" "); }
+    return [x + +m[1], y + +m[2], w, h].join(" ");
+  }
+
+  // ---------- Neues Zimmer (Entwurf „Kleiderschrank“, freigegeben 03.11.2026): Fenster mit Himmel, Regal, Bett, Teppich, Pflanze ----------
+  // 460 × 620; die Figur steht bei x 80–380, Füße bei y ≈ 555. Junge / Mädchen / keine Angabe mit eigenen Farben und eigener Deko.
+  function zimmer() {
+    const g = geschlecht;
+    const wand = g === "w" ? "#FFE3EC" : g === "m" ? "#DCEEFF" : "#EFE6FF", wandS = dunkel(wand, 0.07), boden = "#E9C899", bodenS = dunkel(boden, 0.12);
+    const decke = g === "w" ? "#FF9BC8" : g === "m" ? "#6FA8E8" : "#9B7BD8", kissen = g === "w" ? "#FFD84D" : "#FF8A5B", vorhang = g === "w" ? "#C9A0F0" : g === "m" ? "#7FC4A0" : "#F2B66B";
+    const deko = g === "w" ? Array.from({ length: 10 }, (_, i) => `<path d="M${i * 48 + 10} 60 l22 0 l-11 18 z" fill="${["#FF9BC8", "#FFD84D", "#7ED957", "#4FA8F0"][i % 4]}" stroke="${KF}" stroke-width="1.6"/>`).join("") + strich("M0 58 Q230 76 460 58", KF, 2)
+      : g === "m" ? Array.from({ length: 6 }, (_, i) => `<g transform="translate(${30 + i * 78} ${70 + (i % 2) * 14}) rotate(-30)">${flaeche("M0 -12 C5 -6 6 4 4 10 L-4 10 C-6 4 -5 -6 0 -12 Z", "#fff", "", { kw: 1.6 })}<circle cx="0" cy="-2" r="2.4" fill="#4FA8F0"/></g>`).join("")
+      : Array.from({ length: 12 }, (_, i) => `<circle cx="${i * 40 + 20}" cy="${70 + (i % 2) * 12}" r="5" fill="#fff" opacity=".8"/>`).join("");
+    return `<rect width="460" height="620" fill="${wand}"/><rect width="460" height="40" fill="${wandS}"/>` + deko +
+      flaeche("M300 100 H436 V270 H300 Z", "#BFE6FF", form("M300 210 C340 196 390 200 436 186 V270 H300 Z", "#9ED58A") + form("M316 140 C324 130 340 130 346 140 C356 132 370 138 370 148 L316 150 Z", "#fff") + `<circle cx="404" cy="132" r="15" fill="#FFD84D"/>`) +
+      strich("M368 100 V270 M300 186 H436", KF, 5) + flaeche("M290 266 H446 V280 H290 Z", "#fff", form("M290 274 H446 V280 H290 Z", "#E2DCEB")) +
+      flaeche("M286 92 C302 130 304 200 296 266 L280 266 L280 92 Z", vorhang) + flaeche("M450 92 C434 130 432 200 440 266 L456 266 L456 92 Z", vorhang) +
+      flaeche("M24 150 H150 V162 H24 Z", "#C98D5A", form("M24 158 H150 V162 H24 Z", "#A8693A")) +
+      ["#E8463B", "#4FA8F0", "#FFD84D", "#7ED957", "#9B6BE0"].map((c, i) => flaeche(`M${32 + i * 14} ${150 - 32 - (i % 2) * 6} h11 v${32 + (i % 2) * 6} h-11 Z`, c, "", { kw: 2 })).join("") +
+      (g === "w" ? flaeche("M112 150 C108 134 118 124 128 124 C138 124 146 134 142 150 Z", "#F2B66B", `<circle cx="122" cy="136" r="2" fill="${KF}"/><circle cx="134" cy="136" r="2" fill="${KF}"/>`)
+        : flaeche("M110 150 L122 122 L134 150 Z", "#E8463B", `<circle cx="122" cy="138" r="3" fill="#BFE6FF"/>`)) +
+      `<rect y="470" width="460" height="150" fill="${boden}"/>` + strich("M0 520 H460 M0 572 H460", bodenS, 2, 0.7) + strich("M0 470 H460", KF, 3) +
+      flaeche("M60 560 C60 530 400 530 400 560 C400 590 60 590 60 560 Z", g === "w" ? "#FFC2D9" : g === "m" ? "#9BD3F2" : "#D9C8F5", form("M90 560 C90 542 370 542 370 560 C370 578 90 578 90 560 Z", "#fff", 0.35)) +
+      flaeche("M330 370 H460 V476 H330 Z", "#C98D5A", form("M330 456 H460 V476 H330 Z", "#A8693A")) + flaeche("M340 340 H460 V396 H340 Z", decke, form("M340 380 H460 V396 H340 Z", dunkel(decke, 0.2))) +
+      flaeche("M350 320 C350 306 404 304 408 320 C410 338 350 342 350 320 Z", kissen) + flaeche("M320 290 H336 V476 H320 Z", "#A8693A") +
+      flaeche("M16 440 H66 L60 480 H22 Z", "#E8794A", form("M16 440 H66 V448 H16 Z", "#C2582D")) + flaeche("M40 440 C16 410 20 380 36 370 C40 390 42 410 42 440 Z", "#5DBB63") + flaeche("M42 440 C56 400 72 390 82 392 C76 412 62 430 44 440 Z", "#7ED957");
+  }
+  const orte = P.orte.map(o => o.id === "zimmer" ? Object.assign({}, o, { teil: zimmer }) : o);
+
+  const finde = (l, id) => l.find(t => t.id === id);
+  // Ganze Figur aus einem gespeicherten Look (gleiches Format wie bisher)
+  function zeichneFigur(o) {
+    const haut = (o.figur && o.figur.farbe) || K.HAUT[1], k = K.koerper(haut);
+    const haar = o.haare && finde(haare, o.haare.id), ober = o.oberteil && finde(oberteile, o.oberteil.id), unter = o.unterteil && finde(unterteile, o.unterteil.id);
+    const kl = o.kleid && finde(kleider, o.kleid.id), schuh = o.schuhe && finde(schuhe, o.schuhe.id), ges = (o.figur && finde(gesichter, o.figur.id)) || gesichter[0];
+    const ex = (ebene) => extras.filter(e => e.ebene === ebene && o.extras && o.extras[e.id]).map(e => e.teil(o.extras[e.id].farbe)).join("");
+    const ohneBeine = !!(kl && kl.ohneBeine);
+    let s = ex("ruecken") + (haar ? haar.hinten(o.haare.farbe) : "") + k.koerper;
+    if (kl) s += kl.unten(o.kleid.farbe); else s += unter ? unter.teil(o.unterteil.farbe) : k.hose;
+    if (schuh && !ohneBeine) s += schuh.teil(o.schuhe.farbe);
+    s += k.arme;
+    if (kl) s += kl.oben(o.kleid.farbe); else s += ober ? ober.teil(o.oberteil.farbe) : k.hemd;
+    s += ex("hand") + ex("hals");
+    hautJetzt = haut;
+    s += K.kopf(haut, geschlecht) + ges.teil() + (haar ? haar.vorne(o.haare.farbe) : "") + ex("kopf");
+    return s;
+  }
+  W.Puppe2 = { neu: true, oberteile, unterteile, kleider, schuhe, haare, gesichter, extras, orte, koerper, setzeForm, FUER: P.FUER, D: P.D, ton: P.ton,
+    zeichneFigur, extraSicht, SICHT: { figur: "82 24 136 160", haare: "40 -4 220 300", oben: "52 168 196 196", unten: "50 280 200 280", kleider: "30 168 240 420", schuhe: "92 488 120 72", orte: "0 0 460 620" },
+    FIGUR_Y: 14, KOPF: "50 18 200 200", BUESTE: "40 6 220 290", _intern: { stueck, maske, M, MUSTER, MOTIV, oberteil, hose, rock } };
 })(window);

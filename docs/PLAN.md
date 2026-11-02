@@ -2121,3 +2121,12 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
   schriftliches Rechnen Stelle für Stelle (getauschte Ziffern, kleine Einsen). Fehler-Hinweis „Fast! Schau mal.“ mit Bild und drei kurzen Sätzen statt
   „So denkst du gerade / Warum … / So stimmt es“; der Fehlername steht nur noch im Elternbereich. Die Mathe-Seite lädt jetzt `sprache.js` (🔊 überall).
   Tests `mathe-fehler` (keine Fachwörter, Satzlänge, Bilder) und `fehlerursachen` (echt durchgeklickt).
+- **Kinderfigur freigegeben (03.11.2026)** nach drei Runden: Kopf aus Entwurf 2 („Nur der Kopf ist gut“), Körper neu als **ein durchgehender Umriss**
+  (Hals, Schultern, Arme, Hände, Rumpf, Beine, Füße), Arme locker vom Körper weg, rechtes Bein Spielbein, Hände schmal mit rund geschlossenen Fingern und
+  Daumen ohne Kante. Datei `spiele/stil/entwurf/kind2.js` (`Kind2.kind({ g, haut, haar, ausdruck })`). Nächster Schritt: Kleidung, Frisuren, Extras und
+  Kleiderschrank dafür neu, danach die Nachbarskinder auf der Insel (Wunsch des Auftraggebers).
+- **Erledigt – Kleiderschrank neu:** freigegebene Figur in der App (`spiele/anziehen/kind.js`), alle 120 Teile neu bzw. angepasst (`teile2.js`): 17 Oberteile, 10 Hosen/Röcke,
+  14 Kleider/Kostüme (Meerjungfrau ohne Beine), 10 Schuhe (Stiefel mit Schaft), 18 Frisuren, 7 Gesichter; die 34 Extras sind vorerst die bisherigen Zeichnungen,
+  umgerechnet auf die neue Figur (**offen: neu zeichnen**). Neues Zimmer (Junge/Mädchen/keine Angabe), ↩ Zurück, 🔊. Gleiche Teile-IDs – gespeicherte Looks bleiben.
+  Eltern-Schalter „Zeichnungen wie bis 02.11.2026“ zeigt die alte Figur. Startseite, Meine Ecke und Insel-Seiten zeigen die neue Figur. Test `anziehen` erweitert.
+  **Offen:** Nachbarskinder auf der Insel (3D) an die neue Figur angleichen (Wunsch des Auftraggebers), Extras neu zeichnen, übrige Orte im neuen Stil.

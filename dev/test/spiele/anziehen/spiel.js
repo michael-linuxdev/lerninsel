@@ -1,5 +1,5 @@
 (function () {
-  const S = window.Spielwelt, P = window.Puppe;
+  const S = window.Spielwelt, P = (window.Figur && window.Figur.P) || window.Puppe;
 
   const HAUT = ["#FFE0C7", "#F6C9A3", "#E8B08A", "#C98D63", "#A0694A", "#6E4630"];
   const HAARFARBEN = ["#F4CD6A", "#D9A04E", "#A8693A", "#5C3A21", "#2A2230", "#C9542B", "#FF8CC6", "#9B6BE0", "#4FA8F0", "#6ED8B8"];
@@ -23,7 +23,7 @@
   const finde = (liste, id) => liste.find(t => t.id === id);
 
   // Kleine Vorschaubilder für die Auswahl
-  const SICHT = { figur: "84 58 132 120", haare: "52 8 196 292", oben: "56 166 188 188", unten: "56 276 188 250", kleider: "40 176 220 390", schuhe: "92 448 116 120", orte: "0 0 460 620" };
+  const SICHT = P.SICHT || { figur: "84 58 132 120", haare: "52 8 196 292", oben: "56 166 188 188", unten: "56 276 188 250", kleider: "40 176 220 390", schuhe: "92 448 116 120", orte: "0 0 460 620" };
   const EXTRA_SICHT = {
     kette: "100 172 100 74", schal: "104 168 92 120", tasche: "176 312 76 96", teddy: "190 340 66 84", armband: "62 318 44 36",
     zauberstab: "20 250 86 120", ballon: "10 150 90 210", krone: "90 16 120 70", einhorn: "84 0 132 110", hut: "48 14 204 86",
@@ -42,6 +42,7 @@
       case "orte": inhalt = teil.teil(); break;
       case "extras":
         vb = EXTRA_SICHT[teil.id] || "70 30 160 140";
+        if (P.extraSicht) vb = P.extraSicht(teil, vb);
         inhalt = (teil.ebene === "kopf" && !EXTRA_SICHT[teil.id] ? P.koerper.kopf(haut) : "") + teil.teil(farbe);
         break;
     }
@@ -232,7 +233,13 @@
     }
   }
 
-  function aenderung() {
+  // ↩ Zurück (Entwurf 03.11.2026): die letzten Schritte rückgängig machen
+  const verlauf = [];
+  let letzterStand = JSON.stringify(zustand);
+  function aenderung(rueckgaengig) {
+    if (!rueckgaengig) { verlauf.push(letzterStand); if (verlauf.length > 30) verlauf.shift(); }
+    letzterStand = JSON.stringify(zustand);
+    const z = document.getElementById("zurueck"); if (z) z.disabled = !verlauf.length;
     S.ton("wahl");
     zeigeBuehne(true); zeigeTeile(); zeigeFarben(); funkeln(); sichern();
   }
@@ -255,6 +262,15 @@
     aenderung();
   });
 
+  const zk = document.getElementById("zurueck");
+  if (zk) { zk.disabled = true; zk.addEventListener("click", () => { if (!verlauf.length) return; zustand = JSON.parse(verlauf.pop()); aktivesExtra = null; aenderung(true); }); }
+  // 🔊 sagt, welches Fach offen ist und was gerade an ist (nur auf Knopfdruck)
+  const hk = document.getElementById("hoeren");
+  if (hk) hk.addEventListener("click", () => {
+    const k = kat(), id = gewaehlt(k), t = id && k.teile.find(x => x.id === id);
+    const text = (typeof k.name === "string" ? k.name : "") + (t ? `. Du trägst: ${t.name}.` : ".") + " Tipp auf ein Bild, dann ziehst du es an.";
+    if (window.Sprache) Sprache.sprich(text);
+  });
   document.getElementById("neu").addEventListener("click", () => {
     zustand = STANDARD(); aktivesExtra = null; aenderung();
   });

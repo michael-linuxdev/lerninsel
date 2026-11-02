@@ -56,7 +56,7 @@
   #blitz.an { animation: blitz .5s ease-out; }
   @keyframes blitz { 0% { opacity: .95; } 100% { opacity: 0; } }
 
-  .aktionen { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .aktionen { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
   .aktionen .knopf { padding: 0 8px; font-size: 1.1rem; min-height: 60px; flex-direction: column; gap: 0; line-height: 1.1; }
   .aktionen .knopf .icon { font-size: 1.5rem; }
   .aktionen .foto { background: var(--beere); color: #fff; }
@@ -160,6 +160,7 @@
       <a class="knopf heim" id="heim-link" href="../../" aria-label="Zur Spielwelt" style="text-decoration:none">🏠</a>
       <script>if (/von=insel/.test(location.search)) { const l = document.getElementById("heim-link"); l.href = "../insel/?drinnen=1"; l.textContent = "🏡"; l.setAttribute("aria-label", "Zurück ins Zimmer"); }</script>
       <h1 id="titel">Kleiderschrank</h1>
+      <button class="knopf heim" id="hoeren" aria-label="Vorlesen">🔊</button>
       <div class="knopf sterne-anzeige" aria-label="Deine Sterne">⭐ <b id="sterne-zahl">0</b></div>
     </div>
     <div class="buehnen-rahmen"><div id="buehnen-box">
@@ -168,6 +169,7 @@
     </div></div>
     <div class="aktionen">
       <button class="knopf" id="zufall"><span class="icon" aria-hidden="true">🎲</span>Zufall</button>
+      <button class="knopf" id="zurueck" aria-label="Zurück"><span class="icon" aria-hidden="true">↩️</span>Zurück</button>
       <button class="knopf" id="neu"><span class="icon" aria-hidden="true">🔄</span>Neu</button>
       <button class="knopf foto" id="foto"><span class="icon" aria-hidden="true">📸</span>Foto</button>
       <button class="knopf" id="schrank-auf"><span class="icon" aria-hidden="true">🚪</span>Schrank</button>
@@ -212,7 +214,10 @@
 <script src="../../shared/echtewelt.js"></script>
 <script src="../../shared/zeit.js" data-art="spielen"></script>
 <script src="teile.js"></script>
+<script src="kind.js"></script>
+<script src="teile2.js"></script>
 <script src="figur.js"></script>
+<script src="../../shared/sprache.js"></script>
 <script src="spiel.js"></script>
 </body>
 </html>

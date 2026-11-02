@@ -1,7 +1,10 @@
 // Zeichnet die Figur aus einem gespeicherten Look – gemeinsam für Anziehspiel, „Meine Ecke“ und andere Seiten.
 // Braucht teile.js (window.Puppe).
 (function () {
-  const P = window.Puppe;
+  // 03.11.2026: neue Kinderfigur (kind.js + teile2.js = window.Puppe2) ist Standard; Eltern-Schalter „Zeichnungen wie bis 02.11.2026“
+  // (eltern.zeichnung = "alt") zeigt die alte Figur aus teile.js. Gespeicherte Looks gelten für beide (gleiche Teile-IDs).
+  const altGewaehlt = () => { try { return !!(window.Spielwelt && Spielwelt.lade && (Spielwelt.lade("eltern") || {}).zeichnung === "alt"); } catch (e) { return false; } };
+  const P = (!altGewaehlt() && window.Puppe2) || window.Puppe;
   const HAUT = ["#FFE0C7", "#F6C9A3", "#E8B08A", "#C98D63", "#A0694A", "#6E4630"];
   const HAARFARBEN = ["#F4CD6A", "#D9A04E", "#A8693A", "#5C3A21", "#2A2230", "#C9542B", "#FF8CC6", "#9B6BE0", "#4FA8F0", "#6ED8B8"];
   const geschlecht = () => (window.Spielwelt && window.Spielwelt.kind ? window.Spielwelt.kind().geschlecht : "n") || "n";
@@ -22,6 +25,7 @@
 
   // ---------- Zeichnen ----------
   function zeichneFigur(o) {
+    if (P.neu) { P.setzeForm(o.figur.form || geschlecht()); return P.zeichneFigur(o); }
     const haut = o.figur.farbe;
     if (P.setzeForm) P.setzeForm(o.figur.form || geschlecht());   // Gesicht und Kopfform nach Junge/Mädchen
     const haar = o.haare && finde(P.haare, o.haare.id);
@@ -59,12 +63,12 @@
   function zeichneBild(o) {
     if (P.setzeForm) P.setzeForm(o.figur.form || geschlecht());   // auch das Zimmer im Hintergrund
     const ort = finde(P.orte, o.ort) || P.orte[0];
-    return ort.teil() + `<g transform="translate(80 0)"><g class="hopser">${zeichneFigur(o)}</g></g>`;
+    return ort.teil() + `<g transform="translate(80 ${P.FIGUR_Y || 0})"><g class="hopser">${zeichneFigur(o)}</g></g>`;
   }
 
   // Nur die Figur ohne Hintergrund, z. B. für kleine Porträts
-  function zeichnePortraet(o) { return `<svg viewBox="40 0 220 330" aria-hidden="true">${zeichneFigur(o)}</svg>`; }
+  function zeichnePortraet(o) { return `<svg viewBox="${P.neu ? "40 0 220 330" : "40 0 220 330"}" aria-hidden="true">${zeichneFigur(o)}</svg>`; }
   // Ausschnitte: KOPF = Kopf und Schultern (quadratisch), BUESTE = bis zum Bauch
-  const KOPF = "50 34 200 200", BUESTE = "40 20 220 280";
-  window.Figur = { STANDARD, zeichneFigur, zeichneBild, zeichnePortraet, KOPF, BUESTE };
+  const KOPF = P.KOPF || "50 34 200 200", BUESTE = P.BUESTE || "40 20 220 280";
+  window.Figur = { STANDARD, zeichneFigur, zeichneBild, zeichnePortraet, KOPF, BUESTE, P, neu: !!P.neu };
 })();

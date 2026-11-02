@@ -1,6 +1,7 @@
 // Test Kleiderschrank (30.10.2026, „Jungen mit Mädchen gleichziehen“): Junge startet mit Scheitel-Frisur, Reiter „Kleider & Anzüge“ mit 🦸,
 // neue Teile (Frisuren, Trikot, Cargo, Ritter, Basecap, Fußball …) sind da; jede Kachel aller Reiter zeigt eine sichtbare Vorschau;
 // Teile echt antippen (Basecap, Trikot, Fußballschuhe) und gespeichert; Mädchen-Standard unverändert. Keine Konsolenfehler.
+// 03.11.2026: neue Kinderfigur ist Standard (alle Teile mit gleichen IDs zeichnen), ↩ Zurück echt angetippt, 🔊, Eltern-Schalter alte Figur.
 const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const BILDER = process.env.BILDER || "";
@@ -58,7 +59,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const nachher = await p.evaluate(() => !!document.querySelector('.teil[aria-label^="Ballkleid"]'));
     erwarte(!vorher.ball && vorher.ritter && vorher.mehr && nachher, "Junge: Kostüme vorn, Kleider erst nach „Mehr Sachen“");
     const gesicht = await p.evaluate(() => { const o = __anziehen.STANDARD(); return { m: Figur.zeichnePortraet(o), oben: o.oberteil.id, unten: o.unterteil.id }; });
-    erwarte(gesicht.oben === "raketenshirt" && gesicht.unten === "cargo" && /M96 114 Q96 62/.test(gesicht.m), "Junge: eigene Startkleidung (Raketen-Shirt, Cargohose) und kantigeres Kinn");
+    erwarte(gesicht.oben === "raketenshirt" && gesicht.unten === "cargo" && /200 146 188 160/.test(gesicht.m), "Junge: eigene Startkleidung (Raketen-Shirt, Cargohose) und kantigeres Kinn (neue Figur)");
     // Echt antippen
     await reiter(p, "Extras"); await tippe(p, "Basecap");
     if (BILDER) await p.screenshot({ path: `${BILDER}/anziehen-junge-extras.png` });
@@ -79,6 +80,32 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       schleife: !!__anziehen.STANDARD().extras.schleife }));
     erwarte(!w.ritter && w.ball && w.mehr && w.schleife, "Mädchen: Kleider vorn, Kostüme hinter „Mehr Sachen“, Start mit Schleife");
     if (BILDER) await p.screenshot({ path: `${BILDER}/anziehen-maedchen.png` });
+    // Neue Figur (03.11.2026): ein Umriss, alle 120 Teile mit denselben IDs wie bisher, jedes Teil zeichnet auf der neuen Figur
+    const neu = await p.evaluate(() => {
+      const P2 = window.Puppe2, P1 = window.Puppe, listen = ["gesichter", "haare", "oberteile", "unterteile", "kleider", "schuhe", "extras", "orte"];
+      const gleich = listen.every(l => P2[l].map(t => t.id).join() === P1[l].map(t => t.id).join());
+      const o = __anziehen.STANDARD(); let fehlt = [];
+      for (const [platz, l] of [["haare", "haare"], ["oberteil", "oberteile"], ["unterteil", "unterteile"], ["kleid", "kleider"], ["schuhe", "schuhe"]]) for (const t of P2[l]) {
+        const x = JSON.parse(JSON.stringify(o)); x[platz] = { id: t.id, farbe: "#3AA0E0" }; if (platz === "kleid") { x.oberteil = null; x.unterteil = null; }
+        const svg = Figur.zeichneFigur(x); if (!svg || svg.length < 2000 || /undefined|NaN/.test(svg)) fehlt.push(t.id);
+      }
+      return { gleich, fehlt, neu: Figur.neu, buehne: /zimmer|Fenster/.test(document.getElementById("buehne").innerHTML) || document.getElementById("buehne").innerHTML.length > 5000 };
+    });
+    erwarte(neu.neu && neu.gleich && !neu.fehlt.length, `neue Figur ist Standard, gleiche Teile-IDs, jedes Teil zeichnet${neu.fehlt.length ? " – fehlt: " + neu.fehlt.join(", ") : ""}`);
+    // ↩ Zurück echt angetippt: Kleid anziehen, Zurück → wieder wie vorher
+    const bildJetzt = () => p.evaluate(() => document.getElementById("buehne").innerHTML.replace(/(t2-|k2|kd|m-|ei)[\w-]*\d+/g, "").replace(/ hops/g, ""));
+    const vorZ = await bildJetzt();
+    await tippe(p, "Sommerkleid");
+    const mitKleid = await p.evaluate(() => (Spielwelt.lade("anziehen").aktuell.kleid || {}).id);
+    await p.click("#zurueck"); await p.waitForTimeout(200);
+    const nachZ = await bildJetzt();
+    erwarte(mitKleid === "sommer" && nachZ === vorZ && await p.evaluate(() => document.getElementById("zurueck").disabled), "↩ Zurück: Sommerkleid angezogen, Zurück getippt – alles wie vorher");
+    erwarte(await p.isVisible("#hoeren"), "🔊 im Kleiderschrank sichtbar");
+    // Eltern-Schalter „Zeichnungen wie bis 02.11.2026“: alte Figur
+    await p.evaluate(() => { const e = Spielwelt.lade("eltern"); e.zeichnung = "alt"; Spielwelt.speichere("eltern", e); });
+    await p.goto(BASIS + "spiele/anziehen/"); await p.waitForTimeout(500);
+    erwarte(await p.evaluate(() => !Figur.neu && /M96 114|Q96 62|r="54"/.test(Figur.zeichneFigur(__anziehen.STANDARD()))), "Eltern-Schalter: alte Figur aus teile.js");
+    if (BILDER) await p.screenshot({ path: `${BILDER}/anziehen-alt.png` });
     await ctx.close();
   }
 
