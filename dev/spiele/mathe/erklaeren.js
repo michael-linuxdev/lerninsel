@@ -64,6 +64,7 @@
   // Schriftlich rechnen, Stelle für Stelle von rechts: bis = wie viele Stellen schon fertig sind (0 = nur hingeschrieben)
   // verfahren (minus): "abziehen" (getauschte Ziffer durchgestrichen, neue klein darüber) oder "ergaenzen" (kleine 1 unten links)
   function schrift(a, b, op, bis = 0, verfahren = "abziehen", markiere = -1) {
+    if (op === "·" && b >= 10) return schriftMalMehr(a, b, bis, markiere);
     if (op === "·") return schriftMal(a, b, bis, markiere);
     if (op === ":") return schriftGeteilt(a, b, bis);
     const x = String(a).split("").reverse().map(Number), y = String(b).split("").reverse().map(Number), n = Math.max(x.length, y.length);
@@ -206,7 +207,28 @@
     erg.forEach((z, i) => { if (i < bis) s += ziffer(z, i, 148); });
     return s + `</svg>`;
   }
-  const BILD = { feld, reihen, strahl, schrift, uhr, geld, lineal, stellen, runden };
+  // (06.11.2026) Schriftlich mal mit mehrstelliger Zahl: je Ziffer unten eine Zeile, jede Zeile einen Platz weiter rechts; bis = wie viele Zeilen
+  // schon stehen (eine mehr als Zeilen = Summe darunter), markiere = Zeile, an der gerade gerechnet wird (gelb), verrueckt = Robos Fehler (ohne Einrücken)
+  function schriftMalMehr(a, b, bis = 0, markiere = -1, verrueckt = false) {
+    const d = String(b).split("").map(Number), n = d.length, erg = a * b, zeilen = d.map((x, j) => ({ wert: a * x, k: verrueckt ? 0 : n - 1 - j }));
+    const summe = verrueckt ? zeilen.reduce((t, z) => t + z.wert, 0) : erg;
+    const spalten = Math.max(String(a).length + n + 1, String(summe).length + 1), w = 34, x0 = 20, breite = x0 + spalten * w + 20;
+    const sx = (i) => x0 + (spalten - 1 - i) * w + w / 2;   // i = Platz von rechts
+    const zahl = (z, rechts, yy, farbe = D, gross = 28) => String(z).split("").reverse().map((c, i) => `<text x="${sx(rechts + i)}" y="${yy}" font-size="${gross}" text-anchor="middle" fill="${farbe}" font-weight="700" font-family="Fredoka, sans-serif">${c}</text>`).join("");
+    const zh = 36, y0 = 44, hoehe = y0 + 20 + (n + 1) * zh + 20;
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${breite} ${hoehe}" class="erkl-bild" role="img" aria-label="${a} mal ${b} schriftlich">`;
+    // oben: a · b (b rechts, a davor)
+    s += zahl(b, 0, y0) + `<text x="${sx(String(b).length) }" y="${y0}" font-size="28" text-anchor="middle" fill="${D}" font-weight="700" font-family="Fredoka, sans-serif">·</text>` + zahl(a, String(b).length + 1, y0);
+    s += `<line x1="${x0}" y1="${y0 + 12}" x2="${breite - 16}" y2="${y0 + 12}" stroke="${D}" stroke-width="3"/>`;
+    zeilen.forEach((z, j) => { const yy = y0 + 12 + (j + 1) * zh;
+      if (j === markiere) s += `<rect x="${x0 - 4}" y="${yy - 27}" width="${breite - x0 - 12}" height="${zh - 2}" rx="8" fill="#FFF3C4"/>`;
+      if (j < bis) s += zahl(z.wert, z.k, yy, j === markiere ? BLAU : D); });
+    const ys = y0 + 12 + (n + 1) * zh;
+    s += `<line x1="${x0}" y1="${ys - zh + 8}" x2="${breite - 16}" y2="${ys - zh + 8}" stroke="${D}" stroke-width="3"/>`;
+    if (bis > n) s += zahl(summe, 0, ys + 4, verrueckt ? ROT : D);
+    return s + `</svg>`;
+  }
+  const BILD = { feld, reihen, strahl, schrift, uhr, geld, lineal, stellen, runden, schriftMalMehr };
 
   // ---------- Bilder für die Fehler-Hinweise (fehler.js liefert die Texte) ----------
   function bildFuer(fv, o) {
@@ -218,6 +240,7 @@
       if (fv === "zaehlen" && o.b <= 6) return strahl(o.a, o.b, o.op === M ? "-" : "+");
       if (fv === "stellenwert" && o.a < 100) return feld({ z: Z(o.a), rot: E(o.a), warten: Math.min(9, o.b) });
       if (fv === "malreihe" && o.a <= 10 && o.b <= 10) return reihen(o.a, o.b);
+      if (fv === "verrueckt" && o.op === "·" && o.b >= 10) return schriftMalMehr(o.a, o.b, String(o.b).length + 1, 0);
       if ((fv === "geteiltminus" || fv === "geteiltreihe") && o.op === ":" && o.b <= 10 && o.a / o.b <= 10) return reihen(o.b, o.a / o.b);
       if (fv === "dreher" && o.c < 100) return feld({ z: Z(o.c), rot: E(o.c) });
       if ((fv === "zeigervertauscht" || fv === "stundedaneben") && o.uhr) return uhr(o.uhr.h, o.uhr.m, { zeige: "kurz" });
@@ -536,6 +559,21 @@
       ]
     }
   };
+  // (06.11.2026) Kl. 4 „Schriftlich mal mehrstellig“: je Zahl unten eine Zeile, eingerückt, dann zusammenzählen
+  ERKLAERUNGEN.k4malmehr = [
+    { typ: "zeigen", text: "234 · 26 schriftlich", bilder: [
+      { satz: "Erst malnehmen mit der 2 von der 26: 234 · 2 = 468.", bild: () => schriftMalMehr(234, 26, 1, 0) },
+      { satz: "Die 2 sind 2 Zehner. Darum endet die Zeile einen Platz weiter links.", bild: () => schriftMalMehr(234, 26, 1, 0) },
+      { satz: "Dann mit der 6: 234 · 6 = 1404. Diese Zeile endet ganz rechts.", bild: () => schriftMalMehr(234, 26, 2, 1) },
+      { satz: "Zum Schluss zusammenzählen: 4680 + 1404 = 6084.", bild: () => schriftMalMehr(234, 26, 3) }] },
+    { typ: "machen", text: "Jetzt du: Bau die erste Zeile: 468.", art: "bauen", a: 468 },
+    { typ: "ergaenzen", text: "Jetzt rechnest du: 312 · 23. Erst die Zeile mit der 2.", frage: "312 · 2 = ?", antwort: "624", optionen: ["624", "634", "6240"] },
+    { typ: "gegenbeispiel", text: "Robo rechnet: 234 · 26 = 1872. Stimmt das?", stimmt: false, fv: "verrueckt", warum: "Robo hat die erste Zeile nicht eingerückt. Richtig ist 4680 + 1404 = 6084." },
+    { typ: "geschichte", text: "Jede Zahl unten bekommt eine Zeile. Jede Zeile rückt weiter. Dann zusammenzählen.", bilder: [
+      { satz: "Mit der ersten Zahl malnehmen.", bild: () => schriftMalMehr(234, 26, 1, 0) },
+      { satz: "Mit der nächsten Zahl – einen Platz weiter rechts.", bild: () => schriftMalMehr(234, 26, 2, 1) },
+      { satz: "Die Zeilen zusammenzählen.", bild: () => schriftMalMehr(234, 26, 3) }] }
+  ];
   ERKLAERUNGEN.k1plus20 = ERKLAERUNGEN.plus20; ERKLAERUNGEN.mal2 = ERKLAERUNGEN.mal1; ERKLAERUNGEN.mal3 = ERKLAERUNGEN.mal1;   // gleiche Idee „die gleiche Zahl mehrmals“
   const verfahren = () => { try { return ((W.Spielwelt && W.Spielwelt.lade("eltern")) || {}).mathe?.minus === "ergaenzen" ? "ergaenzen" : "abziehen"; } catch (e) { return "abziehen"; } };
   function fuer(station) { const e = ERKLAERUNGEN[station]; if (!e) return null; return Array.isArray(e) ? e : e[verfahren()] || e.abziehen; }

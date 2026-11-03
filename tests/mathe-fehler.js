@@ -40,7 +40,7 @@ pruefe("typische falsche Antworten werden dem richtigen Denkfehler zugeordnet", 
 
 pruefe("jede Kontrastaufgabe passt zum Denkfehler (1000 Startzahlen je Denkfehler) und ist richtig gerechnet", () => {
   const basis = { op: auf("5 + 3", 8), kleinvongross: auf(`52 ${M} 27`, 25), borgen: auf(`61 ${M} 28`, 33), uebertrag: auf("34 + 28", 62), uebertragdoppelt: auf("34 + 28", 62),
-    stellenwert: auf("34 + 5", 39), zaehlen: auf("5 + 3", 8), malreihe: auf("7 · 8", 56),
+    stellenwert: auf("34 + 5", 39), zaehlen: auf("5 + 3", 8), malreihe: auf("7 · 8", 56), verrueckt: auf("234 · 26", 6084),
     malnull: auf("6 · 0", 0), geteiltminus: auf("15 : 3", 5), geteiltreihe: auf("24 : 4", 6), dreher: auf("34 + 28", 62), zeigervertauscht: F.uhrAufgabe(4, 30, zz), stundedaneben: F.uhrAufgabe(4, 0, zz), muenzenzaehlen: F.geldAufgabe(zz), linealende: { text: "", antwort: "5", art: "zahl", lineal: { start: 2, l: 5 } }, meter: { text: "3 m = ? cm", antwort: "300", art: "zahl", meter: 3 }, nullvergessen: { text: "", antwort: "305", art: "zahl", stellen: 305 }, falschgerundet: { text: "", antwort: "390", art: "zahl", runden: 386 }, umrechnen: { text: "", antwort: "3000", art: "zahl", umrechnen: { n: 3, f: 1000, von: "kg", nach: "g" } }, restvergessen: auf("864 : 4", 216) };
   for (const f of F.KATALOG) {
     for (let i = 0; i < 1000; i++) {
@@ -101,7 +101,18 @@ pruefe("Schrittweg: Ziffern je Stelle, Übertrag vergessen und kleinere von grö
   assert.strictEqual(F.pruefeSchritt(mal.o, mal.liste[1], 0).fv, "uebertrag", "4 · 5 = 20 ohne die gemerkte 3");
   assert.strictEqual(F.pruefeSchritt(mal.o, mal.liste[0], 35).fv, "uebertrag", "35 statt 5 geschrieben");
   assert.ok(F.pruefeSchritt(mal.o, mal.liste[3], 0).hinweis.includes("nach vorn"));
-  assert.strictEqual(F.schritte({ text: "34 · 56", antwort: "1904", art: "zahl" }), null, "mehrstellig mal: kein Schrittweg");
+  // (06.11.2026) mehrstellig mal: Zeilen-Weg – erst jede Zeile, dann zusammenzählen
+  { const p = F.schritte({ text: "234 · 26", antwort: "6084", art: "zahl" });
+    assert.ok(p.zeilen && p.liste.length === 3, "mehrstellig mal: zwei Zeilen und die Summe");
+    assert.deepStrictEqual(p.liste.map(x => x.ziffer), [468, 1404, 6084]);
+    assert.deepStrictEqual(p.liste[2].teile, [4680, 1404]);
+    assert.ok(F.pruefeSchritt(p.o, p.liste[0], "468").ok && F.pruefeSchritt(p.o, p.liste[2], "6084").ok);
+    assert.ok(/nur 468/.test(F.pruefeSchritt(p.o, p.liste[0], "4680").hinweis), "schon eingerückt eingetippt: freundlicher Hinweis");
+    assert.ok(/Rechne 234 · 6/.test(F.pruefeSchritt(p.o, p.liste[1], "1804").hinweis), "sonst: Hinweis, wie man die Zeile rechnet");
+    assert.strictEqual(F.pruefeSchritt(p.o, p.liste[2], "1872").fv, "verrueckt", "Zeilen ohne Einrücken addiert");
+    assert.strictEqual(F.erkenne({ text: "234 · 26", antwort: "6084", art: "zahl" }, 1872).id, "verrueckt");
+    const k = F.pruefeSchritt(F.lies({ text: "47 · 23", antwort: "1081", art: "zahl" }), F.schritte({ text: "47 · 23", antwort: "1081", art: "zahl" }).liste[0], "84");
+    assert.strictEqual(k.fv, "uebertrag", "47 · 2 ohne gemerkte Zahl = 84: Übertrag vergessen"); }
   assert.ok(/^<svg/.test(E.BILD.schrift(347, 5, "·", 2, "", 2)) && /<text[^>]*>3<\/text>/.test(E.BILD.schrift(347, 5, "·", 2, "", 2)));
   for (let i = 0; i < 500; i++) { const a = 112 + Math.floor(zz() * 887), b = 3 + Math.floor(zz() * 7), sm = F.schritte({ text: `${a} · ${b}`, antwort: String(a * b), art: "zahl" });
     assert.strictEqual(+sm.liste.map(x => x.ziffer).reverse().join(""), a * b, `${a} · ${b}`); }
@@ -160,8 +171,9 @@ pruefe("Russische Hilfe (05.11.2026): jeder Satz der Erklär-Einheiten und der D
     [auf("34 + 28", 62), 26], [auf("45 + 2", 47), 74], [F.uhrAufgabe(2, 0, zz2), "12:10"], [F.uhrAufgabe(4, 30, zz2), "5:30"], [F.uhrAufgabe(4, 15, zz2), "5:15"], [F.uhrAufgabe(4, 45, zz2), "9:20"],
     [{ text: "", frage: "Wie viel Geld ist das?", antwort: "25", art: "zahl", geld: [10, 10, 5] }, 3], [{ text: "", antwort: "5", art: "zahl", lineal: { start: 2, l: 5 } }, 7],
     [{ text: "3 m = ? cm", antwort: "300", art: "zahl", meter: 3 }, 30], [{ text: "", antwort: "3000", art: "zahl", umrechnen: { n: 3, f: 1000, von: "kg", nach: "g" } }, 300],
-    [{ text: "", antwort: "305", art: "zahl", stellen: 305 }, 35], [{ text: "", antwort: "390", art: "zahl", runden: 386 }, 380], [{ text: "", antwort: "340", art: "zahl", runden: 342 }, 350]];
+    [{ text: "", antwort: "305", art: "zahl", stellen: 305 }, 35], [{ text: "", antwort: "390", art: "zahl", runden: 386 }, 380], [{ text: "", antwort: "340", art: "zahl", runden: 342 }, 350], [auf("234 · 26", 6084), 1872]];
   for (const [a, w] of fall) { const e = F.erkenne(a, w); assert.ok(e, `${a.text} → ${w}`); pr(e.kurz); e.lang.forEach(pr); for (let w = 0; w < 25; w++) F.kontraste(a, e.id).forEach(k => { pr(k.text); pr(k.hilfe); }); }   // Kontraste sind zufällig: mehrmals
+  { const p = F.schritte({ text: "234 · 26", antwort: "6084", art: "zahl" }); ["4680", "84", "1"].forEach(w => pr(F.pruefeSchritt(p.o, p.liste[0], w).hinweis)); ["1872", "1"].forEach(w => pr(F.pruefeSchritt(p.o, p.liste[2], w).hinweis)); }
   assert.deepStrictEqual(fehlt, [], "ohne russische Zeile – in spiele/mathe/hilfe-ru.js ergänzen");
   assert.strictEqual(R.uebersetze("Robo rechnet: 71 + 19 = 80. Stimmt das?"), "Робо считает: 71 + 19 = 80. Это правильно?", "Zahlen werden eingesetzt");
   assert.strictEqual(R.uebersetze("Das gibt es nicht."), "", "Unbekanntes bleibt leer");

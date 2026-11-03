@@ -364,6 +364,36 @@
     ["Hinten steht {0}. Unter {1} geht es runter.", "В конце стоит {0}. Меньше {1} – округляем вниз."],
     ["Das ist weniger als {0}. Dann bleibt der Zehner.", "Это меньше {0}. Тогда десяток остаётся."],
     ["Schau auf die Einer: {0}. Unter {1} wird abgerundet → {2}.", "Посмотри на единицы: {0}. Меньше {1} – округляем вниз → {2}."],
+    // ---------- Schriftlich mal mehrstellig (06.11.2026) ----------
+    ["{0} · {1} schriftlich", "{0} · {1} столбиком"],
+    ["Erst malnehmen mit der {0} von der {1}: {2} · {3} = {4}.", "Сначала умножаем на {0} из числа {1}: {2} · {3} = {4}."],
+    ["Die {0} sind {1} Zehner. Darum endet die Zeile einen Platz weiter links.", "{0} – это {1} десятка. Поэтому строка кончается на одну клетку левее."],
+    ["Dann mit der {0}: {1} · {2} = {3}. Diese Zeile endet ganz rechts.", "Потом на {0}: {1} · {2} = {3}. Эта строка кончается справа."],
+    ["Zum Schluss zusammenzählen: {0} + {1} = {2}.", "В конце складываем: {0} + {1} = {2}."],
+    ["Jetzt du: Bau die erste Zeile: {0}.", "Теперь ты: составь первую строку: {0}."],
+    ["Jetzt rechnest du: {0} · {1}. Erst die Zeile mit der {2}.", "Теперь считаешь ты: {0} · {1}. Сначала строка с {2}."],
+    ["Robo hat die erste Zeile nicht eingerückt. Richtig ist {0} + {1} = {2}.", "Робо не сдвинул первую строку. Правильно: {0} + {1} = {2}."],
+    ["Jede Zahl unten bekommt eine Zeile. Jede Zeile rückt weiter. Dann zusammenzählen.", "Каждая цифра внизу получает строку. Каждая строка сдвигается. Потом складываем."],
+    ["Mit der ersten Zahl malnehmen.", "Умножаем на первую цифру."],
+    ["Mit der nächsten Zahl – einen Platz weiter rechts.", "На следующую цифру – на одну клетку правее."],
+    ["Die Zeilen zusammenzählen.", "Складываем строки."],
+    ["Jede neue Zeile rückt einen Platz weiter nach rechts.", "Каждая новая строка сдвигается на одну клетку вправо."],
+    ["Du hast die Zeilen nicht eingerückt.", "Ты не сдвинул строки."],
+    ["{0} · {1} heißt hier {2} · {3} = {4}.", "{0} · {1} здесь значит {2} · {3} = {4}."],
+    ["Darum: {0} + {1} = {2}.", "Поэтому: {0} + {1} = {2}."],
+    ["Darum: {0} + {1} + {2} = {3}.", "Поэтому: {0} + {1} + {2} = {3}."],
+    ["Jede Zeile rückt einen Platz weiter nach rechts.", "Каждая строка сдвигается на одну клетку вправо."],
+    ["Fast! Schreib nur {0}. Weil die Zeile eingerückt ist, brauchst du die Null nicht.", "Почти! Напиши только {0}. Строка сдвинута, поэтому ноль не нужен."],
+    ["Denk an die Zahl, die du dir merkst. Fang rechts an: {0} · {1} = {2}.", "Не забудь число, которое запоминаешь. Начни справа: {0} · {1} = {2}."],
+    ["Rechne {0} · {1} von rechts. Fang an mit {2} · {3} = {4}.", "Считай {0} · {1} справа. Начни с {2} · {3} = {4}."],
+    ["Die Zeilen sind eingerückt. Rechne {0} + {1}.", "Строки сдвинуты. Считай {0} + {1}."],
+    ["Zähl die Zeilen zusammen: {0} + {1}.", "Сложи строки: {0} + {1}."],
+    ["Zeig mir deinen Weg! Für jede Zahl unten eine Zeile – dann zusammenzählen.", "Покажи свой путь! Для каждой цифры внизу – строка, потом складываем."],
+    ["Richtig! Nächste Zeile – sie endet einen Platz weiter rechts.", "Правильно! Следующая строка – она кончается на одну клетку правее."],
+    ["Richtig! Jetzt zählst du die Zeilen zusammen.", "Правильно! Теперь сложи строки."],
+    ["Richtig ist {0}. Weiter.", "Правильно: {0}. Дальше."],
+    ["Dein Fehler lag beim Zusammenzählen.", "Ошибка была при сложении."],
+    ["Dein Fehler lag in der Zeile {0} · {1}.", "Ошибка была в строке {0} · {1}."],
     // ---------- Rahmen der Matheseite (mathe.js) ----------
     ["Fast! Schau mal.", "Почти! Посмотри."],
     ["Fast! Versuch es nochmal.", "Почти! Попробуй ещё раз."],
@@ -414,7 +444,7 @@
     return ru.replace(/\{(\d+)\}/g, (_, i) => z.zahlen[+i] !== undefined ? z.zahlen[+i] : "").replace(/\{w\}/g, () => z.worte.shift() || "");
   }
   // Auf der Matheseite: unter jeder deutschen Sprechblase/Erklärzeile die russische Zeile ergänzen (nur mit Hilfesprache Russisch)
-  const ZIELE = ".erklaer-blase > span, .geschichte span, #warum-t, .denkfehler-karte > p, .hilfe .denkfehler, #rueck, #angebot h2, #angebot .frage";
+  const ZIELE = "#tafel > p.frage, .erklaer-blase > span, .geschichte span, #warum-t, .denkfehler-karte > p, .hilfe .denkfehler, #rueck, #angebot h2, #angebot .frage";
   function aktiv() { try { const h = W.Spielwelt && W.Spielwelt.hilfe(); return !!(h && h.code === "ru"); } catch (e) { return false; } }
   function auffrischen(wurzel) {
     if (!aktiv()) return;

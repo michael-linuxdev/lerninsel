@@ -42,6 +42,9 @@
   // geborgt, aber die nächste Stelle nicht verkleinert
   function borgenVergessen(a, b) { const x = stellen(a), y = stellen(b); return ausStellen(x.map((d, i) => { const e = y[i] || 0; return d < e ? d + 10 - e : d - e; })); }
 
+  // (06.11.2026) Schriftlich mal mit mehrstelliger Zahl: je Ziffer der zweiten Zahl (von links) eine Zeile; k = wie weit die Zeile eingerückt ist
+  function zeilen(o) { const d = String(o.b).split("").map(Number); return d.map((x, j) => ({ d: x, k: d.length - 1 - j, wert: o.a * x })); }
+  const ohneEinruecken = (o) => zeilen(o).reduce((n, z) => n + z.wert, 0);
   // ---------- Zufall (Startzahl aus aufgaben.js, sonst Math.random) ----------
   const r = (zz, a, b) => a + Math.floor(zz() * (b - a + 1));
 
@@ -134,6 +137,14 @@
     return (e ? E1[e] + "und" : "") + Z1[z];
   }
   const dreht = (c) => c >= 13 && c < 100 && c % 10 !== 0 && Math.floor(c / 10) !== c % 10;
+  // (06.11.2026) Mal mehrstellig: Teilergebnisse ohne Einrücken addiert (234 · 26 → 468 + 1404 = 1872 statt 4680 + 1404)
+  KATALOG.push({ id: "verrueckt", name: "Mal mehrstellig: Zeilen nicht eingerückt",
+    erkenne: (o, w) => o.op === "·" && o.a >= 10 && o.b >= 10 && w === ohneEinruecken(o) && w !== o.c,
+    kurz: () => "Jede neue Zeile rückt einen Platz weiter nach rechts.",
+    lang: (o) => { const z = zeilen(o); return ["Du hast die Zeilen nicht eingerückt.",
+      `${o.a} · ${z[0].d} heißt hier ${o.a} · ${z[0].d * 10 ** z[0].k} = ${z[0].wert * 10 ** z[0].k}.`,
+      `Darum: ${z.map(x => x.wert * 10 ** x.k).join(" + ")} = ${o.c}.`]; },
+    kontrast: (o, zz) => zr("·", r(zz, 102, 489), r(zz, 12, 39), "Jede Zeile rückt einen Platz weiter nach rechts.") });
   KATALOG.push({ id: "dreher", name: "Zahl verdreht (Zehner und Einer vertauscht)",
     erkenne: (o, w) => dreht(o.c) && w === (o.c % 10) * 10 + Math.floor(o.c / 10),
     kurz: (o) => `Verdreht? Man sagt „${zahlwort(o.c)}“. Geschrieben kommt die ${Math.floor(o.c / 10)} zuerst.`,
@@ -261,6 +272,7 @@
   }
   // Tipps für Eltern (04.11.2026): eine kurze Idee für zu Hause je Denkfehler, ohne Arbeitsblatt
   const TIPP = {
+    verrueckt: "Auf Kästchenpapier rechnen: Jede Zeile beginnt genau unter der Zahl, mit der gerade malgenommen wird.",
     op: "Vor dem Rechnen das Zeichen laut vorlesen lassen: „plus“, „minus“, „mal“.",
     kleinvongross: "Mit Münzen spielen: Reicht es nicht, wird ein 10-Cent-Stück in zehn 1-Cent-Stücke getauscht.",
     borgen: "Beim Tauschen sichtbar machen: den getauschten Zehner wirklich wegnehmen (Münze, Stange, Strich).",
@@ -290,7 +302,13 @@
   // ---------- Schrittweg: schriftlich plus und minus ----------
   // Stellen von rechts; je Stelle: Ziffern x, y, Übertrag/Borgen vorher (ein), richtige Ziffer, Übertrag danach (aus)
   function schritte(a) {
-    const o = lies(a); if (!o || (o.op !== "+" && o.op !== M && !(o.op === "·" && o.b < 10 && o.a >= 10) && !(o.op === ":" && o.b < 10 && o.a >= 10 * o.b && o.a % o.b === 0))) return null;
+    const o = lies(a); if (!o) return null;
+    if (o.op === "·" && o.b >= 10 && o.a >= 10) {   // (06.11.2026) mal mehrstellig: erst jede Zeile, dann zusammenzählen
+      const z = zeilen(o), liste = z.map((x, j) => ({ art: "zeile", j, i: x.k, x: o.a, y: x.d, ziffer: x.wert, k: x.k }));
+      liste.push({ art: "summe", j: z.length, i: -1, teile: z.map(x => x.wert * 10 ** x.k), ziffer: o.c });
+      return { o, liste, zeilen: true };
+    }
+    if ((o.op !== "+" && o.op !== M && !(o.op === "·" && o.b < 10 && o.a >= 10) && !(o.op === ":" && o.b < 10 && o.a >= 10 * o.b && o.a % o.b === 0))) return null;
     if (o.op === ":") {   // (04.11.2026) schriftlich geteilt: von links, der Rest wandert vor die nächste Zahl
       const d = String(o.a).split("").map(Number), liste = []; let rest = 0, pos = 0;
       if (d[0] < o.b) { liste.push({ pos: 1, x: d[0] * 10 + d[1], ein: 0, z: d[0] * 10 + d[1] }); pos = 2; } else { liste.push({ pos: 0, x: d[0], ein: 0, z: d[0] }); pos = 1; }
@@ -326,6 +344,16 @@
       if (w * s.y > s.z) return { ok: false, hinweis: `Zu viel: ${w} · ${s.y} = ${w * s.y}. Das ist mehr als ${s.z}.` };
       if ((w + 1) * s.y <= s.z) return { ok: false, hinweis: `Da passt noch mehr hinein: ${w + 1} · ${s.y} = ${(w + 1) * s.y}.` };
       return { ok: false, hinweis: `Wie oft passt die ${s.y} in die ${s.z}? Denk an die ${s.y}er-Reihe.` };
+    }
+    if (s.art === "zeile") {
+      if (s.k && w === s.ziffer * 10 ** s.k) return { ok: false, fast: true, hinweis: `Fast! Schreib nur ${s.ziffer}. Weil die Zeile eingerückt ist, brauchst du die Null nicht.` };
+      const ohne = ausStellen(stellen(s.x).map(d => (d * s.y) % 10));
+      if (w === ohne && ohne !== s.ziffer) return { ok: false, fv: "uebertrag", hinweis: `Denk an die Zahl, die du dir merkst. Fang rechts an: ${stellen(s.x)[0]} · ${s.y} = ${stellen(s.x)[0] * s.y}.` };
+      return { ok: false, hinweis: `Rechne ${s.x} · ${s.y} von rechts. Fang an mit ${stellen(s.x)[0]} · ${s.y} = ${stellen(s.x)[0] * s.y}.` };
+    }
+    if (s.art === "summe") {
+      if (w === ohneEinruecken(o)) return { ok: false, fv: "verrueckt", hinweis: `Die Zeilen sind eingerückt. Rechne ${s.teile.join(" + ")}.` };
+      return { ok: false, hinweis: `Zähl die Zeilen zusammen: ${s.teile.join(" + ")}.` };
     }
     if (o.op === "·") {
       if (s.vorn) return { ok: false, fv: "uebertrag", hinweis: `Du hast dir zuletzt ${s.ein} gemerkt. Die kommt jetzt nach vorn.` };
