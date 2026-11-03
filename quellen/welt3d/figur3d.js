@@ -4,6 +4,8 @@
 import { Group, Mesh, MeshToonMaterial, MeshBasicMaterial, BackSide, SphereGeometry, CylinderGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry,
   LatheGeometry, TorusGeometry, Vector2, DataTexture, RedFormat, NearestFilter, CircleGeometry } from "../three/three.module.js";
 
+import { extras3d } from "./extras3d.js";
+
 const EINFACH = (() => { try { const S = window.Spielwelt, e = (S.lade("eltern") || {}).insel, l = localStorage.getItem("lerninsel.grafik");
   return (e && e.grafik ? e.grafik : l || (S.grafikStandard ? S.grafikStandard() : "schoen")) === "einfach"; } catch (e) { return false; } })();
 export const verlauf = new DataTexture(new Uint8Array([110, 190, 255]), 3, 1, RedFormat);
@@ -94,18 +96,8 @@ function figur(look) {
   if (form === "m") koerper.children.forEach(c => { if (c.geometry && c.geometry.type === "SphereGeometry" && Math.abs(c.position.y - 1.15) < 0.01) c.scale.set(1.14, 1, 1.05); });
   // (01.11.2026) keine rosa Wangen mehr
   const mund = new Mesh(new TorusGeometry(0.07, 0.018, 6, 12, Math.PI), AUGE); mund.rotation.z = Math.PI; setze(mund, 0, -0.15, 0.55); kopf.add(mund);
-  // Extras aus dem Kleiderschrank (eine Auswahl in 3D)
-  const ex = look.extras || {}, hat = (id) => ex[id];
-  const farbe = (id, std) => (ex[id] && ex[id].farbe) || std;
-  if (hat("krone") || hat("rechenkrone")) { const id = hat("krone") ? "krone" : "rechenkrone"; const k = teil(new CylinderGeometry(0.28, 0.26, 0.2, 16, 1, true), farbe(id, "#FFC83D")); setze(k, 0, 0.66, 0); kopf.add(k); for (let i = 0; i < 5; i++) { const z = teil(new ConeGeometry(0.06, 0.16, 8), farbe(id, "#FFC83D"), { dicke: 1.1 }); const a = i / 5 * Math.PI * 2; setze(z, Math.cos(a) * 0.27, 0.82, Math.sin(a) * 0.27); kopf.add(z); } }
-  if (hat("muetze") || hat("weihnachtsmuetze")) { const id = hat("muetze") ? "muetze" : "weihnachtsmuetze"; const m = teil(new ConeGeometry(0.5, 0.75, 24), farbe(id, "#D7263D")); setze(m, 0, 0.78, -0.05); m.rotation.x = -0.25; kopf.add(m); const rand = teil(new TorusGeometry(0.47, 0.09, 10, 28), "#FFFFFF"); setze(rand, 0, 0.44, -0.02); rand.rotation.x = Math.PI / 2 - 0.25; kopf.add(rand); kopf.add(setze(teil(kugel(0.12), "#FFFFFF"), 0, 1.15, -0.25)); }
-  if (hat("hut") || hat("entdeckerhut")) { const id = hat("hut") ? "hut" : "entdeckerhut"; kopf.add(setze(teil(new CylinderGeometry(0.85, 0.85, 0.05, 28), farbe(id, "#FFE27A")), 0, 0.45, 0)); kopf.add(setze(teil(new SphereGeometry(0.5, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), farbe(id, "#FFE27A")), 0, 0.45, 0)); }
-  if (hat("katzenohren") || hat("fuchsohren")) { const id = hat("katzenohren") ? "katzenohren" : "fuchsohren"; [-1, 1].forEach(s => { const o = teil(new ConeGeometry(0.16, 0.32, 12), farbe(id, "#F28C38")); setze(o, 0.33 * s, 0.6, -0.05); o.rotation.z = -0.35 * s; kopf.add(o); }); }
-  if (hat("brille") || hat("sonnenbrille") || hat("pixelbrille")) { const id = hat("brille") ? "brille" : hat("sonnenbrille") ? "sonnenbrille" : "pixelbrille"; [-1, 1].forEach(s => { const g = new Mesh(new TorusGeometry(0.12, 0.025, 8, 20), mat(farbe(id, "#7B55B8"))); setze(g, 0.2 * s, 0.02, 0.56); kopf.add(g); if (id !== "brille") kopf.add(setze(new Mesh(new CircleGeometry(0.11, 16), mat("#2A2230")), 0.2 * s, 0.02, 0.57)); }); }
-  if (hat("schleife")) [-1, 1].forEach(s => kopf.add(setze(teil(kugel(0.13), farbe("schleife", "#FF6F9F")), 0.18 * s + 0.35, 0.5, 0.1)));
-  if (hat("fluegel")) [-1, 1].forEach(s => { const fl = teil(kugel(0.45), new MeshToonMaterial({ color: farbe("fluegel", "#BDE7FF"), gradientMap: verlauf, transparent: true, opacity: 0.7 })); fl.scale.set(0.25, 1, 0.6); setze(fl, 0.32 * s, 1.35, -0.38); fl.rotation.z = 0.5 * s; koerper.add(fl); });
-  if (hat("umhang")) { const u = teil(new CylinderGeometry(0.32, 0.6, 1.1, 20, 1, true, Math.PI * 0.6, Math.PI * 0.8), farbe("umhang", "#C2337A")); u.material = u.material.clone(); u.material.side = 2; setze(u, 0, 0.85, 0); koerper.add(u); }
-  if (hat("schal")) { const sc = teil(new TorusGeometry(0.24, 0.08, 10, 24), farbe("schal", "#FF6F61")); setze(sc, 0, 1.38, 0); sc.rotation.x = Math.PI / 2; koerper.add(sc); }
+  // (07.11.2026) gemeinsames Modul extras3d.js: alle Extras des Kleiderschranks, Dinge in der Hand werden gehalten
+  extras3d(look, { kopf, koerper, arme, hand: -0.44, hals: 1.38, ruecken: 1.35, umhang: 0.85 }, { teil, kugel, setze, mat, verlauf });
   f.userData = { koerper, beine, arme, kopf };
   return f;
 }
