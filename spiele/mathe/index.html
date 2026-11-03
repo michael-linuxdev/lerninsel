@@ -150,6 +150,9 @@
   .erklaer-zeile .erklaer-figur svg { width: 72px; height: 72px; }
   .erklaer-blase { flex: 1; margin: 0; background: #fff; border-radius: 18px; padding: 10px 14px; font-size: 1.35rem; font-weight: 600; line-height: 1.3; box-shadow: 0 0 0 3px #E4DAF6; display: flex; align-items: center; gap: 8px; }
   .erklaer-blase span { flex: 1; }
+  /* Russische Hilfe (05.11.2026, nur mit Hilfesprache Russisch): klein unter dem deutschen Satz */
+  .hilfe-ru { display: block; font-size: .85rem; font-weight: 500; color: #5B4A7A; margin-top: 2px; line-height: 1.3; }
+  .erklaer-blase { flex-wrap: wrap; } .erklaer-blase > .hilfe-ru { order: 3; flex-basis: 100%; margin-top: 0; }
   .vorlesen-knopf { flex: none; width: 46px; height: 46px; border-radius: 50%; border: 0; background: #E9F3FF; font-size: 1.3rem; cursor: pointer; }
   .erklaer-bild { width: 100%; }
   .erklaer-bild svg { width: 100%; height: auto; max-height: 30dvh; display: block; margin: 0 auto; }
@@ -292,6 +295,7 @@
 <script src="aufgaben.js"></script>
 <script src="fehler.js"></script>
 <script src="erklaeren.js"></script>
+<script src="hilfe-ru.js"></script>
 <script src="mathe.js"></script>
 </body>
 </html>

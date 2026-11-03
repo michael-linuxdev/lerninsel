@@ -231,9 +231,23 @@ pruefe("Spielort: ohne Spielzeit schläft er, ohne Führerschein gesperrt, sonst
 pruefe("Minispiele ausgeblendet (30.10.2026): vier Orte zeigen „bald“ ohne Ziel, Aktionsknopf „Ansehen“; der Schatz-Strand ist seit 04.11. Fipsis Angelsteg", () => {
   const u = neueUmgebung({ zeit: SPIELEN, funde: 20, speicher: { medien: { fuehrerschein: true } }, minispieleAus: true });
   { const b = u.K.antwort("truhe").blase; assert.ok(b[0] === "fipsi" && /Angelsteg/.test(b[1]), "Strand: Angelsteg"); assert.deepStrictEqual(u.K.aktionFuer("truhe")[0], ["🎣", "Angeln"]); }
-  ["ballons", "lauf", "kart", "bau"].forEach(id => { const b = u.K.antwort(id).blase;
+  ["lauf", "kart", "bau"].forEach(id => { const b = u.K.antwort(id).blase;
     assert.ok(b[0] === "🚧" && /entsteht etwas Neues/.test(b[2]) && !b[4], id); assert.deepStrictEqual(u.K.aktionFuer(id)[0], ["🚧", "Ansehen"], id); });
   assert.strictEqual(u.K.antwort("schach").blase[4], "../schach/", "Schach bleibt");
+});
+
+pruefe("Rhythmus-Boot (05.11.2026): Ballon-Wiese = Paulas Boot, zu bis Kapitel 4; Kapitel 4 „Paulas Fest“ braucht 15 Lernfunde und etwas bei Paula", () => {
+  const zu = neueUmgebung({ zeit: SPIELEN, funde: 20, minispieleAus: true, story: { kapitel: 3 } });
+  { const b = zu.K.antwort("ballons").blase; assert.ok(b[0] === "papagei" && /noch zu/.test(b[1]) && !b[4], "vor Kapitel 4 zu"); assert.deepStrictEqual(zu.K.aktionFuer("ballons")[0], ["🛶", "Boot"]); }
+  const auf = neueUmgebung({ zeit: SPIELEN, funde: 20, minispieleAus: true, story: { kapitel: 4 } });
+  { const b = auf.K.antwort("ballons").blase; assert.ok(b[0] === "papagei" && b[4] === "../rhythmus/", "ab Kapitel 4 offen"); }
+  const k4 = (u) => u.K.KAPITEL.find(k => k.n === 4);
+  assert.ok(k4(auf) && k4(auf).szene === "paulas-fest");
+  assert.strictEqual(k4(neueUmgebung({ funde: 20 })).faellig(), false, "ohne Paula nicht fällig");
+  assert.strictEqual(k4(neueUmgebung({ funde: 20, story: { etappen: { E9: "2026-10-30" } } })).faellig(), true, "mit Atelier (E9) fällig");
+  assert.strictEqual(k4(neueUmgebung({ funde: 20, speicher: { englisch: { lektionen: { "en-farben": 2 } } } })).faellig(), true, "mit einer Englisch-Lektion fällig");
+  assert.strictEqual(k4(neueUmgebung({ funde: 20, speicher: { sachkunde: { themen: { "mu-rhythmus": 1 } } } })).faellig(), true, "mit einem Musik-Thema fällig");
+  assert.strictEqual(k4(neueUmgebung({ funde: 14, story: { etappen: { E9: 1 } } })).faellig(), false, "unter 15 Lernfunden nicht fällig");
 });
 
 pruefe("neue Minispiel-Orte öffnen sich mit dem Wissensbaum", () => {

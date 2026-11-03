@@ -216,7 +216,7 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jede
   const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8"), alleThemen = w.THEMEN.concat(w.FACH_THEMEN);
   const gibt = (a) => { const [art, id] = a.split(":");
     return art === "sachkunde" ? alleThemen.some(t => t.id === id) : art === "echtewelt" ? echt.includes(`["${id}", `) : art === "englisch" ? w.ENGLISCH.some(l => l.id === id)
-      : ["atelier:malen", "atelier:musik", "atelier:lieder", "atelier:erkennen", "atelier:verfremden", "gefuehle:alle", "lesen:silben", "robo:alle", "praesentieren:folien"].includes(a); };
+      : ["atelier:malen", "atelier:musik", "atelier:lieder", "atelier:erkennen", "atelier:verfremden", "gefuehle:alle", "lesen:silben", "robo:alle", "praesentieren:folien", "rhythmus:boot"].includes(a); };   // rhythmus:boot = Paulas Rhythmus-Boot (05.11.2026)
   const soll = { kunst: [3, 3, 3], musik: [4, 4, 4], werken: [3, 2, 3], sport: [6, 5, 5], ethik: [4, 4, 4], evreligion: [4, 4, 4], kareligion: [4, 4, 4] };   // Lernbereiche Kl. 1/2, 3, 4
   const benutzt = new Set(), z = {};
   Object.entries(soll).forEach(([f, [n12, n3, n4]]) => {

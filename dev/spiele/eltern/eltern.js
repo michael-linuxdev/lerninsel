@@ -12,6 +12,27 @@
   const hash = (t) => { let h = 5381; for (const c of "pin:" + t) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0; return h.toString(36); };
   const eltern = () => S.lade("eltern") || {};
 
+  // ---------- Fachdaten nach Bedarf (05.11.2026) ----------
+  // Themen, Werkstatt, Lektionen und Lehrplan (~1,5 MB) braucht nur der Lernstand und „Wie in der Schule“.
+  // Sie laden erst nach dem ersten Bild; die Reihenfolge bleibt wie früher in index.html (async = false).
+  const FACHDATEN = ["../deutsch/geschichte.js", "../medien/lektionen.js", "../sachkunde/themen.js", "../sachkunde/landkreise.js", "../sachkunde/faecher.js",
+    "../sachkunde/religion.js", "../deutsch/werkstatt.js", "../englisch/lektionen.js", "../sorbisch/lektionen.js", "../sorbisch/mutter.js", "../vorschule/aufgaben.js",
+    "../sorbisch/geprueft.js", "../../shared/lehrplan/kern.js", "../../shared/inhalte.js", "../../inhalte/deutsch/anlaute.js", "../../inhalte/deutsch/lesetexte.js",
+    "../../inhalte/deutsch/schreiben.js", "../../inhalte/deutsch/schreibschrift.js", "../../shared/lehrplan/laender/sachsen.js",
+    "../../shared/lehrplan/laender/sachsen-punkte.js", "../../shared/koennen.js", "../../shared/lehrplan.js"];
+  const FACH_TEILE = ["lernstand", "schule"];
+  let fachBereit = false, fachLaden = null, aktTeil = "";
+  function ladeFachdaten() {
+    if (fachLaden) return fachLaden;
+    fachLaden = Promise.all(FACHDATEN.map(src => new Promise((ok) => {
+      const el = document.createElement("script"); el.src = src; el.async = false;
+      el.onload = ok; el.onerror = () => { console.warn("Fachdaten fehlen:", src); ok(); };   // offline ohne Cache: Rest trotzdem zeigen
+      document.body.appendChild(el);
+    }))).then(() => { fachBereit = true; });
+    return fachLaden;
+  }
+  const ladeKarte = `<div class="karte lade-karte" aria-busy="true"><p>⏳ Einen Moment, die Lerninhalte werden geladen …</p></div>`;
+
   // ---------- PIN ----------
   function pinSeite() {
     const neu = !S.pin();
@@ -637,6 +658,40 @@
   const quoteKlasse = (q) => q == null ? "leer" : q >= 0.8 ? "gut" : q >= 0.6 ? "mittel" : "schwach";
   const prozent = (q) => q == null ? "–" : Math.round(q * 100) + " %";
 
+  // ---------- Technik & Speicher (05.11.2026) ----------
+  // Speicherplatz, ob der Browser die Daten dauerhaft behält, App-Version und das technische Protokoll (Seitenfehler, voller Speicher) –
+  // alles nur lokal; bei Problemen ein Bildschirmfoto davon an den Entwickler schicken.
+  function technikKarte() {
+    const l = (S.protokoll ? S.protokoll() : []).slice().reverse();
+    const zeit = (z) => { try { return new Date(z).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" }); } catch (e) { return z; } };
+    return `<div class="karte" id="technik-karte">
+      <h2>🛠️ Technik & Speicher</h2>
+      <p id="speicher-stand" class="klein">Speicher wird geprüft …</p>
+      <p class="klein">App-Version (Offline-Speicher): <span id="app-version">–</span></p>
+      <h3 style="margin:10px 0 6px;font-size:1.05rem">Technisches Protokoll</h3>
+      ${l.length ? `<ul class="liste" id="protokoll-liste">${l.slice(0, 12).map(x => `<li><b>${x.a === "speicher" ? "💾 Speicher" : "⚠️ Fehler"}</b> ${S.esc(zeit(x.z))} · ${S.esc(x.s)}${x.n > 1 ? ` (${x.n}×)` : ""}<br><span class="klein">${S.esc(x.t)}</span></li>`).join("")}</ul>
+        <p class="klein">Diese Einträge helfen bei der Fehlersuche. Macht bei Problemen ein Bildschirmfoto davon. Es werden keine Daten verschickt.</p>
+        <div class="knoepfe"><button class="knopf" id="protokoll-leeren">Protokoll leeren</button></div>`
+        : `<p class="klein" id="protokoll-leer">Keine Auffälligkeiten – es sind keine technischen Fehler aufgetreten.</p>`}
+    </div>`;
+  }
+  function technikKnoepfe() {
+    const b = $("protokoll-leeren"); if (b) b.addEventListener("click", () => { S.protokollLeeren(); S.meldung("Protokoll geleert."); uebersicht(); });
+    const el = $("speicher-stand"); if (!el) return;
+    // Cache-Name wie in sw.js: Vorsilbe test-/dev- je nach Pfad, dann spielwelt-<Version>
+    const vor = location.pathname.includes("/dev/test/") ? "test-" : location.pathname.includes("/dev/") ? "dev-" : "";
+    try { if (window.caches) caches.keys().then(k => { const v = k.filter(x => new RegExp("^" + vor + "spielwelt-[0-9a-f]+$").test(x)).pop(); if (v && $("app-version")) $("app-version").textContent = v.split("-").pop(); }).catch(() => {}); } catch (e) { /* egal */ }
+    const st = navigator.storage;
+    if (!st || !st.estimate) { el.textContent = "Dieser Browser zeigt den Speicherplatz nicht an. Sichert den Spielstand regelmäßig als Datei."; return; }
+    Promise.all([st.estimate(), st.persisted ? st.persisted() : Promise.resolve(null)]).then(([e, fest]) => {
+      if (!$("speicher-stand")) return;
+      const mb = (x) => (x / 1048576).toLocaleString("de-DE", { maximumFractionDigits: 1 });
+      el.innerHTML = `Belegt: <b>${mb(e.usage || 0)} MB</b>${e.quota ? ` von ${mb(e.quota)} MB` : ""}. ` +
+        (fest === true ? "✅ Der Browser behält die Daten dauerhaft." : fest === false ? `⚠️ Der Browser darf die Daten bei Platzmangel löschen. Am sichersten: die Lerninsel zum Home-Bildschirm hinzufügen und regelmäßig eine Sicherungsdatei anlegen. <button class="knopf klein-k" id="speicher-fest">Dauerhaft speichern</button>` : "");
+      const f = $("speicher-fest"); if (f) f.addEventListener("click", () => st.persist().then(ja => { S.meldung(ja ? "Die Daten werden jetzt dauerhaft gespeichert." : "Der Browser hat abgelehnt. Bitte die Lerninsel zum Home-Bildschirm hinzufügen."); technikKnoepfe(); }));
+    }).catch(() => { el.textContent = "Speicherplatz konnte nicht ermittelt werden."; });
+  }
+
   function uebersicht() {
     if (S.schuljahrStart) S.schuljahrStart();   // ältere Spielstände: laufendes Schuljahr merken (NA-61)
     const mathe = S.lade("mathe") || {}, deutsch = S.lade("deutsch") || {}, medien = S.lade("medien") || {}, welt = S.lade("welt3d") || {};
@@ -713,7 +768,7 @@
       </div>
       </section>
       <section class="eltern-teil" data-teil="lernstand" role="tabpanel" hidden>
-      ${lehrplanKarte(mathe)}
+      ${!fachBereit ? ladeKarte : `${lehrplanKarte(mathe)}
       <div class="karte">
         <h2>Fähigkeiten</h2>
         <table><tr><th>Fähigkeit</th><th class="r">Stufe</th><th class="r">Punkte</th><th>Wächst durch</th></tr>
@@ -734,16 +789,17 @@
         <p><b>Sachunterricht:</b> ${geschafftListe(window.THEMEN, (S.lade("sachkunde") || {}).themen)}</p>
         <p><b>Führerschein:</b> ${medien.fuehrerschein ? `bestanden am ${medien.fuehrerschein.split("-").reverse().join(".")}` : `${window.LEKTIONEN.filter(l => medien.lektionen && medien.lektionen[l.id]).length} von ${window.LEKTIONEN.length} Lektionen`}</p>
         <p><b>Haustier:</b> ${(() => { const t = S.lade("tier"); return !t || !t.phase ? "noch kein Ei ausgesucht" : t.phase === "ei" ? `Ei wird gewärmt (${t.waerme || 0} von 3)` : `${t.name || "ohne Namen"}, Freundschaft ${t.freundschaft || 0}, ${t.leckerli || 0} Leckerli`; })()}</p>
+        <p><b>Rhythmus-Boot (Musik):</b> ${(() => { const r = S.lade("rhythmus"); return r && r.runden ? `${r.runden} Fahrt${r.runden === 1 ? "" : "en"}, ${Object.keys(r.geschafft || {}).length} Rhythmen beim ersten Versuch nachgespielt` : "noch nicht gefahren (öffnet mit Kapitel 4)"; })()}</p>
         <p><b>3D-Welt:</b> Ballon-Rekord ${(welt.ballon && welt.ballon.rekord) || 0} Punkte, Insel-Schatz ${(welt.insel && welt.insel.geschafft) || 0}× gefunden</p>
       </div>
-      ${staerkenKarte()}
+      ${staerkenKarte()}`}
       </section>
       <section class="eltern-teil" data-teil="schule" role="tabpanel" hidden>
-      ${matheKarte()}
+      ${!fachBereit ? ladeKarte : `${matheKarte()}
       ${englischKarte()}
       ${sorbischKarte()}
       ${schuljahrKarte()}
-      ${deutschKarte()}
+      ${deutschKarte()}`}
       </section>
       <section class="eltern-teil" data-teil="zeit" role="tabpanel" hidden>
       ${ferienKarte()}
@@ -788,6 +844,7 @@
         <p>Alle Daten bleiben nur auf diesem Tablet, nichts wird ins Internet geschickt. Den Spielstand kannst du auf der Startseite unter „💾 Spielstand“ sichern oder aufs andere Tablet übertragen.</p>
         <div class="knoepfe"><button class="knopf" id="pin-neu">PIN ändern</button><button class="knopf" id="abmelden">Bereich schließen</button></div>
       </div>
+      ${technikKarte()}
       </section>
 `;
     $("pin-neu").addEventListener("click", () => { S.setzePin(null); sessionStorage.removeItem(SITZUNG); pinSeite(); });
@@ -813,7 +870,9 @@
     if ($("vl-auto")) $("vl-auto").addEventListener("change", () => { const e = eltern(); e.vorlesen = { auto: $("vl-auto").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });
     if ($("fe-modus")) { const sp = () => { const e = eltern(); e.ferien = { modus: $("fe-modus").checked, weniger: $("fe-weniger").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); };
       $("fe-modus").addEventListener("change", sp); $("fe-weniger").addEventListener("change", sp); }
-    zeitKnoepfe(); inselKnoepfe(); matheKnoepfe(); englischKnoepfe(); sorbischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); echteWeltKnoepfe(); staerkenKnoepfe();
+    zeitKnoepfe(); inselKnoepfe(); echteWeltKnoepfe(); technikKnoepfe();
+    if (fachBereit) { matheKnoepfe(); englischKnoepfe(); sorbischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); staerkenKnoepfe(); }
+    inhalt.dataset.fach = fachBereit ? "ja" : "nein";
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";
@@ -836,14 +895,20 @@
       if (!teile.some(x => x.dataset.teil === n)) n = "ueberblick";
       inhalt.querySelectorAll(".eltern-reiter button").forEach(b => { const an = b.dataset.teil === n; b.classList.toggle("an", an); b.setAttribute("aria-selected", an); });
       teile.forEach(x => { x.hidden = !window.__elternAlle && x.dataset.teil !== n; });
-      try { sessionStorage.setItem("eltern-teil", n); } catch (e) { }
+      aktTeil = n; try { sessionStorage.setItem("eltern-teil", n); } catch (e) { }
+      // Lernstand und Schule brauchen die Fachdaten: laden (falls noch nicht da) und dann neu zeichnen
+      if (FACH_TEILE.includes(n) && inhalt.dataset.fach !== "ja") ladeFachdaten().then(() => { if (aktTeil === n && inhalt.dataset.fach !== "ja" && $("abmelden")) uebersicht(); });
     };
     inhalt.querySelectorAll(".eltern-reiter button").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); zeigeTeil(b.dataset.teil); scrollTo(0, 0); }));
     let teilStart = location.hash.slice(1); try { teilStart = teilStart || sessionStorage.getItem("eltern-teil") || "ueberblick"; } catch (e) { }
     zeigeTeil(teilStart);
-    window.__eltern = Object.assign(window.__eltern || {}, { teil: zeigeTeil });
+    window.__eltern = Object.assign(window.__eltern || {}, { teil: zeigeTeil, fachdaten: ladeFachdaten, fachBereit: () => fachBereit });
+    // Nach dem ersten Bild die Fachdaten still vorladen, damit die Reiter gleich bereit sind
+    if (!fachBereit) setTimeout(ladeFachdaten, 300);
     $("abmelden").addEventListener("click", () => { sessionStorage.removeItem(SITZUNG); location.href = "../ich/"; });
   }
 
-  if (sitzungOffen() && S.pin()) { if (S.eingerichtet()) uebersicht(); else einrichtung(false); } else pinSeite();
+  // Test-Haken __elternAlle zeigt alle Teile untereinander: dann erst nach den Fachdaten zeichnen (wie früher alles auf einmal)
+  const start = () => { if (sitzungOffen() && S.pin()) { if (S.eingerichtet()) uebersicht(); else einrichtung(false); } else pinSeite(); };
+  if (window.__elternAlle) ladeFachdaten().then(start); else start();
 })();

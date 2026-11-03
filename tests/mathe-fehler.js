@@ -8,6 +8,7 @@ global.localStorage = { getItem: () => null, setItem: () => {} };
 require("../spiele/mathe/aufgaben.js");
 require("../spiele/mathe/fehler.js");
 require("../spiele/mathe/erklaeren.js");
+require("../spiele/mathe/hilfe-ru.js");
 const F = global.MatheFehler, E = global.MatheErklaeren, M = "−";
 let n = 0;
 const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
@@ -148,6 +149,23 @@ pruefe("Erklär-Einheiten (kindgerecht, 03.11.2026): feste Reihenfolge zeigen �
   for (const [id, schritte] of alle) { const g = schritte.find(s => s.typ === "gegenbeispiel"), m = rechnung.exec(g.text);
     if (!m) continue; const a = +m[1], b = +m[3], op = m[2], c = op === "+" ? a + b : op === M ? a - b : op === ":" ? a / b : a * b;
     assert.strictEqual(F.erkenne({ text: "", antwort: String(c), ops: { a, b, op } }, +m[4]).id, g.fv, `${id}: ${m[0]}`); }
+});
+
+pruefe("Russische Hilfe (05.11.2026): jeder Satz der Erklär-Einheiten und der Denkfehler hat eine russische Zeile (Entwurf)", () => {
+  const R = global.MatheRu, fehlt = [], pr = (t) => { if (t && /[a-zäöüß]{3}/i.test(t) && !R.uebersetze(t)) fehlt.push(t); };
+  for (const e of Object.values(E.ERKLAERUNGEN)) for (const sch of (Array.isArray(e) ? [e] : Object.values(e))) for (const st of sch) { pr(st.text); pr(st.frage); pr(st.warum); (st.bilder || []).forEach(b => pr(b.satz)); }
+  let saat2 = 5; const zz2 = () => { saat2 = (saat2 * 1103515245 + 12345) % 2147483648; return saat2 / 2147483648; };
+  const fall = [[auf("34 + 28", 62), 52], [auf("34 + 28", 62), 72], [auf(`52 ${M} 27`, 25), 35], [auf(`61 ${M} 28`, 33), 43], [auf("3 · 4", 12), 7], [auf(`9 ${M} 3`, 6), 12], [auf("5 + 3", 8), 7],
+    [auf(`9 ${M} 3`, 6), 7], [auf("34 + 5", 39), 84], [auf("7 · 8", 56), 63], [auf("6 · 0", 0), 6], [auf("15 : 3", 5), 12], [auf("24 : 4", 6), 7], [auf("12 : 3", 4), 36], [auf("8 : 2", 4), 16],
+    [auf("34 + 28", 62), 26], [auf("45 + 2", 47), 74], [F.uhrAufgabe(2, 0, zz2), "12:10"], [F.uhrAufgabe(4, 30, zz2), "5:30"], [F.uhrAufgabe(4, 15, zz2), "5:15"], [F.uhrAufgabe(4, 45, zz2), "9:20"],
+    [{ text: "", frage: "Wie viel Geld ist das?", antwort: "25", art: "zahl", geld: [10, 10, 5] }, 3], [{ text: "", antwort: "5", art: "zahl", lineal: { start: 2, l: 5 } }, 7],
+    [{ text: "3 m = ? cm", antwort: "300", art: "zahl", meter: 3 }, 30], [{ text: "", antwort: "3000", art: "zahl", umrechnen: { n: 3, f: 1000, von: "kg", nach: "g" } }, 300],
+    [{ text: "", antwort: "305", art: "zahl", stellen: 305 }, 35], [{ text: "", antwort: "390", art: "zahl", runden: 386 }, 380], [{ text: "", antwort: "340", art: "zahl", runden: 342 }, 350]];
+  for (const [a, w] of fall) { const e = F.erkenne(a, w); assert.ok(e, `${a.text} → ${w}`); pr(e.kurz); e.lang.forEach(pr); for (let w = 0; w < 25; w++) F.kontraste(a, e.id).forEach(k => { pr(k.text); pr(k.hilfe); }); }   // Kontraste sind zufällig: mehrmals
+  assert.deepStrictEqual(fehlt, [], "ohne russische Zeile – in spiele/mathe/hilfe-ru.js ergänzen");
+  assert.strictEqual(R.uebersetze("Robo rechnet: 71 + 19 = 80. Stimmt das?"), "Робо считает: 71 + 19 = 80. Это правильно?", "Zahlen werden eingesetzt");
+  assert.strictEqual(R.uebersetze("Das gibt es nicht."), "", "Unbekanntes bleibt leer");
+  assert.strictEqual(R.STATUS.ru, "entwurf");
 });
 
 console.log(`✅ Mathe-Fehler-Ursachen: ${n} Prüfungen bestanden.`);

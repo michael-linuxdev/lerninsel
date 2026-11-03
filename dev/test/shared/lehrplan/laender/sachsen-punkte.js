@@ -985,7 +985,7 @@
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
           ["sn.mu12.2.01", "Klänge erzeugen, Klangeigenschaften und Klangfarben untersuchen", "1/2", ["sachkunde:mu-instrumente1", "atelier:musik"], "ja"],
           ["sn.mu12.2.02", "Themen verklanglichen, eigene grafische Notation", "1/2", ["sachkunde:mu-rhythmus", "atelier:musik"], "ja"],
-          ["sn.mu12.2.03", "Grundschlag und Metrum spüren, Rhythmusbausteine (gleich, doppelt, halb so lang)", "1/2", ["sachkunde:mu-rhythmus", "atelier:musik"], "ja"],
+          ["sn.mu12.2.03", "Grundschlag und Metrum spüren, Rhythmusbausteine (gleich, doppelt, halb so lang)", "1/2", ["sachkunde:mu-rhythmus", "atelier:musik", "rhythmus:boot"], "ja"],
           ["sn.mu12.2.04", "Erstes Spiel auf Melodieinstrumenten, Lieder begleiten", "1/2", ["atelier:musik", "echtewelt:instrument"], "ja"]
         ],
         3: [ // Musik umsetzen, verbinden und in Beziehung bringen
@@ -1013,7 +1013,7 @@
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
           ["sn.mu3.2.01", "Mit Klängen experimentieren, Klangflächen, eigene Notation", "3", ["atelier:musik"], "ja"],
           ["sn.mu3.2.02", "Rhythmusbausteine im Zweier- und Dreiertakt", "3", ["sachkunde:mu-taenze", "atelier:musik"], "ja"],
-          ["sn.mu3.2.03", "Rhythmusbausteine notieren", "3", ["sachkunde:mu-noten"], "ja"]
+          ["sn.mu3.2.03", "Rhythmusbausteine notieren", "3", ["sachkunde:mu-noten", "rhythmus:boot"], "ja"]
         ],
         3: [ // Musik umsetzen, verbinden und in Beziehung bringen
           ["sn.mu3.3.01", "Musik in Bewegung: Spiegel- und Echotanzen", "3", ["sachkunde:mu-welt", "echtewelt:tanzen"], "aussen"],

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Paulas Rhythmus-Boot</title>
+<meta name="theme-color" content="#D9F4FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  /* Rhythmus-Boot (05.11.2026, Kapitel 4 „Paulas Fest“): Rhythmus hören, nachpaddeln oder die passende Karte finden – Ballon-Wiese */
+  html, body { min-height: 100%; }
+  body { background: linear-gradient(#D9F4FF 0 30%, #BFE9A8 30% 100%); background-attachment: fixed; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; min-width: 0; }
+  @media (max-width: 480px) { .oben h1 { font-size: 1.3rem; } }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .mitte { max-width: 1040px; margin: 0 auto; padding: 10px 16px 30px; display: grid; gap: 14px; }
+  .paula { display: flex; gap: 12px; align-items: center; }
+  .paula .figur { font-size: 3.4rem; flex: none; transition: transform .1s; }
+  .paula .figur.wipp { transform: rotate(-8deg) translateY(-4px); }
+  .blase { background: #fff; border-radius: 24px; padding: 12px 18px; font-size: 1.25rem; font-weight: 500; box-shadow: 0 6px 0 rgba(0,0,0,.08); flex: 1; display: flex; gap: 10px; align-items: center; }
+  .blase p { margin: 0; flex: 1; line-height: 1.35; }
+  .ru { display: block; font-size: 1rem; font-weight: 500; color: var(--pflaume-hell); margin-top: 4px; }
+  .vorlesen { flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--himmel); font-size: 1.5rem; }
+  /* Fluss mit Bojen und Boot */
+  .fluss { position: relative; height: 74px; border-radius: 40px; background: linear-gradient(#7FD3F7, #3AA0E0); border: 5px solid #3B1F63; overflow: hidden; }
+  .fluss .wasser { position: absolute; inset: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+  .fluss .boje { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 3px solid #3B1F63; opacity: .7; }
+  .fluss .boje.da { background: #FFD84D; opacity: 1; }
+  .fluss .boje.ziel { width: 30px; height: 30px; background: #FF6F61; opacity: 1; }
+  .fluss .boot { position: absolute; top: 8px; font-size: 2.6rem; transition: left .8s ease-in-out; margin-left: 12px; }
+  .stand { text-align: center; font-weight: 700; font-size: 1.1rem; color: var(--pflaume); margin: 4px 0 6px; }
+  .karte { background: #fff; border-radius: 28px; padding: 16px; box-shadow: 0 6px 0 rgba(0,0,0,.08); text-align: center; display: grid; gap: 12px; }
+  .karte[hidden], .zu-oder[hidden] { display: none; }
+  .frage { margin: 0; font-size: 1.35rem; font-weight: 700; }
+  /* Rhythmus-Karte: Bausteine nach Länge */
+  .rhythmus { display: flex; gap: 6px; background: #F6F1FF; border: 4px solid #3B1F63; border-radius: 20px; padding: 8px; min-height: 96px; transition: box-shadow .08s; }
+  .rhythmus.puls, .raetsel.puls { box-shadow: 0 0 0 6px #FFD84D; }
+  .baustein { display: grid; justify-items: center; align-content: center; gap: 4px; background: #fff; border-radius: 14px; padding: 6px 2px; min-width: 0; transition: background .1s, transform .1s; }
+  .baustein.an { background: #FFD84D; transform: scale(1.06); }
+  .baustein > b { font-size: 1.25rem; }
+  .baustein.b-sch > b { color: var(--pflaume-hell); }
+  .punkte { display: flex; gap: 6px; align-items: center; height: 40px; }
+  .punkte i { width: 30px; height: 30px; border-radius: 50%; background: #FF6F61; border: 3px solid #3B1F63; }
+  .punkte i.klein { width: 20px; height: 20px; background: #4FA8F0; }
+  .punkte i.lang { width: 64px; border-radius: 99px; }
+  .punkte i.leer { background: none; border-style: dashed; border-color: #B9A8DA; }
+  .raetsel { display: flex; gap: 6px; justify-content: center; border: 4px dashed #B9A8DA; border-radius: 20px; padding: 10px; min-height: 70px; align-items: center; transition: box-shadow .08s; }
+  .raetsel span { font-size: 2rem; font-weight: 700; color: #B9A8DA; flex: 1; }
+  .wahl { display: grid; gap: 10px; }
+  .wahl-karte { background: none; border: 0; padding: 0; border-radius: 22px; cursor: pointer; }
+  .wahl-karte:disabled { cursor: default; }
+  .wahl-karte.falsch { opacity: .35; }
+  .wahl-karte.richtig .rhythmus { box-shadow: 0 0 0 6px #7ED957; }
+  .tupfen { display: flex; gap: 8px; justify-content: center; min-height: 26px; }
+  .tupfen i { width: 22px; height: 22px; border-radius: 50%; background: #3AA0E0; border: 3px solid #3B1F63; }
+  .knoepfe { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; }
+  .knoepfe > :only-child { grid-column: 1 / -1; }
+  .paddel { min-height: 120px; border-radius: 30px; border: 5px solid #3B1F63; background: #FFB547; font-size: 2.6rem; display: grid; place-items: center; box-shadow: 0 8px 0 #3B1F63; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+  .paddel b { font-size: 1.3rem; }
+  .paddel:disabled { opacity: .45; }
+  .paddel.schlag { animation: schlag .18s; }
+  @keyframes schlag { 50% { transform: translateY(6px) scale(.97); box-shadow: 0 2px 0 #3B1F63; } }
+  .hinweis { min-height: 1.6em; font-size: 1.15rem; font-weight: 600; margin: 0; }
+  .hinweis.gut { color: #2E9C5A; } .hinweis.nein { color: #C2337A; }
+  .ende h2 { margin: 0; }
+  .ende-knoepfe { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .ende-knoepfe a { text-decoration: none; }
+  .zu-oder { text-align: center; }
+  @media (max-width: 520px) { .knoepfe { grid-template-columns: 1fr; } .baustein > b { font-size: 1rem; } .punkte i { width: 22px; height: 22px; } .punkte i.klein { width: 15px; height: 15px; } .punkte i.lang { width: 44px; } }
+  @media (orientation: landscape) and (min-width: 900px) { .spiel-zeile { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; align-items: start; } .spiel-zeile .knoepfe { grid-template-columns: 1fr; } .spiel-zeile .paddel { min-height: 220px; font-size: 3.4rem; } }
+  .spiel-zeile > .karte + .knoepfe { margin-top: 14px; } @media (orientation: landscape) and (min-width: 900px) { .spiel-zeile > .karte + .knoepfe { margin-top: 0; } }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../welt3d/heimat.html" aria-label="Zur Insel">🏝️</a>
+  <h1>🛶 Paulas Rhythmus-Boot</h1>
+  <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
+</div>
+<main class="mitte">
+  <section class="paula">
+    <div class="figur" id="paula-fig" aria-hidden="true">&#xE106;</div>
+    <div class="blase"><p id="paula-text"></p><button class="vorlesen" id="paula-vorlesen" aria-label="Vorlesen">🔊</button></div>
+  </section>
+  <div id="spiel">
+    <section class="fluss" id="fluss" aria-label="Fluss zum Fest"></section>
+    <p class="stand" id="stand"></p>
+    <div class="spiel-zeile">
+      <section class="karte" id="aufgabe-karte"><div id="aufgabe"></div><p class="hinweis" id="hinweis" aria-live="polite"></p></section>
+      <section class="knoepfe" id="knoepfe"></section>
+    </div>
+  </div>
+  <section class="karte ende" id="ende" hidden></section>
+  <section class="zu-oder" id="zu" hidden>
+    <div class="blase" style="justify-content:center"><p>🔒 Paulas Rhythmus-Boot fährt ab Kapitel 4. Lern weiter auf der Insel – dann holt Paula dich zum Fest ab!</p></div>
+  </section>
+</main>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/koennen.js"></script>
+<script src="boot.js"></script>
+</body>
+</html>

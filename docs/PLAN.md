@@ -2179,3 +2179,24 @@ Review in drei Teilen (Sicherheit/Datenschutz, Kernlogik, Build/Tests). Umgesetz
 - **Hinweis Tests:** `vorschule` wackelt unter starker paralleler Last (einzeln grün). Push nur noch über ein Skript, das bei Rot abbricht.
 - **Offen / nächste Schritte:** iPad-Test der neuen Extras, Erklärungen, Münzen und des Angelstegs; Rhythmus-Boot (Ballon-Wiese, Kapitel 4); Schrittweg für mehrstellig mal; russische Hilfe für Mathe-Erklärungen und Denkfehler-Texte (fehlt bisher); weitere Kl.-3/4-Einheiten (Teilen mit Rest, Gewicht);
   Extras der 3D-Figur an die neuen Zeichnungen angleichen.
+
+## Stand 05.11.2026 – Produktreife: Elternbereich schneller, Russisch in Mathe, Rhythmus-Boot, Technik-Protokoll
+Fragerunde: keine iPad-Rückmeldung; Auftraggeber wählte alle vier Pakete (Elternbereich schneller, Russisch für Mathe-Hilfen, Rhythmus-Boot, Qualität/Robustheit), nichts ist tabu.
+- **Erledigt – Elternbereich schneller:** Themen, Werkstatt, Lektionen und Lehrplan (~1,5 MB, 22 Dateien) stehen nicht mehr in `spiele/eltern/index.html`, sondern laden
+  nach dem ersten Bild (`FACHDATEN`/`ladeFachdaten()` in `eltern.js`, Reihenfolge wie früher). Überblick, Zeit & Regeln und Kinder & Gerät erscheinen sofort; „Lernstand“ und
+  „Wie in der Schule“ zeigen kurz „Lerninhalte werden geladen …“ und füllen sich von selbst (auch beim Direktaufruf `#schule`). Auf dem Überblick laden die Daten still
+  im Hintergrund vor. Test `elternschnell` (größte Datei künstlich gebremst); `dashboard` angepasst.
+- **Erledigt – Russische Hilfe in Mathe:** `spiele/mathe/hilfe-ru.js` übersetzt alle Sätze der 23 Erklär-Einheiten, der 20 Denkfehler (kurz und lang), der Kontrast-Hilfen
+  und den Rahmen („Fast! …“, Angebot „Soll ich es dir erst erklären?“) – über Satz-Skelette mit Zahlen-Platzhaltern (~330 Einträge, Entwurf). Unter jeder Sprechblase
+  steht dann klein die russische Zeile, nur bei Hilfesprache Russisch. `tests/mathe-fehler.js` meldet jeden neuen deutschen Satz ohne Übersetzung; Browser-Test `matheru`.
+- **Erledigt – Rhythmus-Boot (Kapitel 4 „Paulas Fest“):** Ballon-Wiese → `spiele/rhythmus/` (Paula). Paula spielt nach Antippen „▶ Anhören“ einen Rhythmus (Klang und
+  Leuchten im Takt), das Kind paddelt ihn nach (Echo) oder findet die passende Karte (Finden), abwechselnd, 6 Rhythmen je Fahrt; das Boot fährt zum Fest.
+  **Entscheidung:** Die Prüfung verlangt keinen festen Takt – das Tempo des Kindes zählt, jeder Schlag darf 0,3 Schläge daneben liegen (fair für Jüngere, iPad-Verzögerungen egal).
+  Stufen: Vorschule/Kl. 1 Ta und ti-ti als Punkte, Kl. 2 dazu Pausen, ab Kl. 3 Ta-a und Notenzeichen (Lehrplan „Rhythmusbausteine notieren“).
+  Sterne nur für neue Rhythmen beim ersten Versuch, höchstens 3 am Tag. **Kapitel 4** öffnet bei 15 Lernfunden und etwas bei Paula (Atelier E9, eine Englisch-Lektion oder
+  ein Musik-Thema); Szene `paulas-fest` mit Zeigehand zu Bühne und Ballon-Wiese. Lehrplan Musik verweist mit `rhythmus:boot`; Elternbericht zeigt die Fahrten. Test `rhythmus`.
+- **Erledigt – Qualität/Robustheit:** technisches Protokoll in `core.js` (Seitenfehler, abgelehnte Promises, voller localStorage – nur lokal, höchstens 30, gleiche gezählt) und
+  Karte „🛠️ Technik & Speicher“ unter „Kinder & Gerät“: Speicherplatz, ob der Browser die Daten dauerhaft behält (mit Knopf „Dauerhaft speichern“), App-Version, Protokoll
+  mit „Protokoll leeren“. So kann der Auftraggeber bei iPad-Problemen ein Bildschirmfoto schicken. Test `technik`. Die vier neuen Tests laufen auch in der CI.
+- **Offen / nächste Schritte:** iPad-Test (Elternbereich-Ladezeit, Rhythmus-Boot mit echtem Ton und Tippen, russische Zeilen in Mathe); Russisch von Muttersprachlern
+  prüfen lassen (Mathe-Hilfen sind Entwurf); Kapitel 5; Schrittweg für mehrstellig mal; Extras der 3D-Figur angleichen; `vorschule` wackelt weiter nur unter Last.

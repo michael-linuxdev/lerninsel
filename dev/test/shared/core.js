@@ -107,7 +107,26 @@
   const lesenK = (k) => { try { return JSON.parse(localStorage.getItem(k)) || null; } catch (e) { return null; } };
   const schreibenK = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
   function lokalLesen() { return lesenK(KEY); }
-  function lokalSchreiben(p) { return schreibenK(KEY, p); }
+  // Technisches Protokoll (05.11.2026): Seitenfehler und volle Speicher werden nur auf diesem Gerät gemerkt (höchstens 30 Einträge,
+  // gleiche Meldungen gezählt) und im Elternbereich unter „Kinder & Gerät“ gezeigt – nichts verlässt das Gerät.
+  const PROTO = PRE + "protokoll";
+  function protokoll(art, text) {
+    try {
+      const t = String(text || "").replace(/\s+/g, " ").slice(0, 220), l = JSON.parse(localStorage.getItem(PROTO) || "[]");
+      const seite = (location.pathname.replace(/\/index\.html$/, "/").split("/").filter(Boolean).slice(-2).join("/")) || "/";
+      const da = l.find(x => x.a === art && x.t === t && x.s === seite);
+      if (da) { da.n = (da.n || 1) + 1; da.z = new Date().toISOString(); } else l.push({ z: new Date().toISOString(), a: art, t, s: seite, n: 1 });
+      localStorage.setItem(PROTO, JSON.stringify(l.slice(-30)));
+    } catch (e) { /* Protokoll ist nur eine Hilfe */ }
+  }
+  addEventListener("error", (e) => { if (e && e.message) protokoll("fehler", `${e.message} (${String(e.filename || "").split("/").slice(-2).join("/")}:${e.lineno || 0})`); });
+  addEventListener("unhandledrejection", (e) => { const r = e && e.reason; protokoll("fehler", "Promise: " + (r && r.message ? r.message : String(r))); });
+  let speicherVollGemeldet = false;
+  function lokalSchreiben(p) {
+    const ok = schreibenK(KEY, p);
+    if (!ok && !speicherVollGemeldet) { speicherVollGemeldet = true; protokoll("speicher", "Spielstand passt nicht mehr in den lokalen Speicher (Sicherung in IndexedDB läuft weiter)"); }
+    return ok;
+  }
 
   // ---------- IndexedDB (zweite Kopie) ----------
   let dbVersprechen = null;
@@ -462,6 +481,10 @@
     },
 
     // Kurze Einblendung unten
+    // Technisches Protokoll (nur auf dem Gerät): Spielwelt.protokoll() → Liste, protokollLeeren(), merke(art, text)
+    protokoll() { try { return JSON.parse(localStorage.getItem(PROTO) || "[]"); } catch (e) { return []; } },
+    protokollLeeren() { try { localStorage.removeItem(PROTO); } catch (e) { /* egal */ } },
+    merke(art, text) { protokoll(art, text); },
     meldung(text) {
       let el = document.getElementById("meldung");
       if (!el) {

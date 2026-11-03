@@ -78,16 +78,19 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const { ctx, p } = await kind("3", { breite, hoehe });
     await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(400);
     if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(600); }
-    const teile = await p.evaluate(() => [...document.querySelectorAll(".eltern-teil")].map(t => ({ id: t.dataset.teil, an: !t.hidden, karten: t.querySelectorAll(":scope > .karte").length })));
-    erwarte(teile.length === 5 && teile.filter(t => t.an).map(t => t.id).join() === "ueberblick" && teile.reduce((n, t) => n + t.karten, 0) >= 20,
-      `Elternbereich ${art}: fünf Reiter, startet mit „Überblick“, alle ${teile.reduce((n, t) => n + t.karten, 0)} Karten verteilt`);
+    const teileVon = () => p.evaluate(() => [...document.querySelectorAll(".eltern-teil")].map(t => ({ id: t.dataset.teil, an: !t.hidden, karten: t.querySelectorAll(":scope > .karte:not(.lade-karte)").length })));
+    const start = await teileVon();
+    erwarte(start.length === 5 && start.filter(t => t.an).map(t => t.id).join() === "ueberblick", `Elternbereich ${art}: fünf Reiter, startet mit „Überblick“`);
     let hoechstens = 0;
     for (const t of ["lernstand", "schule", "zeit", "kinder", "ueberblick"]) {
       await p.click(`.eltern-reiter [data-teil="${t}"]`); await p.waitForTimeout(150);
+      if (["lernstand", "schule"].includes(t)) await p.waitForFunction((t) => !document.querySelector(`.eltern-teil[data-teil="${t}"] .lade-karte`), t);
       const m = await masse(p); hoechstens = Math.max(hoechstens, m.h);
       erwarte(m.w <= m.iw + 1 && await p.evaluate((t) => [...document.querySelectorAll(".eltern-teil")].filter(x => !x.hidden).map(x => x.dataset.teil).join() === t, t), `Elternbereich ${art}: Reiter „${t}“, keine Scrollleiste`);
       await bild(p, `dashboard-eltern-${art}-${t}`);
     }
+    const teile = await teileVon();   // Lernstand/Schule füllen sich seit 05.11.2026 erst nach dem Nachladen der Fachdaten
+    erwarte(teile.reduce((n, t) => n + t.karten, 0) >= 20, `Elternbereich ${art}: alle ${teile.reduce((n, t) => n + t.karten, 0)} Karten auf die Reiter verteilt`);
     if (art === "quer") erwarte(hoechstens < 4000, `Elternbereich quer: kein Teil länger als 4000 px (längster ${hoechstens} px, vorher eine Seite mit über 16 000 px)`);
     // Lehrplan je Fach: zugeklappt, Antippen öffnet
     await p.click('.eltern-reiter [data-teil="lernstand"]');

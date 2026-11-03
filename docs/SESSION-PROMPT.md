@@ -17,13 +17,24 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-Der Auftrag vom 02.11. (Tiere 2D, Kleiderschrank, kindgerechte Mathe-Erklärungen) ist erledigt. Zuerst die **iPad-Rückmeldung** holen (Fragerunde), dann:
-1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test). Letzte Rückmeldung: „Die Münzen müssen wieder echter aussehen“ – umgesetzt, bitte bestätigen lassen.
-2. **Rhythmus-Boot** (Ballon-Wiese, Kapitel 4) nach dem Muster von Wörter-Angeln (2D-Seite, Ort auf der Insel über den Kern, Test).
-3. Russische Hilfe für Mathe-Erklärungen und Denkfehler-Texte (fehlt bisher ganz auf der Mathe-Seite).
-4. Elternbereich schneller (Fachdaten erst beim Reiter „Lernstand“ laden).
+Der Auftrag vom 04.11. (Rhythmus-Boot, Russisch für Mathe, Elternbereich schneller) ist erledigt, dazu ein technisches Protokoll. Zuerst die **iPad-Rückmeldung** holen (Fragerunde), dann:
+1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test).
+2. Kapitel 5 planen (Story-Bogen nach „Paulas Fest“) und ein weiteres Insel-Spiel aus `docs/MINISPIELE.md` (Vorschlag: Murmelbahn oder Wetter-Drache).
+3. Schrittweg „Schriftlich mal“ mit mehrstelliger Zahl; Extras der 3D-Figur an die neuen 2D-Zeichnungen angleichen.
 
-## 1. Stand (04.11.2026)
+## 1. Stand (05.11.2026)
+**Neu am 05.11.2026** (Details in `docs/PLAN.md`, „Stand 05.11.2026“):
+- **Elternbereich schneller:** Die Lerninhalte (~1,5 MB) laden erst nach dem ersten Bild; „Lernstand“ und „Wie in der Schule“ füllen sich kurz danach (Test `elternschnell`).
+- **Russische Hilfe in Mathe:** alle Erklär-Einheiten und Denkfehler-Hinweise mit russischer Zeile (Entwurf, nur mit Hilfesprache Russisch; Test `matheru`).
+- **Rhythmus-Boot** an der Ballon-Wiese, öffnet mit **Kapitel 4 „Paulas Fest“** (15 Lernfunde + Atelier, Englisch oder Musik): Rhythmus anhören, nachpaddeln oder Karte finden (Test `rhythmus`).
+- **Technik & Speicher** im Elternbereich (Kinder & Gerät): Speicherplatz, „Dauerhaft speichern“, App-Version, technisches Protokoll (Test `technik`).
+**Im iPad testen (in /dev, am besten /dev/test – dort ist alles offen):**
+1. Elternbereich öffnen: erscheint der Überblick schneller? „Lernstand“ antippen – kurz „wird geladen“, dann der Inhalt.
+2. Insel → Ballon-Wiese → „Boot“: „▶ Anhören“ (Ton an!), dann im gleichen Rhythmus aufs Paddel tippen; bei „Finden“ die Karte wählen. Klappt das Tippen im Takt? Ist es zu schwer/zu leicht?
+3. Elternbereich → Kind ändern → Hilfesprache Russisch, dann Matheweg Kl. 2 → „Plus über den Zehner“ → „Erklär es mir“: steht unter jeder Blase die russische Zeile?
+4. Elternbereich → Kinder & Gerät → „Technik & Speicher“: Was steht bei Speicher und Protokoll? (Bei Problemen Bildschirmfoto schicken.)
+
+### Stand 04.11.2026
 **Zuletzt (04.11.2026, abends):** Wörter-Angeln an Fipsis Angelsteg (Schatz-Strand, ab Kapitel 2, Test `angeln`); Geld-Erklärung wieder mit echten Münzen.
 **Im iPad testen (in /dev):** Insel → Schatz-Strand → „Angeln“ (in /dev/test sofort offen): Fisch antippen, Eimer wählen, einmal absichtlich falsch.
 **Neu am 04.11.2026:** Kleiderschrank-Extras neu gezeichnet (Dinge in der Hand werden gehalten, Hüte/Mützen mit Schatten), Matheweg mit neuen Denkfehlern
@@ -121,13 +132,12 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - **Ferien:** `FERIEN_SN` in `shared/core.js` reicht bis Sommer 2030 und muss danach nachgetragen werden. Die Termine stammen aus der Websuche
   (sachsen.de war nicht erreichbar) und sollten einmal gegengeprüft werden.
 - **NA-60:** Kürzere Szenen gibt es nur über `fuerAeltere` (4 Blasen markiert). Mehr Text ab Kl. 3 in den Inhalten selbst ist nicht umgesetzt.
-- **Ballon-Wiese und Schatz-Strand** zeigen weiter „🚧“. Vorschlag: Wörter-Angeln und Rhythmus-Boot (siehe unten).
+- **Ballon-Wiese und Schatz-Strand** führen seit 04./05.11. zu Rhythmus-Boot (Kapitel 4) und Wörter-Angeln (Kapitel 2).
 - **Schreibschrift:** Vereinfachte und Lateinische Ausgangsschrift fehlen.
 - **Übersetzungen:** nur russische Entwürfe, Ukrainisch u. a. fehlen.
 - **Länderprofile:** Nur Sachsen ist da (NA-47).
 - **Insel-Tests:** `tutorial`, `prolog`, `kapitel`, `geschenk` und `geburtstag` allein laufen lassen; unter Last wackeln sie.
 - **Aus dem Review offen (Wartbarkeit):**
-  - Fachdaten im Elternbereich nach Bedarf laden (~2 MB Skripte; braucht asynchrones Zeichnen der Lernstand-Teile).
   - Feste Wartezeiten in älteren Tests ersetzen.
   - Weitere gemeinsame Teile der Sprachkurse zusammenführen (Schritt-Darstellung).
   - `dev/` per Action bauen statt einchecken: Entscheidung des Auftraggebers, braucht eine Umstellung von GitHub Pages.
@@ -163,8 +173,8 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 1. **iPad-Rückmeldung** zu Figuren (2D und Insel), Tieren, Zimmern, Erklär-Einheiten, Schrittweg, Noto-Bildern und Leistung – Fehler zuerst, je mit Test.
 2. **Prüfen statt Bauen** (Abschnitt 0, Schritt 2).
 3. **Gestaltung Stil A auf allen Seiten.**
-4. **Wörter-Angeln** (Schatz-Strand, Kapitel 2) und **Rhythmus-Boot** (Ballon-Wiese, Kapitel 4).
-5. Elternbereich schneller (Fachdaten erst beim Reiter „Lernstand“ laden).
+4. ~~Wörter-Angeln und Rhythmus-Boot~~ (erledigt 04./05.11.); ~~Elternbereich schneller~~ (erledigt 05.11.).
+5. Kapitel 5 und das nächste Insel-Spiel; Russisch (Mathe-Hilfen, Szenen) von Muttersprachlern prüfen lassen.
 
 Jederzeit dazwischen: iPad-Rückmeldung einarbeiten (Fehler zuerst), Sorbisch-Korrekturen in `spiele/sorbisch/lektionen.js` und `geprueft.js`,
 den öffentlichen QR-Schlüssel in `OEFFENTLICH` eintragen, sobald er da ist. Arbeitsliste für den Lehrplan bleibt `docs/SACHSEN-SCHULJAHR.md`.

@@ -1798,6 +1798,7 @@ function spieleStory(id) {
   if (id === "fipsis-karte") { b[0].zeige = I.ort("fipsi"); b[1].beim = zeigeKartenweg; b[1].zeige = I.ort("kartenweg"); b[2].zeige = I.ort("kartenweg"); }
   if (id === "atelier") b.forEach(x => { x.zeige = I.ort("buehne"); });
   if (id === "bennos-baeckerei") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "biber" : "baeckerei"); });
+  if (id === "paulas-fest") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "buehne" : "ballons"); });
   storyLaeuft = true;
   // Etappe/Kapitel schon mit der letzten Blase merken – nicht erst beim Schließen (Kind verlässt die Insel oft direkt danach)
   Sz.spiele(def, { beiLetzter: () => K.storyFertig(def) }).then(() => {

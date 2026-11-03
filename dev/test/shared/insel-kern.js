@@ -299,12 +299,18 @@
   const deutschFertig = () => Object.values(((S().lade("deutsch") || {}).kapitel) || {}).filter(x => x > 0).length;
   // geschaffte Matheweg-Stationen über alle Wege
   const matheFertig = () => { const m = S().lade("mathe") || {}; return ["k1", "k2", "k3", "k4", "k5"].reduce((n, w) => n + Object.values(m[w] || {}).filter(x => x > 0).length, 0); };
+  // Paula schon besucht: Etappe E9 „Atelier“, eine Englisch-Lektion oder ein Musik-Thema geschafft
+  const paulaGenutzt = () => !!((W.Story && W.Story.etappe && W.Story.etappe("E9")) || Object.keys(((S().lade("englisch") || {}).lektionen) || {}).length ||
+    Object.keys(((S().lade("sachkunde") || {}).themen) || {}).some(id => id.startsWith("mu-")));
   const KAPITEL = [
     { n: 2, szene: "fipsis-karte", titel: "Fipsis Karte", bedingung: "5 Lernfunde und ein Deutsch-Kapitel",
       faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 5 && deutschFertig() >= 1 },
     // 01.11.2026: Kapitel 3 öffnet Bennos Bäckerei (ersetzt „Bennos Brücke“ am Bauplatz, solange die Minispiele ausgeblendet sind)
     { n: 3, szene: "bennos-baeckerei", titel: "Bennos Bäckerei", bedingung: "10 Lernfunde und 3 Stationen auf dem Matheweg",
-      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 10 && matheFertig() >= 3 }
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 10 && matheFertig() >= 3 },
+    // 05.11.2026: Kapitel 4 „Paulas Fest“ öffnet das Rhythmus-Boot an der Ballon-Wiese (Paulas Fächer: Musik, Englisch, Atelier)
+    { n: 4, szene: "paulas-fest", titel: "Paulas Fest", bedingung: "15 Lernfunde und etwas bei Paula (Atelier, Englisch oder ein Musik-Thema)",
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 15 && paulaGenutzt() }
   ];
   // Wörter für Fipsis Wegweiser: nur Wörter, die das Kind schon hatte (Lernkartei Deutsch, Lernfunde in Deutsch), höchstens n, ohne Dopplungen
   function wortSchilder(n = 3) {
@@ -576,7 +582,7 @@
   // alle übrigen Stationen
   function antwort(id, lage = {}) {
     switch (id) {
-      case "ballons": if (bald(id)) return baldBlase("🎈", "Ballon-Wiese"); return spielort(() => profi() ? blase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", "Лопни как можно больше шариков!", "../welt3d/ballons.html") : fuehrerschein());
+      case "ballons": if (bald(id)) return rhythmusAntwort(); return spielort(() => profi() ? blase("🎈", "Ballon-Wiese", "Lass so viele Ballons platzen, wie du kannst!", "Лопни как можно больше шариков!", "../welt3d/ballons.html") : fuehrerschein());
       case "truhe": if (bald(id)) return angelnAntwort(); return spielort(() => profi() ? blase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "../welt3d/insel.html") : fuehrerschein());
       case "schach": return blase("tilda", "Tilda am Schachtisch", `Hallo ${name()}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?", "../schach/");
       case "buehne": return paulaAntwort();
@@ -634,6 +640,11 @@
     const d = S().lade("baeckerei") || {};
     return blase("biber", "Bäckerei Benno", d.tage ? `Hallo ${name()}! Heute kommen wieder fünf Kunden. Hilfst du mir an der Theke?` : `Hallo ${name()}! Meine Bäckerei ist offen. Packst du die Bestellungen und rechnest mit dem Geld?`, "Помоги мне в пекарне!", "../baeckerei/");
   }
+  // Rhythmus-Boot (05.11.2026): Paulas Boot an der Ballon-Wiese, öffnet mit Kapitel 4 „Paulas Fest“
+  function rhythmusAntwort() {
+    if (!(W.Story && S().offen(W.Story.kapitel() >= 4))) return blase("papagei", "Paulas Rhythmus-Boot – noch zu", "Hier baut Paula ein Boot für ihr Fest. Es fährt ab Kapitel 4 – lern weiter auf der Insel!", "Здесь Паула строит лодку для праздника. Она поплывёт в главе 4.");
+    return blase("papagei", "Paulas Rhythmus-Boot", `Hallo ${name()}! Wir paddeln zum Fest – im Rhythmus! Ich spiele vor, du paddelst nach.`, "Мы плывём на праздник – в ритме! Я играю, ты повторяешь.", "../rhythmus/");
+  }
   // Wörter-Angeln (04.11.2026, NA-61): Fipsis Angelsteg am Schatz-Strand, öffnet mit Kapitel 2
   function angelnAntwort() {
     if (!(W.Story && S().offen(W.Story.kapitel() >= 2))) return blase("fipsi", "Fipsis Angelsteg – noch zu", "Hier baut Fipsi einen Angelsteg. Er öffnet in Kapitel 2 – lern weiter bei Fipsi!", "Здесь Фипси строит причал для рыбалки. Он откроется в главе 2.");
@@ -647,7 +658,7 @@
     return blase("baer", "Brunis Tierpflege-Station", de, "Станция Бруни для животных.", "../tierstation/");
   }
   AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
-  const aktionFuer = (id) => (id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
+  const aktionFuer = (id) => (id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : id === "ballons" && bald(id) ? [["🛶", "Boot"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
   W.InselKern = {
     // Stationen

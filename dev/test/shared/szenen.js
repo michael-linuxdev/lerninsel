@@ -112,6 +112,12 @@
     { fuerAeltere: true, wer: "biber", text: { de: "Brötchen, Brezeln, Kuchen – alles frisch gebacken. Die Tiere der Insel kaufen bei mir ein.", ru: "Булочки, крендели, пироги – всё свежее. Звери острова покупают у меня.", status: E } },
     { wer: "biber", text: { de: "Hilfst du mir an der Theke? Wir packen die Bestellungen und rechnen mit dem Geld.", ru: "Поможешь мне за прилавком? Мы собираем заказы и считаем деньги.", status: E } }
   ] });
+  // Kapitel 4 (05.11.2026): Paulas Fest – das Rhythmus-Boot an der Ballon-Wiese
+  Sz.registriere("paulas-fest", { titel: "Paulas Fest", kapitel: 4, blasen: [
+    { wer: "papagei", text: { de: "{name}! Am Fluss hinter der Ballon-Wiese feiern wir ein Fest – und du bist eingeladen!", ru: "{name}! У реки за поляной с шариками мы празднуем – и ты приглашён!", status: E } },
+    { wer: "papagei", text: { de: "Wir fahren mit meinem Boot hin. Aber paddeln geht nur im Rhythmus: Ta, ti-ti, Ta!", ru: "Мы поплывём на моей лодке. Но грести можно только в ритме: Та, ти-ти, Та!", status: E } },
+    { fuerAeltere: true, wer: "papagei", text: { de: "Ich spiele vor, du paddelst nach. Wann immer du magst, fahren wir los.", ru: "Я играю, ты повторяешь. Когда захочешь, поплывём.", status: E } }
+  ] });
   Sz.registriere("atelier", { titel: "Paulas Atelier", etappe: "E9", blasen: [
     { wer: "papagei", text: { de: "Hallo {name}! Ich bin Paula. Auf meiner Bühne spielt Musik – und im Atelier wird gemalt!", ru: "Привет, {name}! Я Паула. На моей сцене играет музыка – а в ателье рисуют!", status: E } },
     { wer: "papagei", text: { de: "Male ein Bild oder erfinde eine Melodie. Dein neuestes Bild steht dann auf der Staffelei in deinem Zimmer.", ru: "Нарисуй картину или придумай мелодию. Твоя новая картина будет стоять на мольберте в твоей комнате.", status: E } },
