@@ -121,6 +121,35 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     const titel5 = await p.evaluate(() => document.getElementById("blase-titel").textContent);
     erwarte(akt5 === "Drachen" && /Wetter-Drache/.test(titel5), `an der Wetterstation: Knopf „${akt5}“, Ella lädt zum Wetter-Drachen ein`);
     await bild(p, "kapitel-station");
+    // Kapitel 6 „Der Leuchtturm“ (07.11.2026): 35 Lernfunde und drei Schach-Rätsel; danach leuchtet die Lampe, nachts kreist der Strahl
+    await funde(35);
+    erwarte(await naechste(p) === null, "35 Lernfunde ohne Schach: Kapitel 6 wartet");
+    erwarte(await p.evaluate(() => { const l = __heimat.leuchtturm(); return l.lampe !== "#ffe14d" && !l.strahl; }), "vor Kapitel 6 ist die Lampe des Leuchtturms dunkel");
+    await p.evaluate(() => Spielwelt.speichere("schach", { lektionen: {}, raetsel: { 0: 1, 1: 1, 2: 1 }, siege: {}, rennen: 0 }));
+    erwarte(await naechste(p) === "der-leuchtturm", "mit drei Schach-Rätseln: Kapitel 6 „Der Leuchtturm“ ist dran");
+    await p.goto(INSEL);
+    await p.waitForFunction(() => window.__szene && __szene.aktuell() && __szene.aktuell().id === "der-leuchtturm", null, { timeout: 20000 });
+    a = await p.evaluate(() => __szene.aktuell());
+    erwarte(a.wer === "tilda" && a.zeigt, "Tilda spricht und zeigt (Leuchtturm-Szene)");
+    await weiter(p); a = await p.evaluate(() => __szene.aktuell());
+    erwarte(a && a.zeigt, "zweite Blase zeigt zum Leuchtturm am Ufer");
+    await bild(p, "kapitel-6");
+    while (await p.evaluate(() => !!(window.__szene && __szene.aktuell()))) await weiter(p);
+    erwarte(await p.evaluate(() => Story.kapitel() === 6 && Story.chronik().some(x => x.s === "der-leuchtturm")), "Kapitel 6 erreicht, Szene in der Chronik");
+    erwarte(await p.evaluate(() => __heimat.leuchtturm().lampe === "#ffe14d"), "nach der Szene leuchtet die Lampe");
+    await p.goto(INSEL); await p.waitForTimeout(3000);
+    await p.evaluate(() => { const l = __heimat.leuchtturm(), r = Math.hypot(l.x, l.z); __heimat.ich.position.set(l.x * (r - 1.6) / r, __heimat.ich.position.y, l.z * (r - 1.6) / r); });
+    await p.waitForTimeout(900);
+    const akt6 = await p.evaluate(() => __heimat.aktion);
+    await p.evaluate(() => __heimat.druecke()); await p.waitForTimeout(400);
+    const blase6 = await p.evaluate(() => ({ t: document.getElementById("blase-titel").textContent }));
+    erwarte(akt6 === "Leuchtturm" && /Tildas Leuchtturm/.test(blase6.t), `am Leuchtturm: Knopf „${akt6}“, Tilda lädt in die Höhle ein`);
+    await bild(p, "kapitel-leuchtturm");
+    // nachts: Lichtstrahl
+    await p.goto(INSEL.replace("stunde=14", "stunde=22")); await p.waitForTimeout(3000);
+    erwarte(await p.evaluate(() => __heimat.leuchtturm().strahl), "nachts kreist der Lichtstrahl des Leuchtturms");
+    await p.evaluate(() => { const l = __heimat.leuchtturm(); __heimat.ich.position.set(l.x * 0.7, __heimat.ich.position.y, l.z * 0.7); }); await p.waitForTimeout(1200);
+    await bild(p, "kapitel-leuchtturm-nacht");
     await ctx.close();
   }
 

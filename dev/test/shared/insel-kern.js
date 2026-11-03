@@ -302,6 +302,8 @@
   // Ein Sachthema zum Wetter geschafft (Wetter beobachten, Wetterkarte, Wind und Luft …)
   const WETTER_THEMEN = ["wetter", "wetterkarte", "luft-schall", "wasserkreislauf", "jahreszeiten"];
   const wetterThema = () => Object.keys(((S().lade("sachkunde") || {}).themen) || {}).some(id => WETTER_THEMEN.includes(id) || /wetter/.test(id));
+  // Tilda (Denken, Schach): drei Matt-in-1-Rätsel oder drei Schach-Lektionen geschafft
+  const tildaGenutzt = () => { const d = S().lade("schach") || {}; return Object.keys(d.raetsel || {}).length >= 3 || Object.keys(d.lektionen || {}).length >= 3; };
   // Paula schon besucht: Etappe E9 „Atelier“, eine Englisch-Lektion oder ein Musik-Thema geschafft
   const paulaGenutzt = () => !!((W.Story && W.Story.etappe && W.Story.etappe("E9")) || Object.keys(((S().lade("englisch") || {}).lektionen) || {}).length ||
     Object.keys(((S().lade("sachkunde") || {}).themen) || {}).some(id => id.startsWith("mu-")));
@@ -316,7 +318,10 @@
       faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 15 && paulaGenutzt() },
     // 06.11.2026: Kapitel 5 „Der Sturm“ (KONZEPT) – Ella und Bruni bereiten die Insel vor, danach steigt Ellas Wetter-Drache an der Wetterstation
     { n: 5, szene: "der-sturm", titel: "Der Sturm", bedingung: "25 Lernfunde und ein Sachthema zum Wetter",
-      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 25 && wetterThema() }
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 25 && wetterThema() },
+    // 07.11.2026: Kapitel 6 „Der Leuchtturm“ (KONZEPT) – Tilda führt zum Leuchtturm, in der Höhle darunter: Licht-Rätsel und Schatzkammer
+    { n: 6, szene: "der-leuchtturm", titel: "Der Leuchtturm", bedingung: "35 Lernfunde und drei Schach-Rätsel oder drei Schach-Lektionen bei Tilda",
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 35 && tildaGenutzt() }
   ];
   // Wörter für Fipsis Wegweiser: nur Wörter, die das Kind schon hatte (Lernkartei Deutsch, Lernfunde in Deutsch), höchstens n, ohne Dopplungen
   function wortSchilder(n = 3) {
@@ -440,6 +445,16 @@
       const frei = ([x, z]) => WELT.baeume.every(b => Math.hypot(b.x - x, b.z - z) > 1.8) && andere.every(v => Math.hypot(v[0] - x, v[1] - z) > 2) && !(WELT.see && Math.hypot(x - WELT.see.x, z - WELT.see.z) < WELT.see.r + 1);
       P.kartenweg = kand.find(frei) || kand[0];
     }
+    // Kapitel 6 (07.11.2026): Leuchtturm mit Höhle am Ufer – Platz ohne Baum, ohne anderen Ort, nicht am Steg
+    if (!P.leuchtturm) {
+      const ABST = { haus: 4.5, lauf: 4.2, kart: 4.2, bau: 4.2, ballons: 3.8, buehne: 3.6, truhe: 3.4, start: 3.6 };   // große Orte brauchen mehr Platz
+      const andere = Object.entries(P).map(([k, v]) => [v[0], v[1], ABST[k] || 2.8]), rL = RMAX_LAUF - 1.3, a0 = Math.atan2(P.schach[1], P.schach[0]);
+      const kand = Array.from({ length: 24 }, (_, i) => a0 + (i % 2 ? -1 : 1) * Math.ceil(i / 2) * Math.PI / 12).map(a => [Math.cos(a) * rL, Math.sin(a) * rL]);
+      const frei = ([x, z]) => WELT.baeume.every(b => Math.hypot(b.x - x, b.z - z) > 3.2) && andere.every(v => Math.hypot(v[0] - x, v[1] - z) > v[2]) &&
+        Math.hypot(x - STEG.x, z - STEG.z0) > 4 && Math.hypot(x - SU.x, z - SU.z) > 2.5 && !(WELT.see && Math.hypot(x - WELT.see.x, z - WELT.see.z) < WELT.see.r + 1.5);
+      const [x, z] = kand.find(frei) || kand[0];
+      P.leuchtturm = [x, z, Math.atan2(-x, -z)];   // Tür der Höhle zur Mitte
+    }
     // Vor der Haustür (dort kommt man beim Rausgehen an)
     const vorDerTuer = () => ({ x: P.haus[0] + Math.sin(HAUS_DREH) * 2.75, z: P.haus[1] + Math.cos(HAUS_DREH) * 2.75, dreh: HAUS_DREH });
     // Nebel je Stufe (Weite für die runde Darstellung, r = Radius des Nebelbands, a = Deckkraft)
@@ -472,6 +487,8 @@
       buehne: { x: P.buehne[0], z: P.buehne[1], h: 1.8 },
       kartenweg: { x: P.kartenweg[0], z: P.kartenweg[1], h: 1.4 }
     };
+    ORTE.schach = { x: P.schach[0], z: P.schach[1], h: 1.2 };   // Tilda am Schachtisch
+    ORTE.leuchtturm = { x: P.leuchtturm[0], z: P.leuchtturm[1], h: 3.4 };   // Kapitel 6
     if (P.station) ORTE.station = { x: P.station[0], z: P.station[1], h: 1.6 };   // Wetterstation (Kapitel 5, Wetter-Drache)
     // neue Orte an den Plätzen der ausgeblendeten Minispiele (01.11.2026)
     if (P.lauf) ORTE.garten = { x: P.lauf[0], z: P.lauf[1], h: 1.2 };
@@ -569,6 +586,14 @@
     return blase("eule", "Ellas Wetter-Drache", `${satz}Hallo ${name()}! Wir beobachten das Wetter – und wenn der Wind passt, lassen wir den Drachen steigen!`,
       "Мы наблюдаем за погодой – а если ветер подходящий, запускаем воздушного змея!", "../wetter/");
   }
+  // Tildas Leuchtturm (07.11.2026): ab Kapitel 6 offen (Licht-Rätsel und Schatzkammer in der Höhle), vorher dunkel und ohne Ziel
+  const leuchtturmOffen = () => !!(W.Story && S().offen(W.Story.kapitel() >= 6));
+  function leuchtturmAntwort() {
+    if (!leuchtturmOffen()) return blase("tilda", "Der alte Leuchtturm", "Der Leuchtturm ist noch dunkel. Lern weiter – wenn es soweit ist, zeige ich dir den Weg hinein.",
+      "Маяк ещё тёмный. Учись дальше – когда придёт время, я покажу тебе дорогу.");
+    return blase("tilda", "Tildas Leuchtturm", `Hallo ${name()}! Unten in der Höhle lenken wir das Licht mit Spiegeln. Und meine Schatzkammer zeige ich dir auch!`,
+      "Внизу в пещере мы направляем свет зеркалами. И свою сокровищницу я тебе тоже покажу!", "../leuchtturm/");
+  }
   // Paula auf der Bühne: spielt die erste eigene Melodie aus dem Atelier (melodie = Liste von Tönen 0–7, -1 = Pause)
   function paulaAntwort() {
     const m = ((S().lade("atelier") || {}).musik || {}).melodien || [];
@@ -600,6 +625,7 @@
       case "truhe": if (bald(id)) return angelnAntwort(); return spielort(() => profi() ? blase("🏝️", "Schatz-Strand", "Auf der Schatzinsel wartet eine Truhe. Findest du sie?", "На острове сокровищ ждёт сундук. Найдёшь его?", "../welt3d/insel.html") : fuehrerschein());
       case "schach": return blase("tilda", "Tilda am Schachtisch", `Hallo ${name()}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?", "../schach/");
       case "buehne": return paulaAntwort();
+      case "leuchtturm": return leuchtturmAntwort();
       case "garten": return gartenAntwort();
       case "baeckerei": if (!NEU_FERTIG.baeckerei) return baldBlase("🥨", "Bäckerei Benno"); return baeckereiAntwort();
       case "tierstation": if (!NEU_FERTIG.tierstation) return baldBlase("🩹", "Tierpflege-Station"); return tierstationAntwort();
@@ -672,7 +698,8 @@
     return blase("baer", "Brunis Tierpflege-Station", de, "Станция Бруни для животных.", "../tierstation/");
   }
   AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
-  const aktionFuer = (id) => (id === "station" && drachenOffen() ? [["🪁", "Drachen"], 1.9] : id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : id === "ballons" && bald(id) ? [["🛶", "Boot"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
+  AKTION.leuchtturm = [["💡", "Leuchtturm"], 2.4];
+  const aktionFuer = (id) => (id === "leuchtturm" && !leuchtturmOffen() ? [["👀", "Ansehen"], 2.4] : id === "station" && drachenOffen() ? [["🪁", "Drachen"], 1.9] : id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : id === "ballons" && bald(id) ? [["🛶", "Boot"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
   W.InselKern = {
     // Stationen
@@ -682,7 +709,7 @@
     // Regeln und Zustände
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
     weihnachtsPaket, geburtstagsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
-    KAPITEL, WETTER_THEMEN, wortSchilder, deutschFertig, matheFertig,
+    KAPITEL, WETTER_THEMEN, wortSchilder, tildaGenutzt, leuchtturmOffen, deutschFertig, matheFertig,
     // Zimmer
     PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel, wandPreis, standardWand, geschlecht,
     // Wetter

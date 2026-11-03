@@ -482,6 +482,36 @@ windrad.add(setze(teil(new CylinderGeometry(0.02, 0.02, 0.4, 6), "#6B6B7A"), 0, 
 antippbar(station, () => zeigeAntwort(K.antwort("station", { wetter })), ...K.aktionFuer("station"));
 starr.push([station, [windrad]], [windrad]);
 
+// ---------- Leuchtturm mit Höhle am Ufer (07.11.2026, Kapitel 6 „Der Leuchtturm“) ----------
+// Vor Kapitel 6 dunkel; danach leuchtet die Lampe, nachts kreist ein Lichtstrahl über die Insel (zwei durchsichtige Kegel, 1–2 Zeichenaufrufe).
+const leuchtturm = new Group();
+const lampeMat = new MeshBasicMaterial({ color: "#8E879E" });
+const lichtStrahl = new Group();
+{
+  const [x, z, d] = P.leuchtturm; leuchtturm.position.set(x, bodenY(x, z), z); leuchtturm.rotation.y = d; scene.add(leuchtturm); block(x, z, 1.25);
+  const fels = teil(kugel(1.25, 18, 12), "#9C93A8"); fels.scale.set(1, 0.55, 1); leuchtturm.add(setze(fels, 0, 0.1, 0));
+  const tor = new Mesh(new CircleGeometry(0.42, 18, 0, Math.PI), mat("#2B2350")); leuchtturm.add(setze(tor, 0, 0.05, 1.02)); tor.rotation.x = -0.35;   // Höhleneingang zur Mitte
+  leuchtturm.add(setze(teil(new CylinderGeometry(0.42, 0.62, 2.4, 16), "#FFFFFF"), 0, 1.75, -0.1));
+  [1.15, 2.15].forEach((y, i) => leuchtturm.add(setze(teil(new CylinderGeometry(0.5 - i * 0.07, 0.55 - i * 0.07, 0.38, 16), "#FF6F61", { umriss: false }), 0, y, -0.1)));
+  leuchtturm.add(setze(teil(new CylinderGeometry(0.62, 0.62, 0.1, 16), "#3B1F63", { umriss: false }), 0, 2.98, -0.1));
+  const lampe = new Mesh(new CylinderGeometry(0.3, 0.3, 0.42, 12), lampeMat); lampe.userData.bleibt = true; leuchtturm.add(setze(lampe, 0, 3.24, -0.1));
+  leuchtturm.add(setze(teil(new ConeGeometry(0.44, 0.42, 16), "#FF6F61"), 0, 3.66, -0.1));
+  lichtStrahl.position.set(0, 3.24, -0.1); leuchtturm.add(lichtStrahl);
+  const strahlMat = new MeshBasicMaterial({ color: "#FFE680", transparent: true, opacity: 0.32, depthWrite: false });
+  [1, -1].forEach(s => { const k = new Mesh(new ConeGeometry(0.9, 9, 14, 1, true), strahlMat); k.rotation.z = s * Math.PI / 2; k.position.x = s * 4.6; lichtStrahl.add(k); });
+  lichtStrahl.visible = false;
+  antippbar(leuchtturm, () => zeigeAntwort(K.antwort("leuchtturm")), ...K.aktionFuer("leuchtturm"));
+  starr.push([leuchtturm, [lichtStrahl, lampe]]);
+}
+// Lampe an, sobald Kapitel 6 erreicht ist (auch direkt nach der Szene); Strahl nur nachts und nicht bei „Bewegung reduzieren“
+function schalteLeuchtturm() {
+  const an = K.leuchtturmOffen();
+  lampeMat.color.set(an ? "#FFE14D" : "#8E879E");
+  lichtStrahl.visible = an && NACHT;
+  Object.assign(leuchtturm.userData, { aktion: K.aktionFuer("leuchtturm")[0], nah: K.aktionFuer("leuchtturm")[1] });
+}
+schalteLeuchtturm();
+
 // ---------- Wehendes Gras ----------
 let halme = null; const halmDaten = [];
 const MIT_GRAS = WELT.insel ? SAISON !== "winter" : !WINTERLICH && !["wueste"].includes(WELT.biom) && !(JAHRESZEIT_GRAS && SAISON === "winter");
@@ -1609,6 +1639,7 @@ function bild() {
   if (schnee) { const a = schnee.geometry.attributes.position; for (let i = 0; i < a.count; i++) { let y = a.getY(i) - dt * 1.2; if (y < 0) y = 16; a.setY(i, y); a.setX(i, a.getX(i) + Math.sin(t + i) * dt * 0.2); } a.needsUpdate = true; }
   if (drinnen) { const gl = moebelObj && Object.values(moebelObj); gl.forEach(o => { if (o.userData.dreh) o.userData.dreh.rotation.y += dt * 0.5; if (o.userData.fische) o.userData.fische.children.forEach((f, i) => { f.position.x = Math.sin(t * (0.8 + i * 0.3) + i * 2) * 0.35; f.rotation.y = Math.cos(t * (0.8 + i * 0.3) + i * 2) > 0 ? 0 : Math.PI; }); }); }
   pruefeNaehe();
+  if (lichtStrahl.visible && !RUHIG) lichtStrahl.rotation.y += dt * 0.6;
   windrad.rotation.y += dt * (0.6 + Math.min(40, (wetter && wetter.wind) || 8) * 0.15);
   if (regen) { const a = regen.geometry.attributes.position; for (let i = 0; i < a.count; i += 2) { let y = a.getY(i) - dt * 14; if (y < 0) y = 16; a.setY(i, y); a.setY(i + 1, y - 0.55); } a.needsUpdate = true; regen.visible = !drinnen; }
   if (schnee) schnee.visible = !drinnen;
@@ -1799,6 +1830,7 @@ function spieleStory(id) {
   if (id === "atelier") b.forEach(x => { x.zeige = I.ort("buehne"); });
   if (id === "bennos-baeckerei") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "biber" : "baeckerei"); });
   if (id === "paulas-fest") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "buehne" : "ballons"); });
+  if (id === "der-leuchtturm") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "schach" : "leuchtturm"); if (i === 2) x.beim = schalteLeuchtturm; });
   if (id === "der-sturm") b.forEach((x, i) => { x.zeige = I.ort(i === 1 ? "baer" : i === 2 ? "station" : "eule"); });
   storyLaeuft = true;
   // Etappe/Kapitel schon mit der letzten Blase merken – nicht erst beim Schließen (Kind verlässt die Insel oft direkt danach)
@@ -1806,6 +1838,7 @@ function spieleStory(id) {
     storyLaeuft = false;
     K.storyFertig(def);
     if (id === "fipsis-karte") zeigeKartenweg();   // auch beim Überspringen
+    if (id === "der-leuchtturm") schalteLeuchtturm();
     if (id === "geburtstag" && paketId) St.merkeSzene(paketId);   // einmal je Jahr
     nebelWeicht();
     if (id === "ei" && !tier && $("blase").hidden) zeigeAntwort(K.antwort("nest"));
@@ -1842,4 +1875,4 @@ function teileZaehlen() {
   return scene.children.map(o => { let n = 0, d = 0; o.traverseVisible(m => { if (m.isMesh || m.isPoints || m.isLineSegments) { n++; const g = m.geometry; d += g.index ? g.index.count / 3 : (g.attributes.position ? g.attributes.position.count / 3 : 0); } }); return { name: o.type + (o.userData.tipp ? "*" : "") + (o.userData.aktion ? ":" + o.userData.aktion[1] : ""), x: Math.round(o.position.x), z: Math.round(o.position.z), meshes: n, dreiecke: Math.round(d) }; })
     .filter(x => x.meshes > 0).sort((a, b) => b.meshes - a.meshes);
 }
-window.__heimat = { figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };

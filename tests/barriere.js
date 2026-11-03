@@ -8,7 +8,7 @@ const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const SEITEN = ["", "spiele/anziehen/", "spiele/mathe/", "spiele/deutsch/", "spiele/medien/", "spiele/sachkunde/", "spiele/sachkunde/?fach=kunst", "spiele/englisch/", "spiele/heft/", "spiele/robo/", "spiele/vorlesen/",
   "spiele/praesentieren/", "spiele/vorschule/", "spiele/ich/", "spiele/schatz/", "spiele/gefuehle/", "spiele/atelier/", "spiele/schach/", "spiele/familie/duell.html", "spiele/tier/", "spiele/garten/", "spiele/baeckerei/",
-  "spiele/tierstation/", "spiele/angeln/", "spiele/rhythmus/", "spiele/wetter/", "spiele/eltern/", "spiele/daz/", "spiele/lesen/", "spiele/album/"];
+  "spiele/tierstation/", "spiele/angeln/", "spiele/rhythmus/", "spiele/wetter/", "spiele/leuchtturm/", "spiele/eltern/", "spiele/daz/", "spiele/lesen/", "spiele/album/"];
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource|open-meteo/;
 
 (async () => {
@@ -23,7 +23,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
   await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
   await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "3"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
-  await p.evaluate(() => { for (let i = 0; i < 12; i++) Zeit.aufgabe(); Story.setzeKapitel(5); const m = Spielwelt.lade("medien") || {}; m.lektionen = { bedienung: 3 }; Spielwelt.speichere("medien", m); });
+  await p.evaluate(() => { for (let i = 0; i < 12; i++) Zeit.aufgabe(); Story.setzeKapitel(6); const m = Spielwelt.lade("medien") || {}; m.lektionen = { bedienung: 3 }; Spielwelt.speichere("medien", m); });
   let funde = 0;
   for (const s of SEITEN) {
     const skripte = []; const h = (r) => { if (r.request().resourceType() === "script") skripte.push(+(r.headers()["content-length"] || 0)); }; p.on("response", h);

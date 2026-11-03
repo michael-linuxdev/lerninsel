@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Tildas Leuchtturm</title>
+<meta name="theme-color" content="#2B2350">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  /* Tildas Leuchtturm (07.11.2026, Kapitel 6): Höhle mit Licht-Rätseln und Schatzkammer – dunkle Höhle, helles Licht, Stil A */
+  html, body { min-height: 100%; }
+  body { background: radial-gradient(circle at 50% 0%, #5A4A8C 0, #2B2350 60%, #1E1838 100%); background-attachment: fixed; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; min-width: 0; color: #FFF4D6; text-shadow: 0 3px 0 #3B1F63; }
+  @media (max-width: 480px) { .oben h1 { font-size: 1.3rem; } }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .mitte { max-width: 1040px; margin: 0 auto; padding: 10px 16px 30px; display: grid; gap: 14px; }
+  .tilda { display: flex; gap: 12px; align-items: center; }
+  .tilda .figur { font-size: 3.4rem; flex: none; }
+  .blase { background: #fff; border-radius: 24px; padding: 12px 18px; font-size: 1.25rem; font-weight: 500; border: 4px solid #3B1F63; box-shadow: 0 6px 0 #3B1F63; flex: 1; display: flex; gap: 10px; align-items: center; }
+  .blase p { margin: 0; flex: 1; line-height: 1.35; }
+  .ru { display: block; font-size: 1rem; font-weight: 500; color: var(--pflaume-hell); margin-top: 4px; }
+  .vorlesen { flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--himmel); font-size: 1.5rem; }
+  .reiter { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .reiter button { min-height: 52px; padding: 0 20px; border-radius: 999px; border: 4px solid #3B1F63; background: #fff; font-weight: 700; font-size: 1.15rem; box-shadow: 0 5px 0 #3B1F63; }
+  .reiter button.an { background: #FFD84D; }
+  .karte { background: #FFF8E6; border-radius: 28px; padding: 16px; border: 4px solid #3B1F63; box-shadow: 0 6px 0 #3B1F63; display: grid; gap: 12px; text-align: center; transition: background .4s; }
+  .karte.hell { background: #FFF3B0; }
+  .karte h2 { margin: 0; }
+  .stand { margin: 0; font-weight: 700; color: var(--pflaume-hell); }
+  .klein { margin: 0; font-size: 1rem; color: var(--pflaume-hell); }
+  .hinweis { min-height: 1.6em; font-size: 1.15rem; font-weight: 600; margin: 0; }
+  .hinweis.gut { color: #2E9C5A; }
+  .knoepfe { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .knoepfe a { text-decoration: none; }
+  /* Brett: Spalte 0 = Lampe, dann n Felder; der Strahl liegt als SVG darüber */
+  .brett-rahmen { display: flex; justify-content: center; }
+  .brett { --n: 4; position: relative; display: grid; grid-template-columns: repeat(calc(var(--n) + 1), minmax(0, 1fr)); grid-template-rows: repeat(var(--n), minmax(0, 1fr)); gap: 0;
+    width: min(100%, calc(var(--n) * 84px + 84px), 560px); aspect-ratio: calc(var(--n) + 1) / var(--n);
+    background: #3A2F66; border-radius: 22px; border: 5px solid #3B1F63; box-shadow: 0 6px 0 #3B1F63; overflow: hidden; }
+  .feld { position: relative; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.08); font-size: clamp(1.4rem, 5vw, 2.4rem); min-width: 0; min-height: 0; }
+  .lampe-feld { display: grid; place-items: center; background: #2B2350; font-size: clamp(1.4rem, 5vw, 2.4rem); }
+  .lampe { display: inline-block; transform: scaleX(-1); }
+  button.feld { padding: 0; background: rgba(255,255,255,.12); border-radius: 14px; margin: 3px; border: 3px solid rgba(255,255,255,.35); }
+  button.feld svg { position: absolute; inset: 7%; width: 86%; height: 86%; }
+  button.feld.markiert { animation: blink .7s infinite alternate; border-color: #FFD84D; }
+  @keyframes blink { to { background: rgba(255,216,77,.55); } }
+  .feld.kristall { filter: grayscale(.6) brightness(.8); transition: filter .3s; }
+  .feld.kristall.an { filter: drop-shadow(0 0 10px #FFE14D) brightness(1.15); }
+  .strahl { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  /* Schatzkammer */
+  .truhen { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .truhe { background: linear-gradient(160deg, #FFF3C4, #FFD86B); border: 4px solid #3B1F63; border-radius: 20px; box-shadow: 0 5px 0 #3B1F63; padding: 10px 8px; display: grid; gap: 2px; justify-items: center; font-weight: 600; }
+  .truhe .e { font-size: 2.4rem; line-height: 1.1; }
+  .truhe b { font-size: 1.6rem; }
+  .truhe.zu { background: #EEE9F5; }
+  .truhe.zu .e { opacity: .45; }
+  .turm-gross { display: flex; justify-content: center; }
+  .zu-oder { text-align: center; }
+  @media (max-width: 480px) { .reiter button { font-size: 1rem; padding: 0 14px; } .mitte { padding-left: 10px; padding-right: 10px; } button.feld { margin: 1px; border-width: 2px; border-radius: 10px; } .brett { border-width: 4px; } }
+  @media (orientation: landscape) and (min-width: 900px) and (max-height: 900px) { .brett { width: min(100%, calc((100vh - 400px) * (var(--n) + 1) / var(--n)), 620px); } }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../welt3d/heimat.html" aria-label="Zur Insel">🏝️</a>
+  <h1>💡 Tildas Leuchtturm</h1>
+  <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
+</div>
+<main class="mitte">
+  <section class="tilda">
+    <div class="figur" aria-hidden="true">&#xE107;</div>
+    <div class="blase"><p id="tilda-text"></p><button class="vorlesen" id="tilda-vorlesen" aria-label="Vorlesen">🔊</button></div>
+  </section>
+  <nav class="reiter" id="reiter" role="tablist">
+    <button data-reiter="raetsel" role="tab" class="an" aria-selected="true">💡 Licht-Rätsel</button>
+    <button data-reiter="kammer" role="tab" aria-selected="false">💎 Schatzkammer</button>
+  </nav>
+  <div id="bereich"></div>
+  <section class="zu-oder" id="zu" hidden>
+    <div class="blase" style="justify-content:center"><p>🔒 Der Leuchtturm öffnet mit Kapitel 6. Lern weiter auf der Insel – Tilda holt dich ab!</p></div>
+  </section>
+</main>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/koennen.js"></script>
+<script src="leuchtturm.js"></script>
+</body>
+</html>

@@ -250,6 +250,30 @@ pruefe("Wetter-Drache (06.11.2026): Wetterstation zeigt bis Kapitel 5 das Wetter
   assert.strictEqual(k5(neueUmgebung({ funde: 24, speicher: { sachkunde: { themen: { wetterkarte: 1 } } } })).faellig(), false, "unter 25 Lernfunden nicht fällig");
 });
 
+pruefe("Leuchtturm (07.11.2026): Platz am Ufer frei, dunkel bis Kapitel 6, danach Tildas Licht-Rätsel; Kapitel 6 braucht 35 Lernfunde und drei Schach-Rätsel oder -Lektionen", () => {
+  const vor = neueUmgebung({ funde: 40, story: { kapitel: 5 } });
+  const W = vor.K.erstelle(new URLSearchParams("")), [x, z] = W.P.leuchtturm;
+  assert.ok(Math.hypot(x, z) > W.RMAX_LAUF - 2 && Math.hypot(x, z) < W.RMAX_LAUF, "am Ufer");
+  Object.entries(W.P).filter(([k]) => k !== "leuchtturm").forEach(([k, v]) => assert.ok(Math.hypot(v[0] - x, v[1] - z) > 2.7, "Abstand zu " + k));
+  assert.ok(W.ORTE.leuchtturm && W.ORTE.schach, "Orte für die Zeigehand");
+  for (const w of [{ biom: "berge", seed: 5, groesse: "gross" }, { biom: "wueste", seed: 9, see: 1 }]) {
+    const P = vor.K.erstelle(new URLSearchParams(Object.entries(w).map(([k, v]) => k + "=" + v).join("&"))).P;
+    assert.ok(Array.isArray(P.leuchtturm) && P.leuchtturm.every(Number.isFinite), "Platz auch in " + w.biom);
+  }
+  { const b = vor.K.antwort("leuchtturm").blase; assert.ok(b[0] === "tilda" && /dunkel/.test(b[2]) && !b[4], "vor Kapitel 6 dunkel, ohne Ziel"); }
+  assert.deepStrictEqual(vor.K.aktionFuer("leuchtturm")[0], ["👀", "Ansehen"]);
+  const nach = neueUmgebung({ funde: 40, story: { kapitel: 6 } });
+  { const b = nach.K.antwort("leuchtturm").blase; assert.ok(b[0] === "tilda" && b[4] === "../leuchtturm/", "ab Kapitel 6 offen"); }
+  assert.deepStrictEqual(nach.K.aktionFuer("leuchtturm")[0], ["💡", "Leuchtturm"]);
+  const k6 = (u) => u.K.KAPITEL.find(k => k.n === 6);
+  assert.ok(k6(nach) && k6(nach).szene === "der-leuchtturm");
+  assert.strictEqual(k6(neueUmgebung({ funde: 40 })).faellig(), false, "ohne Schach nicht fällig");
+  assert.strictEqual(k6(neueUmgebung({ funde: 40, speicher: { schach: { raetsel: { 0: 1, 1: 1 } } } })).faellig(), false, "zwei Rätsel reichen nicht");
+  assert.strictEqual(k6(neueUmgebung({ funde: 40, speicher: { schach: { raetsel: { 0: 1, 1: 1, 4: 1 } } } })).faellig(), true, "drei Rätsel");
+  assert.strictEqual(k6(neueUmgebung({ funde: 40, speicher: { schach: { lektionen: { turm: 1, laeufer: 1, springer: 1 } } } })).faellig(), true, "drei Lektionen");
+  assert.strictEqual(k6(neueUmgebung({ funde: 34, speicher: { schach: { raetsel: { 0: 1, 1: 1, 2: 1 } } } })).faellig(), false, "unter 35 Lernfunden nicht fällig");
+});
+
 pruefe("Rhythmus-Boot (05.11.2026): Ballon-Wiese = Paulas Boot, zu bis Kapitel 4; Kapitel 4 „Paulas Fest“ braucht 15 Lernfunde und etwas bei Paula", () => {
   const zu = neueUmgebung({ zeit: SPIELEN, funde: 20, minispieleAus: true, story: { kapitel: 3 } });
   { const b = zu.K.antwort("ballons").blase; assert.ok(b[0] === "papagei" && /noch zu/.test(b[1]) && !b[4], "vor Kapitel 4 zu"); assert.deepStrictEqual(zu.K.aktionFuer("ballons")[0], ["🛶", "Boot"]); }

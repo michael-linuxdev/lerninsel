@@ -501,7 +501,7 @@
       "1/2": {
         1: [ // Raum und Form
           ["sn.ma12.rf.01", "Rechts und links am eigenen Körper unterscheiden", "1", ["mathe:k1rechtslinks", "mathe:k1lage", "mathe:lage", "echtewelt:rechtslinks"], "ja"],
-          ["sn.ma12.rf.02", "Lage zwischen Dingen beschreiben: oben, unten, über, unter, links, rechts, neben, zwischen", "1/2", ["mathe:k1lage", "mathe:lage"], "ja"],
+          ["sn.ma12.rf.02", "Lage zwischen Dingen beschreiben: oben, unten, über, unter, links, rechts, neben, zwischen", "1/2", ["mathe:k1lage", "mathe:lage", "leuchtturm:licht"], "ja"],
           ["sn.ma12.rf.03", "Vorn, hinten, vor, hinter im Raum", "1/2", ["mathe:k1vornhinten", "mathe:wuerfelbau2"], "ja"],
           ["sn.ma12.rf.04", "Würfelgebäude frei und nach Bauplan bauen, eigene Baupläne finden", "2", ["mathe:bauplaene", "mathe:wuerfelbau2", "echtewelt:bauplan"], "ja"],
           ["sn.ma12.rf.05", "Wege nach Beschreibung gehen, sichtbare Wege und Wege aus der Vorstellung beschreiben", "2", ["mathe:wege"], "ja"],

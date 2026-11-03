@@ -125,6 +125,13 @@
     { wer: "eule", text: { de: "Danach weht ein guter Wind. Komm an die Wetterstation – wir lassen meinen Drachen steigen!", ru: "А потом подует хороший ветер. Приходи к метеостанции – запустим моего змея!", status: E } },
     { fuerAeltere: true, wer: "eule", text: { de: "Vorher schauen wir genau aufs Wetter: Wie warm ist es? Wie stark weht der Wind?", ru: "Сначала посмотрим на погоду: Как тепло? Как сильно дует ветер?", status: E } }
   ] });
+  // Kapitel 6 (07.11.2026): Der Leuchtturm – Tilda führt zum alten Leuchtturm; in der Höhle lenkt das Kind das Licht mit Spiegeln, dann leuchtet die Insel
+  Sz.registriere("der-leuchtturm", { titel: "Der Leuchtturm", kapitel: 6, blasen: [
+    { wer: "tilda", text: { de: "{name}, du hast so viel gelernt! Jetzt zeige ich dir mein Geheimnis.", ru: "{name}, ты так многому научился! Теперь я покажу тебе мой секрет.", status: E } },
+    { wer: "tilda", text: { de: "Dort am Ufer steht der alte Leuchtturm. Unten drin ist eine Höhle mit Spiegeln und Kristallen.", ru: "Там, на берегу, стоит старый маяк. Внизу есть пещера с зеркалами и кристаллами.", status: E } },
+    { wer: "tilda", text: { de: "Lenk das Licht mit den Spiegeln – dann leuchtet der Turm, und nachts strahlt die ganze Insel.", ru: "Направь свет зеркалами – тогда маяк засветится, и ночью будет сиять весь остров.", status: E } },
+    { fuerAeltere: true, wer: "tilda", text: { de: "In der Höhle liegt auch meine Schatzkammer. Dort siehst du alles, was du schon geschafft hast.", ru: "В пещере есть и моя сокровищница. Там видно всё, что ты уже сделал.", status: E } }
+  ] });
   Sz.registriere("atelier", { titel: "Paulas Atelier", etappe: "E9", blasen: [
     { wer: "papagei", text: { de: "Hallo {name}! Ich bin Paula. Auf meiner Bühne spielt Musik – und im Atelier wird gemalt!", ru: "Привет, {name}! Я Паула. На моей сцене играет музыка – а в ателье рисуют!", status: E } },
     { wer: "papagei", text: { de: "Male ein Bild oder erfinde eine Melodie. Dein neuestes Bild steht dann auf der Staffelei in deinem Zimmer.", ru: "Нарисуй картину или придумай мелодию. Твоя новая картина будет стоять на мольберте в твоей комнате.", status: E } },
