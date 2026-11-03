@@ -2200,3 +2200,25 @@ Fragerunde: keine iPad-Rückmeldung; Auftraggeber wählte alle vier Pakete (Elte
   mit „Protokoll leeren“. So kann der Auftraggeber bei iPad-Problemen ein Bildschirmfoto schicken. Test `technik`. Die vier neuen Tests laufen auch in der CI.
 - **Offen / nächste Schritte:** iPad-Test (Elternbereich-Ladezeit, Rhythmus-Boot mit echtem Ton und Tippen, russische Zeilen in Mathe); Russisch von Muttersprachlern
   prüfen lassen (Mathe-Hilfen sind Entwurf); Kapitel 5; Schrittweg für mehrstellig mal; Extras der 3D-Figur angleichen; `vorschule` wackelt weiter nur unter Last.
+
+## Stand 06.11.2026 – Kapitel 5 mit Wetter-Drache, mal mehrstellig, Russisch für Mathe-Fragen, Barrierefreiheit
+Fragerunde: ohne iPad-Rückmeldung weiter; Auftraggeber wählte alle vier Pakete (Kapitel 5 + Wetter-Drache, Schriftlich mal mehrstellig, Russisch ausbauen, Qualität), ohne Unterbrechung.
+- **Erledigt – Kapitel 5 „Der Sturm“ und Ellas Wetter-Drache:** Kapitel 5 öffnet bei 25 Lernfunden und einem geschafften Wetter-Thema (`WETTER_THEMEN`); Szene `der-sturm`
+  (Ella, Bruni: „Keine Angst“, Zeigehand zur Wetterstation – ohne Bedrohung, ohne Frist). Die Wetterstation führt danach zu `spiele/wetter/` (Knopf 🪁 „Drachen“):
+  1) **Wettertagebuch** – Kind trägt Himmel und Wind von heute ein (mit Ort im Elternbereich steht der Messwert daneben und wird freundlich verglichen; Woche als Leiste);
+  2) **5 Wetter-Fragen** je Klasse (Vorschule/Kl. 1 Bilder: Wind, Anziehen, Gewitter-Regeln, warm/kalt; Kl. 2 Thermometer in 5er-Schritten, Wolken; ab Kl. 3 Minusgrade,
+  Windsack, Regenmesser, Frost), Arten gemischt; 3) **Drachenflug**: „Leine ziehen“, bis der Drache 8 s im grünen Band war; nach zwei Landungen hilft Ella (breiteres Band).
+  **Entscheidungen:** Bei Sturm oder Windstille zu Hause sagt Ella das ehrlich und fliegt „auf der Insel“ mit sanftem Wind; Sterne nur für neue Fragen (3 am Tag), neue
+  Wetterarten im Tagebuch und den ersten Flug je Windstärke. Lehrplan SU verweist mit `wetterdrache:alle`; Elternbericht zeigt Tagebuch-Tage und Flüge. Tests `wetterdrache`, `kapitel` (jetzt mit Kapitel 4 und 5 auf der Insel), `inselkern`.
+- **Erledigt – Schriftlich mal mehrstellig (Kl. 4, `k4malmehr`):** Erklär-Einheit (234 · 26: Zeile mit der 2 eingerückt, Zeile mit der 6, zusammenzählen; erste Zeile selbst bauen;
+  Robo vergisst das Einrücken) und „Zeig mir deinen Weg“ in Zeilen statt Ziffern (`p.zeilen`); neuer Denkfehler „Zeilen nicht eingerückt“ (`verrueckt`, mit Eltern-Tipp
+  „Kästchenpapier“). 4680 statt 468 gilt nur als freundlicher Hinweis, nicht als Fehlerstelle. Test `malmehr`; jetzt 24 Stationen mit Erklär-Einheit und 22 Denkfehler.
+- **Erledigt – Russisch ausbauen:** die häufigsten Aufgabenfragen im Matheweg (`hilfe-ru-fragen.js`, ~290 Entwürfe; Emojis sind jetzt wie Zahlen Platzhalter): Kl. 1 92 %,
+  Kl. 2 84 %, Kl. 3/4 71 %, Übergang 5 61 % der Fragen einer Runde haben eine russische Zeile (Mindestwerte prüft `tests/mathe-fehler.js`). Rückmeldungen in Angeln,
+  Rhythmus-Boot und Wetter-Drache jetzt auch mit Russisch. Garten, Bäckerei und Tierstation hatten Russisch schon.
+- **Erledigt – Qualität:** neuer Barrierefreiheits-Rundgang `barriere` über 30 Seiten (Namen für alle Knöpfe, Tippflächen ≥ 40 px, doppelte ids, alt, Beschriftungen; iPad
+  und `HANDY=1`) – einziger Fund: Weg-Knöpfe im Matheweg 36 px hoch → 44 px. **Gemessen statt umgebaut:** `shared/icons.js` (2,7 MB Emoji-Bilder) lädt auf jeder Seite,
+  braucht aber selbst vierfach gedrosselt nur ~32 ms zum Auswerten – kein Umbau nötig. „Bewegung reduzieren“ des Systems wirkt schon global (`style.css`).
+  Vorschul-Test wartet jetzt auf Zustände statt fester 60 ms (unter Last mit vier schweren Tests parallel grün).
+- **Offen / nächste Schritte:** iPad-Test (Wetter-Drache mit echtem Wetter und Fingertippen, mal mehrstellig, russische Fragen); Russisch von Muttersprachlern prüfen;
+  Kapitel 6 (Höhlen-Entdecker/Schatzkammer laut KONZEPT); restliche Mathe-Hilfetexte (`hilfe` der Aufgaben) auf Russisch; Extras der 3D-Figur angleichen.

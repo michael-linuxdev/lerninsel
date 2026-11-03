@@ -17,12 +17,23 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-Der Auftrag vom 04.11. (Rhythmus-Boot, Russisch für Mathe, Elternbereich schneller) ist erledigt, dazu ein technisches Protokoll. Zuerst die **iPad-Rückmeldung** holen (Fragerunde), dann:
+Die Aufträge vom 05./06.11. sind erledigt (Kapitel 5 mit Wetter-Drache, mal mehrstellig, Russisch für Mathe-Fragen, Barrierefreiheit). Zuerst die **iPad-Rückmeldung** holen (Fragerunde), dann:
 1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test).
-2. Kapitel 5 planen (Story-Bogen nach „Paulas Fest“) und ein weiteres Insel-Spiel aus `docs/MINISPIELE.md` (Vorschlag: Murmelbahn oder Wetter-Drache).
-3. Schrittweg „Schriftlich mal“ mit mehrstelliger Zahl; Extras der 3D-Figur an die neuen 2D-Zeichnungen angleichen.
+2. Kapitel 6 (KONZEPT: Schatzkammer/Höhlen-Entdecker) planen und bauen.
+3. Russische Hilfe für die Mathe-Hilfetexte (`hilfe` der Aufgaben); Extras der 3D-Figur angleichen.
 
-## 1. Stand (05.11.2026)
+## 1. Stand (06.11.2026)
+**Neu am 06.11.2026** (Details in `docs/PLAN.md`, „Stand 06.11.2026“):
+- **Kapitel 5 „Der Sturm“** (25 Lernfunde + ein Wetter-Thema) und **Ellas Wetter-Drache** an der Wetterstation: Wettertagebuch, Wetter-Fragen je Klasse, Drachenflug (Test `wetterdrache`, `kapitel`).
+- **Schriftlich mal mehrstellig** (Kl. 4): Erklär-Einheit, „Zeig mir deinen Weg“ in Zeilen, Denkfehler „Zeilen nicht eingerückt“ (Test `malmehr`).
+- **Russisch:** die häufigsten Mathe-Aufgabenfragen (Kl. 1 92 %, Kl. 2 84 %, Kl. 3/4 71 %), Rückmeldungen in Angeln/Boot/Drache.
+- **Barrierefreiheit:** Rundgang über 30 Seiten ohne Funde (Test `barriere`).
+**Im iPad testen (am einfachsten in /dev/test):**
+1. Insel → Wetterstation → „Drachen“: Tagebuch eintragen (mit Ort im Elternbereich steht das gemessene Wetter da), 5 Fragen, dann den Drachen mit „Leine ziehen“ 8 Sekunden im grünen Band halten – ist das zu schwer?
+2. Matheweg Kl. 4 → „Schriftlich mal mehrstellig“ → „Erklär es mir“; danach eine Aufgabe absichtlich falsch: Kommt der Zeilen-Weg?
+3. Hilfesprache Russisch: Matheweg Kl. 1 oder 2 – steht unter den Fragen die russische Zeile?
+
+### Stand 05.11.2026
 **Neu am 05.11.2026** (Details in `docs/PLAN.md`, „Stand 05.11.2026“):
 - **Elternbereich schneller:** Die Lerninhalte (~1,5 MB) laden erst nach dem ersten Bild; „Lernstand“ und „Wie in der Schule“ füllen sich kurz danach (Test `elternschnell`).
 - **Russische Hilfe in Mathe:** alle Erklär-Einheiten und Denkfehler-Hinweise mit russischer Zeile (Entwurf, nur mit Hilfesprache Russisch; Test `matheru`).
@@ -174,7 +185,7 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 2. **Prüfen statt Bauen** (Abschnitt 0, Schritt 2).
 3. **Gestaltung Stil A auf allen Seiten.**
 4. ~~Wörter-Angeln und Rhythmus-Boot~~ (erledigt 04./05.11.); ~~Elternbereich schneller~~ (erledigt 05.11.).
-5. Kapitel 5 und das nächste Insel-Spiel; Russisch (Mathe-Hilfen, Szenen) von Muttersprachlern prüfen lassen.
+5. ~~Kapitel 5 und das nächste Insel-Spiel~~ (erledigt 06.11.); als Nächstes Kapitel 6; Russisch (Mathe, Szenen) von Muttersprachlern prüfen lassen.
 
 Jederzeit dazwischen: iPad-Rückmeldung einarbeiten (Fehler zuerst), Sorbisch-Korrekturen in `spiele/sorbisch/lektionen.js` und `geprueft.js`,
 den öffentlichen QR-Schlüssel in `OEFFENTLICH` eintragen, sobald er da ist. Arbeitsliste für den Lehrplan bleibt `docs/SACHSEN-SCHULJAHR.md`.
