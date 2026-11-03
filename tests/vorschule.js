@@ -42,7 +42,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
 
   // ---------- Alle Spiele echt durchtippen ----------
   async function spiele(p, id, falschEinmal) {
-    await p.click(`.kachel[data-id="${id}"]`); await p.waitForTimeout(100);
+    await p.click(`.kachel[data-id="${id}"]`);
+    await p.waitForFunction(() => window.__vorschule && __vorschule.lauf && document.querySelector("#aufgabe .option"), null, { timeout: 5000 }).catch(() => {});
     let runden = 0, haengt = false, scroll = false;
     while (runden++ < 20) {
       const l = await p.evaluate(() => { const l = __vorschule.lauf; return { ende: !document.getElementById("ende-ansicht").hidden, pos: l && l.pos, s: l && l.schritte[l.pos] }; });
@@ -53,12 +54,14 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       if (falschEinmal) {
         falschEinmal = false;
         const n = await p.evaluate((s) => [...document.querySelectorAll("#aufgabe .option")].findIndex(b => s.teile ? +b.dataset.i !== 0 : b.textContent !== s.optionen[0]), s);
-        await p.click(`#aufgabe .option >> nth=${n}`); await p.waitForTimeout(80);
+        await p.click(`#aufgabe .option >> nth=${n}`);
+        await p.waitForFunction(() => document.getElementById("hinweis").classList.contains("nein"), null, { timeout: 3000 }).catch(() => {});
         erwarte(await p.evaluate(() => document.getElementById("hinweis").classList.contains("nein") && __vorschule.lauf.fehler === 1), "falsche Antwort wird erkannt und zählt einmal");
       }
       if (s.typ === "ordnen") { for (let i = 0; i < s.teile.length; i++) await p.click(`#aufgabe .option[data-i="${i}"]`); }
       else await p.click(`#aufgabe .option >> nth=${await p.evaluate((t) => [...document.querySelectorAll("#aufgabe .option")].findIndex(b => b.textContent === t), s.optionen[0])}`);
-      await p.waitForTimeout(60);
+      // warten statt fester 60 ms: unter Last kommt die Rückmeldung später
+      await p.waitForFunction(() => document.getElementById("hinweis").classList.contains("gut"), null, { timeout: 3000 }).catch(() => {});
       if (!(await p.evaluate(() => document.getElementById("hinweis").classList.contains("gut")))) { haengt = true; console.log(`    nicht angenommen: ${id} Aufgabe ${l.pos}`); break; }
       await p.waitForFunction((pos) => !__vorschule.lauf || __vorschule.lauf.pos !== pos || !document.getElementById("ende-ansicht").hidden, l.pos, { timeout: 3000 }).catch(() => {});
     }
@@ -86,8 +89,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(g.some(t => /Wie viele Äpfel/.test(t)) && g.some(t => /Ba – na – ne/.test(t)) && !g.some(t => /🍎/.test(t)), "Fragen werden vorgelesen (ohne Emojis), Silben-Hinweis wird mitgesprochen");
     const st = await p.evaluate((v) => ({ fertig: Object.keys(__vorschule.daten().fertig).length, sterne: Spielwelt.sterne() - v }), sterneVorher);
     erwarte(st.fertig === 16 && st.sterne >= 46, `Fortschritt gespeichert (${st.fertig} Spiele) und Sterne verdient (+${st.sterne})`);
-    await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(400);
-    if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(500); }
+    await p.goto(BASIS + "spiele/eltern/"); await p.waitForSelector("#pin1, .eltern-reiter");
+    if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); }
+    await p.waitForSelector("#lp-vorschule", { timeout: 10000 }).catch(() => {});
     const lp = await p.evaluate(() => { const h = document.getElementById("lp-vorschule"); return h && { n: h.nextElementSibling.nextElementSibling.querySelectorAll(":scope > li").length, f: document.getElementById("vs-fortschritt").textContent }; });
     erwarte(lp && lp.n === 7 && lp.f === "16 von 16", `Elternbereich: Sächsischer Bildungsplan für die Vorschule mit 7 Bereichen und Fortschritt (${lp && lp.f})`);
     await bild(p, "vorschule-eltern");
