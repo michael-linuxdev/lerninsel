@@ -9,6 +9,7 @@ require("../spiele/mathe/aufgaben.js");
 require("../spiele/mathe/fehler.js");
 require("../spiele/mathe/erklaeren.js");
 require("../spiele/mathe/hilfe-ru.js");
+require("../spiele/mathe/hilfe-ru-fragen.js");
 const F = global.MatheFehler, E = global.MatheErklaeren, M = "−";
 let n = 0;
 const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
@@ -178,6 +179,27 @@ pruefe("Russische Hilfe (05.11.2026): jeder Satz der Erklär-Einheiten und der D
   assert.strictEqual(R.uebersetze("Robo rechnet: 71 + 19 = 80. Stimmt das?"), "Робо считает: 71 + 19 = 80. Это правильно?", "Zahlen werden eingesetzt");
   assert.strictEqual(R.uebersetze("Das gibt es nicht."), "", "Unbekanntes bleibt leer");
   assert.strictEqual(R.STATUS.ru, "entwurf");
+});
+
+pruefe("Russische Hilfe für Aufgabenfragen (06.11.2026): Platzhalter passen, häufige Fragen je Klasse haben eine russische Zeile", () => {
+  const R = global.MatheRu, EMO = /\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic}|\p{Emoji_Modifier})*/gu;
+  for (const [de, ru] of R.TABELLE) {
+    const zahlen = (de.match(/\{\d+\}|\d+/g) || []).length, emos = (de.match(/\{e\}/g) || []).length + (de.match(EMO) || []).length;
+    const maxNr = Math.max(-1, ...(ru.match(/\{(\d+)\}/g) || []).map(x => +x.slice(1, -1)));
+    assert.ok(maxNr < zahlen, `zu viele Zahl-Platzhalter: ${ru}`);
+    assert.ok((ru.match(/\{e\}/g) || []).length <= emos, `zu viele Emoji-Platzhalter: ${ru}`);
+    assert.ok(!/[a-zäöüß]{4}/i.test(ru.replace(/\{[a-z0-9]+\}|halb|Viertel nach|Viertel vor|cm|ct|km|mm|kg|AB/g, "")) || /«/.test(ru), `deutsches Wort im Russischen? ${ru}`);
+  }
+  assert.strictEqual(R.uebersetze("Wie oft siehst du 🍓?"), "Сколько раз ты видишь 🍓?", "Emoji wird eingesetzt");
+  assert.strictEqual(R.uebersetze("Welche Zahl kommt nach 7?"), "Какое число идёт после 7?");
+  // Abdeckung: Anteil der Fragen einer Runde mit russischer Zeile
+  const M = global.Mathe;
+  for (const [liste, mind] of [["STATIONEN_K1", 0.8], ["STATIONEN", 0.7], ["STATIONEN_K3", 0.5], ["STATIONEN_K4", 0.5], ["STATIONEN_K5", 0.4]]) {
+    let n = 0, mit = 0;
+    for (const st of M[liste]) for (let i = 0; i < 30; i++) { const a = st.neu(); if (a && a.frage && /[a-zäöü]{3}/i.test(a.frage)) { n++; if (R.uebersetze(a.frage)) mit++; } }
+    assert.ok(mit / n >= mind, `${liste}: nur ${Math.round(mit / n * 100)} % der Fragen mit russischer Zeile`);
+    console.log(`    ${liste}: ${Math.round(mit / n * 100)} % der Fragen mit russischer Zeile`);
+  }
 });
 
 console.log(`✅ Mathe-Fehler-Ursachen: ${n} Prüfungen bestanden.`);

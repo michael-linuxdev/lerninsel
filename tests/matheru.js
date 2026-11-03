@@ -69,6 +69,13 @@ const RU = /[а-яё]{3}/i;
     const lang = await p.evaluate(() => [...document.querySelectorAll("#denkfehler .hilfe-ru")].map(x => x.textContent));
     erwarte(await p.isVisible("#denkfehler") && lang.length >= 4 && lang.every(t => RU.test(t)), `${art}: „Fast! Schau mal.“ und drei Sätze, alle mit russischer Zeile (${lang.length})`);
     await bild(p, `matheru-denkfehler-${art.replace(" ", "-")}`);
+    // Aufgabenfragen (06.11.2026): häufige Fragen haben eine russische Zeile, mit Emoji eingesetzt
+    await p.click("#weiter").catch(() => {}); await p.waitForTimeout(300);
+    await p.evaluate(() => __mathe.setzeAufgabe({ text: "", frage: "Wie oft siehst du 🍓?", antwort: "4", art: "zahl", nurLuecke: true, hilfe: "Zähl genau." }));
+    await p.waitForTimeout(300);
+    const fr = await ruUnter(p, "#tafel > p.frage");
+    erwarte(/Сколько раз ты видишь/.test(fr) && fr.includes("🍓"), `${art}: Aufgabenfrage mit russischer Zeile („${fr}“)`);
+    await bild(p, `matheru-frage-${art.replace(" ", "-")}`);
     const m = await p.evaluate(() => ({ w: document.documentElement.scrollWidth, iw: innerWidth }));
     erwarte(m.w <= m.iw + 1, `${art}: keine waagerechte Scrollleiste`);
     await ctx.close();

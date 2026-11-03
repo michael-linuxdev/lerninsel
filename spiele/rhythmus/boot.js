@@ -207,7 +207,7 @@
     }
     speichere(d);
     $("sterne").textContent = S.sterne();
-    $("hinweis").className = "hinweis gut"; $("hinweis").textContent = `Genau so! ${teile(r).map(k => B[k].name).join(" – ")}.${stern ? " Ein neuer Rhythmus – dafür gibt es einen Stern ⭐." : ""}`;
+    $("hinweis").className = "hinweis gut"; $("hinweis").innerHTML = esc(`Genau so! ${teile(r).map(k => B[k].name).join(" – ")}.${stern ? " Ein neuer Rhythmus – dafür gibt es einen Stern ⭐." : ""}`) + ru(stern ? "Точно так! Новый ритм – за него звезда." : "Точно так!");
     if (!istEcho()) $("vorlage").outerHTML = karte(r, "vorlage");
     setTimeout(weiter, window.__testSchnell ? 120 : 1500);
   }

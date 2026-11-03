@@ -418,13 +418,16 @@
   ];
   // Skelett: Zahlen → #, ein einzelnes Zahlwort in „…“ → § (in der Tabelle als {0}, {1} … und {w} geschrieben; die russische Seite nimmt die Zahlen nach Nummer)
   function zerlege(text) {
-    const zahlen = [], worte = [];
+    const zahlen = [], worte = [], emos = [];
     const s = String(text).replace(/\s+/g, " ").trim()
       .replace(/„([a-zäöüß]+)“/g, (m) => { worte.push(m); return "§"; })
+      .replace(EMO, (m) => { emos.push(m); return "¤"; })
       .replace(/\d+/g, (z) => { zahlen.push(z); return "#"; });
-    return { s, zahlen, worte };
+    return { s, zahlen, worte, emos };
   }
-  const schluessel = (de) => de.replace(/\s+/g, " ").trim().replace(/\{w\}/g, "§").replace(/\{\d+\}/g, "#").replace(/\d+/g, "#");
+  // Emojis (auch zusammengesetzte) sind wie Zahlen Platzhalter: in der Tabelle {e}
+  const EMO = /\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic}|\p{Emoji_Modifier})*/gu;
+  const schluessel = (de) => de.replace(/\s+/g, " ").trim().replace(/\{w\}/g, "§").replace(/\{e\}/g, "¤").replace(EMO, "¤").replace(/\{\d+\}/g, "#").replace(/\d+/g, "#");   // feste Emojis (➕) stehen im Russischen wörtlich
   const TAB = new Map(T.map(([de, ru]) => [schluessel(de), ru]));
   // Rahmen um einen Hinweis („Fast! … Versuch es nochmal.“) wird abgetrennt und einzeln übersetzt
   const RAHMEN = [[/^Fast! /, "Почти! ", "vorn"], [/ Versuch es nochmal\.$/, " Попробуй ещё раз.", "hinten"]];
@@ -441,7 +444,7 @@
       if ((vorn || hinten) && kern && kern !== text) { const k = uebersetze(kern); return k ? vorn + k + hinten : ""; }
       return "";
     }
-    return ru.replace(/\{(\d+)\}/g, (_, i) => z.zahlen[+i] !== undefined ? z.zahlen[+i] : "").replace(/\{w\}/g, () => z.worte.shift() || "");
+    return ru.replace(/\{(\d+)\}/g, (_, i) => z.zahlen[+i] !== undefined ? z.zahlen[+i] : "").replace(/\{w\}/g, () => z.worte.shift() || "").replace(/\{e\}/g, () => z.emos.shift() || "");
   }
   // Auf der Matheseite: unter jeder deutschen Sprechblase/Erklärzeile die russische Zeile ergänzen (nur mit Hilfesprache Russisch)
   const ZIELE = "#tafel > p.frage, .erklaer-blase > span, .geschichte span, #warum-t, .denkfehler-karte > p, .hilfe .denkfehler, #rueck, #angebot h2, #angebot .frage";
@@ -471,5 +474,7 @@
   if (typeof document !== "undefined") {
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", beobachte); else beobachte();
   }
-  W.MatheRu = { uebersetze, skelett: (t) => zerlege(t).s, hat: (t) => TAB.has(zerlege(t).s), STATUS, TABELLE: T, auffrischen };
+  // weitere Paare (z. B. Aufgabenfragen aus hilfe-ru-fragen.js) nachtragen
+  function dazu(paare) { paare.forEach(([de, ru]) => { T.push([de, ru]); TAB.set(schluessel(de), ru); }); }
+  W.MatheRu = { uebersetze, skelett: (t) => zerlege(t).s, hat: (t) => TAB.has(zerlege(t).s), STATUS, TABELLE: T, auffrischen, dazu };
 })(typeof window !== "undefined" ? window : globalThis);

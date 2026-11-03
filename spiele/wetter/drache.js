@@ -138,7 +138,7 @@
     const w = echtesWetter(), vergleich = w ? (windStufe(w.wind || 0) === lauf.wind ? " Die Station misst das auch so!" : ` Die Station misst ${Math.round(w.wind || 0)} km/h – das ist ${WIND[windStufe(w.wind || 0)][0]}. Wind fühlt sich überall ein bisschen anders an.`) : "";
     S.ton("juhu"); $("sterne").textContent = S.sterne();
     $("t-hinweis").className = "hinweis gut";
-    $("t-hinweis").textContent = `Eingetragen: ${ARTEN[lauf.art][0]} ${ARTEN[lauf.art][1]}, ${WIND[lauf.wind][0]}.${vergleich}${stern ? " Diese Wetterart ist neu in deinem Tagebuch: ⭐" : ""}`;
+    $("t-hinweis").innerHTML = esc(`Eingetragen: ${ARTEN[lauf.art][0]} ${ARTEN[lauf.art][1]}, ${WIND[lauf.wind][0]}.${vergleich}${stern ? " Diese Wetterart ist neu in deinem Tagebuch: ⭐" : ""}`) + ru(`Записано: ${ARTEN[lauf.art][2]}, ${WIND[lauf.wind][2]}.${stern ? " Новый вид погоды в дневнике: ⭐" : ""}`);
     setTimeout(() => { if (lauf && lauf.phase === "tagebuch") tagebuch(); }, window.__testSchnell ? 400 : 2200);
   }
 

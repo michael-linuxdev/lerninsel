@@ -59,7 +59,7 @@
     const f = $("teich").querySelector(`[data-i="${i}"]`); if (f) f.classList.add("weg");
     $("g-bild").textContent = w.bild; $("g-wort").textContent = w.de; $("g-art").textContent = "der"; $("g-art").classList.remove("da");
     $("eimer").innerHTML = ["der", "die", "das"].map(a => { const A = WS.ARTIKEL[a]; return `<button data-a="${a}" style="background:${A.farbe}" aria-label="Eimer ${a}">${A.form}<small>${a}</small></button>`; }).join("");
-    $("hinweis").className = "hinweis"; $("hinweis").textContent = "In welchen Eimer gehört der Fisch?";
+    $("hinweis").className = "hinweis"; $("hinweis").innerHTML = esc("In welchen Eimer gehört der Fisch?") + ru("В какое ведро положить рыбу?");
     $("karte").hidden = false; $("teich").hidden = true;
   }
 
@@ -82,7 +82,7 @@
       }
       speichere(d);
       lauf.gefangen.push(w);
-      $("hinweis").className = "hinweis gut"; $("hinweis").textContent = `Richtig: ${w.artikel} ${w.de}!${stern ? " Ein neues Wort – dafür gibt es einen Stern ⭐." : ""}`;
+      $("hinweis").className = "hinweis gut"; $("hinweis").innerHTML = esc(`Richtig: ${w.artikel} ${w.de}!${stern ? " Ein neues Wort – dafür gibt es einen Stern ⭐." : ""}`) + ru(stern ? "Правильно! Новое слово – за него звезда." : "Правильно!");
       $("sterne").textContent = S.sterne();
       if (SP && SP.verfuegbar && SP.verfuegbar()) setTimeout(() => SP.sprich(`${w.artikel} ${w.de}`), 300);
       setTimeout(weiter, window.__testSchnell ? 120 : 1600);
@@ -99,7 +99,7 @@
     // zweiter Fehler: Lösung zeigen
     $("g-art").textContent = w.artikel; $("g-art").classList.add("da");
     $("eimer").querySelectorAll("button").forEach(b => { b.disabled = true; if (b.dataset.a === w.artikel) b.classList.add("richtig"); });
-    $("hinweis").className = "hinweis"; $("hinweis").textContent = `Es heißt: ${w.artikel} ${w.de}. Den Fisch angeln wir später noch einmal.`;
+    $("hinweis").className = "hinweis"; $("hinweis").innerHTML = esc(`Es heißt: ${w.artikel} ${w.de}. Den Fisch angeln wir später noch einmal.`) + ru(`Правильно: ${w.artikel} ${w.de}. Эту рыбу мы поймаем ещё раз позже.`);
     if (!lauf.wieder.includes(w.id)) { lauf.wieder.push(w.id); lauf.liste.push(w); lauf.liste.splice(lauf.pos, 1); lauf.pos--; }   // kommt am Ende der Runde einmal wieder
     setTimeout(weiter, window.__testSchnell ? 120 : 2600);
   }
