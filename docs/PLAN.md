@@ -2222,3 +2222,32 @@ Fragerunde: ohne iPad-Rückmeldung weiter; Auftraggeber wählte alle vier Pakete
   Vorschul-Test wartet jetzt auf Zustände statt fester 60 ms (unter Last mit vier schweren Tests parallel grün).
 - **Offen / nächste Schritte:** iPad-Test (Wetter-Drache mit echtem Wetter und Fingertippen, mal mehrstellig, russische Fragen); Russisch von Muttersprachlern prüfen;
   Kapitel 6 (Höhlen-Entdecker/Schatzkammer laut KONZEPT); restliche Mathe-Hilfetexte (`hilfe` der Aufgaben) auf Russisch; Extras der 3D-Figur angleichen.
+
+## Stand 07.11.2026 – Kapitel 6 „Der Leuchtturm“, Russisch für Lösungshilfen, Extras der 3D-Figur, Stil A auf allen Seiten
+Fragerunde: keine iPad-Rückmeldung (noch nicht getestet); Auftraggeber wählte alle vier Pakete, Kapitel 6 als „Schatzkammer + Höhlen-Rätsel“; nichts tabu.
+Nachträglicher Auftrag (noch offen): Arme der 3D-Hauptfigur ein wenig abspreizen.
+- **Erledigt – Kapitel 6 „Der Leuchtturm“:** `KAPITEL` n 6 `der-leuchtturm` = 35 Lernfunde + `tildaGenutzt()` (3 Matt-in-1-Rätsel **oder** 3 Schach-Lektionen –
+  Entscheidung: auch Lektionen zählen, damit Jüngere nicht an Rätseln hängen bleiben). Szene mit Tilda (3 Blasen + 1 `fuerAeltere`), Zeigehand auf Schachtisch und Leuchtturm.
+  Leuchtturm mit Felshöhle am Ufer: Platz `P.leuchtturm` wird im Kern gesucht (frei von Bäumen ≥ 3,2, von großen Orten 3,4–4,5, nicht am Steg/Sonnenuhr), Ort `leuchtturm`
+  (dazu Ort `schach` für Tilda). Vor Kapitel 6 dunkel („👀 Ansehen“, ohne Ziel), danach Lampe an, Knopf „💡 Leuchtturm“, nachts kreist ein Lichtstrahl (zwei Kegel, nicht bei
+  „ruhig“). Test-Haken `__heimat.leuchtturm()`.
+  Seite `spiele/leuchtturm/` (`__leuchtturm`): **Licht-Rätsel** – Lampe links, Spiegel antippen (/ ↔ \), bis der Strahl alle Kristalle trifft; Felsen halten das Licht auf.
+  24 feste Rätsel (je Stufe 8: a 4 × 4, b 5 × 5 mit Fels, c 6 × 6 mit zwei Kristallen), jedes mit **genau einer Lösung** (per Skript erzeugt, im Test geprüft), Start immer
+  ungelöst. Runde = 3 Rätsel, erst ungelöste der eigenen, dann der nächsten Stufe. 💡 Tipp markiert einen falsch stehenden Spiegel (kostenlos). Sterne nur für neue Rätsel,
+  höchstens 3 am Tag. **Tildas Schatzkammer**: 13 Truhen (Lernfunde, Matheweg, Werkstatt, Sachthemen, Englisch, Ernten, Tiere, Bäckerei, Angeln, Rhythmen, Drachenflüge,
+  Schach-, Licht-Rätsel), leere Truhen ohne Druck; Links zu Pokalen und Inselchronik; `#kammer` öffnet direkt. Daten `leuchtturm` = `{ geloest, neu, runden }`.
+  Lernziel ma.rf.02, Lehrplan-Verweis `leuchtturm:licht` (sn.ma12.rf.02). Elternbereich: Zeile „Tildas Leuchtturm“. Tests `leuchtturm` (neu), `kapitel`, `inselkern`, `barriere`.
+- **Erledigt – Russisch für die Mathe-Lösungshilfen:** `spiele/mathe/hilfe-ru-hilfen.js` (Entwurf). `MatheRu.uebersetze` übersetzt lange Hinweise jetzt **Satz für Satz**;
+  reine Rechnungen bleiben stehen; nur wenn jeder Satz passt, gibt es eine Zeile. Neu: `MatheRu.anfaenge([...])` (Satzanfang + Rechnung beliebiger Länge), Regel „2er-Reihe“,
+  „Die Lösung ist …“ → „Ответ: …“. Anzeige unter `.hilfe .hilfe-t` und `.hilfe > b`. Abdeckung: Kl. 1 92 %, Kl. 2 75 %, Kl. 3/4 70 %, Übergang 5 30 %
+  (Mindestwerte in `tests/mathe-fehler.js`), Browser-Test `matheru` erweitert.
+- **Erledigt – Extras der 3D-Figur:** gemeinsames Modul `quellen/welt3d/extras3d.js` (`extras3d(look, teile, helfer)`, `EXTRAS_3D`) für Insel und Minispiele; alle 34 Extras
+  aus `Puppe.extras` (17 waren neu: Blüte, Haarreif, Einhorn, Kopfhörer, Ohrringe, Augenklappe, Maske, Kette, Fliege, Armband, Tasche, Teddy, Zauberstab, Ballon, Fußball,
+  Kuschel-Dino, Schwert). Bommelmütze rund wie in 2D, Dinge in der Hand hängen am Arm (erstes rechts, zweites links; auf der Insel 1,5-fach). Test `extras3d` (3D, allein);
+  Test-Haken `__heimat.extras3d`, `ecken()`, `armEcken()`.
+- **Erledigt – Stil A auf allen Seiten:** `shared/style.css` am Ende: Tokens `--kontur`, `--rund-gross` 26 px, `--schatten` im Kontur-Ton, Kontur 3 px an `.blase`/`#blase`;
+  Zipfel mit Kontur (gedrehte Raute) in Deutsch und Mein Tier. Seiten mit `overflow: auto` an der Blase zeigen keinen Zipfel (war schon so).
+- **Hinweise:** Lokaler Zweig `main` war veraltet (HEAD losgelöst auf `origin/main`) – mit `git checkout -B main HEAD` behoben. 3D-Tests nie parallel mit hängenden
+  Browsern laufen lassen (sonst Zeitüberschreitung beim Laden).
+- **Offen / nächste Schritte:** Arme der 3D-Hauptfigur leicht abspreizen (`heimat.js` `figur()` und Schleife, `figur3d.js`; Hand-Extras mitprüfen); iPad-Test
+  (Leuchtturm, Licht-Rätsel, Schatzkammer, russische Lösungshilfen, 3D-Extras, Sprechblasen); Russisch von Muttersprachlern prüfen; Kapitel 7 „Neue Ufer“ (KONZEPT).

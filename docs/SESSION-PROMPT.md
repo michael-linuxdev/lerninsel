@@ -17,12 +17,26 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-Die Aufträge vom 05./06.11. sind erledigt (Kapitel 5 mit Wetter-Drache, mal mehrstellig, Russisch für Mathe-Fragen, Barrierefreiheit). Zuerst die **iPad-Rückmeldung** holen (Fragerunde), dann:
+Die Aufträge vom 07.11. sind erledigt (Kapitel 6, Russisch für Lösungshilfen, 3D-Extras, Stil A). Zuerst die **iPad-Rückmeldung** holen (Fragerunde), dann:
 1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test).
-2. Kapitel 6 (KONZEPT: Schatzkammer/Höhlen-Entdecker) planen und bauen.
-3. Russische Hilfe für die Mathe-Hilfetexte (`hilfe` der Aufgaben); Extras der 3D-Figur angleichen.
+2. **Auftrag des Auftraggebers (07.11.):** Die Arme der Hauptfigur in 3D sollen ein wenig abgespreizt sein – `quellen/welt3d/heimat.js` (`figur()`: `a.rotation.z = 0.24 * s`,
+   in der Bildschleife `u.arme[…].rotation.z = 0.25`) und `quellen/welt3d/figur3d.js`; Dinge in der Hand (`extras3d.js`) mitprüfen; Test und Screenshot (`extras3d`).
+3. Danach: Kapitel 7 „Neue Ufer“ (KONZEPT) planen; Russisch prüfen lassen.
 
-## 1. Stand (06.11.2026)
+## 1. Stand (07.11.2026)
+**Neu am 07.11.2026** (Details in `docs/PLAN.md`, „Stand 07.11.2026“):
+- **Kapitel 6 „Der Leuchtturm“** (35 Lernfunde + 3 Schach-Rätsel oder -Lektionen): Leuchtturm am Ufer, nachts mit Lichtstrahl; Seite `spiele/leuchtturm/` mit
+  24 Licht-Rätseln (Spiegel drehen, drei Stufen) und **Tildas Schatzkammer** (Test `leuchtturm`, `kapitel`).
+- **Russisch für die Mathe-Lösungshilfen** (Entwurf, Satz für Satz): Kl. 1 92 %, Kl. 2 75 %, Kl. 3/4 70 %, Übergang 5 30 %.
+- **3D-Figur:** alle 34 Kleiderschrank-Extras in 3D, Bommelmütze wie in 2D, Dinge in der Hand werden gehalten (Test `extras3d`).
+- **Stil A auf allen Seiten:** Sprechblasen mit dunkler Kontur, Zipfel mit Kontur.
+**Im iPad testen (in /dev/test, dort ist alles offen):**
+1. Insel → Leuchtturm am Ufer → „Leuchtturm“: Licht-Rätsel lösen (Spiegel antippen), einmal 💡 Tipp; Reiter „Schatzkammer“. Abends (nach 20 Uhr) auf der Insel: kreist der Lichtstrahl?
+2. Hilfesprache Russisch, Matheweg: eine Aufgabe zweimal falsch – steht unter „Die Lösung ist …“ und dem Hinweis die russische Zeile?
+3. Kleiderschrank: Teddy, Ballon, Kopfhörer, Bommelmütze anziehen, dann auf die Insel – passt es?
+4. Sprechblasen in Deutsch, Sachunterricht, Mein Tier: gefällt die dunkle Kontur?
+
+### Stand 06.11.2026
 **Neu am 06.11.2026** (Details in `docs/PLAN.md`, „Stand 06.11.2026“):
 - **Kapitel 5 „Der Sturm“** (25 Lernfunde + ein Wetter-Thema) und **Ellas Wetter-Drache** an der Wetterstation: Wettertagebuch, Wetter-Fragen je Klasse, Drachenflug (Test `wetterdrache`, `kapitel`).
 - **Schriftlich mal mehrstellig** (Kl. 4): Erklär-Einheit, „Zeig mir deinen Weg“ in Zeilen, Denkfehler „Zeilen nicht eingerückt“ (Test `malmehr`).
@@ -185,7 +199,7 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 2. **Prüfen statt Bauen** (Abschnitt 0, Schritt 2).
 3. **Gestaltung Stil A auf allen Seiten.**
 4. ~~Wörter-Angeln und Rhythmus-Boot~~ (erledigt 04./05.11.); ~~Elternbereich schneller~~ (erledigt 05.11.).
-5. ~~Kapitel 5 und das nächste Insel-Spiel~~ (erledigt 06.11.); als Nächstes Kapitel 6; Russisch (Mathe, Szenen) von Muttersprachlern prüfen lassen.
+5. ~~Kapitel 5 und das nächste Insel-Spiel~~ (erledigt 06.11.); ~~Kapitel 6~~ (erledigt 07.11.); als Nächstes Arme der 3D-Figur, dann Kapitel 7; Russisch (Mathe, Szenen) von Muttersprachlern prüfen lassen.
 
 Jederzeit dazwischen: iPad-Rückmeldung einarbeiten (Fehler zuerst), Sorbisch-Korrekturen in `spiele/sorbisch/lektionen.js` und `geprueft.js`,
 den öffentlichen QR-Schlüssel in `OEFFENTLICH` eintragen, sobald er da ist. Arbeitsliste für den Lehrplan bleibt `docs/SACHSEN-SCHULJAHR.md`.
