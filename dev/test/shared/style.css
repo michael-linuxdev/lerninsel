@@ -142,3 +142,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 /* (04.11.2026) Kleine Porträts der Kinderfigur: Konturen wachsen mit der Figur mit (sonst wirken 3 px Kontur und Augenränder im Porträt zu schwer) */
 svg.fig-klein [vector-effect] { vector-effect: none; }
+
+/* Stil A „Insel bunt“ auf allen Seiten (07.11.2026, Wahl des Auftraggebers vom 01.11.): Sprechblasen mit dunkler Kontur #3B1F63,
+   Knöpfe mit festem Schatten im Kontur-Ton, Karten-Radius 26 px (Vorschau spiele/stil/, Variante A). Seiten mit eigener Kontur behalten sie. */
+:root { --kontur: #3B1F63; --rund-gross: 26px; --schatten: 0 6px 0 rgba(59, 31, 99, .22); }
+.blase, #blase { border: 3px solid var(--kontur); }
+/* Zipfel mit Kontur: Seiten mit sichtbarem Zipfel (Deutsch, Mein Tier) zeichnen ihn als gedrehte Raute mit zwei Konturrändern. */
+
