@@ -10,6 +10,7 @@ require("../spiele/mathe/fehler.js");
 require("../spiele/mathe/erklaeren.js");
 require("../spiele/mathe/hilfe-ru.js");
 require("../spiele/mathe/hilfe-ru-fragen.js");
+require("../spiele/mathe/hilfe-ru-hilfen.js");
 const F = global.MatheFehler, E = global.MatheErklaeren, M = "−";
 let n = 0;
 const pruefe = (name, fn) => { fn(); n++; console.log("  ✓ " + name); };
@@ -199,6 +200,24 @@ pruefe("Russische Hilfe für Aufgabenfragen (06.11.2026): Platzhalter passen, h�
     for (const st of M[liste]) for (let i = 0; i < 30; i++) { const a = st.neu(); if (a && a.frage && /[a-zäöü]{3}/i.test(a.frage)) { n++; if (R.uebersetze(a.frage)) mit++; } }
     assert.ok(mit / n >= mind, `${liste}: nur ${Math.round(mit / n * 100)} % der Fragen mit russischer Zeile`);
     console.log(`    ${liste}: ${Math.round(mit / n * 100)} % der Fragen mit russischer Zeile`);
+  }
+});
+
+pruefe("Russische Hilfe für Lösungshilfen (07.11.2026): Satz für Satz, Rechnungen bleiben stehen, Abdeckung je Klasse", () => {
+  const R = global.MatheRu;
+  assert.strictEqual(R.uebersetze("Erst die Zehner: 53 + 20 = 73. Dann die Einer: 73 + 2 = 75"), "Сначала десятки: 53 + 20 = 73. Потом единицы: 73 + 2 = 75");
+  assert.strictEqual(R.uebersetze("7 · 3 = 21. Bis 22 fehlen noch 1. Das ist der Rest."), "7 · 3 = 21. До 22 не хватает ещё 1. Это остаток.", "Rechnung bleibt, Sätze übersetzt");
+  assert.strictEqual(R.uebersetze("29 + 29 = 58"), "", "reine Rechnung: keine doppelte Zeile");
+  assert.strictEqual(R.uebersetze("7 · 3 = 21. Das gibt es nicht."), "", "ein unbekannter Satz: keine halbe Zeile");
+  assert.strictEqual(R.uebersetze("2er-Reihe: 2, 4, 6"), "Ряд на 2: 2, 4, 6");
+  assert.strictEqual(R.uebersetze("Zähle Turm für Turm: 2 + 2 + 1 + 1 = 6."), "Считай башню за башней: 2 + 2 + 1 + 1 = 6.");
+  assert.strictEqual(R.uebersetze("Die Lösung ist 45 cm."), "Ответ: 45 cm.");
+  const M = global.Mathe;
+  for (const [liste, mind] of [["STATIONEN_K1", 0.8], ["STATIONEN", 0.6], ["STATIONEN_K3", 0.55], ["STATIONEN_K4", 0.55], ["STATIONEN_K5", 0.2]]) {
+    let n = 0, mit = 0;
+    for (const st of M[liste]) for (let i = 0; i < 30; i++) { const a = st.neu(); if (a && a.hilfe && /[a-zäöü]{3}/i.test(a.hilfe)) { n++; if (R.uebersetze(a.hilfe)) mit++; } }
+    assert.ok(mit / n >= mind, `${liste}: nur ${Math.round(mit / n * 100)} % der Lösungshilfen mit russischer Zeile`);
+    console.log(`    ${liste}: ${Math.round(mit / n * 100)} % der Lösungshilfen mit russischer Zeile`);
   }
 });
 

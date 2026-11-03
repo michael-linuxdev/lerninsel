@@ -432,22 +432,38 @@
   // Rahmen um einen Hinweis („Fast! … Versuch es nochmal.“) wird abgetrennt und einzeln übersetzt
   const RAHMEN = [[/^Fast! /, "Почти! ", "vorn"], [/ Versuch es nochmal\.$/, " Попробуй ещё раз.", "hinten"]];
   // Satzanfänge mit beliebig langer Rechnung danach (z. B. unterschiedlich viele Münzen): Anfang übersetzen, Rechnung übernehmen
-  const ANFAENGE = [["Fang mit der größten Münze an und zähl weiter: ", "Начни с самой большой монеты и считай дальше: "]];
+  const ANFAENGE = [["Fang mit der größten Münze an und zähl weiter: ", "Начни с самой большой монеты и считай дальше: "], ["Die Lösung ist ", "Ответ: "]];
+  // Lange Hinweise (Lösungshilfen, 07.11.2026) Satz für Satz: nur wenn jeder Satz übersetzt ist, gibt es eine russische Zeile
+  const SATZENDE = /(?<=[.!?])\s+(?=[A-ZÄÖÜ0-9„(])/;
   function uebersetze(text) {
     if (!text) return "";
+    const ganz = einzeln(text);
+    if (ganz) return ganz;
+    const saetze = String(text).replace(/\s+/g, " ").trim().split(SATZENDE);
+    if (saetze.length < 2) return "";
+    // reine Rechnungen („42 : 2 = 21.“, „2 € + 1 € = 3 €“) bleiben stehen; mindestens ein Satz muss Wörter haben
+    const nurRechnung = (s) => !/[a-zäöüß]{3}/i.test(s.replace(/\b(cm|mm|km|kg|ml|ct|m|l|g|t)\b/g, ""));
+    if (saetze.every(nurRechnung)) return "";
+    const ru = saetze.map(s => einzeln(s) || (nurRechnung(s) ? s : ""));
+    return ru.every(Boolean) ? ru.join(" ") : "";
+  }
+  function einzeln(text) {
+    if (!text) return "";
     const z = zerlege(text), ru = TAB.get(z.s);
+    const reihe = !ru && /^(\d+)er-Reihe: ([\d, ]+)$/.exec(String(text).trim());
+    if (reihe) return `Ряд на ${reihe[1]}: ${reihe[2]}`;
     const anf = !ru && ANFAENGE.find(([de]) => String(text).startsWith(de) && !/[a-zäöüß]{3}/i.test(String(text).slice(de.length)));
     if (anf) return anf[1] + String(text).slice(anf[0].length);
     if (!ru) {
       let kern = String(text).replace(/\s+/g, " ").trim(), vorn = "", hinten = "";
       for (const [re, r, wo] of RAHMEN) if (re.test(kern)) { kern = kern.replace(re, ""); if (wo === "vorn") vorn = r; else hinten = r; }
-      if ((vorn || hinten) && kern && kern !== text) { const k = uebersetze(kern); return k ? vorn + k + hinten : ""; }
+      if ((vorn || hinten) && kern && kern !== text) { const k = einzeln(kern); return k ? vorn + k + hinten : ""; }
       return "";
     }
     return ru.replace(/\{(\d+)\}/g, (_, i) => z.zahlen[+i] !== undefined ? z.zahlen[+i] : "").replace(/\{w\}/g, () => z.worte.shift() || "").replace(/\{e\}/g, () => z.emos.shift() || "");
   }
   // Auf der Matheseite: unter jeder deutschen Sprechblase/Erklärzeile die russische Zeile ergänzen (nur mit Hilfesprache Russisch)
-  const ZIELE = "#tafel > p.frage, .erklaer-blase > span, .geschichte span, #warum-t, .denkfehler-karte > p, .hilfe .denkfehler, #rueck, #angebot h2, #angebot .frage";
+  const ZIELE = ".hilfe .hilfe-t, .hilfe > b, #tafel > p.frage, .erklaer-blase > span, .geschichte span, #warum-t, .denkfehler-karte > p, .hilfe .denkfehler, #rueck, #angebot h2, #angebot .frage";
   function aktiv() { try { const h = W.Spielwelt && W.Spielwelt.hilfe(); return !!(h && h.code === "ru"); } catch (e) { return false; } }
   function auffrischen(wurzel) {
     if (!aktiv()) return;
@@ -476,5 +492,7 @@
   }
   // weitere Paare (z. B. Aufgabenfragen aus hilfe-ru-fragen.js) nachtragen
   function dazu(paare) { paare.forEach(([de, ru]) => { T.push([de, ru]); TAB.set(schluessel(de), ru); }); }
-  W.MatheRu = { uebersetze, skelett: (t) => zerlege(t).s, hat: (t) => TAB.has(zerlege(t).s), STATUS, TABELLE: T, auffrischen, dazu };
+  // Satzanfänge, nach denen nur noch eine Rechnung beliebiger Länge folgt (z. B. „Zähle Turm für Turm: 3 + 2 + 2 = 7.“)
+  function anfaenge(paare) { paare.forEach(p => ANFAENGE.push(p)); }
+  W.MatheRu = { uebersetze, skelett: (t) => zerlege(t).s, hat: (t) => TAB.has(zerlege(t).s), STATUS, TABELLE: T, ANFAENGE, auffrischen, dazu, anfaenge };
 })(typeof window !== "undefined" ? window : globalThis);

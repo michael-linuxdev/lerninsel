@@ -76,6 +76,12 @@ const RU = /[а-яё]{3}/i;
     const fr = await ruUnter(p, "#tafel > p.frage");
     erwarte(/Сколько раз ты видишь/.test(fr) && fr.includes("🍓"), `${art}: Aufgabenfrage mit russischer Zeile („${fr}“)`);
     await bild(p, `matheru-frage-${art.replace(" ", "-")}`);
+    // Lösungshilfe (07.11.2026): nach dem zweiten Fehler „Die Lösung ist …“ und die Hilfe, beides mit russischer Zeile
+    await p.evaluate(() => __mathe.setzeAufgabe({ text: "", frage: "Wie viele sind es?", antwort: "7", art: "zahl", nurLuecke: true, hilfe: "Zähle jedes Obst. Das mit der größten Zahl gibt es am meisten." }));
+    await p.waitForTimeout(200); await tippe(p, 3); await p.waitForTimeout(1400); await tippe(p, 5); await p.waitForTimeout(500);
+    const loes = await p.evaluate(() => [...document.querySelectorAll("#hilfe-platz .hilfe-ru")].map(x => x.textContent));
+    erwarte(loes.some(t => /Ответ: 7/.test(t)) && loes.some(t => /Посчитай каждый фрукт/.test(t)), `${art}: Lösung und Lösungshilfe mit russischer Zeile (${loes.join(" | ")})`);
+    await bild(p, `matheru-loesung-${art.replace(" ", "-")}`);
     const m = await p.evaluate(() => ({ w: document.documentElement.scrollWidth, iw: innerWidth }));
     erwarte(m.w <= m.iw + 1, `${art}: keine waagerechte Scrollleiste`);
     await ctx.close();

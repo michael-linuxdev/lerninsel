@@ -701,7 +701,7 @@
     if (!a.wieder && !lauf.einstufung && !lauf.lernstand) lauf.liste.push(Object.assign({}, a, { wieder: true }));
     rueck.className = "rueck"; rueck.textContent = "";
     if (luecke) { luecke.className = "luecke loesung"; luecke.textContent = a.antwort; }
-    $("hilfe-platz").innerHTML = `<div class="hilfe"><b>Die Lösung ist ${a.antwort}${a.einheit ? " " + a.einheit : ""}.</b>${fv ? `<span class="denkfehler">${fv.kurz}</span> ` : ""}${a.hilfe}</div>`;
+    $("hilfe-platz").innerHTML = `<div class="hilfe"><b>Die Lösung ist ${a.antwort}${a.einheit ? " " + a.einheit : ""}.</b>${fv ? `<span class="denkfehler">${fv.kurz}</span> ` : ""}<span class="hilfe-t">${a.hilfe}</span></div>`;
     $("eingabe").innerHTML = `<button class="knopf weiter" id="weiter">Weiter</button>`;
     $("weiter").addEventListener("click", () => { S.ton("tipp"); naechste(); });
     zeigePunkte();
@@ -785,7 +785,7 @@
     if (!lauf.ergebnis[lauf.pos]) { lauf.ergebnis[lauf.pos] = "nochmal"; lauf.fehler++; }
     if (!a.wieder && !lauf.einstufung && !lauf.lernstand) lauf.liste.push(Object.assign({}, a, { wieder: true }));
     $("tafel").innerHTML = (bildEnde ? `<div class="bild weg-bild">${bildEnde}</div>` : "") + `<div class="ausdruck klein">Ergebnis: <span class="luecke loesung">${a.antwort}</span></div>` +
-      `<div class="hilfe" id="weg-ende"><b>${text}</b> ${fvSatz ? `<span>${fvSatz}</span>` : a.hilfe}</div>`;
+      `<div class="hilfe" id="weg-ende"><b>${text}</b> ${fvSatz ? `<span>${fvSatz}</span>` : `<span class="hilfe-t">${a.hilfe}</span>`}</div>`;
     $("eingabe").innerHTML = `<button class="knopf weiter" id="weiter">Weiter</button>`;
     $("weiter").addEventListener("click", () => { S.ton("tipp"); naechste(); });
     zeigePunkte();
