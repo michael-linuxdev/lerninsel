@@ -118,6 +118,13 @@
     { wer: "papagei", text: { de: "Wir fahren mit meinem Boot hin. Aber paddeln geht nur im Rhythmus: Ta, ti-ti, Ta!", ru: "Мы поплывём на моей лодке. Но грести можно только в ритме: Та, ти-ти, Та!", status: E } },
     { fuerAeltere: true, wer: "papagei", text: { de: "Ich spiele vor, du paddelst nach. Wann immer du magst, fahren wir los.", ru: "Я играю, ты повторяешь. Когда захочешь, поплывём.", status: E } }
   ] });
+  // Kapitel 5 (06.11.2026): Der Sturm – Ella und Bruni bereiten die Insel vor, ohne Angst; danach steigt der Wetter-Drache
+  Sz.registriere("der-sturm", { titel: "Der Sturm", kapitel: 5, blasen: [
+    { wer: "eule", text: { de: "{name}, schau zum Himmel! Dunkle Wolken – heute Nacht kommt ein Sturm.", ru: "{name}, посмотри на небо! Тёмные тучи – ночью будет буря.", status: E } },
+    { wer: "baer", text: { de: "Keine Angst. Wir binden die Boote fest und bleiben drinnen, bis er vorbei ist.", ru: "Не бойся. Мы привяжем лодки и останемся дома, пока буря не пройдёт.", status: E } },
+    { wer: "eule", text: { de: "Danach weht ein guter Wind. Komm an die Wetterstation – wir lassen meinen Drachen steigen!", ru: "А потом подует хороший ветер. Приходи к метеостанции – запустим моего змея!", status: E } },
+    { fuerAeltere: true, wer: "eule", text: { de: "Vorher schauen wir genau aufs Wetter: Wie warm ist es? Wie stark weht der Wind?", ru: "Сначала посмотрим на погоду: Как тепло? Как сильно дует ветер?", status: E } }
+  ] });
   Sz.registriere("atelier", { titel: "Paulas Atelier", etappe: "E9", blasen: [
     { wer: "papagei", text: { de: "Hallo {name}! Ich bin Paula. Auf meiner Bühne spielt Musik – und im Atelier wird gemalt!", ru: "Привет, {name}! Я Паула. На моей сцене играет музыка – а в ателье рисуют!", status: E } },
     { wer: "papagei", text: { de: "Male ein Bild oder erfinde eine Melodie. Dein neuestes Bild steht dann auf der Staffelei in deinem Zimmer.", ru: "Нарисуй картину или придумай мелодию. Твоя новая картина будет стоять на мольберте в твоей комнате.", status: E } },

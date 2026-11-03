@@ -5,7 +5,7 @@ const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const SEITEN = [
   "", "spiele/anziehen/", "spiele/mathe/", "spiele/deutsch/", "spiele/medien/", "spiele/sachkunde/", "spiele/sachkunde/?fach=kunst", "spiele/sachkunde/?fach=ethik", "spiele/englisch/", "spiele/sorbisch/", "spiele/heft/", "spiele/robo/", "spiele/vorlesen/", "spiele/praesentieren/", "spiele/vorschule/",
-  "spiele/ich/", "spiele/schatz/", "spiele/gefuehle/", "spiele/atelier/", "spiele/schach/", "spiele/familie/duell.html", "spiele/tier/", "spiele/garten/", "spiele/baeckerei/", "spiele/tierstation/", "spiele/angeln/", "spiele/rhythmus/", "spiele/eltern/", "spiele/daz/", "spiele/lesen/", "spiele/welt3d/", "spiele/album/", "?szene=probe"
+  "spiele/ich/", "spiele/schatz/", "spiele/gefuehle/", "spiele/atelier/", "spiele/schach/", "spiele/familie/duell.html", "spiele/tier/", "spiele/garten/", "spiele/baeckerei/", "spiele/tierstation/", "spiele/angeln/", "spiele/rhythmus/", "spiele/wetter/", "spiele/eltern/", "spiele/daz/", "spiele/lesen/", "spiele/welt3d/", "spiele/album/", "?szene=probe"
 ];
 const SEITEN_3D = ["spiele/welt3d/heimat.html", "spiele/welt3d/lauf.html", "spiele/welt3d/kart.html", "spiele/welt3d/bau.html", "spiele/welt3d/ballons.html", "spiele/welt3d/insel.html", "spiele/welt3d/probe.html?stil=b", "spiele/welt3d/heimat.html?stunde=14&szene=probe"];
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource/;

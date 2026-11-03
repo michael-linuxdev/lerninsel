@@ -1799,6 +1799,7 @@ function spieleStory(id) {
   if (id === "atelier") b.forEach(x => { x.zeige = I.ort("buehne"); });
   if (id === "bennos-baeckerei") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "biber" : "baeckerei"); });
   if (id === "paulas-fest") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "buehne" : "ballons"); });
+  if (id === "der-sturm") b.forEach((x, i) => { x.zeige = I.ort(i === 1 ? "baer" : i === 2 ? "station" : "eule"); });
   storyLaeuft = true;
   // Etappe/Kapitel schon mit der letzten Blase merken – nicht erst beim Schließen (Kind verlässt die Insel oft direkt danach)
   Sz.spiele(def, { beiLetzter: () => K.storyFertig(def) }).then(() => {

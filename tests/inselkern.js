@@ -236,6 +236,20 @@ pruefe("Minispiele ausgeblendet (30.10.2026): vier Orte zeigen „bald“ ohne Z
   assert.strictEqual(u.K.antwort("schach").blase[4], "../schach/", "Schach bleibt");
 });
 
+pruefe("Wetter-Drache (06.11.2026): Wetterstation zeigt bis Kapitel 5 das Wetter, danach Ellas Drachen; Kapitel 5 „Der Sturm“ braucht 25 Lernfunde und ein Wetter-Thema", () => {
+  const vor = neueUmgebung({ funde: 30, story: { kapitel: 4 } });
+  assert.strictEqual(vor.K.antwort("station", {}).blase[0], "🌦️", "vor Kapitel 5: Wetterstation");
+  assert.deepStrictEqual(vor.K.aktionFuer("station")[0], ["🌦️", "Ansehen"]);
+  const nach = neueUmgebung({ funde: 30, story: { kapitel: 5 } });
+  { const b = nach.K.antwort("station", { wetter: { temp: 12.4, wind: 18, ort: "Dresden", art: "wolken" } }).blase; assert.ok(b[0] === "eule" && b[4] === "../wetter/" && /12 Grad/.test(b[2]), "ab Kapitel 5: Drachen mit echtem Wetter"); }
+  assert.deepStrictEqual(nach.K.aktionFuer("station")[0], ["🪁", "Drachen"]);
+  const k5 = (u) => u.K.KAPITEL.find(k => k.n === 5);
+  assert.ok(k5(nach) && k5(nach).szene === "der-sturm");
+  assert.strictEqual(k5(neueUmgebung({ funde: 30 })).faellig(), false, "ohne Wetter-Thema nicht fällig");
+  assert.strictEqual(k5(neueUmgebung({ funde: 30, speicher: { sachkunde: { themen: { wetter: 2 } } } })).faellig(), true, "mit „Wetter beobachten“ fällig");
+  assert.strictEqual(k5(neueUmgebung({ funde: 24, speicher: { sachkunde: { themen: { wetterkarte: 1 } } } })).faellig(), false, "unter 25 Lernfunden nicht fällig");
+});
+
 pruefe("Rhythmus-Boot (05.11.2026): Ballon-Wiese = Paulas Boot, zu bis Kapitel 4; Kapitel 4 „Paulas Fest“ braucht 15 Lernfunde und etwas bei Paula", () => {
   const zu = neueUmgebung({ zeit: SPIELEN, funde: 20, minispieleAus: true, story: { kapitel: 3 } });
   { const b = zu.K.antwort("ballons").blase; assert.ok(b[0] === "papagei" && /noch zu/.test(b[1]) && !b[4], "vor Kapitel 4 zu"); assert.deepStrictEqual(zu.K.aktionFuer("ballons")[0], ["🛶", "Boot"]); }

@@ -76,6 +76,54 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     await ctx.close();
   }
 
+  // ---------- Kapitel 4 „Paulas Fest“ und Kapitel 5 „Der Sturm“ (05./06.11.2026) ----------
+  {
+    const { ctx, p } = await neuesKind();
+    // Lernfunde: höchstens 5 am Tag – für den Test den Zähler direkt setzen
+    const funde = (n) => p.evaluate((n) => { const d = Spielwelt.lade("lernfunde") || { tage: {} }; d.tage = d.tage || {}; d.summe = n; Spielwelt.speichere("lernfunde", d); }, n);
+    await p.evaluate(() => Story.setzeKapitel(3)); await funde(14);
+    await p.goto(INSEL); await p.waitForTimeout(2500);
+    erwarte(await naechste(p) === null, "Kapitel 3 und 14 Lernfunde: Kapitel 4 wartet");
+    await funde(15);
+    erwarte(await naechste(p) === "paulas-fest", "15 Lernfunde und Atelier (E9): Kapitel 4 „Paulas Fest“ ist dran");
+    await p.goto(INSEL);
+    await p.waitForFunction(() => window.__szene && __szene.aktuell() && __szene.aktuell().id === "paulas-fest", null, { timeout: 20000 });
+    let a = await p.evaluate(() => __szene.aktuell());
+    erwarte(a.wer === "papagei" && a.zeigt, "Paula spricht, die Zeigehand zeigt auf die Bühne");
+    await weiter(p); a = await p.evaluate(() => __szene.aktuell());
+    erwarte(a && a.zeigt, "zweite Blase zeigt zur Ballon-Wiese");
+    await bild(p, "kapitel-4");
+    while (await p.evaluate(() => !!(window.__szene && __szene.aktuell()))) await weiter(p);
+    erwarte(await p.evaluate(() => Story.kapitel() === 4), "Kapitel 4 erreicht");
+    erwarte(await p.evaluate(() => InselKern.antwort("ballons").blase[4] === "../rhythmus/"), "Ballon-Wiese führt jetzt zum Rhythmus-Boot");
+    // Kapitel 5: 25 Lernfunde und ein Wetter-Thema
+    await funde(25);
+    erwarte(await naechste(p) === null, "25 Lernfunde ohne Wetter-Thema: Kapitel 5 wartet");
+    await p.evaluate(() => Spielwelt.speichere("sachkunde", { themen: { wetter: 2 } }));
+    erwarte(await naechste(p) === "der-sturm", "mit „Wetter beobachten“: Kapitel 5 „Der Sturm“ ist dran");
+    await p.goto(INSEL);
+    await p.waitForFunction(() => window.__szene && __szene.aktuell() && __szene.aktuell().id === "der-sturm", null, { timeout: 20000 });
+    a = await p.evaluate(() => __szene.aktuell());
+    erwarte(a.wer === "eule" && a.zeigt, "Ella spricht und zeigt (Sturm-Szene)");
+    await weiter(p); a = await p.evaluate(() => __szene.aktuell());
+    erwarte(a.wer === "baer" && /Keine Angst/.test(a.text || document.body.textContent), "Bruni beruhigt: „Keine Angst“");
+    await weiter(p); a = await p.evaluate(() => __szene.aktuell());
+    erwarte(a && a.zeigt, "Ella zeigt zur Wetterstation");
+    await bild(p, "kapitel-5");
+    while (await p.evaluate(() => !!(window.__szene && __szene.aktuell()))) await weiter(p);
+    erwarte(await p.evaluate(() => Story.kapitel() === 5 && Story.chronik().some(x => x.s === "der-sturm")), "Kapitel 5 erreicht, Szene in der Chronik");
+    // Wetterstation antippen: jetzt der Drache (Knopf-Aufschrift entsteht beim Laden der Insel)
+    await p.goto(INSEL); await p.waitForTimeout(3000);
+    await p.evaluate(() => { const o = InselKern.erstelle(new URLSearchParams(location.search)).P.station; __heimat.ich.position.set(o[0] + 0.9, __heimat.ich.position.y, o[1] + 0.7); });
+    await p.waitForTimeout(900);
+    const akt5 = await p.evaluate(() => __heimat.aktion);
+    await p.evaluate(() => __heimat.druecke()); await p.waitForTimeout(400);
+    const titel5 = await p.evaluate(() => document.getElementById("blase-titel").textContent);
+    erwarte(akt5 === "Drachen" && /Wetter-Drache/.test(titel5), `an der Wetterstation: Knopf „${akt5}“, Ella lädt zum Wetter-Drachen ein`);
+    await bild(p, "kapitel-station");
+    await ctx.close();
+  }
+
   // ---------- E9 Atelier ----------
   {
     const { ctx, p } = await neuesKind({ e9: false });

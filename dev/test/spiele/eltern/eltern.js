@@ -790,6 +790,7 @@
         <p><b>Führerschein:</b> ${medien.fuehrerschein ? `bestanden am ${medien.fuehrerschein.split("-").reverse().join(".")}` : `${window.LEKTIONEN.filter(l => medien.lektionen && medien.lektionen[l.id]).length} von ${window.LEKTIONEN.length} Lektionen`}</p>
         <p><b>Haustier:</b> ${(() => { const t = S.lade("tier"); return !t || !t.phase ? "noch kein Ei ausgesucht" : t.phase === "ei" ? `Ei wird gewärmt (${t.waerme || 0} von 3)` : `${t.name || "ohne Namen"}, Freundschaft ${t.freundschaft || 0}, ${t.leckerli || 0} Leckerli`; })()}</p>
         <p><b>Rhythmus-Boot (Musik):</b> ${(() => { const r = S.lade("rhythmus"); return r && r.runden ? `${r.runden} Fahrt${r.runden === 1 ? "" : "en"}, ${Object.keys(r.geschafft || {}).length} Rhythmen beim ersten Versuch nachgespielt` : "noch nicht gefahren (öffnet mit Kapitel 4)"; })()}</p>
+        <p><b>Wetter-Drache (Sachunterricht):</b> ${(() => { const r = S.lade("wetterdrache"); if (!r) return "noch nicht besucht (öffnet mit Kapitel 5)"; const t = Object.keys(r.tagebuch || {}).length, f = Object.values(r.fluege || {}).reduce((a, b) => a + b, 0); return `${t} Tag${t === 1 ? "" : "e"} im Wettertagebuch, ${Object.keys(r.geschafft || {}).length} Wetter-Fragen beim ersten Versuch, ${f} Drachenflüge`; })()}</p>
         <p><b>3D-Welt:</b> Ballon-Rekord ${(welt.ballon && welt.ballon.rekord) || 0} Punkte, Insel-Schatz ${(welt.insel && welt.insel.geschafft) || 0}× gefunden</p>
       </div>
       ${staerkenKarte()}`}

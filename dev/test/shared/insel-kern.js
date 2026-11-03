@@ -299,6 +299,9 @@
   const deutschFertig = () => Object.values(((S().lade("deutsch") || {}).kapitel) || {}).filter(x => x > 0).length;
   // geschaffte Matheweg-Stationen über alle Wege
   const matheFertig = () => { const m = S().lade("mathe") || {}; return ["k1", "k2", "k3", "k4", "k5"].reduce((n, w) => n + Object.values(m[w] || {}).filter(x => x > 0).length, 0); };
+  // Ein Sachthema zum Wetter geschafft (Wetter beobachten, Wetterkarte, Wind und Luft …)
+  const WETTER_THEMEN = ["wetter", "wetterkarte", "luft-schall", "wasserkreislauf", "jahreszeiten"];
+  const wetterThema = () => Object.keys(((S().lade("sachkunde") || {}).themen) || {}).some(id => WETTER_THEMEN.includes(id) || /wetter/.test(id));
   // Paula schon besucht: Etappe E9 „Atelier“, eine Englisch-Lektion oder ein Musik-Thema geschafft
   const paulaGenutzt = () => !!((W.Story && W.Story.etappe && W.Story.etappe("E9")) || Object.keys(((S().lade("englisch") || {}).lektionen) || {}).length ||
     Object.keys(((S().lade("sachkunde") || {}).themen) || {}).some(id => id.startsWith("mu-")));
@@ -310,7 +313,10 @@
       faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 10 && matheFertig() >= 3 },
     // 05.11.2026: Kapitel 4 „Paulas Fest“ öffnet das Rhythmus-Boot an der Ballon-Wiese (Paulas Fächer: Musik, Englisch, Atelier)
     { n: 4, szene: "paulas-fest", titel: "Paulas Fest", bedingung: "15 Lernfunde und etwas bei Paula (Atelier, Englisch oder ein Musik-Thema)",
-      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 15 && paulaGenutzt() }
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 15 && paulaGenutzt() },
+    // 06.11.2026: Kapitel 5 „Der Sturm“ (KONZEPT) – Ella und Bruni bereiten die Insel vor, danach steigt Ellas Wetter-Drache an der Wetterstation
+    { n: 5, szene: "der-sturm", titel: "Der Sturm", bedingung: "25 Lernfunde und ein Sachthema zum Wetter",
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 25 && wetterThema() }
   ];
   // Wörter für Fipsis Wegweiser: nur Wörter, die das Kind schon hatte (Lernkartei Deutsch, Lernfunde in Deutsch), höchstens n, ohne Dopplungen
   function wortSchilder(n = 3) {
@@ -466,6 +472,7 @@
       buehne: { x: P.buehne[0], z: P.buehne[1], h: 1.8 },
       kartenweg: { x: P.kartenweg[0], z: P.kartenweg[1], h: 1.4 }
     };
+    if (P.station) ORTE.station = { x: P.station[0], z: P.station[1], h: 1.6 };   // Wetterstation (Kapitel 5, Wetter-Drache)
     // neue Orte an den Plätzen der ausgeblendeten Minispiele (01.11.2026)
     if (P.lauf) ORTE.garten = { x: P.lauf[0], z: P.lauf[1], h: 1.2 };
     if (P.kart) ORTE.baeckerei = { x: P.kart[0], z: P.kart[1], h: 2.0 };
@@ -555,6 +562,13 @@
     const tipp = w.art === "regen" || w.art === "gewitter" ? "Nimm draußen eine Regenjacke mit!" : tp <= 3 ? "Brr! Mütze und Handschuhe nicht vergessen." : tp >= 26 ? "Heiß! Trink viel Wasser und denk an die Sonnencreme." : w.art === "klar" ? "Ein schöner Tag zum Rausgehen!" : "Zieh dich passend an, wenn du rausgehst.";
     return blase("🌦️", `Wetter in ${w.ort}`, `Draußen sind es ${tp} Grad, ${txt}. Wind: ${Math.round(w.wind || 0)} km/h. ${tipp}`, `На улице ${tp} градусов, ${ru}.`);
   }
+  // Wetter-Drache (06.11.2026): ab Kapitel 5 führt die Wetterstation zu Ellas Wetter-Drachen; das echte Wetter steht mit in der Blase
+  const drachenOffen = () => !!(W.Story && S().offen(W.Story.kapitel() >= 5));
+  function drachenAntwort(w) {
+    const satz = w ? `Bei dir zu Hause: ${Math.round(w.temp)} Grad, Wind ${Math.round(w.wind || 0)} km/h. ` : "";
+    return blase("eule", "Ellas Wetter-Drache", `${satz}Hallo ${name()}! Wir beobachten das Wetter – und wenn der Wind passt, lassen wir den Drachen steigen!`,
+      "Мы наблюдаем за погодой – а если ветер подходящий, запускаем воздушного змея!", "../wetter/");
+  }
   // Paula auf der Bühne: spielt die erste eigene Melodie aus dem Atelier (melodie = Liste von Tönen 0–7, -1 = Pause)
   function paulaAntwort() {
     const m = ((S().lade("atelier") || {}).musik || {}).melodien || [];
@@ -594,7 +608,7 @@
         return blase("fipsi", "Fipsis Wegweiser", w.length ? `Auf den Schildern steht: ${w.join(", ")}. Lies die Wörter laut – du kennst sie schon!` : "Hier kommen bald Wörter hin, die du bei mir lernst. Komm in die Schatzkarte!",
           w.length ? "На табличках слова, которые ты уже знаешь. Прочитай их вслух!" : "Скоро здесь будут слова, которые ты выучишь у меня.", "../deutsch/");
       }
-      case "station": return wetterAntwort(lage.wetter);
+      case "station": return drachenOffen() ? drachenAntwort(lage.wetter) : wetterAntwort(lage.wetter);
       case "wissensbaum": return wissensbaumText();
       case "sonnenuhr": return { blase: [...sonnenuhrText(), null] };
       // Nest am Haus: Ei (noch warm halten) oder leer (Ei aussuchen); ein geschlüpftes Tier läuft mit und wird gestreichelt
@@ -658,7 +672,7 @@
     return blase("baer", "Brunis Tierpflege-Station", de, "Станция Бруни для животных.", "../tierstation/");
   }
   AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
-  const aktionFuer = (id) => (id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : id === "ballons" && bald(id) ? [["🛶", "Boot"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
+  const aktionFuer = (id) => (id === "station" && drachenOffen() ? [["🪁", "Drachen"], 1.9] : id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : id === "ballons" && bald(id) ? [["🛶", "Boot"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
   W.InselKern = {
     // Stationen
@@ -668,7 +682,7 @@
     // Regeln und Zustände
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
     weihnachtsPaket, geburtstagsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
-    KAPITEL, wortSchilder, deutschFertig, matheFertig,
+    KAPITEL, WETTER_THEMEN, wortSchilder, deutschFertig, matheFertig,
     // Zimmer
     PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel, wandPreis, standardWand, geschlecht,
     // Wetter

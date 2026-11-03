@@ -143,7 +143,7 @@ pruefe("Sachsen in voller Tiefe: Sachunterricht Kl. 1/2, 3 und 4 (Pflicht-Lernbe
   const gibt = (a) => { const [art, id] = a.split(":");
     return art === "sachkunde" ? w.THEMEN.concat(w.LANDKREIS_THEMEN).some(t => t.id === id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id)
       : art === "medien" ? w.LEKTIONEN.some(k => k.id === id) : art === "mathe" ? stationen.has(id) : art === "echtewelt" ? echt.includes(`["${id}", `)
-      : art === "praesentieren" ? ["folien"].includes(id) : false; };
+      : art === "praesentieren" ? ["folien"].includes(id) : art === "wetterdrache" ? id === "alle" : false; };   // wetterdrache:alle = Ellas Wetter-Drache (06.11.2026)
   const ids = new Set(), soll = { "1/2": [47, { ja: 46, teil: 0, nein: 0, aussen: 1 }], "3": [24, { ja: 23, teil: 0, nein: 0, aussen: 1 }], "4": [28, { ja: 27, teil: 0, nein: 0, aussen: 1 }] };
   const kl = { "1/2": ["1", "2", "1/2"], "3": ["3"], "4": ["4"] };
   Object.entries(soll).forEach(([st, [zahl, verteilung]]) => {

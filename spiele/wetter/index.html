@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Ellas Wetter-Drache</title>
+<meta name="theme-color" content="#CDEBFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icons/icon-180.png">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  /* Ellas Wetter-Drache (06.11.2026, Kapitel 5 „Der Sturm“): Wettertagebuch, Wetter-Fragen, Drachenflug – an der Wetterstation */
+  html, body { min-height: 100%; }
+  body { background: linear-gradient(#CDEBFF 0 40%, #CDEFB8 40% 100%); background-attachment: fixed; }
+  .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
+  .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; min-width: 0; }
+  @media (max-width: 480px) { .oben h1 { font-size: 1.3rem; } }
+  .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
+  .mitte { max-width: 1040px; margin: 0 auto; padding: 10px 16px 30px; display: grid; gap: 14px; }
+  .ella { display: flex; gap: 12px; align-items: center; }
+  .ella .figur { font-size: 3.4rem; flex: none; }
+  .blase { background: #fff; border-radius: 24px; padding: 12px 18px; font-size: 1.25rem; font-weight: 500; box-shadow: 0 6px 0 rgba(0,0,0,.08); flex: 1; display: flex; gap: 10px; align-items: center; }
+  .blase p { margin: 0; flex: 1; line-height: 1.35; }
+  .ru { display: block; font-size: 1rem; font-weight: 500; color: var(--pflaume-hell); margin-top: 4px; }
+  .vorlesen { flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--himmel); font-size: 1.5rem; }
+  .vorlesen.klein { width: 44px; height: 44px; font-size: 1.2rem; vertical-align: middle; }
+  .karte { background: #fff; border-radius: 28px; padding: 16px; box-shadow: 0 6px 0 rgba(0,0,0,.08); display: grid; gap: 12px; text-align: center; }
+  .karte h2 { margin: 0; }
+  .karte[hidden], .zu-oder[hidden], #bereich[hidden] { display: none; }
+  .frage { margin: 0; font-size: 1.3rem; font-weight: 700; }
+  .stand { margin: 0; font-weight: 700; color: var(--pflaume-hell); }
+  .mess { margin: 0; background: #EAF6FF; border-radius: 16px; padding: 10px 14px; font-weight: 500; }
+  .arten { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .winde { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .optionen { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 10px; }
+  .wahl-knopf { min-height: 64px; border-radius: 20px; border: 4px solid #3B1F63; background: #fff; font: inherit; font-weight: 700; font-size: 1.1rem; color: var(--pflaume); display: grid; place-items: center; gap: 2px; padding: 8px; box-shadow: 0 5px 0 #3B1F63; }
+  .wahl-knopf .gross { font-size: 2.2rem; line-height: 1.1; }
+  .wahl-knopf .mini svg { width: 100%; max-width: 110px; height: auto; display: block; }
+  .wahl-knopf.an { background: #FFD84D; }
+  .wahl-knopf.richtig { background: #9BE38A; } .wahl-knopf.falsch { opacity: .35; }
+  .bild-rahmen { display: flex; justify-content: center; }
+  .bild { width: 100%; max-width: 320px; height: auto; }
+  .bild.thermo { max-width: 200px; }
+  .himmel { font-size: 6rem; line-height: 1.2; background: #EAF6FF; border-radius: 24px; padding: 6px 40px; }
+  .hinweis { min-height: 1.6em; font-size: 1.15rem; font-weight: 600; margin: 0; }
+  .hinweis.gut { color: #2E9C5A; } .hinweis.nein { color: #C2337A; }
+  .woche { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .woche .tag { background: #F6F3FB; border-radius: 12px; padding: 6px 0; display: grid; gap: 2px; font-size: 1.4rem; }
+  .woche .tag b { font-size: .9rem; } .woche .tag.heute { background: #FFF3C4; }
+  .knoepfe { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .knoepfe a { text-decoration: none; }
+  /* Drachenflug */
+  .himmelfeld { position: relative; height: 300px; border-radius: 26px; background: linear-gradient(#8ED3FF, #DDF3FF); border: 5px solid #3B1F63; overflow: hidden; }
+  .band { position: absolute; left: 0; right: 0; background: rgba(126, 217, 87, .35); border-top: 3px dashed #2E9C5A; border-bottom: 3px dashed #2E9C5A; }
+  .drache { position: absolute; left: 50%; margin-left: -28px; font-size: 3.4rem; line-height: 1; transition: filter .2s; }
+  .drache.gut { filter: drop-shadow(0 0 8px #FFD84D); }
+  .faden { position: absolute; left: 50%; bottom: 0; width: 2px; background: #3B1F63; opacity: .6; }
+  .fortschritt { height: 22px; border-radius: 99px; background: #EEE6F7; border: 3px solid #3B1F63; overflow: hidden; }
+  .fortschritt span { display: block; height: 100%; width: 0; background: #7ED957; }
+  .ziehen { min-height: 110px; border-radius: 30px; border: 5px solid #3B1F63; background: #FFB547; font-size: 2.4rem; display: grid; place-items: center; box-shadow: 0 8px 0 #3B1F63; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+  .ziehen b { font-size: 1.3rem; }
+  .ziehen.zug { animation: zug .15s; }
+  @keyframes zug { 50% { transform: translateY(6px); box-shadow: 0 2px 0 #3B1F63; } }
+  .zu-oder { text-align: center; }
+  @media (max-width: 620px) { .arten { grid-template-columns: repeat(3, 1fr); } .winde { grid-template-columns: repeat(2, 1fr); } .himmelfeld { height: 240px; } }
+  @media (orientation: landscape) and (min-width: 900px) { #flugkarte { grid-template-columns: 1.5fr 1fr; grid-template-areas: "st st" "hi zi" "fo fo" "hw hw"; align-items: center; } #flugkarte .stand { grid-area: st; } #flugkarte .himmelfeld { grid-area: hi; } #flugkarte .ziehen { grid-area: zi; min-height: 280px; } #flugkarte .fortschritt { grid-area: fo; } #flugkarte .hinweis { grid-area: hw; } }
+</style>
+</head>
+<body>
+<div class="oben">
+  <a class="knopf rund" href="../welt3d/heimat.html" aria-label="Zur Insel">🏝️</a>
+  <h1>🪁 Ellas Wetter-Drache</h1>
+  <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
+</div>
+<main class="mitte">
+  <section class="ella">
+    <div class="figur" aria-hidden="true">&#xE102;</div>
+    <div class="blase"><p id="ella-text"></p><button class="vorlesen" id="ella-vorlesen" aria-label="Vorlesen">🔊</button></div>
+  </section>
+  <div id="bereich"></div>
+  <section class="zu-oder" id="zu" hidden>
+    <div class="blase" style="justify-content:center"><p>🔒 Ellas Wetter-Drache fliegt ab Kapitel 5. Lern weiter auf der Insel – nach dem Sturm holt Ella dich ab!</p></div>
+  </section>
+</main>
+
+<script src="../../shared/config.js"></script>
+<script src="../../shared/core.js" data-root="../../"></script>
+<script src="../../shared/ereignisse.js"></script>
+<script src="../../shared/charakter.js"></script>
+<script src="../../shared/zeit.js" data-art="lernen"></script>
+<script src="../../shared/sprache.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../../shared/koennen.js"></script>
+<script src="drache.js"></script>
+</body>
+</html>
