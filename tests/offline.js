@@ -43,4 +43,13 @@ pruefe("Keine Anfragen an fremde Schrift-Server (Fredoka liegt lokal)", () => {
   assert.ok(!/fonts\.(googleapis|gstatic)\.com/.test(css + sw), "Google Fonts noch eingebunden");
   for (const e of liste.filter(e => e.startsWith("shared/schrift/"))) assert.ok(fs.existsSync(path.join(root, e)));
 });
+// Review 07.11.2026: Safari vor 16.4 (iPadOS 16.0–16.3) kennt kein Regex-Lookbehind und bricht beim Laden der ganzen Datei mit einem
+// SyntaxError ab – dann fehlt ein kompletter Baustein (so geschehen mit MatheRu). Geprüft werden alle JS-Dateien, die auf ein Gerät kommen.
+pruefe("Kein Regex-Lookbehind (?<= / (?<! in ausgelieferten JS-Dateien (Safari < 16.4)", () => {
+  const treffer = [];
+  for (const e of liste.filter(e => e.endsWith(".js"))) {
+    fs.readFileSync(path.join(root, e), "utf8").split("\n").forEach((z, i) => { if (/\(\?<[=!]/.test(z)) treffer.push(`${e}:${i + 1}`); });
+  }
+  assert.deepStrictEqual(treffer, [], "Lookbehind in: " + treffer.join(", "));
+});
 console.log(`✅ Offline-Liste: ${n} Prüfungen bestanden (${liste.length} Einträge).`);

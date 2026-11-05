@@ -5,7 +5,8 @@
 // c (ab Kl. 3) 6 × 6, drei oder vier Spiegel, zwei Kristalle, zwei Felsen. Jedes Rätsel hat genau eine Lösung (geprüft in tests/leuchtturm.js).
 // Eine Runde = 3 Rätsel; zuerst noch nicht gelöste der eigenen Stufe, dann der nächsten, dann wieder von vorn. Kein Zeitdruck, kein Zufall:
 // Die Rätsel sind feste Daten. 💡 Tipp markiert einen Spiegel, der noch falsch steht (kostet nichts).
-// Sterne nur für neue Ziele: jedes Rätsel beim ersten Lösen 1 ⭐ (höchstens 3 am Tag).
+// Sterne nur für neue Ziele: jedes Rätsel beim ersten Lösen 1 ⭐ (höchstens 3 am Tag); Können und Erfahrung ebenfalls nur beim ersten Lösen
+// (ohne Tipp = gekonnt), damit „Noch eine Runde“ mit gelösten Rätseln weder Mein Können aufbläht noch über Stufenaufstiege Sterne nachschiebt.
 // Schatzkammer: zeigt, was das Kind auf der Insel geschafft hat (Lernfunde, Matheweg, Werkstatt, Sachthemen, Ernten, Tiere …) als Schätze.
 // Daten leuchtturm = { geloest: { id: n }, neu: { "JJJJ-MM-TT": n }, runden: n }. Test-Haken: window.__leuchtturm.
 (function () {
@@ -81,8 +82,11 @@
     const rest = eigen.concat(naechste), ab = (d.runden * RUNDE) % rest.length;
     return liste.concat(rest.slice(ab), rest.slice(0, ab)).filter((r, k, a) => a.indexOf(r) === k).slice(0, RUNDE);
   }
+  // Wartezeit nach einem gelösten Rätsel abbrechen (Reiterwechsel, neue Runde) – sonst überschreibt „weiter“ die Schatzkammer oder springt ein Rätsel weiter
+  function stoppe() { if (lauf && lauf.timer) { clearTimeout(lauf.timer); lauf.timer = null; } }
   function starteRunde() {
-    lauf = { liste: waehle(), pos: 0, geloestNeu: 0, sterne: 0, ohneTipp: 0 };
+    stoppe();
+    lauf = { liste: waehle(), pos: 0, geloestNeu: 0, sterne: 0, ohneTipp: 0, timer: null };
     tilda("Dreh die Spiegel, bis das Licht alle Kristalle trifft. Tipp einen Spiegel an!", "Поворачивай зеркала, пока свет не попадёт на все кристаллы. Нажми на зеркало!");
     zeigeRaetsel();
   }
@@ -96,7 +100,7 @@
       <div class="knoepfe"><button class="knopf" id="tipp">💡 Tipp</button><button class="knopf" id="neu-start">↩ Von vorn</button></div></section>`;
     $("brett").addEventListener("click", (e) => { const b = e.target.closest("[data-y]"); if (b) tippe(+b.dataset.y, +b.dataset.x); });
     $("tipp").addEventListener("click", tipp);
-    $("neu-start").addEventListener("click", () => { S.ton("tipp"); brett.g = startFeld(r); brett.markiert = null; male(); });
+    $("neu-start").addEventListener("click", () => { if (brett.fertig) return; S.ton("tipp"); brett.g = startFeld(r); brett.markiert = null; male(); });
     male();
   }
   function spiegelSvg(c) {
@@ -157,17 +161,20 @@
       if (window.Lernfunde) Lernfunde.merke({ fach: "mathe", art: "raetsel", e: "💡", text: `Licht-Rätsel ${r.id.toUpperCase()} gelöst`, schluessel: "leuchtturm:" + r.id });
     }
     if (!brett.tipp) lauf.ohneTipp++;
-    if (window.Koennen) Koennen.melde(LZ, !brett.tipp);
-    if (window.Charakter) Charakter.gib("mathe", 1);
+    // nur beim ersten Lösen: Können (ohne Tipp = gekonnt) und Erfahrung
+    if (neu && window.Koennen) Koennen.melde(LZ, !brett.tipp);
+    if (neu && window.Charakter) Charakter.gib("mathe", 1);
     d.geloest[r.id] = (d.geloest[r.id] || 0) + 1; speichere(d);
     S.ton("juhu"); $("sterne").textContent = S.sterne();
+    $("tipp").disabled = true; $("neu-start").disabled = true;
     $("raetselkarte").classList.add("hell");
     $("hinweis").className = "hinweis gut";
     $("hinweis").innerHTML = esc(`Hell! Alle Kristalle leuchten.${stern ? " ⭐" : ""}`) + ru("Светло! Все кристаллы светятся.");
-    setTimeout(weiter, window.__testSchnell ? 120 : 1800);
+    lauf.timer = setTimeout(weiter, window.__testSchnell ? 120 : 1800);
   }
   function weiter() {
-    if (!lauf) return;
+    if (!lauf || reiter !== "raetsel") return;
+    lauf.timer = null;
     lauf.pos++;
     if (lauf.pos < lauf.liste.length) return zeigeRaetsel();
     ende();
@@ -225,7 +232,7 @@
       <div class="knoepfe"><a class="knopf" href="../schatz/">🏆 Pokale und Medaillen</a><a class="knopf" href="../album/#chronik">📜 Inselchronik</a></div></section>`;
   }
   function zeigeReiter(r) {
-    reiter = r;
+    stoppe(); reiter = r;
     document.querySelectorAll(".reiter [data-reiter]").forEach(b => { b.classList.toggle("an", b.dataset.reiter === r); b.setAttribute("aria-selected", b.dataset.reiter === r ? "true" : "false"); });
     if (r === "kammer") { brett = null; kammer(); } else starteRunde();
   }

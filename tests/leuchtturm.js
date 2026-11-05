@@ -88,12 +88,38 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     erwarte(await p.evaluate(() => __leuchtturm.lauf.liste.every(r => !Spielwelt.lade("leuchtturm").geloest[r.id])), "nächste Runde beginnt mit noch ungelösten Rätseln");
     await loese(p);
     erwarte((await sterne(p)) === s0 + 3, "viertes neues Rätsel am selben Tag: kein Stern (höchstens 3 am Tag)");
+    // ---------- Review 07.11.2026: Wartezeit nach dem Lösen, Reiterwechsel, Können/Erfahrung nur beim ersten Lösen ----------
+    // echte Wartezeit (1,8 s), damit der Reiterwechsel sicher davor liegt
+    await p.evaluate(() => { window.__testSchnell = false; });
+    const stand0 = await p.evaluate(() => ({ k: JSON.stringify(Spielwelt.lade("koennen")["ma.rf.02"] || null), xp: (Spielwelt.lade("charakter") || { xp: {} }).xp.mathe || 0 }));
+    { const pos = await p.evaluate(() => __leuchtturm.lauf.pos);
+      for (const [y, x] of await falsche(p)) await tippe(p, y, x);
+      erwarte(await p.evaluate(() => __leuchtturm.brett.fertig && document.getElementById("tipp").disabled && document.getElementById("neu-start").disabled), "gelöst: 💡 Tipp und ↩ Von vorn sind aus");
+      await p.click("#neu-start", { force: true }); await p.waitForTimeout(60);
+      erwarte(await p.evaluate(() => __leuchtturm.brett.fertig && /Hell/.test(document.getElementById("hinweis").textContent) && __leuchtturm.geloest(__leuchtturm.brett.g, __leuchtturm.brett.r.q)), "↩ Von vorn nach dem Lösen verstellt das gelöste Brett nicht");
+      const stand1 = await p.evaluate(() => ({ k: JSON.stringify(Spielwelt.lade("koennen")["ma.rf.02"] || null), xp: (Spielwelt.lade("charakter") || { xp: {} }).xp.mathe || 0 }));
+      erwarte(stand1.k !== stand0.k && stand1.xp === stand0.xp + 1, "fünftes neues Rätsel: Können gemeldet, +1 Erfahrung Mathe");
+      // sofort zur Schatzkammer: die Wartezeit darf sie nicht überschreiben
+      await p.click('#reiter [data-reiter="kammer"]'); await p.waitForTimeout(2200);
+      erwarte(await p.isVisible("#kammer") && !(await p.isVisible("#raetselkarte")) && (await p.evaluate(() => __leuchtturm.reiter)) === "kammer", "Schatzkammer direkt nach dem Lösen geöffnet: bleibt auch nach der Wartezeit stehen");
+      // zurück zu den Rätseln: neue Runde fängt bei Rätsel 1 an und springt nicht weiter
+      await p.click('#reiter [data-reiter="raetsel"]'); await p.waitForTimeout(2200);
+      erwarte(await p.isVisible("#raetselkarte") && await p.evaluate(() => __leuchtturm.lauf.pos === 0 && !__leuchtturm.brett.fertig && !__leuchtturm.lauf.timer), `zurück zu den Rätseln: Runde beginnt bei Rätsel 1 und bleibt dort (vorher Rätsel ${pos + 1})`); }
+    // alle Rätsel als gelöst markieren: Wiederholen gibt weder Können noch Erfahrung noch Sterne
+    await p.evaluate(() => { window.__testSchnell = true; const d = Spielwelt.lade("leuchtturm"); __leuchtturm.RAETSEL.forEach(r => { d.geloest[r.id] = d.geloest[r.id] || 1; }); d.neu = {}; Spielwelt.speichere("leuchtturm", d); });
+    await p.click("#nochmal").catch(() => {}); await p.evaluate(() => __leuchtturm.starteRunde()); await p.waitForTimeout(100);
+    const stand2 = await p.evaluate(() => ({ k: JSON.stringify(Spielwelt.lade("koennen")["ma.rf.02"] || null), xp: (Spielwelt.lade("charakter") || { xp: {} }).xp.mathe || 0 }));
+    const s2 = await sterne(p);
+    await p.click("#tipp"); await p.waitForTimeout(60);
+    await loese(p);
+    const stand3 = await p.evaluate(() => ({ k: JSON.stringify(Spielwelt.lade("koennen")["ma.rf.02"] || null), xp: (Spielwelt.lade("charakter") || { xp: {} }).xp.mathe || 0 }));
+    erwarte(stand3.k === stand2.k && stand3.xp === stand2.xp && (await sterne(p)) === s2 && (await p.evaluate(() => __leuchtturm.lauf.pos === 1)), "schon gelöstes Rätsel nochmal (mit Tipp): kein Können, keine Erfahrung, kein Stern – Runde geht weiter");
     // Schatzkammer
     await p.evaluate(() => { Spielwelt.speichere("garten", { beete: [], korb: {}, geerntet: { moehre: 1, radieschen: 1 }, fragen: {} }); });
     await p.click('#reiter [data-reiter="kammer"]'); await p.waitForTimeout(150);
-    const truhen = await p.evaluate(() => [...document.querySelectorAll("#truhen .truhe")].map(t => ({ zu: t.classList.contains("zu"), t: t.textContent })));
-    erwarte(truhen.length >= 12 && truhen.some(t => !t.zu && /Licht-Rätsel/.test(t.t) && /4/.test(t.t)) && truhen.some(t => !t.zu && /Ernten/.test(t.t) && /2/.test(t.t)) && truhen.some(t => t.zu),
-      "Schatzkammer: Truhen für Licht-Rätsel (4) und Ernten (2) gefüllt, andere noch leer");
+    const truhen = await p.evaluate(() => [...document.querySelectorAll("#truhen .truhe")].map(t => ({ zu: t.classList.contains("zu"), t: t.textContent, n: t.querySelector("b").textContent })));
+    erwarte(truhen.length >= 12 && truhen.some(t => !t.zu && /Licht-Rätsel/.test(t.t) && t.n === "24") && truhen.some(t => !t.zu && /Ernten/.test(t.t) && t.n === "2") && truhen.some(t => t.zu),
+      "Schatzkammer: Truhen für Licht-Rätsel (24, alle als gelöst markiert) und Ernten (2) gefüllt, andere noch leer");
     erwarte(await p.isVisible('a[href="../schatz/"]'), "Schatzkammer verlinkt Pokale und Medaillen");
     await bild(p, "leuchtturm-kammer");
     await seite(p, "#kammer");

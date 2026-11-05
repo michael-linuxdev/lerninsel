@@ -433,13 +433,21 @@
   const RAHMEN = [[/^Fast! /, "Почти! ", "vorn"], [/ Versuch es nochmal\.$/, " Попробуй ещё раз.", "hinten"]];
   // Satzanfänge mit beliebig langer Rechnung danach (z. B. unterschiedlich viele Münzen): Anfang übersetzen, Rechnung übernehmen
   const ANFAENGE = [["Fang mit der größten Münze an und zähl weiter: ", "Начни с самой большой монеты и считай дальше: "], ["Die Lösung ist ", "Ответ: "]];
-  // Lange Hinweise (Lösungshilfen, 07.11.2026) Satz für Satz: nur wenn jeder Satz übersetzt ist, gibt es eine russische Zeile
-  const SATZENDE = /(?<=[.!?])\s+(?=[A-ZÄÖÜ0-9„(])/;
+  // Lange Hinweise (Lösungshilfen, 07.11.2026) Satz für Satz: nur wenn jeder Satz übersetzt ist, gibt es eine russische Zeile.
+  // Satzgrenze = Satzzeichen, Leerraum, dann Großbuchstabe/Zahl/„/( – ohne Lookbehind, das versteht Safari erst ab 16.4 (iPadOS 16.0–16.3 bricht
+  // sonst beim Laden der ganzen Datei ab; tests/offline.js prüft alle Dateien darauf).
+  const SATZENDE = /[.!?]\s+(?=[A-ZÄÖÜ0-9„(])/g;
+  function saetzeVon(text) {
+    const aus = []; let von = 0, m; SATZENDE.lastIndex = 0;
+    while ((m = SATZENDE.exec(text))) { aus.push(text.slice(von, m.index + 1)); von = m.index + m[0].length; }
+    aus.push(text.slice(von));
+    return aus;
+  }
   function uebersetze(text) {
     if (!text) return "";
     const ganz = einzeln(text);
     if (ganz) return ganz;
-    const saetze = String(text).replace(/\s+/g, " ").trim().split(SATZENDE);
+    const saetze = saetzeVon(String(text).replace(/\s+/g, " ").trim());
     if (saetze.length < 2) return "";
     // reine Rechnungen („42 : 2 = 21.“, „2 € + 1 € = 3 €“) bleiben stehen; mindestens ein Satz muss Wörter haben
     const nurRechnung = (s) => !/[a-zäöüß]{3}/i.test(s.replace(/\b(cm|mm|km|kg|ml|ct|m|l|g|t)\b/g, ""));

@@ -2251,3 +2251,21 @@ Nachträglicher Auftrag (noch offen): Arme der 3D-Hauptfigur ein wenig abspreize
   Browsern laufen lassen (sonst Zeitüberschreitung beim Laden).
 - **Offen / nächste Schritte:** Arme der 3D-Hauptfigur leicht abspreizen (`heimat.js` `figur()` und Schleife, `figur3d.js`; Hand-Extras mitprüfen); iPad-Test
   (Leuchtturm, Licht-Rätsel, Schatzkammer, russische Lösungshilfen, 3D-Extras, Sprechblasen); Russisch von Muttersprachlern prüfen; Kapitel 7 „Neue Ufer“ (KONZEPT).
+
+## Stand 07.11.2026 (Review) – Safari-Fehler in der russischen Mathe-Hilfe, Leuchtturm-Wartezeit, Können nur beim ersten Lösen
+Code-Review der Sitzung vom 07.11. (8 Befunde); die drei dringendsten behoben, je mit Test:
+- **Behoben – Regex-Lookbehind in `spiele/mathe/hilfe-ru.js`:** `SATZENDE` nutzte `(?<=…)`. Safari vor 16.4 (iPadOS 16.0–16.3) kann das nicht und bricht beim
+  **Laden der ganzen Datei** ab – dann gab es keine russische Zeile mehr in Mathe (Fragen, Denkfehler, Erklärungen, Lösungshilfen), ohne Meldung. Jetzt `saetzeVon()`
+  ohne Lookbehind (Satzzeichen bleibt am Satz). **Neue Regel:** kein Lookbehind in ausgelieferten JS-Dateien; `tests/offline.js` prüft alle Dateien der Offline-Liste darauf.
+- **Behoben – Leuchtturm, Wartezeit nach dem Lösen:** `setTimeout(weiter, 1800)` lief weiter, wenn das Kind sofort zur Schatzkammer wechselte (Rätsel überschrieb die
+  Kammer) oder „Noch eine Runde“/Reiter „Rätsel“ eine neue Runde begann (ein Rätsel wurde übersprungen). Jetzt `lauf.timer`, `stoppe()` bei Reiterwechsel und
+  Rundenstart, `weiter()` nur im Reiter „Rätsel“; nach dem Lösen sind 💡 Tipp und ↩ Von vorn aus („Von vorn“ verstellte sonst das fertige Brett).
+- **Behoben – Leuchtturm, Können und Erfahrung:** `Koennen.melde` und `Charakter.gib("mathe", 1)` liefen bei jedem Lösen, auch für schon gelöste Rätsel (Mein Können
+  aufgebläht, Sterne über Stufenaufstiege am Deckel „3 am Tag“ vorbei). Jetzt nur beim **ersten** Lösen (ohne Tipp = gekonnt, mit Tipp = noch nicht sicher).
+- **Tests:** `tests/leuchtturm.js` – Wartezeit echt (1,8 s) mit Reiterwechsel zur Schatzkammer und zurück, ↩ Von vorn nach dem Lösen, Können/Erfahrung beim fünften
+  neuen Rätsel, kein Können/Erfahrung/Stern beim Wiederholen (alle als gelöst markiert); `tests/offline.js` – Lookbehind-Prüfung (findet die alte Fassung).
+- **Offen aus dem Review (nicht dringend):** Sprechblasen-Zipfel ohne Kontur in Englisch, Sorbisch, Medien, Sachkunde (`shared/style.css`, globale Kontur trifft alle
+  `.blase`); Kapitel-6-Szene: `beim`-Hook an Blase 2 schaltet die Lampe, bevor Kapitel 6 gespeichert ist (ab Kl. 2 vier Blasen – Lampe bleibt grau, bis die Szene
+  endet); Leuchtturm-Platz ohne Rückfall, wenn kein Winkel frei ist (`kand[0]`, `shared/insel-kern.js`); „Kapitel … von 6“ in der Schatzkammer fest verdrahtet;
+  CLAUDE.md um Leuchtturm/`extras3d`/`leuchtturm:licht` ergänzen.
+

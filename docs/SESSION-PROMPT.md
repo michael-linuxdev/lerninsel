@@ -24,6 +24,10 @@ Die Aufträge vom 07.11. sind erledigt (Kapitel 6, Russisch für Lösungshilfen,
 3. Danach: Kapitel 7 „Neue Ufer“ (KONZEPT) planen; Russisch prüfen lassen.
 
 ## 1. Stand (07.11.2026)
+**Review nach der Sitzung (07.11., Details in `docs/PLAN.md`, „Stand 07.11.2026 (Review)“):** behoben sind ein Safari-Fehler (Regex-Lookbehind in `hilfe-ru.js`
+ließ auf iPadOS 16.0–16.3 alle russischen Mathe-Zeilen verschwinden; neue Prüfung in `tests/offline.js`), die Leuchtturm-Wartezeit nach dem Lösen (Reiterwechsel,
+neue Runde) und Können/Erfahrung nur beim ersten Lösen eines Licht-Rätsels. **Noch offen aus dem Review:** Zipfel ohne Kontur in Englisch/Sorbisch/Medien/Sachkunde,
+Lampe in der Kapitel-6-Szene zu früh geschaltet, Leuchtturm-Platz ohne Rückfall, „Kapitel … von 6“ fest verdrahtet, CLAUDE.md um Leuchtturm/`extras3d` ergänzen.
 **Neu am 07.11.2026** (Details in `docs/PLAN.md`, „Stand 07.11.2026“):
 - **Kapitel 6 „Der Leuchtturm“** (35 Lernfunde + 3 Schach-Rätsel oder -Lektionen): Leuchtturm am Ufer, nachts mit Lichtstrahl; Seite `spiele/leuchtturm/` mit
   24 Licht-Rätseln (Spiegel drehen, drei Stufen) und **Tildas Schatzkammer** (Test `leuchtturm`, `kapitel`).
