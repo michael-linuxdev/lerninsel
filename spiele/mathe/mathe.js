@@ -516,7 +516,7 @@
   function zeichneSchuljahr() {
     const box = $("schuljahr"); if (!box) return;
     const lbs = Object.keys(LB).filter(k => ST.some(s => s.lb === k)), d = daten(), schule = schuleLb();
-    box.hidden = !lbs.length; if (!lbs.length) return;
+    box.hidden = !lbs.length; { const t = $("schuljahr-titel"); if (t) t.hidden = !lbs.length; } if (!lbs.length) return;
     box.innerHTML = lbs.map(k => { const st = ST.filter(s => s.lb === k), fertig = st.filter(s => bestes(s.id) > 0).length, ls = (d.lernstand || {})[WEG + ":" + k];
       return `<div class="lb-kachel${k === schule ? " schule" : ""}" data-lb="${k}"><div class="lb-kopf"><span class="lb-icon">${LB[k][0]}</span><b>${LB[k][1]}</b></div>` +
         `<div class="lb-stand">${fertig} von ${st.length} Stationen${ls ? ` · zuletzt gezeigt: ${ls.richtig} von ${ls.n}` : ""}</div>` +

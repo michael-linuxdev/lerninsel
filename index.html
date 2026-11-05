@@ -146,16 +146,24 @@
     .schrank { grid-template-columns: 1fr; grid-template-areas: "insel" "lernen" "spielen"; grid-template-rows: .75fr 1.6fr auto; }
     .tuer.insel { min-height: 190px; }
     .tuer.insel .bild { top: 40px; left: auto; right: 24px; transform: none; width: 280px; height: auto; max-width: 42%; }
-    .reihe { grid-template-columns: 1fr 1fr; }
-    .reihe .erst-dann { grid-column: span 2; }
-    .reihe.ohne-zeit .erst-dann { grid-column: auto; }
+    /* (UX-Paket 3, 07.11.2026) Hochformat: Meine Ecke, Mein Tier und Spielzeit in einer Zeile – vorher stand die Spielzeit allein, halb leer */
+    .reihe { grid-template-columns: 1fr 1fr 1.25fr; }
+    .ich-text { font-size: .9rem; } .ich-text b { font-size: 1.15rem; }
+    .spielen .tuer p { display: none; }
     /* Spiel-Türen: der Begleiter reicht als Bild, sonst bleibt für den Text zu wenig Platz */
     .spielen .tuer { padding-left: 16px; padding-right: 84px; }
     .spielen .tuer .bild { display: none; }
     .spielen .tuer .begleiter { width: 72px; right: 8px; }
   }
   @media (max-width: 620px) {
-    .reihe { grid-template-columns: 1fr; } .reihe .erst-dann { grid-column: auto; }
+    /* (UX-Paket 3) Handy: Name und Knöpfe in einer Zeile, „Heute für dich“ darunter; Ecke und Tier nebeneinander, Spielzeit als schmale Zeile –
+       so beginnt die Insel-Tür schon auf dem ersten Bildschirm */
+    .hallo { order: 0; flex: 1; } .leiste { order: 1; flex: none; } .heute-fuer-dich { order: 2; flex: 1 1 100%; max-width: none; }
+    .leiste .knopf .t { display: none; } .leiste .knopf { padding: 0 11px; }
+    .reihe { grid-template-columns: 1fr 1fr; gap: 8px; } .reihe .erst-dann { grid-column: span 2; padding: 6px 12px; font-size: .9rem; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 2px 10px; }
+    .erst-dann > div:last-child { max-width: none !important; }
+    .reihe.ohne-zeit .erst-dann { grid-column: span 2; }
+    .ich-knopf { padding: 6px 8px; gap: 8px; } .ich-bild { width: 44px; height: 44px; border-radius: 12px; } .ich-text { font-size: .8rem; } .ich-text b { font-size: 1rem; } #ich-titel { display: none; }
     .lernen, .lernen.sechs { grid-template-columns: 1fr 1fr; }
     .lernen.sechs .tuer p { display: block; }
     .spielen { grid-template-columns: 1fr; }
@@ -215,11 +223,11 @@
     </header>
     <a class="heute-fuer-dich" id="heute-fuer-dich" hidden></a>
     <div class="leiste">
-      <button class="knopf" id="wer-knopf" hidden>👥 Wechseln</button>
+      <button class="knopf" id="wer-knopf" hidden>👥 <span class="t">Wechseln</span></button>
       <button class="knopf" id="vorlesen" aria-label="Startseite vorlesen" hidden>🔊</button>
-      <button class="knopf" id="spielstand">💾 Spielstand</button>
-      <button class="knopf" id="ton" aria-pressed="true">🔔 Ton an</button>
-      <div class="knopf sterne" aria-live="polite">⭐ <b id="sterne">0</b> Sterne</div>
+      <button class="knopf" id="spielstand" aria-label="Spielstand">💾 <span class="t">Spielstand</span></button>
+      <button class="knopf" id="ton" aria-pressed="true" aria-label="Töne an oder aus">🔔 <span class="t">Ton an</span></button>
+      <div class="knopf sterne" aria-live="polite">⭐ <b id="sterne">0</b> <span class="t">Sterne</span></div>
     </div>
   </div>
   <div class="reihe" id="reihe">
@@ -443,7 +451,7 @@
   function zeigeSterne() { document.getElementById("sterne").textContent = S.sterne(); }
   function zeigeTon() {
     const b = document.getElementById("ton");
-    b.textContent = S.tonAn() ? "🔔 Ton an" : "🔕 Ton aus";
+    b.innerHTML = S.tonAn() ? '🔔 <span class="t">Ton an</span>' : '🔕 <span class="t">Ton aus</span>';
     b.setAttribute("aria-pressed", S.tonAn());
   }
 

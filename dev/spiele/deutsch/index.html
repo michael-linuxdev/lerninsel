@@ -39,7 +39,7 @@
   .ort.zu { background: #F3EDEB; color: #9C8F8B; box-shadow: none; }
   .ort.zu .emoji { filter: grayscale(1); opacity: .45; }
   @media (max-width: 760px) { .orte { grid-template-columns: repeat(3, 1fr); } }
-  .werk-titel { text-align: center; margin: 26px 0 4px; font-size: 1.8rem; }
+  .werk-titel { text-align: center; margin: 14px 0 4px; font-size: 1.8rem; }
   .werk-text { text-align: center; margin: 0 16px; font-size: 1.1rem; }
   .werkstatt { padding-bottom: 40px; }
   .werk-gruppe { max-width: 1100px; }   /* Karte, Kopfzeile und „Zeig, was du kannst“: shared/style.css (30.10.2026) */
@@ -50,12 +50,13 @@
   .silbe { background: #FFE08A; border-radius: 10px; padding: 0 6px; }
   .trenn { color: var(--pflaume-hell); margin: 0 4px; }
 
-  .schatz { max-width: 760px; margin: 14px auto 0; padding: 0 16px; text-align: center; }
-  .schatz h2 { margin: 0 0 10px; font-size: 1.5rem; }
-  .schatz svg { width: min(520px, 100%); height: auto; }
-  .fipsi-start { display: flex; align-items: center; gap: 12px; max-width: 760px; margin: 0 auto; padding: 4px 16px; }
-  .fipsi-start svg { width: 96px; flex: none; }
-  .fipsi-start p { margin: 0; background: #fff; border-radius: 20px; padding: 12px 18px; font-size: 1.25rem; font-weight: 500; }
+  .schatz { flex: none; width: 230px; margin: 0; padding: 0; text-align: center; }
+  .schatz h2 { margin: 2px 0 0; font-size: .9rem; color: var(--pflaume-hell); }
+  .schatz svg { width: 100%; height: auto; display: block; }
+  .fipsi-start { display: flex; align-items: center; gap: 12px; max-width: 1100px; margin: 0 auto; padding: 4px 16px; flex-wrap: wrap; }
+  .fipsi-start > svg, .fipsi-start > span > svg { width: 96px; flex: none; }
+  .fipsi-start p { margin: 0; flex: 1 1 260px; background: #fff; border-radius: 20px; padding: 12px 18px; font-size: 1.25rem; font-weight: 500; }
+  @media (max-width: 620px) { .schatz { width: 100%; max-width: 260px; margin: 0 auto; } }
 
   /* ---------- Kapitel ---------- */
   #kapitel-ansicht { height: 100dvh; display: flex; flex-direction: column; background: var(--grund); }
@@ -223,9 +224,9 @@
     <button class="knopf rund" id="einst-auf" aria-label="Einstellungen">⚙️</button>
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
-  <div class="fipsi-start"><span id="fipsi-klein"></span><p id="karte-text"></p></div>
+  <!-- (UX-Paket 3, 07.11.2026) Die Schatzkarte steht klein neben Fipsi, damit die Werkstatt (Lehrplan-Kapitel) ohne Scrollen beginnt -->
+  <div class="fipsi-start"><span id="fipsi-klein"></span><p id="karte-text"></p><div class="schatz"><div id="schatz"></div><h2 id="schatz-titel">Die Schatzkarte</h2></div></div>
   <div class="orte" id="orte"></div>
-  <div class="schatz"><h2 id="schatz-titel">Die Schatzkarte</h2><div id="schatz"></div></div>
   <h2 class="werk-titel">🛠️ Fipsis Wörter-Werkstatt</h2>
   <p class="werk-text">Alles aus dem Deutschunterricht – sortiert wie in der Schule. Üb, so oft du willst!</p>
   <div class="werkstatt" id="werkstatt"></div>

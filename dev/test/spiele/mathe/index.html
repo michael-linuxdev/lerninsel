@@ -79,8 +79,13 @@
   .tafel { justify-content: flex-start; }
   #tafel > :first-child { margin-top: auto; }
   #tafel > :last-child { margin-bottom: auto; }
-  .einstufung { max-width: 640px; margin: 10px auto 0; background: #fff; border-radius: 24px; padding: 16px 20px; box-shadow: 0 6px 0 rgba(0,0,0,.08); text-align: center; font-size: 1.2rem; }
-  .einstufung p { margin: 6px 0 10px; }
+  /* (UX-Paket 3) Angebot „Was kannst du schon?“ als schmale Zeile statt großer Karte */
+  .einstufung { max-width: 900px; margin: 10px auto 0; background: #fff; border-radius: 20px; padding: 10px 16px; box-shadow: 0 6px 0 rgba(0,0,0,.08); font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 6px 14px; flex-wrap: wrap; text-align: left; }
+  .einstufung b { font-size: 1.15rem; }
+  .einstufung p { margin: 0; flex: 1 1 260px; }
+  @media (max-width: 620px) { .einstufung p { display: none; } .einstufung { gap: 6px 10px; padding: 8px 12px; } .einstufung b { font-size: 1.05rem; } .einstufung .knoepfe-e { gap: 6px; } .einstufung .knopf { min-height: 44px; font-size: .95rem; padding: 0 12px; } }   /* Handy: nur Titel und kleine Knöpfe */
+  .schuljahr-titel { text-align: center; margin: 22px 0 4px; font-size: 1.35rem; }
+  .schuljahr-titel[hidden] { display: none; }
   /* Schuljahres-Gerüst: Lernbereiche mit „Zeig, was du kannst“ */
   .schuljahr { max-width: 1100px; margin: 12px auto 0; padding: 0 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
   .schuljahr[hidden] { display: none; }
@@ -254,8 +259,10 @@
   <div class="klasse" id="klasse"></div>
   <div class="einstufung" id="einstufung" hidden></div>
   <div class="weiter-klasse" id="weiter-klasse" hidden></div>
-  <div class="schuljahr" id="schuljahr" hidden></div>
   <div class="karte-weg" id="karte"></div>
+  <!-- (UX-Paket 3, 07.11.2026) Lernbereiche mit „Zeig, was du kannst“ stehen unter dem Weg – vorher schoben sie den Weg unter den Bildschirmrand -->
+  <h2 class="schuljahr-titel" id="schuljahr-titel" hidden>📚 Lernbereiche – wie in der Schule</h2>
+  <div class="schuljahr" id="schuljahr" hidden></div>
 </section>
 
 <section class="ansicht" id="rechnen-ansicht" hidden>
