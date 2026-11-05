@@ -121,6 +121,7 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     erwarte(truhen.length >= 12 && truhen.some(t => !t.zu && /Licht-Rätsel/.test(t.t) && t.n === "24") && truhen.some(t => !t.zu && /Ernten/.test(t.t) && t.n === "2") && truhen.some(t => t.zu),
       "Schatzkammer: Truhen für Licht-Rätsel (24, alle als gelöst markiert) und Ernten (2) gefüllt, andere noch leer");
     erwarte(await p.isVisible('a[href="../schatz/"]'), "Schatzkammer verlinkt Pokale und Medaillen");
+    erwarte(await p.evaluate(() => { const z = Story.KAPITEL_ZAHL; return z >= 6 && new RegExp(`Kapitel ${Math.min(z, Story.kapitel())} von ${z} erlebt`).test(document.querySelector("#kammer .stand").textContent); }), "„Kapitel x von y“ kommt aus Story.KAPITEL_ZAHL, nicht aus einer festen Zahl");
     await bild(p, "leuchtturm-kammer");
     await seite(p, "#kammer");
     erwarte(await p.isVisible("#kammer"), "#kammer öffnet direkt die Schatzkammer");

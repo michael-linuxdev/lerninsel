@@ -2264,8 +2264,18 @@ Code-Review der Sitzung vom 07.11. (8 Befunde); die drei dringendsten behoben, j
   aufgebläht, Sterne über Stufenaufstiege am Deckel „3 am Tag“ vorbei). Jetzt nur beim **ersten** Lösen (ohne Tipp = gekonnt, mit Tipp = noch nicht sicher).
 - **Tests:** `tests/leuchtturm.js` – Wartezeit echt (1,8 s) mit Reiterwechsel zur Schatzkammer und zurück, ↩ Von vorn nach dem Lösen, Können/Erfahrung beim fünften
   neuen Rätsel, kein Können/Erfahrung/Stern beim Wiederholen (alle als gelöst markiert); `tests/offline.js` – Lookbehind-Prüfung (findet die alte Fassung).
-- **Offen aus dem Review (nicht dringend):** Sprechblasen-Zipfel ohne Kontur in Englisch, Sorbisch, Medien, Sachkunde (`shared/style.css`, globale Kontur trifft alle
-  `.blase`); Kapitel-6-Szene: `beim`-Hook an Blase 2 schaltet die Lampe, bevor Kapitel 6 gespeichert ist (ab Kl. 2 vier Blasen – Lampe bleibt grau, bis die Szene
-  endet); Leuchtturm-Platz ohne Rückfall, wenn kein Winkel frei ist (`kand[0]`, `shared/insel-kern.js`); „Kapitel … von 6“ in der Schatzkammer fest verdrahtet;
-  CLAUDE.md um Leuchtturm/`extras3d`/`leuchtturm:licht` ergänzen.
+- **Behoben (zweiter Teil) – Sprechblasen-Zipfel in Englisch, Sorbisch, Medien, Sachkunde:** Die Blase dort war ein scrollender Kasten (`overflow: auto`), der weiße
+  Zipfel ohne Kontur wurde abgeschnitten und machte den Kasten um 16 px scrollbar. Jetzt wie in Deutsch: Hülle `.blase` mit Kontur und Raute-Zipfel, innen
+  `#blase.blase-innen` scrollt bei langen Texten (Spalte mit `min-height: 0`, damit es bei knappem Platz mitschrumpft). Dabei gefunden: **im Hochformat steht die Figur
+  rechts neben der Blase** (das `order: -1` trifft nur die SVG im Kasten), der Zipfel zeigte aber nach links – jetzt zeigt er auf allen fünf Seiten (auch Deutsch) nach rechts.
+  Neuer Test `stil` (5 Seiten, quer/hoch: Kontur, Zipfel zeigt zur Figur, kein Scrollrest, langer Text scrollt innen).
+- **Behoben – Lampe in der Kapitel-6-Szene:** Blase 3 („dann leuchtet der Turm“) merkt jetzt per `beim` `St.setzeKapitel(6)` und schaltet dann die Lampe (Muster wie
+  Kapitel 1 in „erste-frucht“); vorher blieb sie ab Kl. 2 (vier Blasen) grau, bis die Szene zu war. `tests/kapitel.js` prüft die Lampe bei der dritten Blase.
+- **Behoben – Leuchtturm-Platz ohne freien Winkel:** 24 Winkel auf zwei Ringen (Ufer, eine Spur innen); ohne freien Platz der mit dem kleinsten Mangel (Orte, Steg, See
+  dreifach gewichtet) und Bäume im Weg werden gefällt. `tests/inselkern.js` prüft 220 Welten (6 Biome × 3 Größen × See × 6 Seeds + vier bekannte kleine Wald-Welten,
+  in denen der alte Code den Turm in Bäume stellte): nie in einem Baum, ≥ 2,5 zu jedem Ort, > 4 zum Steg, nicht im See.
+- **Behoben – „Kapitel x von 6“:** `Story.KAPITEL_ZAHL` in `shared/ereignisse.js` (Seiten ohne Insel-Kern); `tests/inselkern.js` vergleicht mit dem letzten `n` in `KAPITEL`.
+- **CLAUDE.md nachgezogen:** Tests `leuchtturm`, `extras3d`, `stil` in §6; Kurzreferenz Leuchtturm (Platzsuche, Szene, Rätsel-Format, Daten, `KAPITEL_ZAHL`, Präfix
+  `leuchtturm:licht`), `extras3d.js` und Sprechblasen-Regel (nie `overflow: auto` auf der Hülle) in §7.
+- **Offen:** Russisch für den Leuchtturm prüfen lassen; iPad-Test der Blasen in Englisch/Sachkunde.
 

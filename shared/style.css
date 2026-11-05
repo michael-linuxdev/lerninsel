@@ -147,5 +147,8 @@ svg.fig-klein [vector-effect] { vector-effect: none; }
    Knöpfe mit festem Schatten im Kontur-Ton, Karten-Radius 26 px (Vorschau spiele/stil/, Variante A). Seiten mit eigener Kontur behalten sie. */
 :root { --kontur: #3B1F63; --rund-gross: 26px; --schatten: 0 6px 0 rgba(59, 31, 99, .22); }
 .blase, #blase { border: 3px solid var(--kontur); }
-/* Zipfel mit Kontur: Seiten mit sichtbarem Zipfel (Deutsch, Mein Tier) zeichnen ihn als gedrehte Raute mit zwei Konturrändern. */
+/* Zipfel mit Kontur: Seiten mit sichtbarem Zipfel zeichnen ihn als gedrehte Raute mit zwei Konturrändern (Deutsch, Mein Tier; seit dem Review 07.11.2026 auch
+   Englisch, Sorbisch, Medien, Sachkunde – dort scrollt der innere Teil `#blase.blase-innen`, die Hülle `.blase` trägt Kontur und Zipfel; ein scrollender
+   Kasten würde den Zipfel abschneiden). Die Hülle und der innere Teil teilen sich keine Kontur. */
+#blase.blase-innen, .blase-innen { border: 0; }
 

@@ -256,10 +256,29 @@ pruefe("Leuchtturm (07.11.2026): Platz am Ufer frei, dunkel bis Kapitel 6, danac
   assert.ok(Math.hypot(x, z) > W.RMAX_LAUF - 2 && Math.hypot(x, z) < W.RMAX_LAUF, "am Ufer");
   Object.entries(W.P).filter(([k]) => k !== "leuchtturm").forEach(([k, v]) => assert.ok(Math.hypot(v[0] - x, v[1] - z) > 2.7, "Abstand zu " + k));
   assert.ok(W.ORTE.leuchtturm && W.ORTE.schach, "Orte für die Zeigehand");
-  for (const w of [{ biom: "berge", seed: 5, groesse: "gross" }, { biom: "wueste", seed: 9, see: 1 }]) {
-    const P = vor.K.erstelle(new URLSearchParams(Object.entries(w).map(([k, v]) => k + "=" + v).join("&"))).P;
-    assert.ok(Array.isArray(P.leuchtturm) && P.leuchtturm.every(Number.isFinite), "Platz auch in " + w.biom);
+  // Review 07.11.2026: in jeder Welt (6 Biome × 3 Größen × mit/ohne See × 6 Seeds) steht der Leuchtturm am Ufer, nie in einem Baum, nicht am Steg,
+  // nicht im See und mindestens 2,5 Einheiten von jedem anderen Ort (Rückfall: Platz mit dem kleinsten Mangel, Bäume im Weg werden gefällt)
+  let welten = 0, notloesung = 0;
+  const WELTEN = [];
+  for (const biom of ["wiese", "wald", "berge", "strand", "schnee", "wueste"]) for (const groesse of ["klein", "mittel", "gross"]) for (const see of [0, 1]) for (let seed = 1; seed <= 6; seed++) WELTEN.push([biom, groesse, see, seed]);
+  // bekannte Welten ohne freien Winkel (kleiner Wald): hier greift der Rückfall – vorher stand der Turm dort in Bäumen
+  WELTEN.push(["wald", "klein", 0, 4], ["wald", "klein", 1, 3], ["wald", "klein", 1, 15], ["wald", "klein", 1, 25]);
+  for (const [biom, groesse, see, seed] of WELTEN) {
+    const u = neueUmgebung({ funde: 40, story: { kapitel: 5 } }), q = new URLSearchParams(`biom=${biom}&groesse=${groesse}&huegel=${["wenig", "mittel", "viel"][seed % 3]}&see=${see}&seed=${seed}`);
+    const E = u.K.erstelle(q), [x, z] = E.P.leuchtturm, wo = `${biom}/${groesse}/see=${see}/seed=${seed}`;
+    welten++;
+    if (E.WELT.baeume.length < u.K.erzeuge(u.K.wunsch(q)).baeume.length) notloesung++;   // Bäume gefällt = Rückfall
+    assert.ok([x, z].every(Number.isFinite) && Math.hypot(x, z) > E.RMAX_LAUF - 2.6 && Math.hypot(x, z) < E.RMAX_LAUF, "am Ufer: " + wo);
+    E.WELT.baeume.forEach(b => assert.ok(Math.hypot(b.x - x, b.z - z) > 3.2, `Baum im Leuchtturm: ${wo}`));
+    Object.entries(E.P).filter(([k]) => k !== "leuchtturm").forEach(([k, v]) => assert.ok(Math.hypot(v[0] - x, v[1] - z) > 2.5, `zu nah an ${k}: ${wo}`));
+    assert.ok(Math.hypot(x - E.STEG.x, z - E.STEG.z0) > 4, "zu nah am Steg: " + wo);
+    if (E.WELT.see) assert.ok(Math.hypot(x - E.WELT.see.x, z - E.WELT.see.z) > E.WELT.see.r + 1.5, "im See: " + wo);
   }
+  assert.ok(notloesung >= 4 && notloesung < welten / 10, `Rückfall in ${notloesung} von ${welten} Welten (erwartet: die vier bekannten, sonst selten)`);
+  console.log(`    ${welten} Welten geprüft, Rückfall mit gefällten Bäumen in ${notloesung}`);
+  // Schatzkammer „Kapitel x von y“: y steht in shared/ereignisse.js (Seiten ohne Insel-Kern) und muss dem letzten Kapitel hier entsprechen
+  const zahl = +(/const KAPITEL_ZAHL = (\d+)/.exec(fs.readFileSync(path.join(__dirname, "../shared/ereignisse.js"), "utf8")) || [])[1];
+  assert.strictEqual(zahl, Math.max(...vor.K.KAPITEL.map(k => k.n)), "Story.KAPITEL_ZAHL in shared/ereignisse.js = letztes Kapitel in KAPITEL");
   { const b = vor.K.antwort("leuchtturm").blase; assert.ok(b[0] === "tilda" && /dunkel/.test(b[2]) && !b[4], "vor Kapitel 6 dunkel, ohne Ziel"); }
   assert.deepStrictEqual(vor.K.aktionFuer("leuchtturm")[0], ["👀", "Ansehen"]);
   const nach = neueUmgebung({ funde: 40, story: { kapitel: 6 } });

@@ -449,10 +449,27 @@
     if (!P.leuchtturm) {
       const ABST = { haus: 4.5, lauf: 4.2, kart: 4.2, bau: 4.2, ballons: 3.8, buehne: 3.6, truhe: 3.4, start: 3.6 };   // große Orte brauchen mehr Platz
       const andere = Object.entries(P).map(([k, v]) => [v[0], v[1], ABST[k] || 2.8]), rL = RMAX_LAUF - 1.3, a0 = Math.atan2(P.schach[1], P.schach[0]);
-      const kand = Array.from({ length: 24 }, (_, i) => a0 + (i % 2 ? -1 : 1) * Math.ceil(i / 2) * Math.PI / 12).map(a => [Math.cos(a) * rL, Math.sin(a) * rL]);
-      const frei = ([x, z]) => WELT.baeume.every(b => Math.hypot(b.x - x, b.z - z) > 3.2) && andere.every(v => Math.hypot(v[0] - x, v[1] - z) > v[2]) &&
-        Math.hypot(x - STEG.x, z - STEG.z0) > 4 && Math.hypot(x - SU.x, z - SU.z) > 2.5 && !(WELT.see && Math.hypot(x - WELT.see.x, z - WELT.see.z) < WELT.see.r + 1.5);
-      const [x, z] = kand.find(frei) || kand[0];
+      // 24 Winkel (15°-Schritte, abwechselnd links/rechts vom Schachtisch) auf zwei Ringen: am Ufer, sonst eine Spur weiter innen
+      const winkel = Array.from({ length: 24 }, (_, i) => a0 + (i % 2 ? -1 : 1) * Math.ceil(i / 2) * Math.PI / 12);
+      const kand = [rL, rL - 1.1].flatMap(rad => winkel.map(a => [Math.cos(a) * rad, Math.sin(a) * rad]));
+      // Fehlender Abstand je Regel; 0 = Platz ist frei. Bäume zählen einfach (sie lassen sich fällen), Orte, Steg, Sonnenuhr und See dreifach.
+      const BAUM = 3.2;
+      const mangel = ([x, z]) => {
+        let m = 0; const fehlt = (ist, soll, g) => { if (ist < soll) m += (soll - ist) * g; };
+        WELT.baeume.forEach(b => fehlt(Math.hypot(b.x - x, b.z - z), BAUM, 1));
+        andere.forEach(v => fehlt(Math.hypot(v[0] - x, v[1] - z), v[2], 3));
+        fehlt(Math.hypot(x - STEG.x, z - STEG.z0), 4, 3); fehlt(Math.hypot(x - SU.x, z - SU.z), 2.5, 3);
+        if (WELT.see) fehlt(Math.hypot(x - WELT.see.x, z - WELT.see.z), WELT.see.r + 1.5, 3);
+        return m;
+      };
+      let wahl = kand.find(k => mangel(k) === 0);
+      if (!wahl) {
+        // Review 07.11.2026: kein Winkel frei (kleine Insel, See, dichter Wald) – statt blind den ersten zu nehmen, den Platz mit dem kleinsten
+        // Mangel wählen und die Bäume im Weg fällen (Lichtung); so stehen Felsen und Höhlentür nie in einem Baum oder auf einem anderen Ort
+        wahl = kand.reduce((best, k) => (mangel(k) < mangel(best) ? k : best), kand[0]);
+        const [x, z] = wahl; WELT.baeume = WELT.baeume.filter(b => Math.hypot(b.x - x, b.z - z) > BAUM);
+      }
+      const [x, z] = wahl;
       P.leuchtturm = [x, z, Math.atan2(-x, -z)];   // Tür der Höhle zur Mitte
     }
     // Vor der Haustür (dort kommt man beim Rausgehen an)

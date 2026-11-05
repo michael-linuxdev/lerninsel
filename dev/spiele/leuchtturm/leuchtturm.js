@@ -223,10 +223,10 @@
     ];
   }
   function kammer() {
-    const l = schaetze(), kap = window.Story ? Story.kapitel() : 0;
+    const l = schaetze(), zahl = window.Story ? Story.KAPITEL_ZAHL : 0, kap = Math.min(zahl, window.Story ? Story.kapitel() : 0);
     tilda("Das ist meine Schatzkammer. Jede Truhe zeigt, was du auf der Insel geschafft hast.", "Это моя сокровищница. Каждый сундук показывает, что ты сделал на острове.");
     $("bereich").innerHTML = `<section class="karte" id="kammer"><h2>💎 Tildas Schatzkammer</h2>
-      <p class="stand">Kapitel ${kap} von 6 erlebt · ${l.filter(x => x[2]).length} von ${l.length} Truhen gefüllt</p>
+      <p class="stand">Kapitel ${kap} von ${zahl} erlebt · ${l.filter(x => x[2]).length} von ${l.length} Truhen gefüllt</p>
       <div class="truhen" id="truhen" data-ausgleich>${l.map(([e, t, n, r]) => `<div class="truhe${n ? "" : " zu"}"><span class="e" aria-hidden="true">${n ? e : "🧰"}</span><b>${n}</b><span>${esc(t)}${ru(r)}</span></div>`).join("")}</div>
       <p class="klein">Leere Truhen füllen sich ganz von allein, wenn du etwas Neues ausprobierst. Nichts geht verloren.</p>
       <div class="knoepfe"><a class="knopf" href="../schatz/">🏆 Pokale und Medaillen</a><a class="knopf" href="../album/#chronik">📜 Inselchronik</a></div></section>`;

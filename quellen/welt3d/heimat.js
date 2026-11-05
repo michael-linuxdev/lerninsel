@@ -1819,7 +1819,9 @@ function spieleStory(id) {
   if (id === "atelier") b.forEach(x => { x.zeige = I.ort("buehne"); });
   if (id === "bennos-baeckerei") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "biber" : "baeckerei"); });
   if (id === "paulas-fest") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "buehne" : "ballons"); });
-  if (id === "der-leuchtturm") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "schach" : "leuchtturm"); if (i === 2) x.beim = schalteLeuchtturm; });
+  // Blase 3 („… dann leuchtet der Turm“): Kapitel 6 schon hier merken (wie Kapitel 1 in „erste-frucht“), sonst bleibt die Lampe grau, weil
+  // schalteLeuchtturm() nach K.leuchtturmOffen() geht und das Kapitel sonst erst mit der letzten Blase gespeichert würde (ab Kl. 2 sind es vier)
+  if (id === "der-leuchtturm") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "schach" : "leuchtturm"); if (i === 2) x.beim = () => { St.setzeKapitel(6); schalteLeuchtturm(); }; });
   if (id === "der-sturm") b.forEach((x, i) => { x.zeige = I.ort(i === 1 ? "baer" : i === 2 ? "station" : "eule"); });
   storyLaeuft = true;
   // Etappe/Kapitel schon mit der letzten Blase merken – nicht erst beim Schließen (Kind verlässt die Insel oft direkt danach)

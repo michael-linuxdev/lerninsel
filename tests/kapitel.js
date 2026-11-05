@@ -134,6 +134,11 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     await weiter(p); a = await p.evaluate(() => __szene.aktuell());
     erwarte(a && a.zeigt, "zweite Blase zeigt zum Leuchtturm am Ufer");
     await bild(p, "kapitel-6");
+    // Review 07.11.2026: Blase 3 sagt „dann leuchtet der Turm“ – die Lampe muss jetzt schon an sein (Kapitel 6 wird hier gemerkt, nicht erst mit der letzten Blase)
+    await weiter(p); a = await p.evaluate(() => __szene.aktuell());
+    erwarte(!!a && await p.evaluate(() => __heimat.leuchtturm().lampe === "#ffe14d" && Story.kapitel() === 6), "dritte Blase: die Lampe leuchtet, während Tilda es sagt (Kapitel 6 schon gemerkt)");
+    await weiter(p);
+    erwarte(!!(await p.evaluate(() => __szene.aktuell())), "vierte Blase folgt (Kl. 2) – die Lampe war also schon vor der letzten Blase an");
     while (await p.evaluate(() => !!(window.__szene && __szene.aktuell()))) await weiter(p);
     erwarte(await p.evaluate(() => Story.kapitel() === 6 && Story.chronik().some(x => x.s === "der-leuchtturm")), "Kapitel 6 erreicht, Szene in der Chronik");
     erwarte(await p.evaluate(() => __heimat.leuchtturm().lampe === "#ffe14d"), "nach der Szene leuchtet die Lampe");

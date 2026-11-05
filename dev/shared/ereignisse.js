@@ -14,6 +14,9 @@
 (function () {
   const ARTEN = ["fund", "bild", "melodie", "bauwerk", "kapitel", "etappe"];
   const MAX_OFFEN = 20, MAX_GESEHEN = 100, MAX_CHRONIK = 100, MAX_KAPITEL = 20, MAX_DATEN = 160;
+  // Zahl der erzählten Kapitel = letztes `n` in KAPITEL (shared/insel-kern.js); hier für Seiten ohne Insel-Kern (Schatzkammer „Kapitel x von y“).
+  // tests/inselkern.js prüft, dass beide Zahlen gleich sind – bei einem neuen Kapitel hier hochzählen.
+  const KAPITEL_ZAHL = 6;
 
   // ---------- Migration und Prüfung (auch in Node testbar) ----------
   const istObjekt = (x) => !!x && typeof x === "object" && !Array.isArray(x);
@@ -99,6 +102,7 @@
 
   // ---------- Story-Zustand ----------
   const Story = {
+    KAPITEL_ZAHL,
     zustand: () => lade(),
     kapitel: () => lade().kapitel,
     // Kapitel öffnen sich nie rückwärts

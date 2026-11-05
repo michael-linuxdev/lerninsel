@@ -26,8 +26,10 @@ Die Aufträge vom 07.11. sind erledigt (Kapitel 6, Russisch für Lösungshilfen,
 ## 1. Stand (07.11.2026)
 **Review nach der Sitzung (07.11., Details in `docs/PLAN.md`, „Stand 07.11.2026 (Review)“):** behoben sind ein Safari-Fehler (Regex-Lookbehind in `hilfe-ru.js`
 ließ auf iPadOS 16.0–16.3 alle russischen Mathe-Zeilen verschwinden; neue Prüfung in `tests/offline.js`), die Leuchtturm-Wartezeit nach dem Lösen (Reiterwechsel,
-neue Runde) und Können/Erfahrung nur beim ersten Lösen eines Licht-Rätsels. **Noch offen aus dem Review:** Zipfel ohne Kontur in Englisch/Sorbisch/Medien/Sachkunde,
-Lampe in der Kapitel-6-Szene zu früh geschaltet, Leuchtturm-Platz ohne Rückfall, „Kapitel … von 6“ fest verdrahtet, CLAUDE.md um Leuchtturm/`extras3d` ergänzen.
+neue Runde), Können/Erfahrung nur beim ersten Lösen eines Licht-Rätsels, die Sprechblasen-Zipfel mit Kontur in Englisch/Sorbisch/Medien/Sachkunde (Test `stil`),
+die Lampe in der Kapitel-6-Szene bei der dritten Blase, der Leuchtturm-Platz mit Rückfall (220 Welten im Test) und „Kapitel x von y“ über `Story.KAPITEL_ZAHL`;
+CLAUDE.md kennt jetzt Leuchtturm, `extras3d` und die Tests `leuchtturm`/`extras3d`/`stil`. Aus dem Review ist nichts mehr offen.
+**Im iPad zusätzlich testen:** Englisch oder Sachunterricht öffnen, eine Lektion starten – hat die Sprechblase jetzt einen Zipfel mit dunkler Kontur (quer und hoch)?
 **Neu am 07.11.2026** (Details in `docs/PLAN.md`, „Stand 07.11.2026“):
 - **Kapitel 6 „Der Leuchtturm“** (35 Lernfunde + 3 Schach-Rätsel oder -Lektionen): Leuchtturm am Ufer, nachts mit Lichtstrahl; Seite `spiele/leuchtturm/` mit
   24 Licht-Rätseln (Spiegel drehen, drei Stufen) und **Tildas Schatzkammer** (Test `leuchtturm`, `kapitel`).

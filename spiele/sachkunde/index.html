@@ -49,8 +49,9 @@
   .fortschritt span { display: block; height: 100%; background: var(--akzent); border-radius: 999px; transition: width .3s; }
   .buehne { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(240px, 34%) 1fr; gap: 18px; padding: 14px max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
   .erzaehler { display: flex; flex-direction: column; gap: 10px; justify-content: flex-end; min-height: 0; }
-  .blase { position: relative; background: #fff; border-radius: 26px; padding: 18px 20px; font-size: 1.4rem; font-weight: 500; line-height: 1.38; box-shadow: 0 6px 0 rgba(0,0,0,.08); overflow: auto; max-height: 60dvh; }
-  .blase::after { content: ""; position: absolute; bottom: -16px; left: 44px; border: 10px solid transparent; border-top: 14px solid #fff; border-bottom: 0; }
+  .blase { position: relative; display: flex; flex-direction: column; min-height: 0; background: #fff; border-radius: 26px; padding: 18px 20px; font-size: 1.4rem; font-weight: 500; line-height: 1.38; box-shadow: 0 6px 0 rgba(0,0,0,.08); }
+  .blase::after { content: ""; position: absolute; bottom: -12px; left: 44px; width: 20px; height: 20px; background: #fff; border: 0 solid var(--kontur); border-right-width: 3px; border-bottom-width: 3px; transform: rotate(45deg); }   /* Stil A: Zipfel mit Kontur */
+  .blase-innen { min-height: 0; overflow: auto; max-height: 60dvh; }
   .klein-knopf { min-height: 48px; padding: 0 16px; border-radius: 999px; background: var(--himmel); font-weight: 600; font-size: 1.1rem; margin-top: 10px; }
   .eule { width: min(180px, 58%); align-self: center; }
   .eule.spricht { animation: sprechen .5s ease-in-out infinite alternate; transform-origin: 50% 100%; }
@@ -114,8 +115,9 @@
     .buehne { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
     .erzaehler { flex-direction: row; align-items: flex-end; }
     .erzaehler .eule { width: 100px; flex: none; order: -1; }
-    .blase { flex: 1; max-height: 30dvh; }
-    .blase::after { left: -14px; bottom: 26px; border: 10px solid transparent; border-right: 14px solid #fff; border-left: 0; }
+    .blase { flex: 1; }
+    .blase::after { left: auto; right: -12px; bottom: 26px; border-width: 3px 3px 0 0; }   /* Zipfel nach rechts: dort steht die Figur */
+    .blase-innen { max-height: 30dvh; }
   }
 
   /* Ende und Führerschein */
@@ -155,7 +157,7 @@
   </div>
   <div class="buehne">
     <div class="erzaehler">
-      <div class="blase" id="blase" aria-live="polite"></div>
+      <div class="blase"><div class="blase-innen" id="blase" aria-live="polite"></div></div>
       <div id="eule-gross"></div>
     </div>
     <div class="aufgabe" id="aufgabe"></div>
