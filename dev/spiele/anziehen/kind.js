@@ -113,23 +113,23 @@
       form("M114 350 C112 380 114 410 117 426 L121 426 C119 410 117 380 118 350 Z", l, 0.55) +                   // Licht linker Oberschenkel
       form("M100 534 L148 534 L148 542 L100 542 Z", s) + gedreht(POSE.beinR, form("M152 534 L204 534 L204 544 L152 544 Z", s));                      // Sohlen
     const linien =
-      gedreht(POSE.armL, strich("M92 284 C95 288 100 289 104 286", t, 1.5, 0.7) + strich("M87 388 C87 384 88 380 89 377 M94 390 C94 386 94 382 95 378", t, 1.3, 0.75) + strich("M82 370 C87 373 95 374 102 371", t, 1.1, 0.3) +
+      gedreht(POSE.armL, strich("M87 388 C87 384 88 380 89 377 M94 390 C94 386 94 382 95 378", t, 1.3, 0.4) + strich("M82 370 C87 373 95 374 102 371", t, 1.1, 0.2) +   // (Figuren 4) ohne Ellbogenlinie, Fingerlinien zarter
         flaeche("M99 350 C98 358 98 364 99 370 C100 374 104 374 105 369 C107 362 106 355 103 349 Z", haut, form("M104 356 C106 361 106 366 104 370 L108 370 L108 356 Z", s, 0.9), { kontur: false }) +
         strich("M99 354 C98 360 98 365 99 370 C100 374 104 374 105 369 C106 364 106 359 105 355", KF, 2.4)) +   // Daumen wächst ohne Kante aus der Hand
-      gedreht(POSE.armR, strich("M208 284 C205 288 200 289 196 286", t, 1.5, 0.7) + strich("M213 388 C213 384 212 380 211 377 M206 390 C206 386 206 382 205 378", t, 1.3, 0.75) + strich("M218 370 C213 373 205 374 198 371", t, 1.1, 0.3) +
+      gedreht(POSE.armR, strich("M213 388 C213 384 212 380 211 377 M206 390 C206 386 206 382 205 378", t, 1.3, 0.4) + strich("M218 370 C213 373 205 374 198 371", t, 1.1, 0.2) +
         flaeche("M201 350 C202 358 202 364 201 370 C200 374 196 374 195 369 C193 362 194 355 197 349 Z", haut, form("M196 356 C194 361 194 366 196 370 L192 370 L192 356 Z", s, 0.9), { kontur: false }) +
         strich("M201 354 C202 360 202 365 201 370 C200 374 196 374 195 369 C194 364 194 359 195 355", KF, 2.4)) +
-      strich("M118 424 C123 430 133 430 139 424", t, 1.5, 0.6) + gedreht(POSE.beinR, strich("M182 424 C177 430 167 430 161 424", t, 1.5, 0.6) + strich("M188 536 l0 4 M180 537 l0 4 M172 537 l0 3", t, 1.3, 0.6)) +
-      strich("M112 536 l0 4 M120 537 l0 4 M128 537 l0 3", t, 1.3, 0.6) + strich("M150 338 L150 344", t, 1.4, 0.5);
+      gedreht(POSE.beinR, strich("M188 536 l0 4 M180 537 l0 4 M172 537 l0 3", t, 1.3, 0.4)) +   // (Figuren 4) keine Knie- und Schrittlinie mehr, Zehen zarter
+      strich("M112 536 l0 4 M120 537 l0 4 M128 537 l0 3", t, 1.3, 0.4);
     // Arme noch einmal als eigene Hautteile (liegen vor Hose und Rock): mit Schatten und den Hand-Linien
     const armHaut = (rechts) => flaeche(rechts ? TEILE.armR : TEILE.armL, haut,
       rechts ? gedreht(POSE.armR, form("M192 200 C202 208 206 224 208 250 C210 300 214 340 218 392 L240 392 L240 200 Z", s)) : form("M106 200 C99 214 96 240 94 270 L99 270 C100 240 103 216 110 202 Z", l, 0.6));
     const handLinien = (rechts) => linien.split("<g transform=")[rechts ? 2 : 1] ? "<g transform=" + linien.split("<g transform=")[rechts ? 2 : 1].replace(/\)\s*\+?\s*$/, "") : "";
     return {
-      arme: armHaut(false) + armHaut(true) + gedreht(POSE.armL, strich("M92 284 C95 288 100 289 104 286", t, 1.5, 0.7) + strich("M87 388 C87 384 88 380 89 377 M94 390 C94 386 94 382 95 378", t, 1.3, 0.75) +
+      arme: armHaut(false) + armHaut(true) + gedreht(POSE.armL, strich("M87 388 C87 384 88 380 89 377 M94 390 C94 386 94 382 95 378", t, 1.3, 0.4) +
           flaeche("M99 350 C98 358 98 364 99 370 C100 374 104 374 105 369 C107 362 106 355 103 349 Z", haut, form("M104 356 C106 361 106 366 104 370 L108 370 L108 356 Z", s, 0.9), { kontur: false }) +
           strich("M99 354 C98 360 98 365 99 370 C100 374 104 374 105 369 C106 364 106 359 105 355", KF, 2.4)) +
-        gedreht(POSE.armR, strich("M208 284 C205 288 200 289 196 286", t, 1.5, 0.7) + strich("M213 388 C213 384 212 380 211 377 M206 390 C206 386 206 382 205 378", t, 1.3, 0.75) +
+        gedreht(POSE.armR, strich("M213 388 C213 384 212 380 211 377 M206 390 C206 386 206 382 205 378", t, 1.3, 0.4) +
           flaeche("M201 350 C202 358 202 364 201 370 C200 374 196 374 195 369 C193 362 194 355 197 349 Z", haut, form("M196 356 C194 361 194 366 196 370 L192 370 L192 356 Z", s, 0.9), { kontur: false }) +
           strich("M201 354 C202 360 202 365 201 370 C200 374 196 374 195 369 C194 364 194 359 195 355", KF, 2.4)),
       koerper: flaeche(UMRISS, haut, innen) + linien,

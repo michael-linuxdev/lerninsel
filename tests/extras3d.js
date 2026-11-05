@@ -57,6 +57,8 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   await p.evaluate(() => { if (window.__szene && __szene.aktuell()) __szene.abbrechen(); }); await p.waitForTimeout(400);
   { const f = await p.evaluate(() => __heimat.figurInfo());
     erwarte(f.schulter === 2 && f.daumen === 2 && f.pony === 1, `Figur: 2 Schultern, 2 Daumen, Pony bei „Lange Haare“ (${JSON.stringify(f)})`);
+    // Figuren 1 (07.11.2026): Ohren, Nase, Schuhe, Haarsträhnen (4 Fransen + 2 Seitensträhnen bei „lang“), sichtbarer Hals
+    erwarte(f.ohr === 2 && f.nase === 1 && f.schuh === 2 && f.straehne >= 6 && f.halsFrei > 0.02, `Figur: Ohren, Nase, Schuhe, ${f.straehne} Strähnen, Hals frei ${f.halsFrei}`);
     erwarte(f.haende[0] < -0.1 && f.haende[1] > 0.1, `Arme abgespreizt: linke Hand ${f.haende[0]} nach außen, rechte ${f.haende[1]} (vorher trafen sich die Hände vor der Brust)`);
     const l = await p.evaluate(() => __heimat.lampen());
     erwarte(l.n === 3 && !l.an && l.licht === 0 && l.augenweiss === "MeshToonMaterial", `tags: 3 Laternen aus, kein Türlicht, Augenweiß mit Licht (${JSON.stringify(l)})`); }

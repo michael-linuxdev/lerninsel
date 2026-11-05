@@ -586,13 +586,13 @@ function figur(look) {
     const lang = langesKleid ? 0.5 : 0;
     const profil = [new Vector2(0.01, -lang), new Vector2(0.52 + lang * 0.25, -lang), new Vector2(0.48 + lang * 0.2, 0.15 - lang * 0.5), new Vector2(0.34, 0.55), new Vector2(0.28, 0.8), new Vector2(0.01, 0.85)];
     koerper.add(setze(teil(new LatheGeometry(profil, 28), unten), 0, 0.56, 0));
-    koerper.add(setze(teil(new CapsuleGeometry(0.27, 0.36, 6, 20), oben), 0, 1.3, 0));
+    koerper.add(setze(teil(new CapsuleGeometry(0.27, 0.30, 6, 20), oben), 0, 1.28, 0));   // (Figuren 1) etwas kürzer, damit der Hals sichtbar wird
   } else {
     if (!hose && !shorts) {
       const profil = [new Vector2(0.01, 0), new Vector2(0.5, 0), new Vector2(0.46, 0.14), new Vector2(0.31, 0.5), new Vector2(0.01, 0.52)];
       koerper.add(setze(teil(new LatheGeometry(profil, 28), unten), 0, 0.56, 0));
     } else koerper.add(setze(teil(new CylinderGeometry(0.29, 0.31, 0.26, 20), unten), 0, 0.96, 0));
-    koerper.add(setze(teil(new CapsuleGeometry(0.27, 0.36, 6, 20), oben), 0, 1.3, 0));
+    koerper.add(setze(teil(new CapsuleGeometry(0.27, 0.30, 6, 20), oben), 0, 1.28, 0));   // (Figuren 1) etwas kürzer, damit der Hals sichtbar wird
   }
   // Beine
   const beine = [-0.15, 0.15].map(x => {
@@ -600,7 +600,10 @@ function figur(look) {
     if (!ohneBeine) {
       b.add(setze(teil(new CapsuleGeometry(0.1, 0.62, 4, 12), haut), 0, -0.42, 0));
       if (hose || shorts) { const h = teil(new CapsuleGeometry(0.12, shorts ? 0.18 : 0.66, 4, 12), unten); setze(h, 0, shorts ? -0.12 : -0.4, 0); b.add(h); }
-      b.add(setze(teil(kugel(0.14), schuhF, { dicke: 1.12 }), 0, -0.84, 0.06));
+      // (Figuren 1, 07.11.2026) Schuh statt Kugel: flache Kapsel nach vorn mit dunkler Sohle
+      const schuh = teil(new CapsuleGeometry(0.11, 0.16, 3, 10), schuhF, { dicke: 1.1 }); schuh.rotation.x = Math.PI / 2; schuh.scale.set(1, 1, 0.72); schuh.userData.art = "schuh";
+      b.add(setze(schuh, 0, -0.86, 0.09));
+      b.add(setze(teil(new BoxGeometry(0.2, 0.04, 0.32), "#6B5A7A", { umriss: false }), 0, -0.935, 0.1));
     }
     koerper.add(b); return b;
   });
@@ -608,21 +611,24 @@ function figur(look) {
   // ohne Schulter aus der Brust und die Hände waren Fäustlinge
   const arme = [-1, 1].map(s => {
     const a = new Group(); a.position.set(0.36 * s, 1.52, 0);
-    const schulter = teil(kugel(0.115), oben, { dicke: 1.08 }); schulter.userData.art = "schulter"; a.add(schulter);
+    const schulter = teil(kugel(0.115, 12, 8), oben, { dicke: 1.08 }); schulter.userData.art = "schulter"; a.add(schulter);
     a.add(setze(teil(new CapsuleGeometry(0.085, 0.5, 4, 12), oben), 0, -0.32, 0));
-    const hand = teil(kugel(0.1), haut, { dicke: 1.12 }); hand.userData.art = "hand"; setze(hand, 0, -0.66, 0); a.add(hand);
-    const daumen = teil(kugel(0.045), haut, { dicke: 1.1 }); daumen.userData.art = "daumen"; setze(daumen, -0.075 * s, 0.03, 0.06); hand.add(daumen);
+    const hand = teil(kugel(0.1, 12, 8), haut, { dicke: 1.12 }); hand.userData.art = "hand"; setze(hand, 0, -0.66, 0); a.add(hand);
+    const daumen = teil(kugel(0.045, 8, 6), haut, { dicke: 1.1 }); daumen.userData.art = "daumen"; setze(daumen, -0.075 * s, 0.03, 0.06); hand.add(daumen);
     a.rotation.z = -ARM_WINKEL * s; koerper.add(a); return a;
   });
   // Kopf und Frisur
   // (03.11.2026) Proportionen wie die freigegebene 2D-Figur: Kopf etwa ein Drittel kleiner, längere Beine und Arme, Hände an der Hüfte
-  const kopf = new Group(); kopf.position.y = 2.02; kopf.scale.setScalar(0.72); koerper.add(kopf);
-  koerper.add(setze(teil(new CylinderGeometry(0.1, 0.11, 0.2, 14), haut), 0, 1.66, 0));   // Hals   // (02.11.2026) wieder normale Kopfgröße statt Kindchenschema
-  kopf.add(teil(kugel(0.58), haut, { dicke: 1.04 }));
-  const kappe = teil(new SphereGeometry(0.62, 28, 20, 0, Math.PI * 2, 0, Math.PI * 0.55), haarF, { dicke: 1.04 });
+  const kopf = new Group(); kopf.position.y = 2.18; kopf.scale.setScalar(0.72); koerper.add(kopf);   // (Figuren 1) 0,16 höher: Hals sichtbar
+  koerper.add(setze(teil(new CylinderGeometry(0.095, 0.11, 0.38, 14), haut), 0, 1.82, 0));   // Hals   // (02.11.2026) wieder normale Kopfgröße statt Kindchenschema
+  const schaedel = teil(kugel(0.58), haut, { dicke: 1.04 }); schaedel.scale.set(1, 1.04, 0.98); kopf.add(schaedel);   // leicht oval: ein Hauch Kinn
+  // Ohren und Nase (Figuren 1): klein, Hautfarbe – lassen das Gesicht als Gesicht lesen
+  [-1, 1].forEach(s => { const o = teil(kugel(0.1, 10, 6), haut, { dicke: 1.08 }); o.userData.art = "ohr"; o.scale.set(0.6, 1, 0.8); kopf.add(setze(o, 0.56 * s, -0.02, 0.02)); });
+  { const n = teil(kugel(0.05, 8, 6), haut, { umriss: false }); n.userData.art = "nase"; kopf.add(setze(n, 0, -0.05, 0.57)); }
+  const kappe = teil(new SphereGeometry(0.62, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.55), haarF, { dicke: 1.04 });
   kappe.position.set(0, 0.04, -0.04); kappe.rotation.x = -0.35; kopf.add(kappe);
   const haarteil = (geo, x, y, z, sx = 1, sy = 1, sz = 1) => { const m = teil(geo, haarF, { dicke: 1.06 }); m.scale.set(sx, sy, sz); kopf.add(setze(m, x, y, z)); return m; };
-  if (LANG.includes(haarId)) { haarteil(kugel(0.6), 0, -0.35, -0.22, 1.05, 1.1, 0.75); if (haarId === "locken") haarteil(kugel(0.66), 0, 0.05, -0.05, 1.08, 1, 1.05); }
+  if (LANG.includes(haarId)) { haarteil(kugel(0.6, 16, 10), 0, -0.35, -0.22, 1.05, 1.1, 0.75); if (haarId === "locken") haarteil(kugel(0.66, 16, 10), 0, 0.05, -0.05, 1.08, 1, 1.05); }
   else if (haarId === "zoepfe") [-1, 1].forEach(s => { haarteil(new CapsuleGeometry(0.12, 0.6, 4, 12), 0.55 * s, -0.55, -0.1); haarteil(kugel(0.08), 0.55 * s, -0.95, -0.1); });
   else if (haarId === "seitenzopf") haarteil(new CapsuleGeometry(0.14, 0.55, 4, 12), 0.58, -0.45, -0.15);
   else if (haarId === "pferd") haarteil(new CapsuleGeometry(0.14, 0.6, 4, 12), 0, -0.2, -0.68).rotation.x = 0.5;
@@ -638,12 +644,21 @@ function figur(look) {
   if ((haarId === "wuschel" || haarId === "kurzlocken") && !bedeckt) { const r = haarId === "wuschel" ? 0.22 : 0.17; [[-0.36, 0.4], [-0.12, 0.55], [0.12, 0.55], [0.36, 0.4], [0, 0.42]].forEach(([x, y]) => haarteil(kugel(r), x, y, 0.2)); }
   if (haarId === "undercut") haarteil(kugel(0.5), 0, 0.42, 0.05, 1, 0.55, 1);
   // Pony (UX-Paket 2): Frisuren mit Pony in 2D bekommen auch in 3D eine runde Stirnfranse – vorher saß das Haar wie ein glatter Helm (auch unter Hüten sichtbar)
-  if (PONY.includes(haarId)) { const p = haarteil(kugel(0.5), 0, 0.33, 0.2, 1.1, 0.42, 0.9); p.userData.art = "pony"; }
+  if (PONY.includes(haarId)) {
+    const p = haarteil(kugel(0.5, 14, 8), 0, 0.33, 0.2, 1.1, 0.42, 0.9); p.userData.art = "pony";
+    // (Figuren 1) Fransen: vier Strähnen über der Stirn, die mittleren etwas tiefer – vorher war der Pony ein glattes Band
+    [[-0.36, 0.3], [-0.12, 0.26], [0.12, 0.26], [0.36, 0.3]].forEach(([x, y]) => { const f = haarteil(kugel(0.16, 10, 6), x, y, 0.4, 1, 1.35, 0.75); f.userData.art = "straehne"; });
+  }
+  // (Figuren 1) Lange Haare rahmen das Gesicht: zwei Strähnen vor den Schultern, bei Wellen mit Locke am Ende
+  if (LANG.includes(haarId) || haarId === "schulterlang") [-1, 1].forEach(s => {
+    const st = haarteil(new CapsuleGeometry(0.105, haarId === "schulterlang" ? 0.4 : 0.6, 3, 10), 0.52 * s, haarId === "schulterlang" ? -0.28 : -0.38, 0.1); st.rotation.z = -0.06 * s; st.userData.art = "straehne";
+    if (haarId === "wellen" || haarId === "locken") { const l = haarteil(kugel(0.14, 10, 6), 0.58 * s, -0.8, 0.14); l.userData.art = "straehne"; }
+  });
   // Gesicht
   // Augen wie die 2D-Figur (03.11.2026): weißes Auge mit brauner Iris, dunkler Pupille und Glanzpunkt – nicht übergroß
   [-1, 1].forEach(s => {
-    const w = new Mesh(kugel(0.085, 16, 12), WEISS_AUGE); w.scale.set(1.15, 0.8, 0.45); setze(w, 0.2 * s, 0.02, 0.52); kopf.add(w);
-    const iris = new Mesh(kugel(0.052, 14, 10), IRIS); iris.scale.set(1, 1, 0.5); setze(iris, 0.2 * s, 0.015, 0.555); kopf.add(iris);
+    const w = new Mesh(kugel(0.085, 12, 8), WEISS_AUGE); w.scale.set(1.15, 0.8, 0.45); setze(w, 0.2 * s, 0.02, 0.52); kopf.add(w);
+    const iris = new Mesh(kugel(0.052, 10, 7), IRIS); iris.scale.set(1, 1, 0.5); setze(iris, 0.2 * s, 0.015, 0.555); kopf.add(iris);
     const pupille = new Mesh(kugel(0.027, 10, 8), AUGE); pupille.scale.set(1, 1, 0.5); setze(pupille, 0.2 * s, 0.015, 0.575); kopf.add(pupille);
     kopf.add(setze(new Mesh(kugel(0.016, 6, 5), new MeshBasicMaterial({ color: "#ffffff" })), 0.2 * s - 0.02, 0.04, 0.585));
   });
@@ -655,15 +670,18 @@ function figur(look) {
       const b = new Mesh(new BoxGeometry(0.11, 0.014, 0.02), AUGE); b.position.set(s * 0.2, 0.14, 0.53); b.rotation.z = -s * 0.12; kopf.add(b);
     } else if (form === "m") {
       const b = new Mesh(new BoxGeometry(0.13, 0.03, 0.025), AUGE); b.position.set(s * 0.2, 0.13, 0.53); b.rotation.z = s * 0.06; kopf.add(b);
+    } else {   // (Figuren 1) auch „keine Angabe“ bekommt Brauen
+      const b = new Mesh(new BoxGeometry(0.11, 0.02, 0.02), AUGE); b.position.set(s * 0.2, 0.135, 0.53); kopf.add(b);
     }
   });
-  if (form === "m") koerper.children.forEach(c => { if (c.geometry && c.geometry.type === "CapsuleGeometry" && Math.abs(c.position.y - 1.3) < 0.01) c.scale.set(1.1, 1, 1.05); });
+  if (form === "m") koerper.children.forEach(c => { if (c.geometry && c.geometry.type === "CapsuleGeometry" && Math.abs(c.position.y - 1.28) < 0.01) c.scale.set(1.1, 1, 1.05); });
   // (01.11.2026) keine rosa Wangen mehr
   const mund = new Mesh(new TorusGeometry(0.07, 0.018, 6, 12, Math.PI), AUGE); mund.rotation.z = Math.PI; setze(mund, 0, -0.15, 0.55); kopf.add(mund);
   // (07.11.2026) gemeinsames Modul extras3d.js: alle Extras des Kleiderschranks, Dinge in der Hand werden gehalten
-  extras3d(look, { kopf, koerper, arme, hand: -0.66, gross: 1.5, hals: 1.6, ruecken: 1.5, umhang: 1.05 }, { teil, kugel, setze, mat, verlauf });
+  extras3d(look, { kopf, koerper, arme, hand: -0.66, gross: 1.5, hals: 1.76, ruecken: 1.5, umhang: 1.05 }, { teil, kugel, setze, mat, verlauf });
   // Zählung der neuen Teile vor dem Verschmelzen (starr/verschmelzeLokal ersetzt die Einzelteile) – für den Test-Haken __heimat.figurInfo()
-  const info = { schulter: 0, daumen: 0, pony: 0 }; f.traverse(o => { if (o.userData && o.userData.art in info) info[o.userData.art]++; });
+  const info = { schulter: 0, daumen: 0, pony: 0, ohr: 0, nase: 0, schuh: 0, straehne: 0 }; f.traverse(o => { if (o.userData && o.userData.art in info) info[o.userData.art]++; });
+  info.halsFrei = Math.round(((kopf.position.y - 0.58 * 0.72 * 1.04) - (1.28 + 0.15 + 0.27)) * 100) / 100;   // Luft zwischen Rumpfoberkante und Kopfunterkante
   f.userData = { koerper, beine, arme, kopf, info };
   return f;
 }
@@ -997,16 +1015,19 @@ antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe"
   g.add(setze(teil(new BoxGeometry(1.2, 0.1, 1.2), "#B98A55"), 0, 0.78, 0));
   for (let a = 0; a < 4; a++) for (let c = 0; c < 4; c++) g.add(setze(new Mesh(new BoxGeometry(0.25, 0.02, 0.25), mat((a + c) % 2 ? "#5C3A21" : "#F3E3C3")), -0.375 + a * 0.25, 0.84, -0.375 + c * 0.25));
   [[-0.25, 0.25, "#FFFFFF"], [0.25, -0.25, "#2E2240"]].forEach(([px, pz, f]) => { g.add(setze(teil(new CylinderGeometry(0.06, 0.09, 0.22, 10), f), px, 0.96, pz)); g.add(setze(teil(kugel(0.07, 10, 8), f), px, 1.1, pz)); });
-  // Tilda, die Schildkröte
+  // Tilda, die Schildkröte – aufrecht wie in 2D (Figuren 2, 07.11.2026): Panzer auf dem Rücken, Bauchplatte, Arme, Füße, Locken und Schleife
   const t = new Group(); t.position.set(0.95, 0, 0.2); t.rotation.y = -1.2; g.add(t);
-  const panzer = teil(new SphereGeometry(0.42, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), "#4FAF62"); panzer.scale.set(1, 0.85, 1.15); setze(panzer, 0, 0.18, 0); t.add(panzer);
-  t.add(setze(teil(new CylinderGeometry(0.43, 0.43, 0.08, 18), "#E8D9A0"), 0, 0.17, 0));
-  const kopf = new Group(); kopf.position.set(0, 0.32, 0.5); t.add(kopf); kopf.add(teil(kugel(0.17, 14, 10), "#8FD06A")); augen(kopf, 0.07, 0.04, 0.14, 0.035);
+  t.add(setze(teil(new CapsuleGeometry(0.2, 0.24, 6, 14), "#8FD06A"), 0, 0.44, 0));
+  const bauch = teil(kugel(0.17, 14, 10), "#E8D9A0", { dicke: 1.05 }); bauch.scale.set(1, 1.3, 0.55); setze(bauch, 0, 0.42, 0.15); t.add(bauch);
+  const panzer = teil(new SphereGeometry(0.34, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), "#4FAF62"); panzer.rotation.x = -Math.PI / 2; panzer.scale.set(1, 0.7, 1.3); setze(panzer, 0, 0.46, -0.1); t.add(panzer);
+  const rand = teil(new TorusGeometry(0.33, 0.045, 6, 14), "#E8D9A0", { dicke: 1.08 }); rand.scale.set(1, 1.3, 1); setze(rand, 0, 0.46, -0.08); t.add(rand);
+  [-1, 1].forEach(s2 => { const arm = teil(new CapsuleGeometry(0.06, 0.18, 4, 10), "#8FD06A"); arm.rotation.z = s2 * 0.5; setze(arm, 0.25 * s2, 0.42, 0.06); t.add(arm); });
+  [-1, 1].forEach(s2 => { const fuss = teil(kugel(0.1, 10, 8), "#8FD06A"); fuss.scale.set(1, 0.6, 1.3); setze(fuss, 0.13 * s2, 0.06, 0.08); t.add(fuss); });
+  const kopf = new Group(); kopf.position.set(0, 0.86, 0.04); t.add(kopf); kopf.add(teil(kugel(0.17, 14, 10), "#8FD06A")); augen(kopf, 0.07, 0.04, 0.14, 0.035);
   // Frisur (02.11.2026): braune Locken mit lila Schleife wie in 2D
   [[0, 0.15, -0.02, 0.09], [-0.08, 0.13, 0.03, 0.07], [0.08, 0.13, 0.03, 0.07], [-0.11, 0.07, -0.05, 0.07], [0.11, 0.07, -0.05, 0.07], [0, 0.11, -0.1, 0.08]]
     .forEach(([hx, hy, hz, hr]) => kopf.add(setze(teil(kugel(hr, 10, 8), "#9A5530", { dicke: 1.08 }), hx, hy, hz)));
   [-1, 1].forEach(s2 => { const sl = teil(new ConeGeometry(0.04, 0.08, 8), "#7B55B8", { dicke: 1.1 }); sl.rotation.z = s2 * Math.PI / 2; kopf.add(setze(sl, 0.09 + s2 * 0.05, 0.22, 0)); });
-  [[-0.3, 0.35], [0.3, 0.35], [-0.3, -0.35], [0.3, -0.35]].forEach(([fx, fz]) => t.add(setze(teil(kugel(0.1, 10, 8), "#8FD06A"), fx, 0.07, fz)));
   antippbar(g, () => zeigeAntwort(K.antwort("schach")), ...K.aktionFuer("schach")); starr.push([g]);
 }
 
@@ -1015,14 +1036,18 @@ let tanzBis = 0;
 const paula = (() => {
   const g = new Group(), k = new Group(); g.add(k);
   const leib = teil(kugel(0.36), "#4CC27A"); leib.scale.set(1, 1.2, 0.95); setze(leib, 0, 0.6, 0); k.add(leib);
-  [-1, 1].forEach(s => { const f = teil(kugel(0.22), "#2E9C5A"); f.scale.set(0.45, 1.1, 0.9); setze(f, 0.36 * s, 0.64, -0.02); f.rotation.z = -0.25 * s; k.add(f); });
-  const schwanz = teil(new BoxGeometry(0.2, 0.5, 0.06), "#3A8FD0"); setze(schwanz, 0, 0.2, -0.3); schwanz.rotation.x = 0.5; k.add(schwanz);
+  [-1, 1].forEach(s => { const f = teil(kugel(0.22), "#2E9C5A"); f.scale.set(0.45, 1.1, 0.9); setze(f, 0.36 * s, 0.64, -0.02); f.rotation.z = -0.25 * s; k.add(f);
+    [-0.06, 0.06].forEach(dx => { const sp = teil(new ConeGeometry(0.05, 0.16, 8), "#2E9C5A"); sp.rotation.z = Math.PI; setze(sp, 0.4 * s + dx, 0.36, 0.0); k.add(sp); }); });   // (Figuren 3) Federspitzen
+  // (Figuren 3) drei gefächerte Schwanzfedern statt eines Bretts
+  [-0.35, 0, 0.35].forEach(w => { const f = teil(new BoxGeometry(0.11, 0.5, 0.05), "#3A8FD0"); setze(f, Math.sin(w) * 0.16, 0.2 - Math.abs(w) * 0.06, -0.3); f.rotation.x = 0.5; f.rotation.z = w; k.add(f); });
   [-1, 1].forEach(s => k.add(setze(teil(kugel(0.07, 8, 6), "#F2A33A"), 0.12 * s, 0.12, 0.05)));
   const kopf = new Group(); kopf.position.y = 1.12; kopf.scale.setScalar(1.15); k.add(kopf);
   kopf.add(teil(kugel(0.34), "#FF6B5C")); const ges = teil(kugel(0.24), "#FFE7DA", { umriss: false }); ges.scale.set(1.1, 0.95, 0.5); setze(ges, 0, -0.02, 0.2); kopf.add(ges);
   augen(kopf, 0.11, 0.05, 0.31, 0.05);
-  const schnabel = teil(new ConeGeometry(0.065, 0.16, 10), "#FFC83D"); schnabel.rotation.x = Math.PI / 2 + 0.6; setze(schnabel, 0, -0.1, 0.36); kopf.add(schnabel);
-  [-0.12, 0, 0.12].forEach((x, i) => { const f = teil(new ConeGeometry(0.06, 0.2, 8), "#FF5C5C"); setze(f, x, 0.36, -0.04); f.rotation.z = -x * 2; kopf.add(f); });   // Federschopf
+  // (Figuren 3) Papageienschnabel: groß und nach unten gebogen, mit kleinem Unterschnabel
+  const schnabel = teil(new ConeGeometry(0.1, 0.26, 10), "#FFC83D"); schnabel.rotation.x = Math.PI / 2 + 0.95; setze(schnabel, 0, -0.08, 0.36); kopf.add(schnabel);
+  const unter = teil(new ConeGeometry(0.055, 0.1, 8), "#E8A62E"); unter.rotation.x = Math.PI / 2 + 0.3; setze(unter, 0, -0.2, 0.3); kopf.add(unter);
+  [-0.15, -0.05, 0.05, 0.15].forEach((x) => { const f = teil(new ConeGeometry(0.06, 0.26, 8), "#FF5C5C"); setze(f, x, 0.4, -0.04); f.rotation.z = -x * 2.2; kopf.add(f); });   // Federkamm
   g.userData.koerper = k; return g;
 })();
 {

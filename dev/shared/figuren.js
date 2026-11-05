@@ -1,5 +1,6 @@
 // Die Figuren der App als 2D-Zeichnungen (SVG), Stil A „Insel bunt“ (neu gezeichnet am 01.11.2026, Wahl des Auftraggebers):
 // Robo Pixel, Eule Ella (braun, ohne Federohren), Fipsi, Biber Benno, Bärin Bruni, Papagei Paula, Schildkröte Tilda (mit Frisur und lila Schleife, 02.11.2026) – ohne rosa Wangen, normale Augen statt Kulleraugen.
+// Figuren 2/3 (07.11.2026): Tilda aufrecht mit Panzer auf dem Rücken und Bauchplatte (wie in 3D); Paula mit Federkamm, gebogenem Schnabel, Flügeln und Schwanzfedern.
 // Figuren.<name>(klasse) → SVG mit class=klasse (für Sprechblasen, Türen, Seiten). FigurenNeu.svg(name, stil, ausdruck) für Ausdrücke
 // ("froh" | "staunt" | "denkt") und die Stil-Vorschau (stil "a" = Insel bunt, "b" = weich).
 (function () {
@@ -108,25 +109,31 @@
       ${gesicht(s, 76, 124, 74, 10, 108, a)}<ellipse cx="100" cy="96" rx="10" ry="7" fill="${D}"/>`); },
 
     papagei(stil, a) { const s = bau(stil); return svg(s, `
-      <path d="M86 186 L70 216 L92 200 L100 218 L108 200 L130 216 L114 186 Z" fill="${s.f("#3A8FD0")}"${s.k()}/>
-      <ellipse cx="100" cy="150" rx="46" ry="52" fill="${s.f("#4CC27A")}"${s.k()}/>
-      <ellipse cx="62" cy="152" rx="18" ry="40" fill="${s.f("#2E9C5A")}"${s.k()} transform="rotate(14 62 152)"/><ellipse cx="138" cy="152" rx="18" ry="40" fill="${s.f("#2E9C5A")}"${s.k()} transform="rotate(-14 138 152)"/>
-      <path d="M62 148 l-6 22 M138 148 l6 22" stroke="#FFC83D" stroke-width="5" stroke-linecap="round"/>
-      <path d="M80 40 Q86 10 100 22 Q112 8 120 40 Z" fill="${s.f("#FF5C5C")}"${s.k()}/>
-      <circle cx="100" cy="80" r="50" fill="${s.f("#FF6B5C")}"${s.k()}/>
-      <ellipse cx="100" cy="92" rx="34" ry="28" fill="${s.f("#FFE7DA")}"/>
-      ${gesicht(s, 80, 120, 76, 11, 0, a, { ohneMund: true })}
-      <path d="M86 92 Q100 82 116 92 Q122 104 112 122 Q108 108 100 106 Q92 104 86 100 Z" fill="${s.f("#FFC83D")}"${s.k(' stroke-width="3.5"')}/>
-      <path d="M90 102 Q100 112 108 108 Q104 118 96 116 Q90 112 90 102 Z" fill="${s.f("#E8A62E")}"${s.k(' stroke-width="3"')}/>
-      <ellipse cx="86" cy="204" rx="10" ry="5" fill="#8E5C35"/><ellipse cx="114" cy="204" rx="10" ry="5" fill="#8E5C35"/>`); },
+      <path d="M84 184 L66 222 L90 204 L100 226 L110 204 L134 222 L116 184 Z" fill="${s.f("#3A8FD0")}"${s.k()}/>
+      <path d="M92 186 L92 214 M108 186 L108 214" stroke="#2A6FA8" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="100" cy="148" rx="44" ry="52" fill="${s.f("#4CC27A")}"${s.k()}/>
+      <path d="M62 120 Q36 150 46 192 Q58 180 66 186 Q68 172 76 178 Q80 150 70 124 Z" fill="${s.f("#2E9C5A")}"${s.k()}/>
+      <path d="M138 120 Q164 150 154 192 Q142 180 134 186 Q132 172 124 178 Q120 150 130 124 Z" fill="${s.f("#2E9C5A")}"${s.k()}/>
+      <path d="M58 146 Q52 160 56 174 M142 146 Q148 160 144 174" fill="none" stroke="#FFC83D" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="100" cy="158" rx="22" ry="30" fill="${s.f("#FFE27A")}" opacity=".9"/>
+      <path d="M84 44 Q74 22 92 20 Q86 4 104 10 Q112 -4 120 14 Q136 6 134 28 Q146 26 138 46 Z" fill="${s.f("#FF5C5C")}"${s.k()}/>
+      <path d="M92 20 Q96 30 100 38 M104 10 Q104 24 104 38 M120 14 Q114 28 110 40" fill="none" stroke="#C93A3A" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="100" cy="82" rx="46" ry="44" fill="${s.f("#FF6B5C")}"${s.k()}/>
+      <ellipse cx="100" cy="90" rx="30" ry="26" fill="${s.f("#FFE7DA")}"/>
+      ${gesicht(s, 82, 118, 76, 10, 0, a, { ohneMund: true })}
+      <path d="M82 92 Q100 80 118 92 Q126 108 116 128 Q110 118 104 116 Q96 112 88 104 Z" fill="${s.f("#FFC83D")}"${s.k(' stroke-width="3.5"')}/>
+      <path d="M90 110 Q98 118 106 114 Q104 124 96 122 Q90 118 90 110 Z" fill="${s.f("#E8A62E")}"${s.k(' stroke-width="3"')}/>
+      <ellipse cx="86" cy="206" rx="11" ry="5" fill="#8E5C35"/><ellipse cx="114" cy="206" rx="11" ry="5" fill="#8E5C35"/>`); },
 
     tilda(stil, a) { const s = bau(stil); return svg(s, `
-      <ellipse cx="54" cy="196" rx="16" ry="10" fill="${s.f("#7FCB6A")}"${s.k()}/><ellipse cx="146" cy="196" rx="16" ry="10" fill="${s.f("#7FCB6A")}"${s.k()}/>
-      <rect x="82" y="84" width="36" height="30" rx="14" fill="${s.f("#8FD67A")}"${s.k()}/>
-      <path d="M30 178 Q30 104 100 100 Q170 104 170 178 Z" fill="${s.f("#4FAF62")}"${s.k()}/>
-      <path d="M100 112 L124 126 L124 152 L100 166 L76 152 L76 126 Z" fill="${s.f("#7FCB6A")}" opacity=".9"/>
-      <path d="M48 160 L66 148 L66 128 M152 160 L134 148 L134 128" fill="none" stroke="#2E7D45" stroke-width="3.5" stroke-linecap="round"/>
-      <rect x="26" y="172" width="148" height="16" rx="8" fill="${s.f("#E8D9A0")}"${s.k()}/>
+      <ellipse cx="100" cy="128" rx="60" ry="58" fill="${s.f("#4FAF62")}"${s.k()}/>
+      <path d="M100 86 L128 102 L128 134 L100 150 L72 134 L72 102 Z" fill="${s.f("#7FCB6A")}" opacity=".85"/>
+      <path d="M58 112 L72 102 M58 146 L72 134 M142 112 L128 102 M142 146 L128 134 M86 176 L100 150 M114 176 L100 150" fill="none" stroke="#2E7D45" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="52" cy="150" rx="15" ry="11" fill="${s.f("#8FD67A")}"${s.k()} transform="rotate(-28 52 150)"/><ellipse cx="148" cy="150" rx="15" ry="11" fill="${s.f("#8FD67A")}"${s.k()} transform="rotate(28 148 150)"/>
+      <ellipse cx="100" cy="146" rx="38" ry="44" fill="${s.f("#E8D9A0")}"${s.k()}/>
+      <path d="M78 128 L122 128 M74 146 L126 146 M80 164 L120 164 M100 104 L100 188" fill="none" stroke="#C9B87A" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="74" cy="200" rx="17" ry="10" fill="${s.f("#8FD67A")}"${s.k()}/><ellipse cx="126" cy="200" rx="17" ry="10" fill="${s.f("#8FD67A")}"${s.k()}/>
+      <rect x="86" y="86" width="28" height="22" rx="11" fill="${s.f("#8FD67A")}"${s.k()}/>
       <ellipse cx="100" cy="62" rx="44" ry="40" fill="${s.f("#8FD67A")}"${s.k()}/>
       ${gesicht(s, 84, 116, 56, 10, 80, a)}
       <path d="M60 56 Q46 40 58 26 Q62 8 82 12 Q92 0 106 8 Q122 0 132 14 Q152 16 146 36 Q156 48 142 58 Q138 42 124 40 Q118 30 106 36 Q96 28 86 36 Q72 34 68 46 Q62 48 60 56 Z" fill="${s.f("#9A5530")}"${s.k(' stroke-width="3.5"')}/>

@@ -27,10 +27,13 @@ holen (Fragerunde), dann:
 **UX-Pakete 1–5 (07.11., Details in `docs/PLAN.md`, „Stand 07.11.2026 (UX-Pakete 1–5)“):** Insel auf dem Handy ohne Überdeckung; 🔊 liest die Startseite vor; 3D-Figur mit
 Schultern, abgespreizten Armen, Daumen und Pony, nachts Laternen und Türlicht; Startseite hoch/Handy kompakter, Matheweg und Deutsch beginnen ohne Scrollen; Insel-Einstellungen
 hinter ⚙️, Steuerungs-Hinweis mit bewegtem Zeichen; Album-Reiter, Wochenbericht, Nest bei der Ei-Auswahl, Zimmertür. Neue Tests `falz`, `hud`, `feinschliff`.
+**Figuren 1–4 (07.11., PLAN „Stand 07.11.2026 (Figuren 1–4)“):** 3D-Kinderfigur mit Hals, Ohren, Nase, Fransen, Seitensträhnen und Schuhen; Tilda in 2D und 3D aufrecht mit
+Panzer auf dem Rücken; Paula mit Federkamm, Papageienschnabel, Flügeln und Schwanzfedern; 2D-Kinderfigur ohne Knicklinien.
 **Im iPad testen (in /dev/test):**
 1. Startseite: 🔊 oben antippen – liest sie Name, „Heute für dich“ und Spielzeit vor? Hochformat: stehen Meine Ecke, Mein Tier und Spielzeit in einer Zeile?
 2. Insel: Stehen die Arme der Figur ab, gibt es Schultern und Pony? Oben rechts ⚙️ antippen – Blatt mit Welt/Grafik/Laufen/Kamera. Abends: Laternen und Licht an der Haustür.
 3. Im Haus: die Tür rechts antippen – geht es nach draußen? Matheweg: ist die erste Station ohne Scrollen da? Deutsch: beginnt die Werkstatt ohne Scrollen?
+4. Figuren: Gesicht und Haare der 3D-Figur aus der Nähe (Pony, Strähnen, Ohren, Hals, Schuhe); Tilda am Schachtisch und auf der Schach-Seite; Paula auf der Bühne und im Atelier; Kleiderschrank-Figur ohne Linien an Ellbogen und Knien.
 **Review nach der Sitzung (07.11., Details in `docs/PLAN.md`, „Stand 07.11.2026 (Review)“):** behoben sind ein Safari-Fehler (Regex-Lookbehind in `hilfe-ru.js`
 ließ auf iPadOS 16.0–16.3 alle russischen Mathe-Zeilen verschwinden; neue Prüfung in `tests/offline.js`), die Leuchtturm-Wartezeit nach dem Lösen (Reiterwechsel,
 neue Runde), Können/Erfahrung nur beim ersten Lösen eines Licht-Rätsels, die Sprechblasen-Zipfel mit Kontur in Englisch/Sorbisch/Medien/Sachkunde (Test `stil`),

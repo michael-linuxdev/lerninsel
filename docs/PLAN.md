@@ -2302,3 +2302,17 @@ Zimmer), dann fünf Pakete in der empfohlenen Reihenfolge, je mit Test und eigen
 - **Offen / Ideen aus der Bestandsaufnahme:** Startkamera etwas höher und weiter (Bruni und Wegweiser nicht angeschnitten); Fensterkreuze und Türdetails am Haus; Konturen an den
   Baumkronen; Vorschul-Startseite mit größeren Symbolen; iPad-Test aller fünf Pakete.
 
+## Stand 07.11.2026 (Figuren 1–4) – Figuren nach der Bestandsaufnahme
+Auftrag („Was sagst du zu den Figuren?“ → „Letsgo“): die vier empfohlenen Punkte, ein Commit.
+- **Figuren 1 – 3D-Kinderfigur:** sichtbarer Hals (Rumpf kürzer, Kopf 0,16 höher, längerer Hals), leicht ovaler Schädel, Ohren, Nase, Brauen auch für „keine Angabe“,
+  Pony als vier Fransen über der Stirn, bei langen Haaren zwei Strähnen vor den Schultern (Wellen/Locken mit Locke am Ende), Schuhe als flache Kapsel mit dunkler Sohle
+  statt Kugeln. Kleine Teile mit weniger Segmenten, damit „Wald groß, Hügel“ unter 150 000 Dreiecken bleibt. `figurInfo()` zählt `ohr`, `nase`, `schuh`, `straehne` und
+  misst `halsFrei`; `tests/extras3d.js` prüft es. Extras: `hals: 1.76`.
+- **Figuren 2 – Tilda:** in 2D (`shared/figuren.js`) jetzt eine aufrechte Schildkröte mit Panzer auf dem Rücken, Bauchplatte, Armen und Füßen; Kopf, Locken und Schleife wie
+  bisher. In 3D (`heimat.js`, Schachtisch) ebenfalls aufrecht: Leib, Bauchplatte, Panzer-Kuppel mit Rand, Arme, Füße, Kopf mit Locken und Schleife.
+- **Figuren 3 – Paula:** 2D mit Federkamm, großem gebogenem Schnabel mit Unterschnabel, Flügeln mit Federspitzen, drei Schwanzfedern, heller Brust; 3D mit vier Kammfedern,
+  gebogenem Schnabel, Unterschnabel, Flügelspitzen und gefächerten Schwanzfedern.
+- **Figuren 4 – 2D-Kinderfigur** (`spiele/anziehen/kind.js`): keine Ellbogen-, Knie- und Schrittlinien mehr, Finger- und Zehenlinien zarter. Ein froher Ausdruck war schon
+  wählbar (Kleiderschrank, Reiter „Ich“: Lächeln, Lachen, Zwinkern …), deshalb kein neuer Standard.
+- **Offen:** `figur3d.js` (Minispiele, ausgeblendet) bleibt die alte Figur; Russisch; iPad-Test der Figuren.
+
