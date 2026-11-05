@@ -52,6 +52,21 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   await p.evaluate(() => { if (window.__szene && __szene.aktuell()) __szene.abbrechen(); }); await p.waitForTimeout(300);
   await p.evaluate(() => { __heimat.ich.rotation.y = 0; __heimat.blick(-0.3, 0.12, 4.6); }); await p.waitForTimeout(900);
   if (BILDER) await p.screenshot({ path: `${BILDER}/extras3d-kopf.png` });
+  // UX-Paket 2 (07.11.2026): Schultern, abgespreizte Arme (Hände außen, nicht vor der Brust), Daumen, Pony bei „lang“; nachts Laternen, Türlicht, kein leuchtendes Augenweiß
+  await insel({});
+  await p.evaluate(() => { if (window.__szene && __szene.aktuell()) __szene.abbrechen(); }); await p.waitForTimeout(400);
+  { const f = await p.evaluate(() => __heimat.figurInfo());
+    erwarte(f.schulter === 2 && f.daumen === 2 && f.pony === 1, `Figur: 2 Schultern, 2 Daumen, Pony bei „Lange Haare“ (${JSON.stringify(f)})`);
+    erwarte(f.haende[0] < -0.1 && f.haende[1] > 0.1, `Arme abgespreizt: linke Hand ${f.haende[0]} nach außen, rechte ${f.haende[1]} (vorher trafen sich die Hände vor der Brust)`);
+    const l = await p.evaluate(() => __heimat.lampen());
+    erwarte(l.n === 3 && !l.an && l.licht === 0 && l.augenweiss === "MeshToonMaterial", `tags: 3 Laternen aus, kein Türlicht, Augenweiß mit Licht (${JSON.stringify(l)})`); }
+  await p.evaluate(() => { __heimat.ich.rotation.y = 0; __heimat.blick(0.15, 0.12, 4.6); }); await p.waitForTimeout(900);
+  if (BILDER) await p.screenshot({ path: `${BILDER}/extras3d-figur-neu.png` });
+  await p.goto(BASIS + "spiele/welt3d/heimat.html?stunde=21", { waitUntil: "domcontentloaded", timeout: 60000 }); await p.waitForFunction(() => window.__heimat && __heimat.ich, null, { timeout: 60000 }); await p.waitForTimeout(800);
+  await p.evaluate(() => { if (window.__szene && __szene.aktuell()) __szene.abbrechen(); }); await p.waitForTimeout(400);
+  { const l = await p.evaluate(() => __heimat.lampen());
+    erwarte(l.an && l.licht > 0 && l.n === 3, `nachts: Laternen an, warmes Licht vor der Haustür (${l.licht})`); }
+  if (BILDER) await p.screenshot({ path: `${BILDER}/extras3d-nacht.png` });
   // Stufe „einfach“
   await insel({ haarreif: { farbe: "#C2337A" }, tasche: { farbe: "#C2337A" }, fussball: { farbe: "#fff" } }, "einfach");
   erwarte(await p.evaluate(() => __heimat.info().einfach && __heimat.ecken() > 0), "Stufe „einfach“: Figur mit Haarreif, Tasche und Ball ohne Fehler");

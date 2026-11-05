@@ -7,7 +7,7 @@ import {
   PCFShadowMap, Group, Mesh, MeshToonMaterial, MeshBasicMaterial, MeshLambertMaterial, BackSide, DoubleSide,
   CylinderGeometry, SphereGeometry, ConeGeometry, BoxGeometry, CapsuleGeometry, PlaneGeometry,
   LatheGeometry, ExtrudeGeometry, Shape, Vector2, Vector3, DataTexture, RedFormat, NearestFilter, InstancedMesh,
-  Object3D, Matrix4, Raycaster, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, BufferAttribute, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
+  Object3D, Matrix4, Raycaster, PointLight, CircleGeometry, TorusGeometry, MathUtils, BufferGeometry, BufferAttribute, Float32BufferAttribute, Points, PointsMaterial, LineSegments, LineBasicMaterial, CanvasTexture, Sprite, SpriteMaterial
 } from "../three/three.module.js";
 import { S, SPIELE, istFrei, baumStufe, messe } from "./gemeinsam.js";
 import { extras3d, EXTRAS_3D } from "./extras3d.js";
@@ -352,6 +352,20 @@ function verschmelzeLokal(wurzel, ausnahmen = []) {
   deko.add(setze(teil(new CylinderGeometry(0.04, 0.04, 0.8, 6), "#9A6A3F"), SU.x - 0.5, y + 1.1, SU.z));
   block(SU.x, SU.z, 0.6);
 }
+// Laternen (UX-Paket 2, 07.11.2026): zwei an der Haustür, eine an der Sonnenuhr – die Kugel nutzt fensterMat (tags hellblau, abends/nachts warm);
+// Teile der Deko, also nach dem Verschmelzen fast keine zusätzlichen Zeichenaufrufe
+const LATERNEN = [];
+const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" : "#9BD7F5" });
+{
+  const h = KI.HAUS_DREH, lokal = (lx, lz) => [P.haus[0] + lx * Math.cos(h) + lz * Math.sin(h), P.haus[1] - lx * Math.sin(h) + lz * Math.cos(h)];
+  [lokal(1.9, 2.1), lokal(-1.9, 2.1), [SU.x + 0.9, SU.z - 0.7]].forEach(([x, z]) => {
+    const y = bodenY(x, z);
+    deko.add(setze(teil(new CylinderGeometry(0.06, 0.09, 1.7, 8), "#6B5A7A"), x, y + 0.85, z));
+    deko.add(setze(teil(new CylinderGeometry(0.2, 0.14, 0.1, 8), "#4A3558", { dicke: 1.08 }), x, y + 1.98, z));
+    deko.add(setze(teil(kugel(0.17, 12, 8), fensterMat, { dicke: 1.1 }), x, y + 1.8, z));
+    LATERNEN.push({ x, y: y + 1.8, z });
+  });
+}
 verschmelze(deko, !WELT.insel && WELT.R > 16 ? 12 : 0);   // große Welten in Feldern (NA-29)
 const sonnenMat = new MeshBasicMaterial({ color: "#7E7A92" });
 const uhrSonne = setze(new Mesh(kugel(0.22, 16, 12), sonnenMat), SU.x - 0.5, bodenY(SU.x, SU.z) + 1.6, SU.z); scene.add(uhrSonne);
@@ -393,7 +407,6 @@ function nebelWeicht() {
 
 // ---------- Haus ----------
 let hausObj = null, prolog = null;   // prolog: läuft gerade die Ankunft (NA-11)?
-const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" : "#9BD7F5" });
 {
   const h = new Group();
   const form = new Shape(), w = 1.5, r = 0.35;
@@ -412,6 +425,12 @@ const fensterMat = new MeshBasicMaterial({ color: NACHT || DAEMMER ? "#FFD46B" :
   h.position.set(P.haus[0], bodenY(P.haus[0], P.haus[1]), P.haus[1]); h.rotation.y = KI.HAUS_DREH; scene.add(h); block(P.haus[0], P.haus[1], 2.3);
   antippbar(h, () => prolog ? reingehen() : spielOrt(() => reingehen()), ["🚪", "Reingehen"], 3.4);
   hausObj = h; starr.push([h]);
+}
+// Warmes Licht vor der Haustür bei Dämmerung und Nacht (UX-Paket 2): ein Punktlicht, nicht in Stufe „einfach“
+let tuerLicht = null;
+if ((NACHT || DAEMMER) && !EINFACH) {
+  const { x, z } = KI.vorDerTuer();
+  tuerLicht = new PointLight("#FFD46B", NACHT ? 18 : 9, 9, 2); tuerLicht.position.set(x, bodenY(x, z) + 2.2, z); scene.add(tuerLicht);
 }
 
 // ---------- Wolken, Sterne, Schnee ----------
@@ -544,10 +563,13 @@ if (!EINFACH && MIT_GRAS) {
 }
 
 // ---------- Figur nach dem Look aus dem Kleiderschrank ----------
+// (UX-Paket 2) Frisuren mit Pony in 2D; Winkel, um den die Arme von der Hüfte abstehen
+const PONY = ["lang", "wellen", "zoepfe", "bob", "kurz", "schulterlang", "pferd", "seitenzopf", "dutt", "spacebuns", "scheitel"], ARM_WINKEL = 0.3;
 const LANG = ["lang", "wellen", "locken"], KURZ = ["bob", "kurz", "scheitel", "undercut", "igel", "wuschel", "kurzlocken", "afro", "schulterlang"], HOSEN = ["hose", "jeans", "jogging", "leggings", "cargo", "bermuda"];
 // Anzüge aus „Kleider & Anzüge“ (30.10.2026) haben Hosenbeine statt Rock
 const ANZUG = { ritter: "#B8C2CF", astronaut: "#F4F6FA", pirat: "#3A3550", feuerwehr: null, dinokostuem: null };
-const WEISS_AUGE = new MeshBasicMaterial({ color: "#FFFFFF" }), IRIS = new MeshBasicMaterial({ color: "#6B4A2E" });
+// (UX-Paket 2) Augenweiß als Toon-Material: nachts dunkelt es mit – als MeshBasicMaterial leuchteten die Augen aus dem dunklen Gesicht
+const WEISS_AUGE = mat("#FFFFFF"), IRIS = new MeshBasicMaterial({ color: "#6B4A2E" });
 function figur(look) {
   const f = new Group(), haut = look.figur.farbe, haarF = (look.haare && look.haare.farbe) || "#8A5A34", haarId = (look.haare && look.haare.id) || "lang";
   const koerper = new Group(); f.add(koerper);
@@ -582,12 +604,15 @@ function figur(look) {
     }
     koerper.add(b); return b;
   });
-  // Arme
+  // Arme (UX-Paket 2, 07.11.2026): Schulterkugel am Drehpunkt, Drehpunkt etwas weiter außen, Hand mit Daumen – vorher wuchsen die Arme
+  // ohne Schulter aus der Brust und die Hände waren Fäustlinge
   const arme = [-1, 1].map(s => {
-    const a = new Group(); a.position.set(0.32 * s, 1.52, 0);
+    const a = new Group(); a.position.set(0.36 * s, 1.52, 0);
+    const schulter = teil(kugel(0.115), oben, { dicke: 1.08 }); schulter.userData.art = "schulter"; a.add(schulter);
     a.add(setze(teil(new CapsuleGeometry(0.085, 0.5, 4, 12), oben), 0, -0.32, 0));
-    a.add(setze(teil(kugel(0.1), haut, { dicke: 1.12 }), 0, -0.66, 0));
-    a.rotation.z = 0.24 * s; koerper.add(a); return a;
+    const hand = teil(kugel(0.1), haut, { dicke: 1.12 }); hand.userData.art = "hand"; setze(hand, 0, -0.66, 0); a.add(hand);
+    const daumen = teil(kugel(0.045), haut, { dicke: 1.1 }); daumen.userData.art = "daumen"; setze(daumen, -0.075 * s, 0.03, 0.06); hand.add(daumen);
+    a.rotation.z = -ARM_WINKEL * s; koerper.add(a); return a;
   });
   // Kopf und Frisur
   // (03.11.2026) Proportionen wie die freigegebene 2D-Figur: Kopf etwa ein Drittel kleiner, längere Beine und Arme, Hände an der Hüfte
@@ -612,6 +637,8 @@ function figur(look) {
   if (haarId === "igel" && !bedeckt) for (let i = 0; i < 7; i++) { const w = (i / 6 - 0.5) * 1.6; const z = haarteil(new ConeGeometry(0.11, 0.3, 8), Math.sin(w) * 0.4, 0.6 - Math.abs(w) * 0.12, Math.cos(w) * 0.1 - 0.05); z.rotation.z = -w * 0.5; }
   if ((haarId === "wuschel" || haarId === "kurzlocken") && !bedeckt) { const r = haarId === "wuschel" ? 0.22 : 0.17; [[-0.36, 0.4], [-0.12, 0.55], [0.12, 0.55], [0.36, 0.4], [0, 0.42]].forEach(([x, y]) => haarteil(kugel(r), x, y, 0.2)); }
   if (haarId === "undercut") haarteil(kugel(0.5), 0, 0.42, 0.05, 1, 0.55, 1);
+  // Pony (UX-Paket 2): Frisuren mit Pony in 2D bekommen auch in 3D eine runde Stirnfranse – vorher saß das Haar wie ein glatter Helm (auch unter Hüten sichtbar)
+  if (PONY.includes(haarId)) { const p = haarteil(kugel(0.5), 0, 0.33, 0.2, 1.1, 0.42, 0.9); p.userData.art = "pony"; }
   // Gesicht
   // Augen wie die 2D-Figur (03.11.2026): weißes Auge mit brauner Iris, dunkler Pupille und Glanzpunkt – nicht übergroß
   [-1, 1].forEach(s => {
@@ -635,7 +662,9 @@ function figur(look) {
   const mund = new Mesh(new TorusGeometry(0.07, 0.018, 6, 12, Math.PI), AUGE); mund.rotation.z = Math.PI; setze(mund, 0, -0.15, 0.55); kopf.add(mund);
   // (07.11.2026) gemeinsames Modul extras3d.js: alle Extras des Kleiderschranks, Dinge in der Hand werden gehalten
   extras3d(look, { kopf, koerper, arme, hand: -0.66, gross: 1.5, hals: 1.6, ruecken: 1.5, umhang: 1.05 }, { teil, kugel, setze, mat, verlauf });
-  f.userData = { koerper, beine, arme, kopf };
+  // Zählung der neuen Teile vor dem Verschmelzen (starr/verschmelzeLokal ersetzt die Einzelteile) – für den Test-Haken __heimat.figurInfo()
+  const info = { schulter: 0, daumen: 0, pony: 0 }; f.traverse(o => { if (o.userData && o.userData.art in info) info[o.userData.art]++; });
+  f.userData = { koerper, beine, arme, kopf, info };
   return f;
 }
 const look = (S.lade("anziehen") || {}).aktuell || (window.Figur ? window.Figur.STANDARD() : { figur: { farbe: "#F8D2B8" } });
@@ -1593,8 +1622,10 @@ function bild() {
     if (hoehe <= 0) { hoehe = 0; vy = 0; spruenge = 0; }
   }
   const grund = bodenY(ich.position.x, ich.position.z); ich.position.y = grund + hoehe;
-  if (hoehe > 0) { u.beine[0].rotation.x = -0.5; u.beine[1].rotation.x = 0.3; u.arme[0].rotation.z = 0.9; u.arme[1].rotation.z = -0.9; }
-  else { u.arme[0].rotation.z = 0.25; u.arme[1].rotation.z = -0.25; }
+  // (UX-Paket 2, 07.11.2026) Arme leicht abgespreizt: arme[0] ist der linke Arm (x < 0), ein negativer Winkel führt die Hand nach außen –
+  // vorher stand das Vorzeichen falsch herum, beide Hände trafen sich vor der Brust (Auftrag des Auftraggebers: „Arme abspreizen“)
+  if (hoehe > 0) { u.beine[0].rotation.x = -0.5; u.beine[1].rotation.x = 0.3; u.arme[0].rotation.z = -0.9; u.arme[1].rotation.z = 0.9; }
+  else { u.arme[0].rotation.z = -ARM_WINKEL; u.arme[1].rotation.z = ARM_WINKEL; }
   if (marke.visible) marke.scale.setScalar(1 + Math.sin(t * 6) * 0.1);
 
   if (tier) {
@@ -1866,4 +1897,4 @@ function teileZaehlen() {
   return scene.children.map(o => { let n = 0, d = 0; o.traverseVisible(m => { if (m.isMesh || m.isPoints || m.isLineSegments) { n++; const g = m.geometry; d += g.index ? g.index.count / 3 : (g.attributes.position ? g.attributes.position.count / 3 : 0); } }); return { name: o.type + (o.userData.tipp ? "*" : "") + (o.userData.aktion ? ":" + o.userData.aktion[1] : ""), x: Math.round(o.position.x), z: Math.round(o.position.z), meshes: n, dreiecke: Math.round(d) }; })
     .filter(x => x.meshes > 0).sort((a, b) => b.meshes - a.meshes);
 }
-window.__heimat = { extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
