@@ -299,8 +299,8 @@
         <div class="zahl"><b>${summe("spiel")} min</b><span>gespielt</span></div>
         <div class="zahl"><b>${faelligN}</b><span>Wiederholungen heute dran${mathe.gelernt ? ` · ${mathe.gelernt} gelernt` : ""}</span></div>
       </div>
-      <div class="woche-balken" aria-label="Lern- und Spielminuten pro Tag">${tage.map(t => `<div class="tag-balken"><div class="saeulen"><span class="lern" style="height:${Math.round(t.lern / max * 100)}%" title="${t.lern} min gelernt"></span><span class="spiel" style="height:${Math.round(t.spiel / max * 100)}%" title="${t.spiel} min gespielt"></span></div><small>${t.name}</small></div>`).join("")}</div>
-      <p class="klein"><span class="punkt lern"></span> Lernen <span class="punkt spiel"></span> Spielen (Minuten)</p>
+      ${summe("lern") + summe("spiel") === 0 ? `<p class="klein" id="woche-leer">Noch keine Lern- oder Spielminuten in den letzten 7 Tagen – das Diagramm erscheint mit dem ersten Tag.</p>` : `<div class="woche-balken" aria-label="Lern- und Spielminuten pro Tag">${tage.map(t => `<div class="tag-balken"><div class="saeulen"><span class="lern" style="height:${Math.round(t.lern / max * 100)}%" title="${t.lern} min gelernt"></span><span class="spiel" style="height:${Math.round(t.spiel / max * 100)}%" title="${t.spiel} min gespielt"></span></div><small>${t.name}</small></div>`).join("")}</div>
+      <p class="klein"><span class="punkt lern"></span> Lernen <span class="punkt spiel"></span> Spielen (Minuten)</p>`}
       ${lernfundeHtml()}
       ${gemeinsamHtml()}
       ${gefuehleHtml()}

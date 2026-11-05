@@ -2279,3 +2279,26 @@ Code-Review der Sitzung vom 07.11. (8 Befunde); die drei dringendsten behoben, j
   `leuchtturm:licht`), `extras3d.js` und Sprechblasen-Regel (nie `overflow: auto` auf der Hülle) in §7.
 - **Offen:** Russisch für den Leuchtturm prüfen lassen; iPad-Test der Blasen in Englisch/Sachkunde.
 
+## Stand 07.11.2026 (UX-Pakete 1–5) – Bedienbarkeit und 3D-Optik nach der UI/UX-Bestandsaufnahme
+Auftrag („Was ist noch offen im Bereich UI/UX? Alles ist erlaubt“ → „Okay, lets go“): Bestandsaufnahme mit 24 Screenshots (iPad quer/hoch, Vorschule, Handy, Insel Tag/Nacht/Regen,
+Zimmer), dann fünf Pakete in der empfohlenen Reihenfolge, je mit Test und eigenem Commit.
+- **Paket 1 – Insel auf dem Handy, 🔊 auf der Startseite:** unter 640 px wandert die Info-Blase der Insel nach oben unter die Leiste, der Springen-Knopf wird kleiner, der
+  Steuerungs-Hinweis bleibt links unten (vorher überdeckten sich alle drei; `tests/handy.js` prüft Überdeckung und Bildrand). Startseite: Knopf 🔊 `#vorlesen` liest Begrüßung,
+  „Heute für dich“, Meine Ecke, Tier und Spielzeit vor (`window.__startseiteText`); der Töne-Schalter zeigt 🔔/🔕, damit 🔊 überall „Vorlesen“ heißt (`tests/dashboard.js`).
+- **Paket 2 – 3D-Hauptfigur und Nacht:** Die Bildschleife drehte beide Arme nach innen (Hände vor der Brust) – Vorzeichen korrigiert, `ARM_WINKEL` 0,3 (Auftrag „Arme abspreizen“
+  erledigt). Schulterkugel am Drehpunkt (weiter außen), Daumen, Pony für Frisuren mit Pony (`PONY`), Augenweiß als Toon-Material (leuchtete nachts). Drei Laternen (Haustür
+  links/rechts, Sonnenuhr) als Deko mit `fensterMat`, Punktlicht vor der Haustür bei Dämmerung/Nacht (nicht in „einfach“). Haken `__heimat.figurInfo()`, `__heimat.lampen()`;
+  `tests/extras3d.js` erweitert, `leistung` im Budget. **Offen:** `figur3d.js` (Minispiele, ausgeblendet) ist weiter eine ältere Kopie der Figur.
+- **Paket 3 – über der Falz:** Startseite hoch mit Meine Ecke, Mein Tier und Spielzeit in einer Zeile, Spiel-Türen ohne Beschreibung; Handy: Name und Knöpfe (nur Symbol, `.leiste .t`)
+  in einer Zeile, „Heute für dich“ darunter, Ecke und Tier nebeneinander, Spielzeit schmal – die Insel-Tür beginnt auf dem ersten Bildschirm. Matheweg: Lernbereiche mit „Zeig, was du
+  kannst“ unter dem Weg (`#schuljahr-titel`), „Was kannst du schon?“ als schmale Zeile; erste Station ohne Scrollen (iPad 332 px). Deutsch: Schatzkarte klein (230 px) in der
+  Fipsi-Zeile, Werkstatt ab 424 px. Neuer Test `falz`.
+- **Paket 4 – Insel-HUD:** oben nur ⬅️, ⭐, ⚙️; Welt/Grafik/Laufen/Kamera auf dem Blatt `#einstellungen-blatt` (gleiche ids und Handler, Eltern-Sperre `kindDarf` bleibt), zu mit
+  Escape oder Antippen der Insel. Steuerungs-Hinweis mit wackelndem 🕹️/👆, verschwindet nach dem ersten Laufen (Joystick oder Tippen, `hinweisWeg()`, `lerninsel.joystick`).
+  Neuer Test `hud` (3D, allein); `handy`, `tutorial`, `prolog` grün. **Entscheidung:** Startkamera unverändert (3D-Tests hängen daran); Bruni im Vordergrund bleibt vorerst.
+- **Paket 5 – Feinschliff:** Album-Reiter brechen um; Elternbereich zeigt ohne Minuten einen Satz (`#woche-leer`) statt des leeren Wochendiagramms; Mein Tier mit Nest unter den
+  Eiern; Zimmer mit sichtbarer, antippbarer Tür nach draußen (`zimmerTuer`, Haken `__heimat.zimmerTuer()`/`tuerTippen()`). Neuer Test `feinschliff`, Tür in `hud`.
+  Staffelei (neuestes Bild) und Pinnwand (Lernfunde) gab es schon – sie wirken nur leer, solange nichts gemalt/gelernt ist.
+- **Offen / Ideen aus der Bestandsaufnahme:** Startkamera etwas höher und weiter (Bruni und Wegweiser nicht angeschnitten); Fensterkreuze und Türdetails am Haus; Konturen an den
+  Baumkronen; Vorschul-Startseite mit größeren Symbolen; iPad-Test aller fünf Pakete.
+

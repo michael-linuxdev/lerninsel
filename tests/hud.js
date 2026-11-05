@@ -58,6 +58,13 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     erwarte(!(await p.evaluate(() => __heimat.hud().hinweis)), `${art}: nach dem ersten Schieben ist der Steuerungs-Hinweis weg`);
     await insel(p);
     erwarte(!(await p.evaluate(() => __heimat.hud().hinweis)), `${art}: nach dem Neuladen bleibt er weg`);
+    // Zimmer (UX-Paket 5): sichtbare Tür nach draußen, antippbar
+    await p.evaluate(() => __heimat.reingehen()); await p.waitForTimeout(600);
+    const t = await p.evaluate(() => Object.assign({ drinnen: __heimat.drinnen }, __heimat.zimmerTuer()));
+    erwarte(t.drinnen && t.tipp && t.x > 3.5, `${art}: im Zimmer gibt es eine antippbare Tür an der rechten Wand`);
+    await bild(p, `hud-${art.replace(" ", "-")}-zimmer`);
+    await p.evaluate(() => __heimat.tuerTippen()); await p.waitForTimeout(600);
+    erwarte(!(await p.evaluate(() => __heimat.drinnen)), `${art}: Tür antippen führt nach draußen`);
     await ctx.close();
   }
   await browser.close();

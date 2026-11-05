@@ -17,13 +17,20 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-Die Aufträge vom 07.11. sind erledigt (Kapitel 6, Russisch für Lösungshilfen, 3D-Extras, Stil A). Zuerst die **iPad-Rückmeldung** holen (Fragerunde), dann:
+Die Aufträge vom 07.11. sind erledigt (Kapitel 6, Russisch für Lösungshilfen, 3D-Extras, Stil A, **Arme der 3D-Figur abgespreizt**, UX-Pakete 1–5). Zuerst die **iPad-Rückmeldung**
+holen (Fragerunde), dann:
 1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test).
-2. **Auftrag des Auftraggebers (07.11.):** Die Arme der Hauptfigur in 3D sollen ein wenig abgespreizt sein – `quellen/welt3d/heimat.js` (`figur()`: `a.rotation.z = 0.24 * s`,
-   in der Bildschleife `u.arme[…].rotation.z = 0.25`) und `quellen/welt3d/figur3d.js`; Dinge in der Hand (`extras3d.js`) mitprüfen; Test und Screenshot (`extras3d`).
+2. Offene Ideen aus der UX-Bestandsaufnahme (PLAN „Stand 07.11.2026 (UX-Pakete 1–5)“, letzter Punkt), wenn der Auftraggeber sie will: Startkamera, Hausdetails, Baumkronen.
 3. Danach: Kapitel 7 „Neue Ufer“ (KONZEPT) planen; Russisch prüfen lassen.
 
 ## 1. Stand (07.11.2026)
+**UX-Pakete 1–5 (07.11., Details in `docs/PLAN.md`, „Stand 07.11.2026 (UX-Pakete 1–5)“):** Insel auf dem Handy ohne Überdeckung; 🔊 liest die Startseite vor; 3D-Figur mit
+Schultern, abgespreizten Armen, Daumen und Pony, nachts Laternen und Türlicht; Startseite hoch/Handy kompakter, Matheweg und Deutsch beginnen ohne Scrollen; Insel-Einstellungen
+hinter ⚙️, Steuerungs-Hinweis mit bewegtem Zeichen; Album-Reiter, Wochenbericht, Nest bei der Ei-Auswahl, Zimmertür. Neue Tests `falz`, `hud`, `feinschliff`.
+**Im iPad testen (in /dev/test):**
+1. Startseite: 🔊 oben antippen – liest sie Name, „Heute für dich“ und Spielzeit vor? Hochformat: stehen Meine Ecke, Mein Tier und Spielzeit in einer Zeile?
+2. Insel: Stehen die Arme der Figur ab, gibt es Schultern und Pony? Oben rechts ⚙️ antippen – Blatt mit Welt/Grafik/Laufen/Kamera. Abends: Laternen und Licht an der Haustür.
+3. Im Haus: die Tür rechts antippen – geht es nach draußen? Matheweg: ist die erste Station ohne Scrollen da? Deutsch: beginnt die Werkstatt ohne Scrollen?
 **Review nach der Sitzung (07.11., Details in `docs/PLAN.md`, „Stand 07.11.2026 (Review)“):** behoben sind ein Safari-Fehler (Regex-Lookbehind in `hilfe-ru.js`
 ließ auf iPadOS 16.0–16.3 alle russischen Mathe-Zeilen verschwinden; neue Prüfung in `tests/offline.js`), die Leuchtturm-Wartezeit nach dem Lösen (Reiterwechsel,
 neue Runde), Können/Erfahrung nur beim ersten Lösen eines Licht-Rätsels, die Sprechblasen-Zipfel mit Kontur in Englisch/Sorbisch/Medien/Sachkunde (Test `stil`),
