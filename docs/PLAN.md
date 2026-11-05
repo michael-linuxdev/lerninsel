@@ -2316,3 +2316,60 @@ Auftrag („Was sagst du zu den Figuren?“ → „Letsgo“): die vier empfohle
   wählbar (Kleiderschrank, Reiter „Ich“: Lächeln, Lachen, Zwinkern …), deshalb kein neuer Standard.
 - **Offen:** `figur3d.js` (Minispiele, ausgeblendet) bleibt die alte Figur; Russisch; iPad-Test der Figuren.
 
+
+## Stand 08.11.2026 (UX-Ideen) – Startkamera, Hausdetails, Kronen-Konturen, Vorschul-Symbole
+Auftrag (Fragerunde: „Beides nacheinander“ – erst die offenen UX-Ideen aus der Bestandsaufnahme vom 07.11., dann Kapitel 7; kein iPad-Test, keine Tabus, nichts Neues zu QR/Russisch/Ferien).
+- **Startkamera:** `KAM = { neigung: 0.8, abstand: 17 }` in `heimat.js` (vorher 0,72 / 15), im Hochformat zusätzlich `hochFaktor()` = bis ×1,25 weiter weg (schmaler Blick). Bruni, Tilda am
+  Schachtisch, Fipsi und der Wegweiser sind im Querformat ganz im Bild; die Kamera-Rückstellung (🎥 fest) nutzt dieselben Werte. 3D-Tests `tutorial`, `prolog`, `hud`, `kapitel`, `handy` grün.
+- **Hausdetails:** Tür mit hellem Rahmen, rundem Fenster, Füllung, Klinke und Schwelle; Fenster mit Rahmen, Fensterkreuz (dickere Hülle 1,3, in „einfach“ ohne Kontur) und Fensterbank.
+  Alles in der Hausgruppe `h` (starr, wird lokal verschmolzen).
+- **Kronen-Konturen:** `KRONE_KONTUR` (Hülle 1,1) und `STAMM_KONTUR` (1,09) für Laub-, Nadelbäume und Palmen, Wissensbaum-Krone 1,1 – die Lappen der Krone zeigen jetzt auch untereinander eine Linie;
+  in „einfach“ weiter ohne Kontur (`DEKO_KONTUR`). **Budget:** Die weitere Kamera zeigt mehr Bäume (+5 400 Dreiecke in „Wald, groß, Hügel“ einfach → 60 610 > 60 000); deshalb bekommen die
+  Hausdetails in „einfach“ keine Hülle und in großen Wäldern (> 30 Bäume) fällt in „einfach“ die oberste Kronenkugel weg (`KRONE_LAPPEN`): jetzt 56 768 einfach / 97 834 schön.
+- **Vorschul-Startseite:** Symbole der Lern-Türen 108 px statt 64 px (Handy 72 px), Begleiter bis 168 px, Atelier-Symbol 80 px; Türhöhen unverändert, damit die Startseite auf dem iPad ohne Scrollen bleibt
+  (`dashboard`, `falz` grün).
+- **Entscheidung/Frage des Auftraggebers (08.11.):** „Die Insel sollte viel größer sein, sonst findet das Abenteuer in einem kleinen Raum statt.“ Stand: Heimatinsel Radius 15,2 mit rund 16 festen Orten,
+  eigene Welten bis Radius 25. Vorgeschlagen: Heimatinsel moderat größer (Radius ≈ 19, Orte mit Abstand) **und** Kapitel 7 „Neue Ufer“ als Aufbruch zu Nachbar-Eilanden. Antwort stand beim Push noch aus.
+
+## Plan 08.11.2026 – Weg 3: größere Heimatinsel und Kapitel 7 „Neue Ufer“ (Entscheidung des Auftraggebers, für die nächste Sitzung vorbereitet)
+Entscheidung (08.11.2026): **Weg 3** – Heimatinsel moderat größer **und** Kapitel 7 als Aufbruch zu Nachbar-Eilanden. Nicht in dieser Sitzung gebaut, nur geplant.
+
+### W1 – Heimatinsel größer (Radius 15,2 → 19, rund 60 % mehr Fläche)
+Befund: Die erste Insel ist `STANDARD` in `shared/insel-kern.js` (`insel: true, R: 15.2`, feste Plätze `plaetze`, 9 Bäume, 3 Steine, Blumen-Spirale, Pfad). `heimat.js` behandelt `WELT.insel`
+an etwa 15 Stellen mit festen Zahlen: Sand-Lathe 15,2/15,6, Schaum 15,9, `RMAX` 14,6, Gras-Radius `RW` 10,5, `HALME` 560, Blumen-Spirale, Figurstart (1, 2), Truhe bei y 0,05; der Kern setzt
+`UFER = 15.2`, `RMAX_LAUF = 14.6`, Steg bei x 3,2 am Südufer, Sonnenuhr daneben, Leuchtturm- und Wegweiser-Suche relativ zu `RMAX_LAUF`.
+Vorgehen:
+1. `STANDARD.R = 19` und **alle** `WELT.insel`-Sonderzahlen durch Ausdrücke aus `WELT.R` ersetzen (Sand `R`/`R+0.4`, Schaum `R+0.7`, `RMAX = R-0.6`, `UFER = R`, `RW = R-4.7`, Halme
+   `560 · (R/15.2)²` gedeckelt durch das Budget, Blumen-Spirale bis `R-3`). Danach darf es keine 15,2 mehr geben (Suche `15\.2|15\.9|14\.6|10\.5` in `heimat.js`).
+2. Plätze auseinanderziehen (Faktor ≈ 1,25 auf x/z, Haus und Start bleiben nah): Haus (-6,2, -5,6), Eule (10,6, -3,8), Fipsi (-9,5, -0,8), Benno (2,5, -10), Bruni (-4,6, 8,6), Schach (1,9, 8,5),
+   Bühne (5,5, -1), Ballons/Boot (12,5, 7,5), Lauf/Garten (7,5, 12,8), Kart/Tierstation (-10,8, 10,2), Bau/Bäckerei (14, -6,2), Truhe/Angelsteg (-1,2, 17), Wissensbaum (-4, 2,8), Nest/Station
+   relativ zum Haus. **Wege** (Trittsteine wie der Hauspfad) vom Start zu Garten, Bäckerei, Tierstation und Leuchtturm, damit Kinder die Orte finden; Bäume von 9 auf ≈ 14, Steine 5,
+   zwei kleine Blumenwiesen statt einer Spirale.
+3. Laufen: Lauftempo prüfen (Weg Start → Bäckerei ≈ 15 statt 12 Einheiten); „Antippen zum Laufen“ reicht, ggf. Tempo +10 % auf der Heimatinsel; Zeigehand und `laufeZu` bleiben.
+4. Kamera: `KAM.abstand` 17 bleibt (Figur nicht kleiner); Nebel-Stufen (`NEBEL` im Kern, `UFER + …`) passen automatisch.
+5. Tests: `tests/inselkern.js` (prüft `STANDARD`? – 220 Welten für den Leuchtturm-Platz, Koordinaten der Nachbarn), `prolog`, `tutorial`, `kapitel`, `weihnachten` nutzen feste
+   `position.set`/`laufeZu` – auf `__heimat.steg`/`Insel.ort()` umstellen; `leistung` (Budget 150 000/60 000 – Heimatinsel schön heute ≈ 121 000, einfach ≈ 60 000 → Gras und Bäume
+   dürfen pro Fläche nicht dichter werden), `handy`, `hud`, `geschenk`, `geburtstag`, `angeln`, `garten`, `baeckerei`, `tierstation`, `leuchtturm`, `extras3d`. Screenshots vorher/nachher
+   quer/hoch/Handy, auch in „einfach“.
+6. Kein Eltern-Schalter für die kleine Insel (Dashboard-Regel: Ansichten ohne Rückschalter); alte Spielstände wandern mit, weil nur Koordinaten wechseln (Zimmer, Garten-Beete, Tier
+   hängen an Daten, nicht an Plätzen).
+
+### W2 – Kapitel 7 „Neue Ufer“ (KONZEPT: Pixel fährt zum Nachbar-Eiland, Übergang Klasse 5)
+Befund: Eigene Welten gibt es schon (`S.lade("welt")` = `{ welten[≤5], aktiv, entwurf }`, Wünsche-Assistent hinter ⚙️ → Welt, Radius 20/25, Biome Wiese/Wald/Berge/Strand/Schneeland/Wüste,
+Seite lädt neu). Sie haben aber keine Story, keine eigenen Orte und sind für Kinder versteckt.
+Vorgehen:
+1. **Kapitel 7 im Kern:** `KAPITEL` n 7 `neue-ufer`, Bedingung ehrlich zur bisherigen Staffel (6: 35 Funde): **50 Lernfunde + Kapitel 6 + Tablet-Führerschein** (`medien.fuehrerschein`,
+   Robo fährt das Boot); `Story.KAPITEL_ZAHL = 7`; Szene `neue-ufer` (Robo am Steg, 4 Blasen: „Mein Boot ist bereit … wünsch dir eine Welt … wir kommen immer zurück“), `zeige` = Steg/Boot.
+2. **Reisen am Steg statt hinter ⚙️:** Boot wird antippbar (Station `boot`, `antwort("boot")`): vor Kapitel 7 Blase „Bald fahren wir zu neuen Ufern“ (kein Druck), ab Kapitel 7 öffnet
+   `$("welt")` (Welt-Liste/Assistent) mit Knopf „⛵ Losfahren“; `welt-knopf` im ⚙️-Blatt bleibt (Eltern-Sperre `kindDarf` unverändert). Rückfahrt: auf jedem Eiland liegt Pixels Boot am Steg
+   (`STEG` gibt es in jeder Welt) → „🏠 Nach Hause“.
+3. **Forscherlager auf jedem Nachbar-Eiland** (neuer Ort `lager` nur bei `!WELT.insel`, Platz über `P`): Zelt, Fahne, Fernrohr; Station mit Ella → neue Seite `spiele/expedition/`
+   (`__expedition`): **Inselkarte lesen** (Himmelsrichtungen, Koordinaten A–F/1–6, Maßstab; Mathe Übergang 5 `ma.gm`/SU „Karte und Kompass“), **Forscher-Tagebuch** je Eiland (Biom,
+   Wetter, drei Funde), Stufen `a|b|c` nach Klasse; Sterne nur für neue Einträge, höchstens 3 am Tag; Daten `expedition` = `{ eilande: { seed: {…} }, karten, neu }`. Lehrplan-Verweis
+   `expedition:karte` in `sachsen-punkte.js` (Kl. 4 SU „Orientierung im Raum“ + Übergang 5), Lernziele zuordnen, `tests/lehrplan.js` nachziehen.
+4. **Chronik/Schatzkammer:** Kapitel 7 in der Inselchronik; Tildas Schatzkammer zeigt besuchte Eilande (Biom-Emoji).
+5. **Tests:** `tests/expedition.js` (Kapitel-7-Szene auf der Insel, Boot antippen, Welt erschaffen, Lager auf dem Eiland, Karte echt gelöst mit Fehler, Tagebuch, Rückfahrt; 3D, allein),
+   `kapitel` um Kapitel 7, `inselkern` (`KAPITEL_ZAHL`), `rauchtest`/`sw.js`/`barriere` für die neue Seite, Russisch als Entwurf.
+6. Offen für den Auftraggeber: Dürfen Kinder vor Kapitel 7 weiter über ⚙️ reisen (heute ja)? Soll das Lager auch auf der Heimatinsel stehen (dann „Karte der Heimatinsel“ als Stufe a)?
+
+Reihenfolge der nächsten Sitzung: Fragerunde (iPad) → W1 (ein Commit, mit allen 3D-Tests) → W2 (Kern/Szene, dann Seite, dann Tests) → Doku.

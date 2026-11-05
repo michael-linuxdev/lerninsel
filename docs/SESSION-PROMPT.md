@@ -17,13 +17,23 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-Die Aufträge vom 07.11. sind erledigt (Kapitel 6, Russisch für Lösungshilfen, 3D-Extras, Stil A, **Arme der 3D-Figur abgespreizt**, UX-Pakete 1–5). Zuerst die **iPad-Rückmeldung**
-holen (Fragerunde), dann:
+Die UX-Ideen vom 07.11. sind erledigt (08.11.: Startkamera, Hausdetails, Kronen-Konturen, Vorschul-Symbole). **Entscheidung des Auftraggebers (08.11.): Weg 3** – „Die Insel sollte viel
+größer sein, sonst findet das Abenteuer in einem kleinen Raum statt“ → Heimatinsel moderat größer **und** Kapitel 7 „Neue Ufer“ als Aufbruch zu Nachbar-Eilanden.
+**Der fertige Plan steht in `docs/PLAN.md`, „Plan 08.11.2026 – Weg 3“ (W1 Heimatinsel Radius 15,2 → 19 mit Plätzen, Wegen, Tests; W2 Kapitel 7 mit Boot am Steg, Forscherlager und
+Seite `spiele/expedition/`).** Zuerst die **iPad-Rückmeldung** holen (Fragerunde: Kamera, Haus, Kronen, Vorschul-Startseite, dazu alles vom 07.11.; die zwei offenen Fragen aus W2 Punkt 6 stellen), dann:
 1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test).
-2. Offene Ideen aus der UX-Bestandsaufnahme (PLAN „Stand 07.11.2026 (UX-Pakete 1–5)“, letzter Punkt), wenn der Auftraggeber sie will: Startkamera, Hausdetails, Baumkronen.
-3. Danach: Kapitel 7 „Neue Ufer“ (KONZEPT) planen; Russisch prüfen lassen.
+2. **W1** – Heimatinsel größer: ein Commit mit allen 3D-Tests, Screenshots vorher/nachher quer/hoch/Handy, Budget `leistung` einhalten.
+3. **W2** – Kapitel 7 „Neue Ufer“: Kern und Szene, Boot am Steg, Forscherlager und `spiele/expedition/` mit Test `expedition`; Russisch als Entwurf; danach Russisch prüfen lassen.
 
-## 1. Stand (07.11.2026)
+## 1. Stand (08.11.2026)
+**UX-Ideen (08.11., PLAN „Stand 08.11.2026 (UX-Ideen)“):** Startkamera höher und weiter (`KAM`, Hochformat bis ×1,25 weiter), Haus mit Türrahmen, Rundfenster, Klinke, Schwelle, Fensterkreuzen
+und -bänken, Baumkronen mit kräftiger Kontur (in großen Wäldern „einfach“ eine Kugel weniger – Budget), Vorschul-Startseite mit 108-px-Symbolen und größeren Begleitern.
+**Im iPad testen (in /dev/test):**
+1. Insel öffnen (quer und hoch): Sind Bruni, Tilda, Fipsi und der Wegweiser ganz im Bild? Wirkt die Figur noch groß genug?
+2. Zum Haus laufen: Fensterkreuze, Fensterbänke, Türrahmen, rundes Türfenster, Klinke, Schwelle. Bäume aus der Nähe: dunkle Linien an den Kronen.
+3. Ein Kind mit Stufe „Vorschule“ anlegen: Sind die Symbole auf Zahlen / Laute und Reime / Rucksack / Atelier groß genug? Passt alles ohne Scrollen?
+
+### Stand 07.11.2026
 **UX-Pakete 1–5 (07.11., Details in `docs/PLAN.md`, „Stand 07.11.2026 (UX-Pakete 1–5)“):** Insel auf dem Handy ohne Überdeckung; 🔊 liest die Startseite vor; 3D-Figur mit
 Schultern, abgespreizten Armen, Daumen und Pony, nachts Laternen und Türlicht; Startseite hoch/Handy kompakter, Matheweg und Deutsch beginnen ohne Scrollen; Insel-Einstellungen
 hinter ⚙️, Steuerungs-Hinweis mit bewegtem Zeichen; Album-Reiter, Wochenbericht, Nest bei der Ei-Auswahl, Zimmertür. Neue Tests `falz`, `hud`, `feinschliff`.

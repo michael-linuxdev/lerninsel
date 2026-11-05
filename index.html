@@ -36,6 +36,18 @@
   body.vorschul-start .tuer p { display: none; }
   body.vorschul-start .tuer h2 { font-size: 1.9rem; }
   body.vorschul-start .spielen { grid-template-columns: 1fr; }
+  /* (UX 08.11.2026) Vorschule: größere Symbole und Begleiter – Kinder, die noch nicht lesen, erkennen die Tür am Bild */
+  body.vorschul-start .lernen .tuer .bild { width: 108px; height: 108px; top: 14px; left: 18px; }
+  body.vorschul-start .lernen .tuer .begleiter { width: 52%; max-width: 168px; }
+  body.vorschul-start .spielen .tuer .begleiter { width: 104px; }
+  body.vorschul-start .spielen .tuer .bild { width: 80px; height: 80px; }
+  body.vorschul-start .spielen .tuer { padding-left: 112px; }
+  @media (max-width: 620px) {
+    body.vorschul-start .lernen .tuer .bild { width: 72px; height: 72px; top: 12px; left: 14px; }
+    body.vorschul-start .lernen .tuer .begleiter { max-width: 112px; }
+    body.vorschul-start .lernen .tuer h2 { font-size: 1.4rem; }
+    body.vorschul-start .spielen .tuer { padding-left: 16px; }
+  }
   .tuer.laute { background: #E0578F; }
   .leiste .knopf { min-height: 48px; padding: 0 14px; font-size: 1.05rem; }
   .sterne { gap: .35em; }

@@ -169,13 +169,17 @@ if (!EINFACH) wasser.material.onBeforeCompile = (sh) => {
 // ---------- Bäume (Farbe nach Jahreszeit), Steine, Blumen ----------
 // Leistungsbudget (NA-29): Welten mit vielen Bäumen bekommen gröbere Kronen; in „einfach“ haben Bäume keine Kontur.
 const VIELE_BAEUME = WELT.baeume.length > 30, KRONE_SEG = VIELE_BAEUME ? [14, 10] : [18, 12], DEKO_KONTUR = !EINFACH;
+// Kontur der Baumkronen (UX 08.11.2026): dicker als die Standard-Hülle (1,06), damit die Kugeln der Krone auch zwischen den Lappen eine Linie zeigen
+const KRONE_KONTUR = { umriss: DEKO_KONTUR, dicke: 1.1 }, STAMM_KONTUR = { umriss: DEKO_KONTUR, dicke: 1.09 };
+// Dreiecks-Budget „einfach“ (60 000): Seit die Startkamera weiter weg steht, sieht man mehr Bäume – in großen Wäldern fällt in „einfach“ die oberste Kronenkugel weg
+const KRONE_LAPPEN = VIELE_BAEUME && EINFACH ? 4 : 5;
 const KRONE = { sommer: ["#5DBB5A", "#4FAF62"], fruehling: ["#5DBB5A", "#F6B6CE"], herbst: ["#F2A03D", "#E2603A", "#F4C542", "#5DBB5A"], winter: ["#3E8E5A", "#3E8E5A"] };
 function baum(x, z, k = 1, i = 0) {
   const b = new Group();
-  b.add(setze(teil(new CylinderGeometry(0.22 * k, 0.32 * k, 1.6 * k, EINFACH ? 7 : 10), "#9A6A3F", { umriss: DEKO_KONTUR }), 0, 0.8 * k, 0));
+  b.add(setze(teil(new CylinderGeometry(0.22 * k, 0.32 * k, 1.6 * k, EINFACH ? 7 : 10), "#9A6A3F", STAMM_KONTUR), 0, 0.8 * k, 0));
   const farben = KRONE[SAISON], f = farben[i % farben.length];
-  [[0, 2.4, 0, 1.15], [0.8, 2.0, 0.2, 0.8], [-0.75, 2.05, -0.1, 0.85], [0.1, 2.0, 0.8, 0.75], [0, 3.1, 0, 0.75]].forEach(([dx, y, dz, r]) =>
-    b.add(setze(teil(kugel(r * k, ...KRONE_SEG), f, { umriss: DEKO_KONTUR }), dx * k, y * k, dz * k)));   // Kronen: wenige Segmente (NA-29)
+  [[0, 2.4, 0, 1.15], [0.8, 2.0, 0.2, 0.8], [-0.75, 2.05, -0.1, 0.85], [0.1, 2.0, 0.8, 0.75], [0, 3.1, 0, 0.75]].slice(0, KRONE_LAPPEN).forEach(([dx, y, dz, r]) =>
+    b.add(setze(teil(kugel(r * k, ...KRONE_SEG), f, KRONE_KONTUR), dx * k, y * k, dz * k)));   // Kronen: wenige Segmente (NA-29)
   if (SAISON === "winter") b.add(setze(teil(kugel(0.6 * k, 18, 12), "#FFFFFF"), 0, 3.45 * k, 0));
   if (SAISON === "sommer" && i % 2 === 0) [[0.6, 2.3, 0.9], [-0.8, 2.6, 0.6], [0.9, 2.8, -0.4]].forEach(([dx, y, dz]) => b.add(setze(teil(kugel(0.16 * k, 10, 8), "#FF7A6B", { dicke: 1.12 }), dx * k, y * k, dz * k)));
   b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 1.7; deko.add(b); block(x, z, 0.6 * k);
@@ -184,15 +188,15 @@ function baum(x, z, k = 1, i = 0) {
 function nadelbaum(x, z, k) {
   const b = new Group(), f = WINTERLICH ? "#3E8E5A" : "#3F9A5C";
   const sg = EINFACH ? 7 : WELT.R > 16 ? 8 : 10;   // Segmente (NA-29; große Welten 8, damit das Dreiecks-Budget hält)
-  b.add(setze(teil(new CylinderGeometry(0.16 * k, 0.24 * k, 1.0 * k, sg), "#8A5A34", { umriss: DEKO_KONTUR }), 0, 0.5 * k, 0));
-  [[1.15, 1.3, 1.1], [0.9, 1.1, 1.9], [0.62, 0.9, 2.6]].forEach(([r, h, y]) => b.add(setze(teil(new ConeGeometry(r * k, h * k, sg), f, { umriss: DEKO_KONTUR }), 0, y * k, 0)));
+  b.add(setze(teil(new CylinderGeometry(0.16 * k, 0.24 * k, 1.0 * k, sg), "#8A5A34", STAMM_KONTUR), 0, 0.5 * k, 0));
+  [[1.15, 1.3, 1.1], [0.9, 1.1, 1.9], [0.62, 0.9, 2.6]].forEach(([r, h, y]) => b.add(setze(teil(new ConeGeometry(r * k, h * k, sg), f, KRONE_KONTUR), 0, y * k, 0)));
   if (WINTERLICH) b.add(setze(teil(new ConeGeometry(0.4 * k, 0.5 * k, sg), "#FFFFFF"), 0, 3.0 * k, 0));
   b.position.set(x, bodenY(x, z) - 0.05, z); deko.add(b); block(x, z, 0.5 * k);
 }
 function palme(x, z, k) {
   const b = new Group(), stamm = new Group(); b.add(stamm);
   for (let i = 0; i < 6; i++) stamm.add(setze(teil(new CylinderGeometry(0.17 * k, 0.21 * k, 0.5 * k, 10), i % 2 ? "#B98A55" : "#A47746"), Math.sin(i * 0.35) * 0.25 * k, (0.25 + i * 0.45) * k, 0));
-  for (let i = 0; i < 6; i++) { const bl = teil(kugel(0.5 * k, 14, 8), "#4FAF62"); bl.scale.set(1.9, 0.18, 0.55); bl.rotation.y = i / 6 * Math.PI * 2; bl.rotation.z = -0.35; const g = new Group(); g.rotation.y = i / 6 * Math.PI * 2; setze(bl, 0.75 * k, 0, 0); g.add(bl); g.position.set(0.55 * k, 2.85 * k, 0); b.add(g); }
+  for (let i = 0; i < 6; i++) { const bl = teil(kugel(0.5 * k, 14, 8), "#4FAF62", KRONE_KONTUR); bl.scale.set(1.9, 0.18, 0.55); bl.rotation.y = i / 6 * Math.PI * 2; bl.rotation.z = -0.35; const g = new Group(); g.rotation.y = i / 6 * Math.PI * 2; setze(bl, 0.75 * k, 0, 0); g.add(bl); g.position.set(0.55 * k, 2.85 * k, 0); b.add(g); }
   [[0.45, 2.6, 0.15], [0.62, 2.62, -0.12]].forEach(([dx, y, dz]) => b.add(setze(teil(kugel(0.14 * k), "#7A4E25"), dx * k, y * k, dz * k)));
   b.position.set(x, bodenY(x, z) - 0.05, z); b.rotation.y = x * 2.1; deko.add(b); block(x, z, 0.35 * k);
 }
@@ -419,8 +423,21 @@ let hausObj = null, prolog = null;   // prolog: läuft gerade die Ankunft (NA-11
   h.add(teil(koerper, "#FFE3B8", { dicke: 1.03 }));
   h.add(setze(teil(dach, "#E2604F", { dicke: 1.03 }), 0, 2.5, 0));
   if (SAISON === "winter") { const sch = teil(new BoxGeometry(3.6, 0.2, 3.9), "#FFFFFF", { dicke: 1.03 }); sch.rotation.z = 0; setze(sch, 0, 4.15, 0); sch.scale.set(0.35, 1, 1); h.add(sch); }
+  // Tür mit Rahmen, kleinem Rundfenster, Füllung, Klinke und Schwelle; Fenster mit Rahmen, Kreuz und Fensterbank (UX 08.11.2026, „Hausdetails“)
+  const HOLZ_HELL = "#FFF8EC", HAUS_KONTUR = !EINFACH;
+  h.add(setze(teil(new BoxGeometry(0.98, 1.44, 0.08), HOLZ_HELL, { dicke: 1.04 }), 0, 0.7, 1.66));
   h.add(setze(teil(new BoxGeometry(0.8, 1.3, 0.12), "#9A6A3F", { dicke: 1.08 }), 0, 0.65, 1.7));
-  [0.95, -0.95].forEach(x => h.add(setze(teil(new BoxGeometry(0.7, 0.7, 0.1), fensterMat, { dicke: 1.1 }), x, 1.5, 1.7)));
+  { const rund = teil(new CylinderGeometry(0.13, 0.13, 0.04, EINFACH ? 10 : 14), fensterMat, { dicke: 1.12, umriss: HAUS_KONTUR }); rund.rotation.x = Math.PI / 2; h.add(setze(rund, 0, 1.06, 1.78)); }
+  h.add(setze(teil(new BoxGeometry(0.5, 0.5, 0.04), "#C98F55", { dicke: 1.04, umriss: HAUS_KONTUR }), 0, 0.48, 1.77));
+  h.add(setze(teil(kugel(0.055, 10, 6), "#FFC83D", { dicke: 1.15, umriss: HAUS_KONTUR }), 0.29, 0.66, 1.8));
+  h.add(setze(teil(new BoxGeometry(1.1, 0.1, 0.4), "#D9C7A8", { dicke: 1.04, umriss: HAUS_KONTUR }), 0, 0.05, 1.9));
+  [0.95, -0.95].forEach(x => {
+    h.add(setze(teil(new BoxGeometry(0.86, 0.86, 0.08), HOLZ_HELL, { dicke: 1.04 }), x, 1.5, 1.66));
+    h.add(setze(teil(new BoxGeometry(0.7, 0.7, 0.1), fensterMat, { dicke: 1.1 }), x, 1.5, 1.7));
+    h.add(setze(teil(new BoxGeometry(0.05, 0.72, 0.03), HOLZ_HELL, { umriss: HAUS_KONTUR, dicke: 1.3 }), x, 1.5, 1.77));   // Fensterkreuz
+    h.add(setze(teil(new BoxGeometry(0.72, 0.05, 0.03), HOLZ_HELL, { umriss: HAUS_KONTUR, dicke: 1.3 }), x, 1.5, 1.77));
+    h.add(setze(teil(new BoxGeometry(0.92, 0.08, 0.22), HOLZ_HELL, { dicke: 1.05, umriss: HAUS_KONTUR }), x, 1.08, 1.78));   // Fensterbank
+  });
   h.add(setze(teil(new CylinderGeometry(0.22, 0.22, 0.9, 16), "#B9584A"), 0.9, 3.5, -0.5));
   h.position.set(P.haus[0], bodenY(P.haus[0], P.haus[1]), P.haus[1]); h.rotation.y = KI.HAUS_DREH; scene.add(h); block(P.haus[0], P.haus[1], 2.3);
   antippbar(h, () => prolog ? reingehen() : spielOrt(() => reingehen()), ["🚪", "Reingehen"], 3.4);
@@ -951,7 +968,7 @@ const wissen = (() => {
   } else {
     g.add(setze(teil(new CylinderGeometry(0.18 * k, 0.28 * k, 1.5 * k, 14), "#A27449"), 0, 0.75 * k, 0));
     [[0, 2.15, 0, 1.0], [0.7, 1.8, 0.2, 0.7], [-0.65, 1.85, -0.1, 0.72], [0.05, 1.8, 0.7, 0.65], [0, 2.8, 0, 0.62]].slice(0, 2 + Math.min(3, info.stufe))
-      .forEach(([dx, y, dz, r], i) => g.add(setze(teil(kugel(r * k), krone[i % 2]), dx * k, y * k, dz * k)));
+      .forEach(([dx, y, dz, r], i) => g.add(setze(teil(kugel(r * k), krone[i % 2], { dicke: 1.1 }), dx * k, y * k, dz * k)));   // Kronen-Kontur wie bei den Bäumen (08.11.2026)
     if (SAISON === "winter") g.add(setze(teil(kugel(0.5 * k), "#FFFFFF"), 0, 3.1 * k, 0));
     // Jahreszeiten am Wissensbaum: Blüten im Frühling, bunte Blätter im Herbst, Lichterkette im Dezember
     const aussen = (i, n, r0) => { const a = i * 2.399, y = 1.75 + (i % n) / n * 1.2, rr = r0 * Math.sqrt(Math.max(0.15, 1 - ((y - 2.15) / 1.1) ** 2)); return [Math.cos(a) * rr * k, y * k, Math.sin(a) * rr * k]; };
@@ -1431,7 +1448,11 @@ function herzen(p) {
 }
 
 // ---------- Steuerung ----------
-let ziel = null, freiKamera = false, gieren = 0, neigung = 0.72, abstand = 15;
+// Startkamera (UX 08.11.2026): etwas höher und weiter als früher (0,72 / 15), damit Bruni, Tilda und der Wegweiser nicht angeschnitten sind;
+// im Hochformat geht die Kamera zusätzlich ein Stück zurück (schmaler Blick), höchstens ×1,25
+const KAM = { neigung: 0.8, abstand: 17 };
+const hochFaktor = () => (camera.aspect < 1 ? Math.min(1.25, 1 / Math.sqrt(camera.aspect)) : 1);
+let ziel = null, freiKamera = false, gieren = 0, neigung = KAM.neigung, abstand = KAM.abstand;
 const ray = new Raycaster(), zeiger = new Vector2(), fl = renderer.domElement, finger = new Map();
 // Joystick: Finger links aufsetzen und schieben (erscheint, wo der Finger ist). Kurz tippen = antippen.
 const eingabe = { x: 0, z: 0 }, RADIUS = 56, stick = $("stick"), knauf = $("knauf");
@@ -1552,7 +1573,7 @@ function zeigeKamera() { const k = $("kamera"); k.classList.toggle("an", freiKam
 freiKamera = EIN.kamera === "frei"; zeigeKamera();
 $("kamera").addEventListener("click", () => {
   freiKamera = !freiKamera; zeigeKamera(); merkeEin("kamera", freiKamera ? "frei" : "fest");
-  if (!freiKamera) { gieren = 0; neigung = 0.72; abstand = 15; }
+  if (!freiKamera) { gieren = 0; neigung = KAM.neigung; abstand = KAM.abstand; }
 });
 // Eltern können die Einstellungs-Knöpfe ausblenden (Erwachsene sehen sie immer)
 if (!EIN.kindDarf && !(S.erwachsen && S.erwachsen())) ["grafik", "steuerung", "kamera"].forEach(id => { $(id).hidden = true; });
@@ -1709,7 +1730,7 @@ function bild() {
   wolken.forEach((w, i) => { w.position.x += dt * (0.4 + i * 0.1); if (w.position.x > 40) w.position.x = -40; });
 
   blick.set(ich.position.x, 1.0 + grund + hoehe * 0.3, ich.position.z);
-  let gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.7 : 0.72, ab = drinnen && !freiKamera ? 10 : abstand;
+  let gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.7 : KAM.neigung, ab = drinnen && !freiKamera ? 10 : freiKamera ? abstand : abstand * hochFaktor();
   if (fahrt && !drinnen) {   // Ankunft: Kamera schwebt von weit oben heran (zeitabhängig, nicht pro Bild)
     const f = Math.min(1, (performance.now() - fahrt) / 3500), e = 1 - (1 - f) ** 3;
     ab = MathUtils.lerp(30, ab, e); nw = MathUtils.lerp(1.15, nw, e); gw = MathUtils.lerp(-0.6, gw, e);

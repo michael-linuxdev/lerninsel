@@ -124,6 +124,9 @@ Der Auftraggeber testet auf einem **iPad 10**. Antworte und schreibe alles auf *
   Lernziel `ma.rf.02`, Lehrplan-Verweis (app-Präfix) `leuchtturm:licht`.
 - **Extras der 3D-Figur (07.11.2026):** `quellen/welt3d/extras3d.js` (`extras3d(look, teile, helfer)`, `EXTRAS_3D`) baut alle Kleiderschrank-Extras aus `Puppe.extras` für Insel und Minispiele; Dinge in der Hand hängen am Arm
   (erstes rechts, zweites links). Neue Extras im Kleiderschrank brauchen dort einen 3D-Eintrag (Test `extras3d`; Haken `__heimat.extras3d`, `ecken()`, `armEcken()`).
+- **UX-Ideen (08.11.2026):** Startkamera `KAM = { neigung: 0.8, abstand: 17 }` + `hochFaktor()` (Hochformat bis ×1,25 weiter) in `heimat.js` – Rückstellung 🎥 fest nutzt dieselben Werte; Haus mit Türrahmen,
+  Rundfenster, Klinke, Schwelle, Fensterkreuzen und -bänken (Hausgruppe `h`, `HAUS_KONTUR = !EINFACH`); Baumkronen mit `KRONE_KONTUR` (Hülle 1,1) / `STAMM_KONTUR` (1,09), Wissensbaum-Krone 1,1, `KRONE_LAPPEN` (in „einfach“ bei > 30 Bäumen nur 4 Kugeln – Budget 60 000 Dreiecke);
+  Vorschul-Startseite: `.bild` der Lern-Türen 108 px (Handy 72 px), Begleiter bis 168 px – Türhöhen nicht erhöhen (Startseite muss ohne Scrollen passen, Tests `dashboard`/`falz`).
 - **UX-Pakete 1–5 (07.11.2026):** Startseite: 🔊 `#vorlesen` liest die Startseite vor (`window.__startseiteText()`), Töne-Schalter 🔔/🔕, Knopftexte in `.leiste .knopf .t` (auf dem Handy ausgeblendet);
   Hochformat drei Karten in `.reihe`, Handy `.hallo`/`.leiste`/`.heute-fuer-dich` per `order`. Matheweg: `#schuljahr` (Lernbereiche) steht **unter** `#karte`, `.einstufung` ist eine Zeile. Deutsch: `.schatz` liegt in `.fipsi-start`.
   Insel-HUD: Leiste nur ⬅️ ⭐ und `#einstellungen` (⚙️, `aria-expanded`); `#einstellungen-blatt` enthält `#welt-knopf`, `#grafik`, `#steuerung`, `#kamera` (ids und Handler unverändert, `EIN.kindDarf` blendet aus); `einstellungenZeigen(an)`.
