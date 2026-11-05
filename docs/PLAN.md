@@ -2334,6 +2334,15 @@ Auftrag (Fragerunde: „Beides nacheinander“ – erst die offenen UX-Ideen aus
 - **Entscheidung/Frage des Auftraggebers (08.11.):** „Die Insel sollte viel größer sein, sonst findet das Abenteuer in einem kleinen Raum statt.“ Stand: Heimatinsel Radius 15,2 mit rund 16 festen Orten,
   eigene Welten bis Radius 25. Vorgeschlagen: Heimatinsel moderat größer (Radius ≈ 19, Orte mit Abstand) **und** Kapitel 7 „Neue Ufer“ als Aufbruch zu Nachbar-Eilanden. Antwort: **Weg 3**, nur für die nächste Sitzung vorbereiten (Plan unten).
 
+## Stand 08.11.2026 (iPad-Meldung Langdruck, CI)
+- **iPad-Meldung:** Gedrückthalten einer Kachel (z. B. in „Schreiben und Präsentieren“) öffnete Safaris Link-Vorschau mit „Öffnen, Zur Leseliste, Link kopieren, Teilen“ – damit könnten Kinder
+  die App verlassen oder Links weitergeben. **Behoben:** `shared/style.css` setzt `-webkit-touch-callout: none` auf `body` sowie auf Links, Knöpfe, Bilder, `.tuer`, `.knopf` (dazu `-webkit-user-drag: none`);
+  Eingabefelder, `select` und Texteditoren (`contenteditable`) behalten Menü und Auswahl. `core.js` unterdrückt zusätzlich `contextmenu` (Android, Maus) und `dragstart` auf Links/Bildern
+  (iPadOS-Ziehen), außer in Eingaben und `[data-kontext="an"]`. Gilt automatisch für jede Seite mit `style.css`/`core.js`. Neuer Test `langdruck` (13 Seiten, echter Rechtsklick auf eine Kachel,
+  Texteditor und Elternfeld behalten das Menü), in CI aufgenommen; `praesentieren`, `atelier`, `schach`, `robust` grün.
+- **CI war rot (Lauf 93 und 94), ohne App-Fehler:** Lauf 93 scheiterte am Album (Reiter, behoben in `b228271`). Lauf 94 scheiterte, weil `tests/barriere.js` mit „… Seiten ohne Funde.“ endet
+  und die CI-Schleife auf „bestanden“ prüft – Schlusszeile ergänzt; Regel in CLAUDE.md: jeder Test endet bei Erfolg mit „bestanden“.
+
 ## Plan 08.11.2026 – Weg 3: größere Heimatinsel und Kapitel 7 „Neue Ufer“ (Entscheidung des Auftraggebers, für die nächste Sitzung vorbereitet)
 Entscheidung (08.11.2026): **Weg 3** – Heimatinsel moderat größer **und** Kapitel 7 als Aufbruch zu Nachbar-Eilanden. Nicht in dieser Sitzung gebaut, nur geplant.
 

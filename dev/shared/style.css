@@ -35,7 +35,12 @@ body {
   -webkit-user-select: none; user-select: none;
   overscroll-behavior: none;
   touch-action: manipulation;
+  -webkit-touch-callout: none;
 }
+/* iPad-Meldung 08.11.2026: Gedrückthalten einer Kachel öffnete Safaris Link-Vorschau („Öffnen“, „Zur Leseliste“, „Link kopieren“, „Teilen“).
+   Für Kinder aus: kein Callout, kein Ziehen von Links und Bildern. Eingabefelder behalten Auswahl, Lupe und Einfügen. Gegenstück in core.js (contextmenu, dragstart). */
+a, button, img, svg, [role="button"], .tuer, .knopf { -webkit-touch-callout: none; -webkit-user-drag: none; }
+input, textarea, select, [contenteditable="true"], [contenteditable=""] { -webkit-touch-callout: default; -webkit-user-select: text; user-select: text; }
 
 button {
   font: inherit; color: inherit; cursor: pointer;

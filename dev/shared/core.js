@@ -597,6 +597,17 @@
   }
 })();
 
+// Gedrückthalten (iPad-Meldung 08.11.2026): Safari zeigte bei Kacheln (Links) Vorschau und Menü „Öffnen, Leseliste, Link kopieren, Teilen“ –
+// Kinder sollen die App nicht verlassen oder Links weitergeben. CSS (-webkit-touch-callout) verhindert das Menü auf iOS; hier zusätzlich
+// das Kontextmenü (Android, Maus) und das Ziehen von Links/Bildern (iPadOS-Drag-and-Drop). Eingabefelder und Texteditoren bleiben normal. Test: tests/langdruck.js.
+(function () {
+  if (typeof document === "undefined") return;
+  const FREI = "input, textarea, select, [contenteditable='true'], [contenteditable=''], [data-kontext='an']";
+  const frei = (t) => !!(t && t.closest && t.closest(FREI));
+  document.addEventListener("contextmenu", e => { if (!frei(e.target)) e.preventDefault(); }, true);
+  document.addEventListener("dragstart", e => { const t = e.target; if (t && t.closest && t.closest("a, img, svg, .tuer, .knopf") && !frei(t)) e.preventDefault(); }, true);
+})();
+
 // Kachel-Raster ausgleichen (iPad-Meldung 02.11.2026: „Manchmal zweite Zeile nur für eine Kachel“).
 // Stünde in der letzten Zeile eines Rasters genau eine Kachel, verteilen wir die letzten beiden Zeilen gleichmäßiger:
 // 3/1 → 2/2, 3/3/1 → 3/2/2, 4/1 → 3/2, 2/1 → 2/(1 breit). Die Spaltenzahl bleibt die der Seite (auch bei auto-fill);

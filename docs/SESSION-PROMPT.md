@@ -32,6 +32,8 @@ und -bänken, Baumkronen mit kräftiger Kontur (in großen Wäldern „einfach�
 1. Insel öffnen (quer und hoch): Sind Bruni, Tilda, Fipsi und der Wegweiser ganz im Bild? Wirkt die Figur noch groß genug?
 2. Zum Haus laufen: Fensterkreuze, Fensterbänke, Türrahmen, rundes Türfenster, Klinke, Schwelle. Bäume aus der Nähe: dunkle Linien an den Kronen.
 3. Ein Kind mit Stufe „Vorschule“ anlegen: Sind die Symbole auf Zahlen / Laute und Reime / Rucksack / Atelier groß genug? Passt alles ohne Scrollen?
+4. **Langdruck (iPad-Meldung 08.11., behoben):** Eine Kachel oder einen Knopf lange gedrückt halten (Startseite, „Schreiben und Präsentieren“, Matheweg) – erscheint noch das Safari-Menü
+   „Öffnen / Leseliste / Link kopieren / Teilen“? Im Texteditor von „Text gestalten“ muss lange Drücken weiter Auswahl und „Einfügen“ zeigen.
 
 ### Stand 07.11.2026
 **UX-Pakete 1–5 (07.11., Details in `docs/PLAN.md`, „Stand 07.11.2026 (UX-Pakete 1–5)“):** Insel auf dem Handy ohne Überdeckung; 🔊 liest die Startseite vor; 3D-Figur mit

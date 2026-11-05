@@ -59,5 +59,5 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   console.log("  Ladezeiten (lokal, nur Info):\n    " + info.join("\n    "));
   await browser.close();
   if (fehler.length) { console.log("❌ Fehler:\n" + fehler.map(f => "  - " + f).join("\n")); process.exit(1); }
-  console.log(`✅ Barrierefreiheit: ${SEITEN.length} Seiten ohne Funde.`);
+  console.log(`✅ Barrierefreiheit bestanden: ${SEITEN.length} Seiten ohne Funde.`);   // „bestanden“ prüft die CI-Schleife in .github/workflows/tests.yml
 })().catch(err => { console.error(err); process.exit(1); });
