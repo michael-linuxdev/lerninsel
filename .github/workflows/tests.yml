@@ -19,7 +19,7 @@ jobs:
           node-version: 22
       - name: Playwright und Chromium
         run: |
-          npm i --no-save --no-package-lock playwright@1
+          npm i --no-save --no-package-lock playwright@1.63.0   # feste Version (09.11.2026: „playwright@1“ zog ein halb veröffentlichtes 1.65.0 und brach ab)
           npx playwright install --with-deps chromium
       - name: /dev ist frisch gebaut
         run: |

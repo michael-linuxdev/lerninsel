@@ -2420,5 +2420,7 @@ Fragerunde: kein iPad-Test seit dem 08.11., Auftrag W1 und W2; Entscheidungen de
   Welten an ihrem Platz bleiben: jetzt mittel 213/216, riesig 216/216, klein 15/216 (kleine Welten bleiben eng – offen). `tests/inselkern.js` unverändert grün.
 - **Entscheidungen:** W1 und W2 in einem Commit (Kern und `heimat.js` tragen beide); kein Eltern-Schalter für die kleine Insel (alte Spielstände wandern mit – nur Koordinaten wechseln). Der Forscherlager-Weg
   auf der Heimatinsel zweigt nicht ab, der Leuchtturm-Weg zweigt vom Tierstations-Weg ab (sonst zwei parallele Steinreihen am Start).
+- **CI (Lauf 96 rot, ohne App-Fehler):** `npm i playwright@1` fand `playwright-core@1.65.0` nicht (gerade veröffentlicht, Teilpaket fehlte). Die CI installiert jetzt fest `playwright@1.63.0`
+  (die Version der Cloud-Umgebung); bei einem Playwright-Update die Zeile in `.github/workflows/tests.yml` nachziehen.
 - **Offen / nächstes:** iPad-Test der größeren Insel (Laufwege, Tempo, Steg begehbar) und von Kapitel 7; Russisch (Szene, Expedition) prüfen lassen; später Übergang Klasse 5 im Forscherlager vertiefen
   (KONZEPT: „neue Themen“), Eilande in der Inselchronik mit Biom-Zeichen.
