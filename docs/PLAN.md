@@ -2328,8 +2328,11 @@ Auftrag (Fragerunde: „Beides nacheinander“ – erst die offenen UX-Ideen aus
   Hausdetails in „einfach“ keine Hülle und in großen Wäldern (> 30 Bäume) fällt in „einfach“ die oberste Kronenkugel weg (`KRONE_LAPPEN`): jetzt 56 768 einfach / 97 834 schön.
 - **Vorschul-Startseite:** Symbole der Lern-Türen 108 px statt 64 px (Handy 72 px), Begleiter bis 168 px, Atelier-Symbol 80 px; Türhöhen unverändert, damit die Startseite auf dem iPad ohne Scrollen bleibt
   (`dashboard`, `falz` grün).
+- **Album-Reiter:** Der Test `ipad` fand nach UX-Paket 5 die Inselchronik allein in der zweiten Reiterzeile (iPad quer); Reiter schmaler (1 rem, 10/13 px, Breite 1140 px) – alle sieben in einer Zeile.
+- **Alle 3D-Tests** mit der neuen Kamera grün: `tutorial`, `prolog`, `hud`, `kapitel`, `handy`, `extras3d`, `geschenk`, `geburtstag`, `angeln`, `leistung` (alles im Budget), `szene`, `etappen`,
+  `weihnachten`, `zugang`, `ipad`, `garten`, `baeckerei`, `tierstation`; dazu `dashboard`, `falz`, `feinschliff`.
 - **Entscheidung/Frage des Auftraggebers (08.11.):** „Die Insel sollte viel größer sein, sonst findet das Abenteuer in einem kleinen Raum statt.“ Stand: Heimatinsel Radius 15,2 mit rund 16 festen Orten,
-  eigene Welten bis Radius 25. Vorgeschlagen: Heimatinsel moderat größer (Radius ≈ 19, Orte mit Abstand) **und** Kapitel 7 „Neue Ufer“ als Aufbruch zu Nachbar-Eilanden. Antwort stand beim Push noch aus.
+  eigene Welten bis Radius 25. Vorgeschlagen: Heimatinsel moderat größer (Radius ≈ 19, Orte mit Abstand) **und** Kapitel 7 „Neue Ufer“ als Aufbruch zu Nachbar-Eilanden. Antwort: **Weg 3**, nur für die nächste Sitzung vorbereiten (Plan unten).
 
 ## Plan 08.11.2026 – Weg 3: größere Heimatinsel und Kapitel 7 „Neue Ufer“ (Entscheidung des Auftraggebers, für die nächste Sitzung vorbereitet)
 Entscheidung (08.11.2026): **Weg 3** – Heimatinsel moderat größer **und** Kapitel 7 als Aufbruch zu Nachbar-Eilanden. Nicht in dieser Sitzung gebaut, nur geplant.
