@@ -15,7 +15,13 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   const masse = (p) => p.evaluate(() => ({ h: document.documentElement.scrollHeight, w: document.documentElement.scrollWidth, ih: innerHeight, iw: innerWidth }));
   async function kind(stufe, { breite = 1180, hoehe = 820, name = "Mira" } = {}) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: hoehe }, hasTouch: true, serviceWorkers: "block" });
-    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); });
+    await ctx.addInitScript(() => {
+      window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime();
+      // Gerätestimme nachbilden (wie tests/altersgerecht.js): zeichnet auf, was gesprochen würde
+      window.__gesagt = [];
+      const fake = { speaking: false, pending: false, paused: false, speak(u) { window.__gesagt.push(u.text); setTimeout(() => u.onend && u.onend(), 20); }, cancel() {}, resume() {}, getVoices() { return []; }, addEventListener() {} };
+      Object.defineProperty(window, "speechSynthesis", { value: fake, configurable: true });
+    });
     const p = await ctx.newPage();
     p.on("pageerror", e => fehler.push(`${p.url()}: ${e.message}`));
     p.on("console", m => { if (m.type() === "error" && !IGNORIEREN.test(m.text())) fehler.push(`${p.url()}: ${m.text()}`); });
@@ -45,6 +51,14 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       erwarte(/Heute für dich/.test(t.heute), `Startseite ${art}: „Heute für dich“ (${t.heute.replace(/\s+/g, " ").trim()})`);
       erwarte(m.w <= m.iw + 1 && t.lern === n && t.name > 3 && t.farbig > 1, `Startseite ${art} (${stufe === "vs" ? "Vorschule + Sorbisch" : "Kl. " + stufe}): ${n} Lern-Türen, bunter Name, keine Scrollleiste`);
       if (art !== "Handy") erwarte(m.h <= m.ih + 1 && t.sichtbar, `Startseite ${art}: alles auf einen Blick, alle ${t.alle} Türen ohne Scrollen sichtbar (Höhe ${m.h})`);
+      // Review 07.11.2026: 🔊 liest die Startseite vor (Name, „Heute für dich“, Tagesaufgaben, Spielzeit) – für Kinder, die noch nicht lesen
+      if (art === "iPad quer") {
+        await p.click("#vorlesen"); await p.waitForTimeout(200);
+        const g = await p.evaluate(() => (window.__gesagt || []).join(" | "));
+        const name = stufe === "vs" ? "Maximilian" : "Mira";
+        erwarte(new RegExp(`Hallo ${name}`).test(g) && /Heute für dich/.test(g) && /Tagesaufgaben|Spielzeit|Erst lernen/.test(g) && !/🔊|💾|Spielstand/.test(g), `Startseite ${art}: 🔊 liest Begrüßung, „Heute für dich“ und Aufgaben/Spielzeit vor („${g.slice(0, 90)}…“)`);
+        erwarte(/🔔|🔕/.test(await p.textContent("#ton")), `Startseite ${art}: der Töne-Schalter nutzt die Glocke, 🔊 heißt überall „Vorlesen“`);
+      }
       await bild(p, `dashboard-start-${stufe}-${art.replace(" ", "-")}`);
       if (art === "iPad quer" && stufe === "2") {
         await p.click(".tuer.mathe"); await p.waitForURL(/mathe/);

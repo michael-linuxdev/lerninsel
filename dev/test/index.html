@@ -216,8 +216,9 @@
     <a class="heute-fuer-dich" id="heute-fuer-dich" hidden></a>
     <div class="leiste">
       <button class="knopf" id="wer-knopf" hidden>👥 Wechseln</button>
+      <button class="knopf" id="vorlesen" aria-label="Startseite vorlesen" hidden>🔊</button>
       <button class="knopf" id="spielstand">💾 Spielstand</button>
-      <button class="knopf" id="ton" aria-pressed="true">🔊 Ton an</button>
+      <button class="knopf" id="ton" aria-pressed="true">🔔 Ton an</button>
       <div class="knopf sterne" aria-live="polite">⭐ <b id="sterne">0</b> Sterne</div>
     </div>
   </div>
@@ -442,11 +443,21 @@
   function zeigeSterne() { document.getElementById("sterne").textContent = S.sterne(); }
   function zeigeTon() {
     const b = document.getElementById("ton");
-    b.textContent = S.tonAn() ? "🔊 Ton an" : "🔇 Ton aus";
+    b.textContent = S.tonAn() ? "🔔 Ton an" : "🔕 Ton aus";
     b.setAttribute("aria-pressed", S.tonAn());
   }
 
   document.getElementById("spielstand").addEventListener("click", () => { S.ton("tipp"); Spielstand.oeffnen(); });
+  // 🔊 Vorlesen (Review 07.11.2026): die Startseite besteht für Nichtleser aus Text – ein Knopf liest Begrüßung, „Heute für dich“, Meine Ecke, Tier und Spielzeit vor
+  function startseiteText() {
+    const t = (id) => { const el = document.getElementById(id); return el && !el.hidden && el.offsetParent !== null ? el.textContent.replace(/\s+/g, " ").trim() : ""; };
+    const teile = [`Hallo ${S.profil.name || "du"}!`, t("heute-fuer-dich").replace(/^Heute für dich\s*·?\s*/, "Heute für dich: "), ["Meine Ecke:", t("ich-titel"), t("ich-aufgaben")].filter(Boolean).join(" "),
+      [t("tier-name") + ":", t("tier-zeile")].filter(Boolean).join(" "), t("erst-dann")];
+    return teile.filter(x => x && !/:$/.test(x)).join(". ").replace(/\.\./g, ".");
+  }
+  { const v = document.getElementById("vorlesen");
+    if (window.Sprache && Sprache.verfuegbar()) { v.hidden = false; v.addEventListener("click", () => { Sprache.knopf(); Sprache.stopp(); Sprache.sprich(startseiteText(), "de-DE"); }); }
+    window.__startseiteText = startseiteText; }
   document.getElementById("ton").addEventListener("click", () => { S.setzeTon(!S.tonAn()); zeigeTon(); S.ton("tipp"); });
   document.querySelectorAll("[data-bald]").forEach((b) =>
     b.addEventListener("click", () => { S.ton("tipp"); S.meldung(b.dataset.bald + " wird gerade gebaut."); })

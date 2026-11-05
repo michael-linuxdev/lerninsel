@@ -46,6 +46,17 @@
   #joy-hinweis[hidden] { display: none; }
   #einrichten { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(220px, calc(env(safe-area-inset-bottom) + 210px)); z-index: 2; min-height: 56px; font-size: 1.15rem; }
   #einrichten[hidden], #laden[hidden] { display: none; }
+  /* Handy (Review 07.11.2026): unten war kein Platz für Steuerungs-Hinweis, Info-Blase und Springen zugleich – die Info wandert nach oben unter die
+     Leiste, der Springen-Knopf wird kleiner, der Hinweis bleibt links unten neben ihm (prüft tests/handy.js) */
+  @media (max-width: 640px) {
+    #springen { width: 76px; height: 76px; font-size: .82rem; right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); }
+    #springen span { font-size: 1.6rem; }
+    #info { bottom: auto; top: calc(max(12px, env(safe-area-inset-top)) + 64px); max-width: calc(100% - 32px); font-size: .95rem; padding: 8px 14px; }
+    #lern-hinweis { top: calc(max(12px, env(safe-area-inset-top)) + 112px); }
+    #joy-hinweis { bottom: max(14px, env(safe-area-inset-bottom)); max-width: calc(100% - 124px); font-size: .9rem; padding: 8px 12px; border-radius: 18px; }
+    #raus { bottom: max(110px, calc(env(safe-area-inset-bottom) + 100px)); }
+    #einrichten { bottom: max(176px, calc(env(safe-area-inset-bottom) + 166px)); }
+  }
   /* Meine Welt: Wünsche-Assistent und gespeicherte Welten */
   #welt { position: fixed; inset: 0; z-index: 6; background: rgba(40,30,80,.55); display: grid; place-items: center; padding: 14px; }
   .welt-karte { background: #fff; border-radius: 28px; padding: 18px 20px; width: min(760px, 100%); max-height: calc(100dvh - 28px); overflow-y: auto; box-shadow: 0 12px 0 rgba(0,0,0,.15); color: var(--pflaume); }

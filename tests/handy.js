@@ -54,6 +54,15 @@ const MESSEN = () => {
       await p.waitForTimeout(800);
       // Wasser liegt flach (30.10.2026: in „einfach“ stand es als senkrechte Wand im Bild)
       if (/welt3d/.test(url)) { const hoch = await p.evaluate(() => { const g = __heimat.wasser.geometry; g.computeBoundingBox(); return g.boundingBox.max.y - g.boundingBox.min.y; }); if (hoch > 1) fehler.push(`${gname}: Wasser steht senkrecht (${hoch.toFixed(1)} hoch)`); else console.log(`  ✓ ${gname}: Wasser liegt flach`); }
+      // Review 07.11.2026: Steuerungs-Hinweis, Info-Blase und Springen-Knopf dürfen sich nicht überdecken und müssen im Bild liegen
+      if (/welt3d/.test(url)) {
+        const lage = await p.evaluate(() => { const r = (id) => { const el = document.getElementById(id); if (!el || el.hidden || !el.textContent.trim()) return null; const b = el.getBoundingClientRect(); return { id, l: b.left, t: b.top, r: b.right, b: b.bottom }; };
+          const k = ["joy-hinweis", "info", "springen", "raus", "einrichten", "lern-hinweis"].map(r).filter(Boolean), aus = [];
+          k.forEach(a => { if (a.l < -1 || a.t < -1 || a.r > innerWidth + 1 || a.b > innerHeight + 1) aus.push(`${a.id} ragt aus dem Bild`); });
+          k.forEach((a, i) => k.slice(i + 1).forEach(b => { if (a.l < b.r - 2 && b.l < a.r - 2 && a.t < b.b - 2 && b.t < a.b - 2) aus.push(`${a.id} überdeckt ${b.id}`); }));
+          return { aus, n: k.length }; });
+        if (lage.aus.length) fehler.push(`${gname} ${sname}: ${lage.aus.join(", ")}`); else console.error(`  ✓ ${gname} ${sname}: ${lage.n} Bedienelemente unten/oben ohne Überdeckung`);
+      }
       // Seit 30.10.2026: ohne gespeicherte Wahl startet die Insel auf kleinen Bildschirmen (kürzere Seite < 500) in „einfach“
       if (grafik === "auto") { const g = await p.evaluate(() => document.getElementById("grafik").textContent); if (!/einfach/.test(g)) fehler.push(`${gname}: ohne Wahl nicht „einfach“ (${g})`); else console.log(`  ✓ ${gname}: ohne Wahl automatisch „einfach“`); }
       // Messfenster 1: ohne Drosselung (Zeichenaufrufe, Dreiecke, Bildgröße), Messfenster 2: CPU gedrosselt (Hauptthread-Zeit)
