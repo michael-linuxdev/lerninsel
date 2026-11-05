@@ -226,9 +226,9 @@
           ["sn.su3.un.04", "Schwimmen und Sinken: Material, Form, Salzwasser", "3", ["sachkunde:schwimmen"], "ja"]
         ],
         5: [
-          ["sn.su3.rz.01", "Haupt- und Nebenhimmelsrichtungen, Tagbogen der Sonne", "3", ["sachkunde:kompass", "sachkunde:karten-lesen"], "ja"],
+          ["sn.su3.rz.01", "Haupt- und Nebenhimmelsrichtungen, Tagbogen der Sonne", "3", ["sachkunde:kompass", "sachkunde:karten-lesen", "expedition:karte"], "ja"],
           ["sn.su3.rz.02", "Mit Plan und Kompass orientieren, Grundriss, Karte einnorden", "3", ["sachkunde:karten-lesen", "sachkunde:kompass"], "ja"],
-          ["sn.su3.rz.03", "Karten lesen: Nordpfeil, Legende, Lage beschreiben", "3", ["sachkunde:karten-lesen"], "ja"],
+          ["sn.su3.rz.03", "Karten lesen: Nordpfeil, Legende, Lage beschreiben", "3", ["sachkunde:karten-lesen", "expedition:karte"], "ja"],
           ["sn.su3.rz.04", "Den eigenen Landkreis kennen: Lage, Städte, Gewässer, Wirtschaft, Kreisstadt, Bräuche", "3", ["sachkunde:landkreis", "sachkunde:lk-sachsen", "sachkunde:lk-bautzen", "sachkunde:lk-goerlitz", "sachkunde:lk-saechsische-schweiz", "sachkunde:lk-meissen", "sachkunde:lk-mittelsachsen", "sachkunde:lk-erzgebirge", "sachkunde:lk-zwickau", "sachkunde:lk-vogtland", "sachkunde:lk-leipzig-land", "sachkunde:lk-nordsachsen", "sachkunde:lk-dresden", "sachkunde:lk-leipzig", "sachkunde:lk-chemnitz"], "ja"],
           ["sn.su3.rz.05", "Verkehrsregeln für Fußgänger und Radfahrer, verkehrssicheres Fahrrad", "3", ["sachkunde:fahrrad"], "ja"],
           ["sn.su3.rz.06", "Rad fahren üben, Helm", "3", ["sachkunde:fahrrad", "echtewelt:radfahren"], "aussen"]
@@ -267,7 +267,7 @@
           ["sn.su4.un.03", "Gute und schlechte Wärmeleiter, Dämmung im Haushalt", "4", ["sachkunde:waerme"], "ja"]
         ],
         5: [
-          ["sn.su4.rz.01", "Karte von Sachsen: Himmelsrichtungen, Farben, Entfernungen mit dem Maßstab", "4", ["sachkunde:sachsen", "sachkunde:karten-lesen", "mathe:k4massstab"], "ja"],
+          ["sn.su4.rz.01", "Karte von Sachsen: Himmelsrichtungen, Farben, Entfernungen mit dem Maßstab", "4", ["sachkunde:sachsen", "sachkunde:karten-lesen", "mathe:k4massstab", "expedition:karte"], "ja"],
           ["sn.su4.rz.02", "Sachsen: Lage, Größe, Einwohner, Gebirge, Flüsse, Regionen und Städte", "4", ["sachkunde:sachsen", "sachkunde:sachsen-entdecken"], "ja"],
           ["sn.su4.rz.03", "Dresden: Sitz der Landesregierung, Kunst und Kultur", "4", ["sachkunde:sachsen-entdecken", "sachkunde:sachsen"], "ja"],
           ["sn.su4.rz.04", "Sorbische Kultur: Zweisprachigkeit, Bräuche", "4", ["sachkunde:sachsen-entdecken", "sachkunde:sachsen"], "ja"],
@@ -501,7 +501,7 @@
       "1/2": {
         1: [ // Raum und Form
           ["sn.ma12.rf.01", "Rechts und links am eigenen Körper unterscheiden", "1", ["mathe:k1rechtslinks", "mathe:k1lage", "mathe:lage", "echtewelt:rechtslinks"], "ja"],
-          ["sn.ma12.rf.02", "Lage zwischen Dingen beschreiben: oben, unten, über, unter, links, rechts, neben, zwischen", "1/2", ["mathe:k1lage", "mathe:lage", "leuchtturm:licht"], "ja"],
+          ["sn.ma12.rf.02", "Lage zwischen Dingen beschreiben: oben, unten, über, unter, links, rechts, neben, zwischen", "1/2", ["mathe:k1lage", "mathe:lage", "leuchtturm:licht", "expedition:karte"], "ja"],
           ["sn.ma12.rf.03", "Vorn, hinten, vor, hinter im Raum", "1/2", ["mathe:k1vornhinten", "mathe:wuerfelbau2"], "ja"],
           ["sn.ma12.rf.04", "Würfelgebäude frei und nach Bauplan bauen, eigene Baupläne finden", "2", ["mathe:bauplaene", "mathe:wuerfelbau2", "echtewelt:bauplan"], "ja"],
           ["sn.ma12.rf.05", "Wege nach Beschreibung gehen, sichtbare Wege und Wege aus der Vorstellung beschreiben", "2", ["mathe:wege"], "ja"],
@@ -632,7 +632,7 @@
           ["sn.ma4.zo.07", "Schriftliche Multiplikation mit bis zu dreistelligem zweiten Faktor", "4", ["mathe:k4malschrift", "mathe:k4malmehr"], "ja"],
           ["sn.ma4.zo.08", "Schriftliche Division (einstelliger Divisor), Teilbarkeit 4 und 6, Primzahlen, Überschlag", "4", ["mathe:k4geteilt", "mathe:k4teilbar", "mathe:k4primzahl", "mathe:k4runden"], "ja"],
           ["sn.ma4.zo.09", "Zahlenmuster in geometrischen Mustern erkennen (figurierte Zahlen)", "4", ["mathe:k4rechenmeister"], "ja"],
-          ["sn.ma4.zo.10", "Funktionale Beziehungen: Maßstab, Menge und Preis, Tabellen", "4", ["mathe:k4massstab", "mathe:k4reise"], "ja"]
+          ["sn.ma4.zo.10", "Funktionale Beziehungen: Maßstab, Menge und Preis, Tabellen", "4", ["mathe:k4massstab", "mathe:k4reise", "expedition:karte"], "ja"]
         ],
         3: [ // Größen und Messen
           ["sn.ma4.gm.01", "Geld, Länge und Zeit in größeren Sachsituationen (Reiseplanung, Preistafeln, Fahrpläne, Wanderkarten)", "4", ["mathe:k4reise", "mathe:k4zeit"], "ja"],

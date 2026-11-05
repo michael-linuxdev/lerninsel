@@ -132,6 +132,8 @@ nicht rendern, Animationen außerhalb der Kamera pausieren.
   - Unter 45 Bildern/s geht sie in Schritten von 0,125 bis 1,0 herunter, über 58 Bildern/s (4 s lang) wieder herauf.
   - Erst bei Stufe 1,0 und unter 30 Bildern/s wird gespart (keine Schatten). Das gemerkte Sparen gilt 3 Tage (vorher für immer).
 - **Schatten:** `PCFShadowMap` statt `PCFSoftShadowMap`, Radius 3. Die Schattenkarte wird nur jedes zweite Bild neu gezeichnet (`shadowMap.autoUpdate = false`).
+  **Messung (09.11.2026):** In diesem Bild zählt `renderer.info` den Schattendurchlauf mit (≈ +55 Aufrufe, +60 000 Dreiecke). `__heimat.info()` und `tests/leistung.js` zeigen darum
+  das Bild ohne Schattendurchlauf (Budget-Vergleich) und daneben „mit Schatten“.
 - **Wasserwellen und wehendes Gras** laufen im Vertex-Shader (`onBeforeCompile`, Uniform `ZEIT`) statt jedes Bild in JavaScript.
 - **Start:** `renderer.compileAsync` übersetzt die Shader vor dem ersten Bild; bis dahin zeigt die Seite „Die Insel wacht auf …“ (`#insel-laedt`).
 - **Abschalten im Test:** `window.__keinSparen = true` schaltet Regler und Sparen ab, wie bisher.

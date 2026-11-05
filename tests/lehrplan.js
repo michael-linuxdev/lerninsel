@@ -77,6 +77,7 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder I
         else if (art === "werkstatt") assert.ok(w.WERKSTATT.some(k => k.id === id), `${p.id}: Werkstatt-Kapitel ${id} gibt es nicht`);
         else if (art === "echtewelt") assert.ok(echt.includes(`["${id}", `), `${p.id}: Echte-Welt-Aufgabe ${id} gibt es nicht`);
         else if (art === "leuchtturm") assert.strictEqual(id, "licht", `${p.id}: ${a}`);   // Tildas Licht-Rätsel (07.11.2026)
+        else if (art === "expedition") assert.strictEqual(id, "karte", `${p.id}: ${a}`);   // Ellas Forscherlager: Inselkarte lesen (09.11.2026)
         else assert.fail(`${p.id}: unbekannte Zuordnung ${a}`); });
       if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(mathe|werkstatt):/.test(a)), p.id + " ist „ja“ ohne Station");
     });
@@ -88,7 +89,7 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder I
     const m = { ja: 0, teil: 0, nein: 0, aussen: 0 }, ids2 = new Set();
     L.laender.sachsen.faecher.mathe.stufen[st].forEach(lb => { assert.ok(lb.punkte && lb.punkte.length >= 4, `Kl. ${st} ${lb.titel}`);
       lb.punkte.forEach(p => { assert.ok(!ids2.has(p.id) && p.kl === st, p.id); ids2.add(p.id); m[p.abdeckung]++;
-        p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id) : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
+        p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id) : art === "expedition" ? id === "karte" : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
         if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(mathe|werkstatt):/.test(a)), p.id); }); });
     assert.strictEqual(ids2.size, zahl, "Kl. " + st); assert.deepStrictEqual(m, soll, "Kl. " + st);
   }  // Übergang 5: Lehrpläne Klasse 5 Oberschule und Gymnasium
@@ -144,7 +145,7 @@ pruefe("Sachsen in voller Tiefe: Sachunterricht Kl. 1/2, 3 und 4 (Pflicht-Lernbe
   const gibt = (a) => { const [art, id] = a.split(":");
     return art === "sachkunde" ? w.THEMEN.concat(w.LANDKREIS_THEMEN).some(t => t.id === id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id)
       : art === "medien" ? w.LEKTIONEN.some(k => k.id === id) : art === "mathe" ? stationen.has(id) : art === "echtewelt" ? echt.includes(`["${id}", `)
-      : art === "praesentieren" ? ["folien"].includes(id) : art === "wetterdrache" ? id === "alle" : false; };   // wetterdrache:alle = Ellas Wetter-Drache (06.11.2026)
+      : art === "praesentieren" ? ["folien"].includes(id) : art === "wetterdrache" ? id === "alle" : art === "expedition" ? id === "karte" : false; };   // wetterdrache:alle = Ellas Wetter-Drache (06.11.2026), expedition:karte = Ellas Forscherlager (09.11.2026)
   const ids = new Set(), soll = { "1/2": [47, { ja: 46, teil: 0, nein: 0, aussen: 1 }], "3": [24, { ja: 23, teil: 0, nein: 0, aussen: 1 }], "4": [28, { ja: 27, teil: 0, nein: 0, aussen: 1 }] };
   const kl = { "1/2": ["1", "2", "1/2"], "3": ["3"], "4": ["4"] };
   Object.entries(soll).forEach(([st, [zahl, verteilung]]) => {

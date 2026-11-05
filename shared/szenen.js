@@ -132,6 +132,13 @@
     { wer: "tilda", text: { de: "Lenk das Licht mit den Spiegeln – dann leuchtet der Turm, und nachts strahlt die ganze Insel.", ru: "Направь свет зеркалами – тогда маяк засветится, и ночью будет сиять весь остров.", status: E } },
     { fuerAeltere: true, wer: "tilda", text: { de: "In der Höhle liegt auch meine Schatzkammer. Dort siehst du alles, was du schon geschafft hast.", ru: "В пещере есть и моя сокровищница. Там видно всё, что ты уже сделал.", status: E } }
   ] });
+  // Kapitel 7 „Neue Ufer“ (09.11.2026, KONZEPT): Robo macht das Boot klar – Fahrt zu Nachbar-Eilanden mit Ellas Forscherlager
+  Sz.registriere("neue-ufer", { titel: "Neue Ufer", kapitel: 7, blasen: [
+    { wer: "robo", text: { de: "Piep, {name}! Du hast so viel gelernt – mein Boot ist bereit für eine große Fahrt.", ru: "Пип, {name}! Ты так многому научился – моя лодка готова к большому путешествию.", status: E } },
+    { wer: "robo", text: { de: "Wünsch dir ein Eiland: Wiese, Wald, Berge, Strand, Schnee oder Wüste. Dann fahren wir hin.", ru: "Пожелай остров: луг, лес, горы, пляж, снег или пустыню. И мы поплывём туда.", status: E } },
+    { wer: "robo", text: { de: "Dort schlägt Ella ihr Forscherlager auf. Mit Karte und Tagebuch erforschen wir jedes neue Ufer.", ru: "Там Элла разобьёт лагерь исследователей. С картой и дневником мы исследуем каждый новый берег.", status: E } },
+    { fuerAeltere: true, wer: "robo", text: { de: "Und keine Sorge: Deine Heimatinsel bleibt, wie sie ist. Wir kommen immer zurück.", ru: "И не волнуйся: твой родной остров останется таким, как есть. Мы всегда возвращаемся.", status: E } }
+  ] });
   Sz.registriere("atelier", { titel: "Paulas Atelier", etappe: "E9", blasen: [
     { wer: "papagei", text: { de: "Hallo {name}! Ich bin Paula. Auf meiner Bühne spielt Musik – und im Atelier wird gemalt!", ru: "Привет, {name}! Я Паула. На моей сцене играет музыка – а в ателье рисуют!", status: E } },
     { wer: "papagei", text: { de: "Male ein Bild oder erfinde eine Melodie. Dein neuestes Bild steht dann auf der Staffelei in deinem Zimmer.", ru: "Нарисуй картину или придумай мелодию. Твоя новая картина будет стоять на мольберте в твоей комнате.", status: E } },

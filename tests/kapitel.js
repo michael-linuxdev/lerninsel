@@ -4,6 +4,7 @@
 // - Wegweiser zeigt nur Wörter, die das Kind schon hatte (Lernkartei Deutsch), antippen liest sie vor
 // - Kapitel nie rückwärts; nach dem Neuladen steht der Weg noch, die Szene kommt nicht wieder
 // - E9: Paula zeigt Atelier und Bühne nach Kapitel 1 ab dem dritten Tag; wer schon gemalt hat, bekommt E9 still
+// - seit 09.11.2026 auch Kapitel 7 „Neue Ufer“ (50 Lernfunde + Führerschein, Robos Boot wird bereit)
 // Aufruf: sh tests/laufen.sh kapitel (allein laufen lassen, 3D)
 const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
@@ -155,6 +156,22 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     erwarte(await p.evaluate(() => __heimat.leuchtturm().strahl), "nachts kreist der Lichtstrahl des Leuchtturms");
     await p.evaluate(() => { const l = __heimat.leuchtturm(); __heimat.ich.position.set(l.x * 0.7, __heimat.ich.position.y, l.z * 0.7); }); await p.waitForTimeout(1200);
     await bild(p, "kapitel-leuchtturm-nacht");
+    // Kapitel 7 „Neue Ufer“ (09.11.2026): 50 Lernfunde und Tablet-Führerschein; danach fährt Robos Boot (Details in tests/expedition.js)
+    await p.goto(INSEL); await p.waitForTimeout(2500);
+    await funde(50);
+    erwarte(await naechste(p) === null, "50 Lernfunde ohne Führerschein: Kapitel 7 wartet");
+    await p.evaluate(() => { const m = Spielwelt.lade("medien") || {}; m.fuehrerschein = "2026-10-20"; Spielwelt.speichere("medien", m); });
+    erwarte(await naechste(p) === "neue-ufer", "mit Führerschein: Kapitel 7 „Neue Ufer“ ist dran");
+    erwarte(await p.evaluate(() => __heimat.boot().aktion === "Ansehen"), "vor der Szene zeigt das Boot „Ansehen“");
+    await p.goto(INSEL);
+    await p.waitForFunction(() => window.__szene && __szene.aktuell() && __szene.aktuell().id === "neue-ufer", null, { timeout: 20000 });
+    a = await p.evaluate(() => __szene.aktuell());
+    erwarte(a.wer === "robo" && a.zeigt && a.anzahl === 4, "Robo spricht und zeigt zum Steg (4 Blasen)");
+    await bild(p, "kapitel-7");
+    await weiter(p);
+    erwarte(await p.evaluate(() => Story.kapitel() === 7 && __heimat.boot().aktion === "Boot"), "zweite Blase: Kapitel 7 gemerkt, Boot bereit");
+    while (await p.evaluate(() => !!(window.__szene && __szene.aktuell()))) await weiter(p);
+    erwarte(await p.evaluate(() => Story.kapitel() === 7 && Story.chronik().some(x => x.s === "neue-ufer") && Story.KAPITEL_ZAHL === 7), "Kapitel 7 erreicht, Szene in der Chronik, KAPITEL_ZAHL = 7");
     await ctx.close();
   }
 

@@ -103,7 +103,7 @@ dauerhaft übergangen. Es gibt nie eine Frist und nie einen Rückschritt.
 | 4 „Paulas Fest“ | 35 Funde + 1 Bild und 1 Melodie | Inselfest: eigene Bilder als Plakate, eigene Melodie auf der Bühne | Atelier → Story, Bühne |
 | 5 „Der Sturm“ | 70 Funde + 1 Sachthema „Wetter“ | Bruni und Ella bereiten die Insel vor, danach räumen alle gemeinsam auf | echtes Wetter, Gefühle, Bewegung |
 | 6 „Der Leuchtturm“ | 120 Funde + 3 Schach-Rätsel | Tilda führt zum Leuchtturm, nachts leuchtet die Insel | Schatzkammer in der Höhle |
-| 7 „Neue Ufer“ | 200 Funde (neu) | Pixel fährt zu einem Nachbar-Eiland (eigene Welt aus dem Wünsche-Assistenten) | Übergang Klasse 5, neue Themen |
+| 7 „Neue Ufer“ | 50 Funde + Tablet-Führerschein (gebaut 09.11.2026; statt der geplanten 200 Funde – ehrlich zur Staffel 5/10/15/25/35) | Robo macht sein Boot am Steg klar; Pixel fährt zu einem Nachbar-Eiland (eigene Welt aus dem Wünsche-Assistenten), dort steht Ellas Forscherlager: Inselkarte lesen, Forscher-Tagebuch | Karte, Himmelsrichtungen, Maßstab (Übergang Klasse 5) |
 
 **Episoden** (wiederkehrend, unabhängig von den Kapiteln): Jahreszeiten, Feste in Deutschland und in den Herkunftsländern
 (Nikolaus, Ded Moros, Nouruz, Zuckerfest, Ostern …), Geburtstag des Kindes, Weihnachten. Sie dauern ein paar Tage und

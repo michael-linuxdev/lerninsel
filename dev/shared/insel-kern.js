@@ -25,23 +25,42 @@
   const GROESSEN = { klein: 15.2, mittel: 20, gross: 25 };
   const HUEGEL = { wenig: 0.35, mittel: 1, viel: 1.8 };
 
-  // Die bisherige Insel (alle Koordinaten wie früher in heimat.js)
+  // Die Heimatinsel. Weg 3 (Entscheidung des Auftraggebers 08.11.2026, gebaut 09.11.): Radius 15,2 → 19 (rund 60 % mehr Fläche), die Orte
+  // liegen etwa 1,25-mal weiter auseinander (Haus und Start bleiben nah), 14 Bäume, 5 Steine, zwei Blumenwiesen statt der Spirale und
+  // Trittstein-Wege vom Start zu Garten, Bäckerei, Tierstation und Leuchtturm (`wege`, Trittsteine berechnet `erstelle()`).
+  // Alle Zahlen der 3D-Seite (Sand, Gras, Schaum, Laufgrenze, Nebel, Halme) leiten sich aus `R` ab – keine feste 15,2 mehr.
+  // Die Figur startet bei `start` + (1, 2) wie in den eigenen Welten.
   const STANDARD = {
-    insel: true, R: 15.2, biom: "wiese",
+    insel: true, R: 19, biom: "wiese",
     hoehe: () => 0,
     plaetze: {
-      start: [1, 2], tier: [2.5, 3], haus: [-5, -4.5, 0.35], station: [-1.8, -6.3, 0.3], nest: [-2.2, -6.2],
-      eule: [8.5, -3, -1.2], fipsi: [-7.6, -0.6, 1.0], robo: [5.5, 8.5, -2.6], biber: [2, -8, 0.2], schild: [3.3, -8.5, 0.2],
-      wissensbaum: [-3.2, 2.2], ballons: [10, 6], truhe: [-1, 13.6],
-      lauf: [6, 10.2], kart: [-8.6, 8.2], bau: [11.2, -5], baer: [-3.7, 6.9, 2.6], schach: [1.5, 6.8, 3.0], buehne: [4.4, -0.8, -1.4],
-      kartenweg: [-6.5, 2.0]   // Kapitel 2 (NA-17): Ende des neuen Wegs von Fipsi aus
+      start: [0, 0], tier: [-0.5, 3.6], haus: [-6.2, -5.6, 0.35], station: [-3.0, -7.4, 0.3], nest: [-3.4, -7.3],
+      eule: [10.6, -3.8, -1.2], fipsi: [-9.5, -0.8, 1.0], robo: [8.5, 9.5, -2.6], biber: [2.5, -10, 0.2], schild: [4.1, -10.6, 0.2],
+      wissensbaum: [-4, 2.8], ballons: [12.5, 7.5], truhe: [-1.2, 17],
+      lauf: [7.5, 12.8], kart: [-10.8, 10.2], bau: [14, -6.2], baer: [-4.6, 8.6, 2.6], schach: [1.9, 8.5, 3.0], buehne: [5.5, -1, -1.4],
+      kartenweg: [-8.1, 2.5],   // Kapitel 2 (NA-17): Ende des neuen Wegs von Fipsi aus
+      lager: [-12.5, -4.5, 1.22]   // Forscherlager (Kapitel 7 „Neue Ufer“, 09.11.2026): Ellas Zelt mit Fernrohr, Blick zur Mitte
     },
-    baeume: [[-9, -6, 1.1], [-7.5, 3.2, 0.9], [7.5, -7, 1], [10.5, 1, 1.1], [3, -10, 0.85], [-3.5, 9.8, 0.8], [-11, -1, 0.75], [1.5, 11, 0.7], [-11.5, 6, 0.8]].map(([x, z, k], i) => ({ x, z, k, i })),
-    steine: [[4.5, 3.6, 0.6], [5.2, 4.1, 0.35], [-6, 6.5, 0.5]],
-    blumen: null,   // null = alte Blumen-Spirale
+    baeume: [[-11.25, -7.5, 1.1], [-9.4, 4, 0.9], [9.4, -8.75, 1], [12.2, 3.6, 1.1], [3.75, -12.5, 0.85], [-4.4, 12.25, 0.8], [-13.75, -1.25, 0.75], [1.9, 13.75, 0.7], [-13.8, 7.2, 0.8],
+      [-8.5, -11.5, 0.9], [11.5, -10.8, 0.8], [-15, 2.5, 0.75], [14.8, 3.8, 0.85], [-7, 14, 0.8]].map(([x, z, k], i) => ({ x, z, k, i })),
+    steine: [[5.6, 4.5, 0.6], [6.5, 5.1, 0.35], [-8.5, 6.5, 0.5], [12, -1.5, 0.45], [-6, -10.5, 0.5]],
+    blumen: null,   // null = zwei Blumenwiesen (`blumenwiesen()`), im Frühling mehr
     see: null,
-    pfad: Array.from({ length: 7 }, (_, i) => [-4 + i * 1.25, -2.6 + Math.sin(i * 0.9) * 0.6])
+    pfad: Array.from({ length: 8 }, (_, i) => [-5 + i * 1.3, -3 + Math.sin(i * 0.9) * 0.6]),   // vom Haus zum Platz in der Mitte
+    wege: [{ via: [[5, 6]], ziel: "lauf" }, { via: [[-3, 5.5]], ziel: "kart" }, { via: [[7, 1.5], [12.5, -1]], ziel: "bau" }, { von: [10.3, -0.35], via: [], ziel: "leuchtturm" }, { via: [], ziel: "lager" }]   // Leuchtturm-Weg zweigt vom Weg zur Tierstation ab
   };
+  // Zwei Blumenwiesen der Heimatinsel (Goldener Winkel, deterministisch): [x, z, Farbnummer]; `n` = wie viele je Wiese
+  function blumenwiesen(n = 24) {
+    const aus = [], P = STANDARD.plaetze, orte = Object.values(P), baeume = STANDARD.baeume;
+    [[7.5, 3.5, 3.1], [-7, 5.5, 2.6]].forEach(([mx, mz, mr]) => {
+      for (let i = 0; i < n; i++) {
+        const w = i * 2.399, r = Math.sqrt((i + 0.5) / n) * mr, x = +(mx + Math.cos(w) * r).toFixed(2), z = +(mz + Math.sin(w) * r).toFixed(2);
+        if (orte.some(o => Math.hypot(o[0] - x, o[1] - z) < 1.4) || baeume.some(b => Math.hypot(b.x - x, b.z - z) < 1.3) || STANDARD.steine.some(s => Math.hypot(s[0] - x, s[1] - z) < s[2] + 0.3)) continue;
+        aus.push([x, z, i]);
+      }
+    });
+    return aus;
+  }
 
   function zufall(seed) {
     let a = (seed >>> 0) || 1;
@@ -103,6 +122,13 @@
       const [x, z] = polar(r() * Math.PI * 2, R * (0.35 + r() * 0.3)), rad = 2 + r() * 1.2;
       if (flach.every(f => Math.hypot(f.x - x, f.z - z) > f.r + rad + 2) && Math.hypot(x, z) + rad < rand - 1.5) see = { x, z, r: rad };
     }
+    // 09.11.2026: In mittleren Welten fand sich so nie ein Platz (0 von 216 geprüften, der Wunsch „Teich“ blieb unerfüllt). Zweite Suche mit kleinerem Teich und weniger Rand –
+    // mit eigenem Zufall, damit Bäume, Steine und Blumen bestehender Welten an ihrem Platz bleiben (nur Bäume im neuen Teich wandern).
+    if (w.see && !see) { const r2 = zufall(seed ^ 0x5EE5EE);
+      for (let v = 0; v < 120 && !see; v++) {
+        const [x, z] = polar(r2() * Math.PI * 2, R * (0.3 + r2() * 0.42)), rad = 1.6 + r2() * 0.8;
+        if (flach.every(f => Math.hypot(f.x - x, f.z - z) > f.r + rad + 1) && Math.hypot(x, z) + rad < rand - 1.2) see = { x, z, r: rad };
+      } }
 
     const hoehe = (x, z) => {
       let h = roh(x, z), gew = 0, ziel = 0;
@@ -321,7 +347,10 @@
       faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 25 && wetterThema() },
     // 07.11.2026: Kapitel 6 „Der Leuchtturm“ (KONZEPT) – Tilda führt zum Leuchtturm, in der Höhle darunter: Licht-Rätsel und Schatzkammer
     { n: 6, szene: "der-leuchtturm", titel: "Der Leuchtturm", bedingung: "35 Lernfunde und drei Schach-Rätsel oder drei Schach-Lektionen bei Tilda",
-      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 35 && tildaGenutzt() }
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 35 && tildaGenutzt() },
+    // 09.11.2026: Kapitel 7 „Neue Ufer“ (KONZEPT: Pixel fährt zum Nachbar-Eiland) – Robo macht das Boot am Steg klar; dafür braucht es den Tablet-Führerschein
+    { n: 7, szene: "neue-ufer", titel: "Neue Ufer", bedingung: "50 Lernfunde und der Tablet-Führerschein bei Robo Pixel",
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 50 && profi() }
   ];
   // Wörter für Fipsis Wegweiser: nur Wörter, die das Kind schon hatte (Lernkartei Deutsch, Lernfunde in Deutsch), höchstens n, ohne Dopplungen
   function wortSchilder(n = 3) {
@@ -433,7 +462,7 @@
       return -0.1 - Math.min(1.1, (d - WELT.R) * 1.4);
     }
     // Steg mit Pixels Boot am Südufer (zur Kamera hin), Sonnenuhr daneben, Weihnachtspaket am Stegende
-    const UFER = WELT.insel ? 15.2 : WELT.R, RMAX_LAUF = WELT.insel ? 14.6 : WELT.R - 0.6;
+    const UFER = WELT.R, RMAX_LAUF = WELT.R - 0.6;
     const STEG = { x: 3.2, z0: UFER - 2.2, z1: UFER + 2.4 };
     const SU = { x: STEG.x + 2.1, z: Math.min(RMAX_LAUF - 1.1, STEG.z0 + 0.6) };
     const PAKET_POS = { x: STEG.x + 0.95, z: STEG.z0 + 0.15 };
@@ -445,15 +474,15 @@
       const frei = ([x, z]) => WELT.baeume.every(b => Math.hypot(b.x - x, b.z - z) > 1.8) && andere.every(v => Math.hypot(v[0] - x, v[1] - z) > 2) && !(WELT.see && Math.hypot(x - WELT.see.x, z - WELT.see.z) < WELT.see.r + 1);
       P.kartenweg = kand.find(frei) || kand[0];
     }
-    // Kapitel 6 (07.11.2026): Leuchtturm mit Höhle am Ufer – Platz ohne Baum, ohne anderen Ort, nicht am Steg
-    if (!P.leuchtturm) {
-      const ABST = { haus: 4.5, lauf: 4.2, kart: 4.2, bau: 4.2, ballons: 3.8, buehne: 3.6, truhe: 3.4, start: 3.6 };   // große Orte brauchen mehr Platz
-      const andere = Object.entries(P).map(([k, v]) => [v[0], v[1], ABST[k] || 2.8]), rL = RMAX_LAUF - 1.3, a0 = Math.atan2(P.schach[1], P.schach[0]);
-      // 24 Winkel (15°-Schritte, abwechselnd links/rechts vom Schachtisch) auf zwei Ringen: am Ufer, sonst eine Spur weiter innen
+    // Freier Platz am Ufer für einen großen Ort (Leuchtturm, Forscherlager): 24 Winkel (15°-Schritte, abwechselnd links/rechts von a0) auf
+    // zwei Ringen (rL, rL − 1,1); Platz ohne Baum, ohne anderen Ort, nicht am Steg. Ohne freien Winkel der Platz mit dem kleinsten Mangel,
+    // Bäume im Weg werden gefällt (Review 07.11.2026) – so steht nie etwas in einem Baum oder auf einem anderen Ort.
+    const ABST = { haus: 4.5, lauf: 4.2, kart: 4.2, bau: 4.2, ballons: 3.8, buehne: 3.6, truhe: 3.4, start: 3.6, leuchtturm: 4.2, lager: 4.0 };   // große Orte brauchen mehr Platz
+    function freierPlatz(a0, rL, BAUM = 3.2) {
+      const andere = Object.entries(P).map(([k, v]) => [v[0], v[1], ABST[k] || 2.8]);
       const winkel = Array.from({ length: 24 }, (_, i) => a0 + (i % 2 ? -1 : 1) * Math.ceil(i / 2) * Math.PI / 12);
       const kand = [rL, rL - 1.1].flatMap(rad => winkel.map(a => [Math.cos(a) * rad, Math.sin(a) * rad]));
       // Fehlender Abstand je Regel; 0 = Platz ist frei. Bäume zählen einfach (sie lassen sich fällen), Orte, Steg, Sonnenuhr und See dreifach.
-      const BAUM = 3.2;
       const mangel = ([x, z]) => {
         let m = 0; const fehlt = (ist, soll, g) => { if (ist < soll) m += (soll - ist) * g; };
         WELT.baeume.forEach(b => fehlt(Math.hypot(b.x - x, b.z - z), BAUM, 1));
@@ -464,16 +493,39 @@
       };
       let wahl = kand.find(k => mangel(k) === 0);
       if (!wahl) {
-        // Review 07.11.2026: kein Winkel frei (kleine Insel, See, dichter Wald) – statt blind den ersten zu nehmen, den Platz mit dem kleinsten
-        // Mangel wählen und die Bäume im Weg fällen (Lichtung); so stehen Felsen und Höhlentür nie in einem Baum oder auf einem anderen Ort
         wahl = kand.reduce((best, k) => (mangel(k) < mangel(best) ? k : best), kand[0]);
         const [x, z] = wahl; WELT.baeume = WELT.baeume.filter(b => Math.hypot(b.x - x, b.z - z) > BAUM);
       }
-      const [x, z] = wahl;
-      P.leuchtturm = [x, z, Math.atan2(-x, -z)];   // Tür der Höhle zur Mitte
+      return wahl;
     }
+    // Kapitel 6 (07.11.2026): Leuchtturm mit Höhle am Ufer, Tür der Höhle zur Mitte
+    if (!P.leuchtturm) { const [x, z] = freierPlatz(Math.atan2(P.schach[1], P.schach[0]), RMAX_LAUF - 1.3); P.leuchtturm = [x, z, Math.atan2(-x, -z)]; }
+    // Kapitel 7 (09.11.2026): Forscherlager auf jedem Nachbar-Eiland (auf der Heimatinsel fest in STANDARD), Zelt mit Blick zur Mitte
+    if (!P.lager) { const [x, z] = freierPlatz(Math.atan2(P.eule[1], P.eule[0]) + Math.PI / 2, RMAX_LAUF - 2.6, 2.6); P.lager = [x, z, Math.atan2(-x, -z)]; }
     // Vor der Haustür (dort kommt man beim Rausgehen an)
     const vorDerTuer = () => ({ x: P.haus[0] + Math.sin(HAUS_DREH) * 2.75, z: P.haus[1] + Math.cos(HAUS_DREH) * 2.75, dreh: HAUS_DREH });
+    // Trittstein-Wege der Heimatinsel (Weg 3, 09.11.2026): vom Start über Zwischenpunkte zu Garten, Bäckerei, Tierstation und Leuchtturm,
+    // alle 1,3 Einheiten ein Stein mit leichtem Schlenker; Steine in Bäumen, auf Steinen oder an anderen Orten fallen weg, der Weg endet 2,2 vor dem Ziel
+    const alleSteine = [...(WELT.pfad || [])];   // schon gelegte Steine: gemeinsamer Anfang zweier Wege bekommt keine doppelten
+    const WEGE = (WELT.wege || []).map(({ von, via, ziel }) => {
+      const z = P[ziel]; if (!z) return [];
+      const punkte = [von || [P.start[0] + 1, P.start[1] + 2], ...via, [z[0], z[1]]], steine = [];
+      const andere = Object.entries(P).filter(([k]) => k !== "start" && k !== ziel).map(([, v]) => v);
+      let rest = von ? 1.3 : 2.6;   // Abstand zum nächsten Stein; am Start etwas Luft um die Figur, an einer Abzweigung nicht
+      punkte.slice(1).forEach(([bx, bz], i) => {
+        const [ax, az] = punkte[i], dx = bx - ax, dz = bz - az, l = Math.hypot(dx, dz), ex = dx / l, ez = dz / l, letzter = i === punkte.length - 2;
+        for (let s = rest; s < l - (letzter ? 2.2 : 0); s += 1.3) {
+          const q = Math.sin(s * 1.1 + i) * 0.35, x = +(ax + ex * s - ez * q).toFixed(2), zz = +(az + ez * s + ex * q).toFixed(2);
+          rest = s + 1.3 - l;
+          if (WELT.baeume.some(b => Math.hypot(b.x - x, b.z - zz) < 1.3) || WELT.steine.some(st => Math.hypot(st[0] - x, st[1] - zz) < st[2] + 0.7) ||
+            andere.some(o => Math.hypot(o[0] - x, o[1] - zz) < 1.6) || Math.hypot(x - STEG.x, zz - STEG.z0) < 2 || Math.hypot(x, zz) > RMAX_LAUF - 0.8 ||
+            alleSteine.some(st => Math.hypot(st[0] - x, st[1] - zz) < 1.0)) continue;
+          steine.push([x, zz]); alleSteine.push([x, zz]);
+        }
+        if (rest < 0.4) rest = 0.4;
+      });
+      return steine;
+    }).filter(w => w.length);
     // Nebel je Stufe (Weite für die runde Darstellung, r = Radius des Nebelbands, a = Deckkraft)
     const NEBEL = [{ near: 16, far: 44, r: UFER + 3.2, a: 0.85 }, { near: 21, far: 54, r: UFER + 7, a: 0.6 }, { near: 26, far: 66, r: UFER + 12, a: 0.35 }, { near: 32, far: 80, r: 0, a: 0 }];
 
@@ -506,12 +558,14 @@
     };
     ORTE.schach = { x: P.schach[0], z: P.schach[1], h: 1.2 };   // Tilda am Schachtisch
     ORTE.leuchtturm = { x: P.leuchtturm[0], z: P.leuchtturm[1], h: 3.4 };   // Kapitel 6
+    ORTE.lager = { x: P.lager[0], z: P.lager[1], h: 2.2 };   // Kapitel 7: Forscherlager
+    ORTE.boot = { x: STEG.x + 1.55, z: STEG.z1 - 0.9, h: 1.0 };   // Kapitel 7: Robos Boot am Steg
     if (P.station) ORTE.station = { x: P.station[0], z: P.station[1], h: 1.6 };   // Wetterstation (Kapitel 5, Wetter-Drache)
     // neue Orte an den Plätzen der ausgeblendeten Minispiele (01.11.2026)
     if (P.lauf) ORTE.garten = { x: P.lauf[0], z: P.lauf[1], h: 1.2 };
     if (P.kart) ORTE.baeckerei = { x: P.kart[0], z: P.kart[1], h: 2.0 };
     if (P.bau) ORTE.tierstation = { x: P.bau[0], z: P.bau[1], h: 1.6 };
-    return { WELT, P, ZX, ZX_GRENZE, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, HAUS_DREH, vorDerTuer, NEBEL, nachbarn, ORTE };
+    return { WELT, P, ZX, ZX_GRENZE, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, HAUS_DREH, vorDerTuer, NEBEL, nachbarn, ORTE, WEGE };
   }
 
   // Lernfunde des Tages: der passende Nachbar freut sich (Fach je Nachbar, Freude-Text je Fach)
@@ -544,12 +598,31 @@
   const bald = (id) => !!S().MINISPIELE_AUS && ["ballons", "truhe", "insel", "lauf", "kart", "bau"].includes(id);
   // Neue Orte (01.11.2026) an den Plätzen der ausgeblendeten Minispiele: Garten (Kapitel 1), Tierpflege-Station (Kapitel 2), Bäckerei (öffnet Kapitel 3)
   const NEU_FERTIG = { garten: true, baeckerei: true, tierstation: true };
-  function ortOffen(id) {
+  function ortOffen(id, insel = true) {
     const k = W.Story ? W.Story.kapitel() : 0;
     if (id === "garten") return S().offen(k >= 1);
     if (id === "tierstation") return S().offen(k >= 2);
     if (id === "baeckerei") return S().offen(k >= 3);
+    if (id === "lager") return S().offen(insel ? k >= 1 : k >= 7);   // Forscherlager: daheim ab Kapitel 1 (Karte der Heimatinsel), auf Nachbar-Eilanden ab Kapitel 7
+    if (id === "boot") return S().offen(!insel || k >= 7);   // Reisen mit Robos Boot: ab Kapitel 7, auf einem Eiland immer (Rückfahrt)
     return true;
+  }
+  // Kapitel 7 „Neue Ufer“ (09.11.2026): Forscherlager (Ella) und Robos Boot am Steg; lage.insel = Heimatinsel (sonst Nachbar-Eiland)
+  function lagerAntwort(lage = {}) {
+    const insel = lage.insel !== false;
+    if (!ortOffen("lager", insel)) return insel
+      ? blase("eule", "Das Forscherlager – noch zu", "Hier schlagen wir bald unser Forscherlager auf. Lern etwas Neues – wenn die erste Frucht am Wissensbaum wächst, geht es los!", "Скоро здесь будет наш лагерь исследователей. Он откроется с первым плодом на дереве знаний.")
+      : blase("eule", "Das Forscherlager – noch zu", "Dieses Eiland erforschen wir richtig, sobald Robos Boot bereit ist – in Kapitel 7. Lern weiter auf der Heimatinsel!", "Этот остров мы исследуем по-настоящему, когда лодка Робо будет готова – в главе 7.");
+    return insel
+      ? blase("eule", "Ellas Forscherlager", `Hallo ${name()}! Hier ist unser Forscherlager. Kannst du die Karte unserer Insel lesen? Dann finden wir jeden Ort!`, "Это наш лагерь исследователей. Умеешь читать карту острова? Тогда мы найдём любое место!", "../expedition/")
+      : blase("eule", "Ellas Forscherlager", `Ein neues Eiland, ${name()}! Schreib ins Forscher-Tagebuch, was du hier entdeckst – und lies die Karte.`, "Новый остров! Запиши в дневник исследователя, что ты здесь нашёл, и прочитай карту.", "../expedition/");
+  }
+  function bootAntwort(lage = {}) {
+    const insel = lage.insel !== false;
+    if (!ortOffen("boot", insel)) return blase("robo", "Robos Boot", `Mit diesem Boot habe ich dich hergebracht, ${name()}. Bald fahren wir zusammen zu neuen Ufern – lern weiter!`, "На этой лодке я привёз тебя сюда. Скоро мы вместе отправимся к новым берегам – учись дальше!");
+    return Object.assign(insel
+      ? blase("robo", "Robos Boot", `Piep! Mein Boot ist bereit, ${name()}. Wünsch dir ein Eiland – und wir fahren hin. Wir kommen immer zurück.`, "Пип! Моя лодка готова. Пожелай остров – и мы поплывём туда. Мы всегда возвращаемся.")
+      : blase("robo", "Robos Boot", `Sollen wir weiterfahren, ${name()}? Nach Hause auf die Heimatinsel – oder zu einem anderen Eiland.`, "Поплывём дальше? Домой, на родной остров, – или на другой остров."), { extra: "reisen" });
   }
   function gartenAntwort() {
     if (!ortOffen("garten")) return blase("🌱", "Der Insel-Garten – noch zu", "Der Garten wacht auf, wenn auf deinem Wissensbaum die erste Frucht wächst. Lern etwas Neues bei Ella, Fipsi oder Benno!", "Сад проснётся, когда на дереве знаний вырастет первый плод.");
@@ -643,6 +716,8 @@
       case "schach": return blase("tilda", "Tilda am Schachtisch", `Hallo ${name()}! Ich bin Tilda. Langsam und klug gewinnt! Lernst du mit mir Schach?`, "Привет! Я черепаха Тильда. Медленно и умно побеждает! Научишься со мной шахматам?", "../schach/");
       case "buehne": return paulaAntwort();
       case "leuchtturm": return leuchtturmAntwort();
+      case "lager": return lagerAntwort(lage);
+      case "boot": return bootAntwort(lage);
       case "garten": return gartenAntwort();
       case "baeckerei": if (!NEU_FERTIG.baeckerei) return baldBlase("🥨", "Bäckerei Benno"); return baeckereiAntwort();
       case "tierstation": if (!NEU_FERTIG.tierstation) return baldBlase("🩹", "Tierpflege-Station"); return tierstationAntwort();
@@ -716,13 +791,14 @@
   }
   AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
   AKTION.leuchtturm = [["💡", "Leuchtturm"], 2.4];
-  const aktionFuer = (id) => (id === "leuchtturm" && !leuchtturmOffen() ? [["👀", "Ansehen"], 2.4] : id === "station" && drachenOffen() ? [["🪁", "Drachen"], 1.9] : id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : id === "ballons" && bald(id) ? [["🛶", "Boot"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
+  const aktionFuer = (id, insel = true) => (id === "boot" ? [ortOffen("boot", insel) ? ["⛵", "Boot"] : ["👀", "Ansehen"], 3.2] : id === "lager" ? [ortOffen("lager", insel) ? ["🧭", "Forschen"] : ["👀", "Ansehen"], 2.6] :
+    id === "leuchtturm" && !leuchtturmOffen() ? [["👀", "Ansehen"], 2.4] : id === "station" && drachenOffen() ? [["🪁", "Drachen"], 1.9] : id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : id === "ballons" && bald(id) ? [["🛶", "Boot"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
   W.InselKern = {
     // Stationen
     SPIELE, istFrei, baumStufe, antwort, ortOffen, NEU_FERTIG, nachbarAntwort, fundFuer, aktionFuer, FRUCHT, fruchtFarbe, spieleMelodie,
     // Welt
-    BIOME, GROESSEN, HUEGEL, STANDARD, FARBEN, erzeuge, neuerSeed, wunsch, zeit, erstelle,
+    BIOME, GROESSEN, HUEGEL, STANDARD, FARBEN, blumenwiesen, erzeuge, neuerSeed, wunsch, zeit, erstelle,
     // Regeln und Zustände
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
     weihnachtsPaket, geburtstagsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,

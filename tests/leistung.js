@@ -72,12 +72,13 @@ const SZENEN = [
   await browser.close();
 
   const zahl = (v) => (v == null ? "–" : typeof v === "number" ? v.toLocaleString("de-DE") : String(v));
-  const kopf = "| Szene | Grafik | Zeichenaufrufe | Dreiecke | Texturen MB | Schatten | Pixeldichte |\n|---|---|---|---|---|---|---|";
-  const tabelle = kopf + "\n" + zeilen.map(z => `| ${z.name} | ${z.grafik === "-" ? "Pixel" : z.grafik} | ${zahl(z.zeichnungen)} | ${zahl(z.dreiecke)} | ${zahl(z.texturMB)} | ${z.schatten ? "an" : "aus"} | ${zahl(z.pixel)} |`).join("\n");
+  // Zeichenaufrufe/Dreiecke = Bild ohne Schattendurchlauf (seit 09.11.2026 fest, vorher zufällig mal mit, mal ohne); „mit Schatten“ = Bild mit Schattenkarte (jedes zweite)
+  const kopf = "| Szene | Grafik | Zeichenaufrufe | Dreiecke | mit Schatten | Texturen MB | Schatten | Pixeldichte |\n|---|---|---|---|---|---|---|---|";
+  const tabelle = kopf + "\n" + zeilen.map(z => `| ${z.name} | ${z.grafik === "-" ? "Pixel" : z.grafik} | ${zahl(z.zeichnungen)} | ${zahl(z.dreiecke)} | ${z.mitSchatten ? `${zahl(z.mitSchatten.zeichnungen)} / ${zahl(z.mitSchatten.dreiecke)}` : "–"} | ${zahl(z.texturMB)} | ${z.schatten ? "an" : "aus"} | ${zahl(z.pixel)} |`).join("\n");
   console.log(tabelle);
   if (process.env.AUSGABE) fs.writeFileSync(process.env.AUSGABE, `Messung ${new Date().toISOString().slice(0, 10)} (Swiftshader, 1180×820, Pixeldichte 2)\n\n${tabelle}\n`);
   if (warnungen.length) console.log("⚠️ Über dem Budget (GRAFIK.md Abschnitt 6):\n" + warnungen.map(w => "  - " + w).join("\n"));
   if (fehler.length) { console.log("❌ Fehler:\n" + fehler.map(f => "  - " + f).join("\n")); process.exit(1); }
   if (warnungen.length && process.env.STRENG) { console.log("❌ Budget überschritten (STRENG)."); process.exit(1); }
-  console.log(`✅ Leistungs-Test: ${zeilen.length} Messungen${warnungen.length ? `, ${warnungen.length} Warnungen` : ", alles im Budget"}.`);
+  console.log(`✅ Leistungs-Test bestanden: ${zeilen.length} Messungen${warnungen.length ? `, ${warnungen.length} Warnungen` : ", alles im Budget"}.`);
 })().catch(err => { console.error(err); process.exit(1); });

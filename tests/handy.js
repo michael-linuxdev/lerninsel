@@ -87,5 +87,5 @@ const MESSEN = () => {
   console.log("| Gerät | Look | Zeichenaufrufe | Dreiecke | Bild (Pixel) | ms/Bild | ms/Bild gedrosselt | Bilder/s (Software) | JS KB |\n|---|---|---:|---:|---|---:|---:|---:|---:|");
   zeilen.forEach(r => console.log(`| ${r.gerät} | ${r.szene} | ${r.aufrufe} | ${r.dreiecke.toLocaleString("de-DE")} | ${r.groesse} | ${r.msUngedrosselt} | ${r.msGedrosselt} | ${r.fps} | ${r.jsKB} |`));
   if (fehler.length) { console.log("❌ Fehler:\n" + fehler.map(f => "  - " + f).join("\n")); process.exit(1); }
-  console.log(`✅ Handy-Messung: ${zeilen.length} Messungen.`);
+  console.log(`✅ Handy-Messung bestanden: ${zeilen.length} Messungen.`);
 })().catch(e => { console.error(e); process.exit(1); });

@@ -17,14 +17,25 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-Die UX-Ideen vom 07.11. sind erledigt (08.11.: Startkamera, Hausdetails, Kronen-Konturen, Vorschul-Symbole). **Entscheidung des Auftraggebers (08.11.): Weg 3** – „Die Insel sollte viel
-größer sein, sonst findet das Abenteuer in einem kleinen Raum statt“ → Heimatinsel moderat größer **und** Kapitel 7 „Neue Ufer“ als Aufbruch zu Nachbar-Eilanden.
-**Der fertige Plan steht in `docs/PLAN.md`, „Plan 08.11.2026 – Weg 3“ (W1 Heimatinsel Radius 15,2 → 19 mit Plätzen, Wegen, Tests; W2 Kapitel 7 mit Boot am Steg, Forscherlager und
-Seite `spiele/expedition/`).** Zuerst die **iPad-Rückmeldung** holen (Fragerunde: Kamera, Haus, Kronen, Vorschul-Startseite, dazu alles vom 07.11.; die zwei offenen Fragen aus W2 Punkt 6 stellen), dann:
+**Weg 3 ist gebaut (09.11.2026):** Heimatinsel mit Radius 19 (W1) und Kapitel 7 „Neue Ufer“ mit Robos Boot, Ellas Forscherlager und der Seite `spiele/expedition/` (W2); Details in `docs/PLAN.md`,
+„Stand 09.11.2026“. Zuerst die **iPad-Rückmeldung** holen (Fragerunde: größere Insel – Laufwege, Tempo, Trittsteine, Steg bis zum Boot; Kapitel 7 – Szene, „Losfahren“, Forscherlager, Karte lesen, Tagebuch;
+dazu alles vom 07./08.11.), dann:
 1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test).
-2. **W1** – Heimatinsel größer: ein Commit mit allen 3D-Tests, Screenshots vorher/nachher quer/hoch/Handy, Budget `leistung` einhalten.
-3. **W2** – Kapitel 7 „Neue Ufer“: Kern und Szene, Boot am Steg, Forscherlager und `spiele/expedition/` mit Test `expedition`; Russisch als Entwurf; danach Russisch prüfen lassen.
+2. Russisch der neuen Texte (Szene `neue-ufer`, Expedition) prüfen lassen; Eilande in der Inselchronik; Übergang Klasse 5 im Forscherlager vertiefen (KONZEPT: „neue Themen“) – nur wenn der Auftraggeber es will.
+3. Sonst nach `docs/PLAN.md` „Neuausrichtung“ / Abschnitt 2 unten.
 
+## 1. Stand (09.11.2026)
+**Weg 3 (09.11., PLAN „Stand 09.11.2026“):** Heimatinsel Radius 15,2 → 19 (Orte 1,25-mal weiter auseinander, 14 Bäume, zwei Blumenwiesen, Trittstein-Wege zu Garten, Bäckerei, Tierstation, Leuchtturm und Lager,
+Lauftempo +10 %, Leistung im Budget). Kapitel 7 „Neue Ufer“ (50 Lernfunde + Tablet-Führerschein): Robos Boot am Steg ist antippbar, der Steg begehbar; ab Kapitel 7 „⛵ Losfahren“ → Welt-Liste; Forscherlager
+(Ella) auf der Heimatinsel ab Kapitel 1 und auf jedem Eiland ab Kapitel 7; Seite `spiele/expedition/`: Inselkarte lesen (Stufen a/b/c: Lage, Felder A–F/1–6, Himmelsrichtungen, Maßstab) und Forscher-Tagebuch.
+Entscheidungen (Fragerunde 09.11.): Reisen über ⚙️ bleibt vor Kapitel 7 erlaubt; das Lager steht auch daheim. Tests `expedition`, `kapitel` (Kapitel 7), `inselkern`; CI um `expedition` ergänzt.
+**Im iPad testen (in /dev/test):**
+1. Insel öffnen: Ist sie spürbar größer, findet das Kind Garten, Bäckerei, Tierstation und Leuchtturm über die Trittsteine? Ist das Laufen (Joystick und Antippen) noch angenehm?
+2. Zum Steg laufen – bis ans Ende, zum Boot: Knopf „Boot“ → Robo → „⛵ Losfahren“ → Welt-Liste; eine Welt erschaffen; auf dem Eiland das Zelt (Forscherlager) suchen → „Forschen“.
+3. Forscherlager: „Karte lesen“ (sind die Zeichen auf der Karte groß genug, quer und hoch?), eine Runde spielen; „Forscher-Tagebuch“ eintragen. Danach mit dem Boot „Nach Hause“ (Heimatinsel besuchen).
+4. Kapitel-7-Szene (in /dev: 50 Lernfunde und Führerschein): Spricht Robo am Steg, zeigt die Hand aufs Boot?
+
+### Stand 08.11.2026
 ## 1. Stand (08.11.2026)
 **UX-Ideen (08.11., PLAN „Stand 08.11.2026 (UX-Ideen)“):** Startkamera höher und weiter (`KAM`, Hochformat bis ×1,25 weiter), Haus mit Türrahmen, Rundfenster, Klinke, Schwelle, Fensterkreuzen
 und -bänken, Baumkronen mit kräftiger Kontur (in großen Wäldern „einfach“ eine Kugel weniger – Budget), Vorschul-Startseite mit 108-px-Symbolen und größeren Begleitern.
@@ -189,7 +200,7 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - **Schreibschrift:** Vereinfachte und Lateinische Ausgangsschrift fehlen.
 - **Übersetzungen:** nur russische Entwürfe, Ukrainisch u. a. fehlen.
 - **Länderprofile:** Nur Sachsen ist da (NA-47).
-- **Insel-Tests:** `tutorial`, `prolog`, `kapitel`, `geschenk` und `geburtstag` allein laufen lassen; unter Last wackeln sie.
+- **Insel-Tests:** `tutorial`, `prolog`, `kapitel`, `geschenk`, `geburtstag` und `expedition` allein laufen lassen; unter Last wackeln sie. `leistung` nur allein messen (unter Last liegen die Zahlen zu hoch).
 - **Aus dem Review offen (Wartbarkeit):**
   - Feste Wartezeiten in älteren Tests ersetzen.
   - Weitere gemeinsame Teile der Sprachkurse zusammenführen (Schritt-Darstellung).
@@ -227,7 +238,7 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 2. **Prüfen statt Bauen** (Abschnitt 0, Schritt 2).
 3. **Gestaltung Stil A auf allen Seiten.**
 4. ~~Wörter-Angeln und Rhythmus-Boot~~ (erledigt 04./05.11.); ~~Elternbereich schneller~~ (erledigt 05.11.).
-5. ~~Kapitel 5 und das nächste Insel-Spiel~~ (erledigt 06.11.); ~~Kapitel 6~~ (erledigt 07.11.); als Nächstes Arme der 3D-Figur, dann Kapitel 7; Russisch (Mathe, Szenen) von Muttersprachlern prüfen lassen.
+5. ~~Kapitel 5 und das nächste Insel-Spiel~~ (erledigt 06.11.); ~~Kapitel 6~~ (erledigt 07.11.); ~~Arme der 3D-Figur~~ (07.11.); ~~größere Heimatinsel und Kapitel 7~~ (erledigt 09.11.); Russisch (Mathe, Szenen, Expedition) von Muttersprachlern prüfen lassen.
 
 Jederzeit dazwischen: iPad-Rückmeldung einarbeiten (Fehler zuerst), Sorbisch-Korrekturen in `spiele/sorbisch/lektionen.js` und `geprueft.js`,
 den öffentlichen QR-Schlüssel in `OEFFENTLICH` eintragen, sobald er da ist. Arbeitsliste für den Lehrplan bleibt `docs/SACHSEN-SCHULJAHR.md`.

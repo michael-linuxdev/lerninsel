@@ -20,7 +20,10 @@ const q = new URLSearchParams(location.search);
 // Eigene Welt: Wünsche + seed (Test: ?biom=wald&groesse=gross&huegel=viel&see=1&seed=7); ohne gespeicherte Welt die bisherige Insel.
 const K = window.InselKern, KI = K.erstelle(q);
 const { STUNDE, MONAT, SAISON, NACHT, DAEMMER } = K.zeit(q);
-const { WELT, P, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, ZX } = KI;
+const { WELT, P, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, ZX } = KI;
+// Kapitel 7 (09.11.2026): Auf dem Steg darf die Figur bis zum Boot laufen (über die Laufgrenze hinaus); dort ist der Boden die Stegplanke
+const aufSteg = (x, z) => Math.abs(x - STEG.x) < 0.62 && z > STEG.z0 - 0.2 && z < STEG.z1 - 0.3;
+const bodenY = (x, z) => (WELT.insel || Math.hypot(x, z) <= RMAX_LAUF || !aufSteg(x, z) ? KI.bodenY(x, z) : 0.27);
 const WINTERLICH = SAISON === "winter" || WELT.biom === "schnee";
 const GRAFIK_KEY = "lerninsel.grafik";
 const lies = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
@@ -138,15 +141,17 @@ if (!WELT.insel) {
   WELT.pfad.forEach(([x, z]) => { const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, 20), mat("#D9CDB8")); p.receiveShadow = true; setze(p, x, bodenY(x, z) + 0.03, z); deko.add(p); });
 }
 if (WELT.insel) {
-  const sand = new LatheGeometry([new Vector2(0, -1.2), new Vector2(15.2, -1.2), new Vector2(15.6, -0.6), new Vector2(15.2, -0.1), new Vector2(0, -0.1)], 64);
+  // Heimatinsel (Weg 3, 09.11.2026): Sand und Gras aus dem Radius der Welt (R = 19; vorher feste 15,2), Gras bis R − 3
+  const R = WELT.R, segs = EINFACH ? 64 : 80;
+  const sand = new LatheGeometry([new Vector2(0, -1.2), new Vector2(R, -1.2), new Vector2(R + 0.4, -0.6), new Vector2(R, -0.1), new Vector2(0, -0.1)], segs);
   const s = new Mesh(sand, mat(SAISON === "winter" ? "#F3E9D8" : "#F2D9A2")); s.receiveShadow = true; scene.add(s);
-  const g = new Mesh(new LatheGeometry([new Vector2(13.1, -0.3), new Vector2(12.9, 0.05), new Vector2(12.2, 0.25), new Vector2(0, 0.25)], 64), mat(GRAS));
+  const g = new Mesh(new LatheGeometry([new Vector2(R - 2.1, -0.3), new Vector2(R - 2.3, 0.05), new Vector2(R - 3, 0.25), new Vector2(0, 0.25)], segs), mat(GRAS));
   g.receiveShadow = true; scene.add(g); boden.push(g, s);
-  // Pfad vom Haus zum Platz in der Mitte
-  for (let i = 0; i < 7; i++) {
-    const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, 20), mat("#D9CDB8"));
-    p.receiveShadow = true; setze(p, -4 + i * 1.25, 0.28, -2.6 + Math.sin(i * 0.9) * 0.6); deko.add(p);
-  }
+  // Pfad vom Haus zum Platz in der Mitte und Trittstein-Wege zu Garten, Bäckerei, Tierstation und Leuchtturm (aus dem Kern)
+  [...WELT.pfad, ...KI.WEGE.flat()].forEach(([x, z]) => {
+    const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, EINFACH ? 12 : 20), mat("#D9CDB8"));
+    p.receiveShadow = true; setze(p, x, 0.28, z); deko.add(p);
+  });
 }
 const wasserGeo = new PlaneGeometry(140, 140, EINFACH ? 1 : 48, EINFACH ? 1 : 48);   // Wellen-Gitter (NA-29: 48 statt 70 reicht für die weichen Wellen)
 wasserGeo.rotateX(-Math.PI / 2);   // (30.10.2026) stand versehentlich im Kommentar – in „einfach“, „ruhig“ und beim Sparen war das Wasser eine senkrechte Wand
@@ -164,7 +169,7 @@ if (!EINFACH) wasser.material.onBeforeCompile = (sh) => {
       #endif`)
     .replace("#include <begin_vertex>", "vec3 transformed = vec3(position); transformed.y += sin(wA) * 0.1 + cos(wB) * 0.1;");
 };
-{ const schaum = new Mesh(new TorusGeometry(WELT.insel ? 15.9 : WELT.R + 0.9, 0.18, 8, 80), new MeshBasicMaterial({ color: "#EAFBFF" })); schaum.rotation.x = Math.PI / 2; schaum.position.y = -0.48; scene.add(schaum); }
+{ const schaum = new Mesh(new TorusGeometry(WELT.R + (WELT.insel ? 0.7 : 0.9), 0.18, 8, 80), new MeshBasicMaterial({ color: "#EAFBFF" })); schaum.rotation.x = Math.PI / 2; schaum.position.y = -0.48; scene.add(schaum); }
 
 // ---------- Bäume (Farbe nach Jahreszeit), Steine, Blumen ----------
 // Leistungsbudget (NA-29): Welten mit vielen Bäumen bekommen gröbere Kronen; in „einfach“ haben Bäume keine Kontur.
@@ -212,14 +217,16 @@ WELT.steine.forEach(([x, z, r]) => {
   const st = teil(kugel(r, 20, 14), WELT.insel ? "#A7A9B8" : WELT.B.fels); st.scale.y = 0.65; setze(st, x, bodenY(x, z) + r * 0.3, z); deko.add(st); block(x, z, r);
 });
 // Blumen als InstancedMesh (Performance + Code-Qualität, 01.11.2026): weniger Objekte, kein späteres Verschmelzen nötig für die Stiele
-if (!WELT.insel && WELT.blumen.length && !(JAHRESZEIT_GRAS && SAISON === "winter")) {
-  const BL = [WELT.farbe, WELT.farbe, "#FFD84D", "#FFFFFF", WELT.farbe, "#B28DFF", "#FF9E5E"];
+// Heimatinsel: zwei Blumenwiesen aus dem Kern (Weg 3, 09.11.2026; im Frühling dichter), eigene Welten: gestreute Blumen der Welt
+const BLUMEN = WELT.insel ? (SAISON === "winter" ? [] : K.blumenwiesen(SAISON === "fruehling" ? 24 : 14)) : (JAHRESZEIT_GRAS && SAISON === "winter" ? [] : WELT.blumen);
+if (BLUMEN.length) {
+  const BL = WELT.insel ? ["#FF6F91", "#FFD84D", "#FFFFFF", "#B28DFF", "#FF9E5E"] : [WELT.farbe, WELT.farbe, "#FFD84D", "#FFFFFF", WELT.farbe, "#B28DFF", "#FF9E5E"];
   const stielGeo = new CylinderGeometry(0.03, 0.03, 0.4, 4); stielGeo.translate(0, 0.2, 0);
   const blumeGeo = kugel(0.14, 12, 8); blumeGeo.translate(0, 0.45, 0);
-  const stiele = new InstancedMesh(stielGeo, mat("#3E9E55"), WELT.blumen.length);
+  const stiele = new InstancedMesh(stielGeo, mat("#3E9E55"), BLUMEN.length);
   const o = new Object3D();
   const farben = new Map();
-  WELT.blumen.forEach(([x, z, i], idx) => {
+  BLUMEN.forEach(([x, z, i], idx) => {
     const y = bodenY(x, z);
     o.position.set(x, y, z); o.updateMatrix(); stiele.setMatrixAt(idx, o.matrix);
     const c = BL[i % BL.length];
@@ -232,33 +239,6 @@ if (!WELT.insel && WELT.blumen.length && !(JAHRESZEIT_GRAS && SAISON === "winter
     liste.forEach((p, i) => { o.position.set(p.x, p.y, p.z); o.updateMatrix(); im.setMatrixAt(i, o.matrix); });
     im.receiveShadow = true; scene.add(im);
   });
-}
-if (WELT.insel && SAISON !== "winter") {
-  const BL = ["#FF6F91", "#FFD84D", "#FFFFFF", "#B28DFF", "#FF9E5E"], n = SAISON === "fruehling" ? 44 : 26;
-  const positionen = [];
-  for (let i = 0; i < n; i++) {
-    const w = i * 2.399, r = 4 + (i * 37 % 70) / 10, x = Math.cos(w) * r, z = Math.sin(w) * r;
-    if (Math.hypot(x + 5, z + 4.5) < 3.4) continue;
-    positionen.push({ x, z, c: BL[i % BL.length] });
-  }
-  if (positionen.length) {
-    const stielGeo = new CylinderGeometry(0.03, 0.03, 0.4, 4); stielGeo.translate(0, 0.2, 0);
-    const blumeGeo = kugel(0.14, 12, 8); blumeGeo.translate(0, 0.45, 0);
-    const stiele = new InstancedMesh(stielGeo, mat("#3E9E55"), positionen.length);
-    const o = new Object3D();
-    const farben = new Map();
-    positionen.forEach((p, idx) => {
-      o.position.set(p.x, 0.25, p.z); o.updateMatrix(); stiele.setMatrixAt(idx, o.matrix);
-      if (!farben.has(p.c)) farben.set(p.c, []);
-      farben.get(p.c).push(p);
-    });
-    stiele.receiveShadow = true; scene.add(stiele);
-    farben.forEach((liste, farbe) => {
-      const im = new InstancedMesh(blumeGeo, mat(farbe), liste.length);
-      liste.forEach((p, i) => { o.position.set(p.x, 0.25, p.z); o.updateMatrix(); im.setMatrixAt(i, o.matrix); });
-      im.receiveShadow = true; scene.add(im);
-    });
-  }
 }
 
 // ---------- Deko verschmelzen (je Material ein Mesh) ----------
@@ -338,13 +318,18 @@ function verschmelzeLokal(wurzel, ausnahmen = []) {
 // Liegt am Südufer (zur Kamera hin), damit die Ankunft gleich zu sehen ist. Wird mit der Deko verschmolzen.
 {
   const laenge = STEG.z1 - STEG.z0, mz = (STEG.z0 + STEG.z1) / 2;
-  deko.add(setze(teil(new BoxGeometry(1.4, 0.14, laenge), "#C8955B"), STEG.x, 0.2, mz));
+  const planke = setze(teil(new BoxGeometry(1.4, 0.14, laenge), "#C8955B"), STEG.x, 0.2, mz); scene.add(planke); boden.push(planke);   // eigener Boden: Antippen zum Laufen bis ans Stegende
   for (let i = 0; i < 4; i++) [-0.62, 0.62].forEach(dx => deko.add(setze(teil(new CylinderGeometry(0.09, 0.09, 1.1, 8), "#9A6A3F"), STEG.x + dx, -0.38, STEG.z0 + 0.6 + i * (laenge - 0.9) / 3)));
+}
+// Robos Boot (Kapitel 7 „Neue Ufer“, 09.11.2026): eigene Gruppe statt Deko, antippbar – ab Kapitel 7 (auf einem Eiland immer) geht es damit zu neuen Ufern
+const boot = new Group(); boot.position.set(STEG.x + 1.55, 0, STEG.z1 - 0.9); scene.add(boot);
+{
   const rumpf = teil(new SphereGeometry(1, EINFACH ? 12 : 20, EINFACH ? 6 : 10, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), "#E2604F");
-  rumpf.scale.set(0.8, 0.5, 1.6); deko.add(setze(rumpf, STEG.x + 1.55, -0.18, STEG.z1 - 0.9));
-  deko.add(setze(teil(new BoxGeometry(1.2, 0.1, 0.35), "#9A6A3F"), STEG.x + 1.55, -0.3, STEG.z1 - 0.9));
-  deko.add(setze(teil(new CylinderGeometry(0.05, 0.05, 1.5, 6), "#9A6A3F"), STEG.x + 1.55, 0.4, STEG.z1 - 0.4));
-  deko.add(setze(teil(new BoxGeometry(0.04, 0.32, 0.5), "#FFC83D"), STEG.x + 1.55, 0.98, STEG.z1 - 0.15));
+  rumpf.scale.set(0.8, 0.5, 1.6); boot.add(setze(rumpf, 0, -0.18, 0));
+  boot.add(setze(teil(new BoxGeometry(1.2, 0.1, 0.35), "#9A6A3F"), 0, -0.3, 0));
+  boot.add(setze(teil(new CylinderGeometry(0.05, 0.05, 1.5, 6), "#9A6A3F"), 0, 0.4, 0.5));
+  boot.add(setze(teil(new BoxGeometry(0.04, 0.32, 0.5), "#FFC83D"), 0, 0.98, 0.75));
+  antippbar(boot, () => zeigeAntwort(K.antwort("boot", { insel: WELT.insel })), ...K.aktionFuer("boot", WELT.insel)); starr.push([boot]);
 }
 // ---------- Sonnenuhr am Steg (NA-13): dunkel ohne Spielzeit, hell mit Spielzeit ----------
 // „Die Sonne für die Spielorte – sie geht auf, wenn du gelernt hast.“ Fortschritt des Lernblocks färbt die Sonne langsam gelb.
@@ -548,12 +533,14 @@ function schalteLeuchtturm() {
   Object.assign(leuchtturm.userData, { aktion: K.aktionFuer("leuchtturm")[0], nah: K.aktionFuer("leuchtturm")[1] });
 }
 schalteLeuchtturm();
+// Boot ab Kapitel 7 mit dem Knopf „Boot“ (auch direkt nach der Szene)
+function schalteBoot() { Object.assign(boot.userData, { aktion: K.aktionFuer("boot", WELT.insel)[0], nah: K.aktionFuer("boot", WELT.insel)[1] }); }
 
 // ---------- Wehendes Gras ----------
 let halme = null; const halmDaten = [];
 const MIT_GRAS = WELT.insel ? SAISON !== "winter" : !WINTERLICH && !["wueste"].includes(WELT.biom) && !(JAHRESZEIT_GRAS && SAISON === "winter");
 // (30.10.2026) Gras ruhiger: Halme kürzer und breiter, Farbe nur etwas dunkler als der Boden (vorher fast schwarzgrüne Spitzen), etwas weniger Halme
-const HALME = WELT.insel ? 560 : Math.min(560, Math.round(560 * (WELT.rand / 12.9) ** 2));
+const HALME = WELT.insel ? Math.min(900, Math.round(2.42 * WELT.R ** 2)) : Math.min(560, Math.round(560 * (WELT.rand / 12.9) ** 2));   // Heimatinsel: gleiche Dichte wie vor der Vergrößerung (560 Halme bei Radius 15,2)
 if (!EINFACH && MIT_GRAS) {
   const geo = new ConeGeometry(0.075, 0.34, 4); geo.translate(0, 0.16, 0);
   // eigenes Material (nicht aus dem mat()-Speicher): das Wiegen im Wind läuft im Vertex-Shader (01.11.2026, vorher jedes zweite Bild 560 Matrizen in JavaScript)
@@ -569,7 +556,7 @@ if (!EINFACH && MIT_GRAS) {
   };
   halme = new InstancedMesh(geo, halmMat, HALME);
   const o = new Object3D();
-  const HX = WELT.insel ? -5 : P.haus[0], HZ = WELT.insel ? -4.5 : P.haus[1], RW = WELT.insel ? 10.5 : WELT.rand - 2.4;
+  const HX = P.haus[0], HZ = P.haus[1], RW = WELT.insel ? WELT.R - 4.7 : WELT.rand - 2.4;
   for (let i = 0; i < HALME; i++) {
     const w = Math.random() * Math.PI * 2, r = 2 + Math.sqrt(Math.random()) * RW, x = Math.cos(w) * r, z = Math.sin(w) * r;
     if (Math.hypot(x - HX, z - HZ) < 2.6 || (WELT.see && Math.hypot(x - WELT.see.x, z - WELT.see.z) < WELT.see.r + 0.4)) { halmDaten.push({ x: 0, z: 0, p: 0, s: 0 }); o.scale.setScalar(0); o.updateMatrix(); halme.setMatrixAt(i, o.matrix); continue; }
@@ -704,7 +691,7 @@ function figur(look) {
 }
 const look = (S.lade("anziehen") || {}).aktuell || (window.Figur ? window.Figur.STANDARD() : { figur: { farbe: "#F8D2B8" } });
 const ich = figur(look); { const u = ich.userData; starr.push([u.koerper, [...u.beine, ...u.arme]], ...u.beine.map(b => [b]), ...u.arme.map(a => [a])); }
-ich.position.set(WELT.insel ? 1 : P.start[0] + 1, 0.25, WELT.insel ? 2 : P.start[1] + 2); ich.position.y = bodenY(ich.position.x, ich.position.z); scene.add(ich);
+ich.position.set(P.start[0] + 1, 0.25, P.start[1] + 2); ich.position.y = bodenY(ich.position.x, ich.position.z); scene.add(ich);
 
 // ---------- Das eigene Tier ----------
 const TP = window.TierPflege, T = window.Tiere;
@@ -1183,6 +1170,27 @@ const NEU_BAU = {
   if (!frei) { const sp = schildSprite("🔒"); sp.position.set(0, 3.2, 0); o.add(sp); o.traverse(m => { if (m.material && m.material.color && !m.isSprite) m.material = grauMat(m.material); }); }
   antippbar(o, () => zeigeAntwort(K.antwort(id)), ...K.aktionFuer(id)); starr.push([o]);
 });
+// ---------- Forscherlager (Kapitel 7 „Neue Ufer“, 09.11.2026): Ellas Zelt, Fahne, Fernrohr und Feuerstelle ----------
+// (steht nach grauMat(): vor Kapitel 1 bzw. 7 wird es grau – der Rauchtest ohne Kapitel fand den Aufruf vor der Definition)
+// Auf der Heimatinsel ab Kapitel 1 offen (Karte der Heimatinsel), auf Nachbar-Eilanden ab Kapitel 7; vorher grau mit Schloss wie die anderen Orte
+const lager = new Group();
+{
+  const [x, z, d] = P.lager; lager.position.set(x, bodenY(x, z), z); lager.rotation.y = d; scene.add(lager); block(x, z, 1.3);
+  // Zelt: liegendes Dreiecks-Prisma (Zylinder mit 3 Segmenten, Spitze oben), Eingang zur Inselmitte (+z)
+  const zelt = teil(new CylinderGeometry(1.05, 1.05, 1.9, 3, 1, false, Math.PI), "#FFB547", { dicke: 1.05 }); zelt.rotation.x = Math.PI / 2; lager.add(setze(zelt, 0, 0.53, 0));
+  const eingang = new Mesh(new CircleGeometry(0.62, 3, Math.PI / 2), mat("#5A3E7A")); eingang.scale.set(0.9, 1.25, 1); lager.add(setze(eingang, 0, 0.42, 0.97));
+  // Fahne
+  lager.add(setze(teil(new CylinderGeometry(0.04, 0.05, 2.6, 6), "#9A6A3F"), -1.35, 1.3, 0.6));
+  lager.add(setze(teil(new BoxGeometry(0.04, 0.34, 0.6), "#5CCBA6"), -1.35, 2.35, 0.9));
+  // Fernrohr auf drei Beinen, zum Meer gerichtet
+  [[0, 0, 0.35], [0.3, 0, -0.2], [-0.3, 0, -0.2]].forEach(([bx, , bz]) => { const b = teil(new CylinderGeometry(0.03, 0.03, 1.1, 6), "#6B5A7A"); b.rotation.x = -bz * 0.5; b.rotation.z = bx * 0.5; lager.add(setze(b, 1.45 + bx * 0.6, 0.55, 0.45 + bz * 0.6)); });
+  const rohr = teil(new CylinderGeometry(0.09, 0.07, 0.7, 10), "#3AA0E0"); rohr.rotation.x = Math.PI / 2 - 0.5; lager.add(setze(rohr, 1.45, 1.2, 0.25));
+  // Feuerstelle mit Steinring und Flamme
+  for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2; lager.add(setze(teil(kugel(0.11, 10, 6), "#A7A9B8"), 1.2 + Math.cos(a) * 0.36, 0.08, -0.95 + Math.sin(a) * 0.36)); }
+  lager.add(setze(teil(new ConeGeometry(0.16, 0.42, 8), "#FF8A3D", { umriss: false }), 1.2, 0.24, -0.95));
+  if (!K.ortOffen("lager", WELT.insel)) { const sp = schildSprite("🔒"); sp.position.set(0, 2.6, 0); lager.add(sp); lager.traverse(m => { if (m.material && m.material.color && !m.isSprite) m.material = grauMat(m.material); }); }
+  antippbar(lager, () => zeigeAntwort(K.antwort("lager", { insel: WELT.insel })), ...K.aktionFuer("lager", WELT.insel)); starr.push([lager]);
+}
 
 
 // ---------- Zimmer im Haus (eigener Bereich weit weg von der Insel) ----------
@@ -1430,7 +1438,9 @@ function sprechblase(e, titel, text, ru, ziel, extra) {
 // Antwort einer Station aus dem Insel-Kern zeigen ({ blase: [e, titel, text, hilfe, ziel], extra })
 function zeigeAntwort(a) {
   if (!a) return;
-  sprechblase(...a.blase, a.extra === "prolog" ? ["🔁 Wie ging das nochmal?", () => starteProlog(true)] : null);
+  const extra = a.extra === "prolog" ? ["🔁 Wie ging das nochmal?", () => starteProlog(true)]
+    : a.extra === "reisen" ? ["⛵ Losfahren", () => spielOrt(() => { $("welt").hidden = false; weltListe(); })] : null;   // Kapitel 7: Robos Boot öffnet die Welt-Liste
+  sprechblase(...a.blase, extra);
 }
 $("blase-zu").addEventListener("click", () => { $("blase").hidden = true; if (SP && SP.stopp) SP.stopp(); });
 $("blase-los").addEventListener("click", () => { if (blaseZiel) location.href = blaseZiel; });
@@ -1609,10 +1619,12 @@ function groesse() { const el = $("buehne"); renderer.setSize(el.clientWidth, el
 addEventListener("resize", groesse); groesse();
 const uhr = new Clock(), blick = new Vector3(), tmp = new Vector3(), halmO = new Object3D();
 let lauf = 0, vollGas = 0, rennt = false;
+const MESSUNG = { ohne: null, mit: null };   // letztes Bild ohne / mit Schattendurchlauf (für __heimat.info())
+const TEMPO_FAKTOR = WELT.insel ? 1.1 : 1;   // Weg 3 (09.11.2026): die größere Heimatinsel läuft sich 10 % schneller (Weg Start → Bäckerei ≈ 15 statt 12 Einheiten)
 function wegVonHindernissen(p, r) {
   for (const h of hindernisse) { const dx = p.x - h.x, dz = p.z - h.z, d = Math.hypot(dx, dz), m = h.r + r; if (d < m && d > 0.001) { p.x = h.x + dx / d * m; p.z = h.z + dz / d * m; } }
   if (drinnen) { p.x = MathUtils.clamp(p.x, ZX - 3.7, ZX + 3.7); p.z = MathUtils.clamp(p.z, -3.1, 3.3); if (p.z >= 3.25 && ich.position === p) rausgehen(); return; }
-  const RMAX = WELT.insel ? 14.6 : WELT.R - 0.6, l = Math.hypot(p.x, p.z); if (l > RMAX) { p.x *= RMAX / l; p.z *= RMAX / l; }
+  const l = Math.hypot(p.x, p.z); if (l > RMAX_LAUF && !aufSteg(p.x, p.z)) { p.x *= RMAX_LAUF / l; p.z *= RMAX_LAUF / l; }
 }
 // ---------- Automatisch sparen, wenn das Tablet nicht hinterherkommt ----------
 // Seit 01.11.2026 schrittweise (regleAufloesung): erst die Auflösung senken, erst bei Stufe 1 und unter 30 Bildern/s: keine Schatten, Wasser und Gras ruhig.
@@ -1656,7 +1668,7 @@ function bild() {
     // Rennen: Joystick ganz nach außen (oder Umschalt-Taste) – nach kurzer Zeit wird die Figur schneller
     if (Math.hypot(eingabe.x, eingabe.z) > 0.92 || tasten["shift"]) { if (vollGas === 0) vollGas = t; } else vollGas = 0;
     rennt = vollGas > 0 && t - vollGas > 0.5 && !drinnen;
-    const tempo = (rennt ? 7 : 4) * staerke;
+    const tempo = (rennt ? 7 : 4) * TEMPO_FAKTOR * staerke;
     ich.position.x += wx * tempo * dt; ich.position.z += wz * tempo * dt; wegVonHindernissen(ich.position, 0.4);
     const soll = Math.atan2(wx, wz); let diff = soll - ich.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff));
     ich.rotation.y += diff * Math.min(1, dt * 12);
@@ -1666,8 +1678,8 @@ function bild() {
     else {
       geht = true; tmp.normalize();
       const vorher = ich.position.clone();
-      ich.position.addScaledVector(tmp, Math.min(d, 3.4 * dt)); wegVonHindernissen(ich.position, 0.4);
-      if (ich.position.distanceTo(vorher) < 0.2 * 3.4 * dt) { ziel = null; marke.visible = false; if (ankunft) { const f = ankunft; ankunft = null; f(); } } // hängt fest
+      ich.position.addScaledVector(tmp, Math.min(d, 3.4 * TEMPO_FAKTOR * dt)); wegVonHindernissen(ich.position, 0.4);
+      if (ich.position.distanceTo(vorher) < 0.2 * 3.4 * TEMPO_FAKTOR * dt) { ziel = null; marke.visible = false; if (ankunft) { const f = ankunft; ankunft = null; f(); } } // hängt fest
       const soll = Math.atan2(tmp.x, tmp.z); let diff = soll - ich.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff));
       ich.rotation.y += diff * Math.min(1, dt * 10);
     }
@@ -1740,9 +1752,12 @@ function bild() {
   camera.position.set(blick.x + Math.sin(gw) * Math.cos(nw) * ab, blick.y + Math.sin(nw) * ab, blick.z + Math.cos(gw) * Math.cos(nw) * ab);
   camera.lookAt(blick);
   sonne.position.set(ich.position.x + 10, 18, ich.position.z + 8); sonne.target.position.copy(ich.position);
-  if (renderer.shadowMap.enabled && (bildNr++ & 1) === 0) renderer.shadowMap.needsUpdate = true;   // Schatten jedes zweite Bild
+  const mitSchatten = renderer.shadowMap.enabled && (bildNr++ & 1) === 0; if (mitSchatten) renderer.shadowMap.needsUpdate = true;   // Schatten jedes zweite Bild
   regleAufloesung(bild.dt);
   renderer.render(scene, camera);
+  // Messung je Bildart (09.11.2026): renderer.info zählt im Schatten-Bild auch den Schattendurchlauf mit (≈ +55 Aufrufe, +60 000 Dreiecke) – der Leistungs-Test
+  // traf bisher zufällig mal das eine, mal das andere Bild. info() liefert darum immer das Bild ohne Schattendurchlauf und daneben das mit (mitSchatten).
+  { const r = renderer.info.render, m = { zeichnungen: r.calls, dreiecke: r.triangles }; if (mitSchatten) MESSUNG.mit = m; else MESSUNG.ohne = m; }
   requestAnimationFrame(bild);
 }
 // Start (01.11.2026): Shader vorab übersetzen (ohne die Seite zu blockieren), dann erst zeichnen; bis dahin „Die Insel wacht auf …“
@@ -1768,7 +1783,7 @@ function weltListe() {
     (d.aktiv === i || (i === -1 && !(d.aktiv >= 0)) ? `<span>📍 Hier bist du</span>` : `<button class="knopf haupt" data-besuch="${i}">Besuchen</button>`) +
     (i >= 0 ? `<button class="knopf" data-weg="${i}" aria-label="Welt löschen">🗑️</button>` : "") + `</div>`;
   $("welt-inhalt").innerHTML = `<p>Erschaffe dir eine eigene Welt, so wie du sie magst. Du kannst mehrere Welten haben und hin- und herreisen.</p>
-    <div class="welt-liste">${eintrag(-1, "🏝️", "Meine erste Insel")}${d.welten.map((w, i) => eintrag(i, (BIOME[w.biom] || {}).e || "🌍", w.name || "Meine Welt")).join("")}</div>
+    <div class="welt-liste">${eintrag(-1, "🏝️", "Meine Heimatinsel")}${d.welten.map((w, i) => eintrag(i, (BIOME[w.biom] || {}).e || "🌍", w.name || "Meine Welt")).join("")}</div>
     <div class="welt-unten">${d.welten.length < MAX_WELTEN ? `<button class="knopf haupt" id="welt-neu">✨ Neue Welt erschaffen</button>` : `<p>Du hast schon ${MAX_WELTEN} Welten. Lösche eine, um eine neue zu erschaffen.</p>`}</div>`;
   $("welt-inhalt").querySelectorAll("[data-besuch]").forEach(b => b.addEventListener("click", () => { const d2 = weltDaten(); d2.aktiv = +b.dataset.besuch; d2.entwurf = false; weltSpeichern(d2); S.ton("juhu"); neuLaden(); }));
   $("welt-inhalt").querySelectorAll("[data-weg]").forEach(b => b.addEventListener("click", () => {
@@ -1917,6 +1932,7 @@ function spieleStory(id) {
   // schalteLeuchtturm() nach K.leuchtturmOffen() geht und das Kapitel sonst erst mit der letzten Blase gespeichert würde (ab Kl. 2 sind es vier)
   if (id === "der-leuchtturm") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "schach" : "leuchtturm"); if (i === 2) x.beim = () => { St.setzeKapitel(6); schalteLeuchtturm(); }; });
   if (id === "der-sturm") b.forEach((x, i) => { x.zeige = I.ort(i === 1 ? "baer" : i === 2 ? "station" : "eule"); });
+  if (id === "neue-ufer") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "steg" : i === 2 ? "lager" : "boot"); if (i === 1) x.beim = () => { St.setzeKapitel(7); schalteBoot(); }; });   // Kapitel 7: Boot schon bei Blase 2 bereit
   storyLaeuft = true;
   // Etappe/Kapitel schon mit der letzten Blase merken – nicht erst beim Schließen (Kind verlässt die Insel oft direkt danach)
   Sz.spiele(def, { beiLetzter: () => K.storyFertig(def) }).then(() => {
@@ -1924,6 +1940,7 @@ function spieleStory(id) {
     K.storyFertig(def);
     if (id === "fipsis-karte") zeigeKartenweg();   // auch beim Überspringen
     if (id === "der-leuchtturm") schalteLeuchtturm();
+    if (id === "neue-ufer") schalteBoot();
     if (id === "geburtstag" && paketId) St.merkeSzene(paketId);   // einmal je Jahr
     nebelWeicht();
     if (id === "ei" && !tier && $("blase").hidden) zeigeAntwort(K.antwort("nest"));
@@ -1960,4 +1977,4 @@ function teileZaehlen() {
   return scene.children.map(o => { let n = 0, d = 0; o.traverseVisible(m => { if (m.isMesh || m.isPoints || m.isLineSegments) { n++; const g = m.geometry; d += g.index ? g.index.count / 3 : (g.attributes.position ? g.attributes.position.count / 3 : 0); } }); return { name: o.type + (o.userData.tipp ? "*" : "") + (o.userData.aktion ? ":" + o.userData.aktion[1] : ""), x: Math.round(o.position.x), z: Math.round(o.position.z), meshes: n, dreiecke: Math.round(d) }; })
     .filter(x => x.meshes > 0).sort((a, b) => b.meshes - a.meshes);
 }
-window.__heimat = { extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), { einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };

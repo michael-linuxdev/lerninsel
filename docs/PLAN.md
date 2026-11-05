@@ -2385,3 +2385,40 @@ Vorgehen:
 6. Offen für den Auftraggeber: Dürfen Kinder vor Kapitel 7 weiter über ⚙️ reisen (heute ja)? Soll das Lager auch auf der Heimatinsel stehen (dann „Karte der Heimatinsel“ als Stufe a)?
 
 Reihenfolge der nächsten Sitzung: Fragerunde (iPad) → W1 (ein Commit, mit allen 3D-Tests) → W2 (Kern/Szene, dann Seite, dann Tests) → Doku.
+
+## Stand 09.11.2026 – Weg 3 gebaut: größere Heimatinsel (W1) und Kapitel 7 „Neue Ufer“ mit Forscherlager (W2)
+Fragerunde: kein iPad-Test seit dem 08.11., Auftrag W1 und W2; Entscheidungen des Auftraggebers zu den offenen Fragen aus W2: **Reisen über ⚙️ → Welt bleibt vor Kapitel 7 erlaubt**
+(das Boot kommt ab Kapitel 7 dazu, nichts geht verloren) und **das Forscherlager steht auch auf der Heimatinsel** („Karte der Heimatinsel“ als Stufe a, Nachbar-Eilande bringen die höheren Stufen).
+- **W1 Heimatinsel größer (Radius 15,2 → 19, rund 60 % mehr Fläche):** `STANDARD.R = 19`; alle festen Zahlen in `heimat.js` (Sand 15,2/15,6, Schaum 15,9, Laufgrenze 14,6, Gras-Radius 10,5, Halme 560,
+  Blumen-Spirale, Figurstart) leiten sich jetzt aus `WELT.R` ab – in `heimat.js` gibt es keine 15,2 mehr. Plätze ≈ 1,25-mal weiter auseinander (Haus −6,2/−5,6, Ella 10,6/−3,8, Fipsi −9,5/−0,8, Benno 2,5/−10,
+  Bruni −4,6/8,6, Schach 1,9/8,5, Bühne 5,5/−1, Boot 12,5/7,5, Garten 7,5/12,8, Tierstation −10,8/10,2, Bäckerei 14/−6,2, Angelsteg −1,2/17, Wissensbaum −4/2,8, Wegweiser −8,1/2,5; Nest und Station relativ
+  zum Haus), 14 Bäume (9 alte ×1,25 + 5 neue, alle im Gras), 5 Steine, **zwei Blumenwiesen** (`K.blumenwiesen(n)`, Frühling 39 Blumen, sonst 23) statt der Spirale, **Trittstein-Wege** vom Start zu Garten, Bäckerei,
+  Tierstation, Leuchtturm (Abzweig vom Weg zur Tierstation) und Forscherlager (`STANDARD.wege`, berechnet in `erstelle()` → `KI.WEGE`; Steine in Bäumen, auf Steinen, an Orten, am Steg oder auf einem anderen Weg fallen
+  weg). Lauftempo auf der Heimatinsel +10 % (`TEMPO_FAKTOR`, Laufen und Antippen). Kamera unverändert (`KAM.abstand` 17). Nebel, Steg, Sonnenuhr, Paket folgen `UFER` automatisch.
+  **Leistung** (`leistung`, Bild ohne Schattendurchlauf – siehe Befund unten): Heimatinsel schön 96 155 Dreiecke / 69 Aufrufe (mit Schattendurchlauf 144 718; Budget 150 000 / 150), einfach 57 045 (Budget 60 000; vorher 52 512); eigene Welten unverändert.
+  Screenshots vorher/nachher quer/hoch/Handy in schön und einfach angesehen: Figur gleich groß, Haus, Benno, Ella, Paula und der Wegweiser im Startbild; von oben: Orte mit Luft, Wege sichtbar.
+  Tests: `tests/inselkern.js` prüft jetzt R, Laufgrenze, Steg/Sonnenuhr/Paket/Nebel, Abstände aller Orte (≥ 2,4, Ausnahmen Nest/Station, Benno/Schild, Start/Tier), Bäume nie auf Orten oder im Sand, Blumen im Gras,
+  die fünf Wege (Anfang am Start, Ende ≤ 4,2 vor dem Ziel, keine Lücke > 4,5, keine doppelten Steine); `prolog` stellt die Figur über `vorDerTuer()` vor die Tür statt mit festen Zahlen.
+- **W2 Kapitel 7 „Neue Ufer“:** Kern `KAPITEL` n 7 (50 Lernfunde + Tablet-Führerschein; die 200 Funde aus dem KONZEPT waren nicht ehrlich zur Staffel 5/10/15/25/35 – KONZEPT nachgezogen), `Story.KAPITEL_ZAHL = 7`,
+  Szene `neue-ufer` (Robo, 4 Blasen, Russisch als Entwurf; Blase 2 merkt Kapitel 7 und schaltet das Boot). **Robos Boot** ist jetzt antippbar (eigene Gruppe statt Deko): vor Kapitel 7 „Bald fahren wir zu neuen
+  Ufern“ (kein Druck), ab Kapitel 7 – und auf jedem Eiland immer – Knopf **„⛵ Losfahren“** → Welt-Liste („Meine Heimatinsel“ statt „Meine erste Insel“, Assistent unverändert). **Der Steg ist begehbar** (bis ans Ende,
+  über die Laufgrenze hinaus; die Planke ist antippbarer Boden) – vorher kam man nicht am Robo und der Sonnenuhr vorbei ans Boot. **Forscherlager** (Ella: Zelt, Fahne, Fernrohr, Feuerstelle) auf der Heimatinsel bei
+  (−12,5/−4,5) mit Trittstein-Weg, auf jedem Nachbar-Eiland am Rand (`freierPlatz`, die Leuchtturm-Platzsuche ist jetzt eine Hilfsfunktion; `tests/inselkern.js` prüft 220 Welten: nie im Baum, auf einem Ort, am Steg
+  oder im See); daheim ab Kapitel 1 offen, auf Eilanden ab Kapitel 7, vorher grau mit Schloss. **Seite `spiele/expedition/`:** Inselkarte aus der echten Welt (SVG + Orte als Zeichen, Begleiter als Zeichnung),
+  Raster A–F/1–6, Kompassrose, Legende; **Karte lesen** = 5 Fragen aus den Koordinaten (Stufe a: oben/unten, links/rechts, „ganz oben“; b: Kompass, Felder, Himmelsrichtung von A nach B; c: Zwischenrichtungen,
+  Maßstab 1 Kästchen = 50 m, Inselbreite), 42 Fragen je Welt, erst ungelesene, Sterne nur für neue (≤ 3 am Tag); **Forscher-Tagebuch** je Eiland (Wetter + drei Funde aus den echten Merkmalen: Bäume, Felsen, Teich,
+  Hügel, Blumen, Schnee, Sand, Strand, Leuchtturm, Steg), Stern beim ersten Eintrag, Liste „Erforschte Eilande“. Lernziele `ma.rf.02`, `su.ge.03`, `ma.rf.09`; Lehrplan-Verweis `expedition:karte` an SU Kl. 3 (rz.01, rz.03),
+  Kl. 4 (rz.01), Mathe 1/2 Lage und Mathe 4 Maßstab (Zählung unverändert). Schatzkammer: Truhe „Eilande erforscht“. Neu in `sw.js`, Rauchtest, Barriere-Rundgang.
+- **Tests:** neu `tests/expedition.js` (3D: Boot vor/ab Kapitel 7, Steg begehbar, Lager, Szene, Welt über den Assistenten echt erschaffen, Lager auf dem Eiland, Rückfahrt; Seite: Kl. 1 Heimatinsel echt gelöst mit
+  Fehlern, Sterne-Deckel, Tagebuch; Eiland Kl. 3 hoch und Handy), `kapitel` um Kapitel 7, `inselkern` (31 Prüfungen), CI-Schleife um `expedition`. `handy` und `leistung` enden jetzt mit „bestanden“ (Regel aus dem Review 08.11.).
+  **Befund `leistung` (behoben):** Die Zahlen sprangen zwischen zwei Werten (Wald groß schön 100 380 oder 159 837, Heimatinsel 93 609 oder 140 744) – nicht wegen Last, sondern weil die Schattenkarte
+  nur jedes zweite Bild gezeichnet wird und `renderer.info` in diesem Bild den Schattendurchlauf mitzählt (≈ +55 Aufrufe, +60 000 Dreiecke). Der Test traf zufällig mal das eine, mal das andere Bild; frühere
+  „im Budget“-Messungen waren Glück. Jetzt liefert `__heimat.info()` immer das Bild ohne Schattendurchlauf (wie die bisher notierten Werte) und daneben `mitSchatten`; die Tabelle hat eine Spalte dafür.
+  Endstand (ohne Schattendurchlauf): Heimatinsel schön 96 155 (vorher 83 546–100 000 je nach Bild), einfach 57 045 (Budget 60 000); Wald groß schön 97 834, einfach 57 942.
+- **Befund Teich (behoben):** Der Wunsch „Einen Teich“ im Welt-Assistenten blieb in mittleren Welten immer unerfüllt (0 von 216 geprüften Welten, riesig 2 von 12 Saaten) – die 16 flachen
+  Plätze ließen mit Rand +2 keinen Platz. Zweite Suche in `erzeuge()` mit kleinerem Teich (1,6–2,4), Rand +1 und **eigenem Zufall** (`zufall(seed ^ 0x5EE5EE)`), damit Bäume, Steine und Blumen bestehender
+  Welten an ihrem Platz bleiben: jetzt mittel 213/216, riesig 216/216, klein 15/216 (kleine Welten bleiben eng – offen). `tests/inselkern.js` unverändert grün.
+- **Entscheidungen:** W1 und W2 in einem Commit (Kern und `heimat.js` tragen beide); kein Eltern-Schalter für die kleine Insel (alte Spielstände wandern mit – nur Koordinaten wechseln). Der Forscherlager-Weg
+  auf der Heimatinsel zweigt nicht ab, der Leuchtturm-Weg zweigt vom Tierstations-Weg ab (sonst zwei parallele Steinreihen am Start).
+- **Offen / nächstes:** iPad-Test der größeren Insel (Laufwege, Tempo, Steg begehbar) und von Kapitel 7; Russisch (Szene, Expedition) prüfen lassen; später Übergang Klasse 5 im Forscherlager vertiefen
+  (KONZEPT: „neue Themen“), Eilande in der Inselchronik mit Biom-Zeichen.

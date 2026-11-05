@@ -48,12 +48,58 @@ pruefe("ohne gespeicherte Welt gilt die bisherige Insel (flach, feste Plätze)",
   const { K } = neueUmgebung();
   const I = K.erstelle(q(""));
   assert.strictEqual(I.WELT.insel, true);
-  assert.deepStrictEqual(I.P.haus, [-5, -4.5, 0.35]);
+  assert.strictEqual(I.WELT.R, 19);   // Weg 3 (09.11.2026): vorher 15,2
+  assert.deepStrictEqual(I.P.haus, [-6.2, -5.6, 0.35]);
   assert.strictEqual(I.bodenY(3, 4), 0.25);
-  assert.deepStrictEqual(r4(I.STEG), { x: 3.2, z0: 13, z1: 17.6 });
-  assert.deepStrictEqual(r4(I.SU), { x: 5.3, z: 13.5 });
-  assert.deepStrictEqual(r4(I.PAKET_POS), { x: 4.15, z: 13.15 });
+  assert.strictEqual(I.UFER, 19); assert.strictEqual(r4(I.RMAX_LAUF), 18.4);
+  assert.deepStrictEqual(r4(I.STEG), { x: 3.2, z0: 16.8, z1: 21.4 });
+  assert.deepStrictEqual(r4(I.SU), { x: 5.3, z: 17.3 });
+  assert.deepStrictEqual(r4(I.PAKET_POS), { x: 4.15, z: 16.95 });
   assert.strictEqual(I.HAUS_DREH, 0.35);
+  assert.deepStrictEqual(r4(I.NEBEL[0]), { near: 16, far: 44, r: 22.2, a: 0.85 });
+});
+
+pruefe("größere Heimatinsel (Weg 3): Orte mit Abstand, innerhalb der Laufgrenze, kein Baum auf einem Ort, 14 Bäume, 5 Steine", () => {
+  const { K } = neueUmgebung();
+  const I = K.erstelle(q("")), P = I.P, ks = Object.keys(P);
+  assert.strictEqual(I.WELT.baeume.length, 14); assert.strictEqual(I.WELT.steine.length, 5);
+  const NAH = [["nest", "station"], ["biber", "schild"], ["start", "tier"]];   // gehören zusammen
+  ks.forEach(a => ks.forEach(b => {
+    if (a >= b || NAH.some(([x, y]) => (x === a && y === b) || (x === b && y === a))) return;
+    const d = Math.hypot(P[a][0] - P[b][0], P[a][1] - P[b][1]);
+    assert.ok(d >= 2.4, `Orte zu nah: ${a} – ${b} (${d.toFixed(2)})`);
+  }));
+  ks.forEach(k => assert.ok(Math.hypot(P[k][0], P[k][1]) <= I.RMAX_LAUF - 0.9, `Ort ${k} zu nah am Ufer`));
+  I.WELT.baeume.forEach(b => { ks.forEach(k => assert.ok(Math.hypot(b.x - P[k][0], b.z - P[k][1]) > 1.5, `Baum im Ort ${k}`)); assert.ok(Math.hypot(b.x, b.z) < I.WELT.R - 3, "Baum im Sand"); });
+  // der Leuchtturm steht am Ufer, Tür zur Mitte
+  const [lx, lz, ld] = P.leuchtturm; assert.ok(Math.hypot(lx, lz) > I.RMAX_LAUF - 2.5 && Math.hypot(lx, lz) < I.RMAX_LAUF, "Leuchtturm am Ufer");
+  assert.strictEqual(+ld.toFixed(4), +Math.atan2(-lx, -lz).toFixed(4));
+  // Gras-Halme und Blumen bleiben auf dem Gras (Blumenwiesen: zwei Haufen, Frühling dichter)
+  const bl = K.blumenwiesen(24), bl2 = K.blumenwiesen(14);
+  assert.ok(bl.length >= 36 && bl2.length >= 20 && bl.length > bl2.length, `Blumenwiesen: ${bl.length} / ${bl2.length}`);
+  bl.forEach(([x, z]) => { assert.ok(Math.hypot(x, z) < I.WELT.R - 3.3, "Blume im Sand"); ks.forEach(k => assert.ok(Math.hypot(x - P[k][0], z - P[k][1]) >= 1.4, `Blume im Ort ${k}`)); });
+});
+
+pruefe("Trittstein-Wege führen vom Start zu Garten, Bäckerei, Tierstation und Leuchtturm", () => {
+  const { K } = neueUmgebung();
+  const I = K.erstelle(q("")), P = I.P;
+  assert.strictEqual(I.WEGE.length, 5);
+  const start = [P.start[0] + 1, P.start[1] + 2];
+  [["lauf", 0], ["kart", 1], ["bau", 2], ["leuchtturm", 3], ["lager", 4]].forEach(([ziel, i]) => {
+    const w = I.WEGE[i], abzweig = ziel === "leuchtturm";   // der Leuchtturm-Weg zweigt vom Weg zur Tierstation ab
+    assert.ok(w.length >= (abzweig ? 2 : 5), `Weg ${ziel}: nur ${w.length} Steine`);
+    const erster = w[0], letzter = w[w.length - 1];
+    if (abzweig) assert.ok(I.WEGE[2].some(s => Math.hypot(s[0] - erster[0], s[1] - erster[1]) < 2.2), "Leuchtturm-Weg beginnt am Weg zur Tierstation");
+    else assert.ok(Math.hypot(erster[0] - start[0], erster[1] - start[1]) < 6, `Weg ${ziel} beginnt am Start`);
+    assert.ok(Math.hypot(letzter[0] - P[ziel][0], letzter[1] - P[ziel][1]) < 4.2, `Weg ${ziel} endet am Ziel (${Math.hypot(letzter[0] - P[ziel][0], letzter[1] - P[ziel][1]).toFixed(2)})`);
+    for (let k = 1; k < w.length; k++) assert.ok(Math.hypot(w[k][0] - w[k - 1][0], w[k][1] - w[k - 1][1]) <= 4.5, `Weg ${ziel}: Lücke bei Stein ${k}`);
+    w.forEach(([x, z]) => { I.WELT.baeume.forEach(b => assert.ok(Math.hypot(b.x - x, b.z - z) >= 1.3, `Weg ${ziel}: Stein im Baum`)); assert.ok(Math.hypot(x, z) <= I.RMAX_LAUF - 0.8, "Stein im Wasser"); });
+  });
+  // keine doppelten Steine (gemeinsamer Anfang zweier Wege)
+  const alle = [...I.WELT.pfad, ...I.WEGE.flat()];
+  alle.forEach((a, i) => alle.forEach((b, j) => { if (i < j) assert.ok(Math.hypot(a[0] - b[0], a[1] - b[1]) >= 1.0, `doppelter Stein ${a} / ${b}`); }));
+  // eigene Welten haben keine Trittstein-Wege (eigener Pfad aus der Welt)
+  assert.deepStrictEqual(K.erstelle(q("?biom=wald&seed=3")).WEGE, []);
 });
 
 pruefe("Welterzeugung wie vor der Trennung (Werte aus dem alten welt.js, Saat 7)", () => {
@@ -90,7 +136,7 @@ pruefe("Nachbarn mit Platz, Texten und Ziel; Robo Pixel wohnt am Steg", () => {
   const I = K.erstelle(q("")), N = I.nachbarn();
   assert.deepStrictEqual(N.map(x => x.e), ["eule", "fipsi", "robo", "baer", "biber"]);
   const robo = N.find(x => x.e === "robo");
-  assert.deepStrictEqual(r4([robo.x, robo.z]), [1.7, 13.7]);
+  assert.deepStrictEqual(r4([robo.x, robo.z]), [1.7, 17.5]);
   assert.ok(N.every(x => x.text.includes("Mira") && x.ziel && x.titel), "jeder Nachbar hat Name im Text, Titel und Ziel");
   assert.deepStrictEqual(Object.keys(K.FACH), ["eule", "fipsi", "robo", "biber"]);
   assert.ok(K.freude("deutsch", { t: "Neues Wort: Apfel" }, "Mira")[0].includes("Apfel"));
@@ -100,7 +146,7 @@ pruefe("Orte für die Zeigehand: Bodenpunkt und Höhe", () => {
   const { K } = neueUmgebung();
   const O = K.erstelle(q("")).ORTE;
   ["haus", "sonnenuhr", "wissensbaum", "eule", "steg", "paket"].forEach(k => assert.ok(O[k] && typeof O[k].x === "number" && typeof O[k].z === "number" && O[k].h > 0, k));
-  assert.deepStrictEqual(O.haus, { x: -5, z: -4.5, h: 1.2 });
+  assert.deepStrictEqual(O.haus, { x: -6.2, z: -5.6, h: 1.2 });
 });
 
 // ---------- Story-Reihenfolge ----------
@@ -273,6 +319,14 @@ pruefe("Leuchtturm (07.11.2026): Platz am Ufer frei, dunkel bis Kapitel 6, danac
     Object.entries(E.P).filter(([k]) => k !== "leuchtturm").forEach(([k, v]) => assert.ok(Math.hypot(v[0] - x, v[1] - z) > 2.5, `zu nah an ${k}: ${wo}`));
     assert.ok(Math.hypot(x - E.STEG.x, z - E.STEG.z0) > 4, "zu nah am Steg: " + wo);
     if (E.WELT.see) assert.ok(Math.hypot(x - E.WELT.see.x, z - E.WELT.see.z) > E.WELT.see.r + 1.5, "im See: " + wo);
+    // Kapitel 7 (09.11.2026): das Forscherlager steht in jeder Welt frei – nicht im Baum, nicht auf einem Ort, nicht am Steg, nicht im See
+    const [lx, lz] = E.P.lager;
+    assert.ok([lx, lz].every(Number.isFinite) && Math.hypot(lx, lz) > E.RMAX_LAUF - 4 && Math.hypot(lx, lz) < E.RMAX_LAUF - 1.5, "Lager am Rand: " + wo);
+    E.WELT.baeume.forEach(b => assert.ok(Math.hypot(b.x - lx, b.z - lz) > 2.6, `Baum im Lager: ${wo}`));
+    Object.entries(E.P).filter(([k]) => k !== "lager").forEach(([k, v]) => assert.ok(Math.hypot(v[0] - lx, v[1] - lz) > 2.5, `Lager zu nah an ${k}: ${wo}`));
+    assert.ok(Math.hypot(lx - E.STEG.x, lz - E.STEG.z0) > 4, "Lager zu nah am Steg: " + wo);
+    if (E.WELT.see) assert.ok(Math.hypot(lx - E.WELT.see.x, lz - E.WELT.see.z) > E.WELT.see.r + 1.5, "Lager im See: " + wo);
+    assert.ok(E.ORTE.lager && E.ORTE.boot, "Orte Lager und Boot: " + wo);
   }
   assert.ok(notloesung >= 4 && notloesung < welten / 10, `Rückfall in ${notloesung} von ${welten} Welten (erwartet: die vier bekannten, sonst selten)`);
   console.log(`    ${welten} Welten geprüft, Rückfall mit gefällten Bäumen in ${notloesung}`);
@@ -291,6 +345,34 @@ pruefe("Leuchtturm (07.11.2026): Platz am Ufer frei, dunkel bis Kapitel 6, danac
   assert.strictEqual(k6(neueUmgebung({ funde: 40, speicher: { schach: { raetsel: { 0: 1, 1: 1, 4: 1 } } } })).faellig(), true, "drei Rätsel");
   assert.strictEqual(k6(neueUmgebung({ funde: 40, speicher: { schach: { lektionen: { turm: 1, laeufer: 1, springer: 1 } } } })).faellig(), true, "drei Lektionen");
   assert.strictEqual(k6(neueUmgebung({ funde: 34, speicher: { schach: { raetsel: { 0: 1, 1: 1, 2: 1 } } } })).faellig(), false, "unter 35 Lernfunden nicht fällig");
+});
+
+pruefe("Kapitel 7 „Neue Ufer“ (09.11.2026): 50 Lernfunde und Tablet-Führerschein; Boot am Steg und Forscherlager – daheim ab Kapitel 1, auf Eilanden ab Kapitel 7", () => {
+  const k7 = (u) => u.K.KAPITEL.find(k => k.n === 7);
+  assert.ok(k7(neueUmgebung()).szene === "neue-ufer");
+  assert.strictEqual(k7(neueUmgebung({ funde: 50 })).faellig(), false, "ohne Führerschein nicht fällig");
+  assert.strictEqual(k7(neueUmgebung({ funde: 49, speicher: { medien: { fuehrerschein: true } } })).faellig(), false, "unter 50 Lernfunden nicht fällig");
+  assert.strictEqual(k7(neueUmgebung({ funde: 50, speicher: { medien: { fuehrerschein: true } } })).faellig(), true, "50 Lernfunde + Führerschein");
+  // Reihenfolge: Kapitel 7 erst nach Kapitel 6
+  const u6 = neueUmgebung({ funde: 60, speicher: { medien: { fuehrerschein: true } }, story: { kapitel: 5, etappen: { E1: "2026-10-01", E2: 1, E3: 1, E4: 1, E5: 1, E6: 1, E7: 1, E8: 1, E9: 1 } }, zeit: { frei: true, spielen: true, genug: false, fortschritt: 1 } });
+  assert.notStrictEqual(u6.K.naechsteStory({}), "neue-ufer", "mit Kapitel 5 kommt erst Kapitel 6");
+  const u7 = neueUmgebung({ funde: 60, speicher: { medien: { fuehrerschein: true }, schach: { raetsel: { 0: 1, 1: 1, 2: 1 } } }, story: { kapitel: 6, etappen: { E1: "2026-10-01", E2: 1, E3: 1, E4: 1, E5: 1, E6: 1, E7: 1, E8: 1, E9: 1 } }, zeit: { frei: true, spielen: true, genug: false, fortschritt: 1 } });
+  assert.strictEqual(u7.K.naechsteStory({}), "neue-ufer", "mit Kapitel 6, 60 Funden und Führerschein ist „Neue Ufer“ dran");
+  // Boot: vor Kapitel 7 nur ansehen, ab Kapitel 7 reisen; auf einem Eiland immer (Rückfahrt)
+  const vor = neueUmgebung({ story: { kapitel: 6 } }), nach = neueUmgebung({ story: { kapitel: 7 } });
+  { const a = vor.K.antwort("boot", { insel: true }); assert.ok(a.blase[0] === "robo" && /Bald fahren wir/.test(a.blase[2]) && !a.blase[4] && !a.extra, "vor Kapitel 7: Robo vertröstet, kein Reisen"); }
+  assert.deepStrictEqual(vor.K.aktionFuer("boot", true), [["👀", "Ansehen"], 3.2]);
+  { const a = nach.K.antwort("boot", { insel: true }); assert.ok(a.blase[0] === "robo" && /bereit/.test(a.blase[2]) && a.extra === "reisen", "ab Kapitel 7: Boot bereit, Knopf zum Reisen"); }
+  assert.deepStrictEqual(nach.K.aktionFuer("boot", true), [["⛵", "Boot"], 3.2]);
+  { const a = vor.K.antwort("boot", { insel: false }); assert.ok(/Heimatinsel/.test(a.blase[2]) && a.extra === "reisen", "auf einem Eiland: Rückfahrt auch vor Kapitel 7"); }
+  // Forscherlager
+  { const a = neueUmgebung({ story: { kapitel: 0 } }).K.antwort("lager", { insel: true }); assert.ok(a.blase[0] === "eule" && /noch zu/.test(a.blase[1]) && !a.blase[4], "daheim vor Kapitel 1 zu"); }
+  { const a = neueUmgebung({ story: { kapitel: 1 } }).K.antwort("lager", { insel: true }); assert.ok(a.blase[0] === "eule" && a.blase[4] === "../expedition/" && /Karte/.test(a.blase[2]), "daheim ab Kapitel 1: Karte der Insel lesen"); }
+  { const a = vor.K.antwort("lager", { insel: false }); assert.ok(/Kapitel 7/.test(a.blase[2]) && !a.blase[4], "auf einem Eiland vor Kapitel 7 zu"); }
+  { const a = nach.K.antwort("lager", { insel: false }); assert.ok(a.blase[4] === "../expedition/" && /Tagebuch/.test(a.blase[2]), "auf einem Eiland ab Kapitel 7: Tagebuch und Karte"); }
+  assert.deepStrictEqual(nach.K.aktionFuer("lager", false), [["🧭", "Forschen"], 2.6]);
+  assert.deepStrictEqual(vor.K.aktionFuer("lager", false), [["👀", "Ansehen"], 2.6]);
+  assert.strictEqual(vor.K.ortOffen("lager", true), true); assert.strictEqual(vor.K.ortOffen("lager", false), false); assert.strictEqual(nach.K.ortOffen("boot", true), true);
 });
 
 pruefe("Rhythmus-Boot (05.11.2026): Ballon-Wiese = Paulas Boot, zu bis Kapitel 4; Kapitel 4 „Paulas Fest“ braucht 15 Lernfunde und etwas bei Paula", () => {

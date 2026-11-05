@@ -219,7 +219,8 @@
       ["🛶", "Rhythmen", zahl(L("rhythmus").geschafft), "Ритмы"],
       ["🪁", "Drachenflüge", flug, "Полёты змея"],
       ["♟️", "Schach-Rätsel", zahl(L("schach").raetsel), "Шахматные задачи"],
-      ["💡", "Licht-Rätsel", zahl(daten().geloest), "Световые загадки"]
+      ["💡", "Licht-Rätsel", zahl(daten().geloest), "Световые загадки"],
+      ["🧭", "Eilande erforscht", zahl(L("expedition").eilande), "Исследованные острова"]
     ];
   }
   function kammer() {

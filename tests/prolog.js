@@ -52,7 +52,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(a.nr === 2 && a.wartet && a.zeigt, `nach dem Laufen: Blase 3 zeigt aufs Haus (${lage})`);
     await bild(p, `prolog-3-${lage}`);
     // Zum Haus: vor die Tür stellen, Aktionsknopf zeigt „Reingehen“
-    await p.evaluate(() => { __heimat.ich.position.set(-4.2, 0.25, -1.3); });
+    await p.evaluate(() => { const t = InselKern.erstelle(new URLSearchParams(location.search)).vorDerTuer(); __heimat.ich.position.set(t.x, 0.25, t.z + 0.3); });
     await p.waitForFunction(() => __szene.aktuell() && __szene.aktuell().nr === 3, null, { timeout: 5000 });
     erwarte(await p.evaluate(() => __heimat.aktion === "Reingehen"), `vor dem Haus zeigt der Aktionsknopf „Reingehen“ (${lage})`);
     await bild(p, `prolog-4-${lage}`);
