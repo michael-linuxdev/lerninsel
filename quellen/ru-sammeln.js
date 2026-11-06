@@ -16,7 +16,9 @@ function ketten(zeile) {
 const hash = (t) => { let h = 2166136261; for (const c of t) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; } return h.toString(36); };
 const istDeutsch = (t) => /[A-Za-zÄÖÜäöüß]{3}/.test(t) && !KYR.test(t) && !/^[a-z0-9_.\-]+$/.test(t) && !/^[#.\[:]/.test(t.trim()) && !/[{}]$/.test(t.trim());
 const ANDERE = new Set(["uk", "ar", "tr", "pl", "fa", "so", "hsb", "en"]);
-const DE_SCHLUESSEL = ["de", "name", "text", "frage", "satz", "t", "titel", "kurz", "warum"];
+const DE_SCHLUESSEL = ["de", "wort", "name", "text", "frage", "satz", "t", "titel", "kurz", "warum"];
+// Wert eines deutschen Schlüssels (de: "hallo"): auch kleine Einzelwörter zählen, nur keine Kennungen mit Punkt/Unterstrich
+const deWert = (t) => !!t && /[A-Za-zÄÖÜäöüß]/.test(t) && !KYR.test(t) && !/[._]/.test(t);
 // Wert eines Schlüssels in derselben Zeile (erste Zeichenkette nach „schluessel:“)
 const wertVon = (zeile, k, vor) => { const m = new RegExp(`(?:^|[\\s{,])${k}\\s*:\\s*("((?:[^"\\\\]|\\\\.)*)"|'((?:[^'\\\\]|\\\\.)*)'|\`((?:[^\`\\\\]|\\\\.)*)\`)`, "g"); let r, best = "";
   while ((r = m.exec(zeile))) { if (r.index > vor) break; best = r[2] ?? r[3] ?? r[4]; } return best; };
@@ -33,7 +35,7 @@ ORDNER.flatMap(dateien).filter(f => !AUS.test(f)).sort().forEach(f => {
       const ru = s.t.trim(); if (ru.length < 2) return;
       let de = "";
       if (/Ru$/.test(schl)) de = wertVon(zeile, schl.slice(0, -2), s.pos);
-      if (!de && schl === "ru") for (const d of DE_SCHLUESSEL) { const w = wertVon(zeile, d, s.pos); if (w && istDeutsch(w)) { de = w; break; } }
+      if (!de && schl === "ru") for (const d of DE_SCHLUESSEL) { const w = wertVon(zeile, d, s.pos); if (deWert(w)) { de = w; break; } }
       for (let x = j - 1; x >= 0 && !de; x--) if (istDeutsch(k[x].t)) de = k[x].t;
       if (!de && i > 0) { const v = ketten(z[i - 1]).filter(x => istDeutsch(x.t)); if (v.length) de = v[v.length - 1].t; }
       const h = hash(ru); if (gesehen.has(h)) return; gesehen.add(h);

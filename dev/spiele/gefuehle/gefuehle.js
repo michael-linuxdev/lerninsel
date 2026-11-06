@@ -15,6 +15,9 @@
   // russische Zeile (Entwurf) unter einem deutschen Text: nur mit Hilfesprache, vorlesbar über shared/sprache.js (.ru)
   const ruP = (t, k = "p") => (ru(t) ? `<${k} class="ru" lang="ru">${S.esc(t)}</${k}>` : "");
   const setzeRu = (el, t) => { if (!el) return; let n = el.nextElementSibling; if (n && n.classList.contains("ru-auf")) n = n.nextElementSibling; if (!(n && n.classList.contains("ru"))) { n = document.createElement("p"); n.className = "ru"; n.lang = "ru"; el.insertAdjacentElement("afterend", n); } n.textContent = ru(t) || ""; n.hidden = !n.textContent; };
+  // feste Sätze mit russischem Entwurf als Paare [deutsch, russisch] (so zeigt die Prüfliste beide)
+  const T_ERK = ["Gefühle sind nie falsch. Es hilft, sie zu erkennen und zu benennen – bei dir und bei anderen.", "Чувства никогда не бывают неправильными. Полезно их замечать и называть – у себя и у других."];
+  const T_BEW = ["Eine ganze Bewegungs-Minute geschafft. Dein Körper sagt Danke!", "Целая минута движения! Твоё тело говорит спасибо!"];
   const sprich = (t) => { if (SP && SP.sprich) SP.sprich(t, "de-DE"); };
 
   // [id, Emoji, Name, russisch, Bruni sagt …, Bruni sagt (russisch, Entwurf 10.11.2026)]
@@ -122,7 +125,7 @@
   }
   function frage() {
     if (erk.pos >= erk.runden.length) {
-      $("erk-karte").innerHTML = `<div class="gross">🌈</div><h2>Toll gemacht!</h2><p>Gefühle sind nie falsch. Es hilft, sie zu erkennen und zu benennen – bei dir und bei anderen.</p>${ruP("Чувства никогда не бывают неправильными. Полезно их замечать и называть – у себя и у других.")}<button class="knopf haupt" data-zu="start">Zurück zu Bruni</button>`;
+      $("erk-karte").innerHTML = `<div class="gross">🌈</div><h2>Toll gemacht!</h2><p>${T_ERK[0]}</p>${ruP(T_ERK[1])}<button class="knopf haupt" data-zu="start">Zurück zu Bruni</button>`;
       $("erk-karte").querySelector("[data-zu]").addEventListener("click", () => { zeige("start"); start(); });
       if (window.Lernfunde) Lernfunde.merke({ fach: "sachkunde", art: "gefuehle", e: "🎭", text: "Gefühle erkennen: froh, traurig, wütend, ängstlich, aufgeregt …", ru: "радостно, грустно, сердито, тревожно, взволнованно", schluessel: "gefuehle" });
       S.ton("juhu"); return;
@@ -158,7 +161,7 @@
   function uebung() {
     if (bew.pos >= bew.liste.length) {
       const d = lade(); d.bewegung[heute()] = (d.bewegung[heute()] || 0) + 1; const k = Object.keys(d.bewegung).sort(); while (k.length > 60) delete d.bewegung[k.shift()]; speichere(d);
-      $("bew-karte").innerHTML = `<div class="gross">💪</div><h2>Super bewegt!</h2><p>Eine ganze Bewegungs-Minute geschafft. Dein Körper sagt Danke!</p>${ruP("Целая минута движения! Твоё тело говорит спасибо!")}<button class="knopf haupt" id="bew-nochmal">🔁 Nochmal</button><button class="knopf" data-zu="start">Zurück zu Bruni</button>`;
+      $("bew-karte").innerHTML = `<div class="gross">💪</div><h2>Super bewegt!</h2><p>${T_BEW[0]}</p>${ruP(T_BEW[1])}<button class="knopf haupt" id="bew-nochmal">🔁 Nochmal</button><button class="knopf" data-zu="start">Zurück zu Bruni</button>`;
       $("bew-nochmal").addEventListener("click", bewegen); $("bew-karte").querySelector("[data-zu]").addEventListener("click", () => { zeige("start"); start(); });
       if (C && C.hinweis) C.hinweis("💪 Bewegungs-Minute geschafft!", "Bewegung macht den Kopf frisch.", "#2E9C5A");
       S.ton("juhu"); return;
@@ -199,8 +202,66 @@
       [["Ich sage meine Idee.", "Super! Kinder dürfen mitreden – das ist sogar ein Kinderrecht."], ["Ich flüstere sie einer Person zu.", "Ein guter Anfang. Vielleicht sagst du sie nächstes Mal laut?"], ["Ich bleibe still.", "Das ist okay. Was würde dir helfen, deine Idee zu sagen?"]],
       "Warum ist es gut, wenn alle mitreden dürfen?", "Bei welcher Familien-Entscheidung möchtest du gern mitreden?"]
   ];
-  // russisch (Entwurf 10.11.2026) zu den Geschichten: [[Wahl, Folge], …], Frage
-  const GESCH_RU = {"allein": [[["Я спрошу: «Хочешь поиграть с нами?»", "Ребёнок улыбается. Может, сегодня у него появится новый друг – ты!"], ["Я скажу учительнице.", "Учительница поможет. Хорошо, что ты это заметил."], ["Я просто играю дальше.", "Это нормально, иногда такое не замечаешь. Что, наверное, чувствует ребёнок?"]], "Каково это – быть одному?"], "teilen": [[["Я поделюсь печеньем.", "Вы оба радуетесь. Разделённая радость – двойная радость!"], ["Я съем его сам.", "Так тоже можно. Что, наверное, чувствует твой друг?"], ["Мы подумаем, что сделать вместе.", "Хорошая идея! Может, вы найдёте решение для обоих."]], "Когда ты охотно делишься – а когда нет?"], "streit": [[["Сначала я глубоко вдохну.", "Когда ты спокойнее, легче найти решение."], ["Мы будем играть по очереди – с песочными часами.", "Так каждый получит свою очередь. Честно!"], ["Я просто заберу игрушку.", "Тогда сестра наверняка рассердится. Как вам снова помириться?"]], "Как помириться после ссоры?"], "nein": [[["Я громко скажу: «Нет, я этого не сделаю».", "Это смело! Говорить «нет» можно всегда, когда что-то кажется неправильным."], ["Я просто уйду.", "Это тоже «нет». Хорошо, что ты слушаешь своё чувство."], ["Я всё-таки сделаю это.", "Иногда трудно сказать «нет». Что поможет тебе в следующий раз?"]], "Когда важно сказать «нет»?"], "regeln": [[["Я честно скажу об этом.", "Быть честным иногда трудно – и это очень сильно."], ["Я скажу своей команде, что надо играть честно.", "Так игра всем в радость."], ["Я ничего не скажу.", "Что почувствует другая команда, если узнает об этом потом?"]], "Зачем в игре нужны правила?"], "sprache": [[["Я покажу ему школу жестами.", "Можно понять друг друга и без многих слов. Здорово!"], ["Я спрошу, на каком языке он говорит.", "Может, вы научите друг друга новым словам!"], ["Я подожду, пока он лучше выучит немецкий.", "Что сейчас больше всего помогло бы ребёнку?"]], "Каково это, когда ещё не знаешь языка?"], "natur": [[["Я выброшу её в мусорку.", "Спасибо! Животные и луг радуются."], ["Я скажу взрослому.", "Хорошо – вместе можно убрать."], ["Я оставлю её лежать.", "Что может случиться с бутылкой, если она там останется?"]], "Почему важно беречь природу?"], "meinung": [[["Я скажу свою идею.", "Супер! Дети имеют право участвовать в решениях – это даже право ребёнка."], ["Я шепну её кому-нибудь.", "Хорошее начало. Может, в следующий раз скажешь её вслух?"], ["Я промолчу.", "Это нормально. Что помогло бы тебе высказать свою идею?"]], "Почему хорошо, когда все могут высказаться?"]};
+  // russisch (Entwurf 10.11.2026) zu den Geschichten: Paare [deutsch, russisch] für Wahlen, Folgen und Fragen (so sieht die Prüfliste beide Fassungen)
+  const GESCH_RU = new Map([
+    ["Ich frage: „Willst du mitspielen?“", "Я спрошу: «Хочешь поиграть с нами?»"],
+    ["Das Kind lächelt. Vielleicht findet es heute einen neuen Freund – dich!", "Ребёнок улыбается. Может, сегодня у него появится новый друг – ты!"],
+    ["Ich sage es der Lehrerin.", "Я скажу учительнице."],
+    ["Die Lehrerin hilft. Gut, dass du hingeschaut hast.", "Учительница поможет. Хорошо, что ты это заметил."],
+    ["Ich spiele einfach weiter.", "Я просто играю дальше."],
+    ["Das ist okay, manchmal merkt man so etwas nicht. Wie fühlt sich das Kind wohl?", "Это нормально, иногда такое не замечаешь. Что, наверное, чувствует ребёнок?"],
+    ["Wie fühlt man sich, wenn man allein ist?", "Каково это – быть одному?"],
+    ["Ich teile den Keks.", "Я поделюсь печеньем."],
+    ["Ihr freut euch beide. Geteilte Freude ist doppelte Freude!", "Вы оба радуетесь. Разделённая радость – двойная радость!"],
+    ["Ich esse ihn allein.", "Я съем его сам."],
+    ["Das darfst du auch. Wie fühlt sich dein Freund wohl?", "Так тоже можно. Что, наверное, чувствует твой друг?"],
+    ["Wir überlegen, was wir zusammen machen.", "Мы подумаем, что сделать вместе."],
+    ["Gute Idee! Vielleicht findet ihr eine Lösung für beide.", "Хорошая идея! Может, вы найдёте решение для обоих."],
+    ["Wann teilst du gern – und wann nicht?", "Когда ты охотно делишься – а когда нет?"],
+    ["Ich atme erst tief durch.", "Сначала я глубоко вдохну."],
+    ["Wenn man ruhiger ist, findet man leichter eine Lösung.", "Когда ты спокойнее, легче найти решение."],
+    ["Wir wechseln uns ab – mit Sanduhr.", "Мы будем играть по очереди – с песочными часами."],
+    ["So kommt jeder dran. Fair!", "Так каждый получит свою очередь. Честно!"],
+    ["Ich nehme es mir einfach.", "Я просто заберу игрушку."],
+    ["Dann ist die andere bestimmt wütend. Wie könntet ihr euch wieder vertragen?", "Тогда сестра наверняка рассердится. Как вам снова помириться?"],
+    ["Wie kann man sich nach einem Streit wieder vertragen?", "Как помириться после ссоры?"],
+    ["Ich sage laut: „Nein, das mache ich nicht.“", "Я громко скажу: «Нет, я этого не сделаю»."],
+    ["Das ist mutig! Nein sagen darf man immer, wenn sich etwas falsch anfühlt.", "Это смело! Говорить «нет» можно всегда, когда что-то кажется неправильным."],
+    ["Ich gehe einfach weg.", "Я просто уйду."],
+    ["Auch das ist ein Nein. Gut, dass du auf dein Gefühl hörst.", "Это тоже «нет». Хорошо, что ты слушаешь своё чувство."],
+    ["Ich mache es doch.", "Я всё-таки сделаю это."],
+    ["Manchmal ist es schwer, Nein zu sagen. Was könnte dir beim nächsten Mal helfen?", "Иногда трудно сказать «нет». Что поможет тебе в следующий раз?"],
+    ["Wann ist es wichtig, Nein zu sagen?", "Когда важно сказать «нет»?"],
+    ["Ich sage es ehrlich.", "Я честно скажу об этом."],
+    ["Ehrlich sein ist manchmal schwer – und richtig stark.", "Быть честным иногда трудно – и это очень сильно."],
+    ["Ich sage meinem Team, dass wir fair spielen sollen.", "Я скажу своей команде, что надо играть честно."],
+    ["So macht das Spiel allen Spaß.", "Так игра всем в радость."],
+    ["Ich sage nichts.", "Я ничего не скажу."],
+    ["Wie fühlt sich das andere Team, wenn es später davon erfährt?", "Что почувствует другая команда, если узнает об этом потом?"],
+    ["Warum gibt es beim Spielen Regeln?", "Зачем в игре нужны правила?"],
+    ["Ich zeige ihm die Schule mit Händen und Füßen.", "Я покажу ему школу жестами."],
+    ["Man kann sich auch ohne viele Worte verstehen. Toll!", "Можно понять друг друга и без многих слов. Здорово!"],
+    ["Ich frage, welche Sprache es spricht.", "Я спрошу, на каком языке он говорит."],
+    ["Vielleicht könnt ihr euch gegenseitig Wörter beibringen!", "Может, вы научите друг друга новым словам!"],
+    ["Ich warte, bis es besser Deutsch kann.", "Я подожду, пока он лучше выучит немецкий."],
+    ["Was würde dem Kind jetzt am meisten helfen?", "Что сейчас больше всего помогло бы ребёнку?"],
+    ["Wie fühlt man sich, wenn man die Sprache noch nicht kann?", "Каково это, когда ещё не знаешь языка?"],
+    ["Ich werfe sie in den Mülleimer.", "Я выброшу её в мусорку."],
+    ["Danke! Die Tiere und die Wiese freuen sich.", "Спасибо! Животные и луг радуются."],
+    ["Ich sage es einem Erwachsenen.", "Я скажу взрослому."],
+    ["Gut – zusammen kann man aufräumen.", "Хорошо – вместе можно убрать."],
+    ["Ich lasse sie liegen.", "Я оставлю её лежать."],
+    ["Was könnte mit der Flasche passieren, wenn sie dort bleibt?", "Что может случиться с бутылкой, если она там останется?"],
+    ["Warum ist es wichtig, die Natur zu schützen?", "Почему важно беречь природу?"],
+    ["Ich sage meine Idee.", "Я скажу свою идею."],
+    ["Super! Kinder dürfen mitreden – das ist sogar ein Kinderrecht.", "Супер! Дети имеют право участвовать в решениях – это даже право ребёнка."],
+    ["Ich flüstere sie einer Person zu.", "Я шепну её кому-нибудь."],
+    ["Ein guter Anfang. Vielleicht sagst du sie nächstes Mal laut?", "Хорошее начало. Может, в следующий раз скажешь её вслух?"],
+    ["Ich bleibe still.", "Я промолчу."],
+    ["Das ist okay. Was würde dir helfen, deine Idee zu sagen?", "Это нормально. Что помогло бы тебе высказать свою идею?"],
+    ["Warum ist es gut, wenn alle mitreden dürfen?", "Почему хорошо, когда все могут высказаться?"]
+  ]);
+  const gru = (de) => GESCH_RU.get(de) || "";
   function miteinander() {
     const d = lade(), gelesen = d.geschichten || {};
     $("mit-karte").innerHTML = `<h2>🤝 Miteinander</h2><p class="klein">Was würdest du tun? Es gibt kein Richtig oder Falsch – Bruni erzählt dir, was passieren könnte.</p>
@@ -210,16 +271,16 @@
   function geschichte(n) {
     const [id, e, titel, text, r, wahlen, frage, impuls] = GESCHICHTEN[n];
     $("mit-karte").innerHTML = `<div class="gross">${e}</div><h2>${titel}</h2><p class="lage"></p>${ru(r) ? `<p class="lage-ru" lang="ru"></p>` : ""}<p><b>Was würdest du tun?</b></p>${ruP("Что бы ты сделал?")}
-      <div class="wahlen">${wahlen.map((w, i) => `<button data-w="${i}">${w[0]}${ru(((GESCH_RU[id] || [[]])[0][i] || [])[0]) ? `<small lang="ru">${S.esc(GESCH_RU[id][0][i][0])}</small>` : ""}</button>`).join("")}</div><div id="mit-folge"></div>`;
+      <div class="wahlen">${wahlen.map((w, i) => `<button data-w="${i}">${w[0]}${ru(gru(w[0])) ? `<small lang="ru">${S.esc(gru(w[0]))}</small>` : ""}</button>`).join("")}</div><div id="mit-folge"></div>`;
     $("mit-karte").querySelector(".lage").textContent = text; if (ru(r)) $("mit-karte").querySelector(".lage-ru").textContent = r;
     sprich(text);
     $("mit-karte").querySelectorAll("[data-w]").forEach(b => b.addEventListener("click", () => {
       const w = wahlen[+b.dataset.w]; S.ton("tipp");
       $("mit-karte").querySelectorAll("[data-w]").forEach(x => { x.disabled = true; x.style.opacity = x === b ? 1 : 0.5; });
       $("mit-folge").innerHTML = `<div class="folge"><div class="bruni-zeile"><div class="bruni" aria-hidden="true" style="width:70px;height:74px"></div><div><p></p></div></div></div>
-        <p><b>🤔 ${frage}</b></p>${ruP((GESCH_RU[id] || [])[1])}<div class="impuls">🍽️ <b>Zum Reden beim Abendessen:</b> ${impuls}</div>
+        <p><b>🤔 ${frage}</b></p>${ruP(gru(frage))}<div class="impuls">🍽️ <b>Zum Reden beim Abendessen:</b> ${impuls}</div>
         <button class="knopf haupt" id="mit-weiter">Andere Geschichte</button>`;
-      $("mit-folge").querySelector(".folge p").textContent = w[1]; setzeRu($("mit-folge").querySelector(".folge p"), ((GESCH_RU[id] || [[]])[0][+b.dataset.w] || [])[1]);
+      $("mit-folge").querySelector(".folge p").textContent = w[1]; setzeRu($("mit-folge").querySelector(".folge p"), gru(w[1]));
       if (window.Figuren) $("mit-folge").querySelector(".bruni").innerHTML = window.Figuren.baer("");
       sprich(w[1]);
       const d = lade(); d.geschichten = Object.assign({}, d.geschichten, { [id]: 1 }); d.impulse = (d.impulse || []).concat([{ d: heute(), t: impuls, g: titel }]).slice(-20); speichere(d);
@@ -236,11 +297,14 @@
   }));
   // Hilfe-Karte (116 111) und Kurz-Hinweis auf Russisch (Entwurf) – wichtig für Kinder, die noch wenig Deutsch verstehen
   if (ru("x")) {
-    const k = $("hilfe-karte"), ps = k.querySelectorAll(":scope > p"), HR = ["Поговори со взрослым, которому ты доверяешь: мамой, папой, бабушкой, дедушкой, учительницей или учителем. Ты не один.",
-      "Ты можешь бесплатно позвонить на «Номер против печали» (Nummer gegen Kummer): 116 111 (с понедельника по субботу, с 14 до 20 часов). Там тебя выслушают – называть своё имя не нужно.",
-      "Твоё тело принадлежит тебе. Если что-то или кто-то вызывает у тебя странное чувство, ты можешь сказать «нет» и рассказать об этом."];
-    ps.forEach((p, i) => { if (HR[i]) p.insertAdjacentHTML("afterend", ruP(HR[i])); });
-    $("hilfe-kurz").insertAdjacentHTML("beforeend", ruP("Ты можешь бесплатно позвонить на «Номер против печали»: 116 111", "span"));
+    const k = $("hilfe-karte"), ps = k.querySelectorAll(":scope > p"), HR = [
+      ["Sprich mit einem Erwachsenen, dem du vertraust: Mama, Papa, Oma, Opa, deine Lehrerin oder dein Lehrer. Du bist nicht allein.", "Поговори со взрослым, которому ты доверяешь: мамой, папой, бабушкой, дедушкой, учительницей или учителем. Ты не один."],
+      ["Du kannst auch kostenlos bei der Nummer gegen Kummer anrufen: 116 111 (Montag bis Samstag, 14 bis 20 Uhr). Dort hört dir jemand zu – du musst deinen Namen nicht sagen.", "Ты можешь бесплатно позвонить на «Номер против печали» (Nummer gegen Kummer): 116 111 (с понедельника по субботу, с 14 до 20 часов). Там тебя выслушают – называть своё имя не нужно."],
+      ["Dein Körper gehört dir. Wenn dich etwas oder jemand komisch fühlen lässt, darfst du Nein sagen und es weitererzählen.", "Твоё тело принадлежит тебе. Если что-то или кто-то вызывает у тебя странное чувство, ты можешь сказать «нет» и рассказать об этом."]
+    ];
+    ps.forEach((p, i) => { if (HR[i]) p.insertAdjacentHTML("afterend", ruP(HR[i][1])); });   // [deutsch wie in index.html, russisch]
+    const KURZ = ["Du kannst auch kostenlos die Nummer gegen Kummer anrufen: 116 111", "Ты можешь бесплатно позвонить на «Номер против печали»: 116 111"];
+    $("hilfe-kurz").insertAdjacentHTML("beforeend", ruP(KURZ[1], "span"));
   }
   start();
   const q = new URLSearchParams(location.search).get("zu"); if (q && ["barometer", "bewegen", "ruhe"].includes(q)) { zeige(q); if (q === "barometer") barometer(); if (q === "bewegen") bewegen(); }

@@ -10,19 +10,23 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 
 **Zuerst:** Falls das Repo noch nicht da ist, `git clone https://github.com/michael-linuxdev/lerninsel` (bzw. das Repo der Sitzung hinzufügen).
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen**. Dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
-Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Danach in `docs/PLAN.md` die letzten „Stand 30.10.2026“-Einträge und die
-beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
+Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Danach in `docs/PLAN.md` die **„Stand 10.11.2026“**-Einträge am Ende lesen
+(drei Abschnitte: Sitzung, Entscheidungen nach der Übergabe, NA-53/Paket D) und die „Neuausrichtung 26.10.2026“. Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
 **Ablauf:** Einrichten und `sh tests/laufen.sh` (muss grün sein) → **Fragerunde** (höchstens 4 Fragen; iPad-Rückmeldung zuerst, gemeldete Fehler
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-**Letzte Sitzung (10.11.2026, Auftrag „gesamtverantwortlich, unentwegt eigenständig weiterbauen“, ohne Fragerunde):** acht Pakete gebaut, alle Tests grün, CI-Lauf 106 grün
-(Details in `docs/PLAN.md`, „Stand 10.11.2026“). Seit dem 08.11. gibt es **keine iPad-Rückmeldung** – sie ist jetzt das Wichtigste.
-1. **Fragerunde:** iPad-Rückmeldung zu allem seit dem 07.11. (Liste in Abschnitt 1 unten: größere Insel, Kapitel 7, Koordinaten-Karte, Mein Name, russisches Vorlesen, „RU“-Knopf).
-   Gemeldete Fehler zuerst, je mit Test. Außerdem fragen: Hat jemand die **Prüfliste Russisch** ausgefüllt? Dann den Ergebnis-Text einarbeiten (Korrekturen stehen mit Datei:Zeile darin).
-2. Entschieden (10.11.): „Namen schreiben“ bleibt „teilweise“; russische Hilfe standardmäßig „Automatisch nach Deutschstand“ (gutes Deutsch → „RU“-Knopf).
-3. Danach nach Abschnitt 2 unten (nächste Pakete).
+**Letzte Sitzung (10.11.2026)** – Auftrag „gesamtverantwortlich, eigenständig weiterbauen“: elf Pakete gebaut (Liste in Abschnitt 1), alle Tests grün, zuletzt auf Wunsch des
+Auftraggebers pausiert. **Seit dem 08.11. gibt es keine iPad-Rückmeldung** – sie ist jetzt das Wichtigste.
+1. **Fragerunde (höchstens 4 Fragen):** iPad-Rückmeldung zur Liste in Abschnitt 1 (Fehler zuerst beheben, je mit Test). Hat jemand die **Prüfliste Russisch** ausgefüllt
+   (Elternbereich → „✍️ Russisch prüfen lassen“)? Dann den Ergebnis-Text einarbeiten – Korrekturen stehen dort mit Datei:Zeile. Welche Pakete aus Abschnitt 2?
+2. **Entschieden (10.11., nicht neu fragen):** „Namen schreiben“ (Vorschule) bleibt „teilweise“; russische Hilfe standardmäßig **automatisch nach Deutschstand**
+   (kein/wenig Deutsch → immer, Alltags-Deutsch → nur bei Neuem, gutes Deutsch → „RU“-Knopf). Interessen-Kulissen wählt das Kind selbst (nicht aus dem Welt-Assistenten).
+3. Danach selbstständig nach Abschnitt 2 (nächste Pakete).
+4. **Technische Hinweise:** CI-Läufe bis 106 grün (ab da Läufe zu den letzten Pushes prüfen – `mcp__github__actions_list` bzw. GitHub Actions); der lokale Zweig in der alten
+   Cloud-Sitzung war zeitweise „detached“ – in einer neuen Sitzung einfach frisch klonen. `quellen/dev-bauen.sh` ruft jetzt auch `node quellen/ru-sammeln.js` auf (Prüfliste aktuell halten;
+   `tests/offline.js` meldet eine veraltete `spiele/eltern/ru-texte.js`).
 
 ## 1. Stand (10.11.2026)
 **Neu (PLAN „Stand 10.11.2026“):**
@@ -34,6 +38,9 @@ zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, t
   (zentraler Tabellen-Übersetzer `Sprache.ruDazu`); **Prüfliste Russisch** für Muttersprachler (7772 Texte, Elternbereich → „✍️ Russisch prüfen lassen“); **NA-54 Ausschleichen**
   („Immer“ / „Nur bei Neuem“ / „Nur auf Knopfdruck“ mit gelbem „RU“-Knopf).
 - **CI:** `mathe5b` wackelte (Taste zu früh angetippt) – behoben; neue CI-Tests `mathe5b`, `meinname`, `ruvorlesen`, `rupruefen`, `ausschleichen`.
+- **Nach der Übergabe (10.11.):** Entscheidungen umgesetzt (Namen schreiben = teilweise, Hilfe automatisch nach Deutschstand); **NA-53 Interessen-Kulissen** (Meine Ecke → „Meine Sachen“ →
+  „🎨 Meine Lieblingsbilder“: Tiere, Fahrzeuge, Weltraum, Natur, bunt – Mengen-Bilder im Matheweg, Test `kulissen`); **Paket D** Prüfliste: russische Texte in Gefühle, Robo, Schach,
+  Mein Tier als Paare „deutsch, russisch“ – nur noch 13 von 7773 Texten ohne deutsches Gegenstück.
 
 **Im iPad testen (in /dev/test):**
 1. Kind mit Stufe „Übergang Klasse 5“: Insel → Forscherlager → „Karte lesen“ – Achsen 0–6 lesbar (quer und hoch)? Roter Ring gut zu sehen? Eine Frage absichtlich falsch (Hinweis x vor y).
@@ -43,9 +50,10 @@ zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, t
 5. Kind mit Stufe „Vorschule“: Deutsch → „Lesen und Schreiben“ → „🏷️ Mein Name“ – lässt sich der eigene Name gut nachspuren (Größe der Buchstaben, Startpunkte)?
 6. Hilfesprache Russisch (Elternbereich): Matheweg, Forscherlager, Garten, Gefühle, Mein Tier, Schach, Robo, Lesen – die russische Zeile mit dem kleinen Lautsprecher antippen. Wird sie vorgelesen
    (russische Stimme auf dem iPad: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen)?
-7. Elternbereich → Kind „Ändern“ → „Wie viel Hilfe in der Hilfesprache?“ = „Nur auf Knopfdruck“: Erscheint im Matheweg statt der russischen Zeile ein gelber „RU“-Knopf, der sie zeigt und vorliest?
+7. Elternbereich → Kind „Ändern“ → „Wie viel Hilfe in der Hilfesprache?“ steht auf „Automatisch“; mit „Gutes Deutsch“ erscheint statt der russischen Zeile ein gelber „RU“-Knopf. Von Hand „Nur auf Knopfdruck“: Erscheint im Matheweg statt der russischen Zeile ein gelber „RU“-Knopf, der sie zeigt und vorliest?
    Dann „Nur bei Neuem“: Forscherlager zweimal öffnen – Ellas russischer Satz nur beim ersten Mal offen?
 8. Elternbereich (Hilfesprache Russisch) → „✍️ Russisch prüfen lassen“: Prüfliste an eine Person mit Russisch als Muttersprache weitergeben, Ergebnis-Text zurückschicken lassen.
+9. Meine Ecke → „🎒 Meine Sachen“ → „🎨 Meine Lieblingsbilder“ → z. B. „Weltraum“, dann Matheweg Kl. 1 „Zählen bis 10“: Raketen, Sterne, Planeten statt Äpfeln?
 
 ## 1. Stand (09.11.2026)
 **Weg 3 (09.11., PLAN „Stand 09.11.2026“):** Heimatinsel Radius 15,2 → 19 (Orte 1,25-mal weiter auseinander, 14 Bäume, zwei Blumenwiesen, Trittstein-Wege zu Garten, Bäckerei, Tierstation, Leuchtturm und Lager,
@@ -260,7 +268,8 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - A. iPad-Rückmeldung und Ergebnis der Prüfliste Russisch einarbeiten (Fehler zuerst, je mit Test).
 - B. ~~NA-53 Interessen-Kulissen~~ (gebaut 10.11.: Meine Ecke → „Meine Lieblingsbilder“, wirkt auf die Mengen-Bilder im Matheweg; iPad: Thema wählen, dann Matheweg Kl. 1 „Zählen bis 10“).
 - C. Russisch für die letzten Seiten ohne Russisch: Schreiben und Präsentieren, Laut vorlesen, Atelier-Malen (bewusst offen gelassen, sehr deutschlastig – erst mit dem Auftraggeber klären).
-- D. Prüfliste: die 161 Texte ohne deutschen Text daneben (Gefühle, Schach, Robo, Mein Tier) mit deutschem Gegenstück versehen, damit Prüfer sie leichter beurteilen.
+- D. ~~Prüfliste: deutsche Gegenstücke~~ (erledigt 10.11.: 161 → 13; die übrigen sind Lied-Hinweise und Satzbausteine).
+- F. Interessen-Kulissen ausweiten (Bäckerei-Waren, Mathe-Reihen `REGAL`/`TIERE`, Sachaufgaben) – nur wenn das Kind die Kulisse auf dem iPad mag.
 - E. Lehrplan-Reste: Sorbisch als Muttersprache (Erzählen, Vortragen, freies Schreiben – braucht eine Person mit Sorbisch), Vorschule „Bildergeschichten erzählen“, Übergang 5 „Würfel skizzieren“ (draußen am Tisch).
 
 **Ältere Liste:**

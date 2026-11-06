@@ -2494,3 +2494,8 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
   Der Matheweg nimmt für alle Mengen-Bilder aus `DINGE` (Zählen, Plus/Minus mit Bildern, Mengen vergleichen, Kl. 1/Vorschule) die Bilder des Themas – gleiche Aufgaben, andere Bilder.
   **Entscheidungen:** das Kind wählt selbst (kein Ableiten aus dem Welt-Assistenten – eine Wüsten-Welt sagt wenig über Vorlieben); die Wahl wird nicht belohnt (kein Stern), sie ist jederzeit änderbar.
   Offen: weitere Stellen mit Bildern (Bäckerei-Waren, Sachaufgaben-Texte, REGAL/TIERE in Mathe) könnten die Kulisse später auch nutzen. Neuer Test `kulissen` (CI).
+- **Paket D Prüfliste (deutsches Gegenstück):** `quellen/ru-sammeln.js` nimmt bei `ru:` jetzt auch kleine Einzelwörter aus `de:`/`wort:` (vorher als Kennung verworfen); in den Seiten stehen die
+  russischen Sätze als Paare [deutsch, russisch]: Gefühle (`GESCH_RU` = Map der 56 Wahlen/Folgen/Fragen, `gru(de)`; Hilfe-Karte `HR`, `KURZ`, `T_ERK`, `T_BEW`), Robo (`LV_PAARE`), Schach
+  (`L_PAARE`, `FERTIG_PAARE`, `R_PAARE`), Mein Tier (alle Sätze über `Sprache.ruDazu`/`ruVon`, Name des Tiers als `{w}`; `ARTEN_RU`/`EIER_RU` als Paare). Ergebnis: 13 von 7773 Texten ohne deutsches
+  Gegenstück (vorher 161). Tests `tier`, `schach`, `robo`, `gefuehle`, `ruvorlesen`, `rupruefen`, `verbessert` grün.
+- **Pause auf Wunsch des Auftraggebers; Übergabe für eine neue, unabhängige Sitzung** in `docs/SESSION-PROMPT.md` (Auftrag, Entscheidungen, iPad-Testliste mit 9 Schritten, Pakete A, C, E, F).

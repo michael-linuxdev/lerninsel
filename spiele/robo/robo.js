@@ -139,12 +139,23 @@
   zeigeListe();
   // ---------- Russisch (Entwurf 10.11.2026, nur mit Hilfesprache; vorlesbar über shared/sprache.js) ----------
   if (SP && SP.ruDazu) {
-    const LV_RU = ["Доведи Робо до звезды! Он смотрит вверх.", "Робо смотрит вправо. Сколько раз ему нужно идти вперёд?", "Теперь Робо нужно ещё и поворачивать. Поворот не сдвигает его с места!",
-      "Длинный путь в угол.", "На пути камень. Объезжай вокруг!", "Два камня – найди путь.", "Вдоль и поперёк между камнями.", "Робо смотрит влево. Следи за его направлением!",
-      "Новое: цикл! Он повторяет команды. Справишься всего с 2 блоками?", "До самого верха – всего с 2 блоками.", "Лестница! Что всё время повторяется? Не больше 5 блоков.",
-      "Вверх, вбок, вниз – используй циклы. Не больше 9 блоков.", "Объедь один раз квадрат вокруг середины и вернись на старт. Не больше 6 блоков."];
+    const LV_PAARE = [
+      ["Bring Robo zum Stern! Er schaut nach oben.", "Доведи Робо до звезды! Он смотрит вверх."],
+      ["Robo schaut nach rechts. Wie oft muss er vorwärts gehen?", "Робо смотрит вправо. Сколько раз ему нужно идти вперёд?"],
+      ["Jetzt musst du Robo auch drehen. Drehen bewegt ihn nicht vom Fleck!", "Теперь Робо нужно ещё и поворачивать. Поворот не сдвигает его с места!"],
+      ["Ein langer Weg in die Ecke.", "Длинный путь в угол."],
+      ["Ein Stein liegt im Weg. Fahr außen herum!", "На пути камень. Объезжай вокруг!"],
+      ["Zwei Steine – finde einen Weg.", "Два камня – найди путь."],
+      ["Kreuz und quer durch die Steine.", "Вдоль и поперёк между камнями."],
+      ["Robo schaut nach links. Achte gut auf seine Richtung!", "Робо смотрит влево. Следи за его направлением!"],
+      ["Neu: die Schleife 🔁! Sie wiederholt Befehle. Schaffst du es mit nur 2 Bausteinen?", "Новое: цикл! Он повторяет команды. Справишься всего с 2 блоками?"],
+      ["Ganz nach oben – mit nur 2 Bausteinen.", "До самого верха – всего с 2 блоками."],
+      ["Eine Treppe! Was wiederholt sich immer wieder? Höchstens 5 Bausteine.", "Лестница! Что всё время повторяется? Не больше 5 блоков."],
+      ["Hoch, rüber, runter – nutze Schleifen. Höchstens 9 Bausteine.", "Вверх, вбок, вниз – используй циклы. Не больше 9 блоков."],
+      ["Fahr einmal im Quadrat um die Mitte und komm zurück zum Start. Höchstens 6 Bausteine.", "Объедь один раз квадрат вокруг середины и вернись на старт. Не больше 6 блоков."]
+    ];
     SP.ruDazu([
-      ...LEVELS.map((l, i) => [l.text, LV_RU[i]]),
+      ...LV_PAARE,
       ["Hallo! Ich bin Robo Pixel. Ich mache genau, was du programmierst. Hilfst du mir zum Stern?", "Привет! Я Робо Пиксель. Я делаю ровно то, что ты запрограммируешь. Поможешь мне добраться до звезды?"],
       ["Super, du hast schon 3 von 13 Aufgaben gelöst!", "Супер, ты уже решил {0} из {1} заданий!"],
       ["Programmieren heißt: Befehle in die richtige Reihenfolge bringen. Ein Roboter macht genau das, was im Programm steht – nicht mehr und nicht weniger.", "Программировать – значит ставить команды в правильном порядке. Робот делает ровно то, что написано в программе, – не больше и не меньше."],

@@ -184,13 +184,34 @@
   auswahl();
   // ---------- Russisch (Entwurf 10.11.2026, nur mit Hilfesprache): Tildas Sätze und die Erklärtexte, vorlesbar über shared/sprache.js ----------
   if (SP && SP.ruDazu) {
-    const FIG_RU = { turm: ["Турм", "ладья"], laeufer: ["Лойфер", "слон"], dame: ["Даме", "ферзь"], koenig: ["Кёниг", "король"], springer: ["Шпрингер", "конь"], bauer: ["Бауэр", "пешка"] };
-    const L_RU = { turm: "Ладья ходит прямо: вверх, вниз, влево и вправо – так далеко, как хочет. Собери все звёзды!",
-      laeufer: "Слон ходит наискосок – всегда по полям своего цвета. Собери все звёзды!", dame: "Ферзь – самая сильная фигура: он ходит и прямо, И наискосок.",
-      koenig: "Король делает только один шаг – в любую сторону. Он медленный, но важный!", springer: "Конь прыгает буквой Г: два поля прямо и одно в сторону. Он может перепрыгивать через другие фигуры!",
-      bauer: "Пешка ходит прямо – в начале можно на два поля. Бить можно только наискосок вперёд. В конце она превращается в ферзя!" };
-    const R_RU = ["Чёрный король заперт за своими пешками …", "Ферзь может ходить далеко. Куда?", "У ладьи свободный путь.", "Твой король помогает ферзю.",
-      "Король не может уйти – хитрость с конём!", "Две ладьи работают вместе.", "Последнее слово за конём.", "Где у чёрных слабое место? Посмотри на f7!", "Слон следит – ладья бьёт."];
+    // Paare [deutsch, russisch] – so zeigt auch die Prüfliste (quellen/ru-sammeln.js) beide Fassungen nebeneinander
+    const L_PAARE = [
+      ["Der Turm fährt gerade: nach oben, unten, links und rechts – so weit er will. Sammle alle Sterne!", "Ладья ходит прямо: вверх, вниз, влево и вправо – так далеко, как хочет. Собери все звёзды!"],
+      ["Der Läufer läuft schräg – immer auf Feldern seiner Farbe. Sammle alle Sterne!", "Слон ходит наискосок – всегда по полям своего цвета. Собери все звёзды!"],
+      ["Die Dame ist die stärkste Figur: Sie kann gerade UND schräg ziehen.", "Ферзь – самая сильная фигура: он ходит и прямо, И наискосок."],
+      ["Der König macht nur einen Schritt – in jede Richtung. Er ist langsam, aber wichtig!", "Король делает только один шаг – в любую сторону. Он медленный, но важный!"],
+      ["Der Springer springt wie ein L: zwei Felder gerade und eins zur Seite. Er kann über andere Figuren springen!", "Конь прыгает буквой Г: два поля прямо и одно в сторону. Он может перепрыгивать через другие фигуры!"],
+      ["Der Bauer geht geradeaus – am Anfang auch zwei Felder. Schlagen darf er nur schräg nach vorne. Am Ende wird er zur Dame!", "Пешка ходит прямо – в начале можно на два поля. Бить можно только наискосок вперёд. В конце она превращается в ферзя!"]
+    ];
+    const FERTIG_PAARE = [
+      ["Super! Alle Sterne gesammelt. Jetzt weißt du, wie der Turm zieht!", "Супер! Все звёзды собраны. Теперь ты знаешь, как ходит ладья!"],
+      ["Super! Alle Sterne gesammelt. Jetzt weißt du, wie der Läufer zieht!", "Супер! Все звёзды собраны. Теперь ты знаешь, как ходит слон!"],
+      ["Super! Alle Sterne gesammelt. Jetzt weißt du, wie die Dame zieht!", "Супер! Все звёзды собраны. Теперь ты знаешь, как ходит ферзь!"],
+      ["Super! Alle Sterne gesammelt. Jetzt weißt du, wie der König zieht!", "Супер! Все звёзды собраны. Теперь ты знаешь, как ходит король!"],
+      ["Super! Alle Sterne gesammelt. Jetzt weißt du, wie der Springer zieht!", "Супер! Все звёзды собраны. Теперь ты знаешь, как ходит конь!"],
+      ["Super! Alle Sterne gesammelt. Jetzt weißt du, wie der Bauer zieht!", "Супер! Все звёзды собраны. Теперь ты знаешь, как ходит пешка!"]
+    ];
+    const R_PAARE = [
+      ["Weiß zieht und setzt matt! Der schwarze König ist hinter seinen Bauern gefangen …", "Белые ходят и ставят мат! Чёрный король заперт за своими пешками …"],
+      ["Weiß zieht und setzt matt! Die Dame kann weit ziehen. Wohin?", "Белые ходят и ставят мат! Ферзь может ходить далеко. Куда?"],
+      ["Weiß zieht und setzt matt! Der Turm hat freie Bahn.", "Белые ходят и ставят мат! У ладьи свободный путь."],
+      ["Weiß zieht und setzt matt! Dein König hilft der Dame.", "Белые ходят и ставят мат! Твой король помогает ферзю."],
+      ["Weiß zieht und setzt matt! Der König kann nicht weg – ein Springer-Trick!", "Белые ходят и ставят мат! Король не может уйти – хитрость с конём!"],
+      ["Weiß zieht und setzt matt! Zwei Türme arbeiten zusammen.", "Белые ходят и ставят мат! Две ладьи работают вместе."],
+      ["Weiß zieht und setzt matt! Der Springer hat das letzte Wort.", "Белые ходят и ставят мат! Последнее слово за конём."],
+      ["Weiß zieht und setzt matt! Wo ist Schwarz schwach? Schau auf f7!", "Белые ходят и ставят мат! Где у чёрных слабое место? Посмотри на f7!"],
+      ["Weiß zieht und setzt matt! Der Läufer passt auf – der Turm schlägt zu.", "Белые ходят и ставят мат! Слон следит – ладья бьёт."]
+    ];
     SP.ruDazu([
       ["Hallo {name}! Ich bin Tilda, die Schach-Schildkröte. Langsam und klug gewinnt! Was möchtest du machen?", "Привет, {name}! Я Тильда, черепаха-шахматистка. Медленно и умно – и побеждаешь! Что ты хочешь делать?"],
       ["Hallo du! Ich bin Tilda, die Schach-Schildkröte. Langsam und klug gewinnt! Was möchtest du machen?", "Привет! Я Тильда, черепаха-шахматистка. Медленно и умно – и побеждаешь! Что ты хочешь делать?"],
@@ -213,9 +234,7 @@
       ["Weiß zieht – und der schwarze König kann nicht mehr entkommen.", "Белые ходят – и чёрный король уже не может убежать."],
       ["Für den Anfang: nur Bauern. Wer zuerst einen Bauern ans andere Ende bringt, gewinnt!", "Для начала – только пешки. Кто первым доведёт пешку до другого края, тот выиграл!"],
       ["Einfache Regeln für den Anfang: ohne Rochade und „en passant“, ein Bauer am Ende wird zur Dame.", "Простые правила для начала: без рокировки и взятия на проходе, пешка в конце становится ферзём."],
-      ...LEKTIONEN.map(l => [l.text, L_RU[l.id]]),
-      ...LEKTIONEN.map(l => [`Super! Alle Sterne gesammelt. Jetzt weißt du, wie ${l.name.replace("Der ", "der ").replace("Die ", "die ")} zieht!`, `Супер! Все звёзды собраны. Теперь ты знаешь, как ходит ${FIG_RU[l.id][1]}!`]),
-      ...RAETSEL.map(([, t], i) => [`Weiß zieht und setzt matt! ${t}`, `Белые ходят и ставят мат! ${R_RU[i]}`])
+      ...L_PAARE, ...FERTIG_PAARE, ...R_PAARE,
     ]);
     SP.ruBeobachte("#tilda-text, .klein-t");
   }
