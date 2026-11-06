@@ -480,9 +480,10 @@
       const de = el.textContent;
       if (el.dataset.ruVon === de) return;
       el.dataset.ruVon = de;
-      let n = el.nextElementSibling; if (!(n && n.classList.contains("hilfe-ru"))) n = null;
+      let n = el.nextElementSibling; if (n && n.classList.contains("ru-auf")) n = n.nextElementSibling;   // NA-54: „RU“-Knopf davor überspringen
+      if (!(n && n.classList.contains("hilfe-ru"))) n = null;
       const ru = uebersetze(de);
-      if (!ru) { if (n) n.remove(); return; }
+      if (!ru) { if (n) { const b = n.previousElementSibling; if (b && b.classList.contains("ru-auf")) b.remove(); n.remove(); } return; }
       if (!n) { n = document.createElement("small"); n.className = "hilfe-ru"; n.lang = "ru"; n.dataset.emoji = "aus"; el.insertAdjacentElement("afterend", n); }
       n.textContent = ru;
     });

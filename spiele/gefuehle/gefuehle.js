@@ -14,7 +14,7 @@
   const ru = (t) => S.paar(["", t])[1];
   // russische Zeile (Entwurf) unter einem deutschen Text: nur mit Hilfesprache, vorlesbar über shared/sprache.js (.ru)
   const ruP = (t, k = "p") => (ru(t) ? `<${k} class="ru" lang="ru">${S.esc(t)}</${k}>` : "");
-  const setzeRu = (el, t) => { if (!el) return; let n = el.nextElementSibling; if (!(n && n.classList.contains("ru"))) { n = document.createElement("p"); n.className = "ru"; n.lang = "ru"; el.insertAdjacentElement("afterend", n); } n.textContent = ru(t) || ""; n.hidden = !n.textContent; };
+  const setzeRu = (el, t) => { if (!el) return; let n = el.nextElementSibling; if (n && n.classList.contains("ru-auf")) n = n.nextElementSibling; if (!(n && n.classList.contains("ru"))) { n = document.createElement("p"); n.className = "ru"; n.lang = "ru"; el.insertAdjacentElement("afterend", n); } n.textContent = ru(t) || ""; n.hidden = !n.textContent; };
   const sprich = (t) => { if (SP && SP.sprich) SP.sprich(t, "de-DE"); };
 
   // [id, Emoji, Name, russisch, Bruni sagt …, Bruni sagt (russisch, Entwurf 10.11.2026)]

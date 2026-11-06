@@ -84,10 +84,30 @@
   // ebenso alles unter [data-ru-vorlesen="aus"]. Gilt nur mit Hilfesprache Russisch.
   const RU_WAHL = '.ru, .hilfe-ru, [lang="ru"]';
   const hilfeRu = () => { try { const h = window.Spielwelt && window.Spielwelt.hilfe && window.Spielwelt.hilfe(); return h && h.code === "ru" ? h : null; } catch (x) { return null; } };
+  // NA-54 „Ausschleichen“ (10.11.2026): bei Spielwelt.hilfeDosis() = "knopf" oder "neu" wird die Zeile versteckt (.ru-zu) und davor steht ein
+  // kleiner Knopf „RU“ (.ru-auf); Antippen zeigt sie und liest sie vor. "neu": beim ersten Mal (Prüfsumme des Texts noch nicht gesehen) bleibt sie sichtbar.
+  // Zeilen in Knöpfen/Links werden nur versteckt (dort hat kein zweiter Knopf Platz). Ändert sich der Text, wird neu entschieden.
+  const dosis = () => { try { return (window.Spielwelt && window.Spielwelt.hilfeDosis && window.Spielwelt.hilfeDosis()) || "immer"; } catch (x) { return "immer"; } };
+  const pruefsumme = (t) => { let h = 2166136261; for (const c of t) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; } return h.toString(36); };
+  function ruDosiere(el) {
+    const d = dosis(); if (d === "immer") return;
+    const t = (el.textContent || "").trim(); if (!t || el.dataset.ruText === t) return;
+    el.dataset.ruText = t;
+    let b = el.previousElementSibling; if (!(b && b.classList.contains("ru-auf"))) b = null;
+    const h = pruefsumme(t), S = window.Spielwelt;
+    if (d === "neu" && S && S.hilfeGesehen && !S.hilfeGesehen(h)) { S.merkeHilfe(h); el.classList.remove("ru-zu"); if (b) b.hidden = true; return; }
+    el.classList.add("ru-zu");
+    if (el.closest('button, a, label, [role=button]:not(.ru-hoerbar)')) return;
+    if (!b) { b = document.createElement("button"); b.type = "button"; b.className = "ru-auf"; b.textContent = "RU"; b.setAttribute("aria-label", "Hilfe auf Russisch zeigen"); b.dataset.vorlesen = "ru"; b.lang = "de";
+      el.insertAdjacentElement("beforebegin", b); }
+    b.hidden = false;
+  }
   function ruMarkiere(wurzel) {
     if (!hilfeRu() || !wurzel || !wurzel.querySelectorAll) return;
     const liste = wurzel.matches && wurzel.matches(RU_WAHL) ? [wurzel] : [];
     wurzel.querySelectorAll(RU_WAHL).forEach(e => liste.push(e));
+    if (wurzel.closest && !(wurzel.matches && wurzel.matches(RU_WAHL))) { const o = wurzel.closest(RU_WAHL); if (o) liste.push(o); }
+    liste.forEach(ruDosiere);
     liste.forEach(el => {
       if (el.classList.contains("ru-hoerbar") || el === document.documentElement || el === document.body) return;
       if (el.closest('button, a, label, input, textarea, select, [role=button], [contenteditable], [data-ru-vorlesen="aus"]')) return;
@@ -104,11 +124,17 @@
     st.textContent = `.ru-hoerbar { cursor: pointer; border-radius: 8px; -webkit-tap-highlight-color: transparent; }
       .ru-hoerbar::after { content: ""; display: inline-block; width: 1.05em; height: 1.05em; margin-left: .3em; vertical-align: -.15em;
         background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9h4l5-4v14l-5-4H3z' fill='%23FFC93C' stroke='%233B1F63' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12' fill='none' stroke='%233B1F63' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat; }
-      .ru-hoerbar:active, .ru-hoerbar.spricht { background: #FFF1C2; }`;
+      .ru-hoerbar:active, .ru-hoerbar.spricht { background: #FFF1C2; }
+      .ru-zu { display: none !important; }
+      .ru-auf { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 40px; margin: 2px 6px; padding: 0 10px; border-radius: 12px;
+        border: 2px solid #3B1F63; background: #FFC93C; color: #3B1F63; font: 700 .9rem Fredoka, sans-serif; box-shadow: 0 3px 0 #3B1F63; cursor: pointer; vertical-align: middle; }
+      .ru-auf[hidden] { display: none; }`;
     document.head.appendChild(st);
     ruMarkiere(document.body);
     new MutationObserver(m => m.forEach(x => x.addedNodes.forEach(n => { if (n.nodeType === 1) ruMarkiere(n); else if (n.parentElement) ruMarkiere(n.parentElement); })))
       .observe(document.body, { childList: true, subtree: true });
+    document.addEventListener("click", (e) => { const auf = e.target.closest && e.target.closest(".ru-auf");
+      if (auf) { e.stopPropagation(); e.preventDefault(); const el = auf.nextElementSibling; if (el) { el.classList.remove("ru-zu"); auf.hidden = true; ruSprich(el); } return; } }, true);
     document.addEventListener("click", (e) => { const el = e.target.closest && e.target.closest(".ru-hoerbar"); if (!el) return; e.stopPropagation(); ruSprich(el);
       el.classList.add("spricht"); setTimeout(() => el.classList.remove("spricht"), 600); }, true);
     document.addEventListener("keydown", (e) => { const el = document.activeElement; if ((e.key === "Enter" || e.key === " ") && el && el.classList && el.classList.contains("ru-hoerbar")) { e.preventDefault(); ruSprich(el); } });

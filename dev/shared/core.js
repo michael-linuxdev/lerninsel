@@ -377,6 +377,12 @@
     SPRACHEN,
     hilfe() { const c = Spielwelt.kind().hilfesprache; return SPRACHEN.find(x => x.code === c && x.fertig) || null; },
     hilfeRu() { return !!Spielwelt.hilfe(); },   // alter Name: „gibt es eine Hilfesprache?“
+    // NA-54 Muttersprache dosiert („Ausschleichen“, 10.11.2026): wie viel Hilfe in der Hilfesprache – "immer" (Standard, sichtbar) | "neu" (eine Zeile
+    // ist beim ersten Mal sichtbar, danach auf Knopfdruck) | "knopf" (immer erst auf Knopfdruck). Umgesetzt in shared/sprache.js für alle Hilfezeilen.
+    hilfeDosis() { const d = Spielwelt.kind().hilfedosis; return ["neu", "knopf"].includes(d) ? d : "immer"; },
+    // schon gesehene Hilfezeilen (Prüfsummen) je Kind – nur lokal, nicht im Spielstand (höchstens 3000)
+    hilfeGesehen(h) { try { return (JSON.parse(localStorage.getItem(PRE + "hilfe-gesehen." + haushalt.aktiv) || "[]")).includes(h); } catch (e) { return false; } },
+    merkeHilfe(h) { try { const k = PRE + "hilfe-gesehen." + haushalt.aktiv, l = JSON.parse(localStorage.getItem(k) || "[]"); if (l.includes(h)) return; l.push(h); localStorage.setItem(k, JSON.stringify(l.slice(-3000))); } catch (e) { /* voll: dann eben immer neu */ } },
     // Hilfetext zu einem Feld: ht(o) → o.ru, ht(o, "warum") → o.warumRu (je nach gewählter Sprache)
     ht(o, feld) { const h = Spielwelt.hilfe(); if (!h || !o) return ""; const k = feld ? feld + h.code[0].toUpperCase() + h.code.slice(1) : h.code; return o[k] || ""; },
     // Feste Textpaare: [deutsch, russisch] (alt) oder { de, ru, uk } → [deutsch, hilfe]

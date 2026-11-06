@@ -118,6 +118,8 @@
       <p class="klein" id="e-deutsch-text" style="margin-top:-8px"></p>
       <label>Hilfesprache in der App<select id="e-sprache">${option(SPRACHEN, k.hilfesprache)}</select></label>
       <p class="klein" id="e-sprache-text" style="margin-top:-8px"></p>
+      <label id="e-dosis-feld">Wie viel Hilfe in der Hilfesprache?<select id="e-dosis">${option([["immer", "Immer zeigen"], ["neu", "Nur bei Neuem (danach auf Knopfdruck)"], ["knopf", "Nur auf Knopfdruck"]], k.hilfedosis || "immer")}</select></label>
+      <p class="klein" id="e-dosis-text" style="margin-top:-8px"></p>
       <label>Ort für das Wetter auf der Insel (optional)<input id="e-ort" maxlength="40" autocomplete="off" placeholder="z. B. Dresden" value="${((k.ort || {}).name || "").replace(/"/g, "&quot;")}"></label>
       <p class="klein" style="margin-top:-8px">Nur der Ortsname, kein GPS. Die Insel fragt damit das Wetter bei Open-Meteo ab.</p>
       <p class="hinweis" id="e-empf"></p>
@@ -143,8 +145,13 @@
       $("e-sprache-text").textContent = m === "de" ? "Ohne Hilfesprache ist alles nur auf Deutsch."
         : hilfe && hilfe.fertig ? "Hilfetexte und Vorlesen in der Muttersprache sind möglich."
         : "Für diese Sprache gibt es noch keine geprüften Hilfetexte. Die App bleibt auf Deutsch, mit Bildern und Vorlesen.";
+      // NA-54: Hilfe dosieren – Empfehlung nach Deutschstand, Feld nur mit Hilfesprache
+      $("e-dosis-feld").hidden = !$("e-sprache").value; $("e-dosis-text").hidden = !$("e-sprache").value;
+      $("e-dosis-text").textContent = ({ keine: "Empfehlung bei „Noch kein Deutsch“: Immer zeigen.", wenig: "Empfehlung bei „Wenig Deutsch“: Immer zeigen – später „Nur bei Neuem“.",
+        alltag: "Empfehlung bei „Alltags-Deutsch“: Nur bei Neuem. So liest Ihr Kind zuerst Deutsch und holt sich die Hilfe, wenn es sie braucht.",
+        gut: "Empfehlung bei „Gutem Deutsch“: Nur auf Knopfdruck." })[$("e-deutsch").value] || "";
     };
-    ["e-stufe", "e-land", "e-deutsch"].forEach(id => $(id).addEventListener("change", erklaere));
+    ["e-stufe", "e-land", "e-deutsch", "e-sprache"].forEach(id => $(id).addEventListener("change", erklaere));
     // Muttersprache gewählt → passende fertige Hilfesprache vorschlagen; Deutsch → keine Hilfesprache, gutes Deutsch
     $("e-mutter").addEventListener("change", () => {
       const m = $("e-mutter").value, hilfe = S.SPRACHEN.find(x => x.code === m && x.fertig);
@@ -169,7 +176,7 @@
         ...(S.geburtOk($("e-geburt").value) ? { geburt: $("e-geburt").value } : {}),
         schuljahr: Number.isFinite(S.kind().schuljahr) && bearbeiten ? S.kind().schuljahr : S.schuljahrAm(),
         alter: +$("e-alter").value, stufe: $("e-stufe").value, klasse: S.STUFEN.find(x => x.code === $("e-stufe").value).klasse, geschlecht: $("e-geschlecht").value,
-        hilfesprache: $("e-sprache").value, muttersprache: $("e-mutter").value, deutschstand: $("e-deutsch").value, land: $("e-land").value, ort } }));
+        hilfesprache: $("e-sprache").value, muttersprache: $("e-mutter").value, deutschstand: $("e-deutsch").value, hilfedosis: $("e-dosis").value, land: $("e-land").value, ort } }));
       if (bearbeiten) { S.meldung("Gespeichert."); uebersicht(); } else location.href = "../../";
     });
     if (bearbeiten) $("e-zurueck").addEventListener("click", uebersicht);

@@ -33,6 +33,7 @@ behoben: Tagebuch-Liste zeigte falsche Baumzahlen anderer Eilande, Robo stand in
 3. Neue kleine Welt mit Wunsch „Teich“ erschaffen – ist der Teich da?
 5. Kind mit Stufe „Vorschule“: Deutsch → „Lesen und Schreiben“ → „🏷️ Mein Name“ – lässt sich der eigene Name gut nachspuren (Größe der Buchstaben, Startpunkte)?
 6. Hilfesprache Russisch (Elternbereich): Matheweg, Forscherlager, Garten, Gefühle, Mein Tier, Schach, Robo, Lesen – die russische Zeile mit dem kleinen Lautsprecher antippen. Wird sie vorgelesen (russische Stimme auf dem iPad vorhanden)?
+8. Elternbereich → Kind „Ändern“ → „Wie viel Hilfe in der Hilfesprache?“ = „Nur auf Knopfdruck“: Erscheint im Matheweg statt der russischen Zeile ein gelber „RU“-Knopf, der sie zeigt und vorliest?
 7. Elternbereich (Hilfesprache Russisch) → „✍️ Russisch prüfen lassen“: Prüfliste ansehen und an eine Person mit Russisch als Muttersprache weitergeben (Ergebnis-Text zurückschicken lassen).
 4. Matheweg „Übergang 5“ ganz hinten: „Brüche am Zahlenstrahl“ (Striche gut zu zählen?) und „Schätzen und Überschlagen“ (sind die Fermi-Fragen verständlich?).
 
