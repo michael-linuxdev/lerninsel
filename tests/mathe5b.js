@@ -27,7 +27,10 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   }
   const aufgabe = (p) => p.evaluate(() => { const x = __mathe.lauf.liste[__mathe.lauf.pos]; return { art: x.art, antwort: x.antwort, optionen: x.optionen, frage: x.frage, bild: x.bild || "", hilfe: x.hilfe }; });
   async function tippe(p, wert, art) {
-    if (art === "wahl") await p.evaluate((w) => [...document.querySelectorAll(".wahl-tasten .taste")].find(b => b.dataset.wert === w).click(), wert);
+    if (art === "wahl") {   // auf die Taste warten (nach einem Fehler werden die Tasten kurz danach neu gezeichnet; CI-Lauf 100 tippte zu früh)
+      await p.waitForFunction((w) => [...document.querySelectorAll(".wahl-tasten .taste")].some(b => b.dataset.wert === w && !b.disabled), wert, { timeout: 5000 });
+      await p.evaluate((w) => [...document.querySelectorAll(".wahl-tasten .taste")].find(b => b.dataset.wert === w && !b.disabled).click(), wert);
+    }
     else { for (const z of wert) await p.click(`.taste[data-ziffer="${z}"]`); await p.click(".taste.ok"); }
   }
   // fehler: 0 = alles richtig, 1 = Aufgabe 3 einmal falsch (nur „Fast!“, zählt nicht), 2 = Aufgabe 3 zweimal falsch (Lösung mit Hilfe, kommt am Ende wieder, 2 ⭐)
