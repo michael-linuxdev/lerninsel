@@ -328,6 +328,22 @@
   $("wort-zurueck").addEventListener("click", () => { S.ton("tipp"); SP.stopp(); $("wort-ansicht").hidden = true; $("haupt-ansicht").hidden = false; zeichne(); });
 
   zeichne();
+  // ---------- NA-53 Interessen-Kulissen (10.11.2026): Lieblingsbilder wählen – der Matheweg zeigt dann Mengen mit diesen Bildern ----------
+  const KULISSEN_WAHL = [["", "🎨", "Bunt gemischt", "Всё вперемешку"], ["tiere", "🐶", "Tiere", "Животные"], ["fahrzeuge", "🚗", "Fahrzeuge", "Транспорт"],
+    ["weltraum", "🚀", "Weltraum", "Космос"], ["natur", "🌻", "Natur", "Природа"]];
+  function kulissen() {
+    const el = $("kulissen"); if (!el) return;
+    const jetzt = (S.lade("interessen") || {}).thema || "", ruAn = S.hilfe && S.hilfe() && S.hilfe().code === "ru";
+    el.innerHTML = KULISSEN_WAHL.map(([id, e, n, r]) => `<button data-kulisse="${id}" class="${id === jetzt ? "an" : ""}" aria-pressed="${id === jetzt}"><span class="e">${e}</span>${n}${ruAn ? `<small lang="ru">${r}</small>` : ""}</button>`).join("");
+    if (ruAn && !$("kulisse-ru")) $("kulisse-frage").insertAdjacentHTML("afterend", `<p class="ru" id="kulisse-ru" lang="ru">Какие картинки ты хочешь видеть в задачах по математике?</p>`);
+  }
+  if ($("kulissen")) {
+    $("kulissen").addEventListener("click", (e) => { const b = e.target.closest("[data-kulisse]"); if (!b) return;
+      S.speichere("interessen", Object.assign({}, S.lade("interessen") || {}, { thema: b.dataset.kulisse, am: S.heute() })); S.ton("juhu"); kulissen();
+      if (S.meldung) S.meldung(b.dataset.kulisse ? `Ab jetzt rechnest du mit ${b.textContent.trim().replace(/[^A-Za-zÄÖÜäöüß ]/g, "").trim()}!` : "Ab jetzt sind die Bilder wieder bunt gemischt."); });
+    $("kulisse-hoeren").addEventListener("click", () => { if (window.Sprache) Sprache.sprich("Welche Bilder möchtest du beim Rechnen sehen? Tiere, Fahrzeuge, Weltraum, Natur oder bunt gemischt?"); });
+    kulissen();
+  }
   // Reiter (30.10.2026): Heute / Meine Woche / Ich kann / Meine Sachen; Wahl bleibt für dieses Gerät gemerkt, #woche|#kann|#sachen öffnet direkt
   const REITER = ["heute", "woche", "kann", "sachen"];
   function reiter(n) {
@@ -343,5 +359,5 @@
   if (location.hash === "#echte-welt") setTimeout(() => { const k = document.getElementById("ew-karte"); if (k && !k.hidden) k.scrollIntoView({ block: "center" }); }, 300);
   // Ferien-Aufgabe „Echte Welt“: zur Karte springen (NA-61)
   document.addEventListener("click", (e) => { const l = e.target.closest('a[href="#echte-welt"]'); if (!l) return; e.preventDefault(); const k = document.getElementById("ew-karte"); if (k) k.scrollIntoView({ behavior: "smooth", block: "center" }); });
-  window.__ich = { zeichne, starteWort, reiter, get quiz() { return quiz; } };
+  window.__ich = { kulissen, zeichne, starteWort, reiter, get quiz() { return quiz; } };
 })();

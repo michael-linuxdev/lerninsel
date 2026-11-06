@@ -195,6 +195,15 @@
   .quiz-punkte span { width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 3px #E7C9A6; }
   .quiz-punkte span.an { background: var(--beere); box-shadow: none; }
   .quiz .knopf.weiter { min-height: 68px; font-size: 1.4rem; padding: 0 40px; }
+  /* NA-53 Interessen-Kulissen (10.11.2026) */
+  .kulisse-karte h2 { display: flex; align-items: center; gap: 10px; }
+  .klein-rund { width: 44px; height: 44px; min-height: 44px; font-size: 1.1rem; padding: 0; }
+  .kulissen { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+  .kulissen button { min-height: 92px; border-radius: 18px; border: 3px solid var(--kontur, #3B1F63); background: #fff; font: 700 1rem Fredoka, sans-serif; color: var(--kontur, #3B1F63);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 4px 0 var(--kontur, #3B1F63); cursor: pointer; }
+  .kulissen button > .e { font-size: 2rem; line-height: 1; }
+  .kulissen button.an { background: #FFE27A; }
+  @media (max-width: 640px) { .kulissen { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 </style>
 </head>
 <body>
@@ -278,6 +287,11 @@
       </div>
     </div>
     <div class="teil" id="teil-sachen" role="tabpanel" hidden>
+      <div class="karte kulisse-karte" id="kulisse-karte">
+        <h2>🎨 Meine Lieblingsbilder <button class="knopf rund klein-rund" id="kulisse-hoeren" aria-label="Vorlesen">🔊</button></h2>
+        <p id="kulisse-frage">Welche Bilder möchtest du beim Rechnen sehen?</p>
+        <div class="kulissen" id="kulissen" data-ausgleich="aus"></div>
+      </div>
       <div class="sachen">
         <a class="sache" href="../tier/" id="tier-link"><span>🐾</span>Mein Tier</a>
         <a class="sache" href="../schatz/"><span>🏆</span>Schatzkammer</a>

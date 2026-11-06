@@ -433,7 +433,16 @@
     return `<svg viewBox="0 0 440 110" role="img" aria-label="Zwanzigerfeld">${s}</svg>`;
   }
   // Menge aus Bildern, in Fünfergruppen (zählen ohne Abzählfehler); weg = so viele am Ende durchgestrichen
-  const DINGE = ["🍎", "⭐", "🐟", "🌸", "🎈", "🐞", "🍓", "🚗", "🦆", "🍪"];
+  // NA-53 Interessen-Kulissen (10.11.2026): gleiche Aufgabe, andere Bilder – das Kind wählt in Meine Ecke sein Lieblingsthema (Daten interessen = { thema }).
+  // Gilt für alle Mengen-Bilder aus DINGE (Zählen, Plus/Minus mit Bildern, Mengen vergleichen …). Ohne Wahl der bunte Standard.
+  const KULISSEN = {
+    tiere: ["🐶", "🐱", "🐰", "🐸", "🦆", "🐞", "🐟", "🐻", "🐢", "🐝"],
+    fahrzeuge: ["🚗", "🚌", "🚲", "🚂", "🚜", "🚒", "🚑", "🚕", "⛵", "✈️"],
+    weltraum: ["🚀", "⭐", "🌙", "🪐", "☄️", "🛸", "🌍", "☀️", "🌟", "🔭"],
+    natur: ["🌸", "🌳", "🍄", "🍁", "🌻", "🦋", "🌿", "🌰", "🌷", "🍀"]
+  };
+  const kulisse = () => { try { const t = ((window.Spielwelt && window.Spielwelt.lade && window.Spielwelt.lade("interessen")) || {}).thema; return KULISSEN[t] ? t : ""; } catch (e) { return ""; } };
+  const DINGE = (KULISSEN[kulisse()] || ["🍎", "⭐", "🐟", "🌸", "🎈", "🐞", "🍓", "🚗", "🦆", "🍪"]).slice();
   function mengeBild(n, ding, weg = 0, ding2 = null, n2 = 0) {
     const alle = Array.from({ length: n }, () => ding).concat(Array.from({ length: n2 }, () => ding2));
     let s = "";
@@ -2165,5 +2174,5 @@
     return liste;
   }
 
-  window.Mathe = { STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, STATIONEN_K5, runde, aufgabe, _sfc32: sfc32, _k3: { istWuerfelnetz, zufallsNetz, roemisch, istPrim, wuerfelGebaeude }, _bilder: { muenze, zehnerBild, stellenBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
+  window.Mathe = { KULISSEN, kulisse, DINGE, STATIONEN, STATIONEN_K1, STATIONEN_K3, STATIONEN_K4, STATIONEN_K5, runde, aufgabe, _sfc32: sfc32, _k3: { istWuerfelnetz, zufallsNetz, roemisch, istPrim, wuerfelGebaeude }, _bilder: { muenze, zehnerBild, stellenBild, geldBild, uhrBild, wuerfelBild, zwanzigerBild, mengeBild } };
 })();

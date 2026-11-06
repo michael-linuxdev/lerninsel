@@ -258,7 +258,7 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 ## 2. Nächste Pakete (in dieser Reihenfolge)
 **Stand 10.11.2026 – zuerst:**
 - A. iPad-Rückmeldung und Ergebnis der Prüfliste Russisch einarbeiten (Fehler zuerst, je mit Test).
-- B. **NA-53 Interessen-Kulissen** (PLAN Neuausrichtung): gleiche Aufgabe, andere Bilder (Tiere, Fahrzeuge, Weltraum, Natur) aus dem Wünsche-Assistenten – nächstes offenes NA-Paket.
+- B. ~~NA-53 Interessen-Kulissen~~ (gebaut 10.11.: Meine Ecke → „Meine Lieblingsbilder“, wirkt auf die Mengen-Bilder im Matheweg; iPad: Thema wählen, dann Matheweg Kl. 1 „Zählen bis 10“).
 - C. Russisch für die letzten Seiten ohne Russisch: Schreiben und Präsentieren, Laut vorlesen, Atelier-Malen (bewusst offen gelassen, sehr deutschlastig – erst mit dem Auftraggeber klären).
 - D. Prüfliste: die 161 Texte ohne deutschen Text daneben (Gefühle, Schach, Robo, Mein Tier) mit deutschem Gegenstück versehen, damit Prüfer sie leichter beurteilen.
 - E. Lehrplan-Reste: Sorbisch als Muttersprache (Erzählen, Vortragen, freies Schreiben – braucht eine Person mit Sorbisch), Vorschule „Bildergeschichten erzählen“, Übergang 5 „Würfel skizzieren“ (draußen am Tisch).

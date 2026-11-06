@@ -2490,3 +2490,7 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
   gutes Deutsch → nur auf Knopfdruck; Eltern können weiter von Hand wählen. Ändern die Eltern den Deutschstand, passt sich die Hilfe an. Achtung: Bei der Einrichtung ist „Gutes Deutsch“ vorausgewählt –
   wer nur die Hilfesprache setzt, bekommt die russischen Zeilen also hinter dem „RU“-Knopf. Tests mit sichtbarem Russisch (`daz`, `gefuehle`, `malmehr`, `mathe5b`, `matheru`, `ruvorlesen`) wählen
   ausdrücklich „Immer zeigen“; `ausschleichen` prüft die Automatik je Deutschstand.
+- **NA-53 Interessen-Kulissen gebaut:** Meine Ecke → „Meine Sachen“ → „🎨 Meine Lieblingsbilder“: Bunt gemischt (Standard), Tiere, Fahrzeuge, Weltraum, Natur (mit 🔊 und russischer Zeile).
+  Der Matheweg nimmt für alle Mengen-Bilder aus `DINGE` (Zählen, Plus/Minus mit Bildern, Mengen vergleichen, Kl. 1/Vorschule) die Bilder des Themas – gleiche Aufgaben, andere Bilder.
+  **Entscheidungen:** das Kind wählt selbst (kein Ableiten aus dem Welt-Assistenten – eine Wüsten-Welt sagt wenig über Vorlieben); die Wahl wird nicht belohnt (kein Stern), sie ist jederzeit änderbar.
+  Offen: weitere Stellen mit Bildern (Bäckerei-Waren, Sachaufgaben-Texte, REGAL/TIERE in Mathe) könnten die Kulisse später auch nutzen. Neuer Test `kulissen` (CI).
