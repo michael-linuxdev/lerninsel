@@ -2482,3 +2482,11 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
 - **Offen / nächstes (Übergabe):** (A) iPad-Rückmeldung zu allem seit 07.11. und Ergebnis der Prüfliste Russisch einarbeiten; (B) NA-53 Interessen-Kulissen; (C) Russisch für Schreiben und Präsentieren,
   Laut vorlesen, Atelier-Malen (erst klären); (D) deutsches Gegenstück für 161 Prüflisten-Texte; (E) Lehrplan-Reste Sorbisch-Muttersprache, Vorschule „Bildergeschichten erzählen“, Übergang 5 „Würfel skizzieren“.
   Offene Entscheidungen für den Auftraggeber: „Namen schreiben“ als „ja“ (Finger statt Stift)? Standard „Immer zeigen“ bei NA-54 so lassen?
+
+## Stand 10.11.2026 (Entscheidungen des Auftraggebers nach der Übergabe)
+- **„Namen schreiben“ (Vorschule `sn.vs.3.04`) ist nicht erfüllt:** zurück auf „teilweise“ (Nachspuren mit dem Finger ersetzt nicht das Schreiben mit dem Stift); Vorschule wieder 22 ja / 2 teil / 5 außen.
+  „Mein Name“ bleibt als Übung.
+- **Russische Hilfe nach Deutschstand:** neuer Standard „Automatisch nach Deutsch-Kenntnissen“ (`hilfedosis` = `auto`): kein/wenig Deutsch → immer zeigen, Alltags-Deutsch → nur bei Neuem,
+  gutes Deutsch → nur auf Knopfdruck; Eltern können weiter von Hand wählen. Ändern die Eltern den Deutschstand, passt sich die Hilfe an. Achtung: Bei der Einrichtung ist „Gutes Deutsch“ vorausgewählt –
+  wer nur die Hilfesprache setzt, bekommt die russischen Zeilen also hinter dem „RU“-Knopf. Tests mit sichtbarem Russisch (`daz`, `gefuehle`, `malmehr`, `mathe5b`, `matheru`, `ruvorlesen`) wählen
+  ausdrücklich „Immer zeigen“; `ausschleichen` prüft die Automatik je Deutschstand.

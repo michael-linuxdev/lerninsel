@@ -118,7 +118,7 @@
       <p class="klein" id="e-deutsch-text" style="margin-top:-8px"></p>
       <label>Hilfesprache in der App<select id="e-sprache">${option(SPRACHEN, k.hilfesprache)}</select></label>
       <p class="klein" id="e-sprache-text" style="margin-top:-8px"></p>
-      <label id="e-dosis-feld">Wie viel Hilfe in der Hilfesprache?<select id="e-dosis">${option([["immer", "Immer zeigen"], ["neu", "Nur bei Neuem (danach auf Knopfdruck)"], ["knopf", "Nur auf Knopfdruck"]], k.hilfedosis || "immer")}</select></label>
+      <label id="e-dosis-feld">Wie viel Hilfe in der Hilfesprache?<select id="e-dosis">${option([["auto", "Automatisch nach Deutsch-Kenntnissen"], ["immer", "Immer zeigen"], ["neu", "Nur bei Neuem (danach auf Knopfdruck)"], ["knopf", "Nur auf Knopfdruck"]], k.hilfedosis || "auto")}</select></label>
       <p class="klein" id="e-dosis-text" style="margin-top:-8px"></p>
       <label>Ort für das Wetter auf der Insel (optional)<input id="e-ort" maxlength="40" autocomplete="off" placeholder="z. B. Dresden" value="${((k.ort || {}).name || "").replace(/"/g, "&quot;")}"></label>
       <p class="klein" style="margin-top:-8px">Nur der Ortsname, kein GPS. Die Insel fragt damit das Wetter bei Open-Meteo ab.</p>
@@ -147,9 +147,9 @@
         : "Für diese Sprache gibt es noch keine geprüften Hilfetexte. Die App bleibt auf Deutsch, mit Bildern und Vorlesen.";
       // NA-54: Hilfe dosieren – Empfehlung nach Deutschstand, Feld nur mit Hilfesprache
       $("e-dosis-feld").hidden = !$("e-sprache").value; $("e-dosis-text").hidden = !$("e-sprache").value;
-      $("e-dosis-text").textContent = ({ keine: "Empfehlung bei „Noch kein Deutsch“: Immer zeigen.", wenig: "Empfehlung bei „Wenig Deutsch“: Immer zeigen – später „Nur bei Neuem“.",
-        alltag: "Empfehlung bei „Alltags-Deutsch“: Nur bei Neuem. So liest Ihr Kind zuerst Deutsch und holt sich die Hilfe, wenn es sie braucht.",
-        gut: "Empfehlung bei „Gutem Deutsch“: Nur auf Knopfdruck." })[$("e-deutsch").value] || "";
+      $("e-dosis-text").textContent = ({ keine: "„Automatisch“ heißt bei „Noch kein Deutsch“: Immer zeigen.", wenig: "„Automatisch“ heißt bei „Wenig Deutsch“: Immer zeigen. Wenn Sie die Deutsch-Kenntnisse später ändern, passt sich die Hilfe an.",
+        alltag: "„Automatisch“ heißt bei „Alltags-Deutsch“: Nur bei Neuem. So liest Ihr Kind zuerst Deutsch und holt sich die Hilfe, wenn es sie braucht.",
+        gut: "„Automatisch“ heißt bei „Gutem Deutsch“: Nur auf Knopfdruck." })[$("e-deutsch").value] || "";
     };
     ["e-stufe", "e-land", "e-deutsch", "e-sprache"].forEach(id => $(id).addEventListener("change", erklaere));
     // Muttersprache gewählt → passende fertige Hilfesprache vorschlagen; Deutsch → keine Hilfesprache, gutes Deutsch

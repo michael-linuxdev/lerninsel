@@ -379,7 +379,9 @@
     hilfeRu() { return !!Spielwelt.hilfe(); },   // alter Name: „gibt es eine Hilfesprache?“
     // NA-54 Muttersprache dosiert („Ausschleichen“, 10.11.2026): wie viel Hilfe in der Hilfesprache – "immer" (Standard, sichtbar) | "neu" (eine Zeile
     // ist beim ersten Mal sichtbar, danach auf Knopfdruck) | "knopf" (immer erst auf Knopfdruck). Umgesetzt in shared/sprache.js für alle Hilfezeilen.
-    hilfeDosis() { const d = Spielwelt.kind().hilfedosis; return ["neu", "knopf"].includes(d) ? d : "immer"; },
+    // Entscheidung des Auftraggebers (10.11.2026): Standard „auto“ = nach Deutschstand – kein/wenig Deutsch: immer, Alltags-Deutsch: nur bei Neuem, gutes Deutsch: auf Knopfdruck.
+    hilfeDosis() { const k = Spielwelt.kind(), d = k.hilfedosis; if (["immer", "neu", "knopf"].includes(d)) return d;
+      return ({ keine: "immer", wenig: "immer", alltag: "neu", gut: "knopf" })[k.deutschstand] || "immer"; },
     // schon gesehene Hilfezeilen (Prüfsummen) je Kind – nur lokal, nicht im Spielstand (höchstens 3000)
     hilfeGesehen(h) { try { return (JSON.parse(localStorage.getItem(PRE + "hilfe-gesehen." + haushalt.aktiv) || "[]")).includes(h); } catch (e) { return false; } },
     merkeHilfe(h) { try { const k = PRE + "hilfe-gesehen." + haushalt.aktiv, l = JSON.parse(localStorage.getItem(k) || "[]"); if (l.includes(h)) return; l.push(h); localStorage.setItem(k, JSON.stringify(l.slice(-3000))); } catch (e) { /* voll: dann eben immer neu */ } },

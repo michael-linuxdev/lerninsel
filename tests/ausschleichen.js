@@ -41,7 +41,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   // ---------- Nur auf Knopfdruck ----------
   {
     const { ctx, p, info } = await kind("knopf");
-    erwarte(!info.vorher && info.nachher && /Alltags-Deutsch/.test(info.text) && /Nur bei Neuem/.test(info.text), "Elternbereich: Feld erst mit Hilfesprache, Empfehlung nach Deutschstand");
+    erwarte(!info.vorher && info.nachher && /Alltags-Deutsch/.test(info.text) && /Nur bei Neuem/.test(info.text) && /Automatisch/.test(info.text), "Elternbereich: Feld erst mit Hilfesprache, Erklärung „Automatisch“ nach Deutschstand");
     erwarte(await p.evaluate(() => Spielwelt.kind().hilfedosis === "knopf" && Spielwelt.hilfeDosis() === "knopf"), "Einstellung gespeichert (hilfedosis = knopf)");
     await seite(p, "spiele/mathe/"); erwarte(await matheMitRu(p), "Matheweg: Aufgabe mit russischer Zeile gefunden");
     let z = await zustand(p, "#tafel .hilfe-ru, .hilfe-ru");
@@ -77,10 +77,17 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     erwarte(z && z.zu && z.knopf, "beim zweiten Besuch: dieselbe Zeile versteckt, mit „RU“-Knopf");
     await ctx.close();
   }
-  // ---------- Immer (Standard) ----------
+  // ---------- Automatisch nach Deutschstand (Standard, Entscheidung des Auftraggebers 10.11.2026) ----------
+  for (const [deutsch, soll] of [["wenig", "immer"], ["alltag", "neu"], ["gut", "knopf"]]) {
+    const { ctx, p } = await kind("", { deutsch });
+    erwarte(await p.evaluate((soll) => (Spielwelt.kind().hilfedosis || "auto") === "auto" && Spielwelt.hilfeDosis() === soll, soll), `Standard „Automatisch“: Deutschstand „${deutsch}“ → „${soll}“`);
+    if (deutsch === "gut") { await seite(p, "spiele/expedition/"); const z = await zustand(p, "#ella-text .ru"); erwarte(z && z.zu && z.knopf, "„Gutes Deutsch“: Ellas Zeile versteckt, mit „RU“-Knopf"); }
+    await ctx.close();
+  }
+  // ---------- Immer (von Hand gewählt) ----------
   {
-    const { ctx, p } = await kind("", { deutsch: "keine" });
-    erwarte(await p.evaluate(() => Spielwelt.hilfeDosis() === "immer"), "Standard: „Immer zeigen“");
+    const { ctx, p } = await kind("immer", { deutsch: "gut" });
+    erwarte(await p.evaluate(() => Spielwelt.hilfeDosis() === "immer"), "von Hand „Immer zeigen“ gilt auch bei gutem Deutsch");
     await seite(p, "spiele/expedition/");
     const z = await zustand(p, "#ella-text .ru");
     erwarte(z && !z.zu && z.sichtbar && !z.knopf && !(await p.$(".ru-auf")), "„Immer“: Zeile sichtbar, kein „RU“-Knopf");

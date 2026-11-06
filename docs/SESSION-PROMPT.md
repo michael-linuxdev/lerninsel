@@ -21,7 +21,7 @@ zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, t
 (Details in `docs/PLAN.md`, „Stand 10.11.2026“). Seit dem 08.11. gibt es **keine iPad-Rückmeldung** – sie ist jetzt das Wichtigste.
 1. **Fragerunde:** iPad-Rückmeldung zu allem seit dem 07.11. (Liste in Abschnitt 1 unten: größere Insel, Kapitel 7, Koordinaten-Karte, Mein Name, russisches Vorlesen, „RU“-Knopf).
    Gemeldete Fehler zuerst, je mit Test. Außerdem fragen: Hat jemand die **Prüfliste Russisch** ausgefüllt? Dann den Ergebnis-Text einarbeiten (Korrekturen stehen mit Datei:Zeile darin).
-2. Rückmeldung zur Entscheidung „Namen schreiben = ja“ (Vorschule, Finger statt Stift) und zum Standard „Immer zeigen“ bei NA-54 einholen.
+2. Entschieden (10.11.): „Namen schreiben“ bleibt „teilweise“; russische Hilfe standardmäßig „Automatisch nach Deutschstand“ (gutes Deutsch → „RU“-Knopf).
 3. Danach nach Abschnitt 2 unten (nächste Pakete).
 
 ## 1. Stand (10.11.2026)

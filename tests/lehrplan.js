@@ -295,7 +295,7 @@ pruefe("Vorschule (Sächsischer Bildungsplan): 7 Bereiche, jeder Punkt zugeordne
     assert.ok(!a.aufgaben.some(x => x.optionen && x.optionen[0] === a.e), a.id + ": Symbol im Kopf verrät eine Antwort"); a.lz.forEach(id => assert.ok(K.ziel(id), a.id + ": " + id));
     a.aufgaben.forEach(x => { assert.ok(x.frage && x.ru, a.id + ": Frage/ru"); if (x.typ === "ordnen") assert.ok(x.teile.length >= 3 && new Set(x.teile).size === x.teile.length, a.id);
       else assert.ok(x.optionen.length >= 2 && new Set(x.optionen).size === x.optionen.length, a.id); }); });
-  assert.deepStrictEqual(m, { ja: 23, teil: 1, nein: 0, aussen: 5 });   // teil: Bildergeschichten erzählen (mündlich); Namen schreiben seit 10.11. „Mein Name“ (lesen:name)
+  assert.deepStrictEqual(m, { ja: 22, teil: 2, nein: 0, aussen: 5 });   // teil: Bildergeschichten erzählen (mündlich), Namen schreiben (Entscheidung des Auftraggebers 10.11.: „Mein Name“ ist Nachspuren mit dem Finger, kein Schreiben mit dem Stift)
 });
 
 pruefe("Länder-Abweichung: Sachsen verschiebt einfache Kombinationen nach Kl. 2 und kennt ein Zusatz-Ziel", () => {
