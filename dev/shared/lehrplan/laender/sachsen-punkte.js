@@ -1560,7 +1560,7 @@
       ["sn.vs.3.01", "Reimen und Silben klatschen (Laute bewusst hören)", "vs", ["vorschule:vs-reime", "vorschule:vs-silben", "lesen:silben"], "ja"],
       ["sn.vs.3.02", "Anlaute hören, neugierig auf Buchstaben und Schrift werden", "vs", ["lesen:anlaute"], "ja"],
       ["sn.vs.3.03", "Bildergeschichten verstehen und erzählen", "vs", ["vorschule:vs-geschichte"], "teil"],
-      ["sn.vs.3.04", "Den eigenen Namen schreiben, Stift richtig halten", "vs", ["lesen:spuren", "echtewelt:schreibhaltung"], "teil"],
+      ["sn.vs.3.04", "Den eigenen Namen schreiben, Stift richtig halten", "vs", ["lesen:name", "lesen:spuren", "echtewelt:schreibhaltung"], "ja"],
       ["sn.vs.3.05", "Bilderbücher anschauen, Bibliothek kennenlernen", "vs", ["echtewelt:bibliothek"], "aussen"]
     ].map(zuPunkt) },
     { nr: 4, titel: "Ästhetische Bildung: Malen, Musik, Tanz", punkte: [

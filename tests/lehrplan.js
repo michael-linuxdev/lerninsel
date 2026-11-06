@@ -103,7 +103,7 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder I
 
 pruefe("Sachsen in voller Tiefe: Deutsch Kl. 1/2, 3 und 4 – jeder Inhaltspunkt zugeordnet, Zuordnungen zeigen auf echte Kapitel, LB-Abdeckung passt zu den Punkten", () => {
   const echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8");
-  const LESEN = ["anlaute", "silben", "texte", "spuren", "legen", "tafel", "schreibschrift"];
+  const LESEN = ["anlaute", "silben", "texte", "spuren", "legen", "tafel", "schreibschrift", "name"];
   const gibt = (a) => { const [art, id] = a.split(":");
     if (art === "werkstatt") return w.WERKSTATT.some(k => k.id === id);
     if (art === "deutsch") return w.GESCHICHTE.some(k => k.id === id);
@@ -288,14 +288,14 @@ pruefe("Vorschule (Sächsischer Bildungsplan): 7 Bereiche, jeder Punkt zugeordne
   V.bereiche.forEach(b => { assert.ok(b.punkte.length >= 4, b.titel); b.punkte.forEach(p => { m[p.abdeckung]++; assert.ok(p.app.length, p.id);
     p.app.forEach(a => { const [art, id] = a.split(":"); benutzt.add(a);
       assert.ok(art === "vorschule" ? w.VORSCHULE.some(x => x.id === id) : art === "mathe" ? stationen.has(id) : art === "sachkunde" ? themen.has(id)
-        : art === "echtewelt" ? echt.includes(`["${id}", `) : art === "lesen" ? ["anlaute", "silben", "spuren"].includes(id)
+        : art === "echtewelt" ? echt.includes(`["${id}", `) : art === "lesen" ? ["anlaute", "silben", "spuren", "name"].includes(id)
         : ["atelier:malen", "atelier:musik", "atelier:erkennen", "gefuehle:alle"].includes(a), `${p.id}: ${a}`); }); }); });
   w.VORSCHULE.forEach(a => { assert.ok(benutzt.has("vorschule:" + a.id), a.id + " kommt in keinem Vorschul-Punkt vor");
     assert.ok(w.VORSCHULE_BEREICHE.some(b => b.id === a.bereich), a.id + ": Bereich");
     assert.ok(!a.aufgaben.some(x => x.optionen && x.optionen[0] === a.e), a.id + ": Symbol im Kopf verrät eine Antwort"); a.lz.forEach(id => assert.ok(K.ziel(id), a.id + ": " + id));
     a.aufgaben.forEach(x => { assert.ok(x.frage && x.ru, a.id + ": Frage/ru"); if (x.typ === "ordnen") assert.ok(x.teile.length >= 3 && new Set(x.teile).size === x.teile.length, a.id);
       else assert.ok(x.optionen.length >= 2 && new Set(x.optionen).size === x.optionen.length, a.id); }); });
-  assert.deepStrictEqual(m, { ja: 22, teil: 2, nein: 0, aussen: 5 });   // teil: Bildergeschichten erzählen, Namen schreiben (mündlich/auf Papier)
+  assert.deepStrictEqual(m, { ja: 23, teil: 1, nein: 0, aussen: 5 });   // teil: Bildergeschichten erzählen (mündlich); Namen schreiben seit 10.11. „Mein Name“ (lesen:name)
 });
 
 pruefe("Länder-Abweichung: Sachsen verschiebt einfache Kombinationen nach Kl. 2 und kennt ein Zusatz-Ziel", () => {

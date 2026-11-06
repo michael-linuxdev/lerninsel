@@ -75,6 +75,7 @@
   $("weg-texte").addEventListener("click", texte);
   $("weg-spuren").addEventListener("click", () => spurenRunde());
   $("weg-sas").addEventListener("click", () => spurenRunde("sas"));
+  $("weg-name").addEventListener("click", () => spurenRunde("name"));
   // Schreibschrift nur, wenn die Eltern sie nicht ausgeschaltet haben (Schule nutzt eine andere Schrift): eltern.deutsch.schrift = "sas" | "aus"
   $("weg-sas").hidden = !window.SCHREIBSCHRIFT || (((S.lade("eltern") || {}).deutsch || {}).schrift === "aus");
   $("weg-legen").addEventListener("click", () => legenRunde());
@@ -350,7 +351,28 @@
     zeige("spuren"); $("spuren-ende").hidden = true; $("spuren").style.display = "";
     spurZeichen();
   }
+  // Mein Name (10.11.2026, Bildungsplan Vorschule „den eigenen Namen schreiben“): der Name des Kindes in Druckschrift als ein Wort,
+  // Buchstabe für Buchstabe nebeneinander; Zeichen ohne Spur-Daten (Leerzeichen, Bindestrich, é …) stehen grau dabei und werden übersprungen.
+  const nameDesKindes = () => String((S.profil && S.profil.name) || "").trim().slice(0, 14);
+  function nameStriche(name) {
+    const striche = [], grau = []; let x = 0;
+    [...name].forEach(c => {
+      if (!SCHRIFT[c]) { grau.push({ c, x: x + 16 }); x += c === " " ? 26 : 34; return; }
+      const ps = SCHRIFT[c].map(strichPunkte), alle = ps.flat(), x0 = Math.min(...alle.map(q => q[0])), x1 = Math.max(...alle.map(q => q[0]));
+      ps.forEach(p => { const v = p.map(([a, b]) => [a - x0 + x, b]); striche.push({ p: v, cp: pruefpunkte(v), k: 0 }); });
+      x += (x1 - x0) + 14;
+    });
+    return { striche, grau, breite: Math.max(60, x - 14) };
+  }
+  function nameRunde() {
+    const n = nameDesKindes();
+    if (!n || !nameStriche(n).striche.length) { if (S.meldung) S.meldung("Im Elternbereich steht noch kein Name, den du schreiben kannst."); return; }
+    spur = { zeichen: [n], i: 0, fertig: 0, modus: "name" };
+    zeige("spuren"); $("spuren-ende").hidden = true; $("spuren").style.display = "";
+    spurZeichen();
+  }
   function spurenRunde(modus) {
+    if (modus === "name") return nameRunde();
     if (modus === "sas" && SAS) return sasRunde();
     const sp = daten().sp || {};
     const wahl = REIHE.filter(b => SCHRIFT[b]).sort((x, y) => Math.min(2, sp[x] || 0) - Math.min(2, sp[y] || 0) || REIHE.indexOf(x) - REIHE.indexOf(y)).slice(0, 3);
@@ -379,6 +401,21 @@
       sprich(wort ? `Schreib das Wort ${z} in Schreibschrift. Fang beim Punkt an und schreib ohne abzusetzen.` : `Schreib das ${gk} ${z} in Schreibschrift. Fang beim Punkt an.`);
       return;
     }
+    if (spur.modus === "name") {
+      const r = nameStriche(z), rand = 12;
+      spur.striche = r.striche; spur.grau = r.grau; spur.s = 0;
+      spur.vb = [-rand, Math.max(100, r.breite + 2 * rand)];
+      $("spuren").setAttribute("viewBox", `${spur.vb[0]} -10 ${spur.vb[1]} 130`);
+      $("spuren").style.width = `min(94vw, 980px, calc((100vh - 230px) * ${(spur.vb[1] / 130).toFixed(2)}))`;
+      $("spuren").classList.add("breit"); $("spuren").parentElement.classList.add("breit-main");
+      $("spuren-titel").textContent = "🏷️ Mein Name";
+      $("spuren-bild").textContent = "🏷️"; $("spuren-wort").textContent = `Dein Name: ${z}`;
+      $("spuren-balken").style.width = "0%"; $("spuren-rueck").textContent = "";
+      spurZeichnen();
+      sprich(`Schreib deinen Namen: ${z}. Fang beim Punkt an.`);
+      return;
+    }
+    spur.grau = null;
     spur.vb = [0, 100]; $("spuren").setAttribute("viewBox", "0 -10 100 130"); $("spuren").classList.remove("breit"); $("spuren").style.width = ""; $("spuren").parentElement.classList.remove("breit-main");
     spur.striche = SCHRIFT[z].map(st => { const p = strichPunkte(st); return { p, cp: pruefpunkte(p), k: 0 }; });
     spur.s = 0;
@@ -396,6 +433,7 @@
     const [x0, b] = spur.vb || [0, 100], x1 = x0 + b;
     if (spur.modus === "sas") h += `<line x1="${x0 + 2}" y1="10" x2="${x1 - 2}" y2="10" stroke="#EEF3F9" stroke-width="1"/><line x1="${x0 + 2}" y1="115" x2="${x1 - 2}" y2="115" stroke="#EEF3F9" stroke-width="1"/>`;
     h += `<line x1="${x0 + 2}" y1="45" x2="${x1 - 2}" y2="45" stroke="#D9E8F5" stroke-width="1" stroke-dasharray="3 3"/><line x1="${x0 + 2}" y1="90" x2="${x1 - 2}" y2="90" stroke="#9CC9EA" stroke-width="1.5"/>`;
+    (spur.grau || []).forEach(g => { h += `<text x="${g.x}" y="90" font-size="60" text-anchor="middle" fill="#B9AFCB" font-family="Fredoka, sans-serif">${esc(g.c)}</text>`; });
     spur.striche.forEach(st => { h += st.p.length === 1 ? `<circle cx="${st.p[0][0]}" cy="${st.p[0][1]}" r="5" fill="#E6E1F0"/>` : `<polyline points="${linie(st.p)}" fill="none" stroke="#E6E1F0" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>`; });
     spur.striche.forEach((st, i) => {
       if (i < spur.s) h += st.p.length === 1 ? `<circle cx="${st.p[0][0]}" cy="${st.p[0][1]}" r="4.5" fill="#2E9C5A"/>` : `<polyline points="${linie(st.p)}" fill="none" stroke="#2E9C5A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>`;
@@ -427,6 +465,7 @@
     if (!weiter) return;
     if (st.k >= st.cp.length) {
       spur.s++; if (S.ton) S.ton("tipp");
+      if (spur.modus === "name") $("spuren-balken").style.width = Math.round(100 * spur.s / spur.striche.length) + "%";
       if (spur.s >= spur.striche.length) return spurFertig();
     }
     spurZeichnen();
@@ -439,13 +478,14 @@
     spurZeichnen();
     const z = spur.zeichen[spur.i];
     const d = daten();
-    if (spur.modus === "sas") { d.sas = d.sas || {}; [...new Set(z)].forEach(c => { d.sas[c] = Math.min(9, (d.sas[c] || 0) + 1); }); }
+    if (spur.modus === "name") { d.name = Math.min(99, (d.name || 0) + 1); }
+    else if (spur.modus === "sas") { d.sas = d.sas || {}; [...new Set(z)].forEach(c => { d.sas[c] = Math.min(9, (d.sas[c] || 0) + 1); }); }
     else { d.sp = d.sp || {}; d.sp[z.toUpperCase()] = Math.min(9, (d.sp[z.toUpperCase()] || 0) + (z === z.toLowerCase() ? 1 : 0)); }
     S.speichere("lesen", d);
     spur.fertig++; kn(LZ.spuren, true);
     if (C) { C.gib("deutsch", 1); geuebt(); }
     const lob = LOB[Math.floor(Math.random() * LOB.length)];
-    $("spuren-rueck").textContent = spur.modus === "sas" ? `${lob} ${z.length > 1 ? "Ein schön verbundenes Wort!" : "Das ist ein " + z + "."}` : `${lob} Das ist ${z}.`;
+    $("spuren-rueck").textContent = spur.modus === "name" ? `${lob} Das ist dein Name: ${z}.` : spur.modus === "sas" ? `${lob} ${z.length > 1 ? "Ein schön verbundenes Wort!" : "Das ist ein " + z + "."}` : `${lob} Das ist ${z}.`;
     if (S.ton) S.ton("juhu");
     sprich(lob);
     setTimeout(spurNaechstes, 1000);
@@ -454,6 +494,15 @@
     spur.i++;
     if (spur.i < spur.zeichen.length) { spurZeichen(); return; }
     $("spuren-balken").style.width = "100%";
+    if (spur.modus === "name") {
+      if (window.Lernfunde) Lernfunde.merke({ fach: "deutsch", art: "schreiben", e: "🏷️", text: `Meinen Namen geschrieben: ${spur.zeichen[0]}`, schluessel: "name:" + spur.zeichen[0] });
+      $("spuren").style.display = "none"; $("spuren-rueck").textContent = "";
+      $("spuren-ende").hidden = false;
+      $("spuren-ende").innerHTML = `<div class="gross">🏷️</div><p>Du hast deinen Namen geschrieben: <b>${esc(spur.zeichen[0])}</b>. Schreib ihn auch mal mit einem Stift auf ein Blatt!</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="knopf haupt" id="spuren-mehr">🔁 Noch einmal</button><button class="knopf" id="spuren-start">🔤 Übersicht</button></div>`;
+      $("spuren-mehr").onclick = () => spurenRunde("name"); $("spuren-start").onclick = start;
+      return;
+    }
     const b = spur.modus === "sas" ? spur.zeichen.join(", ") : spur.zeichen.filter(z => z === z.toUpperCase()).join(", ");
     if (window.Lernfunde) Lernfunde.merke({ fach: "deutsch", art: "schreiben", e: spur.modus === "sas" ? "✒️" : "✍️", text: `${spur.modus === "sas" ? "In Schreibschrift geschrieben" : "Geschrieben"}: ${b}`, schluessel: (spur.modus === "sas" ? "sas:" : "spur:") + b });
     $("spuren").style.display = "none"; $("spuren-rueck").textContent = "";

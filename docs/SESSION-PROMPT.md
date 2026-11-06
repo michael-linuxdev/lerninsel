@@ -25,12 +25,13 @@ dazu alles vom 07./08.11.), dann:
 3. Sonst nach `docs/PLAN.md` „Neuausrichtung“ / Abschnitt 2 unten.
 
 ## 1. Stand (10.11.2026)
-**Neu (PLAN „Stand 10.11.2026“):** Erforschte Eilande stehen in der **Inselchronik** (Album); Forscherlager mit **Koordinatensystem für den Übergang Klasse 5**; Matheweg Übergang 5 mit **„Brüche am Zahlenstrahl“** und **„Schätzen und Überschlagen“**; Teich-Wunsch klappt auch in kleinen Welten;
+**Neu (PLAN „Stand 10.11.2026“):** Erforschte Eilande stehen in der **Inselchronik** (Album); Forscherlager mit **Koordinatensystem für den Übergang Klasse 5**; „🏷️ Mein Name“ zum Nachspuren für Vorschulkinder; Matheweg Übergang 5 mit **„Brüche am Zahlenstrahl“** und **„Schätzen und Überschlagen“**; Teich-Wunsch klappt auch in kleinen Welten;
 behoben: Tagebuch-Liste zeigte falsche Baumzahlen anderer Eilande, Robo stand in manchen großen Welten im Teich.
 **Im iPad testen (in /dev/test):**
 1. Kind mit Stufe „Übergang Klasse 5“: Insel → Forscherlager → „Karte lesen“ – Achsen 0–6 lesbar (quer und hoch)? Roter Ring gut zu sehen? Eine Frage absichtlich falsch (Hinweis x vor y).
 2. Forscher-Tagebuch auf zwei Eilanden eintragen, dann Album → „📜 Inselchronik“: stehen die Eilande mit Wetter und Funden zwischen den Geschichten?
 3. Neue kleine Welt mit Wunsch „Teich“ erschaffen – ist der Teich da?
+5. Kind mit Stufe „Vorschule“: Deutsch → „Lesen und Schreiben“ → „🏷️ Mein Name“ – lässt sich der eigene Name gut nachspuren (Größe der Buchstaben, Startpunkte)?
 4. Matheweg „Übergang 5“ ganz hinten: „Brüche am Zahlenstrahl“ (Striche gut zu zählen?) und „Schätzen und Überschlagen“ (sind die Fermi-Fragen verständlich?).
 
 ## 1. Stand (09.11.2026)

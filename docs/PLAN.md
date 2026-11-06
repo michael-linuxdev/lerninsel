@@ -2447,4 +2447,8 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
   (Zahlenstrahl, unechte Brüche, Körper) und `sn.gy5.5.02` (Fermi, Näherungswerte) von „teil“ auf „ja“ – Übergang 5 jetzt 45 ja / 1 teil (`sn.os5.3.04` Würfel skizzieren bleibt draußen am Tisch) / 5 außen.
   Russisch (Entwurf) für die neuen Fragen: Übergang 5 jetzt 65 % der Fragen. Neuer Test `mathe5b` (beide Runden echt über die Tasten, mit „Fast!“ und Lösung nach zwei Fehlern, quer/Handy, Russisch), in der CI;
   Zählungen in `mathe5`, `mathe15`, `uebergang5`, `mathe-generatoren`, `lehrplan` nachgezogen; `tafel` grün (alle Aufgaben passen auf die Tafel).
-- **Offen / nächstes:** iPad-Test (größere Insel, Kapitel 7, Koordinaten-Karte und neue Stationen für Kl. 5); Russisch der neuen Texte prüfen lassen; Stufe d auch im Elternbereich erklären (Lernstand zeigt `ma.rf.10` schon über das Können).
+- **„Mein Name“ (Vorschule/Kl. 1):** neuer Knopf auf der Seite „Lesen und Schreiben“: Das Kind spurt seinen eigenen Namen in Druckschrift nach – als ein Wort, Buchstabe neben Buchstabe,
+  Strich für Strich mit Startpunkt, Pfeil und Nummer wie beim Buchstaben-Nachspuren; Zeichen ohne Spur-Daten (Bindestrich, Leerzeichen, é) stehen grau dabei. Am Ende: „Schreib ihn auch mal mit einem Stift
+  auf ein Blatt!“, Lernfund, „Noch einmal“. Lehrplan Vorschule `sn.vs.3.04` „Den eigenen Namen schreiben, Stift richtig halten“ jetzt „ja“ (`lesen:name` + Nachspuren + Echte-Welt-Idee Schreibhaltung);
+  Vorschule jetzt 23 ja / 1 teil (Bildergeschichten erzählen) / 5 außen. Die Kachelliste der Lesen-Seite hat jetzt 11 Kacheln → `data-ausgleich` (die letzte steht breit statt allein). Neuer Test `meinname` (CI).
+- **Offen / nächstes:** iPad-Test (größere Insel, Kapitel 7, Koordinaten-Karte und neue Stationen für Kl. 5, „Mein Name“); Russisch der neuen Texte prüfen lassen; Stufe d auch im Elternbereich erklären (Lernstand zeigt `ma.rf.10` schon über das Können).
