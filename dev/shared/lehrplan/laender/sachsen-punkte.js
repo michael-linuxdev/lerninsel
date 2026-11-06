@@ -1484,7 +1484,7 @@
         ["sn.os5.2.07", "Sachaufgaben mit Geld, Länge, Masse und Zeit: Schreibweisen, Umrechnen, Dezi, Zenti, Milli", "5", ["mathe:k5komma", "mathe:k5groessen", "mathe:k5sach"], "ja"]
       ].map(zuPunkt) },
       { nr: 3, titel: "Geometrische Grundformen", punkte: [
-        ["sn.os5.3.01", "Koordinate und Koordinatensystem (erster Quadrant)", "5", ["mathe:k5koordinaten"], "ja"],
+        ["sn.os5.3.01", "Koordinate und Koordinatensystem (erster Quadrant)", "5", ["mathe:k5koordinaten", "expedition:karte"], "ja"],
         ["sn.os5.3.02", "Parallel, senkrecht, schneiden einander", "5", ["mathe:k5lage"], "ja"],
         ["sn.os5.3.03", "Winkel messen und zeichnen, Winkelarten", "5", ["mathe:k5lage", "mathe:k5winkel", "echtewelt:lineal"], "aussen"],
         ["sn.os5.3.04", "Würfel skizzieren, Körpernetz, Schrägbild, Körpermodell bauen", "5", ["mathe:k3netze", "mathe:k4schraegbild", "echtewelt:bauplan"], "teil"],
@@ -1518,7 +1518,7 @@
         ["sn.gy5.2.07", "Arithmetisches Mittel", "5", ["mathe:k5mittel"], "ja"]
       ].map(zuPunkt) },
       { nr: 3, titel: "Lagebeziehungen geometrischer Objekte", punkte: [
-        ["sn.gy5.3.01", "Punkte und Strecken im Koordinatensystem, parallele und senkrechte Geraden", "5", ["mathe:k5koordinaten", "mathe:k5lage"], "ja"],
+        ["sn.gy5.3.01", "Punkte und Strecken im Koordinatensystem, parallele und senkrechte Geraden", "5", ["mathe:k5koordinaten", "mathe:k5lage", "expedition:karte"], "ja"],
         ["sn.gy5.3.02", "Winkel zeichnen, messen und bezeichnen, Winkelarten", "5", ["mathe:k5winkel", "mathe:k5lage", "echtewelt:lineal"], "aussen"],
         ["sn.gy5.3.03", "Scheitel-, Neben-, Stufen- und Wechselwinkel und ihre Eigenschaften", "5", ["mathe:k5winkelpaare"], "ja"],
         ["sn.gy5.3.04", "Symmetrie im Alltag: Muster, Achsen- und Punktsymmetrie, Verschiebung, Drehung und Spiegelung unterscheiden", "5", ["mathe:k5bewegung", "mathe:k3ornament", "mathe:k4parkett"], "ja"],

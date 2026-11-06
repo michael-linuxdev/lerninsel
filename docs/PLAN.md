@@ -2424,3 +2424,20 @@ Fragerunde: kein iPad-Test seit dem 08.11., Auftrag W1 und W2; Entscheidungen de
   (die Version der Cloud-Umgebung); bei einem Playwright-Update die Zeile in `.github/workflows/tests.yml` nachziehen.
 - **Offen / nächstes:** iPad-Test der größeren Insel (Laufwege, Tempo, Steg begehbar) und von Kapitel 7; Russisch (Szene, Expedition) prüfen lassen; später Übergang Klasse 5 im Forscherlager vertiefen
   (KONZEPT: „neue Themen“), Eilande in der Inselchronik mit Biom-Zeichen.
+
+## Stand 10.11.2026 – Eilande in der Inselchronik, Koordinaten im Forscherlager (Übergang 5), Teich in kleinen Welten, zwei Fehler behoben
+Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt eigenständig weiter.“ – darum ohne Fragerunde (kein iPad-Test seit dem 08.11. gemeldet); Pakete aus „Offen / nächstes“ vom 09.11.
+(Die Sitzung lief am 06.11.2026 Echtzeit; die Doku zählt ihre Stände fortlaufend weiter, darum „10.11.“.)
+- **Fehler Forscher-Tagebuch (behoben):** Die Liste „Erforschte Eilande“ zeigte bei *anderen* Eilanden die Funde mit den Zahlen des Eilands, auf dem man gerade stand (z. B. „14 Laubbäume“ der Heimatinsel beim Berg-Eiland).
+  Einträge speichern jetzt die Fund-Texte mit (`ft`, drei kurze Texte); alte Einträge ohne `ft` zeigen die Funde ohne Zahl („Bäume“, „Felsen“). Test `expedition` (Eintrag auf dem Eiland, Liste daheim).
+- **Eilande in der Inselchronik:** Der Reiter „📜 Inselchronik“ im Album zeigt die Tagebuch-Einträge nach Datum zwischen den Szenen („Heimatinsel erforscht“ / „Eiland erforscht: <Name>“, Biom-Zeichen,
+  Datum, Wetter, drei Funde; Name über `S.esc`), der Reiter zählt beides. Kein ▶ für Eilande (es gibt keine Szene dazu). Test `chronik` (Reihenfolge, alter Eintrag, HTML im Namen, quer und Handy).
+- **Forscherlager Stufe d (Übergang Klasse 5):** Kinder mit Stufe „Übergang 5“ bekommen auf der Inselkarte ein **Koordinatensystem** (Achsen 0–6, x nach rechts, y nach oben, Ursprung links unten) statt A–F/1–6.
+  Fragen aus der echten Karte: „Der rote Punkt liegt beim Haus – welche Koordinaten?“ (roter Ring, der Ort bleibt sichtbar; falsche Antworten: x und y vertauscht, eins daneben), „Ella hat bei (2|4) etwas versteckt –
+  welcher Ort ist ganz nah?“ (nur Gitterpunkte mit eindeutigem nächstem Ort), „Eine Einheit sind 50 m – wie weit vom roten Punkt bis …?“ (falsche Antwort „Einheiten statt Meter“). 13–16 Fragen je Welt;
+  die Runde nimmt zuerst diese Fragen (die Lage-Fragen der Kl. 1/2 wären zu leicht). Hinweis nach einem Fehler: „Erst nach rechts zählen (x), dann nach oben (y).“ Lernziel `ma.rf.10`; Lehrplan: `expedition:karte`
+  zusätzlich an `sn.os5.3.01` und `sn.gy5.3.01` (Koordinatensystem, Zählung unverändert). Test `expedition` (Kl. 5 quer mit zwei Fehlern echt durchgespielt, Handy).
+- **Teich-Wunsch in kleinen Welten:** dritte Suche mit kleinerem Teich (1,3–1,8) und eigenem Zufall (`seed ^ 0x7E1C4`): klein 198/216 statt 15/216, mittel 216/216, groß 216/216. Bestehende Welten ohne Teich-Wunsch ändern sich nicht.
+- **Fehler Robo im Teich (behoben):** In 18 von 216 großen Welten lag der Teich auf Robos Platz (Robo stand im Wasser). Der Teich meidet jetzt Robo, Bennos Schild und den Angelsteg (`teichFrei`); nur diese 18 Welten ändern sich.
+  Neue Prüfung in `tests/inselkern.js`: Teich-Quote je Größe, nie näher als 0,8 an einem Ort, nie im Sand (32 Prüfungen).
+- **Offen / nächstes:** iPad-Test (größere Insel, Kapitel 7, Koordinaten-Karte für Kl. 5); Russisch der neuen Texte prüfen lassen; Stufe d auch im Elternbereich erklären (Lernstand zeigt `ma.rf.10` schon über das Können).

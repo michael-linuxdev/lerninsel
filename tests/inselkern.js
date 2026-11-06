@@ -113,6 +113,22 @@ pruefe("Welterzeugung wie vor der Trennung (Werte aus dem alten welt.js, Saat 7)
   }
 });
 
+pruefe("Teich-Wunsch wird fast immer erfüllt (10.11.2026: auch kleine Welten), ohne andere Welten zu ändern; nie an einem Ort", () => {
+  const { K } = neueUmgebung();
+  for (const groesse of ["klein", "mittel", "gross"]) { let mit = 0, alle = 0;
+    for (const biom of Object.keys(K.BIOME)) for (const huegel of ["wenig", "mittel", "viel"]) for (let seed = 1; seed <= 12; seed++) {
+      alle++; const I = K.erstelle(new URLSearchParams(`biom=${biom}&groesse=${groesse}&huegel=${huegel}&see=1&seed=${seed}`)), W = I.WELT;
+      if (!W.see) continue; mit++;
+      for (const [k, p] of Object.entries(I.P)) if (Array.isArray(p)) assert.ok(Math.hypot(p[0] - W.see.x, p[1] - W.see.z) > W.see.r + 0.8, `Teich auf ${k}: ${biom}/${groesse}/${seed}`);
+      assert.ok(Math.hypot(W.see.x, W.see.z) + W.see.r < W.rand, `Teich im Sand: ${biom}/${groesse}/${seed}`);
+      // ohne Teich-Wunsch bleibt die Welt, wie sie war (Bäume an ihrem Platz)
+      const ohne = K.erzeuge({ biom, groesse, huegel, see: false, seed });
+      assert.ok(ohne.see === null, "ohne Wunsch kein Teich");
+    }
+    assert.ok(mit / alle >= (groesse === "klein" ? 0.85 : 0.97), `${groesse}: Teich in ${mit} von ${alle} Welten`);
+  }
+});
+
 pruefe("Test-Parameter und gespeicherte Welt werden gelesen", () => {
   const { K } = neueUmgebung({ speicher: { welt: { welten: [{ biom: "strand", seed: 3, groesse: "klein" }], aktiv: 0 } } });
   assert.strictEqual(K.erstelle(q("")).WELT.biom, "strand");

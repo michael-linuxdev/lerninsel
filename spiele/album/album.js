@@ -38,7 +38,7 @@
     $("reiter").innerHTML = ST.SEITEN.map((s, i) => {
       const n = s.sticker.filter(([id]) => d.hat[id]).length, punkt = s.sticker.some(([id]) => neu.has(id));
       return `<button role="tab" aria-selected="${i === aktiv}" class="${i === aktiv ? "an" : ""}" data-i="${i}">${s.sticker[0][1]} ${s.name} ${n}/${s.sticker.length}${punkt ? '<span class="punkt"></span>' : ""}</button>`;
-    }).join("") + (Sz && Sto ? `<button role="tab" aria-selected="${aktiv === CHRONIK}" class="${aktiv === CHRONIK ? "an" : ""}" data-i="${CHRONIK}">📜 Inselchronik ${Sto.chronik().length}</button>` : "");
+    }).join("") + (Sz && Sto ? `<button role="tab" aria-selected="${aktiv === CHRONIK}" class="${aktiv === CHRONIK ? "an" : ""}" data-i="${CHRONIK}">📜 Inselchronik ${eintraege().length}</button>` : "");
   }
   // der aktive Reiter soll sichtbar sein (die Leiste ist breiter als der Bildschirm)
   // (04.11.2026) nur scrollen, wenn der gewählte Reiter nicht ganz zu sehen ist (offsetLeft zählte den Seitenrand mit – der erste Reiter war angeschnitten)
@@ -46,11 +46,29 @@
     if (a.left < b.left || a.right > b.right) r.scrollLeft += a.left - b.left - 16; };
   const MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
   const datum = (d) => { const [, m, t] = String(d || "").split("-").map(Number); return m ? `${t}. ${MONATE[m - 1]}` : ""; };
+  // Eilande in der Chronik (10.11.2026): Einträge aus dem Forscher-Tagebuch (expedition.eilande) stehen nach Datum zwischen den Szenen,
+  // mit Biom-Zeichen, Wetter und den drei Funden. Zeichen wie K.BIOME im Insel-Kern (das Album lädt den Kern nicht).
+  const BIOM_E = { heimat: "🏝️", wiese: "🌼", wald: "🌲", berge: "⛰️", strand: "🏖️", schnee: "❄️", wueste: "🌵" };
+  const WETTER = { sonne: "☀️ sonnig", wolken: "☁️ bewölkt", regen: "🌧️ Regen", schnee: "❄️ Schnee", nebel: "🌫️ Nebel", gewitter: "⛈️ Gewitter" };
+  const FUND = { baeume: "Bäume", steine: "Felsen", teich: "ein Teich", huegel: "Hügel", blumen: "Blumenwiesen", schnee: "Schnee das ganze Jahr", sand: "Sand, so weit man sieht", strand: "ein breiter Strand", leuchtturm: "ein Leuchtturm", steg: "ein Steg mit Boot" };
+  function eilande() {
+    const e = (S.lade("expedition") || {}).eilande || {};
+    return Object.entries(e).filter(([, x]) => x && typeof x === "object" && /^\d{4}-\d\d-\d\d$/.test(x.am || "")).map(([k, x]) => ({ eiland: k, x, d: x.am }));
+  }
+  function eintraege() {
+    const sz = Sto.chronik().filter(x => Sz.def(x.s)), ei = eilande().sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0)), aus = [];
+    let j = 0;
+    sz.forEach(x => { while (j < ei.length && x.d && ei[j].d < x.d) aus.push(ei[j++]); aus.push(x); });
+    return aus.concat(ei.slice(j));
+  }
+  const eilandZeile = (y, i) => { const x = y.x, esc = S.esc, f = (x.funde || []).map((id, n) => (x.ft && x.ft[n]) || FUND[id] || id);
+    const name = y.eiland === "heimat" ? "Meine Heimatinsel" : x.name || "Ein Eiland";
+    return `<li class="eiland" data-eiland="${esc(y.eiland)}"><span class="nr">${i + 1}.</span><span class="kopf">${BIOM_E[y.eiland === "heimat" ? "heimat" : x.biom] || "🌍"}</span><span class="was"><b>${y.eiland === "heimat" ? "Heimatinsel erforscht" : "Eiland erforscht: " + esc(name)}</b><span>${datum(y.d)}${WETTER[x.wetter] ? " · " + WETTER[x.wetter] : ""}${f.length ? " · " + esc(f.join(", ")) : ""}</span></span></li>`; };
   function chronik(el) {
-    const liste = Sto.chronik().filter(x => Sz.def(x.s));
+    const liste = eintraege();
     el.style.background = "#FFF8EC";
     el.innerHTML = `<h2>📜 Inselchronik</h2><p class="klein">Alles, was auf deiner Insel passiert ist – tippe auf ▶, dann erzählen es dir die Figuren noch einmal.</p>` +
-      (liste.length ? `<ol class="chronik">${liste.map((x, i) => { const def = Sz.def(x.s), wer = def.blasen[0] && def.blasen[0].wer, F = window.Figuren;
+      (liste.length ? `<ol class="chronik">${liste.map((x, i) => { if (x.eiland) return eilandZeile(x, i); const def = Sz.def(x.s), wer = def.blasen[0] && def.blasen[0].wer, F = window.Figuren;
         const kopf = F && F[wer] ? F[wer]("") : ((Sz.FIGUREN[wer] || {}).e || "📜");
         return `<li data-s="${x.s}"><span class="nr">${i + 1}.</span><span class="kopf">${kopf}</span><span class="was"><b>${def.titel || x.s}</b><span>${datum(x.d)}</span></span><button class="knopf haupt" data-spiele="${x.s}" aria-label="${def.titel || x.s} ansehen">▶ Ansehen</button></li>`; }).join("")}</ol>`
         : `<p class="chronik-leer">Noch ist deine Chronik leer. Auf der Insel warten die ersten Geschichten auf dich!</p>`);
@@ -90,5 +108,5 @@
   });
   $("gross").addEventListener("click", (e) => { if (e.target.id === "gross") $("gross").hidden = true; });
   reiter(); seite(); zeigeReiter(); auswahl();
-  window.__album = { chronik: () => (Sto ? Sto.chronik() : []), zeige: (i) => { aktiv = i; reiter(); seite(); }, CHRONIK, auswahl };
+  window.__album = { chronik: () => (Sto ? Sto.chronik() : []), eintraege: () => (Sto && Sz ? eintraege() : []), zeige: (i) => { aktiv = i; reiter(); seite(); }, CHRONIK, auswahl };
 })();

@@ -17,12 +17,20 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-**Weg 3 ist gebaut (09.11.2026):** Heimatinsel mit Radius 19 (W1) und Kapitel 7 „Neue Ufer“ mit Robos Boot, Ellas Forscherlager und der Seite `spiele/expedition/` (W2); Details in `docs/PLAN.md`,
+**Seit 10.11.2026 außerdem:** Eilande in der Inselchronik, Koordinaten-Karte (Stufe d) für den Übergang 5, Teich in kleinen Welten (Abschnitt 1). **Weg 3 ist gebaut (09.11.2026):** Heimatinsel mit Radius 19 (W1) und Kapitel 7 „Neue Ufer“ mit Robos Boot, Ellas Forscherlager und der Seite `spiele/expedition/` (W2); Details in `docs/PLAN.md`,
 „Stand 09.11.2026“. Zuerst die **iPad-Rückmeldung** holen (Fragerunde: größere Insel – Laufwege, Tempo, Trittsteine, Steg bis zum Boot; Kapitel 7 – Szene, „Losfahren“, Forscherlager, Karte lesen, Tagebuch;
 dazu alles vom 07./08.11.), dann:
 1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test).
 2. Russisch der neuen Texte (Szene `neue-ufer`, Expedition) prüfen lassen; Eilande in der Inselchronik; Übergang Klasse 5 im Forscherlager vertiefen (KONZEPT: „neue Themen“) – nur wenn der Auftraggeber es will.
 3. Sonst nach `docs/PLAN.md` „Neuausrichtung“ / Abschnitt 2 unten.
+
+## 1. Stand (10.11.2026)
+**Neu (PLAN „Stand 10.11.2026“):** Erforschte Eilande stehen in der **Inselchronik** (Album); Forscherlager mit **Koordinatensystem für den Übergang Klasse 5**; Teich-Wunsch klappt auch in kleinen Welten;
+behoben: Tagebuch-Liste zeigte falsche Baumzahlen anderer Eilande, Robo stand in manchen großen Welten im Teich.
+**Im iPad testen (in /dev/test):**
+1. Kind mit Stufe „Übergang Klasse 5“: Insel → Forscherlager → „Karte lesen“ – Achsen 0–6 lesbar (quer und hoch)? Roter Ring gut zu sehen? Eine Frage absichtlich falsch (Hinweis x vor y).
+2. Forscher-Tagebuch auf zwei Eilanden eintragen, dann Album → „📜 Inselchronik“: stehen die Eilande mit Wetter und Funden zwischen den Geschichten?
+3. Neue kleine Welt mit Wunsch „Teich“ erschaffen – ist der Teich da?
 
 ## 1. Stand (09.11.2026)
 **Weg 3 (09.11., PLAN „Stand 09.11.2026“):** Heimatinsel Radius 15,2 → 19 (Orte 1,25-mal weiter auseinander, 14 Bäume, zwei Blumenwiesen, Trittstein-Wege zu Garten, Bäckerei, Tierstation, Leuchtturm und Lager,

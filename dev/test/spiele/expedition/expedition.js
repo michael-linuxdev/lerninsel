@@ -3,7 +3,8 @@
 // dieselben Orte, Bäume und der Teich wie in 3D): Norden ist oben, Raster A–F / 1–6, Kompassrose, Legende.
 // Karte lesen: 5 Fragen je Runde aus der eigenen Karte – Stufe a (Vorschule, Kl. 1): oben/unten, links/rechts, „ganz oben“ (Lage, ma.rf.02);
 // b (Kl. 2): Himmelsrichtungen, Felder A–F/1–6, „was steht im Feld“ (su.ge.03); c (ab Kl. 3): dazu Zwischenrichtungen und Maßstab
-// „1 Kästchen = 10 Meter“ (ma.rf.09). Keine Zufallsfragen: alle Fragen folgen aus den Koordinaten, Reihenfolge fest (erst ungelöste).
+// „1 Kästchen = 50 Meter“ (ma.rf.09). Keine Zufallsfragen: alle Fragen folgen aus den Koordinaten, Reihenfolge fest (erst ungelöste).
+// d (Übergang 5, 10.11.2026): Koordinatensystem 0–6 mit Punkten (x|y), Ort zu einem Punkt, Strecken mit Maßstab (ma.rf.10).
 // Tagebuch: je Eiland einmal Biom, Wetter und drei Funde eintragen (nichts falsch oder richtig). Sterne nur für Neues: neue Frage beim ersten
 // Versuch richtig (höchstens 3 am Tag), erster Tagebuch-Eintrag je Eiland – nie Zufall, nichts geht verloren.
 // Daten expedition = { karten: { "<eiland>:<frage>": n }, neu: { "JJJJ-MM-TT": n }, eilande: { "<eiland>": { biom, name, am, wetter, funde } } }.
@@ -14,8 +15,9 @@
   const esc = S.esc;
   const ru = (t) => (S.hilfe() && t ? `<span class="ru">${esc(t)}</span>` : "");
   const D = "#3B1F63", RUNDE = 5, STERNE_TAG = 3, ZELLEN = 6, METER_JE_KAESTCHEN = 50;
-  const STUFEN = ["a", "b", "c"];
-  const stufeFuer = (code) => (["vs", "1"].includes(code) ? "a" : code === "2" ? "b" : "c");
+  const STUFEN = ["a", "b", "c", "d"];
+  // Stufe d (10.11.2026, Übergang Klasse 5): Koordinatensystem auf der Inselkarte (Punkte ablesen, Ort zu einem Punkt, Strecken mit Maßstab – ma.rf.10)
+  const stufeFuer = (code) => (["vs", "1"].includes(code) ? "a" : code === "2" ? "b" : code === "5" ? "d" : "c");
   const stufe = () => window.__expeditionStufe || stufeFuer(((S.stufe && S.stufe()) || {}).code || "2");
   const daten = () => Object.assign({ karten: {}, neu: {}, eilande: {} }, S.lade("expedition") || {});
   const speichere = (d) => S.speichere("expedition", d);
@@ -41,6 +43,7 @@
   ].filter(([id]) => id === "steg" || P[id]).map(([id, e, name, r]) => ({ id, e, name, r, x: id === "steg" ? I.STEG.x : P[id][0], z: id === "steg" ? (I.STEG.z0 + I.STEG.z1) / 2 : P[id][1] }));
   const ort = (id) => ORTE.find(o => o.id === id);
   const von = (o) => o.name.replace(/^das /, "vom ").replace(/^der /, "vom ").replace(/^die /, "von der ").replace(/^(?![vV]o)/, "von ");
+  const bei = (o) => o.name.replace(/^das /, "beim ").replace(/^der /, "beim ").replace(/^die /, "bei der ").replace(/^(?![bB]ei)/, "bei ");
   const zu = (o) => o.name.replace(/^das /, "zum ").replace(/^der /, "zum ").replace(/^die /, "zur ").replace(/^(?![zZ]u)/, "zu ");
   // Karte: 6 × 6 Felder über [−R−1, R+1]; Spalte A–F von links (Westen), Zeile 1–6 von oben (Norden = −z)
   const spanne = 2 * R + 2, zelle = spanne / ZELLEN;
@@ -79,7 +82,13 @@
     s += `<rect x="${px(I.STEG.x) - 0.7 * sk}" y="${pz(I.STEG.z0)}" width="${1.4 * sk}" height="${(I.STEG.z1 - I.STEG.z0) * sk}" fill="#C8955B" stroke="${D}" stroke-width="2"/>`;
     // Raster und Beschriftung
     for (let i = 0; i <= ZELLEN; i++) { const t = M + i / ZELLEN * B; s += `<line x1="${t}" y1="${M}" x2="${t}" y2="${G - M}" stroke="${D}" stroke-width="1.5" opacity=".55"/><line x1="${M}" y1="${t}" x2="${G - M}" y2="${t}" stroke="${D}" stroke-width="1.5" opacity=".55"/>`; }
-    for (let i = 0; i < ZELLEN; i++) { const t = M + (i + 0.5) / ZELLEN * B; s += `<text x="${t}" y="${M - 14}" text-anchor="middle" font-size="26" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${"ABCDEF"[i]}</text><text x="${M - 18}" y="${t + 9}" text-anchor="middle" font-size="26" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${i + 1}</text>`; }
+    if (markiert && markiert.koord) {   // Stufe d: Achsen 0–6 an den Linien, Ursprung links unten, y nach oben (Norden)
+      s += `<path d="M${M} ${G - M} H${G - M + 22} M${G - M + 22} ${G - M} l-12 -7 v14 z M${M} ${G - M} V${M - 22} M${M} ${M - 22} l-7 12 h14 z" stroke="${D}" stroke-width="3.5" fill="${D}"/>`;
+      for (let i = 0; i <= ZELLEN; i++) { const t = M + i / ZELLEN * B; s += `<text x="${t}" y="${G - M + 30}" text-anchor="middle" font-size="24" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${i}</text>` + (i ? `<text x="${M - 16}" y="${G - M - i / ZELLEN * B + 8}" text-anchor="middle" font-size="24" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${i}</text>` : ""); }
+      s += `<text x="${G - M + 24}" y="${G - M + 30}" font-size="22" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">x</text><text x="${M - 30}" y="${M - 22}" font-size="22" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">y</text>`;
+      if (markiert.punkt) { const [a, b] = markiert.punkt, X = M + a / ZELLEN * B, Y = G - M - b / ZELLEN * B;   // roter Ring mit Punkt: der Ort darunter bleibt sichtbar
+        s += `<circle cx="${X}" cy="${Y}" r="22" fill="none" stroke="#fff" stroke-width="10"/><circle cx="${X}" cy="${Y}" r="22" fill="none" stroke="#E5383B" stroke-width="5"/><circle cx="${X}" cy="${Y}" r="6" fill="#E5383B" stroke="#fff" stroke-width="2"/>`; }
+    } else for (let i = 0; i < ZELLEN; i++) { const t = M + (i + 0.5) / ZELLEN * B; s += `<text x="${t}" y="${M - 14}" text-anchor="middle" font-size="26" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${"ABCDEF"[i]}</text><text x="${M - 18}" y="${t + 9}" text-anchor="middle" font-size="26" font-weight="700" fill="${D}" font-family="Fredoka, sans-serif">${i + 1}</text>`; }
     if (markiert && markiert.feld) { const c = "ABCDEF".indexOf(markiert.feld[0]), r = +markiert.feld[1] - 1; s += `<rect x="${M + c / ZELLEN * B}" y="${M + r / ZELLEN * B}" width="${B / ZELLEN}" height="${B / ZELLEN}" fill="none" stroke="#FF6F61" stroke-width="6"/>`; }
     // Kompassrose rechts unten im Wasser (Feld F6 ist dort frei)
     const cx = G - M - 44, cy = G - M - 44;
@@ -136,6 +145,29 @@
         warum: `Zähle die Kästchen zwischen den Orten: etwa ${(meter(a, b) / METER_JE_KAESTCHEN).toFixed(1).replace(".", ",")} Kästchen – also ungefähr ${m} Meter.`, warumRu: `Посчитай квадраты между местами: примерно ${(meter(a, b) / METER_JE_KAESTCHEN).toFixed(1).replace(".", ",")} квадрата – то есть около ${m} метров.` }); });
     neu({ id: "insel-breite", ab: "c", lz: ["ma.rf.09"], frage: `Ein Kästchen sind ${METER_JE_KAESTCHEN} Meter. Wie breit ist die Insel ungefähr?`, ru: `Один квадрат – ${METER_JE_KAESTCHEN} метров. Какой примерно ширины остров?`,
       optionen: [`${rund10(2 * R / zelle * METER_JE_KAESTCHEN)} m`, ...falscheMeter(rund10(2 * R / zelle * METER_JE_KAESTCHEN))], warum: `Die Insel ist fast so breit wie die ganze Karte: etwa ${(2 * R / zelle).toFixed(1).replace(".", ",")} Kästchen.`, warumRu: `Остров почти такой же ширины, как вся карта: около ${(2 * R / zelle).toFixed(1).replace(".", ",")} квадратов.` });
+    // Stufe d (Übergang 5): Koordinatensystem – Gitterpunkt (x|y) mit x nach rechts, y nach oben; 1 Einheit = 50 m
+    const gx = (x) => (x + R + 1) / zelle, gy = (z) => (R + 1 - z) / zelle, pt = (p) => `(${p[0]}|${p[1]})`;
+    const naechster = (o) => [Math.round(gx(o.x)), Math.round(gy(o.z))];
+    const abst = (o, p) => Math.hypot(gx(o.x) - p[0], gy(o.z) - p[1]);
+    const gesehen = new Set(), punkte = [];
+    grosse.forEach(o => { const p = naechster(o), k = pt(p); if (gesehen.has(k) || abst(o, p) > 0.6) return;
+      const andere = grosse.filter(x => x !== o).map(x => abst(x, p)).sort((a, b) => a - b);
+      if (andere.length && andere[0] - abst(o, p) < 0.45) return;   // ein anderer Ort liegt fast genauso nah – nicht eindeutig
+      gesehen.add(k); punkte.push({ o, p }); });
+    const falschePunkte = ([a, b]) => { const l = []; if (a !== b) l.push([b, a]); [[a + 1, b], [a, b - 1], [a - 1, b], [a, b + 1]].forEach(q => { if (l.length < 2 && q[0] >= 0 && q[1] >= 0 && q[0] <= ZELLEN && q[1] <= ZELLEN) l.push(q); }); return l.slice(0, 2).map(pt); };
+    punkte.slice(0, 6).forEach(({ o, p }) => neu({ id: "punkt-" + o.id, ab: "d", lz: ["ma.rf.10"], markiert: { koord: true, punkt: p },
+      frage: `Der rote Punkt liegt ${bei(o)}. Welche Koordinaten hat er?`, ru: `Красная точка у места «${o.r}». Какие у неё координаты?`, optionen: [pt(p), ...falschePunkte(p)],
+      warum: `Erst nach rechts (x = ${p[0]}), dann nach oben (y = ${p[1]}): ${pt(p)}.`, warumRu: `Сначала вправо (x = ${p[0]}), потом вверх (y = ${p[1]}): ${pt(p)}.` }));
+    punkte.slice(0, 6).forEach(({ o, p }) => { const weit = grosse.filter(x => abst(x, p) > 2).slice(0, 2);
+      if (weit.length === 2) neu({ id: "schatz-" + o.id, ab: "d", lz: ["ma.rf.10"], markiert: { koord: true },
+        frage: `Ella hat bei ${pt(p)} etwas versteckt. Welcher Ort ist ganz nah?`, ru: `Элла что-то спрятала в точке ${pt(p)}. Какое место совсем рядом?`, optionen: [o, ...weit].map(x => x.e + " " + x.name),
+        warum: `x = ${p[0]} nach rechts, y = ${p[1]} nach oben: Dort steht ${o.name}.`, warumRu: `x = ${p[0]} вправо, y = ${p[1]} вверх: там ${o.r}.` }); });
+    for (let i = 0; i + 1 < punkte.length && i < 4; i++) { const p = punkte[i].p, q = punkte[i + 1].p, waag = Math.abs(p[0] - q[0]) >= Math.abs(p[1] - q[1]), z = waag ? [q[0], p[1]] : [p[0], q[1]], n = Math.abs(z[0] - p[0]) + Math.abs(z[1] - p[1]);
+      if (n < 2) continue;
+      neu({ id: `strecke-${pt(p)}-${pt(z)}`, ab: "d", lz: ["ma.rf.10", "ma.rf.09"], markiert: { koord: true, punkt: p },
+        frage: `Eine Einheit sind ${METER_JE_KAESTCHEN} Meter. Wie weit ist es vom roten Punkt ${pt(p)} bis ${pt(z)}?`, ru: `Одна единица – ${METER_JE_KAESTCHEN} метров. Какое расстояние от красной точки ${pt(p)} до ${pt(z)}?`,
+        optionen: [`${n * METER_JE_KAESTCHEN} m`, `${n} m`, `${(n + 1) * METER_JE_KAESTCHEN} m`],
+        warum: `Von ${pt(p)} bis ${pt(z)} sind es ${n} Einheiten: ${n} · ${METER_JE_KAESTCHEN} m = ${n * METER_JE_KAESTCHEN} m.`, warumRu: `От ${pt(p)} до ${pt(z)} – ${n} единиц: ${n} · ${METER_JE_KAESTCHEN} м = ${n * METER_JE_KAESTCHEN} м.` }); }
     return F;
   }
   const FRAGEN = fragen();
@@ -148,14 +180,17 @@
     return aus;
   }
   function waehle() {
-    const d = daten(), l = fuerStufe(stufe()), schon = (f) => d.karten[eilandKey + ":" + f.id];
-    return mischeArten(l.filter(f => !schon(f))).concat(mischeArten(l.filter(f => schon(f)))).slice(0, RUNDE);
+    const d = daten(), st = stufe(), l = fuerStufe(st), schon = (f) => d.karten[eilandKey + ":" + f.id];
+    // Stufe d: erst die Koordinaten-Fragen (die Lage-Fragen der Kl. 1/2 sind für den Übergang zu leicht), dann der Rest
+    const vorn = st === "d" ? (f) => f.ab === "d" : () => true;
+    return mischeArten(l.filter(f => !schon(f) && vorn(f))).concat(mischeArten(l.filter(f => !schon(f) && !vorn(f))), mischeArten(l.filter(f => schon(f) && vorn(f))), mischeArten(l.filter(f => schon(f) && !vorn(f)))).slice(0, RUNDE);
   }
 
   // ---------- Karte lesen (Runde) ----------
   function starteRunde() {
     lauf = { phase: "fragen", liste: waehle(), pos: 0, versuche: 0, ersteRichtig: 0, sterne: 0 };
-    ella(insel ? `Das ist die Karte unserer Heimatinsel, ${S.profil.name || "du"}. Norden ist oben. Findest du dich zurecht?` : `Das ist die Karte von diesem Eiland, ${S.profil.name || "du"}. Norden ist oben. Findest du dich zurecht?`,
+    if (lauf.liste[0] && lauf.liste[0].ab === "d") ella(`Heute liegt ein Koordinatensystem auf der Karte, ${S.profil.name || "du"}. Ein Punkt (x|y): erst x nach rechts, dann y nach oben.`, "Сегодня на карте система координат. Точка (x|y): сначала x вправо, потом y вверх.");
+    else ella(insel ? `Das ist die Karte unserer Heimatinsel, ${S.profil.name || "du"}. Norden ist oben. Findest du dich zurecht?` : `Das ist die Karte von diesem Eiland, ${S.profil.name || "du"}. Norden ist oben. Findest du dich zurecht?`,
       "Это карта острова. Север – вверху. Сориентируешься?");
     zeigeFrage();
   }
@@ -193,7 +228,7 @@
     }
     S.ton("nein"); lauf.versuche++; b.classList.add("falsch"); b.disabled = true;
     if (lauf.versuche === 1) { if (window.Koennen) Koennen.melde(f.lz, false);
-      $("hinweis").className = "hinweis nein"; $("hinweis").innerHTML = esc("Fast! Schau noch einmal auf die Karte – Norden ist oben.") + ru("Почти! Посмотри ещё раз на карту – север вверху."); return; }
+      $("hinweis").className = "hinweis nein"; $("hinweis").innerHTML = (f.ab === "d" ? esc("Fast! Erst nach rechts zählen (x), dann nach oben (y).") + ru("Почти! Сначала считай вправо (x), потом вверх (y).") : esc("Fast! Schau noch einmal auf die Karte – Norden ist oben.") + ru("Почти! Посмотри ещё раз на карту – север вверху.")); return; }
     $("optionen").querySelectorAll("button").forEach(x => { x.disabled = true; if (x.dataset.o === f.optionen[0]) x.classList.add("richtig"); });
     $("hinweis").className = "hinweis"; $("hinweis").innerHTML = esc(`Es ist: ${f.optionen[0]}. ${f.warum}`) + ru(f.warumRu);
     setTimeout(weiter, window.__testSchnell ? 80 : 3000);
@@ -232,6 +267,10 @@
     l.push({ id: "steg", e: "⛵", t: "ein Steg mit Boot", r: "причал с лодкой" });
     return l;
   }
+  // Texte der Funde eines Eintrags: gespeicherte Texte (seit 10.11.2026), sonst – nur für dieses Eiland – aus der Welt, sonst allgemein ohne Anzahl
+  // (Fehler bis 10.11.: die Liste zeigte bei anderen Eilanden die Baum- und Felsenzahl des Eilands, auf dem man gerade stand)
+  const FUND_ALLGEMEIN = { baeume: "Bäume", steine: "Felsen", teich: "ein Teich", huegel: "Hügel", blumen: "Blumenwiesen", schnee: "Schnee das ganze Jahr", sand: "Sand, so weit man sieht", strand: "ein breiter Strand", leuchtturm: "ein Leuchtturm", steg: "ein Steg mit Boot" };
+  const fundTexte = (x, f) => (x.funde || []).map((id, i) => (x.ft && x.ft[i]) || (f && (f.find(y => y.id === id) || {}).t) || FUND_ALLGEMEIN[id] || id);
   function tagebuch() {
     const d = daten(), e = d.eilande[eilandKey], f = fundeFuer();
     lauf = { phase: "tagebuch", wetter: e ? e.wetter : null, funde: e ? e.funde.slice() : [] };
@@ -246,7 +285,7 @@
       <div class="funde" id="funde">${f.map(x => `<button class="wahl-knopf${lauf.funde.includes(x.id) ? " an" : ""}" data-fund="${x.id}"><span class="gross">${x.e}</span>${esc(x.t)}${ru(x.r)}</button>`).join("")}</div>
       <p class="hinweis" id="t-hinweis" aria-live="polite"></p>
       <div class="knoepfe"><button class="knopf haupt" id="eintragen" ${lauf.wetter && lauf.funde.length === 3 ? "" : "disabled"}>✍️ Eintragen</button><button class="knopf" id="zur-karte">🗺️ Karte lesen</button></div>
-      ${liste.length ? `<h2>🌍 Erforschte Eilande</h2><div class="eilande" id="eilande">${liste.map(([k, x]) => `<div class="eiland${k === eilandKey ? " hier" : ""}"><span class="e">${k === "heimat" ? "🏝️" : (K.BIOME[x.biom] || {}).e || "🌍"}</span><span><b>${esc(x.name)}</b><br>${ARTEN[x.wetter] ? ARTEN[x.wetter][0] + " " : ""}${esc(x.funde.map(id => (f.find(y => y.id === id) || { t: id }).t).join(", "))}</span></div>`).join("")}</div>` : ""}
+      ${liste.length ? `<h2>🌍 Erforschte Eilande</h2><div class="eilande" id="eilande">${liste.map(([k, x]) => `<div class="eiland${k === eilandKey ? " hier" : ""}"><span class="e">${k === "heimat" ? "🏝️" : (K.BIOME[x.biom] || {}).e || "🌍"}</span><span><b>${esc(x.name)}</b><br>${ARTEN[x.wetter] ? ARTEN[x.wetter][0] + " " : ""}${esc(fundTexte(x, k === eilandKey ? f : null).join(", "))}</span></div>`).join("")}</div>` : ""}
       <p class="klein">Jedes Eiland bekommt einen Eintrag. Nichts geht verloren.</p>
     </section>`;
     $("arten").addEventListener("click", (ev) => { const b = ev.target.closest("[data-art]"); if (!b) return; S.ton("tipp"); lauf.wetter = b.dataset.art; $("arten").querySelectorAll("button").forEach(x => x.classList.toggle("an", x === b)); bereit(); });
@@ -259,7 +298,8 @@
   function bereit() { $("eintragen").disabled = !(lauf.wetter && lauf.funde.length === 3); }
   function eintragen() {
     const d = daten(), erster = !d.eilande[eilandKey], f = fundeFuer();
-    d.eilande[eilandKey] = { biom: insel ? "wiese" : WELT.biom, name: eilandName, am: S.heute(), wetter: lauf.wetter, funde: lauf.funde.slice(0, 3) };
+    d.eilande[eilandKey] = { biom: insel ? "wiese" : WELT.biom, name: eilandName, am: S.heute(), wetter: lauf.wetter, funde: lauf.funde.slice(0, 3),
+      ft: lauf.funde.slice(0, 3).map(id => (f.find(y => y.id === id) || { t: id }).t) };   // Texte mitspeichern: die Funde anderer Eilande (Anzahl Bäume …) kennt nur deren Welt
     const keys = Object.keys(d.eilande); if (keys.length > 30) keys.sort((a, b) => (d.eilande[a].am < d.eilande[b].am ? -1 : 1)).slice(0, keys.length - 30).forEach(k => delete d.eilande[k]);   // Spielstand klein halten
     if (erster) { S.gibSterne(1); if (window.Charakter) Charakter.gib("sachkunde", 1);
       if (window.Lernfunde) Lernfunde.merke({ fach: "sachkunde", art: "karte", e: eilandE, text: `Eiland erforscht: ${eilandName} – ${lauf.funde.map(id => (f.find(y => y.id === id) || { t: id }).t).join(", ")}`, schluessel: "expedition:eiland:" + eilandKey }); }
@@ -285,5 +325,5 @@
     ella("Mein Fernrohr ist noch eingepackt. Bald geht es los!", "Моя подзорная труба ещё упакована. Скоро начнём!");
   } else if (location.hash === "#tagebuch") zeigeReiter("tagebuch"); else starteRunde();
 
-  window.__expedition = { get lauf() { return lauf; }, get reiter() { return reiter; }, starteRunde, tagebuch, waehle, fuerStufe, stufe, stufeFuer, daten, FRAGEN, ORTE, feld, richtung, meter, fundeFuer, eilandKey, insel, RUNDE, STERNE_TAG, ZELLEN, zelle };
+  window.__expedition = { fundTexte, get lauf() { return lauf; }, get reiter() { return reiter; }, starteRunde, tagebuch, waehle, fuerStufe, stufe, stufeFuer, daten, FRAGEN, ORTE, feld, richtung, meter, fundeFuer, eilandKey, insel, RUNDE, STERNE_TAG, ZELLEN, zelle };
 })();

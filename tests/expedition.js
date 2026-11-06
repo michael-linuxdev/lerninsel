@@ -161,6 +161,36 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     erwarte(await p.evaluate(() => (Lernfunde.heute ? Lernfunde.heute() : []).some(f => /Eiland erforscht/.test(f.t))), "Lernfund „Eiland erforscht“");
     await ctx.close(); }
 
+  // ---------- Seite: Übergang Klasse 5 (Stufe d, 10.11.2026): Koordinatensystem auf der Heimatinsel, echt durchgespielt mit Fehlern ----------
+  for (const [breite, hoehe, art] of [[1180, 820, "quer"], [390, 760, "Handy"]]) {
+    const { ctx, p } = await kind("5", breite, hoehe);
+    await p.evaluate(() => Story.setzeKapitel(1)); await seite(p);
+    const k = await p.evaluate(() => ({ stufe: __expedition.stufe(), d: __expedition.FRAGEN.filter(f => f.ab === "d"), liste: __expedition.lauf.liste.map(f => f.ab),
+      achsen: [...document.querySelectorAll("#kartenbild svg text")].map(t => t.textContent).join(""), ring: document.querySelectorAll('#kartenbild circle[stroke="#E5383B"]').length }));
+    const arten = new Set(k.d.map(f => f.id.split("-")[0]));
+    erwarte(k.stufe === "d" && k.d.length >= 9 && ["punkt", "schatz", "strecke"].every(a => arten.has(a)), `${art}: Stufe d mit ${k.d.length} Koordinaten-Fragen (Punkt ablesen, Ort finden, Strecke)`);
+    erwarte(k.liste.every(a => a === "d"), `${art}: die erste Runde nimmt nur Koordinaten-Fragen`);
+    erwarte(/x/.test(k.achsen) && /y/.test(k.achsen) && [..."0123456"].every(z => k.achsen.includes(z)) && !/[A-F]/.test(k.achsen) && k.ring === 1, `${art}: Karte mit Achsen 0–6, x und y, roter Punkt markiert`);
+    erwarte(k.d.every(f => new Set(f.optionen).size === f.optionen.length && f.optionen.length === 3), `${art}: jede Koordinaten-Frage hat drei verschiedene Antworten`);
+    const punkt = k.d.find(f => /^punkt-/.test(f.id));
+    erwarte(punkt && /^\((\d)\|(\d)\)$/.test(punkt.optionen[0]) && (() => { const [, a, b] = punkt.optionen[0].match(/(\d)\|(\d)/); return a === b || punkt.optionen.includes(`(${b}|${a})`); })(), `${art}: „x und y vertauscht“ steht als falsche Antwort da (${punkt && punkt.optionen.join(" ")})`);
+    const strecke = k.d.find(f => /^strecke-/.test(f.id));
+    erwarte(strecke && /^\d+0 m$/.test(strecke.optionen[0]) && strecke.optionen.some(o => +o.split(" ")[0] * 50 === +strecke.optionen[0].split(" ")[0]), `${art}: Strecke mit Maßstab, „Einheiten statt Meter“ als falsche Antwort (${strecke && strecke.frage})`);
+    if (art === "quer") {
+      await p.click(`#optionen [data-o="${(await p.evaluate(() => __expedition.lauf.liste[0].optionen[1]))}"]`); await p.waitForTimeout(120);
+      erwarte(/nach rechts zählen \(x\), dann nach oben \(y\)/.test(await p.textContent("#hinweis")), "quer: Hinweis nach einem Fehler erklärt x vor y");
+      await p.click(`#optionen [data-o="${(await p.evaluate(() => __expedition.lauf.liste[0].optionen[0]))}"]`);
+      await p.waitForFunction(() => __expedition.lauf.pos > 0, null, { timeout: 8000 });
+      for (let i = 1; i < 5; i++) await antworte(p, i === 3 ? 2 : 0);
+      await p.waitForSelector("#ende");
+      const d = await p.evaluate(() => Spielwelt.lade("expedition"));
+      erwarte(Object.keys(d.karten).length === 3 && Object.keys(d.karten).every(x => /^heimat:(punkt|schatz|strecke)-/.test(x)) && (await sterne(p)) === 3, "quer: Runde mit zwei Fehlern durchgespielt – 3 gleich richtig gemerkt, 3 ⭐");
+    }
+    erwarte(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${art}: keine waagerechte Scrollleiste`);
+    await bild(p, `expedition-k5-${art}`);
+    await ctx.close();
+  }
+
   // ---------- Seite: Nachbar-Eiland Kl. 3 (Stufe c), Hochformat und Handy ----------
   for (const [breite, hoehe, art] of [[820, 1180, "hoch"], [390, 760, "Handy"]]) {
     const { ctx, p } = await kind("3", breite, hoehe);
@@ -176,6 +206,20 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     for (let i = 0; i < 5; i++) await antworte(p);
     await p.waitForSelector("#ende");
     erwarte(await p.evaluate(() => Object.keys(Spielwelt.lade("expedition").karten).every(k => k.startsWith("berge-3:"))), `${art}: Antworten unter dem Eiland-Schlüssel gemerkt`);
+    if (art === "hoch") {
+      // Tagebuch auf dem Eiland, dann daheim: die Liste zeigt die Funde des Eilands mit dessen eigenen Zahlen (Fehler bis 10.11.: Zahlen der Heimatinsel)
+      await p.click("#zum-tagebuch"); await p.waitForTimeout(300);
+      await p.click('[data-art="schnee"]'); await p.click('[data-fund="baeume"]'); await p.click('[data-fund="steine"]'); await p.click('[data-fund="teich"]');
+      await p.click("#eintragen"); await p.waitForTimeout(500);
+      const e = await p.evaluate(() => Spielwelt.lade("expedition").eilande["berge-3"]);
+      erwarte(e && e.ft && e.ft.length === 3 && /^\d+ /.test(e.ft[0]) && e.ft[2] === "ein Teich", `hoch: Eintrag „berge-3“ speichert die Fund-Texte (${e && e.ft && e.ft.join(", ")})`);
+      await p.evaluate(() => { const d = Spielwelt.lade("expedition"); d.eilande["wald-9"] = { biom: "wald", name: "Altes Eiland", am: "2026-10-20", wetter: "regen", funde: ["baeume", "blumen", "steg"] }; Spielwelt.speichere("expedition", d); });
+      await seite(p, "#tagebuch");
+      const l = await p.evaluate(() => [...document.querySelectorAll("#eilande .eiland")].map(x => x.textContent));
+      const berge = l.find(t => /Berge|berge/i.test(t) || t.includes(e.name)) || "", alt = l.find(t => /Altes Eiland/.test(t)) || "";
+      erwarte(berge.includes(e.ft[0]) && berge.includes(e.ft[1]) && !/14 Laubbäume/.test(berge), `hoch: daheim zeigt die Liste die Funde des Eilands (${berge.trim()})`);
+      erwarte(/Bäume, Blumenwiesen, ein Steg mit Boot/.test(alt) && !/\d+ Laubbäume/.test(alt), "hoch: alter Eintrag ohne Texte zeigt Funde ohne falsche Zahl");
+    }
     await ctx.close();
   }
 

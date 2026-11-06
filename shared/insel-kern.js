@@ -116,18 +116,28 @@
     const flach = [[P.start, 3.2], [P.haus, 3.2], [P.station, 1.2], [P.nest, 1], [P.eule, 1.6], [P.fipsi, 1.6], [P.biber, 2.4], [P.wissensbaum, 1.6], [P.ballons, 1.6], [P.tier, 1], [P.lauf, 1.8], [P.kart, 1.8], [P.bau, 1.8], [P.baer, 1.6], [P.schach, 1.8], [P.buehne, 1.8]]
       .map(([p, rad]) => ({ x: p[0], z: p[1], r: rad, h: roh(p[0], p[1]) }));
 
-    // Teich (Wunsch): nicht auf Plätzen
+    // Teich (Wunsch): nicht auf Plätzen – auch nicht auf Robo, Bennos Schild oder dem Angelsteg (10.11.2026: in 18 von 216 großen Welten stand Robo im Teich;
+    // nur diese Welten ändern sich, weil die Suche dort weiterläuft)
+    const auchFrei = [[P.robo, 1.2], [P.schild, 0.8], [P.truhe, 1.2]];
+    const teichFrei = (x, z, rad) => auchFrei.every(([p, a]) => Math.hypot(p[0] - x, p[1] - z) > rad + a);
     let see = null;
     if (w.see) for (let v = 0; v < 40 && !see; v++) {
       const [x, z] = polar(r() * Math.PI * 2, R * (0.35 + r() * 0.3)), rad = 2 + r() * 1.2;
-      if (flach.every(f => Math.hypot(f.x - x, f.z - z) > f.r + rad + 2) && Math.hypot(x, z) + rad < rand - 1.5) see = { x, z, r: rad };
+      if (flach.every(f => Math.hypot(f.x - x, f.z - z) > f.r + rad + 2) && Math.hypot(x, z) + rad < rand - 1.5 && teichFrei(x, z, rad)) see = { x, z, r: rad };
     }
     // 09.11.2026: In mittleren Welten fand sich so nie ein Platz (0 von 216 geprüften, der Wunsch „Teich“ blieb unerfüllt). Zweite Suche mit kleinerem Teich und weniger Rand –
     // mit eigenem Zufall, damit Bäume, Steine und Blumen bestehender Welten an ihrem Platz bleiben (nur Bäume im neuen Teich wandern).
     if (w.see && !see) { const r2 = zufall(seed ^ 0x5EE5EE);
       for (let v = 0; v < 120 && !see; v++) {
         const [x, z] = polar(r2() * Math.PI * 2, R * (0.3 + r2() * 0.42)), rad = 1.6 + r2() * 0.8;
-        if (flach.every(f => Math.hypot(f.x - x, f.z - z) > f.r + rad + 1) && Math.hypot(x, z) + rad < rand - 1.2) see = { x, z, r: rad };
+        if (flach.every(f => Math.hypot(f.x - x, f.z - z) > f.r + rad + 1) && Math.hypot(x, z) + rad < rand - 1.2 && teichFrei(x, z, rad)) see = { x, z, r: rad };
+      } }
+    // 10.11.2026: kleine Welten (R 15,2) blieben fast immer ohne Teich (15 von 216). Dritte Suche: kleiner Teich (1,3–1,8) dicht an den Plätzen vorbei –
+    // wieder mit eigenem Zufall, bestehende Welten ändern sich nur dort, wo ein gewünschter Teich jetzt Platz findet.
+    if (w.see && !see) { const r3 = zufall(seed ^ 0x7E1C4);
+      for (let v = 0; v < 200 && !see; v++) {
+        const [x, z] = polar(r3() * Math.PI * 2, R * (0.18 + r3() * 0.6)), rad = 1.3 + r3() * 0.5;
+        if (flach.every(f => Math.hypot(f.x - x, f.z - z) > f.r + rad + 0.5) && Math.hypot(x, z) + rad < rand - 1 && teichFrei(x, z, rad)) see = { x, z, r: rad };
       } }
 
     const hoehe = (x, z) => {

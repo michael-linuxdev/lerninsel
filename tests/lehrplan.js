@@ -97,7 +97,7 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder I
   assert.ok(ue && /Oberschule 2019, Gymnasium 2021/.test(ue.stand) && ue.schularten.os.lb.length === 5 && ue.schularten.gy.lb.length === 6);
   const k5 = new Set(); ue.mathe.forEach(p => p.app.forEach(a => k5.add(a)));
   w.Mathe.STATIONEN_K5.forEach(s => assert.ok(k5.has("mathe:" + s.id), s.id + " kommt in keinem Kl.-5-Punkt vor"));
-  ue.mathe.forEach(p => { u[p.abdeckung]++; p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : echt.includes(`["${id}", `), `${p.id}: ${a}`); }); });
+  ue.mathe.forEach(p => { u[p.abdeckung]++; p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "expedition" ? id === "karte" : echt.includes(`["${id}", `), `${p.id}: ${a}`); }); });
   assert.deepStrictEqual(u, { ja: 42, teil: 4, nein: 0, aussen: 5 });   // Oberschule 25 + Gymnasium 26 Punkte
 });
 

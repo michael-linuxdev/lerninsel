@@ -57,6 +57,28 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await ctx.close();
   }
 
+  // ---------- Eilande in der Chronik (10.11.2026): nach Datum zwischen den Szenen, mit Biom, Wetter, Funden; Namen ohne HTML ----------
+  for (const [breite, hoehe, art] of [[1180, 820, "quer"], [390, 760, "Handy"]]) {
+    const { ctx, p } = await kind({ breite, hoehe });
+    await p.evaluate(() => { ["sonne", "erste-frucht"].forEach(s => Story.merkeSzene(s));   // beide am 25. Oktober
+      Spielwelt.speichere("expedition", { karten: {}, neu: {}, eilande: {
+        heimat: { biom: "wiese", name: "Meine Heimatinsel", am: "2026-10-20", wetter: "sonne", funde: ["baeume", "blumen", "leuchtturm"], ft: ["14 Laubbäume", "Blumenwiesen", "ein Leuchtturm"] },
+        "schnee-4": { biom: "schnee", name: "Eis<b>insel</b>", am: "2026-10-30", wetter: "schnee", funde: ["baeume", "schnee", "steine"], ft: ["16 Nadelbäume", "Schnee das ganze Jahr", "8 Felsen"] },
+        "wald-2": { biom: "wald", name: "Altwald", am: "2026-10-25", wetter: "nebel", funde: ["baeume", "teich", "steg"] },
+        kaputt: "x" } }); });
+    await p.goto(BASIS + "spiele/album/#chronik"); await p.waitForTimeout(400);
+    const l = await p.evaluate(() => [...document.querySelectorAll(".chronik li")].map(li => ({ s: li.dataset.s || li.dataset.eiland, t: li.textContent, kopf: li.querySelector(".kopf").textContent, html: li.innerHTML })));
+    erwarte(l.map(x => x.s).join() === "heimat,sonne,erste-frucht,wald-2,schnee-4", `${art}: Eilande nach Datum zwischen den Szenen (${l.map(x => x.s).join(", ")})`);
+    const h = l[0] || {}, sch = l[4] || {}, w = l[3] || {};
+    erwarte(/Heimatinsel erforscht/.test(h.t) && /20\. Oktober/.test(h.t) && /sonnig/.test(h.t) && /14 Laubbäume/.test(h.t) && /🏝/.test(h.kopf), `${art}: Heimatinsel mit Datum, Wetter, Funden und 🏝️`);
+    erwarte(/Eiland erforscht: Eis<b>insel/.test(sch.t) && !/<b>insel/.test(sch.html.replace(/&lt;b&gt;/g, "")) && /16 Nadelbäume/.test(sch.t) && /❄/.test(sch.kopf), `${art}: Eiland-Name ohne HTML, Funde mit Zahl, Biom-Zeichen`);
+    erwarte(/Bäume, ein Teich, ein Steg mit Boot/.test(w.t) && /Nebel/.test(w.t), `${art}: alter Eintrag ohne Texte zeigt allgemeine Funde`);
+    erwarte(await p.evaluate(() => /Inselchronik 5/.test(document.querySelector("#reiter .an").textContent)), `${art}: Reiter zählt Szenen und Eilande (5)`);
+    erwarte(await passt(p), `${art}: keine Scrollleiste`);
+    await bild(p, `chronik-eilande-${art}`);
+    await ctx.close();
+  }
+
   await browser.close();
   if (fehler.length) { console.log("❌ Fehler:\n" + fehler.map(f => "  - " + f).join("\n")); process.exit(1); }
   console.log("✅ Chronik-Test bestanden.");
