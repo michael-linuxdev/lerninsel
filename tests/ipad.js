@@ -47,7 +47,7 @@ const KACHEL_SEITEN = ["", "spiele/mathe/", "spiele/deutsch/", "spiele/medien/",
     return out;
   });
   // Emoji-Bilder, die größer sind als ihr Platz (dann liegen sie über dem Text)
-  const zuGross = (p) => p.evaluate(() => [...document.querySelectorAll(".emo > svg")].filter(s => s.getClientRects().length).filter(s => {
+  const zuGross = (p) => p.evaluate(() => [...document.querySelectorAll(".emo > img")].filter(s => s.getClientRects().length).filter(s => {
     const a = s.getBoundingClientRect(), b = s.parentElement.getBoundingClientRect();
     return a.width > b.width + 1 || a.height > b.height + 1;
   }).map(s => s.parentElement.textContent).slice(0, 5));
@@ -70,7 +70,7 @@ const KACHEL_SEITEN = ["", "spiele/mathe/", "spiele/deutsch/", "spiele/medien/",
     await p.evaluate(() => { const i = __sachkunde.themen.findIndex(t => t.id === "kulturen"); __sachkunde.starte(i); __sachkunde.schritt(__sachkunde.lauf.t.schritte.findIndex(s => s.typ === "zuordnen")); });
     await p.waitForTimeout(400);
     const licht = await p.evaluate(() => { const k = document.querySelector('.gruppen [data-g="licht"]'), e = k.querySelector(".emo"), t = [...k.childNodes].find(n => n.nodeType === 3 && n.textContent.trim());
-      const r = document.createRange(); r.selectNodeContents(t); const tr = r.getBoundingClientRect(), er = e.querySelector("svg").getBoundingClientRect();
+      const r = document.createRange(); r.selectNodeContents(t); const tr = r.getBoundingClientRect(), er = e.querySelector(":scope > img").getBoundingClientRect();
       return { ueber: er.bottom > tr.top + 1 && er.top < tr.bottom && er.right > tr.left && er.left < tr.right, text: k.textContent.trim() }; });
     erwarte(!licht.ueber && /Lichterfeste/.test(licht.text), `${lage}: 🪔 steht über „Lichterfeste“, nicht darauf`);
     await bild(p, `ipad-lichterfest-${lage}`);
@@ -91,12 +91,16 @@ const KACHEL_SEITEN = ["", "spiele/mathe/", "spiele/deutsch/", "spiele/medien/",
     const p = await einrichten(ctx);
     await p.goto(BASIS + "spiele/vorschule/"); await p.waitForTimeout(700);
     await p.evaluate(() => __vorschule.starte("vs-zaehlen")); await p.waitForTimeout(400);
-    const w = await p.evaluate(() => [...document.querySelectorAll(".emo")].filter(e => /[⚀-⚅]/u.test(e.textContent)).map(e => ({ t: e.textContent, kreise: e.querySelectorAll("svg circle").length, rand: !!e.querySelector('svg rect[stroke="#3B1F63"]') })));
+    const w = await p.evaluate(() => [...document.querySelectorAll(".emo")].filter(e => /[⚀-⚅]/u.test(e.textContent)).map(e => { const svg = __emoji.svg(e.dataset.h); return { t: e.textContent, kreise: (svg.match(/<circle/g) || []).length, rand: /<rect[^>]*stroke="#3B1F63"/.test(svg) && !!e.querySelector(":scope > img") }; }));
     erwarte(w.length === 3 && w.every(x => x.rand && x.kreise === "⚀⚁⚂⚃⚄⚅".indexOf(x.t) + 1), `Vorschule: Würfel ⚀–⚅ als Stil-A-Würfel mit passenden Augen (${w.map(x => x.t + x.kreise).join(" ")})`);
     await bild(p, "ipad-wuerfel-vorschule");
     // 6. (Meldung 03.11.) Kreis, Dreieck, Viereck gleich gefärbt und gleich groß – nur die Form unterscheidet sich
     await p.evaluate(() => __vorschule.starte("vs-formen")); await p.waitForTimeout(400);
-    const formen = await p.evaluate(() => [...document.querySelectorAll(".emo svg g[fill]")].filter(g => g.closest("button")).map(g => { const r = g.getBoundingClientRect(); return { fill: g.getAttribute("fill"), b: Math.round(r.width), h: Math.round(r.height) }; }));
+    // (Paket 5: Emoji-Bilder sind <img> – die Form wird in einer unsichtbaren Kopie in Bildgröße vermessen)
+    const formen = await p.evaluate(() => [...document.querySelectorAll(".emo")].filter(e => /^e11[0-3]$/.test(e.dataset.h) && e.closest("button")).map(e => {
+      const r0 = e.querySelector(":scope > img").getBoundingClientRect(), d = document.createElement("div"); d.style.cssText = `position:fixed;left:0;top:0;width:${r0.width}px;height:${r0.height}px;visibility:hidden`;
+      d.innerHTML = __emoji.svg(e.dataset.h).replace("<svg ", '<svg width="100%" height="100%" '); document.body.appendChild(d);
+      const g = d.querySelector("g[fill]"), r = g.getBoundingClientRect(), out = { fill: g.getAttribute("fill"), b: Math.round(r.width), h: Math.round(r.height) }; d.remove(); return out; }));
     const gr = formen.map(f => Math.max(f.b, f.h));
     erwarte(formen.length === 3 && new Set(formen.map(f => f.fill)).size === 1 && Math.max(...gr) - Math.min(...gr) <= 8,
       `Vorschule: Kreis, Dreieck, Viereck in einer Farbe und gleich groß (${formen.map(f => f.fill + " " + f.b + "×" + f.h).join(", ")})`);
@@ -104,7 +108,7 @@ const KACHEL_SEITEN = ["", "spiele/mathe/", "spiele/deutsch/", "spiele/medien/",
     const vs = fs.readFileSync(__dirname + "/../spiele/vorschule/aufgaben.js", "utf8").split('id: "vs-formen"')[1].split('id: "vs-vergleichen"')[0];
     const k1 = fs.readFileSync(__dirname + "/../spiele/mathe/aufgaben.js", "utf8").split('id: "k1formen"')[1].split('id: "k1geld"')[0];
     erwarte(!/🔵|🔺|🟦|🟩|🟧|🔴/u.test(vs + k1) && /\\uE110/.test(vs) && /\\uE110/.test(k1), "Formen-Aufgaben (Vorschule, Matheweg Kl. 1) ohne bunte Form-Emojis");
-    const ein = await p.evaluate(() => { const d = document.createElement("div"); d.textContent = "🎲"; document.body.appendChild(d); return new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(d.querySelectorAll(".emo svg circle").length)))); });
+    const ein = await p.evaluate(() => { const d = document.createElement("div"); d.textContent = "🎲"; document.body.appendChild(d); return new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r((__emoji.svg((d.querySelector(".emo") || { dataset: {} }).dataset.h) .match(/<circle/g) || []).length)))); });
     erwarte(ein === 5, "🎲 ist derselbe Würfel (fünf Augen) statt des roten Noto-Würfels");
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);
     const mathe = await p.evaluate(() => { const st = "k1wuerfel"; for (let i = 0; i < 40; i++) { const a = Mathe.aufgabe(st, i + 1); if (a.bild) return a.bild; } return ""; });

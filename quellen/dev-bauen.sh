@@ -16,6 +16,8 @@ HASH=$(find $SEITE -type f ! -name 'sw.js' -print0 | LC_ALL=C sort -z | xargs -0
 sed -i.bak "s/^const CACHE = VORSILBE + \"spielwelt-[^\"]*\";/const CACHE = VORSILBE + \"spielwelt-$HASH\";/" sw.js && rm -f sw.js.bak
 grep -q "spielwelt-$HASH" sw.js || { echo "Cache-Version konnte nicht gesetzt werden"; exit 1; }
 echo "Cache-Version: $HASH"
+# Prüfsummen je Datei der Offline-Liste (Updates holen nur geänderte Dateien, siehe sw.js und quellen/sw-pruefsummen.js)
+node quellen/sw-pruefsummen.js
 rm -rf dev
 mkdir dev
 for f in $SEITE; do cp -R "$f" dev/; done
@@ -35,5 +37,8 @@ cat > dev/test/shared/config.js <<'CFG'
 window.SPIELWELT_CONFIG = { modus: "schule", version: "test", umgebung: "test" };
 CFG
 sed -i.bak 's/"name": "Lerninsel DEV"/"name": "Lerninsel TEST"/; s/"short_name": "DEV"/"short_name": "TEST"/' dev/test/manifest.webmanifest && rm -f dev/test/manifest.webmanifest.bak
+# /dev und /dev/test haben eigene config.js und manifest – ihre Prüfsummen eigens rechnen
+node quellen/sw-pruefsummen.js dev >/dev/null
+node quellen/sw-pruefsummen.js dev/test >/dev/null
 echo "dev/ und dev/test/ aktualisiert"
 

@@ -189,9 +189,11 @@ def stil_a(svg, hexk):
     inner = re.sub(r'^<svg[^>]*>|</svg>\s*$', '', svg.strip(), flags=re.S)
     inner = re.sub(r'<\?xml[^>]*>|<!--.*?-->', '', inner, flags=re.S)
     st = 1 if vb[2] >= 64 else 3
+    # (?<!/): ein selbst schließender Verlauf <radialGradient … href="…"/> hat keine Stopps (vorher fraß das Muster die Stopps des nächsten –
+    # im eigenständigen SVG als <img> war das kein gültiges XML, Paket 5)
     # Verläufe mit Durchsichtigkeit bleiben weich (Glanz, Schatten); rosa/rote davon sind Wangen und fliegen raus
     weich, wangen = set(), set()
-    for m in re.finditer(r'<(linearGradient|radialGradient)([^>]*)>(.*?)</\1>', inner, re.S):
+    for m in re.finditer(r'<(linearGradient|radialGradient)([^>]*?)(?<!/)>(.*?)</\1>', inner, re.S):
         i = re.search(r'\bid="([^"]+)"', m.group(2))
         if i and re.search(r'stop-opacity[=:]"?\s*\.?\d', m.group(3)) and not re.search(r'stop-opacity[=:]"?\s*1"', m.group(3)) or (i and 'stop-opacity' in m.group(3)):
             weich.add(i.group(1))
@@ -208,7 +210,7 @@ def stil_a(svg, hexk):
         if i and i.group(1) in weich: return m.group(0)
         neu = stufen(m.group(3))
         return m.group(0) if not neu else '<%s%s>%s</%s>' % (m.group(1), m.group(2), neu, m.group(1))
-    inner = re.sub(r'<(linearGradient|radialGradient)([^>]*)>(.*?)</\1>', gr, inner, flags=re.S)
+    inner = re.sub(r'<(linearGradient|radialGradient)([^>]*?)(?<!/)>(.*?)</\1>', gr, inner, flags=re.S)
     inner = kuerze(inner, st)
     for i in sorted(set(re.findall(r'\bid="([^"]+)"', inner)), key=len, reverse=True):
         inner = (inner.replace('id="%s"' % i, 'id="%s%s"' % (praefix, i)).replace('#%s)' % i, '#%s%s)' % (praefix, i))
@@ -241,6 +243,11 @@ def main():
     js = ('// GEBAUT von quellen/noto-stil-a.py aus quellen/noto/ – nicht von Hand ändern. Noto Emoji (Google, Apache 2.0, verändert: Stil A der Lerninsel; Lizenz quellen/noto/LICENSE).\n'
           'window.LERN_ICONS = %s;\n') % json.dumps(alle, ensure_ascii=False, separators=(',', ':'))
     open(aus, 'w', encoding='utf8').write(js)
+    # Paket 5 (07.11.2026): kleine Liste der Emojis mit Bild – emoji.js kennt so schon vor icons.js (wird erst nach dem ersten Bild geladen),
+    # welche Emojis ein Bild bekommen, und hält ihnen gleich den Platz frei (kein Springen der Größe)
+    namen = os.path.join(os.path.dirname(aus), 'icons-liste.js')
+    open(namen, 'w', encoding='utf8').write('// GEBAUT von quellen/noto-stil-a.py – nicht von Hand ändern. Emojis, für die shared/icons.js ein Bild hat (Hex-Schlüssel).\n'
+                                            'window.LERN_ICON_LISTE = "%s";\n' % ','.join(alle.keys()))
     print('%d Bilder (%d KB), %d ohne Bild (bleiben System-Zeichen): %s' % (len(alle), len(js.encode()) // 1024, len(fehlt), ' '.join(fehlt)))
 
 if __name__ == '__main__': main()

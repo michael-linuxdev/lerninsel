@@ -36,7 +36,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
 
   // 2) QR-Transfer: mit leerem Story-Zustand höchstens 200 Zeichen mehr als ohne
   const groessen = await a.evaluate(async () => {
-    const t = Spielstand._test, mit = Spielwelt.exportiere(), ohne = JSON.parse(JSON.stringify(mit));
+    const t = (await Spielstand.laden())._test, mit = Spielwelt.exportiere(), ohne = JSON.parse(JSON.stringify(mit));
     delete ohne.profil.daten.story;
     const laenge = async (o) => (await t.zuTeilen(o)).map(x => x.split(":").slice(4).join(":")).join("").length;
     return { mit: await laenge(mit), ohne: await laenge(ohne) };

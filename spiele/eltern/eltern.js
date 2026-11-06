@@ -15,7 +15,8 @@
   // ---------- Fachdaten nach Bedarf (05.11.2026) ----------
   // Themen, Werkstatt, Lektionen und Lehrplan (~1,5 MB) braucht nur der Lernstand und „Wie in der Schule“.
   // Sie laden erst nach dem ersten Bild; die Reihenfolge bleibt wie früher in index.html (async = false).
-  const FACHDATEN = ["../deutsch/geschichte.js", "../medien/lektionen.js", "../sachkunde/themen.js", "../sachkunde/landkreise.js", "../sachkunde/faecher.js",
+  // (Paket 5, 07.11.2026) auch Matheweg-Aufgaben und Denkfehler (vorher synchron in index.html, ~350 KB vor dem ersten Bild)
+  const FACHDATEN = ["../mathe/aufgaben.js", "../mathe/fehler.js", "../deutsch/geschichte.js", "../medien/lektionen.js", "../sachkunde/themen.js", "../sachkunde/landkreise.js", "../sachkunde/faecher.js",
     "../sachkunde/religion.js", "../deutsch/werkstatt.js", "../englisch/lektionen.js", "../sorbisch/lektionen.js", "../sorbisch/mutter.js", "../vorschule/aufgaben.js",
     "../sorbisch/geprueft.js", "../../shared/lehrplan/kern.js", "../../shared/inhalte.js", "../../inhalte/deutsch/anlaute.js", "../../inhalte/deutsch/lesetexte.js",
     "../../inhalte/deutsch/schreiben.js", "../../inhalte/deutsch/schreibschrift.js", "../../shared/lehrplan/laender/sachsen.js",
@@ -699,6 +700,46 @@
     }).catch(() => { el.textContent = "Speicherplatz konnte nicht ermittelt werden."; });
   }
 
+  // ---------- Zum Home-Bildschirm (Paket 5, 07.11.2026) ----------
+  // Safari löscht die Daten einer Webseite, die 7 Tage lang nicht im Browser geöffnet wurde (Intelligent Tracking Prevention). Als App auf dem
+  // Home-Bildschirm gilt das nicht. Die Karte erscheint nur, wenn die Lerninsel nicht schon als App läuft (Test-Haken window.__standalone).
+  const HOME_TEXT = {
+    titel: { de: "📲 Lerninsel als App auf den Home-Bildschirm", ru: "📲 Лерн-инзель как приложение на экран «Домой»" },
+    warum: { de: "Safari löscht die Daten einer Webseite, wenn sie 7 Tage lang nicht geöffnet wurde – dann wären Sterne und Fortschritt weg. Als App auf dem Home-Bildschirm passiert das nicht, und die Lerninsel startet ohne Adressleiste.",
+      ru: "Safari удаляет данные сайта, если его не открывали 7 дней, – тогда звёзды и успехи пропадут. У приложения на экране «Домой» такого не бывает, и Лерн-инзель открывается без адресной строки." },
+    schritte: [
+      { de: "In Safari oben auf „Teilen“ tippen (Quadrat mit Pfeil nach oben).", ru: "В Safari нажмите вверху «Поделиться» (квадрат со стрелкой вверх)." },
+      { de: "„Zum Home-Bildschirm“ wählen, dann „Hinzufügen“ tippen.", ru: "Выберите «На экран „Домой“», затем нажмите «Добавить»." },
+      { de: "Ab jetzt die Lerninsel immer über das neue Symbol öffnen.", ru: "Теперь всегда открывайте Лерн-инзель через новый значок." }
+    ],
+    wichtig: { de: "Wichtig: Die App hat einen eigenen Speicher. Vorher den Spielstand sichern (Startseite → 💾 Spielstand → „Als Datei sichern“) und in der App mit „Datei laden“ holen. Auf Android: Menü ⋮ → „Zum Startbildschirm hinzufügen“.",
+      ru: "Важно: у приложения своя память. Сначала сохраните игру (главная страница → 💾 Spielstand → «Als Datei sichern») и загрузите её в приложении через «Datei laden». На Android: меню ⋮ → «Добавить на главный экран»." },
+    status: { ru: "entwurf" }
+  };
+  function alsApp() {
+    if (typeof window.__standalone === "boolean") return window.__standalone;
+    try { return navigator.standalone === true || matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: fullscreen)").matches; } catch (e) { return false; }
+  }
+  function homeKarte() {
+    if (alsApp() || eltern().homeHinweis === "aus") return "";
+    const ru = (x) => (S.hilfe() && S.hilfe().code === "ru" && x.ru ? `<span class="ru klein" lang="ru">${x.ru}</span>` : "");
+    return `<div class="karte" id="home-karte">
+        <h2>${HOME_TEXT.titel.de}</h2>${ru(HOME_TEXT.titel)}
+        <p>${HOME_TEXT.warum.de}</p>${ru(HOME_TEXT.warum)}
+        <ol class="home-schritte">${HOME_TEXT.schritte.map(x => `<li>${x.de}${ru(x) ? "<br>" + ru(x) : ""}</li>`).join("")}</ol>
+        <p class="klein">${HOME_TEXT.wichtig.de}</p>${ru(HOME_TEXT.wichtig)}
+        <div class="knoepfe"><button class="knopf" id="home-weg">Erledigt – ausblenden</button></div>
+      </div>`;
+  }
+  // (Paket 5) Wochenbericht neu berechnen (für das Nachzeichnen, wenn die Mathe-Daten nachgeladen sind) – dieselbe Regel wie in uebersicht()
+  function wochenberichtJetzt() {
+    const mathe = S.lade("mathe") || {}, stat = mathe.stat || {}, MA = window.Mathe || {};
+    const k1 = mathe.k1 || {}, mitK1 = Object.keys(k1).length || ["vs", "1"].includes((S.stufe() || {}).code);
+    const alle = (mitK1 ? MA.STATIONEN_K1 || [] : []).concat(MA.STATIONEN || [],
+      ...[["k3", "STATIONEN_K3", "3"], ["k4", "STATIONEN_K4", "4"], ["k5", "STATIONEN_K5", "5"]].map(([w, liste, kl]) => (Object.keys(mathe[w] || {}).length || (S.stufe() || {}).code === kl) ? MA[liste] || [] : []));
+    const schwach = alle.map(s => ({ s, x: stat[s.id] })).filter(o => o.x && o.x.r + o.x.f >= 5 && o.x.r / (o.x.r + o.x.f) < 0.7);
+    return wochenbericht(schwach, mathe);
+  }
   function uebersicht() {
     if (S.schuljahrStart) S.schuljahrStart();   // ältere Spielstände: laufendes Schuljahr merken (NA-61)
     const mathe = S.lade("mathe") || {}, deutsch = S.lade("deutsch") || {}, medien = S.lade("medien") || {}, welt = S.lade("welt3d") || {};
@@ -718,12 +759,15 @@
 
     // Klasse-1-Weg (NA-32) mit anzeigen, wenn das Kind dort übt oder in Vorschule/Klasse 1 ist
     const k1 = mathe.k1 || {}, mitK1 = Object.keys(k1).length || ["vs", "1"].includes((S.stufe() || {}).code);
-    const alleSt = (mitK1 ? (window.Mathe.STATIONEN_K1 || []).map(s => ({ s, st: k1[s.id], vor: "Kl. 1: " })) : [])
-      .concat(window.Mathe.STATIONEN.map(s => ({ s, st: k2[s.id], vor: "" })))
+    // (Paket 5) spiele/mathe/aufgaben.js gehört seit 07.11.2026 zu den Fachdaten (lädt nach dem ersten Bild) – bis dahin ohne Stationen;
+    // der Wochenbericht im Überblick wird nachgezeichnet, sobald sie da sind (woche-huelle)
+    const MA = window.Mathe || {};
+    const alleSt = (mitK1 ? (MA.STATIONEN_K1 || []).map(s => ({ s, st: k1[s.id], vor: "Kl. 1: " })) : [])
+      .concat((MA.STATIONEN || []).map(s => ({ s, st: k2[s.id], vor: "" })))
       // Klasse 3/4 (NA-33/37), wenn das Kind dort übt oder in der Klasse ist
       .concat(...[["k3", "STATIONEN_K3", "3", "Kl. 3: "], ["k4", "STATIONEN_K4", "4", "Kl. 4: "], ["k5", "STATIONEN_K5", "5", "Übergang 5: "]].map(([w, liste, kl, vor]) => {
         const d = mathe[w] || {}, mit = Object.keys(d).length || (S.stufe() || {}).code === kl;
-        return mit ? (window.Mathe[liste] || []).map(s => ({ s, st: d[s.id], vor })) : []; }));
+        return mit ? (MA[liste] || []).map(s => ({ s, st: d[s.id], vor })) : []; }));
     const stationen = alleSt.map(({ s, st, vor }) => {
       const x = stat[s.id], n = x ? x.r + x.f : 0, q = n ? x.r / n : null;
       return `<tr><td>${vor}${s.name}</td><td class="zahl-r">${st ? "⭐".repeat(st) : "–"}</td><td class="zahl-r">${n || "–"}</td><td class="zahl-r"><span class="quote ${quoteKlasse(n >= 3 ? q : null)}">${prozent(q)}</span></td></tr>`;
@@ -762,7 +806,7 @@
           <div class="zahl"><b>${gesR + gesF ? Math.round(gesR / (gesR + gesF) * 100) + " %" : "–"}</b><span>Mathe beim 1. Versuch richtig (${gesR + gesF} Aufgaben)</span></div>
         </div>
       </div>
-      ${wochenbericht(schwach, mathe)}
+      <div id="woche-huelle">${wochenbericht(schwach, mathe)}</div>
       <div class="karte">
         <h2>Tagesaufgaben</h2>
         <p>Heute: ${tag.erledigt.length} von ${aufgaben.length} geschafft (${aufgaben.map(a => `${a.erledigt ? "✓" : "○"} ${a.titel}`).join(", ")}).</p>
@@ -824,6 +868,7 @@
         <div class="knoepfe"><button class="knopf" id="kind-neu">➕ Kind hinzufügen</button></div>
         <p class="klein">Jedes Kind hat einen eigenen Spielstand. Gibt es mehrere Kinder, fragt die Startseite zuerst „Wer spielt?“. Die PIN gilt für alle.</p>
       </div>
+      ${homeKarte()}
       <div class="karte">
         <h2>Kind und Einstellungen</h2>
         <p><b>${S.profil.name}</b>, ${S.kind().alter} Jahre${S.kind().geburt ? ` (Geburtstag ${S.kind().geburt.split("-").slice(1).reverse().join(".")}.)` : ""}, ${S.stufe().name}, ${S.land().name} · Muttersprache: ${(S.MUTTERSPRACHEN.find(x => x[0] === S.kind().muttersprache) || S.MUTTERSPRACHEN[0])[1].split(" – ")[0]}, ${S.DEUTSCHSTAND.find(x => x.code === S.kind().deutschstand).name} · Hilfesprache: ${(SPRACHEN.find(x => x[0] === S.kind().hilfesprache) || SPRACHEN[0])[1].replace(" (in Arbeit)", "")} · Wetter-Ort: ${(S.kind().ort || {}).lat != null ? S.kind().ort.name : "keiner"}</p>
@@ -883,6 +928,7 @@
     zeitKnoepfe(); inselKnoepfe(); echteWeltKnoepfe(); technikKnoepfe();
     if (fachBereit) { matheKnoepfe(); englischKnoepfe(); sorbischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); staerkenKnoepfe(); }
     inhalt.dataset.fach = fachBereit ? "ja" : "nein";
+    if ($("home-weg")) $("home-weg").addEventListener("click", () => { const e = eltern(); e.homeHinweis = "aus"; S.speichere("eltern", e); $("home-karte").remove(); S.meldung("Ausgeblendet."); });
     $("kind-neu").addEventListener("click", () => {
       const id = S.neuesKind(); if (!id) { S.meldung("Mehr als 8 Kinder gehen nicht."); return; }
       S.wechsleKind(id); location.href = "./?einrichtung=1";
@@ -914,7 +960,12 @@
     zeigeTeil(teilStart);
     window.__eltern = Object.assign(window.__eltern || {}, { teil: zeigeTeil, fachdaten: ladeFachdaten, fachBereit: () => fachBereit });
     // Nach dem ersten Bild die Fachdaten still vorladen, damit die Reiter gleich bereit sind
-    if (!fachBereit) setTimeout(ladeFachdaten, 300);
+    if (!fachBereit) setTimeout(() => ladeFachdaten().then(() => {
+      // Wochenbericht nennt schwache Stationen beim Namen – mit den Mathe-Daten nachzeichnen (nur diese Karte, sonst bleibt alles stehen)
+      const h = $("woche-huelle"); if (!h || !window.Mathe || !inhalt.contains(h)) return;
+      const neu = wochenberichtJetzt(), tmp = document.createElement("div"); tmp.innerHTML = neu;
+      if (tmp.innerHTML !== h.innerHTML) h.innerHTML = neu;
+    }), 300);
     $("abmelden").addEventListener("click", () => { sessionStorage.removeItem(SITZUNG); location.href = "../ich/"; });
   }
 

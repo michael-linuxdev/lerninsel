@@ -20,7 +20,7 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok"); await p.waitForSelector("#e-name");
   await p.fill("#e-name", "Mira ⭐"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString())); await p.waitForTimeout(800);
   // Startseite: Stern-Knopf zeigt das eigene Bild, Text enthält weiter ⭐
-  const s = await p.evaluate(() => ({ n: document.querySelectorAll(".emo").length, stern: !!document.querySelector("#sterne") && document.querySelector("#sterne").parentElement.querySelector(".emo svg") !== null,
+  const s = await p.evaluate(() => ({ n: document.querySelectorAll(".emo").length, stern: !!document.querySelector("#sterne") && document.querySelector("#sterne").parentElement.querySelector(".emo > img") !== null,
     text: document.querySelector("#sterne").parentElement.textContent, anzahl: window.__emoji ? __emoji.anzahl() : 0 }));
   erwarte(s.anzahl >= 100 && s.n > 5, `Startseite: ${s.n} Emojis durch eigene Bilder ersetzt (${s.anzahl} Bilder vorhanden)`);
   erwarte(s.stern && s.text.includes("⭐"), "Stern-Knopf: eigenes Bild, das Zeichen ⭐ bleibt im Text");
@@ -33,18 +33,27 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     return { emo: d.querySelectorAll(".emo").length, text: d.textContent, feld: i.value, unbekannt: (() => { const x = document.createElement("p"); x.textContent = "🛸"; document.body.appendChild(x); return x; })() && true };
   });
   erwarte(nach.emo === 2 && nach.text === "Ich mag 🍎 und 🦊" && nach.feld === "🍎", "neuer Inhalt: 🍎 und 🦊 ersetzt, textContent unverändert, Eingabefeld unberührt");
-  // Noto in Stil A: Kontur ohne SVG-Filter (zwei <use>), ids je Anzeige eindeutig, keine Wangen
+  // Noto in Stil A: Kontur ohne SVG-Filter (zwei <use>), keine Wangen. Seit Paket 5 (07.11.2026) als <img> mit einer Blob-Adresse je Emoji:
+  // gleiches Emoji mehrfach = dieselbe Adresse, kein Inline-SVG mehr im DOM, jedes Bild gültig (geladen, nicht leer)
   const noto = await p.evaluate(async () => {
     const d = document.createElement("div"); d.textContent = "😊😊🍎🍎"; document.body.appendChild(d);
     await new Promise(r => setTimeout(r, 120));
-    const ids = [...document.querySelectorAll(".emo [id]")].map(e => e.id);
     const roh = Object.values(window.LERN_ICONS), smiley = window.LERN_ICONS["1f60a"];
-    const zielOk = [...d.querySelectorAll("use")].length === 8 && [...d.querySelectorAll("use")].every(u => { const z = document.getElementById(u.getAttribute("href").slice(1)); return z && u.closest("svg").contains(z); });
+    const imgs = [...d.querySelectorAll(".emo > img")];
+    await Promise.all(imgs.map(i => i.decode().catch(() => null)));
     return { anzahl: roh.length, filter: roh.filter(s => s.includes("<filter")).length, use: roh.filter(s => (s.match(/<use href='#n[0-9a-f]+-b'/g) || []).length === 2).length,
-      doppelt: ids.length - new Set(ids).size, zielOk, wangen: /url\(#n1f60a-SVGljKj4yZw\)|url\(#n1f60a-SVGBJFSCeLy\)/.test(smiley) };
+      imgs: imgs.length, adressen: new Set(imgs.map(i => i.src)).size, blob: imgs.every(i => i.src.startsWith("blob:")), geladen: imgs.every(i => i.naturalWidth > 0),
+      inline: document.querySelectorAll(".emo svg").length, wangen: /url\(#n1f60a-SVGljKj4yZw\)|url\(#n1f60a-SVGBJFSCeLy\)/.test(smiley) };
   });
   erwarte(noto.anzahl >= 770 && noto.filter === 0 && noto.use === noto.anzahl, `Noto in Stil A: ${noto.anzahl} Bilder, keins mit SVG-Filter, jedes mit Kontur-Kopie über <use>`);
-  erwarte(noto.doppelt === 0 && noto.zielOk, "gleiches Emoji mehrfach: ids je Anzeige eindeutig, jedes <use> zeigt ins eigene Bild");
+  erwarte(noto.imgs === 4 && noto.adressen === 2 && noto.blob && noto.geladen && noto.inline === 0, "gleiches Emoji mehrfach: ein <img> je Anzeige, eine Blob-Adresse je Emoji, alle geladen, kein Inline-SVG im DOM");
+  // alle Noto-Bilder sind als eigenständiges Bild gültig (ein <img> verzeiht kein fehlerhaftes Markup)
+  const kaputt = await p.evaluate(async () => {
+    const schlecht = [];
+    for (const h of Object.keys(window.LERN_ICONS)) { const d = new DOMParser().parseFromString(window.LERN_ICONS[h], "image/svg+xml"); if (d.querySelector("parsererror")) schlecht.push(h); }
+    return schlecht;
+  });
+  erwarte(kaputt.length === 0, "jedes Noto-Bild ist gültiges SVG-XML" + (kaputt.length ? ": " + kaputt.join(", ") : ""));
   erwarte(!noto.wangen, "keine rosa Wangen (😊 ohne Noto-Wangen)");
   // 📦 hat bei Noto ein großes Rechteck außerhalb des Bildes: es darf weder zu sehen sein noch Klicks abfangen
   await p.evaluate(() => {
@@ -55,7 +64,7 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   });
   await p.waitForTimeout(150);
   await p.click("#pk-a", { timeout: 3000 }); await p.click("#pk-b", { timeout: 3000 });
-  const pk = await p.evaluate(() => ({ k: __klicks, emo: !!document.querySelector("#pk-a .emo"), ov: getComputedStyle(document.querySelector("#pk-a .emo svg")).overflow }));
+  const pk = await p.evaluate(() => ({ k: __klicks, emo: !!document.querySelector("#pk-a .emo"), ov: getComputedStyle(document.querySelector("#pk-a .emo > img")).overflow }));
   erwarte(pk.emo && pk.k.a === 1 && pk.k.b === 1 && pk.ov === "hidden", "📦: Bild am Rand abgeschnitten, Klicks auf den Knopf und den Nachbarn kommen an");
   // Atelier: Stempel zeichnet das Noto-Bild (mit Kontur #3B1F63) auf die Leinwand
   await p.goto(BASIS + "spiele/atelier/"); await p.waitForLoadState("load");
@@ -80,23 +89,36 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     const r = await p.evaluate((B) => {
       const text = document.body.innerText, falsch = [];
       for (const [e, n] of Object.entries(B)) { const i = text.indexOf(e); if (i >= 0 && text.slice(Math.max(0, i - 40), i + 40).includes(n)) falsch.push(e + " " + n); }
-      return { falsch, fig: document.querySelectorAll(".emo.fig svg").length };
+      return { falsch, fig: document.querySelectorAll(".emo.fig > img").length };
     }, BEGLEITER);
     erwarte(r.falsch.length === 0, `${s || "Startseite"}: kein Begleiter als Emoji (${r.fig} Begleiter-Zeichnungen)` + (r.falsch.length ? " – gefunden: " + r.falsch.join(", ") : ""));
   }
   await p.goto(BASIS + "spiele/vorschule/"); await p.waitForLoadState("load"); await p.waitForTimeout(450);
-  const fipsi = await p.evaluate(() => ({ fig: !!document.querySelector(".intro .emo.fig svg"), noto: document.querySelector(".intro").textContent.includes("🦊"), zeichen: document.querySelector(".intro").textContent.includes("\uE103") }));
+  const fipsi = await p.evaluate(() => ({ fig: !!document.querySelector(".intro .emo.fig > img"), noto: document.querySelector(".intro").textContent.includes("🦊"), zeichen: document.querySelector(".intro").textContent.includes("\uE103") }));
   erwarte(fipsi.fig && !fipsi.noto && fipsi.zeichen, "Vorschul-Rucksack: Fipsi als Zeichnung, nicht als Fuchs-Emoji");
   // Seiten mit vielen Emojis öffnen ohne Fehler
   for (const s of ["spiele/sachkunde/", "spiele/mathe/", "spiele/garten/", "spiele/ich/"]) { await p.goto(BASIS + s); await p.waitForLoadState("load"); await p.waitForTimeout(400); }
   erwarte(await p.evaluate(() => document.querySelectorAll(".emo").length > 0), "weitere Seiten (Sachunterricht, Mathe, Garten, Meine Ecke) laufen mit den Bildern");
   if (BILDER) await p.screenshot({ path: `${BILDER}/bilder-ich.png` });
+  // Paket 5: icons.js kommt erst nach dem ersten Bild – bis dahin hält span.emo.warte den Platz in derselben Größe frei (Emoji des Geräts), dann kommt das Bild
+  {
+    const q = await ctx.newPage(); let freigeben; const gesperrt = new Promise(ok => { freigeben = ok; });
+    await q.route(/shared\/icons\.js/, async (r) => { await gesperrt; await r.continue(); });
+    await q.goto(BASIS + "spiele/sachkunde/", { waitUntil: "domcontentloaded" }); await q.waitForTimeout(800);   // „load“ wartet auf icons.js
+    const vor = await q.evaluate(() => { const e = document.querySelector(".emo.warte:not(.fig)"); if (!e) return null; const r = e.getBoundingClientRect(), t = e.querySelector(".emo-t");
+      return { n: document.querySelectorAll(".emo.warte").length, fig: document.querySelectorAll(".emo.fig > img").length, b: r.width, h: r.height, sichtbar: getComputedStyle(t).clipPath === "none", i: [...document.querySelectorAll(".emo")].indexOf(e) }; });
+    erwarte(vor && vor.n > 5 && vor.sichtbar && vor.fig >= 0, `vor icons.js: ${vor && vor.n} Emojis halten den Platz frei und zeigen das Geräte-Emoji (Begleiter sofort als Zeichnung)`);
+    freigeben(); await q.waitForFunction(() => window.LERN_ICONS && !document.querySelector(".emo.warte"), null, { timeout: 10000 });
+    const nach = await q.evaluate((i) => { const e = document.querySelectorAll(".emo")[i], r = e.getBoundingClientRect(); return { b: r.width, h: r.height, img: !!e.querySelector(":scope > img") }; }, vor ? vor.i : 0);
+    erwarte(vor && nach.img && Math.abs(nach.b - vor.b) < 0.5 && Math.abs(nach.h - vor.h) < 0.5, `nach icons.js: Bild an derselben Stelle, gleiche Größe (${vor && vor.b.toFixed(1)} → ${nach.b.toFixed(1)} px)`);
+    await q.close();
+  }
   // Eltern-Wahl: Emojis des Geräts
   await p.evaluate(() => { const e = Spielwelt.lade("eltern"); e.bilder = "geraet"; Spielwelt.speichere("eltern", e); });
   await p.goto(BASIS); await p.waitForLoadState("load"); await p.waitForTimeout(500);
   erwarte(await p.evaluate(() => window.__emoji && __emoji.nurFiguren && document.querySelectorAll(".emo:not(.fig)").length === 0), "Eltern-Wahl „Emojis des Geräts“: keine Noto-Bilder (nur die Begleiter bleiben Zeichnungen)");
   await p.goto(BASIS + "spiele/vorschule/"); await p.waitForLoadState("load"); await p.waitForTimeout(500);
-  erwarte(await p.evaluate(() => !!document.querySelector(".intro .emo.fig svg")), "auch mit Geräte-Emojis: Fipsi im Vorschul-Rucksack als Zeichnung");
+  erwarte(await p.evaluate(() => !!document.querySelector(".intro .emo.fig > img")), "auch mit Geräte-Emojis: Fipsi im Vorschul-Rucksack als Zeichnung");
   await browser.close();
   if (fehler.length) { console.log("❌ Fehler:\n  " + fehler.join("\n  ")); process.exit(1); }
   console.log("✅ Bilder-Test bestanden.");
