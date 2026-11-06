@@ -30,7 +30,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "2");
     if (sprache) await p.selectOption("#e-sprache", sprache);
     await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
-    await p.evaluate(() => { Story.setzeKapitel(7); });
+    await p.evaluate(() => { Story.setzeKapitel(7); if (window.Zeit) for (let i = 0; i < 12; i++) Zeit.aufgabe(); });
     return { ctx, p };
   }
   // eine russische Zeile echt antippen und prüfen, dass genau sie russisch gesprochen wird
@@ -69,6 +69,24 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       await tippeRu(p, wo);
       if (BILDER && wo === "Forscherlager") await p.screenshot({ path: `${BILDER}/ruvorlesen-expedition.png` });
     }
+    // Gefühle (10.11.2026 übersetzt): Hilfe-Karte mit 116 111, Brunis Antwort, Ruhe-Übung
+    await seite(p, "spiele/gefuehle/");
+    const hk = await p.evaluate(() => [...document.querySelectorAll("#hilfe-karte .ru")].map(x => x.textContent));
+    erwarte(hk.length === 3 && hk.some(t => /116 111/.test(t)), "Gefühle: Hilfe-Karte auf Russisch, mit 116 111");
+    await tippeRu(p, "Gefühle: Hilfe-Karte", "#hilfe-karte .ru-hoerbar");
+    await p.click('[data-oeffne="barometer"]'); await p.waitForTimeout(300); await p.click('.face[data-g="traurig"]'); await p.waitForTimeout(300);
+    erwarte(await p.evaluate(() => /взрослому/.test((document.querySelector("#antwort-text + .ru") || {}).textContent || "") && /116 111/.test(document.getElementById("hilfe-kurz").textContent) && /[а-я]/.test(document.getElementById("hilfe-kurz").textContent)), "Gefühle: Brunis Antwort und Kurz-Hilfe auf Russisch");
+    await tippeRu(p, "Gefühle: Brunis Antwort", "#antwort .ru-hoerbar");
+    await p.evaluate(() => __gefuehle.zeige("wut")); await p.click('[data-oeffne="wut"]').catch(() => {}); await p.evaluate(() => { document.querySelector('[data-oeffne="wut"]') && document.querySelector('[data-oeffne="wut"]').click(); }); await p.waitForTimeout(300);
+    erwarte(await p.evaluate(() => /шарик/.test((document.querySelector("#wut-text + .ru") || {}).textContent || "")), "Gefühle: Wut-Ballon mit russischer Anleitung");
+    await p.evaluate(() => __gefuehle.bewegen()); await p.evaluate(() => __gefuehle.zeige("bewegen")); await p.waitForTimeout(300);
+    erwarte(await p.evaluate(() => /[а-я]/.test((document.querySelector("#bew-karte .lage + .ru") || {}).textContent || "")), "Gefühle: Bewegungs-Übung auf Russisch");
+    if (BILDER) await p.screenshot({ path: `${BILDER}/ruvorlesen-gefuehle.png` });
+    // Mein Tier (10.11.2026 übersetzt): Ei-Auswahl
+    await seite(p, "spiele/tier/");
+    if (await p.isVisible("#wahl-ansicht")) { erwarte(await p.isVisible("#wahl-ru") && await p.isVisible("#nest-ru"), "Mein Tier: Ei-Auswahl auf Russisch"); await tippeRu(p, "Mein Tier", "#wahl-ansicht .ru-hoerbar"); }
+    else erwarte(await p.evaluate(() => !!document.querySelector(".ru-zeile")), "Mein Tier: Sprechblase auf Russisch");
+    if (BILDER) await p.screenshot({ path: `${BILDER}/ruvorlesen-tier.png` });
     // Forscherlager-Tagebuch: russischer Text in Fund-Knöpfen bleibt Teil des Knopfs (Antippen wählt den Fund)
     await seite(p, "spiele/expedition/#tagebuch");
     const imKnopf = await p.evaluate(() => [...document.querySelectorAll("#funde .ru")].every(e => !e.classList.contains("ru-hoerbar")) && document.querySelectorAll("#funde .ru").length > 0);

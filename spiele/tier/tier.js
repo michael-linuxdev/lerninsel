@@ -4,6 +4,23 @@
   const VB = "-30 -40 360 320";
   const NAMEN = { drache: ["Funki", "Flammi", "Drako", "Rubin"], einhorn: ["Luna", "Glitzer", "Sternchen", "Rosalie"], hund: ["Bello", "Struppi", "Bruno", "Lotte"], katze: ["Mimi", "Schnurri", "Mia", "Tiger"] };
   let ausdruckJetzt = null, ausdruckTimer = null;
+  // Russisch (Entwurf 10.11.2026, nur mit Hilfesprache): Zeilen mit class="ru" – über shared/sprache.js antippbar und vorlesbar
+  const hatRu = () => { const h = S.hilfe && S.hilfe(); return !!(h && h.code === "ru"); };
+  const ruP = (t, k = "p") => (hatRu() && t ? `<${k} class="ru" lang="ru">${S.esc(t)}</${k}>` : "");
+  const setzeRu = (el, t) => { if (!el) return; let n = el.querySelector(":scope > .ru-zeile"); if (!hatRu() || !t) { if (n) n.remove(); return; }
+    if (!n) { n = document.createElement("span"); n.className = "ru ru-zeile"; n.lang = "ru"; el.appendChild(n); } n.textContent = t; };
+  const ARTEN_RU = { drache: "дракон", hund: "собака", katze: "котёнок" };
+  const EIER_RU = { feuer: "Огненное яйцо", wald: "Яйцо с лапками", kuschel: "Пушистое яйцо" };
+  // wie TierPflege.stimmung(d), auf Russisch
+  function stimmungRu(d) {
+    const n = d.name || "Твой питомец", jetzt = window.__jetzt ? new Date(window.__jetzt) : new Date();
+    if (d.satt < 25) return `${n} хочет есть! Выполни задание дня – тогда будет угощение.`;
+    if (d.freude < 20) return `${n} немного грустит. Поиграешь с ним?`;
+    const h = jetzt.getHours();
+    if (h >= 21 || h < 6) return `Тссс … ${n} спит. Спокойной ночи!`;
+    if (d.satt > 85 && d.freude > 85) return `${n} совершенно счастлив!`;
+    return ["Как хорошо, что ты пришёл!", "Поиграем?", "Я по тебе скучал!", "Ты сегодня уже считал?", "Почеши меня!"][jetzt.getDate() % 5];
+  }
 
   function zeige(n) { ["wahl", "ei", "tier"].forEach(v => $(v + "-ansicht").hidden = v !== n); }
   function dialog(html) { $("dkarte").innerHTML = html; $("dialog").hidden = false; }
@@ -20,13 +37,14 @@
   // ---------- Ei aussuchen ----------
   function zeigeWahl() {
     $("titel").textContent = "Mein Tier";
+    ["wahl-ru", "nest-ru"].forEach(id => { if ($(id)) $(id).hidden = !hatRu(); });
     zeige("wahl");
-    $("eier").innerHTML = Object.entries(T.EIER).map(([id, e]) => `<button class="ei-wahl" data-ei="${id}"><svg viewBox="40 30 220 250">${T.zeichneEi(id)}</svg>${e.name}<span>${{ feuer: "Es ist ganz warm …", regenbogen: "Es glitzert bunt …", wald: "Es riecht nach Wald …", kuschel: "Es ist ganz weich …" }[id]}</span></button>`).join("");
+    $("eier").innerHTML = Object.entries(T.EIER).map(([id, e]) => `<button class="ei-wahl" data-ei="${id}"><svg viewBox="40 30 220 250">${T.zeichneEi(id)}</svg>${e.name}<span>${{ feuer: "Es ist ganz warm …", regenbogen: "Es glitzert bunt …", wald: "Es riecht nach Wald …", kuschel: "Es ist ganz weich …" }[id]}</span>${ruP(`${EIER_RU[id] || ""}: ${{ feuer: "оно совсем тёплое …", regenbogen: "оно переливается …", wald: "пахнет лесом …", kuschel: "оно совсем мягкое …" }[id] || ""}`, "small")}</button>`).join("");
     $("eier").querySelectorAll("[data-ei]").forEach(b => b.addEventListener("click", () => {
       S.ton("tipp");
       const e = T.EIER[b.dataset.ei];
       dialog(`<h2>${e.name}</h2><svg viewBox="40 30 220 250" style="width:160px">${T.zeichneEi(b.dataset.ei)}</svg>
-        <p>Möchtest du dieses Ei? Du kannst es danach nicht mehr tauschen.</p>
+        <p>Möchtest du dieses Ei? Du kannst es danach nicht mehr tauschen.</p>${ruP(`${EIER_RU[b.dataset.ei] || ""}: хочешь это яйцо? Потом поменять его будет нельзя.`)}
         <div class="dknoepfe"><button class="knopf haupt" id="ja">Ja, das will ich!</button><button class="knopf" id="nein">Lieber nochmal schauen</button></div>`);
       $("ja").onclick = () => { P.waehleEi(b.dataset.ei); zu(); S.ton("juhu"); zeichne(); };
       $("nein").onclick = () => { zu(); S.ton("tipp"); };
@@ -43,6 +61,8 @@
     $("waerme").innerHTML = [...Array(P.WAERME_ZIEL)].map((_, i) => `<span class="${i < d.waerme ? "an" : ""}">🔥</span>`).join("");
     $("ei-text").textContent = bereit ? (risse ? "Es knackt! Weiter tippen!" : "Das Ei ist ganz warm. Tippe darauf – es schlüpft!") : heuteGewaermt ? "Das Ei fühlt sich schon wärmer an." : "Tippe auf das Ei, um es zu wärmen!";
     $("ei-hilfe").textContent = bereit ? "" : "Jede geschaffte Tagesaufgabe wärmt das Ei. Einmal am Tag darfst du es auch selbst wärmen.";
+    setzeRu($("ei-text"), bereit ? (risse ? "Трещит! Нажимай дальше!" : "Яйцо совсем тёплое. Нажми на него – он вылупится!") : heuteGewaermt ? "Яйцо уже теплее." : "Нажми на яйцо, чтобы его согреть!");
+    setzeRu($("ei-hilfe"), bereit ? "" : "Каждое выполненное задание дня согревает яйцо. Один раз в день ты можешь согреть его и сам.");
   }
   $("ei-bild").addEventListener("click", () => {
     const d = P.lade();
@@ -62,7 +82,7 @@
     herzen($("tier-bild"), "✨", 10);
     const art = T.ARTEN[d.art];
     dialog(`<h2>Ein ${art.name}!</h2><svg viewBox="${VB}" style="width:200px">${T.zeichneTier({ art: d.art, farbe: d.farbe, stufe: 0, ausdruck: "lacht" })}</svg>
-      <p>Wie soll ${d.art === "einhorn" || d.art === "katze" ? "es" : "er"} heißen?</p>
+      ${ruP(`Это ${ARTEN_RU[d.art] || ""}!`)}<p>Wie soll ${d.art === "einhorn" || d.art === "katze" ? "es" : "er"} heißen?</p>${ruP("Как его назовём?")}
       <input id="name-feld" maxlength="16" autocomplete="off" value="">
       <div class="vorschlaege">${NAMEN[d.art].map(n => `<button data-n="${n}">${n}</button>`).join("")}</div>
       <div class="dknoepfe"><button class="knopf haupt" id="name-ok">Fertig</button></div>`);
@@ -84,7 +104,7 @@
     $("tier-bild").innerHTML = `<svg viewBox="${VB}">${T.zeichneTier({ art: d.art, farbe: d.farbe, stufe: st, ausdruck: ausdruck || ausdruckJetzt || P.ausdruck(d), zubehoer: d.traegt })}</svg>`;
     $("tier-name").textContent = d.name || art.name;
     $("tier-stufe").textContent = `${art.name}, ${T.stufenName(d.art, st)}`;
-    $("tier-text").textContent = P.stimmung(d);
+    $("tier-text").textContent = P.stimmung(d); setzeRu($("tier-text"), stimmungRu(d));
     const naechste = P.STUFE_AB[st + 1];
     const balken = (icon, name, w, farbe, unten) => `<div class="wert">${icon} ${name}<div class="balken"><span style="width:${Math.round(w)}%;background:${farbe}"></span></div>${unten ? `<small>${unten}</small>` : ""}</div>`;
     $("werte").innerHTML =
@@ -114,7 +134,7 @@
     setTimeout(() => {
       S.ton("juhu");
       dialog(`<h2>${d.name} ist gewachsen!</h2><svg viewBox="${VB}" style="width:220px">${T.zeichneTier({ art: d.art, farbe: d.farbe, stufe: st, ausdruck: "lacht", zubehoer: d.traegt })}</svg>
-        <p>Jetzt: <b>${T.stufenName(d.art, st)}</b>. Eure Freundschaft wird immer größer!</p><div class="dknoepfe"><button class="knopf haupt" id="ok">Juhu!</button></div>`);
+        <p>Jetzt: <b>${T.stufenName(d.art, st)}</b>. Eure Freundschaft wird immer größer!</p>${ruP(`${d.name} подрос! Ваша дружба становится всё крепче!`)}<div class="dknoepfe"><button class="knopf haupt" id="ok">Juhu!</button></div>`);
       $("ok").onclick = () => { zu(); zeichne(); };
       if (window.Charakter) Charakter.hinweis("🌱 Gewachsen!", `${d.name} ist gewachsen: ${T.stufenName(d.art, st)}.`, "#2FA37C");
     }, 900);

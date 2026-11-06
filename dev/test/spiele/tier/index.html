@@ -81,6 +81,8 @@
   .zb svg { width: 100%; height: 120px; }
   .zb.an { border-color: var(--beere); background: #FFEAF4; }
   .zb em { font-style: normal; font-size: .95rem; color: var(--pflaume-hell); }
+  /* Russisch (Hilfesprache, Entwurf) */
+  .ru { display: block; font-size: .82em; font-weight: 500; color: #5B4A7A; margin-top: 4px; line-height: 1.3; }
 </style>
 </head>
 <body>
@@ -91,14 +93,14 @@
 </div>
 
 <section class="ansicht mitte" id="wahl-ansicht" hidden>
-  <div class="blase">Such dir ein Ei aus! Wer wohnt da wohl drin?</div>
+  <div class="blase">Such dir ein Ei aus! Wer wohnt da wohl drin?<span class="ru" lang="ru" id="wahl-ru" hidden>Выбери себе яйцо! Кто же в нём живёт?</span></div>
   <div class="eier" id="eier"></div>
   <!-- (UX-Paket 5, 07.11.2026) Nest unter den Eiern – vorher blieb die halbe Seite leer -->
   <div class="nest" aria-hidden="true"><svg viewBox="0 0 600 170"><ellipse cx="300" cy="120" rx="290" ry="46" fill="#B8783F" stroke="#3B1F63" stroke-width="5"/>
     <ellipse cx="300" cy="104" rx="236" ry="30" fill="#E2B47E" stroke="#3B1F63" stroke-width="4"/>
     <g stroke="#8A5A34" stroke-width="5" stroke-linecap="round" fill="none"><path d="M40 118 q60 -30 130 -8"/><path d="M160 140 q80 -26 170 -4"/><path d="M330 142 q90 -30 200 -10"/><path d="M420 118 q70 -24 150 0"/><path d="M90 150 q50 -14 120 4"/></g>
     <g fill="#5DBB5A" stroke="#3B1F63" stroke-width="4"><ellipse cx="46" cy="156" rx="30" ry="12"/><ellipse cx="556" cy="158" rx="34" ry="12"/></g></svg>
-  <p>Das Nest ist schon gebaut. Dein Ei wartet nur noch auf dich.</p></div>
+  <p>Das Nest ist schon gebaut. Dein Ei wartet nur noch auf dich.</p><p class="ru" lang="ru" id="nest-ru" hidden>Гнездо уже готово. Твоё яйцо ждёт только тебя.</p></div>
 </section>
 
 <section class="ansicht mitte" id="ei-ansicht" hidden>
@@ -129,6 +131,7 @@
 <script src="../../shared/charakter.js"></script>
 <script src="../../shared/echtewelt.js"></script>
 <script src="../../shared/zeit.js" data-art="spielen"></script>
+<script src="../../shared/sprache.js"></script>
 <script src="../../shared/tiere.js"></script>
 <script src="../../shared/tierpflege.js"></script>
 <script src="tier.js"></script>
