@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Russisch prüfen</title>
+<meta name="theme-color" content="#F4F1EA">
+<link rel="icon" href="../../icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../shared/style.css">
+<style>
+  /* Prüfliste für eine Person mit Russisch als Muttersprache (10.11.2026): alle russischen Entwürfe der App (gesammelt von quellen/ru-sammeln.js),
+     nach Bereichen gruppiert; ✓ oder ✗ mit besserer Fassung; Ergebnis als Text an die Familie. Gespeichert nur in diesem Browser.
+     Online-Seite für Erwachsene (nicht im Offline-Paket der Kinder – die Textliste ist groß). */
+  body { background: #F4F1EA; background-image: none; padding: max(14px, env(safe-area-inset-top)) 16px 40px; max-width: 1000px; margin: 0 auto; overflow-wrap: anywhere; }
+  h1 { margin: 6px 0; font-size: 1.7rem; }
+  .klein { font-size: .95rem; opacity: .85; }
+  details.karte { background: #fff; border-radius: 18px; padding: 10px 16px; margin: 10px 0; box-shadow: 0 3px 0 rgba(0,0,0,.08); }
+  details.karte > summary { cursor: pointer; font-size: 1.15rem; font-weight: 700; min-height: 44px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .stand { font-size: .9rem; font-weight: 600; padding: 2px 10px; border-radius: 99px; background: #EEE; }
+  .stand.fertig { background: #D4F2DE; color: #1E6B3A; }
+  .wichtig { background: #FFE3E0; color: #9A2A1F; }
+  .eintrag { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; padding: 8px 0; border-top: 1px solid #EEE; }
+  .eintrag .ru { font-size: 1.12rem; font-weight: 600; }
+  .eintrag .de { font-size: .95rem; opacity: .8; }
+  .eintrag .wo { font-size: .75rem; opacity: .5; }
+  .wahl { display: flex; gap: 6px; }
+  .wahl button { min-height: 44px; min-width: 52px; padding: 0 12px; border-radius: 12px; border: 2px solid #CCC; background: #fff; font-size: 1.1rem; box-shadow: none; }
+  .wahl button.an.ok { background: #2FA37C; border-color: #2FA37C; color: #fff; }
+  .wahl button.an.nein { background: #E0574A; border-color: #E0574A; color: #fff; }
+  .eintrag input { grid-column: 1 / -1; min-height: 44px; font-size: 1.05rem; padding: 6px 10px; border-radius: 10px; border: 2px solid #E0574A; }
+  .eintrag input[hidden] { display: none; }
+  .mehr { margin: 8px 0 4px; }
+  .oben-leiste { position: sticky; top: 0; z-index: 2; background: #F4F1EA; padding: 8px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .oben-leiste .zahl { font-weight: 700; margin-right: auto; }
+  .oben-leiste input { min-height: 44px; font-size: 1rem; padding: 0 10px; border-radius: 12px; border: 2px solid #CCC; }
+  textarea { width: 100%; min-height: 240px; font: .95rem/1.4 ui-monospace, monospace; border-radius: 12px; padding: 10px; box-sizing: border-box; }
+</style>
+</head>
+<body>
+<p><a class="knopf" href="./">← Elternbereich</a></p>
+<h1>✍️ Russisch prüfen</h1>
+<p>Спасибо за помощь! / Danke für Ihre Hilfe! Alle russischen Texte der Lerninsel sind <b>Entwürfe</b> (ohne Muttersprachler geschrieben). Bitte prüfen Sie,
+  ob sie richtig und für Kinder von 5 bis 11 Jahren verständlich sind: <b>✓</b> = gut, <b>✗</b> = bitte bessere Fassung ins Feld schreiben.
+  Grau darunter steht der deutsche Text, zu dem die Übersetzung gehört. Unten entsteht ein Text für die Familie (kopieren oder „Teilen“).</p>
+<p class="klein">Die Haken werden nur in diesem Browser gespeichert. Beginnen Sie am besten mit den rot markierten Bereichen (Hilfe in schwierigen Lagen, Geschichten der Insel).
+  Platzhalter wie {0}, {name} oder ${…} bleiben stehen – dort setzt die App Zahlen oder Namen ein.</p>
+<div class="oben-leiste"><span class="zahl" id="zahl"></span><input id="suche" type="search" placeholder="Suchen (Deutsch oder Russisch)" aria-label="Suchen"><a class="knopf" href="#ergebnis">Zum Ergebnis ↓</a></div>
+<div id="liste"></div>
+<div class="karte" id="ergebnis" style="background:#fff;border-radius:18px;padding:14px 16px;margin:14px 0">
+  <h2>Ergebnis</h2>
+  <label class="klein">Ihr Name oder Kürzel (freiwillig) <input id="pruefer" style="min-height:44px;font-size:1rem;width:100%;box-sizing:border-box"></label>
+  <textarea id="text" readonly aria-label="Ergebnis"></textarea>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+    <button class="knopf haupt" id="kopieren">📋 Kopieren</button>
+    <button class="knopf" id="teilen" hidden>📤 Teilen</button>
+    <button class="knopf" id="leeren">Alle Haken löschen</button>
+  </div>
+</div>
+<script src="ru-texte.js"></script>
+<script>
+(function () {
+  const KEY = "lerninsel-russisch-pruefung", $ = (id) => document.getElementById(id), SEITE = 40;
+  let st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { st = {}; }
+  const sichern = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { } };
+  const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const T = (window.RU_TEXTE || []).map(([datei, zeile, k, ru, de]) => ({ datei, zeile, k, ru, de }));
+  // Bereiche in sinnvoller Reihenfolge; „wichtig“ = zuerst prüfen
+  const BEREICHE = [
+    ["hilfe", "🆘 Hilfe und Gefühle (Nummer gegen Kummer 116 111)", (d) => /gefuehle/.test(d), true],
+    ["insel", "🏝️ Geschichten und Orte der Insel", (d) => /szenen|szene\.js|insel-kern|garten|sticker|staerken|core\.js|tier|schach|robo|leuchtturm|wetter|rhythmus|angeln|baeckerei|tierstation|expedition|heft|anziehen|atelier|lieder/.test(d), true],
+    ["daz", "🗣️ Ankommen, Wortschatz, Lesen", (d) => /woerter|daz|lesen/.test(d)],
+    ["mathe", "🔢 Mathe (Fragen, Lösungshilfen, Erklärungen)", (d) => /mathe/.test(d)],
+    ["deutsch", "✏️ Deutsch (Werkstatt, Geschichten)", (d) => /deutsch/.test(d)],
+    ["su", "🔬 Sachunterricht", (d) => /sachkunde\/(themen|landkreise|sachkunde)/.test(d)],
+    ["faecher", "🎨 Weitere Fächer (Kunst, Musik, Werken, Sport, Ethik)", (d) => /faecher/.test(d)],
+    ["religion", "⛪ Religion", (d) => /religion/.test(d)],
+    ["englisch", "🇬🇧 Englisch (Hilfe-Zeilen)", (d) => /englisch/.test(d)],
+    ["sorbisch", "🏳️ Sorbisch (Hilfe-Zeilen)", (d) => /sorbisch/.test(d)],
+    ["medien", "📱 Medien, Vorschule, Echte Welt", (d) => true]
+  ];
+  const bereichVon = (d) => BEREICHE.find(b => b[2](d))[0];
+  const gruppen = BEREICHE.map(([id, name, , wichtig]) => ({ id, name, wichtig: !!wichtig, eintraege: T.filter(t => bereichVon(t.datei) === id) })).filter(g => g.eintraege.length);
+  const offen = {}, gezeigt = {};
+  let suche = "";
+  const passt = (e) => !suche || e.ru.toLowerCase().includes(suche) || e.de.toLowerCase().includes(suche);
+  function eintrag(e) {
+    const v = st[e.k] || {};
+    return `<div class="eintrag" data-k="${e.k}"><div><div class="ru" lang="ru">${esc(e.ru)}</div>${e.de ? `<div class="de">${esc(e.de)}</div>` : ""}<div class="wo">${esc(e.datei)}:${e.zeile}</div></div>
+      <div class="wahl"><button class="ok ${v.ok === true ? "an" : ""}" aria-label="richtig">✓</button><button class="nein ${v.ok === false ? "an" : ""}" aria-label="falsch">✗</button></div>
+      <input lang="ru" placeholder="Лучше так: …" aria-label="Bessere Fassung" value="${esc(v.neu || "")}" ${v.ok === false ? "" : "hidden"}></div>`;
+  }
+  function gruppeInhalt(g) {
+    const l = g.eintraege.filter(passt), n = Math.min(l.length, gezeigt[g.id] || SEITE);
+    return l.slice(0, n).map(eintrag).join("") + (n < l.length ? `<button class="knopf mehr" data-mehr="${g.id}">Weitere ${Math.min(SEITE, l.length - n)} von ${l.length - n} zeigen</button>` : "");
+  }
+  function zeichne() {
+    $("liste").innerHTML = gruppen.map(g => {
+      const l = g.eintraege.filter(passt), fertig = l.length && l.every(e => (st[e.k] || {}).ok === true), n = l.filter(e => st[e.k]).length;
+      return `<details class="karte" data-gruppe="${g.id}" ${offen[g.id] || suche ? "open" : ""}><summary>${esc(g.name)} <span class="stand ${fertig ? "fertig" : g.wichtig ? "wichtig" : ""}">${n}/${l.length}${fertig ? " ✓" : g.wichtig ? " · zuerst" : ""}</span></summary>
+        <div class="inhalt">${offen[g.id] || suche ? gruppeInhalt(g) : ""}</div></details>`;
+    }).join("");
+    text();
+  }
+  $("liste").addEventListener("toggle", (ev) => { const d = ev.target; if (!d.matches || !d.matches("details")) return; const g = gruppen.find(x => x.id === d.dataset.gruppe);
+    offen[g.id] = d.open; if (d.open && !d.querySelector(".eintrag")) d.querySelector(".inhalt").innerHTML = gruppeInhalt(g); }, true);
+  $("liste").addEventListener("click", (ev) => {
+    const m = ev.target.closest("[data-mehr]"); if (m) { const g = gruppen.find(x => x.id === m.dataset.mehr); gezeigt[g.id] = (gezeigt[g.id] || SEITE) + SEITE; m.closest(".inhalt").innerHTML = gruppeInhalt(g); return; }
+    const b = ev.target.closest(".wahl button"); if (!b) return;
+    const d = b.closest(".eintrag"), k = d.dataset.k;
+    if (b.classList.contains("ok")) st[k] = { ok: true }; else st[k] = { ok: false, neu: (st[k] || {}).neu || "" };
+    sichern();
+    d.querySelector(".ok").classList.toggle("an", st[k].ok === true); d.querySelector(".nein").classList.toggle("an", st[k].ok === false);
+    const inp = d.querySelector("input"); inp.hidden = st[k].ok !== false; if (!inp.hidden) inp.focus();
+    stand(); text();
+  });
+  $("liste").addEventListener("input", (ev) => { const i = ev.target; if (!i.matches(".eintrag input")) return; const k = i.closest(".eintrag").dataset.k; st[k] = { ok: false, neu: i.value }; sichern(); text(); });
+  function stand() { document.querySelectorAll("details.karte").forEach(d => { const g = gruppen.find(x => x.id === d.dataset.gruppe), l = g.eintraege.filter(passt), s = d.querySelector(".stand"),
+    fertig = l.length && l.every(e => (st[e.k] || {}).ok === true); s.textContent = `${l.filter(e => st[e.k]).length}/${l.length}${fertig ? " ✓" : g.wichtig ? " · zuerst" : ""}`; s.className = "stand " + (fertig ? "fertig" : g.wichtig ? "wichtig" : ""); }); }
+  function text() {
+    const alle = T.length, geprueft = T.filter(e => st[e.k]).length, ok = T.filter(e => (st[e.k] || {}).ok === true), fehler = T.filter(e => (st[e.k] || {}).ok === false);
+    $("zahl").textContent = `${geprueft} von ${alle} geprüft`;
+    $("text").value = `Lerninsel – Prüfung Russisch\nGeprüft von: ${st._pruefer || "(ohne Angabe)"}\nStand: ${new Date().toLocaleDateString("de-DE")}\nGeprüft: ${geprueft} von ${alle} Texten\n\n` +
+      gruppen.map(g => `${g.name}: ${g.eintraege.filter(e => st[e.k]).length}/${g.eintraege.length}`).join("\n") +
+      `\n\nKorrekturen (${fehler.length}):\n${fehler.map(e => `- [${e.datei}:${e.zeile}] „${e.ru}“ → „${(st[e.k] || {}).neu || "?"}“${e.de ? ` (Deutsch: ${e.de})` : ""}`).join("\n") || "- keine"}\n\n` +
+      `Als richtig bestätigt (Schlüssel): ${ok.map(e => e.k).join(" ") || "-"}\n`;
+  }
+  let sucheT = null;
+  $("suche").addEventListener("input", (e) => { clearTimeout(sucheT); sucheT = setTimeout(() => { suche = e.target.value.trim().toLowerCase(); zeichne(); }, 250); });
+  $("pruefer").value = st._pruefer || "";
+  $("pruefer").addEventListener("input", (e) => { st._pruefer = e.target.value; sichern(); text(); });
+  $("kopieren").addEventListener("click", async () => { $("text").select(); try { await navigator.clipboard.writeText($("text").value); } catch (e) { document.execCommand("copy"); } $("kopieren").textContent = "✓ Kopiert"; });
+  if (navigator.share) { $("teilen").hidden = false; $("teilen").addEventListener("click", () => navigator.share({ title: "Prüfung Russisch", text: $("text").value }).catch(() => { })); }
+  $("leeren").addEventListener("click", () => { if (confirm("Wirklich alle Haken und Korrekturen löschen?")) { st = {}; sichern(); $("pruefer").value = ""; zeichne(); } });
+  zeichne();
+  window.__ruPruefen = { gruppen: () => gruppen.map(g => ({ id: g.id, n: g.eintraege.length })), text: () => $("text").value, anzahl: () => T.length };
+})();
+</script>
+</body>
+</html>

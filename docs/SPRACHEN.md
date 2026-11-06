@@ -116,6 +116,7 @@ Danach ist das Kind im normalen Deutsch-Pfad; DaZ-Hilfen bleiben auf Wunsch.
    in `shared/core.js`); sie bleiben im Status `entwurf` (gestrichelt markiert) und werden später geprüft. Alle anderen Sprachen erst nach Prüfung bzw. nur in /dev.
 3. Eine Sprache wird im Elternbereich wählbar (`fertig: true` in `shared/core.js`), wenn **Tutorial, Story-Prolog, Wortschatz D0 und
    alle Oberflächentexte** geprüft sind. Fächer können nachziehen; der Elternbereich zeigt „Hilfe in Mathe: 80 %“.
+   **Prüfliste Russisch (10.11.2026):** alle russischen Texte auf einer Seite – Elternbereich → „Kind und Einstellungen“ → „✍️ Russisch prüfen lassen“ (nur mit Hilfesprache Russisch) bzw. `spiele/eltern/russisch-pruefen.html`; gesammelt von `quellen/ru-sammeln.js`.
    **Neue russische Entwürfe (10.11.2026, Status `entwurf`, noch zu prüfen):** Gefühle und Bewegung (Brunis Antworten, Hilfe-Karte mit 116 111 – *bei der Prüfung
    besonders wichtig*, Ruhe-Übungen, Bewegungs-Minute, Antworten und Fragen der Geschichten in `spiele/gefuehle/gefuehle.js`), Mein Tier (Ei-Auswahl, Ei-Texte,
    Stimmung, Dialoge in `spiele/tier/tier.js`), Übergang 5 „Brüche am Zahlenstrahl“/„Schätzen“ (`spiele/mathe/hilfe-ru-fragen.js`), Forscherlager Stufe d (`spiele/expedition/expedition.js`). Außerdem (Tabellen in den Seiten-Skripten, `Sprache.ruDazu`): Schach (`spiele/schach/schach.js`), Robo (`spiele/robo/robo.js`), Mein Heft, Lesen und Schreiben (nur Anleitungen), Kleiderschrank (Kauf-Dialog).

@@ -8,7 +8,7 @@ const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
 const liste = [...sw.match(/const START = \[([\s\S]*?)\];/)[1].matchAll(/"([^"]+)"/g)].map(m => m[1]);
 const AUSSER = new Set(["dev", "quellen", "docs", "tests", ".git", ".github", ".claude", "node_modules"]);
 // Absichtlich nicht offline: Probeszene (nur zum Vergleichen der Grafikstile), Prüfseiten für Übersetzungen
-const NICHT_OFFLINE = new Set(["spiele/welt3d/probe.html", "spiele/welt3d/probe.js"]);
+const NICHT_OFFLINE = new Set(["spiele/welt3d/probe.html", "spiele/welt3d/probe.js", "spiele/eltern/russisch-pruefen.html", "spiele/eltern/ru-texte.js"]);   // Prüfliste Russisch: online-Seite für Erwachsene (1,4 MB Textliste)
 function alle(d, aus = []) {
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
     if (d === root && AUSSER.has(e.name)) continue;
@@ -51,5 +51,9 @@ pruefe("Kein Regex-Lookbehind (?<= / (?<! in ausgelieferten JS-Dateien (Safari <
     fs.readFileSync(path.join(root, e), "utf8").split("\n").forEach((z, i) => { if (/\(\?<[=!]/.test(z)) treffer.push(`${e}:${i + 1}`); });
   }
   assert.deepStrictEqual(treffer, [], "Lookbehind in: " + treffer.join(", "));
+});
+pruefe("Prüfliste Russisch: spiele/eltern/ru-texte.js ist aktuell (node quellen/ru-sammeln.js)", () => {
+  const r = require("child_process").spawnSync(process.execPath, [path.join(root, "quellen/ru-sammeln.js"), "--pruefen"], { encoding: "utf8" });
+  assert.strictEqual(r.status, 0, (r.stderr || r.stdout).trim());
 });
 console.log(`✅ Offline-Liste: ${n} Prüfungen bestanden (${liste.length} Einträge).`);
