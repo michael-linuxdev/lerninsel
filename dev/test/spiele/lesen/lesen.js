@@ -594,6 +594,28 @@
     sprich(lauf.richtig >= lauf.ziele.length - 2 ? "Super gemacht!" : "Gut gemacht!");
   }
 
+  // ---------- Russisch (Entwurf 10.11.2026, nur mit Hilfesprache): Anleitungen und Rückmeldungen, nie die Lerninhalte selbst
+  // (Buchstaben, Wörter, Lesetexte bleiben deutsch – sie werden ja geübt). Vorlesbar über shared/sprache.js. ----------
+  if (SP && SP.ruDazu) {
+    const LOB_RU = { "Richtig!": "Правильно!", "Super!": "Супер!", "Genau!": "Точно!", "Toll!": "Отлично!", "Prima!": "Прекрасно!" };
+    const START = [["Hör genau hin! Welche Wörter fangen gleich an? Fang mit „Gleicher Anfang“ an.", "Слушай внимательно! Какие слова начинаются одинаково? Начни с «Одинакового начала» (Gleicher Anfang)."],
+      ["Jedes Wort fängt mit einem Laut an. Hör genau hin und finde den Buchstaben!", "Каждое слово начинается со звука. Слушай внимательно и найди букву!"]];
+    SP.ruDazu([
+      ...START, ...START.map(([de, ru]) => [de + " Heute passt gut: „{w}“.", ru + " Сегодня хорошо подойдёт: «{w0}»."]),
+      ["Du kennst schon 3 von 28 Buchstaben und Lauten.", "Ты уже знаешь {0} из {1} букв и звуков."],
+      ["Womit fängt {w} an?", "С чего начинается слово «{w0}»?"], ["Was fängt genauso an wie {w}?", "Что начинается так же, как «{w0}»?"],
+      ["Welches Bild fängt mit {w} an?", "Какая картинка начинается на {w0}?"], ["Lies das Wort. Welches Bild passt?", "Прочитай слово. Какая картинка подходит?"],
+      ["{w} fängt mit {w} an. Hör nochmal hin.", "«{w0}» начинается на {w1}. Послушай ещё раз."], ["Hör nochmal hin.", "Послушай ещё раз."],
+      ["Lies nochmal Silbe für Silbe.", "Прочитай ещё раз по слогам."], ["Lies nochmal im Text nach.", "Посмотри ещё раз в тексте."],
+      ["Nomen schreibt man am Anfang groß!", "Существительные пишут с большой буквы!"], ["Hör nochmal genau hin.", "Послушай ещё раз внимательно."],
+      ["3 von 10 gleich beim ersten Mal richtig.", "{0} из {1} правильно с первого раза."], ["3 von 10 Wörtern ohne Fehler gelegt.", "{0} из {1} слов собрано без ошибок."],
+      ["Du hast 6 Buchstaben geschrieben: {w}", "Ты написал букв: {0}."],
+      ["Du hast deinen Namen geschrieben: {w}. Schreib ihn auch mal mit einem Stift auf ein Blatt!", "Ты написал своё имя: {w0}. Напиши его ещё и карандашом на листе!"],
+      ...Object.entries(LOB_RU).flatMap(([de, ru]) => [[`${de} Das ist dein Name: {w}.`, `${ru} Это твоё имя: {w0}.`], [`${de} Das ist {w}.`, `${ru} Это {w0}.`],
+        [`${de} Ein schön verbundenes Wort!`, `${ru} Красиво связанное слово!`], [`${de} {w} wie {w}.`, `${ru} {w0} – как в слове «{w1}».`], [de, ru]])
+    ]);
+    SP.ruBeobachte("#start-blase, #stand, #frage > span:not(.vorlage), #frage > div > div:last-child, #rueck, #text-rueck, #spuren-rueck, #legen-rueck, .runde-ende > p");
+  }
   window.__lesen = {
     ansicht: () => ansicht, runde, antworte, tafel, detail,
     richtigIndex: () => lauf ? lauf.richtig_i : -1, aufgabeNr: () => lauf ? lauf.i : -1, anzahl: () => lauf ? lauf.ziele.length : 0,

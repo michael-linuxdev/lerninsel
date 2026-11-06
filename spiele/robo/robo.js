@@ -137,5 +137,26 @@
   if (window.Figuren && Figuren.robo) $("robo-klein").outerHTML = `<div class="robo">${Figuren.robo("")}</div>`;
 
   zeigeListe();
+  // ---------- Russisch (Entwurf 10.11.2026, nur mit Hilfesprache; vorlesbar über shared/sprache.js) ----------
+  if (SP && SP.ruDazu) {
+    const LV_RU = ["Доведи Робо до звезды! Он смотрит вверх.", "Робо смотрит вправо. Сколько раз ему нужно идти вперёд?", "Теперь Робо нужно ещё и поворачивать. Поворот не сдвигает его с места!",
+      "Длинный путь в угол.", "На пути камень. Объезжай вокруг!", "Два камня – найди путь.", "Вдоль и поперёк между камнями.", "Робо смотрит влево. Следи за его направлением!",
+      "Новое: цикл! Он повторяет команды. Справишься всего с 2 блоками?", "До самого верха – всего с 2 блоками.", "Лестница! Что всё время повторяется? Не больше 5 блоков.",
+      "Вверх, вбок, вниз – используй циклы. Не больше 9 блоков.", "Объедь один раз квадрат вокруг середины и вернись на старт. Не больше 6 блоков."];
+    SP.ruDazu([
+      ...LEVELS.map((l, i) => [l.text, LV_RU[i]]),
+      ["Hallo! Ich bin Robo Pixel. Ich mache genau, was du programmierst. Hilfst du mir zum Stern?", "Привет! Я Робо Пиксель. Я делаю ровно то, что ты запрограммируешь. Поможешь мне добраться до звезды?"],
+      ["Super, du hast schon 3 von 13 Aufgaben gelöst!", "Супер, ты уже решил {0} из {1} заданий!"],
+      ["Programmieren heißt: Befehle in die richtige Reihenfolge bringen. Ein Roboter macht genau das, was im Programm steht – nicht mehr und nicht weniger.", "Программировать – значит ставить команды в правильном порядке. Робот делает ровно то, что написано в программе, – не больше и не меньше."],
+      ["Jetzt die Befehle für die Schleife tippen, dann „] zu“.", "Теперь нажми команды для цикла, потом «] закрыть»."],
+      ["Zu viele Bausteine: 7. Schaffst du es mit höchstens 5? Tipp: Was wiederholt sich?", "Слишком много блоков: {0}. Справишься не больше чем с {1}? Подсказка: что повторяется?"],
+      ["Geschafft! Robo ist am Ziel.", "Получилось! Робо у цели."], ["Alle Aufgaben gelöst – du kannst programmieren!", "Все задания решены – ты умеешь программировать!"],
+      ["Autsch, ein Stein! Der rot markierte Befehl passt nicht – ändere das Programm ab dort.", "Ой, камень! Команда, отмеченная красным, не подходит – измени программу с этого места."],
+      ["Halt, da ist der Rand! Der rot markierte Befehl passt nicht.", "Стоп, там край! Команда, отмеченная красным, не подходит."],
+      ["Robo ist nicht wieder am Start angekommen. Schau, wo er steht, und ändere das Programm.", "Робо не вернулся на старт. Посмотри, где он стоит, и измени программу."],
+      ["Robo ist nicht beim Stern. Schau, wo er steht, und ändere das Programm.", "Робо не у звезды. Посмотри, где он стоит, и измени программу."]
+    ]);
+    SP.ruBeobachte("#intro, #auftrag, #meldung, .blatt > p.klein");
+  }
   window.__robo = { LEVELS, parse, simuliere, starte, tippe, schleife, zu: () => { offen = null; zeichneProgramm(); }, start, programm: () => prog, daten };
 })();

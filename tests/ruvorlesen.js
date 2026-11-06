@@ -87,6 +87,32 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     if (await p.isVisible("#wahl-ansicht")) { erwarte(await p.isVisible("#wahl-ru") && await p.isVisible("#nest-ru"), "Mein Tier: Ei-Auswahl auf Russisch"); await tippeRu(p, "Mein Tier", "#wahl-ansicht .ru-hoerbar"); }
     else erwarte(await p.evaluate(() => !!document.querySelector(".ru-zeile")), "Mein Tier: Sprechblase auf Russisch");
     if (BILDER) await p.screenshot({ path: `${BILDER}/ruvorlesen-tier.png` });
+    // Tabellen-Übersetzer (10.11.2026): Schach, Robo, Mein Heft, Lesen und Schreiben, Kleiderschrank
+    for (const [pfad, wo, sel, muster] of [["spiele/schach/", "Schach (Tilda)", "#tilda-text .ru-auto", /Тильда/], ["spiele/robo/", "Robo programmieren", "#intro .ru-auto", /Робо/],
+      ["spiele/heft/", "Mein Heft", ".leer .ru-auto", /тетрадь/], ["spiele/lesen/", "Lesen und Schreiben", "#start-blase .ru-auto", /букв/]]) {
+      await seite(p, pfad);
+      const t = await p.evaluate((sel) => (document.querySelector(sel) || {}).textContent || "", sel);
+      erwarte(muster.test(t), `${wo}: russische Zeile aus der Tabelle (${t.slice(0, 50)})`);
+      await tippeRu(p, wo, sel);
+    }
+    // Schach: Lektion starten – Erklärtext und Tildas Satz mit Name übersetzt; Tipp mit Schachfeldern
+    await seite(p, "spiele/schach/"); await p.evaluate(() => document.querySelector("#lektionen button").click()); await p.waitForTimeout(400);
+    erwarte(/Ладья ходит прямо/.test(await p.textContent("#tilda-text .ru-auto")), "Schach: Lektion „Der Turm“ auf Russisch");
+    // Lesen: „Gleicher Anfang“ – Frage mit deutschem Lernwort in der russischen Zeile
+    await seite(p, "spiele/lesen/"); await p.click("#weg-gleich"); await p.waitForTimeout(400);
+    const lf = await p.evaluate(() => ({ de: document.querySelector("#frage b") && document.querySelector("#frage b").textContent, ru: (document.querySelector("#frage .ru-auto") || {}).textContent || "" }));
+    erwarte(lf.de && lf.ru.includes(`«${lf.de}»`) && /начинается/.test(lf.ru), `Lesen: Frage auf Russisch, das Lernwort bleibt deutsch (${lf.ru})`);
+    if (BILDER) await p.screenshot({ path: `${BILDER}/ruvorlesen-lesen.png` });
+    // Kleiderschrank: Kauf-Dialog
+    await seite(p, "spiele/anziehen/");
+    let kauf = false;
+    for (let r = 0; r < 12 && !kauf; r++) {
+      kauf = await p.evaluate(() => { const b = [...document.querySelectorAll("#teile .teil.zu")].find(x => /🔒/.test(x.textContent)); if (b) b.click(); return !!b; });
+      if (!kauf) { const n = await p.evaluate((r) => { const t = document.querySelectorAll("#reiter button, #reiter [role=tab]"); if (t[r + 1]) { t[r + 1].click(); return true; } return false; }, r); if (!n) break; await p.waitForTimeout(150); }
+    }
+    await p.waitForTimeout(300);
+    if (kauf && await p.isVisible("#kauf")) erwarte(/звёзд/.test(await p.evaluate(() => (document.querySelector("#kauf-text .ru-auto") || {}).textContent || "")), "Kleiderschrank: Kauf-Dialog auf Russisch");
+    else fehler.push("Kleiderschrank: kein gesperrtes Teil gefunden, Kauf-Dialog nicht geprüft");
     // Forscherlager-Tagebuch: russischer Text in Fund-Knöpfen bleibt Teil des Knopfs (Antippen wählt den Fund)
     await seite(p, "spiele/expedition/#tagebuch");
     const imKnopf = await p.evaluate(() => [...document.querySelectorAll("#funde .ru")].every(e => !e.classList.contains("ru-hoerbar")) && document.querySelectorAll("#funde .ru").length > 0);

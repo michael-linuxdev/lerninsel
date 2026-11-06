@@ -262,6 +262,15 @@
     aenderung();
   });
 
+  // Russisch (Entwurf 10.11.2026, nur mit Hilfesprache): der Kauf-Dialog, vorlesbar über shared/sprache.js
+  if (window.Sprache && Sprache.ruDazu) {
+    Sprache.ruDazu([
+      ["Das kostet 5 ⭐. Du hast 3 ⭐. Dir fehlen noch 2 Sterne. Sterne gibt es in Mathe, im Abenteuer, im Tablet-Führerschein und in der 3D-Welt.", "Это стоит {0} звёзд. У тебя {1}. Не хватает ещё {2}. Звёзды можно получить в математике, в приключении, в «правах на планшет» и в 3D-мире."],
+      ["Das kostet 5 ⭐. Du hast 4 ⭐. Dir fehlen noch 1 Stern. Sterne gibt es in Mathe, im Abenteuer, im Tablet-Führerschein und in der 3D-Welt.", "Это стоит {0} звёзд. У тебя {1}. Не хватает ещё {2}. Звёзды можно получить в математике, в приключении, в «правах на планшет» и в 3D-мире."],
+      ["Möchtest du 3 ⭐ ausgeben, um es freizuschalten? Du hast 9 ⭐, danach noch 6 ⭐.", "Хочешь потратить {0} звёзд, чтобы открыть это? У тебя {1}, потом останется {2}."]
+    ]);
+    Sprache.ruBeobachte("#kauf-text");
+  }
   const zk = document.getElementById("zurueck");
   if (zk) { zk.disabled = true; zk.addEventListener("click", () => { if (!verlauf.length) return; zustand = JSON.parse(verlauf.pop()); aktivesExtra = null; aenderung(true); }); }
   // 🔊 sagt, welches Fach offen ist und was gerade an ist (nur auf Knopfdruck)

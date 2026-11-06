@@ -114,5 +114,59 @@
     document.addEventListener("keydown", (e) => { const el = document.activeElement; if ((e.key === "Enter" || e.key === " ") && el && el.classList && el.classList.contains("ru-hoerbar")) { e.preventDefault(); ruSprich(el); } });
   }
   Sprache.ruMarkiere = ruMarkiere;
+
+  // Russische Zeilen per Tabelle (10.11.2026): Seiten melden Satzpaare an (Sprache.ruDazu([[de, ru], …])) und nennen die Elemente, unter deren
+  // deutschem Text die russische Zeile stehen soll (Sprache.ruBeobachte(".blase p, #meldung")). Ändert sich der deutsche Text, sucht die Tabelle den
+  // Satz: Der Name des Kindes wird zu {name}, Schachfelder (e2) zu {f0}, {f1} …, Zahlen zu {0}, {1} …; Emojis und Begleiter-Zeichen zählen nicht.
+  // Die Zeile hängt als <span class="ru ru-auto" lang="ru"> im Element (Block, antippbar zum Vorlesen). Unbekannte Sätze bekommen keine Zeile.
+  // Nur mit Hilfesprache Russisch; alle Einträge sind Entwürfe (Russisch steht in Spielwelt.ENTWURF_FREI).
+  const RU_TAB = new Map();
+  const PIKTO = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}️‍-←-⇿⌀-⏿■-◿♔-♟]/gu;
+  function ruZerlege(text, mitPlatzhalter) {
+    let t = String(text || "").replace(PIKTO, " ").replace(/([.!?])(?=[A-Za-zÄÖÜäöüß])/g, "$1 ").replace(/\s+/g, " ").trim();
+    const name = (window.Spielwelt && window.Spielwelt.profil && window.Spielwelt.profil.name) || "";
+    if (!mitPlatzhalter && name.length >= 2) t = t.split(name).join("{name}");
+    const felder = [], zahlen = [];
+    t = t.replace(/\b[a-h][1-8]\b/g, (f) => { felder.push(f); return "{f}"; });
+    t = t.replace(/\d+(?:[.,]\d+)?/g, (z) => { zahlen.push(z); return "{n}"; });
+    if (mitPlatzhalter) t = t.replace(/\{\d+\}/g, "{n}").replace(/\{f\d+\}/g, "{f}");
+    return { key: t.replace(/\s+([.,!?;:…])/g, "$1"), felder, zahlen };
+  }
+  // {w} im deutschen Satz = beliebiges Wort/Textstück, das deutsch bleibt (z. B. das Lernwort); im Russischen {w0}, {w1} …
+  const RU_MUSTER = [];
+  const reEsc = (t) => t.replace(/[.*+?^$()|[\]\\]/g, "\\$&");
+  Sprache.ruDazu = (paare) => { (paare || []).forEach(([de, ru]) => { if (!de || !ru) return; const k = ruZerlege(de, true).key;
+    if (k.includes("{w}")) RU_MUSTER.push([new RegExp("^" + k.split("{w}").map(t => reEsc(t).replace(/\\\{/g, "{").replace(/\\\}/g, "}")).join("(.+?)") + "$"), ru]); else RU_TAB.set(k, ru); }); };
+  Sprache.ruVon = (de) => {
+    const z = ruZerlege(de); let ru = RU_TAB.get(z.key);
+    if (!ru) { for (const [re, r] of RU_MUSTER) { const m = re.exec(z.key); if (m) { const w = m.slice(1).map(x => x.replace(/\{name\}/g, "%NAME%")); ru = r.replace(/\{w(\d+)\}/g, (_, i) => w[+i] || ""); break; } } }
+    if (!ru) return "";
+    const name = (window.Spielwelt && window.Spielwelt.profil && window.Spielwelt.profil.name) || "";
+    // Platzhalter im gefundenen deutschen Stück ({n}, {f}) wieder füllen, dann die russischen Platzhalter
+    let zi = 0, fi = 0;
+    const zurueck = (t) => t.replace(/%NAME%/g, name).replace(/\{f\}/g, () => z.felder[fi++] || "").replace(/\{n\}/g, () => z.zahlen[zi++] || "");
+    if (ru.includes("%NAME%") || /\{[nf]\}/.test(ru)) ru = zurueck(ru);
+    return ru.replace(/\{name\}/g, name).replace(/\{f(\d+)\}/g, (_, i) => z.felder[+i] || "").replace(/\{(\d+)\}/g, (_, i) => z.zahlen[+i] || "");
+  };
+  const ruDe = (el) => { let t = ""; el.childNodes.forEach(n => { if (!(n.nodeType === 1 && (n.classList.contains("ru-auto") || n.matches("button, a, input, select, textarea")))) t += n.textContent; }); return t; };
+  function ruZeile(el) {
+    const de = ruDe(el); if (el.dataset.ruDe === de) return; el.dataset.ruDe = de;
+    let n = el.querySelector(":scope > .ru-auto"); const ru = Sprache.ruVon(de);
+    if (!ru) { if (n) n.remove(); return; }
+    if (!n) { n = document.createElement("span"); n.className = "ru ru-auto"; n.lang = "ru"; n.dataset.emoji = "aus"; el.appendChild(n); }
+    if (n.textContent !== ru) n.textContent = ru;
+  }
+  Sprache.ruBeobachte = (wahl) => {
+    const los = () => {
+      if (!hilfeRu() || !document.body) return;
+      if (!document.getElementById("ru-auto-stil")) { const st = document.createElement("style"); st.id = "ru-auto-stil";
+        st.textContent = ".ru-auto { display: block; font-size: .82em; font-weight: 500; color: #5B4A7A; margin-top: 4px; line-height: 1.3; text-align: inherit; }"; document.head.appendChild(st); }
+      const lauf = () => { geplant = false; document.querySelectorAll(wahl).forEach(ruZeile); };
+      let geplant = false;
+      new MutationObserver(() => { if (!geplant) { geplant = true; (window.requestAnimationFrame || setTimeout)(lauf); } }).observe(document.body, { childList: true, subtree: true, characterData: true });
+      lauf();
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", los); else los();
+  };
   if (typeof document !== "undefined") { if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ruStart); else setTimeout(ruStart, 0); }
 })();

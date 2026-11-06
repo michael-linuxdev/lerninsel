@@ -182,5 +182,42 @@
   $("zu-zweit").addEventListener("click", () => { S.ton("tipp"); starteZwei(); });
   $("rennen").addEventListener("click", () => { S.ton("tipp"); starteRennen(); });
   auswahl();
+  // ---------- Russisch (Entwurf 10.11.2026, nur mit Hilfesprache): Tildas Sätze und die Erklärtexte, vorlesbar über shared/sprache.js ----------
+  if (SP && SP.ruDazu) {
+    const FIG_RU = { turm: ["Турм", "ладья"], laeufer: ["Лойфер", "слон"], dame: ["Даме", "ферзь"], koenig: ["Кёниг", "король"], springer: ["Шпрингер", "конь"], bauer: ["Бауэр", "пешка"] };
+    const L_RU = { turm: "Ладья ходит прямо: вверх, вниз, влево и вправо – так далеко, как хочет. Собери все звёзды!",
+      laeufer: "Слон ходит наискосок – всегда по полям своего цвета. Собери все звёзды!", dame: "Ферзь – самая сильная фигура: он ходит и прямо, И наискосок.",
+      koenig: "Король делает только один шаг – в любую сторону. Он медленный, но важный!", springer: "Конь прыгает буквой Г: два поля прямо и одно в сторону. Он может перепрыгивать через другие фигуры!",
+      bauer: "Пешка ходит прямо – в начале можно на два поля. Бить можно только наискосок вперёд. В конце она превращается в ферзя!" };
+    const R_RU = ["Чёрный король заперт за своими пешками …", "Ферзь может ходить далеко. Куда?", "У ладьи свободный путь.", "Твой король помогает ферзю.",
+      "Король не может уйти – хитрость с конём!", "Две ладьи работают вместе.", "Последнее слово за конём.", "Где у чёрных слабое место? Посмотри на f7!", "Слон следит – ладья бьёт."];
+    SP.ruDazu([
+      ["Hallo {name}! Ich bin Tilda, die Schach-Schildkröte. Langsam und klug gewinnt! Was möchtest du machen?", "Привет, {name}! Я Тильда, черепаха-шахматистка. Медленно и умно – и побеждаешь! Что ты хочешь делать?"],
+      ["Hallo du! Ich bin Tilda, die Schach-Schildkröte. Langsam und klug gewinnt! Was möchtest du machen?", "Привет! Я Тильда, черепаха-шахматистка. Медленно и умно – и побеждаешь! Что ты хочешь делать?"],
+      ["Achtung, dein König steht im Schach! Schütze ihn.", "Внимание, твоему королю шах! Защити его."], ["Schach! Gut gemacht.", "Шах! Молодец."],
+      ["Weiß ist am Zug.", "Ход белых."], ["Schwarz ist am Zug.", "Ход чёрных."], ["Du bist dran – tippe auf eine weiße Figur.", "Твой ход – нажми на белую фигуру."],
+      ["Tilda denkt nach …", "Тильда думает …"], ["Tilda überlegt …", "Тильда размышляет …"],
+      ["Schachmatt! Weiß gewinnt!", "Мат! Белые выиграли!"], ["Schachmatt! Schwarz gewinnt!", "Мат! Чёрные выиграли!"], ["Schachmatt! Du hast gewonnen!", "Мат! Ты выиграл!"],
+      ["Schachmatt – diesmal hat Tilda gewonnen. Verlieren gehört dazu – nochmal?", "Мат – на этот раз выиграла Тильда. Проигрывать – тоже часть игры. Ещё раз?"],
+      ["Patt – unentschieden! Der König kann nicht ziehen, steht aber nicht im Schach.", "Пат – ничья! Король не может ходить, но шаха нет."],
+      ["Unentschieden – nur noch die Könige sind übrig.", "Ничья – остались только короли."],
+      ["Du bist dran! Bauern ziehen geradeaus und schlagen schräg.", "Твой ход! Пешки ходят прямо, а бьют наискосок."],
+      ["Geschafft! Dein Bauer ist angekommen – dafür gibt es einen Stern.", "Получилось! Твоя пешка дошла – за это звезда."], ["Geschafft! Dein Bauer ist angekommen!", "Получилось! Твоя пешка дошла!"],
+      ["Diesmal war Tilda schneller. Langsam und klug – nochmal?", "На этот раз Тильда была быстрее. Медленно и умно – ещё раз?"],
+      ["Bring einen Bauern ans andere Ende! Bauern ziehen geradeaus – am Anfang auch zwei Felder – und schlagen schräg.", "Доведи пешку до другого края! Пешки ходят прямо – в начале можно на два поля – и бьют наискосок."],
+      ["Wie wäre es mit e2 nach e4? Tippe auf das grüne Feld.", "Как насчёт хода {f0} – {f1}? Нажми на зелёное поле."],
+      ["Schachmatt! Toll gesehen!", "Мат! Отлично увидел!"], ["Das ist noch kein Matt. Schau nochmal genau – ich stelle zurück.", "Это ещё не мат. Посмотри внимательно – я верну ход."],
+      ["Du spielst Weiß und fängst an. Tippe auf eine Figur, dann auf ein grünes Feld.", "Ты играешь белыми и начинаешь. Нажми на фигуру, потом на зелёное поле."],
+      ["Weiß fängt an. Danach seid ihr abwechselnd dran.", "Белые начинают. Потом ходите по очереди."],
+      ["Jede Figur zieht anders. Sammle mit ihr alle Sterne!", "Каждая фигура ходит по-своему. Собери ею все звёзды!"],
+      ["Weiß zieht – und der schwarze König kann nicht mehr entkommen.", "Белые ходят – и чёрный король уже не может убежать."],
+      ["Für den Anfang: nur Bauern. Wer zuerst einen Bauern ans andere Ende bringt, gewinnt!", "Для начала – только пешки. Кто первым доведёт пешку до другого края, тот выиграл!"],
+      ["Einfache Regeln für den Anfang: ohne Rochade und „en passant“, ein Bauer am Ende wird zur Dame.", "Простые правила для начала: без рокировки и взятия на проходе, пешка в конце становится ферзём."],
+      ...LEKTIONEN.map(l => [l.text, L_RU[l.id]]),
+      ...LEKTIONEN.map(l => [`Super! Alle Sterne gesammelt. Jetzt weißt du, wie ${l.name.replace("Der ", "der ").replace("Die ", "die ")} zieht!`, `Супер! Все звёзды собраны. Теперь ты знаешь, как ходит ${FIG_RU[l.id][1]}!`]),
+      ...RAETSEL.map(([, t], i) => [`Weiß zieht und setzt matt! ${t}`, `Белые ходят и ставят мат! ${R_RU[i]}`])
+    ]);
+    SP.ruBeobachte("#tilda-text, .klein-t");
+  }
   window.__schach = { starteLektion: (i) => starteLektion(LEKTIONEN[i]), starteRaetsel, starteKi, starteRennen, zug, stellung: (t) => { b = R.aufstellen(t); zeichne(); }, get brett() { return b; }, LEKTIONEN, RAETSEL };
 })();

@@ -38,6 +38,15 @@
   }
   $("r-text").addEventListener("click", () => { art = "text"; S.ton("tipp"); if (SP) SP.stopp(); zeichne(); });
   $("r-ton").addEventListener("click", () => { art = "ton"; S.ton("tipp"); if (SP) SP.stopp(); zeichne(); });
+  // Russisch (Entwurf 10.11.2026, nur mit Hilfesprache): Hinweise im leeren Heft – die eigenen Texte des Kindes bleiben, wie sie sind
+  if (SP && SP.ruDazu) {
+    SP.ruDazu([
+      ["Dein Heft ist noch leer. In der Wörter-Werkstatt kannst du eigene Texte schreiben – sie landen dann hier.", "Твоя тетрадь пока пустая. В мастерской слов можно писать свои тексты – они появятся здесь."],
+      ["Noch keine Aufnahmen. In der Wörter-Werkstatt kannst du dich beim Vorlesen aufnehmen.", "Записей пока нет. В мастерской слов можно записать, как ты читаешь вслух."],
+      ["Noch keine Aufnahmen. Sich selbst aufnehmen können deine Eltern im Elternbereich erlauben.", "Записей пока нет. Записывать себя тебе могут разрешить родители в разделе для родителей."]
+    ]);
+    SP.ruBeobachte(".leer > p");
+  }
   lade();
   window.__heft = { lade, art: () => art, anzahl: () => ({ text: liste.text.length, ton: liste.ton.length }) };
 })();

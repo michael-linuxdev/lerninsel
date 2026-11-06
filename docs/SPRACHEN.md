@@ -118,7 +118,7 @@ Danach ist das Kind im normalen Deutsch-Pfad; DaZ-Hilfen bleiben auf Wunsch.
    alle Oberflächentexte** geprüft sind. Fächer können nachziehen; der Elternbereich zeigt „Hilfe in Mathe: 80 %“.
    **Neue russische Entwürfe (10.11.2026, Status `entwurf`, noch zu prüfen):** Gefühle und Bewegung (Brunis Antworten, Hilfe-Karte mit 116 111 – *bei der Prüfung
    besonders wichtig*, Ruhe-Übungen, Bewegungs-Minute, Antworten und Fragen der Geschichten in `spiele/gefuehle/gefuehle.js`), Mein Tier (Ei-Auswahl, Ei-Texte,
-   Stimmung, Dialoge in `spiele/tier/tier.js`), Übergang 5 „Brüche am Zahlenstrahl“/„Schätzen“ (`spiele/mathe/hilfe-ru-fragen.js`), Forscherlager Stufe d (`spiele/expedition/expedition.js`).
+   Stimmung, Dialoge in `spiele/tier/tier.js`), Übergang 5 „Brüche am Zahlenstrahl“/„Schätzen“ (`spiele/mathe/hilfe-ru-fragen.js`), Forscherlager Stufe d (`spiele/expedition/expedition.js`). Außerdem (Tabellen in den Seiten-Skripten, `Sprache.ruDazu`): Schach (`spiele/schach/schach.js`), Robo (`spiele/robo/robo.js`), Mein Heft, Lesen und Schreiben (nur Anleitungen), Kleiderschrank (Kauf-Dialog).
 4. **Glossar je Sprache** (`docs/glossar/<code>.md`): feste Übersetzung für Inselbegriffe (Lernfund, Wissensbaum, Sterne …),
    Figurennamen bleiben gleich.
 5. Prüfskript `tests/sprachen.js`: zählt je Sprache fehlende/ungeprüfte Texte, prüft RTL-Markierung, bricht ab, wenn ein Text mit
