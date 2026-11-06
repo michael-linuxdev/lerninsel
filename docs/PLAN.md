@@ -2440,4 +2440,11 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
 - **Teich-Wunsch in kleinen Welten:** dritte Suche mit kleinerem Teich (1,3–1,8) und eigenem Zufall (`seed ^ 0x7E1C4`): klein 198/216 statt 15/216, mittel 216/216, groß 216/216. Bestehende Welten ohne Teich-Wunsch ändern sich nicht.
 - **Fehler Robo im Teich (behoben):** In 18 von 216 großen Welten lag der Teich auf Robos Platz (Robo stand im Wasser). Der Teich meidet jetzt Robo, Bennos Schild und den Angelsteg (`teichFrei`); nur diese 18 Welten ändern sich.
   Neue Prüfung in `tests/inselkern.js`: Teich-Quote je Größe, nie näher als 0,8 an einem Ort, nie im Sand (32 Prüfungen).
-- **Offen / nächstes:** iPad-Test (größere Insel, Kapitel 7, Koordinaten-Karte für Kl. 5); Russisch der neuen Texte prüfen lassen; Stufe d auch im Elternbereich erklären (Lernstand zeigt `ma.rf.10` schon über das Können).
+- **Übergang 5: zwei neue Mathe-Stationen** am Ende des Wegs (`zusatz: true`, Urkunde unverändert erreichbar): **„Brüche am Zahlenstrahl“** (`k5bruchstrahl`: Bruch am Pfeil ablesen auf 0–1 und 0–2,
+  also auch unechte Brüche; unechter Bruch → gemischte Zahl; „In wie viele Teile ist 0 bis 1 geteilt?“; Anteil an einer Würfelstange = Bruch an einem Körper; falsche Antworten mit typischen Fehlern:
+  Striche statt Abstände gezählt, ganze Strecke 0–2 als Nenner, Teil zu Rest) und **„Schätzen und Überschlagen“** (`k5schaetzen`: Überschlag beim Einkauf mit 9,95 €, Fermi-Aufgaben Herzschlag/Buch/Schritte/Becher,
+  Antworten auf die erste Stelle gerundet, falsche Antworten eine Zehnerpotenz daneben; geschützte Leerzeichen, damit „600 000“ auf dem Handy nicht umbricht). Lehrplan: `sn.os5.2.01`, `sn.gy5.2.01`
+  (Zahlenstrahl, unechte Brüche, Körper) und `sn.gy5.5.02` (Fermi, Näherungswerte) von „teil“ auf „ja“ – Übergang 5 jetzt 45 ja / 1 teil (`sn.os5.3.04` Würfel skizzieren bleibt draußen am Tisch) / 5 außen.
+  Russisch (Entwurf) für die neuen Fragen: Übergang 5 jetzt 65 % der Fragen. Neuer Test `mathe5b` (beide Runden echt über die Tasten, mit „Fast!“ und Lösung nach zwei Fehlern, quer/Handy, Russisch), in der CI;
+  Zählungen in `mathe5`, `mathe15`, `uebergang5`, `mathe-generatoren`, `lehrplan` nachgezogen; `tafel` grün (alle Aufgaben passen auf die Tafel).
+- **Offen / nächstes:** iPad-Test (größere Insel, Kapitel 7, Koordinaten-Karte und neue Stationen für Kl. 5); Russisch der neuen Texte prüfen lassen; Stufe d auch im Elternbereich erklären (Lernstand zeigt `ma.rf.10` schon über das Können).

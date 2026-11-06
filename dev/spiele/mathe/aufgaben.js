@@ -2095,6 +2095,55 @@
   ];
   STATIONEN_K5.push(...STATIONEN_K5_SEK);
 
+  // ---------- Übergang 5, zweiter Nachtrag (10.11.2026): Brüche am Zahlenstrahl und an Körpern (sn.os5.2.01, sn.gy5.2.01),
+  // Schätzen, Überschlagen und Fermi-Aufgaben (sn.gy5.5.02). Wieder mit `zusatz: true` am Ende des Wegs – die Urkunde bleibt erreichbar. ----------
+  // Zahlenstrahl von 0 bis `bis` (1 oder 2), jedes Ganze in n gleiche Teile; Pfeil bei k/n
+  function bruchStrahlBild(k, n, bis) {
+    const w = 640, x0 = 40, L = w - 2 * x0, schritt = L / (n * bis); let s = `<line x1="${x0 - 12}" y1="70" x2="${w - x0 + 16}" y2="70" stroke="${D}" stroke-width="3"/>`;
+    for (let i = 0; i <= n * bis; i++) { const x = x0 + i * schritt, ganz = i % n === 0;
+      s += `<line x1="${x}" y1="${ganz ? 50 : 58}" x2="${x}" y2="${ganz ? 90 : 82}" stroke="${D}" stroke-width="${ganz ? 3.5 : 2}"/>`;
+      if (ganz) s += `<text x="${x}" y="116" text-anchor="middle" font-size="24" font-weight="700" fill="${D}" font-family="Fredoka, Arial">${i / n}</text>`; }
+    const xk = x0 + k * schritt;
+    s += `<path d="M${xk} 48 l-12 -24 h24 Z" fill="#E5484D" stroke="${D}" stroke-width="2"/>`;
+    return `<svg viewBox="0 0 ${w} 126" style="max-height:136px" role="img" aria-label="Zahlenstrahl mit Bruchteilen">${s}</svg>`;
+  }
+  // Würfelstange aus n Würfeln (schräg von vorn), die ersten k rot
+  function wuerfelStangeBild(k, n) {
+    const a = Math.min(52, 520 / n), t = a * 0.45, x0 = 14, y0 = 24 + t; let s = "";
+    for (let i = 0; i < n; i++) { const x = x0 + i * a, f = i < k ? "#E5484D" : "#FFFFFF", f2 = i < k ? "#B8323A" : "#DCD3EA", f3 = i < k ? "#F07A7E" : "#F3EEFA";
+      s += `<path d="M${x} ${y0} l${t} ${-t} h${a} l${-t} ${t} Z" fill="${f3}" stroke="${D}" stroke-width="2" stroke-linejoin="round"/>`;
+      s += `<rect x="${x}" y="${y0}" width="${a}" height="${a}" fill="${f}" stroke="${D}" stroke-width="2"/>`; }
+    s += `<path d="M${x0 + n * a} ${y0} l${t} ${-t} v${a} l${-t} ${t} Z" fill="${k === n ? "#B8323A" : "#DCD3EA"}" stroke="${D}" stroke-width="2" stroke-linejoin="round"/>`;
+    return `<svg viewBox="0 0 ${x0 * 2 + n * a + t} ${y0 + a + 14}" style="max-height:120px" role="img" aria-label="Würfelstange">${s}</svg>`;
+  }
+  const rund1 = (v) => { const p = Math.pow(10, Math.floor(Math.log10(v))); return Math.round(v / p) * p; };   // auf die erste Stelle runden (4 800 → 5 000)
+  const STATIONEN_K5_NACH = [
+    { id: "k5bruchstrahl", lb: "zo", zusatz: true, stufe: "5", lz: ["ma.zo.19", "ma.zo.14"], name: "Brüche am Zahlenstrahl", icon: "📏",
+      neu: () => { const art = r(1, 4), n = wahl([2, 3, 4, 5, 6, 8, 10]);
+        if (art === 4) { const m = wahl([4, 5, 6, 8, 10]), k = r(1, m - 1);
+          return wahlAufgabe("Welcher Anteil der Würfelstange ist rot?", `${k}/${m}`, [`${m - k}/${m}`, `${k}/${m - k}`, `${k}/${m + 1}`], `Die Stange hat ${m} gleich große Würfel – der Nenner ist ${m}. ${k} ${k === 1 ? "Würfel ist" : "Würfel sind"} rot: ${k}/${m}.`, { bild: wuerfelStangeBild(k, m) }); }
+        if (art === 3) { const k = r(1, n - 1); return zahl("", n, `Zähle die Abstände zwischen 0 und 1, nicht die Striche: ${n} gleiche Teile. Darum heißt jeder Teil 1/${n}.`, { frage: "In wie viele gleiche Teile ist der Weg von 0 bis 1 geteilt?", bild: bruchStrahlBild(k, n, 1), nurLuecke: true }); }
+        if (art === 2) { const k = n + r(1, n - 1), g = Math.floor(k / n), rest = k % n;
+          return wahlAufgabe("Der Pfeil zeigt einen unechten Bruch. Welche gemischte Zahl ist das?", `${g} ${rest}/${n}`, [`${g} ${n - rest}/${n}`, `${rest} ${g}/${n}`, `${g + 1} ${rest}/${n}`], `Bis zur 1 sind es ${n}/${n}. Danach noch ${rest} ${rest === 1 ? "Teil" : "Teile"}: ${k}/${n} = ${g} ${rest}/${n}.`, { bild: bruchStrahlBild(k, n, 2) }); }
+        const bis = zz() < 0.5 ? 1 : 2, k = bis === 1 ? r(1, n - 1) : r(1, 2 * n - 1);
+        return wahlAufgabe("Welchen Bruch zeigt der Pfeil?", `${k}/${n}`, [`${k}/${n + 1}`, bis === 2 ? `${k}/${2 * n}` : `${n}/${k}`, `${k + 1}/${n}`],
+          `Jedes Ganze ist in ${n} gleiche Teile geteilt – der Nenner ist ${n}. Der Pfeil steht beim ${k}. Teil: ${k}/${n}.${k > n ? ` Das ist mehr als 1: ein unechter Bruch.` : ""}`, { bild: bruchStrahlBild(k, n, bis) }); } },
+    { id: "k5schaetzen", lb: "gm", zusatz: true, stufe: "5", lz: ["ma.gm.10", "ma.pk.04"], name: "Schätzen und Überschlagen", icon: "🤔",
+      neu: () => { const art = r(1, 5), etwa = (v) => "etwa\u00a0" + tz(v).replace(/ /g, "\u00a0");   // geschützte Leerzeichen: „600 000“ bricht auf dem Handy nicht um
+        const fermi = (frage, wert, hilfe) => { const g = rund1(wert); return wahlAufgabe(frage, etwa(g), [etwa(g * 10), etwa(g / 10), etwa(g * 100)], hilfe); };
+        if (art === 1) { const e = r(1, 9), c = wahl([95, 99, 90]), n = r(3, 8), wer = wahl(NAMEN), was = wahl(["Hefte", "Stifte", "Brezeln", "Bälle", "Bücher"]);
+          return wahlAufgabe(`${wer} kauft ${n} ${was} zu je ${e},${c} €. Etwa wie viel kostet das?`, `etwa ${(e + 1) * n} €`, [`etwa ${(e + 1) * n * 10} €`, `etwa ${e + 1 + n} €`, `etwa ${e * n} €`],
+            `Überschlag: ${e},${c} € sind fast ${e + 1} €. ${n} · ${e + 1} € = ${(e + 1) * n} €.`); }
+        if (art === 2) { const puls = r(7, 9) * 10; return fermi(`Ein Herz schlägt etwa ${puls}-mal in der Minute. Wie oft ungefähr in einer Stunde?`, puls * 60, `Eine Stunde hat 60 Minuten: ${puls} · 60 = ${tz(puls * 60)} – also ${etwa(rund1(puls * 60))}.`); }
+        if (art === 3) { const seiten = r(10, 30) * 10, woerter = r(2, 4) * 100; return fermi(`Ein Buch hat ${seiten} Seiten. Auf jeder Seite stehen etwa ${woerter} Wörter. Wie viele Wörter hat das Buch ungefähr?`, seiten * woerter, `Überschlag: ${seiten} · ${woerter} = ${tz(seiten * woerter)} – also ${etwa(rund1(seiten * woerter))}.`); }
+        if (art === 4) { const schritt = wahl([50, 60, 70]), km = r(1, 3), n = km * 100000 / schritt; return fermi(`Ein Schritt ist etwa ${schritt} cm lang. Wie viele Schritte brauchst du ungefähr für ${km} km?`, n,
+          `${km} km = ${tz(km * 100000)} cm. ${tz(km * 100000)} : ${schritt} ≈ ${tz(Math.round(n))} – also ${etwa(rund1(n))} Schritte.`); }
+        const kinder = r(18, 28), tage = r(4, 6), glas = wahl([4, 5, 6]);
+        return fermi(`In der Klasse sind ${kinder} Kinder. Jedes trinkt in der Schule etwa ${glas} Becher Wasser am Tag. Wie viele Becher sind das ungefähr in ${tage} Schultagen?`, kinder * glas * tage,
+          `${kinder} · ${glas} = ${kinder * glas} Becher am Tag, mal ${tage} Tage = ${kinder * glas * tage} – also ${etwa(rund1(kinder * glas * tage))}.`); } }
+  ];
+  STATIONEN_K5.push(...STATIONEN_K5_NACH);
+
   const stationVon = (station) => STATIONEN.find(x => x.id === station) || STATIONEN_K1.find(x => x.id === station) || STATIONEN_K3.find(x => x.id === station) || STATIONEN_K4.find(x => x.id === station) || STATIONEN_K5.find(x => x.id === station);
   // Eine Aufgabe zu einer Startzahl (immer dieselbe)
   function aufgabe(station, saat) {

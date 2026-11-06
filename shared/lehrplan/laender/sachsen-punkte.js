@@ -1475,7 +1475,7 @@
         ["sn.os5.1.08", "Teilbarkeit: Vielfache, Teiler, Regeln für 3, 4 und 6, Primzahlen", "5", ["mathe:k5teiler", "mathe:k4teilbar", "mathe:k4primzahl"], "ja"]
       ].map(zuPunkt) },
       { nr: 2, titel: "Gemeine Brüche, Dezimalzahlen und Größen", punkte: [
-        ["sn.os5.2.01", "Brüche erkennen und darstellen: an Figuren, echte und unechte Brüche, am Zahlenstrahl", "5", ["mathe:k5bruchbild", "mathe:k5bruchvon", "mathe:k5kuerzen"], "teil"],
+        ["sn.os5.2.01", "Brüche erkennen und darstellen: an Figuren, echte und unechte Brüche, am Zahlenstrahl", "5", ["mathe:k5bruchbild", "mathe:k5bruchvon", "mathe:k5kuerzen", "mathe:k5bruchstrahl"], "ja"],
         ["sn.os5.2.02", "Zehnerbrüche und Dezimalzahlen ineinander umwandeln, Stellenwerttafel erweitern", "5", ["mathe:k5dezimal"], "ja"],
         ["sn.os5.2.03", "Brüche vergleichen, ordnen und abschätzen", "5", ["mathe:k5bruchvergleich"], "ja"],
         ["sn.os5.2.04", "Dezimalzahlen runden", "5", ["mathe:k5dezimal"], "ja"],
@@ -1509,7 +1509,7 @@
         ["sn.gy5.1.05", "Teiler, Primzahlen, Teilbarkeitsregeln für 3, 4 und 6, einfache Primfaktorzerlegung", "5", ["mathe:k5teiler", "mathe:k4teilbar", "mathe:k4primzahl"], "ja"]
       ].map(zuPunkt) },
       { nr: 2, titel: "Gemeine Brüche und Dezimalzahlen", punkte: [
-        ["sn.gy5.2.01", "Brüche darstellen an Figuren, Körpern und am Zahlenstrahl, Anteile von Größen", "5", ["mathe:k5bruchbild", "mathe:k5bruchvon"], "teil"],
+        ["sn.gy5.2.01", "Brüche darstellen an Figuren, Körpern und am Zahlenstrahl, Anteile von Größen", "5", ["mathe:k5bruchbild", "mathe:k5bruchvon", "mathe:k5bruchstrahl"], "ja"],
         ["sn.gy5.2.02", "Kürzen und Erweitern, echte und unechte Brüche", "5", ["mathe:k5kuerzen"], "ja"],
         ["sn.gy5.2.03", "Stellenwerttafel erweitern, Prozentschreibweise für ausgewählte Anteile", "5", ["mathe:k5dezimal", "mathe:k5prozent"], "ja"],
         ["sn.gy5.2.04", "Brüche, Dezimalzahlen und Prozentangaben ineinander umwandeln", "5", ["mathe:k5dezimal", "mathe:k5prozent"], "ja"],
@@ -1532,7 +1532,7 @@
       ].map(zuPunkt) },
       { nr: 5, titel: "Vernetzung: Mathematik im Alltag", punkte: [
         ["sn.gy5.5.01", "Sachaufgaben mit Größen, Einheiten von Zeit, Masse, Länge, Fläche und Volumen umrechnen", "5", ["mathe:k5sach", "mathe:k5groessen"], "ja"],
-        ["sn.gy5.5.02", "Sinnvoll runden, mit Näherungswerten umgehen, Fahrpläne, Schätzaufgaben (Fermi)", "5", ["mathe:k4reise", "mathe:k3daten", "mathe:k4runden"], "teil"],
+        ["sn.gy5.5.02", "Sinnvoll runden, mit Näherungswerten umgehen, Fahrpläne, Schätzaufgaben (Fermi)", "5", ["mathe:k4reise", "mathe:k3daten", "mathe:k4runden", "mathe:k5schaetzen"], "ja"],
         ["sn.gy5.5.03", "Ein Alltagsprojekt mathematisch planen (Spendenaktion, Sportfest, weniger Verpackungsmüll)", "5", ["echtewelt:umfrage", "echtewelt:einkauf"], "aussen"]
       ].map(zuPunkt) },
       { nr: 9, titel: "Wahlbereiche (freiwillig)", punkte: [

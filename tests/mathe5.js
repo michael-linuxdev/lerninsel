@@ -47,7 +47,7 @@ const NEU = ["k5quadrat", "k5gleichung", "k5dezimal", "k5dezrechnen", "k5prozent
     const { ctx, p } = await kind("5");
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForSelector("#karte .station");
     const n = await p.evaluate(() => document.querySelectorAll("#karte .station:not(.ziel)").length);
-    erwarte(n === 26, `Übergang 5: 26 Stationen (${n})`);
+    erwarte(n === 28, `Übergang 5: 28 Stationen (${n})`);
     for (const id of NEU) {
       const r = await spiele(p, id, "quer");
       erwarte(r.sterne === 3 && r.passt, `quer: „${id}“ – 10 Aufgaben über die Tasten gelöst, 3 Sterne, keine Scrollleiste (${r.sterne}, ${r.passt})`);

@@ -306,6 +306,15 @@
     ["Welche Zahl mal sich selbst ergibt 169? (√169)", "Какое число, умноженное само на себя, даёт {0}? (√{1})"],
     ["Wie viele natürliche Zahlen y erfüllen y + 12 < 18? (Die 0 ist auch eine natürliche Zahl.)", "Сколько натуральных чисел y удовлетворяют y + {0} < {1}? (0 тоже натуральное число.)"],
     ["Wie viel sind 50 % von 200?", "Сколько будет {0} % от {1}?"],
-    ["Bei welchen Koordinaten liegt A?", "Какие координаты у точки A?"]
+    ["Bei welchen Koordinaten liegt A?", "Какие координаты у точки A?"],
+    // Nachtrag 10.11.2026: Brüche am Zahlenstrahl, Schätzen und Überschlagen
+    ["Welchen Bruch zeigt der Pfeil?", "Какую дробь показывает стрелка?"],
+    ["Welcher Anteil der Würfelstange ist rot?", "Какая часть палочки из кубиков красная?"],
+    ["In wie viele gleiche Teile ist der Weg von 0 bis 1 geteilt?", "На сколько равных частей разделён путь от {0} до {1}?"],
+    ["Der Pfeil zeigt einen unechten Bruch. Welche gemischte Zahl ist das?", "Стрелка показывает неправильную дробь. Какое это смешанное число?"],
+    ["Ein Herz schlägt etwa 70-mal in der Minute. Wie oft ungefähr in einer Stunde?", "Сердце бьётся примерно {0} раз в минуту. Сколько примерно раз за час?"],
+    ["Ein Buch hat 200 Seiten. Auf jeder Seite stehen etwa 300 Wörter. Wie viele Wörter hat das Buch ungefähr?", "В книге {0} страниц. На каждой странице примерно {1} слов. Сколько примерно слов в книге?"],
+    ["Ein Schritt ist etwa 50 cm lang. Wie viele Schritte brauchst du ungefähr für 2 km?", "Шаг – примерно {0} см. Сколько примерно шагов нужно на {1} км?"],
+    ["In der Klasse sind 24 Kinder. Jedes trinkt in der Schule etwa 5 Becher Wasser am Tag. Wie viele Becher sind das ungefähr in 5 Schultagen?", "В классе {0} детей. Каждый выпивает в школе примерно {1} стаканов воды в день. Сколько примерно стаканов за {2} учебных дней?"]
   ]);
 })(typeof window !== "undefined" ? window : globalThis);
