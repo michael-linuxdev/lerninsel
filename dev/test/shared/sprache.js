@@ -77,4 +77,42 @@
     }
   };
   window.Sprache = Sprache;
+
+  // Russische Zeilen vorlesen (10.11.2026, Wunsch des Auftraggebers „überall russisch vorlesen“): Jede russische Hilfezeile (.ru, .hilfe-ru,
+  // [lang="ru"]) wird selbst zum Vorlese-Knopf – antippen liest sie mit der russischen Gerätestimme vor; ein kleines Lautsprecher-Zeichen zeigt das an.
+  // textContent bleibt unverändert (Zeichen per CSS). Zeilen in Knöpfen/Links/Eingaben bleiben aus (dort wählt Antippen die Antwort),
+  // ebenso alles unter [data-ru-vorlesen="aus"]. Gilt nur mit Hilfesprache Russisch.
+  const RU_WAHL = '.ru, .hilfe-ru, [lang="ru"]';
+  const hilfeRu = () => { try { const h = window.Spielwelt && window.Spielwelt.hilfe && window.Spielwelt.hilfe(); return h && h.code === "ru" ? h : null; } catch (x) { return null; } };
+  function ruMarkiere(wurzel) {
+    if (!hilfeRu() || !wurzel || !wurzel.querySelectorAll) return;
+    const liste = wurzel.matches && wurzel.matches(RU_WAHL) ? [wurzel] : [];
+    wurzel.querySelectorAll(RU_WAHL).forEach(e => liste.push(e));
+    liste.forEach(el => {
+      if (el.classList.contains("ru-hoerbar") || el === document.documentElement || el === document.body) return;
+      if (el.closest('button, a, label, input, textarea, select, [role=button], [contenteditable], [data-ru-vorlesen="aus"]')) return;
+      if (el.parentElement && el.parentElement.closest(".ru-hoerbar")) return;
+      if (!(el.textContent || "").trim()) return;
+      el.classList.add("ru-hoerbar"); el.setAttribute("role", "button"); el.setAttribute("tabindex", "0"); el.dataset.vorlesen = "ru";
+      el.setAttribute("title", "Auf Russisch vorlesen");
+    });
+  }
+  function ruSprich(el) { const h = hilfeRu(); letzterKnopf = Date.now(); Sprache.sprich((el.textContent || "").trim(), (h && h.tts) || "ru-RU"); }
+  function ruStart() {
+    if (!document.body || !hilfeRu()) return;
+    const st = document.createElement("style");
+    st.textContent = `.ru-hoerbar { cursor: pointer; border-radius: 8px; -webkit-tap-highlight-color: transparent; }
+      .ru-hoerbar::after { content: ""; display: inline-block; width: 1.05em; height: 1.05em; margin-left: .3em; vertical-align: -.15em;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9h4l5-4v14l-5-4H3z' fill='%23FFC93C' stroke='%233B1F63' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12' fill='none' stroke='%233B1F63' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat; }
+      .ru-hoerbar:active, .ru-hoerbar.spricht { background: #FFF1C2; }`;
+    document.head.appendChild(st);
+    ruMarkiere(document.body);
+    new MutationObserver(m => m.forEach(x => x.addedNodes.forEach(n => { if (n.nodeType === 1) ruMarkiere(n); else if (n.parentElement) ruMarkiere(n.parentElement); })))
+      .observe(document.body, { childList: true, subtree: true });
+    document.addEventListener("click", (e) => { const el = e.target.closest && e.target.closest(".ru-hoerbar"); if (!el) return; e.stopPropagation(); ruSprich(el);
+      el.classList.add("spricht"); setTimeout(() => el.classList.remove("spricht"), 600); }, true);
+    document.addEventListener("keydown", (e) => { const el = document.activeElement; if ((e.key === "Enter" || e.key === " ") && el && el.classList && el.classList.contains("ru-hoerbar")) { e.preventDefault(); ruSprich(el); } });
+  }
+  Sprache.ruMarkiere = ruMarkiere;
+  if (typeof document !== "undefined") { if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ruStart); else setTimeout(ruStart, 0); }
 })();

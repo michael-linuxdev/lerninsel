@@ -32,6 +32,7 @@ behoben: Tagebuch-Liste zeigte falsche Baumzahlen anderer Eilande, Robo stand in
 2. Forscher-Tagebuch auf zwei Eilanden eintragen, dann Album → „📜 Inselchronik“: stehen die Eilande mit Wetter und Funden zwischen den Geschichten?
 3. Neue kleine Welt mit Wunsch „Teich“ erschaffen – ist der Teich da?
 5. Kind mit Stufe „Vorschule“: Deutsch → „Lesen und Schreiben“ → „🏷️ Mein Name“ – lässt sich der eigene Name gut nachspuren (Größe der Buchstaben, Startpunkte)?
+6. Hilfesprache Russisch (Elternbereich): Matheweg, Forscherlager, Garten – die russische Zeile mit dem kleinen Lautsprecher antippen. Wird sie vorgelesen (russische Stimme auf dem iPad vorhanden)?
 4. Matheweg „Übergang 5“ ganz hinten: „Brüche am Zahlenstrahl“ (Striche gut zu zählen?) und „Schätzen und Überschlagen“ (sind die Fermi-Fragen verständlich?).
 
 ## 1. Stand (09.11.2026)
