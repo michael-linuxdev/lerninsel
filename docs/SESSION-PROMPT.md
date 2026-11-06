@@ -17,25 +17,35 @@ beiden „Fragerunde 30.10.2026“-Abschnitte lesen. Diese Nachricht enthält nu
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-**Seit 10.11.2026 außerdem:** Eilande in der Inselchronik, Koordinaten-Karte (Stufe d) für den Übergang 5, Teich in kleinen Welten (Abschnitt 1). **Weg 3 ist gebaut (09.11.2026):** Heimatinsel mit Radius 19 (W1) und Kapitel 7 „Neue Ufer“ mit Robos Boot, Ellas Forscherlager und der Seite `spiele/expedition/` (W2); Details in `docs/PLAN.md`,
-„Stand 09.11.2026“. Zuerst die **iPad-Rückmeldung** holen (Fragerunde: größere Insel – Laufwege, Tempo, Trittsteine, Steg bis zum Boot; Kapitel 7 – Szene, „Losfahren“, Forscherlager, Karte lesen, Tagebuch;
-dazu alles vom 07./08.11.), dann:
-1. Rückmeldung einarbeiten (Fehler zuerst, je mit Test).
-2. Russisch der neuen Texte (Szene `neue-ufer`, Expedition) prüfen lassen; Eilande in der Inselchronik; Übergang Klasse 5 im Forscherlager vertiefen (KONZEPT: „neue Themen“) – nur wenn der Auftraggeber es will.
-3. Sonst nach `docs/PLAN.md` „Neuausrichtung“ / Abschnitt 2 unten.
+**Letzte Sitzung (10.11.2026, Auftrag „gesamtverantwortlich, unentwegt eigenständig weiterbauen“, ohne Fragerunde):** acht Pakete gebaut, alle Tests grün, CI-Lauf 106 grün
+(Details in `docs/PLAN.md`, „Stand 10.11.2026“). Seit dem 08.11. gibt es **keine iPad-Rückmeldung** – sie ist jetzt das Wichtigste.
+1. **Fragerunde:** iPad-Rückmeldung zu allem seit dem 07.11. (Liste in Abschnitt 1 unten: größere Insel, Kapitel 7, Koordinaten-Karte, Mein Name, russisches Vorlesen, „RU“-Knopf).
+   Gemeldete Fehler zuerst, je mit Test. Außerdem fragen: Hat jemand die **Prüfliste Russisch** ausgefüllt? Dann den Ergebnis-Text einarbeiten (Korrekturen stehen mit Datei:Zeile darin).
+2. Rückmeldung zur Entscheidung „Namen schreiben = ja“ (Vorschule, Finger statt Stift) und zum Standard „Immer zeigen“ bei NA-54 einholen.
+3. Danach nach Abschnitt 2 unten (nächste Pakete).
 
 ## 1. Stand (10.11.2026)
-**Neu (PLAN „Stand 10.11.2026“):** Erforschte Eilande stehen in der **Inselchronik** (Album); Forscherlager mit **Koordinatensystem für den Übergang Klasse 5**; „🏷️ Mein Name“ zum Nachspuren für Vorschulkinder; Matheweg Übergang 5 mit **„Brüche am Zahlenstrahl“** und **„Schätzen und Überschlagen“**; Teich-Wunsch klappt auch in kleinen Welten;
-behoben: Tagebuch-Liste zeigte falsche Baumzahlen anderer Eilande, Robo stand in manchen großen Welten im Teich.
+**Neu (PLAN „Stand 10.11.2026“):**
+- **Insel/Forscherlager:** erforschte Eilande in der **Inselchronik** (Album); Forscherlager mit **Koordinatensystem für den Übergang Klasse 5** (Stufe d); Teich-Wunsch klappt auch in kleinen Welten;
+  behoben: Tagebuch-Liste zeigte falsche Baumzahlen anderer Eilande, Robo stand in 18 großen Welten im Teich.
+- **Lernen:** Matheweg Übergang 5 mit **„Brüche am Zahlenstrahl“** und **„Schätzen und Überschlagen“** (Lehrplan Kl. 5: nur noch „Würfel skizzieren“ teilweise); **„🏷️ Mein Name“** zum Nachspuren
+  (Vorschule „Namen schreiben“ = ja).
+- **Russisch:** jede russische Zeile ist antippbar und wird vorgelesen; neue Entwürfe für Gefühle (inkl. Hilfe-Karte 116 111), Mein Tier, Schach, Robo, Mein Heft, Lesen (Anleitungen), Kleiderschrank
+  (zentraler Tabellen-Übersetzer `Sprache.ruDazu`); **Prüfliste Russisch** für Muttersprachler (7772 Texte, Elternbereich → „✍️ Russisch prüfen lassen“); **NA-54 Ausschleichen**
+  („Immer“ / „Nur bei Neuem“ / „Nur auf Knopfdruck“ mit gelbem „RU“-Knopf).
+- **CI:** `mathe5b` wackelte (Taste zu früh angetippt) – behoben; neue CI-Tests `mathe5b`, `meinname`, `ruvorlesen`, `rupruefen`, `ausschleichen`.
+
 **Im iPad testen (in /dev/test):**
 1. Kind mit Stufe „Übergang Klasse 5“: Insel → Forscherlager → „Karte lesen“ – Achsen 0–6 lesbar (quer und hoch)? Roter Ring gut zu sehen? Eine Frage absichtlich falsch (Hinweis x vor y).
 2. Forscher-Tagebuch auf zwei Eilanden eintragen, dann Album → „📜 Inselchronik“: stehen die Eilande mit Wetter und Funden zwischen den Geschichten?
 3. Neue kleine Welt mit Wunsch „Teich“ erschaffen – ist der Teich da?
-5. Kind mit Stufe „Vorschule“: Deutsch → „Lesen und Schreiben“ → „🏷️ Mein Name“ – lässt sich der eigene Name gut nachspuren (Größe der Buchstaben, Startpunkte)?
-6. Hilfesprache Russisch (Elternbereich): Matheweg, Forscherlager, Garten, Gefühle, Mein Tier, Schach, Robo, Lesen – die russische Zeile mit dem kleinen Lautsprecher antippen. Wird sie vorgelesen (russische Stimme auf dem iPad vorhanden)?
-8. Elternbereich → Kind „Ändern“ → „Wie viel Hilfe in der Hilfesprache?“ = „Nur auf Knopfdruck“: Erscheint im Matheweg statt der russischen Zeile ein gelber „RU“-Knopf, der sie zeigt und vorliest?
-7. Elternbereich (Hilfesprache Russisch) → „✍️ Russisch prüfen lassen“: Prüfliste ansehen und an eine Person mit Russisch als Muttersprache weitergeben (Ergebnis-Text zurückschicken lassen).
 4. Matheweg „Übergang 5“ ganz hinten: „Brüche am Zahlenstrahl“ (Striche gut zu zählen?) und „Schätzen und Überschlagen“ (sind die Fermi-Fragen verständlich?).
+5. Kind mit Stufe „Vorschule“: Deutsch → „Lesen und Schreiben“ → „🏷️ Mein Name“ – lässt sich der eigene Name gut nachspuren (Größe der Buchstaben, Startpunkte)?
+6. Hilfesprache Russisch (Elternbereich): Matheweg, Forscherlager, Garten, Gefühle, Mein Tier, Schach, Robo, Lesen – die russische Zeile mit dem kleinen Lautsprecher antippen. Wird sie vorgelesen
+   (russische Stimme auf dem iPad: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen)?
+7. Elternbereich → Kind „Ändern“ → „Wie viel Hilfe in der Hilfesprache?“ = „Nur auf Knopfdruck“: Erscheint im Matheweg statt der russischen Zeile ein gelber „RU“-Knopf, der sie zeigt und vorliest?
+   Dann „Nur bei Neuem“: Forscherlager zweimal öffnen – Ellas russischer Satz nur beim ersten Mal offen?
+8. Elternbereich (Hilfesprache Russisch) → „✍️ Russisch prüfen lassen“: Prüfliste an eine Person mit Russisch als Muttersprache weitergeben, Ergebnis-Text zurückschicken lassen.
 
 ## 1. Stand (09.11.2026)
 **Weg 3 (09.11., PLAN „Stand 09.11.2026“):** Heimatinsel Radius 15,2 → 19 (Orte 1,25-mal weiter auseinander, 14 Bäume, zwei Blumenwiesen, Trittstein-Wege zu Garten, Bäckerei, Tierstation, Leuchtturm und Lager,
@@ -246,6 +256,14 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - Muttersprachlerinnen und Muttersprachler für ru/uk; Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (in dieser Reihenfolge)
+**Stand 10.11.2026 – zuerst:**
+- A. iPad-Rückmeldung und Ergebnis der Prüfliste Russisch einarbeiten (Fehler zuerst, je mit Test).
+- B. **NA-53 Interessen-Kulissen** (PLAN Neuausrichtung): gleiche Aufgabe, andere Bilder (Tiere, Fahrzeuge, Weltraum, Natur) aus dem Wünsche-Assistenten – nächstes offenes NA-Paket.
+- C. Russisch für die letzten Seiten ohne Russisch: Schreiben und Präsentieren, Laut vorlesen, Atelier-Malen (bewusst offen gelassen, sehr deutschlastig – erst mit dem Auftraggeber klären).
+- D. Prüfliste: die 161 Texte ohne deutschen Text daneben (Gefühle, Schach, Robo, Mein Tier) mit deutschem Gegenstück versehen, damit Prüfer sie leichter beurteilen.
+- E. Lehrplan-Reste: Sorbisch als Muttersprache (Erzählen, Vortragen, freies Schreiben – braucht eine Person mit Sorbisch), Vorschule „Bildergeschichten erzählen“, Übergang 5 „Würfel skizzieren“ (draußen am Tisch).
+
+**Ältere Liste:**
 0. **Abschnitt 0** (Tiere 2D, Kleiderschrank, Mathe-Erklärungen – erst Vorschau).
 1. **iPad-Rückmeldung** zu Figuren (2D und Insel), Tieren, Zimmern, Erklär-Einheiten, Schrittweg, Noto-Bildern und Leistung – Fehler zuerst, je mit Test.
 2. **Prüfen statt Bauen** (Abschnitt 0, Schritt 2).
