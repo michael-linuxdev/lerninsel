@@ -23,7 +23,7 @@
     el.hidden = !n;
     if (!n) return;
     el.innerHTML = `<h2>🎁 Such dir ${n > 1 ? `${n} Sticker` : "einen Sticker"} aus!</h2><p class="klein">Tippe auf den Sticker, den du haben möchtest.</p>
-      <div class="feld">${ST.fehlend().map(id => { const x = ST.ALLE[id]; return `<button class="st hat wahl" data-wahl="${id}"><span class="e">${x.e}</span><b>${x.name}</b></button>`; }).join("")}</div>`;
+      <div class="feld">${ST.fehlend().map(id => { const x = ST.ALLE[id]; return `<button class="st hat wahl" data-wahl="${id}"><span class="e">${bild(x)}</span><b>${x.name}</b></button>`; }).join("")}</div>`;
   }
   $("auswahl") && $("auswahl").addEventListener("click", (e) => {
     const b = e.target.closest("[data-wahl]"); if (!b) return;
@@ -73,6 +73,8 @@
         return `<li data-s="${x.s}"><span class="nr">${i + 1}.</span><span class="kopf">${kopf}</span><span class="was"><b>${def.titel || x.s}</b><span>${datum(x.d)}</span></span><button class="knopf haupt" data-spiele="${x.s}" aria-label="${def.titel || x.s} ansehen">▶ Ansehen</button></li>`; }).join("")}</ol>`
         : `<p class="chronik-leer">Noch ist deine Chronik leer. Auf der Insel warten die ersten Geschichten auf dich!</p>`);
   }
+  // Sticker-Bild (Eine Welt, 07.11.2026): Drache und Katze wie in „Mein Tier“ gezeichnet, alle anderen als Emoji/Begleiter-Zeichen (emoji.js)
+  const bild = (x) => x && x.tier && window.Tiere ? `<svg class="tier-bild" viewBox="${Tiere.portraet(x.tier, 1)}" aria-hidden="true">${Tiere.zeichneTier({ art: x.tier, stufe: 1 })}</svg>` : x ? x.e : "";
   function seite() {
     const el = $("seite");
     if (aktiv === CHRONIK) { chronik(el); return; }
@@ -82,19 +84,19 @@
     el.innerHTML = `<h2>${s.name}${voll ? " 🏆" : ""}</h2><p class="klein">${voll ? "Seite komplett!" : WIE[s.woher]}${hl && hl.code === "ru" ? " · " + s.ru : ""}</p>
       <div class="feld">${s.sticker.map(([id, e, name]) => {
         const n = d.hat[id] || 0;
-        return `<button class="st ${n ? "hat" : "fehlt"}" data-id="${id}">${neu.has(id) ? '<span class="neu">neu!</span>' : ""}${n > 1 ? `<span class="anz">×${n}</span>` : ""}<span class="e">${e}</span><b>${n ? name : "?"}</b></button>`;
+        return `<button class="st ${n ? "hat" : "fehlt"}" data-id="${id}">${neu.has(id) ? '<span class="neu">neu!</span>' : ""}${n > 1 ? `<span class="anz">×${n}</span>` : ""}<span class="e">${bild(ST.ALLE[id]) || e}</span><b>${n ? name : "?"}</b></button>`;
       }).join("")}</div>`;
   }
   function gross(id) {
     const x = ST.ALLE[id], n = d.hat[id] || 0, k = $("gross-karte");
     if (n) {
-      k.innerHTML = `<div class="e">${x.e}</div><h2>${x.name}</h2>${hl && hl.code === "ru" ? `<p><span class="ru" lang="ru">${x.ru}</span></p>` : ""}
+      k.innerHTML = `<div class="e">${bild(x)}</div><h2>${x.name}</h2>${hl && hl.code === "ru" ? `<p><span class="ru" lang="ru">${x.ru}</span></p>` : ""}
         <p>${n > 1 ? `Du hast ihn ${n}-mal. Doppelte kannst du bald mit Freunden tauschen.` : "Klebt in deinem Album."}</p>
         <div class="knoepfe"><button class="knopf" id="g-hoer">🔊 Anhören</button><button class="knopf haupt" id="g-zu">Schließen</button></div>`;
       if (SP && SP.sprich) SP.sprich(x.name, "de-DE");
     } else {
       const s = ST.SEITEN.find(y => y.id === x.seite);
-      k.innerHTML = `<div class="e" style="filter:grayscale(1) brightness(.35);opacity:.3">${x.e}</div><h2>Noch nicht gefunden</h2>
+      k.innerHTML = `<div class="e" style="filter:grayscale(1) brightness(.35);opacity:.3">${bild(x)}</div><h2>Noch nicht gefunden</h2>
         <p>${x.tipp || WIE[s.woher]}</p><div class="knoepfe"><button class="knopf haupt" id="g-zu">Schließen</button></div>`;
     }
     $("gross").hidden = false;

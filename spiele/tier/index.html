@@ -13,6 +13,11 @@
 <style>
   html, body { height: 100%; }
   body { background: linear-gradient(#DDF1FF 0 62%, #CFEFC0 62% 100%); background-attachment: fixed; }
+  /* (Eine Welt, 07.11.2026) Wiese mit Halmen: eine Reihe Grasbüschel auf der Horizontlinie, eine lockere weiter unten (SVG im Hintergrund, kein Bild) */
+  body { background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='26'%3E%3Cg fill='%237CCB5B' stroke='%233B1F63' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M8 26 L12 8 L16 26 Z'/%3E%3Cpath d='M15 26 L22 12 L22 26 Z'/%3E%3Cpath d='M52 26 L56 4 L60 26 Z'/%3E%3Cpath d='M60 26 L68 14 L66 26 Z'/%3E%3Cpath d='M46 26 L44 14 L52 26 Z'/%3E%3C/g%3E%3C/svg%3E") 0 62% / 90px 26px repeat-x fixed,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='22'%3E%3Cg fill='%2394D673' stroke='%233B1F63' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M30 22 L34 6 L38 22 Z'/%3E%3Cpath d='M37 22 L44 10 L43 22 Z'/%3E%3Cpath d='M180 22 L184 8 L188 22 Z'/%3E%3Cpath d='M174 22 L172 10 L181 22 Z'/%3E%3C/g%3E%3C/svg%3E") 40px 84% / 260px 22px repeat-x fixed,
+      linear-gradient(#DDF1FF 0 62%, #CFEFC0 62% 100%) fixed; }
   .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); position: relative; z-index: 3; }
   .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; min-width: 0; }
   .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
@@ -23,8 +28,16 @@
   .blase::after { content: ""; position: absolute; bottom: -13px; left: 50%; margin-left: -11px; width: 22px; height: 22px; background: #fff; border: 0 solid var(--kontur); border-right-width: 3px; border-bottom-width: 3px; transform: rotate(45deg); }   /* Stil A: Zipfel mit Kontur */
 
   /* Eier wählen */
-  .eier { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; }
-  @media (max-width: 760px) { .eier { grid-template-columns: 1fr 1fr; } }
+  /* (Eine Welt) Eier mittig über dem Nest (vorher Raster mit 4 Spalten: drei Eier links, rechts leer) */
+  .eier { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; width: 100%; }
+  .eier > .ei-wahl { flex: 0 1 calc(25% - 11px); min-width: 0; }
+  @media (max-width: 760px) { .eier > .ei-wahl { flex-basis: calc(50% - 7px); } }
+  /* Sprecherin Ella links neben der Blase (Begleiter als Zeichnung, nie Emoji) */
+  .sprecher-zeile { display: flex; align-items: center; justify-content: center; gap: 16px; width: 100%; }
+  .sprecher-zeile .sprecher { width: 92px; flex: none; }
+  .sprecher-zeile .sprecher svg { width: 100%; height: auto; display: block; }
+  .sprecher-zeile .blase::after { content: none; }
+  @media (max-width: 520px) { .sprecher-zeile .sprecher { width: 64px; } .sprecher-zeile .blase { font-size: 1.15rem; padding: 12px 16px; } }
   .ei-wahl { background: #fff; border-radius: 26px; padding: 14px 10px; font-size: 1.25rem; font-weight: 700; box-shadow: 0 7px 0 rgba(0,0,0,.08); display: grid; justify-items: center; gap: 4px; }
   .ei-wahl:active { transform: translateY(4px); }
   .ei-wahl svg { width: 100%; max-width: 170px; height: auto; }
@@ -93,7 +106,8 @@
 </div>
 
 <section class="ansicht mitte" id="wahl-ansicht" hidden>
-  <div class="blase">Such dir ein Ei aus! Wer wohnt da wohl drin?<span class="ru" lang="ru" id="wahl-ru" hidden>Выбери себе яйцо! Кто же в нём живёт?</span></div>
+  <div class="sprecher-zeile"><span class="sprecher" id="wahl-sprecher" data-wer="eule" aria-hidden="true"></span>
+  <div class="blase begleiter-blase">Such dir ein Ei aus! Wer wohnt da wohl drin?<span class="ru" lang="ru" id="wahl-ru" hidden>Выбери себе яйцо! Кто же в нём живёт?</span></div></div>
   <div class="eier" id="eier"></div>
   <!-- (UX-Paket 5, 07.11.2026) Nest unter den Eiern – vorher blieb die halbe Seite leer -->
   <div class="nest" aria-hidden="true"><svg viewBox="0 0 600 170"><ellipse cx="300" cy="120" rx="290" ry="46" fill="#B8783F" stroke="#3B1F63" stroke-width="5"/>
@@ -134,6 +148,8 @@
 <script src="../../shared/sprache.js"></script>
 <script src="../../shared/tiere.js"></script>
 <script src="../../shared/tierpflege.js"></script>
+<script src="../../shared/figuren.js"></script>
 <script src="tier.js"></script>
+<script>{ const s = document.getElementById("wahl-sprecher"); if (s && window.FigurenNeu) s.innerHTML = FigurenNeu.svg("eule", "a", "froh"); }</script>
 </body>
 </html>

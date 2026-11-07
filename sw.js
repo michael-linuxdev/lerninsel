@@ -91,6 +91,7 @@ const START = [
   "spiele/familie/duell.js",
   "shared/zeit.js",
   "shared/sticker.js",
+  "shared/inseltuer.js",
   "spiele/album/",
   "spiele/album/album.js",
   "shared/figuren.js",

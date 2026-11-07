@@ -66,7 +66,7 @@
     paint-order: stroke fill;
     text-shadow: 0 .06em 0 var(--pflaume);
   }
-  .name-aendern { font-size: 1rem; min-height: 44px; margin-top: 10px; box-shadow: none; background: transparent; text-decoration: underline; text-underline-offset: 4px; }
+  .name-aendern { outline: 0; font-size: 1rem; min-height: 44px; margin-top: 10px; box-shadow: none; background: transparent; text-decoration: underline; text-underline-offset: 4px; }
   .abzeichen { display: inline-flex; align-items: center; gap: .4em; padding: 4px 12px; border-radius: 999px; background: #fff; font-weight: 600; font-size: .95rem; box-shadow: var(--schatten); }
   .abzeichen[hidden] { display: none; }
 
@@ -267,11 +267,21 @@
   <nav class="schrank" aria-label="Insel, Lernen und Spielen">
     <a class="tuer insel" id="tuer-insel" href="spiele/insel/" style="text-decoration:none">
       <span class="schloss" id="insel-status" hidden></span>
-      <svg class="bild" viewBox="0 0 120 100" aria-hidden="true">
-        <ellipse cx="60" cy="78" rx="52" ry="14" fill="#F2D9A2"/><ellipse cx="60" cy="74" rx="44" ry="11" fill="#7CCB5B"/>
-        <rect x="30" y="50" width="22" height="20" rx="4" fill="#FFE3B8"/><path d="M26 52 41 38 56 52z" fill="#E2604F"/>
-        <rect x="76" y="46" width="5" height="24" rx="2" fill="#9A6A3F"/><circle cx="78" cy="40" r="13" fill="#5DBB5A"/><circle cx="70" cy="46" r="8" fill="#4FAF62"/>
-        <circle cx="98" cy="20" r="9" fill="#FFC83D"/>
+      <!-- Eine Welt (07.11.2026): kleines Stil-A-Bild der Insel – Meer, Sand, Wiese, Haus mit Tür, Palme, Sonne, alles mit Kontur -->
+      <svg class="bild insel-bild" viewBox="0 0 120 100" aria-hidden="true" stroke="#3B1F63" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+        <ellipse cx="60" cy="80" rx="57" ry="16" fill="#5EC3E6" class="it-meer"/>
+        <path d="M14 82q5-3 10 0M96 86q5-3 10 0M40 92q5-3 10 0" fill="none" stroke="#fff" stroke-width="2"/>
+        <ellipse cx="60" cy="74" rx="46" ry="12" fill="#F2D9A2"/><ellipse cx="58" cy="70" rx="38" ry="9" fill="#7CCB5B" class="it-gras"/>
+        <circle cx="22" cy="64" r="7" fill="#5DBB5A" class="it-busch"/>
+        <path d="M28 70V52h26v18z" fill="#FFE3B8"/><path d="M23 54 41 38l18 16z" fill="#E2604F"/>
+        <path d="M26 52 41 40l15 12-3 1-12-10-12 10z" fill="#fff" class="it-schnee" style="display:none"/>
+        <path d="M37 70v-9a4 4 0 0 1 8 0v9z" fill="#B9774A"/><rect x="47" y="56" width="5" height="5" rx="1" fill="#A8DDF5" stroke-width="1.6" class="it-fenster"/>
+        <path d="M82 70q-1-16 4-28" fill="none" stroke-width="5"/><path d="M82 70q-1-16 4-28" fill="none" stroke="#B9774A" stroke-width="2.4"/>
+        <path d="M86 42C74 30 58 32 52 46C62 39 74 39 86 42ZM86 42C98 30 112 34 116 46C106 39 96 39 86 42ZM86 42C80 30 82 20 90 14C90 24 90 33 86 42ZM86 42C94 30 104 25 112 28C102 32 94 36 86 42Z" fill="#5DBB5A" class="it-palme"/><circle cx="84" cy="45" r="2.6" fill="#8A5A34"/><circle cx="89" cy="45" r="2.6" fill="#8A5A34"/>
+        <circle cx="100" cy="16" r="9" fill="#FFC83D" class="it-sonne"/>
+        <g class="it-mond" style="display:none"><path d="M104 8a10 10 0 1 0 6 16a8 8 0 1 1-6-16z" fill="#FFF3C4"/><path d="M14 14l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5zM60 8l1 2 2 1-2 1-1 2-1-2-2-1 2-1zM36 26l1 2 2 1-2 1-1 2-1-2-2-1 2-1z" fill="#FFF3C4" stroke-width="1"/></g>
+        <g class="it-regen" style="display:none" stroke="#2F86C8" stroke-width="2.2"><path d="M30 18l-3 7M50 12l-3 7M70 20l-3 7M44 30l-3 7M64 4l-3 7"/></g>
+        <g class="it-flocken" style="display:none" fill="#fff" stroke-width="1"><circle cx="30" cy="20" r="2.4"/><circle cx="52" cy="12" r="2.4"/><circle cx="68" cy="26" r="2.4"/><circle cx="42" cy="34" r="2"/><circle cx="16" cy="36" r="2"/></g>
       </svg>
       <h2>Meine Insel</h2>
       <p>Dein Zuhause mit Tier, Haus, Kleiderschrank und Nachbarn</p>
@@ -285,13 +295,13 @@
     </a>
     <a class="tuer deutsch" href="spiele/deutsch/" style="text-decoration:none">
       <span class="begleiter" data-wer="fipsi" aria-hidden="true"></span>
-      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><path d="M20 70 50 22l30 48z" fill="#fff"/><circle cx="72" cy="30" r="9" fill="#FFC83D"/></svg>
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><!-- Deutsch: „Abc“ auf einer Karte (Eine Welt) --><rect x="10" y="26" width="72" height="50" rx="10" fill="#fff" stroke="#3B1F63" stroke-width="3"/><text x="46" y="62" text-anchor="middle" font-size="30" font-weight="700" fill="#3B1F63" font-family="Fredoka, sans-serif">Abc</text><circle cx="82" cy="24" r="9" fill="#FFC83D"/></svg>
       <h2>Deutsch</h2>
       <p>Mit Fipsi die Schatzkarte finden</p>
     </a>
     <a class="tuer sach" href="spiele/sachkunde/" style="text-decoration:none">
       <span class="begleiter" data-wer="eule" aria-hidden="true"></span>
-      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34" fill="#fff"/><path d="M28 36c8 2 10 10 18 8s6-12 14-10 8 8 12 6M24 58c10-2 14 6 22 4s10 6 16 10" stroke="#1F8F8A" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="76" cy="22" r="9" fill="#FFC83D"/></svg>
+      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true" stroke="#3B1F63" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><!-- Sachunterricht: Lupe über einem Blatt (Eine Welt) --><path d="M6 86C2 44 32 12 76 8c4 44-24 76-70 78z" fill="#8FD66B"/><path d="M8 84C26 62 44 42 66 20" fill="none" stroke-width="2.4"/><path d="M62 66l26 26" stroke-width="12"/><path d="M62 66l26 26" stroke="#B9774A" stroke-width="6"/><circle cx="48" cy="52" r="24" fill="#E6F7FF" fill-opacity=".85" stroke-width="6"/><circle cx="40" cy="44" r="6" fill="#fff" stroke="none"/><circle cx="88" cy="14" r="9" fill="#FFC83D"/></svg>
       <h2>Sachunterricht</h2>
       <p>Mit Eule Ella die Welt entdecken</p>
     </a>
@@ -372,6 +382,7 @@
 <script src="shared/tierpflege.js"></script>
 <script src="shared/vendor/qrcodegen.js"></script>
 <script src="shared/spielstand.js" data-root="./"></script>
+<script src="shared/inseltuer.js"></script>
 <script>
   const S = Spielwelt;
   // Ersteinrichtung immer durch einen Erwachsenen
