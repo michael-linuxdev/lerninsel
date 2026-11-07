@@ -123,6 +123,7 @@
   .bew-bild { background: #fff; border: 3px solid var(--kontur, #3B1F63); border-radius: 26px; padding: 6px 18px; line-height: 0; }
   .bew-figur { max-height: 28vh; width: auto; }
   .bew-knoepfe { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  @media (max-width: 640px) { .bew-figur { max-height: 19vh; } .bew-bild { padding: 2px 12px; } }
   @media (orientation: portrait) {
     .buehne { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
     .erzaehler { flex-direction: row; align-items: flex-end; }
