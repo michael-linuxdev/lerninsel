@@ -2542,3 +2542,20 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
   keine Impressum-/Datenschutzseite. Heute gibt es Prüflisten nur für Russisch (Elternbereich, nur mit Hilfesprache Russisch) und Sorbisch (nur mit Sorbisch-Wahl), fachlich keine; Ergebnisse als kopierter Text.
 - **Runde 2 gestartet** (fünf Agenten, je eigener Worktree): Fächer I (Kunst/Musik/Werken), Fächer II (Sport/Ethik/Religion), Englisch Sprechen/Dialoge, Kapitel 9 Bennos Brücke, `icons.js` verkleinern.
   Danach Paket K Erprobungsmodus. Übergabe für eine neue Sitzung in `docs/SESSION-PROMPT.md` (Abschnitt 0 und 2, Pakete G–L).
+
+## Stand 12.11.2026 (Runde 2 fertig: Fächer, Englisch, Bennos Brücke, Emoji-Häppchen)
+- **Fächer ausbauen I (Kunst, Musik, Werken):** ≈ 110 neue Übungen in 24 Themen, neues Musik-Thema „Hör genau hin!“ (`mu-hoeren`, 8 Klangbeispiele aus WebAudio, `spiele/sachkunde/klang.js`,
+  Abspielen nur nach Antippen). Abdeckung (ja/teil/aussen) Kunst 16/17/12 → 31/0/14, Musik 23/14/11 → 35/0/13, Werken 7/18/9 → 23/0/11. **Entscheidung:** Tun mit Material/Stimme (Upcycling, Pantomime,
+  Singtechnik, Falten/Kleben, Fahrradpflege) ist ehrlich „aussen“; neue Echte-Welt-Idee `upcycling`. Test `faecher1`.
+- **Fächer ausbauen II (Sport, Ethik, Religion):** 105 neue Übungen, neue Themen `sp-helfen`, `sp-bewegungspause`, `re-jona` (ev); Sport 6/8/28 → 13/0/29, Ethik 16/27 → 43/0, ev 26/19 → 45/0, ka 17/42 → 59/0.
+  Eigene Idee: Schritt-Typ `bewegung` (Bewegungspause mit Strichfiguren, `spiele/sachkunde/bewegung.js`) – zählt **nicht** als Übung (die App sieht das Kind nicht). Test `faecher2`.
+- **Englisch Sprechen/Hören:** Schritt-Typen `dialog`, `gespraech` (Rollenspiele Café, Laden, Bahnhof, Interview), `hoergeschichte`, `nachsprechen`; Aufnehmen mit Selbstvergleich nur mit neuem Eltern-Schalter
+  `eltern.englisch.aufnehmen` (Aufnahmen werden nicht gespeichert, keine Spracherkennung). Lernbereiche Englisch 5/17 → 19/3 (ja/teil); freies Sprechen/Schreiben bleibt „teil“. Test `englischsprechen`.
+- **Kapitel 9 „Bennos Brücke“, Finale jetzt Kapitel 10** (`Story.KAPITEL_ZAHL = 10`): Kapitel 9 ab 55 Lernfunden + 5 Matheweg-Stationen; Seite `spiele/bruecke/` (4 Bauschritte je Runde, Stufen a–d: vergleichen/
+  Pfoten messen, cm/m, umrechnen/einteilen, Maßstab/Tragkraft), 8 Stücke, 3D-Brücke wächst zur Sandbank, fertig → begehbar; Finale braucht 70 Lernfunde + 3 Brückenstücke (Brücke nur begonnen), Benno spricht
+  die erste Finale-Blase; Truhe „Brückenstücke“ in der Schatzkammer. „einfach“ mit voller Brücke ≈ 58 500 Dreiecke (Budget 60 000 – knapp). Test `bruecke`.
+- **Emoji-Bilder in 24 Häppchen** (`shared/icons/<teil>-<n>.js`, `shared/icons.js` entfällt): Kurzform verlustfrei (roh 2,62 → 1,87 MB; gzip −7 %), pixelgleich (773 Bilder, 0 % Abweichung); `emoji.js` lädt nur
+  die Häppchen der Seite (Startseite 10 von 24), Bilder als `data:` statt Blob in Portionen ≤ 12 ms – Emoji-Arbeit ist keine lange Aufgabe mehr; ein geändertes Emoji ändert ein Häppchen. Test `icons`.
+- **Zusammenführen:** Zählzeilen in `tests/lehrplan.js` und `tests/faechervoll.js` (73 + 38 Themen) aus beiden Fächer-Paketen vereint; `bewegung` in `NICHT` neben den Englisch-Ausnahmen.
+- **Offen / nächstes:** Paket K Erprobungsmodus (Rollen mehrfach wählbar); Prüf- und Erprobungsphase; Budget „einfach“ beobachten; Sachunterricht hat noch lange Aufgaben beim Seitenaufbau (nicht Emojis);
+  Hör-Schritte auch für Instrumente (mu-gruppen, mu-orchester); russische Entwürfe der neuen Texte prüfen lassen.

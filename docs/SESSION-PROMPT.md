@@ -18,8 +18,8 @@ zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, t
 
 ## 0. Auftrag für die nächste Sitzung
 **Übergabe (12.11.2026, Gerätedatum 07.11.)** – auf Wunsch des Auftraggebers an eine neue, unabhängige Sitzung; die alte Sitzung arbeitet vorerst weiter.
-**Zuerst prüfen, was davon schon auf `main` liegt** (`git log --oneline -15`, PLAN-Einträge „Stand 12.11.2026“): die alte Sitzung baut gerade **Runde 2** (Abschnitt 2, Pakete G–J) mit fünf Agenten
-in lokalen Arbeitskopien – **nur was auf `main` gepusht ist, ist da**. Fehlt ein Paket aus G–J auf `main`, ist es noch nicht fertig: dann selbst bauen.
+**Zuerst prüfen, was davon schon auf `main` liegt** (`git log --oneline -15`, PLAN-Einträge „Stand 12.11.2026“): **Runde 2** (Abschnitt 2, Pakete G–J: Fächer, Englisch Sprechen, Kapitel 9 Bennos Brücke, Emoji-Häppchen) ist fertig und gepusht;
+als Nächstes **Paket K Erprobungsmodus** – prüfe auf `main`, ob die alte Sitzung damit schon begonnen hat.
 1. **Fragerunde (höchstens 4 Fragen):** iPad-Rückmeldung (seit 08.11. keine – zwei große Runden sind auf echtem Safari ungetestet: Emojis als `<img>`, Update-Verhalten, Kamerafahrt, kurze Startseite).
    Hat jemand mit dem Erprobungsmodus gespielt oder geprüft (Paket K)? Dann zuerst die Dateien auswerten.
 2. **Entschieden (nicht neu fragen):** 10.11.: „Namen schreiben“ bleibt „teilweise“; russische Hilfe automatisch nach Deutschstand; Kulissen wählt das Kind. 11.11.: kurze Startseite für Vorschule/Kl. 1
@@ -34,6 +34,15 @@ in lokalen Arbeitskopien – **nur was auf `main` gepusht ist, ist da**. Fehlt e
    Commits: Autor michael-linuxdev, Committer `Claude <noreply@anthropic.com>` (`git config user.name Claude; git config user.email noreply@anthropic.com`, Autor per `--author`), sonst „Unverified“.
    CI-Zeitlimit 60 min (Lauf 115 grün nach Review-Runde). Viele Agenten parallel: je eigener Worktree, generierte Dateien (`dev/`, `spiele/welt3d/`, `ru-texte.js`, `icons.js`) nicht committen lassen,
    beim Zusammenführen Testlisten in `tests/laufen.sh`/CI vereinen und neue Tests auf `#uebergabe-los` prüfen; Test-Haken-Objekte mit Gettern nie per `Object.assign` erweitern (`defineProperties`).
+
+## 1. Stand (12.11.2026)
+**Neu (PLAN „Stand 12.11.2026 (Runde 2 fertig …)“):** Kunst/Musik/Werken und Sport/Ethik/Religion ohne „teilweise“ (Draußen-Punkte 🌍), „Hör genau hin!“ mit Klängen, Bewegungspause; Englisch mit Dialogen,
+Rollenspielen, Hörgeschichten und Nachsprechen (Aufnahme nur mit Eltern-Schalter); **Kapitel 9 „Bennos Brücke“** (Bauseite + wachsende 3D-Brücke), Finale = Kapitel 10; Emoji-Bilder in 24 Häppchen.
+**Im iPad testen (in /dev/test):**
+1. Sachunterricht → Reiter Musik → „Hör genau hin!“: ▶️ antippen – klingen die Beispiele (lauter, schneller, A – B – A)? Sport → „Bewegungspause“: sind die Strichfiguren verständlich?
+2. Kind Kl. 3 → Englisch → Lektion mit Dialog: 🔊, Antwort wählen, nachsprechen. Elternbereich → Englisch „Aufnehmen erlauben“ → aufnehmen, anhören, „Klang es gleich?“. Rollenspiel „Paulas Café“.
+3. Insel (in /dev/test ist alles frei): Baustelle am Ufer → „🌉 Bauen“ → eine Runde auf der Bauseite (je Klasse anders) → wächst die Brücke auf der Insel? Fertig → über die Brücke auf die Sandbank laufen.
+4. Emojis überall: erscheinen sie schnell und sehen aus wie vorher (jetzt aus Häppchen geladen)?
 
 ## 1. Stand (11.11.2026)
 **Neu (PLAN „Stand 11.11.2026“):** Paket 1 Sofort-Fehler (Inhaltsfehler, ehrliches Lob, Übergabe-Bildschirm), Paket 2 Ohne Lesen (kurze Startseite mit „Los!“, 🔊 im Matheweg, 🏠/⬅️-Regel),
@@ -287,7 +296,7 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - Muttersprachlerinnen und Muttersprachler für ru/uk; Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (in dieser Reihenfolge)
-**Stand 12.11.2026 – Runde 2 (läuft in der alten Sitzung; auf `main` prüfen, was fertig ist):**
+**Stand 12.11.2026 – Runde 2 (G–J) ist fertig und auf `main` (PLAN „Stand 12.11.2026 (Runde 2 fertig …)“); Beschreibung bleibt als Referenz:**
 - G. **Fächer ausbauen** I (Kunst, Musik, Werken) und II (Sport, Ethik, Religion ev/ka): Themen in `faecher.js`/`religion.js` so ausbauen, dass Inhaltspunkte ehrlich „ja“ werden (≥ 2 Übungen je Punkt);
   reine Draußen-/Material-Punkte bleiben `aussen`/„teil“ mit Hinweis. Tests `faecher1`, `faecher2`. Stand vorher: Kunst 16/17, Musik 23/14, Werken 7/18, Sport 6/8, Ethik 16/27, Ev 26/19, Ka 17/42 (ja/teil).
 - H. **Englisch: Sprechen, Hören, Dialoge** – Schritt `dialog` (Figur fragt, Kind wählt Antwort und spricht nach), Nachsprechen mit Aufnahme (offline, Selbstvergleich, keine Spracherkennung),
