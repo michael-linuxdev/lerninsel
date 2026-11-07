@@ -453,3 +453,179 @@ window.ENGLISCH.push(
     ende: { de: "Super! Gesichter und Gesten verstehen Menschen überall – das hilft, wenn dir ein Wort fehlt.", ru: "Супер! Мимику и жесты понимают везде." }
   }
 );
+
+// ---------- Sprechen, Hören, kleine Dialoge (07.11.2026, Review: Englisch war fast nur Wortschatz) ----------
+// Neue Schritt-Typen in extra (in den Lektionen unten eingehängt):
+//   dialog { wer, kontext?, e?, frage (EN), de, optionen: [richtig, …] (EN, {name} erlaubt), warum?, ru, punkte? }
+//     – ein Begleiter (FigurenNeu, nie Emoji) fragt auf Englisch (🔊 nur auf Knopfdruck), das Kind wählt die passende Antwort und spricht sie nach
+//       (mit Eltern-Erlaubnis eltern.englisch.aufnehmen auch mit Aufnahme und Selbstvergleich „Klang es gleich? 👍/🔁“ – zählt nie als Fehler).
+//   gespraech { wer, titel, ru, punkte?, zuege: [{ frage, de, kontext?, e?, optionen }] } – Rollenspiel: wird zu mehreren dialog-Schritten mit Verlauf.
+//   hoergeschichte { wer, titel, e, saetze: [EN], de, ru, fragen: [{ frage, de, optionen: [Emoji richtig, …], antwort, ru, punkte? }] }
+//     – erst hören (Text versteckt), dann Fragen mit Bild-Antworten, danach der Text zum Mitlesen. Ohne englische Stimme steht der Text gleich da.
+//   nachsprechen { satz, de, e?, tipp?, ru } – nur mit Eltern-Erlaubnis und Mikrofon, sonst fällt der Schritt still weg; ohne Bewertung.
+// punkte: Inhaltspunkte (sachsen-punkte.js), für die dieser Schritt eine echte Übung ist – tests/lehrplan.js zählt sie je Punkt.
+// Russisch: nur die Anleitung (Entwurf), nie die englischen Sätze.
+(function () {
+  const RU_D = "Нажми 🔊 и послушай вопрос. Выбери подходящий ответ и скажи его вслух.";
+  const RU_G = "Послушай историю (🔊). Потом будут вопросы — отвечай картинками.";
+  const SPRECHEN = {
+    "en-hello": [
+      { typ: "dialog", wer: "robo", e: "🌅", kontext: "Robo trifft dich am Morgen.", frage: "Good morning! I'm Robo. What's your name?", de: "Guten Morgen! Ich bin Robo. Wie heißt du?",
+        optionen: ["Good morning! My name is {name}.", "Good night! I'm eight.", "Goodbye! It's red."], warum: "„What's your name?“ = „Wie heißt du?“ – „My name is …“ = „Ich heiße …“", ru: "Робо встречает тебя утром. " + RU_D, punkte: ["sn.en3.mf.03"] },
+      { typ: "dialog", wer: "fipsi", e: "🚶", kontext: "Fipsi geht nach Hause.", frage: "Bye-bye, {name}! See you tomorrow!", de: "Tschüss! Bis morgen!",
+        optionen: ["Goodbye, Fipsi! See you!", "Hello, Fipsi! Nice to meet you.", "Thank you, I'm fine."], ru: "Фипси идёт домой. " + RU_D, punkte: ["sn.en3.mf.03"] },
+      { typ: "dialog", wer: "baer", e: "🙂", kontext: "Dir geht es gut.", frage: "Hi, {name}! How are you?", de: "Hallo! Wie geht es dir?",
+        optionen: ["I'm fine, thank you. And you?", "I'm eight, thank you.", "My name is fine."], warum: "„How are you?“ fragt, wie es dir geht – nicht, wie alt du bist.", ru: "У тебя всё хорошо. " + RU_D, punkte: ["sn.en3.mf.05"] },
+      { typ: "nachsprechen", satz: "Thank you!", de: "Danke!", e: "💐", tipp: "Beim „th“ schaut die Zungenspitze kurz zwischen den Zähnen hervor.", ru: "Послушай, скажи сам(а) и сравни. При «th» кончик языка чуть выглядывает между зубами." }],
+    "en-numbers": [
+      { typ: "dialog", wer: "tilda", e: "🎂", kontext: "Stell dir vor, du bist acht Jahre alt.", frage: "How old are you?", de: "Wie alt bist du?",
+        optionen: ["I'm eight.", "I have eight years.", "I'm fine."], warum: "Auf Englisch sagt man „I'm eight“ – wie im Deutschen „Ich bin acht“.", ru: "Представь, что тебе восемь лет. " + RU_D, punkte: ["sn.en3.mf.04"] }],
+    "en-family": [
+      { typ: "hoergeschichte", wer: "papagei", titel: "Tom's family", e: "👨‍👩‍👧", saetze: ["Hello! I'm Tom.", "I'm nine years old.", "I've got a sister. Her name is Lily.", "Lily is six.", "And we've got a dog."],
+        de: "Hallo! Ich bin Tom. Ich bin neun Jahre alt. Ich habe eine Schwester. Sie heißt Lily. Lily ist sechs. Und wir haben einen Hund.", ru: RU_G,
+        fragen: [
+          { frage: "How old is Tom?", de: "Wie alt ist Tom?", optionen: ["9️⃣", "6️⃣", "3️⃣"], antwort: "Tom is nine.", ru: "Сколько лет Тому?", punkte: ["sn.en3.mf.04"] },
+          { frage: "Who is Lily?", de: "Wer ist Lily?", optionen: ["👧", "👩", "👵"], antwort: "Lily is Tom's sister.", ru: "Кто такая Лили?", punkte: ["sn.en3.mf.04"] },
+          { frage: "What pet have they got?", de: "Welches Haustier haben sie?", optionen: ["🐶", "🐱", "🐟"], antwort: "They've got a dog.", ru: "Какое у них домашнее животное?", punkte: ["sn.en3.mf.04"] }] },
+      { typ: "dialog", wer: "robo", e: "👦", kontext: "Du hast einen Bruder.", frage: "Have you got a brother or a sister?", de: "Hast du einen Bruder oder eine Schwester?",
+        optionen: ["I've got a brother.", "I'm a brother.", "I've got a sister."], warum: "„I've got …“ = „Ich habe …“", ru: "У тебя есть брат. " + RU_D, punkte: ["sn.en3.mf.04"] }],
+    "en-portfolio": [
+      { typ: "gespraech", wer: "robo", titel: "An interview with Robo", ru: "Интервью: Робо спрашивает, ты отвечаешь. " + RU_D, punkte: ["sn.en4.mf.03"], zuege: [
+        { frage: "Hello! What's your name?", de: "Hallo! Wie heißt du?", e: "🙋", optionen: ["My name is {name}.", "I'm from {name}.", "I like {name}."] },
+        { frage: "Where are you from?", de: "Woher kommst du?", kontext: "Du kommst aus Deutschland.", e: "🇩🇪", optionen: ["I'm from Germany.", "I'm Germany.", "I like Germany."] },
+        { frage: "What languages can you speak?", de: "Welche Sprachen kannst du sprechen?", kontext: "Du sprichst Deutsch und Englisch.", e: "🗣️", optionen: ["I can speak German and English.", "I can German and English.", "I'm German and English."] }] }],
+    "en-feelings": [
+      { typ: "dialog", wer: "eule", e: "🥱", kontext: "Du bist sehr müde.", frage: "How are you today?", de: "Wie geht es dir heute?",
+        optionen: ["I'm tired.", "I'm hungry.", "I'm happy."], ru: "Ты очень устал(а). " + RU_D, punkte: ["sn.en3.mf.05"] },
+      { typ: "dialog", wer: "biber", e: "😢", kontext: "Dein Ballon ist weggeflogen. Du bist traurig.", frage: "Oh! What's the matter?", de: "Oh! Was ist los?",
+        optionen: ["I'm sad. My balloon is gone.", "I'm happy. My balloon is gone.", "I'm fine, thank you."], ru: "Твой шарик улетел, тебе грустно. " + RU_D, punkte: ["sn.en4.mf.04"] },
+      { typ: "dialog", wer: "papagei", e: "🥤", kontext: "Du hast keinen Hunger, aber großen Durst.", frage: "Are you hungry?", de: "Hast du Hunger?",
+        optionen: ["No, I'm not. I'm thirsty.", "Yes, I'm thirsty.", "No, I'm hungry."], warum: "hungry = hungrig, thirsty = durstig", ru: "Ты не голоден (не голодна), но очень хочешь пить. " + RU_D, punkte: ["sn.en4.mf.04"] },
+      { typ: "nachsprechen", satz: "I'm happy!", de: "Ich bin fröhlich!", e: "😄", tipp: "Sag es fröhlich – mit einem Lächeln klingt es gleich richtig.", ru: "Послушай, скажи сам(а) и сравни." }],
+    "en-colours": [
+      { typ: "dialog", wer: "fipsi", e: "🔵", kontext: "Du magst Blau am liebsten.", frage: "What's your favourite colour?", de: "Was ist deine Lieblingsfarbe?",
+        optionen: ["My favourite colour is blue.", "I'm blue.", "Yes, I like colours."], ru: "Твой любимый цвет — синий. " + RU_D, punkte: ["sn.en3.bc.05"] }],
+    "en-clothes": [
+      { typ: "dialog", wer: "baer", e: "🧥", kontext: "Bruni hält eine Jacke hoch. Es ist deine.", frage: "Is this your jacket?", de: "Ist das deine Jacke?",
+        optionen: ["Yes, it's my jacket. Thank you!", "Yes, I'm a jacket.", "No, it's sunny."], ru: "Бруни держит куртку. Это твоя куртка. " + RU_D, punkte: ["sn.en3.bc.05"] },
+      { typ: "dialog", wer: "tilda", e: "👕", kontext: "Am liebsten trägst du dein grünes T-Shirt.", frage: "What do you like to wear?", de: "Was ziehst du gern an?",
+        optionen: ["I like to wear my green T-shirt.", "I like green apples.", "My T-shirt is cold."], ru: "Больше всего ты любишь носить зелёную футболку. " + RU_D, punkte: ["sn.en4.bc.02"] }],
+    "en-weather": [
+      { typ: "hoergeschichte", wer: "eule", titel: "A cold day", e: "❄️", saetze: ["Brr! It's cold and snowy today.", "Ben puts on his warm jacket.", "He puts on his red scarf, too.", "But where is his cap?", "Oh, here it is – under the bed!"],
+        de: "Brr! Heute ist es kalt und es schneit. Ben zieht seine warme Jacke an. Er zieht auch seinen roten Schal an. Aber wo ist seine Mütze? Oh, hier ist sie – unter dem Bett!", ru: RU_G,
+        fragen: [
+          { frage: "What's the weather like?", de: "Wie ist das Wetter?", optionen: ["❄️", "☀️", "🌧️"], antwort: "It's cold and snowy.", ru: "Какая погода?", punkte: ["sn.en4.bc.02"] },
+          { frage: "What colour is Ben's scarf?", de: "Welche Farbe hat Bens Schal?", optionen: ["🔴", "🔵", "🟢"], antwort: "It's red.", ru: "Какого цвета шарф у Бена?", punkte: ["sn.en4.bc.02"] },
+          { frage: "Where is the cap?", de: "Wo ist die Mütze?", optionen: ["🛏️", "🛋️", "🚪"], antwort: "It's under the bed.", ru: "Где шапка?" }] },
+      { typ: "dialog", wer: "robo", e: "🌧️", kontext: "Draußen regnet es.", frage: "It's rainy. What do you need?", de: "Es regnet. Was brauchst du?",
+        optionen: ["I need my jacket and my umbrella.", "I need my sunglasses.", "I need a swimsuit."], ru: "На улице дождь. " + RU_D, punkte: ["sn.en4.bc.02"] }],
+    "en-home": [
+      { typ: "hoergeschichte", wer: "papagei", titel: "Paula's house", e: "🏠", saetze: ["Welcome to my house!", "The kitchen is yellow.", "The bathroom is blue.", "My cat sleeps in the living room.", "And I sit in the garden."],
+        de: "Willkommen in meinem Haus! Die Küche ist gelb. Das Badezimmer ist blau. Meine Katze schläft im Wohnzimmer. Und ich sitze im Garten.", ru: RU_G,
+        fragen: [
+          { frage: "Which room is yellow?", de: "Welches Zimmer ist gelb?", optionen: ["🍳", "🛁", "🛏️"], antwort: "The kitchen is yellow.", ru: "Какая комната жёлтая?", punkte: ["sn.en3.ah.01"] },
+          { frage: "Where does the cat sleep?", de: "Wo schläft die Katze?", optionen: ["🛋️", "🛏️", "🌷"], antwort: "In the living room.", ru: "Где спит кошка?", punkte: ["sn.en3.ah.01", "sn.en3.ah.03"] },
+          { frage: "Where is Paula?", de: "Wo ist Paula?", optionen: ["🌷", "🍳", "🛁"], antwort: "Paula is in the garden.", ru: "Где Паула?", punkte: ["sn.en3.ah.03"] }] },
+      { typ: "dialog", wer: "biber", e: "🐱", kontext: "Bennos Katze liegt unter dem Bett.", frage: "Where is my cat?", de: "Wo ist meine Katze?",
+        optionen: ["It's under the bed.", "It's on the bed.", "It's in the bath."], warum: "under = unter, on = auf, in = in", ru: "Кошка Бенно лежит под кроватью. " + RU_D, punkte: ["sn.en3.ah.03"] }],
+    "en-furniture": [
+      { typ: "dialog", wer: "fipsi", e: "⚽", kontext: "Der Ball liegt neben dem Sofa.", frage: "Where is my ball?", de: "Wo ist mein Ball?",
+        optionen: ["It's next to the sofa.", "It's under the sofa.", "It's on the sofa."], warum: "next to = neben", ru: "Мяч лежит рядом с диваном. " + RU_D, punkte: ["sn.en4.ah.02"] },
+      { typ: "dialog", wer: "tilda", e: "💡", kontext: "Die Lampe steht auf dem Tisch.", frage: "Where is the lamp?", de: "Wo ist die Lampe?",
+        optionen: ["It's on the table.", "It's under the table.", "It's next to the bed."], warum: "on = auf", ru: "Лампа стоит на столе. " + RU_D, punkte: ["sn.en4.ah.02"] }],
+    "en-cafe": [
+      { typ: "gespraech", wer: "papagei", titel: "In Paula's café", ru: "Ролевая игра: Паула — официантка, ты — гость. " + RU_D, punkte: ["sn.en4.fd.01"], zuege: [
+        { frage: "Hello! Welcome to my café. What would you like?", de: "Hallo! Willkommen in meinem Café. Was möchtest du?", kontext: "Du möchtest einen Pfannkuchen.", e: "🥞",
+          optionen: ["Can I have a pancake, please?", "I am a pancake, please.", "Here you are, pancake."] },
+        { frage: "Here you are. Anything to drink?", de: "Bitte schön. Etwas zu trinken?", kontext: "Du möchtest einen Saft.", e: "🧃", optionen: ["Yes, a juice, please.", "Yes, you are a juice.", "No, I'm a juice."] },
+        { frage: "Here's your juice.", de: "Hier ist dein Saft.", kontext: "Du möchtest wissen, was es kostet.", e: "💷", optionen: ["Thank you! How much is it?", "Thank you! How old is it?", "Thank you! Where is it?"] },
+        { frage: "That's three pounds, please.", de: "Das macht drei Pfund, bitte.", kontext: "Du bezahlst und verabschiedest dich.", e: "🪙", optionen: ["Here you are. Goodbye!", "Three pounds, please.", "Happy birthday!"] }] }],
+    "en-shopping": [
+      { typ: "gespraech", wer: "baer", titel: "At Bruni's toy shop", ru: "Ролевая игра: Бруни — продавщица, ты — покупатель. " + RU_D, punkte: ["sn.en3.sh.03", "sn.en4.sh.02"], zuege: [
+        { frage: "Good morning! Can I help you?", de: "Guten Morgen! Kann ich dir helfen?", kontext: "Du möchtest einen Drachen kaufen.", e: "🪁", optionen: ["Yes, please. I'd like a kite.", "Yes, I am a kite.", "No, it's Monday."] },
+        { frage: "Here you are. It's a red kite.", de: "Bitte schön. Es ist ein roter Drachen.", kontext: "Du fragst nach dem Preis.", e: "💷", optionen: ["How much is it?", "How old is it?", "Where is it?"] },
+        { frage: "It's five pounds.", de: "Er kostet fünf Pfund.", kontext: "Du hast nur zwei Pfund.", e: "🪙", optionen: ["Oh, sorry. I haven't got five pounds.", "Here you are, five pounds.", "Happy New Year!"] },
+        { frage: "Never mind! This small kite is two pounds.", de: "Macht nichts! Dieser kleine Drachen kostet zwei Pfund.", kontext: "Du kaufst den kleinen Drachen und verabschiedest dich.", e: "🛍️",
+          optionen: ["Great! Here you are. Thank you, goodbye!", "Can I help you?", "Good night, kite!"] }] },
+      { typ: "hoergeschichte", wer: "fipsi", titel: "Mia's wish list", e: "📝", saetze: ["Mia has got a wish list.", "She would like a teddy and a ball.", "The teddy is ten pounds.", "The ball is three pounds."],
+        de: "Mia hat eine Wunschliste. Sie hätte gern einen Teddy und einen Ball. Der Teddy kostet zehn Pfund. Der Ball kostet drei Pfund.", ru: RU_G,
+        fragen: [
+          { frage: "What would Mia like?", de: "Was hätte Mia gern?", optionen: ["🧸", "🪆", "🪁"], antwort: "A teddy and a ball.", ru: "Что хотела бы Мия?", punkte: ["sn.en4.sh.02"] },
+          { frage: "How much is the ball?", de: "Wie viel kostet der Ball?", optionen: ["3️⃣", "🔟", "5️⃣"], antwort: "The ball is three pounds.", ru: "Сколько стоит мяч?", punkte: ["sn.en4.sh.02"] }] }],
+    "en-school": [
+      { typ: "dialog", wer: "robo", e: "✏️", kontext: "Robo braucht einen Bleistift. Du hast einen.", frage: "Have you got a pencil?", de: "Hast du einen Bleistift?",
+        optionen: ["Yes, I have. Here you are.", "Yes, I am a pencil.", "No, it's my birthday."], ru: "Робо нужен карандаш. У тебя он есть. " + RU_D, punkte: ["sn.en3.sc.03"] },
+      { typ: "dialog", wer: "fipsi", e: "📏", kontext: "Fipsi hat ein Lineal gefunden. Es ist deins.", frage: "Is this your ruler?", de: "Ist das dein Lineal?",
+        optionen: ["Yes, this is my ruler. Thank you!", "Yes, this is my teacher.", "No, I haven't got a dog."], ru: "Фипси нашёл линейку. Это твоя. " + RU_D, punkte: ["sn.en3.sc.03"] }],
+    "en-subjects": [
+      { typ: "hoergeschichte", wer: "papagei", titel: "Amy's school", e: "🏫", saetze: ["This is Amy. She goes to school in England.", "All children at her school wear a school uniform.", "Amy's school jumper is red.", "School starts at nine o'clock.", "At three o'clock, school is over."],
+        de: "Das ist Amy. Sie geht in England zur Schule. Alle Kinder an ihrer Schule tragen eine Schuluniform. Amys Schulpullover ist rot. Die Schule beginnt um neun Uhr. Um drei Uhr ist die Schule aus.", ru: RU_G,
+        fragen: [
+          { frage: "What colour is Amy's school jumper?", de: "Welche Farbe hat Amys Schulpullover?", optionen: ["🔴", "🔵", "🟢"], antwort: "It's red.", ru: "Какого цвета школьный свитер Эми?", punkte: ["sn.en3.sc.01", "sn.en4.sc.03"] },
+          { frage: "When does school start?", de: "Wann beginnt die Schule?", optionen: ["🕘", "🕗", "🕐"], antwort: "At nine o'clock.", ru: "Когда начинаются уроки?", punkte: ["sn.en3.sc.01", "sn.en4.sc.02"] },
+          { frage: "When is school over?", de: "Wann ist die Schule aus?", optionen: ["🕒", "🕐", "🕘"], antwort: "At three o'clock.", ru: "Когда заканчиваются уроки?", punkte: ["sn.en4.sc.02", "sn.en4.sc.03"] }] },
+      { typ: "dialog", wer: "papagei", e: "👕", kontext: "An deiner Schule tragen die Kinder keine Schuluniform.", frage: "Do you wear a school uniform?", de: "Trägst du eine Schuluniform?",
+        optionen: ["No, I don't. We wear our own clothes.", "Yes, I'm a uniform.", "No, it's nine o'clock."], warum: "In England tragen viele Kinder eine Schuluniform, in Deutschland meist nicht.", ru: "В твоей школе дети не носят форму. " + RU_D, punkte: ["sn.en3.sc.01", "sn.en4.sc.03"] },
+      { typ: "dialog", wer: "tilda", e: "📅", kontext: "Heute ist Montag.", frage: "What day is it today?", de: "Welcher Tag ist heute?",
+        optionen: ["It's Monday.", "It's Sunday.", "It's nine o'clock."], ru: "Сегодня понедельник. " + RU_D, punkte: ["sn.en4.sc.01"] },
+      { typ: "dialog", wer: "eule", e: "🤸", kontext: "Sport ist dein Lieblingsfach.", frage: "What's your favourite subject?", de: "Was ist dein Lieblingsfach?",
+        optionen: ["My favourite subject is PE.", "My favourite subject is Monday.", "My favourite colour is PE."], warum: "PE (physical education) = Sport", ru: "Физкультура — твой любимый предмет. " + RU_D, punkte: ["sn.en4.sc.01"] },
+      { typ: "dialog", wer: "robo", e: "🕤", kontext: "Die Uhr zeigt halb zehn (9:30).", frage: "Excuse me, what time is it?", de: "Entschuldigung, wie spät ist es?",
+        optionen: ["It's nine thirty.", "It's nine o'clock.", "It's thirty nine."], warum: "9:30 = nine thirty – erst die Stunde, dann die Minuten.", ru: "Часы показывают половину десятого (9:30). " + RU_D, punkte: ["sn.en4.sc.02"] }],
+    "en-sports": [
+      { typ: "dialog", wer: "robo", e: "🏀", kontext: "Du magst Basketball sehr.", frage: "Do you like basketball?", de: "Magst du Basketball?",
+        optionen: ["Yes, I do. It's great!", "Yes, I am.", "No, I don't."], warum: "Auf „Do you like …?“ antwortet man „Yes, I do.“ oder „No, I don't.“", ru: "Ты очень любишь баскетбол. " + RU_D, punkte: ["sn.en3.ho.02"] },
+      { typ: "dialog", wer: "fipsi", e: "🏑", kontext: "Hockey magst du nicht.", frage: "Do you like hockey?", de: "Magst du Hockey?",
+        optionen: ["No, I don't.", "No, I'm not hockey.", "Yes, I do."], ru: "Хоккей тебе не нравится. " + RU_D, punkte: ["sn.en3.ho.02"] }],
+    "en-animals": [
+      { typ: "dialog", wer: "papagei", e: "🐶", kontext: "Dein Hund ist braun und kann schnell rennen.", frage: "Tell me about your dog!", de: "Erzähl mir von deinem Hund!",
+        optionen: ["It's brown. It can run fast.", "It's brown. It can fly.", "It's a brown cat."], ru: "Твоя собака коричневая и быстро бегает. " + RU_D, punkte: ["sn.en3.an.02"] },
+      { typ: "hoergeschichte", wer: "biber", titel: "Guess the animal!", e: "❓", saetze: ["I'm an animal on the farm.", "I'm pink.", "I've got four legs and a curly tail.", "I like mud!"],
+        de: "Ich bin ein Tier auf dem Bauernhof. Ich bin rosa. Ich habe vier Beine und einen Ringelschwanz. Ich mag Matsch!", ru: "Отгадай животное: послушай загадку (🔊), потом выбери картинку.",
+        fragen: [{ frage: "What animal is it?", de: "Welches Tier ist das?", optionen: ["🐷", "🐮", "🐴"], antwort: "It's a pig.", ru: "Что это за животное?", punkte: ["sn.en3.an.02"] }] }],
+    "en-zoo": [
+      { typ: "hoergeschichte", wer: "tilda", titel: "Animal riddle", e: "❓", saetze: ["It's very tall.", "It's yellow and brown.", "It has got a long neck.", "It eats leaves from the trees."],
+        de: "Es ist sehr groß. Es ist gelb und braun. Es hat einen langen Hals. Es frisst Blätter von den Bäumen.", ru: "Отгадай животное: послушай загадку (🔊), потом выбери картинку.",
+        fragen: [{ frage: "Which animal is it?", de: "Welches Tier ist das?", optionen: ["🦒", "🦓", "🐘"], antwort: "It's a giraffe.", ru: "Какое это животное?", punkte: ["sn.en4.an.02"] }] },
+      { typ: "dialog", wer: "tilda", e: "🐧", kontext: "Du denkst an einen Pinguin. Tilda rät.", frage: "Is your animal big?", de: "Ist dein Tier groß?",
+        optionen: ["No, it isn't. It's black and white.", "Yes, it is. It's yellow.", "No, it can fly."], ru: "Ты задумал(а) пингвина. Тильда угадывает. " + RU_D, punkte: ["sn.en4.an.02"] }],
+    "en-trip": [
+      { typ: "gespraech", wer: "robo", titel: "At the station", ru: "Ролевая игра на вокзале: Робо продаёт билеты. " + RU_D, punkte: ["sn.en3.tr.03", "sn.en4.tr.03"], zuege: [
+        { frage: "Hello! Can I help you?", de: "Hallo! Kann ich dir helfen?", kontext: "Du möchtest eine Fahrkarte nach London.", e: "🚆", optionen: ["Yes, please. A ticket to London, please.", "Yes, please. I'm London.", "No, I like trains."] },
+        { frage: "Here you are.", de: "Bitte schön.", kontext: "Du fragst, was die Fahrkarte kostet.", e: "🎫", optionen: ["How much is the ticket?", "How old is the ticket?", "Where is the ticket?"] },
+        { frage: "It's twelve pounds.", de: "Sie kostet zwölf Pfund.", kontext: "Du bezahlst und bedankst dich.", e: "💷", optionen: ["Here you are. Thank you!", "Twelve, please. Goodbye, ticket!", "Happy birthday!"] }] },
+      { typ: "dialog", wer: "baer", e: "🚉", kontext: "Du suchst den Bahnhof. Frag Bruni höflich nach dem Weg.", frage: "Hello! Can I help you?", de: "Hallo! Kann ich dir helfen?",
+        optionen: ["Excuse me, where is the station?", "Where are you, station?", "I'm the station, thank you."], ru: "Ты ищешь вокзал. Вежливо спроси Бруни дорогу. " + RU_D, punkte: ["sn.en3.tr.03"] }],
+    "en-london": [
+      { typ: "hoergeschichte", wer: "papagei", titel: "The way to the museum", e: "🗺️", saetze: ["Excuse me, where is the museum?", "Go straight on.", "Then turn left.", "The museum is next to the park."],
+        de: "Entschuldigung, wo ist das Museum? Geh geradeaus. Dann bieg links ab. Das Museum ist neben dem Park.", ru: "Послушай, как пройти к музею (🔊). Потом будут вопросы.",
+        fragen: [
+          { frage: "Where do you go first?", de: "Wohin gehst du zuerst?", optionen: ["⬆️", "⬅️", "➡️"], antwort: "Go straight on.", ru: "Куда ты идёшь сначала?" },
+          { frage: "Then where do you turn?", de: "Wohin biegst du dann ab?", optionen: ["⬅️", "➡️", "⬆️"], antwort: "Turn left.", ru: "Куда ты потом поворачиваешь?" },
+          { frage: "Where is the museum?", de: "Wo ist das Museum?", optionen: ["🌳", "🏰", "🚉"], antwort: "It's next to the park.", ru: "Где музей?" }] }],
+    "en-party": [
+      { typ: "dialog", wer: "fipsi", e: "🎂", kontext: "Fipsi hat heute Geburtstag!", frage: "Today is my birthday!", de: "Heute ist mein Geburtstag!",
+        optionen: ["Happy birthday, Fipsi! Here's a present for you.", "Merry Christmas, Fipsi!", "Good night, Fipsi!"], ru: "У Фипси сегодня день рождения! " + RU_D, punkte: ["sn.en3.yr.03"] },
+      { typ: "dialog", wer: "papagei", e: "🎄", kontext: "Paula wünscht dir frohe Weihnachten.", frage: "Merry Christmas, {name}!", de: "Frohe Weihnachten!",
+        optionen: ["Merry Christmas to you, too!", "Happy Easter to you, too!", "Happy birthday, Paula!"], ru: "Паула поздравляет тебя с Рождеством. " + RU_D, punkte: ["sn.en3.yr.03"] }],
+    "en-numbers2": [
+      { typ: "nachsprechen", satz: "thirteen – thirty", de: "dreizehn – dreißig", e: "🔢", tipp: "Bei „thirTEEN“ ist das Ende laut und lang, bei „THIRty“ der Anfang.", ru: "Послушай, скажи сам(а) и сравни: в «thirteen» ударение в конце, в «thirty» — в начале." }]
+  };
+  (window.ENGLISCH || []).forEach(l => { if (SPRECHEN[l.id]) l.extra = (l.extra || []).concat(SPRECHEN[l.id]); });
+
+  // Gespräche und Hörgeschichten werden zu einzelnen Schritten (englisch.js baut damit die Lektion, tests/lehrplan.js zählt danach)
+  function flach(extra) {
+    const aus = [];
+    (extra || []).forEach(s => {
+      if (s.typ === "gespraech") s.zuege.forEach((z, i) => aus.push(Object.assign({ typ: "dialog", wer: s.wer, ru: s.ru, punkte: s.punkte, gespraech: s.titel,
+        verlauf: s.zuege.slice(0, i).map(v => [v.frage, v.optionen[0]]) }, z)));
+      else if (s.typ === "hoergeschichte") {
+        aus.push({ typ: "hg", g: s, ru: s.ru });
+        s.fragen.forEach((f, i) => aus.push({ typ: "hg-frage", g: s, f, nr: i, ru: f.ru, punkte: f.punkte }));
+        aus.push({ typ: "hg-text", g: s, ru: "Теперь можно прочитать историю. Нажми 🔊, чтобы послушать ещё раз." });
+      } else aus.push(s);
+    });
+    return aus;
+  }
+  window.EnglischSchritte = { flach, SPRECHEN };
+})();
