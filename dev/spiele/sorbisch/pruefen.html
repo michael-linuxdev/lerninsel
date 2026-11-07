@@ -57,6 +57,9 @@
 <script src="lektionen.js"></script>
 <script src="mutter.js"></script>
 <script src="geprueft.js"></script>
+<!-- Erprobungsmodus (Paket K): ✓/✗ landen zusätzlich in der Erprobungsdatei, wenn die Erprobung im Elternbereich an ist -->
+<script src="../../shared/config.js"></script>
+<script src="../../shared/erprobung.js"></script>
 <script>
 (function () {
   const KEY = "lerninsel-sorbisch-pruefung", $ = (id) => document.getElementById(id);
@@ -105,11 +108,16 @@
             <div class="wahl"><button class="ok ${v.ok === true ? "an" : ""}" aria-label="richtig">✓</button><button class="nein ${v.ok === false ? "an" : ""}" aria-label="falsch">✗</button></div>
             <input lang="hsb" placeholder="Richtige Fassung" value="${esc(v.neu || "")}" ${v.ok === false ? "" : "hidden"}></div>`; }).join("") + `</section>`;
     }).join("");
+    // Erprobungsmodus: Prüfung „hsb“ mit Prüfsumme des sorbischen Texts
+    const erprobung = (k, v) => { const E = window.Erprobung; if (!E || !E.aktiv) return; const [gid, ek] = [k.split(":")[0], k.split(":").slice(1).join(":")];
+      const e = ((gruppen.find(g => g.id === gid) || {}).eintraege || []).find(x => x.k === ek) || {};
+      E.pruefung({ rolle: "hsb", urteil: v.ok ? "ok" : "aendern", korrektur: v.neu || undefined, inhalt: "hsb-text:" + k, schritt: e.art, text: e.de, ruText: e.so, h: E.pruefsumme(e.so || "") }); };
     document.querySelectorAll(".eintrag").forEach(d => {
       const k = d.dataset.k;
-      d.querySelector(".ok").addEventListener("click", () => { st[k] = { ok: true }; sichern(); zeichne(); });
-      d.querySelector(".nein").addEventListener("click", () => { st[k] = { ok: false, neu: (st[k] || {}).neu || "" }; sichern(); zeichne(); document.querySelector(`[data-k="${CSS.escape(k)}"] input`).focus(); });
+      d.querySelector(".ok").addEventListener("click", () => { st[k] = { ok: true }; sichern(); erprobung(k, st[k]); zeichne(); });
+      d.querySelector(".nein").addEventListener("click", () => { st[k] = { ok: false, neu: (st[k] || {}).neu || "" }; sichern(); erprobung(k, st[k]); zeichne(); document.querySelector(`[data-k="${CSS.escape(k)}"] input`).focus(); });
       d.querySelector("input").addEventListener("input", (ev) => { st[k] = { ok: false, neu: ev.target.value }; sichern(); text(); });
+      d.querySelector("input").addEventListener("change", () => { if (st[k]) erprobung(k, st[k]); });
     });
     text();
   }

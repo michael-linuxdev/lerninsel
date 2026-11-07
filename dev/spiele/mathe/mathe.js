@@ -498,6 +498,7 @@
     return lauf.fehlStationen >= 2 || lauf.pos >= lauf.liste.length - 1;
   }
   function beendeEinstufung() {
+    if (window.Erprobung) Erprobung.rundeFertig({ fehler: lauf.fehler });
     const d = daten();
     // Startpunkt: erste getestete Station, die nicht geschafft wurde
     const ersteFehl = TEST_ST.find(id => lauf.liste.some(a => a.station === id) && !lauf.geschafft.includes(id) && lauf.liste.findIndex(a => a.station === id) <= lauf.pos);
@@ -614,6 +615,14 @@
       `<p class="rueck" id="rueck">${a.bruecke ? "Eine leichtere Aufgabe zwischendurch 🙂" : ""}</p><div id="hilfe-platz"></div>`;
     aktualisiereLuecke();
     zeigeEingabe(a);
+    erpZeige(a);
+  }
+  // Erprobungsmodus (Paket K): Aufgabe mit Inhalt-ID und Prüfsumme der Station melden, Prüfleiste unter Tafel und Tasten
+  function erpZeige(a) {
+    const E = window.Erprobung; if (!E) return;
+    if (!lauf._erp) { lauf._erp = true; E.runde(lauf.training ? "mathe:training" : lauf.einstufung ? "mathe:einstufung" : lauf.lernstand ? `mathe:lernstand-${WEG}-${lauf.lernstand}` : "mathe:" + (lauf.station.id || ""), lauf.liste.length); }
+    E.zeige({ inhalt: "mathe:" + a.station, schritt: a.saat != null ? "saat " + a.saat : null, text: [a.frage, a.text].filter(Boolean).join(" · "), fach: "mathe",
+      klasse: WEG === "k1" && (S.stufe() || {}).code === "vs" ? "vs" : WEG.slice(1), daten: ST.find(s => s.id === a.station), el: document.querySelector("#rechnen-ansicht .rechnen") });
   }
 
   function aktualisiereLuecke() {
@@ -654,6 +663,7 @@
     if (a.art === "wahl" && luecke) luecke.textContent = wert;
 
     if (lauf.versuch === 0 && MF()) { const d = daten(); MF().zaehle(d); S.speichere("mathe", d); }
+    if (window.Erprobung) Erprobung.aufgabe({ antwort, richtig: antwort === a.antwort, versuch: lauf.versuch + 1 });
     if (antwort === a.antwort) {
       lauf.gesperrt = true;
       const aufgeloest = a.kontrast && kontrastFertig(a, lauf.versuch === 0);
@@ -832,6 +842,7 @@
   }
 
   function beende() {
+    if (window.Erprobung) Erprobung.rundeFertig({ fehler: lauf.fehler });
     if (lauf.training) return beendeTraining();
     if (lauf.lernstand) return beendeLernstand();
     const { station, nr, fehler } = lauf;

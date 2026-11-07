@@ -686,6 +686,104 @@
   const quoteKlasse = (q) => q == null ? "leer" : q >= 0.8 ? "gut" : q >= 0.6 ? "mittel" : "schwach";
   const prozent = (q) => q == null ? "–" : Math.round(q * 100) + " %";
 
+  // ---------- Erprobung & Prüfen (Paket K, 12.11.2026) ----------
+  // Erwachsene spielen die App durch oder prüfen Inhalte; alles landet in einer Datei je Person (shared/erprobung.js, Format im Kopf dort).
+  // Der Reiter ist immer sichtbar, unabhängig von den Einstellungen des Kindes (Prüflisten Russisch/Sorbisch auch ohne Hilfesprache).
+  function erprobungKarten() {
+    const E = window.Erprobung; if (!E || !E.einstellungen) return `<div class="karte"><p>Der Erprobungsmodus konnte nicht geladen werden.</p></div>`;
+    const st = E.einstellungen(), v = E.vorschau(), hat = (r) => st.rollen.includes(r);
+    const box = (id, an, text, extra = "") => `<label class="schalter-z"><input type="checkbox" id="${id}" ${an ? "checked" : ""} ${extra}> ${text}</label>`;
+    const geprueft = E.geprueft();
+    const ROLLE_N = { fach: "Fachlich (Lehrkraft)", ru: "Russisch", hsb: "Sorbisch" };
+    return `<div class="karte" id="erprobung-karte">
+      <h2>🔍 Erprobung & Prüfen</h2>
+      <p>Für Erwachsene, die die Lerninsel ausprobieren oder ihre Inhalte prüfen: selbst durchspielen, einem Kind beim Spielen zuschauen, als Lehrkraft Aufgaben fachlich prüfen oder als Muttersprachler/in die russischen bzw. sorbischen Texte. Alle Beobachtungen landen in <b>einer Datei je Person</b>, die Sie am Ende speichern und weitergeben.</p>
+      <details class="aufklapp" id="erp-einwilligung"><summary>Was wird aufgezeichnet? (bitte vor dem Einschalten lesen)</summary>
+        <ul class="liste">
+          <li><b>Aufgezeichnet</b> wird nur auf diesem Gerät: welche Seiten geöffnet wurden und wie lange, jede Aufgabe mit Inhalt (z. B. „mathe:k2plus“), gegebener Antwort, richtig/falsch, Zeit bis zur Antwort und ob Hilfe, 🔊 oder RU genutzt wurde; abgebrochene Runden, übersprungene Szenen, technische Fehler, Gerätetyp, Bildschirmgröße und App-Version; dazu Ihre Meldungen und Prüfungen.</li>
+          <li><b>Nicht</b> aufgezeichnet werden: Namen (Namen der Kinder werden zu „{name}“), eigene Texte und Aufnahmen des Kindes, Bilder, Fotos, Standort.</li>
+          <li><b>Nichts wird automatisch verschickt.</b> Die Datei entsteht erst mit „Erprobung speichern“; Sie sehen vorher, was darin steht, und entscheiden selbst, wem Sie sie geben.</li>
+          <li>Sie können die Aufzeichnung <b>jederzeit ausschalten und löschen</b>. Wenn ein Kind mitspielt, sprechen Sie bitte vorher mit ihm darüber; am besten spielt es in /dev/test oder als eigenes Test-Kind.</li>
+        </ul></details>
+      ${box("erp-an", st.an, "<b>Erprobung aufzeichnen</b> (gilt ab der nächsten Seite)")}
+      <div class="zeit-raster"><label>Kürzel statt Name (z. B. „L1“ oder „MK“) <input id="erp-kuerzel" maxlength="12" autocomplete="off" value="${S.esc(st.kuerzel)}"></label></div>
+      <fieldset class="erp-rollen" style="border:0;padding:0;margin:0"><legend style="font-weight:700;margin-bottom:4px">Meine Rollen (mehrere möglich)</legend>
+        ${box("erp-rolle-spieler", hat("spieler"), "🎮 Spieler/in – ich spiele selbst oder schaue einem Kind zu (Knopf „✍️ Melden“ auf jeder Seite)")}
+        <div class="erp-unter" ${hat("spieler") ? "" : "hidden"}>${box("erp-kind", st.kindSpielt, "Ein Kind spielt, ich schaue zu (zählt im Prüfstand als „mit Kindern ausprobiert“)")}</div>
+        ${box("erp-rolle-lehrkraft", hat("lehrkraft"), "🏫 Lehrkraft – unter jeder Aufgabe 👍 passt / ✏️ ändern / ❓ unklar")}
+        <div class="erp-unter" id="erp-lehrkraft-wahl" ${hat("lehrkraft") ? "" : "hidden"}>
+          <p class="klein" style="margin:4px 0">Fächer (keins gewählt = alle):</p>
+          <div class="zeit-raster">${Object.entries(E.FAECHER).map(([id, n]) => box("erp-fach-" + id, st.faecher.includes(id), n, `data-erp-fach="${id}"`)).join("")}</div>
+          <p class="klein" style="margin:4px 0">Klassen (keine gewählt = alle):</p>
+          <div class="zeit-raster">${Object.entries(E.KLASSEN).map(([id, n]) => box("erp-klasse-" + id, st.klassen.includes(id), n, `data-erp-klasse="${id}"`)).join("")}</div>
+        </div>
+        ${box("erp-rolle-ru", hat("ru"), "🇷🇺 Muttersprachler/in Russisch – russische Zeilen unter den Aufgaben prüfen (dafür beim Kind die Hilfesprache Russisch wählen)")}
+        ${box("erp-rolle-hsb", hat("hsb"), "Muttersprachler/in Sorbisch – sorbische Texte in den Sorbisch-Lektionen prüfen")}
+      </fieldset>
+      ${hat("ru") && S.kind().hilfesprache !== "ru" ? `<p class="hinweis" id="erp-ru-hinweis">Für die Prüfung der russischen Zeilen beim Kind (Reiter „Kinder & Gerät“ → „Ändern“) die Hilfesprache Russisch und bei der Hilfe „Immer“ wählen.</p>` : ""}
+      <p class="klein" id="erp-stand">${st.an ? "🔴 Aufzeichnung läuft" : "⚪ Aufzeichnung ist aus"} · ${v.anzahl} Einträge gespeichert (${Math.round(v.zeichen / v.grenze * 100)} % des Platzes)${st.verworfen ? ` · ${st.verworfen} ältere Einträge wurden schon überschrieben` : ""}.</p>
+      ${v.voll ? `<p class="hinweis" id="erp-voll">💾 Der Speicher für die Erprobung ist fast voll. Bitte jetzt „Erprobung speichern“ und danach leeren – sonst werden die ältesten Seiten und Aufgaben überschrieben (Meldungen und Prüfungen bleiben am längsten).</p>` : ""}
+    </div>
+    <div class="karte" id="erprobung-export">
+      <h2>💾 Erprobung speichern</h2>
+      <p>Speichert alles in eine Datei <code>${S.esc(E.dateiname())}</code>. Diese Datei geben Sie an die Lerninsel weiter (z. B. per Mail oder Messenger). Vorher sehen Sie hier, was darin steht.</p>
+      <div class="knoepfe"><button class="knopf" id="erp-vorschau">👀 Vorschau</button></div>
+      <div id="erp-vorschau-inhalt" hidden></div>
+    </div>
+    <div class="karte" id="erprobung-geprueft">
+      <h2>✅ Was ist geprüft?</h2>
+      ${geprueft.length ? `<table><tr><th>Rolle</th><th>Fach</th><th>Klasse</th><th class="r">👍</th><th class="r">✏️</th><th class="r">❓</th><th class="r">Inhalte</th></tr>
+        ${geprueft.map(g => `<tr><td>${ROLLE_N[g.rolle] || S.esc(g.rolle)}</td><td>${S.esc(E.FAECHER[g.fach] || g.fach || "–")}</td><td>${S.esc(E.KLASSEN[g.klasse] || g.klasse || "–")}</td><td class="zahl-r">${g.ok || 0}</td><td class="zahl-r">${g.aendern || 0}</td><td class="zahl-r">${g.unklar || 0}</td><td class="zahl-r">${g.inhalte}</td></tr>`).join("")}</table>
+        <p class="klein">Gezählt wird das letzte Urteil je Aufgabe. Ob ein Inhalt danach als „fachlich geprüft“ gilt, entscheidet die Auswertung der Datei (alle Schritte 👍, nichts offen, Inhalt seitdem unverändert).</p>`
+        : `<p class="klein" id="erp-nichts-geprueft">Noch nichts geprüft. Mit der Rolle Lehrkraft oder Muttersprachler/in erscheint unter jeder Aufgabe eine Prüfleiste.</p>`}
+    </div>
+    <div class="karte" id="erprobung-listen">
+      <h2>📋 Prüflisten</h2>
+      <p>Alle Texte auf einen Blick, ohne zu spielen. Ist die Erprobung an, landen Ihre ✓/✗ auch in der Erprobungsdatei.</p>
+      <div class="knoepfe"><a class="knopf" id="erp-ru-liste" href="russisch-pruefen.html">✍️ Russisch prüfen</a><a class="knopf" id="erp-hsb-liste" href="../sorbisch/pruefen.html">✍️ Sorbisch prüfen</a></div>
+    </div>`;
+  }
+  function erprobungKnoepfe() {
+    const E = window.Erprobung; if (!E || !$("erp-an")) return;
+    const lies = () => {
+      const rollen = ["spieler", "lehrkraft", "ru", "hsb"].filter(r => $("erp-rolle-" + r).checked);
+      return { an: $("erp-an").checked, kuerzel: $("erp-kuerzel").value, rollen, kindSpielt: $("erp-kind").checked,
+        faecher: [...inhalt.querySelectorAll("[data-erp-fach]")].filter(x => x.checked).map(x => x.dataset.erpFach),
+        klassen: [...inhalt.querySelectorAll("[data-erp-klasse]")].filter(x => x.checked).map(x => x.dataset.erpKlasse) };
+    };
+    const neuZeichnen = () => { const k = $("erprobung-karte"); if (!k) return; const sec = k.closest(".eltern-teil"), y = scrollY; sec.innerHTML = erprobungKarten(); erprobungKnoepfe(); scrollTo(0, y); };
+    inhalt.querySelectorAll("#erprobung-karte input[type=checkbox]").forEach(x => x.addEventListener("change", () => {
+      const vor = E.einstellungen().an, n = lies();
+      if (n.an && !vor && !n.rollen.length) n.rollen = ["spieler"];
+      E.setze(n); S.meldung(n.an !== vor ? (n.an ? "🔴 Erprobung läuft – ab der nächsten Seite." : "Erprobung ist aus. Es wird nichts mehr aufgezeichnet.") : "Gespeichert.");
+      neuZeichnen();
+    }));
+    $("erp-kuerzel").addEventListener("change", () => { E.setze({ kuerzel: S.sauber($("erp-kuerzel").value, 12) }); S.meldung("Kürzel gespeichert."); neuZeichnen(); });
+    $("erp-vorschau").addEventListener("click", () => {
+      const v = E.vorschau(), el = $("erp-vorschau-inhalt"), N = { seite: "Seiten", aufgabe: "Aufgaben", runde: "fertige Runden", abbruch: "Abbrüche", szene: "Szenen", technik: "technische Fehler", meldung: "Meldungen", pruefung: "Prüfungen" };
+      const zeile = (e) => S.esc([e.art, e.inhalt, e.schritt != null ? "Schritt " + e.schritt : "", e.antwort != null ? "Antwort „" + e.antwort + "“" : "", e.art === "aufgabe" ? (e.richtig ? "richtig" : "falsch") : "",
+        e.rolle || "", e.urteil || "", e.kat || "", e.korrektur || e.text || "", e.ms != null ? Math.round(e.ms / 1000) + " s" : ""].filter(Boolean).join(" · ").slice(0, 180));
+      el.hidden = false;
+      el.innerHTML = `<p id="erp-zahlen"><b>${v.anzahl} Einträge</b>${v.anzahl ? ": " + Object.entries(v.je).map(([a, n]) => `${n} ${N[a] || a}`).join(", ") : ""}.</p>
+        ${Object.entries(v.beispiele).map(([a, l]) => `<details class="aufklapp"><summary>Beispiele: ${N[a] || a}</summary><ul class="liste">${l.map(e => `<li class="klein">${zeile(e)}</li>`).join("")}</ul></details>`).join("")}
+        <p class="klein">Dazu kommen: Kürzel „${S.esc(E.einstellungen().kuerzel || "ohne")}“, Rollen, Gerät (${S.esc(navigator.userAgent.slice(0, 60))} …, ${screen.width}×${screen.height}), App-Version und das technische Protokoll. Keine Namen, keine eigenen Texte, keine Bilder.</p>
+        <div class="knoepfe"><button class="knopf haupt" id="erp-speichern">💾 Als Datei speichern</button>${navigator.canShare ? `<button class="knopf" id="erp-teilen">📤 Teilen</button>` : ""}<button class="knopf" id="erp-leeren">🗑️ Aufzeichnung leeren</button></div>
+        <p class="klein" id="erp-export-meldung" aria-live="polite"></p>`;
+      const vor = location.pathname.includes("/dev/test/") ? "test-" : location.pathname.includes("/dev/") ? "dev-" : "";
+      const mitCache = () => (window.caches ? caches.keys().then(k => (k.filter(x => new RegExp("^" + vor + "spielwelt-[0-9a-f]+$").test(x)).pop() || "")).catch(() => "") : Promise.resolve(""));
+      const datei = () => mitCache().then(c => { const d = E.datei(c); return new File([JSON.stringify(d, null, 1)], E.dateiname(), { type: "application/json" }); });
+      $("erp-speichern").addEventListener("click", () => datei().then(f => {
+        const a = document.createElement("a"); a.href = URL.createObjectURL(f); a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 10000); $("erp-export-meldung").textContent = `Gespeichert als ${f.name}. Danach können Sie die Aufzeichnung leeren.`;
+      }));
+      if ($("erp-teilen")) $("erp-teilen").addEventListener("click", () => datei().then(f => {
+        if (navigator.canShare({ files: [f] })) return navigator.share({ files: [f], title: "Lerninsel – Erprobung" }).then(() => { $("erp-export-meldung").textContent = "Geteilt. Danach können Sie die Aufzeichnung leeren."; });
+        $("erp-export-meldung").textContent = "Teilen geht auf diesem Gerät nicht – bitte „Als Datei speichern“.";
+      }).catch(() => {}));
+      $("erp-leeren").addEventListener("click", () => { if (!confirm("Alle aufgezeichneten Einträge löschen? Speichern Sie vorher die Datei.")) return; E.leeren(); S.meldung("Aufzeichnung geleert."); neuZeichnen(); });
+    });
+  }
+
   // ---------- Technik & Speicher (05.11.2026) ----------
   // Speicherplatz, ob der Browser die Daten dauerhaft behält, App-Version und das technische Protokoll (Seitenfehler, voller Speicher) –
   // alles nur lokal; bei Problemen ein Bildschirmfoto davon an den Entwickler schicken.
@@ -820,7 +918,7 @@
 
     inhalt.innerHTML = `
       <nav class="eltern-reiter" role="tablist" aria-label="Bereiche">
-        <button role="tab" data-teil="ueberblick" class="an">📊 Überblick</button><button role="tab" data-teil="lernstand">📘 Lernstand</button><button role="tab" data-teil="schule">🏫 Wie in der Schule</button><button role="tab" data-teil="zeit">⏰ Zeit & Regeln</button><button role="tab" data-teil="kinder">👨‍👩‍👧 Kinder & Gerät</button>
+        <button role="tab" data-teil="ueberblick" class="an">📊 Überblick</button><button role="tab" data-teil="lernstand">📘 Lernstand</button><button role="tab" data-teil="schule">🏫 Wie in der Schule</button><button role="tab" data-teil="zeit">⏰ Zeit & Regeln</button><button role="tab" data-teil="kinder">👨‍👩‍👧 Kinder & Gerät</button><button role="tab" data-teil="erprobung">🔍 Erprobung & Prüfen</button>
       </nav>
       <section class="eltern-teil" data-teil="ueberblick" role="tabpanel">
       ${(() => { let z = 0; try { z = +localStorage.getItem(PIN_ZURUECK); } catch (e) { /* egal */ } return z ? `<div class="karte" id="pin-hinweis"><h2>🔑 Die PIN wurde neu festgelegt</h2>
@@ -947,6 +1045,9 @@
       </div>
       ${technikKarte()}
       </section>
+      <section class="eltern-teil" data-teil="erprobung" role="tabpanel" hidden>
+      ${erprobungKarten()}
+      </section>
 `;
     $("pin-neu").addEventListener("click", () => { S.setzePin(null); sessionStorage.removeItem(SITZUNG); pinSeite(); });
     const ph = $("pin-hinweis-ok"); if (ph) ph.addEventListener("click", () => { try { localStorage.removeItem(PIN_ZURUECK); } catch (e) { /* egal */ } $("pin-hinweis").remove(); });
@@ -972,7 +1073,7 @@
     if ($("vl-auto")) $("vl-auto").addEventListener("change", () => { const e = eltern(); e.vorlesen = { auto: $("vl-auto").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });
     if ($("fe-modus")) { const sp = () => { const e = eltern(); e.ferien = { modus: $("fe-modus").checked, weniger: $("fe-weniger").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); };
       $("fe-modus").addEventListener("change", sp); $("fe-weniger").addEventListener("change", sp); }
-    zeitKnoepfe(); inselKnoepfe(); echteWeltKnoepfe(); technikKnoepfe();
+    zeitKnoepfe(); inselKnoepfe(); echteWeltKnoepfe(); technikKnoepfe(); erprobungKnoepfe();
     if (fachBereit) { matheKnoepfe(); englischKnoepfe(); sorbischKnoepfe(); schuljahrKnoepfe(); deutschKnoepfe(); staerkenKnoepfe(); }
     inhalt.dataset.fach = fachBereit ? "ja" : "nein";
     if ($("home-weg")) $("home-weg").addEventListener("click", () => { const e = eltern(); e.homeHinweis = "aus"; S.speichere("eltern", e); $("home-karte").remove(); S.meldung("Ausgeblendet."); });

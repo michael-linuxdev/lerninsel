@@ -106,6 +106,7 @@
     $("frage-vorlesen").addEventListener("click", () => { if (SP) { SP.knopf && SP.knopf(); SP.sprich(q.f + " " + q.o.map(x => x.replace(/[^\p{L}\p{N} ,.–-]/gu, "")).join(", ")); } });
     $("frage").querySelectorAll("[data-antwort]").forEach(b => b.addEventListener("click", () => {
       const richtig = b.dataset.antwort === "0";
+      if (window.Erprobung) Erprobung.aufgabe({ inhalt: "tierstation:" + t.id, schritt: schritt, text: q.f, antwort: b.textContent, richtig, versuch: versucht ? 2 : 1 });   // Erprobungsmodus (Paket K)
       if (!versucht && window.Koennen) Koennen.melde([t.lz], richtig);
       if (!richtig) { versucht = true; b.classList.add("falsch"); b.disabled = true; S.ton("nein"); hinweis("Hm, überleg nochmal. Was ist gut für das Tier?", "nein"); return; }
       b.classList.add("richtig"); S.ton("juhu"); $("frage").querySelectorAll("button").forEach(x => { x.disabled = true; });

@@ -274,6 +274,7 @@
   function pruefe(ok, hilfeZeigen) { if (ok) richtig(); else fehler(hilfeZeigen); }
   function fehler(hilfeZeigen) {
     const a = auf; a.versuche++; lauf.fehler++;
+    if (window.Erprobung) Erprobung.aufgabe({ inhalt: "bruecke:" + lauf.st, schritt: a.art || null, richtig: false, versuch: a.versuche });   // Erprobungsmodus (Paket K)
     if (a.versuche === 1 && window.Koennen) Koennen.melde(LZ[lauf.st], false);
     S.ton("nein");
     const h = $("hinweis"); h.className = "hinweis";
@@ -282,6 +283,7 @@
   }
   function richtig() {
     const a = auf; a.fertig = true;
+    if (window.Erprobung) Erprobung.aufgabe({ inhalt: "bruecke:" + lauf.st, schritt: a.art || null, richtig: true, versuch: a.versuche + 1 });
     if (a.versuche === 0 && window.Koennen) Koennen.melde(LZ[lauf.st], true);
     S.ton("juhu");
     if (a.art === "zahl") male();

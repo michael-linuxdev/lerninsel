@@ -118,6 +118,7 @@
       if (da) { da.n = (da.n || 1) + 1; da.z = new Date().toISOString(); } else l.push({ z: new Date().toISOString(), a: art, t, s: seite, n: 1 });
       localStorage.setItem(PROTO, JSON.stringify(l.slice(-30)));
     } catch (e) { /* Protokoll ist nur eine Hilfe */ }
+    if (window.Erprobung && window.Erprobung.technik) window.Erprobung.technik(art, text);   // Erprobungsmodus (Paket K): auch in die Erprobungsdatei
   }
   addEventListener("error", (e) => { if (e && e.message) protokoll("fehler", `${e.message} (${String(e.filename || "").split("/").slice(-2).join("/")}:${e.lineno || 0})`); });
   addEventListener("unhandledrejection", (e) => { const r = e && e.reason; protokoll("fehler", "Promise: " + (r && r.message ? r.message : String(r))); });
@@ -622,6 +623,14 @@
     const lade = (datei, dann) => { const s = document.createElement("script"); s.src = wurzel + datei; s.async = false; if (dann) s.onload = dann; document.head.appendChild(s); };
     // Figuren immer (Begleiter-Zeichen → Zeichnung, Figuren.ZEICHEN), Noto-Bilder nur ohne Eltern-Wahl „Emojis des Geräts“
     if (!window.FigurenNeu) lade("shared/figuren.js");
+    // Erprobungsmodus (Paket K, 12.11.2026): shared/erprobung.js nur laden, wenn er im Elternbereich eingeschaltet ist – sonst keine Kosten.
+    // Bis die Datei da ist, sammelt ein Platzhalter die Aufrufe der Seiten (window.Erprobung && Erprobung.zeige(…)) und erprobung.js holt sie nach.
+    let erprobung = false; try { erprobung = !!(JSON.parse(localStorage.getItem(PRE + "erprobung")) || {}).an; } catch (e) { /* aus */ }
+    if (erprobung && !window.Erprobung) {
+      const q = []; window.Erprobung = { _q: q };
+      ["zeige", "aufgabe", "runde", "rundeFertig", "abbruch", "hilfe", "szene", "technik", "pruefung"].forEach(n => { window.Erprobung[n] = (...a) => { q.push([n, a]); }; });
+      lade("shared/erprobung.js");
+    }
     const mitBildern = ((profil.daten.eltern || {}).bilder) !== "geraet" && !window.__ohneBilder;
     // EmojiBereit: für Canvas/3D (wartet, bis EmojiBild da ist; EmojiBild.lade wartet selbst auf die Noto-Bilder)
     // Paket 5 (07.11.2026): shared/icons.js (2,7 MB) nicht mehr synchron vor dem ersten Bild – erst die kleine Liste (icons-liste.js: welche

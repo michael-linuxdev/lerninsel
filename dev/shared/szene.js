@@ -189,6 +189,7 @@
     el.hidden = true;
     const sp = sprecher(); if (sp) sp.stopp();
     if (a.def.chronik !== false && a.opt.chronik !== false && a.def.id && window.Story) window.Story.merkeSzene(a.def.id);
+    if (window.Erprobung && a.def.id) window.Erprobung.szene(a.def.id, !!uebersprungen);   // Erprobungsmodus: übersprungene Szenen
     a.fertig({ uebersprungen: !!uebersprungen });
   }
 

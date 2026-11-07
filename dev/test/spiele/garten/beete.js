@@ -73,6 +73,7 @@
     $("frage-vorlesen").addEventListener("click", () => { if (SP) { SP.knopf && SP.knopf(); SP.sprich(q.f + " " + q.o.map(t => t.replace(/[^\p{L}\p{N} ,.-]/gu, "")).join(", ")); } });
     $("dkarte").querySelectorAll("[data-antwort]").forEach(knopf => knopf.addEventListener("click", () => {
       const richtig = knopf.dataset.antwort === "0";
+      if (window.Erprobung) Erprobung.aufgabe({ inhalt: "garten:" + q.id, text: q.f, antwort: knopf.textContent, richtig, versuch: versucht ? 2 : 1 });   // Erprobungsmodus (Paket K)
       if (window.Koennen && !versucht) Koennen.melde([q.lz], richtig);
       if (!richtig) { versucht = true; knopf.classList.add("falsch"); knopf.disabled = true; S.ton("nein"); return; }
       knopf.classList.add("richtig"); S.ton("juhu");

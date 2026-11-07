@@ -175,6 +175,7 @@
   }
   function antworte(b) {
     const f = lauf.liste[lauf.pos], ok = b.dataset.o === f.optionen[0], d = daten();
+    if (window.Erprobung) Erprobung.aufgabe({ inhalt: "wetterdrache:" + f.id, text: f.frage, antwort: b.dataset.o, richtig: ok, versuch: lauf.versuche + 1 });   // Erprobungsmodus (Paket K)
     if (ok) {
       S.ton("juhu"); b.classList.add("richtig");
       $("optionen").querySelectorAll("button").forEach(x => { x.disabled = true; });

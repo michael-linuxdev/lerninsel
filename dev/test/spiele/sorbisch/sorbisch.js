@@ -126,6 +126,7 @@
   function starte(i, lernstand) {
     const k = lernstand || L[i];
     lauf = { i, k, schritte: k.lernstand ? k.schritte : mitWiederholung(baue(k)), pos: 0, fehler: 0, falsch: new Set() };
+    if (window.Erprobung) Erprobung.runde("sorbisch:" + (k.lernstand ? "lernstand" : k.id), lauf.schritte.length);
     document.body.style.setProperty("--grund", k.grund); document.body.style.setProperty("--akzent", k.farbe);
     $("lektion-name").textContent = k.name;
     $("paula-gross").innerHTML = F.papagei("papagei");
@@ -142,6 +143,11 @@
     if (!s) return beende();
     lauf.versuche = 0; lauf.gesperrt = false;
     A.scrollTop = 0;
+    if (window.Erprobung) {   // Erprobungsmodus (Paket K): sorbisch:<lektion>; Muttersprachler/in Sorbisch prüft den sorbischen Text
+      const so = s.so || (s.wort && s.wort.so) || "";
+      Erprobung.zeige({ inhalt: "sorbisch:" + (k.lernstand ? "lernstand" : k.id), schritt: s.typ + (s.wort ? ":" + s.wort.so : ":" + lauf.pos), text: s.typ + ": " + ((s.wort && (s.wort.so + " = " + s.wort.de)) || s.text || s.frage || ""),
+        fach: "sorbisch", klasse: k.stufe, daten: k.lernstand ? null : k, ru: s.ru || (s.wort && s.wort.ru) || "", hsb: so || (k.mutter ? "lektion" : true), el: A });
+    }
     switch (s.typ) {
       case "sag":
         blase(s.so ? soText(s.so, s.text) : s.text, s.text, s.ru);
@@ -210,6 +216,7 @@
   // Gemeinsame Prüfung: richtig → loben, Erklärung zeigen, weiter. Falsch → nochmal (erster Fehler zählt).
   function antwort(knopf, richtig, sorbisch, erklaerung) {
     if (lauf.gesperrt) return;
+    if (window.Erprobung) Erprobung.aufgabe({ antwort: knopf ? (knopf.getAttribute("aria-label") || knopf.textContent) : undefined, richtig, versuch: (lauf.versuche || 0) + 1 });
     const h = $("hinweis"), lz = lauf.k.lz;
     if (richtig) {
       lauf.gesperrt = true;
@@ -235,6 +242,7 @@
   function weiter() { SP.stopp(); lauf.pos++; schritt(); }
 
   function beende() {
+    if (window.Erprobung) Erprobung.rundeFertig({ fehler: lauf.fehler });
     if (lauf.k.lernstand) return beendeLernstand();
     const { k, fehler } = lauf, sterne = fehler <= 1 ? 3 : fehler <= 3 ? 2 : 1, vorher = bestes(k.id);
     let gewinn = Math.max(0, sterne - vorher); if (vorher === 3 && sterne === 3) gewinn = 1;

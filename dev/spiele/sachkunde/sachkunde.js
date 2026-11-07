@@ -143,6 +143,7 @@
     document.body.style.setProperty("--grund", t.grund);
     document.body.style.setProperty("--akzent", t.farbe);
     document.body.classList.toggle("breit", !!t.stammbaum);
+    if (window.Erprobung) Erprobung.runde((t.fach ? "faecher:" : "sachkunde:") + (t.lernstand ? "lernstand" : t.nachfrage ? "nachfrage" : t.id), t.schritte.length);
     $("thema-name").textContent = t.name;
     $("eule-gross").innerHTML = BI.eule();
     zeige("lektion"); schritt();
@@ -172,6 +173,7 @@
     container.querySelectorAll(".option").forEach((b, n) => b.addEventListener("click", () => {
       const o = optionen[n];
       const sj = lauf.t.schritte[lauf.pos];
+      if (window.Erprobung && !b.disabled) Erprobung.aufgabe({ antwort: o.t || b.getAttribute("aria-label") || b.textContent, richtig: !!o.ok });
       if (o.ok) {
         b.classList.add("richtig");
         if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde((sj && sj.__lz) || lauf.t.lz, true);
@@ -195,6 +197,14 @@
     }));
   }
 
+  // Erprobungsmodus (Paket K): Inhalt-ID sachkunde:<thema> bzw. faecher:<thema> (Kunst, Musik, … Religion), Schritt = Nummer im Thema
+  function erpZeige(s, A) {
+    const alle = (window.THEMEN || []).concat(window.FACH_THEMEN || []), orig = TH[lauf.i] || lauf.t;
+    const quelle = s.__kap ? (alle.find(x => x.id === s.__kap) || orig) : orig, idx = quelle.schritte ? quelle.schritte.indexOf(s) : -1;
+    Erprobung.zeige({ inhalt: (quelle.fach ? "faecher:" : "sachkunde:") + quelle.id, schritt: idx >= 0 ? idx : s.__karte ? "wiederholung" : s.__transfer ? "transfer" : s.typ,
+      text: s.typ + ": " + (s.frage || s.satz || s.titel || s.text || ""), fach: quelle.fach || "sachkunde", klasse: quelle.stufe || quelle.kl || "", daten: quelle.lernstand || quelle.nachfrage ? null : quelle,
+      ru: S.ht(s) || S.ht(s, "satz") || "", el: A });
+  }
   const bildVon = (s) => s.baum ? BI.stammbaum(lauf.t.stammbaum, s.baum) : BI.bild(s.bild);
 
   function schritt() {
@@ -203,6 +213,7 @@
     if (lauf.pos >= t.schritte.length) return beende();
     const s = t.schritte[lauf.pos], A = $("aufgabe");
     A.innerHTML = ""; texte.length = 0;
+    if (window.Erprobung) erpZeige(s, A);
     if (window.Bewegung) Bewegung.stopp();
 
     switch (s.typ) {
@@ -242,6 +253,7 @@
         A.querySelectorAll(".person").forEach(g => g.addEventListener("click", () => {
           if (fertig) return;
           const id = g.dataset.id, w = A.querySelector(".warum");
+          if (window.Erprobung) Erprobung.aufgabe({ antwort: (P[id] || {}).name || id, richtig: id === s.ziel });
           if (id === s.ziel) {
             fertig = true; S.ton("juhu");
             if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde(lauf.t.lz, true);
@@ -279,6 +291,7 @@
           sprich(d.t);
           A.querySelectorAll(".gruppen .option").forEach(b => b.addEventListener("click", () => {
             const w = A.querySelector(".warum");
+            if (window.Erprobung) Erprobung.aufgabe({ antwort: d.t + " → " + b.dataset.g, richtig: b.dataset.g === d.gruppe });
             if (b.dataset.g === d.gruppe) {
               b.classList.add("richtig"); S.ton("juhu"); A.querySelectorAll(".gruppen .option").forEach(x => x.disabled = true);
               if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde(lauf.t.lz, true);
@@ -297,6 +310,7 @@
 
   // ---------- Ende ----------
   function beende() {
+    if (window.Erprobung) Erprobung.rundeFertig({ fehler: lauf.fehler });
     if (lauf.t.lernstand) return beendeLernstand();
     if (lauf.t.nachfrage) return beendeNachfrage();
     const { t, fehler } = lauf;
