@@ -63,8 +63,8 @@
         ["Eine Taube bringt einen Ölzweig", "Голубь приносит масличную ветвь", "Genau! Irgendwo wachsen wieder Bäume.", "Точно! Где-то снова растут деревья."],
         ["Ein Fisch springt ins Boot", "Рыба прыгает в лодку", "Nein, eine Taube bringt den Zweig.", "Нет, голубь приносит ветку."],
         ["Es schneit", "Идёт снег", "Nein, eine Taube bringt einen Zweig.", "Нет, голубь приносит ветку."]),
-      daumen("Nach der Flut erscheint ein Regenbogen. Er ist in der Bibel ein Zeichen für Gottes Versprechen: Ich halte zu euch.", "После потопа появляется радуга. В Библии это знак Божьего обещания: Я с вами.", "🌈", true,
-        "Stimmt! Christen sehen im Regenbogen ein Zeichen für Hoffnung und einen neuen Anfang.", "Верно! Христиане видят в радуге знак надежды и нового начала."),
+      daumen("Die Bibel erzählt: Noah nimmt nur seine Familie mit in die Arche, die Tiere bleiben draußen.", "Библия рассказывает: Ной берёт в ковчег только свою семью, животные остаются снаружи.", "🌈", false,
+        "Stimmt nicht! Die Bibel erzählt: Noah nimmt von allen Tieren ein Paar mit in die Arche. Nach der Flut erscheint ein Regenbogen.", "Неверно! Библия рассказывает: Ной берёт в ковчег по паре всех животных. После потопа появляется радуга."),
       ende("Super, {name}! Mal eine Arche mit vielen Tierpaaren.", "Супер, {name}! Нарисуй ковчег со многими парами животных.")
     ] });
   re({ id: "re-gottesbilder", lb: "re2", kl: 2, lz: ["re.go.01"], name: "Wie ist Gott? Bilder aus der Bibel", e: "🐑", farbe: "#7B55B8", grund: "#F1EAFF",
@@ -101,8 +101,8 @@
         "Иисус жил около 2000 лет назад в земле Израиля, в Назарете и у Галилейского озера. Люди жили в маленьких глиняных домах, пекли лепёшки и работали рыбаками, крестьянами или ремесленниками."),
       zuordnen("Wer war das damals?", "Кто это был тогда?", [["fischer", "Fischer", "Рыбак", "🎣"], ["zoellner", "Zöllner", "Мытарь", "🪙"], ["roemer", "Römischer Soldat", "Римский солдат", "🛡️"]],
         [["Fährt mit dem Boot auf den See", "Выходит на лодке на озеро", "fischer"], ["Sammelt Geld für die Römer ein", "Собирает деньги для римлян", "zoellner"], ["Bewacht das Land für den Kaiser", "Охраняет землю для императора", "roemer"]]),
-      daumen("Damals hatten Kinder keine Schule wie wir – viele mussten früh mitarbeiten.", "Тогда у детей не было школы, как у нас, – многим рано приходилось работать.", "🧺", true,
-        "Stimmt! Jungen lernten oft in der Synagoge lesen, viele Kinder halfen in Haus und Feld.", "Верно! Мальчики часто учились читать в синагоге, многие дети помогали дома и в поле."),
+      daumen("Zur Zeit von Jesus gingen alle Kinder jeden Tag in eine Schule wie unsere.", "Во времена Иисуса все дети каждый день ходили в такую же школу, как наша.", "🧺", false,
+        "Stimmt nicht! Damals hatten Kinder keine Schule wie wir – viele mussten früh mitarbeiten.", "Неверно! Тогда у детей не было такой школы, как у нас, – многим рано приходилось работать."),
       wahl("Was aß man zur Zeit Jesu oft?", "Что часто ели во времена Иисуса?", "🫓",
         ["Fladenbrot, Oliven, Fisch", "Лепёшки, оливки, рыбу", "Richtig! Pommes und Pizza gab es noch nicht.", "Правильно! Картошки фри и пиццы ещё не было."],
         ["Pommes", "Картошку фри", "Kartoffeln kannte man dort damals noch gar nicht.", "Картошку тогда там ещё не знали."],
@@ -133,8 +133,8 @@
         ["In Zelten, mit ihren Tieren", "В шатрах, со своими животными", "Richtig! Sie waren Nomaden – Menschen, die umherziehen.", "Правильно! Они были кочевниками – людьми, которые кочуют."],
         ["In einem Hochhaus", "В высотном доме", "Nein, Hochhäuser gab es damals nicht.", "Нет, высоток тогда не было."],
         ["Auf einem Schiff", "На корабле", "Nein, sie zogen über Land.", "Нет, они шли по суше."]),
-      daumen("Sara lachte, weil sie so alt war und nicht glauben konnte, noch ein Kind zu bekommen.", "Сарра засмеялась, потому что была очень старой и не верила, что родит ребёнка.", "😄", true,
-        "Stimmt! Später bekam sie einen Sohn: Isaak. Sein Name erinnert an das Lachen.", "Верно! Позже у неё родился сын Исаак. Его имя напоминает о смехе."),
+      daumen("Sara lachte, weil sie sich schon lange auf ein Kind gefreut hatte und sich sicher war.", "Сарра засмеялась, потому что давно ждала ребёнка и была в этом уверена.", "😄", false,
+        "Stimmt nicht! Sara lachte, weil sie so alt war und nicht glauben konnte, noch ein Kind zu bekommen.", "Неверно! Сарра засмеялась, потому что была уже старой и не могла поверить, что у неё ещё будет ребёнок."),
       wahl("Was ist ein Segen?", "Что такое благословение?", "🙏",
         ["Ein guter Wunsch, dass Gott jemanden behütet", "Доброе пожелание, чтобы Бог хранил кого-то", "Genau! Eltern segnen ihre Kinder, im Gottesdienst wird gesegnet.", "Точно! Родители благословляют детей, в богослужении благословляют."],
         ["Ein Geschenk aus dem Laden", "Подарок из магазина", "Nein, ein Segen ist ein guter Wunsch.", "Нет, благословение – это доброе пожелание."],
@@ -153,8 +153,8 @@
         ["Sieben gute Erntejahre, dann sieben Hungerjahre", "Семь урожайных лет, потом семь голодных", "Genau! Darum sammelt Ägypten Vorräte – und Josef wird ein wichtiger Mann.", "Точно! Поэтому Египет делает запасы – и Иосиф становится важным человеком."],
         ["Es gibt bald mehr Kühe", "Скоро будет больше коров", "Nein, die Kühe stehen für Erntejahre.", "Нет, коровы означают годы урожая."],
         ["Der Pharao soll Milch trinken", "Фараон должен пить молоко", "Nein, es geht um Ernte und Hunger.", "Нет, речь об урожае и голоде."]),
-      daumen("Am Ende verzeiht Josef seinen Brüdern und die Familie ist wieder zusammen.", "В конце Иосиф прощает братьев, и семья снова вместе.", "🤝", true,
-        "Stimmt! Versöhnung ist schwer – aber sie macht einen neuen Anfang möglich.", "Верно! Примириться трудно – но это делает возможным новое начало."),
+      daumen("Am Ende bestraft Josef seine Brüder und schickt sie für immer weg.", "В конце Иосиф наказывает братьев и прогоняет их навсегда.", "🤝", false,
+        "Stimmt nicht! Am Ende verzeiht Josef seinen Brüdern, und die Familie ist wieder zusammen.", "Неверно! В конце Иосиф прощает братьев, и семья снова вместе."),
       ende("Super, {name}! Spielt die Versöhnung der Brüder einmal nach.", "Супер, {name}! Разыграйте примирение братьев.")
     ] });
   re({ id: "re-vaterunser", lb: "re3", kl: 2, konf: ["ka"], lz: ["re.go.02"], name: "Beten, Stille und das Vaterunser", e: "🙏", farbe: "#2F6FD6", grund: "#EAF2FF",
@@ -165,8 +165,8 @@
         ["Das Vaterunser", "«Отче наш»", "Richtig! Christen auf der ganzen Welt beten es – in vielen Sprachen.", "Правильно! Христиане по всему миру молятся ею – на многих языках."],
         ["Das ABC-Lied", "Песенку про алфавит", "Nein, das Vaterunser.", "Нет, «Отче наш»."],
         ["Ein Geburtstagslied", "Песню на день рождения", "Nein, das Vaterunser.", "Нет, «Отче наш»."]),
-      daumen("Beten kann man laut oder leise, mit gefalteten Händen, im Stehen oder im Sitzen.", "Молиться можно громко или тихо, сложив руки, стоя или сидя.", "🙏", true,
-        "Stimmt! Wichtig ist, was man Gott sagen möchte: danken, bitten, klagen.", "Верно! Важно то, что хочешь сказать Богу: поблагодарить, попросить, пожаловаться."),
+      daumen("Beten darf man nur in der Kirche und nur mit gefalteten Händen.", "Молиться можно только в церкви и только со сложенными руками.", "🙏", false,
+        "Stimmt nicht! Beten kann man überall – laut oder leise, im Stehen oder im Sitzen, mit oder ohne gefaltete Hände.", "Неверно! Молиться можно везде – вслух или про себя, стоя или сидя, со сложенными руками или без."),
       ende("Toll, {name}! Mach eine Stille-Minute: Augen zu – was hörst du?", "Здорово, {name}! Устрой минуту тишины: закрой глаза – что ты слышишь?")
     ] });
   re({ id: "re-feste12", lb: "re4", kl: 2, lz: ["re.fe.01", "et.we.02"], name: "Erntedank, Advent und Weihnachten", e: "🎄", farbe: "#E0574A", grund: "#FFECE8",
@@ -179,8 +179,8 @@
         ["In einem Schloss", "Во дворце", "Nein, ganz einfach in einem Stall.", "Нет, совсем просто – в хлеву."]),
       zuordnen("Wer kommt zur Krippe?", "Кто приходит к яслям?", [["hirten", "Die Hirten", "Пастухи", "🐑"], ["weise", "Die Weisen", "Волхвы", "🎁"]],
         [["Ein Engel sagt es ihnen auf dem Feld", "Им сообщает ангел в поле", "hirten"], ["Sie folgen einem Stern", "Они идут за звездой", "weise"], ["Sie bringen Gold, Weihrauch und Myrrhe", "Приносят золото, ладан и смирну", "weise"]]),
-      daumen("Der Adventskranz hat vier Kerzen – an jedem Adventssonntag wird eine mehr angezündet.", "На венке Адвента четыре свечи – каждое воскресенье зажигают на одну больше.", "🕯️", true,
-        "Stimmt! So wird es bis Weihnachten immer heller.", "Верно! Так до Рождества становится всё светлее."),
+      daumen("Am ersten Adventssonntag brennen schon alle vier Kerzen am Adventskranz.", "В первое воскресенье Адвента на венке горят уже все четыре свечи.", "🕯️", false,
+        "Stimmt nicht! Am ersten Advent brennt eine Kerze, an jedem Adventssonntag eine mehr. Am vierten Advent brennen alle vier.", "Неверно! В первый Адвент горит одна свеча, в каждое следующее воскресенье – на одну больше. В четвёртый Адвент горят все четыре."),
       ende("Super, {name}! Erzähl jemandem die Weihnachtsgeschichte mit eigenen Worten.", "Супер, {name}! Расскажи кому-нибудь рождественскую историю своими словами.")
     ] });
   re({ id: "re-ostern12", lb: "re4", kl: 2, lz: ["re.fe.01"], name: "Karwoche und Ostern", e: "🐣", farbe: "#3BAA5C", grund: "#E8F7EC",
@@ -193,8 +193,8 @@
         ["Den Frühlingsanfang", "Начало весны", "Ostern ist im Frühling – gefeiert wird aber die Auferstehung.", "Пасха весной – но празднуют воскресение."]),
       zuordnen("Welcher Tag?", "Какой день?", [["palm", "Palmsonntag", "Вербное воскресенье", "🌿"], ["kar", "Karfreitag", "Страстная пятница", "✝️"], ["ostern", "Ostersonntag", "Пасха", "🌅"]],
         [["Menschen jubeln mit Palmzweigen", "Люди ликуют с пальмовыми ветвями", "palm"], ["Jesus stirbt am Kreuz", "Иисус умирает на кресте", "kar"], ["Frauen finden das Grab leer", "Женщины находят гроб пустым", "ostern"]]),
-      daumen("Das Ei ist ein Zeichen für neues Leben – darum gibt es zu Ostern bemalte Eier.", "Яйцо – знак новой жизни, поэтому на Пасху есть крашеные яйца.", "🥚", true,
-        "Stimmt! Auch das Osterfeuer und die Osterkerze sind Zeichen: Das Licht ist stärker als die Dunkelheit.", "Верно! Пасхальный огонь и свеча тоже знаки: свет сильнее тьмы."),
+      daumen("Das Osterei ist ein Zeichen für den Winter.", "Пасхальное яйцо – символ зимы.", "🥚", false,
+        "Stimmt nicht! Das Ei ist ein Zeichen für neues Leben – darum gibt es zu Ostern bemalte Eier.", "Неверно! Яйцо – символ новой жизни, поэтому на Пасху красят яйца."),
       ende("Toll, {name}! Bemal zu Ostern ein Ei mit einem Zeichen für neues Leben.", "Здорово, {name}! Распиши на Пасху яйцо знаком новой жизни.")
     ] });
   re({ id: "re-kirche-taufe", lb: "re4", kl: 2, lz: ["re.fe.02"], name: "Kirche, Sonntag und Taufe", e: "⛪", farbe: "#2F86C8", grund: "#EAF4FC",
@@ -207,8 +207,8 @@
         ["Eine Taufkerze", "Крестильную свечу", "Richtig! Mit Wasser getauft wird man Teil der christlichen Gemeinde.", "Правильно! Крещённый водой становится частью христианской общины."],
         ["Einen Fußball", "Футбольный мяч", "Nein, typisch ist die Taufkerze.", "Нет, обычно – крестильная свеча."],
         ["Ein Zeugnis", "Табель", "Nein, eine Taufkerze.", "Нет, крестильную свечу."]),
-      daumen("Die Taufe verbindet evangelische und katholische Christen.", "Крещение объединяет евангелических и католических христиан.", "🤝", true,
-        "Stimmt! Beide Kirchen erkennen die Taufe gegenseitig an.", "Верно! Обе церкви признают крещение друг друга."),
+      daumen("Nur katholische Christen werden getauft.", "Крестят только католиков.", "🤝", false,
+        "Stimmt nicht! Evangelische und katholische Christen taufen – die Taufe verbindet sie.", "Неверно! Крестят и евангелических, и католических христиан – крещение их объединяет."),
       ende("Super, {name}! Frag zu Hause: Bist du getauft? Gibt es Fotos oder eine Taufkerze?", "Супер, {name}! Спроси дома: ты крещён? Есть ли фото или свеча?")
     ] });
 
@@ -291,8 +291,8 @@
         ["„Fertig, los!“", "«Готово, вперёд!»", "Nein.", "Нет."]),
       daumen("Die Schöpfungsgeschichte will vor allem sagen, warum die Welt wertvoll ist – Naturwissenschaft erklärt, wie sie entstanden ist.", "История сотворения хочет прежде всего сказать, почему мир ценен, – наука объясняет, как он возник.", "🔭", true,
         "Stimmt! Viele Christen sehen darin keinen Widerspruch: Beide stellen verschiedene Fragen.", "Верно! Многие христиане не видят тут противоречия: они задают разные вопросы."),
-      daumen("Auch andere Kulturen haben eigene Schöpfungsgeschichten.", "У других культур тоже есть свои истории сотворения.", "🌏", true,
-        "Stimmt! Menschen auf der ganzen Welt haben sich gefragt, woher alles kommt.", "Верно! Люди во всём мире спрашивали, откуда всё взялось."),
+      daumen("Nur die Bibel erzählt, wie die Welt entstanden ist – andere Kulturen haben solche Geschichten nicht.", "Только Библия рассказывает о том, как появился мир, – у других культур таких историй нет.", "🌏", false,
+        "Stimmt nicht! Viele Kulturen und Religionen haben eigene Schöpfungsgeschichten.", "Неверно! У многих культур и религий есть свои истории о сотворении мира."),
       ende("Super, {name}! Gestalte einen Schöpfungs-Kalender mit sieben Bildern.", "Супер, {name}! Сделай календарь творения из семи картинок.")
     ] });
   re({ id: "re-brot", lb: "re2", stufe: 3, konf: ["ka"], lz: ["re.fe.02", "re.go.02"], name: "Brot teilen und Stille hören", e: "🍞", farbe: "#B5651D", grund: "#FFF1E3",
@@ -335,8 +335,8 @@
         ["Aus einem Brunnen", "Из колодца", "Nein, aus einem brennenden Dornbusch.", "Нет, из горящего куста."]),
       zuordnen("Was geschah wo?", "Что где случилось?", [["meer", "Am Schilfmeer", "У Чермного моря", "🌊"], ["wueste", "In der Wüste", "В пустыне", "🏜️"], ["berg", "Am Berg Sinai", "На горе Синай", "⛰️"]],
         [["Das Wasser weicht zurück, alle kommen hindurch", "Вода расступается, все проходят", "meer"], ["Gott schickt Manna zum Essen", "Бог посылает манну", "wueste"], ["Mose erhält die Zehn Gebote", "Моисей получает Десять заповедей", "berg"]]),
-      daumen("Juden feiern bis heute das Pessach-Fest zur Erinnerung an die Befreiung aus Ägypten.", "Евреи до сих пор празднуют Песах в память об освобождении из Египта.", "🫓", true,
-        "Stimmt! Dabei isst man ungesäuertes Brot, die Matze.", "Верно! При этом едят пресный хлеб – мацу."),
+      daumen("Juden feiern das Pessach-Fest zur Erinnerung an die Arche Noah.", "Евреи празднуют Песах в память о Ноевом ковчеге.", "🫓", false,
+        "Stimmt nicht! Pessach erinnert an die Befreiung aus Ägypten, von der die Geschichte von Mose erzählt.", "Неверно! Песах напоминает об освобождении из Египта, о котором рассказывает история Моисея."),
       ende("Toll, {name}! Mal die Geschichte von Mose als Bildergeschichte in vier Bildern.", "Здорово, {name}! Нарисуй историю Моисея в четырёх картинках.")
     ] });
   re({ id: "re-pfingsten", lb: "re4", stufe: 3, lz: ["re.fe.01", "re.fe.02"], name: "Pfingsten und der Gottesdienst", e: "🕊️", farbe: "#E0574A", grund: "#FFECE8",
@@ -419,8 +419,8 @@
         ["Nach Mekka", "В Мекку", "Richtig! Die Pilgerfahrt ist eine der fünf Säulen.", "Правильно! Паломничество – один из пяти столпов."],
         ["Nach Rom", "В Рим", "Nach Rom pilgern eher katholische Christen.", "В Рим скорее паломничают католики."],
         ["Zum Nordpol", "На Северный полюс", "Nein, nach Mekka.", "Нет, в Мекку."]),
-      daumen("Am Ende des Fastenmonats Ramadan feiern viele Muslime das Zuckerfest.", "В конце поста Рамадан многие мусульмане празднуют Ураза-байрам.", "🍬", true,
-        "Stimmt! Man besucht sich, isst zusammen und beschenkt die Kinder.", "Верно! Ходят в гости, едят вместе и дарят детям подарки."),
+      daumen("Am Ende des Fastenmonats Ramadan feiern Muslime Weihnachten.", "В конце месяца поста Рамадан мусульмане празднуют Рождество.", "🍬", false,
+        "Stimmt nicht! Am Ende des Ramadan feiern viele Muslime das Zuckerfest. Weihnachten ist ein christliches Fest.", "Неверно! В конце Рамадана многие мусульмане празднуют Ураза-байрам (праздник разговения). Рождество – христианский праздник."),
       ende("Toll, {name}! Vielleicht kann ein muslimisches Kind oder eine Familie von ihren Festen erzählen.", "Здорово, {name}! Может быть, мусульманский ребёнок или семья расскажут о своих праздниках.")
     ] });
   re({ id: "re-beten", lb: "re2", stufe: 4, lz: ["re.go.02"], name: "Mit Gott reden: Psalmen und Gebete", e: "🙏", farbe: "#2F6FD6", grund: "#EAF2FF",
@@ -461,8 +461,8 @@
         ["Er verkleidet sich als Esau – mit Fell an den Armen", "Переодевается Исавом – с шкурой на руках", "Richtig! Das war Betrug – danach muss Jakob vor Esau fliehen.", "Правильно! Это был обман – потом Иаков бежит от Исава."],
         ["Er bittet höflich darum", "Вежливо просит", "Nein, er betrügt den Vater.", "Нет, он обманывает отца."],
         ["Er gewinnt ein Wettrennen", "Выигрывает гонку", "Nein, er verkleidet sich.", "Нет, он переодевается."]),
-      daumen("Auf der Flucht träumt Jakob von einer Leiter bis in den Himmel – Gott verspricht ihm, ihn zu begleiten.", "В бегстве Иакову снится лестница до неба – Бог обещает быть с ним.", "🌙", true,
-        "Stimmt! Christen lesen darin: Gottes Zusage gilt sogar dem, der Fehler gemacht hat.", "Верно! Христиане видят в этом: обещание Бога действует даже для того, кто ошибся."),
+      daumen("Auf der Flucht träumt Jakob von einem Schiff, das ihn über das Meer bringt.", "Во время бегства Иаков видит во сне корабль, который везёт его через море.", "🌙", false,
+        "Stimmt nicht! Jakob träumt von einer Leiter bis in den Himmel. Gott verspricht ihm, ihn zu begleiten.", "Неверно! Иакову снится лестница до самого неба. Бог обещает быть с ним."),
       wahl("Wie endet die Geschichte der Brüder?", "Чем заканчивается история братьев?", "🤗",
         ["Sie versöhnen sich und umarmen sich", "Они мирятся и обнимаются", "Genau! Nach vielen Jahren gibt es einen neuen Anfang.", "Точно! Спустя много лет – новое начало."],
         ["Sie sehen sich nie wieder", "Больше никогда не видятся", "Doch – sie treffen sich wieder.", "Видятся – они встречаются снова."],
@@ -493,8 +493,8 @@
         ["Arme, Kranke und Fremde von der Straße", "Бедных, больных и чужих с улицы", "Richtig! Bei Gott ist Platz für alle.", "Правильно! У Бога есть место для всех."],
         ["Niemanden", "Никого", "Nein, er lädt andere ein.", "Нет, он зовёт других."],
         ["Nur Könige", "Только королей", "Nein, gerade die, die sonst niemand einlädt.", "Нет, именно тех, кого никто не зовёт."]),
-      daumen("Im Abendmahl erinnern evangelische Christen mit Brot und Wein (oder Saft) an das letzte Mahl von Jesus.", "На Причастии евангелические христиане хлебом и вином (или соком) вспоминают последнюю трапезу Иисуса.", "🍇", true,
-        "Stimmt! Katholische Christen nennen es Eucharistie oder Kommunion.", "Верно! Католики называют это Евхаристией или Причастием."),
+      daumen("Beim Abendmahl erinnern evangelische Christen an die Geburt von Jesus im Stall.", "На Вечере Господней евангелические христиане вспоминают рождение Иисуса в хлеву.", "🍇", false,
+        "Stimmt nicht! Im Abendmahl erinnern evangelische Christen mit Brot und Wein (oder Saft) an das letzte Mahl von Jesus mit seinen Jüngern.", "Неверно! На Вечере Господней евангелические христиане хлебом и вином (или соком) вспоминают последнюю трапезу Иисуса с учениками."),
       ende("Super, {name}! Plant ein Essen, zu dem ihr jemanden einladet, der sonst allein ist.", "Супер, {name}! Спланируйте обед, на который пригласите того, кто обычно один.")
     ] });
   re({ id: "re-heilungen", lb: "re3", stufe: 4, konf: ["ka"], lz: ["re.bi.02"], name: "Jesus setzt sich für andere ein", e: "🤲", farbe: "#C2337A", grund: "#FFEAF3",
@@ -505,8 +505,8 @@
         ["Er vertraut, dass ein Wort von Jesus genügt", "Он верит, что достаточно слова Иисуса", "Richtig! Jesus lobt sein großes Vertrauen – obwohl er ein Fremder ist.", "Правильно! Иисус хвалит его большое доверие – хотя он чужой."],
         ["Er will Jesus verhaften", "Он хочет арестовать Иисуса", "Nein, er bittet um Hilfe.", "Нет, он просит о помощи."],
         ["Er ist selbst krank", "Он сам болен", "Nein, sein Diener ist krank.", "Нет, болен его слуга."]),
-      daumen("Schon als Zwölfjähriger sprach Jesus im Tempel mit den Gelehrten über die Heilige Schrift.", "Уже двенадцатилетним Иисус беседовал в Храме с учёными о Писании.", "📜", true,
-        "Stimmt! Seine Eltern suchten ihn drei Tage lang.", "Верно! Родители искали Его три дня."),
+      daumen("Als Zwölfjähriger blieb Jesus im Tempel, weil er dort eingeschlafen war.", "В двенадцать лет Иисус остался в храме, потому что там уснул.", "📜", false,
+        "Stimmt nicht! Die Bibel erzählt: Der zwölfjährige Jesus blieb im Tempel und sprach mit den Gelehrten über die Heilige Schrift.", "Неверно! Библия рассказывает: двенадцатилетний Иисус остался в храме и беседовал с учителями о Священном Писании."),
       ende("Super, {name}! Wo könntest du dich heute für jemanden einsetzen?", "Супер, {name}! За кого ты мог бы сегодня заступиться?")
     ] });
   re({ id: "re-kirchenjahr", lb: "re4", stufe: 4, lz: ["re.fe.01"], name: "Das Kirchenjahr", e: "🗓️", farbe: "#2F86C8", grund: "#EAF4FC",
@@ -519,8 +519,8 @@
         ["Mit Ostern", "С Пасхи", "Ostern ist das wichtigste Fest – aber nicht der Anfang.", "Пасха – главный праздник, но не начало."]),
       zuordnen("Zu welchem Festkreis gehört es?", "К какому кругу относится?", [["weihnachten", "Weihnachtsfestkreis", "Рождественский круг", "🎄"], ["ostern", "Osterfestkreis", "Пасхальный круг", "🐣"]],
         [["Advent", "Адвент", "weihnachten"], ["Heilige Drei Könige", "Богоявление (три царя)", "weihnachten"], ["Fastenzeit", "Великий пост", "ostern"], ["Pfingsten", "Пятидесятница", "ostern"]]),
-      daumen("Der Sonntag erinnert Christen jede Woche an Ostern – darum ist er ein Ruhe- und Feiertag.", "Воскресенье каждую неделю напоминает христианам о Пасхе – поэтому это день отдыха и праздника.", "☀️", true,
-        "Stimmt! Für Juden ist der Sabbat der Ruhetag.", "Верно! Для иудеев день покоя – шаббат."),
+      daumen("Der Sonntag erinnert Christen jede Woche an Weihnachten.", "Воскресенье каждую неделю напоминает христианам о Рождестве.", "☀️", false,
+        "Stimmt nicht! Der Sonntag erinnert Christen an Ostern – an die Auferstehung von Jesus. Darum ist er ein Ruhe- und Feiertag.", "Неверно! Воскресенье напоминает христианам о Пасхе – о воскресении Иисуса. Поэтому это день отдыха и праздника."),
       ende("Toll, {name}! Gestalte einen Kreis mit den Festen des Kirchenjahres.", "Здорово, {name}! Нарисуй круг с праздниками церковного года.")
     ] });
   re({ id: "re-oekumene", lb: "re4", stufe: 4, lz: ["re.fe.02"], name: "Evangelisch und katholisch", e: "🤝", farbe: "#7B55B8", grund: "#F1EAFF",
@@ -545,8 +545,8 @@
         ["Er übersetzte das Neue Testament ins Deutsche", "Перевёл Новый Завет на немецкий", "Richtig! So konnten viel mehr Menschen die Bibel selbst lesen.", "Правильно! Так гораздо больше людей могли сами читать Библию."],
         ["Er baute die Burg", "Построил замок", "Nein, die Burg war viel älter.", "Нет, замок был гораздо старше."],
         ["Er spielte Fußball", "Играл в футбол", "Nein, er übersetzte die Bibel.", "Нет, он переводил Библию."]),
-      daumen("Die Lutherrose ist das Wappen von Martin Luther – ein Kreuz in einem Herz in einer Rose.", "Роза Лютера – герб Мартина Лютера: крест в сердце внутри розы.", "🌹", true,
-        "Stimmt! Man findet sie heute an vielen evangelischen Kirchen.", "Верно! Её и сегодня можно увидеть на многих евангелических церквях."),
+      daumen("Die Lutherrose ist eine echte Rose, die Luther in seinem Garten gepflanzt hat.", "Роза Лютера – настоящая роза, которую Лютер посадил у себя в саду.", "🌹", false,
+        "Stimmt nicht! Die Lutherrose ist Luthers Wappen, ein Zeichen: ein Kreuz in einem Herz in einer Rose.", "Неверно! Роза Лютера – это герб Лютера, знак: крест в сердце внутри розы."),
       daumen("In Sachsen ist auch der Buß- und Bettag im November ein Feiertag.", "В Саксонии День покаяния и молитвы в ноябре – тоже выходной.", "🗓️", true,
         "Stimmt! Sachsen ist das einzige Bundesland, in dem er ein gesetzlicher Feiertag ist.", "Верно! Саксония – единственная земля, где это официальный выходной."),
       ende("Toll, {name}! Schau, ob es in deinem Ort zum Reformationstag Reformationsbrötchen gibt.", "Здорово, {name}! Посмотри, есть ли у вас ко Дню Реформации особые булочки.")

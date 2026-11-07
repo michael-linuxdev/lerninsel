@@ -53,10 +53,10 @@ pruefe("Sachsen: alle 45 Lernbereiche (Mathe, Deutsch 2025, Sachunterricht) habe
   assert.deepStrictEqual(leer, ["sachkunde 3 Experimentieren"]);
 });
 
-pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Abdeckung von Hand; Stand 30.10.2026: alle 45 gut)", () => {
+pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Stand 07.11.2026 nach „Ehrlich lernen“: 32 gut, 13 teilweise)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 45, teil: 0, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 32, teil: 13, nein: 0 });   // 07.11.2026 „Ehrlich lernen“: strengere Regel für „ja“
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
@@ -114,7 +114,7 @@ pruefe("Sachsen in voller Tiefe: Deutsch Kl. 1/2, 3 und 4 – jeder Inhaltspunkt
     if (art === "sachkunde") return w.THEMEN.some(k => k.id === id);
     if (art === "echtewelt") return echt.includes(`["${id}", `);
     return false; };
-  const ids = new Set(), soll = { "1/2": [69, { ja: 65, teil: 0, nein: 0, aussen: 4 }], "3": [63, { ja: 62, teil: 0, nein: 0, aussen: 1 }], "4": [47, { ja: 46, teil: 0, nein: 0, aussen: 1 }] };
+  const ids = new Set(), soll = { "1/2": [69, { ja: 56, teil: 9, nein: 0, aussen: 4 }], "3": [63, { ja: 58, teil: 4, nein: 0, aussen: 1 }], "4": [47, { ja: 39, teil: 7, nein: 0, aussen: 1 }] };   // 07.11.2026 „Ehrlich lernen“: vorher 65/62/46 „ja“
   const kl = { "1/2": ["1", "2", "1/2"], "3": ["3"], "4": ["4"] };
   Object.entries(soll).forEach(([st, [zahl, verteilung]]) => {
     const n = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
@@ -146,7 +146,7 @@ pruefe("Sachsen in voller Tiefe: Sachunterricht Kl. 1/2, 3 und 4 (Pflicht-Lernbe
     return art === "sachkunde" ? w.THEMEN.concat(w.LANDKREIS_THEMEN).some(t => t.id === id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id)
       : art === "medien" ? w.LEKTIONEN.some(k => k.id === id) : art === "mathe" ? stationen.has(id) : art === "echtewelt" ? echt.includes(`["${id}", `)
       : art === "praesentieren" ? ["folien"].includes(id) : art === "wetterdrache" ? id === "alle" : art === "expedition" ? id === "karte" : false; };   // wetterdrache:alle = Ellas Wetter-Drache (06.11.2026), expedition:karte = Ellas Forscherlager (09.11.2026)
-  const ids = new Set(), soll = { "1/2": [47, { ja: 46, teil: 0, nein: 0, aussen: 1 }], "3": [24, { ja: 23, teil: 0, nein: 0, aussen: 1 }], "4": [28, { ja: 27, teil: 0, nein: 0, aussen: 1 }] };
+  const ids = new Set(), soll = { "1/2": [47, { ja: 43, teil: 3, nein: 0, aussen: 1 }], "3": [24, { ja: 22, teil: 1, nein: 0, aussen: 1 }], "4": [28, { ja: 27, teil: 0, nein: 0, aussen: 1 }] };   // 07.11.2026 „Ehrlich lernen“: vorher 46/23/27 „ja“
   const kl = { "1/2": ["1", "2", "1/2"], "3": ["3"], "4": ["4"] };
   Object.entries(soll).forEach(([st, [zahl, verteilung]]) => {
     const n = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
@@ -195,9 +195,9 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
 });
 
-pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und „My Portfolio“ je Klasse, Kl. 1/2 ohne Englisch, Zählung 22 / 0 / 0, alle Inhaltspunkte zugeordnet", () => {
+pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und „My Portfolio“ je Klasse, Kl. 1/2 ohne Englisch, Zählung 5 / 17 / 0 (seit 07.11.2026 strenger), alle Inhaltspunkte zugeordnet", () => {
   const n = { ja: 0, teil: 0, nein: 0 }, echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8"), ids = new Set();
-  const soll = { 3: [40, { ja: 39, teil: 0, nein: 0, aussen: 1 }], 4: [33, { ja: 31, teil: 0, nein: 0, aussen: 2 }] };
+  const soll = { 3: [40, { ja: 26, teil: 13, nein: 0, aussen: 1 }], 4: [33, { ja: 19, teil: 12, nein: 0, aussen: 2 }] };   // 07.11.2026: Sprechen und zu wenig Übung ehrlich „teil“ (vorher 39/31 „ja“)
   [3, 4].forEach(k => { const lb = L.fuer("sachsen", "englisch", k), m = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
     assert.strictEqual(lb.length, 11);
     lb.forEach(x => { n[x.abdeckung]++; x.lz.forEach(id => assert.ok(K.ziel(id), id));
@@ -207,7 +207,7 @@ pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und �
         if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("englisch:")), p.id); });
       assert.strictEqual(x.abdeckung, x.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein") ? "teil" : "ja", `Englisch ${k} ${x.titel}`); });
     assert.strictEqual(z, soll[k][0]); assert.deepStrictEqual(m, soll[k][1]); });
-  assert.deepStrictEqual({ ...n }, { ja: 22, teil: 0, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 5, teil: 17, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "englisch", 2).length, 0);
   const benutzt = new Set(); [3, 4].forEach(k => L.fuer("sachsen", "englisch", k).forEach(x => x.punkte.forEach(p => p.app.forEach(a => benutzt.add(a)))));
   w.ENGLISCH.forEach(l => assert.ok(benutzt.has("englisch:" + l.id), l.id + " kommt in keinem Inhaltspunkt vor"));
@@ -235,9 +235,10 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jede
     z[f] = m;
   });
   w.FACH_THEMEN.forEach(t => assert.ok(benutzt.has("sachkunde:" + t.id), t.id + " kommt in keinem Inhaltspunkt vor"));
-  assert.deepStrictEqual(z, { kunst: { ja: 33, teil: 0, nein: 0, aussen: 12 }, musik: { ja: 37, teil: 0, nein: 0, aussen: 11 }, werken: { ja: 25, teil: 0, nein: 0, aussen: 9 },
-    sport: { ja: 14, teil: 0, nein: 0, aussen: 28 }, ethik: { ja: 43, teil: 0, nein: 0, aussen: 0 },
-    evreligion: { ja: 45, teil: 0, nein: 0, aussen: 2 }, kareligion: { ja: 59, teil: 0, nein: 0, aussen: 1 } });
+  // 07.11.2026 „Ehrlich lernen“: Themen mit wenig Übungen für viele Punkte sind ehrlich „teil“ (vorher alle „ja“: 33, 37, 25, 14, 43, 45, 59)
+  assert.strictEqual(JSON.stringify(z), JSON.stringify({ kunst: { ja: 16, teil: 17, nein: 0, aussen: 12 }, musik: { ja: 23, teil: 14, nein: 0, aussen: 11 }, werken: { ja: 7, teil: 18, nein: 0, aussen: 9 },
+    sport: { ja: 6, teil: 8, nein: 0, aussen: 28 }, ethik: { ja: 16, teil: 27, nein: 0, aussen: 0 },
+    evreligion: { ja: 26, teil: 19, nein: 0, aussen: 2 }, kareligion: { ja: 17, teil: 42, nein: 0, aussen: 1 } }));
 });
 
 pruefe("Sachsen Sorbisch als Fremdsprache (nur nach Eltern-Wahl): 6 Themen Kl. 1/2, 11 Lernbereiche + Wahlbereiche Kl. 3 und 4, jeder Punkt zugeordnet, jede Lektion kommt vor, ehrlich „teil“ ohne Hören", () => {
@@ -251,7 +252,7 @@ pruefe("Sachsen Sorbisch als Fremdsprache (nur nach Eltern-Wahl): 6 Themen Kl. 1
         if (!ids.has(p.id)) { ids.add(p.id); m[p.abdeckung]++; } });
       assert.strictEqual(lb.abdeckung, lb.punkte.some(p => p.abdeckung !== "ja") ? "teil" : "ja", `Sorbisch Kl. ${k} ${lb.titel}`); }); });
   w.SORBISCH.forEach(l => assert.ok(benutzt.has("sorbisch:" + l.id), l.id + " kommt in keinem Inhaltspunkt vor"));
-  assert.deepStrictEqual(m, { ja: 49, teil: 1, nein: 1 });   // 30.10.2026: nur Hören/Nachsprechen fehlt (keine sorbische Stimme)
+  assert.deepStrictEqual(m, { ja: 46, teil: 4, nein: 1 });   // 07.11.2026: drei Punkte mit zu wenig Übung   // 30.10.2026: nur Hören/Nachsprechen fehlt (keine sorbische Stimme)
   // Jedes Wort mit eigenem Emoji je Lektion, Sätze und Wahlaufgaben vollständig
   w.SORBISCH.forEach(l => { const e = l.woerter.map(x => x.e); assert.strictEqual(new Set(e).size, e.length, l.id + ": Emoji doppelt");
     l.woerter.forEach(x => assert.ok(x.so && x.de && x.ru, l.id + ": Wort unvollständig"));
@@ -271,7 +272,7 @@ pruefe("Sachsen Sorbisch als Muttersprache (Lehrplan 2004, nur nach Eltern-Wahl)
         if (!ids.has(p.id)) { ids.add(p.id); m[p.abdeckung]++; } });
       assert.strictEqual(lb.abdeckung, lb.punkte.some(p => p.abdeckung !== "ja") ? "teil" : "ja", `Sorbisch Muttersprache Kl. ${k} ${lb.titel}`); }); });
   w.SORBISCH_MUTTER.forEach(l => assert.ok(benutzt.has("sorbisch:" + l.id), l.id + " kommt in keinem Inhaltspunkt vor"));
-  assert.deepStrictEqual(m, { ja: 36, teil: 13, nein: 2 });   // offen: Erzählen, Zuhören, Vortragen (keine sorbische Stimme), freies Schreiben auf Sorbisch
+  assert.deepStrictEqual(m, { ja: 20, teil: 29, nein: 2 });   // 07.11.2026: 16 Punkte mit zu wenig Übung dazu   // offen: Erzählen, Zuhören, Vortragen (keine sorbische Stimme), freies Schreiben auf Sorbisch
   // Lektionen: feste Schritte, Wahl mit Antworten, Ende als letzter Schritt, russischer Entwurf, IDs nicht doppelt mit der Fremdsprache
   w.SORBISCH_MUTTER.forEach(l => { assert.ok(l.mutter && l.id.startsWith("sm-") && !w.SORBISCH.some(x => x.id === l.id), l.id);
     assert.ok(w.SORBISCH_MUTTER_LB.some(([nr]) => nr === l.lb), l.id + ": Lernbereich fehlt");
@@ -296,6 +297,41 @@ pruefe("Vorschule (Sächsischer Bildungsplan): 7 Bereiche, jeder Punkt zugeordne
     a.aufgaben.forEach(x => { assert.ok(x.frage && x.ru, a.id + ": Frage/ru"); if (x.typ === "ordnen") assert.ok(x.teile.length >= 3 && new Set(x.teile).size === x.teile.length, a.id);
       else assert.ok(x.optionen.length >= 2 && new Set(x.optionen).size === x.optionen.length, a.id); }); });
   assert.deepStrictEqual(m, { ja: 22, teil: 2, nein: 0, aussen: 5 });   // teil: Bildergeschichten erzählen (mündlich), Namen schreiben (Entscheidung des Auftraggebers 10.11.: „Mein Name“ ist Nachspuren mit dem Finger, kein Schreiben mit dem Stift)
+});
+
+pruefe("Ehrlich lernen (07.11.2026): ein Inhaltspunkt ist „ja“ nur mit mindestens 2 echten Übungsschritten für sich; jeder „teil“-Punkt sagt im Hinweis, was fehlt", () => {
+  // Übungsschritte je Inhalt: Info-Karten, `sag`, Wortkarten und Aufnahmen zählen nicht; Mathe-Stationen und Spiele mit erzeugten Aufgaben
+  // (Lesen, Atelier, Robo, Leuchtturm …) zählen als genug. Die Übungen eines Inhalts werden auf alle Punkte desselben Fachs verteilt, die ihn nutzen.
+  const NICHT = new Set(["info", "sag", "karten", "aufnehmen"]), ue = (s) => (s || []).filter(x => !NICHT.has(x.typ)).length;
+  const alle = w.THEMEN.concat(w.FACH_THEMEN, w.LANDKREIS_THEMEN || []);
+  const zaehle = (a) => { const [art, id] = a.split(":"), f = (l) => l.find(x => x.id === id);
+    if (art === "mathe") return 99;
+    if (art === "werkstatt") return ue((f(w.WERKSTATT) || {}).schritte);
+    if (art === "deutsch") return ue((f(w.GESCHICHTE) || {}).schritte);
+    if (art === "sachkunde") return ue((f(alle) || {}).schritte);
+    if (art === "medien") return ue((f(w.LEKTIONEN) || {}).schritte);
+    if (art === "englisch") { const l = f(w.ENGLISCH); return Math.min(6, l.woerter.length) + ue(l.extra); }
+    if (art === "sorbisch") { const l = f(w.SORBISCH) || f(w.SORBISCH_MUTTER); return l.schritte ? ue(l.schritte) : Math.min(6, l.woerter.length) + ue(l.extra); }
+    if (art === "vorschule") return f(w.VORSCHULE).aufgaben.length;
+    if (art === "echtewelt") return 0;
+    return 99; };
+  const S = L.laender.sachsen, punkte = new Map();
+  Object.entries(S.faecher).forEach(([fach, x]) => Object.values(x.stufen || {}).forEach(lbs => lbs.forEach(lb => (lb.punkte || []).forEach(p => punkte.has(p.id) || punkte.set(p.id, { fach, p })))));
+  S.vorschule.bereiche.forEach(b => b.punkte.forEach(p => punkte.set(p.id, { fach: "vorschule", p })));
+  const refs = {}; punkte.forEach(({ fach, p }) => p.app.forEach(a => { refs[fach + a] = (refs[fach + a] || 0) + 1; }));
+  const zuViel = [], ohneHinweis = [], z = {};
+  punkte.forEach(({ fach, p }) => { const n = p.app.reduce((s, a) => s + zaehle(a) / refs[fach + a], 0);
+    (z[fach] = z[fach] || { ja: 0, teil: 0, nein: 0, aussen: 0 })[p.abdeckung]++;
+    if (p.abdeckung === "ja" && n < 2) zuViel.push(`${p.id} (${n.toFixed(1)})`);
+    if (p.abdeckung === "teil" && !p.hinweis) ohneHinweis.push(p.id); });
+  assert.deepStrictEqual(zuViel, [], "„ja“ mit zu wenig Übung");
+  assert.deepStrictEqual(ohneHinweis, [], "„teil“ ohne Hinweis");
+  // Englisch: Punkte zum Sprechen sind ehrlich „teil“ (die App übt Verstehen, nicht Sprechen)
+  ["sn.en3.mf.04", "sn.en4.fd.01"].forEach(id => assert.ok(punkte.get(id).p.abdeckung === "teil" && /Sprechen fehlt/.test(punkte.get(id).p.hinweis), id));
+  // Lernbereich mit einem „teil“-Punkt ist selbst „teil“ (sachsen-punkte.js setzt das beim Laden)
+  Object.values(S.faecher).forEach(x => Object.values(x.stufen || {}).forEach(lbs => lbs.forEach(lb => {
+    if ((lb.punkte || []).some(p => p.abdeckung === "teil" || p.abdeckung === "nein")) assert.strictEqual(lb.abdeckung, "teil", lb.titel); })));
+  if (process.env.ZAEHLUNG) console.log(JSON.stringify(z));
 });
 
 pruefe("Länder-Abweichung: Sachsen verschiebt einfache Kombinationen nach Kl. 2 und kennt ein Zusatz-Ziel", () => {

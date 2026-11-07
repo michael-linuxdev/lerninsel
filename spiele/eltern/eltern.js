@@ -216,7 +216,7 @@
     if (!punkte || !punkte.length) return "";
     const n = (a) => punkte.filter(p => p.abdeckung === a).length;
     return `<details class="lp-punkte"><summary>${punkte.length} Inhaltspunkte: ${n("ja")} geübt, ${n("teil")} teilweise, ${n("nein")} fehlen${n("aussen") ? `, ${n("aussen")} draußen/auf Papier` : ""}</summary><ul>` +
-      punkte.map(p => `<li data-punkt="${p.id}"><span class="zeichen">${PUNKT_ZEICHEN[p.abdeckung]}</span>${p.text} <span class="klein">(Kl. ${p.kl})</span></li>`).join("") + `</ul></details>`;
+      punkte.map(p => `<li data-punkt="${p.id}"><span class="zeichen">${PUNKT_ZEICHEN[p.abdeckung]}</span>${p.text} <span class="klein">(Kl. ${p.kl})</span>${p.hinweis ? `<br><i class="klein lp-hinweis">${p.hinweis}</i>` : ""}</li>`).join("") + `</ul></details>`;
   }
   function lehrplanKarte(mathe) {
     const L = window.LEHRPLAN; if (!L) return "";
@@ -483,10 +483,10 @@
   const SU_LB = { zl: "Zusammen leben und lernen", kg: "Mein Körper und meine Gesundheit", pt: "Pflanzen und Tiere", un: "Unbelebte Natur", rz: "Raum und Zeit", ex: "Forschen, Medien, Schuljahre" };
   function lernstandListe(fach, namen, liste, id, praefix) {
     const ls = (S.lade(fach) || {}).lernstand || {}, eintraege = Object.entries(ls).filter(([k]) => !praefix || k[0] === praefix).sort((a, b) => (b[1].am || "").localeCompare(a[1].am || ""));
-    const name = (x) => (liste.find(k => k.id === x) || {}).name || x;
+    const name = (x) => x === "transfer" ? "neue Situationen" : (liste.find(k => k.id === x) || {}).name || x;
     if (!eintraege.length) return `<p class="klein" id="${id}">„Zeig, was du kannst“: noch nicht gemacht.</p>`;
     return `<ul class="liste" id="${id}">` + eintraege.map(([k, v]) => { const [kl, lb] = k.split(":"), ueben = Object.keys(v.je).filter(x => !v.je[x]);
-      return `<li><b>Kl. ${kl.slice(1)} · ${namen[lb] || lb}</b> (${v.am.split("-").reverse().join(".")}): ${v.richtig} von ${v.n} auf Anhieb${ueben.length ? ` · noch üben: ${ueben.map(name).join(", ")}` : " · alles sicher"}</li>`; }).join("") + `</ul>`;
+      return `<li><b>Kl. ${kl.slice(1)} · ${namen[lb] || lb}</b> (${v.am.split("-").reverse().join(".")}): ${v.richtig} von ${v.n} auf Anhieb${v.transfer ? ` · <span class="lp-transfer">neue Situationen: ${v.transfer.richtig} von ${v.transfer.n}</span>` : ""}${ueben.length ? ` · noch üben: ${ueben.map(name).join(", ")}` : " · alles sicher"}</li>`; }).join("") + `</ul>`;
   }
   function schuljahrKarte() {
     const e = S.lade("eltern") || {}, de = (e.deutsch || {}).schule || "", su = (e.sachkunde || {}).schule || "";
