@@ -143,6 +143,7 @@
   // Auswertung: erster Versuch zählt fürs Können; nach zwei Fehlern zeigt Benno die Lösung und es geht weiter (nichts geht verloren)
   function pruefe(ok, text, loesung) {
     const a = lauf.aktuell;
+    if (window.Erprobung) Erprobung.aufgabe({ inhalt: "baeckerei:" + lauf.st, schritt: a.art || null, richtig: ok, versuch: a.versuche + 1 });   // Erprobungsmodus (Paket K)
     if (a.versuche === 0) { if (window.Koennen) Koennen.melde([LZ[lauf.st]], ok); if (ok && window.Charakter) Charakter.gib("mathe", 1); }
     if (!ok) {
       a.versuche++; lauf.fehler++; S.ton("nein");

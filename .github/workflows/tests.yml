@@ -32,7 +32,7 @@ jobs:
         run: PORT=8798 sh tests/laufen.sh robust
       - name: Neue Orte und Verbesserungen (Garten, Bäckerei, Tierstation, Schach/Duell/Gefühle/Atelier, NA-60 Teil 2, Sticker, Fehler-Ursachen, Sicherung, iPad-Meldungen, Rhythmus-Boot, Elternbereich schnell, Russisch Mathe, Technik, Leuchtturm, Langdruck)
         run: |
-          for t in garten baeckerei tierstation verbessert na60b sticker fehlerursachen sicherung ipad rhythmus elternschnell matheru technik wetterdrache malmehr barriere leuchtturm bruecke extras3d langdruck expedition mathe5b meinname ruvorlesen rupruefen ausschleichen kulissen eineswelt sofort finale ehrlich ohnelesen faecher1 faecher2 englischsprechen; do
+          for t in garten baeckerei tierstation verbessert na60b sticker fehlerursachen sicherung ipad rhythmus elternschnell matheru technik wetterdrache malmehr barriere leuchtturm bruecke extras3d langdruck expedition mathe5b meinname ruvorlesen rupruefen ausschleichen kulissen eineswelt sofort finale ehrlich ohnelesen faecher1 faecher2 englischsprechen erprobung; do
             PORT=8797 sh tests/laufen.sh $t | tee /tmp/$t.log; tail -1 /tmp/$t.log | grep -q bestanden || exit 1
           done
       - name: Leistung und Updates (Paket 5) – Budget der Insel streng, Ladezeit mit CPU-Drossel, Service-Worker-Update, Emoji-Bilder und ihre Häppchen

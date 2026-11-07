@@ -7,7 +7,11 @@
 //   runde    fertig gespielte Runde · abbruch  Runde mitten drin verlassen · szene  Szene (übersprungen?)
 //   technik  Seitenfehler/voller Speicher (aus dem Protokoll in core.js) · meldung  „✍️ Melden“ · pruefung  Prüfleiste und Prüflisten
 // Nie aufgezeichnet: eigene Texte und Aufnahmen des Kindes, Bilder, Namen (Namen der Kinder werden in allen Texten zu {name}).
-// Export: Erprobung.datei() → { format: "lerninsel-erprobung", version: 1, … } (Elternbereich: „💾 Erprobung speichern“),
+// Jeder Eintrag: { t (ms seit 1970), art, seite, … } – aufgabe: inhalt, schritt, text (Aufgabentext, ohne Namen), antwort, richtig, versuch, ms, hilfe[], fach, klasse, h
+// (Prüfsumme des Inhalts); pruefung: rolle fach|ru|hsb, urteil ok|aendern|unklar, korrektur, inhalt, schritt, h (bei ru/hsb: Prüfsumme des Texts ruText, hInhalt);
+// meldung: kat fehler|unklar|schwer|leicht|schoen|idee, text (≤ 500), inhalt, schritt, klasse; runde/abbruch: inhalt, n, beantwortet, ms; szene: inhalt, uebersprungen.
+// Export: Erprobung.datei() → { format: "lerninsel-erprobung", version: 1, kuerzel, rollen, faecher, klassen, kindSpielt, geraet, app, kind (stufe, land,
+// hilfesprache), erstellt, von, bis, verworfen, protokoll, eintraege } (Elternbereich: „💾 Erprobung speichern“),
 // Auswertung im Repo: node quellen/erprobung-auswerten.js <dateien…> [--pruefstand]. Prüfsumme der Inhalte wie quellen/pruefstand.js
 // (sha256 über JSON mit Funktionen als Quelltext, 12 Zeichen) – geänderter Inhalt = Prüfung unwirksam.
 (function () {

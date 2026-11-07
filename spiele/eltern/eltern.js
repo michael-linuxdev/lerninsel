@@ -709,9 +709,9 @@
       <div class="zeit-raster"><label>Kürzel statt Name (z. B. „L1“ oder „MK“) <input id="erp-kuerzel" maxlength="12" autocomplete="off" value="${S.esc(st.kuerzel)}"></label></div>
       <fieldset class="erp-rollen" style="border:0;padding:0;margin:0"><legend style="font-weight:700;margin-bottom:4px">Meine Rollen (mehrere möglich)</legend>
         ${box("erp-rolle-spieler", hat("spieler"), "🎮 Spieler/in – ich spiele selbst oder schaue einem Kind zu (Knopf „✍️ Melden“ auf jeder Seite)")}
-        <div class="erp-unter">${box("erp-kind", st.kindSpielt, "Ein Kind spielt, ich schaue zu (zählt im Prüfstand als „mit Kindern ausprobiert“)")}</div>
+        <div class="erp-unter" ${hat("spieler") ? "" : "hidden"}>${box("erp-kind", st.kindSpielt, "Ein Kind spielt, ich schaue zu (zählt im Prüfstand als „mit Kindern ausprobiert“)")}</div>
         ${box("erp-rolle-lehrkraft", hat("lehrkraft"), "🏫 Lehrkraft – unter jeder Aufgabe 👍 passt / ✏️ ändern / ❓ unklar")}
-        <div class="erp-unter" id="erp-lehrkraft-wahl">
+        <div class="erp-unter" id="erp-lehrkraft-wahl" ${hat("lehrkraft") ? "" : "hidden"}>
           <p class="klein" style="margin:4px 0">Fächer (keins gewählt = alle):</p>
           <div class="zeit-raster">${Object.entries(E.FAECHER).map(([id, n]) => box("erp-fach-" + id, st.faecher.includes(id), n, `data-erp-fach="${id}"`)).join("")}</div>
           <p class="klein" style="margin:4px 0">Klassen (keine gewählt = alle):</p>
