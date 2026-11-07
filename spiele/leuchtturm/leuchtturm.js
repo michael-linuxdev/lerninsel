@@ -163,6 +163,7 @@
     if (!brett.tipp) lauf.ohneTipp++;
     // nur beim ersten Lösen: Können (ohne Tipp = gekonnt) und Erfahrung
     if (neu && window.Koennen) Koennen.melde(LZ, !brett.tipp);
+    if (window.Erprobung) Erprobung.aufgabe({ inhalt: "leuchtturm:" + r.id, antwort: brett.tipp ? "mit Tipp" : "ohne Tipp", richtig: true });   // Erprobungsmodus (Paket K)
     if (neu && window.Charakter) Charakter.gib("mathe", 1);
     d.geloest[r.id] = (d.geloest[r.id] || 0) + 1; speichere(d);
     S.ton("juhu"); $("sterne").textContent = S.sterne();

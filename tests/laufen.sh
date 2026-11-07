@@ -1,7 +1,7 @@
 #!/bin/sh
 # Startet einen lokalen Server, führt einen Browser-Test aus und beendet den Server wieder.
-#   sh tests/laufen.sh              → Node-Tests (story-migration, inselkern, lehrplan, wortschatz, koennen, mathe-generatoren, mathe-fehler, pruefstand, offline) und Rauchtest über alle Seiten
-#   sh tests/laufen.sh ereignisse   → nur tests/ereignisse.js (ebenso profil, szene, prolog, zugang, tutorial, etappen, weihnachten, probe, leistung, daz, lesen, mathe1, sachkunde, deutsch34, koennen-anzeige, uebergang5, englisch, schreiben, mathe2, mathe34, mathe15, mathevoll, schuljahr, tafel, deutschvoll, sachkundevoll, schuljahr2, faechervoll, sorbisch, luecken, mathe5, robo, atelier, vorlesen, praesentieren, landkreise, sorbischmutter, vorschule, dashboard, anziehen, kapitel, chronik, geschenk, geburtstag, schuljahrwechsel, altersgerecht, garten, baeckerei, tierstation, verbessert, na60b, tier, schach, gefuehle, duell, sticker, fehlerursachen, sicherung, ipad, elternschnell, matheru, rhythmus, technik, wetterdrache, malmehr, barriere, leuchtturm, extras3d, stil, falz, hud, feinschliff, langdruck, expedition, eineswelt, ladezeit, swupdate, sofort, finale, ehrlich, ohnelesen, bruecke, faecher1, faecher2, icons, englischsprechen)
+#   sh tests/laufen.sh              → Node-Tests (story-migration, inselkern, lehrplan, wortschatz, koennen, mathe-generatoren, mathe-fehler, pruefstand, erprobung-auswerten, offline) und Rauchtest über alle Seiten
+#   sh tests/laufen.sh ereignisse   → nur tests/ereignisse.js (ebenso profil, szene, prolog, zugang, tutorial, etappen, weihnachten, probe, leistung, daz, lesen, mathe1, sachkunde, deutsch34, koennen-anzeige, uebergang5, englisch, schreiben, mathe2, mathe34, mathe15, mathevoll, schuljahr, tafel, deutschvoll, sachkundevoll, schuljahr2, faechervoll, sorbisch, luecken, mathe5, robo, atelier, vorlesen, praesentieren, landkreise, sorbischmutter, vorschule, dashboard, anziehen, kapitel, chronik, geschenk, geburtstag, schuljahrwechsel, altersgerecht, garten, baeckerei, tierstation, verbessert, na60b, tier, schach, gefuehle, duell, sticker, fehlerursachen, sicherung, ipad, elternschnell, matheru, rhythmus, technik, wetterdrache, malmehr, barriere, leuchtturm, extras3d, stil, falz, hud, feinschliff, langdruck, expedition, eineswelt, ladezeit, swupdate, sofort, finale, ehrlich, ohnelesen, bruecke, faecher1, faecher2, icons, englischsprechen, erprobung)
 cd "$(dirname "$0")/.."
 PORT=${PORT:-8799}
 TEST=${1:-rauchtest}
@@ -15,6 +15,7 @@ if [ "$TEST" = "rauchtest" ]; then
   node tests/mathe-generatoren.js || exit 1
   node tests/mathe-fehler.js || exit 1
   node tests/pruefstand.js || exit 1
+  node tests/erprobung-auswerten.js || exit 1
   node tests/offline.js || exit 1
 fi
 # Port muss frei sein – sonst würde still ein fremder oder alter Server getestet

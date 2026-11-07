@@ -31,6 +31,7 @@
   function starte(id) {
     const a = A.find(x => x.id === id); if (!a) return;
     lauf = { a, pos: 0, fehler: 0, schritte: a.aufgaben };
+    if (window.Erprobung) Erprobung.runde("vorschule:" + a.id, a.aufgaben.length);
     $("aufgabe-name").textContent = `${a.e} ${a.name}`;
     zeige("aufgabe"); schritt();
   }
@@ -39,6 +40,7 @@
     $("balken").style.width = Math.round(lauf.pos / lauf.schritte.length * 100) + "%";
     if (!s) return beende();
     lauf.versuche = 0; lauf.gesperrt = false; lauf.gelegt = [];
+    if (window.Erprobung) Erprobung.zeige({ inhalt: "vorschule:" + lauf.a.id, schritt: lauf.pos, text: s.frage, fach: "vorschule", klasse: "vs", daten: lauf.a, ru: s.ru || "", el: $("aufgabe") });
     $("frage-text").textContent = s.frage; $("hinweis").textContent = ""; $("hinweis").className = "hinweis";
     const hilfe = S.hilfeRu && S.hilfeRu() && s.ru; $("ru-knopf").hidden = !hilfe; $("ru-text").hidden = true; $("ru-text").textContent = s.ru || "";
     const W = $("aufgabe");
@@ -58,13 +60,14 @@
   function lege(b, s) {
     if (lauf.gesperrt || b.disabled) return;
     const soll = lauf.gelegt.length;
-    if (+b.dataset.i !== soll) { fehlerVersuch(b); return; }
+    if (+b.dataset.i !== soll) { if (window.Erprobung) Erprobung.aufgabe({ antwort: b.textContent, richtig: false, versuch: lauf.versuche + 1 }); fehlerVersuch(b); return; }
     S.ton("tipp"); lauf.gelegt.push(soll); b.disabled = true; b.style.visibility = "hidden";
     $("reihe").insertAdjacentHTML("beforeend", `<span class="platz">${s.teile[soll]}</span>`);
-    if (lauf.gelegt.length === s.teile.length) richtig(null, s);
+    if (lauf.gelegt.length === s.teile.length) { if (window.Erprobung) Erprobung.aufgabe({ antwort: s.teile.join(" "), richtig: true, versuch: lauf.versuche + 1 }); richtig(null, s); }
   }
   function antwort(b, ok, s) {
     if (lauf.gesperrt) return;
+    if (window.Erprobung) Erprobung.aufgabe({ antwort: b.textContent, richtig: ok, versuch: lauf.versuche + 1 });
     if (ok) richtig(b, s); else fehlerVersuch(b);
   }
   function richtig(b, s) {
@@ -86,6 +89,7 @@
   }
   function weiter() { SP.stopp(); lauf.pos++; schritt(); }
   function beende() {
+    if (window.Erprobung) Erprobung.rundeFertig({ fehler: lauf.fehler });
     const { a, fehler } = lauf, sterne = fehler <= 1 ? 3 : fehler <= 3 ? 2 : 1, d = daten(), vorher = d.fertig[a.id] || 0;
     let gewinn = Math.max(0, sterne - vorher); if (vorher === 3 && sterne === 3) gewinn = 1;
     d.fertig[a.id] = Math.max(vorher, sterne); speichere(d);

@@ -94,9 +94,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(600); }
     const teileVon = () => p.evaluate(() => [...document.querySelectorAll(".eltern-teil")].map(t => ({ id: t.dataset.teil, an: !t.hidden, karten: t.querySelectorAll(":scope > .karte:not(.lade-karte)").length })));
     const start = await teileVon();
-    erwarte(start.length === 5 && start.filter(t => t.an).map(t => t.id).join() === "ueberblick", `Elternbereich ${art}: fünf Reiter, startet mit „Überblick“`);
+    erwarte(start.length === 6 && start.filter(t => t.an).map(t => t.id).join() === "ueberblick", `Elternbereich ${art}: sechs Reiter (seit 12.11. „Erprobung & Prüfen“), startet mit „Überblick“`);
     let hoechstens = 0;
-    for (const t of ["lernstand", "schule", "zeit", "kinder", "ueberblick"]) {
+    for (const t of ["lernstand", "schule", "zeit", "kinder", "erprobung", "ueberblick"]) {
       await p.click(`.eltern-reiter [data-teil="${t}"]`); await p.waitForTimeout(150);
       if (["lernstand", "schule"].includes(t)) await p.waitForFunction((t) => !document.querySelector(`.eltern-teil[data-teil="${t}"] .lade-karte`), t);
       const m = await masse(p); hoechstens = Math.max(hoechstens, m.h);

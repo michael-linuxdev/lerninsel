@@ -182,6 +182,7 @@
     document.body.style.setProperty("--grund", k.grund);
     document.body.style.setProperty("--akzent", k.farbe);
     $("kapitel-name").textContent = k.name;
+    if (window.Erprobung) Erprobung.runde((lauf.werk ? "werkstatt:" : "abenteuer:") + (k.lernstand ? "lernstand" : k.id), k.schritte.length);
     $("fipsi-gross").innerHTML = fipsi();
     zeige("kapitel");
     schritt();
@@ -202,6 +203,14 @@
     if (gesprochen) sprich(gesprochen);
   }
 
+  // Erprobungsmodus (Paket K): Inhalt-ID werkstatt:<kapitel> bzw. abenteuer:<kapitel>, Schritt = Nummer im Kapitel (Wiederholungen aus der Lernkartei ohne Nummer)
+  function erpZeige(s, A) {
+    const orig = lauf.liste[lauf.i] || lauf.k, quelle = s.__kap ? ((window.WERKSTATT || []).concat(window.GESCHICHTE || []).find(x => x.id === s.__kap) || orig) : orig;
+    const idx = quelle.schritte ? quelle.schritte.indexOf(s) : -1, werk = lauf.werk || !!s.__kap || /^w-/.test(quelle.id || "");
+    const text = s.frage || s.satz || (s.gedicht ? (s.titel || s.gedicht[0]) : s.text) || s.sag || (s.wort && s.wort.de) || s.wort || s.typ;
+    Erprobung.zeige({ inhalt: (werk ? "werkstatt:" : "abenteuer:") + quelle.id, schritt: idx >= 0 ? idx : s.__karte ? "wiederholung" : s.typ, text: s.typ + ": " + (typeof text === "string" ? text : ""),
+      fach: "deutsch", klasse: quelle.stufe, daten: quelle.lernstand ? null : quelle, ru: S.ht(s) || "", el: A });
+  }
   const luecke = (satz, fuell) => satz.replace("___", `<span class="luecke">${fuell || "&nbsp;"}</span>`);
   const sprechbar = (satz) => satz.replace("___", "…");
 
@@ -212,6 +221,7 @@
     const s = k.schritte[lauf.pos];
     lauf.versuche = 0;
     const A = $("aufgabe");
+    if (window.Erprobung) erpZeige(s, A);
     A.classList.toggle("lang", ["ordnen", "verbessern", "schreiben", "aufnehmen"].includes(s.typ) || !!s.gedicht); A.scrollTop = 0;   // Paket A: hohe Inhalte oben beginnen, sonst schneidet die Zentrierung oben ab
     const hinweis = `<p class="hinweis" id="hinweis"></p>`;
 
@@ -515,6 +525,7 @@
       if (lauf.gesperrt) return;
       const p = zeichne(), offen = p.filter(x => !x.ok), h = $("hinweis");
       const ersterVersuch = lauf.versuche === 0;
+      if (window.Erprobung) Erprobung.aufgabe({ richtig: !offen.length, versuch: lauf.versuche + 1 });   // eigener Text wird nie aufgezeichnet
       if (offen.length && lauf.versuche === 0) {
         // Erst ein freundlicher Hinweis statt „falsch“; zählt nicht gegen die Sterne
         lauf.versuche++;
@@ -612,6 +623,7 @@
   // Gemeinsame Prüfung: richtig → loben, vorlesen, weiter. Falsch → nochmal, nach 2 Fehlern Lösung zeigen.
   function antwort(knopf, richtig, beiRichtig, beiFalsch, zeigeLoesung) {
     if (lauf.gesperrt) return;
+    if (window.Erprobung) Erprobung.aufgabe({ antwort: knopf ? (knopf.getAttribute("aria-label") || knopf.textContent) : undefined, richtig, versuch: lauf.versuche + 1 });
     const h = $("hinweis");
     const schrittJetzt = lauf.k.schritte[lauf.pos];
     if (richtig) {
@@ -683,6 +695,7 @@
 
   // ---------- Ende eines Kapitels ----------
   function beende() {
+    if (window.Erprobung) Erprobung.rundeFertig({ fehler: lauf.fehler });
     if (lauf.k.lernstand) return beendeLernstand();
     const { k, i, fehler } = lauf;
     const sterne = fehler <= 1 ? 3 : fehler <= 3 ? 2 : 1;

@@ -154,6 +154,10 @@
   function aufgabe() {
     const z = lauf.ziele[lauf.i], w = wort(z.wort), b = z.ziel;
     lauf.versuche = 0;
+    if (window.Erprobung) {   // Erprobungsmodus (Paket K): lesen:<modus>, Schritt = Wort
+      if (lauf.i === 0) Erprobung.runde("lesen:" + lauf.modus, lauf.ziele.length);
+      Erprobung.zeige({ inhalt: "lesen:" + lauf.modus, schritt: z.wort, text: lauf.modus + ": " + w.de, fach: "deutsch", klasse: "1", el: $("wahl") });
+    }
     $("uebung-balken").style.width = Math.round(100 * lauf.i / lauf.ziele.length) + "%";
     $("rueck").textContent = "";
     let optionen, frage, ansage, buchstaben = false;
@@ -206,6 +210,7 @@
     if (!lauf || !$("uebung-ende").hidden) return;
     const z = lauf.ziele[lauf.i], k = $("wahl").querySelector(`[data-i="${i}"]`);
     if (!k || k.classList.contains("falsch") || k.classList.contains("richtig")) return;
+    if (window.Erprobung) { const o = lauf.optionen[i] || {}; Erprobung.aufgabe({ antwort: (o.w && o.w.de) || o.b, richtig: i === lauf.richtig_i, versuch: lauf.versuche + 1 }); }
     const schritt = lauf.modus === "silben" ? { typ: "silbenwort", wort: z.wort } : { typ: "anlaut", wort: z.wort, ziel: z.ziel };
     if (lauf.modus === "silben") return antworteSilben(i, z, k, schritt);
     if (i !== lauf.richtig_i) {
@@ -593,6 +598,7 @@
   function weiter() {
     lauf.i++;
     if (lauf.i < lauf.ziele.length) { aufgabe(); return; }
+    if (window.Erprobung) Erprobung.rundeFertig({ richtig: lauf.richtig });
     $("uebung-balken").style.width = "100%";
     $("wahl").hidden = true; $("frage").innerHTML = ""; $("rueck").textContent = "";
     $("uebung-ende").hidden = false;
