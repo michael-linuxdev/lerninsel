@@ -10,23 +10,38 @@ Du arbeitest an der **Lerninsel** (Offline-Lern-App für Grundschulkinder, Repo 
 
 **Zuerst:** Falls das Repo noch nicht da ist, `git clone https://github.com/michael-linuxdev/lerninsel` (bzw. das Repo der Sitzung hinzufügen).
 Dann **`CLAUDE.md` im Repo-Stamm vollständig lesen und befolgen**. Dort stehen Einrichtung, Arbeitsweise, Regeln, Bauen, Testen und die
-Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Danach in `docs/PLAN.md` die **„Stand 10.11.2026“**-Einträge am Ende lesen
-(drei Abschnitte: Sitzung, Entscheidungen nach der Übergabe, NA-53/Paket D) und die „Neuausrichtung 26.10.2026“. Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
+Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Danach in `docs/PLAN.md` den Eintrag **„Stand 11.11.2026“** am Ende lesen
+(Review und sechs Pakete; davor die drei „Stand 10.11.2026“-Abschnitte) und die „Neuausrichtung 26.10.2026“. Diese Nachricht enthält nur, was sich seit der letzten Sitzung geändert hat.
 
 **Ablauf:** Einrichten und `sh tests/laufen.sh` (muss grün sein) → **Fragerunde** (höchstens 4 Fragen; iPad-Rückmeldung zuerst, gemeldete Fehler
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-**Letzte Sitzung (10.11.2026)** – Auftrag „gesamtverantwortlich, eigenständig weiterbauen“: elf Pakete gebaut (Liste in Abschnitt 1), alle Tests grün, zuletzt auf Wunsch des
-Auftraggebers pausiert. **Seit dem 08.11. gibt es keine iPad-Rückmeldung** – sie ist jetzt das Wichtigste.
-1. **Fragerunde (höchstens 4 Fragen):** iPad-Rückmeldung zur Liste in Abschnitt 1 (Fehler zuerst beheben, je mit Test). Hat jemand die **Prüfliste Russisch** ausgefüllt
-   (Elternbereich → „✍️ Russisch prüfen lassen“)? Dann den Ergebnis-Text einarbeiten – Korrekturen stehen dort mit Datei:Zeile. Welche Pakete aus Abschnitt 2?
-2. **Entschieden (10.11., nicht neu fragen):** „Namen schreiben“ (Vorschule) bleibt „teilweise“; russische Hilfe standardmäßig **automatisch nach Deutschstand**
-   (kein/wenig Deutsch → immer, Alltags-Deutsch → nur bei Neuem, gutes Deutsch → „RU“-Knopf). Interessen-Kulissen wählt das Kind selbst (nicht aus dem Welt-Assistenten).
-3. Danach selbstständig nach Abschnitt 2 (nächste Pakete).
-4. **Technische Hinweise:** CI-Läufe bis 106 grün (ab da Läufe zu den letzten Pushes prüfen – `mcp__github__actions_list` bzw. GitHub Actions); der lokale Zweig in der alten
-   Cloud-Sitzung war zeitweise „detached“ – in einer neuen Sitzung einfach frisch klonen. `quellen/dev-bauen.sh` ruft jetzt auch `node quellen/ru-sammeln.js` auf (Prüfliste aktuell halten;
-   `tests/offline.js` meldet eine veraltete `spiele/eltern/ru-texte.js`).
+**Letzte Sitzung (11.11.2026, Gerätedatum 07.11.)** – Auftrag „gesamtverantwortlich; Agenten reviewen Lerninhalte, Grafik, Leistung, UI/UX, Story“, danach „alles bauen, gern mit eigenen Ideen“:
+fünf Prüf-Agenten, sechs Pakete (Abschnitt 1), alle Tests grün. **Seit dem 08.11. gibt es keine iPad-Rückmeldung** – sie ist jetzt das Wichtigste, denn diesmal hat sich viel Sichtbares geändert.
+1. **Fragerunde (höchstens 4 Fragen):** iPad-Rückmeldung zur Liste in Abschnitt 1 (Fehler zuerst beheben, je mit Test). Prüfliste Russisch ausgefüllt? Welche Pakete aus Abschnitt 2?
+2. **Entschieden (nicht neu fragen):** 10.11.: „Namen schreiben“ bleibt „teilweise“; russische Hilfe automatisch nach Deutschstand; Kulissen wählt das Kind. 11.11.: kurze Startseite für Vorschule/Kl. 1
+   mit Eltern-Schalter „Alles zeigen“; Abdeckung streng (≥ 2 Übungen je Punkt, Zahlen dürfen sinken); Kamera fährt beim Betreten von weit heran; Story mit Finale (Kapitel 9), danach offen weiter.
+3. Danach selbstständig nach Abschnitt 2.
+4. **Technische Hinweise:** Nach der Ersteinrichtung kommt der Übergabe-Bildschirm – **Tests klicken nach `#e-ok` auch `#uebergabe-los`**, der Elternbereich braucht danach die PIN
+   (`if (await p.$("#pin1")) …`). Emojis sind `<img>` (`.emo > img`), nicht mehr SVG. `sw.js` trägt `PRUEFSUMMEN` – immer `sh quellen/dev-bauen.sh` vor dem Push, sonst ist `offline` rot.
+   Commits: Autor michael-linuxdev, Committer `Claude <noreply@anthropic.com>` (`git config user.name Claude; git config user.email noreply@anthropic.com`, Autor per `--author`), sonst „Unverified“.
+
+## 1. Stand (11.11.2026)
+**Neu (PLAN „Stand 11.11.2026“):** Paket 1 Sofort-Fehler (Inhaltsfehler, ehrliches Lob, Übergabe-Bildschirm), Paket 2 Ohne Lesen (kurze Startseite mit „Los!“, 🔊 im Matheweg, 🏠/⬅️-Regel),
+Paket 3 Ehrlich lernen (Daumen 51 % wahr, Denkfehler-Ablenker, strenge Abdeckung, Transfer-Fragen, „Ella fragt nach“), Paket 4 Eine Welt (Kamerafahrt, Nachthimmel, Stil A überall, lebendige Insel-Tür),
+Paket 5 Leistung (Service Worker ohne Mischen, Updates nur mit geänderten Dateien, Emojis als Bild, Home-Bildschirm-Karte), Paket 6 Story (Bruni im Sturm, Tilda, Kapitel 8 „Fipsis Schatz“ mit Wörterbuch,
+Kapitel 9 „Die Insel ist wach“, Jahreszeiten-Episoden, Feste Neujahr/Nouruz).
+
+**Im iPad testen (in /dev/test, Reihenfolge = Wichtigkeit):**
+1. **Neues Kind anlegen:** Nach „Fertig“ kommt „Gib das Tablet jetzt deinem Kind“. Danach Elternbereich öffnen – fragt er nach der PIN?
+2. **Vorschule und Kl. 1:** Startseite mit wenigen Türen und großem „Los!“ – startet „Los!“ eine passende Aufgabe? 🔊 neben „Los!“ und im Matheweg antippen: wird vorgelesen? Im Elternbereich „Alles zeigen“ → alte Startseite.
+3. **Insel öffnen:** Fährt die Kamera von weit heran (2,5 s)? Antippen überspringt? Kommen Meldungen erst nach der Szene, nacheinander? Abends (oder `?stunde=21`): Sterne und Mond?
+4. **Emojis und Begleiter** auf Startseite, Matheweg, Album: sehen sie aus wie vorher (Kontur!)? Langsamer oder schneller als vorher?
+5. **Update:** nach dem nächsten Push die App einmal ganz schließen und neu öffnen – kommt die neue Version ohne Fehler? Elternbereich → „Kinder & Gerät“: „Offline bereit“ und Karte „Home-Bildschirm“.
+6. **Stil A:** Knöpfe, Türen, Karten mit dunkler Kontur – wirkt das ruhig oder zu schwer? Neue Insel-Tür (Tageszeit/Wetter), Deutsch „Abc“, Sachunterricht Lupe, Benno an der Mathe-Tafel.
+7. **Sachunterricht:** ein Thema mit „Daumen“ spielen – sind die falschen Sätze verständlich? „Zeig, was du kannst“ mit neuen Fragen. Elternbereich → Lernstand: Hinweise „was fehlt“ bei „teilweise“.
+8. **Story (in /dev/test alles frei):** Kapitel 5 Sturm (Bruni atmet mit dem Kind), Fipsis Truhe → Album „📖 Wörterbuch“, Kapitel 9 Fest aller Begleiter.
 
 ## 1. Stand (10.11.2026)
 **Neu (PLAN „Stand 10.11.2026“):**
@@ -264,6 +279,14 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - Muttersprachlerinnen und Muttersprachler für ru/uk; Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (in dieser Reihenfolge)
+**Stand 11.11.2026 – zuerst:**
+- A. iPad-Rückmeldung zu den sechs Paketen (Liste in Abschnitt 1) – Fehler zuerst, je mit Test.
+- B. Fachthemen Kunst, Musik, Werken, Sport, Ethik, Religion ausbauen (mindestens 2 Übungen je Inhaltspunkt; jetzt etwa zur Hälfte „teilweise“).
+- C. Englisch: Sprechen und Redemittel (Mini-Dialoge, Hörgeschichten mit Fragen, Nachsprechen mit Aufnahme) – Lernbereiche Englisch stehen jetzt meist auf „teilweise“.
+- D. Kapitel „Bennos Brücke“ (offener Faden aus dem KONZEPT, Mathe: Länge, Maß, Bauplan).
+- E. `icons.js` verkleinern oder in Gruppen teilen; Weitsicht der Kamerafahrt in Stufe „einfach“ gegen das Budget messen; `docs/LEHRPLAN.md` auf die neuen Zahlen bringen.
+- F. Russische Entwürfe der neuen Texte (Szenen, Übergabe, Transfer-Fragen) in die Prüfliste geben.
+
 **Stand 10.11.2026 – zuerst:**
 - A. iPad-Rückmeldung und Ergebnis der Prüfliste Russisch einarbeiten (Fehler zuerst, je mit Test).
 - B. ~~NA-53 Interessen-Kulissen~~ (gebaut 10.11.: Meine Ecke → „Meine Lieblingsbilder“, wirkt auf die Mengen-Bilder im Matheweg; iPad: Thema wählen, dann Matheweg Kl. 1 „Zählen bis 10“).

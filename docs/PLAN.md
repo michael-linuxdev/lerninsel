@@ -2499,3 +2499,38 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
   (`L_PAARE`, `FERTIG_PAARE`, `R_PAARE`), Mein Tier (alle Sätze über `Sprache.ruDazu`/`ruVon`, Name des Tiers als `{w}`; `ARTEN_RU`/`EIER_RU` als Paare). Ergebnis: 13 von 7773 Texten ohne deutsches
   Gegenstück (vorher 161). Tests `tier`, `schach`, `robo`, `gefuehle`, `ruvorlesen`, `rupruefen`, `verbessert` grün.
 - **Pause auf Wunsch des Auftraggebers; Übergabe für eine neue, unabhängige Sitzung** in `docs/SESSION-PROMPT.md` (Auftrag, Entscheidungen, iPad-Testliste mit 9 Schritten, Pakete A, C, E, F).
+
+## Stand 11.11.2026 (Review mit fünf Prüf-Agenten, danach sechs Pakete; Gerätedatum der Sitzung 07.11.2026)
+- **Review** (Lerninhalte, Grafik, Leistung, UI/UX, Story – je ein unabhängiger Agent, nur gelesen/gemessen): Ergebnisse in sechs Pakete gegliedert. **Entscheidungen des Auftraggebers:**
+  Startseite Vorschule/Kl. 1 auf wenige Türen mit Eltern-Schalter „Alles zeigen“ (ja); Abdeckung strenger messen, auch wenn die Zahlen sinken (ja); Kamera **beim Betreten von weit heranfahren**;
+  Story mit **Finale**, danach offen weiter; „alles bauen“, Innovation und eigene Ideen erwünscht. Gebaut von sechs Agenten parallel (je eigener Worktree), zusammengeführt und getestet vom Koordinator.
+- **Paket 1 „Sofort-Fehler“:** Wetterkarte (Pfeil zeigt, *wohin* der Wind weht), Vierecke Kl. 3/4 nur wirklich falsche Ablenker (`AUCH_V`, geometrisch geprüft), keine Hunderterzahl bei „Nachbarhunderter“,
+  Vorschul-Mehrdeutigkeiten (Spielplatz, Reimbilder, Raupe, Jahreszeiten), Musik „einen Schlag lang halten“, Goldene Regel „in vielen Religionen“, Werken Kl. 4 ohne Thermoplaste, eigenes Frosch-Märchen
+  klar als eigenes, Rehkitz ruhig formuliert (`wRu`), russische Formen für Junge/Mädchen (Fipsi männlich), ehrliches Mathe-Lob, Tipp „Schau …“ bei Bild-Fragen, Garten 2 × 2.
+  **Entscheidung:** Nach der Ersteinrichtung endet die Eltern-Anmeldung, Übergabe-Bildschirm „Gib das Tablet jetzt deinem Kind“ (`#uebergabe-los`); jede Seite außerhalb `spiele/eltern/` meldet ab.
+  Eigene Ideen: `Spielwelt.ruDu(t, g)` wählt die russische Form nach der Ansprache; Wächter für Vorschul-Aufgaben. Test `sofort`.
+- **Paket 2 „Ohne Lesen bedienbar“:** Vorschule/Kl. 1: Startseite mit höchstens 4 Türen und großem „Los!“ (startet die nächste Aufgabe direkt; `eltern.start.alles` = alte Startseite); 🔊 im Matheweg
+  (Frage, Antworten, Rückmeldung); kurzer Robo mit 🔊 an der gesperrten Insel; 🎒 auf der Rucksack-Tür; Insel-Meldungen erst nach der Szene, nacheinander; Deutsch „Für dich“ bis Kl. 2 (höchstens 5 Kacheln,
+  „Alle Kapitel“); Regel 🏠 = Startseite, ⬅️ = eine Ebene zurück (überall); beschriftete Kopfleisten, ⚙️ in Deutsch hinter der PIN; „Hier weiter“-Hand im Matheweg, 🐾 statt 🔁; Vorschul-Lesen mit „Mehr“,
+  Rucksack ohne Erwachsenen-Untertitel; Elternbereich mit 40-px-Schaltern und Sprungmarken. Eigene Ideen: „🔊 Was gibt es hier?“ (liest Kacheln vor, die genannte leuchtet), „Tipp auf mich!“ (Begleiter
+  liest seine Blase vor). Test `ohnelesen`.
+- **Paket 3 „Ehrlich lernen“:** Daumen-Sätze 77 % → 51 % wahr (typische Fehlvorstellungen), Ablenker mit Denkfehlern (SU, Werkstatt-Wortarten), sieben dünne SU-Themen auf 6 Übungen.
+  **Neue Regel:** ein Inhaltspunkt ist „ja“ nur mit ≥ 2 Übungsschritten für sich (Übungen eines Inhalts auf die Punkte desselben Fachs verteilt), jeder „teil“-Punkt sagt, was fehlt; Englisch-Sprechen „teil“.
+  Lernbereiche Mathe/Deutsch/SU 45 → 32 „ja“, Englisch 22 → 5; Fachthemen (Kunst … Religion) jetzt ehrlich etwa zur Hälfte „teil“. 84 Transfer-Fragen im SU-Lernstand (`spiele/sachkunde/transfer.js`).
+  Eigene Idee: „Ella fragt nach“ (abgeschlossene Sachthemen nach 1, 7, 30 Tagen, zwei Fragen, ohne Sterne/Frist). Tests `inhalte` (Node), `ehrlich`.
+- **Paket 4 „Eine Welt“ (Grafik):** Kamerafahrt beim Betreten (weit → nah in 2,5 s, Antippen überspringt; Endstellung Heimatinsel 18,5), Sterne und Mond nachts, Schaum nachts bläulich, Dach glüht nicht,
+  nasser Boden bei Regen; 3D-Figur mit Ärmellänge aus dem Kleiderschrank (`Puppe2.aermel`), runderes Haar; Stil A überall (Kontur-Outline an Knöpfen/Türen/Karten, fester Schatten, `.begleiter-blase`,
+  `--pflaume` = Konturfarbe), Wolken nur am Rand; Insel-Tür als Stil-A-Bild, Deutsch „Abc“, SU Lupe; Tafel mit Benno und Punktpapier; Mein Tier mit Ella und Wiese; Album mit allen 7 Begleitern (52 Sticker).
+  Eigene Idee: „lebendige Insel-Tür“ (`shared/inseltuer.js`: Tageszeit, Jahreszeit, Wetter). Test `eineswelt`.
+- **Paket 5 „Leistung und Updates“:** Service Worker je Version ohne Mischen (cache-first, neue Version beim nächsten Start), Updates holen nur geänderte Dateien (`PRUEFSUMMEN`, nachgerechnet),
+  Emojis als `<img>` (Elternbereich 7871 → 3184 DOM-Knoten), `icons.js` nach dem ersten Bild, Mathe-Daten im Elternbereich und QR auf der Startseite nachgeladen, Insel im Leerlauf 30 Bilder/s,
+  Karte „Als App auf den Home-Bildschirm“. Eigene Ideen: „Offline bereit“ im Elternbereich, langsame Seiten im technischen Protokoll. Tests `ladezeit`, `swupdate`; CI mit `leistung` STRENG=1.
+- **Paket 6 „Story-Bogen mit Finale“:** Sturm: Bruni hat Angst, das Kind atmet mit ihr, Sturm sichtbar; Nebenszenen Brunis Station, Tilda am Schachtisch, Inselfest (höchstens eine am Tag);
+  **Kapitel 8 „Fipsis Schatz“** (Schatzkarte komplett → Truhe am Wegweiser → Album-Reiter „📖 Wörterbuch“ mit den Wörtern des Kindes), **Kapitel 9 „Die Insel ist wach“** (70 Lernfunde, alle sieben
+  Begleiter feiern, letzter Nebel weg, kein Ende-Bildschirm), danach Jahreszeiten-Episoden mit Sachthema-Angebot (`?thema=`); „Lern weiter“ figurtypisch ersetzt; KONZEPT nachgezogen. Eigene Idee:
+  Feste aus Herkunftsländern (Neujahr mit Väterchen Frost, Nouruz). Nebenbei behoben: `wortSchilder()` fand keine Lernfunde. Test `finale`.
+- **Zusammenführen:** Konflikte in `heimat.js`, `eltern.js`, `sachkunde.js`, `album.js`, `index.html`, Testlisten von Hand vereint; neue Tests der Pakete 2–6 an den Übergabe-Bildschirm angepasst;
+  `dashboard` erkennt das 🎒-Emoji als `<img>`. Commits seit dieser Sitzung: Autor michael-linuxdev, Committer Claude (sonst „Unverified“ auf GitHub).
+- **Offen / nächstes:** (A) iPad-Rückmeldung zu allem (Liste in SESSION-PROMPT); (B) Fachthemen Kunst/Musik/Werken/Sport/Ethik/Religion auf ≥ 2 Übungen je Punkt ausbauen (jetzt „teil“);
+  (C) Englisch: Sprechen/Redemittel (Mini-Dialoge, Nachsprechen mit Aufnahme); (D) Kapitel „Bennos Brücke“ (offener Faden); (E) `icons.js` verkleinern/teilen, Weitsicht der Kamerafahrt in „einfach“
+  gegen das Budget messen; (F) russische Entwürfe der neuen Texte prüfen lassen; `docs/LEHRPLAN.md` Zahlen nachziehen.
