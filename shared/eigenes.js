@@ -2,7 +2,7 @@
 // eigenen IndexedDB auf diesem Tablet – getrennt je Kind und Umgebung, nicht im Spielstand (QR-Übertragung bleibt klein). Sie verlassen
 // das Gerät nie; Eltern sehen und hören sie im Elternbereich und können sie dort löschen.
 // Eintrag = { id, kind, t (Zeitstempel), art: "text" | "ton", kapitel, aufgabe, text? , ton?: ArrayBuffer, typ?: MIME-Typ, dauer?: Sekunden }
-// Aufnehmen ist nur erlaubt, wenn die Eltern es eingeschaltet haben: Spielwelt.lade("eltern").deutsch.aufnehmen === true.
+// Aufnehmen ist nur erlaubt, wenn die Eltern es eingeschaltet haben: Spielwelt.lade("eltern").deutsch.aufnehmen === true (Englisch: .englisch.aufnehmen).
 (function () {
   const S = window.Spielwelt; if (!S) return;
   const MAX = { text: 60, ton: 30 };
@@ -39,9 +39,10 @@
   const url = (e) => URL.createObjectURL(new Blob([e.ton], { type: e.typ || "audio/mp4" }));
 
   // ---------- Aufnehmen ----------
-  const elternErlaubt = () => !!(((S.lade("eltern") || {}).deutsch || {}).aufnehmen);
+  // fach: "deutsch" (Werkstatt) oder "englisch" (Nachsprechen, eigener Schalter eltern.englisch.aufnehmen seit 07.11.2026)
+  const elternErlaubt = (fach = "deutsch") => !!(((S.lade("eltern") || {})[fach] || {}).aufnehmen);
   const kannAufnehmen = () => !!(window.MediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-  const darfAufnehmen = () => elternErlaubt() && kannAufnehmen();
+  const darfAufnehmen = (fach) => elternErlaubt(fach) && kannAufnehmen();
   function mime() {
     const MR = window.MediaRecorder;
     return ["audio/mp4", "audio/webm;codecs=opus", "audio/webm", "audio/ogg"].find(t => MR.isTypeSupported && MR.isTypeSupported(t)) || "";

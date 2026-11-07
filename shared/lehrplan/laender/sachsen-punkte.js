@@ -23,9 +23,9 @@
         1: [ // Me, my family and my friends
           ["sn.en3.mf.01", "Englisch als neue Sprache erleben: Klang, Rhythmus, Lieder und Reime", "3", ["englisch:en-hello", "englisch:en-numbers", "englisch:en-year", "englisch:en-party"], "ja"],
           ["sn.en3.mf.02", "Englische Wörter im Alltag entdecken (Computer, Essen, Kleidung, Spiele)", "3", ["englisch:en-everywhere"], "ja"],
-          ["sn.en3.mf.03", "Begrüßen, verabschieden, sich vorstellen", "3", ["englisch:en-hello"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
-          ["sn.en3.mf.04", "Über sich, Familie und Freunde Auskunft geben: Name, Alter, Geschwister", "3", ["englisch:en-family", "englisch:en-numbers2"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
-          ["sn.en3.mf.05", "Befinden ausdrücken: How are you? I'm fine.", "3", ["englisch:en-feelings", "englisch:en-hello"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en3.mf.03", "Begrüßen, verabschieden, sich vorstellen", "3", ["englisch:en-hello"], "ja"],
+          ["sn.en3.mf.04", "Über sich, Familie und Freunde Auskunft geben: Name, Alter, Geschwister", "3", ["englisch:en-family", "englisch:en-numbers2", "englisch:en-numbers"], "ja"],
+          ["sn.en3.mf.05", "Befinden ausdrücken: How are you? I'm fine.", "3", ["englisch:en-feelings", "englisch:en-hello"], "ja"],
           ["sn.en3.mf.06", "Zahlen von 0 bis 12", "3", ["englisch:en-numbers", "englisch:en-numbers2"], "ja"],
           ["sn.en3.mf.07", "Beim Hören helfen Tonfall, Bilder und Töne", "3", ["englisch:en-hello", "englisch:en-animals"], "ja"]
         ],
@@ -34,12 +34,12 @@
           ["sn.en3.bc.02", "Kleidungsstücke benennen", "3", ["englisch:en-clothes"], "ja"],
           ["sn.en3.bc.03", "Wetter: It's rainy. It's sunny.", "3", ["englisch:en-weather"], "ja"],
           ["sn.en3.bc.04", "Grund- und Mischfarben", "3", ["englisch:en-colours"], "ja"],
-          ["sn.en3.bc.05", "Lieblingsfarbe und -kleidung nennen, Besitz ausdrücken (Is this your jacket?)", "3", ["englisch:en-colours", "englisch:en-clothes"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en3.bc.05", "Lieblingsfarbe und -kleidung nennen, Besitz ausdrücken (Is this your jacket?)", "3", ["englisch:en-colours", "englisch:en-clothes"], "ja"]
         ],
         3: [ // At home
-          ["sn.en3.ah.01", "Zimmer benennen", "3", ["englisch:en-home"], "teil", "Zu wenig Übung: „At home – Zuhause“ hat 9 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.en3.ah.01", "Zimmer benennen", "3", ["englisch:en-home"], "ja"],
           ["sn.en3.ah.02", "Einrichtungs- und Gebrauchsgegenstände", "3", ["englisch:en-furniture", "englisch:en-home"], "ja"],
-          ["sn.en3.ah.03", "Sagen, wo jemand oder etwas ist", "3", ["englisch:en-home", "englisch:en-furniture"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en3.ah.03", "Sagen, wo jemand oder etwas ist", "3", ["englisch:en-home", "englisch:en-furniture"], "ja"],
           ["sn.en3.ah.04", "Wohnen in englischsprachigen Ländern (Kamin, bunte Haustüren)", "3", ["englisch:en-furniture"], "ja"]
         ],
         4: [ // Food and drink
@@ -51,31 +51,31 @@
         5: [ // Let's go shopping
           ["sn.en3.sh.01", "Kleidung, Lebensmittel und Spielsachen im Laden", "3", ["englisch:en-shopping", "englisch:en-clothes"], "ja"],
           ["sn.en3.sh.02", "Mengen und Preise, britisches Geld (penny, pound)", "3", ["englisch:en-shopping"], "ja"],
-          ["sn.en3.sh.03", "Einkaufsgespräch: bitten, wünschen, Preis erfragen, bedauern", "3", ["englisch:en-shopping"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en3.sh.03", "Einkaufsgespräch: bitten, wünschen, Preis erfragen, bedauern", "3", ["englisch:en-shopping"], "ja"]
         ],
         6: [ // At school
-          ["sn.en3.sc.01", "Schulalltag in englischsprachigen Ländern (Schuluniform)", "3", ["englisch:en-subjects"], "teil", "Zu wenig Übung: „At school – Fächer, Tage, Uhrzeit“ hat 12 Aufgaben für 7 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.en3.sc.01", "Schulalltag in englischsprachigen Ländern (Schuluniform)", "3", ["englisch:en-subjects"], "ja"],
           ["sn.en3.sc.02", "Schulsachen, Fächer, Wochentage, volle Stunden", "3", ["englisch:en-school", "englisch:en-subjects"], "ja"],
-          ["sn.en3.sc.03", "Nach Schulsachen fragen, Besitz ausdrücken (Have you got a pen? This is my pencil.)", "3", ["englisch:en-school"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en3.sc.03", "Nach Schulsachen fragen, Besitz ausdrücken (Have you got a pen? This is my pencil.)", "3", ["englisch:en-school"], "ja"]
         ],
         7: [ // My hobbies
           ["sn.en3.ho.01", "Sportarten, Spiele, Musik, Malen und Basteln", "3", ["englisch:en-hobbies", "englisch:en-sports"], "ja"],
-          ["sn.en3.ho.02", "Vorlieben ausdrücken: Do you like …?", "3", ["englisch:en-hobbies", "englisch:en-sports"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en3.ho.02", "Vorlieben ausdrücken: Do you like …?", "3", ["englisch:en-hobbies", "englisch:en-sports"], "ja"]
         ],
         8: [ // Animals
           ["sn.en3.an.01", "Haustiere und Tiere auf dem Bauernhof", "3", ["englisch:en-animals"], "ja"],
-          ["sn.en3.an.02", "Tiere beschreiben: It's brown. It has got four legs. It can …", "3", ["englisch:en-zoo", "englisch:en-animals"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en3.an.02", "Tiere beschreiben: It's brown. It has got four legs. It can …", "3", ["englisch:en-zoo", "englisch:en-animals"], "ja"],
           ["sn.en3.an.03", "Lieblingstiere, Besitz und Wünsche (What would you like for your birthday?)", "3", ["englisch:en-animals", "englisch:en-party"], "ja"]
         ],
         9: [ // Let's go on a trip
           ["sn.en3.tr.01", "Ausflugsziele und Verkehrsmittel", "3", ["englisch:en-trip"], "ja"],
           ["sn.en3.tr.02", "Sehenswürdigkeiten", "3", ["englisch:en-london"], "ja"],
-          ["sn.en3.tr.03", "Fahrkarte kaufen, nach dem Weg fragen", "3", ["englisch:en-trip"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en3.tr.03", "Fahrkarte kaufen, nach dem Weg fragen", "3", ["englisch:en-trip"], "ja"]
         ],
         10: [ // Around the year
           ["sn.en3.yr.01", "Feste: Easter, Halloween, Christmas, New Year, Birthday", "3", ["englisch:en-year", "englisch:en-party"], "ja"],
           ["sn.en3.yr.02", "Monate und Jahreszeiten", "3", ["englisch:en-year"], "ja"],
-          ["sn.en3.yr.03", "Gratulieren mündlich und schriftlich, Grußkarten", "3", ["englisch:en-party"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en3.yr.03", "Gratulieren mündlich und schriftlich, Grußkarten", "3", ["englisch:en-party"], "teil", "Mündlich gratulieren übt die App in Dialogen mit Nachsprechen; eine eigene Grußkarte frei schreiben fehlt noch – das macht das Kind mit Stift und Papier."],
           ["sn.en3.yr.04", "Lieder, Reime und szenisches Spiel zu den Festen", "3", ["englisch:en-act", "englisch:en-party", "englisch:en-year"], "ja"]
         ],
         11: [ // My Portfolio
@@ -86,32 +86,32 @@
       "4": {
         1: [
           ["sn.en4.mf.01", "Englisch im Alltag: wozu man es braucht (Handy, Computer)", "4", ["englisch:en-everywhere"], "ja"],
-          ["sn.en4.mf.02", "Mimik und Gestik beim Sprechen einsetzen", "4", ["englisch:en-faces", "englisch:en-feelings", "englisch:en-act"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
-          ["sn.en4.mf.03", "Sich und andere vorstellen, Herkunft, Interviews", "4", ["englisch:en-portfolio", "englisch:en-family", "englisch:en-hello"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
-          ["sn.en4.mf.04", "Befinden und Gefühle ausdrücken", "4", ["englisch:en-feelings"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en4.mf.02", "Mimik und Gestik beim Sprechen einsetzen", "4", ["englisch:en-faces", "englisch:en-feelings", "englisch:en-act"], "teil", "Sprechen mit Mimik und Gesten übt das Theaterspiel nur ohne Rückmeldung – ob Gesicht und Hände passen, sieht nur ein Mensch. Das übt das Kind mit anderen."],
+          ["sn.en4.mf.03", "Sich und andere vorstellen, Herkunft, Interviews", "4", ["englisch:en-portfolio", "englisch:en-family", "englisch:en-hello"], "teil", "Antworten im Interview hören, wählen und nachsprechen übt die App (Interview mit Robo); selbst ein Interview führen und andere frei vorstellen übt das Kind mit anderen – die App hört nicht zu."],
+          ["sn.en4.mf.04", "Befinden und Gefühle ausdrücken", "4", ["englisch:en-feelings"], "ja"]
         ],
         2: [
           ["sn.en4.bc.01", "Körper, Kleidung, Farbnuancen (light green, dark blue), Wetter (foggy, snowy)", "4", ["englisch:en-colours", "englisch:en-weather", "englisch:en-body"], "ja"],
-          ["sn.en4.bc.02", "Passende Kleidung zum Wetter wählen, Lieblingskleidung erfragen", "4", ["englisch:en-weather", "englisch:en-clothes"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en4.bc.02", "Passende Kleidung zum Wetter wählen, Lieblingskleidung erfragen", "4", ["englisch:en-weather", "englisch:en-clothes"], "ja"]
         ],
         3: [
           ["sn.en4.ah.01", "Zimmer, Möbel und Gebrauchsgegenstände", "4", ["englisch:en-home", "englisch:en-furniture"], "ja"],
-          ["sn.en4.ah.02", "Lage beschreiben: in, on, under, next to", "4", ["englisch:en-furniture", "englisch:en-home"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en4.ah.02", "Lage beschreiben: in, on, under, next to", "4", ["englisch:en-furniture", "englisch:en-home"], "ja"]
         ],
         4: [
-          ["sn.en4.fd.01", "Im Café oder Restaurant bestellen, Preise erfragen, höflich sein", "4", ["englisch:en-cafe"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en4.fd.01", "Im Café oder Restaurant bestellen, Preise erfragen, höflich sein", "4", ["englisch:en-cafe"], "ja"],
           ["sn.en4.fd.02", "Typische Speisen und Getränke englischsprachiger Länder", "4", ["englisch:en-cafe", "englisch:en-dates"], "ja"],
           ["sn.en4.fd.03", "Gesunde Ernährung", "4", ["englisch:en-cafe", "englisch:en-food"], "ja"],
           ["sn.en4.fd.04", "Rezeptbuch oder Speisekarte gestalten", "4", ["echtewelt:speisekarte"], "aussen"]
         ],
         5: [
           ["sn.en4.sh.01", "Kleidung, Spielsachen, Preise bis 100", "4", ["englisch:en-shopping", "englisch:en-numbers2"], "ja"],
-          ["sn.en4.sh.02", "Verkaufsgespräch beginnen und beenden, Wunschliste", "4", ["englisch:en-shopping"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en4.sh.02", "Verkaufsgespräch beginnen und beenden, Wunschliste", "4", ["englisch:en-shopping"], "ja"]
         ],
         6: [
-          ["sn.en4.sc.01", "Tagesabschnitte, Schulfächer, Wochentage", "4", ["englisch:en-subjects"], "teil", "Zu wenig Übung: „At school – Fächer, Tage, Uhrzeit“ hat 12 Aufgaben für 7 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.en4.sc.02", "Uhrzeit erfragen und angeben (It's nine thirty.)", "4", ["englisch:en-subjects"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
-          ["sn.en4.sc.03", "Deutsche und britische Schulen vergleichen", "4", ["englisch:en-subjects"], "teil", "Zu wenig Übung: „At school – Fächer, Tage, Uhrzeit“ hat 12 Aufgaben für 7 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.en4.sc.01", "Tagesabschnitte, Schulfächer, Wochentage", "4", ["englisch:en-subjects"], "ja"],
+          ["sn.en4.sc.02", "Uhrzeit erfragen und angeben (It's nine thirty.)", "4", ["englisch:en-subjects"], "ja"],
+          ["sn.en4.sc.03", "Deutsche und britische Schulen vergleichen", "4", ["englisch:en-subjects"], "ja"],
           ["sn.en4.sc.04", "Hilfe anbieten und suchen, sich entschuldigen (Sorry, I'm late.)", "4", ["englisch:en-subjects", "englisch:en-school"], "ja"]
         ],
         7: [
@@ -121,13 +121,13 @@
         ],
         8: [
           ["sn.en4.an.01", "Zoo- und Wildtiere, Lebensräume, bedrohte Tiere", "4", ["englisch:en-zoo"], "ja"],
-          ["sn.en4.an.02", "Tiere beschreiben, Ratespiele mit Steckbriefen", "4", ["englisch:en-zoo"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en4.an.02", "Tiere beschreiben, Ratespiele mit Steckbriefen", "4", ["englisch:en-zoo"], "teil", "Tier-Rätsel hören und verstehen übt die App; ein Tier selbst frei beschreiben und Ratespiele mit Steckbriefen spielen übt das Kind mit anderen – die App hört nicht zu."],
           ["sn.en4.an.03", "Einen englischen Text über Tiere verstehen (Schlüsselwörter)", "4", ["englisch:en-hedgehog", "englisch:en-zoo"], "ja"]
         ],
         9: [
           ["sn.en4.tr.01", "Ausflugsziele und Verkehrsmittel", "4", ["englisch:en-trip"], "ja"],
           ["sn.en4.tr.02", "Sehenswürdigkeiten in London", "4", ["englisch:en-london"], "ja"],
-          ["sn.en4.tr.03", "Fahrkarte kaufen, Preisauskunft", "4", ["englisch:en-trip"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
+          ["sn.en4.tr.03", "Fahrkarte kaufen, Preisauskunft", "4", ["englisch:en-trip"], "ja"]
         ],
         10: [
           ["sn.en4.yr.01", "Weitere Feste: Valentine's Day, Pancake Day, Mother's Day, Thanksgiving, St Patrick's Day", "4", ["englisch:en-dates"], "ja"],

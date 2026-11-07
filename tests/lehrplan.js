@@ -195,9 +195,9 @@ pruefe("Errechnete Abdeckung: Plus/Minus bis 100 und Stellenwerte gut, Wortarten
   assert.ok(z.teil >= 8, "Kl. 1/2: mindestens 8 teilweise errechnet");
 });
 
-pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und „My Portfolio“ je Klasse, Kl. 1/2 ohne Englisch, Zählung 5 / 17 / 0 (seit 07.11.2026 strenger), alle Inhaltspunkte zugeordnet", () => {
+pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und „My Portfolio“ je Klasse, Kl. 1/2 ohne Englisch, Zählung 19 / 3 / 0 (07.11.2026 strenger, dann Sprechen und Hören dazu), alle Inhaltspunkte zugeordnet", () => {
   const n = { ja: 0, teil: 0, nein: 0 }, echt = fs.readFileSync(path.join(__dirname, "..", "shared/echtewelt.js"), "utf8"), ids = new Set();
-  const soll = { 3: [40, { ja: 26, teil: 13, nein: 0, aussen: 1 }], 4: [33, { ja: 19, teil: 12, nein: 0, aussen: 2 }] };   // 07.11.2026: Sprechen und zu wenig Übung ehrlich „teil“ (vorher 39/31 „ja“)
+  const soll = { 3: [40, { ja: 38, teil: 1, nein: 0, aussen: 1 }], 4: [33, { ja: 28, teil: 3, nein: 0, aussen: 2 }] };   // 07.11.2026: erst Sprechen ehrlich „teil“ (26/19 „ja“), dann Dialoge, Nachsprechen und Hörgeschichten (38/28 „ja“)
   [3, 4].forEach(k => { const lb = L.fuer("sachsen", "englisch", k), m = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
     assert.strictEqual(lb.length, 11);
     lb.forEach(x => { n[x.abdeckung]++; x.lz.forEach(id => assert.ok(K.ziel(id), id));
@@ -207,7 +207,7 @@ pruefe("Sachsen Englisch (Lehrplan 2019, ab Kl. 3): 10 Themen-Lernbereiche und �
         if (p.abdeckung === "ja") assert.ok(p.app.some(a => a.startsWith("englisch:")), p.id); });
       assert.strictEqual(x.abdeckung, x.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein") ? "teil" : "ja", `Englisch ${k} ${x.titel}`); });
     assert.strictEqual(z, soll[k][0]); assert.deepStrictEqual(m, soll[k][1]); });
-  assert.deepStrictEqual({ ...n }, { ja: 5, teil: 17, nein: 0 });
+  assert.deepStrictEqual({ ...n }, { ja: 19, teil: 3, nein: 0 });
   assert.strictEqual(L.fuer("sachsen", "englisch", 2).length, 0);
   const benutzt = new Set(); [3, 4].forEach(k => L.fuer("sachsen", "englisch", k).forEach(x => x.punkte.forEach(p => p.app.forEach(a => benutzt.add(a)))));
   w.ENGLISCH.forEach(l => assert.ok(benutzt.has("englisch:" + l.id), l.id + " kommt in keinem Inhaltspunkt vor"));
@@ -302,7 +302,10 @@ pruefe("Vorschule (Sächsischer Bildungsplan): 7 Bereiche, jeder Punkt zugeordne
 pruefe("Ehrlich lernen (07.11.2026): ein Inhaltspunkt ist „ja“ nur mit mindestens 2 echten Übungsschritten für sich; jeder „teil“-Punkt sagt im Hinweis, was fehlt", () => {
   // Übungsschritte je Inhalt: Info-Karten, `sag`, Wortkarten und Aufnahmen zählen nicht; Mathe-Stationen und Spiele mit erzeugten Aufgaben
   // (Lesen, Atelier, Robo, Leuchtturm …) zählen als genug. Die Übungen eines Inhalts werden auf alle Punkte desselben Fachs verteilt, die ihn nutzen.
-  const NICHT = new Set(["info", "sag", "karten", "aufnehmen"]), ue = (s) => (s || []).filter(x => !NICHT.has(x.typ)).length;
+  const NICHT = new Set(["info", "sag", "karten", "aufnehmen", "nachsprechen", "hg", "hg-text"]), ue = (s) => (s || []).filter(x => !NICHT.has(x.typ)).length;
+  // Englisch (07.11.2026): Dialoge und Fragen zu Hörgeschichten mit `punkte` zählen nur für diese Punkte, nicht für alle Punkte der Lektion
+  const enFlach = (l) => w.EnglischSchritte.flach(l.extra), enGezielt = (id, app) => app.filter(a => a.startsWith("englisch:"))
+    .reduce((n, a) => n + ue(enFlach(w.ENGLISCH.find(l => "englisch:" + l.id === a)).filter(x => (x.punkte || []).includes(id))), 0);
   const alle = w.THEMEN.concat(w.FACH_THEMEN, w.LANDKREIS_THEMEN || []);
   const zaehle = (a) => { const [art, id] = a.split(":"), f = (l) => l.find(x => x.id === id);
     if (art === "mathe") return 99;
@@ -310,7 +313,7 @@ pruefe("Ehrlich lernen (07.11.2026): ein Inhaltspunkt ist „ja“ nur mit minde
     if (art === "deutsch") return ue((f(w.GESCHICHTE) || {}).schritte);
     if (art === "sachkunde") return ue((f(alle) || {}).schritte);
     if (art === "medien") return ue((f(w.LEKTIONEN) || {}).schritte);
-    if (art === "englisch") { const l = f(w.ENGLISCH); return Math.min(6, l.woerter.length) + ue(l.extra); }
+    if (art === "englisch") { const l = f(w.ENGLISCH); return Math.min(6, l.woerter.length) + ue(enFlach(l).filter(x => !x.punkte)); }
     if (art === "sorbisch") { const l = f(w.SORBISCH) || f(w.SORBISCH_MUTTER); return l.schritte ? ue(l.schritte) : Math.min(6, l.woerter.length) + ue(l.extra); }
     if (art === "vorschule") return f(w.VORSCHULE).aufgaben.length;
     if (art === "echtewelt") return 0;
@@ -320,14 +323,22 @@ pruefe("Ehrlich lernen (07.11.2026): ein Inhaltspunkt ist „ja“ nur mit minde
   S.vorschule.bereiche.forEach(b => b.punkte.forEach(p => punkte.set(p.id, { fach: "vorschule", p })));
   const refs = {}; punkte.forEach(({ fach, p }) => p.app.forEach(a => { refs[fach + a] = (refs[fach + a] || 0) + 1; }));
   const zuViel = [], ohneHinweis = [], z = {};
-  punkte.forEach(({ fach, p }) => { const n = p.app.reduce((s, a) => s + zaehle(a) / refs[fach + a], 0);
+  punkte.forEach(({ fach, p }) => { const n = p.app.reduce((s, a) => s + zaehle(a) / refs[fach + a], 0) + (fach === "englisch" ? enGezielt(p.id, p.app) : 0);
     (z[fach] = z[fach] || { ja: 0, teil: 0, nein: 0, aussen: 0 })[p.abdeckung]++;
     if (p.abdeckung === "ja" && n < 2) zuViel.push(`${p.id} (${n.toFixed(1)})`);
     if (p.abdeckung === "teil" && !p.hinweis) ohneHinweis.push(p.id); });
   assert.deepStrictEqual(zuViel, [], "„ja“ mit zu wenig Übung");
   assert.deepStrictEqual(ohneHinweis, [], "„teil“ ohne Hinweis");
-  // Englisch: Punkte zum Sprechen sind ehrlich „teil“ (die App übt Verstehen, nicht Sprechen)
-  ["sn.en3.mf.04", "sn.en4.fd.01"].forEach(id => assert.ok(punkte.get(id).p.abdeckung === "teil" && /Sprechen fehlt/.test(punkte.get(id).p.hinweis), id));
+  // Englisch (07.11.2026): Punkte zum Sprechen in Redemitteln sind „ja“ nur mit mindestens 2 eigenen Dialog- oder Hörschritten (Antwort wählen und
+  // nachsprechen, Fragen zu einer Hörgeschichte); freies Sprechen ohne Rückmeldung (Interview führen, frei beschreiben, Mimik) bleibt „teil“.
+  const SPRECH_JA = ["sn.en3.mf.03", "sn.en3.mf.04", "sn.en3.mf.05", "sn.en3.bc.05", "sn.en3.ah.03", "sn.en3.sh.03", "sn.en3.sc.03", "sn.en3.ho.02", "sn.en3.an.02", "sn.en3.tr.03",
+    "sn.en4.mf.04", "sn.en4.bc.02", "sn.en4.ah.02", "sn.en4.fd.01", "sn.en4.sh.02", "sn.en4.sc.02"];
+  SPRECH_JA.forEach(id => { const { p } = punkte.get(id), n = enGezielt(id, p.app); assert.ok(p.abdeckung === "ja" && n >= 2, `${id}: ${p.abdeckung}, ${n} Dialog-/Hörschritte`); });
+  ["sn.en3.yr.03", "sn.en4.mf.02", "sn.en4.mf.03", "sn.en4.an.02"].forEach(id => assert.ok(punkte.get(id).p.abdeckung === "teil" && /übt das Kind|fehlt/.test(punkte.get(id).p.hinweis), id));
+  // jeder gezielte Schritt gehört zu einem Punkt, der seine Lektion auch nennt; jeder Dialog hat eine richtige Antwort und eine russische Anleitung
+  w.ENGLISCH.forEach(l => enFlach(l).forEach(x => { (x.punkte || []).forEach(id => assert.ok(punkte.has(id) && punkte.get(id).p.app.includes("englisch:" + l.id), `${l.id}: ${id}`));
+    if (x.typ === "dialog") assert.ok(x.frage && x.optionen.length >= 3 && new Set(x.optionen).size === x.optionen.length && x.ru && x.wer, l.id + ": Dialog unvollständig");
+    if (x.typ === "hg-frage") assert.ok(x.f.optionen.length === 3 && x.f.antwort && x.ru && x.g.saetze.length >= 3 && x.g.saetze.length <= 5, l.id + ": Hörgeschichte unvollständig"); }));
   // Lernbereich mit einem „teil“-Punkt ist selbst „teil“ (sachsen-punkte.js setzt das beim Laden)
   Object.values(S.faecher).forEach(x => Object.values(x.stufen || {}).forEach(lbs => lbs.forEach(lb => {
     if ((lb.punkte || []).some(p => p.abdeckung === "teil" || p.abdeckung === "nein")) assert.strictEqual(lb.abdeckung, "teil", lb.titel); })));

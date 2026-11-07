@@ -60,7 +60,19 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       if (!(await passt(p))) { scroll = true; console.log(`    Scrollleiste: ${id} Schritt ${l.pos} (${l.s.typ})`); }
       const s = l.s;
       if (s.typ === "lied") { await p.click(".lied-spielen"); await p.waitForSelector(".silbe.an, .lied-zeile.an", { timeout: 3000 }).catch(() => { haengt = true; }); await p.click("#weiter"); await p.waitForTimeout(80); continue; }
-      if (s.typ === "buch" || s.typ === "sachtext" || s.typ === "rolle") { await p.click("#weiter"); await p.waitForTimeout(60); continue; }
+      if (s.typ === "buch" || s.typ === "sachtext" || s.typ === "rolle" || s.typ === "hg-text") { await p.click("#weiter"); await p.waitForTimeout(60); continue; }
+      // Sprechen und Hören (07.11.2026): Hörgeschichte anhören (ohne Stimme steht der Text da), Dialog: Antwort wählen, dann „✅ Gesagt!“
+      if (s.typ === "hg") { if (await p.$("#hg-hoeren")) await p.click("#hg-hoeren"); await p.click("#weiter"); await p.waitForTimeout(60); continue; }
+      if (s.typ === "dialog" || s.typ === "hg-frage") {
+        const ziel = s.typ === "dialog" ? s.optionen[0].replace("{name}", "Mira") : s.f.optionen[0];
+        const n = await p.evaluate((t) => [...document.querySelectorAll("#aufgabe .option")].findIndex(b => b.textContent.trim() === t), ziel);
+        if (n < 0) { haengt = true; console.log(`    Antwort fehlt: ${id} Schritt ${l.pos} (${s.typ})`); break; }
+        await p.click(`#aufgabe .option >> nth=${n}`); await p.waitForTimeout(60);
+        if (!(await p.evaluate(() => document.getElementById("hinweis").classList.contains("gut")))) { haengt = true; console.log(`    nicht angenommen: ${id} Schritt ${l.pos} (${s.typ})`); break; }
+        if (s.typ === "dialog") { await p.waitForSelector("#sprech #weiter", { timeout: 3000 }); await p.click("#sprech #weiter"); await p.waitForTimeout(60); }
+        else await p.evaluate((pos) => __englisch.schritt(pos + 1), l.pos);
+        continue;
+      }
       if (s.typ === "sag" || s.typ === "karten") {
         if (s.typ === "karten") { await p.click(".wortkarte >> nth=0"); if (BILDER && id === "en-colours") await bild(p, `englisch-karten-${art}`); }
         await p.click("#weiter"); await p.waitForTimeout(80); continue;
