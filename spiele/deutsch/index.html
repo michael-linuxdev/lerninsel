@@ -206,6 +206,19 @@
   .dialog[hidden] { display: none; }
   .einst { background: #fff; border-radius: 28px; padding: 26px; width: min(560px, 100%); display: grid; gap: 14px; }
   .einst h2 { margin: 0; font-size: 1.9rem; }
+  .einst-inhalt, .einst-pin { display: grid; gap: 14px; }
+  .einst-inhalt[hidden], .einst-pin[hidden] { display: none; }
+  .einst-pin input { font: inherit; font-size: 1.8rem; text-align: center; padding: 10px; border-radius: 14px; border: 3px solid #D9D2EC; letter-spacing: .3em; }
+  /* Paket 2: Kopfleisten-Symbole mit kurzer Beschriftung darunter (Handy: nur Symbol, Name über aria-label) */
+  .knopf.rund.mit-text { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; width: auto; min-width: 64px; padding: 4px 8px; border-radius: 20px; line-height: 1.05; }
+  .knopf.rund.mit-text small { font-size: .72rem; font-weight: 700; }
+  @media (max-width: 480px) { .knopf.rund.mit-text small { display: none; } }
+  .werk-fuer-dich { max-width: 1100px; margin: 8px auto 0; padding: 0 16px; }
+  .werk-fuer-dich[hidden] { display: none; }
+  .werk-fuer-dich .orte { padding: 8px 0; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+  .werk-fuer-dich h3 { margin: 6px 0 0; font-size: 1.35rem; text-align: center; }
+  .werk-fuer-dich .klein-vorlesen { min-height: 44px; min-width: 44px; padding: 0 10px; font-size: 1.2rem; vertical-align: middle; margin-left: 6px; }
+  .werk-fuer-dich .werk-alle { display: block; margin: 6px auto 0; min-height: 56px; font-size: 1.15rem; }
   .schalter { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 1.25rem; font-weight: 600; min-height: 60px; padding: 0 16px; border-radius: 18px; background: var(--himmel); }
   .schalter b { padding: 6px 14px; border-radius: 999px; background: #fff; }
   .schalter[aria-pressed="true"] b { background: var(--minze); color: #fff; }
@@ -216,12 +229,12 @@
 
 <section class="ansicht" id="karte-ansicht">
   <div class="oben">
-    <a class="knopf rund" href="../../" aria-label="Zur Spielwelt">🏠</a>
+    <a class="knopf rund" href="../../" aria-label="Zur Startseite">🏠</a>
     <h1>Fipsis Schatzkarte</h1>
-    <a class="knopf rund" href="../praesentieren/" aria-label="Schreiben und Präsentieren am Tablet" id="praesentieren-link" style="text-decoration:none">💻</a>
-    <a class="knopf rund" href="../vorlesen/" aria-label="Vorlesen und Lesetheater" id="vorlesen-link" style="text-decoration:none">🎙️</a>
-    <a class="knopf rund" href="../heft/" aria-label="Mein Heft" id="heft-link" style="text-decoration:none">📓</a>
-    <button class="knopf rund" id="einst-auf" aria-label="Einstellungen">⚙️</button>
+    <a class="knopf rund mit-text" href="../praesentieren/" aria-label="Schreiben und Präsentieren am Tablet" id="praesentieren-link" style="text-decoration:none"><span aria-hidden="true">💻</span><small aria-hidden="true">Zeigen</small></a>
+    <a class="knopf rund mit-text" href="../vorlesen/" aria-label="Vorlesen und Lesetheater" id="vorlesen-link" style="text-decoration:none"><span aria-hidden="true">🎙️</span><small aria-hidden="true">Vorlesen</small></a>
+    <a class="knopf rund mit-text" href="../heft/" aria-label="Mein Heft" id="heft-link" style="text-decoration:none"><span aria-hidden="true">📓</span><small aria-hidden="true">Heft</small></a>
+    <button class="knopf rund mit-text" id="einst-auf" aria-label="Einstellungen für Erwachsene"><span aria-hidden="true">⚙️</span><small aria-hidden="true">Eltern</small></button>
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
   <!-- (UX-Paket 3, 07.11.2026) Die Schatzkarte steht klein neben Fipsi, damit die Werkstatt (Lehrplan-Kapitel) ohne Scrollen beginnt -->
@@ -229,6 +242,8 @@
   <div class="orte" id="orte"></div>
   <h2 class="werk-titel">🛠️ Fipsis Wörter-Werkstatt</h2>
   <p class="werk-text">Alles aus dem Deutschunterricht – sortiert wie in der Schule. Üb, so oft du willst!</p>
+  <!-- Paket 2 „Ohne Lesen bedienbar“ (07.11.2026): Vorschule bis Kl. 2 sehen zuerst wenige passende Kacheln, „Alle Kapitel“ öffnet die ganze Werkstatt -->
+  <div class="werk-fuer-dich" id="werk-fuer-dich" hidden></div>
   <div class="werkstatt" id="werkstatt"></div>
 </section>
 
@@ -264,6 +279,13 @@
 <div class="dialog" id="einst" hidden>
   <div class="einst" role="dialog" aria-label="Einstellungen">
     <h2>Einstellungen</h2>
+    <div class="einst-pin" id="einst-pin" hidden>
+      <p style="margin:0">Für Erwachsene: Bitte die PIN des Elternbereichs eingeben.</p>
+      <input id="einst-pin-feld" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="PIN">
+      <p class="fehler" id="einst-pin-fehler" style="margin:0;color:#C0392B"></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="knopf haupt" id="einst-pin-ok">Öffnen</button><button class="knopf" id="einst-pin-zu">Abbrechen</button></div>
+    </div>
+    <div class="einst-inhalt" id="einst-inhalt">
     <button class="schalter" id="sch-vorlesen" aria-pressed="true">Vorlesen <b>an</b></button>
     <button class="schalter" id="sch-ru" aria-pressed="true">Hilfe auf Russisch <b>an</b></button>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -272,6 +294,7 @@
     </div>
     <p class="stimmen-info" id="stimmen-info"></p>
     <button class="knopf haupt" id="einst-zu">Fertig</button>
+    </div>
   </div>
 </div>
 
@@ -286,6 +309,7 @@
 <script src="../../shared/echtewelt.js"></script>
 <script src="../../shared/zeit.js" data-art="lernen"></script>
 <script src="../../shared/sprache.js"></script>
+<script src="../../shared/vorleser.js"></script>
 <script src="../../shared/daz.js"></script>
 <script>if (window.DaZ) DaZ.einstieg();</script>
 <script src="geschichte.js"></script>

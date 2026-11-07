@@ -49,6 +49,34 @@
     body.vorschul-start .spielen .tuer { padding-left: 16px; }
   }
   .tuer.laute { background: #E0578F; }
+  /* Paket 2 „Ohne Lesen bedienbar“ (07.11.2026, Entscheidung des Auftraggebers): Vorschule und Klasse 1 sehen höchstens vier Türen
+     (Insel, Zahlen/Mathe, Laute bzw. Deutsch, Rucksack) und einen großen „Los!“-Knopf; Eltern-Schalter „Alles zeigen“ (eltern.start.alles) = alte Startseite */
+  body.kurz-start .tuer.sach, body.kurz-start .tuer.englisch, body.kurz-start .tuer.sorbisch, body.kurz-start .spielen { display: none; }
+  body.kurz-start .schrank { grid-template-areas: "insel lernen"; grid-template-rows: 1fr; }
+  body.kurz-start .tuer p { display: none; }
+  body.kurz-start .tuer h2 { font-size: 1.9rem; }
+  body.kurz-start .heute-fuer-dich { display: none; }
+  .los-zeile { display: flex; gap: 12px; align-items: stretch; }
+  .los-zeile[hidden] { display: none; }
+  .los { flex: 1; min-height: 84px; display: flex; align-items: center; justify-content: center; gap: 14px; padding: 8px 20px; border-radius: 26px;
+    background: var(--sonne); color: var(--pflaume); text-decoration: none; font-weight: 700; font-size: 2.2rem; line-height: 1.1;
+    border: 3px solid var(--kontur, #3B1F63); box-shadow: 0 6px 0 var(--kontur, #3B1F63); animation: los-puls 1.8s ease-in-out infinite; }
+  .los:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--kontur, #3B1F63); animation: none; }
+  .los .e { font-size: 2.6rem; flex: none; }
+  .los small { display: block; font-size: 1rem; font-weight: 600; color: var(--pflaume-hell); }
+  @keyframes los-puls { 50% { transform: scale(1.015); } }
+  .los-zeile .los-hoer { flex: none; width: 84px; min-height: 84px; font-size: 2rem; border-radius: 26px; }
+  @media (max-width: 620px) { .los { min-height: 68px; font-size: 1.7rem; } .los .e { font-size: 2rem; } .los-zeile .los-hoer { width: 68px; min-height: 68px; } }
+  @media (max-width: 1023px) { body.kurz-start .schrank { grid-template-areas: "insel" "lernen"; grid-template-rows: .8fr 1.6fr; } }
+  /* Rucksack-Tür: großer Rucksack statt Begleiter (vorher Robo und ein Bild, das wie ein Schloss aussah) */
+  .tuer .begleiter.rucksack { display: grid; place-items: center; font-size: 96px; line-height: 1; }
+  body.vorschul-start .lernen .tuer .begleiter.rucksack { font-size: 130px; }
+  @media (max-width: 620px) { .tuer .begleiter.rucksack, body.vorschul-start .lernen .tuer .begleiter.rucksack { font-size: 76px; } }
+  .robo-karte .robo-satz { display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .robo-karte .robo-satz p { margin: 0; font-size: 1.45rem; font-weight: 600; }
+  .robo-karte .robo-satz .robo-hoer { flex: none; width: 56px; min-height: 56px; margin: 0; font-size: 1.5rem; border-radius: 50%; padding: 0; }
+  .robo-karte .robo-satz { margin-top: 10px; } .robo-karte .robo-satz p { flex: 1; }
+  .robo-karte .knopf.haupt { animation: los-puls 1.6s ease-in-out infinite; }
   .leiste .knopf { min-height: 48px; padding: 0 14px; font-size: 1.05rem; }
   .sterne { gap: .35em; }
   .sterne b { font-size: 1.3rem; }
@@ -184,6 +212,7 @@
     .lernen .tuer h2 { font-size: 1.25rem; overflow-wrap: anywhere; hyphens: auto; }
     .tuer.insel .bild { width: 130px; top: 44px; right: 12px; }
     .leiste .knopf { min-height: 44px; padding: 0 10px; font-size: .95rem; }
+    .leiste .knopf:not(.sterne) { min-width: 44px; justify-content: center; }   /* Paket 2: Tippfläche ≥ 44 px auch ohne Beschriftung (Test barriere HANDY=1) */
   }
 
   /* Wer spielt? (mehrere Kinder) */
@@ -242,6 +271,10 @@
       <div class="knopf sterne" aria-live="polite">⭐ <b id="sterne">0</b> <span class="t">Sterne</span></div>
     </div>
   </div>
+  <div class="los-zeile" id="los-zeile" hidden>
+    <a class="los" id="los" href="spiele/mathe/?los=1"><span class="e" aria-hidden="true">▶️</span><span>Los!<small id="los-was"></small></span></a>
+    <button class="knopf los-hoer" id="los-hoer" aria-label="Vorlesen, was jetzt kommt">🔊</button>
+  </div>
   <div class="reihe" id="reihe">
     <a class="ich-knopf" href="spiele/ich/" id="ich-knopf">
       <span class="ich-bild" id="ich-bild" aria-hidden="true"></span>
@@ -257,9 +290,9 @@
     <div class="karte robo-karte" role="dialog" aria-labelledby="robo-titel">
       <div class="robo-bild" id="robo-bild" aria-hidden="true"></div>
       <h2 id="robo-titel">Piep! Ich bin Robo Pixel.</h2>
-      <p id="robo-text"></p>
-      <p class="robo-ru" id="robo-ru" hidden></p>
-      <a class="knopf haupt" href="spiele/medien/" id="robo-los">🪪 Zum Tablet-Führerschein</a>
+      <div class="robo-satz"><p id="robo-text"></p><button class="knopf robo-hoer" id="robo-hoer" aria-label="Vorlesen">🔊</button></div>
+      <p class="robo-ru ru" id="robo-ru" lang="ru" hidden></p>
+      <a class="knopf haupt" href="spiele/medien/" id="robo-los">🪪 Zum Führerschein</a>
       <button class="knopf" id="robo-zu">Später</button>
     </div>
   </div>
@@ -314,8 +347,7 @@
       <p>Mit Fipsi Anfangslaute hören und Reime finden</p>
     </a>
     <a class="tuer vorschule" id="vorschule-link" href="spiele/vorschule/" style="text-decoration:none" hidden>
-      <span class="begleiter" data-wer="robo" aria-hidden="true"></span>
-      <svg class="bild" viewBox="0 0 100 100" aria-hidden="true"><rect x="24" y="30" width="52" height="56" rx="12" fill="#fff"/><path d="M38 30v-6a12 12 0 0 1 24 0v6" stroke="#fff" stroke-width="6" fill="none"/><rect x="34" y="50" width="32" height="14" rx="5" fill="#7B55B8"/><circle cx="84" cy="20" r="9" fill="#FFC83D"/></svg>
+      <span class="begleiter rucksack" aria-hidden="true">🎒</span>
       <h2>Vorschul-Rucksack</h2>
       <p>Zählen, Reimen, Entdecken, Malen</p>
     </a>
@@ -429,6 +461,7 @@
     // Vorschule (NA-60): eigene Startseite – Rucksack, Zahlen, Laute und Reime, Insel, Malen
     const vs = (S.stufe() || {}).code === "vs";
     document.body.classList.toggle("vorschul-start", vs);
+    document.body.classList.toggle("kurz-start", kurzStart());
     document.getElementById("laute-link").hidden = !vs;
     const mt = document.querySelector(".tuer.mathe h2"); if (mt) mt.textContent = vs ? "Zahlen" : "Mathe";
     // Türen nach Klasse (NA-60): Englisch ab Klasse 3 – oder früher, wenn die Eltern „Englisch ab Klasse 1“ gewählt haben
@@ -439,6 +472,8 @@
     document.querySelectorAll("#lernen .tuer.breit").forEach(t => t.classList.remove("breit"));
     if (sichtbar.length % 2 === 1 && sichtbar.length <= 4) sichtbar[sichtbar.length - 1].classList.add("breit");   // ungerade Zahl: letzte Tür über zwei Spalten
   }
+  // Paket 2 „Ohne Lesen bedienbar“ (07.11.2026): kurze Startseite für Vorschule und Klasse 1, außer die Eltern haben „Alles zeigen“ gewählt
+  function kurzStart() { return ["vs", "1"].includes((S.stufe() || {}).code) && !((S.lade("eltern") || {}).start || {}).alles; }
   zeigeLernTueren();
   // „Heute für dich“ (NA-60): Lücken-Check nach dem Überspringen → nächste offene Tagesaufgabe (je Klasse) → Fach „gerade in der Schule“ → Echte Welt
   function zeigeHeute() {
@@ -458,7 +493,23 @@
     if (!v) v = ["🌍", "Eine Echte-Welt-Idee", "für draußen", "spiele/ich/#echte-welt"];
     el.innerHTML = `<span class="e" aria-hidden="true">${v[0]}</span><span><small>Heute für dich · ${v[2]}</small>${v[1]}</span>`;
     el.href = v[3]; el.hidden = false;
+    zeigeLos(v);
   }
+  // „Los!“ (Paket 2): startet genau die nächste passende Aufgabe – dieselbe Wahl wie „Heute für dich“, aber gleich mitten hinein
+  // (Matheweg: Station „Hier weiter“, Rucksack: nächstes Spiel, Laute: eine Runde). Ist alles erledigt, geht es auf die Insel.
+  function zeigeLos(v) {
+    const z = document.getElementById("los-zeile"); z.hidden = !kurzStart(); if (z.hidden) return;
+    const LOS = { "spiele/vorschule/": "spiele/vorschule/?los=1", "spiele/mathe/": "spiele/mathe/?los=1", "spiele/lesen/": "spiele/lesen/?los=1" };
+    let ziel = LOS[v[3]] || v[3], was = v[1];
+    if (/echte-welt/.test(v[3])) { ziel = S.inselOffen() ? "spiele/insel/" : "spiele/medien/"; was = S.inselOffen() ? "Auf deine Insel" : "Zu Robo Pixel"; }
+    const los = document.getElementById("los"); los.href = ziel; los.dataset.ziel = ziel;
+    document.getElementById("los-was").textContent = was;
+    los.setAttribute("aria-label", "Los! " + was);
+  }
+  document.getElementById("los-hoer").addEventListener("click", () => {
+    if (!window.Sprache) return; Sprache.knopf(); Sprache.stopp();
+    Sprache.sprich(`Los! ${document.getElementById("los-was").textContent}. Tipp auf den gelben Knopf.`, "de-DE");
+  });
   zeigeHeute();
   function zeigeSterne() { document.getElementById("sterne").textContent = S.sterne(); }
   function zeigeTon() {
@@ -471,7 +522,8 @@
   // 🔊 Vorlesen (Review 07.11.2026): die Startseite besteht für Nichtleser aus Text – ein Knopf liest Begrüßung, „Heute für dich“, Meine Ecke, Tier und Spielzeit vor
   function startseiteText() {
     const t = (id) => { const el = document.getElementById(id); return el && !el.hidden && el.offsetParent !== null ? el.textContent.replace(/\s+/g, " ").trim() : ""; };
-    const teile = [`Hallo ${S.profil.name || "du"}!`, t("heute-fuer-dich").replace(/^Heute für dich\s*·?\s*/, "Heute für dich: "), ["Meine Ecke:", t("ich-titel"), t("ich-aufgaben")].filter(Boolean).join(" "),
+    const heute = t("heute-fuer-dich") || (t("los-zeile") ? "Heute für dich: " + document.getElementById("los-was").textContent : "");   // kurze Startseite: „Los!“ statt „Heute für dich“
+    const teile = [`Hallo ${S.profil.name || "du"}!`, heute.replace(/^Heute für dich\s*·?\s*/, "Heute für dich: "), ["Meine Ecke:", t("ich-titel"), t("ich-aufgaben")].filter(Boolean).join(" "),
       [t("tier-name") + ":", t("tier-zeile")].filter(Boolean).join(" "), t("erst-dann")];
     return teile.filter(x => x && !/:$/.test(x)).join(". ").replace(/\.\./g, ".");
   }
@@ -531,16 +583,16 @@
   function roboBegruessung() {
     const L = 6, fertig = Object.values((medien && medien.lektionen) || {}).filter(x => x > 0).length, neu = S.inselRegel() === "bedienung";
     document.getElementById("robo-bild").innerHTML = window.Figuren ? Figuren.robo("") : "🤖";
-    document.getElementById("robo-text").textContent = neu
-      ? `Hallo ${S.profil.name || "du"}! Deine eigene Insel wartet auf dich. Den Schlüssel bekommst du bei mir: Mach die erste Lektion „Das Tablet bedienen“. Dann bringe ich dich mit meinem Boot hin!`
-      : fertig
-      ? `Hallo ${S.profil.name || "du"}! Deine Insel wartet schon auf dich. Du hast ${fertig} von ${L} Lektionen im Tablet-Führerschein geschafft – mach weiter, dann öffnet sich die Insel!`
-      : `Hallo ${S.profil.name || "du"}! Deine eigene Insel wartet auf dich. Den Schlüssel bekommst du bei mir: Mach den Tablet-Führerschein – 6 kurze Lektionen. Dann darfst du auf deine Insel!`;
-    const ru = S.paar(["", neu ? "Пип! Твой остров ждёт тебя. Пройди первый урок «Как пользоваться планшетом» – и я отвезу тебя туда на лодке!" : "Пип! Твой остров ждёт тебя. Ключ ты получишь у меня: пройди права на планшет — 6 коротких уроков."])[1];
+    // Paket 2 „Ohne Lesen bedienbar“ (07.11.2026): ein kurzer Satz statt vier Zeilen, 🔊 daneben, der Knopf „Zum Führerschein“ pulsiert
+    document.getElementById("robo-text").textContent = neu ? "Spiel eine Lektion mit mir. Dann geht es zur Insel!"
+      : fertig ? `Schon ${fertig} von ${L} geschafft! Spiel weiter mit mir.` : "Mach den Tablet-Führerschein mit mir. Dann geht es zur Insel!";
+    const ru = S.paar(["", neu ? "Пройди со мной один урок – и поплывём на остров!" : "Сдай со мной права на планшет – и поплывём на остров!"])[1];
     const r = document.getElementById("robo-ru"); r.textContent = ru; r.hidden = !ru;
     document.getElementById("robo-dialog").hidden = false;
     if (window.Sprache && Sprache.sprich) Sprache.sprich(document.getElementById("robo-text").textContent, "de-DE");
   }
+  document.getElementById("robo-hoer").addEventListener("click", () => { if (!window.Sprache) return; Sprache.knopf(); Sprache.stopp();
+    Sprache.sprich(document.getElementById("robo-titel").textContent + " " + document.getElementById("robo-text").textContent, "de-DE"); });
   document.getElementById("robo-zu").addEventListener("click", () => { document.getElementById("robo-dialog").hidden = true; if (window.Sprache && Sprache.stopp) Sprache.stopp(); });
   const tuerInsel = document.getElementById("tuer-insel");
   if (!inselOffen()) {

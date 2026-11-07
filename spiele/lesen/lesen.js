@@ -62,11 +62,21 @@
         if (w) { $(w.id).classList.add("tipp"); tipp = ` Heute passt gut: „${w.name}“.`; }
       }
     }
+    // Paket 2 „Ohne Lesen bedienbar“ (07.11.2026): Vorschulkinder sehen nur die Laut-, Bild- und Nachspur-Wege; Schreibschrift, Lesetexte,
+    // Silben, Wörter legen und Laut vorlesen liegen hinter „➕ Mehr“. Wer von der Startseite (Vorschule) kommt, kehrt mit ⬅️ dorthin zurück.
+    if (!mehrOffen) $("weg-mehr").parentElement.classList.toggle("kurz", vs);
+    $("weg-mehr").hidden = !vs || mehrOffen;
+    if (vs) { $("lesen-zurueck").href = "../../"; $("lesen-zurueck").setAttribute("aria-label", "Zurück zur Startseite"); }
     $("start-blase").textContent = text + tipp;
     $("start-ton").onclick = () => sprich(text + tipp);
     const kann = Object.values(daten().b).filter(n => n >= 2).length;
     $("stand").textContent = `Du kennst schon ${kann} von ${HOERBAR.length} Buchstaben und Lauten.`;
   }
+  // Eigene Idee (Paket 2): „Was gibt es hier?“ liest die Wege nacheinander vor (Kachel leuchtet), Fipsi antippen liest die Sprechblase
+  if (window.Vorleser) { Vorleser.kacheln($("was-hier"), () => [...document.querySelectorAll(".wege .weg")], (k) => (k.childNodes[1] ? k.childNodes[1].textContent : Vorleser.name(k)).trim());
+    Vorleser.begleiter($("fipsi-start"), () => $("start-blase").textContent); $("fipsi-start").setAttribute("aria-label", "Fipsi: vorlesen"); }
+  let mehrOffen = false;
+  $("weg-mehr").addEventListener("click", () => { mehrOffen = true; $("weg-mehr").parentElement.classList.remove("kurz"); $("weg-mehr").hidden = true; $("weg-mehr").setAttribute("aria-expanded", "true"); S.ton("tipp"); });
   $("weg-tafel").addEventListener("click", tafel);
   $("weg-gleich").addEventListener("click", () => runde("gleich"));
   $("weg-bild").addEventListener("click", () => runde("bild"));
@@ -630,4 +640,10 @@
     legenStein: (b) => leg ? leg.steine.findIndex((s, i) => s.b === b && !$("legen-steine").querySelector(`[data-i="${i}"]`).classList.contains("weg")) : -1
   };
   start();
+  // „Los!“ von der Startseite (Paket 2, 07.11.2026): gleich eine Runde – den empfohlenen Weg, sonst „Gleicher Anfang“ (Vorschule) bzw. „Finde das Bild“
+  if (new URLSearchParams(location.search).has("los")) {
+    history.replaceState(null, "", location.pathname);
+    const t = document.querySelector(".weg.tipp"), m = { "weg-gleich": "gleich", "weg-bild": "bild", "weg-buchstabe": "buchstabe", "weg-silben": "silben" };
+    if (t && t.id === "weg-legen") legenRunde(); else runde((t && m[t.id]) || ((S.stufe() || {}).code === "vs" ? "gleich" : "bild"));
+  }
 })();

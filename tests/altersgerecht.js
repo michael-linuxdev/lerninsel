@@ -42,8 +42,10 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const heute = await p.evaluate(() => document.getElementById("heute-fuer-dich").textContent);
     erwarte(/Vorschul-Rucksack/.test(heute), "„Heute für dich“: Vorschul-Rucksack");
     await bild(p, "alter-vorschule-start");
-    await p.click("#heute-fuer-dich"); await p.waitForURL(/vorschule/); await p.waitForTimeout(400);
-    await p.click('.kachel[data-id="vs-zaehlen"]'); await p.waitForTimeout(500);
+    // Paket 2 (07.11.2026): Vorschule hat die kurze Startseite – „Los!“ (gleiche Wahl wie „Heute für dich“) startet gleich das erste Rucksack-Spiel
+    erwarte(await p.evaluate(() => /Vorschul-Rucksack/.test(document.getElementById("los").textContent)), "„Los!“ zeigt dieselbe Wahl: Vorschul-Rucksack");
+    await p.click("#los", { force: true }); await p.waitForURL(/vorschule/); await p.waitForTimeout(500);
+    erwarte(await p.evaluate(() => !!(__vorschule.lauf && __vorschule.lauf.a && __vorschule.lauf.a.id === "vs-zaehlen") || !document.getElementById("aufgabe-ansicht").hidden), "„Los!“ startet das erste Rucksack-Spiel");
     erwarte((await gesagt(p)).length === 0, "Vorschul-Spiel: nichts wird von selbst vorgelesen");
     await p.click("#nochmal"); await p.waitForTimeout(300);
     const g = await gesagt(p);

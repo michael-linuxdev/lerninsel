@@ -752,7 +752,6 @@
         const faellig = letzte ? tage(letzte) >= 30 : tage(el.seit || heute) >= 7;
         return faellig ? `<div class="karte" id="sicherung-erinnerung"><h2>💾 Zeit für eine Sicherung</h2><p>${letzte ? `Die letzte Sicherung war am ${letzte.slice(8)}.${letzte.slice(5, 7)}.${letzte.slice(0, 4)}.` : "Der Spielstand wurde noch nie gesichert."} Alles liegt nur auf diesem Tablet. Mit einer Sicherungsdatei geht nichts verloren – auch nicht, wenn das Tablet kaputtgeht oder ein neues kommt.</p><p class="klein">So geht es: Startseite → 💾 Spielstand → „Als Datei sichern“. Wir erinnern einmal im Monat.</p></div>` : "";
       })()}
-      ${S.kind().geburt ? "" : `<div class="karte" id="geburt-fehlt"><h2>🎂 Geburtsdatum eintragen</h2><p>Mit dem Geburtsdatum stimmt das Alter immer (Bildschirmzeit nach Alter), und am Geburtstag wartet ein Geschenk am Steg der Insel – auch wenn ${S.profil.name || "das Kind"} erst ein paar Tage später spielt.</p><div class="knoepfe"><button class="knopf haupt" id="geburt-eintragen">Jetzt eintragen</button></div></div>`}
       <div class="karte">
         <h2>${S.profil.name || "Spielstand"} auf einen Blick</h2>
         <div class="zahlen">
@@ -761,6 +760,8 @@
           <div class="zahl"><b>${stempel.length}</b><span>Tage mit allen Tagesaufgaben</span></div>
           <div class="zahl"><b>${gesR + gesF ? Math.round(gesR / (gesR + gesF) * 100) + " %" : "–"}</b><span>Mathe beim 1. Versuch richtig (${gesR + gesF} Aufgaben)</span></div>
         </div>
+        <p class="klein" id="gesamtstufe-erklaert">Die Gesamtstufe ist die Summe der Stufen aller Fähigkeiten (Mathe, Deutsch, Entdecken …); jede steigt mit geschafften Aufgaben, „${C.titel()}“ ist der Titel, den ${S.profil.name || "das Kind"} dafür in Meine Ecke sieht.</p>
+        ${S.kind().geburt ? "" : `<p class="klein geburt-fehlt" id="geburt-fehlt">🎂 Tipp: Mit dem Geburtsdatum stimmt das Alter immer (Bildschirmzeit nach Alter), und am Geburtstag wartet ein Geschenk am Steg. <button class="knopf klein-k" id="geburt-eintragen">Geburtsdatum eintragen</button></p>`}
       </div>
       ${wochenbericht(schwach, mathe)}
       <div class="karte">
@@ -838,6 +839,7 @@
         <label class="schalter-z"><input type="checkbox" id="vl-auto" ${(eltern().vorlesen || {}).auto ? "checked" : ""}> Automatisch vorlesen (wie früher: jede Sprechblase und Aufgabe wird sofort vorgelesen)</label>
         <label class="schalter-z"><input type="checkbox" id="alte-zeichnung" ${eltern().zeichnung === "alt" ? "checked" : ""}> Zeichnungen wie bis 02.11.2026 (Mein Tier und Kleiderschrank in der alten, einfacheren Zeichnung)</label>
         <label class="schalter-z"><input type="checkbox" id="eigene-bilder" ${eltern().bilder !== "geraet" ? "checked" : ""}> Eigene Bilder der Lerninsel statt der Emojis des Geräts (überall gleich, im Stil der Figuren)</label>
+        <label class="schalter-z"><input type="checkbox" id="start-alles" ${(eltern().start || {}).alles ? "checked" : ""}> Startseite: alles zeigen (Vorschule und Klasse 1 sehen sonst nur vier Türen und einen großen „Los!“-Knopf; ab Klasse 2 zeigt die Startseite immer alles)</label>
       </div>
       <div class="karte" id="geschenk-karte">
         <h2>🎁 Geschenk-Code einlösen</h2>
@@ -877,6 +879,7 @@
     geschenkKnoepfe();
     if ($("alte-zeichnung")) $("alte-zeichnung").addEventListener("change", () => { const e = eltern(); if ($("alte-zeichnung").checked) e.zeichnung = "alt"; else delete e.zeichnung; S.speichere("eltern", e); S.meldung("Gespeichert – gilt ab der nächsten Seite."); });
     if ($("eigene-bilder")) $("eigene-bilder").addEventListener("change", () => { const e = eltern(); e.bilder = $("eigene-bilder").checked ? "" : "geraet"; S.speichere("eltern", e); S.meldung("Gespeichert – gilt ab der nächsten Seite."); });
+    if ($("start-alles")) $("start-alles").addEventListener("change", () => { const e = eltern(); if ($("start-alles").checked) e.start = { alles: true }; else delete e.start; S.speichere("eltern", e); S.meldung("Gespeichert – gilt ab der nächsten Seite."); });
     if ($("vl-auto")) $("vl-auto").addEventListener("change", () => { const e = eltern(); e.vorlesen = { auto: $("vl-auto").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); });
     if ($("fe-modus")) { const sp = () => { const e = eltern(); e.ferien = { modus: $("fe-modus").checked, weniger: $("fe-weniger").checked }; S.speichere("eltern", e); S.meldung("Gespeichert."); };
       $("fe-modus").addEventListener("change", sp); $("fe-weniger").addEventListener("change", sp); }
@@ -910,6 +913,16 @@
       if (FACH_TEILE.includes(n) && inhalt.dataset.fach !== "ja") ladeFachdaten().then(() => { if (aktTeil === n && inhalt.dataset.fach !== "ja" && $("abmelden")) uebersicht(); });
     };
     inhalt.querySelectorAll(".eltern-reiter button").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); zeigeTeil(b.dataset.teil); scrollTo(0, 0); }));
+    // Paket 2 (07.11.2026): lange Reiter bekommen oben Sprungmarken zu ihren Karten (Knöpfe, kein #-Anker – der Anker wählt sonst beim Neuladen den Reiter)
+    teile.forEach((x, ti) => {
+      const karten = [...x.querySelectorAll(":scope > .karte, :scope > div > .karte")].filter(k => k.querySelector("h2"));
+      if (karten.length < 4 || x.querySelector(".sprung")) return;
+      const nav = document.createElement("nav"); nav.className = "sprung"; nav.dataset.ausgleich = ""; nav.setAttribute("aria-label", "Springen zu");
+      karten.forEach((k, ki) => { const b = document.createElement("button"); b.type = "button"; b.className = "knopf klein-k";
+        b.textContent = k.querySelector("h2").textContent.replace(/\s+/g, " ").trim().slice(0, 34);
+        b.addEventListener("click", () => { S.ton("tipp"); k.scrollIntoView({ block: "start" }); }); nav.appendChild(b); });
+      x.prepend(nav);
+    });
     let teilStart = location.hash.slice(1); try { teilStart = teilStart || sessionStorage.getItem("eltern-teil") || "ueberblick"; } catch (e) { }
     zeigeTeil(teilStart);
     window.__eltern = Object.assign(window.__eltern || {}, { teil: zeigeTeil, fachdaten: ladeFachdaten, fachBereit: () => fachBereit });

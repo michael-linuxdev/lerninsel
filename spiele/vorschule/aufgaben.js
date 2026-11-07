@@ -4,20 +4,21 @@
 // Aufgabe: { id: "vs-…", bereich, name, e (darf keine Antwort verraten), lz, aufgaben: [ { frage, ru, optionen: [richtig, …] (Emojis), sag?, warum? }
 //   | { typ: "ordnen", frage, ru, teile: [Emojis in richtiger Reihenfolge], warum? } ] }
 //   sag = zusätzlich vorgelesen (z. B. „Ba – na – ne“); warum = Erklärung nach der richtigen Antwort (vorgelesen).
+// text = kurzer Untertitel fürs Kind, bildung = Bildungsbereich des Sächsischen Bildungsplans (nur für Erwachsene, als title)
 window.VORSCHULE_BEREICHE = [
-  { id: "mathe", name: "Zahlen und Formen", e: "🔢", farbe: "#2FA37C", text: "Mathematische Bildung: zählen, vergleichen, Formen und Muster",
+  { id: "mathe", name: "Zahlen und Formen", e: "🔢", farbe: "#2FA37C", text: "Zählen, vergleichen, Formen", bildung: "Mathematische Bildung: zählen, vergleichen, Formen und Muster",
     links: [["spiele/mathe/", "Matheweg: Würfelbilder, Zählen, Muster", "\uE104"]] },
-  { id: "sprache", name: "Sprechen und Hören", e: "🗣️", farbe: "#E0574A", text: "Kommunikative Bildung: Reime, Silben, Anlaute, Geschichten",
+  { id: "sprache", name: "Sprechen und Hören", e: "🗣️", farbe: "#E0574A", text: "Reime, Silben, Geschichten", bildung: "Kommunikative Bildung: Reime, Silben, Anlaute, Geschichten",
     links: [["spiele/lesen/", "Laute und Buchstaben: Gleicher Anfang, Nachspuren", "\uE103"]] },
-  { id: "natur", name: "Natur entdecken", e: "🌱", farbe: "#1F8F8A", text: "Naturwissenschaftliche Bildung: Tiere, Pflanzen, Wasser, Jahreszeiten",
+  { id: "natur", name: "Natur entdecken", e: "🌱", farbe: "#1F8F8A", text: "Tiere, Pflanzen, Wasser", bildung: "Naturwissenschaftliche Bildung: Tiere, Pflanzen, Wasser, Jahreszeiten",
     links: [["spiele/sachkunde/", "Sachunterricht mit Eule Ella", "\uE102"]] },
-  { id: "koerper", name: "Körper und Gesundheit", e: "🧼", farbe: "#3AA0E0", text: "Somatische Bildung: Körper, Sinne, gesund essen, Hygiene, Bewegung",
+  { id: "koerper", name: "Körper und Gesundheit", e: "🧼", farbe: "#3AA0E0", text: "Körper, Essen, Bewegung", bildung: "Somatische Bildung: Körper, Sinne, gesund essen, Hygiene, Bewegung",
     links: [["spiele/gefuehle/", "Bewegung mit Bärin Bruni", "\uE105"]] },
-  { id: "sozial", name: "Miteinander", e: "🤝", farbe: "#E0578F", text: "Soziale Bildung: Gefühle, Regeln, helfen, sicher unterwegs",
+  { id: "sozial", name: "Miteinander", e: "🤝", farbe: "#E0578F", text: "Gefühle, Regeln, helfen", bildung: "Soziale Bildung: Gefühle, Regeln, helfen, sicher unterwegs",
     links: [["spiele/gefuehle/", "Gefühle mit Bärin Bruni", "💗"]] },
-  { id: "kunst", name: "Malen und Musik", e: "🎨", farbe: "#E07A2E", text: "Ästhetische Bildung: Farben, Klänge, Instrumente",
+  { id: "kunst", name: "Malen und Musik", e: "🎨", farbe: "#E07A2E", text: "Farben und Klänge", bildung: "Ästhetische Bildung: Farben, Klänge, Instrumente",
     links: [["spiele/atelier/", "Atelier: malen und Musik machen", "🎨"]] },
-  { id: "schule", name: "Bald bin ich Schulkind", e: "🎒", farbe: "#7B55B8", text: "Schulvorbereitung: Schulsachen, Tagesablauf, sich melden",
+  { id: "schule", name: "Bald bin ich Schulkind", e: "🎒", farbe: "#7B55B8", text: "Schulsachen, sich melden", bildung: "Schulvorbereitung: Schulsachen, Tagesablauf, sich melden",
     links: [["spiele/lesen/", "Den eigenen Namen nachspuren", "✏️"]] }
 ];
 window.VORSCHULE = [
