@@ -75,16 +75,28 @@ const TYP = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; char
     const v2 = geholt(PR).filter(e => e !== "sw.js");
     erwarte(v2.length === 1 && v2[0] === "shared/garten.js", `Update holt nur die geänderte Datei (geholt: ${v2.join(", ") || "nichts"})`);
 
+    // Eigene Idee: Elternbereich „Technik & Speicher“ zeigt, ob alles offline da ist und dass eine neue Version wartet
+    await p.goto(B + "spiele/eltern/#kinder"); await p.waitForTimeout(400);
+    if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(600); }
+    await p.click('.eltern-reiter [data-teil="kinder"]').catch(() => {});
+    const stand = await p.waitForFunction(() => { const e = document.getElementById("offline-stand"); return e && /Offline bereit|Noch nicht/.test(e.textContent) && e.textContent; }, null, { timeout: 15000 }).then(h => h.jsonValue(), () => "");
+    erwarte(/Offline bereit: alle \d+ Dateien/.test(stand) && /neue Version ist geladen/.test(stand), `Elternbereich: „${stand.trim().slice(0, 110)}…“`);
+    await p.goto(B + "spiele/mathe/"); await p.waitForLoadState("load");
     // 3. Kein Mischen: die offene Matheweg-Seite (Version 1) bekommt weiter die alte Datei
-    const alt = await p.evaluate(() => fetch("../../shared/garten.js").then(r => r.text()));
+    const alt =await p.evaluate(() => fetch("../../shared/garten.js").then(r => r.text()));
     erwarte(!alt.includes("__version2"), "offene Seite der alten Version lädt weiter die alte Datei");
     const p2 = await ctx.newPage();
     await p2.goto(B); await p2.waitForLoadState("load"); await p2.waitForTimeout(1500);
     erwarte(await p2.evaluate(() => navigator.serviceWorker.getRegistration().then(r => !!r.waiting)), "zweites Fenster mit der Startseite stellt nicht um, solange der Matheweg offen ist");
     await p2.close();
     // allein auf der Startseite: still aktiv, Seite lädt neu
+    let ladungen = 0; const zaehle = () => ladungen++; p.on("load", zaehle);
     await p.goto(B); await p.waitForLoadState("load");
-    erwarte(await warteAuf(() => navigator.serviceWorker.getRegistration().then(r => !r.waiting && !!navigator.serviceWorker.controller)), "allein auf der Startseite: Version 2 wird aktiv");
+    const aktiv = await warteAuf(() => navigator.serviceWorker.getRegistration().then(r => !r.waiting && !!navigator.serviceWorker.controller && document.readyState === "complete"));
+    for (let i = 0; i < 50 && ladungen < 2; i++) await p.waitForTimeout(200);
+    p.off("load", zaehle); await p.waitForLoadState("load");
+    // (Chromium stellt manchmal schon beim Seitenwechsel um, dann kommt die Startseite gleich aus der neuen Version – sonst lädt sie neu)
+    erwarte(aktiv, `allein auf der Startseite: Version 2 wird aktiv (Startseite ${ladungen}× geladen)`);
     await p.waitForLoadState("load"); await p.waitForTimeout(500);
     const neu = await p.evaluate(() => fetch("shared/garten.js").then(r => r.text()));
     erwarte(neu.includes("__version2"), "danach kommt die neue Datei");

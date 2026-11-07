@@ -676,8 +676,9 @@
       <h2>🛠️ Technik & Speicher</h2>
       <p id="speicher-stand" class="klein">Speicher wird geprüft …</p>
       <p class="klein">App-Version (Offline-Speicher): <span id="app-version">–</span></p>
+      <p class="klein" id="offline-stand">📶 Offline-Speicher wird geprüft …</p>
       <h3 style="margin:10px 0 6px;font-size:1.05rem">Technisches Protokoll</h3>
-      ${l.length ? `<ul class="liste" id="protokoll-liste">${l.slice(0, 12).map(x => `<li><b>${x.a === "speicher" ? "💾 Speicher" : "⚠️ Fehler"}</b> ${S.esc(zeit(x.z))} · ${S.esc(x.s)}${x.n > 1 ? ` (${x.n}×)` : ""}<br><span class="klein">${S.esc(x.t)}</span></li>`).join("")}</ul>
+      ${l.length ? `<ul class="liste" id="protokoll-liste">${l.slice(0, 12).map(x => `<li><b>${x.a === "speicher" ? "💾 Speicher" : x.a === "langsam" ? "🐢 Langsam" : "⚠️ Fehler"}</b> ${S.esc(zeit(x.z))} · ${S.esc(x.s)}${x.n > 1 ? ` (${x.n}×)` : ""}<br><span class="klein">${S.esc(x.t)}</span></li>`).join("")}</ul>
         <p class="klein">Diese Einträge helfen bei der Fehlersuche. Macht bei Problemen ein Bildschirmfoto davon. Es werden keine Daten verschickt.</p>
         <div class="knoepfe"><button class="knopf" id="protokoll-leeren">Protokoll leeren</button></div>`
         : `<p class="klein" id="protokoll-leer">Keine Auffälligkeiten – es sind keine technischen Fehler aufgetreten.</p>`}
@@ -689,6 +690,7 @@
     // Cache-Name wie in sw.js: Vorsilbe test-/dev- je nach Pfad, dann spielwelt-<Version>
     const vor = location.pathname.includes("/dev/test/") ? "test-" : location.pathname.includes("/dev/") ? "dev-" : "";
     try { if (window.caches) caches.keys().then(k => { const v = k.filter(x => new RegExp("^" + vor + "spielwelt-[0-9a-f]+$").test(x)).pop(); if (v && $("app-version")) $("app-version").textContent = v.split("-").pop(); }).catch(() => {}); } catch (e) { /* egal */ }
+    offlineStand();
     const st = navigator.storage;
     if (!st || !st.estimate) { el.textContent = "Dieser Browser zeigt den Speicherplatz nicht an. Sichert den Spielstand regelmäßig als Datei."; return; }
     Promise.all([st.estimate(), st.persisted ? st.persisted() : Promise.resolve(null)]).then(([e, fest]) => {
@@ -698,6 +700,27 @@
         (fest === true ? "✅ Der Browser behält die Daten dauerhaft." : fest === false ? `⚠️ Der Browser darf die Daten bei Platzmangel löschen. Am sichersten: die Lerninsel zum Home-Bildschirm hinzufügen und regelmäßig eine Sicherungsdatei anlegen. <button class="knopf klein-k" id="speicher-fest">Dauerhaft speichern</button>` : "");
       const f = $("speicher-fest"); if (f) f.addEventListener("click", () => st.persist().then(ja => { S.meldung(ja ? "Die Daten werden jetzt dauerhaft gespeichert." : "Der Browser hat abgelehnt. Bitte die Lerninsel zum Home-Bildschirm hinzufügen."); technikKnoepfe(); }));
     }).catch(() => { el.textContent = "Speicherplatz konnte nicht ermittelt werden."; });
+  }
+
+  // Eigene Idee (Paket 5): Ist die Lerninsel vollständig offline da? Eltern sehen vor einer Reise ohne WLAN, ob alles gespeichert ist,
+  // und ob eine neue Version wartet (sie startet beim nächsten Öffnen der Startseite). Der Service Worker zählt die Dateien seiner Version (sw.js „stand“).
+  function offlineStand() {
+    const el = $("offline-stand"); if (!el) return;
+    const sw = navigator.serviceWorker;
+    if (!sw || !sw.controller) { el.textContent = location.protocol === "https:" ? "📶 Offline-Speicher wird beim nächsten Öffnen eingerichtet (einmal mit Internet öffnen)." : "📶 Offline-Speicher ist nur über https aktiv."; return; }
+    const antwort = (e) => {
+      if (!e.data || e.data.typ !== "stand") return; sw.removeEventListener("message", antwort);
+      const d = e.data, mb = (d.bytes / 1048576).toLocaleString("de-DE", { maximumFractionDigits: 1 });
+      sw.getRegistration().then(reg => {
+        if (!$("offline-stand")) return;
+        const wartet = reg && (reg.waiting || reg.installing);
+        el.innerHTML = (d.da === d.dateien ? `✅ <b>Offline bereit:</b> alle ${d.dateien} Dateien dieser Version sind auf dem Gerät (${mb} MB) – die Lerninsel läuft auch ohne Internet.`
+          : `⚠️ <b>Noch nicht ganz offline:</b> ${d.da} von ${d.dateien} Dateien gespeichert. Einmal mit Internet die Startseite öffnen.`) +
+          (wartet ? ` <br>✨ Eine neue Version ${reg.waiting ? "ist geladen und" : "wird gerade geladen und"} startet beim nächsten Öffnen der Startseite.` : "");
+      });
+    };
+    sw.addEventListener("message", antwort);
+    sw.controller.postMessage({ typ: "stand" });
   }
 
   // ---------- Zum Home-Bildschirm (Paket 5, 07.11.2026) ----------

@@ -121,6 +121,20 @@
   }
   addEventListener("error", (e) => { if (e && e.message) protokoll("fehler", `${e.message} (${String(e.filename || "").split("/").slice(-2).join("/")}:${e.lineno || 0})`); });
   addEventListener("unhandledrejection", (e) => { const r = e && e.reason; protokoll("fehler", "Promise: " + (r && r.message ? r.message : String(r))); });
+  // Eigene Idee (Paket 5, 07.11.2026): langsame Seiten auf dem echten Gerät merken – die Messungen im Test laufen auf einem PC mit gedrosselter CPU,
+  // so sieht man im Elternbereich (Technik & Speicher), ob das Tablet selbst zu kämpfen hat. Gemessen: Zeit bis die Seite aufgebaut ist
+  // (DOMContentLoaded) und ob danach ein Bild länger als 1 s hing. Nur lokal, gleiche Einträge werden gezählt. Test-Haken window.__langsamAb (ms).
+  addEventListener("load", () => setTimeout(() => {
+    try {
+      const ab = window.__langsamAb || 3000, n = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+      if (n && document.visibilityState === "visible" && n.domContentLoadedEventEnd > ab) protokoll("langsam", `Seitenaufbau dauerte über ${Math.round(ab / 1000)} s`);
+      // ein Bild, das in den ersten 10 Sekunden länger als 1 s hing (z. B. großer Baustein beim Start)
+      let letzte = performance.now(); const bis = letzte + 10000, haenger = window.__haengerAb || 1000;
+      const schau = () => { const j = performance.now(); if (document.visibilityState === "visible" && j - letzte > haenger) { protokoll("langsam", `Bild hing über ${String(Math.round(haenger / 100) / 10).replace(".", ",")} s`); return; } letzte = j; if (j < bis) requestAnimationFrame(schau); };
+      requestAnimationFrame(schau);
+      document.addEventListener("visibilitychange", () => { letzte = performance.now(); });
+    } catch (e) { /* nur eine Hilfe */ }
+  }, 0));
   let speicherVollGemeldet = false;
   function lokalSchreiben(p) {
     const ok = schreibenK(KEY, p);
@@ -624,7 +638,7 @@
       k.innerHTML = `<span>✨ Es gibt eine neue Version der Lerninsel.</span><button class="knopf haupt" id="nv-jetzt">Jetzt aktualisieren</button><button class="knopf" id="nv-spaeter">Später</button>`;
       k.style.cssText = "position:fixed;inset-inline:12px;inset-block-end:12px;z-index:50;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;background:#fff;border-radius:22px;padding:12px 16px;box-shadow:0 6px 0 rgba(59,31,99,.18),0 0 0 3px #3B1F63;font-weight:600";
       document.body.appendChild(k);
-      k.querySelector("#nv-jetzt").addEventListener("click", () => bitte(w));
+      k.querySelector("#nv-jetzt").addEventListener("click", () => { if (w) bitte(w); else location.reload(); });
       k.querySelector("#nv-spaeter").addEventListener("click", () => k.remove());
     };
     // wartende Version: gleich nach dem Öffnen der Startseite still übernehmen, sonst freundlich fragen
@@ -644,7 +658,9 @@
       if (!hatteSW || window.__neueVersionGemeldet) return;
       window.__neueVersionGemeldet = true;
       // Nur die Startseite bittet darum – sie lädt mit der neuen Version neu. (Andere Seiten: sollte nicht vorkommen; dann gilt sie ab der nächsten Seite.)
-      if (start && gebeten) location.reload();
+      // gerade geöffnet (Umstellung beim Seitenwechsel) oder selbst gebeten: neu laden, damit Seite und Skripte zur neuen Version passen
+      if (start && (gebeten || performance.now() - geoeffnet < 10000)) location.reload();
+      else if (start) banner(null);
       else if (window.Spielwelt && Spielwelt.meldung) Spielwelt.meldung("✨ Neue Version geladen – sie gilt ab der nächsten Seite.");
     });
   }

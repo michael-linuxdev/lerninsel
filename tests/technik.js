@@ -12,6 +12,8 @@ const BILDER = process.env.BILDER || "";
   const erwarte = (ok, text) => { if (!ok) fehler.push(text); else console.log("  ✓ " + text); };
   const ctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true, serviceWorkers: "block" });
   await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime();
+    // langsame Seiten (Paket 5): im Test nur, wenn eingeschaltet – sonst würde ein ausgelasteter Testrechner Einträge erzeugen
+    window.__langsamAb = +sessionStorage.getItem("__langsam") || 1e9; window.__haengerAb = +sessionStorage.getItem("__haenger") || 1e9;
     // Speicher-voll nachbilden, sobald der Test es einschaltet (nur für den Spielstand, nicht fürs Protokoll)
     const orig = Storage.prototype.setItem;
     Storage.prototype.setItem = function (k, v) { if (this === window.localStorage && sessionStorage.getItem("__voll") && /profil\.v1/.test(k)) { const e = new Error("voll"); e.name = "QuotaExceededError"; throw e; } return orig.call(this, k, v); }; });
@@ -42,6 +44,16 @@ const BILDER = process.env.BILDER || "";
   erwarte((await p.evaluate(() => Spielwelt.protokoll().length)) === 0, "„Protokoll leeren“ echt angetippt: leer");
   await p.evaluate(() => { for (let i = 0; i < 40; i++) Spielwelt.merke("fehler", "Fehler Nr. " + i); });
   erwarte((await p.evaluate(() => Spielwelt.protokoll().length)) === 30, "höchstens 30 Einträge");
+  // Eigene Idee (Paket 5): langsame Seite und hängendes Bild auf dem Gerät gemerkt, im Elternbereich mit 🐢
+  await p.evaluate(() => { Spielwelt.protokollLeeren(); sessionStorage.setItem("__langsam", "1"); sessionStorage.setItem("__haenger", "200"); });
+  await p.goto(BASIS + "spiele/mathe/"); await p.waitForLoadState("load"); await p.waitForTimeout(300);
+  await p.evaluate(() => { const t = performance.now(); while (performance.now() - t < 450) { /* Bild hängt */ } });
+  await p.waitForTimeout(400);
+  await p.evaluate(() => { sessionStorage.removeItem("__langsam"); sessionStorage.removeItem("__haenger"); });
+  const lg = await p.evaluate(() => Spielwelt.protokoll().filter(x => x.a === "langsam").map(x => x.t + " @" + x.s));
+  erwarte(lg.some(t => /Seitenaufbau/.test(t) && /spiele\/mathe/.test(t)) && lg.some(t => /Bild hing/.test(t)), `langsamer Seitenaufbau und hängendes Bild gemerkt (${lg.join("; ")})`);
+  await kinder();
+  erwarte(/🐢 Langsam/.test(await p.textContent("#technik-karte")), "Elternbereich zeigt „🐢 Langsam“");
   await browser.close();
   if (fehler.length) { console.log("❌ Fehler:\n" + fehler.map(f => "  - " + f).join("\n")); process.exit(1); }
   console.log("✅ Technik-Test bestanden.");
