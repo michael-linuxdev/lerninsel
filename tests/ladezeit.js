@@ -109,6 +109,8 @@ const GRENZE = {
   await p.evaluate(() => { const e = Spielwelt.lade("eltern"); e.kind = Object.assign({}, e.kind, { hilfesprache: "" }); Spielwelt.speichere("eltern", e); });
   await p.goto(BASIS + "spiele/welt3d/heimat.html?stunde=14&wetter=klar", { waitUntil: "domcontentloaded" });
   await p.waitForFunction(() => window.__heimat && document.getElementById("insel-laedt") && document.getElementById("insel-laedt").hidden, null, { timeout: 90000 });
+  // Neues Kind: zuerst läuft die Ankunft (Prolog, Kamera und Figur bewegen sich) – im Leerlauf ist die Insel erst danach; unter Last dauert sie länger als 15 s
+  await p.waitForTimeout(1500); await p.waitForFunction(() => !__heimat.imProlog, null, { timeout: 90000 }).catch(() => {});
   if (await p.$("#szene-weiter")) await p.evaluate(() => window.__szene && __szene.abbrechen());
   if (process.env.DBG) console.log(await p.evaluate(() => ({ szene: window.Szene && Szene.laeuft, ziel: !!__heimat.ziel, w: __heimat.wetter, tanzt: __heimat.tanzt, blase: !!document.querySelector(".szene:not([hidden])") })));
   const still = await p.waitForFunction(() => __heimat.leerlauf(), null, { timeout: 15000 }).then(() => true, () => false);
