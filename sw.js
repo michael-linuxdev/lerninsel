@@ -165,6 +165,7 @@ const START = [
   "spiele/sachkunde/faecher.js",
   "spiele/sachkunde/religion.js",
   "spiele/sachkunde/bewegung.js",
+  "spiele/sachkunde/klang.js",
   "spiele/sachkunde/sachkunde.js",
   "spiele/englisch/",
   "spiele/englisch/lektionen.js",
