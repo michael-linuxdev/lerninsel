@@ -28,7 +28,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   const aufgabe = (p) => p.evaluate(() => { const x = __mathe.lauf.liste[__mathe.lauf.pos]; return { art: x.art, antwort: x.antwort, optionen: x.optionen, frage: x.frage, bild: x.bild || "", hilfe: x.hilfe }; });
   async function tippe(p, wert, art) {
     if (art === "wahl") {   // auf die Taste warten (nach einem Fehler werden die Tasten kurz danach neu gezeichnet; CI-Lauf 100 tippte zu früh)
-      await p.waitForFunction((w) => [...document.querySelectorAll(".wahl-tasten .taste")].some(b => b.dataset.wert === w && !b.disabled), wert, { timeout: 5000 });
+      await p.waitForFunction((w) => [...document.querySelectorAll(".wahl-tasten .taste")].some(b => b.dataset.wert === w && !b.disabled), wert, { timeout: 15000 });
       await p.evaluate((w) => [...document.querySelectorAll(".wahl-tasten .taste")].find(b => b.dataset.wert === w && !b.disabled).click(), wert);
     }
     else { for (const z of wert) await p.click(`.taste[data-ziffer="${z}"]`); await p.click(".taste.ok"); }
@@ -39,6 +39,10 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.evaluate((n) => __mathe.starte(n), nr); await p.waitForTimeout(150);
     let passt = true, hinweis = "", loesung = "", schritte = 0; const fragen = [], bilder = [];
     while (await p.evaluate(() => document.getElementById("ende-ansicht").hidden) && schritte++ < 14) {
+      // erst lesen, wenn die Tasten der aktuellen Aufgabe gezeichnet sind (CI-Lauf 114: auf dem langsamen Läufer war die Aufgabe schon weiter, die Tasten noch nicht)
+      await p.waitForFunction(() => { if (!document.getElementById("ende-ansicht").hidden) return true; const x = __mathe.lauf.liste[__mathe.lauf.pos];
+        return x.art === "wahl" ? [...document.querySelectorAll(".wahl-tasten .taste")].some(b => !b.disabled && x.optionen.includes(b.dataset.wert)) : !!document.querySelector(".taste.ok"); }, null, { timeout: 15000 });
+      if (!(await p.evaluate(() => document.getElementById("ende-ansicht").hidden))) break;
       const a = await aufgabe(p), pos = await p.evaluate(() => __mathe.lauf.pos);
       if (pos < 10) { fragen.push(a.frage); bilder.push(a.bild); }
       if (!(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))) passt = false;
