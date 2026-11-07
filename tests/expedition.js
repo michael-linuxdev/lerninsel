@@ -40,7 +40,7 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   // ---------- 3D: Boot, Lager, Kapitel 7, Reise zum Eiland und zurück ----------
   { const { ctx, p } = await kind("2");
     await p.evaluate(() => { const m = Spielwelt.lade("medien") || {}; m.lektionen = { bedienung: 3 }; Spielwelt.speichere("medien", m); Story.etappeFertig("E1");
-      ["E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"].forEach(e => Story.etappeFertig(e, true)); Story.merkeSzene("sonne"); Story.setzeKapitel(6); for (let i = 0; i < 12; i++) Zeit.aufgabe(); });
+      ["E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"].forEach(e => Story.etappeFertig(e, true)); Story.merkeSzene("sonne"); ["brunis-station", "tilda"].forEach(x => Story.merkeSzene(x, true)); Story.setzeKapitel(6); for (let i = 0; i < 12; i++) Zeit.aufgabe(); });
     await insel(p); await szeneWeg(p);
     const start = await p.evaluate(() => ({ insel: __heimat.insel, wege: __heimat.wege, lager: __heimat.lager(), boot: __heimat.boot() }));
     erwarte(start.insel && start.wege === 5 && start.lager.offen && !start.lager.schloss && start.lager.aktion === "Forschen", "Heimatinsel: fünf Trittstein-Wege, Forscherlager offen (Kapitel 1) mit Knopf „Forschen“");

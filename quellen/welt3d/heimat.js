@@ -1037,7 +1037,8 @@ antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe"
 
 // ---------- Bühne mit Papagei Paula: spielt die eigene Melodie aus dem Atelier, alle tanzen ----------
 let tanzBis = 0;
-const paula = (() => {
+// (07.11.2026) als Funktion, damit Paula beim Finale (Kapitel 9) auch am Schachtisch mitfeiern kann
+function paulaFigur() {
   const g = new Group(), k = new Group(); g.add(k);
   const leib = teil(kugel(0.36), "#4CC27A"); leib.scale.set(1, 1.2, 0.95); setze(leib, 0, 0.6, 0); k.add(leib);
   [-1, 1].forEach(s => { const f = teil(kugel(0.22), "#2E9C5A"); f.scale.set(0.45, 1.1, 0.9); setze(f, 0.36 * s, 0.64, -0.02); f.rotation.z = -0.25 * s; k.add(f);
@@ -1053,7 +1054,8 @@ const paula = (() => {
   const unter = teil(new ConeGeometry(0.055, 0.1, 8), "#E8A62E"); unter.rotation.x = Math.PI / 2 + 0.3; setze(unter, 0, -0.2, 0.3); kopf.add(unter);
   [-0.15, -0.05, 0.05, 0.15].forEach((x) => { const f = teil(new ConeGeometry(0.06, 0.26, 8), "#FF5C5C"); setze(f, x, 0.4, -0.04); f.rotation.z = -x * 2.2; kopf.add(f); });   // Federkamm
   g.userData.koerper = k; return g;
-})();
+}
+const paula = paulaFigur();
 {
   const [x, z, d] = P.buehne, g = new Group(); g.position.set(x, bodenY(x, z), z); g.rotation.y = d; scene.add(g); block(x, z, 1.5);
   g.add(setze(teil(new CylinderGeometry(1.4, 1.5, 0.3, 28), "#B98A55"), 0, 0.15, 0));
@@ -1908,6 +1910,145 @@ function starteProlog(wiederholen) {
 // Neues Kind: beim ersten Besuch (nicht wenn die Seite direkt im Zimmer startet)
 if (K.prologFaellig(q)) setTimeout(() => starteProlog(false), 700);
 
+// ---------- Story-Bogen mit Finale (07.11.2026, Story-Review): Effekte für Szenen – gebündelt an einer Stelle ----------
+// sturm(an): Kapitel 5 – Himmel dunkel, Wolken schnell, Regen und Wind, danach genau wie vorher.
+// fest(an): Kapitel 9 – alle Begleiter kommen zu Tilda an den Schachtisch (Kopien; die Figuren an ihren Plätzen ruhen so lange), Wimpel.
+// letzterNebel(an): Kapitel 9 – ein letzter Nebelring zieht auf und verschwindet sichtbar.
+// zeigeSchatz(): Kapitel 8 – Fipsis Truhe am Wegweiser (Wörterbuch der Insel). plakat(): Paulas Fest – Plakat mit dem neuesten eigenen Bild.
+const STORY_FX = (() => {
+  let sturmAlt = null, sturmRegen = null, sturmLauf = 0, festGruppe = null, schatz = null, plakatObj = null, nebelLauf = 0;
+  function sturm(an) {
+    if (an && !sturmAlt) {
+      sturmAlt = { bg: scene.background && scene.background.clone ? scene.background.clone() : null, fog: scene.fog.color.clone(), sonne: sonne.intensity,
+        wolken: wolken.map(w => ({ v: w.visible, f: w.children[0] ? "#" + w.children[0].material.color.getHexString() : null })) };
+      const grau = NACHT ? "#26304F" : "#7F92A6";
+      scene.background = new Color(grau); scene.fog.color.set(grau); sonne.intensity = sturmAlt.sonne * 0.5;
+      wolken.forEach(w => { w.visible = true; w.children.forEach(k => k.material.color.set(NACHT ? "#3E4868" : "#6F7A88")); });
+      const pos = []; for (let i = 0; i < (EINFACH ? 300 : 700); i++) { const x = (Math.random() - 0.5) * 40, y = Math.random() * 16, z = (Math.random() - 0.5) * 40; pos.push(x, y, z, x + 0.35, y - 0.6, z); }
+      const g = new BufferGeometry(); g.setAttribute("position", new Float32BufferAttribute(pos, 3));
+      sturmRegen = new LineSegments(g, new LineBasicMaterial({ color: "#E6EEF8", transparent: true, opacity: 0.7 })); scene.add(sturmRegen);
+      let t0 = performance.now(); const lauf = ++sturmLauf;
+      const schritt = () => {
+        if (lauf !== sturmLauf || !sturmRegen) return;
+        const jetzt = performance.now(), dt = Math.min(0.1, (jetzt - t0) / 1000); t0 = jetzt;
+        const a = sturmRegen.geometry.attributes.position;   // schräger Regen, Wind von links
+        for (let i = 0; i < a.count; i += 2) { let y = a.getY(i) - dt * 16, x = a.getX(i) + dt * 6; if (y < 0) { y = 16; x -= 9; } if (x > 20) x -= 40; a.setXYZ(i, x, y, a.getZ(i)); a.setXYZ(i + 1, x + 0.35, y - 0.6, a.getZ(i)); }
+        a.needsUpdate = true; sturmRegen.visible = !drinnen;
+        wolken.forEach((w, i) => { w.position.x += dt * (3 + i * 0.6); if (w.position.x > 40) w.position.x = -40; });
+        windrad.rotation.y += dt * 9;
+        requestAnimationFrame(schritt);
+      };
+      requestAnimationFrame(schritt);
+    } else if (!an && sturmAlt) {
+      sturmLauf++;
+      if (sturmRegen) { scene.remove(sturmRegen); sturmRegen.geometry.dispose(); sturmRegen = null; }
+      scene.background = sturmAlt.bg || new Color(HIMMEL); scene.fog.color.copy(sturmAlt.fog); sonne.intensity = sturmAlt.sonne;
+      wolken.forEach((w, i) => { const x = sturmAlt.wolken[i]; w.visible = x.v; if (x.f) w.children.forEach(k => k.material.color.set(x.f)); });
+      sturmAlt = null;
+    }
+  }
+  // Fest am Schachtisch: Tilda sitzt dort schon; die anderen sechs stehen im Halbkreis hinter dem Tisch (von der Kamera aus gesehen),
+  // die Figur des Kindes davor – so sieht man alle sieben von vorn. Darüber eine Wimpelkette zwischen zwei Stangen.
+  function fest(an) {
+    if (an && !festGruppe) {
+      const [sx, sz] = P.schach, px = sx, pz = sz + 2.6;
+      festGruppe = new Group(); scene.add(festGruppe);
+      const gaeste = [...NACHBARN.map(n => ({ e: n.e, bau: () => { const o = n.bau(); o.scale.multiplyScalar(1.15); return o; }, orig: n.obj })), { e: "papagei", bau: paulaFigur, orig: paula }];
+      gaeste.forEach((x, i) => {
+        const w = Math.PI + (i - (gaeste.length - 1) / 2) * 0.5, x0 = sx + Math.sin(w) * 2.6, z0 = sz + Math.cos(w) * 2.6;
+        const o = x.bau(); o.position.set(x0, bodenY(x0, z0) + (x.e === "papagei" ? 0.05 : 0), z0); o.rotation.y = Math.atan2(px - x0, pz - z0); o.userData.wer = x.e; festGruppe.add(o);
+        if (x.orig) x.orig.visible = false;
+      });
+      const farben = ["#FF6F61", "#FFC83D", "#5CCBA6", "#7B9BFF", "#C27BFF"], R = 3.6, w0 = Math.PI - 1.45, w1 = Math.PI + 1.45, N = 16;
+      const punkt = (f) => { const w = w0 + (w1 - w0) * f, x0 = sx + Math.sin(w) * R, z0 = sz + Math.cos(w) * R; return [x0, bodenY(x0, z0) + 2.9 - Math.sin(f * Math.PI) * 0.45, z0]; };
+      [0, 1].forEach(f => { const [x0, y0, z0] = punkt(f); const st = teil(new CylinderGeometry(0.05, 0.06, y0 - bodenY(x0, z0) + 0.1, 8), "#9A6A3F"); st.position.set(x0, (y0 + bodenY(x0, z0)) / 2, z0); festGruppe.add(st); });
+      const seil = []; for (let i = 0; i < N; i++) { seil.push(...punkt(i / N), ...punkt((i + 1) / N)); }
+      { const g = new BufferGeometry(); g.setAttribute("position", new Float32BufferAttribute(seil, 3)); festGruppe.add(new LineSegments(g, new LineBasicMaterial({ color: "#3B1F63" }))); }
+      for (let i = 1; i < N; i++) {
+        const [x0, y0, z0] = punkt(i / N), wi = new Mesh(new ConeGeometry(0.17, 0.36, 3), mat(farben[i % farben.length]));
+        wi.rotation.x = Math.PI; wi.scale.z = 0.3; wi.position.set(x0, y0 - 0.2, z0); festGruppe.add(wi);
+      }
+      ich.position.set(px, bodenY(px, pz), pz); ich.rotation.y = Math.PI; ziel = null; marke.visible = false;
+    } else if (!an && festGruppe) {
+      scene.remove(festGruppe); festGruppe = null;
+      NACHBARN.forEach(n => { n.obj.visible = true; }); paula.visible = true;
+    }
+  }
+  function letzterNebel(an) {
+    const lauf = ++nebelLauf;
+    if (an) { nebelBand.visible = true; nebelBand.scale.set(UFER + 5, 1, UFER + 5); nebelBand.material.opacity = 0.6; scene.fog.near = 20; scene.fog.far = 56; return; }
+    const t0 = performance.now(), r0 = nebelBand.scale.x, a0 = nebelBand.material.opacity;
+    const schritt = () => {
+      if (lauf !== nebelLauf) return;
+      const f = Math.min(1, (performance.now() - t0) / 3500), e = f * f * (3 - 2 * f);
+      const r = MathUtils.lerp(r0, UFER + 20, e); nebelBand.scale.set(r, 1, r); nebelBand.material.opacity = MathUtils.lerp(a0, 0, e);
+      scene.fog.near = MathUtils.lerp(20, nebelBasis.near, e); scene.fog.far = MathUtils.lerp(56, nebelBasis.far, e);
+      if (f < 1) requestAnimationFrame(schritt); else { nebelJetzt = Math.max(nebelJetzt, nebelStufe()); wendeNebelAn(); nebelBand.visible = false; }
+    };
+    schritt();
+  }
+  function zeigeSchatz() {
+    const o = KI.ORTE.schatz; if (schatz || !o || !WELT.insel) return;
+    schatz = new Group(); schatz.position.set(o.x, bodenY(o.x, o.z), o.z); schatz.rotation.y = o.dreh || 0; scene.add(schatz); block(o.x, o.z, 0.5);
+    schatz.add(setze(teil(new BoxGeometry(0.8, 0.45, 0.55), "#B9732E"), 0, 0.23, 0));
+    const d = teil(new CylinderGeometry(0.27, 0.27, 0.8, 16, 1, false, 0, Math.PI), "#C98A3E"); d.rotation.z = Math.PI / 2; setze(d, 0, 0.45, 0); schatz.add(d);
+    schatz.add(setze(teil(new BoxGeometry(0.14, 0.18, 0.05), "#FFC83D", { dicke: 1.1 }), 0, 0.42, 0.29));
+    const buch = schildSprite("📖"); buch.position.set(0, 1.15, 0); buch.scale.setScalar(0.55); schatz.add(buch);
+    antippbar(schatz, () => zeigeAntwort(K.antwort("schatz")), ...K.aktionFuer("schatz"));
+  }
+  // Plakat neben Paulas Bühne: neuestes eigenes Bild aus dem Atelier (sonst ein leeres Plakat mit Pinsel)
+  function plakat(bild) {
+    if (plakatObj) return;
+    const [x, z, d] = P.buehne, ax = x + Math.cos(d) * 1.9, az = z - Math.sin(d) * 1.9;
+    plakatObj = new Group(); plakatObj.position.set(ax, bodenY(ax, az), az); plakatObj.rotation.y = d; scene.add(plakatObj);
+    plakatObj.add(setze(teil(new CylinderGeometry(0.05, 0.05, 1.6, 8), "#9A6A3F"), 0, 0.8, 0));
+    plakatObj.add(setze(teil(new BoxGeometry(1.1, 0.85, 0.06), "#FF7FB0", { dicke: 1.03 }), 0, 1.75, 0));
+    const flaeche = new MeshBasicMaterial({ color: "#FFFFFF" }); plakatObj.add(setze(new Mesh(new PlaneGeometry(0.95, 0.7), flaeche), 0, 1.75, 0.035));
+    if (bild && bild.url) { const img = new Image(); img.onload = () => { const t = new CanvasTexture(img); t.colorSpace = SRGBColorSpace; flaeche.map = t; flaeche.needsUpdate = true; }; img.src = bild.url; }
+    else { const s = schildSprite("🎨"); s.position.set(0, 1.75, 0.1); s.scale.setScalar(0.5); plakatObj.add(s); }
+  }
+  if (window.Story && Story.kapitel() >= 8) zeigeSchatz();
+  return { sturm, fest, letzterNebel, zeigeSchatz, plakat, feier: { geprueft: false, bild: null },
+    info: () => ({ sturm: !!sturmAlt, regen: !!sturmRegen, fest: festGruppe ? festGruppe.children.filter(c => c.userData.wer).map(c => c.userData.wer) : [], schatz: schatz ? { x: schatz.position.x, z: schatz.position.z, aktion: schatz.userData.aktion[1] } : null, plakat: !!plakatObj,
+      himmel: scene.background && scene.background.getHexString ? "#" + scene.background.getHexString() : null }),
+    festPunkte: () => (festGruppe ? festGruppe.children.filter(c => c.userData.wer).map(c => ({ wer: c.userData.wer, ...bildschirm(c.position.x, c.position.y + 1, c.position.z) })) : []),
+    schatzTippen: () => schatz && schatz.userData.tipp() };
+})();
+// Szenen-Hooks des Story-Bogens (07.11.2026): Zeigehand, Effekte; liefert true, wenn die Szene erst später (nach dem Laden eines Bilds) startet
+function storyBogen(id, b, I, St) {
+  if (id === "der-sturm") b.forEach((x, i) => {
+    x.zeige = I.ort(i === 1 || i === 2 ? "baer" : i === 3 ? "station" : "eule");
+    if (i === 0) x.beim = () => STORY_FX.sturm(true);
+    if (i === 3) x.beim = () => STORY_FX.sturm(false);
+  });
+  if (id === "tilda") b.forEach(x => { x.zeige = I.ort("schach"); });
+  if (id === "brunis-station") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "baer" : "tierstation"); });
+  if (id === "paulas-feier") {
+    const def = STORY_FX.feier;   // Szene.def liefert eine Kopie – das Bild merkt sich darum STORY_FX
+    if (!def.geprueft) { def.geprueft = true; storyLaeuft = true; const weiter = (bild) => { def.bild = bild || null; storyLaeuft = false; spieleStory(id); }; (window.Bilder ? window.Bilder.alle().then(l => weiter(l[0])).catch(() => weiter(null)) : weiter(null)); return true; }
+    b.forEach(x => { x.zeige = I.ort("buehne"); });
+    if (!def.bild && b[1].alt && b[1].alt.ohneBild) b[1].text = b[1].alt.ohneBild;
+    b[1].beim = () => STORY_FX.plakat(def.bild);
+    b[2].beim = () => { tanzBis = performance.now() + 4000; NACHBARN.forEach(n => { n.obj.userData.huepf = 1; }); paula.userData.huepf = 1; };
+  }
+  if (id === "fipsis-schatz") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "fipsi" : "schatz"); if (i === 1) x.beim = () => { zeigeKartenweg(); STORY_FX.zeigeSchatz(); }; });
+  if (id === "insel-wach") b.forEach((x, i) => {
+    x.zeige = I.ort("fest");
+    if (i === 0) x.beim = () => { STORY_FX.fest(true); STORY_FX.letzterNebel(true); };
+    if (i === 2) x.beim = () => { St.setzeKapitel(9); STORY_FX.letzterNebel(false); };
+  });
+  if (/^fest-/.test(id)) b.forEach(x => { x.zeige = I.ort(x.wer === "papagei" ? "buehne" : x.wer); });   // Feste aus Herkunftsländern (eigene Idee)
+  if (/^jz-/.test(id)) { const wer = b[0].wer; b.forEach(x => { x.zeige = I.ort(wer === "papagei" ? "buehne" : wer); }); }
+  return false;
+}
+// nach dem Ende (auch beim Überspringen): alles wieder wie vorher, nur was bleiben soll, bleibt
+function storyBogenEnde(id) {
+  if (id === "der-sturm") STORY_FX.sturm(false);
+  if (id === "fipsis-schatz") { zeigeKartenweg(); STORY_FX.zeigeSchatz(); }
+  if (id === "insel-wach") { STORY_FX.letzterNebel(false); setTimeout(() => STORY_FX.fest(false), 4000); }
+  if (/^jz-/.test(id) && $("blase").hidden) zeigeAntwort(K.antwort("jahreszeit"));
+}
+
 // ---------- Tutorial E2 „Erst lernen“, Szene „Sonne geht auf“, E3 „Erste Frucht“ (= Kapitel 1) (NA-13) ----------
 // Reihenfolge und Auslöser aus KONZEPT „Etappen“; höchstens zwei neue Etappen am Tag; nur draußen auf der Insel.
 function spieleStory(id) {
@@ -1931,8 +2072,8 @@ function spieleStory(id) {
   // Blase 3 („… dann leuchtet der Turm“): Kapitel 6 schon hier merken (wie Kapitel 1 in „erste-frucht“), sonst bleibt die Lampe grau, weil
   // schalteLeuchtturm() nach K.leuchtturmOffen() geht und das Kapitel sonst erst mit der letzten Blase gespeichert würde (ab Kl. 2 sind es vier)
   if (id === "der-leuchtturm") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "schach" : "leuchtturm"); if (i === 2) x.beim = () => { St.setzeKapitel(6); schalteLeuchtturm(); }; });
-  if (id === "der-sturm") b.forEach((x, i) => { x.zeige = I.ort(i === 1 ? "baer" : i === 2 ? "station" : "eule"); });
   if (id === "neue-ufer") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "steg" : i === 2 ? "lager" : "boot"); if (i === 1) x.beim = () => { St.setzeKapitel(7); schalteBoot(); }; });   // Kapitel 7: Boot schon bei Blase 2 bereit
+  if (storyBogen(id, b, I, St)) return;   // Sturm, Tilda, Bruni, Paulas Fest, Kapitel 8/9, Jahreszeiten (07.11.2026)
   storyLaeuft = true;
   // Etappe/Kapitel schon mit der letzten Blase merken – nicht erst beim Schließen (Kind verlässt die Insel oft direkt danach)
   Sz.spiele(def, { beiLetzter: () => K.storyFertig(def) }).then(() => {
@@ -1941,6 +2082,7 @@ function spieleStory(id) {
     if (id === "fipsis-karte") zeigeKartenweg();   // auch beim Überspringen
     if (id === "der-leuchtturm") schalteLeuchtturm();
     if (id === "neue-ufer") schalteBoot();
+    storyBogenEnde(id);
     if (id === "geburtstag" && paketId) St.merkeSzene(paketId);   // einmal je Jahr
     nebelWeicht();
     if (id === "ei" && !tier && $("blase").hidden) zeigeAntwort(K.antwort("nest"));
@@ -1978,3 +2120,4 @@ function teileZaehlen() {
     .filter(x => x.meshes > 0).sort((a, b) => b.meshes - a.meshes);
 }
 window.__heimat = { extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+Object.assign(window.__heimat, { story: () => STORY_FX.info(), festPunkte: () => STORY_FX.festPunkte(), schatzTippen: () => STORY_FX.schatzTippen() });   // Story-Bogen (07.11.2026)

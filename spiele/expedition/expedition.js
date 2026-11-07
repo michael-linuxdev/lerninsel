@@ -321,7 +321,7 @@
   $("reiter").addEventListener("click", (e) => { const b = e.target.closest("[data-reiter]"); if (b) { S.ton("tipp"); zeigeReiter(b.dataset.reiter); } });
   if (!offen()) {
     $("zu").hidden = false; $("bereich").hidden = true; $("reiter").hidden = true;
-    $("zu-text").textContent = insel ? "🔒 Das Forscherlager öffnet, wenn die erste Frucht am Wissensbaum wächst. Lern etwas Neues!" : "🔒 Dieses Eiland erforschen wir ab Kapitel 7 – wenn Robos Boot bereit ist. Lern weiter auf der Heimatinsel!";
+    $("zu-text").textContent = insel ? "🔒 Das Forscherlager öffnet, wenn die erste Frucht am Wissensbaum wächst. Lern etwas Neues!" : "🔒 Dieses Eiland erforschen wir ab Kapitel 7 – wenn Robos Boot bereit ist. Bis dahin: Was entdeckst du heute auf der Heimatinsel?";
     ella("Mein Fernrohr ist noch eingepackt. Bald geht es los!", "Моя подзорная труба ещё упакована. Скоро начнём!");
   } else if (location.hash === "#tagebuch") zeigeReiter("tagebuch"); else starteRunde();
 

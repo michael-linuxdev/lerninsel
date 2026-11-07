@@ -16,7 +16,7 @@
   const MAX_OFFEN = 20, MAX_GESEHEN = 100, MAX_CHRONIK = 100, MAX_KAPITEL = 20, MAX_DATEN = 160;
   // Zahl der erzählten Kapitel = letztes `n` in KAPITEL (shared/insel-kern.js); hier für Seiten ohne Insel-Kern (Schatzkammer „Kapitel x von y“).
   // tests/inselkern.js prüft, dass beide Zahlen gleich sind – bei einem neuen Kapitel hier hochzählen.
-  const KAPITEL_ZAHL = 7;
+  const KAPITEL_ZAHL = 9;
 
   // ---------- Migration und Prüfung (auch in Node testbar) ----------
   const istObjekt = (x) => !!x && typeof x === "object" && !Array.isArray(x);
@@ -126,11 +126,12 @@
     gesehen: (szene) => lade().gesehen.includes(szene),
     vergiss(szene) { const st = lade(); if (!st.gesehen.includes(szene)) return false; st.gesehen = st.gesehen.filter(x => x !== szene); speichere(st); return true; },
     // Gesehene Szene merken; jede Szene steht einmal in der Chronik (zum Wiederansehen im Album)
-    merkeSzene(szene) {
+    // still = true (07.11.2026): nur als gesehen merken, ohne Chronik-Eintrag (z. B. Szene, die das Kind nicht braucht, weil es den Ort schon kennt)
+    merkeSzene(szene, still) {
       if (typeof szene !== "string" || !szene) return false;
       const st = lade(), s = kurz(szene, 40); if (st.gesehen.includes(s)) return false;
       st.gesehen.push(s); st.gesehen = st.gesehen.slice(-MAX_GESEHEN);
-      st.chronik.push({ s, d: heute() }); st.chronik = st.chronik.slice(-MAX_CHRONIK);
+      if (!still) { st.chronik.push({ s, d: heute() }); st.chronik = st.chronik.slice(-MAX_CHRONIK); }
       speichere(st); return true;
     },
     chronik: () => lade().chronik.slice(),
