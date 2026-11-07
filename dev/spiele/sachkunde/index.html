@@ -119,6 +119,11 @@
   .daumen .option { font-size: 3.4rem; width: 130px; height: 120px; }
   .satz-gross { font-size: 1.6rem; font-weight: 600; max-width: 28ch; line-height: 1.35; margin: 0; }
   .zaehler { font-size: 1.3rem; font-weight: 700; }
+  /* Bewegungspause (bewegung.js) */
+  .bew-bild { background: #fff; border: 3px solid var(--kontur, #3B1F63); border-radius: 26px; padding: 6px 18px; line-height: 0; }
+  .bew-figur { max-height: 28vh; width: auto; }
+  .bew-knoepfe { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  @media (max-width: 640px) { .bew-figur { max-height: 19vh; } .bew-bild { padding: 2px 12px; } }
   @media (orientation: portrait) {
     .buehne { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
     .erzaehler { flex-direction: row; align-items: flex-end; }
@@ -140,6 +145,9 @@
   .gewinn { display: inline-block; background: #FFF6D6; padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 1.2rem; margin: 6px 0 16px; }
   .ende-knoepfe { display: grid; gap: 12px; }
   .ende-knoepfe .knopf { min-height: 62px; font-size: 1.3rem; }
+  /* Hör-Schritt (07.11.2026): großer Abspiel-Knopf statt Bild */
+  .klang-knopf { font-size: 1.35rem; min-height: 64px; padding: 10px 26px; margin: 4px auto 6px; display: block; }
+  .klang-knopf.gehoert { font-size: 1.1rem; min-height: 52px; }
 </style>
 </head>
 <body>
@@ -199,6 +207,8 @@
 <script src="landkreise.js"></script>
 <script src="faecher.js"></script>
 <script src="religion.js"></script>
+<script src="bewegung.js"></script>
+<script src="klang.js"></script>
 <script src="../../shared/koennen.js"></script>
 <script src="sachkunde.js"></script>
 </body>

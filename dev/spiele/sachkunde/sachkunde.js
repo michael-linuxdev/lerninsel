@@ -155,7 +155,7 @@
   }
   const weiterKnopf = (text = "Weiter") => `<button class="knopf weiter" id="weiter">${text}</button>`;
   function aufWeiter() { const w = $("weiter"); if (w) w.addEventListener("click", () => { S.ton("tipp"); weiter(); }); }
-  function weiter() { SP.stopp(); lauf.pos++; schritt(); }
+  function weiter() { SP.stopp(); if (window.Klang) Klang.stopp(); lauf.pos++; schritt(); }
   function erklaere(el, art, de, ru) {
     const id = eintrag(de, ru);
     el.hidden = false; el.className = "warum " + art; el.innerHTML = vt(id) + mini(id);
@@ -203,6 +203,7 @@
     if (lauf.pos >= t.schritte.length) return beende();
     const s = t.schritte[lauf.pos], A = $("aufgabe");
     A.innerHTML = ""; texte.length = 0;
+    if (window.Bewegung) Bewegung.stopp();
 
     switch (s.typ) {
       case "info": {
@@ -214,7 +215,10 @@
       case "wahl": {
         const opts = mische(s.optionen);
         blase(s.frage, S.ht(s));
-        A.innerHTML = bildVon(s) + `<div class="optionen">` + opts.map(o => optionZeile(o.t, S.ht(o))).join("") + `</div>`;
+        // Hör-Schritt (07.11.2026): Klangbeispiel aus klang.js, erst nach Antippen
+        const hoer = s.klang && window.Klang ? `<button class="knopf haupt klang-knopf" id="klang-knopf" aria-label="Klangbeispiel abspielen">▶️ Abspielen</button>` : "";
+        A.innerHTML = bildVon(s) + hoer + `<div class="optionen">` + opts.map(o => optionZeile(o.t, S.ht(o))).join("") + `</div>`;
+        if (hoer) $("klang-knopf").addEventListener("click", () => { SP.stopp(); Klang.spiele(s.klang); $("klang-knopf").classList.add("gehoert"); $("klang-knopf").textContent = "🔁 Nochmal abspielen"; });
         auswahl(A.querySelector(".optionen"), opts);
         break;
       }
@@ -251,6 +255,10 @@
             erklaere(w, "nein", `Das ist nicht die richtige Person. ${P[id].wer}`, S.ht(P[id], "wer") ? S.paar({ de: "", ru: "Это не тот человек." })[1] + " " + S.ht(P[id], "wer") : "");
           }
         }));
+        break;
+      }
+      case "bewegung": {   // Bewegungspause zum Mitmachen (bewegung.js)
+        Bewegung.zeige(A, s, { eintrag, vt, mini, blase, weiterKnopf, aufWeiter, ton: (t) => S.ton(t), ht: (o, f) => S.ht(o, f) });
         break;
       }
       case "zuordnen": {
