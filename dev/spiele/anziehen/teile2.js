@@ -188,13 +188,13 @@
   function kleid(art) {
     const oben = (c) => oberteil({ aermel: art.aermel || "ohne", ausschnitt: art.ausschnitt ?? 6, muster: art.muster, saum: 304, motiv: art.motiv })(c);
     const unten = (c) => rock({ lang: art.lang || 420, weit: art.weit ?? 16, muster: art.muster, tuell: art.tuell })(c);
-    return { oben, unten };
+    return { oben, unten, aermel: art.aermel || "ohne" };
   }
   // Ganzkörper-Kostüme: Oberteil (lang) + Hose aus denselben Bausteinen, dazu eigene Details
   function kostuem(art) {
     const oben = (c) => oberteil({ aermel: "lang", buendchen: true, ...(art.oben || {}) })(art.farbeOben || c) + (art.obenExtra ? art.obenExtra(c) : "");
     const unten = (c) => hose({ bis: 520, ...(art.unten || {}) })(art.farbeUnten || c) + (art.untenExtra ? art.untenExtra(c) : "");
-    return { oben, unten };
+    return { oben, unten, aermel: "lang" };
   }
   const meerjungfrau = (c) => {
     const s = dunkel(c, 0.22), l = hell(c, 0.35);
@@ -208,11 +208,11 @@
     latzkleid: { oben: (c) => oberteil({ aermel: "kurz" })("#FFFFFF") + flaeche("M126 238 L174 238 L178 300 L122 300 Z", c, form("M164 238 L174 238 L178 300 L168 300 Z", dunkel(c, 0.2))) +
         strich("M128 240 L126 196 M172 240 L174 196", c, 7) + `<circle cx="130" cy="244" r="3.4" fill="#FFD84D" stroke="${KF}" stroke-width="1.4"/><circle cx="170" cy="244" r="3.4" fill="#FFD84D" stroke="${KF}" stroke-width="1.4"/>` +
         flaeche("M138 256 L162 256 L162 276 L138 276 Z", dunkel(c, 0.08)),
-      unten: (c) => rock({ lang: 404, weit: 12 })(c) },
+      unten: (c) => rock({ lang: 404, weit: 12 })(c), aermel: "kurz" },
     fee: kleid({ aermel: "ohne", lang: 402, weit: 26, tuell: true, muster: "glitzer" }), ball: kleid({ aermel: "kurz", lang: 520, weit: 46, muster: "glitzer", tuell: true }),
     buchstabenkleid: kleid({ aermel: "kurz", lang: 412, muster: "buchstaben" }), glitzer: kleid({ aermel: "ohne", lang: 410, muster: "glitzer" }),
     regenbogenkleid: kleid({ aermel: "kurz", lang: 412, muster: "regenbogen" }),
-    meerjungfrau: { oben: (c) => oberteil({ aermel: "ohne", muster: "glitzer", saum: 304 })(c), unten: meerjungfrau, ohneBeine: true },
+    meerjungfrau: { oben: (c) => oberteil({ aermel: "ohne", muster: "glitzer", saum: 304 })(c), unten: meerjungfrau, ohneBeine: true, aermel: "ohne" },
     ritter: kostuem({ farbeOben: "#B8C2CF", farbeUnten: "#6B7280", oben: { muster: "kette" }, obenExtra: (c) => flaeche("M124 220 L176 220 L176 300 C166 312 134 312 124 300 Z", c, form("M150 220 L176 220 L176 300 L150 310 Z", dunkel(c, 0.18))) + flaeche("M138 238 L162 238 L162 256 C162 268 150 276 150 276 C150 276 138 268 138 256 Z", "#FFD84D") }),
     astronaut: kostuem({ farbeOben: "#F4F6FA", farbeUnten: "#F4F6FA", obenExtra: () => flaeche("M128 236 L172 236 L172 268 L128 268 Z", "#4FA8F0", `<circle cx="140" cy="252" r="5" fill="#FF6F61"/><circle cx="160" cy="252" r="5" fill="#FFD84D"/>`) + `<g transform="${AL}">${flaeche("M86 224 L102 224 L102 240 L86 240 Z", "#E8463B")}</g>`,
       untenExtra: () => strich("M104 304 L196 304", "#9AA3B2", 6) + strich("M116 440 L142 440", "#9AA3B2", 4) + `<g transform="${BR}">${strich("M158 440 L184 440", "#9AA3B2", 4)}</g>` }),
@@ -528,6 +528,12 @@
   const orte = P.orte.map(o => o.id === "zimmer" ? Object.assign({}, o, { teil: zimmer }) : o);
 
   const finde = (l, id) => l.find(t => t.id === id);
+  // Ärmellänge eines Looks (Eine Welt, 07.11.2026): "kurz" | "lang" | "ohne" – die 3D-Figur auf der Insel übernimmt sie (vorher immer lange Ärmel)
+  function aermel(o) {
+    if (o && o.kleid) { const k = KLEIDER[o.kleid.id]; return (k && k.aermel) || "ohne"; }
+    if (o && o.oberteil) return (OBEN[o.oberteil.id] && OBEN[o.oberteil.id].aermel) || "kurz";
+    return "kurz";   // ohne Oberteil: Grundhemd der Figur (kurz)
+  }
   // Ganze Figur aus einem gespeicherten Look (gleiches Format wie bisher)
   function zeichneFigur(o) {
     const haut = (o.figur && o.figur.farbe) || K.HAUT[1], k = K.koerper(haut);
@@ -546,6 +552,6 @@
     return s;
   }
   W.Puppe2 = { neu: true, oberteile, unterteile, kleider, schuhe, haare, gesichter, extras, orte, koerper, setzeForm, FUER: P.FUER, D: P.D, ton: P.ton,
-    zeichneFigur, extraSicht, SICHT: { figur: "82 24 136 160", haare: "40 -4 220 300", oben: "52 168 196 196", unten: "50 280 200 280", kleider: "30 168 240 420", schuhe: "92 488 120 72", orte: "0 0 460 620" },
+    zeichneFigur, extraSicht, aermel, SICHT: { figur: "82 24 136 160", haare: "40 -4 220 300", oben: "52 168 196 196", unten: "50 280 200 280", kleider: "30 168 240 420", schuhe: "92 488 120 72", orte: "0 0 460 620" },
     FIGUR_Y: 14, KOPF: "50 18 200 200", BUESTE: "40 6 220 290", _intern: { stueck, maske, M, MUSTER, MOTIV, oberteil, hose, rock } };
 })(window);

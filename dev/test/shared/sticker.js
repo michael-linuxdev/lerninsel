@@ -8,7 +8,10 @@
   if (!S) return;
   const SEITEN = [
     { id: "insel", name: "Inselbewohner", ru: "Жители острова", farbe: "#FFE3B8", woher: "lernen", sticker: [
-      ["eule", "\uE102", "Eule Ella", "Сова Элла"], ["fipsi", "\uE103", "Fipsi", "Фипси"], ["robo", "\uE101", "Robo Pixel", "Робо Пиксель"], ["drache", "🐉", "Drache", "Дракон"],
+      // (Eine Welt, 07.11.2026) alle sieben Begleiter als Zeichnung (Zeichen \uE101…\uE107, emoji.js zeichnet sie); Drache und Katze wie in „Mein Tier“
+      // (Feld tier, album.js zeichnet sie mit Tiere.zeichneTier) statt Noto-Bildern. Vorhandene IDs bleiben – kein gesammelter Sticker geht verloren.
+      ["eule", "\uE102", "Eule Ella", "Сова Элла"], ["fipsi", "\uE103", "Fipsi", "Фипси"], ["robo", "\uE101", "Robo Pixel", "Робо Пиксель"], ["biber", "\uE104", "Biber Benno", "Бобёр Бенно"],
+      ["baer", "\uE105", "Bärin Bruni", "Медведица Бруни"], ["papagei", "\uE106", "Papagei Paula", "Попугай Паула"], ["tilda", "\uE107", "Schildkröte Tilda", "Черепаха Тильда"], ["drache", "🐉", "Drache", "Дракон"],
       ["katze", "🐈", "Katze", "Кошка"], ["igel", "🦔", "Igel", "Ёжик"], ["hoernchen", "🐿️", "Eichhörnchen", "Белка"], ["kaefer", "🐞", "Marienkäfer", "Божья коровка"]] },
     { id: "wetter", name: "Wetter", ru: "Погода", farbe: "#D6EEFF", woher: "entdecken", sticker: [
       ["w-klar", "☀️", "Sonne", "Солнце", "Scheint die Sonne bei dir? Schau auf der Insel!"], ["w-wolken", "⛅", "Wolken", "Облака", "Wolkentag auf der Insel"],
@@ -31,6 +34,8 @@
       ["f-ostern", "🐣", "Ostern", "Пасха", "Rund um Ostern"], ["f-schule", "🎒", "Schulanfang", "1 сентября", "Ende August bis 3. September"]] }
   ];
   const ALLE = {}; SEITEN.forEach(s => s.sticker.forEach(([id, e, name, ru, tipp]) => { ALLE[id] = { id, e, name, ru, tipp, seite: s.id }; }));
+  ALLE.drache.tier = "drache"; ALLE.katze.tier = "katze";   // im Album als Zeichnung aus Mein Tier (Tiere.zeichneTier)
+  const BEGLEITER = ["eule", "fipsi", "robo", "biber", "baer", "papagei", "tilda"];
   const LERN_POOL = SEITEN.filter(s => s.woher === "lernen").flatMap(s => s.sticker.map(x => x[0]));
   const PRO_STICKER = 6, MAX_TAG = 3;
   // Bewegliche Feste (Masleniza-Woche und Ostern West/Ost) – Tabelle, bei Bedarf erweitern
@@ -97,5 +102,5 @@
   function gesehen() { const d = daten(); d.neu = []; speichere(d); }
   function stand() { const d = daten(); return { hat: Object.keys(d.hat).length, gesamt: Object.keys(ALLE).length, neu: d.neu.length }; }
   const wahl = () => Math.min(daten().wahl || 0, fehlend().length);
-  window.Sticker = { SEITEN, ALLE, daten, gib, waehle, wahl, fehlend, entdecke, feste, gesehen, stand, PRO_STICKER, MAX_TAG };
+  window.Sticker = { SEITEN, ALLE, BEGLEITER, daten, gib, waehle, wahl, fehlend, entdecke, feste, gesehen, stand, PRO_STICKER, MAX_TAG };
 })();
