@@ -36,6 +36,14 @@
   .lek.zu { background: #EEF0F5; color: #8C8FA3; box-shadow: none; }
   .lek.zu .emoji { filter: grayscale(1); opacity: .5; }
   @media (max-width: 760px) { .lektionen { grid-template-columns: 1fr 1fr; } }
+  /* Ella fragt nach (07.11.2026): fällige Nachfragen oben in der Themenliste */
+  .nachfrage-karte { max-width: 900px; margin: 14px auto; padding: 14px 16px; background: #FFF6D9; border: 3px solid var(--kontur, #3B1F63); border-radius: 22px; box-shadow: 0 5px 0 var(--kontur, #3B1F63); }
+  .nachfrage-kopf { display: flex; align-items: center; gap: 12px; }
+  .nachfrage-kopf p { margin: 0; font-weight: 600; font-size: 1.1rem; }
+  .nachfrage-eule { flex: none; width: 56px; height: 56px; }
+  .nachfrage-eule svg { width: 100%; height: 100%; }
+  .nachfrage-knoepfe { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .nachfrage-knopf { min-height: 52px; }
   .su-gruppe { max-width: 900px; }   /* Karte, Kopfzeile und „Zeig, was du kannst“: shared/style.css (30.10.2026) */
   .fach-reiter { display: flex; gap: 8px; max-width: 900px; margin: 12px auto 0; padding: 0 16px; overflow-x: auto; scrollbar-width: none; }
   .fach-reiter:empty { display: none; }
@@ -187,6 +195,7 @@
 <script src="../../shared/sprache.js"></script>
 <script src="bilder.js"></script>
 <script src="themen.js"></script>
+<script src="transfer.js"></script>
 <script src="landkreise.js"></script>
 <script src="faecher.js"></script>
 <script src="religion.js"></script>

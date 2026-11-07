@@ -2,8 +2,12 @@
 // (nie wörtlich), mit Zuordnung zu Inhalten der App. Ergänzt das Profil aus sachsen.js um `punkte` – darum NACH sachsen.js und VOR
 // shared/lehrplan.js laden.
 // Punkt: [id, Text, Klasse ("1" | "2" | "1/2" | "3" | "4"), app[], abdeckung]
-//   abdeckung: "ja" = in der App geübt · "teil" = teilweise · "nein" = fehlt noch · "aussen" = gehört nach draußen/aufs Papier
+//   abdeckung: "ja" = in der App geübt (Regel seit 07.11.2026, „Ehrlich lernen“, prüft tests/lehrplan.js: ein Punkt ist „ja“ nur mit mindestens
+//   2 echten Übungsschritten für sich – die Übungen eines Inhalts (Info-Karten und `sag` zählen nicht) werden auf alle Punkte desselben Fachs verteilt,
+//   die ihn nutzen; Mathe-Stationen und Spiele mit erzeugten Aufgaben zählen immer als genug; Sprechen auf Englisch übt die App nicht)
+//   · "teil" = teilweise · "nein" = fehlt noch · "aussen" = gehört nach draußen/aufs Papier
 //   (Zeichnen mit Lineal und Zirkel, echtes Messen, Bauen) – dafür gibt es Echte-Welt-Aufgaben, die App übt es nicht selbst.
+//   6. Feld (optional): hinweis = was fehlt (bei „teil“ Pflicht, im Elternbereich unter dem Punkt). Ein Lernbereich mit einem „teil“-Punkt wird automatisch „teil“.
 // Quellen: Mathematik 2025 (Lehrplan Grundschule Sachsen, Fassung 2025, gültig ab 1.8.2025; vom Auftraggeber als PDF bereitgestellt), Kl. 1/2, 3 und 4;
 //   Deutsch 2025 (Fachlehrplan Deutsch, gültig ab 1.8.2025, kommentierte Fassung; PDF vom Auftraggeber, 28.10.2026), Kl. 1/2, 3 und 4;
 //   Sachunterricht 2019 (Lehrplan Grundschule, gültig ab 1.8.2019; PDF vom Auftraggeber, 28.10.2026), Kl. 1/2, 3 und 4 – nur die Pflicht-Lernbereiche,
@@ -19,9 +23,9 @@
         1: [ // Me, my family and my friends
           ["sn.en3.mf.01", "Englisch als neue Sprache erleben: Klang, Rhythmus, Lieder und Reime", "3", ["englisch:en-hello", "englisch:en-numbers", "englisch:en-year", "englisch:en-party"], "ja"],
           ["sn.en3.mf.02", "Englische Wörter im Alltag entdecken (Computer, Essen, Kleidung, Spiele)", "3", ["englisch:en-everywhere"], "ja"],
-          ["sn.en3.mf.03", "Begrüßen, verabschieden, sich vorstellen", "3", ["englisch:en-hello"], "ja"],
-          ["sn.en3.mf.04", "Über sich, Familie und Freunde Auskunft geben: Name, Alter, Geschwister", "3", ["englisch:en-family", "englisch:en-numbers2"], "ja"],
-          ["sn.en3.mf.05", "Befinden ausdrücken: How are you? I'm fine.", "3", ["englisch:en-feelings", "englisch:en-hello"], "ja"],
+          ["sn.en3.mf.03", "Begrüßen, verabschieden, sich vorstellen", "3", ["englisch:en-hello"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en3.mf.04", "Über sich, Familie und Freunde Auskunft geben: Name, Alter, Geschwister", "3", ["englisch:en-family", "englisch:en-numbers2"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en3.mf.05", "Befinden ausdrücken: How are you? I'm fine.", "3", ["englisch:en-feelings", "englisch:en-hello"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
           ["sn.en3.mf.06", "Zahlen von 0 bis 12", "3", ["englisch:en-numbers", "englisch:en-numbers2"], "ja"],
           ["sn.en3.mf.07", "Beim Hören helfen Tonfall, Bilder und Töne", "3", ["englisch:en-hello", "englisch:en-animals"], "ja"]
         ],
@@ -30,12 +34,12 @@
           ["sn.en3.bc.02", "Kleidungsstücke benennen", "3", ["englisch:en-clothes"], "ja"],
           ["sn.en3.bc.03", "Wetter: It's rainy. It's sunny.", "3", ["englisch:en-weather"], "ja"],
           ["sn.en3.bc.04", "Grund- und Mischfarben", "3", ["englisch:en-colours"], "ja"],
-          ["sn.en3.bc.05", "Lieblingsfarbe und -kleidung nennen, Besitz ausdrücken (Is this your jacket?)", "3", ["englisch:en-colours", "englisch:en-clothes"], "ja"]
+          ["sn.en3.bc.05", "Lieblingsfarbe und -kleidung nennen, Besitz ausdrücken (Is this your jacket?)", "3", ["englisch:en-colours", "englisch:en-clothes"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         3: [ // At home
-          ["sn.en3.ah.01", "Zimmer benennen", "3", ["englisch:en-home"], "ja"],
+          ["sn.en3.ah.01", "Zimmer benennen", "3", ["englisch:en-home"], "teil", "Zu wenig Übung: „At home – Zuhause“ hat 9 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.en3.ah.02", "Einrichtungs- und Gebrauchsgegenstände", "3", ["englisch:en-furniture", "englisch:en-home"], "ja"],
-          ["sn.en3.ah.03", "Sagen, wo jemand oder etwas ist", "3", ["englisch:en-home", "englisch:en-furniture"], "ja"],
+          ["sn.en3.ah.03", "Sagen, wo jemand oder etwas ist", "3", ["englisch:en-home", "englisch:en-furniture"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
           ["sn.en3.ah.04", "Wohnen in englischsprachigen Ländern (Kamin, bunte Haustüren)", "3", ["englisch:en-furniture"], "ja"]
         ],
         4: [ // Food and drink
@@ -47,31 +51,31 @@
         5: [ // Let's go shopping
           ["sn.en3.sh.01", "Kleidung, Lebensmittel und Spielsachen im Laden", "3", ["englisch:en-shopping", "englisch:en-clothes"], "ja"],
           ["sn.en3.sh.02", "Mengen und Preise, britisches Geld (penny, pound)", "3", ["englisch:en-shopping"], "ja"],
-          ["sn.en3.sh.03", "Einkaufsgespräch: bitten, wünschen, Preis erfragen, bedauern", "3", ["englisch:en-shopping"], "ja"]
+          ["sn.en3.sh.03", "Einkaufsgespräch: bitten, wünschen, Preis erfragen, bedauern", "3", ["englisch:en-shopping"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         6: [ // At school
-          ["sn.en3.sc.01", "Schulalltag in englischsprachigen Ländern (Schuluniform)", "3", ["englisch:en-subjects"], "ja"],
+          ["sn.en3.sc.01", "Schulalltag in englischsprachigen Ländern (Schuluniform)", "3", ["englisch:en-subjects"], "teil", "Zu wenig Übung: „At school – Fächer, Tage, Uhrzeit“ hat 12 Aufgaben für 7 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.en3.sc.02", "Schulsachen, Fächer, Wochentage, volle Stunden", "3", ["englisch:en-school", "englisch:en-subjects"], "ja"],
-          ["sn.en3.sc.03", "Nach Schulsachen fragen, Besitz ausdrücken (Have you got a pen? This is my pencil.)", "3", ["englisch:en-school"], "ja"]
+          ["sn.en3.sc.03", "Nach Schulsachen fragen, Besitz ausdrücken (Have you got a pen? This is my pencil.)", "3", ["englisch:en-school"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         7: [ // My hobbies
           ["sn.en3.ho.01", "Sportarten, Spiele, Musik, Malen und Basteln", "3", ["englisch:en-hobbies", "englisch:en-sports"], "ja"],
-          ["sn.en3.ho.02", "Vorlieben ausdrücken: Do you like …?", "3", ["englisch:en-hobbies", "englisch:en-sports"], "ja"]
+          ["sn.en3.ho.02", "Vorlieben ausdrücken: Do you like …?", "3", ["englisch:en-hobbies", "englisch:en-sports"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         8: [ // Animals
           ["sn.en3.an.01", "Haustiere und Tiere auf dem Bauernhof", "3", ["englisch:en-animals"], "ja"],
-          ["sn.en3.an.02", "Tiere beschreiben: It's brown. It has got four legs. It can …", "3", ["englisch:en-zoo", "englisch:en-animals"], "ja"],
+          ["sn.en3.an.02", "Tiere beschreiben: It's brown. It has got four legs. It can …", "3", ["englisch:en-zoo", "englisch:en-animals"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
           ["sn.en3.an.03", "Lieblingstiere, Besitz und Wünsche (What would you like for your birthday?)", "3", ["englisch:en-animals", "englisch:en-party"], "ja"]
         ],
         9: [ // Let's go on a trip
           ["sn.en3.tr.01", "Ausflugsziele und Verkehrsmittel", "3", ["englisch:en-trip"], "ja"],
           ["sn.en3.tr.02", "Sehenswürdigkeiten", "3", ["englisch:en-london"], "ja"],
-          ["sn.en3.tr.03", "Fahrkarte kaufen, nach dem Weg fragen", "3", ["englisch:en-trip"], "ja"]
+          ["sn.en3.tr.03", "Fahrkarte kaufen, nach dem Weg fragen", "3", ["englisch:en-trip"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         10: [ // Around the year
           ["sn.en3.yr.01", "Feste: Easter, Halloween, Christmas, New Year, Birthday", "3", ["englisch:en-year", "englisch:en-party"], "ja"],
           ["sn.en3.yr.02", "Monate und Jahreszeiten", "3", ["englisch:en-year"], "ja"],
-          ["sn.en3.yr.03", "Gratulieren mündlich und schriftlich, Grußkarten", "3", ["englisch:en-party"], "ja"],
+          ["sn.en3.yr.03", "Gratulieren mündlich und schriftlich, Grußkarten", "3", ["englisch:en-party"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
           ["sn.en3.yr.04", "Lieder, Reime und szenisches Spiel zu den Festen", "3", ["englisch:en-act", "englisch:en-party", "englisch:en-year"], "ja"]
         ],
         11: [ // My Portfolio
@@ -82,32 +86,32 @@
       "4": {
         1: [
           ["sn.en4.mf.01", "Englisch im Alltag: wozu man es braucht (Handy, Computer)", "4", ["englisch:en-everywhere"], "ja"],
-          ["sn.en4.mf.02", "Mimik und Gestik beim Sprechen einsetzen", "4", ["englisch:en-faces", "englisch:en-feelings", "englisch:en-act"], "ja"],
-          ["sn.en4.mf.03", "Sich und andere vorstellen, Herkunft, Interviews", "4", ["englisch:en-portfolio", "englisch:en-family", "englisch:en-hello"], "ja"],
-          ["sn.en4.mf.04", "Befinden und Gefühle ausdrücken", "4", ["englisch:en-feelings"], "ja"]
+          ["sn.en4.mf.02", "Mimik und Gestik beim Sprechen einsetzen", "4", ["englisch:en-faces", "englisch:en-feelings", "englisch:en-act"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en4.mf.03", "Sich und andere vorstellen, Herkunft, Interviews", "4", ["englisch:en-portfolio", "englisch:en-family", "englisch:en-hello"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en4.mf.04", "Befinden und Gefühle ausdrücken", "4", ["englisch:en-feelings"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         2: [
           ["sn.en4.bc.01", "Körper, Kleidung, Farbnuancen (light green, dark blue), Wetter (foggy, snowy)", "4", ["englisch:en-colours", "englisch:en-weather", "englisch:en-body"], "ja"],
-          ["sn.en4.bc.02", "Passende Kleidung zum Wetter wählen, Lieblingskleidung erfragen", "4", ["englisch:en-weather", "englisch:en-clothes"], "ja"]
+          ["sn.en4.bc.02", "Passende Kleidung zum Wetter wählen, Lieblingskleidung erfragen", "4", ["englisch:en-weather", "englisch:en-clothes"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         3: [
           ["sn.en4.ah.01", "Zimmer, Möbel und Gebrauchsgegenstände", "4", ["englisch:en-home", "englisch:en-furniture"], "ja"],
-          ["sn.en4.ah.02", "Lage beschreiben: in, on, under, next to", "4", ["englisch:en-furniture", "englisch:en-home"], "ja"]
+          ["sn.en4.ah.02", "Lage beschreiben: in, on, under, next to", "4", ["englisch:en-furniture", "englisch:en-home"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         4: [
-          ["sn.en4.fd.01", "Im Café oder Restaurant bestellen, Preise erfragen, höflich sein", "4", ["englisch:en-cafe"], "ja"],
+          ["sn.en4.fd.01", "Im Café oder Restaurant bestellen, Preise erfragen, höflich sein", "4", ["englisch:en-cafe"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
           ["sn.en4.fd.02", "Typische Speisen und Getränke englischsprachiger Länder", "4", ["englisch:en-cafe", "englisch:en-dates"], "ja"],
           ["sn.en4.fd.03", "Gesunde Ernährung", "4", ["englisch:en-cafe", "englisch:en-food"], "ja"],
           ["sn.en4.fd.04", "Rezeptbuch oder Speisekarte gestalten", "4", ["echtewelt:speisekarte"], "aussen"]
         ],
         5: [
           ["sn.en4.sh.01", "Kleidung, Spielsachen, Preise bis 100", "4", ["englisch:en-shopping", "englisch:en-numbers2"], "ja"],
-          ["sn.en4.sh.02", "Verkaufsgespräch beginnen und beenden, Wunschliste", "4", ["englisch:en-shopping"], "ja"]
+          ["sn.en4.sh.02", "Verkaufsgespräch beginnen und beenden, Wunschliste", "4", ["englisch:en-shopping"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         6: [
-          ["sn.en4.sc.01", "Tagesabschnitte, Schulfächer, Wochentage", "4", ["englisch:en-subjects"], "ja"],
-          ["sn.en4.sc.02", "Uhrzeit erfragen und angeben (It's nine thirty.)", "4", ["englisch:en-subjects"], "ja"],
-          ["sn.en4.sc.03", "Deutsche und britische Schulen vergleichen", "4", ["englisch:en-subjects"], "ja"],
+          ["sn.en4.sc.01", "Tagesabschnitte, Schulfächer, Wochentage", "4", ["englisch:en-subjects"], "teil", "Zu wenig Übung: „At school – Fächer, Tage, Uhrzeit“ hat 12 Aufgaben für 7 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.en4.sc.02", "Uhrzeit erfragen und angeben (It's nine thirty.)", "4", ["englisch:en-subjects"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
+          ["sn.en4.sc.03", "Deutsche und britische Schulen vergleichen", "4", ["englisch:en-subjects"], "teil", "Zu wenig Übung: „At school – Fächer, Tage, Uhrzeit“ hat 12 Aufgaben für 7 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.en4.sc.04", "Hilfe anbieten und suchen, sich entschuldigen (Sorry, I'm late.)", "4", ["englisch:en-subjects", "englisch:en-school"], "ja"]
         ],
         7: [
@@ -117,13 +121,13 @@
         ],
         8: [
           ["sn.en4.an.01", "Zoo- und Wildtiere, Lebensräume, bedrohte Tiere", "4", ["englisch:en-zoo"], "ja"],
-          ["sn.en4.an.02", "Tiere beschreiben, Ratespiele mit Steckbriefen", "4", ["englisch:en-zoo"], "ja"],
+          ["sn.en4.an.02", "Tiere beschreiben, Ratespiele mit Steckbriefen", "4", ["englisch:en-zoo"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."],
           ["sn.en4.an.03", "Einen englischen Text über Tiere verstehen (Schlüsselwörter)", "4", ["englisch:en-hedgehog", "englisch:en-zoo"], "ja"]
         ],
         9: [
           ["sn.en4.tr.01", "Ausflugsziele und Verkehrsmittel", "4", ["englisch:en-trip"], "ja"],
           ["sn.en4.tr.02", "Sehenswürdigkeiten in London", "4", ["englisch:en-london"], "ja"],
-          ["sn.en4.tr.03", "Fahrkarte kaufen, Preisauskunft", "4", ["englisch:en-trip"], "ja"]
+          ["sn.en4.tr.03", "Fahrkarte kaufen, Preisauskunft", "4", ["englisch:en-trip"], "teil", "Sprechen fehlt: Die App übt Verstehen und das Auswählen passender Sätze – selbst sprechen (fragen, Auskunft geben) übt das Kind im Gespräch mit Eltern oder in der Klasse."]
         ],
         10: [
           ["sn.en4.yr.01", "Weitere Feste: Valentine's Day, Pancake Day, Mother's Day, Thanksgiving, St Patrick's Day", "4", ["englisch:en-dates"], "ja"],
@@ -146,10 +150,10 @@
           ["sn.su12.zl.04", "Unter Anleitung in Büchern und digitalen Medien Informationen suchen", "2", ["sachkunde:medien-info", "medien:bedienung"], "ja"]
         ],
         2: [ // Mein Körper und meine Gesundheit
-          ["sn.su12.kg.01", "Körperhygiene und Zahnpflege, Ansteckung vermeiden, Abhärtung", "1/2", ["sachkunde:gesundheit"], "ja"],
+          ["sn.su12.kg.01", "Körperhygiene und Zahnpflege, Ansteckung vermeiden, Abhärtung", "1/2", ["sachkunde:gesundheit"], "teil", "Zu wenig Übung: „Gesund und munter“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.su12.kg.02", "Passende Kleidung, gute Sitzhaltung, genug Bewegung", "1/2", ["sachkunde:gesund-essen", "sachkunde:wetter"], "ja"],
           ["sn.su12.kg.03", "Gesunde Ernährung: Grundnahrungsmittel, genug trinken, Kräuter, Werbung kritisch sehen", "1/2", ["sachkunde:gesund-essen", "sachkunde:gesundheit"], "ja"],
-          ["sn.su12.kg.04", "Ernährung, Bewegung, Ruhe und Schlaf hängen zusammen", "1/2", ["sachkunde:gesund-essen"], "ja"],
+          ["sn.su12.kg.04", "Ernährung, Bewegung, Ruhe und Schlaf hängen zusammen", "1/2", ["sachkunde:gesund-essen"], "teil", "Zu wenig Übung: „Essen, trinken, bewegen“ hat 6 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.su12.kg.05", "Ein gesundes Frühstück; Obst und Gemüse von nah und fern, fairer Handel", "1/2", ["sachkunde:gesund-essen", "sachkunde:gesundheit"], "ja"],
           ["sn.su12.kg.06", "Körperteile von Jungen und Mädchen mit den richtigen Namen kennen, Intimsphäre", "1/2", ["sachkunde:mein-koerper"], "ja"],
           ["sn.su12.kg.07", "Schutz vor Missbrauch: Nein sagen, gute und schlechte Geheimnisse, Hilfe holen (Nummer gegen Kummer)", "1/2", ["sachkunde:mein-koerper"], "ja"],
@@ -184,7 +188,7 @@
           ["sn.su12.un.12", "Selbst experimentieren: Vermutung, Versuch, Beobachtung festhalten", "2", ["sachkunde:experiment", "echtewelt:versuch"], "aussen"]
         ],
         5: [ // Begegnung mit Raum und Zeit
-          ["sn.su12.rz.01", "Sich im Schulhaus und Gelände orientieren, Fluchtweg und Brandschutz", "1", ["sachkunde:schule-ort"], "ja"],
+          ["sn.su12.rz.01", "Sich im Schulhaus und Gelände orientieren, Fluchtweg und Brandschutz", "1", ["sachkunde:schule-ort"], "teil", "Zu wenig Übung: „Schule und Heimatort“ hat 6 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.su12.rz.02", "Zeit: Tagesablauf, gestern und vorgestern, Uhr, Kalender, Woche und Jahr", "1/2", ["mathe:uhr", "mathe:kalender", "mathe:k1zeit", "sachkunde:jahreszeiten"], "ja"],
           ["sn.su12.rz.03", "Öffentliche Einrichtungen im Wohnort, Wegskizze, Ortsplan mit Legende", "2", ["sachkunde:schule-ort", "sachkunde:gemeinde", "echtewelt:wegskizze"], "ja"],
           ["sn.su12.rz.04", "Feste und Höhepunkte im Jahreskreis", "1/2", ["sachkunde:jahreszeiten", "sachkunde:geschenkebringer"], "ja"],
@@ -213,7 +217,7 @@
         ],
         3: [
           ["sn.su3.pt.01", "Drei Getreidearten unterscheiden; Ähre, Rispe, Kolben", "3", ["sachkunde:getreide", "sachkunde:brot"], "ja"],
-          ["sn.su3.pt.02", "Vom Korn zum Brot", "3", ["sachkunde:brot"], "ja"],
+          ["sn.su3.pt.02", "Vom Korn zum Brot", "3", ["sachkunde:brot"], "teil", "Zu wenig Übung: „Vom Korn zum Brot“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.su3.pt.03", "Die Kartoffel: Anbau, Knollen, giftige Beeren, Kartoffelkäfer", "3", ["sachkunde:getreide", "sachkunde:brot"], "ja"],
           ["sn.su3.pt.04", "Lebensmittel wertschätzen, Hunger in der Welt", "3", ["sachkunde:getreide"], "ja"],
           ["sn.su3.pt.05", "Lebensraum Wiese: Stockwerke, Kleintiere und ihre Entwicklung", "3", ["sachkunde:wiese", "sachkunde:wald"], "ja"],
@@ -288,12 +292,12 @@
           ["sn.de12.sz.03", "Von der Alltagssprache zur Bildungssprache: passende, genaue Wörter wählen", "2", ["werkstatt:w-sprachen", "werkstatt:w-sprechen"], "ja"],
           ["sn.de12.sz.04", "Digitale Werkzeuge erproben: die eigene Stimme aufnehmen und anhören (mit Eltern-Erlaubnis)", "1/2", ["werkstatt:w-reime", "werkstatt:w-erzaehlen", "werkstatt:w-auswendig"], "ja"],
           ["sn.de12.sz.05", "Beim Sprechen: Körperhaltung, Tempo, Lautstärke, Betonung; Gedichtvortrag und szenisches Spiel", "1/2", ["werkstatt:w-sprechen", "werkstatt:w-gedicht-vortragen"], "ja"],
-          ["sn.de12.sz.06", "Sprachvarietäten kennen: Dialekt, Erst- und Zweitsprache, Alltags- und Bildungssprache", "2", ["werkstatt:w-sprachen"], "ja"],
+          ["sn.de12.sz.06", "Sprachvarietäten kennen: Dialekt, Erst- und Zweitsprache, Alltags- und Bildungssprache", "2", ["werkstatt:w-sprachen"], "teil", "Zu wenig Übung: „Viele Sprachen, viele Wörter“ hat 7 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de12.sz.07", "Wertschätzend sprechen: grüßen, bitten, entschuldigen, danken, gratulieren, einladen, loben", "1/2", ["werkstatt:w-gespraech", "deutsch:baeckerei"], "ja"],
           ["sn.de12.sz.08", "Gemeinsame Gesprächsregeln: zuhören, melden, deutlich sprechen, Blickkontakt, ausreden lassen", "1/2", ["werkstatt:w-gespraech"], "ja"],
           ["sn.de12.sz.09", "Konflikte mit Worten lösen, andere Meinungen akzeptieren", "1/2", ["werkstatt:w-gespraech"], "ja"],
           ["sn.de12.sz.10", "Reime, Gedichte, Märchen und Witze auswendig oder vorlesend vortragen", "1/2", ["werkstatt:w-reime", "werkstatt:w-auswendig", "werkstatt:w-gedicht-vortragen"], "ja"],
-          ["sn.de12.sz.11", "Techniken des Auswendiglernens: wiederholen, Bilder als Gedächtnisstütze, mit mehreren Sinnen", "2", ["werkstatt:w-auswendig"], "ja"],
+          ["sn.de12.sz.11", "Techniken des Auswendiglernens: wiederholen, Bilder als Gedächtnisstütze, mit mehreren Sinnen", "2", ["werkstatt:w-auswendig"], "teil", "Zu wenig Übung: „Auswendig lernen“ hat 6 Aufgaben für 6 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de12.sz.12", "Zuhören vorbereiten: Hörerwartung, Vorwissen, gute Hörbedingungen, Lauschübungen", "1/2", ["werkstatt:w-zuhoeren", "deutsch:hof"], "ja"],
           ["sn.de12.sz.13", "Hörtexte verstehen (Durchsagen, Hörgeschichten): Kernaussage, Details, Tonfall", "1/2", ["werkstatt:w-zuhoeren", "werkstatt:w-maerchen"], "ja"],
           ["sn.de12.sz.14", "Nach dem Zuhören: nachfragen, einfache Schlussfolgerungen, Fragen beantworten", "1/2", ["werkstatt:w-zuhoeren"], "ja"]
@@ -309,7 +313,7 @@
           ["sn.de12.sc.08", "Wortbildung beim Schreiben: zusammengesetzte Nomen, vorangestellte Wortbausteine", "2", ["werkstatt:w-wortbau", "werkstatt:w-vornach"], "ja"],
           ["sn.de12.sc.09", "Großschreibung: Nomen, Namen, Satzanfänge, Überschriften, auch mit Wiewort davor", "1/2", ["werkstatt:w-begleiter", "werkstatt:w-wortarten", "werkstatt:w-ueberarbeiten"], "ja"],
           ["sn.de12.sc.10", "Satzschlusszeichen: Punkt, Fragezeichen, Ausrufezeichen", "1/2", ["werkstatt:w-satzarten", "werkstatt:w-satzzeichen"], "ja"],
-          ["sn.de12.sc.11", "Rechtschreibstrategien und Arbeitstechniken: kontrollieren, abschreiben, berichtigen", "2", ["werkstatt:w-detektiv"], "ja"],
+          ["sn.de12.sc.11", "Rechtschreibstrategien und Arbeitstechniken: kontrollieren, abschreiben, berichtigen", "2", ["werkstatt:w-detektiv"], "teil", "Zu wenig Übung: „Rechtschreib-Detektiv“ hat 8 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de12.sc.12", "Häufige Wörter und Funktionswörter sicher schreiben", "1/2", ["werkstatt:w-merkwoerter", "lesen:legen"], "ja"],
           ["sn.de12.sc.13", "Merkwörter, die keiner Regel folgen (Vogel, vier, Vater)", "2", ["werkstatt:w-merkwoerter"], "ja"],
           ["sn.de12.sc.14", "Das Alphabet als Ordnung; im Wörterbuch nach dem Anfangsbuchstaben suchen", "2", ["werkstatt:w-laute", "werkstatt:w-woerterbuch"], "ja"],
@@ -336,8 +340,8 @@
         4: [ // Sich mit Texten und anderen Medien auseinandersetzen
           ["sn.de12.tm.01", "Gedichte, Bilderbücher, Erstlesebücher und Märchen kennenlernen", "1/2", ["werkstatt:w-maerchen", "werkstatt:w-reime", "deutsch:schloss"], "ja"],
           ["sn.de12.tm.02", "Sach- und Gebrauchstexte: informieren, anleiten, regeln", "2", ["werkstatt:w-sachtexte"], "ja"],
-          ["sn.de12.tm.03", "Hörspiele, Hörbücher, Podcasts und Erklärvideos kennen", "2", ["werkstatt:w-medien"], "ja"],
-          ["sn.de12.tm.04", "Bücher nach Interesse auswählen, über Lieblingsbücher sprechen", "2", ["werkstatt:w-medien"], "ja"],
+          ["sn.de12.tm.03", "Hörspiele, Hörbücher, Podcasts und Erklärvideos kennen", "2", ["werkstatt:w-medien"], "teil", "Zu wenig Übung: „Bücher, Hörbücher, Bibliothek“ hat 7 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.de12.tm.04", "Bücher nach Interesse auswählen, über Lieblingsbücher sprechen", "2", ["werkstatt:w-medien"], "teil", "Zu wenig Übung: „Bücher, Hörbücher, Bibliothek“ hat 7 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de12.tm.05", "Die Bibliothek als Bezugsquelle nutzen", "2", ["werkstatt:w-medien", "echtewelt:bibliothek"], "aussen"],
           ["sn.de12.tm.06", "Vorlesen erleben, über Texte sprechen, Figuren verstehen", "1/2", ["werkstatt:w-maerchen", "deutsch:wald"], "ja"],
           ["sn.de12.tm.07", "Text, Bilder und Grafiken in Sachtexten verbinden", "2", ["werkstatt:w-sachtexte"], "ja"],
@@ -349,16 +353,16 @@
         ],
         5: [ // Sprache und Sprachgebrauch untersuchen
           ["sn.de12.su.01", "Wirkung von Bitten und Aufforderungen; Wortbedeutungen klären, Mehrdeutigkeit entdecken", "2", ["werkstatt:w-teekessel"], "ja"],
-          ["sn.de12.su.02", "Mündlich und schriftlich vergleichen: Gespräch und Brief, Mimik und Satzzeichen", "2", ["werkstatt:w-sprachen"], "ja"],
-          ["sn.de12.su.03", "Sprachliche Vielfalt: Dialekt, Hochdeutsch, Alltagssprache, Mehrsprachigkeit", "2", ["werkstatt:w-sprachen"], "ja"],
+          ["sn.de12.su.02", "Mündlich und schriftlich vergleichen: Gespräch und Brief, Mimik und Satzzeichen", "2", ["werkstatt:w-sprachen"], "teil", "Zu wenig Übung: „Viele Sprachen, viele Wörter“ hat 7 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.de12.su.03", "Sprachliche Vielfalt: Dialekt, Hochdeutsch, Alltagssprache, Mehrsprachigkeit", "2", ["werkstatt:w-sprachen"], "teil", "Zu wenig Übung: „Viele Sprachen, viele Wörter“ hat 7 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de12.su.04", "Verb: Tätigkeit, Grundform und Personalform, Zentrum des Satzes", "1/2", ["werkstatt:w-verben", "werkstatt:w-verbformen"], "ja"],
           ["sn.de12.su.05", "Nomen: Menschen, Tiere, Pflanzen, Dinge; mit Artikel, Einzahl und Mehrzahl", "1/2", ["werkstatt:w-wortarten", "deutsch:hof"], "ja"],
           ["sn.de12.su.06", "Artikel: bestimmt und unbestimmt, Begleiter des Nomens", "2", ["werkstatt:w-begleiter", "deutsch:hof"], "ja"],
           ["sn.de12.su.07", "Adjektiv: Eigenschaften, steht zwischen Artikel und Nomen", "2", ["werkstatt:w-adjektive", "werkstatt:w-begleiter"], "ja"],
           ["sn.de12.su.08", "Wortbildung: zusammengesetzte Nomen, Wortstamm und vorangestellte Wortbausteine", "2", ["werkstatt:w-wortbau", "werkstatt:w-vornach"], "ja"],
-          ["sn.de12.su.09", "Wortschatz erweitern: Wortfamilien und Wortfelder", "2", ["werkstatt:w-wortbau"], "ja"],
+          ["sn.de12.su.09", "Wortschatz erweitern: Wortfamilien und Wortfelder", "2", ["werkstatt:w-wortbau"], "teil", "Zu wenig Übung: „Wörter bauen: Familien und Felder“ hat 9 Aufgaben für 7 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de12.su.10", "Satzarten: Aussage-, Frage-, Aufforderungs- und Ausrufesatz; Klangprobe", "2", ["werkstatt:w-satzarten"], "ja"],
-          ["sn.de12.su.11", "Wortgruppen und Treppensätze (Erweiterungsprobe)", "2", ["werkstatt:w-begleiter"], "ja"],
+          ["sn.de12.su.11", "Wortgruppen und Treppensätze (Erweiterungsprobe)", "2", ["werkstatt:w-begleiter"], "teil", "Zu wenig Übung: „Der, ein und Treppensätze“ hat 7 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de12.su.12", "Fachbegriffe: Verb, Nomen, Artikel, Adjektiv, Einzahl, Mehrzahl, Grundform, Personalform, Satzarten", "2", ["werkstatt:w-verbformen", "werkstatt:w-satzarten", "werkstatt:w-wortarten"], "ja"]
         ]
       },
@@ -410,20 +414,20 @@
           ["sn.de3.tm.01", "Literarische Texte: Witze, Erzählungen, Kinderromane, Fabeln, fantastische Geschichten, Krimis", "3", ["werkstatt:w-fabel", "werkstatt:w-textsorten"], "ja"],
           ["sn.de3.tm.02", "Sach- und Gebrauchstexte: Lexikonartikel, Spielanleitungen, Klassenregeln", "3", ["werkstatt:w-anleitung", "werkstatt:w-textsorten"], "ja"],
           ["sn.de3.tm.03", "Gestaltungsmittel in Bild und Ton (Hörspiel, Film)", "3", ["werkstatt:w-hoerspiel"], "ja"],
-          ["sn.de3.tm.04", "Medien begründet auswählen; Bezugsquellen und Ordnung nach Themen und Autoren", "3", ["werkstatt:w-buch-finden"], "ja"],
+          ["sn.de3.tm.04", "Medien begründet auswählen; Bezugsquellen und Ordnung nach Themen und Autoren", "3", ["werkstatt:w-buch-finden"], "teil", "Zu wenig Übung: „Bücher finden und vorstellen“ hat 8 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de3.tm.05", "Lieblingsbücher vorstellen", "3", ["werkstatt:w-buch-finden", "werkstatt:w-buchtipp"], "ja"],
           ["sn.de3.tm.06", "Stellung nehmen zu Texten, Figuren und Handlung verstehen", "3", ["werkstatt:w-fabel", "werkstatt:w-maerchen"], "ja"],
           ["sn.de3.tm.07", "Informationen aus verschiedenen Medien vergleichen, Stichwortzettel", "3", ["werkstatt:w-lesen-vergleich", "werkstatt:w-vortrag"], "ja"],
           ["sn.de3.tm.08", "Kindersuchmaschinen und Suchstrategien, Chancen und Risiken", "3", ["werkstatt:w-medien4", "sachkunde:medien-info"], "ja"],
           ["sn.de3.tm.09", "Websites und Apps kritisch prüfen, eigenes Nutzungsverhalten bedenken", "3", ["werkstatt:w-medien4", "medien:pflege"], "ja"],
-          ["sn.de3.tm.10", "Szenisches Gestalten: Lesetheater, Aufführung", "3", ["werkstatt:w-theater"], "ja"],
+          ["sn.de3.tm.10", "Szenisches Gestalten: Lesetheater, Aufführung", "3", ["werkstatt:w-theater"], "teil", "Zu wenig Übung: „Lesetheater und Rollen“ hat 6 Aufgaben für 8 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de3.tm.11", "Fachbegriffe: Handlung, Figur, Erzähler, Sprecher, Illustration, Kapitel, Inhaltsverzeichnis", "3", ["werkstatt:w-buch-finden", "werkstatt:w-hoerspiel"], "ja"]
         ],
         5: [
           ["sn.de3.su.01", "Gesagtes und Gemeintes, Lügen, Witze mit sprachlicher Pointe", "3", ["werkstatt:w-gemeint", "werkstatt:w-fabel"], "ja"],
           ["sn.de3.su.02", "Sprichwörter, Redensarten, Namen und besondere Wörter erforschen", "3", ["werkstatt:w-gemeint"], "ja"],
           ["sn.de3.su.03", "Telefonat und digitale Kommunikation: Kurz- und Sprachnachricht, Chat, Emojis – kritisch", "3", ["werkstatt:w-email", "medien:fremde"], "ja"],
-          ["sn.de3.su.04", "Sprachliche Vielfalt: Dialekt, Gebärdensprache, Umgangssprache, Herkunfts- und Fremdsprachen", "3", ["werkstatt:w-sprachvielfalt"], "ja"],
+          ["sn.de3.su.04", "Sprachliche Vielfalt: Dialekt, Gebärdensprache, Umgangssprache, Herkunfts- und Fremdsprachen", "3", ["werkstatt:w-sprachvielfalt"], "teil", "Zu wenig Übung: „Dialekt, Gebärden, Anglizismen“ hat 9 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de3.su.05", "Verb: Präsens und Präteritum; Prädikat, ein- und zweiteilig", "3", ["werkstatt:w-praeteritum", "werkstatt:w-proben"], "ja"],
           ["sn.de3.su.06", "Nomen für Gefühle und Nichtgegenständliches", "3", ["werkstatt:w-tagebuch", "werkstatt:w-nomen-erkennen"], "ja"],
           ["sn.de3.su.07", "Weitere Artikelwörter: mein, dieses", "3", ["werkstatt:w-nomen-erkennen"], "ja"],
@@ -432,7 +436,7 @@
           ["sn.de3.su.10", "Wörter für Zeitstufen: heute, gestern, damals, gerade", "3", ["werkstatt:w-praeteritum"], "ja"],
           ["sn.de3.su.11", "Wortstamm, Oberbegriffe, Assoziationen, Teekesselwörter", "3", ["werkstatt:w-ableiten", "werkstatt:w-nomen-erkennen", "werkstatt:w-teekessel"], "ja"],
           ["sn.de3.su.12", "Satzglieder: Subjekt und Prädikat", "3", ["werkstatt:w-satzglieder"], "ja"],
-          ["sn.de3.su.13", "Wörtliche Rede mit vorangestelltem Begleitsatz", "3", ["werkstatt:w-rede"], "ja"],
+          ["sn.de3.su.13", "Wörtliche Rede mit vorangestelltem Begleitsatz", "3", ["werkstatt:w-rede"], "teil", "Zu wenig Übung: „Wörtliche Rede“ hat 5 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de3.su.14", "Ersatz-, Umstell- und Weglassprobe", "3", ["werkstatt:w-proben"], "ja"],
           ["sn.de3.su.15", "Fachbegriffe: Präsens, Präteritum, Subjekt, Prädikat, Pronomen, Steigerungsstufen, Satzglied, Begleitsatz", "3", ["werkstatt:w-proben", "werkstatt:w-satzglieder", "werkstatt:w-steigerung"], "ja"]
         ]
@@ -442,10 +446,10 @@
           ["sn.de4.sz.01", "Appellieren und argumentieren, verständlich und nachvollziehbar", "4", ["werkstatt:w-ueberzeugen", "werkstatt:w-meinung"], "ja"],
           ["sn.de4.sz.02", "Bildungs- und Fachsprache, umfangreicher Wortschatz", "4", ["werkstatt:w-fachbegriffe", "werkstatt:w-sprachvielfalt"], "ja"],
           ["sn.de4.sz.03", "Rückmeldungen zu Redebeiträgen geben (Reflexionsgespräch)", "4", ["werkstatt:w-rueckmeldung"], "ja"],
-          ["sn.de4.sz.04", "Dialoge und Regieanweisungen gestalten", "4", ["werkstatt:w-theater"], "ja"],
+          ["sn.de4.sz.04", "Dialoge und Regieanweisungen gestalten", "4", ["werkstatt:w-theater"], "teil", "Zu wenig Übung: „Lesetheater und Rollen“ hat 6 Aufgaben für 8 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de4.sz.05", "Gesprächsformen: Interview, Diskussion, Streitschlichtung", "4", ["werkstatt:w-interview", "werkstatt:w-pro-kontra"], "ja"],
           ["sn.de4.sz.06", "Diskriminierende Sprache erkennen, digitale Gesprächsregeln, andere Meinungen akzeptieren", "4", ["werkstatt:w-fair"], "ja"],
-          ["sn.de4.sz.07", "Präsentieren mit Plakat, Tafel oder digital; Inhalte auswählen und ordnen", "4", ["werkstatt:w-vortrag"], "ja"],
+          ["sn.de4.sz.07", "Präsentieren mit Plakat, Tafel oder digital; Inhalte auswählen und ordnen", "4", ["werkstatt:w-vortrag"], "teil", "Zu wenig Übung: „Einen Vortrag vorbereiten“ hat 6 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de4.sz.08", "Gestaltend vortragen: szenische Lesung, Improvisation, Hörspiel", "4", ["werkstatt:w-theater", "werkstatt:w-hoerspiel"], "ja"],
           ["sn.de4.sz.09", "Verstehend zuhören: Aufmerksamkeit fokussieren, Aussage, Absicht und Aufbau erfassen, beurteilen, eigene Fragen", "4", ["werkstatt:w-zuhoeren-profi", "werkstatt:w-interview"], "ja"]
         ],
@@ -464,28 +468,28 @@
         3: [
           ["sn.de4.le.01", "Selbstbestimmt lesen; Laut- und Vielleseverfahren", "4", ["vorlesen:laut", "vorlesen:pass", "werkstatt:w-lautlesen"], "ja"],
           ["sn.de4.le.02", "Vor dem Lesen: Erwartungen formulieren, Textsorte klären", "4", ["werkstatt:w-lesen4", "werkstatt:w-lesestrategien"], "ja"],
-          ["sn.de4.le.03", "Beim Lesen: Wichtiges markieren, Bild und Ton in digitalen Texten, Hyperlinks", "4", ["werkstatt:w-lesen4"], "ja"],
+          ["sn.de4.le.03", "Beim Lesen: Wichtiges markieren, Bild und Ton in digitalen Texten, Hyperlinks", "4", ["werkstatt:w-lesen4"], "teil", "Zu wenig Übung: „Lesen: Bienen in der Stadt“ hat 7 Aufgaben für 6 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de4.le.04", "Textverstehen prüfen, Sinnabschnitte erfassen", "4", ["werkstatt:w-lesen4", "werkstatt:w-lesen-vergleich"], "ja"],
-          ["sn.de4.le.05", "Nach dem Lesen: zentrale Aussagen wiedergeben, kurz zusammenfassen, eigene Fragen stellen", "4", ["werkstatt:w-lesen4"], "ja"],
+          ["sn.de4.le.05", "Nach dem Lesen: zentrale Aussagen wiedergeben, kurz zusammenfassen, eigene Fragen stellen", "4", ["werkstatt:w-lesen4"], "teil", "Zu wenig Übung: „Lesen: Bienen in der Stadt“ hat 7 Aufgaben für 6 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de4.le.06", "Sprachliche Mittel bewerten, wertende Einschätzungen abgeben", "4", ["werkstatt:w-sage-comic", "werkstatt:w-buchtipp"], "ja"]
         ],
         4: [
           ["sn.de4.tm.01", "Literarische Texte: Comic, Sage, Schwank", "4", ["werkstatt:w-sage-comic"], "ja"],
           ["sn.de4.tm.02", "Sach- und Gebrauchstexte in verschiedenen Medien", "4", ["werkstatt:w-lesen-vergleich", "werkstatt:w-lesen4"], "ja"],
-          ["sn.de4.tm.03", "Eigene Lese- und Medienerfahrungen beschreiben (Medientagebuch)", "4", ["werkstatt:w-medien4"], "ja"],
+          ["sn.de4.tm.03", "Eigene Lese- und Medienerfahrungen beschreiben (Medientagebuch)", "4", ["werkstatt:w-medien4"], "teil", "Zu wenig Übung: „Medien prüfen und schützen“ hat 7 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de4.tm.04", "Informationen auf Glaubwürdigkeit prüfen, Fake News", "4", ["werkstatt:w-medien4", "medien:freundlich"], "ja"],
           ["sn.de4.tm.05", "Deutungen mit Textstellen belegen, Fassungen vergleichen, Bezüge zwischen Texten", "4", ["werkstatt:w-sage-comic"], "ja"],
           ["sn.de4.tm.06", "Weitere Kinderbücher kennen, themenbezogen auswählen", "4", ["werkstatt:w-buchtipp", "werkstatt:w-buch-finden"], "ja"],
           ["sn.de4.tm.07", "Digitale Werkzeuge für Präsentationen, Podcasts und Wikis nutzen", "4", ["praesentieren:folien", "praesentieren:podcast", "praesentieren:wiki", "werkstatt:w-vortrag"], "ja"],
           ["sn.de4.tm.08", "Datenschutz, Schutz der eigenen Identität, Persönlichkeits- und Urheberrechte", "4", ["werkstatt:w-medien4", "medien:daten"], "ja"],
           ["sn.de4.tm.09", "Selbstgewählte Texte vortragen, szenisch darstellen, kurze Texte auswendig", "4", ["werkstatt:w-gedicht-vortragen", "werkstatt:w-theater", "werkstatt:w-auswendig"], "ja"],
-          ["sn.de4.tm.10", "Fachbegriffe: Absatz, Dialog", "4", ["werkstatt:w-theater", "werkstatt:w-lesen4"], "ja"]
+          ["sn.de4.tm.10", "Fachbegriffe: Absatz, Dialog", "4", ["werkstatt:w-theater", "werkstatt:w-lesen4"], "teil", "Zu wenig Übung: „Lesetheater und Rollen“ hat 6 Aufgaben für 8 Inhaltspunkte, „Lesen: Bienen in der Stadt“ hat 7 Aufgaben für 6 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         5: [
           ["sn.de4.su.01", "Überzeugen: Sprache in Werbung und Politik, bildhafte Vergleiche, Übertreibungen", "4", ["werkstatt:w-ueberzeugen", "medien:werbung"], "ja"],
           ["sn.de4.su.02", "Höflichkeitsformen und Beziehungsebene beachten", "4", ["werkstatt:w-ueberzeugen", "werkstatt:w-email"], "ja"],
           ["sn.de4.su.03", "Perspektiven untersuchen, in den Rollen Sprecher und Hörer handeln", "4", ["werkstatt:w-interview", "werkstatt:w-weiterschreiben"], "ja"],
-          ["sn.de4.su.04", "Sprachliche Vielfalt: Anglizismen", "4", ["werkstatt:w-sprachvielfalt"], "ja"],
+          ["sn.de4.su.04", "Sprachliche Vielfalt: Anglizismen", "4", ["werkstatt:w-sprachvielfalt"], "teil", "Zu wenig Übung: „Dialekt, Gebärden, Anglizismen“ hat 9 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.de4.su.05", "Bekannte Wortarten sicher bestimmen", "4", ["werkstatt:w-fachbegriffe", "werkstatt:w-wortarten"], "ja"],
           ["sn.de4.su.06", "Verb: Perfekt und Futur, Hilfsverben", "4", ["werkstatt:w-perfekt"], "ja"],
           ["sn.de4.su.07", "Nomen verändern sich im Satz (Fälle)", "4", ["werkstatt:w-faelle"], "ja"],
@@ -654,79 +658,79 @@
       "1/2": {
         1: [ // Schriftspracherwerb (Přiswojenje spisowneje rěče)
           ["sn.sm12.1.01", "Bedeutung von Lesen und Schreiben, Schrift als Zeichensystem", "1/2", ["sorbisch:sm-pismiki", "sorbisch:sm-slowa"], "ja"],
-          ["sn.sm12.1.02", "Laute hören und unterscheiden, Wörter in Silben gliedern, reimen", "1/2", ["sorbisch:sm-zlozki"], "teil"],
+          ["sn.sm12.1.02", "Laute hören und unterscheiden, Wörter in Silben gliedern, reimen", "1/2", ["sorbisch:sm-zlozki"], "teil", "Hören fehlt: keine sorbische Stimme in der App; Silben und Reime nur über die Schrift."],
           ["sn.sm12.1.03", "Buchstaben und Laut-Buchstaben-Beziehungen, auch č, ć, dź, ł, š, ž", "1/2", ["sorbisch:sm-pismiki"], "ja"],
           ["sn.sm12.1.04", "Lesetechnik: Wörter, Sätze und kurze Texte lesen", "1/2", ["sorbisch:sm-slowa", "sorbisch:sm-mica"], "ja"],
-          ["sn.sm12.1.05", "Druckschrift und Schulausgangsschrift schreiben", "1/2", ["lesen:schreibschrift"], "teil"]
+          ["sn.sm12.1.05", "Druckschrift und Schulausgangsschrift schreiben", "1/2", ["lesen:schreibschrift"], "teil", "Nur Nachspuren mit dem Finger; Schreiben mit dem Stift gehört aufs Papier."]
         ],
         2: [ // Sprechen und Zuhören (Rěčeć a připosłuchać)
           ["sn.sm12.2.01", "Erlebnisse und Geschichten zusammenhängend erzählen", "1/2", [], "nein"],
-          ["sn.sm12.2.02", "Einander aktiv zuhören, Gesprächsregeln finden und einhalten", "1/2", ["sorbisch:sm-rozmolwa"], "teil"],
+          ["sn.sm12.2.02", "Einander aktiv zuhören, Gesprächsregeln finden und einhalten", "1/2", ["sorbisch:sm-rozmolwa"], "teil", "Zuhören und Gespräche üben die Kinder im echten Gespräch; die App fragt nur die Regeln ab."],
           ["sn.sm12.2.03", "Grüßen, sich entschuldigen, bitten, danken, wünschen, einladen", "1/2", ["sorbisch:sm-zdwoliwy"], "ja"],
-          ["sn.sm12.2.04", "Ausdrucksmittel: Stimme, Mimik, Gestik; Dialekt, Umgangs- und Standardsprache", "1/2", ["sorbisch:sm-dziwadlo"], "teil"]
+          ["sn.sm12.2.04", "Ausdrucksmittel: Stimme, Mimik, Gestik; Dialekt, Umgangs- und Standardsprache", "1/2", ["sorbisch:sm-dziwadlo"], "teil", "Stimme, Mimik und Gestik lassen sich in der App nicht üben (keine sorbische Stimme)."]
         ],
         3: [ // Für sich und andere schreiben (Za sebje a druhich pisać)
-          ["sn.sm12.3.01", "Schreibanlässe nutzen, Ideen sammeln, für andere verständlich schreiben", "1/2", ["sorbisch:sm-preprosenje"], "teil"],
+          ["sn.sm12.3.01", "Schreibanlässe nutzen, Ideen sammeln, für andere verständlich schreiben", "1/2", ["sorbisch:sm-preprosenje"], "teil", "Freies Schreiben auf Sorbisch prüft die App nicht."],
           ["sn.sm12.3.02", "Gebrauchsformen: Einladung, Glückwunsch, Brief", "1/2", ["sorbisch:sm-preprosenje", "sorbisch:sm-zdwoliwy"], "ja"],
-          ["sn.sm12.3.03", "Texte überarbeiten, gestalten und präsentieren", "1/2", ["praesentieren:gestalten"], "teil"]
+          ["sn.sm12.3.03", "Texte überarbeiten, gestalten und präsentieren", "1/2", ["praesentieren:gestalten"], "teil", "Texte gestalten geht im Präsentieren-Werkzeug, aber ohne sorbische Rechtschreibprüfung."]
         ],
         4: [ // Richtig schreiben (Prawje pisać)
           ["sn.sm12.4.01", "Laute und Buchstaben: stimmhafte und stimmlose Konsonanten, stumme h/ł/w, ähnliche Laute č/ć, ł/w", "1/2", ["sorbisch:sm-cc", "sorbisch:sm-zwuki"], "ja"],
-          ["sn.sm12.4.02", "Großschreibung von Vornamen, Familiennamen und Satzanfängen, Satzzeichen", "1/2", ["sorbisch:sm-wulke1"], "ja"],
-          ["sn.sm12.4.03", "Orientierungswortschatz und eigene Wörterkartei", "1/2", ["sorbisch:sm-slowa", "sorbisch:sm-cc"], "teil"]
+          ["sn.sm12.4.02", "Großschreibung von Vornamen, Familiennamen und Satzanfängen, Satzzeichen", "1/2", ["sorbisch:sm-wulke1"], "teil", "Zu wenig Übung: „Wulki pismik a dypk – Satzanfang und Punkt“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm12.4.03", "Orientierungswortschatz und eigene Wörterkartei", "1/2", ["sorbisch:sm-slowa", "sorbisch:sm-cc"], "teil", "Eine eigene sorbische Wörterkartei gibt es noch nicht."]
         ],
         5: [ // Lesen und Umgang mit Medien (Čitanje/Wobchad z medijemi)
-          ["sn.sm12.5.01", "Sinnentnehmend lesen, Fragen zum Text beantworten", "1/2", ["sorbisch:sm-mica"], "ja"],
-          ["sn.sm12.5.02", "Über Gelesenes sprechen, laut und leise lesen", "1/2", ["sorbisch:sm-mica"], "teil"]
+          ["sn.sm12.5.01", "Sinnentnehmend lesen, Fragen zum Text beantworten", "1/2", ["sorbisch:sm-mica"], "teil", "Zu wenig Übung: „Mica – Ein kleiner Lesetext“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm12.5.02", "Über Gelesenes sprechen, laut und leise lesen", "1/2", ["sorbisch:sm-mica"], "teil", "Laut lesen und über Gelesenes sprechen übt die App auf Sorbisch nicht (keine sorbische Stimme)."]
         ],
         6: [ // Sprache untersuchen (Rěč přepytować)
           ["sn.sm12.6.01", "Wörter, Silben und Buchstaben untersuchen, Sorbisch und Deutsch vergleichen", "1/2", ["sorbisch:sm-zlozki", "sorbisch:sm-druziny"], "ja"],
-          ["sn.sm12.6.02", "Erste Wortarten kennenlernen", "1/2", ["sorbisch:sm-druziny"], "ja"]
+          ["sn.sm12.6.02", "Erste Wortarten kennenlernen", "1/2", ["sorbisch:sm-druziny"], "teil", "Zu wenig Übung: „Słowne družiny – Wortarten“ hat 4 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         7: [ // Wahlbereiche (freiwillig)
-          ["sn.sm12.7.01", "Wahlbereich Buchstabenfest", "1/2", ["sorbisch:sm-pismiki"], "teil"],
-          ["sn.sm12.7.02", "Wahlbereich Sorbische Volksmärchen", "1/2", ["sorbisch:sm-bajki"], "ja"],
-          ["sn.sm12.7.03", "Wahlbereich Sorbische Sagengestalten", "1/2", ["sorbisch:sm-bajki", "echtewelt:sage"], "ja"],
-          ["sn.sm12.7.04", "Wahlbereich Kasperletheater", "1/2", ["sorbisch:sm-bajki", "sorbisch:sm-dziwadlo"], "ja"]
+          ["sn.sm12.7.01", "Wahlbereich Buchstabenfest", "1/2", ["sorbisch:sm-pismiki"], "teil", "Das Buchstabenfest selbst findet in der Klasse statt; die App übt nur Buchstaben."],
+          ["sn.sm12.7.02", "Wahlbereich Sorbische Volksmärchen", "1/2", ["sorbisch:sm-bajki"], "teil", "Zu wenig Übung: „Bajki a powěsće – Märchen und Sagengestalten“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm12.7.03", "Wahlbereich Sorbische Sagengestalten", "1/2", ["sorbisch:sm-bajki", "echtewelt:sage"], "teil", "Zu wenig Übung: „Bajki a powěsće – Märchen und Sagengestalten“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm12.7.04", "Wahlbereich Kasperletheater", "1/2", ["sorbisch:sm-bajki", "sorbisch:sm-dziwadlo"], "teil", "Zu wenig Übung: „Bajki a powěsće – Märchen und Sagengestalten“ hat 3 Aufgaben für 3 Inhaltspunkte, „Dwurěčne dźiwadło – Zweisprachig Theater spielen“ hat 2 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ]
       },
       "3": {
         2: [ // Sprechen und Zuhören (Rěčeć a připosłuchać)
-          ["sn.sm3.2.01", "Gesprächsregeln und Gesprächsformen (Gespräch über Lerninhalte, Diskussion)", "3", ["sorbisch:sm-rozmolwa"], "ja"],
-          ["sn.sm3.2.02", "Zuhören und nachfragen, wenn man etwas nicht versteht", "3", ["sorbisch:sm-rozmolwa"], "teil"],
+          ["sn.sm3.2.01", "Gesprächsregeln und Gesprächsformen (Gespräch über Lerninhalte, Diskussion)", "3", ["sorbisch:sm-rozmolwa"], "teil", "Zu wenig Übung: „Rozmołwne prawidła – Gesprächsregeln“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm3.2.02", "Zuhören und nachfragen, wenn man etwas nicht versteht", "3", ["sorbisch:sm-rozmolwa"], "teil", "Zuhören und Nachfragen übt die App nicht (keine sorbische Stimme)."],
           ["sn.sm3.2.03", "Erzählen und vortragen", "3", [], "nein"]
         ],
         3: [ // Für sich und andere schreiben (Za sebje a druhich pisać)
-          ["sn.sm3.3.01", "Texte planen, Geschichten aufbauen (Anfang, Höhepunkt, Schluss)", "3", ["sorbisch:sm-stawizna"], "ja"],
-          ["sn.sm3.3.02", "Texte überarbeiten und präsentieren", "3", ["praesentieren:gestalten"], "teil"]
+          ["sn.sm3.3.01", "Texte planen, Geschichten aufbauen (Anfang, Höhepunkt, Schluss)", "3", ["sorbisch:sm-stawizna"], "teil", "Zu wenig Übung: „Prěnje, potom, skónčnje – Eine Geschichte ordnen“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm3.3.02", "Texte überarbeiten und präsentieren", "3", ["praesentieren:gestalten"], "teil", "Überarbeiten und Präsentieren ohne sorbische Rechtschreibprüfung."]
         ],
         4: [ // Richtig schreiben (Prawje pisać)
-          ["sn.sm3.4.01", "Auslaut und Verlängerungsprobe (dub – duby)", "3", ["sorbisch:sm-zwuki"], "ja"],
-          ["sn.sm3.4.02", "Ähnlich klingende Laute (č/ć, ł/w)", "3", ["sorbisch:sm-cc"], "ja"],
+          ["sn.sm3.4.01", "Auslaut und Verlängerungsprobe (dub – duby)", "3", ["sorbisch:sm-zwuki"], "teil", "Zu wenig Übung: „Dub abo dup? – Wörter verlängern“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm3.4.02", "Ähnlich klingende Laute (č/ć, ł/w)", "3", ["sorbisch:sm-cc"], "teil", "Zu wenig Übung: „č abo ć? ł abo w? – Ähnliche Laute“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.sm3.4.03", "Kleinschreibung der Substantive, Großschreibung von Namen und Satzanfang", "3", ["sorbisch:sm-druziny", "sorbisch:sm-wulke1"], "ja"]
         ],
         5: [ // Lesen und Umgang mit Medien (Čitanje/Wobchad z medijemi)
           ["sn.sm3.5.01", "Texte lesen und verstehen", "3", ["sorbisch:sm-ptaci"], "ja"],
-          ["sn.sm3.5.02", "Kinderzeitschrift und Bibliothek nutzen", "3", ["sorbisch:sm-plomjo"], "ja"]
+          ["sn.sm3.5.02", "Kinderzeitschrift und Bibliothek nutzen", "3", ["sorbisch:sm-plomjo"], "teil", "Zu wenig Übung: „Płomjo a rěče Łužicy – Mehrsprachige Lausitz“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         6: [ // Sprache untersuchen (Rěč přepytować)
-          ["sn.sm3.6.01", "Wortarten: Substantiv, Verb, Adjektiv", "3", ["sorbisch:sm-druziny"], "ja"],
+          ["sn.sm3.6.01", "Wortarten: Substantiv, Verb, Adjektiv", "3", ["sorbisch:sm-druziny"], "teil", "Zu wenig Übung: „Słowne družiny – Wortarten“ hat 4 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.sm3.6.02", "Den Dual kennen und bilden", "3", ["sorbisch:sm-dual"], "ja"]
         ],
         7: [ // Wahlbereiche (freiwillig)
-          ["sn.sm3.7.01", "Wahlbereich Rund um die Płomjo", "3", ["sorbisch:sm-plomjo"], "ja"],
-          ["sn.sm3.7.02", "Wahlbereich Mehrsprachigkeit der Lausitz", "3", ["sorbisch:sm-plomjo"], "ja"],
-          ["sn.sm3.7.03", "Wahlbereich Zweisprachig Theater spielen", "3", ["sorbisch:sm-dziwadlo"], "ja"]
+          ["sn.sm3.7.01", "Wahlbereich Rund um die Płomjo", "3", ["sorbisch:sm-plomjo"], "teil", "Zu wenig Übung: „Płomjo a rěče Łužicy – Mehrsprachige Lausitz“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm3.7.02", "Wahlbereich Mehrsprachigkeit der Lausitz", "3", ["sorbisch:sm-plomjo"], "teil", "Zu wenig Übung: „Płomjo a rěče Łužicy – Mehrsprachige Lausitz“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm3.7.03", "Wahlbereich Zweisprachig Theater spielen", "3", ["sorbisch:sm-dziwadlo"], "teil", "Zu wenig Übung: „Dwurěčne dźiwadło – Zweisprachig Theater spielen“ hat 2 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ]
       },
       "4": {
         2: [ // Sprechen und Zuhören (Rěčeć a připosłuchać)
           ["sn.sm4.2.01", "Nachrichten und Informationen weitergeben", "4", ["sorbisch:sm-powesc"], "ja"],
-          ["sn.sm4.2.02", "Diskutieren und die eigene Meinung sagen", "4", ["sorbisch:sm-rozmolwa"], "teil"]
+          ["sn.sm4.2.02", "Diskutieren und die eigene Meinung sagen", "4", ["sorbisch:sm-rozmolwa"], "teil", "Diskutieren übt man im Gespräch; die App fragt nur Redemittel ab."]
         ],
         3: [ // Für sich und andere schreiben (Za sebje a druhich pisać)
           ["sn.sm4.3.01", "Einen Brief schreiben (Anrede, Text, Gruß)", "4", ["sorbisch:sm-list"], "ja"],
-          ["sn.sm4.3.02", "Eigene Texte schreiben und überarbeiten", "4", ["sorbisch:sm-stawizna", "praesentieren:gestalten"], "teil"]
+          ["sn.sm4.3.02", "Eigene Texte schreiben und überarbeiten", "4", ["sorbisch:sm-stawizna", "praesentieren:gestalten"], "teil", "Freies Schreiben auf Sorbisch prüft die App nicht."]
         ],
         4: [ // Richtig schreiben (Prawje pisać)
           ["sn.sm4.4.01", "Alphabet und Wörterbuch nutzen", "4", ["sorbisch:sm-slownik"], "ja"],
@@ -742,7 +746,7 @@
         ],
         7: [ // Wahlbereiche (freiwillig)
           ["sn.sm4.7.01", "Wahlbereich Slawische Sprachverwandtschaft", "4", ["sorbisch:sm-slowjan"], "ja"],
-          ["sn.sm4.7.02", "Wahlbereich Zweisprachig Theater spielen", "4", ["sorbisch:sm-dziwadlo"], "ja"],
+          ["sn.sm4.7.02", "Wahlbereich Zweisprachig Theater spielen", "4", ["sorbisch:sm-dziwadlo"], "teil", "Zu wenig Übung: „Dwurěčne dźiwadło – Zweisprachig Theater spielen“ hat 2 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.sm4.7.03", "Wahlbereich Sorbisches Fest", "4", ["sorbisch:sm-swjedzen"], "ja"]
         ]
       }
@@ -767,15 +771,15 @@
         ],
         5: [ // Haus- und Zootiere
           ["sn.so12.5.01", "Ausgewählte Haus- und Bauernhoftiere benennen", "1/2", ["sorbisch:so-zwerjata"], "ja"],
-          ["sn.so12.5.02", "Weitere Tiere (Zoo, Wald) kennenlernen", "1/2", ["sorbisch:so-zoo"], "ja"]
+          ["sn.so12.5.02", "Weitere Tiere (Zoo, Wald) kennenlernen", "1/2", ["sorbisch:so-zoo"], "teil", "Zu wenig Übung: „W zoo – Im Zoo und im Wald“ hat 7 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         8: [ // Feste und Bräuche
           ["sn.so12.8.01", "Sorbische Feste und Bräuche kennenlernen: Vogelhochzeit, Ostern, Weihnachten, Geburtstag", "1/2", ["sorbisch:so-swjedzenje"], "ja"],
           ["sn.so12.8.02", "Feste mitfeiern (Vogelhochzeit, Ostereier verzieren)", "1/2", ["sorbisch:so-swjedzenje", "echtewelt:vogelhochzeit", "echtewelt:ostereier"], "ja"]
         ],
         10: [ // Jahreszeiten
-          ["sn.so12.10.01", "Jahreszeiten benennen", "1/2", ["sorbisch:so-leto"], "ja"],
-          ["sn.so12.10.02", "Typische Naturerscheinungen benennen (Regen, Schnee, Wind, Sonne)", "1/2", ["sorbisch:so-leto"], "ja"],
+          ["sn.so12.10.01", "Jahreszeiten benennen", "1/2", ["sorbisch:so-leto"], "teil", "Zu wenig Übung: „Lěto – Jahreszeiten und Wetter“ hat 7 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.so12.10.02", "Typische Naturerscheinungen benennen (Regen, Schnee, Wind, Sonne)", "1/2", ["sorbisch:so-leto"], "teil", "Zu wenig Übung: „Lěto – Jahreszeiten und Wetter“ hat 7 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.so12.10.03", "Jahrestypische Aktivitäten benennen", "1/2", ["sorbisch:so-letne"], "ja"]
         ]
       },
@@ -784,7 +788,7 @@
           ["sn.so34.1.01", "Begrüßen, vorstellen, verabschieden, bedauern", "3", ["sorbisch:so-witaj", "sorbisch:so-preceljo"], "ja"],
           ["sn.so34.1.02", "Auskunft zur eigenen Person: Name, Alter, Wohnort, Familie", "3", ["sorbisch:so-preceljo", "sorbisch:so-swojba"], "ja"],
           ["sn.so34.1.03", "Eine Person beschreiben", "3", ["sorbisch:so-wosoby"], "ja"],
-          ["sn.so34.1.04", "Verschiedene Sprecher verstehen, Mimik und Gestik beobachten", "3", ["sorbisch:so-mimika"], "teil"]
+          ["sn.so34.1.04", "Verschiedene Sprecher verstehen, Mimik und Gestik beobachten", "3", ["sorbisch:so-mimika"], "teil", "Verschiedene Sprecher hören geht nicht (keine sorbische Stimme)."]
         ],
         2: [ // Mein Körper, meine Kleidung und mein Befinden
           ["sn.so34.2.01", "Körperteile, Kleidung, Grund- und Mischfarben", "3", ["sorbisch:so-cylo", "sorbisch:so-drasta", "sorbisch:so-barby"], "ja"],
@@ -845,7 +849,7 @@
           ["sn.so34.1.01", "Begrüßen, vorstellen, verabschieden, bedauern", "4", ["sorbisch:so-witaj", "sorbisch:so-preceljo"], "ja"],
           ["sn.so34.1.02", "Auskunft zur eigenen Person: Name, Alter, Wohnort, Familie", "4", ["sorbisch:so-preceljo", "sorbisch:so-swojba"], "ja"],
           ["sn.so34.1.03", "Eine Person beschreiben", "4", ["sorbisch:so-wosoby"], "ja"],
-          ["sn.so34.1.04", "Verschiedene Sprecher verstehen, Mimik und Gestik beobachten", "4", ["sorbisch:so-mimika"], "teil"]
+          ["sn.so34.1.04", "Verschiedene Sprecher verstehen, Mimik und Gestik beobachten", "4", ["sorbisch:so-mimika"], "teil", "Verschiedene Sprecher hören geht nicht (keine sorbische Stimme)."]
         ],
         2: [ // Mein Körper, meine Kleidung und mein Befinden
           ["sn.so34.2.01", "Körperteile, Kleidung, Grund- und Mischfarben", "4", ["sorbisch:so-cylo", "sorbisch:so-drasta", "sorbisch:so-barby"], "ja"],
@@ -910,46 +914,46 @@
           ["sn.ku12.1.03", "Farbauftrag: deckend, lasierend, tupfen, klecksen, spritzen; Werke dazu betrachten", "1/2", ["sachkunde:ku-farbauftrag"], "ja"],
           ["sn.ku12.1.04", "Punkt, Linie und Muster, Linie als Bewegungsspur, digital malen", "1/2", ["sachkunde:ku-linie", "atelier:malen"], "ja"],
           ["sn.ku12.1.05", "Einfache Druckverfahren: Finger-, Stempel-, Materialdruck, Abklatsch, Abdrücke", "1/2", ["sachkunde:ku-drucken", "echtewelt:stempel"], "ja"],
-          ["sn.ku12.1.06", "Formen und Bildaufbau: rund–eckig, offen–geschlossen, Reihen, Ballen, Streuen", "1/2", ["sachkunde:ku-formen"], "ja"],
-          ["sn.ku12.1.07", "Buchstaben und Ziffern als Gestaltungsmittel", "1/2", ["sachkunde:ku-formen"], "ja"],
+          ["sn.ku12.1.06", "Formen und Bildaufbau: rund–eckig, offen–geschlossen, Reihen, Ballen, Streuen", "1/2", ["sachkunde:ku-formen"], "teil", "Zu wenig Übung: „Formen und Bildaufbau“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku12.1.07", "Buchstaben und Ziffern als Gestaltungsmittel", "1/2", ["sachkunde:ku-formen"], "teil", "Zu wenig Übung: „Formen und Bildaufbau“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.ku12.1.08", "Gestaltungspraktiken kombinieren: Collage, Frottage, einfaches Malprogramm", "1/2", ["sachkunde:ku-formen", "atelier:malen"], "ja"]
         ],
         2: [ // Körperhaft-räumliches Gestalten
-          ["sn.ku12.2.01", "Plastische Objekte betrachten, betasten, beschreiben; Begriff Plastik", "1/2", ["sachkunde:ku-plastik"], "ja"],
+          ["sn.ku12.2.01", "Plastische Objekte betrachten, betasten, beschreiben; Begriff Plastik", "1/2", ["sachkunde:ku-plastik"], "teil", "Zu wenig Übung: „Kneten, formen, bauen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.ku12.2.02", "Modellieren mit Ton, Knete, Salzteig, Sand: antragen, abtragen, Abdrücke", "1/2", ["sachkunde:ku-plastik", "echtewelt:kneten"], "aussen"],
           ["sn.ku12.2.03", "Mit Kartons, Rollen, Korken und Naturfundstücken bauen", "1/2", ["sachkunde:ku-plastik", "echtewelt:turm"], "aussen"],
           ["sn.ku12.2.04", "Innen- und Außenräume erleben und umgestalten, Labyrinthe, Tierbauten", "1/2", ["sachkunde:ku-plastik", "echtewelt:hoehle"], "aussen"]
         ],
         3: [ // Aktionsbetontes Gestalten
-          ["sn.ku12.3.01", "Spielerische Zugänge zu Kunstwerken: Ich sehe was, Geräusche erfinden, Titel und Geschichten", "1/2", ["sachkunde:ku-sinne"], "ja"],
+          ["sn.ku12.3.01", "Spielerische Zugänge zu Kunstwerken: Ich sehe was, Geräusche erfinden, Titel und Geschichten", "1/2", ["sachkunde:ku-sinne"], "teil", "Zu wenig Übung: „Kunst mit allen Sinnen“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.ku12.3.02", "Szenisches Spiel mit Figuren, Puppen und Schattenfiguren", "1/2", ["sachkunde:ku-sinne", "echtewelt:lebendesbild"], "aussen"],
           ["sn.ku12.3.03", "Farb- und Formaktionen: sammeln, sortieren, arrangieren, große Malaktionen", "1/2", ["echtewelt:landart"], "aussen"],
-          ["sn.ku12.3.04", "Körperhaltungen, Mimik, Gestik, Verkleiden und Masken", "1/2", ["sachkunde:ku-sinne"], "ja"]
+          ["sn.ku12.3.04", "Körperhaltungen, Mimik, Gestik, Verkleiden und Masken", "1/2", ["sachkunde:ku-sinne"], "teil", "Zu wenig Übung: „Kunst mit allen Sinnen“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ]
       },
       "3": {
         1: [ // Flächiges Gestalten
           ["sn.ku3.1.01", "Bekannte Techniken erweitern: skizzieren, drucken, schneiden, fotografieren", "3", ["atelier:malen", "echtewelt:frottage"], "aussen"],
-          ["sn.ku3.1.02", "Farben als Träger von Stimmungen: Harmonie, Kontraste, Signalfarben", "3", ["sachkunde:ku-farbgefuehl"], "ja"],
+          ["sn.ku3.1.02", "Farben als Träger von Stimmungen: Harmonie, Kontraste, Signalfarben", "3", ["sachkunde:ku-farbgefuehl"], "teil", "Zu wenig Übung: „Farben machen Stimmung“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.ku3.1.03", "Farben abstufen (trüben, tönen), Pinselführung und Farbverlauf", "3", ["sachkunde:ku-farbgefuehl", "sachkunde:ku-farbauftrag"], "ja"],
           ["sn.ku3.1.04", "Hell-Dunkel-Kontrast, Oberflächenstrukturen, optische Täuschungen", "3", ["sachkunde:ku-hell-dunkel"], "ja"],
           ["sn.ku3.1.05", "Ein besonderes Druckverfahren: Monotypie, Frottage, Materialdruck", "3", ["sachkunde:ku-hell-dunkel", "echtewelt:frottage"], "ja"],
           ["sn.ku3.1.06", "Bildaufbau: Überdeckung, Größe, Farbabstufung, Figur und Grund", "3", ["sachkunde:ku-bildraum"], "ja"],
-          ["sn.ku3.1.07", "Schrift als Gestaltungsmittel: Monogramm, Geheimschrift, Kalligrafie", "3", ["sachkunde:ku-schrift-foto"], "ja"],
-          ["sn.ku3.1.08", "Fotografie: Bildausschnitt, Lochkamera, Licht und Schatten", "3", ["sachkunde:ku-schrift-foto"], "ja"],
-          ["sn.ku3.1.09", "Persönlichkeitsrechte und Urheberrecht bei Bildern", "3", ["sachkunde:ku-schrift-foto"], "ja"],
+          ["sn.ku3.1.07", "Schrift als Gestaltungsmittel: Monogramm, Geheimschrift, Kalligrafie", "3", ["sachkunde:ku-schrift-foto"], "teil", "Zu wenig Übung: „Schrift, Foto und Bildrechte“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku3.1.08", "Fotografie: Bildausschnitt, Lochkamera, Licht und Schatten", "3", ["sachkunde:ku-schrift-foto"], "teil", "Zu wenig Übung: „Schrift, Foto und Bildrechte“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku3.1.09", "Persönlichkeitsrechte und Urheberrecht bei Bildern", "3", ["sachkunde:ku-schrift-foto"], "teil", "Zu wenig Übung: „Schrift, Foto und Bildrechte“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.ku3.1.10", "Bilder digital bearbeiten und verfremden", "3", ["atelier:verfremden", "atelier:malen"], "ja"]
         ],
         2: [ // Körperhaft-räumliches Gestalten
-          ["sn.ku3.2.01", "Bildhauer und ihre Arbeitsweise, Formbarkeit von Materialien", "3", ["sachkunde:ku-bildhauer"], "ja"],
+          ["sn.ku3.2.01", "Bildhauer und ihre Arbeitsweise, Formbarkeit von Materialien", "3", ["sachkunde:ku-bildhauer"], "teil", "Zu wenig Übung: „Bildhauer, Design und Land-Art“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.ku3.2.02", "Modellieren mit Ton, Gips und Pappmaché, Figuren", "3", ["echtewelt:kneten"], "aussen"],
-          ["sn.ku3.2.03", "Montagen aus Fundstücken, Upcycling", "3", ["sachkunde:ku-bildhauer"], "ja"],
-          ["sn.ku3.2.04", "Design: Gebrauchsgegenstände gestalten und prüfen", "3", ["sachkunde:ku-bildhauer"], "ja"],
-          ["sn.ku3.2.05", "Kunst in Außenräumen: Land-Art, Urban Art", "3", ["sachkunde:ku-bildhauer", "echtewelt:landart"], "ja"]
+          ["sn.ku3.2.03", "Montagen aus Fundstücken, Upcycling", "3", ["sachkunde:ku-bildhauer"], "teil", "Zu wenig Übung: „Bildhauer, Design und Land-Art“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku3.2.04", "Design: Gebrauchsgegenstände gestalten und prüfen", "3", ["sachkunde:ku-bildhauer"], "teil", "Zu wenig Übung: „Bildhauer, Design und Land-Art“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku3.2.05", "Kunst in Außenräumen: Land-Art, Urban Art", "3", ["sachkunde:ku-bildhauer", "echtewelt:landart"], "teil", "Zu wenig Übung: „Bildhauer, Design und Land-Art“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         3: [ // Aktionsbetontes Gestalten
-          ["sn.ku3.3.01", "Spielerische Methoden der Kunstbetrachtung: verdecken, Puzzle, Klanggeschichten, Elfchen, Brief an das Werk", "3", ["sachkunde:ku-aktion3"], "ja"],
-          ["sn.ku3.3.02", "Körper und Bewegung: Rollenspiel, Pantomime, Schattenfiguren", "3", ["sachkunde:ku-aktion3"], "ja"],
+          ["sn.ku3.3.01", "Spielerische Methoden der Kunstbetrachtung: verdecken, Puzzle, Klanggeschichten, Elfchen, Brief an das Werk", "3", ["sachkunde:ku-aktion3"], "teil", "Zu wenig Übung: „Lebende Bilder und Schattenspiel“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku3.3.02", "Körper und Bewegung: Rollenspiel, Pantomime, Schattenfiguren", "3", ["sachkunde:ku-aktion3"], "teil", "Zu wenig Übung: „Lebende Bilder und Schattenspiel“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.ku3.3.03", "Lebende Bilder und Aktionen mit Farben und Formen, dokumentieren", "3", ["sachkunde:ku-aktion3", "echtewelt:lebendesbild"], "aussen"]
         ]
       },
@@ -967,19 +971,19 @@
           ["sn.ku4.2.03", "Architektur: Form und Funktion, Kirchen, Brücken, Gewölbe", "4", ["sachkunde:ku-architektur", "echtewelt:architektur"], "ja"]
         ],
         3: [ // Aktionsbetontes Gestalten
-          ["sn.ku4.3.01", "Aktionsmethoden: Bilddiktat, fiktives Interview, Motive weiterspinnen", "4", ["sachkunde:ku-aktion4"], "ja"],
+          ["sn.ku4.3.01", "Aktionsmethoden: Bilddiktat, fiktives Interview, Motive weiterspinnen", "4", ["sachkunde:ku-aktion4"], "teil", "Zu wenig Übung: „Kunst in Aktion“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.ku4.3.02", "Eine Aktion planen und durchführen: lebende Bilder, Schattenspiel, Performance", "4", ["sachkunde:ku-aktion4", "echtewelt:lebendesbild"], "aussen"],
-          ["sn.ku4.3.03", "Aktionskunst kennenlernen und dokumentieren", "4", ["sachkunde:ku-aktion4"], "ja"]
+          ["sn.ku4.3.03", "Aktionskunst kennenlernen und dokumentieren", "4", ["sachkunde:ku-aktion4"], "teil", "Zu wenig Übung: „Kunst in Aktion“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ]
       }
     },
     musik: {
       "1/2": {
         1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
-          ["sn.mu12.1.01", "Stimme als Instrument: Geräusche nachahmen, Texte und Bilder verklanglichen", "1/2", ["sachkunde:mu-stimme"], "ja"],
+          ["sn.mu12.1.01", "Stimme als Instrument: Geräusche nachahmen, Texte und Bilder verklanglichen", "1/2", ["sachkunde:mu-stimme"], "teil", "Zu wenig Übung: „Meine Stimme ist ein Instrument“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.mu12.1.02", "Grundton spüren, Melodiebausteine wiedererkennen", "1/2", ["atelier:erkennen", "atelier:musik"], "ja"],
           ["sn.mu12.1.03", "Rhythmus und Melodie beim Sprechen: Verse rhythmisieren", "1/2", ["sachkunde:mu-rhythmus", "lesen:silben"], "ja"],
-          ["sn.mu12.1.04", "Grundlagen des Singens: Haltung, Atmung, Tonbildung", "1/2", ["sachkunde:mu-stimme"], "ja"],
+          ["sn.mu12.1.04", "Grundlagen des Singens: Haltung, Atmung, Tonbildung", "1/2", ["sachkunde:mu-stimme"], "teil", "Zu wenig Übung: „Meine Stimme ist ein Instrument“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.mu12.1.05", "Im Klassengesang singen, Kanon-Vorübungen, etwa sechs Lieder auswendig", "1/2", ["atelier:lieder", "echtewelt:singen"], "aussen"]
         ],
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
@@ -991,23 +995,23 @@
         3: [ // Musik umsetzen, verbinden und in Beziehung bringen
           ["sn.mu12.3.01", "Musik in freie Bewegung und Tanz umsetzen, Stimmungen darstellen", "1/2", ["sachkunde:mu-bewegung", "echtewelt:tanzen"], "aussen"],
           ["sn.mu12.3.02", "Einfache Tänze, Schritte, Aufstellungen und Fassungen", "1/2", ["sachkunde:mu-bewegung", "echtewelt:tanzschritte"], "aussen"],
-          ["sn.mu12.3.03", "Musik in Bilder und Sprache umsetzen: Tempo, Stimmung, Überschriften", "1/2", ["sachkunde:mu-bewegung", "sachkunde:mu-laut-leise"], "ja"],
+          ["sn.mu12.3.03", "Musik in Bilder und Sprache umsetzen: Tempo, Stimmung, Überschriften", "1/2", ["sachkunde:mu-bewegung", "sachkunde:mu-laut-leise"], "teil", "Zu wenig Übung: „Musik und Bewegung“ hat 3 Aufgaben für 4 Inhaltspunkte, „Laut, leise, schnell, langsam“ hat 4 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.mu12.3.04", "Szenisches Spiel zu Musik: Puppen, Schattenspiel, Pantomime", "1/2", ["echtewelt:lebendesbild"], "aussen"]
         ],
         4: [ // Musik wahrnehmen, verstehen und deuten
-          ["sn.mu12.4.01", "Ausdruck von Musik erleben: Stimmungen, Gefühle, Bilder", "1/2", ["sachkunde:mu-laut-leise"], "ja"],
+          ["sn.mu12.4.01", "Ausdruck von Musik erleben: Stimmungen, Gefühle, Bilder", "1/2", ["sachkunde:mu-laut-leise"], "teil", "Zu wenig Übung: „Laut, leise, schnell, langsam“ hat 4 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.mu12.4.02", "Lautstärke und Tempo, einfache Formen", "1/2", ["sachkunde:mu-laut-leise", "atelier:musik"], "ja"],
           ["sn.mu12.4.03", "Instrumente und Stimmen: Material, Bauweise, Tonerzeugung; Männer-, Frauen-, Kinderstimmen", "1/2", ["sachkunde:mu-instrumente1", "sachkunde:mu-orchester"], "ja"],
-          ["sn.mu12.4.04", "Musik in Schule, Freizeit, Familie und zu besonderen Anlässen", "1/2", ["sachkunde:mu-mozart"], "ja"],
-          ["sn.mu12.4.05", "Leben und Schaffen von Komponisten und Kinderliedermachern", "1/2", ["sachkunde:mu-mozart"], "ja"]
+          ["sn.mu12.4.04", "Musik in Schule, Freizeit, Familie und zu besonderen Anlässen", "1/2", ["sachkunde:mu-mozart"], "teil", "Zu wenig Übung: „Mozart und Musik im Alltag“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu12.4.05", "Leben und Schaffen von Komponisten und Kinderliedermachern", "1/2", ["sachkunde:mu-mozart"], "teil", "Zu wenig Übung: „Mozart und Musik im Alltag“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ]
       },
       "3": {
         1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
           ["sn.mu3.1.01", "Melodie- und Rhythmusbausteine singen und wiedererkennen", "3", ["atelier:erkennen", "atelier:lieder", "atelier:musik"], "ja"],
-          ["sn.mu3.1.02", "Haltung, Atmung und Tonraum beim Singen", "3", ["sachkunde:mu-stimme"], "ja"],
+          ["sn.mu3.1.02", "Haltung, Atmung und Tonraum beim Singen", "3", ["sachkunde:mu-stimme"], "teil", "Zu wenig Übung: „Meine Stimme ist ein Instrument“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.mu3.1.03", "Kanon und Quodlibet, solistisch und mehrstimmig singen", "3", ["sachkunde:mu-singen3", "echtewelt:singen"], "aussen"],
-          ["sn.mu3.1.04", "Gestaltungsmittel beim Singen: Lautstärke, Tempo, Stimmklang, Fachbegriffe", "3", ["sachkunde:mu-singen3"], "ja"],
+          ["sn.mu3.1.04", "Gestaltungsmittel beim Singen: Lautstärke, Tempo, Stimmklang, Fachbegriffe", "3", ["sachkunde:mu-singen3"], "teil", "Zu wenig Übung: „Kanon, Strophe, Refrain“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.mu3.1.05", "Lieder verschiedener Stile und Länder, etwa fünf auswendig", "3", ["sachkunde:mu-welt", "echtewelt:singen"], "aussen"]
         ],
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
@@ -1018,12 +1022,12 @@
         3: [ // Musik umsetzen, verbinden und in Beziehung bringen
           ["sn.mu3.3.01", "Musik in Bewegung: Spiegel- und Echotanzen", "3", ["sachkunde:mu-welt", "echtewelt:tanzen"], "aussen"],
           ["sn.mu3.3.02", "Tänze verschiedener Stile und Länder", "3", ["sachkunde:mu-welt", "echtewelt:tanzschritte"], "aussen"],
-          ["sn.mu3.3.03", "Musik in Bilder und Sprache umsetzen: Klangfarben, Formverläufe, Tempo", "3", ["sachkunde:mu-laut-leise"], "ja"]
+          ["sn.mu3.3.03", "Musik in Bilder und Sprache umsetzen: Klangfarben, Formverläufe, Tempo", "3", ["sachkunde:mu-laut-leise"], "teil", "Zu wenig Übung: „Laut, leise, schnell, langsam“ hat 4 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         4: [ // Musik wahrnehmen, verstehen und deuten
-          ["sn.mu3.4.01", "Gestaltungsmittel hören: Lautstärke, Tempo, Artikulation, Klangfarbe, Form", "3", ["sachkunde:mu-laut-leise", "sachkunde:mu-singen3"], "ja"],
+          ["sn.mu3.4.01", "Gestaltungsmittel hören: Lautstärke, Tempo, Artikulation, Klangfarbe, Form", "3", ["sachkunde:mu-laut-leise", "sachkunde:mu-singen3"], "teil", "Zu wenig Übung: „Laut, leise, schnell, langsam“ hat 4 Aufgaben für 5 Inhaltspunkte, „Kanon, Strophe, Refrain“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.mu3.4.02", "Instrumentengruppen, Bauweise und Spielweise", "3", ["sachkunde:mu-gruppen"], "ja"],
-          ["sn.mu3.4.03", "Musik in Freizeit und Kirche, eigene Meinung zu Musikstilen", "3", ["sachkunde:mu-bach"], "ja"],
+          ["sn.mu3.4.03", "Musik in Freizeit und Kirche, eigene Meinung zu Musikstilen", "3", ["sachkunde:mu-bach"], "teil", "Zu wenig Übung: „Bach, die Orgel und Musik in der Kirche“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.mu3.4.04", "Leben und Schaffen von Komponisten, Musik anderer Länder", "3", ["sachkunde:mu-bach", "sachkunde:mu-welt"], "ja"]
         ]
       },
@@ -1035,13 +1039,13 @@
         ],
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
           ["sn.mu4.2.01", "Improvisieren, Themen verklanglichen", "4", ["atelier:musik"], "ja"],
-          ["sn.mu4.2.02", "Rhythmusbausteine im Zweier- und Dreiertakt kombinieren", "4", ["sachkunde:mu-rhythmus4", "sachkunde:mu-taenze"], "ja"],
+          ["sn.mu4.2.02", "Rhythmusbausteine im Zweier- und Dreiertakt kombinieren", "4", ["sachkunde:mu-rhythmus4", "sachkunde:mu-taenze"], "teil", "Zu wenig Übung: „Rhythmen erfinden und notieren“ hat 3 Aufgaben für 3 Inhaltspunkte, „Tänze aus verschiedenen Zeiten“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.mu4.2.03", "Lieder mit Melodieinstrumenten begleiten; Viertel, Achtel, halbe und ganze Noten notieren", "4", ["sachkunde:mu-rhythmus4", "sachkunde:mu-noten", "atelier:musik"], "ja"]
         ],
         3: [ // Musik umsetzen, verbinden und in Beziehung bringen
           ["sn.mu4.3.01", "Musik differenziert in Bewegung umsetzen, Schattentanzen", "4", ["echtewelt:tanzen"], "aussen"],
-          ["sn.mu4.3.02", "Tänze verschiedener Stile, Zeiten und Kulturen", "4", ["sachkunde:mu-taenze", "echtewelt:tanzschritte"], "ja"],
-          ["sn.mu4.3.03", "Musik in Bilder, Geschichten und Gedichte umsetzen", "4", ["sachkunde:mu-bewegung"], "ja"]
+          ["sn.mu4.3.02", "Tänze verschiedener Stile, Zeiten und Kulturen", "4", ["sachkunde:mu-taenze", "echtewelt:tanzschritte"], "teil", "Zu wenig Übung: „Tänze aus verschiedenen Zeiten“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu4.3.03", "Musik in Bilder, Geschichten und Gedichte umsetzen", "4", ["sachkunde:mu-bewegung"], "teil", "Zu wenig Übung: „Musik und Bewegung“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         4: [ // Musik wahrnehmen, verstehen und deuten
           ["sn.mu4.4.01", "Gattungen: Lied, Suite, Kindermusical, Oper", "4", ["sachkunde:mu-gattungen"], "ja"],
@@ -1056,52 +1060,52 @@
     werken: {
       "1/2": {
         1: [ // Entdecken von Technik im Alltag
-          ["sn.we12.1.01", "Technik im Alltag wahrnehmen: Spielzeug, Haushalt, Schule, Freizeit", "1/2", ["sachkunde:we-fahrzeuge"], "ja"],
-          ["sn.we12.1.02", "Fahrzeuge zu Wasser, Land und Luft: Zweck, Kufen, Räder, Flügel", "1/2", ["sachkunde:we-fahrzeuge"], "ja"],
-          ["sn.we12.1.03", "Funktionsweise: bewegliche Teile, Welle und Achse, Rad", "1/2", ["sachkunde:we-fahrzeuge"], "ja"],
+          ["sn.we12.1.01", "Technik im Alltag wahrnehmen: Spielzeug, Haushalt, Schule, Freizeit", "1/2", ["sachkunde:we-fahrzeuge"], "teil", "Zu wenig Übung: „Technik um uns: Fahrzeuge“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we12.1.02", "Fahrzeuge zu Wasser, Land und Luft: Zweck, Kufen, Räder, Flügel", "1/2", ["sachkunde:we-fahrzeuge"], "teil", "Zu wenig Übung: „Technik um uns: Fahrzeuge“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we12.1.03", "Funktionsweise: bewegliche Teile, Welle und Achse, Rad", "1/2", ["sachkunde:we-fahrzeuge"], "teil", "Zu wenig Übung: „Technik um uns: Fahrzeuge“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.we12.1.04", "Ein technisches Objekt bauen (Windrad, Papierflieger, Fahrzeug) und prüfen", "1/2", ["echtewelt:papierflieger"], "aussen"]
         ],
         2: [ // Umgehen mit Material und Werkzeug
           ["sn.we12.2.01", "Vom Bedarf zur Idee: planen, Skizzen lesen und anfertigen", "1/2", ["sachkunde:we-werkzeug", "echtewelt:bruecke"], "aussen"],
-          ["sn.we12.2.02", "Papierwerkstoffe mit anderen Werkstoffen vergleichen", "1/2", ["sachkunde:we-papier"], "ja"],
-          ["sn.we12.2.03", "Werkzeuge sicher handhaben: Arbeitsschutz, messen, anreißen mit Lineal, Zirkel, Schablone", "1/2", ["sachkunde:we-werkzeug", "echtewelt:werkzeug"], "ja"],
-          ["sn.we12.2.04", "Falten, falzen, biegen, schneiden, lochen, kleben", "1/2", ["sachkunde:we-papier", "echtewelt:papierflieger"], "ja"],
+          ["sn.we12.2.02", "Papierwerkstoffe mit anderen Werkstoffen vergleichen", "1/2", ["sachkunde:we-papier"], "teil", "Zu wenig Übung: „Papier: falten, schneiden, kleben“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we12.2.03", "Werkzeuge sicher handhaben: Arbeitsschutz, messen, anreißen mit Lineal, Zirkel, Schablone", "1/2", ["sachkunde:we-werkzeug", "echtewelt:werkzeug"], "teil", "Zu wenig Übung: „Werkzeug sicher benutzen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we12.2.04", "Falten, falzen, biegen, schneiden, lochen, kleben", "1/2", ["sachkunde:we-papier", "echtewelt:papierflieger"], "teil", "Zu wenig Übung: „Papier: falten, schneiden, kleben“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.we12.2.05", "Technische Objekte herstellen und prüfen (Drachen, Modelle)", "1/2", ["echtewelt:bruecke"], "aussen"],
-          ["sn.we12.2.06", "Papier verwenden, Recyclingpapier, Abfall vermeiden", "1/2", ["sachkunde:we-papier"], "ja"]
+          ["sn.we12.2.06", "Papier verwenden, Recyclingpapier, Abfall vermeiden", "1/2", ["sachkunde:we-papier"], "teil", "Zu wenig Übung: „Papier: falten, schneiden, kleben“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         3: [ // Bauen stabiler Konstruktionen
-          ["sn.we12.3.01", "Bau- und Tragwerke der Umgebung und ihr Zweck", "1/2", ["sachkunde:we-bauen"], "ja"],
-          ["sn.we12.3.02", "Stabilität: Profile, Bauweisen, Steck- und Schraubverbindungen", "1/2", ["sachkunde:we-bauen"], "ja"],
+          ["sn.we12.3.01", "Bau- und Tragwerke der Umgebung und ihr Zweck", "1/2", ["sachkunde:we-bauen"], "teil", "Zu wenig Übung: „Stabile Türme und Brücken“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we12.3.02", "Stabilität: Profile, Bauweisen, Steck- und Schraubverbindungen", "1/2", ["sachkunde:we-bauen"], "teil", "Zu wenig Übung: „Stabile Türme und Brücken“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.we12.3.03", "Türme und Brücken bauen und beurteilen", "1/2", ["echtewelt:bruecke", "echtewelt:turm"], "aussen"]
         ]
       },
       "3": {
         1: [ // Nutzen von elektrischem Strom
-          ["sn.we3.1.01", "Erneuerbare Energiequellen: Sonne, Wind, Wasser, Biomasse", "3", ["sachkunde:we-strom"], "ja"],
+          ["sn.we3.1.01", "Erneuerbare Energiequellen: Sonne, Wind, Wasser, Biomasse", "3", ["sachkunde:we-strom"], "teil", "Zu wenig Übung: „Strom: Bauteile und Schaltplan“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.we3.1.02", "Bauteile und Schaltplan: Spannungsquelle, Leitung, Schalter, Summer, Leuchtmittel, Motor", "3", ["sachkunde:we-strom", "sachkunde:strom"], "ja"],
           ["sn.we3.1.03", "Mit Baukästen elektrische Objekte bauen (Solarlüfter, Elektrofahrzeug)", "3", ["echtewelt:stromkreis"], "aussen"],
           ["sn.we3.1.04", "Leiter und Isolatoren, Strom im Alltag, sparsame Geräte", "3", ["sachkunde:we-strom", "sachkunde:strom"], "ja"],
           ["sn.we3.1.05", "Regeln und Schutz im Umgang mit Strom", "3", ["sachkunde:we-strom", "sachkunde:strom"], "ja"]
         ],
         2: [ // Planen und Herstellen eines Gegenstandes
-          ["sn.we3.2.01", "Holz als nachwachsender Rohstoff: Eigenschaften und Einsatz", "3", ["sachkunde:we-holz"], "ja"],
+          ["sn.we3.2.01", "Holz als nachwachsender Rohstoff: Eigenschaften und Einsatz", "3", ["sachkunde:we-holz"], "teil", "Zu wenig Übung: „Holz bearbeiten“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.we3.2.02", "Planen: Werkstoff wählen, Skizze, Arbeitsschritte, Arbeitsplatz einrichten", "3", ["sachkunde:we-holz", "sachkunde:we-werkzeug"], "ja"],
           ["sn.we3.2.03", "Sägen, feilen, raspeln, schleifen, nageln, schrauben, streichen", "3", ["sachkunde:we-holz", "echtewelt:holz"], "aussen"],
-          ["sn.we3.2.04", "Messen in Millimetern, anreißen, sparsam mit dem Werkstoff", "3", ["sachkunde:we-werkzeug"], "ja"],
+          ["sn.we3.2.04", "Messen in Millimetern, anreißen, sparsam mit dem Werkstoff", "3", ["sachkunde:we-werkzeug"], "teil", "Zu wenig Übung: „Werkzeug sicher benutzen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.we3.2.05", "Ergebnis beurteilen: Funktion, Aussehen, Sicherheit, Preis", "3", ["echtewelt:holz"], "aussen"]
         ]
       },
       "4": {
         1: [ // Warten und Pflegen technischer Objekte
-          ["sn.we4.1.01", "Aufbau technischer Objekte: Antrieb, Übertragung, Abtrieb", "4", ["sachkunde:we-fahrrad"], "ja"],
-          ["sn.we4.1.02", "Fehlersuche: Funktionsprobe, Bedienungsanleitung, Demontage", "4", ["sachkunde:we-fahrrad"], "ja"],
-          ["sn.we4.1.03", "Pflege und Wartung, zum Beispiel am Fahrrad", "4", ["sachkunde:we-fahrrad", "echtewelt:fahrradpflege"], "ja"],
-          ["sn.we4.1.04", "Reparieren statt wegwerfen, Werkstoffe trennen, Batterien entsorgen", "4", ["sachkunde:we-fahrrad", "echtewelt:reparieren"], "ja"]
+          ["sn.we4.1.01", "Aufbau technischer Objekte: Antrieb, Übertragung, Abtrieb", "4", ["sachkunde:we-fahrrad"], "teil", "Zu wenig Übung: „Das Fahrrad pflegen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we4.1.02", "Fehlersuche: Funktionsprobe, Bedienungsanleitung, Demontage", "4", ["sachkunde:we-fahrrad"], "teil", "Zu wenig Übung: „Das Fahrrad pflegen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we4.1.03", "Pflege und Wartung, zum Beispiel am Fahrrad", "4", ["sachkunde:we-fahrrad", "echtewelt:fahrradpflege"], "teil", "Zu wenig Übung: „Das Fahrrad pflegen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we4.1.04", "Reparieren statt wegwerfen, Werkstoffe trennen, Batterien entsorgen", "4", ["sachkunde:we-fahrrad", "echtewelt:reparieren"], "teil", "Zu wenig Übung: „Das Fahrrad pflegen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         2: [ // Vergleichen von Werkstoffen und Herstellen eines Produkts
-          ["sn.we4.2.01", "Holzwerkstoffe und Kunststoffe: Eigenschaften, Einsatz, Vor- und Nachteile, Umwelt", "4", ["sachkunde:we-werkstoffe"], "ja"],
+          ["sn.we4.2.01", "Holzwerkstoffe und Kunststoffe: Eigenschaften, Einsatz, Vor- und Nachteile, Umwelt", "4", ["sachkunde:we-werkstoffe"], "teil", "Zu wenig Übung: „Holz oder Kunststoff?“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.we4.2.02", "Werkstoffe vergleichen: trennen, umformen, fügen, Oberfläche", "4", ["sachkunde:we-werkstoffe", "sachkunde:we-holz"], "ja"],
-          ["sn.we4.2.03", "Arbeitsvorbereitung: technische Skizze, Stückliste, Arbeitsschritte", "4", ["sachkunde:we-werkstoffe"], "ja"],
+          ["sn.we4.2.03", "Arbeitsvorbereitung: technische Skizze, Stückliste, Arbeitsschritte", "4", ["sachkunde:we-werkstoffe"], "teil", "Zu wenig Übung: „Holz oder Kunststoff?“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.we4.2.04", "Ein Produkt fertigen und prüfen (Bücherstütze, Staffelei)", "4", ["echtewelt:holz"], "aussen"]
         ],
         3: [ // Begegnung mit Robotern und Automaten
@@ -1114,10 +1118,10 @@
     ethik: {
       "1/2": {
         1: [ // Ich im Wir
-          ["sn.et12.1.01", "Eigene Einmaligkeit: Aussehen, Name, Lebenswelt", "1/2", ["sachkunde:et-einmalig"], "ja"],
+          ["sn.et12.1.01", "Eigene Einmaligkeit: Aussehen, Name, Lebenswelt", "1/2", ["sachkunde:et-einmalig"], "teil", "Zu wenig Übung: „Ich bin einmalig“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.et12.1.02", "Eigenschaften und Gefühle, mit Mimik und Körper ausdrücken", "1/2", ["sachkunde:et-einmalig", "gefuehle:alle"], "ja"],
-          ["sn.et12.1.03", "Unterschiedlichkeit: Neigungen, Begabungen, Handicaps, anders sein", "1/2", ["sachkunde:et-einmalig"], "ja"],
-          ["sn.et12.1.04", "Eigene Fähigkeiten und Grenzen, Selbstwert", "1/2", ["sachkunde:et-einmalig"], "ja"]
+          ["sn.et12.1.03", "Unterschiedlichkeit: Neigungen, Begabungen, Handicaps, anders sein", "1/2", ["sachkunde:et-einmalig"], "teil", "Zu wenig Übung: „Ich bin einmalig“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et12.1.04", "Eigene Fähigkeiten und Grenzen, Selbstwert", "1/2", ["sachkunde:et-einmalig"], "teil", "Zu wenig Übung: „Ich bin einmalig“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         2: [ // Miteinander
           ["sn.et12.2.01", "Familienformen, mein Zuhause", "1/2", ["sachkunde:et-familie", "sachkunde:familie"], "ja"],
@@ -1131,56 +1135,56 @@
           ["sn.et12.3.03", "Weihnachten, Silvester, Fasching, Ostern; Wünsche und Schenken", "1/2", ["sachkunde:et-winterfeste"], "ja"]
         ],
         4: [ // Wir in der Welt
-          ["sn.et12.4.01", "Das Wunderbare der Natur, Sonne, Mond und Sterne", "1/2", ["sachkunde:et-natur"], "ja"],
-          ["sn.et12.4.02", "Werden, Wachsen, Vergehen; eine Pflanze aufziehen", "1/2", ["sachkunde:et-natur", "echtewelt:pflanze"], "ja"],
-          ["sn.et12.4.03", "Umgang mit der Natur, Tier- und Umweltschutz", "1/2", ["sachkunde:et-natur", "echtewelt:staunen"], "ja"]
+          ["sn.et12.4.01", "Das Wunderbare der Natur, Sonne, Mond und Sterne", "1/2", ["sachkunde:et-natur"], "teil", "Zu wenig Übung: „Staunen über die Natur“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et12.4.02", "Werden, Wachsen, Vergehen; eine Pflanze aufziehen", "1/2", ["sachkunde:et-natur", "echtewelt:pflanze"], "teil", "Zu wenig Übung: „Staunen über die Natur“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et12.4.03", "Umgang mit der Natur, Tier- und Umweltschutz", "1/2", ["sachkunde:et-natur", "echtewelt:staunen"], "teil", "Zu wenig Übung: „Staunen über die Natur“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ]
       },
       "3": {
         1: [ // Ich im Wir
-          ["sn.et3.1.01", "Kinder und Erwachsene: Gemeinsamkeiten und Unterschiede", "3", ["sachkunde:et-staerken"], "ja"],
-          ["sn.et3.1.02", "Stärken und Schwächen, Angst bewältigen, Erfolg und Misserfolg", "3", ["sachkunde:et-staerken"], "ja"],
-          ["sn.et3.1.03", "Geschlechterrollen hinterfragen, Vielfalt achten", "3", ["sachkunde:et-staerken"], "ja"],
+          ["sn.et3.1.01", "Kinder und Erwachsene: Gemeinsamkeiten und Unterschiede", "3", ["sachkunde:et-staerken"], "teil", "Zu wenig Übung: „Stärken, Schwächen, Mut“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et3.1.02", "Stärken und Schwächen, Angst bewältigen, Erfolg und Misserfolg", "3", ["sachkunde:et-staerken"], "teil", "Zu wenig Übung: „Stärken, Schwächen, Mut“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et3.1.03", "Geschlechterrollen hinterfragen, Vielfalt achten", "3", ["sachkunde:et-staerken"], "teil", "Zu wenig Übung: „Stärken, Schwächen, Mut“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.et3.1.04", "Gemeinsamkeiten und Unterschiede der Menschen, Herkunft", "3", ["sachkunde:kulturen"], "ja"],
           ["sn.et3.1.05", "Gut und Böse im eigenen Handeln, Nein sagen, verzeihen", "3", ["sachkunde:et-staerken", "sachkunde:nein-sagen"], "ja"],
           ["sn.et3.1.06", "Persönliche Konflikte, Kompromisse, Hilfe suchen", "3", ["gefuehle:alle", "sachkunde:et-freundschaft"], "ja"]
         ],
         2: [ // Miteinander
-          ["sn.et3.2.01", "Freundschaft finden und pflegen, Vertrauen", "3", ["sachkunde:et-freundschaft"], "ja"],
-          ["sn.et3.2.02", "Konflikte in Freundschaften: Streitregeln, Mobbing, Internet, Goldene Regel, Geheimnisse", "3", ["sachkunde:et-freundschaft"], "ja"],
+          ["sn.et3.2.01", "Freundschaft finden und pflegen, Vertrauen", "3", ["sachkunde:et-freundschaft"], "teil", "Zu wenig Übung: „Freundschaft“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et3.2.02", "Konflikte in Freundschaften: Streitregeln, Mobbing, Internet, Goldene Regel, Geheimnisse", "3", ["sachkunde:et-freundschaft"], "teil", "Zu wenig Übung: „Freundschaft“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.et3.2.03", "Wahrheit und Lüge, Notlüge, Vertrauen", "3", ["sachkunde:et-wahrheit"], "ja"]
         ],
         3: [ // Voneinander
-          ["sn.et3.3.01", "Ethik und Religion: die Begriffe", "3", ["sachkunde:et-kirchenjahr"], "ja"],
-          ["sn.et3.3.02", "Christlicher Glaube: Kreuz, Kirche, Bibel", "3", ["sachkunde:et-kirchenjahr"], "ja"],
+          ["sn.et3.3.01", "Ethik und Religion: die Begriffe", "3", ["sachkunde:et-kirchenjahr"], "teil", "Zu wenig Übung: „Ethik, Religion und das Kirchenjahr“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et3.3.02", "Christlicher Glaube: Kreuz, Kirche, Bibel", "3", ["sachkunde:et-kirchenjahr"], "teil", "Zu wenig Übung: „Ethik, Religion und das Kirchenjahr“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.et3.3.03", "Christlich geprägte Zeiten: Weihnachten, Fastenzeit, Ostern, Pfingsten", "3", ["sachkunde:et-kirchenjahr", "sachkunde:et-winterfeste"], "ja"],
-          ["sn.et3.3.04", "Feiertage in Sachsen und das Kirchenjahr: Reformationstag, sorbische Feiertage", "3", ["sachkunde:et-kirchenjahr"], "ja"]
+          ["sn.et3.3.04", "Feiertage in Sachsen und das Kirchenjahr: Reformationstag, sorbische Feiertage", "3", ["sachkunde:et-kirchenjahr"], "teil", "Zu wenig Übung: „Ethik, Religion und das Kirchenjahr“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         4: [ // Wir in der Welt
-          ["sn.et3.4.01", "Symbole wahrnehmen und deuten", "3", ["sachkunde:et-symbole"], "ja"],
-          ["sn.et3.4.02", "Natürliche Welt, vom Menschen gemachte Welt und Gedankenwelt", "3", ["sachkunde:et-symbole"], "ja"],
-          ["sn.et3.4.03", "Die Welt gestalten und bewahren", "3", ["sachkunde:et-symbole"], "ja"],
-          ["sn.et3.4.04", "Die vier Elemente Feuer, Wasser, Erde, Luft", "3", ["sachkunde:et-symbole"], "ja"]
+          ["sn.et3.4.01", "Symbole wahrnehmen und deuten", "3", ["sachkunde:et-symbole"], "teil", "Zu wenig Übung: „Symbole, Elemente und unsere Welt“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et3.4.02", "Natürliche Welt, vom Menschen gemachte Welt und Gedankenwelt", "3", ["sachkunde:et-symbole"], "teil", "Zu wenig Übung: „Symbole, Elemente und unsere Welt“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et3.4.03", "Die Welt gestalten und bewahren", "3", ["sachkunde:et-symbole"], "teil", "Zu wenig Übung: „Symbole, Elemente und unsere Welt“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et3.4.04", "Die vier Elemente Feuer, Wasser, Erde, Luft", "3", ["sachkunde:et-symbole"], "teil", "Zu wenig Übung: „Symbole, Elemente und unsere Welt“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ]
       },
       "4": {
         1: [ // Ich im Wir
-          ["sn.et4.1.01", "Eigene Identität, Vorbilder, Selbstwert", "4", ["sachkunde:et-wuensche"], "ja"],
-          ["sn.et4.1.02", "Wünsche, Träume, Lebensvorstellungen", "4", ["sachkunde:et-wuensche", "echtewelt:wuensche"], "ja"],
-          ["sn.et4.1.03", "Entscheidungen treffen, Gewissen, Folgen; Übergang zur neuen Schule", "4", ["sachkunde:et-wuensche"], "ja"]
+          ["sn.et4.1.01", "Eigene Identität, Vorbilder, Selbstwert", "4", ["sachkunde:et-wuensche"], "teil", "Zu wenig Übung: „Wünsche, Träume, Entscheidungen“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et4.1.02", "Wünsche, Träume, Lebensvorstellungen", "4", ["sachkunde:et-wuensche", "echtewelt:wuensche"], "teil", "Zu wenig Übung: „Wünsche, Träume, Entscheidungen“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et4.1.03", "Entscheidungen treffen, Gewissen, Folgen; Übergang zur neuen Schule", "4", ["sachkunde:et-wuensche"], "teil", "Zu wenig Übung: „Wünsche, Träume, Entscheidungen“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         2: [ // Miteinander
-          ["sn.et4.2.01", "Beziehungen zwischen den Generationen", "4", ["sachkunde:et-miteinander4", "echtewelt:frage"], "ja"],
-          ["sn.et4.2.02", "Goldene Regel in Religionen und Philosophie, Umgangsformen, Zivilcourage", "4", ["sachkunde:et-miteinander4"], "ja"]
+          ["sn.et4.2.01", "Beziehungen zwischen den Generationen", "4", ["sachkunde:et-miteinander4", "echtewelt:frage"], "teil", "Zu wenig Übung: „Jung und Alt, Zivilcourage“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et4.2.02", "Goldene Regel in Religionen und Philosophie, Umgangsformen, Zivilcourage", "4", ["sachkunde:et-miteinander4"], "teil", "Zu wenig Übung: „Jung und Alt, Zivilcourage“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         3: [ // Voneinander
-          ["sn.et4.3.01", "Judentum und Islam: Symbole, Gebetshäuser, heilige Bücher, Feste", "4", ["sachkunde:et-religionen"], "ja"],
-          ["sn.et4.3.02", "Gemeinsamkeiten von Judentum, Christentum und Islam", "4", ["sachkunde:et-religionen"], "ja"],
-          ["sn.et4.3.03", "Religiöse Persönlichkeiten und karitative Hilfe; selbst helfen", "4", ["sachkunde:et-religionen", "echtewelt:helfenprojekt"], "ja"],
+          ["sn.et4.3.01", "Judentum und Islam: Symbole, Gebetshäuser, heilige Bücher, Feste", "4", ["sachkunde:et-religionen"], "teil", "Zu wenig Übung: „Judentum, Christentum, Islam“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et4.3.02", "Gemeinsamkeiten von Judentum, Christentum und Islam", "4", ["sachkunde:et-religionen"], "teil", "Zu wenig Übung: „Judentum, Christentum, Islam“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.et4.3.03", "Religiöse Persönlichkeiten und karitative Hilfe; selbst helfen", "4", ["sachkunde:et-religionen", "echtewelt:helfenprojekt"], "teil", "Zu wenig Übung: „Judentum, Christentum, Islam“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.et4.3.04", "Werte und Traditionen anderer Kulturen, Toleranz", "4", ["sachkunde:et-religionen", "sachkunde:kulturen"], "ja"]
         ],
         4: [ // Wir in der Welt
-          ["sn.et4.4.01", "Gerechtigkeit und Ungerechtigkeit", "4", ["sachkunde:et-gerechtigkeit"], "ja"],
+          ["sn.et4.4.01", "Gerechtigkeit und Ungerechtigkeit", "4", ["sachkunde:et-gerechtigkeit"], "teil", "Zu wenig Übung: „Gerechtigkeit und Kinderrechte“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.et4.4.02", "Kinderrechte und Menschenrechte", "4", ["sachkunde:et-gerechtigkeit", "sachkunde:kinderrechte"], "ja"],
           ["sn.et4.4.03", "Philosophische Fragen: Glück, Zeit, was den Menschen ausmacht, Abschied", "4", ["sachkunde:et-glueck-zeit"], "ja"]
         ]
@@ -1198,13 +1202,13 @@
         2: [ // Spiele und Spielformen
           ["sn.sp12.2.01", "Laufspiele: Wettläufe, Staffeln, Platzsuch- und Fangspiele", "1/2", ["sachkunde:sp-fair", "echtewelt:fangen"], "aussen"],
           ["sn.sp12.2.02", "Mit Bällen und Spielgeräten üben: werfen, treffen, fangen", "1/2", ["echtewelt:werfen"], "aussen"],
-          ["sn.sp12.2.03", "Fair mit- und gegeneinander spielen, Gruppen bilden", "1/2", ["sachkunde:sp-fair"], "ja"],
-          ["sn.sp12.2.04", "Freizeit- und Pausenspiele, Regeln aushandeln und verändern", "1/2", ["sachkunde:sp-fair", "echtewelt:spielregeln"], "ja"]
+          ["sn.sp12.2.03", "Fair mit- und gegeneinander spielen, Gruppen bilden", "1/2", ["sachkunde:sp-fair"], "teil", "Zu wenig Übung: „Spielen und Fair Play“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sp12.2.04", "Freizeit- und Pausenspiele, Regeln aushandeln und verändern", "1/2", ["sachkunde:sp-fair", "echtewelt:spielregeln"], "teil", "Zu wenig Übung: „Spielen und Fair Play“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         3: [ // Turnerische Übungen
           ["sn.sp12.3.01", "An Geräten balancieren, klettern, hangeln, rollen; sicherer Geräteaufbau", "1/2", ["sachkunde:sp-turnen", "echtewelt:balance"], "aussen"],
           ["sn.sp12.3.02", "Rolle vorwärts und rückwärts", "1/2", ["sachkunde:sp-turnen", "echtewelt:rolle"], "aussen"],
-          ["sn.sp12.3.03", "Helfen und sich helfen lassen", "1/2", ["sachkunde:sp-turnen"], "ja"],
+          ["sn.sp12.3.03", "Helfen und sich helfen lassen", "1/2", ["sachkunde:sp-turnen"], "teil", "Zu wenig Übung: „Sicher turnen“ hat 4 Aufgaben für 6 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.sp12.3.04", "Beidbeinig abspringen: Auf- und Niedersprünge", "1/2", ["echtewelt:huepfen"], "aussen"],
           ["sn.sp12.3.05", "Gleichgewicht und Kraft, Spannung und Entspannung", "1/2", ["sachkunde:sp-turnen", "echtewelt:balance"], "aussen"]
         ],
@@ -1235,20 +1239,20 @@
         ],
         2: [ // Spiele und Spielformen
           ["sn.sp34.2.01", "Lauf- und Ballspiele, prellen, dribbeln, freilaufen", "3/4", ["echtewelt:fangen"], "aussen"],
-          ["sn.sp34.2.02", "Spielrollen, Sieg und Niederlage, Regeln erklären, Schiedsrichter sein", "3/4", ["sachkunde:sp-regeln"], "ja"],
-          ["sn.sp34.2.03", "Freizeit- und Trendsportarten, Spiele anderer Länder", "3/4", ["sachkunde:sp-regeln"], "ja"]
+          ["sn.sp34.2.02", "Spielrollen, Sieg und Niederlage, Regeln erklären, Schiedsrichter sein", "3/4", ["sachkunde:sp-regeln"], "teil", "Zu wenig Übung: „Spielregeln und Schiedsrichter“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sp34.2.03", "Freizeit- und Trendsportarten, Spiele anderer Länder", "3/4", ["sachkunde:sp-regeln"], "teil", "Zu wenig Übung: „Spielregeln und Schiedsrichter“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         3: [ // Turnerische Übungen
           ["sn.sp34.3.01", "Gerätebahnen, Sicherheit, Geräteaufbau", "3/4", ["sachkunde:sp-turnen", "echtewelt:balance"], "aussen"],
           ["sn.sp34.3.02", "Rollen in Verbindungen, Handstand, Kopfstand, Rad-Vorübungen", "3/4", ["echtewelt:rolle"], "aussen"],
           ["sn.sp34.3.03", "Sprunggrätsche und Aufhocken, helfen und sichern", "3/4", ["sachkunde:sp-turnen", "echtewelt:huepfen"], "aussen"],
-          ["sn.sp34.3.04", "Gleichgewicht, Kraft, Dehnen, gesunde Haltung", "3/4", ["sachkunde:sp-ruecken", "echtewelt:ruecken"], "ja"]
+          ["sn.sp34.3.04", "Gleichgewicht, Kraft, Dehnen, gesunde Haltung", "3/4", ["sachkunde:sp-ruecken", "echtewelt:ruecken"], "teil", "Zu wenig Übung: „Starker Rücken, Seil und Aerobic“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         4: [ // Gymnastisch-tänzerische Übungen
           ["sn.sp34.4.01", "Seilspringen und Handgeräte", "3/4", ["sachkunde:sp-ruecken", "echtewelt:huepfen"], "aussen"],
-          ["sn.sp34.4.02", "Aerobic-Grundschritte und Rhythmus", "3/4", ["sachkunde:sp-ruecken"], "ja"],
+          ["sn.sp34.4.02", "Aerobic-Grundschritte und Rhythmus", "3/4", ["sachkunde:sp-ruecken"], "teil", "Zu wenig Übung: „Starker Rücken, Seil und Aerobic“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.sp34.4.03", "Tänze gestalten, auch aus anderen Ländern", "3/4", ["sachkunde:mu-welt", "echtewelt:tanzschritte"], "aussen"],
-          ["sn.sp34.4.04", "Orientierung, Körperhaltung, Kräftigen, Dehnen und Entspannen", "3/4", ["sachkunde:sp-ruecken"], "ja"]
+          ["sn.sp34.4.04", "Orientierung, Körperhaltung, Kräftigen, Dehnen und Entspannen", "3/4", ["sachkunde:sp-ruecken"], "teil", "Zu wenig Übung: „Starker Rücken, Seil und Aerobic“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         6: [ // Wintersport
           ["sn.sp34.6.01", "Ski- oder Eislauftechnik: Aufstieg, Schussfahrt, Bremsen, Bögen, Lift", "3/4", ["echtewelt:schnee"], "aussen"],
@@ -1264,20 +1268,20 @@
         ],
         2: [ // Spiele und Spielformen
           ["sn.sp34.2.01", "Lauf- und Ballspiele, prellen, dribbeln, freilaufen", "3/4", ["echtewelt:fangen"], "aussen"],
-          ["sn.sp34.2.02", "Spielrollen, Sieg und Niederlage, Regeln erklären, Schiedsrichter sein", "3/4", ["sachkunde:sp-regeln"], "ja"],
-          ["sn.sp34.2.03", "Freizeit- und Trendsportarten, Spiele anderer Länder", "3/4", ["sachkunde:sp-regeln"], "ja"]
+          ["sn.sp34.2.02", "Spielrollen, Sieg und Niederlage, Regeln erklären, Schiedsrichter sein", "3/4", ["sachkunde:sp-regeln"], "teil", "Zu wenig Übung: „Spielregeln und Schiedsrichter“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sp34.2.03", "Freizeit- und Trendsportarten, Spiele anderer Länder", "3/4", ["sachkunde:sp-regeln"], "teil", "Zu wenig Übung: „Spielregeln und Schiedsrichter“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         3: [ // Turnerische Übungen
           ["sn.sp34.3.01", "Gerätebahnen, Sicherheit, Geräteaufbau", "3/4", ["sachkunde:sp-turnen", "echtewelt:balance"], "aussen"],
           ["sn.sp34.3.02", "Rollen in Verbindungen, Handstand, Kopfstand, Rad-Vorübungen", "3/4", ["echtewelt:rolle"], "aussen"],
           ["sn.sp34.3.03", "Sprunggrätsche und Aufhocken, helfen und sichern", "3/4", ["sachkunde:sp-turnen", "echtewelt:huepfen"], "aussen"],
-          ["sn.sp34.3.04", "Gleichgewicht, Kraft, Dehnen, gesunde Haltung", "3/4", ["sachkunde:sp-ruecken", "echtewelt:ruecken"], "ja"]
+          ["sn.sp34.3.04", "Gleichgewicht, Kraft, Dehnen, gesunde Haltung", "3/4", ["sachkunde:sp-ruecken", "echtewelt:ruecken"], "teil", "Zu wenig Übung: „Starker Rücken, Seil und Aerobic“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         4: [ // Gymnastisch-tänzerische Übungen
           ["sn.sp34.4.01", "Seilspringen und Handgeräte", "3/4", ["sachkunde:sp-ruecken", "echtewelt:huepfen"], "aussen"],
-          ["sn.sp34.4.02", "Aerobic-Grundschritte und Rhythmus", "3/4", ["sachkunde:sp-ruecken"], "ja"],
+          ["sn.sp34.4.02", "Aerobic-Grundschritte und Rhythmus", "3/4", ["sachkunde:sp-ruecken"], "teil", "Zu wenig Übung: „Starker Rücken, Seil und Aerobic“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.sp34.4.03", "Tänze gestalten, auch aus anderen Ländern", "3/4", ["sachkunde:mu-welt", "echtewelt:tanzschritte"], "aussen"],
-          ["sn.sp34.4.04", "Orientierung, Körperhaltung, Kräftigen, Dehnen und Entspannen", "3/4", ["sachkunde:sp-ruecken"], "ja"]
+          ["sn.sp34.4.04", "Orientierung, Körperhaltung, Kräftigen, Dehnen und Entspannen", "3/4", ["sachkunde:sp-ruecken"], "teil", "Zu wenig Übung: „Starker Rücken, Seil und Aerobic“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         6: [ // Wintersport
           ["sn.sp34.6.01", "Ski- oder Eislauftechnik: Aufstieg, Schussfahrt, Bremsen, Bögen, Lift", "3/4", ["echtewelt:schnee"], "aussen"],
@@ -1292,26 +1296,26 @@
           ["sn.rev12.1.01", "Gemeinschaft, Rituale, Regeln und eigene Fähigkeiten", "1/2", ["sachkunde:re-gefuehle", "sachkunde:et-klasse"], "ja"],
           ["sn.rev12.1.02", "Gefühle und Bedürfnisse wahrnehmen und ausdrücken", "1/2", ["sachkunde:re-gefuehle", "gefuehle:alle"], "ja"],
           ["sn.rev12.1.03", "Konflikte: Neid, Wut, Lösungen finden", "1/2", ["sachkunde:re-gefuehle", "sachkunde:et-klasse"], "ja"],
-          ["sn.rev12.1.04", "Angst überwinden: Sturmstillung und Jona", "1/2", ["sachkunde:re-gefuehle"], "ja"]
+          ["sn.rev12.1.04", "Angst überwinden: Sturmstillung und Jona", "1/2", ["sachkunde:re-gefuehle"], "teil", "Zu wenig Übung: „Freude, Angst und Trost“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         2: [ // Nach Gott und dem Sinn der Welt fragen
-          ["sn.rev12.2.01", "Vielfalt der Schöpfung mit allen Sinnen, Achtsamkeit", "1/2", ["sachkunde:re-schoepfung", "echtewelt:staunen"], "ja"],
-          ["sn.rev12.2.02", "Ein biblisches Schöpfungslob (Psalmen)", "1/2", ["sachkunde:re-schoepfung"], "ja"],
-          ["sn.rev12.2.03", "Biblische Rede von Gott: Hirte, Fels; eigene Gottesvorstellungen", "1/2", ["sachkunde:re-gottesbilder"], "ja"],
+          ["sn.rev12.2.01", "Vielfalt der Schöpfung mit allen Sinnen, Achtsamkeit", "1/2", ["sachkunde:re-schoepfung", "echtewelt:staunen"], "teil", "Zu wenig Übung: „Die Welt ist wunderbar“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rev12.2.02", "Ein biblisches Schöpfungslob (Psalmen)", "1/2", ["sachkunde:re-schoepfung"], "teil", "Zu wenig Übung: „Die Welt ist wunderbar“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rev12.2.03", "Biblische Rede von Gott: Hirte, Fels; eigene Gottesvorstellungen", "1/2", ["sachkunde:re-gottesbilder"], "teil", "Zu wenig Übung: „Wie ist Gott? Bilder aus der Bibel“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rev12.2.04", "Wasser als Quelle des Lebens", "1/2", ["sachkunde:re-licht-wasser"], "ja"],
           ["sn.rev12.2.05", "Die Erzählung von Noah", "1/2", ["sachkunde:re-noah"], "ja"]
         ],
         3: [ // Die biblische Botschaft kennen lernen
           ["sn.rev12.3.01", "Land und Leben zur Zeit Jesu", "1/2", ["sachkunde:re-zeit-jesu"], "ja"],
           ["sn.rev12.3.02", "Jesusgeschichten: Levi, Kindersegnung, Bartimäus", "1/2", ["sachkunde:re-jesus-hilft"], "ja"],
-          ["sn.rev12.3.03", "Abraham und Sara", "1/2", ["sachkunde:re-abraham"], "ja"],
-          ["sn.rev12.3.04", "Segen und Segenshandlungen", "1/2", ["sachkunde:re-abraham"], "ja"],
+          ["sn.rev12.3.03", "Abraham und Sara", "1/2", ["sachkunde:re-abraham"], "teil", "Zu wenig Übung: „Abraham und Sara“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rev12.3.04", "Segen und Segenshandlungen", "1/2", ["sachkunde:re-abraham"], "teil", "Zu wenig Übung: „Abraham und Sara“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rev12.3.05", "Die Josefsgeschichte", "1/2", ["sachkunde:re-josef"], "ja"]
         ],
         4: [ // Mit der Gemeinde feiern
           ["sn.rev12.4.01", "Erntedank, Nikolaus, Advent, Weihnachten, Ostern im Schulalltag", "1/2", ["sachkunde:re-feste12", "sachkunde:re-ostern12"], "ja"],
-          ["sn.rev12.4.02", "Die Weihnachtsgeschichte", "1/2", ["sachkunde:re-feste12"], "ja"],
-          ["sn.rev12.4.03", "Passion und Ostern", "1/2", ["sachkunde:re-ostern12"], "ja"],
+          ["sn.rev12.4.02", "Die Weihnachtsgeschichte", "1/2", ["sachkunde:re-feste12"], "teil", "Zu wenig Übung: „Erntedank, Advent und Weihnachten“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rev12.4.03", "Passion und Ostern", "1/2", ["sachkunde:re-ostern12"], "teil", "Zu wenig Übung: „Karwoche und Ostern“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rev12.4.04", "Sonntag, Kirche und Taufe", "1/2", ["sachkunde:re-kirche-taufe"], "ja"],
           ["sn.rev12.4.05", "Eine Kirche erleben und erkunden", "1/2", ["echtewelt:kirche"], "aussen"]
         ]
@@ -1319,26 +1323,26 @@
       "3": {
         1: [ // Miteinander leben
           ["sn.rev3.1.01", "Ermutigung und eigene Stärken", "3", ["sachkunde:et-staerken"], "ja"],
-          ["sn.rev3.1.02", "Konflikte, Symbol Brücke, Mobbing, Vergebung", "3", ["sachkunde:re-bruecken"], "ja"],
+          ["sn.rev3.1.02", "Konflikte, Symbol Brücke, Mobbing, Vergebung", "3", ["sachkunde:re-bruecken"], "teil", "Zu wenig Übung: „Brücken bauen: Streit und Versöhnung“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rev3.1.03", "Die Goldene Regel", "3", ["sachkunde:re-bruecken", "sachkunde:et-freundschaft"], "ja"],
-          ["sn.rev3.1.04", "Jüdische Religion: Synagoge, Thora, Sabbat", "3", ["sachkunde:re-judentum"], "ja"],
-          ["sn.rev3.1.05", "Jesus als Jude", "3", ["sachkunde:re-judentum"], "ja"]
+          ["sn.rev3.1.04", "Jüdische Religion: Synagoge, Thora, Sabbat", "3", ["sachkunde:re-judentum"], "teil", "Zu wenig Übung: „Jesus war Jude: das Judentum“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rev3.1.05", "Jesus als Jude", "3", ["sachkunde:re-judentum"], "teil", "Zu wenig Übung: „Jesus war Jude: das Judentum“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         2: [ // Nach Gott und dem Sinn der Welt fragen
-          ["sn.rev3.2.01", "Bildworte in Alltagssprache und Bibel", "3", ["sachkunde:re-bildworte"], "ja"],
+          ["sn.rev3.2.01", "Bildworte in Alltagssprache und Bibel", "3", ["sachkunde:re-bildworte"], "teil", "Zu wenig Übung: „Bildworte: Gott ist wie …“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rev3.2.02", "Gott in Metaphern: Hirte und Licht", "3", ["sachkunde:re-bildworte", "sachkunde:re-gottesbilder"], "ja"],
           ["sn.rev3.2.03", "Reich Gottes in Gleichnissen: Samariter, Senfkorn, verlorener Sohn", "3", ["sachkunde:re-gleichnisse"], "ja"],
           ["sn.rev3.2.04", "Die erste Schöpfungsgeschichte", "3", ["sachkunde:re-schoepfung3"], "ja"]
         ],
         3: [ // Die biblische Botschaft kennen lernen
-          ["sn.rev3.3.01", "Jesusgeschichten: ein Aussätziger, Zachäus", "3", ["sachkunde:re-ausgegrenzte"], "ja"],
-          ["sn.rev3.3.02", "Ausgegrenzte Menschen heute", "3", ["sachkunde:re-ausgegrenzte"], "ja"],
-          ["sn.rev3.3.03", "Menschen, die aus christlicher Überzeugung anderen geholfen haben", "3", ["sachkunde:re-ausgegrenzte"], "ja"],
+          ["sn.rev3.3.01", "Jesusgeschichten: ein Aussätziger, Zachäus", "3", ["sachkunde:re-ausgegrenzte"], "teil", "Zu wenig Übung: „Jesus und die Ausgegrenzten“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rev3.3.02", "Ausgegrenzte Menschen heute", "3", ["sachkunde:re-ausgegrenzte"], "teil", "Zu wenig Übung: „Jesus und die Ausgegrenzten“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rev3.3.03", "Menschen, die aus christlicher Überzeugung anderen geholfen haben", "3", ["sachkunde:re-ausgegrenzte"], "teil", "Zu wenig Übung: „Jesus und die Ausgegrenzten“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rev3.3.04", "Die Mosegeschichte bis zu den Zehn Geboten", "3", ["sachkunde:re-mose"], "ja"]
         ],
         4: [ // Mit der Gemeinde feiern
-          ["sn.rev3.4.01", "Jesus im Mittelpunkt des Kirchenjahres", "3", ["sachkunde:re-pfingsten"], "ja"],
-          ["sn.rev3.4.02", "Pfingsten als Geburtsfest der Kirche", "3", ["sachkunde:re-pfingsten"], "ja"],
+          ["sn.rev3.4.01", "Jesus im Mittelpunkt des Kirchenjahres", "3", ["sachkunde:re-pfingsten"], "teil", "Zu wenig Übung: „Pfingsten und der Gottesdienst“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rev3.4.02", "Pfingsten als Geburtsfest der Kirche", "3", ["sachkunde:re-pfingsten"], "teil", "Zu wenig Übung: „Pfingsten und der Gottesdienst“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rev3.4.03", "Einen Gottesdienst mitgestalten", "3", ["sachkunde:re-pfingsten", "echtewelt:kirche"], "aussen"]
         ]
       },
@@ -1349,9 +1353,9 @@
           ["sn.rev4.1.03", "Die Religion des Islam", "4", ["sachkunde:re-islam"], "ja"]
         ],
         2: [ // Nach Gott und dem Sinn der Welt fragen
-          ["sn.rev4.2.01", "Biblische Gebete, Vaterunser, Gebetsformen", "4", ["sachkunde:re-beten"], "ja"],
+          ["sn.rev4.2.01", "Biblische Gebete, Vaterunser, Gebetsformen", "4", ["sachkunde:re-beten"], "teil", "Zu wenig Übung: „Mit Gott reden: Psalmen und Gebete“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rev4.2.02", "Symbole: Baum, Sonne, Weg", "4", ["sachkunde:re-symbole"], "ja"],
-          ["sn.rev4.2.03", "Ein Schöpfungslob gestalten", "4", ["sachkunde:re-beten"], "ja"]
+          ["sn.rev4.2.03", "Ein Schöpfungslob gestalten", "4", ["sachkunde:re-beten"], "teil", "Zu wenig Übung: „Mit Gott reden: Psalmen und Gebete“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         3: [ // Die biblische Botschaft kennen lernen
           ["sn.rev4.3.01", "Das Mahl in der Bibel und die Mahlgemeinschaft Jesu", "4", ["sachkunde:re-mahl"], "ja"],
@@ -1369,89 +1373,89 @@
       "1/2": {
         1: [ // Miteinander leben
           ["sn.rka12.1.01", "Leben in Gemeinschaft, Rituale, Regeln", "1/2", ["sachkunde:re-gefuehle", "sachkunde:et-klasse"], "ja"],
-          ["sn.rka12.1.02", "Freude und Leid bei sich und anderen", "1/2", ["sachkunde:re-gefuehle"], "ja"],
-          ["sn.rka12.1.03", "Trost finden und andere trösten", "1/2", ["sachkunde:re-gefuehle"], "ja"],
-          ["sn.rka12.1.04", "Religiöse Vorerfahrungen und Zugehörigkeit zu einer Religionsgemeinschaft", "1/2", ["sachkunde:re-kirche-taufe"], "ja"]
+          ["sn.rka12.1.02", "Freude und Leid bei sich und anderen", "1/2", ["sachkunde:re-gefuehle"], "teil", "Zu wenig Übung: „Freude, Angst und Trost“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.1.03", "Trost finden und andere trösten", "1/2", ["sachkunde:re-gefuehle"], "teil", "Zu wenig Übung: „Freude, Angst und Trost“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.1.04", "Religiöse Vorerfahrungen und Zugehörigkeit zu einer Religionsgemeinschaft", "1/2", ["sachkunde:re-kirche-taufe"], "teil", "Zu wenig Übung: „Kirche, Sonntag und Taufe“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         2: [ // Das Geheimnis entdecken
-          ["sn.rka12.2.01", "Licht als Symbol im Kirchenjahr, Licht für andere sein", "1/2", ["sachkunde:re-licht-wasser"], "ja"],
-          ["sn.rka12.2.02", "Wasser als Symbol und Taufwasser", "1/2", ["sachkunde:re-licht-wasser"], "ja"],
-          ["sn.rka12.2.03", "Stille und meditative Übungen", "1/2", ["sachkunde:re-vaterunser", "echtewelt:stille"], "ja"],
-          ["sn.rka12.2.04", "Bildsprache der Bibel: Gott ist mein Licht, mein Hirte", "1/2", ["sachkunde:re-gottesbilder"], "ja"],
-          ["sn.rka12.2.05", "Fragen nach Gott und eigene Vorstellungen", "1/2", ["sachkunde:re-gottesbilder"], "ja"],
+          ["sn.rka12.2.01", "Licht als Symbol im Kirchenjahr, Licht für andere sein", "1/2", ["sachkunde:re-licht-wasser"], "teil", "Zu wenig Übung: „Licht und Wasser“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.2.02", "Wasser als Symbol und Taufwasser", "1/2", ["sachkunde:re-licht-wasser"], "teil", "Zu wenig Übung: „Licht und Wasser“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.2.03", "Stille und meditative Übungen", "1/2", ["sachkunde:re-vaterunser", "echtewelt:stille"], "teil", "Zu wenig Übung: „Beten, Stille und das Vaterunser“ hat 2 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.2.04", "Bildsprache der Bibel: Gott ist mein Licht, mein Hirte", "1/2", ["sachkunde:re-gottesbilder"], "teil", "Zu wenig Übung: „Wie ist Gott? Bilder aus der Bibel“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.2.05", "Fragen nach Gott und eigene Vorstellungen", "1/2", ["sachkunde:re-gottesbilder"], "teil", "Zu wenig Übung: „Wie ist Gott? Bilder aus der Bibel“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka12.2.06", "Schöpfung und Gott als Schöpfer", "1/2", ["sachkunde:re-schoepfung"], "ja"],
           ["sn.rka12.2.07", "Die Erzählung von Noah", "1/2", ["sachkunde:re-noah"], "ja"],
-          ["sn.rka12.2.08", "Segen und Segenshandlungen", "1/2", ["sachkunde:re-abraham"], "ja"]
+          ["sn.rka12.2.08", "Segen und Segenshandlungen", "1/2", ["sachkunde:re-abraham"], "teil", "Zu wenig Übung: „Abraham und Sara“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         3: [ // Die biblische Botschaft kennen lernen
-          ["sn.rka12.3.01", "Die Bartimäusgeschichte", "1/2", ["sachkunde:re-jesus-hilft"], "ja"],
-          ["sn.rka12.3.02", "Jesus segnet die Kinder", "1/2", ["sachkunde:re-jesus-hilft"], "ja"],
+          ["sn.rka12.3.01", "Die Bartimäusgeschichte", "1/2", ["sachkunde:re-jesus-hilft"], "teil", "Zu wenig Übung: „Jesus sieht die Not: Bartimäus und die Kinder“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.3.02", "Jesus segnet die Kinder", "1/2", ["sachkunde:re-jesus-hilft"], "teil", "Zu wenig Übung: „Jesus sieht die Not: Bartimäus und die Kinder“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka12.3.03", "Die Heimat Jesu", "1/2", ["sachkunde:re-zeit-jesu"], "ja"],
-          ["sn.rka12.3.04", "Gott als guter Vater und liebende Mutter", "1/2", ["sachkunde:re-gottesbilder"], "ja"],
-          ["sn.rka12.3.05", "Das Vaterunser", "1/2", ["sachkunde:re-vaterunser"], "ja"],
-          ["sn.rka12.3.06", "Abraham und Sara", "1/2", ["sachkunde:re-abraham"], "ja"],
+          ["sn.rka12.3.04", "Gott als guter Vater und liebende Mutter", "1/2", ["sachkunde:re-gottesbilder"], "teil", "Zu wenig Übung: „Wie ist Gott? Bilder aus der Bibel“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.3.05", "Das Vaterunser", "1/2", ["sachkunde:re-vaterunser"], "teil", "Zu wenig Übung: „Beten, Stille und das Vaterunser“ hat 2 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.3.06", "Abraham und Sara", "1/2", ["sachkunde:re-abraham"], "teil", "Zu wenig Übung: „Abraham und Sara“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka12.3.07", "Die Josefserzählung", "1/2", ["sachkunde:re-josef"], "ja"]
         ],
         4: [ // Mit der Kirche feiern
-          ["sn.rka12.4.01", "Erntedank", "1/2", ["sachkunde:re-feste12"], "ja"],
-          ["sn.rka12.4.02", "Advent, Brauchtum und die Weihnachtsgeschichte", "1/2", ["sachkunde:re-feste12"], "ja"],
-          ["sn.rka12.4.03", "Leiden, Sterben und Auferstehung Jesu, Lichtsymbolik zu Ostern", "1/2", ["sachkunde:re-ostern12"], "ja"],
-          ["sn.rka12.4.04", "Die Karwoche", "1/2", ["sachkunde:re-ostern12"], "ja"],
-          ["sn.rka12.4.05", "Der Kirchenraum und seine Ausstattung", "1/2", ["sachkunde:re-kirche-taufe", "echtewelt:kirche"], "ja"],
-          ["sn.rka12.4.06", "Die Taufe", "1/2", ["sachkunde:re-kirche-taufe"], "ja"]
+          ["sn.rka12.4.01", "Erntedank", "1/2", ["sachkunde:re-feste12"], "teil", "Zu wenig Übung: „Erntedank, Advent und Weihnachten“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.4.02", "Advent, Brauchtum und die Weihnachtsgeschichte", "1/2", ["sachkunde:re-feste12"], "teil", "Zu wenig Übung: „Erntedank, Advent und Weihnachten“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.4.03", "Leiden, Sterben und Auferstehung Jesu, Lichtsymbolik zu Ostern", "1/2", ["sachkunde:re-ostern12"], "teil", "Zu wenig Übung: „Karwoche und Ostern“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.4.04", "Die Karwoche", "1/2", ["sachkunde:re-ostern12"], "teil", "Zu wenig Übung: „Karwoche und Ostern“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.4.05", "Der Kirchenraum und seine Ausstattung", "1/2", ["sachkunde:re-kirche-taufe", "echtewelt:kirche"], "teil", "Zu wenig Übung: „Kirche, Sonntag und Taufe“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka12.4.06", "Die Taufe", "1/2", ["sachkunde:re-kirche-taufe"], "teil", "Zu wenig Übung: „Kirche, Sonntag und Taufe“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ]
       },
       "3": {
         1: [ // Miteinander leben
           ["sn.rka3.1.01", "Regeln und Gebote zum Schutz des Lebens, Goldene Regel", "3", ["sachkunde:re-mose", "sachkunde:et-freundschaft"], "ja"],
-          ["sn.rka3.1.02", "Rache und Vergebung", "3", ["sachkunde:re-bruecken"], "ja"],
-          ["sn.rka3.1.03", "Konflikte lösen, Brücken bauen", "3", ["sachkunde:re-bruecken"], "ja"],
+          ["sn.rka3.1.02", "Rache und Vergebung", "3", ["sachkunde:re-bruecken"], "teil", "Zu wenig Übung: „Brücken bauen: Streit und Versöhnung“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka3.1.03", "Konflikte lösen, Brücken bauen", "3", ["sachkunde:re-bruecken"], "teil", "Zu wenig Übung: „Brücken bauen: Streit und Versöhnung“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka3.1.04", "Das Judentum als Wurzel des christlichen Glaubens", "3", ["sachkunde:re-judentum"], "ja"]
         ],
         2: [ // Das Geheimnis entdecken
-          ["sn.rka3.2.01", "Brot als Symbol, Speisung der Fünftausend, Eucharistie", "3", ["sachkunde:re-brot"], "ja"],
-          ["sn.rka3.2.02", "Stille und Hören: Samuel", "3", ["sachkunde:re-brot"], "ja"],
+          ["sn.rka3.2.01", "Brot als Symbol, Speisung der Fünftausend, Eucharistie", "3", ["sachkunde:re-brot"], "teil", "Zu wenig Übung: „Brot teilen und Stille hören“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka3.2.02", "Stille und Hören: Samuel", "3", ["sachkunde:re-brot"], "teil", "Zu wenig Übung: „Brot teilen und Stille hören“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka3.2.03", "Bildrede von Gott, eigene Gottesvorstellungen", "3", ["sachkunde:re-bildworte"], "ja"],
-          ["sn.rka3.2.04", "Die Bildsprache der Gleichnisse, Reich Gottes", "3", ["sachkunde:re-gleichnisse"], "ja"]
+          ["sn.rka3.2.04", "Die Bildsprache der Gleichnisse, Reich Gottes", "3", ["sachkunde:re-gleichnisse"], "teil", "Zu wenig Übung: „Gleichnisse vom Reich Gottes“ hat 5 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         3: [ // Die biblische Botschaft kennen lernen
           ["sn.rka3.3.01", "Die Zachäusgeschichte", "3", ["sachkunde:re-ausgegrenzte"], "ja"],
-          ["sn.rka3.3.02", "Gleichnisse vom Schatz im Acker und vom Festmahl", "3", ["sachkunde:re-gleichnisse"], "ja"],
-          ["sn.rka3.3.03", "Der barmherzige Samariter", "3", ["sachkunde:re-gleichnisse"], "ja"],
-          ["sn.rka3.3.04", "Die Mosegeschichte, der Bund und die Zehn Gebote", "3", ["sachkunde:re-mose"], "ja"]
+          ["sn.rka3.3.02", "Gleichnisse vom Schatz im Acker und vom Festmahl", "3", ["sachkunde:re-gleichnisse"], "teil", "Zu wenig Übung: „Gleichnisse vom Reich Gottes“ hat 5 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka3.3.03", "Der barmherzige Samariter", "3", ["sachkunde:re-gleichnisse"], "teil", "Zu wenig Übung: „Gleichnisse vom Reich Gottes“ hat 5 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka3.3.04", "Die Mosegeschichte, der Bund und die Zehn Gebote", "3", ["sachkunde:re-mose"], "teil", "Zu wenig Übung: „Mose und der Weg in die Freiheit“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
         ],
         4: [ // Mit der Kirche feiern
-          ["sn.rka3.4.01", "Verkündigung des Herrn", "3", ["sachkunde:re-emmaus"], "ja"],
-          ["sn.rka3.4.02", "Menschwerdung Gottes, die Weisen aus dem Osten", "3", ["sachkunde:re-feste12"], "ja"],
-          ["sn.rka3.4.03", "Das Weizenkorn als Bild für Ostern", "3", ["sachkunde:re-emmaus"], "ja"],
-          ["sn.rka3.4.04", "Der Emmausgang", "3", ["sachkunde:re-emmaus"], "ja"],
-          ["sn.rka3.4.05", "Pfingsten als Geburtsstunde der Kirche", "3", ["sachkunde:re-pfingsten"], "ja"],
+          ["sn.rka3.4.01", "Verkündigung des Herrn", "3", ["sachkunde:re-emmaus"], "teil", "Zu wenig Übung: „Verkündigung, Weizenkorn und Emmaus“ hat 2 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka3.4.02", "Menschwerdung Gottes, die Weisen aus dem Osten", "3", ["sachkunde:re-feste12"], "teil", "Zu wenig Übung: „Erntedank, Advent und Weihnachten“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka3.4.03", "Das Weizenkorn als Bild für Ostern", "3", ["sachkunde:re-emmaus"], "teil", "Zu wenig Übung: „Verkündigung, Weizenkorn und Emmaus“ hat 2 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka3.4.04", "Der Emmausgang", "3", ["sachkunde:re-emmaus"], "teil", "Zu wenig Übung: „Verkündigung, Weizenkorn und Emmaus“ hat 2 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka3.4.05", "Pfingsten als Geburtsstunde der Kirche", "3", ["sachkunde:re-pfingsten"], "teil", "Zu wenig Übung: „Pfingsten und der Gottesdienst“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka3.4.06", "Gottesdienst und eine liturgische Feier gestalten", "3", ["sachkunde:re-pfingsten", "echtewelt:kirche"], "aussen"]
         ]
       },
       "4": {
         1: [ // Miteinander leben
-          ["sn.rka4.1.01", "Selbstvertrauen, Talente, Ermutigung", "4", ["sachkunde:re-verantwortung"], "ja"],
-          ["sn.rka4.1.02", "Verantwortung für Menschen und Natur", "4", ["sachkunde:re-verantwortung"], "ja"],
+          ["sn.rka4.1.01", "Selbstvertrauen, Talente, Ermutigung", "4", ["sachkunde:re-verantwortung"], "teil", "Zu wenig Übung: „Mut, Verantwortung und Kinderrechte“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka4.1.02", "Verantwortung für Menschen und Natur", "4", ["sachkunde:re-verantwortung"], "teil", "Zu wenig Übung: „Mut, Verantwortung und Kinderrechte“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka4.1.03", "Gerechtigkeit und Ungerechtigkeit, Mobbing", "4", ["sachkunde:re-verantwortung", "sachkunde:et-gerechtigkeit"], "ja"],
           ["sn.rka4.1.04", "Kinderrechte", "4", ["sachkunde:re-verantwortung", "sachkunde:kinderrechte"], "ja"],
           ["sn.rka4.1.05", "Leben von Muslimen und die islamische Religion", "4", ["sachkunde:re-islam"], "ja"]
         ],
         2: [ // Das Geheimnis entdecken
-          ["sn.rka4.2.01", "Das Symbol Baum", "4", ["sachkunde:re-symbole"], "ja"],
-          ["sn.rka4.2.02", "Stilleübungen und das Labyrinth", "4", ["sachkunde:re-symbole", "echtewelt:stille"], "ja"],
+          ["sn.rka4.2.01", "Das Symbol Baum", "4", ["sachkunde:re-symbole"], "teil", "Zu wenig Übung: „Baum, Weg und Labyrinth“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka4.2.02", "Stilleübungen und das Labyrinth", "4", ["sachkunde:re-symbole", "echtewelt:stille"], "teil", "Zu wenig Übung: „Baum, Weg und Labyrinth“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka4.2.03", "Psalmen und Gebete, eigene Psalmen", "4", ["sachkunde:re-beten"], "ja"]
         ],
         3: [ // Die biblische Botschaft kennen lernen
-          ["sn.rka4.3.01", "Jesus setzt sich für Benachteiligte ein: Aussätziger, Hauptmann", "4", ["sachkunde:re-heilungen"], "ja"],
+          ["sn.rka4.3.01", "Jesus setzt sich für Benachteiligte ein: Aussätziger, Hauptmann", "4", ["sachkunde:re-heilungen"], "teil", "Zu wenig Übung: „Jesus setzt sich für andere ein“ hat 2 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka4.3.02", "Die Bibel als Buch des Lebens, Jesus und die Heilige Schrift", "4", ["sachkunde:re-heilungen", "sachkunde:re-bibel"], "ja"],
-          ["sn.rka4.3.03", "Entstehung und Aufbau der Bibel", "4", ["sachkunde:re-bibel"], "ja"],
+          ["sn.rka4.3.03", "Entstehung und Aufbau der Bibel", "4", ["sachkunde:re-bibel"], "teil", "Zu wenig Übung: „Die Bibel – eine ganze Bibliothek“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka4.3.04", "Die Jakobserzählung", "4", ["sachkunde:re-jakob"], "ja"]
         ],
         4: [ // Mit der Kirche feiern
-          ["sn.rka4.4.01", "Die Passionsgeschichte und das Kreuz", "4", ["sachkunde:re-passion"], "ja"],
-          ["sn.rka4.4.02", "Der zweifelnde Tomas", "4", ["sachkunde:re-passion"], "ja"],
-          ["sn.rka4.4.03", "Inhalt und Verlauf des Kirchenjahres", "4", ["sachkunde:re-kirchenjahr"], "ja"],
+          ["sn.rka4.4.01", "Die Passionsgeschichte und das Kreuz", "4", ["sachkunde:re-passion"], "teil", "Zu wenig Übung: „Kreuz, Tomas und Sonntag“ hat 2 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka4.4.02", "Der zweifelnde Tomas", "4", ["sachkunde:re-passion"], "teil", "Zu wenig Übung: „Kreuz, Tomas und Sonntag“ hat 2 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.rka4.4.03", "Inhalt und Verlauf des Kirchenjahres", "4", ["sachkunde:re-kirchenjahr"], "teil", "Zu wenig Übung: „Das Kirchenjahr“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.rka4.4.04", "Der Sonntag", "4", ["sachkunde:re-passion", "sachkunde:re-kirchenjahr"], "ja"],
           ["sn.rka4.4.05", "Die Ökumene", "4", ["sachkunde:re-oekumene"], "ja"]
         ]
@@ -1461,7 +1465,7 @@
   // Übergang in Klasse 5 (Mathe) nach den Lehrplänen Oberschule (2019) und Gymnasium (2021) Sachsen, Klassenstufe 5 (29.10.2026; PDFs vom
   // Auftraggeber, nur zusammengefasst). Kein Lernbereich des Grundschul-Profils – wird nur für Kinder in der Stufe „Übergang 5“ im
   // Elternbereich gezeigt, je nach Eltern-Wahl eltern.mathe.schulart = "os" | "gy" (Standard Oberschule). P.uebergang.mathe = alle Punkte beider Schularten.
-  const zuPunkt = ([id, text, kl, app, abdeckung]) => ({ id, text, kl, app, abdeckung });
+  const zuPunkt = ([id, text, kl, app, abdeckung, hinweis]) => Object.assign({ id, text, kl, app, abdeckung }, hinweis ? { hinweis } : {});
   P.uebergang = { stand: "Lehrplan Mathematik Klasse 5: Oberschule 2019, Gymnasium 2021", schularten: {
     os: { name: "Oberschule", quelle: "Lehrplan Oberschule Mathematik (2019), Klassenstufe 5", lb: [
       { nr: 1, titel: "Natürliche Zahlen", punkte: [
@@ -1487,7 +1491,7 @@
         ["sn.os5.3.01", "Koordinate und Koordinatensystem (erster Quadrant)", "5", ["mathe:k5koordinaten", "expedition:karte"], "ja"],
         ["sn.os5.3.02", "Parallel, senkrecht, schneiden einander", "5", ["mathe:k5lage"], "ja"],
         ["sn.os5.3.03", "Winkel messen und zeichnen, Winkelarten", "5", ["mathe:k5lage", "mathe:k5winkel", "echtewelt:lineal"], "aussen"],
-        ["sn.os5.3.04", "Würfel skizzieren, Körpernetz, Schrägbild, Körpermodell bauen", "5", ["mathe:k3netze", "mathe:k4schraegbild", "echtewelt:bauplan"], "teil"],
+        ["sn.os5.3.04", "Würfel skizzieren, Körpernetz, Schrägbild, Körpermodell bauen", "5", ["mathe:k3netze", "mathe:k4schraegbild", "echtewelt:bauplan"], "teil", "Skizzieren und Modelle bauen gehören aufs Papier und in die Hand; die App übt Netze und Schrägbilder."],
         ["sn.os5.3.05", "Umfang und Flächeninhalt von Figuren aus Rechtecken, Flächeneinheiten", "5", ["mathe:k5raum", "mathe:k4flaeche", "mathe:k3umfang"], "ja"],
         ["sn.os5.3.06", "Oberfläche und Volumen des Würfels, Volumeneinheiten", "5", ["mathe:k5raum", "mathe:k4volumen"], "ja"]
       ].map(zuPunkt) },
@@ -1559,8 +1563,8 @@
     { nr: 3, titel: "Kommunikative Bildung: Sprache, Schrift, Medien", punkte: [
       ["sn.vs.3.01", "Reimen und Silben klatschen (Laute bewusst hören)", "vs", ["vorschule:vs-reime", "vorschule:vs-silben", "lesen:silben"], "ja"],
       ["sn.vs.3.02", "Anlaute hören, neugierig auf Buchstaben und Schrift werden", "vs", ["lesen:anlaute"], "ja"],
-      ["sn.vs.3.03", "Bildergeschichten verstehen und erzählen", "vs", ["vorschule:vs-geschichte"], "teil"],
-      ["sn.vs.3.04", "Den eigenen Namen schreiben, Stift richtig halten", "vs", ["lesen:name", "lesen:spuren", "echtewelt:schreibhaltung"], "teil"],
+      ["sn.vs.3.03", "Bildergeschichten verstehen und erzählen", "vs", ["vorschule:vs-geschichte"], "teil", "Erzählen ist mündlich; die App übt nur das Ordnen der Bilder."],
+      ["sn.vs.3.04", "Den eigenen Namen schreiben, Stift richtig halten", "vs", ["lesen:name", "lesen:spuren", "echtewelt:schreibhaltung"], "teil", "Nur Nachspuren mit dem Finger; den Stift halten und schreiben übt das Kind auf Papier (Entscheidung des Auftraggebers 10.11.2026)."],
       ["sn.vs.3.05", "Bilderbücher anschauen, Bibliothek kennenlernen", "vs", ["echtewelt:bibliothek"], "aussen"]
     ].map(zuPunkt) },
     { nr: 4, titel: "Ästhetische Bildung: Malen, Musik, Tanz", punkte: [
@@ -1591,6 +1595,11 @@
   P.uebergang.mathe = [].concat(...Object.values(P.uebergang.schularten).map(s => [].concat(...s.lb.map(l => l.punkte))));
   Object.entries(PUNKTE).forEach(([fach, stufen]) => Object.entries(stufen).forEach(([st, lbs]) => Object.entries(lbs).forEach(([nr, liste]) => {
     const lb = (((P.faecher[fach] || {}).stufen || {})[st] || []).find(x => x.nr === +nr);
-    if (lb) lb.punkte = liste.map(([id, text, kl, app, abdeckung]) => ({ id, text, kl, app, abdeckung }));
+    if (!lb) return;
+    lb.punkte = liste.map(([id, text, kl, app, abdeckung, hinweis]) => Object.assign({ id, text, kl, app, abdeckung }, hinweis ? { hinweis } : {}));
+    // Ehrlich lernen (07.11.2026): Ist ein Inhaltspunkt nur teilweise geübt, ist es der ganze Lernbereich auch.
+    if (lb.punkte.some(p => p.abdeckung === "teil" || p.abdeckung === "nein") && lb.abdeckung !== "teil") {
+      lb.abdeckung = "teil"; lb.hinweis = (lb.hinweis ? lb.hinweis + " " : "") + "Einzelne Inhaltspunkte sind nur teilweise geübt (siehe Inhaltspunkte).";
+    }
   })));
 })();
