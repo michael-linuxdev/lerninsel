@@ -163,8 +163,8 @@
     A.querySelectorAll("#dlg-optionen .option").forEach(b => b.addEventListener("click", () => {
       $("dlg-frage").hidden = false; const z = $("dlg-zu"); if (z) z.remove();
       antwort(b, opts[+b.dataset.n].ok, richtig, s.warum || "", () => {
-        $("dlg-optionen").hidden = true;
-        sprechPanel($("sprech-platz"), richtig, s.de ? `${rufname}: „${s.de}“` : "", "");
+        $("dlg-optionen").hidden = true; $("hinweis").hidden = true;   // die Erklärung steht jetzt im Sprech-Kasten
+        sprechPanel($("sprech-platz"), richtig, s.de ? `${rufname}: „${s.de}“` : "", s.warum || "");
         $("sprech-platz").scrollIntoView({ block: "nearest" });
       });
     }));

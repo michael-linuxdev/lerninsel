@@ -100,6 +100,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
         dialoge++;
         if (!erster) return false;
         erster = false;
+        await p.waitForTimeout(2700); await p.evaluate(() => { window.__gesagt = []; }); await p.waitForTimeout(400);   // Knopfdruck-Fenster des vorigen 🔊 abwarten
         const vorher = await p.evaluate(() => ({ versteckt: document.getElementById("dlg-frage").hidden, figur: !!document.querySelector(".dlg-figur svg"),
           emoji: /[\u{1F916}\u{1F989}\u{1F98A}\u{1F9AB}\u{1F43B}\u{1F99C}\u{1F422}]/u.test(document.querySelector(".dlg-zeile").textContent) }));
         erwarte(vorher.versteckt && vorher.figur && !vorher.emoji, "Dialog: Robo als Zeichnung (kein Emoji), die Frage ist vor dem Hören versteckt");
@@ -146,6 +147,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     let hgOk = false, textOk = false, falsch = true;
     const r2 = await durch(p, "en-home", {
       async hg(p, s) {
+        await p.waitForTimeout(2700); await p.evaluate(() => { window.__gesagt = []; }); await p.waitForTimeout(400);
         const vor = await p.evaluate(() => ({ text: !!document.querySelector(".hg-text"), weiter: document.getElementById("weiter").disabled }));
         const stumm = (await englischGesagt(p)).length === 0;
         await bild(p, "ensprechen-hoergeschichte-quer");
