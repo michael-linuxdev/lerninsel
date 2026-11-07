@@ -111,9 +111,12 @@
     const ablenker = (x) => mische(w.filter(y => y !== x)).slice(0, 2);
     return [{ typ: "sag", text: k.intro.de, ru: k.intro.ru }, { typ: "karten" }]
       .concat(quiz.map((x, i) => ({ typ: arten[i % 3], wort: x, andere: ablenker(x) })))
-      .concat(k.extra || [])
+      .concat(extraSchritte(k))
       .concat([{ typ: "sag", text: k.ende.de, ru: k.ende.ru, letzte: true }]);
   }
+  // Sprechen und Hören (07.11.2026): Gespräche/Hörgeschichten werden zu Einzelschritten (lektionen.js), Nachsprechen nur mit Erlaubnis und Mikrofon
+  const darfAufnehmen = () => !!(window.Eigenes && Eigenes.darfAufnehmen("englisch"));
+  const extraSchritte = (k) => (window.EnglischSchritte ? EnglischSchritte.flach(k.extra) : (k.extra || [])).filter(s => s.typ !== "nachsprechen" || darfAufnehmen());
 
   // Lernkartei (shared/lernkartei.js): Wörter, die letztes Mal knifflig waren, kommen nach der Begrüßung als kurze Wiederholung
   // (falsch → morgen, dann nach 3 und 7 Tagen; Wiederholungen zählen nicht gegen die Sterne).
@@ -136,6 +139,83 @@
   }
 
   const hinweis = `<p class="hinweis" id="hinweis"></p>`;
+
+  // ---------- Sprechen, Hören, kleine Dialoge (07.11.2026) ----------
+  const RUFNAME = { robo: "Robo", eule: "Ella", fipsi: "Fipsi", biber: "Benno", baer: "Bruni", papagei: "Paula", tilda: "Tilda" };
+  const figur = (wer) => window.FigurenNeu && FigurenNeu.svg ? FigurenNeu.svg(RUFNAME[wer] ? wer : "papagei", "a", "froh") : "";   // Begleiter immer als Zeichnung, nie als Emoji
+  const hgText = (g, mitDe) => `<div class="sachtext hg-text" lang="en">${g.saetze.map(t => `<span>${t}</span>`).join(" ")}</div>` + (mitDe ? `<p class="buch-de klein">${g.de}</p>` : "");
+
+  // Dialog: ein Begleiter fragt (🔊), das Kind wählt die passende Antwort und spricht sie nach
+  function dialogSchritt(s, A) {
+    const wer = RUFNAME[s.wer] ? s.wer : "papagei", rufname = RUFNAME[wer], frage = mitName(s.frage), ohne = !hatEnglisch();
+    const opts = mische(s.optionen.map((t, n) => ({ t: mitName(t), ok: n === 0 })));
+    const anleitung = `${s.gespraech ? `<b lang="en">${s.gespraech}</b> – ` : ""}${s.kontext ? s.kontext + " " : ""}${rufname} fragt dich etwas. ${ohne ? "Lies die Frage." : "Tippe auf 🔊 und hör zu."} Welche Antwort passt? Danach sagst du sie laut.`;
+    blase(anleitung, anleitung.replace(/<[^>]+>/g, "").replace("🔊", "den Lautsprecher"), s.ru);
+    A.innerHTML = (s.verlauf && s.verlauf.length ? `<div class="dlg-verlauf">${s.verlauf.map(([f, a]) => `<p><b>${rufname}:</b> <span lang="en">${mitName(f)}</span></p><p class="ich"><b>Du:</b> <span lang="en">${mitName(a)}</span></p>`).join("")}</div>` : "") +
+      `<div class="dlg-zeile"><span class="dlg-figur" aria-hidden="true">${figur(wer)}</span><div class="dlg-blase begleiter-blase">` +
+      `<p class="dlg-frage" id="dlg-frage" lang="en"${ohne ? "" : " hidden"}>${frage}</p>${ohne ? "" : `<p class="dlg-zu" id="dlg-zu">${rufname} fragt …</p>`}` +
+      (ohne ? "" : `<button class="knopf dlg-hoeren" id="dlg-hoeren" aria-label="Frage anhören">🔊 Anhören</button>`) + `</div>` +
+      (s.e ? `<span class="gross-emoji klein dlg-e" aria-hidden="true">${s.e}</span>` : "") + `</div>` +
+      `<div class="optionen texte" id="dlg-optionen">` + opts.map((o, n) => `<button class="option" data-n="${n}" lang="en">${o.t}</button>`).join("") + `</div>` + hinweis + `<div id="sprech-platz"></div>`;
+    const hk = $("dlg-hoeren");
+    if (hk) hk.addEventListener("click", () => { $("dlg-frage").hidden = false; const z = $("dlg-zu"); if (z) z.remove(); sprichEn(frage); });
+    const richtig = opts.find(o => o.ok).t;
+    A.querySelectorAll("#dlg-optionen .option").forEach(b => b.addEventListener("click", () => {
+      $("dlg-frage").hidden = false; const z = $("dlg-zu"); if (z) z.remove();
+      antwort(b, opts[+b.dataset.n].ok, richtig, s.warum || "", () => {
+        $("dlg-optionen").hidden = true;
+        sprechPanel($("sprech-platz"), richtig, s.de ? `${rufname}: „${s.de}“` : "", "");
+        $("sprech-platz").scrollIntoView({ block: "nearest" });
+      });
+    }));
+  }
+
+  // Nachsprechen: Vorbild hören (🔊), laut sagen; mit Eltern-Erlaubnis aufnehmen, sich anhören und selbst vergleichen – ohne Bewertung, zählt nie als Fehler.
+  // Aufnahmen bleiben nur im Speicher dieser Seite (nicht in „Mein Heft“) und sind beim Weiterblättern weg.
+  let aufnahmeEnde = null;
+  function sprechPanel(platz, satz, de, tipp) {
+    const darf = darfAufnehmen();
+    platz.innerHTML = `<div class="sprech" id="sprech"><p class="sprech-titel">🗣️ Jetzt du! Sag es laut:</p><p class="sprech-satz" lang="en">${satz}</p>${de ? `<p class="klein sprech-de">${de}</p>` : ""}${tipp ? `<p class="klein sprech-tipp">💡 ${tipp}</p>` : ""}
+      <div class="sprech-knoepfe"><button class="knopf" id="vorbild" aria-label="Vorsprechen">🔊 Vorsprechen</button>${darf ? `<button class="aufnahme-knopf" id="en-aufnahme" aria-label="Aufnehmen">🎙️</button>` : ""}</div>
+      ${darf ? `<p class="aufnahme-zeit" id="aufnahme-zeit">Tippe aufs Mikrofon und sprich nach!</p>
+      <div class="vergleich" id="vergleich" hidden><div class="sprech-knoepfe"><button class="knopf" id="mich-hoeren">▶️ Mich anhören</button><button class="knopf" id="vorbild2" aria-label="Vorbild nochmal anhören">🔊 Vorbild</button></div>
+        <p class="vergleich-frage">Klang es gleich?</p><div class="sprech-knoepfe"><button class="knopf haupt" id="gleich" aria-label="Ja, es klang gleich">👍 Ja!</button><button class="knopf" id="noch-einmal" aria-label="Noch einmal aufnehmen">🔁 Noch einmal</button></div></div>` : ""}
+      <button class="knopf weiter" id="weiter">${darf ? "Weiter ohne Aufnahme" : "✅ Gesagt!"}</button></div>`;
+    $("vorbild").addEventListener("click", () => sprichEn(satz));
+    const dieser = lauf, an = lauf.pos, nochDa = () => lauf === dieser && lauf.pos === an;
+    let rec = null, erg = null, adresse = null, spieler = null, uhr = null;
+    const aufraeumen = () => { clearInterval(uhr); if (spieler) spieler.pause(); if (adresse) URL.revokeObjectURL(adresse); adresse = null; };
+    aufnahmeEnde = () => { if (rec) rec.stopp(); aufraeumen(); aufnahmeEnde = null; };
+    const fertig = (gut) => { if (aufnahmeEnde) aufnahmeEnde(); if (gut && window.Charakter) Charakter.gib("englisch", 1); S.ton(gut ? "juhu" : "tipp"); weiter(); };
+    $("weiter").addEventListener("click", () => fertig(false));
+    if (!darf) return;
+    const knopf = $("en-aufnahme"), zeit = $("aufnahme-zeit");
+    knopf.addEventListener("click", async () => {
+      if (rec) { rec.stopp(); return; }
+      SP.stopp(); aufraeumen(); $("vergleich").hidden = true;
+      try {
+        rec = await Eigenes.starteAufnahme((x) => {
+          rec = null; clearInterval(uhr); knopf.classList.remove("laeuft"); knopf.textContent = "🎙️"; knopf.setAttribute("aria-label", "Noch einmal aufnehmen");
+          if (!nochDa()) return;
+          erg = x;
+          zeit.textContent = x ? "Hör dich an und vergleiche mit dem Vorbild." : "Da war nichts zu hören. Probier es nochmal!";
+          $("vergleich").hidden = !x;
+          if (x) $("vergleich").scrollIntoView({ block: "nearest" });
+        }, 15);
+      } catch (e) {
+        zeit.textContent = "Das Mikrofon ist gerade aus. Sag es einfach laut – das ist auch Üben!";
+        knopf.disabled = true; $("weiter").textContent = "✅ Gesagt!";
+        return;
+      }
+      knopf.classList.add("laeuft"); knopf.textContent = "⏹️"; knopf.setAttribute("aria-label", "Aufnahme stoppen");
+      const start = Date.now(); zeit.textContent = "Ich höre zu …";
+      uhr = setInterval(() => { zeit.textContent = `Ich höre zu … ${Math.round((Date.now() - start) / 1000)} s – tippe auf ⏹️, wenn du fertig bist.`; }, 500);
+    });
+    $("mich-hoeren").addEventListener("click", () => { if (!erg) return; if (spieler) spieler.pause(); if (!adresse) adresse = Eigenes.url(erg); spieler = new Audio(adresse); spieler.play().catch(() => {}); });
+    $("vorbild2").addEventListener("click", () => { if (spieler) spieler.pause(); sprichEn(satz); });
+    $("noch-einmal").addEventListener("click", () => { S.ton("tipp"); knopf.click(); });
+    $("gleich").addEventListener("click", () => fertig(true));
+  }
 
   function schritt() {
     const s = lauf.schritte[lauf.pos], A = $("aufgabe"), k = lauf.k;
@@ -203,6 +283,40 @@
         if (l) Lieder.zeige($("lied-platz"), s.id);
         break;
       }
+      case "dialog": dialogSchritt(s, A); break;
+      case "nachsprechen":
+        blase("Sprich mir nach! Tippe auf 🔊 und hör gut zu. Dann nimm dich auf und hör dich an: Klang es gleich?", "Sprich mir nach! Tippe auf den Lautsprecher und hör gut zu. Dann nimm dich auf und hör dich an.", s.ru);
+        A.innerHTML = (s.e ? `<div class="gross-emoji klein" aria-hidden="true">${s.e}</div>` : "") + `<div id="sprech-platz"></div>`;
+        sprechPanel($("sprech-platz"), s.satz, s.de, s.tipp);
+        break;
+      case "hg": {   // Hörgeschichte: erst hören, der Text bleibt versteckt (ohne englische Stimme steht er gleich da)
+        const g = s.g, ohne = !hatEnglisch();
+        blase(ohne ? `Eine kleine Geschichte: „${g.titel}“. Auf diesem Gerät fehlt die englische Stimme – lies sie dir in Ruhe durch. Danach kommen Fragen.`
+          : `Eine Hörgeschichte: „${g.titel}“. Tippe auf 🔊 und hör gut zu – den Text siehst du erst später. Danach kommen Fragen.`, ohne ? "Eine kleine Geschichte. Lies sie dir durch, danach kommen Fragen." : "Eine Hörgeschichte. Tippe auf den Lautsprecher und hör gut zu. Danach kommen Fragen.", s.ru);
+        A.innerHTML = `<div class="hg-kopf"><span class="dlg-figur" aria-hidden="true">${figur(g.wer)}</span><span class="gross-emoji klein" aria-hidden="true">${g.e}</span></div><h2 class="hg-titel" lang="en">${g.titel}</h2>` +
+          (ohne ? hgText(g) : `<button class="hoeren-knopf" id="hg-hoeren" aria-label="Geschichte anhören">🔊</button><p class="klein" id="hg-status">Tippe auf 🔊 und hör zu.</p>`) +
+          `<button class="knopf weiter" id="weiter"${ohne ? "" : " disabled"}>Zu den Fragen ➡️</button>`;
+        aufWeiter();
+        if (!ohne) $("hg-hoeren").addEventListener("click", () => { lauf.gehoert = true; $("weiter").disabled = false; $("hg-status").textContent = "Gut zugehört? Du kannst es auch nochmal anhören."; sprichEn(g.saetze.join(" ")); });
+        break;
+      }
+      case "hg-frage": {
+        const g = s.g, f = s.f, opts = mische(f.optionen.map((t, n) => ({ t, ok: n === 0 })));
+        blase(`Frage ${s.nr + 1} von ${g.fragen.length}: <i>${f.de}</i> Tippe auf das passende Bild.`, `Frage ${s.nr + 1}: ${f.de}`, s.ru);
+        A.innerHTML = `<p class="dlg-frage-gross" lang="en">${f.frage}</p>` +
+          (hatEnglisch() ? `<button class="knopf" id="hg-nochmal" aria-label="Geschichte nochmal anhören">🔊 Nochmal anhören</button>` : hgText(g)) +
+          `<div class="optionen bilder">` + opts.map((o, n) => `<button class="option" data-n="${n}" aria-label="Bild ${n + 1}"><span class="e">${o.t}</span></button>`).join("") + `</div>` + hinweis;
+        const nh = $("hg-nochmal"); if (nh) nh.addEventListener("click", () => sprichEn(g.saetze.join(" ")));
+        A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => antwort(b, opts[+b.dataset.n].ok, f.antwort, f.antwort)));
+        break;
+      }
+      case "hg-text": {
+        const g = s.g;
+        blase("Geschafft! Hier ist die Geschichte zum Mitlesen. Tippe auf 🔊, dann hörst du sie noch einmal.", "Geschafft! Hier ist die Geschichte zum Mitlesen.", s.ru);
+        A.innerHTML = `<h2 class="hg-titel" lang="en">${g.titel}</h2>` + hgText(g, true) + `<button class="knopf" id="hg-text-hoeren" aria-label="Geschichte anhören">🔊 Anhören</button>` + weiterKnopf();
+        $("hg-text-hoeren").addEventListener("click", () => sprichEn(g.saetze.join(" "))); aufWeiter();
+        break;
+      }
       case "wahl": {
         const opts = mische(s.optionen.map((t, n) => ({ t, ok: n === 0 })));
         blase(s.frage, s.frage, s.ru);
@@ -240,7 +354,7 @@
   }
 
   // Gemeinsame Prüfung: richtig → loben, englisch vorsprechen, Erklärung zeigen, weiter. Falsch → nochmal (erster Fehler zählt).
-  function antwort(knopf, richtig, englisch, erklaerung) {
+  function antwort(knopf, richtig, englisch, erklaerung, danach) {   // danach: statt automatisch weiterzublättern (Dialog → Nachsprechen)
     if (lauf.gesperrt) return;
     const h = $("hinweis"), lz = lauf.k.lz;
     if (richtig) {
@@ -255,7 +369,7 @@
       h.className = "hinweis gut"; h.innerHTML = `${LOB[Math.floor(Math.random() * LOB.length)]}${erklaerung ? ` <span class="erklaerung">${erklaerung}</span>` : ""}`;
       S.ton("juhu"); setTimeout(() => sprichEn(englisch), 250);
       const dieser = lauf, an = lauf.pos;
-      setTimeout(() => { if (lauf !== dieser || lauf.pos !== an) return; weiter(); }, 2300);
+      setTimeout(() => { if (lauf !== dieser || lauf.pos !== an) return; if (danach) danach(); else weiter(); }, danach ? (window.__testSchnell ? 60 : 900) : 2300);
       return;
     }
     lauf.versuche++;
@@ -264,7 +378,7 @@
     S.ton("nein"); if (knopf) { knopf.classList.add("falsch"); knopf.disabled = true; }
     h.className = "hinweis nein"; h.textContent = "Fast! Try again – versuch es nochmal.";
   }
-  function weiter() { SP.stopp(); if (window.Lieder) Lieder.stopp(); lauf.pos++; schritt(); }
+  function weiter() { if (aufnahmeEnde) aufnahmeEnde(); SP.stopp(); if (window.Lieder) Lieder.stopp(); lauf.pos++; schritt(); }
 
   function beende() {
     if (lauf.k.lernstand) return beendeLernstand();
@@ -295,7 +409,7 @@
     zeige("ende"); S.ton("juhu");
   }
 
-  $("zur-liste").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); lauf = null; zeige("liste"); zeichneListe(); });
+  $("zur-liste").addEventListener("click", () => { if (aufnahmeEnde) aufnahmeEnde(); SP.stopp(); S.ton("tipp"); lauf = null; zeige("liste"); zeichneListe(); });
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Deutsche Erklärungen werden vorgelesen." : "Deutsche Erklärungen werden nicht vorgelesen. Englische Wörter hörst du weiter."); });
 
   zeichneListe();

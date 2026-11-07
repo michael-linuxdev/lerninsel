@@ -463,7 +463,7 @@
   }
   // Englisch (Englisch-Einstieg): Beginn je nach Bundesland/Schule – meist Kl. 3, in manchen Ländern früher
   function englischKarte() {
-    const ab = ((S.lade("eltern") || {}).englisch || {}).ab || "3", enSchule = ((S.lade("eltern") || {}).englisch || {}).schule || "";
+    const ab = ((S.lade("eltern") || {}).englisch || {}).ab || "3", enSchule = ((S.lade("eltern") || {}).englisch || {}).schule || "", enAuf = !!(((S.lade("eltern") || {}).englisch || {}).aufnehmen);
     return `<div class="karte">
       <h2>\uE106 Englisch wie in der Schule</h2>
       <div class="zeit-raster"><label>Englisch zeigen<select id="en-ab">
@@ -471,6 +471,8 @@
         <option value="1" ${ab === "1" ? "selected" : ""}>Schon ab Klasse 1 (wenn die Schule früh mit Englisch beginnt)</option></select></label>
         <label>Gerade in der Schule<select id="en-schule"><option value="">Keine Angabe</option>${Object.entries(EN_LB).map(([k, n]) => `<option value="${k}" ${String(enSchule) === k ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
       <h3>„Zeig, was du kannst“</h3>${lernstandListe("englisch", EN_LB, window.ENGLISCH || [], "lernstand-englisch")}
+      <label class="schalter-z"><input type="checkbox" id="en-aufnehmen" ${enAuf ? "checked" : ""}> Mein Kind darf sich beim Nachsprechen auf Englisch selbst aufnehmen und mit dem Vorbild vergleichen</label>
+      <p class="klein">Die Aufnahmen bleiben nur auf dieser Seite im Speicher, werden nicht gespeichert, nie hochgeladen und nicht bewertet (keine Spracherkennung) – das Kind hört sich an und entscheidet selbst: „Klang es gleich?“. Ist der Schalter aus, spricht das Kind nur laut nach und die Aufnahme-Schritte fallen still weg.${window.Eigenes && !Eigenes.kannAufnehmen() ? " <b>Dieser Browser kann nicht aufnehmen.</b>" : ""}</p>
       <p class="klein">Englische Wörter liest die englische Stimme des Geräts vor. Fehlt sie: iPad → Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Englisch. Ohne Stimme werden Hör-Aufgaben zu Lese-Aufgaben.</p>
       <div class="knoepfe"><button class="knopf haupt" id="en-speichern">Speichern</button></div>
     </div>`;
@@ -573,7 +575,7 @@
     fuelle();
   }
   function englischKnoepfe() {
-    $("en-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.englisch = Object.assign({}, e.englisch || {}, { ab: $("en-ab").value, schule: $("en-schule").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
+    $("en-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.englisch = Object.assign({}, e.englisch || {}, { ab: $("en-ab").value, schule: $("en-schule").value, aufnehmen: $("en-aufnehmen").checked }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
   }
   function matheKnoepfe() {
     $("m-speichern").addEventListener("click", () => { const e = S.lade("eltern") || {}; e.mathe = Object.assign({}, e.mathe || {}, { minus: $("m-minus").value, schule: $("m-schule").value, schulart: $("m-schulart").value }); S.speichere("eltern", e); S.meldung("Gespeichert."); });
