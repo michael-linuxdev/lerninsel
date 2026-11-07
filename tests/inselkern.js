@@ -26,7 +26,7 @@ function neueUmgebung({ story = {}, zeit = null, funde = 0, speicher = {}, jetzt
       etappe: (e) => !!st.etappen[e], etappeFertig: (e, still) => { if (!st.etappen[e]) { st.etappen[e] = still ? 1 : "2026-10-27"; if (!still) neueHeute++; } },
       kapitel: () => st.kapitel, setzeKapitel: (k) => { st.kapitel = Math.max(st.kapitel, k); },
       gesehen: (id) => st.gesehen.includes(id), darfNeueEtappe: () => neueHeute < 2,
-      zustand: () => st, hatGeschenk: (id) => st.geschenke.includes(id), merkeGeschenk: (id) => { if (!st.geschenke.includes(id)) st.geschenke.push(id); }
+      zustand: () => st, chronik: () => (st.chronik || []).slice(), merkeSzene: (id, still) => { if (st.gesehen.includes(id)) return false; st.gesehen.push(id); if (!still) (st.chronik = st.chronik || []).push({ s: id, d: "2026-10-25" }); return true; }, hatGeschenk: (id) => st.geschenke.includes(id), merkeGeschenk: (id) => { if (!st.geschenke.includes(id)) st.geschenke.push(id); }
     },
     Szene: { laeuft: false },
     Lernfunde: { gesamt: () => funde, STUFEN: [1, 5, 15, 30], baum: () => ({ stufe: funde >= 15 ? 3 : funde >= 5 ? 2 : funde >= 1 ? 1 : 0, summe: funde, naechste: funde < 1 ? 1 : funde < 5 ? 5 : funde < 15 ? 15 : 30 }),
@@ -460,6 +460,64 @@ pruefe("E4–E8 (NA-14): Auslöser, Reihenfolge, höchstens zwei am Tag, schon G
   assert.strictEqual(x.K.naechsteStory({}), null, "am Ankunftstag noch nicht");
   // Merkkiste bei Ella, wenn nur Sachunterricht fällig ist
   assert.strictEqual(u.K.merkkisteBei(), "fipsi");
+});
+
+pruefe("Story-Bogen mit Finale (07.11.2026): Kapitel 8 „Fipsis Schatz“, Kapitel 9 „Die Insel ist wach“, Nebenszenen (Tilda, Bruni, Paulas Fest) und Jahreszeiten", () => {
+  const ALLE = { E1: "2026-10-01", E2: 1, E3: 1, E4: 1, E5: 1, E6: 1, E7: 1, E8: 1, E9: 1 }, FREI = { frei: true, spielen: true, genug: false, fortschritt: 1 };
+  // Schatzkarte = die fünf Kapitel aus spiele/deutsch/geschichte.js
+  const g = {}; new Function("window", fs.readFileSync(path.join(__dirname, "../spiele/deutsch/geschichte.js"), "utf8"))(g);
+  assert.deepStrictEqual(neueUmgebung().K.SCHATZKARTE, g.GESCHICHTE.map(k => k.id), "SCHATZKARTE = Kapitel der Geschichte");
+  const voll = { wald: 1, hof: 2, baeckerei: 1, strand: 3, schloss: 1 };
+  const k8 = (u) => u.K.KAPITEL.find(k => k.n === 8), k9 = (u) => u.K.KAPITEL.find(k => k.n === 9);
+  assert.strictEqual(k8(neueUmgebung({ speicher: { deutsch: { kapitel: Object.assign({}, voll, { schloss: 0 }) } } })).faellig(), false, "vier Kartenteile: Kapitel 8 wartet");
+  assert.strictEqual(k8(neueUmgebung({ speicher: { deutsch: { kapitel: voll } } })).faellig(), true, "Schatzkarte komplett: Kapitel 8 fällig");
+  assert.strictEqual(k9(neueUmgebung({ funde: 69 })).faellig(), false); assert.strictEqual(k9(neueUmgebung({ funde: 70 })).faellig(), true, "Finale ab 70 Lernfunden");
+  const u7 = neueUmgebung({ funde: 70, speicher: { deutsch: { kapitel: voll }, schach: { raetsel: { 0: 1 } }, tierstation: { frei: { igel: 1 } } }, story: { kapitel: 7, etappen: ALLE }, zeit: FREI });
+  assert.strictEqual(u7.K.naechsteStory({}), "fipsis-schatz", "nach Kapitel 7 mit kompletter Karte: Fipsis Schatz");
+  u7.st.kapitel = 8; assert.strictEqual(u7.K.naechsteStory({}), "insel-wach", "danach das Finale");
+  // Truhe: Ort neben dem Wegweiser, zu bis Kapitel 8, dann Fipsis Wörterbuch
+  const W = neueUmgebung().K.erstelle(q("")), o = W.ORTE.schatz, kw = W.P.kartenweg, ab = Math.hypot(o.x - kw[0], o.z - kw[1]);
+  assert.ok(ab < 1.6 && ab > 0.8, "Truhe steht neben dem Wegweiser: " + ab);
+  assert.ok(W.ORTE.fest && W.ORTE.fest.x === W.P.schach[0], "Fest am Schachtisch");
+  assert.strictEqual(neueUmgebung({ story: { kapitel: 7 } }).K.ortOffen("schatz"), false);
+  { const b = neueUmgebung({ story: { kapitel: 8 } }).K.antwort("schatz").blase; assert.ok(b[0] === "fipsi" && /Wörterbuch/.test(b[2]) && b[4] === "../album/#woerterbuch"); }
+  assert.deepStrictEqual(neueUmgebung().K.aktionFuer("schatz"), [["📖", "Öffnen"], 2.0]);
+  // Nebenszenen: Brunis Station ab Kapitel 2, still, wenn das Kind die Station schon kennt
+  const n2 = neueUmgebung({ story: { kapitel: 2, etappen: ALLE }, zeit: FREI });
+  assert.strictEqual(n2.K.naechsteStory({}), "brunis-station", "Kapitel 2: Bruni zeigt ihre Station");
+  n2.st.gesehen.push("brunis-station"); assert.strictEqual(n2.K.naechsteStory({}), null, "Tilda erst ab Kapitel 3");
+  const kennt = neueUmgebung({ story: { kapitel: 2, etappen: ALLE }, zeit: FREI, speicher: { tierstation: { gast: { id: "igel" } } } });
+  assert.strictEqual(kennt.K.naechsteStory({}), null); assert.ok(kennt.st.gesehen.includes("brunis-station") && !(kennt.st.chronik || []).length, "schon genutzt: still, ohne Chronik");
+  const n3 = neueUmgebung({ story: { kapitel: 3, etappen: ALLE, gesehen: ["brunis-station"] }, zeit: FREI });
+  assert.strictEqual(n3.K.naechsteStory({}), "tilda", "Kapitel 3 nach E9: Tilda stellt sich vor");
+  const ohne9 = Object.assign({}, ALLE); delete ohne9.E9;
+  assert.notStrictEqual(neueUmgebung({ story: { kapitel: 3, etappen: ohne9, gesehen: ["brunis-station"] }, zeit: FREI }).K.naechsteStory({}), "tilda", "vor E9 noch nicht");
+  // höchstens eine Nebenszene am Tag
+  const heute = neueUmgebung({ jetzt: new Date(2026, 9, 25, 15).getTime(), story: { kapitel: 4, etappen: ALLE, gesehen: ["brunis-station"], chronik: [{ s: "brunis-station", d: "2026-10-25" }] }, zeit: FREI, speicher: { rhythmus: { runden: 1 } } });
+  assert.strictEqual(heute.K.naechsteStory({}), null, "heute gab es schon eine Nebenszene");
+  const fest = neueUmgebung({ jetzt: new Date(2026, 9, 26, 15).getTime(), story: { kapitel: 4, etappen: ALLE, gesehen: ["brunis-station", "tilda"], chronik: [{ s: "brunis-station", d: "2026-10-25" }] }, zeit: FREI, speicher: { rhythmus: { runden: 1 } } });
+  assert.strictEqual(fest.K.naechsteStory({}), "paulas-feier", "nach der ersten Bootsfahrt: Paulas Fest");
+  // Jahreszeiten nach dem Finale, je Jahreszeit und Jahr einmal; nicht am Tag des Finales
+  const jz = (m, d, extra = {}) => neueUmgebung({ jetzt: new Date(m[0], m[1], d, 15).getTime(), story: Object.assign({ kapitel: 9, etappen: ALLE, gesehen: ["brunis-station", "tilda", "paulas-feier"], chronik: [{ s: "insel-wach", d: "2026-10-20" }] }, extra), zeit: FREI });
+  assert.strictEqual(jz([2026, 9], 20).K.naechsteStory({}), null, "am Tag des Finales keine Episode");
+  const h = jz([2026, 9], 21); assert.strictEqual(h.K.naechsteStory({}), "jz-herbst", "Herbst: Ella");
+  h.K.storyFertig({ id: "jz-herbst", jahreszeit: true }); assert.ok(h.st.gesehen.includes("jz-herbst-2026")); assert.strictEqual(h.K.naechsteStory({}), null, "einmal je Herbst");
+  assert.strictEqual(jz([2027, 1], 3, { gesehen: ["brunis-station", "tilda", "paulas-feier", "jz-winter-2026"] }).K.naechsteStory({}), null, "Februar 2027 gehört zum Winter 2026");
+  assert.strictEqual(jz([2027, 3], 3).K.naechsteStory({}), "jz-fruehling");
+  assert.strictEqual(jz([2027, 6], 3).K.naechsteStory({}), "jz-sommer");
+  { const b = jz([2026, 11], 3).K.antwort("jahreszeit").blase; assert.ok(b[0] === "baer" && b[4] === "../sachkunde/?thema=wetter", "Winter: Bruni, Thema Wetter"); }
+  // Eigene Idee: Feste aus Herkunftsländern – ab Kapitel 1, nur in den Festtagen, je Jahr einmal (Neujahr über den Jahreswechsel)
+  const fe = (j, m, d, extra = {}) => neueUmgebung({ jetzt: new Date(j, m, d, 15).getTime(), story: Object.assign({ kapitel: 1, etappen: ALLE, gesehen: [] }, extra), zeit: FREI });
+  assert.strictEqual(fe(2026, 11, 30).K.naechsteStory({}), null, "30.12.: noch kein Neujahr");
+  const nj = fe(2027, 0, 3); assert.strictEqual(nj.K.naechsteStory({}), "fest-neujahr", "3.1.: Neujahr mit Väterchen Frost");
+  nj.K.storyFertig({ id: "fest-neujahr", fest: true }); assert.ok(nj.st.gesehen.includes("fest-neujahr-2026"), "Neujahr 2026/27 einmal");
+  assert.strictEqual(fe(2026, 11, 31, { gesehen: ["fest-neujahr-2025"] }).K.naechsteStory({}), "fest-neujahr", "im nächsten Jahr wieder");
+  assert.strictEqual(fe(2027, 2, 21).K.naechsteStory({}), "fest-nouruz", "21.3.: Nouruz");
+  assert.strictEqual(fe(2027, 2, 24).K.naechsteStory({}), null, "nach den Festtagen nicht mehr");
+  assert.strictEqual(fe(2027, 2, 21, { kapitel: 0, etappen: { E1: "x", E2: 1 } }).K.naechsteStory({}), null, "erst ab Kapitel 1");
+  // die Themen der Episoden gibt es wirklich
+  const th = {}; new Function("window", fs.readFileSync(path.join(__dirname, "../spiele/sachkunde/themen.js"), "utf8"))(th);
+  Object.values(neueUmgebung().K.JAHRESZEITEN).forEach(j => assert.ok(th.THEMEN.some(t => t.id === j.thema), j.thema));
 });
 
 console.log(`✅ Insel-Kern: ${n} Prüfungen bestanden.`);

@@ -436,5 +436,7 @@
 
   if (FACH) { const n = FS[FACH].name + (FACH === "religion" && KONF ? (KONF === "ev" ? " (evangelisch)" : " (katholisch)") : ""); document.title = n; const h = document.querySelector("#liste-ansicht h1"); if (h) h.textContent = n; }
   zeichneListe();
+  // ?thema=<id> (07.11.2026): direkt ein Thema öffnen – z. B. aus den Jahreszeiten-Episoden auf der Insel
+  { const tq = new URLSearchParams(location.search).get("thema"), ti = tq ? TH.findIndex(t => t.id === tq) : -1; if (ti >= 0) starte(ti); }
   window.__sachkunde = { fach: FACH, themen: TH, starte, starteLernstand, lernstandThemen, transferFragen, nachfrage: faelligeNachfragen, starteNachfrage, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
 })();

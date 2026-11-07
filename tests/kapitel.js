@@ -31,7 +31,8 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     // Ankunft, Tutorial E1–E8 (und auf Wunsch E9) liegen zurück, Kapitel 1 erreicht, Spielzeit frei
     await p.evaluate((e9) => { const m = Spielwelt.lade("medien") || {}; m.lektionen = { bedienung: 3 }; Spielwelt.speichere("medien", m);
       Story.etappeFertig("E1"); ["E2", "E3", "E4", "E5", "E6", "E7", "E8"].concat(e9 ? ["E9"] : []).forEach(e => Story.etappeFertig(e, true));
-      Story.merkeSzene("sonne"); Story.setzeKapitel(1); for (let i = 0; i < 12; i++) Zeit.aufgabe(); }, e9);
+      Story.merkeSzene("sonne"); Story.setzeKapitel(1); for (let i = 0; i < 12; i++) Zeit.aufgabe();
+      ["brunis-station", "tilda", "paulas-feier"].forEach(x => Story.merkeSzene(x, true)); }, e9);   // Nebenszenen (07.11.2026) prüft tests/finale.js
     return { ctx, p };
   }
   const naechste = (p) => p.evaluate(() => InselKern.naechsteStory({}));
@@ -107,7 +108,7 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     a = await p.evaluate(() => __szene.aktuell());
     erwarte(a.wer === "eule" && a.zeigt, "Ella spricht und zeigt (Sturm-Szene)");
     await weiter(p); a = await p.evaluate(() => __szene.aktuell());
-    erwarte(a.wer === "baer" && /Keine Angst/.test(a.text || document.body.textContent), "Bruni beruhigt: „Keine Angst“");
+    erwarte(a.wer === "baer" && /Angst/.test(a.text) && /Ein – aus/.test(a.text), "Bruni hat ein bisschen Angst – das Kind atmet mit ihr (07.11.2026)");
     await weiter(p); a = await p.evaluate(() => __szene.aktuell());
     erwarte(a && a.zeigt, "Ella zeigt zur Wetterstation");
     await bild(p, "kapitel-5");
@@ -171,7 +172,7 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     await weiter(p);
     erwarte(await p.evaluate(() => Story.kapitel() === 7 && __heimat.boot().aktion === "Boot"), "zweite Blase: Kapitel 7 gemerkt, Boot bereit");
     while (await p.evaluate(() => !!(window.__szene && __szene.aktuell()))) await weiter(p);
-    erwarte(await p.evaluate(() => Story.kapitel() === 7 && Story.chronik().some(x => x.s === "neue-ufer") && Story.KAPITEL_ZAHL === 7), "Kapitel 7 erreicht, Szene in der Chronik, KAPITEL_ZAHL = 7");
+    erwarte(await p.evaluate(() => Story.kapitel() === 7 && Story.chronik().some(x => x.s === "neue-ufer") && Story.KAPITEL_ZAHL === 9), "Kapitel 7 erreicht, Szene in der Chronik, KAPITEL_ZAHL = 9 (Finale, 07.11.2026)");
     await ctx.close();
   }
 

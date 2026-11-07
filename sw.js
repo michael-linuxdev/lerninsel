@@ -69,6 +69,7 @@ const START = [
   "shared/vorleser.js",
   "shared/charakter.js",
   "shared/lernfunde.js",
+  "shared/woerterbuch.js",
   "shared/lernkartei.js",
   "shared/lieder.js",
   "shared/familie.js",
