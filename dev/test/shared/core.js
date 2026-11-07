@@ -628,12 +628,9 @@
     // Emojis ein Bild haben, emoji.js hält ihnen den Platz frei), die Bilder selbst nach dem ersten Bild der Seite.
     window.EmojiBereit = new Promise((fertig) => { if (mitBildern) lade("shared/icons-liste.js"); lade("shared/emoji.js", () => fertig(window.EmojiBild || null)); });
     if (mitBildern) {
-      const spaeter = () => {
-        const s = document.createElement("script"); s.src = wurzel + "shared/icons.js"; s.async = true;
-        s.onload = () => { window.EmojiBereit.then(() => { if (window.__emoji && __emoji.iconsDa) __emoji.iconsDa(); }); };
-        s.onerror = () => { window.EmojiBereit.then(() => { if (window.__emoji && __emoji.iconsDa) __emoji.iconsDa(); }); };
-        document.head.appendChild(s);
-      };
+      // seit 07.11.2026 (Paket „icons.js verkleinern“): keine große icons.js mehr – emoji.js lädt nach dem ersten Bild nur die Häppchen
+      // shared/icons/<teil>.js, deren Emojis auf der Seite stehen
+      const spaeter = () => { window.EmojiBereit.then(() => { if (window.__emoji && __emoji.los) __emoji.los(); }); };
       // nach dem ersten Bild (zwei requestAnimationFrame = das erste Bild ist gemalt); im Hintergrund-Tab ohne Bilder spätestens nach 1 s
       let los = false; const einmal = () => { if (!los) { los = true; spaeter(); } };
       requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(einmal, 0))); setTimeout(einmal, 1000);
