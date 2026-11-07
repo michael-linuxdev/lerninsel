@@ -2559,3 +2559,15 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
 - **Zusammenführen:** Zählzeilen in `tests/lehrplan.js` und `tests/faechervoll.js` (73 + 38 Themen) aus beiden Fächer-Paketen vereint; `bewegung` in `NICHT` neben den Englisch-Ausnahmen.
 - **Offen / nächstes:** Paket K Erprobungsmodus (Rollen mehrfach wählbar); Prüf- und Erprobungsphase; Budget „einfach“ beobachten; Sachunterricht hat noch lange Aufgaben beim Seitenaufbau (nicht Emojis);
   Hör-Schritte auch für Instrumente (mu-gruppen, mu-orchester); russische Entwürfe der neuen Texte prüfen lassen.
+
+## Stand 12.11.2026 (Paket K Erprobungsmodus)
+- **Gebaut:** Reiter „🔍 Erprobung & Prüfen“ im Elternbereich (sechster Reiter, `data-teil="erprobung"`): Einwilligungstext, Schalter „Erprobung aufzeichnen“ (Standard aus), Kürzel, **Rollen mehrfach**:
+  Spieler/in (optional „Ein Kind spielt“), Lehrkraft (Fächer und Klassen wählbar), Muttersprachler/in Russisch und/oder Sorbisch. `shared/erprobung.js` wird nur bei eingeschaltetem Modus geladen (sonst keine Kosten);
+  aufgezeichnet: Seiten mit Verweildauer, Aufgaben (Inhalt-ID, Schritt, Antwort, richtig, Versuch, Zeit, Hilfe/🔊/RU, Prüfsumme), fertige Runden, Abbrüche, übersprungene Szenen, technische Fehler, Gerät/App-Version –
+  **nicht**: Namen (werden zu `{name}`), eigene Texte, Aufnahmen, Bilder. Ringspeicher (≈ 900 000 Zeichen, Hinweis ab 75 %). „✍️ Melden“ auf jeder Seite (6 Kategorien + Text), Prüfleiste unter jeder Aufgabe je Rolle
+  (fachlich 👍/✏️/❓, Russisch/Sorbisch 👍/✏️), Übersicht „Was ist geprüft?“, Links zu den Prüflisten Russisch/Sorbisch (schreiben bei aktivem Modus mit). Export `lerninsel-erprobung-<kürzel>-<datum>.json`
+  (Format `lerninsel-erprobung`, Version 1) per Datei oder Teilen; Leeren.
+- **Auswertung:** `node quellen/erprobung-auswerten.js <dateien…> [--aus bericht.md] [--pruefstand]` → Markdown-Bericht (Hänger, Fehlerquoten, Zeiten, Meldungen, Korrekturen) und Übernahme in den Prüfstand.
+  **Regeln (Entscheidung):** Stufe 2 nur durch Rolle Lehrkraft mit aktueller Prüfsumme, letztes Urteil je Schritt, kein offenes ✏️/❓ – Werkstatt/Sachthemen/Fächer/Vorschule alle Schritte 👍, Mathe ≥ 5 Aufgaben 👍,
+  Englisch ≥ 6 Schritte 👍; Stufe 3 = Stufe 2 + eine fertige Runde in einer Datei mit Spieler/in und „Ein Kind spielt“; Stufen werden nie gesenkt; Russisch/Sorbisch nur im Bericht (Korrekturen arbeitet Claude von Hand ein).
+- **Offen:** Teilen über das iPad-Menü ungetestet (Download geprüft); in Mathe zählt jede kurz geöffnete Station als Abbruch (rauscht im Bericht). Tests `erprobung`, `erprobung-auswerten` (Node).

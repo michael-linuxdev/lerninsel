@@ -19,7 +19,8 @@ zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, t
 ## 0. Auftrag für die nächste Sitzung
 **Übergabe (12.11.2026, Gerätedatum 07.11.)** – auf Wunsch des Auftraggebers an eine neue, unabhängige Sitzung; die alte Sitzung arbeitet vorerst weiter.
 **Zuerst prüfen, was davon schon auf `main` liegt** (`git log --oneline -15`, PLAN-Einträge „Stand 12.11.2026“): **Runde 2** (Abschnitt 2, Pakete G–J: Fächer, Englisch Sprechen, Kapitel 9 Bennos Brücke, Emoji-Häppchen) ist fertig und gepusht;
-als Nächstes **Paket K Erprobungsmodus** – prüfe auf `main`, ob die alte Sitzung damit schon begonnen hat.
+**Paket K Erprobungsmodus ist ebenfalls fertig** (PLAN „Stand 12.11.2026 (Paket K …)“). Liegen Erprobungsdateien vor (`lerninsel-erprobung-*.json`), zuerst
+`node quellen/erprobung-auswerten.js <dateien…> --aus bericht.md` laufen lassen, den Bericht mit dem Auftraggeber durchgehen, Fehler beheben (je mit Test), Korrekturen einarbeiten, dann `--pruefstand`.
 1. **Fragerunde (höchstens 4 Fragen):** iPad-Rückmeldung (seit 08.11. keine – zwei große Runden sind auf echtem Safari ungetestet: Emojis als `<img>`, Update-Verhalten, Kamerafahrt, kurze Startseite).
    Hat jemand mit dem Erprobungsmodus gespielt oder geprüft (Paket K)? Dann zuerst die Dateien auswerten.
 2. **Entschieden (nicht neu fragen):** 10.11.: „Namen schreiben“ bleibt „teilweise“; russische Hilfe automatisch nach Deutschstand; Kulissen wählt das Kind. 11.11.: kurze Startseite für Vorschule/Kl. 1
@@ -43,6 +44,8 @@ Rollenspielen, Hörgeschichten und Nachsprechen (Aufnahme nur mit Eltern-Schalte
 2. Kind Kl. 3 → Englisch → Lektion mit Dialog: 🔊, Antwort wählen, nachsprechen. Elternbereich → Englisch „Aufnehmen erlauben“ → aufnehmen, anhören, „Klang es gleich?“. Rollenspiel „Paulas Café“.
 3. Insel (in /dev/test ist alles frei): Baustelle am Ufer → „🌉 Bauen“ → eine Runde auf der Bauseite (je Klasse anders) → wächst die Brücke auf der Insel? Fertig → über die Brücke auf die Sandbank laufen.
 4. Emojis überall: erscheinen sie schnell und sehen aus wie vorher (jetzt aus Häppchen geladen)?
+5. **Erprobung:** Elternbereich → „🔍 Erprobung & Prüfen“ → einschalten, Kürzel, Rollen wählen (z. B. Spieler/in + Lehrkraft Mathe Kl. 2 + Russisch) → spielen,
+   „✍️ Melden“ und die Prüfleiste unter den Aufgaben ausprobieren → „💾 Als Datei speichern“ bzw. „📤 Teilen“ – kommt die Datei auf dem iPad an (Dateien/Mail)? Diese Datei an Claude geben.
 
 ## 1. Stand (11.11.2026)
 **Neu (PLAN „Stand 11.11.2026“):** Paket 1 Sofort-Fehler (Inhaltsfehler, ehrliches Lob, Übergabe-Bildschirm), Paket 2 Ohne Lesen (kurze Startseite mit „Los!“, 🔊 im Matheweg, 🏠/⬅️-Regel),
@@ -305,7 +308,7 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
   aufs Wasser, fertig → begehbar; `Story.KAPITEL_ZAHL = 10`; Finale würdigt die Brücke. Test `bruecke`.
 - J. **`shared/icons.js` verkleinern** (2,7 MB / 764 KB gzip): SVG-Daten kompakter, in Gruppen nachladen, keine lange Aufgabe, Aussehen gleich (Pixel-Vergleich). Messwerte vorher/nachher.
 **Danach:**
-- K. **Erprobungsmodus** (Entscheidung 12.11.): neuer, immer sichtbarer Reiter im Elternbereich „🔍 Erprobung & Prüfen“ (PIN). Rollen **mehrfach wählbar**: Spieler/in, Lehrkraft (Fächer/Klassen wählbar),
+- K. ~~Erprobungsmodus~~ (gebaut 12.11., Beschreibung als Referenz): (Entscheidung 12.11.) neuer, immer sichtbarer Reiter im Elternbereich „🔍 Erprobung & Prüfen“ (PIN). Rollen **mehrfach wählbar**: Spieler/in, Lehrkraft (Fächer/Klassen wählbar),
   Muttersprachler/in (Russisch und/oder Sorbisch), dazu ein Kürzel statt Name, kurzer Einwilligungstext für Eltern. Aufzeichnung nur bei eingeschaltetem Modus: Seiten/Verweildauer, jede Aufgabe
   (Inhalt-ID, Antwort, richtig, Zeit, Hilfe/🔊 genutzt), Abbrüche, übersprungene Szenen, technische Fehler, Gerät/App-Version – **keine** eigenen Texte, Aufnahmen, Bilder. Schwebender Knopf „✍️ Melden“
   (Fehler / unverständlich / zu schwer / zu leicht / schön / Idee + Text, Kontext automatisch). **Prüfleiste unter jeder Aufgabe** in den normalen Seiten je aktiver Rolle (fachlich 👍/✏️/❓, Russisch/Sorbisch
