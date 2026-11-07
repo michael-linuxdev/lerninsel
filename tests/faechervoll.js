@@ -1,5 +1,5 @@
 // Test Kunst, Musik, Werken, Sport, Ethik (Lehrpläne Sachsen 2019, 28.10.2026): Sachunterricht-Seite mit Fach-Reitern (?fach=…),
-// Themen nach Lernbereichen gruppiert, jedes der 70 Themen über seine Kachel geöffnet und echt bis „geschafft“ durchgeklickt
+// Themen nach Lernbereichen gruppiert, jedes der 72 Themen über seine Kachel geöffnet und echt bis „geschafft“ durchgeklickt
 // (Weiter, richtige Wahl, Daumen, Zuordnen per Antippen) – jeweils von einem Kind der passenden Klasse; ein Teil auch im Hochformat.
 // Dazu: Landesfilter („Musik in Sachsen“), „Zeig, was du kannst“ mit Ergebnis im Elternbereich, Inhaltspunkte der neuen Fächer im Elternbereich.
 // Aufruf: sh tests/laufen.sh faechervoll   (Screenshots mit BILDER=<ordner>)
@@ -15,7 +15,7 @@ const FAECHER = ["kunst", "musik", "werken", "sport", "ethik"];
   const erwarte = (ok, text) => { if (!ok) { fehler.push(text); console.log("  ✗ " + text); } else console.log("  ✓ " + text); };
   async function kind(stufe, breite = 1180, hoehe = 820) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: hoehe }, hasTouch: true });
-    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; });
+    await ctx.addInitScript(() => { window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = true; window.__testSchnell = true; });
     const p = await ctx.newPage();
     p.on("pageerror", e => fehler.push(`${p.url()}: ${e.message}`));
     p.on("console", m => { if (m.type() === "error" && !IGNORIEREN.test(m.text())) fehler.push(`${p.url()}: ${m.text()}`); });
@@ -46,6 +46,8 @@ const FAECHER = ["kunst", "musik", "werken", "sport", "ethik"];
         const ding = lage.schritt.dinge.filter(d => lage.karte.includes(d.t)).sort((a, b) => b.t.length - a.t.length)[0];
         if (!ding) { haengt = true; break; }
         await p.click(`.gruppen .option[data-g="${ding.gruppe}"]`); await p.waitForTimeout(900);
+      } else if (lage.typ === "bewegung") {   // Bewegungspause: jede Übung abwarten (mit __testSchnell 40 ms je Sekunde) und „Geschafft!“ antippen
+        await p.click("#bew-weiter:not([disabled])", { timeout: 15000 });
       } else { haengt = true; break; }
       await p.waitForTimeout(80);
     }
@@ -60,8 +62,8 @@ const FAECHER = ["kunst", "musik", "werken", "sport", "ethik"];
   const probe = await kind("2");
   await oeffne(probe.p, "kunst");
   const themen = await probe.p.evaluate(() => (window.FACH_THEMEN || []).map(t => ({ id: t.id, fach: t.fach, kl: Math.max(2, t.stufe || t.kl || 2), land: t.land || "", konf: (t.konf || []).join() })));
-  erwarte(themen.filter(t => t.fach !== "religion").length === 70 && themen.filter(t => t.fach === "religion").length === 37,
-    `70 Themen in faecher.js, 37 in religion.js (${themen.filter(t => t.fach !== "religion").length}/${themen.filter(t => t.fach === "religion").length})`);
+  erwarte(themen.filter(t => t.fach !== "religion").length === 72 && themen.filter(t => t.fach === "religion").length === 38,
+    `72 Themen in faecher.js, 38 in religion.js (${themen.filter(t => t.fach !== "religion").length}/${themen.filter(t => t.fach === "religion").length})`);
 
   // --- Reiter, Gruppen, Landesfilter ---
   {

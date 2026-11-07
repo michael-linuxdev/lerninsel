@@ -5,28 +5,28 @@
 // Test-Haken: window.__bewegung (posen, svg); window.__testSchnell = true lässt eine Sekunde in 40 ms vergehen.
 (function () {
   // Punkte einer Figur (viewBox 0 0 120 150): k Kopf, h Hals, b Hüfte, Arme [Ellbogen, Hand] links/rechts, Beine [Knie, Fuß] links/rechts
-  const STEH = { k: [60, 24], h: [60, 40], b: [60, 86], al: [[48, 62], [44, 84]], ar: [[72, 62], [76, 84]], bl: [[53, 112], [50, 140]], br: [[67, 112], [70, 140]] };
+  const STEH = { k: [60, 26], h: [60, 40], b: [60, 86], al: [[48, 62], [44, 84]], ar: [[72, 62], [76, 84]], bl: [[53, 112], [50, 140]], br: [[67, 112], [70, 140]] };
   const mit = (x) => Object.assign({}, STEH, x);
   const POSEN = {
     marsch: [mit({ al: [[48, 58], [56, 46]], ar: [[73, 64], [78, 84]], bl: [[48, 102], [52, 122]] }), mit({ ar: [[72, 58], [64, 46]], al: [[47, 64], [42, 84]], br: [[72, 102], [68, 122]] })],
-    kreisen: [mit({ al: [[46, 26], [40, 8]], ar: [[74, 26], [80, 8]] }), mit({ al: [[38, 40], [18, 40]], ar: [[82, 40], [102, 40]] })],
-    seite: [mit({ k: [70, 27], h: [66, 42], al: [[52, 22], [72, 8]], ar: [[76, 62], [80, 82]] }), mit({ k: [50, 27], h: [54, 42], ar: [[68, 22], [48, 8]], al: [[44, 62], [40, 82]] })],
+    kreisen: [mit({ al: [[42, 26], [32, 6]], ar: [[78, 26], [88, 6]] }), mit({ al: [[38, 40], [18, 40]], ar: [[82, 40], [102, 40]] })],
+    seite: [mit({ k: [70, 27], h: [66, 42], al: [[44, 22], [64, 4]], ar: [[76, 62], [80, 82]] }), mit({ k: [50, 27], h: [54, 42], ar: [[76, 22], [56, 4]], al: [[44, 62], [40, 82]] })],
     flamingo: [mit({ al: [[38, 40], [18, 40]], ar: [[82, 40], [102, 40]], bl: [[44, 104], [62, 112]], br: [[64, 113], [64, 140]] }),
       mit({ al: [[38, 40], [18, 40]], ar: [[82, 40], [102, 40]], br: [[76, 104], [58, 112]], bl: [[56, 113], [56, 140]] })],
     kniebeuge: [mit({ al: [[44, 50], [30, 46]], ar: [[76, 50], [90, 46]] }),
       { k: [60, 46], h: [60, 62], b: [60, 104], al: [[44, 70], [30, 66]], ar: [[76, 70], [90, 66]], bl: [[42, 116], [48, 140]], br: [[78, 116], [72, 140]] }],
     steptouch: [mit({ k: [70, 24], h: [70, 40], b: [70, 86], al: [[60, 56], [66, 40]], ar: [[82, 56], [74, 40]], bl: [[60, 112], [50, 140]], br: [[82, 112], [92, 140]] }),
-      mit({ al: [[50, 26], [58, 8]], ar: [[70, 26], [62, 8]] })],
-    atmen: [mit({ al: [[46, 26], [40, 8]], ar: [[74, 26], [80, 8]] }), mit({})]
+      mit({ al: [[44, 22], [57, 0]], ar: [[76, 22], [63, 0]] })],
+    atmen: [mit({ al: [[42, 26], [32, 6]], ar: [[78, 26], [88, 6]] }), mit({})]
   };
   const KONTUR = "#3B1F63";
   function svg(name, n) {
     const f = (POSEN[name] || POSEN.atmen)[n % 2], L = (a, b, w = 7, c = KONTUR) => `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
-    const glied = (start, [m, e]) => L(start, m) + L(m, e);
-    return `<svg class="bew-figur" viewBox="0 0 120 150" width="150" height="188" role="img" aria-label="Zeigebild">` +
+    const glied = (start, [m, e]) => L(start, m) + L(m, e), sch = [f.h[0], f.h[1] + 6];   // Arme an den Schultern, etwas unter dem Hals
+    return `<svg class="bew-figur" viewBox="0 -6 120 156" width="150" height="188" role="img" aria-label="Zeigebild">` +
       `<ellipse cx="60" cy="144" rx="34" ry="5" fill="${KONTUR}" opacity=".12"/>` +
       glied(f.b, f.bl) + glied(f.b, f.br) + L(f.h, f.b, 16, KONTUR) + L(f.h, f.b, 10, "var(--akzent, #2F86C8)") +
-      glied(f.h, f.al) + glied(f.h, f.ar) +
+      glied(sch, f.al) + glied(sch, f.ar) +
       `<circle cx="${f.k[0]}" cy="${f.k[1]}" r="12" fill="#FFD9B8" stroke="${KONTUR}" stroke-width="3.5"/></svg>`;
   }
 
