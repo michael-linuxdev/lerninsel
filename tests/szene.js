@@ -27,7 +27,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await e.goto(BASIS); await e.waitForURL(/eltern/); await e.waitForLoadState("load"); await e.waitForTimeout(300);
     await e.fill("#pin1", "1234"); await e.fill("#pin2", "1234"); await e.click("#pin-ok");
     await e.waitForSelector("#e-name"); await e.fill("#e-name", "Mira"); await e.selectOption("#e-mutter", "ru"); await e.selectOption("#e-deutsch", "alltag");
-    await e.click("#e-ok"); await e.waitForURL(u => !/eltern/.test(u.toString()));
+    await e.click("#e-ok"); await e.click("#uebergabe-los"); await e.waitForURL(u => !/eltern/.test(u.toString()));
     await e.evaluate(() => { const m = Spielwelt.lade("medien") || {}; m.fuehrerschein = "2026-10-01"; Spielwelt.speichere("medien", m); });
     await e.close();
 

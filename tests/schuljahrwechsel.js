@@ -31,7 +31,7 @@ const TAG = (j, m, d) => new Date(j, m - 1, d, 15, 0).getTime();
   // ---------- Einrichtung im Oktober 2026 ----------
   await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
   await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
-  await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "2"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+  await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "2"); await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
   let k = await kind();
   erwarte(k.schuljahr === 2026 && !(await p.$("#schuljahr-hinweis")), "Einrichtung im Oktober 2026: Schuljahr 2026/27 gemerkt, kein Hinweis");
   await p.evaluate(() => { Spielwelt.speichere("mathe", { weg: "k2" }); const e = Spielwelt.lade("eltern"); e.mathe = { schule: "rf" }; Spielwelt.speichere("eltern", e); });

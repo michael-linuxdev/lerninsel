@@ -24,7 +24,7 @@ const DEUTSCH = ["w-fachbegriffe", "w-lesestrategien"], THEMEN_NEU = ["lernen-le
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", stufe);
     if (pruefeHinweis) { const h = await p.evaluate(() => { const e = document.getElementById("e-stufe-hinweis"); return !e.hidden && e.textContent; });
       erwarte(h && /Übergang 5/.test(h) && /bewertet nicht/.test(h), "Elternbereich: ehrlicher Hinweis zur Stufe „Übergang Klasse 5“ (eigener Matheweg, keine Schulform-Bewertung)"); }
-    await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     return { ctx, p };
   }
   const wegInfo = (p) => p.evaluate(() => ({ an: (document.querySelector(".weg-wahl.an") || {}).dataset?.weg, stationen: document.querySelectorAll("#karte .station:not(.ziel)").length,

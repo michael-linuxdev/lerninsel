@@ -29,7 +29,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.selectOption("#e-sprache", "ru"); await p.waitForTimeout(100);
     const info = { vorher, nachher: await p.isVisible("#e-dosis"), text: await p.textContent("#e-dosis-text") };
     if (dosis) await p.selectOption("#e-dosis", dosis);
-    await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     await p.evaluate(() => { Story.setzeKapitel(7); if (window.Zeit) for (let i = 0; i < 12; i++) Zeit.aufgabe(); });
     return { ctx, p, info };
   }

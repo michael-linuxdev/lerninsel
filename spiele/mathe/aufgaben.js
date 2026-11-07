@@ -1439,6 +1439,15 @@
     raute: "M105 15 L170 85 L105 155 L40 85 Z", trapez: "M60 40 L150 40 L195 130 L15 130 Z", drachen: "M105 15 L160 60 L105 160 L50 60 Z", viereck: "M30 140 L60 30 L175 55 L150 160 Z",
     rechtwinklig: "M40 140 L40 30 L180 140 Z", spitz: "M105 20 L180 140 L30 140 Z", stumpf: "M20 140 L80 70 L200 140 Z" };
   const NAMEN_V = { quadrat: "Quadrat", rechteck: "Rechteck", parallelogramm: "Parallelogramm", raute: "Raute", trapez: "Trapez", drachen: "Drachen", viereck: "allgemeines Viereck" };
+  // Haus der Vierecke: welche Namen auf die gezeichnete Figur AUCH zutreffen – die dürfen nie als falsche Antwort stehen
+  const AUCH_V = { quadrat: ["rechteck", "raute", "parallelogramm", "trapez", "drachen"], rechteck: ["parallelogramm", "trapez"], raute: ["parallelogramm", "trapez", "drachen"],
+    parallelogramm: ["trapez"], trapez: [], drachen: [], viereck: [] };
+  const WARUM_V = { quadrat: "Vier gleich lange Seiten und vier rechte Winkel: ein Quadrat.", rechteck: "Vier rechte Winkel, die gegenüberliegenden Seiten sind gleich lang: ein Rechteck.",
+    parallelogramm: "Die gegenüberliegenden Seiten sind parallel und gleich lang. Rechte Winkel hat dieses Viereck keine: ein Parallelogramm.",
+    raute: "Alle vier Seiten sind gleich lang, rechte Winkel gibt es keine: eine Raute.", trapez: "Nur zwei Seiten sind parallel: ein Trapez.",
+    drachen: "Je zwei Seiten nebeneinander sind gleich lang: ein Drachen.", viereck: "Keine Seiten sind parallel, keine gleich lang: ein allgemeines Viereck." };
+  // falsche Namen für die Figur k: nur solche, die wirklich nicht passen (aufgefüllt mit Namen anderer Formen)
+  const falscheV = (k, namen) => namen.filter(n => n !== k && !AUCH_V[k].includes(n)).map(n => NAMEN_V[n]).concat(["Dreieck", "Fünfeck", "Sechseck"]).slice(0, 3);
   const vierBild = (k) => `<svg viewBox="0 0 210 170" class="bild-uhr" role="img" aria-label="Figur"><path d="${VIERECKE[k]}" fill="${["#7B9BFF", "#FFB03B", "#5CCBA6", "#F27BAA"][k.length % 4]}" stroke="${D}" stroke-width="5" stroke-linejoin="round"/></svg>`;
   // Bandornament aus einem F: verschoben, gespiegelt oder gedreht
   const ORNAMENT_FORMEN = ["M0 0 h34 v9 h-25 v12 h18 v9 h-18 v26 h-9 Z", "M0 0 h10 v46 h24 v10 h-34 Z", "M0 0 h30 l-14 18 h18 l-24 38 l6 -28 h-16 Z", "M0 0 h20 a14 14 0 0 1 0 28 h-10 v28 h-10 Z", "M0 56 l17 -56 l17 56 h-10 l-7 -26 l-7 26 Z"];
@@ -1480,7 +1489,7 @@
         if (art === 1) { const m = r(1, 19) * 50; return zahl("", m, `Jeder lange Strich ist ein Hunderter, die kurzen liegen bei 50: ${m}.`, { frage: "Welche Zahl zeigt der Pfeil?", bild: strahlTeilung(0, 1000, 50, 100, m), nurLuecke: true, max: 4 }); }
         if (art === 2) { const a = r(1, 8) * 100, m = a + r(1, 9) * 10; return zahl("", m, `Von ${a} aus: Jeder kurze Strich ist 10 weiter. ${m}.`, { frage: "Welche Zahl zeigt der Pfeil?", bild: strahlTeilung(a, a + 100, 10, 50, m), nurLuecke: true }); }
         if (art === 3) return zahl("", n, `Hunderter zuerst, dann der Rest: ${zahlwort1000(n)} = ${n}.`, { frage: `Schreib die Zahl: „${zahlwort1000(n)}“`, nurLuecke: true });
-        if (art === 4) { const u = Math.floor(n / 100) * 100; return wahlAufgabe(`Zwischen welchen Nachbarhundertern liegt ${n}?`, `${u} und ${u + 100}`, [`${u + 100} und ${u + 200}`, `${u - 100} und ${u}`, `${Math.floor(n / 10) * 10} und ${Math.floor(n / 10) * 10 + 10}`], `${n} hat ${u / 100} Hunderter.`); }
+        if (art === 4) { const m = n % 100 ? n : n + r(1, 99), u = Math.floor(m / 100) * 100; return wahlAufgabe(`Zwischen welchen Nachbarhundertern liegt ${m}?`, `${u} und ${u + 100}`, [`${u + 100} und ${u + 200}`, `${u - 100} und ${u}`, `${Math.floor(m / 10) * 10} und ${Math.floor(m / 10) * 10 + 10}`], `${m} hat ${u / 100} Hunderter.`); }
         if (art === 5) { const k = wahl([25, 50, 100, 20]), rueck = zz() < 0.5, st = rueck ? r(5, 9) * 100 : r(1, 5) * 100 + wahl([0, 25, 50]), f = [0, 1, 2, 3].map(i => rueck ? st - i * k : st + i * k);
           return zahl(`${f.join(", ")}, ?`, rueck ? st - 4 * k : st + 4 * k, `Immer ${rueck ? "minus" : "plus"} ${k}.`, { frage: `Zähle in ${k}er-Schritten ${rueck ? "rückwärts" : "weiter"}:` }); }
         if (art === 6) { const h = Math.floor(n / 100), z = Math.floor(n / 10) % 10, e = n % 10; return zahl(`${h * 100} + ${z * 10} + ${e}`, n, `${h} Hunderter, ${z} Zehner, ${e} Einer: ${n}.`); }
@@ -1527,7 +1536,7 @@
         return wahlAufgabe(s[0], s[1], ["Kegel", "Zylinder", "Pyramide"], "Kegel und Zylinder haben eine runde Fläche – sie rollen. Pyramide und Kegel haben eine Spitze."); } },
     { id: "k3vierecke", lb: "rf", zusatz: true, stufe: "3", lz: ["ma.rf.03", "ma.rf.08"], name: "Parallelogramm und Dreiecke", icon: "▱",
       neu: () => { const art = r(1, 4);
-        if (art === 1) { const k = wahl(["parallelogramm", "parallelogramm", "rechteck", "quadrat", "viereck"]); return wahlAufgabe("Wie heißt das Viereck?", NAMEN_V[k], ["Parallelogramm", "Rechteck", "Quadrat", "allgemeines Viereck"], "Beim Parallelogramm sind die gegenüberliegenden Seiten parallel und gleich lang, die Ecken sind aber nicht rechtwinklig.", { bild: vierBild(k) }); }
+        if (art === 1) { const k = wahl(["parallelogramm", "parallelogramm", "rechteck", "quadrat", "viereck"]); return wahlAufgabe("Wie heißt das Viereck?", NAMEN_V[k], falscheV(k, ["parallelogramm", "rechteck", "quadrat", "viereck"]), WARUM_V[k], { bild: vierBild(k) }); }
         if (art === 2) { const s = wahl([["Beim Parallelogramm sind gegenüberliegende Seiten parallel.", "ja"], ["Ein Parallelogramm hat immer vier rechte Winkel.", "nein"], ["Jedes Rechteck ist auch ein Parallelogramm.", "ja"], ["Ein Parallelogramm hat drei Ecken.", "nein"]]);
           return wahlAufgabe(`Stimmt das? ${s[0]}`, s[1], ["ja", "nein"], "Parallelogramm: zwei Paare paralleler Seiten. Hat es zusätzlich rechte Winkel, ist es ein Rechteck."); }
         if (art === 3) { const k = wahl(["rechtwinklig", "spitz", "stumpf"]); return wahlAufgabe("Hat das Dreieck einen rechten Winkel?", k === "rechtwinklig" ? "ja" : "nein", ["ja", "nein"], "Halte eine Blattecke an die Ecken: Passt sie genau, ist es ein rechter Winkel.", { bild: `<svg viewBox="0 0 210 170" class="bild-uhr" role="img" aria-label="Dreieck"><path d="${VIERECKE[k]}" fill="#5CCBA6" stroke="${D}" stroke-width="5" stroke-linejoin="round"/></svg>` }); }
@@ -1572,7 +1581,7 @@
   const STATIONEN_K4_NEU = [
     { id: "k4vierecke", lb: "rf", zusatz: true, stufe: "4", lz: ["ma.rf.09", "ma.rf.03"], name: "Haus der Vierecke", icon: "🏠",
       neu: () => { const art = r(1, 4);
-        if (art === 1) { const k = wahl(Object.keys(NAMEN_V)); return wahlAufgabe("Wie heißt das Viereck?", NAMEN_V[k], Object.values(NAMEN_V).filter(x => x !== NAMEN_V[k]).sort(() => zz() - 0.5), "Trapez: ein Paar parallele Seiten. Parallelogramm: zwei Paare. Raute: alle Seiten gleich lang. Drachen: je zwei benachbarte Seiten gleich lang.", { bild: vierBild(k) }); }
+        if (art === 1) { const k = wahl(Object.keys(NAMEN_V)); return wahlAufgabe("Wie heißt das Viereck?", NAMEN_V[k], falscheV(k, Object.keys(NAMEN_V).sort(() => zz() - 0.5)), WARUM_V[k], { bild: vierBild(k) }); }
         if (art === 2) { const s = wahl([["Jedes Quadrat ist auch ein Rechteck.", "ja"], ["Jedes Rechteck ist auch ein Quadrat.", "nein"], ["Jedes Quadrat ist auch eine Raute.", "ja"], ["Jedes Parallelogramm ist auch ein Trapez.", "ja"], ["Jedes Trapez ist auch ein Parallelogramm.", "nein"], ["Eine Raute hat vier gleich lange Seiten.", "ja"], ["Ein Drachen hat immer vier rechte Winkel.", "nein"]]);
           return wahlAufgabe(`Haus der Vierecke – stimmt das? ${s[0]}`, s[1], ["ja", "nein"], "Im Haus der Vierecke steht unten das Quadrat: Es ist gleichzeitig Rechteck, Raute, Parallelogramm, Trapez und Drachen."); }
         if (art === 3) { const k = wahl(["rechtwinklig", "spitz", "stumpf", "rechtwinklig"]); return wahlAufgabe("Hat das Dreieck einen rechten Winkel?", k === "rechtwinklig" ? "ja" : "nein", ["ja", "nein"], "Prüfe mit dem Geodreieck oder einer Blattecke.", { bild: `<svg viewBox="0 0 210 170" class="bild-uhr" role="img" aria-label="Dreieck"><path d="${VIERECKE[k]}" fill="#F27BAA" stroke="${D}" stroke-width="5" stroke-linejoin="round"/></svg>` }); }

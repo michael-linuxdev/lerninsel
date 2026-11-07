@@ -37,7 +37,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     const ueberlauf = await p.evaluate(() => document.documentElement.scrollWidth > innerWidth);
     erwarte(!ueberlauf, `kein waagerechter Überlauf (${lage})`);
     if (BILDER) await p.screenshot({ path: `${BILDER}/profil-einrichtung-${lage}.png`, fullPage: true });
-    await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString())); await p.waitForTimeout(400);
+    await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString())); await p.waitForTimeout(400);
     const k = await p.evaluate(() => Spielwelt.kind());
     erwarte(k.stufe === "vs" && k.klasse === 1 && k.land === "by" && k.muttersprache === "uk" && k.deutschstand === "keine", `Profil gespeichert: ${JSON.stringify({ stufe: k.stufe, klasse: k.klasse, land: k.land, mutter: k.muttersprache, deutsch: k.deutschstand })} (${lage})`);
     await ctx.close();
@@ -46,7 +46,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   // 2) Jede Stufe einstellen, Startseite, Mathe und Elternbereich öffnen sich ohne Fehler
   {
     const ctx = await neu(), p = await seite(ctx, "stufen");
-    await pin(p); await p.fill("#e-name", "Testkind"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await pin(p); await p.fill("#e-name", "Testkind"); await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     for (const st of ["vs", "1", "2", "3", "4", "5"]) {
       await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(300);
       if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); }
@@ -65,7 +65,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   // 3) Alter Spielstand mit Klasse 2 und Land "sachsen" → stufe "2", land "sn"; Russisch → Hilfesprache Russisch
   {
     const ctx = await neu(), p = await seite(ctx, "migration");
-    await pin(p); await p.fill("#e-name", "Altkind"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await pin(p); await p.fill("#e-name", "Altkind"); await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     await p.evaluate(() => { const key = Spielwelt.vorsilbe + "profil.v1", pr = JSON.parse(localStorage.getItem(key));
       pr.daten.eltern.kind = { alter: 8, klasse: 2, geschlecht: "w", hilfesprache: "ru", land: "sachsen" }; pr.stand = Date.now() + 60000; localStorage.setItem(key, JSON.stringify(pr)); });
     await p.reload(); await p.waitForTimeout(500);

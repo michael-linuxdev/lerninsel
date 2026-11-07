@@ -23,7 +23,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   const e = await seite("einrichtung");
   await e.goto(BASIS); await e.waitForURL(/eltern/); await e.waitForLoadState("load"); await e.waitForTimeout(300);
   await e.fill("#pin1", "1234"); await e.fill("#pin2", "1234"); await e.click("#pin-ok");
-  await e.waitForSelector("#e-name"); await e.fill("#e-name", "Testkind"); await e.click("#e-ok");
+  await e.waitForSelector("#e-name"); await e.fill("#e-name", "Testkind"); await e.click("#e-ok"); await e.click("#uebergabe-los");
   await e.waitForURL(u => !/eltern/.test(u.toString())); await e.close();
 
   // 1) Alter Spielstand ohne story → nach dem Laden Kapitel 0

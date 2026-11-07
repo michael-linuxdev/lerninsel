@@ -27,7 +27,7 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     p.on("console", m => { if (m.type() === "error" && !IGNORIEREN.test(m.text())) fehler.push(`${p.url()}: ${m.text()}`); });
     await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
-    await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     // Ankunft, Tutorial E1–E8 (und auf Wunsch E9) liegen zurück, Kapitel 1 erreicht, Spielzeit frei
     await p.evaluate((e9) => { const m = Spielwelt.lade("medien") || {}; m.lektionen = { bedienung: 3 }; Spielwelt.speichere("medien", m);
       Story.etappeFertig("E1"); ["E2", "E3", "E4", "E5", "E6", "E7", "E8"].concat(e9 ? ["E9"] : []).forEach(e => Story.etappeFertig(e, true));

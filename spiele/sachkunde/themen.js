@@ -743,8 +743,8 @@ window.THEMEN = [
         { t: "Überall gleich", ru: "Везде одинаково", ok: false, warum: "Die Zahlen sind verschieden: 25 °C und 18 °C.", warumRu: "Числа разные: 25 °C и 18 °C." }] },
       { typ: "daumen", satz: "Unter 0 °C kann Wasser zu Eis gefrieren.", satzRu: "Ниже 0 °C вода может замёрзнуть.", bild: "🧊", ok: true,
         warum: "Stimmt! Dann gibt es Frost und manchmal Glätte auf den Wegen.", warumRu: "Верно! Тогда бывает мороз, а иногда гололёд." },
-      { typ: "daumen", satz: "Ein Pfeil auf der Wetterkarte zeigt, woher der Wind weht.", satzRu: "Стрелка на карте погоды показывает, откуда дует ветер.", bild: "💨", ok: true,
-        warum: "Stimmt! Der Pfeil zeigt die Richtung, in die der Wind weht. Westwind kommt aus dem Westen.", warumRu: "Верно! Стрелка показывает, куда дует ветер. Западный ветер дует с запада." },
+      { typ: "daumen", satz: "Ein Pfeil auf der Wetterkarte zeigt, wohin der Wind weht.", satzRu: "Стрелка на карте погоды показывает, куда дует ветер.", bild: "💨", ok: true,
+        warum: "Stimmt! Der Pfeil zeigt die Richtung, in die der Wind weht. Westwind kommt aus dem Westen, der Pfeil zeigt nach Osten.", warumRu: "Верно! Стрелка показывает, куда дует ветер. Западный ветер дует с запада, стрелка показывает на восток." },
       { typ: "info", titel: "Geschafft!", bild: "🦉",
         text: "Super, {name}! Schau heute mit deiner Familie den Wetterbericht an. Auf der Insel ändert sich das Wetter übrigens auch.",
         ru: "Супер, {name}! Посмотри сегодня с семьёй прогноз погоды. На острове погода тоже меняется." }

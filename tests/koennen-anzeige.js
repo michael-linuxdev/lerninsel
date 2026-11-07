@@ -17,7 +17,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
   await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
   await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "1");
-  await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+  await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
 
   await p.goto(BASIS + "spiele/ich/"); await p.waitForTimeout(600);
   erwarte(await p.evaluate(() => document.getElementById("koennen-karte").hidden), "ohne Übung: keine Karte „Mein Können“");

@@ -101,7 +101,7 @@
   const Sz = window.Szene; if (!Sz) return;
   const E = { ru: "entwurf" };
   Sz.registriere("fipsis-karte", { titel: "Fipsis Karte", kapitel: 2, blasen: [
-    { wer: "fipsi", text: { de: "{name}, schau mal! Ich habe ein Stück von meiner Schatzkarte gefunden!", ru: "{name}, смотри! Я нашла кусочек своей карты сокровищ!", status: E } },
+    { wer: "fipsi", text: { de: "{name}, schau mal! Ich habe ein Stück von meiner Schatzkarte gefunden!", ru: "{name}, смотри! Я нашёл кусочек своей карты сокровищ!", status: E } },
     { wer: "fipsi", text: { de: "Darauf ist ein Weg eingezeichnet – und da ist er schon! Er führt zu einem Wegweiser.", ru: "На ней нарисована тропинка – и вот она! Она ведёт к указателю.", status: E } },
     { wer: "fipsi", text: { de: "Auf den Schildern stehen Wörter, die du schon kennst. Lies sie mal laut!", ru: "На табличках написаны слова, которые ты уже знаешь. Прочитай их вслух!", status: E } },
     { fuerAeltere: true, wer: "fipsi", text: { de: "Mit jedem neuen Wort finden wir mehr von der Karte. Wann immer du magst, üben wir weiter.", ru: "С каждым новым словом мы находим больше карты. Когда захочешь, продолжим.", status: E } }
@@ -114,7 +114,7 @@
   ] });
   // Kapitel 4 (05.11.2026): Paulas Fest – das Rhythmus-Boot an der Ballon-Wiese
   Sz.registriere("paulas-fest", { titel: "Paulas Fest", kapitel: 4, blasen: [
-    { wer: "papagei", text: { de: "{name}! Am Fluss hinter der Ballon-Wiese feiern wir ein Fest – und du bist eingeladen!", ru: "{name}! У реки за поляной с шариками мы празднуем – и ты приглашён!", status: E } },
+    { wer: "papagei", text: { de: "{name}! Am Fluss hinter der Ballon-Wiese feiern wir ein Fest – und du bist eingeladen!", ru: "{name}! У реки за поляной с шариками мы празднуем – и ты приглашён(а)!", status: E } },
     { wer: "papagei", text: { de: "Wir fahren mit meinem Boot hin. Aber paddeln geht nur im Rhythmus: Ta, ti-ti, Ta!", ru: "Мы поплывём на моей лодке. Но грести можно только в ритме: Та, ти-ти, Та!", status: E } },
     { fuerAeltere: true, wer: "papagei", text: { de: "Ich spiele vor, du paddelst nach. Wann immer du magst, fahren wir los.", ru: "Я играю, ты повторяешь. Когда захочешь, поплывём.", status: E } }
   ] });
@@ -127,14 +127,14 @@
   ] });
   // Kapitel 6 (07.11.2026): Der Leuchtturm – Tilda führt zum alten Leuchtturm; in der Höhle lenkt das Kind das Licht mit Spiegeln, dann leuchtet die Insel
   Sz.registriere("der-leuchtturm", { titel: "Der Leuchtturm", kapitel: 6, blasen: [
-    { wer: "tilda", text: { de: "{name}, du hast so viel gelernt! Jetzt zeige ich dir mein Geheimnis.", ru: "{name}, ты так многому научился! Теперь я покажу тебе мой секрет.", status: E } },
+    { wer: "tilda", text: { de: "{name}, du hast so viel gelernt! Jetzt zeige ich dir mein Geheimnis.", ru: "{name}, ты так многому научился(-ась)! Теперь я покажу тебе мой секрет.", status: E } },
     { wer: "tilda", text: { de: "Dort am Ufer steht der alte Leuchtturm. Unten drin ist eine Höhle mit Spiegeln und Kristallen.", ru: "Там, на берегу, стоит старый маяк. Внизу есть пещера с зеркалами и кристаллами.", status: E } },
     { wer: "tilda", text: { de: "Lenk das Licht mit den Spiegeln – dann leuchtet der Turm, und nachts strahlt die ganze Insel.", ru: "Направь свет зеркалами – тогда маяк засветится, и ночью будет сиять весь остров.", status: E } },
-    { fuerAeltere: true, wer: "tilda", text: { de: "In der Höhle liegt auch meine Schatzkammer. Dort siehst du alles, was du schon geschafft hast.", ru: "В пещере есть и моя сокровищница. Там видно всё, что ты уже сделал.", status: E } }
+    { fuerAeltere: true, wer: "tilda", text: { de: "In der Höhle liegt auch meine Schatzkammer. Dort siehst du alles, was du schon geschafft hast.", ru: "В пещере есть и моя сокровищница. Там видно всё, что ты уже сделал(а).", status: E } }
   ] });
   // Kapitel 7 „Neue Ufer“ (09.11.2026, KONZEPT): Robo macht das Boot klar – Fahrt zu Nachbar-Eilanden mit Ellas Forscherlager
   Sz.registriere("neue-ufer", { titel: "Neue Ufer", kapitel: 7, blasen: [
-    { wer: "robo", text: { de: "Piep, {name}! Du hast so viel gelernt – mein Boot ist bereit für eine große Fahrt.", ru: "Пип, {name}! Ты так многому научился – моя лодка готова к большому путешествию.", status: E } },
+    { wer: "robo", text: { de: "Piep, {name}! Du hast so viel gelernt – mein Boot ist bereit für eine große Fahrt.", ru: "Пип, {name}! Ты так многому научился(-ась) – моя лодка готова к большому путешествию.", status: E } },
     { wer: "robo", text: { de: "Wünsch dir ein Eiland: Wiese, Wald, Berge, Strand, Schnee oder Wüste. Dann fahren wir hin.", ru: "Пожелай остров: луг, лес, горы, пляж, снег или пустыню. И мы поплывём туда.", status: E } },
     { wer: "robo", text: { de: "Dort schlägt Ella ihr Forscherlager auf. Mit Karte und Tagebuch erforschen wir jedes neue Ufer.", ru: "Там Элла разобьёт лагерь исследователей. С картой и дневником мы исследуем каждый новый берег.", status: E } },
     { fuerAeltere: true, wer: "robo", text: { de: "Und keine Sorge: Deine Heimatinsel bleibt, wie sie ist. Wir kommen immer zurück.", ru: "И не волнуйся: твой родной остров останется таким, как есть. Мы всегда возвращаемся.", status: E } }

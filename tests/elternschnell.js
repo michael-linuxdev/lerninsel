@@ -19,9 +19,11 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
   await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load");
   await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
   await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "3");
-  await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+  await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
 
   // Die größte Fachdatei künstlich bremsen, damit man den Zwischenzustand sieht
+  // seit 07.11.2026 endet die Eltern-Anmeldung nach der Einrichtung: einmal mit PIN öffnen (Neuladen im Bereich hält sie)
+  await p.goto(BASIS + "spiele/eltern/"); await p.waitForSelector("#pin1"); await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForSelector(".eltern-reiter");
   let freigeben; const bremse = new Promise(r => { freigeben = r; });
   await p.route("**/sachkunde/themen.js", async (route) => { await bremse; await route.continue(); });
   await p.goto(BASIS + "spiele/eltern/", { waitUntil: "domcontentloaded" });   // „load“ kann auf die gebremste Datei warten

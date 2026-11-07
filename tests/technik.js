@@ -18,8 +18,8 @@ const BILDER = process.env.BILDER || "";
   const p = await ctx.newPage();
   await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
   await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
-  await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
-  const kinder = async () => { await p.goto(BASIS + "spiele/eltern/#kinder"); await p.waitForSelector("#technik-karte"); await p.waitForFunction(() => !/geprüft/.test(document.getElementById("speicher-stand").textContent)); };
+  await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+  const kinder = async () => { await p.goto(BASIS + "spiele/eltern/#kinder"); await p.waitForTimeout(300); if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(300); } await p.click('.eltern-reiter [data-teil="kinder"]').catch(() => {}); await p.waitForSelector("#technik-karte"); await p.waitForFunction(() => !/geprüft/.test(document.getElementById("speicher-stand").textContent)); };
 
   await kinder();
   erwarte(await p.isVisible("#protokoll-leer"), "ohne Fehler: „Keine Auffälligkeiten“");
