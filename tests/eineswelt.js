@@ -55,12 +55,12 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     await bild(p, `start-${art}`);
     // Eigene Idee „Lebendige Insel-Tür“: das Bild zeigt Tages-/Jahreszeit und Wetter der Insel
     await p.goto(BASIS + "?stunde=22&monat=12", { waitUntil: "load" }); await p.waitForTimeout(500);
-    const nacht = await p.evaluate(() => { const s = document.querySelector("#tuer-insel svg"), sicht = (k) => getComputedStyle(s.querySelector(".it-" + k)).display !== "none";
+    const nacht = await p.evaluate(() => { const s = document.querySelector("#tuer-insel svg.insel-bild"), sicht = (k) => getComputedStyle(s.querySelector(".it-" + k)).display !== "none";
       return { z: window.__inseltuer && __inseltuer(), mond: sicht("mond"), sonne: sicht("sonne"), schnee: sicht("schnee"), klasse: document.getElementById("tuer-insel").classList.contains("nacht"), bg: getComputedStyle(document.getElementById("tuer-insel")).backgroundImage }; });
     erwarte(nacht.z && nacht.z.nacht && nacht.mond && !nacht.sonne && nacht.schnee && nacht.klasse && /rgb\(28, 42, 85\)/.test(nacht.bg), `${art}: Insel-Tür nachts im Winter mit Mond, Schnee und dunklem Himmel`);
     await bild(p, `start-nacht-${art}`);
     await p.goto(BASIS + "?stunde=14&monat=10&wetter=regen", { waitUntil: "load" }); await p.waitForTimeout(500);
-    const regen = await p.evaluate(() => { const s = document.querySelector("#tuer-insel svg"), sicht = (k) => getComputedStyle(s.querySelector(".it-" + k)).display !== "none";
+    const regen = await p.evaluate(() => { const s = document.querySelector("#tuer-insel svg.insel-bild"), sicht = (k) => getComputedStyle(s.querySelector(".it-" + k)).display !== "none";
       return { z: __inseltuer(), regen: sicht("regen"), mond: sicht("mond"), busch: s.querySelector(".it-busch").getAttribute("fill") }; });
     erwarte(regen.z.saison === "herbst" && regen.regen && !regen.mond && regen.busch === "#F08A3C", `${art}: Insel-Tür am Herbsttag mit Regen und buntem Busch`);
 
