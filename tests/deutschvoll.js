@@ -28,7 +28,10 @@ const NEU34 = ["w-sprachvielfalt", "w-rueckmeldung", "w-pro-kontra", "w-theater"
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", stufe);
     await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
-    await p.goto(BASIS + "spiele/deutsch/"); await p.waitForSelector("#werkstatt .werk-gruppe");
+    await p.goto(BASIS + "spiele/deutsch/"); await p.waitForTimeout(300);
+    // Paket 2: Vorschule bis Kl. 2 sehen zuerst „Für dich“ (höchstens 5 Kacheln) – „📚 Alle Kapitel“ echt antippen
+    if (await p.isVisible("#werk-alle")) { erwarte(await p.evaluate(() => document.querySelectorAll("#werk-fuer-dich .ort").length <= 5), "Werkstatt: zuerst höchstens 5 Kacheln „Für dich“"); await p.click("#werk-alle"); }
+    await p.waitForSelector("#werkstatt .werk-gruppe");
     return { ctx, p };
   }
   const passt = (p) => p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
@@ -78,7 +81,10 @@ const NEU34 = ["w-sprachvielfalt", "w-rueckmeldung", "w-pro-kontra", "w-theater"
     }
     const sterne = await p.evaluate((id) => ((Spielwelt.lade("deutsch") || {}).kapitel || {})[id] || 0, id);
     const fehlerZahl = await p.evaluate(() => __deutsch.lauf.fehler);
-    await p.goto(BASIS + "spiele/deutsch/"); await p.waitForSelector("#werkstatt .werk-gruppe");
+    await p.goto(BASIS + "spiele/deutsch/"); await p.waitForTimeout(300);
+    // Paket 2: Vorschule bis Kl. 2 sehen zuerst „Für dich“ (höchstens 5 Kacheln) – „📚 Alle Kapitel“ echt antippen
+    if (await p.isVisible("#werk-alle")) { erwarte(await p.evaluate(() => document.querySelectorAll("#werk-fuer-dich .ort").length <= 5), "Werkstatt: zuerst höchstens 5 Kacheln „Für dich“"); await p.click("#werk-alle"); }
+    await p.waitForSelector("#werkstatt .werk-gruppe");
     return { ok: ok && fehlerZahl === 0, sterne, typen };
   }
 

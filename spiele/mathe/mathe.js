@@ -101,6 +101,14 @@
   }
   const faellig_ = (f) => !f.faellig || f.faellig <= tagIn(0);
 
+  // Die Station, an der es weitergeht (Lernbereich „gerade in der Schule“ zuerst, dann ab dem Startpunkt, dann die erste offene ungespielte); -1 = alle gespielt
+  function jetztIndex() {
+    let jetzt = -1;
+    if (schuleLb()) jetzt = ST.findIndex((s, i) => s.lb === schuleLb() && istOffen(i) && !bestes(s.id));
+    if (jetzt < 0) jetzt = ST.findIndex((s, i) => i >= startAb() && istOffen(i) && !bestes(s.id));
+    if (jetzt < 0) jetzt = ST.findIndex((s, i) => istOffen(i) && !bestes(s.id));
+    return jetzt;
+  }
   function zeichneWeg() {
     $("sterne").textContent = S.sterne(); benno();
     // Nach Können über die Klasse hinaus (NA-60): Wer alle Stationen dieses Weges geschafft hat, bekommt den nächsten Weg vorgeschlagen (freiwillig)
@@ -138,10 +146,7 @@
       if (y0 === y1) d += ` L${x1} ${y1}`;
       else { const bogen = x0 > breite / 2 ? dx * 0.9 : -dx * 0.9; d += ` C${x0 + bogen} ${y0} ${x1 + bogen} ${y1} ${x1} ${y1}`; }
     }
-    let jetzt = -1;
-    if (schuleLb()) jetzt = ST.findIndex((s, i) => s.lb === schuleLb() && istOffen(i) && !bestes(s.id));
-    if (jetzt < 0) jetzt = ST.findIndex((s, i) => i >= startAb() && istOffen(i) && !bestes(s.id));
-    if (jetzt < 0) jetzt = ST.findIndex((s, i) => istOffen(i) && !bestes(s.id));
+    const jetzt = jetztIndex();
     zeigeEinstufungAngebot();
     zeichneSchuljahr();
 
@@ -188,9 +193,11 @@
         }
       } else {
         const offen = istOffen(i), best = bestes(k.s.id);
-        b.className = "station" + (offen ? "" : " zu") + (i === jetzt ? " jetzt" : "");
-        b.setAttribute("aria-label", `${i + 1}. ${k.s.name}${offen ? "" : ", noch gesperrt"}${best ? `, ${best} Sterne` : ""}`);
-        b.innerHTML = `<span class="kreis">${offen ? k.s.icon : "🔒"}</span><span class="nr">${i + 1}</span><span class="name">${k.s.name}</span>` +
+        // Paket 2 „Ohne Lesen bedienbar“ (07.11.2026): Die nächste Station zeigt eine Hand „Hier weiter“; andere offene, noch nicht gespielte Stationen
+        // (je Lernbereich) sind heller – so ist klar, wo es weitergeht, ohne dass etwas gesperrt wird
+        b.className = "station" + (offen ? "" : " zu") + (i === jetzt ? " jetzt" : offen && !best ? " dezent" : "");
+        b.setAttribute("aria-label", `${i + 1}. ${k.s.name}${offen ? "" : ", noch gesperrt"}${best ? `, ${best} Sterne` : ""}${i === jetzt ? ", hier geht es weiter" : ""}`);
+        b.innerHTML = (i === jetzt ? `<span class="hier" aria-hidden="true">👉</span>` : "") + `<span class="kreis">${offen ? k.s.icon : "🔒"}</span><span class="nr">${i + 1}</span><span class="name">${k.s.name}</span>` +
           `<span class="stern-reihe">${offen && best ? [1, 2, 3].map(n => `<span class="${n <= best ? "" : "leer"}">⭐</span>`).join("") : ""}</span>`;
         b.addEventListener("click", () => {
           if (!offen) { S.ton("nein"); S.meldung(k.s.lb ? "Schaffe zuerst eine Station davor aus diesem Bereich." : "Schaffe zuerst die Station davor."); return; }
@@ -868,9 +875,26 @@
     else if (e.key === "Enter") { const w = $("weiter"); if (w) w.click(); else if (a.art === "zahl" || lauf.weg) pruefe(); }
   });
   $("zum-weg").addEventListener("click", () => { S.ton("tipp"); lauf = null; zeige("weg"); zeichneWeg(); });
+  // 🔊 Aufgabe vorlesen (Paket 2 „Ohne Lesen bedienbar“, 07.11.2026): liest Frage, Rechnung (Lücke = „wie viel?“), bei Auswahl die Antworten und
+  // die Rückmeldung vor – nur auf Knopfdruck (NA-60). Der Knopf steht in der Kopfzeile, damit die Tafel nicht enger wird (Test „tafel“).
+  function tafelText() {
+    const ohne = (el) => { if (!el) return ""; const c = el.cloneNode(true); c.querySelectorAll(".hilfe-ru, .ru, .ru-auf, .emo-t, .vorlesen-knopf, button, svg").forEach(x => x.remove());
+      c.querySelectorAll(".luecke").forEach(l => { l.textContent = l.textContent.trim() ? " " + l.textContent + " " : " wie viel? "; });
+      return c.textContent.replace(/\s+/g, " ").trim(); };
+    const rechnung = (t) => t.replace(/·|×/g, " mal ").replace(/\s:\s/g, " geteilt durch ").replace(/[−–]/g, " minus ").replace(/\+/g, " plus ").replace(/=/g, " ist gleich ").replace(/§/g, " wie viel? ");
+    const a = lauf && lauf.liste && lauf.liste[lauf.pos];
+    const teile = [ohne(document.querySelector("#tafel .frage")), rechnung(ohne($("ausdruck")))];
+    if (a && a.art === "wahl") { const o = [...document.querySelectorAll("#eingabe .taste")].map(b => b.textContent.replace(/\s+/g, " ").trim()).filter(x => /[0-9A-Za-zÄÖÜäöüß]/.test(x)); if (o.length) teile.push("Ist es " + o.join(" oder ") + "?"); }
+    teile.push(ohne($("rueck")), ohne(document.querySelector("#hilfe-platz .hilfe")));
+    return teile.map(x => x.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{E100}-\u{E1FF}]/gu, "").replace(/\s+/g, " ").trim()).filter(x => x && x !== "wie viel?").join(". ").replace(/([.?!])\./g, "$1");
+  }
+  if ($("tafel-hoer")) $("tafel-hoer").addEventListener("click", () => { S.ton("tipp"); if (window.Sprache) { Sprache.knopf(); Sprache.stopp(); Sprache.sprich(tafelText(), "de-DE"); } });
   let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (!$("weg-ansicht").hidden) zeichneWeg(); }, 150); });
 
   zeichneWeg();
+  if (window.Vorleser) { Vorleser.begleiter($("benno"), () => $("benno-text").textContent); $("benno").setAttribute("aria-label", "Benno: vorlesen"); }   // eigene Idee (Paket 2): „Tipp auf mich!“
   if (new URLSearchParams(location.search).has("training")) starteTraining();
-  window.__mathe = { faellig, tagIn, starteEinstufung, starteLernstand, zeige: (n) => { lauf.pos = n; zeigeAufgabe(); }, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte: (n, mitAngebot) => starte(n, !mitAngebot), starteRunde, starteTraining, zeigeUrkunde, erklaere, setzeAufgabe: (a) => { lauf.liste[lauf.pos] = Object.assign({ wieder: false, station: lauf.station.id }, a); zeigeAufgabe(); }, get lauf() { return lauf; } }; // für Tests
+  // „Los!“ von der Startseite (Paket 2, 07.11.2026): gleich die Station „Hier weiter“ (sind alle gespielt: das Training)
+  else if (new URLSearchParams(location.search).has("los")) { history.replaceState(null, "", location.pathname); const j = jetztIndex(); if (j >= 0) starte(j); else starteTraining(); }
+  window.__mathe = { faellig, tagIn, starteEinstufung, starteLernstand, zeige: (n) => { lauf.pos = n; zeigeAufgabe(); }, antworte: (w) => { const a = lauf.liste[lauf.pos]; if (a.art === "zahl") { lauf.eingabe = String(w); pruefe(); } else pruefe(String(w)); }, starte: (n, mitAngebot) => starte(n, !mitAngebot), starteRunde, starteTraining, zeigeUrkunde, erklaere, tafelText, setzeAufgabe: (a) => { lauf.liste[lauf.pos] = Object.assign({ wieder: false, station: lauf.station.id }, a); zeigeAufgabe(); }, get lauf() { return lauf; } }; // für Tests
 })();

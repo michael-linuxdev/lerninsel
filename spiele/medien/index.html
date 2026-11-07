@@ -148,16 +148,20 @@
   #fs-ansicht > div { width: min(760px, 100%); }
   #urkunde svg { width: min(720px, 100%); height: auto; display: block; margin: 0 auto 16px; border-radius: 18px; box-shadow: 0 12px 0 rgba(0,0,0,.1); }
   .fs-knoepfe { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  /* Paket 2 (07.11.2026): Symbol mit kurzer Beschriftung darunter (Handy: nur Symbol, Name über aria-label) */
+  .knopf.rund.mit-text { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: auto; min-width: 64px; padding: 4px 8px; border-radius: 20px; line-height: 1.05; }
+  .knopf.rund.mit-text small { font-size: .72rem; font-weight: 700; }
+  @media (max-width: 480px) { .knopf.rund.mit-text small { display: none; } }
 </style>
 </head>
 <body>
 
 <section class="ansicht" id="liste-ansicht">
   <div class="oben">
-    <a class="knopf rund" href="../../" aria-label="Zur Spielwelt">🏠</a>
+    <a class="knopf rund" href="../../" aria-label="Zur Startseite">🏠</a>
     <h1>Tablet-Führerschein</h1>
     <button class="knopf rund ru-schalter" id="ru-schalter" aria-label="Hilfe in der Muttersprache an oder aus">RU</button>
-    <button class="knopf rund" id="ton-vorlesen" aria-label="Vorlesen an oder aus">🗣️</button>
+    <button class="knopf rund mit-text" id="ton-vorlesen" aria-label="Vorlesen an oder aus"><span aria-hidden="true">🗣️</span><small aria-hidden="true">Stimme an</small></button>
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
   <div class="intro"><span id="robo-klein"></span><p id="intro-text"></p></div>

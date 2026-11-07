@@ -66,6 +66,7 @@ const START = [
   "spiele/mathe/hilfe-ru-hilfen.js",
   "spiele/mathe/mathe.js",
   "shared/sprache.js",
+  "shared/vorleser.js",
   "shared/charakter.js",
   "shared/lernfunde.js",
   "shared/lernkartei.js",
