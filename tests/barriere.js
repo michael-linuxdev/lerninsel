@@ -8,7 +8,7 @@ const { chromium } = require("playwright");
 const BASIS = process.env.BASIS || "http://localhost:8799/";
 const SEITEN = ["", "spiele/anziehen/", "spiele/mathe/", "spiele/deutsch/", "spiele/medien/", "spiele/sachkunde/", "spiele/sachkunde/?fach=kunst", "spiele/englisch/", "spiele/heft/", "spiele/robo/", "spiele/vorlesen/",
   "spiele/praesentieren/", "spiele/vorschule/", "spiele/ich/", "spiele/schatz/", "spiele/gefuehle/", "spiele/atelier/", "spiele/schach/", "spiele/familie/duell.html", "spiele/tier/", "spiele/garten/", "spiele/baeckerei/",
-  "spiele/tierstation/", "spiele/angeln/", "spiele/rhythmus/", "spiele/wetter/", "spiele/leuchtturm/", "spiele/expedition/", "spiele/eltern/", "spiele/daz/", "spiele/lesen/", "spiele/album/"];
+  "spiele/tierstation/", "spiele/angeln/", "spiele/rhythmus/", "spiele/wetter/", "spiele/leuchtturm/", "spiele/bruecke/", "spiele/expedition/", "spiele/eltern/", "spiele/daz/", "spiele/lesen/", "spiele/album/"];
 const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load resource|open-meteo/;
 
 (async () => {

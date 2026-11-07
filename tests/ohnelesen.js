@@ -219,7 +219,7 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     // Zurück-Regel auf allen Seiten (HTML geholt und geprüft)
     const SEITEN = ["spiele/mathe/", "spiele/deutsch/", "spiele/lesen/", "spiele/vorschule/", "spiele/medien/", "spiele/sachkunde/", "spiele/englisch/", "spiele/ich/", "spiele/album/",
       "spiele/heft/", "spiele/schatz/", "spiele/vorlesen/", "spiele/praesentieren/", "spiele/daz/", "spiele/tier/", "spiele/anziehen/", "spiele/atelier/", "spiele/schach/", "spiele/gefuehle/",
-      "spiele/robo/", "spiele/sorbisch/", "spiele/garten/", "spiele/baeckerei/", "spiele/tierstation/", "spiele/angeln/", "spiele/rhythmus/", "spiele/wetter/", "spiele/leuchtturm/",
+      "spiele/robo/", "spiele/sorbisch/", "spiele/garten/", "spiele/baeckerei/", "spiele/tierstation/", "spiele/angeln/", "spiele/rhythmus/", "spiele/wetter/", "spiele/leuchtturm/", "spiele/bruecke/",
       "spiele/expedition/", "spiele/welt3d/heimat.html"];
     const verstoss = await p.evaluate(async (seiten) => {
       const aus = [];

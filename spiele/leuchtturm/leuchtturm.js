@@ -220,7 +220,8 @@
       ["🪁", "Drachenflüge", flug, "Полёты змея"],
       ["♟️", "Schach-Rätsel", zahl(L("schach").raetsel), "Шахматные задачи"],
       ["💡", "Licht-Rätsel", zahl(daten().geloest), "Световые загадки"],
-      ["🧭", "Eilande erforscht", zahl(L("expedition").eilande), "Исследованные острова"]
+      ["🧭", "Eilande erforscht", zahl(L("expedition").eilande), "Исследованные острова"],
+      ["🌉", "Brückenstücke", Math.min(8, L("bruecke").abschnitte || 0), "Части моста"]
     ];
   }
   function kammer() {

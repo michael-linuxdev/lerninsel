@@ -547,10 +547,10 @@
           ["sn.ma12.gm.01", "Geld: Euro und Cent erfassen, vergleichen, ordnen, auch mit Komma", "1/2", ["mathe:k1geld", "mathe:geld", "mathe:euro"], "ja"],
           ["sn.ma12.gm.02", "Geld: Preise kennen (Stützpunkte), wechseln, umrechnen", "2", ["mathe:euro"], "ja"],
           ["sn.ma12.gm.03", "Geld: einfache Sachaufgaben", "2", ["mathe:euro", "mathe:sachaufgaben"], "ja"],
-          ["sn.ma12.gm.04", "Länge: direkt vergleichen; mm, cm, dm, m mit einer und zwei Einheiten und mit Komma", "1/2", ["mathe:k1messen", "mathe:laenge", "mathe:massband"], "ja"],
+          ["sn.ma12.gm.04", "Länge: direkt vergleichen; mm, cm, dm, m mit einer und zwei Einheiten und mit Komma", "1/2", ["mathe:k1messen", "mathe:laenge", "mathe:massband", "bruecke:a", "bruecke:b"], "ja"],
           ["sn.ma12.gm.05", "Längen am Lineal ablesen und messen", "2", ["mathe:laenge"], "ja"],
           ["sn.ma12.gm.11", "Mit Lineal und Maßband selbst messen", "2", ["echtewelt:messen"], "aussen"],
-          ["sn.ma12.gm.06", "Längen: Stützpunkte, schätzen, umrechnen, Sachaufgaben", "2", ["mathe:laenge", "mathe:massband"], "ja"],
+          ["sn.ma12.gm.06", "Längen: Stützpunkte, schätzen, umrechnen, Sachaufgaben", "2", ["mathe:laenge", "mathe:massband", "bruecke:b"], "ja"],
           ["sn.ma12.gm.07", "Uhren und Kalender als Zeitmesser", "1/2", ["mathe:k1zeit", "mathe:uhr", "mathe:kalender"], "ja"],
           ["sn.ma12.gm.08", "Zeitspannen: Minuten, Stunden, Tag, Woche, Monat, Jahr; halbe und Viertelstunde", "2", ["mathe:kalender", "mathe:zeitspanne"], "ja"],
           ["sn.ma12.gm.09", "Uhrzeit auf 5 Minuten genau lesen, Datum am Kalender", "2", ["mathe:uhr", "mathe:zeitspanne"], "ja"],
@@ -598,7 +598,7 @@
         ],
         3: [ // Größen und Messen
           ["sn.ma3.gm.01", "Geld: Sachaufgaben, Tabellen und Diagramme", "3", ["mathe:k3geld"], "ja"],
-          ["sn.ma3.gm.02", "Länge: Kilometer, zwei Einheiten, Komma, ½ cm/m/km, Stützpunkt 1 km, umrechnen, Sachaufgaben", "3", ["mathe:k3laenge", "mathe:k3groessen"], "ja"],
+          ["sn.ma3.gm.02", "Länge: Kilometer, zwei Einheiten, Komma, ½ cm/m/km, Stützpunkt 1 km, umrechnen, Sachaufgaben", "3", ["mathe:k3laenge", "mathe:k3groessen", "bruecke:c"], "ja"],
           ["sn.ma3.gm.03", "Zeit: Sekunde, minutengenau, ¼ h, ½ h, ¾ h, umrechnen, Sachaufgaben", "3", ["mathe:k3zeit", "mathe:k3groessen"], "ja"],
           ["sn.ma3.gm.04", "Masse: Gramm und Kilogramm, zwei Einheiten, ½ kg, Stützpunkte, schätzen, umrechnen", "3", ["mathe:k3gewicht", "mathe:k3groessen"], "ja"],
           ["sn.ma3.gm.05", "Messen mit Messrad, Waage und verschiedenen Uhren", "3", ["echtewelt:backen", "echtewelt:messen"], "aussen"]
@@ -636,12 +636,12 @@
           ["sn.ma4.zo.07", "Schriftliche Multiplikation mit bis zu dreistelligem zweiten Faktor", "4", ["mathe:k4malschrift", "mathe:k4malmehr"], "ja"],
           ["sn.ma4.zo.08", "Schriftliche Division (einstelliger Divisor), Teilbarkeit 4 und 6, Primzahlen, Überschlag", "4", ["mathe:k4geteilt", "mathe:k4teilbar", "mathe:k4primzahl", "mathe:k4runden"], "ja"],
           ["sn.ma4.zo.09", "Zahlenmuster in geometrischen Mustern erkennen (figurierte Zahlen)", "4", ["mathe:k4rechenmeister"], "ja"],
-          ["sn.ma4.zo.10", "Funktionale Beziehungen: Maßstab, Menge und Preis, Tabellen", "4", ["mathe:k4massstab", "mathe:k4reise", "expedition:karte"], "ja"]
+          ["sn.ma4.zo.10", "Funktionale Beziehungen: Maßstab, Menge und Preis, Tabellen", "4", ["mathe:k4massstab", "mathe:k4reise", "expedition:karte", "bruecke:d"], "ja"]
         ],
         3: [ // Größen und Messen
           ["sn.ma4.gm.01", "Geld, Länge und Zeit in größeren Sachsituationen (Reiseplanung, Preistafeln, Fahrpläne, Wanderkarten)", "4", ["mathe:k4reise", "mathe:k4zeit"], "ja"],
           ["sn.ma4.gm.02", "Bruchteile ¼, ½, ¾ von Größen", "4", ["mathe:k4reise", "mathe:k4tonne"], "ja"],
-          ["sn.ma4.gm.03", "Masse: Tonne, zwei Einheiten, Komma, Stützpunkte, schätzen, umrechnen, Sachaufgaben", "4", ["mathe:k4tonne"], "ja"],
+          ["sn.ma4.gm.03", "Masse: Tonne, zwei Einheiten, Komma, Stützpunkte, schätzen, umrechnen, Sachaufgaben", "4", ["mathe:k4tonne", "bruecke:d"], "ja"],
           ["sn.ma4.gm.04", "Volumen: Liter und Milliliter, Komma, messen, Stützpunkte, schätzen, umrechnen", "4", ["mathe:k4liter"], "ja"]
         ],
         4: [ // Daten und Zufall
