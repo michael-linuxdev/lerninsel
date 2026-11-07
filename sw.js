@@ -140,6 +140,7 @@ const START = [
   "spiele/sachkunde/landkreise.js",
   "spiele/sachkunde/faecher.js",
   "spiele/sachkunde/religion.js",
+  "spiele/sachkunde/bewegung.js",
   "spiele/sachkunde/sachkunde.js",
   "spiele/englisch/",
   "spiele/englisch/lektionen.js",

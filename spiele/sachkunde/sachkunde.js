@@ -203,6 +203,7 @@
     if (lauf.pos >= t.schritte.length) return beende();
     const s = t.schritte[lauf.pos], A = $("aufgabe");
     A.innerHTML = ""; texte.length = 0;
+    if (window.Bewegung) Bewegung.stopp();
 
     switch (s.typ) {
       case "info": {
@@ -251,6 +252,10 @@
             erklaere(w, "nein", `Das ist nicht die richtige Person. ${P[id].wer}`, S.ht(P[id], "wer") ? S.paar({ de: "", ru: "Это не тот человек." })[1] + " " + S.ht(P[id], "wer") : "");
           }
         }));
+        break;
+      }
+      case "bewegung": {   // Bewegungspause zum Mitmachen (bewegung.js)
+        Bewegung.zeige(A, s, { eintrag, vt, mini, blase, weiterKnopf, aufWeiter, ton: (t) => S.ton(t), ht: (o, f) => S.ht(o, f) });
         break;
       }
       case "zuordnen": {

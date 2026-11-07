@@ -237,8 +237,10 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jede
   w.FACH_THEMEN.forEach(t => assert.ok(benutzt.has("sachkunde:" + t.id), t.id + " kommt in keinem Inhaltspunkt vor"));
   // 07.11.2026 „Ehrlich lernen“: Themen mit wenig Übungen für viele Punkte sind ehrlich „teil“ (vorher alle „ja“: 33, 37, 25, 14, 43, 45, 59)
   assert.strictEqual(JSON.stringify(z), JSON.stringify({ kunst: { ja: 16, teil: 17, nein: 0, aussen: 12 }, musik: { ja: 23, teil: 14, nein: 0, aussen: 11 }, werken: { ja: 7, teil: 18, nein: 0, aussen: 9 },
-    sport: { ja: 6, teil: 8, nein: 0, aussen: 28 }, ethik: { ja: 16, teil: 27, nein: 0, aussen: 0 },
-    evreligion: { ja: 26, teil: 19, nein: 0, aussen: 2 }, kareligion: { ja: 17, teil: 42, nein: 0, aussen: 1 } }));
+    sport: { ja: 13, teil: 0, nein: 0, aussen: 29 }, ethik: { ja: 43, teil: 0, nein: 0, aussen: 0 },
+    evreligion: { ja: 45, teil: 0, nein: 0, aussen: 2 }, kareligion: { ja: 59, teil: 0, nein: 0, aussen: 1 } }));
+  // 07.11.2026 „Fächer ausbauen II“: Sport, Ethik und Religion mit eigenen Übungen je Punkt (vorher Sport 6/8 teil, Ethik 16/27, ev 26/19, ka 17/42);
+  // reine Bewegungspunkte bleiben „aussen“ – die Bewegungspause (sp-bewegungspause) leitet an, zählt aber nicht als Übung.
 });
 
 pruefe("Sachsen Sorbisch als Fremdsprache (nur nach Eltern-Wahl): 6 Themen Kl. 1/2, 11 Lernbereiche + Wahlbereiche Kl. 3 und 4, jeder Punkt zugeordnet, jede Lektion kommt vor, ehrlich „teil“ ohne Hören", () => {
@@ -300,9 +302,9 @@ pruefe("Vorschule (Sächsischer Bildungsplan): 7 Bereiche, jeder Punkt zugeordne
 });
 
 pruefe("Ehrlich lernen (07.11.2026): ein Inhaltspunkt ist „ja“ nur mit mindestens 2 echten Übungsschritten für sich; jeder „teil“-Punkt sagt im Hinweis, was fehlt", () => {
-  // Übungsschritte je Inhalt: Info-Karten, `sag`, Wortkarten und Aufnahmen zählen nicht; Mathe-Stationen und Spiele mit erzeugten Aufgaben
+  // Übungsschritte je Inhalt: Info-Karten, `sag`, Wortkarten, Aufnahmen und Bewegungspausen (die App sieht das Kind nicht) zählen nicht; Mathe-Stationen und Spiele mit erzeugten Aufgaben
   // (Lesen, Atelier, Robo, Leuchtturm …) zählen als genug. Die Übungen eines Inhalts werden auf alle Punkte desselben Fachs verteilt, die ihn nutzen.
-  const NICHT = new Set(["info", "sag", "karten", "aufnehmen"]), ue = (s) => (s || []).filter(x => !NICHT.has(x.typ)).length;
+  const NICHT = new Set(["info", "sag", "karten", "aufnehmen", "bewegung"]), ue = (s) => (s || []).filter(x => !NICHT.has(x.typ)).length;
   const alle = w.THEMEN.concat(w.FACH_THEMEN, w.LANDKREIS_THEMEN || []);
   const zaehle = (a) => { const [art, id] = a.split(":"), f = (l) => l.find(x => x.id === id);
     if (art === "mathe") return 99;
