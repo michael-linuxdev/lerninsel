@@ -15,7 +15,8 @@
   .oben { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
   .oben h1 { margin: 0; font-size: 1.8rem; flex: 1; }
   .rund { width: 56px; padding: 0; font-size: 1.6rem; flex: none; text-decoration: none; }
-  .zaehler { font-weight: 700; }
+  .zaehler { font-weight: 700; white-space: nowrap; flex: none; }
+  @media (max-width: 520px) { .zaehler { padding-left: 10px; padding-right: 10px; font-size: .95rem; } .oben h1 { min-width: 0; font-size: 1.45rem; overflow-wrap: anywhere; } }
   /* (UX-Paket 5, 07.11.2026) Reiter brechen um, statt nach rechts aus dem Bild zu laufen (vorher ohne Hinweis, dass man wischen kann) */
   /* (08.11.2026) alle sieben Reiter passen auf dem iPad quer in eine Zeile (vorher stand die Inselchronik allein in der zweiten – Test `ipad`) */
   .reiter { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 14px 16px 4px; max-width: 1140px; margin: 0 auto; }
