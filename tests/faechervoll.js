@@ -60,8 +60,8 @@ const FAECHER = ["kunst", "musik", "werken", "sport", "ethik"];
   const probe = await kind("2");
   await oeffne(probe.p, "kunst");
   const themen = await probe.p.evaluate(() => (window.FACH_THEMEN || []).map(t => ({ id: t.id, fach: t.fach, kl: Math.max(2, t.stufe || t.kl || 2), land: t.land || "", konf: (t.konf || []).join() })));
-  erwarte(themen.filter(t => t.fach !== "religion").length === 70 && themen.filter(t => t.fach === "religion").length === 37,
-    `70 Themen in faecher.js, 37 in religion.js (${themen.filter(t => t.fach !== "religion").length}/${themen.filter(t => t.fach === "religion").length})`);
+  erwarte(themen.filter(t => t.fach !== "religion").length === 71 && themen.filter(t => t.fach === "religion").length === 37,
+    `71 Themen in faecher.js (seit 07.11. mit „Hör genau hin!“), 37 in religion.js (${themen.filter(t => t.fach !== "religion").length}/${themen.filter(t => t.fach === "religion").length})`);
 
   // --- Reiter, Gruppen, Landesfilter ---
   {

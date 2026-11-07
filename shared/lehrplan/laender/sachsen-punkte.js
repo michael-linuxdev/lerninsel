@@ -914,46 +914,46 @@
           ["sn.ku12.1.03", "Farbauftrag: deckend, lasierend, tupfen, klecksen, spritzen; Werke dazu betrachten", "1/2", ["sachkunde:ku-farbauftrag"], "ja"],
           ["sn.ku12.1.04", "Punkt, Linie und Muster, Linie als Bewegungsspur, digital malen", "1/2", ["sachkunde:ku-linie", "atelier:malen"], "ja"],
           ["sn.ku12.1.05", "Einfache Druckverfahren: Finger-, Stempel-, Materialdruck, Abklatsch, Abdrücke", "1/2", ["sachkunde:ku-drucken", "echtewelt:stempel"], "ja"],
-          ["sn.ku12.1.06", "Formen und Bildaufbau: rund–eckig, offen–geschlossen, Reihen, Ballen, Streuen", "1/2", ["sachkunde:ku-formen"], "teil", "Zu wenig Übung: „Formen und Bildaufbau“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.ku12.1.07", "Buchstaben und Ziffern als Gestaltungsmittel", "1/2", ["sachkunde:ku-formen"], "teil", "Zu wenig Übung: „Formen und Bildaufbau“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku12.1.06", "Formen und Bildaufbau: rund–eckig, offen–geschlossen, Reihen, Ballen, Streuen", "1/2", ["sachkunde:ku-formen"], "ja"],
+          ["sn.ku12.1.07", "Buchstaben und Ziffern als Gestaltungsmittel", "1/2", ["sachkunde:ku-formen"], "ja"],
           ["sn.ku12.1.08", "Gestaltungspraktiken kombinieren: Collage, Frottage, einfaches Malprogramm", "1/2", ["sachkunde:ku-formen", "atelier:malen"], "ja"]
         ],
         2: [ // Körperhaft-räumliches Gestalten
-          ["sn.ku12.2.01", "Plastische Objekte betrachten, betasten, beschreiben; Begriff Plastik", "1/2", ["sachkunde:ku-plastik"], "teil", "Zu wenig Übung: „Kneten, formen, bauen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku12.2.01", "Plastische Objekte betrachten, betasten, beschreiben; Begriff Plastik", "1/2", ["sachkunde:ku-plastik"], "ja"],
           ["sn.ku12.2.02", "Modellieren mit Ton, Knete, Salzteig, Sand: antragen, abtragen, Abdrücke", "1/2", ["sachkunde:ku-plastik", "echtewelt:kneten"], "aussen"],
           ["sn.ku12.2.03", "Mit Kartons, Rollen, Korken und Naturfundstücken bauen", "1/2", ["sachkunde:ku-plastik", "echtewelt:turm"], "aussen"],
           ["sn.ku12.2.04", "Innen- und Außenräume erleben und umgestalten, Labyrinthe, Tierbauten", "1/2", ["sachkunde:ku-plastik", "echtewelt:hoehle"], "aussen"]
         ],
         3: [ // Aktionsbetontes Gestalten
-          ["sn.ku12.3.01", "Spielerische Zugänge zu Kunstwerken: Ich sehe was, Geräusche erfinden, Titel und Geschichten", "1/2", ["sachkunde:ku-sinne"], "teil", "Zu wenig Übung: „Kunst mit allen Sinnen“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku12.3.01", "Spielerische Zugänge zu Kunstwerken: Ich sehe was, Geräusche erfinden, Titel und Geschichten", "1/2", ["sachkunde:ku-sinne"], "ja"],
           ["sn.ku12.3.02", "Szenisches Spiel mit Figuren, Puppen und Schattenfiguren", "1/2", ["sachkunde:ku-sinne", "echtewelt:lebendesbild"], "aussen"],
           ["sn.ku12.3.03", "Farb- und Formaktionen: sammeln, sortieren, arrangieren, große Malaktionen", "1/2", ["echtewelt:landart"], "aussen"],
-          ["sn.ku12.3.04", "Körperhaltungen, Mimik, Gestik, Verkleiden und Masken", "1/2", ["sachkunde:ku-sinne"], "teil", "Zu wenig Übung: „Kunst mit allen Sinnen“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
+          ["sn.ku12.3.04", "Körperhaltungen, Mimik, Gestik, Verkleiden und Masken", "1/2", ["sachkunde:ku-sinne"], "ja"]
         ]
       },
       "3": {
         1: [ // Flächiges Gestalten
           ["sn.ku3.1.01", "Bekannte Techniken erweitern: skizzieren, drucken, schneiden, fotografieren", "3", ["atelier:malen", "echtewelt:frottage"], "aussen"],
-          ["sn.ku3.1.02", "Farben als Träger von Stimmungen: Harmonie, Kontraste, Signalfarben", "3", ["sachkunde:ku-farbgefuehl"], "teil", "Zu wenig Übung: „Farben machen Stimmung“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku3.1.02", "Farben als Träger von Stimmungen: Harmonie, Kontraste, Signalfarben", "3", ["sachkunde:ku-farbgefuehl"], "ja"],
           ["sn.ku3.1.03", "Farben abstufen (trüben, tönen), Pinselführung und Farbverlauf", "3", ["sachkunde:ku-farbgefuehl", "sachkunde:ku-farbauftrag"], "ja"],
           ["sn.ku3.1.04", "Hell-Dunkel-Kontrast, Oberflächenstrukturen, optische Täuschungen", "3", ["sachkunde:ku-hell-dunkel"], "ja"],
           ["sn.ku3.1.05", "Ein besonderes Druckverfahren: Monotypie, Frottage, Materialdruck", "3", ["sachkunde:ku-hell-dunkel", "echtewelt:frottage"], "ja"],
           ["sn.ku3.1.06", "Bildaufbau: Überdeckung, Größe, Farbabstufung, Figur und Grund", "3", ["sachkunde:ku-bildraum"], "ja"],
-          ["sn.ku3.1.07", "Schrift als Gestaltungsmittel: Monogramm, Geheimschrift, Kalligrafie", "3", ["sachkunde:ku-schrift-foto"], "teil", "Zu wenig Übung: „Schrift, Foto und Bildrechte“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.ku3.1.08", "Fotografie: Bildausschnitt, Lochkamera, Licht und Schatten", "3", ["sachkunde:ku-schrift-foto"], "teil", "Zu wenig Übung: „Schrift, Foto und Bildrechte“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.ku3.1.09", "Persönlichkeitsrechte und Urheberrecht bei Bildern", "3", ["sachkunde:ku-schrift-foto"], "teil", "Zu wenig Übung: „Schrift, Foto und Bildrechte“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku3.1.07", "Schrift als Gestaltungsmittel: Monogramm, Geheimschrift, Kalligrafie", "3", ["sachkunde:ku-schrift-foto"], "ja"],
+          ["sn.ku3.1.08", "Fotografie: Bildausschnitt, Lochkamera, Licht und Schatten", "3", ["sachkunde:ku-schrift-foto"], "ja"],
+          ["sn.ku3.1.09", "Persönlichkeitsrechte und Urheberrecht bei Bildern", "3", ["sachkunde:ku-schrift-foto"], "ja"],
           ["sn.ku3.1.10", "Bilder digital bearbeiten und verfremden", "3", ["atelier:verfremden", "atelier:malen"], "ja"]
         ],
         2: [ // Körperhaft-räumliches Gestalten
-          ["sn.ku3.2.01", "Bildhauer und ihre Arbeitsweise, Formbarkeit von Materialien", "3", ["sachkunde:ku-bildhauer"], "teil", "Zu wenig Übung: „Bildhauer, Design und Land-Art“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku3.2.01", "Bildhauer und ihre Arbeitsweise, Formbarkeit von Materialien", "3", ["sachkunde:ku-bildhauer"], "ja"],
           ["sn.ku3.2.02", "Modellieren mit Ton, Gips und Pappmaché, Figuren", "3", ["echtewelt:kneten"], "aussen"],
-          ["sn.ku3.2.03", "Montagen aus Fundstücken, Upcycling", "3", ["sachkunde:ku-bildhauer"], "teil", "Zu wenig Übung: „Bildhauer, Design und Land-Art“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.ku3.2.04", "Design: Gebrauchsgegenstände gestalten und prüfen", "3", ["sachkunde:ku-bildhauer"], "teil", "Zu wenig Übung: „Bildhauer, Design und Land-Art“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.ku3.2.05", "Kunst in Außenräumen: Land-Art, Urban Art", "3", ["sachkunde:ku-bildhauer", "echtewelt:landart"], "teil", "Zu wenig Übung: „Bildhauer, Design und Land-Art“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
+          ["sn.ku3.2.03", "Montagen aus Fundstücken, Upcycling", "3", ["sachkunde:ku-bildhauer", "echtewelt:upcycling"], "aussen", "Die App fragt Wissen zu Montage und Upcycling ab; das Bauen aus Fundstücken selbst ist eine Echte-Welt-Aufgabe."],
+          ["sn.ku3.2.04", "Design: Gebrauchsgegenstände gestalten und prüfen", "3", ["sachkunde:ku-bildhauer"], "ja"],
+          ["sn.ku3.2.05", "Kunst in Außenräumen: Land-Art, Urban Art", "3", ["sachkunde:ku-bildhauer", "echtewelt:landart"], "ja"]
         ],
         3: [ // Aktionsbetontes Gestalten
-          ["sn.ku3.3.01", "Spielerische Methoden der Kunstbetrachtung: verdecken, Puzzle, Klanggeschichten, Elfchen, Brief an das Werk", "3", ["sachkunde:ku-aktion3"], "teil", "Zu wenig Übung: „Lebende Bilder und Schattenspiel“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.ku3.3.02", "Körper und Bewegung: Rollenspiel, Pantomime, Schattenfiguren", "3", ["sachkunde:ku-aktion3"], "teil", "Zu wenig Übung: „Lebende Bilder und Schattenspiel“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku3.3.01", "Spielerische Methoden der Kunstbetrachtung: verdecken, Puzzle, Klanggeschichten, Elfchen, Brief an das Werk", "3", ["sachkunde:ku-aktion3"], "ja"],
+          ["sn.ku3.3.02", "Körper und Bewegung: Rollenspiel, Pantomime, Schattenfiguren", "3", ["sachkunde:ku-aktion3", "echtewelt:lebendesbild"], "aussen", "Die App fragt Wissen zu Pantomime und Schattenspiel ab; das Spielen mit dem Körper selbst ist eine Echte-Welt-Aufgabe."],
           ["sn.ku3.3.03", "Lebende Bilder und Aktionen mit Farben und Formen, dokumentieren", "3", ["sachkunde:ku-aktion3", "echtewelt:lebendesbild"], "aussen"]
         ]
       },
@@ -971,19 +971,19 @@
           ["sn.ku4.2.03", "Architektur: Form und Funktion, Kirchen, Brücken, Gewölbe", "4", ["sachkunde:ku-architektur", "echtewelt:architektur"], "ja"]
         ],
         3: [ // Aktionsbetontes Gestalten
-          ["sn.ku4.3.01", "Aktionsmethoden: Bilddiktat, fiktives Interview, Motive weiterspinnen", "4", ["sachkunde:ku-aktion4"], "teil", "Zu wenig Übung: „Kunst in Aktion“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.ku4.3.01", "Aktionsmethoden: Bilddiktat, fiktives Interview, Motive weiterspinnen", "4", ["sachkunde:ku-aktion4"], "ja"],
           ["sn.ku4.3.02", "Eine Aktion planen und durchführen: lebende Bilder, Schattenspiel, Performance", "4", ["sachkunde:ku-aktion4", "echtewelt:lebendesbild"], "aussen"],
-          ["sn.ku4.3.03", "Aktionskunst kennenlernen und dokumentieren", "4", ["sachkunde:ku-aktion4"], "teil", "Zu wenig Übung: „Kunst in Aktion“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
+          ["sn.ku4.3.03", "Aktionskunst kennenlernen und dokumentieren", "4", ["sachkunde:ku-aktion4"], "ja"]
         ]
       }
     },
     musik: {
       "1/2": {
         1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
-          ["sn.mu12.1.01", "Stimme als Instrument: Geräusche nachahmen, Texte und Bilder verklanglichen", "1/2", ["sachkunde:mu-stimme"], "teil", "Zu wenig Übung: „Meine Stimme ist ein Instrument“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu12.1.01", "Stimme als Instrument: Geräusche nachahmen, Texte und Bilder verklanglichen", "1/2", ["sachkunde:mu-stimme"], "ja"],
           ["sn.mu12.1.02", "Grundton spüren, Melodiebausteine wiedererkennen", "1/2", ["atelier:erkennen", "atelier:musik"], "ja"],
           ["sn.mu12.1.03", "Rhythmus und Melodie beim Sprechen: Verse rhythmisieren", "1/2", ["sachkunde:mu-rhythmus", "lesen:silben"], "ja"],
-          ["sn.mu12.1.04", "Grundlagen des Singens: Haltung, Atmung, Tonbildung", "1/2", ["sachkunde:mu-stimme"], "teil", "Zu wenig Übung: „Meine Stimme ist ein Instrument“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu12.1.04", "Grundlagen des Singens: Haltung, Atmung, Tonbildung", "1/2", ["sachkunde:mu-stimme", "echtewelt:singen"], "aussen", "Die App fragt Wissen zu Haltung und Atmung ab; das Singen selbst geht nur mit der eigenen Stimme (Echte-Welt-Aufgabe, Lieder im Atelier)."],
           ["sn.mu12.1.05", "Im Klassengesang singen, Kanon-Vorübungen, etwa sechs Lieder auswendig", "1/2", ["atelier:lieder", "echtewelt:singen"], "aussen"]
         ],
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
@@ -995,23 +995,23 @@
         3: [ // Musik umsetzen, verbinden und in Beziehung bringen
           ["sn.mu12.3.01", "Musik in freie Bewegung und Tanz umsetzen, Stimmungen darstellen", "1/2", ["sachkunde:mu-bewegung", "echtewelt:tanzen"], "aussen"],
           ["sn.mu12.3.02", "Einfache Tänze, Schritte, Aufstellungen und Fassungen", "1/2", ["sachkunde:mu-bewegung", "echtewelt:tanzschritte"], "aussen"],
-          ["sn.mu12.3.03", "Musik in Bilder und Sprache umsetzen: Tempo, Stimmung, Überschriften", "1/2", ["sachkunde:mu-bewegung", "sachkunde:mu-laut-leise"], "teil", "Zu wenig Übung: „Musik und Bewegung“ hat 3 Aufgaben für 4 Inhaltspunkte, „Laut, leise, schnell, langsam“ hat 4 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu12.3.03", "Musik in Bilder und Sprache umsetzen: Tempo, Stimmung, Überschriften", "1/2", ["sachkunde:mu-bewegung", "sachkunde:mu-laut-leise", "sachkunde:mu-hoeren"], "ja"],
           ["sn.mu12.3.04", "Szenisches Spiel zu Musik: Puppen, Schattenspiel, Pantomime", "1/2", ["echtewelt:lebendesbild"], "aussen"]
         ],
         4: [ // Musik wahrnehmen, verstehen und deuten
-          ["sn.mu12.4.01", "Ausdruck von Musik erleben: Stimmungen, Gefühle, Bilder", "1/2", ["sachkunde:mu-laut-leise"], "teil", "Zu wenig Übung: „Laut, leise, schnell, langsam“ hat 4 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu12.4.01", "Ausdruck von Musik erleben: Stimmungen, Gefühle, Bilder", "1/2", ["sachkunde:mu-laut-leise", "sachkunde:mu-hoeren"], "ja"],
           ["sn.mu12.4.02", "Lautstärke und Tempo, einfache Formen", "1/2", ["sachkunde:mu-laut-leise", "atelier:musik"], "ja"],
           ["sn.mu12.4.03", "Instrumente und Stimmen: Material, Bauweise, Tonerzeugung; Männer-, Frauen-, Kinderstimmen", "1/2", ["sachkunde:mu-instrumente1", "sachkunde:mu-orchester"], "ja"],
-          ["sn.mu12.4.04", "Musik in Schule, Freizeit, Familie und zu besonderen Anlässen", "1/2", ["sachkunde:mu-mozart"], "teil", "Zu wenig Übung: „Mozart und Musik im Alltag“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.mu12.4.05", "Leben und Schaffen von Komponisten und Kinderliedermachern", "1/2", ["sachkunde:mu-mozart"], "teil", "Zu wenig Übung: „Mozart und Musik im Alltag“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
+          ["sn.mu12.4.04", "Musik in Schule, Freizeit, Familie und zu besonderen Anlässen", "1/2", ["sachkunde:mu-mozart"], "ja"],
+          ["sn.mu12.4.05", "Leben und Schaffen von Komponisten und Kinderliedermachern", "1/2", ["sachkunde:mu-mozart"], "ja"]
         ]
       },
       "3": {
         1: [ // Musik erfinden, wiedergeben und gestalten mit der Stimme
           ["sn.mu3.1.01", "Melodie- und Rhythmusbausteine singen und wiedererkennen", "3", ["atelier:erkennen", "atelier:lieder", "atelier:musik"], "ja"],
-          ["sn.mu3.1.02", "Haltung, Atmung und Tonraum beim Singen", "3", ["sachkunde:mu-stimme"], "teil", "Zu wenig Übung: „Meine Stimme ist ein Instrument“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu3.1.02", "Haltung, Atmung und Tonraum beim Singen", "3", ["sachkunde:mu-stimme", "echtewelt:singen"], "aussen", "Die App fragt Wissen zu Haltung, Atmung und Tonraum ab; das Singen selbst geht nur mit der eigenen Stimme (Echte-Welt-Aufgabe, Lieder im Atelier)."],
           ["sn.mu3.1.03", "Kanon und Quodlibet, solistisch und mehrstimmig singen", "3", ["sachkunde:mu-singen3", "echtewelt:singen"], "aussen"],
-          ["sn.mu3.1.04", "Gestaltungsmittel beim Singen: Lautstärke, Tempo, Stimmklang, Fachbegriffe", "3", ["sachkunde:mu-singen3"], "teil", "Zu wenig Übung: „Kanon, Strophe, Refrain“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu3.1.04", "Gestaltungsmittel beim Singen: Lautstärke, Tempo, Stimmklang, Fachbegriffe", "3", ["sachkunde:mu-singen3"], "ja"],
           ["sn.mu3.1.05", "Lieder verschiedener Stile und Länder, etwa fünf auswendig", "3", ["sachkunde:mu-welt", "echtewelt:singen"], "aussen"]
         ],
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
@@ -1022,12 +1022,12 @@
         3: [ // Musik umsetzen, verbinden und in Beziehung bringen
           ["sn.mu3.3.01", "Musik in Bewegung: Spiegel- und Echotanzen", "3", ["sachkunde:mu-welt", "echtewelt:tanzen"], "aussen"],
           ["sn.mu3.3.02", "Tänze verschiedener Stile und Länder", "3", ["sachkunde:mu-welt", "echtewelt:tanzschritte"], "aussen"],
-          ["sn.mu3.3.03", "Musik in Bilder und Sprache umsetzen: Klangfarben, Formverläufe, Tempo", "3", ["sachkunde:mu-laut-leise"], "teil", "Zu wenig Übung: „Laut, leise, schnell, langsam“ hat 4 Aufgaben für 5 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
+          ["sn.mu3.3.03", "Musik in Bilder und Sprache umsetzen: Klangfarben, Formverläufe, Tempo", "3", ["sachkunde:mu-laut-leise", "sachkunde:mu-hoeren"], "ja"]
         ],
         4: [ // Musik wahrnehmen, verstehen und deuten
-          ["sn.mu3.4.01", "Gestaltungsmittel hören: Lautstärke, Tempo, Artikulation, Klangfarbe, Form", "3", ["sachkunde:mu-laut-leise", "sachkunde:mu-singen3"], "teil", "Zu wenig Übung: „Laut, leise, schnell, langsam“ hat 4 Aufgaben für 5 Inhaltspunkte, „Kanon, Strophe, Refrain“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu3.4.01", "Gestaltungsmittel hören: Lautstärke, Tempo, Artikulation, Klangfarbe, Form", "3", ["sachkunde:mu-laut-leise", "sachkunde:mu-singen3", "sachkunde:mu-hoeren"], "ja"],
           ["sn.mu3.4.02", "Instrumentengruppen, Bauweise und Spielweise", "3", ["sachkunde:mu-gruppen"], "ja"],
-          ["sn.mu3.4.03", "Musik in Freizeit und Kirche, eigene Meinung zu Musikstilen", "3", ["sachkunde:mu-bach"], "teil", "Zu wenig Übung: „Bach, die Orgel und Musik in der Kirche“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu3.4.03", "Musik in Freizeit und Kirche, eigene Meinung zu Musikstilen", "3", ["sachkunde:mu-bach"], "ja"],
           ["sn.mu3.4.04", "Leben und Schaffen von Komponisten, Musik anderer Länder", "3", ["sachkunde:mu-bach", "sachkunde:mu-welt"], "ja"]
         ]
       },
@@ -1039,13 +1039,13 @@
         ],
         2: [ // Musik erfinden, wiedergeben und gestalten mit Instrumenten
           ["sn.mu4.2.01", "Improvisieren, Themen verklanglichen", "4", ["atelier:musik"], "ja"],
-          ["sn.mu4.2.02", "Rhythmusbausteine im Zweier- und Dreiertakt kombinieren", "4", ["sachkunde:mu-rhythmus4", "sachkunde:mu-taenze"], "teil", "Zu wenig Übung: „Rhythmen erfinden und notieren“ hat 3 Aufgaben für 3 Inhaltspunkte, „Tänze aus verschiedenen Zeiten“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.mu4.2.02", "Rhythmusbausteine im Zweier- und Dreiertakt kombinieren", "4", ["sachkunde:mu-rhythmus4", "sachkunde:mu-taenze"], "ja"],
           ["sn.mu4.2.03", "Lieder mit Melodieinstrumenten begleiten; Viertel, Achtel, halbe und ganze Noten notieren", "4", ["sachkunde:mu-rhythmus4", "sachkunde:mu-noten", "atelier:musik"], "ja"]
         ],
         3: [ // Musik umsetzen, verbinden und in Beziehung bringen
           ["sn.mu4.3.01", "Musik differenziert in Bewegung umsetzen, Schattentanzen", "4", ["echtewelt:tanzen"], "aussen"],
-          ["sn.mu4.3.02", "Tänze verschiedener Stile, Zeiten und Kulturen", "4", ["sachkunde:mu-taenze", "echtewelt:tanzschritte"], "teil", "Zu wenig Übung: „Tänze aus verschiedenen Zeiten“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.mu4.3.03", "Musik in Bilder, Geschichten und Gedichte umsetzen", "4", ["sachkunde:mu-bewegung"], "teil", "Zu wenig Übung: „Musik und Bewegung“ hat 3 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
+          ["sn.mu4.3.02", "Tänze verschiedener Stile, Zeiten und Kulturen", "4", ["sachkunde:mu-taenze", "echtewelt:tanzschritte"], "ja"],
+          ["sn.mu4.3.03", "Musik in Bilder, Geschichten und Gedichte umsetzen", "4", ["sachkunde:mu-bewegung"], "ja"]
         ],
         4: [ // Musik wahrnehmen, verstehen und deuten
           ["sn.mu4.4.01", "Gattungen: Lied, Suite, Kindermusical, Oper", "4", ["sachkunde:mu-gattungen"], "ja"],
@@ -1060,52 +1060,52 @@
     werken: {
       "1/2": {
         1: [ // Entdecken von Technik im Alltag
-          ["sn.we12.1.01", "Technik im Alltag wahrnehmen: Spielzeug, Haushalt, Schule, Freizeit", "1/2", ["sachkunde:we-fahrzeuge"], "teil", "Zu wenig Übung: „Technik um uns: Fahrzeuge“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.we12.1.02", "Fahrzeuge zu Wasser, Land und Luft: Zweck, Kufen, Räder, Flügel", "1/2", ["sachkunde:we-fahrzeuge"], "teil", "Zu wenig Übung: „Technik um uns: Fahrzeuge“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.we12.1.03", "Funktionsweise: bewegliche Teile, Welle und Achse, Rad", "1/2", ["sachkunde:we-fahrzeuge"], "teil", "Zu wenig Übung: „Technik um uns: Fahrzeuge“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we12.1.01", "Technik im Alltag wahrnehmen: Spielzeug, Haushalt, Schule, Freizeit", "1/2", ["sachkunde:we-fahrzeuge"], "ja"],
+          ["sn.we12.1.02", "Fahrzeuge zu Wasser, Land und Luft: Zweck, Kufen, Räder, Flügel", "1/2", ["sachkunde:we-fahrzeuge"], "ja"],
+          ["sn.we12.1.03", "Funktionsweise: bewegliche Teile, Welle und Achse, Rad", "1/2", ["sachkunde:we-fahrzeuge"], "ja"],
           ["sn.we12.1.04", "Ein technisches Objekt bauen (Windrad, Papierflieger, Fahrzeug) und prüfen", "1/2", ["echtewelt:papierflieger"], "aussen"]
         ],
         2: [ // Umgehen mit Material und Werkzeug
           ["sn.we12.2.01", "Vom Bedarf zur Idee: planen, Skizzen lesen und anfertigen", "1/2", ["sachkunde:we-werkzeug", "echtewelt:bruecke"], "aussen"],
-          ["sn.we12.2.02", "Papierwerkstoffe mit anderen Werkstoffen vergleichen", "1/2", ["sachkunde:we-papier"], "teil", "Zu wenig Übung: „Papier: falten, schneiden, kleben“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.we12.2.03", "Werkzeuge sicher handhaben: Arbeitsschutz, messen, anreißen mit Lineal, Zirkel, Schablone", "1/2", ["sachkunde:we-werkzeug", "echtewelt:werkzeug"], "teil", "Zu wenig Übung: „Werkzeug sicher benutzen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.we12.2.04", "Falten, falzen, biegen, schneiden, lochen, kleben", "1/2", ["sachkunde:we-papier", "echtewelt:papierflieger"], "teil", "Zu wenig Übung: „Papier: falten, schneiden, kleben“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we12.2.02", "Papierwerkstoffe mit anderen Werkstoffen vergleichen", "1/2", ["sachkunde:we-papier"], "ja"],
+          ["sn.we12.2.03", "Werkzeuge sicher handhaben: Arbeitsschutz, messen, anreißen mit Lineal, Zirkel, Schablone", "1/2", ["sachkunde:we-werkzeug", "echtewelt:werkzeug"], "ja"],
+          ["sn.we12.2.04", "Falten, falzen, biegen, schneiden, lochen, kleben", "1/2", ["sachkunde:we-papier", "echtewelt:papierflieger"], "aussen", "Die App fragt Wissen zu Falzen, Kleben und Werkstoffen ab; Falten, Schneiden und Kleben selbst geht nur mit echtem Papier (Echte-Welt-Aufgabe)."],
           ["sn.we12.2.05", "Technische Objekte herstellen und prüfen (Drachen, Modelle)", "1/2", ["echtewelt:bruecke"], "aussen"],
-          ["sn.we12.2.06", "Papier verwenden, Recyclingpapier, Abfall vermeiden", "1/2", ["sachkunde:we-papier"], "teil", "Zu wenig Übung: „Papier: falten, schneiden, kleben“ hat 3 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
+          ["sn.we12.2.06", "Papier verwenden, Recyclingpapier, Abfall vermeiden", "1/2", ["sachkunde:we-papier"], "ja"]
         ],
         3: [ // Bauen stabiler Konstruktionen
-          ["sn.we12.3.01", "Bau- und Tragwerke der Umgebung und ihr Zweck", "1/2", ["sachkunde:we-bauen"], "teil", "Zu wenig Übung: „Stabile Türme und Brücken“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.we12.3.02", "Stabilität: Profile, Bauweisen, Steck- und Schraubverbindungen", "1/2", ["sachkunde:we-bauen"], "teil", "Zu wenig Übung: „Stabile Türme und Brücken“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we12.3.01", "Bau- und Tragwerke der Umgebung und ihr Zweck", "1/2", ["sachkunde:we-bauen"], "ja"],
+          ["sn.we12.3.02", "Stabilität: Profile, Bauweisen, Steck- und Schraubverbindungen", "1/2", ["sachkunde:we-bauen"], "ja"],
           ["sn.we12.3.03", "Türme und Brücken bauen und beurteilen", "1/2", ["echtewelt:bruecke", "echtewelt:turm"], "aussen"]
         ]
       },
       "3": {
         1: [ // Nutzen von elektrischem Strom
-          ["sn.we3.1.01", "Erneuerbare Energiequellen: Sonne, Wind, Wasser, Biomasse", "3", ["sachkunde:we-strom"], "teil", "Zu wenig Übung: „Strom: Bauteile und Schaltplan“ hat 5 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we3.1.01", "Erneuerbare Energiequellen: Sonne, Wind, Wasser, Biomasse", "3", ["sachkunde:we-strom"], "ja"],
           ["sn.we3.1.02", "Bauteile und Schaltplan: Spannungsquelle, Leitung, Schalter, Summer, Leuchtmittel, Motor", "3", ["sachkunde:we-strom", "sachkunde:strom"], "ja"],
           ["sn.we3.1.03", "Mit Baukästen elektrische Objekte bauen (Solarlüfter, Elektrofahrzeug)", "3", ["echtewelt:stromkreis"], "aussen"],
           ["sn.we3.1.04", "Leiter und Isolatoren, Strom im Alltag, sparsame Geräte", "3", ["sachkunde:we-strom", "sachkunde:strom"], "ja"],
           ["sn.we3.1.05", "Regeln und Schutz im Umgang mit Strom", "3", ["sachkunde:we-strom", "sachkunde:strom"], "ja"]
         ],
         2: [ // Planen und Herstellen eines Gegenstandes
-          ["sn.we3.2.01", "Holz als nachwachsender Rohstoff: Eigenschaften und Einsatz", "3", ["sachkunde:we-holz"], "teil", "Zu wenig Übung: „Holz bearbeiten“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we3.2.01", "Holz als nachwachsender Rohstoff: Eigenschaften und Einsatz", "3", ["sachkunde:we-holz"], "ja"],
           ["sn.we3.2.02", "Planen: Werkstoff wählen, Skizze, Arbeitsschritte, Arbeitsplatz einrichten", "3", ["sachkunde:we-holz", "sachkunde:we-werkzeug"], "ja"],
           ["sn.we3.2.03", "Sägen, feilen, raspeln, schleifen, nageln, schrauben, streichen", "3", ["sachkunde:we-holz", "echtewelt:holz"], "aussen"],
-          ["sn.we3.2.04", "Messen in Millimetern, anreißen, sparsam mit dem Werkstoff", "3", ["sachkunde:we-werkzeug"], "teil", "Zu wenig Übung: „Werkzeug sicher benutzen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we3.2.04", "Messen in Millimetern, anreißen, sparsam mit dem Werkstoff", "3", ["sachkunde:we-werkzeug"], "ja"],
           ["sn.we3.2.05", "Ergebnis beurteilen: Funktion, Aussehen, Sicherheit, Preis", "3", ["echtewelt:holz"], "aussen"]
         ]
       },
       "4": {
         1: [ // Warten und Pflegen technischer Objekte
-          ["sn.we4.1.01", "Aufbau technischer Objekte: Antrieb, Übertragung, Abtrieb", "4", ["sachkunde:we-fahrrad"], "teil", "Zu wenig Übung: „Das Fahrrad pflegen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.we4.1.02", "Fehlersuche: Funktionsprobe, Bedienungsanleitung, Demontage", "4", ["sachkunde:we-fahrrad"], "teil", "Zu wenig Übung: „Das Fahrrad pflegen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.we4.1.03", "Pflege und Wartung, zum Beispiel am Fahrrad", "4", ["sachkunde:we-fahrrad", "echtewelt:fahrradpflege"], "teil", "Zu wenig Übung: „Das Fahrrad pflegen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
-          ["sn.we4.1.04", "Reparieren statt wegwerfen, Werkstoffe trennen, Batterien entsorgen", "4", ["sachkunde:we-fahrrad", "echtewelt:reparieren"], "teil", "Zu wenig Übung: „Das Fahrrad pflegen“ hat 4 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."]
+          ["sn.we4.1.01", "Aufbau technischer Objekte: Antrieb, Übertragung, Abtrieb", "4", ["sachkunde:we-fahrrad"], "ja"],
+          ["sn.we4.1.02", "Fehlersuche: Funktionsprobe, Bedienungsanleitung, Demontage", "4", ["sachkunde:we-fahrrad"], "ja"],
+          ["sn.we4.1.03", "Pflege und Wartung, zum Beispiel am Fahrrad", "4", ["sachkunde:we-fahrrad", "echtewelt:fahrradpflege"], "aussen", "Die App fragt Wissen zur Pflege ab; das Fahrrad selbst pflegen ist eine Echte-Welt-Aufgabe."],
+          ["sn.we4.1.04", "Reparieren statt wegwerfen, Werkstoffe trennen, Batterien entsorgen", "4", ["sachkunde:we-fahrrad", "echtewelt:reparieren"], "ja"]
         ],
         2: [ // Vergleichen von Werkstoffen und Herstellen eines Produkts
-          ["sn.we4.2.01", "Holzwerkstoffe und Kunststoffe: Eigenschaften, Einsatz, Vor- und Nachteile, Umwelt", "4", ["sachkunde:we-werkstoffe"], "teil", "Zu wenig Übung: „Holz oder Kunststoff?“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we4.2.01", "Holzwerkstoffe und Kunststoffe: Eigenschaften, Einsatz, Vor- und Nachteile, Umwelt", "4", ["sachkunde:we-werkstoffe"], "ja"],
           ["sn.we4.2.02", "Werkstoffe vergleichen: trennen, umformen, fügen, Oberfläche", "4", ["sachkunde:we-werkstoffe", "sachkunde:we-holz"], "ja"],
-          ["sn.we4.2.03", "Arbeitsvorbereitung: technische Skizze, Stückliste, Arbeitsschritte", "4", ["sachkunde:we-werkstoffe"], "teil", "Zu wenig Übung: „Holz oder Kunststoff?“ hat 4 Aufgaben für 3 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.we4.2.03", "Arbeitsvorbereitung: technische Skizze, Stückliste, Arbeitsschritte", "4", ["sachkunde:we-werkstoffe"], "ja"],
           ["sn.we4.2.04", "Ein Produkt fertigen und prüfen (Bücherstütze, Staffelei)", "4", ["echtewelt:holz"], "aussen"]
         ],
         3: [ // Begegnung mit Robotern und Automaten

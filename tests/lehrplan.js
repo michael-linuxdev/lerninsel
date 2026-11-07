@@ -236,7 +236,8 @@ pruefe("Sachsen Kunst, Musik, Werken, Sport, Ethik, Ev. und Kath. Religion: jede
   });
   w.FACH_THEMEN.forEach(t => assert.ok(benutzt.has("sachkunde:" + t.id), t.id + " kommt in keinem Inhaltspunkt vor"));
   // 07.11.2026 „Ehrlich lernen“: Themen mit wenig Übungen für viele Punkte sind ehrlich „teil“ (vorher alle „ja“: 33, 37, 25, 14, 43, 45, 59)
-  assert.strictEqual(JSON.stringify(z), JSON.stringify({ kunst: { ja: 16, teil: 17, nein: 0, aussen: 12 }, musik: { ja: 23, teil: 14, nein: 0, aussen: 11 }, werken: { ja: 7, teil: 18, nein: 0, aussen: 9 },
+  // 07.11.2026 „Fächer ausbauen I“: eigene Aufgaben je Punkt (Kunst, Musik, Werken), Tun mit Material/Stimme ehrlich „aussen“ (vorher 16/17/12, 23/14/11, 7/18/9)
+  assert.strictEqual(JSON.stringify(z), JSON.stringify({ kunst: { ja: 31, teil: 0, nein: 0, aussen: 14 }, musik: { ja: 35, teil: 0, nein: 0, aussen: 13 }, werken: { ja: 23, teil: 0, nein: 0, aussen: 11 },
     sport: { ja: 6, teil: 8, nein: 0, aussen: 28 }, ethik: { ja: 16, teil: 27, nein: 0, aussen: 0 },
     evreligion: { ja: 26, teil: 19, nein: 0, aussen: 2 }, kareligion: { ja: 17, teil: 42, nein: 0, aussen: 1 } }));
 });

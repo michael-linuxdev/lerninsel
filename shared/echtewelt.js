@@ -58,6 +58,7 @@
     ["stempel", "kunst", "🥔", "Druck mit einem Korken, einer halben Kartoffel oder deinem Finger ein Muster auf Papier.", "Напечатай узор на бумаге пробкой, половинкой картошки или пальцем.", 1],
     ["kneten", "kunst", "🏺", "Forme aus Knete oder Salzteig ein kleines Tier – rollen, drücken, zusammensetzen.", "Слепи из пластилина или солёного теста маленькое животное: катай, нажимай, соединяй.", 1],
     ["collage", "kunst", "✂️", "Schneide Bilder aus alten Zeitschriften aus und kleb daraus eine Collage.", "Вырежи картинки из старых журналов и сделай из них коллаж.", 1],
+    ["upcycling", "kunst", "♻️", "Bau aus alten Dosen, Korken, Kartons oder Papprollen eine Figur und gib ihr einen Namen.", "Построй из старых банок, пробок, коробок или картонных трубок фигуру и дай ей имя.", 3],
     ["landart", "kunst", "🪨", "Leg draußen aus Steinen, Ästen und Blättern ein Bild oder Muster und mach ein Foto davon.", "Выложи на улице из камней, веток и листьев картину или узор и сфотографируй.", 2],
     ["museum", "kunst", "🖼️", "Schau dir mit einem Erwachsenen echte Kunst an – im Museum, in einer Kirche oder an einer Hauswand. Was siehst du?", "Посмотри со взрослым настоящее искусство – в музее, в церкви или на стене дома. Что ты видишь?", 2],
     ["frottage", "kunst", "🍃", "Leg ein Blatt Papier auf eine Münze, ein Blatt oder Holz und reib mit einem Wachsmalstift darüber.", "Положи бумагу на монету, лист или дерево и потри сверху восковым мелком.", 3],
