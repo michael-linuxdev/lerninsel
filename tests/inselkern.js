@@ -462,19 +462,67 @@ pruefe("E4–E8 (NA-14): Auslöser, Reihenfolge, höchstens zwei am Tag, schon G
   assert.strictEqual(u.K.merkkisteBei(), "fipsi");
 });
 
-pruefe("Story-Bogen mit Finale (07.11.2026): Kapitel 8 „Fipsis Schatz“, Kapitel 9 „Die Insel ist wach“, Nebenszenen (Tilda, Bruni, Paulas Fest) und Jahreszeiten", () => {
+pruefe("Bennos Brücke (Kapitel 9, 07.11.2026): Baustelle am Ufer in jeder Welt frei, Brücke hinaus aufs Wasser nicht zum Steg, Laufen nur auf gebauten Stücken, Sandbank erst fertig", () => {
+  const wink = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+  const WELTEN = [[null]];
+  for (const biom of ["wiese", "wald", "berge", "strand", "schnee", "wueste"]) for (const groesse of ["klein", "mittel", "gross"]) for (const see of [0, 1]) for (let seed = 1; seed <= 6; seed++) WELTEN.push([biom, groesse, see, seed]);
+  for (const [biom, groesse, see, seed] of WELTEN) {
+    const u = neueUmgebung(), qq = biom ? new URLSearchParams(`biom=${biom}&groesse=${groesse}&huegel=${["wenig", "mittel", "viel"][seed % 3]}&see=${see}&seed=${seed}`) : q("");
+    const E = u.K.erstelle(qq), [x, z] = E.P.bruecke, B = E.BRUECKE, wo = biom ? `${biom}/${groesse}/see=${see}/seed=${seed}` : "Heimatinsel";
+    assert.ok(Math.hypot(x, z) > E.RMAX_LAUF - 2.8 && Math.hypot(x, z) < E.RMAX_LAUF - 1, "Baustelle am Ufer: " + wo);
+    E.WELT.baeume.forEach(b => assert.ok(Math.hypot(b.x - x, b.z - z) > 3.0, "Baum an der Baustelle: " + wo));
+    Object.entries(E.P).filter(([k]) => k !== "bruecke").forEach(([k, v]) => assert.ok(Math.hypot(v[0] - x, v[1] - z) > 2.5, `Baustelle zu nah an ${k}: ${wo}`));
+    assert.ok(wink(B.a, Math.atan2(E.STEG.z0, E.STEG.x)) >= 0.6, "Brücke Richtung Steg/Boot: " + wo);
+    ["leuchtturm", "lager"].forEach(k => assert.ok(wink(B.a, Math.atan2(E.P[k][1], E.P[k][0])) > 0.2, `Brücke vor ${k}: ${wo}`));
+    assert.ok(Math.hypot(B.sand.x, B.sand.z) - B.sand.r > E.UFER + 4, "Sandbank draußen im Wasser: " + wo);
+    if (E.WELT.see) assert.ok(Math.hypot(x - E.WELT.see.x, z - E.WELT.see.z) > E.WELT.see.r + 1.2, "Baustelle im See: " + wo);
+    // Wegsteine liegen nicht auf dem Brückenkopf
+    E.WEGE.flat().forEach(([sx, sz]) => { const l = B.lage(sx, sz); assert.ok(!(l.d > -1 && l.d < B.laenge && Math.abs(l.s) < B.breite), "Wegstein auf der Brücke: " + wo); });
+    // Laufen: Mitte der Brücke nur, wenn gebaut; Sandbank nur, wenn fertig
+    const [mx, mz] = B.punkt(B.stueck * 1.5), [ex, ez] = B.punkt(B.stueck * 6.5);
+    assert.strictEqual(B.auf(mx, mz, 0), null); assert.strictEqual(B.auf(mx, mz, 2), "bruecke"); assert.strictEqual(B.auf(ex, ez, 2), null, "nicht über das letzte Brett hinaus: " + wo);
+    assert.strictEqual(B.auf(B.sand.x, B.sand.z, 7), null); assert.strictEqual(B.auf(B.sand.x, B.sand.z, 8), "sandbank", "fertig: Sandbank begehbar: " + wo);
+    const [sx, sz] = B.punkt(B.stueck * 2, B.breite); assert.strictEqual(B.auf(sx, sz, 8), null, "nicht neben der Brücke im Wasser: " + wo);
+    assert.ok(E.ORTE.bruecke && E.ORTE.sandbank, "Orte für die Zeigehand: " + wo);
+  }
+  // Heimatinsel: Leuchtturm und Lager stehen wie vorher (die Baustelle wird danach gesucht)
+  { const E = neueUmgebung().K.erstelle(q("")); assert.deepStrictEqual(E.P.lager, [-12.5, -4.5, 1.22]); }
+  // Kapitel 9: 55 Lernfunde und 5 Matheweg-Stationen; Antworten und Knopf
+  const k9 = (u) => u.K.KAPITEL.find(k => k.n === 9), M5 = { mathe: { k1: { a: 1, b: 1 }, k2: { c: 1, d: 1, e: 1 } } };
+  assert.ok(k9(neueUmgebung()).szene === "bennos-bruecke");
+  assert.strictEqual(k9(neueUmgebung({ funde: 54, speicher: M5 })).faellig(), false, "54 Lernfunde reichen nicht");
+  assert.strictEqual(k9(neueUmgebung({ funde: 55, speicher: { mathe: { k2: { a: 1, b: 1, c: 1, d: 1 } } } })).faellig(), false, "4 Stationen reichen nicht");
+  assert.strictEqual(k9(neueUmgebung({ funde: 55, speicher: M5 })).faellig(), true, "55 Lernfunde und 5 Stationen");
+  { const b = neueUmgebung({ story: { kapitel: 8 } }).K.antwort("bruecke").blase; assert.ok(b[0] === "biber" && /Kapitel 9/.test(b[2]) && !b[4], "vor Kapitel 9: Holzstapel ohne Ziel"); }
+  assert.deepStrictEqual(neueUmgebung({ story: { kapitel: 8 } }).K.aktionFuer("bruecke")[0], ["👀", "Ansehen"]);
+  { const u = neueUmgebung({ story: { kapitel: 9 } }), b = u.K.antwort("bruecke").blase; assert.ok(b[4] === "../bruecke/" && /Brücke/.test(b[2])); assert.deepStrictEqual(u.K.aktionFuer("bruecke"), [["🌉", "Bauen"], 2.6]); }
+  { const b = neueUmgebung({ story: { kapitel: 9 }, speicher: { bruecke: { abschnitte: 3 } } }).K.antwort("bruecke").blase; assert.ok(/3 von 8/.test(b[2]), "Stand in der Blase"); }
+  { const b = neueUmgebung({ story: { kapitel: 9 }, speicher: { bruecke: { abschnitte: 8 } } }).K.antwort("bruecke").blase; assert.ok(/fertig/.test(b[2]) && /Sandbank/.test(b[2])); }
+  assert.strictEqual(neueUmgebung({ speicher: { bruecke: { abschnitte: 99 } } }).K.brueckeStand(), 8, "Stand höchstens 8");
+  // Abschluss-Szene, wenn die Brücke fertig ist (einmal)
+  const ALLE = { E1: "2026-10-01", E2: 1, E3: 1, E4: 1, E5: 1, E6: 1, E7: 1, E8: 1, E9: 1 }, FREI = { frei: true, spielen: true, genug: false, fortschritt: 1 };
+  const f = neueUmgebung({ funde: 60, story: { kapitel: 9, etappen: ALLE, gesehen: ["brunis-station", "tilda", "paulas-feier"] }, zeit: FREI, speicher: { bruecke: { abschnitte: 8 } } });
+  assert.strictEqual(f.K.naechsteStory({}), "bruecke-fertig", "Brücke fertig: Abschluss-Szene");
+  f.st.gesehen.push("bruecke-fertig"); assert.notStrictEqual(f.K.naechsteStory({}), "bruecke-fertig", "nur einmal");
+  assert.notStrictEqual(neueUmgebung({ funde: 60, story: { kapitel: 9, etappen: ALLE }, zeit: FREI, speicher: { bruecke: { abschnitte: 7 } } }).K.naechsteStory({}), "bruecke-fertig", "unfertig: keine Abschluss-Szene");
+});
+
+pruefe("Story-Bogen mit Finale (07.11.2026): Kapitel 8 „Fipsis Schatz“, Kapitel 9 „Bennos Brücke“, Kapitel 10 „Die Insel ist wach“, Nebenszenen (Tilda, Bruni, Paulas Fest) und Jahreszeiten", () => {
   const ALLE = { E1: "2026-10-01", E2: 1, E3: 1, E4: 1, E5: 1, E6: 1, E7: 1, E8: 1, E9: 1 }, FREI = { frei: true, spielen: true, genug: false, fortschritt: 1 };
   // Schatzkarte = die fünf Kapitel aus spiele/deutsch/geschichte.js
   const g = {}; new Function("window", fs.readFileSync(path.join(__dirname, "../spiele/deutsch/geschichte.js"), "utf8"))(g);
   assert.deepStrictEqual(neueUmgebung().K.SCHATZKARTE, g.GESCHICHTE.map(k => k.id), "SCHATZKARTE = Kapitel der Geschichte");
   const voll = { wald: 1, hof: 2, baeckerei: 1, strand: 3, schloss: 1 };
-  const k8 = (u) => u.K.KAPITEL.find(k => k.n === 8), k9 = (u) => u.K.KAPITEL.find(k => k.n === 9);
+  const k8 = (u) => u.K.KAPITEL.find(k => k.n === 8), k9 = (u) => u.K.KAPITEL.find(k => k.n === 10);   // k9 = Finale (seit 07.11.2026 Kapitel 10)
+  const BR3 = { bruecke: { abschnitte: 3 } }, MATHE5 = { mathe: { k2: { a: 1, b: 1, c: 1, d: 1, e: 1 } } };
   assert.strictEqual(k8(neueUmgebung({ speicher: { deutsch: { kapitel: Object.assign({}, voll, { schloss: 0 }) } } })).faellig(), false, "vier Kartenteile: Kapitel 8 wartet");
   assert.strictEqual(k8(neueUmgebung({ speicher: { deutsch: { kapitel: voll } } })).faellig(), true, "Schatzkarte komplett: Kapitel 8 fällig");
-  assert.strictEqual(k9(neueUmgebung({ funde: 69 })).faellig(), false); assert.strictEqual(k9(neueUmgebung({ funde: 70 })).faellig(), true, "Finale ab 70 Lernfunden");
-  const u7 = neueUmgebung({ funde: 70, speicher: { deutsch: { kapitel: voll }, schach: { raetsel: { 0: 1 } }, tierstation: { frei: { igel: 1 } } }, story: { kapitel: 7, etappen: ALLE }, zeit: FREI });
+  assert.strictEqual(k9(neueUmgebung({ funde: 69, speicher: BR3 })).faellig(), false); assert.strictEqual(k9(neueUmgebung({ funde: 70, speicher: BR3 })).faellig(), true, "Finale ab 70 Lernfunden und drei Brücken-Abschnitten");
+  assert.strictEqual(k9(neueUmgebung({ funde: 90, speicher: { bruecke: { abschnitte: 2 } } })).faellig(), false, "Finale wartet, bis die Brücke begonnen ist (3 Abschnitte)");
+  const u7 = neueUmgebung({ funde: 70, speicher: Object.assign({ deutsch: { kapitel: voll }, schach: { raetsel: { 0: 1 } }, tierstation: { frei: { igel: 1 } } }, BR3, MATHE5), story: { kapitel: 7, etappen: ALLE }, zeit: FREI });
   assert.strictEqual(u7.K.naechsteStory({}), "fipsis-schatz", "nach Kapitel 7 mit kompletter Karte: Fipsis Schatz");
-  u7.st.kapitel = 8; assert.strictEqual(u7.K.naechsteStory({}), "insel-wach", "danach das Finale");
+  u7.st.kapitel = 8; assert.strictEqual(u7.K.naechsteStory({}), "bennos-bruecke", "danach Bennos Brücke (Kapitel 9)");
+  u7.st.kapitel = 9; assert.strictEqual(u7.K.naechsteStory({}), "insel-wach", "danach das Finale (Kapitel 10)");
   // Truhe: Ort neben dem Wegweiser, zu bis Kapitel 8, dann Fipsis Wörterbuch
   const W = neueUmgebung().K.erstelle(q("")), o = W.ORTE.schatz, kw = W.P.kartenweg, ab = Math.hypot(o.x - kw[0], o.z - kw[1]);
   assert.ok(ab < 1.6 && ab > 0.8, "Truhe steht neben dem Wegweiser: " + ab);
@@ -498,7 +546,7 @@ pruefe("Story-Bogen mit Finale (07.11.2026): Kapitel 8 „Fipsis Schatz“, Kapi
   const fest = neueUmgebung({ jetzt: new Date(2026, 9, 26, 15).getTime(), story: { kapitel: 4, etappen: ALLE, gesehen: ["brunis-station", "tilda"], chronik: [{ s: "brunis-station", d: "2026-10-25" }] }, zeit: FREI, speicher: { rhythmus: { runden: 1 } } });
   assert.strictEqual(fest.K.naechsteStory({}), "paulas-feier", "nach der ersten Bootsfahrt: Paulas Fest");
   // Jahreszeiten nach dem Finale, je Jahreszeit und Jahr einmal; nicht am Tag des Finales
-  const jz = (m, d, extra = {}) => neueUmgebung({ jetzt: new Date(m[0], m[1], d, 15).getTime(), story: Object.assign({ kapitel: 9, etappen: ALLE, gesehen: ["brunis-station", "tilda", "paulas-feier"], chronik: [{ s: "insel-wach", d: "2026-10-20" }] }, extra), zeit: FREI });
+  const jz = (m, d, extra = {}) => neueUmgebung({ jetzt: new Date(m[0], m[1], d, 15).getTime(), story: Object.assign({ kapitel: 10, etappen: ALLE, gesehen: ["brunis-station", "tilda", "paulas-feier"], chronik: [{ s: "insel-wach", d: "2026-10-20" }] }, extra), zeit: FREI });
   assert.strictEqual(jz([2026, 9], 20).K.naechsteStory({}), null, "am Tag des Finales keine Episode");
   const h = jz([2026, 9], 21); assert.strictEqual(h.K.naechsteStory({}), "jz-herbst", "Herbst: Ella");
   h.K.storyFertig({ id: "jz-herbst", jahreszeit: true }); assert.ok(h.st.gesehen.includes("jz-herbst-2026")); assert.strictEqual(h.K.naechsteStory({}), null, "einmal je Herbst");

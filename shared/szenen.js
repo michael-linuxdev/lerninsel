@@ -147,7 +147,7 @@
   ] });
 })();
 
-// ---------- Story-Bogen mit Finale (07.11.2026, Story-Review): Nebenszenen, Kapitel 8 „Fipsis Schatz“, Kapitel 9 „Die Insel ist wach“, Jahreszeiten ----------
+// ---------- Story-Bogen mit Finale (07.11.2026, Story-Review): Nebenszenen, Kapitel 8 „Fipsis Schatz“, Kapitel 9 „Bennos Brücke“, Kapitel 10 „Die Insel ist wach“, Jahreszeiten ----------
 // Auslöser im Insel-Kern (KAPITEL, NEBEN, JAHRESZEITEN); Zeigehand, Wetter, Fest und Nebel in heimat.js (spieleStory, storyEffekt).
 (function () {
   const Sz = window.Szene; if (!Sz) return;
@@ -178,9 +178,22 @@
     { wer: "fipsi", text: { de: "Darin liegt unser Schatz: das Wörterbuch der Insel. Alle deine Wörter stehen darin.", ru: "В нём наше сокровище: словарь острова. В нём все твои слова.", status: E } },
     { fuerAeltere: true, wer: "fipsi", text: { de: "Jedes neue Wort kommt dazu. So wächst unser Schatz immer weiter.", ru: "Каждое новое слово добавляется. Так наше сокровище растёт.", status: E } }
   ] });
-  // Kapitel 9 = Finale „Die Insel ist wach“: alle sieben Begleiter feiern am Schachtisch, der letzte Nebel geht. Danach geht es offen weiter.
-  Sz.registriere("insel-wach", { titel: "Die Insel ist wach", kapitel: 9, blasen: [
-    { wer: "robo", text: { de: "Piep, {name}! Komm schnell – alle sind am Schachtisch versammelt!", ru: "Пип, {name}! Скорее – все собрались у шахматного стола!", status: E } },
+  // Kapitel 9 „Bennos Brücke“ (07.11.2026): Benno baut eine Brücke zur Sandbank – das Kind misst und rechnet mit (spiele/bruecke/)
+  Sz.registriere("bennos-bruecke", { titel: "Bennos Brücke", kapitel: 9, blasen: [
+    { wer: "biber", text: { de: "{name}, schau mal da draußen: eine kleine Sandbank im Meer!", ru: "{name}, посмотри туда: маленькая песчаная отмель в море!", status: E } },
+    { wer: "biber", text: { de: "Ich baue eine Brücke dorthin – Stück für Stück, Brett für Brett.", ru: "Я построю туда мост – часть за частью, доска за доской.", status: E } },
+    { wer: "biber", text: { de: "Dafür muss ich messen und rechnen. Hilfst du mir?", ru: "Для этого нужно измерять и считать. Будешь моим помощником (моей помощницей)?", status: E } },
+    { fuerAeltere: true, wer: "biber", text: { de: "Wir bauen ganz in Ruhe. Jedes fertige Stück bleibt stehen.", ru: "Мы строим спокойно. Каждая готовая часть остаётся на месте.", status: E } }
+  ] });
+  // Die Brücke ist fertig (alle 8 Stücke): kurze Abschluss-Szene, danach kann die Figur hinüber auf die Sandbank laufen
+  Sz.registriere("bruecke-fertig", { titel: "Die Brücke ist fertig", blasen: [
+    { wer: "biber", text: { de: "Geschafft, {name}! Die Brücke reicht bis zur Sandbank.", ru: "Готово, {name}! Мост доходит до самой отмели.", status: E } },
+    { wer: "biber", text: { de: "Du hast gemessen und gerechnet – ganz genau. Danke!", ru: "Ты измерял(а) и считал(а) – очень точно. Спасибо!", status: E } },
+    { wer: "biber", text: { de: "Lauf doch mal hinüber! Von der Sandbank sieht man die ganze Insel.", ru: "Пройди по мосту! С отмели виден весь остров.", status: E } }
+  ] });
+  // Kapitel 10 = Finale „Die Insel ist wach“: alle sieben Begleiter feiern am Schachtisch, der letzte Nebel geht. Danach geht es offen weiter.
+  Sz.registriere("insel-wach", { titel: "Die Insel ist wach", kapitel: 10, blasen: [
+    { wer: "biber", text: { de: "{name}, komm schnell! Ich lege mein Brücken-Werkzeug weg – alle sind am Schachtisch!", ru: "{name}, скорее! Я откладываю инструменты для моста – все собрались у шахматного стола!", status: E } },
     { wer: "papagei", text: { de: "Wir feiern dich! Ohne dich wäre die Insel noch im Nebel.", ru: "Мы празднуем в твою честь! Без тебя остров был бы ещё в тумане.", status: E } },
     { wer: "eule", text: { de: "Schau, der letzte Nebel zieht weg. Die Insel ist wach – und sie wächst weiter mit dir.", ru: "Смотри, последний туман уходит. Остров проснулся – и он растёт вместе с тобой.", status: E } },
     { wer: "baer", text: { de: "Und wir sind immer für dich da. Morgen, im Herbst, im Winter – wann du willst.", ru: "А мы всегда рядом. Завтра, осенью, зимой – когда захочешь.", status: E } }

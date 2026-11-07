@@ -23,7 +23,22 @@ const { STUNDE, MONAT, SAISON, NACHT, DAEMMER } = K.zeit(q);
 const { WELT, P, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, ZX } = KI;
 // Kapitel 7 (09.11.2026): Auf dem Steg darf die Figur bis zum Boot laufen (über die Laufgrenze hinaus); dort ist der Boden die Stegplanke
 const aufSteg = (x, z) => Math.abs(x - STEG.x) < 0.62 && z > STEG.z0 - 0.2 && z < STEG.z1 - 0.3;
-const bodenY = (x, z) => (WELT.insel || Math.hypot(x, z) <= RMAX_LAUF || !aufSteg(x, z) ? KI.bodenY(x, z) : 0.27);
+// Kapitel 9 „Bennos Brücke“ (07.11.2026): je gebautem Abschnitt reicht die Brücke weiter hinaus; ist sie fertig, trägt auch die Sandbank (Boden = Planke bzw. Sand)
+const BR = KI.BRUECKE, BR_DECK = 0.36, BR_SAND = 0.24;
+let brN = K.brueckeStand ? K.brueckeStand() : 0;
+const aufBruecke = (x, z) => (brN && Math.hypot(x, z) > RMAX_LAUF - 0.95 ? BR.auf(x, z, brN) : null);
+const bodenY = (x, z) => { const b = aufBruecke(x, z); if (b) return b === "bruecke" ? BR_DECK : BR_SAND; return WELT.insel || Math.hypot(x, z) <= RMAX_LAUF || !aufSteg(x, z) ? KI.bodenY(x, z) : 0.27; };
+// Außerhalb der Laufgrenze: auf dem Steg frei, auf der Brücke bis zum letzten gebauten Brett (seitlich am Geländer), auf der fertigen Sandbank bis zum Rand
+function haltAmWasser(p) {
+  const l = Math.hypot(p.x, p.z); if (l <= RMAX_LAUF || aufSteg(p.x, p.z) || aufBruecke(p.x, p.z)) return;
+  if (brN) {
+    const fertig = brN >= BR.abschnitte, sd = Math.hypot(p.x - BR.sand.x, p.z - BR.sand.z);
+    if (fertig && sd < BR.sand.r + 0.8) { const k = (BR.sand.r - 0.5) / sd; p.x = BR.sand.x + (p.x - BR.sand.x) * k; p.z = BR.sand.z + (p.z - BR.sand.z) * k; return; }
+    const { d, s } = BR.lage(p.x, p.z), dMax = brN * BR.stueck - (fertig ? -0.3 : 0.3);
+    if (d > 0 && d < dMax + 0.9 && Math.abs(s) < BR.breite / 2 + 0.7) { const [x, z] = BR.punkt(Math.min(d, dMax), Math.max(-BR.breite / 2 + 0.15, Math.min(BR.breite / 2 - 0.15, s))); p.x = x; p.z = z; return; }
+  }
+  p.x *= RMAX_LAUF / l; p.z *= RMAX_LAUF / l;
+}
 const WINTERLICH = SAISON === "winter" || WELT.biom === "schnee";
 const GRAFIK_KEY = "lerninsel.grafik";
 const lies = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
@@ -325,6 +340,41 @@ function verschmelzeLokal(wurzel, ausnahmen = []) {
   const laenge = STEG.z1 - STEG.z0, mz = (STEG.z0 + STEG.z1) / 2;
   const planke = setze(teil(new BoxGeometry(1.4, 0.14, laenge), "#C8955B"), STEG.x, 0.2, mz); scene.add(planke); boden.push(planke);   // eigener Boden: Antippen zum Laufen bis ans Stegende
   for (let i = 0; i < 4; i++) [-0.62, 0.62].forEach(dx => deko.add(setze(teil(new CylinderGeometry(0.09, 0.09, 1.1, 8), "#9A6A3F"), STEG.x + dx, -0.38, STEG.z0 + 0.6 + i * (laenge - 0.9) / 3)));
+}
+// ---------- Bennos Brücke (Kapitel 9, 07.11.2026): Sandbank draußen (feste Deko), Brücke als eigene Gruppe, die je Abschnitt wächst ----------
+// Die Brücke wird bei jeder Änderung neu gebaut und lokal verschmolzen (Planken, Pfähle, Geländer → wenige Zeichenaufrufe); die Lauffläche
+// ist ein unsichtbarer Kasten in `boden` (Antippen zum Laufen), auf der fertigen Sandbank ebenso.
+{
+  const { x, z, r } = BR.sand;
+  deko.add(setze(teil(new CylinderGeometry(r, r + 0.35, 0.55, EINFACH ? 14 : 20), WINTERLICH ? "#E9EEF4" : "#F2D9A2", { umriss: DEKO_KONTUR }), x, BR_SAND - 0.28, z));
+  deko.add(setze(teil(new CylinderGeometry(0.04, 0.05, 1.5, 6), "#9A6A3F"), x + 0.6, BR_SAND + 0.75, z - 0.4));
+  { const f = teil(new ConeGeometry(0.22, 0.6, 3), "#FF6F61", { dicke: 1.1 }); f.rotation.z = -Math.PI / 2; f.scale.z = 0.3; deko.add(setze(f, x + 0.9, BR_SAND + 1.3, z - 0.4)); }
+  [[-0.8, 0.5, 0.32], [-0.3, 0.9, 0.2], [0.9, 0.7, 0.24]].forEach(([dx, dz, rs]) => { const st = teil(kugel(rs, 12, 8), STEIN_MAT); st.scale.y = 0.6; deko.add(setze(st, x + dx, BR_SAND + rs * 0.2, z + dz)); });
+}
+const brueckeGr = new Group(); brueckeGr.position.set(BR.x0, 0, BR.z0); brueckeGr.rotation.y = -BR.a; scene.add(brueckeGr);
+let brBoden = [];
+const BRETT = new MeshBasicMaterial({ visible: false });
+function baueBruecke(n = brN) {
+  brN = Math.max(0, Math.min(BR.abschnitte, n | 0));
+  [...brueckeGr.children].forEach(c => { brueckeGr.remove(c); c.traverse(m => { if (m.geometry) m.geometry.dispose(); }); });
+  brBoden.forEach(m => { const i = boden.indexOf(m); if (i >= 0) boden.splice(i, 1); if (m.parent) m.parent.remove(m); m.geometry.dispose(); }); brBoden = [];
+  if (!brN) return;
+  const L = BR.stueck, B = BR.breite, lang = brN * L;
+  for (let i = 0; i < brN; i++) {
+    const d = (i + 0.5) * L;
+    brueckeGr.add(setze(teil(new BoxGeometry(L - 0.05, 0.1, B), i % 2 ? "#C8955B" : "#D2A066", { umriss: !EINFACH }), d, BR_DECK - 0.05, 0));
+    [-1, 1].forEach(sx => {
+      brueckeGr.add(setze(teil(new BoxGeometry(L, 0.07, 0.07), "#9A6A3F", { umriss: false }), d, BR_DECK + 0.5, sx * (B / 2 - 0.03)));   // Handlauf
+      brueckeGr.add(setze(teil(new CylinderGeometry(0.06, 0.06, 0.55, 6), "#9A6A3F", { umriss: false }), (i + 1) * L - 0.05, BR_DECK + 0.25, sx * (B / 2 - 0.03)));
+      if (i % 2 === 1 || i === brN - 1) brueckeGr.add(setze(teil(new CylinderGeometry(0.1, 0.1, 1.3, 7), "#7A5230", { umriss: !EINFACH }), (i + 1) * L - 0.1, -0.35, sx * (B / 2 - 0.12)));   // Pfahl im Wasser
+    });
+  }
+  if (brN < BR.abschnitte) { const kegel = teil(new ConeGeometry(0.16, 0.42, 8), "#FF8A3D"); brueckeGr.add(setze(kegel, lang - 0.2, BR_DECK + 0.21, 0)); }   // Baustellen-Hütchen am Ende
+  verschmelzeLokal(brueckeGr);
+  // Laufflächen (unsichtbar) für das Antippen
+  const deck = new Mesh(new BoxGeometry(lang + 0.5, 0.1, B), BRETT); setze(deck, lang / 2 - 0.25, BR_DECK - 0.05, 0); brueckeGr.add(deck); brBoden.push(deck);
+  if (brN >= BR.abschnitte) { const sb = new Mesh(new CylinderGeometry(BR.sand.r - 0.3, BR.sand.r - 0.3, 0.1, 12), BRETT); sb.position.set(BR.sand.x, BR_SAND - 0.05, BR.sand.z); scene.add(sb); brBoden.push(sb); }
+  boden.push(...brBoden);
 }
 // Robos Boot (Kapitel 7 „Neue Ufer“, 09.11.2026): eigene Gruppe statt Deko, antippbar – ab Kapitel 7 (auf einem Eiland immer) geht es damit zu neuen Ufern
 const boot = new Group(); boot.position.set(STEG.x + 1.55, 0, STEG.z1 - 0.9); scene.add(boot);
@@ -1072,7 +1122,7 @@ antippbar(truhe, () => zeigeAntwort(K.antwort("truhe")), ...K.aktionFuer("truhe"
 
 // ---------- Bühne mit Papagei Paula: spielt die eigene Melodie aus dem Atelier, alle tanzen ----------
 let tanzBis = 0;
-// (07.11.2026) als Funktion, damit Paula beim Finale (Kapitel 9) auch am Schachtisch mitfeiern kann
+// (07.11.2026) als Funktion, damit Paula beim Finale (Kapitel 10) auch am Schachtisch mitfeiern kann
 function paulaFigur() {
   const g = new Group(), k = new Group(); g.add(k);
   const leib = teil(kugel(0.36), "#4CC27A"); leib.scale.set(1, 1.2, 0.95); setze(leib, 0, 0.6, 0); k.add(leib);
@@ -1207,6 +1257,32 @@ const NEU_BAU = {
   if (!frei) { const sp = schildSprite("🔒"); sp.position.set(0, 3.2, 0); o.add(sp); o.traverse(m => { if (m.material && m.material.color && !m.isSprite) m.material = grauMat(m.material); }); }
   antippbar(o, () => zeigeAntwort(K.antwort(id)), ...K.aktionFuer(id)); starr.push([o]);
 });
+// ---------- Bennos Baustelle am Brückenkopf (Kapitel 9, 07.11.2026): Holzstapel, Schild mit 🌉, Säge; vor Kapitel 9 mit Schloss ----------
+const baustelle = new Group();
+let baustelleSchloss = null;
+{
+  const [x, z, d] = P.bruecke; baustelle.position.set(x, bodenY(x, z), z); baustelle.rotation.y = d; scene.add(baustelle);
+  // lokale Achsen: +z zur Inselmitte, Brücke liegt hinter der Baustelle (−z); Holz und Schild stehen seitlich, der Weg auf die Brücke bleibt frei
+  const welt = (lx, lz) => [x + lx * Math.cos(d) + lz * Math.sin(d), z - lx * Math.sin(d) + lz * Math.cos(d)];
+  [[-1.25, 0.15, 0.13], [-1.25, 0.15, -0.13], [-1.25, 0.37, 0]].forEach(([lx, y, lz]) => { const s = teil(new CylinderGeometry(0.12, 0.12, 1.1, 8), "#B9732E"); s.rotation.x = Math.PI / 2; s.rotation.y = 0; baustelle.add(setze(s, lx, y, lz * 2.4)); });
+  const lx2 = 1.25; baustelle.add(setze(teil(new CylinderGeometry(0.05, 0.06, 1.5, 6), "#9A6A3F"), lx2, 0.75, 0));
+  baustelle.add(setze(teil(new BoxGeometry(0.9, 0.55, 0.08), "#FFC83D", { dicke: 1.04 }), lx2, 1.45, 0.02));
+  const schild = schildSprite("🌉"); schild.position.set(lx2, 1.45, 0.2); schild.scale.setScalar(0.5); baustelle.add(schild);
+  baustelle.add(setze(teil(new BoxGeometry(0.5, 0.05, 0.14), "#C9D6DF", { umriss: false }), -1.25, 0.56, 0.35));   // Säge auf dem Stapel
+  [welt(-1.25, 0), welt(lx2, 0)].forEach(([bx, bz]) => block(bx, bz, 0.55));
+  if (!K.ortOffen("bruecke")) { baustelleSchloss = schildSprite("🔒"); baustelleSchloss.position.set(0, 2.2, 0); baustelle.add(baustelleSchloss); }
+  antippbar(baustelle, () => zeigeAntwort(K.antwort("bruecke")), ...K.aktionFuer("bruecke")); starr.push([baustelle]);
+}
+baueBruecke();
+// Sandbank antippbar (Text von Benno), nur ein kleiner unsichtbarer Treffer-Körper
+const sandbankTipp = new Group(); sandbankTipp.position.set(BR.sand.x, BR_SAND, BR.sand.z); scene.add(sandbankTipp);
+{ const t = new Mesh(new CylinderGeometry(BR.sand.r, BR.sand.r, 0.6, 10), BRETT); t.position.y = 0.2; sandbankTipp.add(t); antippbar(sandbankTipp, () => zeigeAntwort(K.antwort("sandbank")), ...K.aktionFuer("sandbank")); }
+// nach der Szene „Bennos Brücke“: Schloss weg, Knopf „Bauen“
+function schalteBruecke() {
+  if (baustelleSchloss && K.ortOffen("bruecke")) { baustelle.remove(baustelleSchloss); baustelleSchloss = null; }
+  Object.assign(baustelle.userData, { aktion: K.aktionFuer("bruecke")[0], nah: K.aktionFuer("bruecke")[1] });
+}
+
 // ---------- Forscherlager (Kapitel 7 „Neue Ufer“, 09.11.2026): Ellas Zelt, Fahne, Fernrohr und Feuerstelle ----------
 // (steht nach grauMat(): vor Kapitel 1 bzw. 7 wird es grau – der Rauchtest ohne Kapitel fand den Aufruf vor der Definition)
 // Auf der Heimatinsel ab Kapitel 1 offen (Karte der Heimatinsel), auf Nachbar-Eilanden ab Kapitel 7; vorher grau mit Schloss wie die anderen Orte
@@ -1675,7 +1751,7 @@ const TEMPO_FAKTOR = WELT.insel ? 1.1 : 1;   // Weg 3 (09.11.2026): die größer
 function wegVonHindernissen(p, r) {
   for (const h of hindernisse) { const dx = p.x - h.x, dz = p.z - h.z, d = Math.hypot(dx, dz), m = h.r + r; if (d < m && d > 0.001) { p.x = h.x + dx / d * m; p.z = h.z + dz / d * m; } }
   if (drinnen) { p.x = MathUtils.clamp(p.x, ZX - 3.7, ZX + 3.7); p.z = MathUtils.clamp(p.z, -3.1, 3.3); if (p.z >= 3.25 && ich.position === p) rausgehen(); return; }
-  const l = Math.hypot(p.x, p.z); if (l > RMAX_LAUF && !aufSteg(p.x, p.z)) { p.x *= RMAX_LAUF / l; p.z *= RMAX_LAUF / l; }
+  haltAmWasser(p);
 }
 // ---------- Automatisch sparen, wenn das Tablet nicht hinterherkommt ----------
 // Seit 01.11.2026 schrittweise (regleAufloesung): erst die Auflösung senken, erst bei Stufe 1 und unter 30 Bildern/s: keine Schatten, Wasser und Gras ruhig.
@@ -1981,8 +2057,8 @@ if (K.prologFaellig(q)) setTimeout(() => starteProlog(false), 700);
 
 // ---------- Story-Bogen mit Finale (07.11.2026, Story-Review): Effekte für Szenen – gebündelt an einer Stelle ----------
 // sturm(an): Kapitel 5 – Himmel dunkel, Wolken schnell, Regen und Wind, danach genau wie vorher.
-// fest(an): Kapitel 9 – alle Begleiter kommen zu Tilda an den Schachtisch (Kopien; die Figuren an ihren Plätzen ruhen so lange), Wimpel.
-// letzterNebel(an): Kapitel 9 – ein letzter Nebelring zieht auf und verschwindet sichtbar.
+// fest(an): Kapitel 10 (Finale) – alle Begleiter kommen zu Tilda an den Schachtisch (Kopien; die Figuren an ihren Plätzen ruhen so lange), Wimpel.
+// letzterNebel(an): Kapitel 10 – ein letzter Nebelring zieht auf und verschwindet sichtbar.
 // zeigeSchatz(): Kapitel 8 – Fipsis Truhe am Wegweiser (Wörterbuch der Insel). plakat(): Paulas Fest – Plakat mit dem neuesten eigenen Bild.
 const STORY_FX = (() => {
   let sturmAlt = null, sturmRegen = null, sturmLauf = 0, festGruppe = null, schatz = null, plakatObj = null, nebelLauf = 0;
@@ -2104,7 +2180,7 @@ function storyBogen(id, b, I, St) {
   if (id === "insel-wach") b.forEach((x, i) => {
     x.zeige = I.ort("fest");
     if (i === 0) x.beim = () => { STORY_FX.fest(true); STORY_FX.letzterNebel(true); };
-    if (i === 2) x.beim = () => { St.setzeKapitel(9); STORY_FX.letzterNebel(false); };
+    if (i === 2) x.beim = () => { St.setzeKapitel(10); STORY_FX.letzterNebel(false); };
   });
   if (/^fest-/.test(id)) b.forEach(x => { x.zeige = I.ort(x.wer === "papagei" ? "buehne" : x.wer); });   // Feste aus Herkunftsländern (eigene Idee)
   if (/^jz-/.test(id)) { const wer = b[0].wer; b.forEach(x => { x.zeige = I.ort(wer === "papagei" ? "buehne" : wer); }); }
@@ -2141,6 +2217,8 @@ function spieleStory(id) {
   // Blase 3 („… dann leuchtet der Turm“): Kapitel 6 schon hier merken (wie Kapitel 1 in „erste-frucht“), sonst bleibt die Lampe grau, weil
   // schalteLeuchtturm() nach K.leuchtturmOffen() geht und das Kapitel sonst erst mit der letzten Blase gespeichert würde (ab Kl. 2 sind es vier)
   if (id === "der-leuchtturm") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "schach" : "leuchtturm"); if (i === 2) x.beim = () => { St.setzeKapitel(6); schalteLeuchtturm(); }; });
+  if (id === "bennos-bruecke") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "sandbank" : "bruecke"); if (i === 1) x.beim = () => { St.setzeKapitel(9); schalteBruecke(); }; });   // Kapitel 9: Baustelle schon bei Blase 2 offen
+  if (id === "bruecke-fertig") b.forEach((x, i) => { x.zeige = I.ort(i === 1 ? "bruecke" : "sandbank"); });
   if (id === "neue-ufer") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "steg" : i === 2 ? "lager" : "boot"); if (i === 1) x.beim = () => { St.setzeKapitel(7); schalteBoot(); }; });   // Kapitel 7: Boot schon bei Blase 2 bereit
   if (storyBogen(id, b, I, St)) return;   // Sturm, Tilda, Bruni, Paulas Fest, Kapitel 8/9, Jahreszeiten (07.11.2026)
   storyLaeuft = true;
@@ -2151,6 +2229,7 @@ function spieleStory(id) {
     if (id === "fipsis-karte") zeigeKartenweg();   // auch beim Überspringen
     if (id === "der-leuchtturm") schalteLeuchtturm();
     if (id === "neue-ufer") schalteBoot();
+    if (id === "bennos-bruecke") schalteBruecke();
     storyBogenEnde(id);
     if (id === "geburtstag" && paketId) St.merkeSzene(paketId);   // einmal je Jahr
     nebelWeicht();
@@ -2217,7 +2296,17 @@ const meldungenWarten = (() => {
 })();
 window.__heimat = { meldungen: () => ({ warten: meldungenWarten.warten(), ruhig: meldungenWarten.ruhig(), steuerung: meldungenWarten.steuerung() }), extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
 Object.assign(window.__heimat, { story: () => STORY_FX.info(), festPunkte: () => STORY_FX.festPunkte(), schatzTippen: () => STORY_FX.schatzTippen() });   // Story-Bogen (07.11.2026)
-Object.assign(window.__heimat, { leerlauf: () => gedrosselt });   // Paket 5: Insel im Leerlauf ~30 Bilder/s
+Object.assign(window.__heimat, { leerlauf: () => gedrosselt });
+// Bennos Brücke (Kapitel 9): Stand der 3D-Brücke, neu bauen (n Abschnitte, ohne Angabe aus dem Spielstand), Baustelle antippen
+Object.assign(window.__heimat, {
+  bruecke: () => { let tri = 0; brueckeGr.traverse(m => { if (m.isMesh && m.material.visible !== false) tri += (m.geometry.index ? m.geometry.index.count : m.geometry.attributes.position.count) / 3; });
+    const ende = BR.punkt(brN * BR.stueck), kopf = BR.punkt(0.2);
+    return { n: brN, abschnitte: BR.abschnitte, laenge: +(brN * BR.stueck).toFixed(3), stueck: BR.stueck, dreiecke: Math.round(tri), offen: K.ortOffen("bruecke"), schloss: !!baustelleSchloss,
+      aktion: baustelle.userData.aktion, kopf: { x: kopf[0], z: kopf[1] }, ende: { x: ende[0], z: ende[1] }, mitte: { x: BR.punkt(brN * BR.stueck / 2)[0], z: BR.punkt(brN * BR.stueck / 2)[1] }, sand: { ...BR.sand }, platz: P.bruecke.slice(), boden: brBoden.length,
+      ich: { x: ich.position.x, y: ich.position.y, z: ich.position.z, auf: aufBruecke(ich.position.x, ich.position.z) } }; },
+  baueBruecke: (n) => { baueBruecke(n == null ? K.brueckeStand() : n); return brN; },
+  brueckeTippen: () => baustelle.userData.tipp(), sandbankTippen: () => sandbankTipp.userData.tipp()
+});   // Paket 5: Insel im Leerlauf ~30 Bilder/s
 Object.defineProperties(window.__heimat, Object.getOwnPropertyDescriptors({ extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { fahrt = null; freiKamera = true; gieren = g; neigung = n; abstand = a; }, kamerafahrt: () => ({ laeuft: !!fahrt, art: fahrt ? fahrt.art : null, anteil: fahrt ? fahrt.anteil || 0 : 1, abstand: Math.round(camera.position.distanceTo(blick) * 10) / 10, ziel: Math.round(KAM.abstand * hochFaktor() * 10) / 10, letzte: letzteFahrt }), ueberspringen: fahrtUeberspringen, himmel: () => { const v = new Vector3(), drin = (x, y, z) => { v.set(x, y, z).project(camera); return Math.abs(v.x) < 1 && Math.abs(v.y) < 1 && v.z < 1; };
     const a = sterne ? sterne.geometry.attributes.position : null; let n = 0; if (a && sterne.visible) for (let i = 0; i < a.count; i++) if (drin(a.getX(i), a.getY(i), a.getZ(i))) n++;
     return { sterne: a ? a.count : 0, sterneImBild: n, mond: !!mond, mondImBild: !!(mond && mond.visible && drin(mond.position.x, mond.position.y, mond.position.z)), nass: nassAn, schaum: SCHAUM_FARBE }; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT }));   // Eine Welt (07.11.2026): Kamerafahrt, Himmel, Figur (Getter mitnehmen)

@@ -307,6 +307,8 @@
       if (St.darfNeueEtappe() && e.faellig(st)) return e.szene;
     }
     for (const k of KAPITEL) if (St.kapitel() === k.n - 1 && St.darfNeueEtappe() && k.faellig()) return k.szene;
+    // Bennos Brücke fertig: kleine Abschluss-Szene, danach geht es über die Brücke auf die Sandbank
+    if (St.kapitel() >= 9 && brueckeFertig() && !St.gesehen("bruecke-fertig") && St.darfNeueEtappe()) return "bruecke-fertig";
     if (St.darfNeueEtappe()) return nebenszene();
     return null;
   }
@@ -365,10 +367,19 @@
     // 07.11.2026 (Story-Review): Kapitel 8 „Fipsis Schatz“ – die Schatzkarte ist komplett; in der Truhe am Wegweiser liegt das Wörterbuch der Insel
     { n: 8, szene: "fipsis-schatz", titel: "Fipsis Schatz", bedingung: "die ganze Schatzkarte bei Fipsi (alle fünf Teile)",
       faellig: () => schatzkarteKomplett() },
-    // Finale „Die Insel ist wach“: alle Begleiter feiern, der letzte Nebel geht – danach geht es offen weiter (Jahreszeiten-Episoden)
-    { n: 9, szene: "insel-wach", titel: "Die Insel ist wach", bedingung: "70 Lernfunde",
-      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 70 }
+    // 07.11.2026 (Auftraggeber: Reihenfolge darf sich ändern, noch spielt kein Kind): Kapitel 9 „Bennos Brücke“ – Benno baut eine Brücke zur Sandbank,
+    // das Kind misst und rechnet (Längen, Maße, Bauplan). Bedingung: 55 Lernfunde und 5 geschaffte Matheweg-Stationen (Benno = Mathe).
+    { n: 9, szene: "bennos-bruecke", titel: "Bennos Brücke", bedingung: "55 Lernfunde und 5 Stationen auf dem Matheweg",
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 55 && matheFertig() >= 5 },
+    // Finale „Die Insel ist wach“ (jetzt Kapitel 10): alle Begleiter feiern, der letzte Nebel geht – danach geht es offen weiter (Jahreszeiten-Episoden).
+    // Die Brücke muss nicht fertig sein, nur begonnen (3 von 8 Abschnitten) – das Finale soll nicht an einer unfertigen Brücke hängenbleiben.
+    { n: 10, szene: "insel-wach", titel: "Die Insel ist wach", bedingung: "70 Lernfunde und drei Abschnitte an Bennos Brücke",
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 70 && brueckeStand() >= BRUECKE_FINALE }
   ];
+  // Bennos Brücke (Kapitel 9): 8 Abschnitte, Daten bruecke = { abschnitte, neu: { "JJJJ-MM-TT": n }, runden, fehlerfrei } (spiele/bruecke/)
+  const BRUECKE_ABSCHNITTE = 8, BRUECKE_FINALE = 3;
+  const brueckeStand = () => { const d = S().lade("bruecke") || {}; return Math.max(0, Math.min(BRUECKE_ABSCHNITTE, Math.floor(+d.abschnitte || 0))); };
+  const brueckeFertig = () => brueckeStand() >= BRUECKE_ABSCHNITTE;
   // Fipsis Schatzkarte: die fünf Kapitel der Geschichte (spiele/deutsch/geschichte.js, ids gleich – prüft tests/inselkern.js)
   const SCHATZKARTE = ["wald", "hof", "baeckerei", "strand", "schloss"];
   const schatzkarteKomplett = () => { const k = ((S().lade("deutsch") || {}).kapitel) || {}; return SCHATZKARTE.every(id => (k[id] || 0) > 0); };
@@ -416,7 +427,7 @@
       if (n.faellig()) return n.id;
     }
     { const f = festJetzt(); if (f && St.kapitel() >= 1 && !St.gesehen(f.merke)) return f.id; }
-    if (St.kapitel() >= 9) { const j = jahreszeitJetzt(); if (!St.gesehen(j.merke)) return j.szene; }
+    if (St.kapitel() >= 10) { const j = jahreszeitJetzt(); if (!St.gesehen(j.merke)) return j.szene; }
     return null;
   }
   // Wörter für Fipsis Wegweiser: nur Wörter, die das Kind schon hatte (Lernkartei Deutsch, Lernfunde in Deutsch), höchstens n, ohne Dopplungen
@@ -549,8 +560,8 @@
     // Freier Platz am Ufer für einen großen Ort (Leuchtturm, Forscherlager): 24 Winkel (15°-Schritte, abwechselnd links/rechts von a0) auf
     // zwei Ringen (rL, rL − 1,1); Platz ohne Baum, ohne anderen Ort, nicht am Steg. Ohne freien Winkel der Platz mit dem kleinsten Mangel,
     // Bäume im Weg werden gefällt (Review 07.11.2026) – so steht nie etwas in einem Baum oder auf einem anderen Ort.
-    const ABST = { haus: 4.5, lauf: 4.2, kart: 4.2, bau: 4.2, ballons: 3.8, buehne: 3.6, truhe: 3.4, start: 3.6, leuchtturm: 4.2, lager: 4.0 };   // große Orte brauchen mehr Platz
-    function freierPlatz(a0, rL, BAUM = 3.2) {
+    const ABST = { haus: 4.5, lauf: 4.2, kart: 4.2, bau: 4.2, ballons: 3.8, buehne: 3.6, truhe: 3.4, start: 3.6, leuchtturm: 4.2, lager: 4.0, bruecke: 4.0 };   // große Orte brauchen mehr Platz
+    function freierPlatz(a0, rL, BAUM = 3.2, extra = null) {
       const andere = Object.entries(P).map(([k, v]) => [v[0], v[1], ABST[k] || 2.8]);
       const winkel = Array.from({ length: 24 }, (_, i) => a0 + (i % 2 ? -1 : 1) * Math.ceil(i / 2) * Math.PI / 12);
       const kand = [rL, rL - 1.1].flatMap(rad => winkel.map(a => [Math.cos(a) * rad, Math.sin(a) * rad]));
@@ -561,6 +572,7 @@
         andere.forEach(v => fehlt(Math.hypot(v[0] - x, v[1] - z), v[2], 3));
         fehlt(Math.hypot(x - STEG.x, z - STEG.z0), 4, 3); fehlt(Math.hypot(x - SU.x, z - SU.z), 2.5, 3);
         if (WELT.see) fehlt(Math.hypot(x - WELT.see.x, z - WELT.see.z), WELT.see.r + 1.5, 3);
+        if (extra) m += extra(x, z);
         return m;
       };
       let wahl = kand.find(k => mangel(k) === 0);
@@ -574,6 +586,34 @@
     if (!P.leuchtturm) { const [x, z] = freierPlatz(Math.atan2(P.schach[1], P.schach[0]), RMAX_LAUF - 1.3); P.leuchtturm = [x, z, Math.atan2(-x, -z)]; }
     // Kapitel 7 (09.11.2026): Forscherlager auf jedem Nachbar-Eiland (auf der Heimatinsel fest in STANDARD), Zelt mit Blick zur Mitte
     if (!P.lager) { const [x, z] = freierPlatz(Math.atan2(P.eule[1], P.eule[0]) + Math.PI / 2, RMAX_LAUF - 2.6, 2.6); P.lager = [x, z, Math.atan2(-x, -z)]; }
+    // Kapitel 9 „Bennos Brücke“ (07.11.2026): Baustelle am Ufer in Richtung Benno, nach P.leuchtturm/P.lager gesucht (die bleiben so, wo sie waren).
+    // Die Brücke führt von dort gerade hinaus aufs Wasser zu einer kleinen Sandbank; nicht in Richtung Steg/Boot (Winkel ≥ 0,9) und mit Platz
+    // zu Leuchtturm und Lager auch draußen auf dem Wasser.
+    if (!P.bruecke) {
+      const wSteg = Math.atan2(STEG.z0, STEG.x), wink = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+      const [x, z] = freierPlatz(Math.atan2(P.biber[1], P.biber[0]), RMAX_LAUF - 1.6, 3.2, (x, z) => {
+        const a = Math.atan2(z, x); let m = wink(a, wSteg) < 0.9 ? (0.9 - wink(a, wSteg)) * 30 : 0;
+        ["leuchtturm", "lager"].forEach(k => { const v = P[k]; if (v && wink(a, Math.atan2(v[1], v[0])) < 0.42) m += (0.42 - wink(a, Math.atan2(v[1], v[0]))) * 30; });
+        return m;
+      });
+      P.bruecke = [x, z, Math.atan2(-x, -z)];
+    }
+    // Brücke: von r0 (kurz vor der Laufgrenze) bis r1 draußen auf dem Wasser, 8 gleich lange Abschnitte, Breite 1,3; Sandbank am Ende
+    const BRUECKE = (() => {
+      const a = Math.atan2(P.bruecke[1], P.bruecke[0]), ux = Math.cos(a), uz = Math.sin(a), r0 = RMAX_LAUF - 0.9, r1 = UFER + 6.4, sr = 2.4;
+      const laenge = r1 - r0, stueck = laenge / BRUECKE_ABSCHNITTE, breite = 1.3;
+      const sand = { x: ux * (r1 + sr - 0.5), z: uz * (r1 + sr - 0.5), r: sr };
+      // Liegt (x, z) auf der Brücke (bis Abschnitt n) oder – wenn sie fertig ist – auf der Sandbank?
+      const lage = (x, z) => { const dx = x - ux * r0, dz = z - uz * r0; return { d: dx * ux + dz * uz, s: -dx * uz + dz * ux }; };
+      const auf = (x, z, n) => {
+        const { d, s } = lage(x, z); n = Math.max(0, Math.min(BRUECKE_ABSCHNITTE, n | 0));
+        if (n > 0 && Math.abs(s) < breite / 2 - 0.1 && d > -0.5 && d < n * stueck - (n < BRUECKE_ABSCHNITTE ? 0.25 : -0.4)) return "bruecke";
+        if (n >= BRUECKE_ABSCHNITTE && Math.hypot(x - sand.x, z - sand.z) < sr - 0.45) return "sandbank";
+        return null;
+      };
+      return { a, ux, uz, r0, r1, laenge, stueck, breite, sand, x0: ux * r0, z0: uz * r0, abschnitte: BRUECKE_ABSCHNITTE, lage, auf,
+        punkt: (d, s = 0) => [ux * r0 + ux * d - uz * s, uz * r0 + uz * d + ux * s] };
+    })();
     // Vor der Haustür (dort kommt man beim Rausgehen an)
     const vorDerTuer = () => ({ x: P.haus[0] + Math.sin(HAUS_DREH) * 2.75, z: P.haus[1] + Math.cos(HAUS_DREH) * 2.75, dreh: HAUS_DREH });
     // Trittstein-Wege der Heimatinsel (Weg 3, 09.11.2026): vom Start über Zwischenpunkte zu Garten, Bäckerei, Tierstation und Leuchtturm,
@@ -645,9 +685,12 @@
       const a = platz(1), b = platz(-1), [x, z] = a[2] >= b[2] ? a : b;
       ORTE.schatz = { x, z, h: 0.9, dreh: Math.atan2(fx - x, fz - z) };
     }
-    // Finale (Kapitel 9): alle Begleiter versammeln sich am Schachtisch bei Tilda
+    // Finale (Kapitel 10): alle Begleiter versammeln sich am Schachtisch bei Tilda
     ORTE.fest = { x: P.schach[0], z: P.schach[1], h: 1.4 };
-    return { WELT, P, ZX, ZX_GRENZE, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, HAUS_DREH, vorDerTuer, NEBEL, nachbarn, ORTE, WEGE };
+    // Kapitel 9: Bennos Baustelle am Ufer und die Sandbank draußen
+    ORTE.bruecke = { x: P.bruecke[0], z: P.bruecke[1], h: 1.6 };
+    ORTE.sandbank = { x: BRUECKE.sand.x, z: BRUECKE.sand.z, h: 0.6 };
+    return { WELT, P, ZX, ZX_GRENZE, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, HAUS_DREH, vorDerTuer, NEBEL, nachbarn, ORTE, WEGE, BRUECKE };
   }
 
   // Lernfunde des Tages: der passende Nachbar freut sich (Fach je Nachbar, Freude-Text je Fach)
@@ -687,7 +730,8 @@
     if (id === "baeckerei") return S().offen(k >= 3);
     if (id === "schatz") return k >= 8;   // Fipsis Truhe mit dem Wörterbuch der Insel (Kapitel 8)
     if (id === "lager") return S().offen(insel ? k >= 1 : k >= 7);   // Forscherlager: daheim ab Kapitel 1 (Karte der Heimatinsel), auf Nachbar-Eilanden ab Kapitel 7
-    if (id === "boot") return S().offen(!insel || k >= 7);   // Reisen mit Robos Boot: ab Kapitel 7, auf einem Eiland immer (Rückfahrt)
+    if (id === "boot") return S().offen(!insel || k >= 7);
+    if (id === "bruecke") return S().offen(k >= 9);   // Bennos Brücke (Kapitel 9)   // Reisen mit Robos Boot: ab Kapitel 7, auf einem Eiland immer (Rückfahrt)
     return true;
   }
   // Kapitel 7 „Neue Ufer“ (09.11.2026): Forscherlager (Ella) und Robos Boot am Steg; lage.insel = Heimatinsel (sonst Nachbar-Eiland)
@@ -767,6 +811,15 @@
     return blase("tilda", "Tildas Leuchtturm", `Hallo ${name()}! Unten in der Höhle lenken wir das Licht mit Spiegeln. Und meine Schatzkammer zeige ich dir auch!`,
       "Внизу в пещере мы направляем свет зеркалами. И свою сокровищницу я тебе тоже покажу!", "../leuchtturm/");
   }
+  // Bennos Brücke (Kapitel 9, 07.11.2026): Baustelle am Ufer → spiele/bruecke/; vorher sammelt Benno noch Holz
+  function brueckeAntwort() {
+    if (!ortOffen("bruecke")) return blase("biber", "Bennos Holzstapel", "Hier sammle ich Holz für etwas Großes. Was es wird, verrate ich dir in Kapitel 9!", "Здесь я собираю дерево для чего-то большого. Что это будет, я расскажу в главе 9.");
+    const n = brueckeStand();
+    if (n >= BRUECKE_ABSCHNITTE) return blase("biber", "Bennos Brücke", `Unsere Brücke ist fertig, ${name()}! Lauf hinüber zur Sandbank. Auf dem Bauplatz messen und rechnen wir trotzdem weiter, wenn du magst.`,
+      "Наш мост готов! Пройди по нему на отмель. На стройке мы можем и дальше измерять и считать.", "../bruecke/");
+    return blase("biber", "Bennos Brücke", n ? `Schon ${n} von ${BRUECKE_ABSCHNITTE} Stücken stehen, ${name()}! Messen wir das nächste Stück aus?` : `Hallo ${name()}! Hier bauen wir die Brücke zur Sandbank. Hilfst du mir beim Messen und Rechnen?`,
+      "Здесь мы строим мост до отмели. Поможешь мне измерять и считать?", "../bruecke/");
+  }
   // Paula auf der Bühne: spielt die erste eigene Melodie aus dem Atelier (melodie = Liste von Tönen 0–7, -1 = Pause)
   function paulaAntwort() {
     const m = ((S().lade("atelier") || {}).musik || {}).melodien || [];
@@ -800,6 +853,9 @@
       case "buehne": return paulaAntwort();
       case "leuchtturm": return leuchtturmAntwort();
       case "lager": return lagerAntwort(lage);
+      case "bruecke": return brueckeAntwort();
+      case "sandbank": return blase("biber", "Die Sandbank", brueckeFertig() ? `Von hier sieht man die ganze Insel, ${name()}! Schau mal, wie weit wir gebaut haben.` : "Da draußen liegt die Sandbank. Mit Bennos Brücke kommen wir bald trocken hinüber!",
+        brueckeFertig() ? "Отсюда виден весь остров! Посмотри, как далеко мы построили." : "Там лежит песчаная отмель. По мосту Бенно мы скоро дойдём туда, не намокнув!");
       case "boot": return bootAntwort(lage);
       case "garten": return gartenAntwort();
       case "baeckerei": if (!NEU_FERTIG.baeckerei) return baldBlase("🥨", "Bäckerei Benno"); return baeckereiAntwort();
@@ -877,8 +933,8 @@
     return blase("baer", "Brunis Tierpflege-Station", de, "Станция Бруни для животных.", "../tierstation/");
   }
   AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
-  AKTION.leuchtturm = [["💡", "Leuchtturm"], 2.4]; AKTION.schatz = [["📖", "Öffnen"], 2.0];
-  const aktionFuer = (id, insel = true) => (id === "boot" ? [ortOffen("boot", insel) ? ["⛵", "Boot"] : ["👀", "Ansehen"], 3.2] : id === "lager" ? [ortOffen("lager", insel) ? ["🧭", "Forschen"] : ["👀", "Ansehen"], 2.6] :
+  AKTION.leuchtturm = [["💡", "Leuchtturm"], 2.4]; AKTION.schatz = [["📖", "Öffnen"], 2.0]; AKTION.sandbank = [["🏝️", "Ansehen"], 2.6];
+  const aktionFuer = (id, insel = true) => (id === "bruecke" ? [ortOffen("bruecke") ? ["🌉", "Bauen"] : ["👀", "Ansehen"], 2.6] : id === "boot" ? [ortOffen("boot", insel) ? ["⛵", "Boot"] : ["👀", "Ansehen"], 3.2] : id === "lager" ? [ortOffen("lager", insel) ? ["🧭", "Forschen"] : ["👀", "Ansehen"], 2.6] :
     id === "leuchtturm" && !leuchtturmOffen() ? [["👀", "Ansehen"], 2.4] : id === "station" && drachenOffen() ? [["🪁", "Drachen"], 1.9] : id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : id === "ballons" && bald(id) ? [["🛶", "Boot"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
   W.InselKern = {
@@ -889,7 +945,7 @@
     // Regeln und Zustände
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
     weihnachtsPaket, geburtstagsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
-    KAPITEL, WETTER_THEMEN, wortSchilder, tildaGenutzt, leuchtturmOffen, deutschFertig, matheFertig,
+    KAPITEL, WETTER_THEMEN, wortSchilder, tildaGenutzt, leuchtturmOffen, deutschFertig, matheFertig, BRUECKE_ABSCHNITTE, BRUECKE_FINALE, brueckeStand, brueckeFertig,
     SCHATZKARTE, schatzkarteKomplett, JAHRESZEITEN, jahreszeitJetzt, NEBEN, nebenszene, FESTE, festJetzt,
     // Zimmer
     PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel, wandPreis, standardWand, geschlecht,
