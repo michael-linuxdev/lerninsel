@@ -437,7 +437,7 @@
           const gut = (b.dataset.g === "ja") === st.stimmt;
           S.ton(gut ? "juhu" : "nein"); $("rueck").className = "rueck " + (gut ? "gut" : "nein");
           $("rueck").textContent = gut ? "Richtig erkannt – Robo hat sich vertan!" : "Schau genau – Robo hat sich vertan.";
-          const bf = ME().bildFuer && MF() ? ME().bildFuer(st.fv, MF().lies({ text: (/(\d+) ([+−·:]) (\d+)/.exec(st.text) || [""])[0], antwort: "" })) : "";
+          const bf = ME().bildFuer && MF() ? ME().bildFuer(st.fv, (st.o || MF().lies({ text: (/(\d+) ([+−·:]) (\d+)/.exec(st.text) || [""])[0], antwort: "" }))) : "";
           $("warum").hidden = false; $("warum").innerHTML = `${bf ? `<div class="erklaer-bild">${bf}</div>` : ""}<span id="warum-t">${st.warum}</span> <button class="vorlesen-knopf" id="warum-t-hoer" aria-label="Vorlesen">🔊</button>`;
           hoer("warum-t");
           knopfWeiter("Weiter ➜", weiter);

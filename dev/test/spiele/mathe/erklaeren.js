@@ -392,7 +392,7 @@
         { satz: "Von 2 bis 7 sind es 5 Schritte. Er ist 5 cm lang.", bild: () => lineal(2, 5, { schritte: 5 }) }] },
       { typ: "machen", text: "Jetzt du: Tipp die Zentimeter an, von der 2 bis zum Ende.", art: "lineal", a: 2, b: 4 },
       { typ: "ergaenzen", text: "Der Stift fängt bei 3 an und hört bei 9 auf.", frage: "Er ist ? cm lang.", antwort: "6", optionen: ["6", "9", "12"] },
-      { typ: "gegenbeispiel", text: "Der Stift fängt bei 2 an und hört bei 8 auf. Robo sagt: „8 cm.“ Stimmt das?", stimmt: false, fv: "linealende", warum: "Robo hat nur das Ende abgelesen. Von 2 bis 8 sind es 6 Schritte. Also 6 cm." },
+      { typ: "gegenbeispiel", text: "Der Stift fängt bei 2 an und hört bei 8 auf. Robo sagt: „8 cm.“ Stimmt das?", stimmt: false, fv: "linealende", o: { lineal: { start: 2, l: 6 } }, warum: "Robo hat nur das Ende abgelesen. Von 2 bis 8 sind es 6 Schritte. Also 6 cm." },
       { typ: "geschichte", text: "Schau, wo der Stift anfängt. Dann die Schritte zählen.", bilder: [
         { satz: "Wo fängt der Stift an?", bild: () => lineal(3, 4) },
         { satz: "Zähl die Schritte bis zum Ende.", bild: () => lineal(3, 4, { schritte: 4 }) },
@@ -436,7 +436,7 @@
         { satz: "4 blaue. Also 7 = 3 + 4.", bild: F({ rot: 3, blau: 4 }) }] },
       { typ: "machen", text: "Jetzt du: Mach aus 3 die 7. Tipp die blauen Punkte an.", art: "dazu", a: 3, b: 4 },
       { typ: "ergaenzen", text: "Jetzt du: 8 Punkte. 5 sind rot.", frage: "8 = 5 + ?", antwort: "3", optionen: ["3", "8", "13"] },
-      { typ: "gegenbeispiel", text: "Robo zählt bei 6 = 2 + ?: „2, 3, 4, 5, 6.“ Er sagt 5. Stimmt das?", stimmt: false, fv: "zaehlen", warum: "Bei der 2 ist Robo schon. Weiter: 3, 4, 5, 6. Das sind 4 Schritte. Also 4." },
+      { typ: "gegenbeispiel", text: "Robo zählt bei 6 = 2 + ?: „2, 3, 4, 5, 6.“ Er sagt 5. Stimmt das?", stimmt: false, fv: "zaehlen", o: { a: 2, op: "+", b: 4, c: 6 }, warum: "Bei der 2 ist Robo schon. Weiter: 3, 4, 5, 6. Das sind 4 Schritte. Also 4." },
       { typ: "geschichte", text: "Eine Zahl hat zwei Teile: rot und blau.", bilder: [
         { satz: "Erst die roten zählen.", bild: F({ rot: 3 }) },
         { satz: "Dann bis zur Zahl auffüllen.", bild: F({ rot: 3, blau: 4 }) },
