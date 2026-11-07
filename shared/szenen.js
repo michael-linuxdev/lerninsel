@@ -114,7 +114,7 @@
   ] });
   // Kapitel 4 (05.11.2026): Paulas Fest – das Rhythmus-Boot an der Ballon-Wiese
   Sz.registriere("paulas-fest", { titel: "Paulas Fest", kapitel: 4, blasen: [
-    { wer: "papagei", text: { de: "{name}! Am Fluss hinter der Ballon-Wiese feiern wir ein Fest – und du bist eingeladen!", ru: "{name}! У реки за поляной с шариками мы празднуем – и ты приглашён(а)!", status: E } },
+    { wer: "papagei", text: { de: "{name}! Am Teich hinter der Ballon-Wiese feiern wir ein Fest – und du bist eingeladen!", ru: "{name}! У пруда за поляной с шариками мы празднуем – и ты приглашён(а)!", status: E } },
     { wer: "papagei", text: { de: "Wir fahren mit meinem Boot hin. Aber paddeln geht nur im Rhythmus: Ta, ti-ti, Ta!", ru: "Мы поплывём на моей лодке. Но грести можно только в ритме: Та, ти-ти, Та!", status: E } },
     { fuerAeltere: true, wer: "papagei", text: { de: "Ich spiele vor, du paddelst nach. Das Boot wartet auf dich.", ru: "Я играю, ты повторяешь. Лодка ждёт тебя.", status: E } }
   ] });
@@ -135,7 +135,7 @@
   ] });
   // Kapitel 7 „Neue Ufer“ (09.11.2026, KONZEPT): Robo macht das Boot klar – Fahrt zu Nachbar-Eilanden mit Ellas Forscherlager
   Sz.registriere("neue-ufer", { titel: "Neue Ufer", kapitel: 7, blasen: [
-    { wer: "robo", text: { de: "Piep, {name}! Du hast so viel gelernt – mein Boot ist bereit für eine große Fahrt.", ru: "Пип, {name}! Ты так многому научился(-ась) – моя лодка готова к большому путешествию.", status: E } },
+    { wer: "robo", text: { de: "Piep, {name}! Mein Boot ist endlich bereit für eine große Fahrt.", ru: "Пип, {name}! Моя лодка наконец готова к большому путешествию.", status: E } },
     { wer: "robo", text: { de: "Wünsch dir ein Eiland: Wiese, Wald, Berge, Strand, Schnee oder Wüste. Dann fahren wir hin.", ru: "Пожелай остров: луг, лес, горы, пляж, снег или пустыню. И мы поплывём туда.", status: E } },
     { wer: "eule", text: { de: "Ich schlage dort mein Forscherlager auf. Mit Karte und Tagebuch erforschen wir alles!", ru: "Я разобью там свой лагерь исследователей. С картой и дневником мы всё исследуем!", status: E } },
     { fuerAeltere: true, wer: "robo", text: { de: "Und keine Sorge: Deine Heimatinsel bleibt, wie sie ist. Wir kommen immer zurück.", ru: "И не волнуйся: твой родной остров останется таким, как есть. Мы всегда возвращаемся.", status: E } }
@@ -152,11 +152,6 @@
 (function () {
   const Sz = window.Szene; if (!Sz) return;
   const E = { ru: "entwurf" };
-  // Texte, die in derselben Zeile wie eine gleichzeitige Korrektur der russischen Formen stehen, werden hier nachgezogen
-  // (beim Zusammenführen in die Zeilen oben übernehmen): Paulas Fest liegt am Teich (die Insel hat keinen Fluss), Robo sagt nicht noch einmal „so viel gelernt“.
-  const setze = (id, nr, text) => { const d = Sz.def && Sz.def(id); if (d && d.blasen[nr]) { d.blasen[nr].text = Object.assign({}, text, { status: E }); Sz.registriere(id, d); } };   // Szene.def liefert eine Kopie
-  setze("paulas-fest", 0, { de: "{name}! Am Teich hinter der Ballon-Wiese feiern wir ein Fest – und du bist eingeladen!", ru: "{name}! У пруда за поляной с шариками мы празднуем – и ты приглашён(а)!" });
-  setze("neue-ufer", 0, { de: "Piep, {name}! Mein Boot ist endlich bereit für eine große Fahrt.", ru: "Пип, {name}! Моя лодка наконец готова к большому путешествию." });
 
   // Nebenszenen (höchstens eine am Tag)
   Sz.registriere("tilda", { titel: "Tilda am Schachtisch", blasen: [
