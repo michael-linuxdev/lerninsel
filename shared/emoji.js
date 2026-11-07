@@ -1,15 +1,21 @@
-// Emoji-Bilder (01.11.2026, Noto in Stil A): ersetzt beim Anzeigen jedes Emoji, für das es ein Bild gibt (shared/icons.js,
+// Emoji-Bilder (01.11.2026, Noto in Stil A): ersetzt beim Anzeigen jedes Emoji, für das es ein Bild gibt (shared/icons/<teil>.js,
 // gebaut von quellen/noto-stil-a.py aus quellen/noto/, Noto Emoji von Google, Apache 2.0, Lizenz quellen/noto/LICENSE), durch dieses Bild. Das Emoji bleibt unsichtbar im Text erhalten (Vorlesen, Suche, Tests, textContent),
 // nur das Aussehen ändert sich. Emojis ohne eigenes Bild bleiben, wie sie sind – so können die Bilder paketweise dazukommen.
 // Wird von core.js nachgeladen. Ausnahmen: Eingabefelder, <option>, <canvas>, SVG, Elemente mit data-emoji="aus". Test-Haken: window.__emoji.
 // Paket 5 (07.11.2026): Jedes Bild ist ein <img> mit einer Blob-Adresse, die je Emoji einmal entsteht (vorher ein ganzes Inline-SVG je Anzeige –
 // im Elternbereich waren 74 % aller DOM-Knoten Emoji-Teile). Aufbau bleibt <span class="emo"><span class="emo-t">🍎</span><img></span>, textContent gleich.
-// Die großen Noto-Bilder (shared/icons.js) kommen erst nach dem ersten Bild der Seite (core.js); bis dahin hält span.emo.warte den Platz in
+// Die Noto-Bilder kommen erst nach dem ersten Bild der Seite (core.js); bis dahin hält span.emo.warte den Platz in
 // derselben Größe frei und zeigt das Emoji des Geräts (shared/icons-liste.js sagt, welche Emojis ein Bild bekommen).
+// Paket „icons.js verkleinern“ (07.11.2026): statt einer großen icons.js kleine Häppchen shared/icons/<teil>-<n>.js in Kurzform
+// (quellen/noto-stil-a.py). Nach dem ersten Bild (core.js ruft __emoji.los()) lädt emoji.js nur die Häppchen, deren Emojis auf der Seite
+// stehen, später nach Bedarf. Die Bilder entstehen in kleinen Portionen (höchstens ~12 ms am Stück) – keine lange Aufgabe. Statt einer Blob-Adresse
+// bekommt jedes Emoji eine data:-Adresse (einmal je Emoji, dieselbe Zeichenkette für jede Anzeige): Blob + createObjectURL kosteten gemessen
+// 10- bis 25-mal so viel Zeit auf dem Hauptfaden (60 Emojis bei Drossel 4: 43–121 ms gegen 2–10 ms), das Laden ins <img> dauert gleich lang.
 (function () {
   if (window.__emoji) return;
   // Ohne Noto-Bilder (Eltern-Wahl „Emojis des Geräts“) werden nur die Begleiter-Zeichen ersetzt
   const nurFiguren = !window.LERN_ICON_LISTE && !window.LERN_ICONS;
+  const ORDNER = ((document.currentScript && document.currentScript.src) || "").replace(/emoji\.js(\?.*)?$/, "") + "icons/";
   const ICONS = {};                 // Hex → SVG-Text (sobald da)
   const BEKANNT = new Set();        // Hex mit Bild (auch wenn das SVG noch lädt)
   const FIG = new Set();
@@ -27,9 +33,19 @@
   const FORM = { e110: '<circle cx="64" cy="64" r="46"/>', e111: '<path d="M64 14 L116 106 H12 Z" stroke-linejoin="round"/>',
     e112: '<rect x="20" y="20" width="88" height="88" rx="6"/>', e113: '<rect x="8" y="34" width="112" height="60" rx="6"/>' };
   for (const [h, f] of Object.entries(FORM)) eigene(h, `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><g fill="#4FA8F0" stroke="#3B1F63" stroke-width="7">${f}</g></svg>`);
-  // Noto-Bilder: schon da (Seite hat icons.js selbst geladen) oder angekündigt (icons-liste.js, icons.js kommt nach dem ersten Bild)
+  // Noto-Bilder: schon da (eine Seite hat window.LERN_ICONS selbst gesetzt) oder angekündigt (icons-liste.js; die Häppchen kommen nach dem ersten Bild)
   if (window.LERN_ICONS) for (const [h, s] of Object.entries(window.LERN_ICONS)) if (!ICONS[h]) eigene(h, s);
-  if (window.LERN_ICON_LISTE) for (const h of window.LERN_ICON_LISTE.split(",")) if (h) BEKANNT.add(h);
+  const WO = new Map();              // Hex → Häppchen (shared/icons/<teil>.js)
+  if (window.LERN_ICON_LISTE) window.LERN_ICON_LISTE.split(",").forEach((h, i) => { if (!h) return; BEKANNT.add(h);
+    const t = window.LERN_ICON_WO && (window.LERN_ICON_TEILE || [])[parseInt(window.LERN_ICON_WO[i], 36)]; if (t && !ICONS[h]) WO.set(h, t); });
+  // SVG eines Emojis, sobald sein Häppchen da ist (Kurzform wird erst hier ausgepackt, je Emoji einmal)
+  function svgVon(h) {
+    if (ICONS[h]) return ICONS[h];
+    const k = window.LERN_ICONS_KURZ && window.LERN_ICONS_KURZ[h];
+    if (k && window.LernIconAuf) { ICONS[h] = window.LernIconAuf(h, k); NOTO_H.add(h); }
+    return ICONS[h] || "";
+  }
+  const NOTO_H = new Set();
   const hex = (e) => [...e].filter(c => c !== "️").map(c => c.codePointAt(0).toString(16)).join("-");
   const zeichen = (h) => h.split("-").map(x => String.fromCodePoint(parseInt(x, 16))).join("");
   const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -52,12 +68,12 @@
     ".emo.warte>.emo-t{inset:0;width:auto;height:auto;margin:0;clip:auto;clip-path:none;overflow:visible;line-height:1.15em;text-align:center;font-size:.92em}";
   document.head.appendChild(stil);
 
-  // Ein Blob je Emoji (das SVG wird über den HTML-Parser zu gültigem XML gemacht – ein <img> verzeiht keine Tippfehler im Markup)
+  // Eine Adresse je Emoji (das SVG wird über den HTML-Parser zu gültigem XML gemacht – ein <img> verzeiht keine Tippfehler im Markup)
   const ADRESSEN = new Map();
   // Noto-Bilder sind schon gültiges XML (quellen/noto-stil-a.py, geprüft in tests/bilder.js) – nur Figuren & Co. gehen durch den Parser
-  const NOTO = (h) => !!(window.LERN_ICONS && window.LERN_ICONS[h] === ICONS[h]) && !FIG.has(h);
+  const NOTO = (h) => (NOTO_H.has(h) || !!(window.LERN_ICONS && window.LERN_ICONS[h] === ICONS[h])) && !FIG.has(h);
   function xmlVon(h) {
-    const svg = ICONS[h]; if (!svg) return "";
+    const svg = svgVon(h); if (!svg) return "";
     if (NOTO(h) && /^<svg xmlns=/.test(svg)) return svg;
     let xml = svg;
     try {
@@ -70,7 +86,7 @@
   function adresse(h) {
     let a = ADRESSEN.get(h); if (a) return a;
     const xml = xmlVon(h); if (!xml) return "";
-    a = URL.createObjectURL(new Blob([xml], { type: "image/svg+xml" }));
+    a = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(xml);
     ADRESSEN.set(h, a); return a;
   }
   function bild(s, h) {
@@ -86,7 +102,27 @@
     }
     return true;
   }
-  const wartend = new Set();   // span.emo.warte, die auf icons.js warten
+  const wartend = new Set();   // span.emo.warte, die auf ihr Häppchen oder ihre Adresse warten
+  // Adressen in Portionen: 50 neue Emojis auf einmal waren mit Blob-Adressen eine lange Aufgabe von 150 ms und mehr (Sachunterricht, Drossel 4).
+  // Mit data:-Adressen viel billiger, aber trotzdem höchstens ~12 ms am Stück (große Bilder, Auspacken der Kurzform).
+  const schlange = []; let pumpt = false; const stat = { portionen: 0, portionMax: 0 };
+  // eigene Aufgabe ohne die 4-ms-Bremse verschachtelter setTimeout-Aufrufe
+  const kanal = typeof MessageChannel === "function" ? new MessageChannel() : null;
+  const spaeter = kanal ? (() => kanal.port2.postMessage(0)) : (() => setTimeout(pumpe, 0));
+  if (kanal) kanal.port1.onmessage = () => pumpe();
+  function pumpe() {
+    pumpt = false; const t0 = performance.now();
+    while (schlange.length) {
+      const s = schlange.shift(), h = s.dataset.h;
+      if (!s.classList.contains("warte")) continue;
+      if (!svgVon(h)) continue;   // Häppchen noch nicht da – kommt über teilDa wieder in die Schlange
+      wartend.delete(s); bild(s, h);
+      if (performance.now() - t0 > 12 && schlange.length) { stat.portionen++; stat.portionMax = Math.max(stat.portionMax, performance.now() - t0); pumpt = true; spaeter(); return; }
+    }
+    stat.portionen++; stat.portionMax = Math.max(stat.portionMax, performance.now() - t0);
+    pruefeBereit();
+  }
+  function einreihen(s) { schlange.push(s); if (!pumpt) { pumpt = true; spaeter(); } }
   function ersetzeText(t) {
     const text = t.nodeValue; if (!text || text.length < 1) return;
     MUSTER.lastIndex = 0; if (!MUSTER.test(text)) return;
@@ -98,7 +134,8 @@
       if (m.index > pos) teile.appendChild(document.createTextNode(text.slice(pos, m.index)));
       const s = document.createElement("span"); s.className = FIG.has(h) ? "emo fig" : "emo"; s.setAttribute("aria-hidden", "true"); s.dataset.h = h;
       const tx = document.createElement("span"); tx.className = "emo-t"; tx.textContent = m[0]; s.appendChild(tx);
-      if (ICONS[h]) bild(s, h); else { s.classList.add("warte"); wartend.add(s); }
+      if (ADRESSEN.has(h) || (ICONS[h] && !WO.has(h))) bild(s, h);
+      else { s.classList.add("warte"); wartend.add(s); if (svgVon(h)) einreihen(s); else brauche(h); }
       teile.appendChild(s); pos = m.index + m[0].length;
     }
     if (!pos) return;
@@ -124,25 +161,64 @@
     if (offen.size) plane();
   });
   function start() { durchsuche(document.body); beobachter.observe(document.body, { childList: true, subtree: true, characterData: true }); }
-  if (document.body) start(); else addEventListener("DOMContentLoaded", start);
 
-  // icons.js ist da (core.js lädt es nach dem ersten Bild): Bilder übernehmen, freigehaltene Plätze füllen
-  let bereitFertig; const bereit = new Promise(ok => { bereitFertig = ok; });
-  function iconsDa() {
-    if (window.LERN_ICONS) for (const [h, s] of Object.entries(window.LERN_ICONS)) if (!ICONS[h]) ICONS[h] = s;
-    wartend.forEach(s => { if (ICONS[s.dataset.h]) bild(s, s.dataset.h); else s.classList.remove("warte"); });
-    wartend.clear(); bereitFertig();
+  // Häppchen laden: erst nach dem ersten Bild (core.js ruft los()), dann nur die gebrauchten, jedes einmal
+  const TEIL = new Map();      // Häppchen → { p: Promise, fertig }
+  let frei = false;
+  function teil(t) {
+    let x = TEIL.get(t); if (x) return x;
+    let fertig; x = { p: new Promise(ok => { fertig = ok; }), da: !!(window.LERN_ICONS_GELADEN && window.LERN_ICONS_GELADEN[t]), geholt: false };
+    x.fertig = () => { x.da = true; fertig(); }; if (x.da) fertig();
+    TEIL.set(t, x); return x;
   }
-  if (window.LERN_ICONS || nurFiguren || !window.LERN_ICON_LISTE) iconsDa();
+  function hole(t) {
+    const x = teil(t); if (x.da || x.geholt) return x.p; x.geholt = true;
+    const s = document.createElement("script"); s.src = ORDNER + t + ".js"; s.async = true;
+    // Fehler (z. B. offline ohne Cache): Platz freigeben, das Emoji des Geräts bleibt sichtbar
+    s.onerror = () => { x.fertig(); wartend.forEach(w => { if (WO.get(w.dataset.h) === t) { w.classList.remove("warte"); wartend.delete(w); } }); pruefeBereit(); };
+    document.head.appendChild(s); return x.p;
+  }
+  function brauche(h) { const t = WO.get(h); if (!t) return Promise.resolve(); const x = teil(t); if (frei) hole(t); return x.p; }
+  // ein Häppchen hat sich angemeldet (LERN_ICONS_DAZU in icons-liste.js)
+  const vorher = window.LERN_ICONS_DA;
+  window.LERN_ICONS_DA = function (t) {
+    teil(t).fertig();
+    wartend.forEach(s => { if (WO.get(s.dataset.h) === t) einreihen(s); });
+    if (vorher) vorher(t);
+  };
+  let bereitFertig; const bereit = new Promise(ok => { bereitFertig = ok; });
+  let fertigGemeldet = false;
+  function pruefeBereit() { if (frei && !fertigGemeldet && !wartend.size && !schlange.length) { fertigGemeldet = true; bereitFertig(); } }
+  function los() {
+    if (frei) return; frei = true;
+    if (window.LERN_ICONS) for (const [h, s] of Object.entries(window.LERN_ICONS)) if (!ICONS[h]) { ICONS[h] = s; WO.delete(h); }
+    const brauchen = new Set();
+    wartend.forEach(s => { const h = s.dataset.h; if (svgVon(h)) einreihen(s); else if (WO.has(h)) brauchen.add(WO.get(h)); else { s.classList.remove("warte"); wartend.delete(s); } });
+    TEIL.forEach((x, t) => { if (!x.da) brauchen.add(t); });
+    brauchen.forEach(hole);
+    // bereit, sobald die Häppchen dieser Seite da sind (auch wenn ein Fehler kam)
+    Promise.all([...brauchen].map(t => teil(t).p)).then(() => setTimeout(pruefeBereit, 0));
+    pruefeBereit();
+  }
+  // alle Bilder auf einmal (Prüfseiten, Tests): Promise → { hex: SVG }
+  function alle() {
+    los();
+    const t = [...new Set(WO.values())];
+    return Promise.all(t.map(hole)).then(() => { const o = {}; BEKANNT.forEach(h => { if (!FIG.has(h) && (WO.has(h) || NOTO_H.has(h))) { const v = svgVon(h); if (v) o[h] = v; } }); return o; });
+  }
+  if (nurFiguren || !window.LERN_ICON_LISTE) los();
+  else setTimeout(los, window.Spielwelt ? 2500 : 0);   // Seiten ohne core.js (Prüfseiten) gleich, sonst Sicherheitsnetz (core.js ruft los() schon nach dem ersten Bild)
   window.__emoji = { anzahl: () => [...BEKANNT].filter(h => !FIG.has(h)).length, figuren: FIG.size, nurFiguren, durchsuche, hat: (e) => BEKANNT.has(hex(e)),
-    iconsDa, bereit, svg: (h) => ICONS[h] || "", wartend: () => wartend.size };
+    los, iconsDa: los, bereit, svg: (h) => svgVon(h), wartend: () => wartend.size, alle, brauche: (e) => brauche(hex(String(e || ""))),
+    stat: () => ({ ...stat, adressen: ADRESSEN.size }), teile: () => [...TEIL].filter(([, x]) => x.da).map(([t]) => t), teilVon: (e) => WO.get(hex(String(e || ""))) || null };
+  if (document.body) start(); else addEventListener("DOMContentLoaded", start);
   // Für Canvas und 3D (Schilder auf der Insel, Pinnwand, Atelier-Stempel): Bild als Image laden und zeichnen (data-Adresse wie bisher: Safari zeichnet
   // Blob-SVGs nicht in jede Leinwand, ohne sie zu sperren)
   const bilder = new Map();
   function lade(e) {
     const h = hex(String(e || "")); if (!BEKANNT.has(h)) return Promise.resolve(null);
-    if (!bilder.has(h)) bilder.set(h, bereit.then(() => new Promise((fertig) => {
-      if (!ICONS[h]) { fertig(null); return; }
+    if (!bilder.has(h)) bilder.set(h, (WO.has(h) && !svgVon(h) ? new Promise(ok => { brauche(h).then(ok); if (!frei) setTimeout(los, 0); }) : Promise.resolve()).then(() => new Promise((fertig) => {
+      if (!svgVon(h)) { fertig(null); return; }
       const img = new Image(); img.onload = () => { img.__fertig = true; fertig(img); }; img.onerror = () => fertig(null);
       img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(xmlVon(h).replace("<svg ", "<svg width='128' height='128' "));
       bilder.set(h + ":img", img);

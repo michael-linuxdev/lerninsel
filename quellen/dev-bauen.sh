@@ -5,7 +5,7 @@
 set -e
 cd "$(dirname "$0")/.."
 # Cache-Version automatisch aus dem Inhalt aller Dateien der Seite (ändert sich nur, wenn sich etwas ändert)
-# Emoji-Bilder neu bauen (shared/icons.js: Noto-Emojis aus quellen/noto/ in Stil A, siehe quellen/noto-stil-a.py)
+# Emoji-Bilder neu bauen (shared/icons/<teil>.js + shared/icons-liste.js: Noto-Emojis aus quellen/noto/ in Stil A, siehe quellen/noto-stil-a.py)
 python3 -I quellen/noto-stil-a.py >/dev/null
 # Russische Entwürfe für die Prüfliste sammeln (spiele/eltern/ru-texte.js, siehe quellen/ru-sammeln.js)
 node quellen/ru-sammeln.js >/dev/null

@@ -4,7 +4,8 @@ const { chromium } = require('playwright'); const fs = require('fs'), path = req
 const R = path.resolve(__dirname, '..'), S = process.argv[2], gr = +process.argv[3] || 64, orig = process.argv[4] === 'orig';
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 900, height: 800 } });
-  const icons = fs.readFileSync(R + '/shared/icons.js', 'utf8');
+  // seit 07.11.2026 in Häppchen (shared/icons/), ausgepackt über quellen/icons-lesen.js; NOTO_JSON=<datei> nimmt stattdessen eine Liste { hex: SVG }
+  const icons = 'window.LERN_ICONS = ' + (process.env.NOTO_JSON ? fs.readFileSync(process.env.NOTO_JSON, 'utf8') : JSON.stringify(require('./icons-lesen.js')(R).svg)) + ';';
   const quellen = {}; for (const f of fs.readdirSync(R + '/quellen/noto')) quellen[f.replace('.svg', '')] = fs.readFileSync(R + '/quellen/noto/' + f, 'utf8');
   await p.setContent(`<html><body style="margin:0;background:#FFF8E7;font:10px sans-serif"><div id=g style="display:flex;flex-wrap:wrap;gap:4px;padding:6px"></div></body></html>`);
   await p.addScriptTag({ content: icons });

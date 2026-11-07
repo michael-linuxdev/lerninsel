@@ -15,7 +15,17 @@ Die Bilder sind die **Noto-Emojis von Google (Apache 2.0)**, umgesetzt in **Stil
 - `liste.json` – alle Emojis der App (nach Teilen). Neue Emojis hier eintragen.
 - `quellen/noto/<hex>.svg` – Noto-Originale (eine Datei je Emoji), Lizenz `quellen/noto/LICENSE`.
 - `quellen/noto-holen.py` – holt neue Originale aus den npm-Paketen `@iconify-json/noto` und `@svgmoji/noto` (Aufruf im Kopf der Datei).
-- `quellen/noto-stil-a.py` – baut `shared/icons.js` (läuft in `quellen/dev-bauen.sh`); Sonderfälle in `AUSNAHMEN`.
+- `quellen/noto-stil-a.py` – baut die Häppchen `shared/icons/<teil>-<n>.js` und `shared/icons-liste.js` (läuft in `quellen/dev-bauen.sh`); Sonderfälle in `AUSNAHMEN`.
+- `quellen/icons-lesen.js` – liest die Häppchen in Node und packt sie aus (Prüfbogen, `tests/icons.js`).
+
+## Häppchen und Kurzform (07.11.2026, Paket „icons.js verkleinern“)
+- Statt einer großen `shared/icons.js` (2,7 MB) gibt es 24 Häppchen (6 Teile der Liste × 4). In welches Häppchen ein Emoji kommt, bestimmt eine Prüfsumme
+  seines Hex-Schlüssels (`zlib.crc32`) – ein geändertes oder neues Emoji ändert genau ein Häppchen (Updates holen nur das).
+- `shared/emoji.js` lädt nach dem ersten Bild nur die Häppchen, deren Emojis auf der Seite stehen, später nach Bedarf (`__emoji.brauche(e)`, alle: `__emoji.alle()`).
+- Kurzform je Bild: nur der Inhalt der Form-Gruppe, id-Präfix als `~`, häufige Bausteine (`KURZ`, **feste Liste – nicht nach Häufigkeit neu berechnen**) als ein Zeichen;
+  kurze ids (`0`, `1`, …), Verläufe mit zwei statt vier Stopps (gleiches Bild). `LernIconAuf(hex, kurz)` in `shared/icons-liste.js` packt aus; `tests/icons.js` prüft,
+  dass das Ergebnis Zeichen für Zeichen dem SVG des Generators entspricht.
+- Gemessen: roh 2,62 → 1,86 MB, gzip 746 → 690 KB (am Stück), Pixel-Vergleich aller 773 Bilder: höchstens 0,07 % der Bildpunkte deutlich anders (eine Flagge).
 - `quellen/noto-pruefbogen.js` – Prüfbogen aller Bilder als PNG (64 px mit Original daneben, 24 px).
 
 ## Neues Emoji aufnehmen

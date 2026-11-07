@@ -65,11 +65,21 @@ pruefe("Prüfsummen in sw.js sind aktuell (node quellen/sw-pruefsummen.js, läuf
     assert.strictEqual(r.status, 0, (r.stderr || r.stdout).trim());
   }
 });
-// Obergrenze für das Offline-Paket (Paket 5): alles, was ein Tablet beim ersten Start lädt. Gemessen 07.11.2026: ca. 7,5 MB (vorher 7,9 MB).
-const GRENZE_MB = 9;
+// Paket „icons.js verkleinern“ (07.11.2026): die Emoji-Häppchen lädt emoji.js per Skript nach (keine HTML-Seite nennt sie) – alle müssen offline da sein
+pruefe("Alle Emoji-Häppchen shared/icons/*.js stehen in START, keins größer als 160 KB, keine alte shared/icons.js", () => {
+  const haeppchen = fs.readdirSync(path.join(root, "shared/icons")).filter(f => f.endsWith(".js")).map(f => "shared/icons/" + f);
+  const fehlt = haeppchen.filter(f => !inListe.has(f));
+  assert.deepStrictEqual(fehlt, [], "fehlt in sw.js: " + fehlt.join(", "));
+  assert.ok(haeppchen.length >= 12, "zu wenige Häppchen: " + haeppchen.length);
+  for (const f of haeppchen) assert.ok(fs.statSync(path.join(root, f)).size <= 160 * 1024, f + " ist größer als 160 KB");
+  assert.ok(!fs.existsSync(path.join(root, "shared/icons.js")) && !inListe.has("shared/icons.js"), "shared/icons.js gibt es nicht mehr (Häppchen in shared/icons/)");
+});
+// Obergrenze für das Offline-Paket (Paket 5): alles, was ein Tablet beim ersten Start lädt. Gemessen 07.11.2026: ca. 7,5 MB (vorher 7,9 MB),
+// nach „icons.js verkleinern“ (Emoji-Häppchen in Kurzform, 2,6 → 1,9 MB) ca. 6,8 MB.
+const GRENZE_MB = 8;
 pruefe(`Offline-Paket höchstens ${GRENZE_MB} MB`, () => {
   const mb = [...new Set(liste.map(norm))].reduce((s, e) => s + fs.statSync(path.join(root, e)).size, 0) / 1048576;
   console.log(`    (${mb.toFixed(2)} MB)`);
-  assert.ok(mb <= GRENZE_MB, `Offline-Paket ${mb.toFixed(2)} MB > ${GRENZE_MB} MB – große Dateien prüfen (shared/icons.js, Fachdaten)`);
+  assert.ok(mb <= GRENZE_MB, `Offline-Paket ${mb.toFixed(2)} MB > ${GRENZE_MB} MB – große Dateien prüfen (shared/icons/, Fachdaten)`);
 });
 console.log(`✅ Offline-Liste: ${n} Prüfungen bestanden (${liste.length} Einträge).`);

@@ -7,11 +7,13 @@
 # Kontur ohne SVG-Filter (schneller auf dem iPad): Die Formen stehen einmal in <defs> als <g id="…b"> und werden zweimal mit <use> gezeichnet.
 # Jede Farbe steht als style="fill:var(--k,<farbe>)"; die hintere Kopie setzt --k auf die Konturfarbe und --w auf die Konturbreite
 # (stroke-width:calc(<breite>px + var(--w,0px))), so wird sie zur dunklen, etwas dickeren Silhouette hinter dem Bild.
-# Zahlen in Pfaden werden auf eine Nachkommastelle gerundet (über absolute Koordinaten, damit sich nichts aufsummiert).
-# Aufruf:  python3 -I quellen/noto-stil-a.py [quellen/noto] [quellen/icons/liste.json] [shared/icons.js]
+# Zahlen in Pfaden werden auf eine Nachkommastelle gerundet (über absolute Koordinaten, damit sich nichts aufsummiert). Ganze Zahlen (GENAU = 0)
+# sparen weitere 25 %, verschieben aber Kanten um bis zu einen Gerätepixel (gemessen 07.11.2026: im Mittel 4 % der Bildpunkte deutlich anders) – nein.
+# Aufruf:  python3 -I quellen/noto-stil-a.py [quellen/noto] [quellen/icons/liste.json] [shared] [--voll <datei.json>]
+#   schreibt shared/icons/<teil>-<n>.js (Häppchen) und shared/icons-liste.js; --voll legt zusätzlich alle SVGs vollständig als JSON ab (Vergleiche)
 #   quellen/noto: Original-SVGs <hex>.svg (geholt mit quellen/noto-holen.py, Noto Emoji von Google, Apache 2.0)
 #   Ausnahmen: AUSNAHMEN unten (hex → Sonderbehandlung) für Bilder, die mit den Regeln nicht gut aussehen.
-import json, os, re, sys
+import json, math, os, re, sys, zlib
 
 KONTUR, BREITE = '#3B1F63', 5.2
 # Wangen (rosa/rote Verläufe, die ins Durchsichtige auslaufen) – im Spiel verboten, sie werden entfernt
@@ -44,7 +46,8 @@ def stufen(body):
                 return tuple(round(ca[i] + (cb[i] - ca[i]) * k) for i in range(3))
         return pts[-1][1]
     h = '#%02X%02X%02X' % bei(.25); g = '#%02X%02X%02X' % bei(.7)
-    return '<stop offset="0" stop-color="%s"/><stop offset=".48" stop-color="%s"/><stop offset=".48" stop-color="%s"/><stop offset="1" stop-color="%s"/>' % (h, h, g, g)
+    # zwei Stopps genügen: vor dem ersten und nach dem letzten Stopp gilt dessen Farbe (SVG-Regel) – gleiches Bild wie vorher mit vier Stopps
+    return '<stop offset=".48" stop-color="%s"/><stop offset=".48" stop-color="%s"/>' % (h, g)
 
 # ---------- Zahlen kürzen ----------
 def zahl(x, st):
@@ -137,10 +140,13 @@ def pfad(d, st):
 
 ATTR_ZAHL = re.compile(r'\b(cx|cy|r|rx|ry|x|y|width|height|x1|x2|y1|y2|fx|fy|stroke-width)="(-?[\d.]+)"')
 
-def kuerze(inner, st):
-    inner = re.sub(r'\bd="([^"]*)"', lambda m: 'd="%s"' % pfad(m.group(1), st), inner)
-    inner = ATTR_ZAHL.sub(lambda m: '%s="%s"' % (m.group(1), zahl(float(m.group(2)), st + (1 if m.group(1) == 'stroke-width' else 0))), inner)
-    return inner
+def kuerze(inner, st, st_verlauf):
+    # Formen mit st Nachkommastellen; Verläufe (Lage der harten Farbgrenze, Bruchteile bei objectBoundingBox) behalten st_verlauf
+    def tag(m):
+        t = m.group(0); s = st_verlauf if re.match(r'<(linearGradient|radialGradient|stop)\b', t) else st
+        t = re.sub(r'\bd="([^"]*)"', lambda m: 'd="%s"' % pfad(m.group(1), s), t)
+        return ATTR_ZAHL.sub(lambda m: '%s="%s"' % (m.group(1), zahl(float(m.group(2)), s + (1 if m.group(1) == 'stroke-width' else 0))), t)
+    return re.sub(r'<[a-zA-Z][^>]*>', tag, inner)
 
 # ---------- Farben über Variablen, damit eine zweite Kopie die Kontur sein kann ----------
 GRAFIK = ('path', 'circle', 'ellipse', 'rect', 'polygon', 'polyline', 'line', 'g', 'use', 'symbol')
@@ -188,7 +194,11 @@ def stil_a(svg, hexk):
     vb = [float(x) for x in re.search(r'viewBox="([^"]+)"', svg).group(1).replace(',', ' ').split()]
     inner = re.sub(r'^<svg[^>]*>|</svg>\s*$', '', svg.strip(), flags=re.S)
     inner = re.sub(r'<\?xml[^>]*>|<!--.*?-->', '', inner, flags=re.S)
-    st = 1 if vb[2] >= 64 else 3
+    # Nachkommastellen: Formen nach GENAU (bezogen aufs 128er-Raster, Flaggen mit großer viewBox brauchen weniger), Verläufe wie bisher
+    groesse = max(vb[2], vb[3])
+    st_verlauf = 1 if vb[2] >= 64 else 3
+    # GENAU = 1: wie bisher (eine Stelle, kleine viewBox drei) – so bleibt jedes Bild gleich (auch Flaggen mit 750er-viewBox)
+    st = st_verlauf if GENAU >= 1 else max(0, round(GENAU - math.log10(groesse / 128)))
     # (?<!/): ein selbst schließender Verlauf <radialGradient … href="…"/> hat keine Stopps (vorher fraß das Muster die Stopps des nächsten –
     # im eigenständigen SVG als <img> war das kein gültiges XML, Paket 5)
     # Verläufe mit Durchsichtigkeit bleiben weich (Glanz, Schatten); rosa/rote davon sind Wangen und fliegen raus
@@ -211,11 +221,23 @@ def stil_a(svg, hexk):
         neu = stufen(m.group(3))
         return m.group(0) if not neu else '<%s%s>%s</%s>' % (m.group(1), m.group(2), neu, m.group(1))
     inner = re.sub(r'<(linearGradient|radialGradient)([^>]*?)(?<!/)>(.*?)</\1>', gr, inner, flags=re.S)
-    inner = kuerze(inner, st)
-    for i in sorted(set(re.findall(r'\bid="([^"]+)"', inner)), key=len, reverse=True):
-        inner = (inner.replace('id="%s"' % i, 'id="%s%s"' % (praefix, i)).replace('#%s)' % i, '#%s%s)' % (praefix, i))
-                 .replace('"#%s"' % i, '"#%s%s"' % (praefix, i)))
-    weich = set(praefix + w for w in weich)
+    inner = kuerze(inner, st, st_verlauf)
+    # ids kurz umbenennen (0, 1, …, a, c, …; „b“ ist die Form-Gruppe) – nur Namen, das Bild bleibt gleich
+    kurz, nr = {}, 0
+    def naechster():
+        nonlocal nr
+        while True:
+            n, k = nr, ''
+            while True:
+                k = '0123456789acdefghijklmnopqrstuvwxyz'[n % 35] + k; n //= 35
+                if not n: break
+            nr += 1
+            if k != 'b': return k
+    for i in sorted(set(re.findall(r'\bid="([^"]+)"', inner)), key=lambda x: (-len(x), x)):   # feste Reihenfolge (Mengen sind je Lauf anders geordnet)
+        kurz[i] = naechster()
+        inner = (inner.replace('id="%s"' % i, 'id="%s%s"' % (praefix, kurz[i])).replace('#%s)' % i, '#%s%s)' % (praefix, kurz[i]))
+                 .replace('"#%s"' % i, '"#%s%s"' % (praefix, kurz[i])))
+    weich = set(praefix + kurz.get(w, w) for w in weich)
     inner = variablen(re.sub(r'\s+', ' ', inner), weich)
     inner = re.sub(r'\s*xml:space="[^"]*"', '', inner)
     inner = inner.replace('xlink:href=', 'href=')
@@ -226,28 +248,104 @@ def stil_a(svg, hexk):
         b = b / s  # Konturbreite in den Einheiten des Bildes (sie wird mit dem Bild skaliert)
         tx = (128 - vb[2] * s) / 2 - vb[0] * s; ty = (128 - vb[3] * s) / 2 - vb[1] * s
         inner = '<g transform="translate(%s %s) scale(%s)">%s</g>' % (zahl(tx, 2), zahl(ty, 2), zahl(s, 4), inner)
-    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 136 136"><defs><g id="%sb">%s</g></defs>'
-            '<use href="#%sb" fill="%s" stroke="%s" stroke-width="%s" stroke-linejoin="round" stroke-linecap="round" style="--k:%s;--w:%spx;--o:1;--v:hidden"/>'
-            '<use href="#%sb"/></svg>') % (praefix, inner.strip(), praefix, KONTUR, KONTUR, zahl(b, 3), KONTUR, zahl(b, 3), praefix)
+    # Inhalt der Form-Gruppe und Konturbreite; voll() setzt daraus das ganze SVG zusammen (zweimal <use>, siehe oben)
+    return inner.strip(), zahl(b, 3)
+
+# ---------- Ausgabe in Häppchen und Kurzform (Paket „icons.js verkleinern“, 07.11.2026) ----------
+# Statt einer großen shared/icons.js (2,7 MB, in einem Stück geparst) gibt es kleine Häppchen shared/icons/<teil>-<n>.js, die shared/emoji.js
+# erst lädt, wenn ein Emoji daraus auf der Seite steht. Welches Emoji in welchem Häppchen liegt, bestimmt eine Prüfsumme des Hex-Schlüssels
+# (zlib.crc32) innerhalb seines Teils der Liste – stabil: ein geändertes oder neues Emoji ändert genau ein Häppchen (wichtig für Updates).
+# Jedes Bild steht in Kurzform: nur der Inhalt der Form-Gruppe, Präfix der ids als „~“, häufige Bausteine als ein Zeichen (KURZ).
+# shared/icons-liste.js (klein, vor dem ersten Bild geladen) enthält die Liste, die Zuordnung und LernIconAuf(hex, kurz) → vollständiges SVG.
+# Das ausgepackte SVG ist Zeichen für Zeichen das, was stil_a() baut (prüft tests/icons.js).
+GENAU = 1                                         # Nachkommastellen der Formen im 128er-Raster (Verläufe behalten eine)
+TEILE = 4                                         # Häppchen je Teil der Liste (6 Teile → 24 Dateien)
+# Bausteine für die Kurzform – FESTE Liste (nicht nach Häufigkeit neu berechnen: sonst ändert jedes neue Emoji alle Häppchen).
+# Reihenfolge = Ersetzungsreihenfolge (lange zuerst); die Zeichen kommen nirgends im SVG vor (prüft main()).
+KURZ = ["gradientUnits='userSpaceOnUse'>", "gradientTransform='matrix(", "style='fill:var(--k,url(#~", "style='fill:var(--k,#", ";visibility:var(--v,visible)",
+        "<stop offset='.48' stop-color='#", "' stop-color='#", "<stop offset='", "stop-opacity='", "</radialGradient>", "</linearGradient>",
+        "<radialGradient id='~", "<linearGradient id='~", "<clipPath id='~", "clip-path='url(#~", "<use href='#~", "' id='~", ")'/><path d='m",
+        "'/><path d='m", "<path d='m", "<ellipse cx='", "<circle cx='", "' cx='", "' cy='", "' rx='", "' ry='", "' fx='", "' fy='", "' r='", "' d='",
+        "stroke:var(--k,#", ";stroke-width:calc(", "px + var(--w,0px))", "opacity:var(--o,", "stroke-linecap='round'", "stroke-linejoin='round'",
+        "stroke-miterlimit='", "fill='none'", "transform='rotate(", "transform='translate(", "<g style='", "</g>", "<defs>", "</defs>", ")'/>", "'/>"]
+ZEICHEN = '!$%&*?[]^_`{|}' + ''.join(chr(c) for c in range(0xC0, 0x100) if c not in (0xD7, 0xF7))
+
+def voll(h, inner, b):
+    p = 'n' + h.replace('-', '') + '-'
+    return ("<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 136 136'><defs><g id='%sb'>%s</g></defs>"
+            "<use href='#%sb' fill='%s' stroke='%s' stroke-width='%s' stroke-linejoin='round' stroke-linecap='round' style='--k:%s;--w:%spx;--o:1;--v:hidden'/>"
+            "<use href='#%sb'/></svg>") % (p, inner, p, KONTUR, KONTUR, b, KONTUR, b, p)
+
+def kurzform(h, inner, b):
+    p = 'n' + h.replace('-', '') + '-'
+    verboten = set(ZEICHEN[:len(KURZ)]) | {'~', '@', '"', '\\'}
+    falsch = verboten & set(inner)
+    assert not falsch, 'Zeichen %s im Bild %s – KURZ/ZEICHEN anpassen' % (falsch, h)
+    k = inner.replace(p, '~')
+    for tok, z in zip(KURZ, ZEICHEN): k = k.replace(tok, z)
+    return k if b == '5.2' else '@%s@%s' % (b, k)
 
 def main():
-    a = sys.argv[1:] + [None] * 3
-    quellen = a[0] or 'quellen/noto'; liste = a[1] or 'quellen/icons/liste.json'; aus = a[2] or 'shared/icons.js'
-    emojis = [e for teil in json.load(open(liste, encoding='utf8')).values() for e, *_ in teil]
+    a = sys.argv[1:]
+    vollaus = None
+    if '--voll' in a: i = a.index('--voll'); vollaus = a[i + 1]; del a[i:i + 2]   # alle SVGs vollständig als JSON (Prüfbogen, Vergleich)
+    if '--genau' in a: i = a.index('--genau'); global GENAU; GENAU = int(a[i + 1]); del a[i:i + 2]   # nur zum Vergleichen
+    a += [None] * 3
+    quellen = a[0] or 'quellen/noto'; liste = a[1] or 'quellen/icons/liste.json'; aus = a[2] or 'shared'
+    teile = json.load(open(liste, encoding='utf8'))
     hexk = lambda e: '-'.join('%x' % ord(c) for c in e if c != '️')
-    alle, fehlt = {}, []
-    for e in emojis:
-        h = hexk(e); f = os.path.join(quellen, h + '.svg')
-        if not os.path.exists(f): fehlt.append(e); continue
-        alle[h] = stil_a(open(f, encoding='utf8').read(), h).replace('"', "'")  # einfache Anführungszeichen: im JSON kein Backslash vor jedem Anführungszeichen
-    js = ('// GEBAUT von quellen/noto-stil-a.py aus quellen/noto/ – nicht von Hand ändern. Noto Emoji (Google, Apache 2.0, verändert: Stil A der Lerninsel; Lizenz quellen/noto/LICENSE).\n'
-          'window.LERN_ICONS = %s;\n') % json.dumps(alle, ensure_ascii=False, separators=(',', ':'))
-    open(aus, 'w', encoding='utf8').write(js)
-    # Paket 5 (07.11.2026): kleine Liste der Emojis mit Bild – emoji.js kennt so schon vor icons.js (wird erst nach dem ersten Bild geladen),
-    # welche Emojis ein Bild bekommen, und hält ihnen gleich den Platz frei (kein Springen der Größe)
-    namen = os.path.join(os.path.dirname(aus), 'icons-liste.js')
-    open(namen, 'w', encoding='utf8').write('// GEBAUT von quellen/noto-stil-a.py – nicht von Hand ändern. Emojis, für die shared/icons.js ein Bild hat (Hex-Schlüssel).\n'
-                                            'window.LERN_ICON_LISTE = "%s";\n' % ','.join(alle.keys()))
-    print('%d Bilder (%d KB), %d ohne Bild (bleiben System-Zeichen): %s' % (len(alle), len(js.encode()) // 1024, len(fehlt), ' '.join(fehlt)))
+    alle, kurz, wo, namen, fehlt = {}, {}, {}, [], []
+    for teil, eintraege in teile.items():
+        for n in range(TEILE): namen.append('%s-%d' % (teil, n + 1))
+        for e, *_ in eintraege:
+            h = hexk(e); f = os.path.join(quellen, h + '.svg')
+            if not os.path.exists(f): fehlt.append(e); continue
+            if h in alle: continue
+            inner, b = stil_a(open(f, encoding='utf8').read(), h)
+            inner = inner.replace('"', "'")   # einfache Anführungszeichen: im JSON kein Backslash vor jedem Anführungszeichen
+            alle[h] = voll(h, inner, b); kurz[h] = kurzform(h, inner, b)
+            wo[h] = '%s-%d' % (teil, zlib.crc32(h.encode()) % TEILE + 1)
+    ordner = os.path.join(aus, 'icons'); os.makedirs(ordner, exist_ok=True)
+    for f in os.listdir(ordner):
+        if f.endswith('.js') and f[:-3] not in namen: os.remove(os.path.join(ordner, f))
+    kopf = '// GEBAUT von quellen/noto-stil-a.py aus quellen/noto/ – nicht von Hand ändern. Noto Emoji (Google, Apache 2.0, verändert: Stil A der Lerninsel; Lizenz quellen/noto/LICENSE).\n'
+    groessen = {}
+    for name in namen:
+        d = {h: kurz[h] for h in kurz if wo[h] == name}
+        js = kopf + 'LERN_ICONS_DAZU("%s",%s);\n' % (name, json.dumps(d, ensure_ascii=False, separators=(',', ':')))
+        open(os.path.join(ordner, name + '.js'), 'w', encoding='utf8').write(js); groessen[name] = len(js.encode())
+    # Liste, Zuordnung und Auspacker (klein, kommt vor dem ersten Bild: emoji.js hält damit den Platz frei und weiß, welches Häppchen es braucht)
+    zz = ''.join('0123456789abcdefghijklmnopqrstuvwxyz'[namen.index(wo[h])] for h in kurz)
+    js = (kopf + '// Emojis mit Bild (Hex-Schlüssel), je Emoji das Häppchen (ein Zeichen = Nummer in LERN_ICON_TEILE), Auspacker der Kurzform.\n'
+          'window.LERN_ICON_LISTE = "%s";\nwindow.LERN_ICON_TEILE = %s;\nwindow.LERN_ICON_WO = "%s";\n'
+          '(function () {\n'
+          '  const Z = %s, T = %s, M = {};\n'
+          '  for (let i = 0; i < T.length; i++) M[Z[i]] = T[i];\n'
+          '  const RE = T.length ? new RegExp("[" + Z.slice(0, T.length).replace(/[\\]\\\\^-]/g, "\\\\$&") + "]", "g") : null;\n'
+          '  // Kurzform → vollständiges SVG (wie quellen/noto-stil-a.py voll())\n'
+          '  window.LernIconAuf = function (h, k) {\n'
+          '    let w = "5.2"; if (k[0] === "@") { const i = k.indexOf("@", 1); w = k.slice(1, i); k = k.slice(i + 1); }\n'
+          '    const p = "n" + h.replace(/-/g, "") + "-", innen = (RE ? k.replace(RE, (c) => M[c]) : k).split("~").join(p);\n'
+          '    return "<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'-4 -4 136 136\'><defs><g id=\'" + p + "b\'>" + innen + "</g></defs><use href=\'#" + p + "b\' fill=\'%s\' stroke=\'%s\' stroke-width=\'" + w +\n'
+          '      "\' stroke-linejoin=\'round\' stroke-linecap=\'round\' style=\'--k:%s;--w:" + w + "px;--o:1;--v:hidden\'/><use href=\'#" + p + "b\'/></svg>";\n'
+          '  };\n'
+          '  // Häppchen melden sich hier an (shared/icons/<teil>.js); emoji.js hört über LERN_ICONS_DA mit\n'
+          '  window.LERN_ICONS_KURZ = window.LERN_ICONS_KURZ || {}; window.LERN_ICONS_GELADEN = window.LERN_ICONS_GELADEN || {};\n'
+          '  window.LERN_ICONS_DAZU = function (teil, d) { Object.assign(window.LERN_ICONS_KURZ, d); window.LERN_ICONS_GELADEN[teil] = true; if (window.LERN_ICONS_DA) window.LERN_ICONS_DA(teil); };\n'
+          '  // alle Häppchen laden (Prüfseiten wie spiele/stil/): Promise → { hex: SVG }\n'
+          '  window.LernIconsAlle = function (ordner) {\n'
+          '    return Promise.all(window.LERN_ICON_TEILE.map((t) => window.LERN_ICONS_GELADEN[t] ? null : new Promise((ok) => {\n'
+          '      const s = document.createElement("script"); s.src = ordner + t + ".js"; s.onload = s.onerror = ok; document.head.appendChild(s); })))\n'
+          '      .then(() => { const o = {}; for (const h in window.LERN_ICONS_KURZ) o[h] = window.LernIconAuf(h, window.LERN_ICONS_KURZ[h]); return o; });\n'
+          '  };\n'
+          '})();\n') % (','.join(kurz.keys()), json.dumps(namen), zz, json.dumps(ZEICHEN[:len(KURZ)], ensure_ascii=False),
+                        json.dumps(KURZ, ensure_ascii=False), KONTUR, KONTUR, KONTUR)
+    open(os.path.join(aus, 'icons-liste.js'), 'w', encoding='utf8').write(js)
+    alt = os.path.join(aus, 'icons.js')
+    if os.path.exists(alt): os.remove(alt)   # früher eine große Datei, seit 07.11.2026 Häppchen
+    if vollaus: json.dump(alle, open(vollaus, 'w', encoding='utf8'), ensure_ascii=False, separators=(',', ':'))
+    gesamt = sum(groessen.values())
+    print('%d Bilder in %d Häppchen (%d KB, größtes %d KB), Liste %d KB, %d ohne Bild (bleiben System-Zeichen): %s' % (
+        len(alle), len(namen), gesamt // 1024, max(groessen.values()) // 1024, len(js.encode()) // 1024, len(fehlt), ' '.join(fehlt)))
 
 if __name__ == '__main__': main()

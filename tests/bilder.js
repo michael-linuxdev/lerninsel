@@ -33,24 +33,25 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     return { emo: d.querySelectorAll(".emo").length, text: d.textContent, feld: i.value, unbekannt: (() => { const x = document.createElement("p"); x.textContent = "🛸"; document.body.appendChild(x); return x; })() && true };
   });
   erwarte(nach.emo === 2 && nach.text === "Ich mag 🍎 und 🦊" && nach.feld === "🍎", "neuer Inhalt: 🍎 und 🦊 ersetzt, textContent unverändert, Eingabefeld unberührt");
-  // Noto in Stil A: Kontur ohne SVG-Filter (zwei <use>), keine Wangen. Seit Paket 5 (07.11.2026) als <img> mit einer Blob-Adresse je Emoji:
+  // Noto in Stil A: Kontur ohne SVG-Filter (zwei <use>), keine Wangen. Seit Paket 5 (07.11.2026) als <img> mit einer Adresse je Emoji (seit „icons.js verkleinern“ data: statt blob:):
   // gleiches Emoji mehrfach = dieselbe Adresse, kein Inline-SVG mehr im DOM, jedes Bild gültig (geladen, nicht leer)
   const noto = await p.evaluate(async () => {
     const d = document.createElement("div"); d.textContent = "😊😊🍎🍎"; document.body.appendChild(d);
     await new Promise(r => setTimeout(r, 120));
-    const roh = Object.values(window.LERN_ICONS), smiley = window.LERN_ICONS["1f60a"];
+    const ALLE = await __emoji.alle(), roh = Object.values(ALLE), smiley = ALLE["1f60a"];
     const imgs = [...d.querySelectorAll(".emo > img")];
     await Promise.all(imgs.map(i => i.decode().catch(() => null)));
     return { anzahl: roh.length, filter: roh.filter(s => s.includes("<filter")).length, use: roh.filter(s => (s.match(/<use href='#n[0-9a-f]+-b'/g) || []).length === 2).length,
-      imgs: imgs.length, adressen: new Set(imgs.map(i => i.src)).size, blob: imgs.every(i => i.src.startsWith("blob:")), geladen: imgs.every(i => i.naturalWidth > 0),
+      imgs: imgs.length, adressen: new Set(imgs.map(i => i.src)).size, data: imgs.every(i => i.src.startsWith("data:image/svg+xml")), geladen: imgs.every(i => i.naturalWidth > 0),
       inline: document.querySelectorAll(".emo svg").length, wangen: /url\(#n1f60a-SVGljKj4yZw\)|url\(#n1f60a-SVGBJFSCeLy\)/.test(smiley) };
   });
   erwarte(noto.anzahl >= 770 && noto.filter === 0 && noto.use === noto.anzahl, `Noto in Stil A: ${noto.anzahl} Bilder, keins mit SVG-Filter, jedes mit Kontur-Kopie über <use>`);
-  erwarte(noto.imgs === 4 && noto.adressen === 2 && noto.blob && noto.geladen && noto.inline === 0, "gleiches Emoji mehrfach: ein <img> je Anzeige, eine Blob-Adresse je Emoji, alle geladen, kein Inline-SVG im DOM");
+  erwarte(noto.imgs === 4 && noto.adressen === 2 && noto.data && noto.geladen && noto.inline === 0, "gleiches Emoji mehrfach: ein <img> je Anzeige, eine data:-Adresse je Emoji, alle geladen, kein Inline-SVG im DOM");
   // alle Noto-Bilder sind als eigenständiges Bild gültig (ein <img> verzeiht kein fehlerhaftes Markup)
   const kaputt = await p.evaluate(async () => {
     const schlecht = [];
-    for (const h of Object.keys(window.LERN_ICONS)) { const d = new DOMParser().parseFromString(window.LERN_ICONS[h], "image/svg+xml"); if (d.querySelector("parsererror")) schlecht.push(h); }
+    const ALLE = await __emoji.alle();
+    for (const h of Object.keys(ALLE)) { const d = new DOMParser().parseFromString(ALLE[h], "image/svg+xml"); if (d.querySelector("parsererror")) schlecht.push(h); }
     return schlecht;
   });
   erwarte(kaputt.length === 0, "jedes Noto-Bild ist gültiges SVG-XML" + (kaputt.length ? ": " + kaputt.join(", ") : ""));
@@ -100,17 +101,18 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
   for (const s of ["spiele/sachkunde/", "spiele/mathe/", "spiele/garten/", "spiele/ich/"]) { await p.goto(BASIS + s); await p.waitForLoadState("load"); await p.waitForTimeout(400); }
   erwarte(await p.evaluate(() => document.querySelectorAll(".emo").length > 0), "weitere Seiten (Sachunterricht, Mathe, Garten, Meine Ecke) laufen mit den Bildern");
   if (BILDER) await p.screenshot({ path: `${BILDER}/bilder-ich.png` });
-  // Paket 5: icons.js kommt erst nach dem ersten Bild – bis dahin hält span.emo.warte den Platz in derselben Größe frei (Emoji des Geräts), dann kommt das Bild
+  // Paket 5: die Noto-Bilder kommen erst nach dem ersten Bild – bis dahin hält span.emo.warte den Platz in derselben Größe frei (Emoji des Geräts), dann kommt das Bild.
+  // Seit 07.11.2026 in Häppchen (shared/icons/<teil>.js): gesperrt werden alle Häppchen
   {
     const q = await ctx.newPage(); let freigeben; const gesperrt = new Promise(ok => { freigeben = ok; });
-    await q.route(/shared\/icons\.js/, async (r) => { await gesperrt; await r.continue(); });
+    await q.route(/shared\/icons\/[\w-]+\.js/, async (r) => { await gesperrt; await r.continue(); });
     await q.goto(BASIS + "spiele/sachkunde/", { waitUntil: "domcontentloaded" }); await q.waitForTimeout(800);   // „load“ wartet auf icons.js
     const vor = await q.evaluate(() => { const e = document.querySelector(".emo.warte:not(.fig)"); if (!e) return null; const r = e.getBoundingClientRect(), t = e.querySelector(".emo-t");
       return { n: document.querySelectorAll(".emo.warte").length, fig: document.querySelectorAll(".emo.fig > img").length, b: r.width, h: r.height, sichtbar: getComputedStyle(t).clipPath === "none", i: [...document.querySelectorAll(".emo")].indexOf(e) }; });
-    erwarte(vor && vor.n > 5 && vor.sichtbar && vor.fig >= 0, `vor icons.js: ${vor && vor.n} Emojis halten den Platz frei und zeigen das Geräte-Emoji (Begleiter sofort als Zeichnung)`);
-    freigeben(); await q.waitForFunction(() => window.LERN_ICONS && !document.querySelector(".emo.warte"), null, { timeout: 10000 });
+    erwarte(vor && vor.n > 5 && vor.sichtbar && vor.fig >= 0, `vor den Häppchen: ${vor && vor.n} Emojis halten den Platz frei und zeigen das Geräte-Emoji (Begleiter sofort als Zeichnung)`);
+    freigeben(); await q.waitForFunction(() => __emoji.teile().length > 0 && !document.querySelector(".emo.warte"), null, { timeout: 10000 });
     const nach = await q.evaluate((i) => { const e = document.querySelectorAll(".emo")[i], r = e.getBoundingClientRect(); return { b: r.width, h: r.height, img: !!e.querySelector(":scope > img") }; }, vor ? vor.i : 0);
-    erwarte(vor && nach.img && Math.abs(nach.b - vor.b) < 0.5 && Math.abs(nach.h - vor.h) < 0.5, `nach icons.js: Bild an derselben Stelle, gleiche Größe (${vor && vor.b.toFixed(1)} → ${nach.b.toFixed(1)} px)`);
+    erwarte(vor && nach.img && Math.abs(nach.b - vor.b) < 0.5 && Math.abs(nach.h - vor.h) < 0.5, `nach den Häppchen: Bild an derselben Stelle, gleiche Größe (${vor && vor.b.toFixed(1)} → ${nach.b.toFixed(1)} px)`);
     await q.close();
   }
   // Eltern-Wahl: Emojis des Geräts
