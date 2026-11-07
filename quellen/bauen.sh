@@ -16,6 +16,8 @@ cp "$ZW"/*.js spiele/welt3d/
 $ESBUILD quellen/welt3d/probe.js --bundle --format=esm --minify --target=es2020 --outfile=spiele/welt3d/probe.js --legal-comments=none
 cp quellen/three/LICENSE.txt spiele/welt3d/three-LICENSE.txt
 # sw.js: alte gemeinsam*-Einträge raus, aktuelle rein (vor der Zeile mit heimat.html)
-grep -v '"spiele/welt3d/gemeinsam' sw.js > sw.js.neu
+grep -v '^  "spiele/welt3d/gemeinsam' sw.js > sw.js.neu
 TEILE=$(cd spiele/welt3d && ls gemeinsam*.js | sed 's#^#  "spiele/welt3d/#; s#$#",#')
-awk -v teile="$TEILE" '/"spiele\/welt3d\/heimat.html"/ { print teile } { print }' sw.js.neu > sw.js && rm sw.js.neu
+awk -v teile="$TEILE" '/^  "spiele\/welt3d\/heimat.html"/ { print teile } { print }' sw.js.neu > sw.js && rm sw.js.neu
+# Prüfsummen der Offline-Liste nachziehen (Updates laden nur Geändertes, siehe quellen/sw-pruefsummen.js)
+node quellen/sw-pruefsummen.js >/dev/null

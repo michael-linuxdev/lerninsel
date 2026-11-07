@@ -402,8 +402,18 @@
 <script src="shared/szene.js"></script>
 <script src="shared/tiere.js"></script>
 <script src="shared/tierpflege.js"></script>
-<script src="shared/vendor/qrcodegen.js"></script>
-<script src="shared/spielstand.js" data-root="./"></script>
+<script>
+  // Spielstand sichern/übertragen (Paket 5, 07.11.2026): QR-Baustein und Übertragung erst beim Antippen von „Spielstand“ laden (~60 KB weniger vor dem ersten Bild).
+  // Spielstand.laden() → Promise mit dem echten Baustein (shared/spielstand.js); Spielstand.oeffnen() wie bisher.
+  (function () {
+    let laden = null;
+    const skript = (src, root) => new Promise((ok, fehler) => { const s = document.createElement("script"); s.src = src; s.async = false; if (root) s.dataset.root = root; s.onload = ok; s.onerror = fehler; document.head.appendChild(s); });
+    const stub = window.Spielstand = {
+      laden() { if (!laden) laden = Promise.all([skript("shared/vendor/qrcodegen.js"), skript("shared/spielstand.js", "./")]).then(() => window.Spielstand, (f) => { laden = null; throw f; }); return laden; },
+      oeffnen() { return stub.laden().then(S => { if (S && S !== stub) S.oeffnen(); }, () => { if (window.Spielwelt && Spielwelt.meldung) Spielwelt.meldung("Das hat nicht geklappt – bitte gleich noch einmal versuchen."); }); }
+    };
+  })();
+</script>
 <script>
   const S = Spielwelt;
   // Ersteinrichtung immer durch einen Erwachsenen

@@ -1656,7 +1656,22 @@ function regleAufloesung(dtEcht) {
   schlechtSek = 0;
   if (fps > 58 && aufl < AUFL_MAX && !sparen) { if (++gutSek >= 4) { gutSek = 0; aufl = Math.min(AUFL_MAX, aufl + 0.125); renderer.setPixelRatio(aufl); groesse(); try { localStorage.setItem(AUFL_KEY, String(aufl)); } catch (e) { /* egal */ } } } else gutSek = 0;
 }
+// Leerlauf (Paket 5, 07.11.2026): keine Eingabe seit 2,5 s, Figur steht, keine Szene, kein Sprung/Kameraflug, keine Wetter-Teilchen, kein Tanz/Herz –
+// dann reichen ~30 Bilder/s (Wolken, Windrad und Nachbarn bewegen sich ruhig weiter; spart auf dem iPad Akku und Wärme). Test-Haken __heimat.leerlauf().
+let letzteEingabe = performance.now(), letztesBild = 0, gedrosselt = false;
+for (const art of ["pointerdown", "pointermove", "keydown", "wheel", "touchstart"]) addEventListener(art, () => { letzteEingabe = performance.now(); }, { capture: true, passive: true });
+function leerlauf(jetzt) {
+  if (jetzt - letzteEingabe < 2500 || ziel || hoehe > 0 || vy !== 0 || fahrt || jetzt < tanzBis || herzListe.length || regen || schnee) return false;
+  if (window.Szene && window.Szene.laeuft) return false;
+  if (Math.hypot(eingabe.x, eingabe.z) > 0.12) return false;
+  for (const k in tasten) if (tasten[k]) return false;
+  return !(wetter && wetter.art === "gewitter");
+}
+const vorherPos = new Vector3();
 function bild() {
+  { const jetzt = performance.now(); gedrosselt = leerlauf(jetzt) && !window.__keinLeerlauf;
+    if (gedrosselt && jetzt - letztesBild < 1000 / 30 - 4) { requestAnimationFrame(bild); return; }
+    letztesBild = jetzt; }
   const dtEcht = uhr.getDelta(), dt = Math.min(dtEcht, 0.05), t = uhr.elapsedTime; bild.dt = dtEcht;
   const u = ich.userData; let geht = false;
   let ix = eingabe.x, iz = eingabe.z;
@@ -1679,7 +1694,7 @@ function bild() {
     if (d < 0.1) { ziel = null; marke.visible = false; if (ankunft) { const f = ankunft; ankunft = null; f(); } }
     else {
       geht = true; tmp.normalize();
-      const vorher = ich.position.clone();
+      const vorher = vorherPos.copy(ich.position);
       ich.position.addScaledVector(tmp, Math.min(d, 3.4 * TEMPO_FAKTOR * dt)); wegVonHindernissen(ich.position, 0.4);
       if (ich.position.distanceTo(vorher) < 0.2 * 3.4 * TEMPO_FAKTOR * dt) { ziel = null; marke.visible = false; if (ankunft) { const f = ankunft; ankunft = null; f(); } } // hängt fest
       const soll = Math.atan2(tmp.x, tmp.z); let diff = soll - ich.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff));
@@ -1734,7 +1749,7 @@ function bild() {
 
   if (!EINFACH && !RUHIG && !sparen) ZEIT.value = t;   // Wasser und Gras bewegen sich im Shader
   if (schnee) { const a = schnee.geometry.attributes.position; for (let i = 0; i < a.count; i++) { let y = a.getY(i) - dt * 1.2; if (y < 0) y = 16; a.setY(i, y); a.setX(i, a.getX(i) + Math.sin(t + i) * dt * 0.2); } a.needsUpdate = true; }
-  if (drinnen) { const gl = moebelObj && Object.values(moebelObj); gl.forEach(o => { if (o.userData.dreh) o.userData.dreh.rotation.y += dt * 0.5; if (o.userData.fische) o.userData.fische.children.forEach((f, i) => { f.position.x = Math.sin(t * (0.8 + i * 0.3) + i * 2) * 0.35; f.rotation.y = Math.cos(t * (0.8 + i * 0.3) + i * 2) > 0 ? 0 : Math.PI; }); }); }
+  if (drinnen) for (const id in moebelObj) { const o = moebelObj[id]; if (o.userData.dreh) o.userData.dreh.rotation.y += dt * 0.5; if (o.userData.fische) o.userData.fische.children.forEach((f, i) => { f.position.x = Math.sin(t * (0.8 + i * 0.3) + i * 2) * 0.35; f.rotation.y = Math.cos(t * (0.8 + i * 0.3) + i * 2) > 0 ? 0 : Math.PI; }); }
   pruefeNaehe();
   if (lichtStrahl.visible && !RUHIG) lichtStrahl.rotation.y += dt * 0.6;
   windrad.rotation.y += dt * (0.6 + Math.min(40, (wetter && wetter.wind) || 8) * 0.15);
@@ -1755,7 +1770,7 @@ function bild() {
   camera.lookAt(blick);
   sonne.position.set(ich.position.x + 10, 18, ich.position.z + 8); sonne.target.position.copy(ich.position);
   const mitSchatten = renderer.shadowMap.enabled && (bildNr++ & 1) === 0; if (mitSchatten) renderer.shadowMap.needsUpdate = true;   // Schatten jedes zweite Bild
-  regleAufloesung(bild.dt);
+  if (gedrosselt) { reglerZeit = 0; reglerBilder = 0; } else regleAufloesung(bild.dt);   // gedrosselte Bilder nicht als „zu langsam“ werten
   renderer.render(scene, camera);
   // Messung je Bildart (09.11.2026): renderer.info zählt im Schatten-Bild auch den Schattendurchlauf mit (≈ +55 Aufrufe, +60 000 Dreiecke) – der Leistungs-Test
   // traf bisher zufällig mal das eine, mal das andere Bild. info() liefert darum immer das Bild ohne Schattendurchlauf und daneben das mit (mitSchatten).
@@ -2148,3 +2163,4 @@ const meldungenWarten = (() => {
 })();
 window.__heimat = { meldungen: () => ({ warten: meldungenWarten.warten(), ruhig: meldungenWarten.ruhig(), steuerung: meldungenWarten.steuerung() }), extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
 Object.assign(window.__heimat, { story: () => STORY_FX.info(), festPunkte: () => STORY_FX.festPunkte(), schatzTippen: () => STORY_FX.schatzTippen() });   // Story-Bogen (07.11.2026)
+Object.assign(window.__heimat, { leerlauf: () => gedrosselt });   // Paket 5: Insel im Leerlauf ~30 Bilder/s

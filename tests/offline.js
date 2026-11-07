@@ -56,4 +56,20 @@ pruefe("Prüfliste Russisch: spiele/eltern/ru-texte.js ist aktuell (node quellen
   const r = require("child_process").spawnSync(process.execPath, [path.join(root, "quellen/ru-sammeln.js"), "--pruefen"], { encoding: "utf8" });
   assert.strictEqual(r.status, 0, (r.stderr || r.stdout).trim());
 });
+// Paket 5 (07.11.2026): Updates holen nur Dateien mit geänderter Prüfsumme – die Zeile PRUEFSUMMEN in sw.js muss zum Inhalt passen,
+// sonst richtet sich die neue Version auf keinem Gerät ein (der Service Worker prüft jede geholte Datei nach).
+pruefe("Prüfsummen in sw.js sind aktuell (node quellen/sw-pruefsummen.js, läuft in dev-bauen.sh) – auch in dev/ und dev/test/", () => {
+  for (const w of ["", "dev", "dev/test"]) {
+    if (w && !fs.existsSync(path.join(root, w, "sw.js"))) continue;
+    const r = require("child_process").spawnSync(process.execPath, [path.join(root, "quellen/sw-pruefsummen.js"), path.join(root, w), "--pruefen"], { encoding: "utf8" });
+    assert.strictEqual(r.status, 0, (r.stderr || r.stdout).trim());
+  }
+});
+// Obergrenze für das Offline-Paket (Paket 5): alles, was ein Tablet beim ersten Start lädt. Gemessen 07.11.2026: ca. 7,5 MB (vorher 7,9 MB).
+const GRENZE_MB = 9;
+pruefe(`Offline-Paket höchstens ${GRENZE_MB} MB`, () => {
+  const mb = [...new Set(liste.map(norm))].reduce((s, e) => s + fs.statSync(path.join(root, e)).size, 0) / 1048576;
+  console.log(`    (${mb.toFixed(2)} MB)`);
+  assert.ok(mb <= GRENZE_MB, `Offline-Paket ${mb.toFixed(2)} MB > ${GRENZE_MB} MB – große Dateien prüfen (shared/icons.js, Fachdaten)`);
+});
 console.log(`✅ Offline-Liste: ${n} Prüfungen bestanden (${liste.length} Einträge).`);
