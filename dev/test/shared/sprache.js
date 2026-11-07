@@ -131,8 +131,19 @@
       .ru-auf[hidden] { display: none; }`;
     document.head.appendChild(st);
     ruMarkiere(document.body);
-    new MutationObserver(m => m.forEach(x => x.addedNodes.forEach(n => { if (n.nodeType === 1) ruMarkiere(n); else if (n.parentElement) ruMarkiere(n.parentElement); })))
-      .observe(document.body, { childList: true, subtree: true });
+    // (Paket 5) Änderungen gesammelt in einer Mikroaufgabe bearbeiten (noch vor dem nächsten Bild, also ohne Aufblitzen versteckter Zeilen);
+    // Emoji-Bilder (span.emo und ihr Inhalt) sind nie russische Zeilen und werden übersprungen
+    let ruOffen = new Set(), ruGeplant = false;
+    const emoTeil = (n) => n.nodeType === 1 ? n.classList.contains("emo") || (n.parentElement && n.parentElement.classList.contains("emo")) : !!(n.parentElement && n.parentElement.closest && n.parentElement.closest(".emo"));
+    new MutationObserver(m => {
+      for (const x of m) for (const n of x.addedNodes) {
+        if (emoTeil(n)) continue;
+        const el = n.nodeType === 1 ? n : n.parentElement; if (el) ruOffen.add(el);
+      }
+      if (!ruOffen.size || ruGeplant) return;
+      ruGeplant = true;
+      queueMicrotask(() => { ruGeplant = false; const l = ruOffen; ruOffen = new Set(); l.forEach(el => { if (el.isConnected) ruMarkiere(el); }); });
+    }).observe(document.body, { childList: true, subtree: true });
     document.addEventListener("click", (e) => { const auf = e.target.closest && e.target.closest(".ru-auf");
       if (auf) { e.stopPropagation(); e.preventDefault(); const el = auf.nextElementSibling; if (el) { el.classList.remove("ru-zu"); auf.hidden = true; ruSprich(el); } return; } }, true);
     document.addEventListener("click", (e) => { const el = e.target.closest && e.target.closest(".ru-hoerbar"); if (!el) return; e.stopPropagation(); ruSprich(el);

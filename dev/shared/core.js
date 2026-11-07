@@ -121,6 +121,20 @@
   }
   addEventListener("error", (e) => { if (e && e.message) protokoll("fehler", `${e.message} (${String(e.filename || "").split("/").slice(-2).join("/")}:${e.lineno || 0})`); });
   addEventListener("unhandledrejection", (e) => { const r = e && e.reason; protokoll("fehler", "Promise: " + (r && r.message ? r.message : String(r))); });
+  // Eigene Idee (Paket 5, 07.11.2026): langsame Seiten auf dem echten Gerät merken – die Messungen im Test laufen auf einem PC mit gedrosselter CPU,
+  // so sieht man im Elternbereich (Technik & Speicher), ob das Tablet selbst zu kämpfen hat. Gemessen: Zeit bis die Seite aufgebaut ist
+  // (DOMContentLoaded) und ob danach ein Bild länger als 1 s hing. Nur lokal, gleiche Einträge werden gezählt. Test-Haken window.__langsamAb (ms).
+  addEventListener("load", () => setTimeout(() => {
+    try {
+      const ab = window.__langsamAb || 3000, n = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+      if (n && document.visibilityState === "visible" && n.domContentLoadedEventEnd > ab) protokoll("langsam", `Seitenaufbau dauerte über ${Math.round(ab / 1000)} s`);
+      // ein Bild, das in den ersten 10 Sekunden länger als 1 s hing (z. B. großer Baustein beim Start)
+      let letzte = performance.now(); const bis = letzte + 10000, haenger = window.__haengerAb || 1000;
+      const schau = () => { const j = performance.now(); if (document.visibilityState === "visible" && j - letzte > haenger) { protokoll("langsam", `Bild hing über ${String(Math.round(haenger / 100) / 10).replace(".", ",")} s`); return; } letzte = j; if (j < bis) requestAnimationFrame(schau); };
+      requestAnimationFrame(schau);
+      document.addEventListener("visibilitychange", () => { letzte = performance.now(); });
+    } catch (e) { /* nur eine Hilfe */ }
+  }, 0));
   let speicherVollGemeldet = false;
   function lokalSchreiben(p) {
     const ok = schreibenK(KEY, p);
@@ -276,6 +290,16 @@
     ? navigator.storage.persisted().then(ja => ja || navigator.storage.persist()).catch(() => false)
     : Promise.resolve(false);
 
+  // gesehene Hilfezeilen (NA-54) je Kind: einmal je Seite lesen, dann im Speicher halten (Paket 5)
+  let gesehenCache = null;
+  function gesehen() {
+    const k = PRE + "hilfe-gesehen." + haushalt.aktiv;
+    if (!gesehenCache || gesehenCache.k !== k) {
+      let liste = []; try { liste = JSON.parse(localStorage.getItem(k) || "[]"); if (!Array.isArray(liste)) liste = []; } catch (e) { liste = []; }
+      gesehenCache = { k, liste, set: new Set(liste) };
+    }
+    return gesehenCache;
+  }
   const Spielwelt = {
     config: cfg,
     test: TEST,
@@ -383,12 +407,29 @@
     hilfeDosis() { const k = Spielwelt.kind(), d = k.hilfedosis; if (["immer", "neu", "knopf"].includes(d)) return d;
       return ({ keine: "immer", wenig: "immer", alltag: "neu", gut: "knopf" })[k.deutschstand] || "immer"; },
     // schon gesehene Hilfezeilen (Prüfsummen) je Kind – nur lokal, nicht im Spielstand (höchstens 3000)
-    hilfeGesehen(h) { try { return (JSON.parse(localStorage.getItem(PRE + "hilfe-gesehen." + haushalt.aktiv) || "[]")).includes(h); } catch (e) { return false; } },
-    merkeHilfe(h) { try { const k = PRE + "hilfe-gesehen." + haushalt.aktiv, l = JSON.parse(localStorage.getItem(k) || "[]"); if (l.includes(h)) return; l.push(h); localStorage.setItem(k, JSON.stringify(l.slice(-3000))); } catch (e) { /* voll: dann eben immer neu */ } },
+    // (Paket 5) einmal je Seite und Kind gelesen und als Set gehalten (vorher bei jeder Zeile bis zu 3000 Einträge geparst)
+    hilfeGesehen(h) { return gesehen().set.has(h); },
+    merkeHilfe(h) { const g = gesehen(); if (g.set.has(h)) return; g.set.add(h); g.liste.push(h); if (g.liste.length > 3000) { g.liste.splice(0, g.liste.length - 3000); g.set = new Set(g.liste); }
+      try { localStorage.setItem(g.k, JSON.stringify(g.liste)); } catch (e) { /* voll: dann eben immer neu */ } },
     // Hilfetext zu einem Feld: ht(o) → o.ru, ht(o, "warum") → o.warumRu (je nach gewählter Sprache)
     ht(o, feld) { const h = Spielwelt.hilfe(); if (!h || !o) return ""; const k = feld ? feld + h.code[0].toUpperCase() + h.code.slice(1) : h.code; return o[k] || ""; },
     // Feste Textpaare: [deutsch, russisch] (alt) oder { de, ru, uk } → [deutsch, hilfe]
-    paar(x) { const h = Spielwelt.hilfe(); if (Array.isArray(x)) return [x[0], h && h.code === "ru" ? x[1] || "" : ""]; return [x.de, h ? x[h.code] || "" : ""]; },
+    paar(x) { const h = Spielwelt.hilfe(); if (Array.isArray(x)) return [x[0], h && h.code === "ru" ? Spielwelt.ruDu(x[1] || "") : ""]; return [x.de, h ? (h.code === "ru" ? Spielwelt.ruDu(x[h.code] || "") : x[h.code] || "") : ""]; },
+    // Russisch spricht das Kind in der Vergangenheit je nach Geschlecht an (07.11.2026): Entwürfe schreiben beide Formen –
+    // „научился(-ась)“, „сделал(а)“, „приглашён(а)“, „вырос(ла)“, „нашёл (нашла)“. Mit der Ansprache Junge/Mädchen im Elternbereich
+    // steht nur die passende Form da, bei „keine Angabe“ bleiben beide. g = "m" | "w" | "n" (Standard: Ansprache des Kindes).
+    ruDu(t, g) {
+      if (!t) return t || "";
+      g = g || Spielwelt.kind().geschlecht;
+      if (g !== "m" && g !== "w") return t;
+      return String(t)
+        .replace(/([а-яё]{3,}) \(([а-яё]{3,})\)/gi, (x, m, w) => m.slice(0, 2).toLowerCase() === w.slice(0, 2).toLowerCase() ? (g === "m" ? m : w) : x)
+        .replace(/([а-яё]{3,})\((-?)([а-яё]{1,3})\)/gi, (x, wort, strich, endung) => {
+          if (g === "m") return wort;
+          if (strich) return /ся$/.test(wort) ? wort.slice(0, -2) + endung : wort + endung;   // научился(-ась) → научилась
+          return (wort + endung).replace(/ёна$/, "ена");                                        // приглашён(а) → приглашена
+        });
+    },
     setzeName(n) {
       const name = sauber(n); speichernFest(p => { p.name = name; });
       const e = haushalt.kinder.find(k => k.id === haushalt.aktiv); if (e && e.name !== name) { e.name = name; haushaltSpeichern(); }
@@ -529,6 +570,9 @@
   document.addEventListener("visibilitychange", () => { if (!document.hidden && Spielwelt._ctx && Spielwelt._ctx.state !== "running") Spielwelt._ctx.resume(); });
 
   window.Spielwelt = Spielwelt;
+  // Elternbereich verlassen = abmelden (07.11.2026): Öffnet sich irgendeine andere Seite der App, endet die Eltern-Anmeldung
+  // (sessionStorage <vorsilbe>eltern). Neuladen und Wege innerhalb von spiele/eltern/ halten sie (dort 15 Minuten).
+  if (!/\/spiele\/eltern\//.test(location.pathname)) { try { sessionStorage.removeItem(PRE + "eltern"); } catch (e) { /* egal */ } }
 
   if (TEST) {
     const banner = () => {
@@ -579,28 +623,63 @@
     // Figuren immer (Begleiter-Zeichen → Zeichnung, Figuren.ZEICHEN), Noto-Bilder nur ohne Eltern-Wahl „Emojis des Geräts“
     if (!window.FigurenNeu) lade("shared/figuren.js");
     const mitBildern = ((profil.daten.eltern || {}).bilder) !== "geraet" && !window.__ohneBilder;
-    // EmojiBereit: für Canvas/3D (wartet, bis EmojiBild da ist)
-    window.EmojiBereit = new Promise((fertig) => { if (mitBildern) lade("shared/icons.js"); lade("shared/emoji.js", () => fertig(window.EmojiBild || null)); });
+    // EmojiBereit: für Canvas/3D (wartet, bis EmojiBild da ist; EmojiBild.lade wartet selbst auf die Noto-Bilder)
+    // Paket 5 (07.11.2026): shared/icons.js (2,7 MB) nicht mehr synchron vor dem ersten Bild – erst die kleine Liste (icons-liste.js: welche
+    // Emojis ein Bild haben, emoji.js hält ihnen den Platz frei), die Bilder selbst nach dem ersten Bild der Seite.
+    window.EmojiBereit = new Promise((fertig) => { if (mitBildern) lade("shared/icons-liste.js"); lade("shared/emoji.js", () => fertig(window.EmojiBild || null)); });
+    if (mitBildern) {
+      const spaeter = () => {
+        const s = document.createElement("script"); s.src = wurzel + "shared/icons.js"; s.async = true;
+        s.onload = () => { window.EmojiBereit.then(() => { if (window.__emoji && __emoji.iconsDa) __emoji.iconsDa(); }); };
+        s.onerror = () => { window.EmojiBereit.then(() => { if (window.__emoji && __emoji.iconsDa) __emoji.iconsDa(); }); };
+        document.head.appendChild(s);
+      };
+      // nach dem ersten Bild (zwei requestAnimationFrame = das erste Bild ist gemalt); im Hintergrund-Tab ohne Bilder spätestens nach 1 s
+      let los = false; const einmal = () => { if (!los) { los = true; spaeter(); } };
+      requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(einmal, 0))); setTimeout(einmal, 1000);
+    }
   }
-  if ("serviceWorker" in navigator && location.protocol === "https:") {
+  // Service Worker nur über https (im Test auf localhost mit window.__mitSW, tests/swupdate.js)
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || (window.__mitSW && location.hostname === "localhost"))) {
     const tiefe = (document.currentScript && document.currentScript.dataset.root) || "./";
-    navigator.serviceWorker.register(tiefe + "sw.js").catch(() => {});
-    // Neue Version (02.11.2026, Vorbild Bastion: nie still mitten in der Sitzung): Die offene Seite rechnet mit ihrem Stand zu Ende;
-    // der neue Stand gilt ab der nächsten Seite. Wir sagen es einmal freundlich an – auf der Startseite mit Knopf zum Neuladen.
-    // (skipWaiting bleibt: Seiten kommen zuerst aus dem Netz, Skripte aus dem Speicher – so passen HTML und Skripte immer zusammen.)
-    const hatteSW = !!navigator.serviceWorker.controller;
+    // Neue Version (Paket 5, 07.11.2026): Jede Version liegt vollständig in einem eigenen Cache; Seiten UND Skripte kommen immer aus dem
+    // Cache der Version, die die Seite ausliefert (sw.js) – nie gemischt. Eine neue Version wird im Hintergrund vorbereitet (nur geänderte
+    // Dateien) und wartet. Aktiv wird sie beim nächsten Start der App, oder hier auf der Startseite, wenn sie die einzige offene Seite ist:
+    // gleich nach dem Öffnen still (Neuladen), später mit Knopf „Jetzt aktualisieren“. Auf anderen Seiten wird nie umgestellt.
+    const start = /\/(index\.html)?$/.test(location.pathname) && !location.pathname.includes("/spiele/");
+    const hatteSW = !!navigator.serviceWorker.controller, geoeffnet = performance.now();
+    let gebeten = false;
+    const bitte = (w) => { if (!w || !hatteSW) return; gebeten = true; w.postMessage({ typ: "aktivieren" }); };
+    const banner = (w) => {
+      if (!document.body || document.getElementById("neue-version")) return;
+      const k = document.createElement("div"); k.id = "neue-version"; k.className = "neue-version";
+      k.innerHTML = `<span>✨ Es gibt eine neue Version der Lerninsel.</span><button class="knopf haupt" id="nv-jetzt">Jetzt aktualisieren</button><button class="knopf" id="nv-spaeter">Später</button>`;
+      k.style.cssText = "position:fixed;inset-inline:12px;inset-block-end:12px;z-index:50;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;background:#fff;border-radius:22px;padding:12px 16px;box-shadow:0 6px 0 rgba(59,31,99,.18),0 0 0 3px #3B1F63;font-weight:600";
+      document.body.appendChild(k);
+      k.querySelector("#nv-jetzt").addEventListener("click", () => { if (w) bitte(w); else location.reload(); });
+      k.querySelector("#nv-spaeter").addEventListener("click", () => k.remove());
+    };
+    // wartende Version: gleich nach dem Öffnen der Startseite still übernehmen, sonst freundlich fragen
+    const wartet = (w) => { if (!start || !w || !hatteSW) return; if (performance.now() - geoeffnet < 4000) bitte(w); else banner(w); };
+    navigator.serviceWorker.register(tiefe + "sw.js", { updateViaCache: "none" }).then((reg) => {
+      window.__swReg = reg;
+      wartet(reg.waiting);
+      reg.addEventListener("updatefound", () => {
+        const w = reg.installing; if (!w) return;
+        w.addEventListener("statechange", () => { if (w.state === "installed" && navigator.serviceWorker.controller) wartet(w); });
+      });
+    }).catch(() => {});
+    navigator.serviceWorker.addEventListener("message", (e) => {
+      if (e.data && e.data.typ === "warten" && window.Spielwelt && Spielwelt.meldung) Spielwelt.meldung("✨ Die neue Version startet, sobald die anderen Lerninsel-Fenster zu sind.");
+    });
     navigator.serviceWorker.addEventListener("controllerchange", () => {
       if (!hatteSW || window.__neueVersionGemeldet) return;
       window.__neueVersionGemeldet = true;
-      const start = /\/(index\.html)?$/.test(location.pathname) && !location.pathname.includes("/spiele/");
-      if (start && document.body) {
-        const k = document.createElement("div"); k.id = "neue-version"; k.className = "neue-version";
-        k.innerHTML = `<span>✨ Es gibt eine neue Version der Lerninsel.</span><button class="knopf haupt" id="nv-jetzt">Jetzt aktualisieren</button><button class="knopf" id="nv-spaeter">Später</button>`;
-        k.style.cssText = "position:fixed;inset-inline:12px;inset-block-end:12px;z-index:50;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;background:#fff;border-radius:22px;padding:12px 16px;box-shadow:0 6px 0 rgba(59,31,99,.18),0 0 0 3px #3B1F63;font-weight:600";
-        document.body.appendChild(k);
-        k.querySelector("#nv-jetzt").addEventListener("click", () => location.reload());
-        k.querySelector("#nv-spaeter").addEventListener("click", () => k.remove());
-      } else if (window.Spielwelt && Spielwelt.meldung) Spielwelt.meldung("✨ Neue Version geladen – sie gilt ab der nächsten Seite.");
+      // Nur die Startseite bittet darum – sie lädt mit der neuen Version neu. (Andere Seiten: sollte nicht vorkommen; dann gilt sie ab der nächsten Seite.)
+      // gerade geöffnet (Umstellung beim Seitenwechsel) oder selbst gebeten: neu laden, damit Seite und Skripte zur neuen Version passen
+      if (start && (gebeten || performance.now() - geoeffnet < 10000)) location.reload();
+      else if (start) banner(null);
+      else if (window.Spielwelt && Spielwelt.meldung) Spielwelt.meldung("✨ Neue Version geladen – sie gilt ab der nächsten Seite.");
     });
   }
 })();
@@ -652,12 +731,23 @@
     requestAnimationFrame(() => { geplant = false; document.querySelectorAll(WAHL).forEach(gleiche); });
   }
   window.RasterAusgleich = { alle, gleiche };
+  // (Paket 5, 07.11.2026) nur noch bei Größen- oder Inhaltsänderung statt nach jedem Klick: ein ResizeObserver je Raster meldet, wenn sich die
+  // Breite ändert (auch sichtbar werden nach Reiter/Aufklappen: 0 → Breite); neue Raster und Kacheln meldet der MutationObserver, versteckte Kacheln das Attribut hidden.
+  const breite = new WeakMap(), beobachtet = new WeakSet();
+  const ro = window.ResizeObserver ? new ResizeObserver(eintraege => {
+    let neu = false;
+    for (const e of eintraege) { const b = Math.round(e.contentRect.width); if (breite.get(e.target) !== b) { breite.set(e.target, b); neu = true; } }
+    if (neu) alle();
+  }) : null;
+  const beobachte = () => { if (ro) document.querySelectorAll(WAHL).forEach(el => { if (!beobachtet.has(el)) { beobachtet.add(el); ro.observe(el); } }); };
   const los = () => {
-    alle();
-    new MutationObserver(m => { if (m.some(x => x.type === "childList" && (x.target.matches?.(WAHL) || [...x.addedNodes].some(a => a.nodeType === 1 && (a.matches(WAHL) || a.querySelector?.(WAHL)))))) alle(); })
-      .observe(document.body, { childList: true, subtree: true });
+    alle(); beobachte();
+    new MutationObserver(m => {
+      if (m.some(x => x.type === "attributes" ? x.target.parentElement && x.target.parentElement.matches?.(WAHL)
+        : (x.target.matches?.(WAHL) || [...x.addedNodes].some(a => a.nodeType === 1 && (a.matches(WAHL) || a.querySelector?.(WAHL)))))) { alle(); beobachte(); }
+    }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["hidden"] });
     addEventListener("resize", alle);
-    addEventListener("click", () => setTimeout(alle, 30), true);   // Reiter/aufklappen: Raster werden erst dann sichtbar
+    if (!ro) addEventListener("click", () => setTimeout(alle, 30), true);   // ältere Geräte ohne ResizeObserver: wie bisher nach jedem Klick
   };
   if (document.body) los(); else document.addEventListener("DOMContentLoaded", los);
 })();

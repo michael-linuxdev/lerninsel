@@ -21,7 +21,7 @@
     $("ton-vorlesen").textContent = d.vorlesen ? "🔊" : "🔇";
     $("intro-text").textContent = fertig ? `Toll, ${name()}! Du hast schon ${fertig} von ${A.length} Rucksack-Spielen geschafft.`
       : `Hallo ${name()}! Bald kommst du in die Schule. In deinem Rucksack sind Spiele zum Zählen, Hören, Entdecken und Malen. Tipp auf ein Bild!`;
-    $("bereiche").innerHTML = B.map(b => `<section class="bereich" style="--f:${b.farbe}" data-bereich="${b.id}"><h2>${b.e} ${b.name}</h2><p class="klein">${b.text}</p><div class="kacheln">` +
+    $("bereiche").innerHTML = B.map(b => `<section class="bereich" style="--f:${b.farbe}" data-bereich="${b.id}"${b.bildung ? ` title="${b.bildung}"` : ""}><h2>${b.e} ${b.name}</h2><p class="klein">${b.text}</p><div class="kacheln">` +
       A.filter(a => a.bereich === b.id).map(a => `<button class="kachel" data-id="${a.id}" aria-label="${a.name}"><span class="e" aria-hidden="true">${a.e}</span>${a.name}<span class="st">${d.fertig[a.id] ? [1, 2, 3].map(n => `<span class="${n <= d.fertig[a.id] ? "" : "leer"}">⭐</span>`).join("") : ""}</span></button>`).join("") +
       b.links.map(([href, t, e]) => `<a class="kachel link" href="../../${href}"><span class="e" aria-hidden="true">${e}</span>${t}</a>`).join("") + `</div></section>`).join("");
     document.querySelectorAll(".kachel[data-id]").forEach(k => k.addEventListener("click", () => { S.ton("tipp"); starte(k.dataset.id); }));
@@ -109,5 +109,9 @@
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); });
 
   zeichneListe();
+  // Eigene Idee (Paket 2): 🔊 liest die Spiele nacheinander vor (Kachel leuchtet), Fipsi antippen liest die Begrüßung
+  if (window.Vorleser) { Vorleser.kacheln($("was-hier"), () => [...document.querySelectorAll(".kachel[data-id]")]); Vorleser.begleiter($("intro-fipsi"), () => $("intro-text").textContent); $("intro-fipsi").setAttribute("aria-label", "Fipsi: vorlesen"); }
+  // „Los!“ von der Startseite (Paket 2 „Ohne Lesen bedienbar“, 07.11.2026): gleich das nächste offene Spiel starten (sonst das erste)
+  if (new URLSearchParams(location.search).has("los")) { history.replaceState(null, "", location.pathname); const n = A.find(x => !daten().fertig[x.id]) || A[0]; if (n) starte(n.id); }
   window.__vorschule = { starte, get lauf() { return lauf; }, schritt: (n) => { lauf.pos = n; schritt(); }, daten, alle: () => A.map(a => a.id) };
 })();

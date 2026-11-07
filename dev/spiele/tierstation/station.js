@@ -26,7 +26,7 @@
       pflege: { f: "Was braucht der Frosch jetzt?", ru: "Что сейчас нужно лягушке?", o: ["💧 feuchte Haut – etwas Wasser", "☀️ pralle Sonne", "🔥 die Heizung"], w: "Frösche brauchen feuchte Haut, sonst trocknen sie aus." },
       ort: { f: "Wo lassen wir den Frosch frei?", ru: "Где мы выпустим лягушку?", o: ["💧 am Teich", "🏜️ auf dem Sandweg", "🌲 oben im Baum"], w: "Frösche leben am und im Wasser." } },
     { id: "kitz", g: "n", name: "Rehkitz", e: "🦌", ab: 1, lz: "su.na.08", sonder: true, wo: "🌾 im hohen Gras", warum: "Ein Rehkitz liegt ganz allein im Gras.",
-      frage: { f: "Ein Rehkitz liegt allein im Gras. Was ist richtig?", ru: "Оленёнок лежит один в траве. Как правильно?", o: ["🙌 Nicht anfassen – die Mutter kommt wieder", "🤗 Mitnehmen und streicheln", "🍼 Milch geben"], w: "Die Reh-Mutter versteckt ihr Kitz und kommt zum Säugen zurück. Riecht es nach Menschen, kann sie es nicht mehr annehmen." } },
+      frage: { f: "Ein Rehkitz liegt allein im Gras. Was ist richtig?", ru: "Оленёнок лежит один в траве. Как правильно?", o: ["🙌 Nicht anfassen – die Mutter kommt wieder", "🤗 Mitnehmen und streicheln", "🍼 Milch geben"], w: "Nicht anfassen! Die Mutter kommt zurück. Wir schauen nur von weitem.", wRu: "Не трогать! Мама вернётся. Мы смотрим только издалека." } },
     { id: "fledermaus", g: "f", name: "Fledermaus", e: "🦇", ab: 2, lz: "su.na.08", wo: "🏚️ im alten Dachboden", warum: "Die Fledermaus ist im Winter aufgewacht und hat sich verflogen.",
       futter: { f: "Was frisst eine Fledermaus bei uns?", ru: "Что ест летучая мышь у нас?", o: ["🦟 Insekten", "🍓 Erdbeeren", "🥜 Erdnussbutter"], w: "Unsere Fledermäuse fangen nachts Mücken und Nachtfalter." },
       pflege: { f: "Was braucht die Fledermaus im Winter?", ru: "Что нужно летучей мыши зимой?", o: ["😴 einen kühlen, ruhigen Platz zum Schlafen", "💡 helles Licht", "🎉 eine Party"], w: "Fledermäuse halten Winterschlaf an kühlen, ruhigen Orten." },
@@ -56,7 +56,8 @@
   const meinTier = () => { const P = window.TierPflege; if (!P) return null; const t = P.lade(); return t && t.phase === "tier" ? (t.name || "Dein Tier") : null; };
 
   function sage(de, ru) { $("bruni-text").innerHTML = esc(de) + (S.hilfe() && ru ? `<span class="ru">${esc(ru)}</span>` : ""); $("bruni-text").dataset.text = de; }
-  function hinweis(t, art) { const h = $("hinweis"); h.textContent = t; h.className = "hinweis " + (art || ""); }
+  function hinweis(t, art, ru) { const h = $("hinweis"); h.textContent = t; h.className = "hinweis " + (art || "");
+    if (ru && S.hilfe()) { const z = document.createElement("span"); z.className = "ru"; z.style.display = "block"; z.textContent = ru; h.appendChild(z); } }
   function knoepfe(html) { $("aktionen").innerHTML = html; }
 
   function zeichne() {
@@ -109,7 +110,7 @@
       if (!richtig) { versucht = true; b.classList.add("falsch"); b.disabled = true; S.ton("nein"); hinweis("Hm, überleg nochmal. Was ist gut für das Tier?", "nein"); return; }
       b.classList.add("richtig"); S.ton("juhu"); $("frage").querySelectorAll("button").forEach(x => { x.disabled = true; });
       if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1);
-      hinweis("💡 " + q.w, "ja");
+      hinweis("💡 " + q.w, "ja", q.wRu);
       knoepfe(`<button class="knopf haupt" id="weiter" style="min-height:60px">Weiter ➡️</button>`);
       $("weiter").addEventListener("click", () => {
         if (fertig) return fertig();

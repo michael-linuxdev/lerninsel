@@ -55,6 +55,13 @@
   .info { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
   .info p { margin: 10px 0 0; font-weight: 500; }
   /* Inselchronik (NA-18): jede gesehene Szene noch einmal ansehen */
+  /* Wörterbuch der Insel (07.11.2026, Kapitel 8) */
+  .wb { display: grid; gap: 14px; max-width: 860px; margin: 0 auto; }
+  .wb-gruppe h3 { margin: 0 0 6px; font-size: 1.5rem; color: var(--pflaume, #3B1F63); }
+  .wb-woerter { display: flex; flex-wrap: wrap; gap: 8px; }
+  .wb-wort { display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 6px 14px; border-radius: 16px; border: 3px solid #3B1F63; background: #fff; font: inherit; font-size: 1.15rem; box-shadow: 0 4px 0 #3B1F63; cursor: pointer; }
+  .wb-wort i { font-style: normal; font-weight: 700; }
+  .wb-e { font-size: 1.5rem; }
   .chronik { display: grid; gap: 12px; max-width: 760px; margin: 0 auto; padding: 0; list-style: none; }
   .chronik li { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 22px; padding: 10px 14px; box-shadow: 0 5px 0 rgba(0,0,0,.07); }
   .chronik .kopf { width: 64px; height: 64px; flex: none; border-radius: 18px; background: #FFF4E0; display: grid; place-items: center; font-size: 2.2rem; overflow: hidden; }
@@ -70,7 +77,7 @@
 </head>
 <body>
 <div class="oben">
-  <a class="knopf rund" id="zurueck" href="../ich/" aria-label="Zurück">⬅️</a>
+  <a class="knopf rund" id="zurueck" href="../ich/" aria-label="Zurück zu meiner Ecke">⬅️</a><a class="knopf rund heim-zusatz" href="../../" aria-label="Zur Startseite">🏠</a>
   <h1>📒 Stickeralbum</h1>
   <div class="knopf zaehler" id="zaehler"></div>
 </div>
@@ -88,6 +95,9 @@
 <script src="../../shared/zeit.js" data-art="neutral"></script>
 <script src="../../shared/sprache.js"></script>
 <script src="../../shared/sticker.js"></script>
+<script src="../../shared/lernfunde.js"></script>
+<script src="../deutsch/geschichte.js"></script>
+<script src="../../shared/woerterbuch.js"></script>
 <script src="../../shared/figuren.js"></script>
 <script src="../../shared/zeige.js"></script>
 <script src="../../shared/szene.js"></script>

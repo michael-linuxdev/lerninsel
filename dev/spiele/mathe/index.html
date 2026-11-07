@@ -54,6 +54,15 @@
   .station .stern-reihe .leer { filter: grayscale(1); opacity: .3; }
   .station.jetzt .kreis { background: var(--beere); box-shadow: inset 0 0 0 6px rgba(255,255,255,.45), 0 7px 0 #8E1F58; animation: puls 1.6s ease-in-out infinite; }
   @keyframes puls { 50% { transform: scale(1.07); } }
+  /* Paket 2 „Ohne Lesen bedienbar“ (07.11.2026): Hand über der nächsten Station, andere offene ungespielte Stationen heller */
+  .station .hier { position: absolute; top: 26px; left: -22px; font-size: 2.4rem; line-height: 1; animation: zeige-hand 1.2s ease-in-out infinite; pointer-events: none; z-index: 1; }
+  @keyframes zeige-hand { 50% { transform: translateX(10px); } }
+  @media (max-width: 480px) { .station .hier { left: -26px; top: 20px; font-size: 2rem; } }
+  .station.dezent .kreis { background: #A9E2CC; box-shadow: inset 0 0 0 6px rgba(255,255,255,.55), 0 7px 0 #8CCDB4; }
+  .station.dezent .name { opacity: .8; }
+  .vorlesen-tafel { flex: none; background: #E9F3FF; }
+  /* Handy: der 🔊-Knopf nimmt Platz in der Kopfzeile – der Stationsname bleibt einzeilig (mit …), damit die Tafel nicht kleiner wird (Test „tafel“) */
+  @media (max-width: 520px) { #rechnen-ansicht .oben h1 { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } #rechnen-ansicht .oben { gap: 8px; } .vorlesen-tafel { width: 48px; height: 48px; min-height: 48px; font-size: 1.3rem; } }
   .station.zu .kreis { background: #B9C7C1; box-shadow: inset 0 0 0 6px rgba(255,255,255,.45), 0 7px 0 #93A39C; font-size: 1.9rem; }
   .station.zu .name { opacity: .7; }
   .station.ziel .kreis { background: var(--sonne); box-shadow: inset 0 0 0 6px rgba(255,255,255,.5), 0 7px 0 #C79512; }
@@ -251,7 +260,7 @@
 
 <section class="ansicht" id="weg-ansicht">
   <div class="oben">
-    <a class="knopf rund" href="../../" aria-label="Zur Spielwelt">🏠</a>
+    <a class="knopf rund" href="../../" aria-label="Zur Startseite">🏠</a>
     <h1>Matheweg</h1>
     <div class="knopf sterne">⭐ <b id="sterne">0</b></div>
   </div>
@@ -269,6 +278,7 @@
   <div class="oben">
     <button class="knopf rund" id="zum-weg" aria-label="Zum Matheweg">⬅️</button>
     <h1 id="station-name"></h1>
+    <button class="knopf rund vorlesen-tafel" id="tafel-hoer" aria-label="Aufgabe vorlesen">🔊</button>
     <div class="punkte" id="punkte" aria-hidden="true"></div>
   </div>
   <div class="rechnen">
@@ -298,6 +308,7 @@
 <script src="../../shared/zeit.js" data-art="lernen"></script>
 <script src="../../shared/figuren.js"></script>
 <script src="../../shared/sprache.js"></script>
+<script src="../../shared/vorleser.js"></script>
 <script src="../../shared/koennen.js"></script>
 <script src="aufgaben.js"></script>
 <script src="fehler.js"></script>

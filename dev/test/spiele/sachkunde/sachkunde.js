@@ -80,6 +80,7 @@
     $("intro-text").textContent = fertig === 0 ? (FACH ? `Hallo ${name()}! ${religion ? "Du hast in der Schule Religion – die Religionsthemen findest du oben unter „Religion“. Hier in Ethik gibt es noch mehr zum Nachdenken: Feste, Religionen und unser Miteinander." : FS[FACH].intro}` : `Hallo ${name()}! Ich bin Eule Ella. Mit mir entdeckst du spannende Dinge über die Welt.`)
       : `Du hast schon ${fertig} ${fertig === 1 ? "Thema" : "Themen"} entdeckt. Bald kommen neue dazu!`;
     $("themen").innerHTML = "";
+    nachfrageKarte();
     const klasse = ((S.stufe && S.stufe()) || {}).klasse || 2;
     const kachel = (t, i) => {
       const best = bestes(t.id);
@@ -137,8 +138,8 @@
   }
 
   function starte(i) {
-    const t = TH[i].lernstand ? TH[i] : mitWiederholung(TH[i]);
-    lauf = { i, t, pos: 0, fehler: 0, falsch: new Set() };
+    const t = TH[i].lernstand || TH[i].nachfrage ? TH[i] : mitWiederholung(TH[i]);
+    lauf = { i, t, pos: 0, fehler: 0, falsch: new Set(), transferFalsch: new Set() };
     document.body.style.setProperty("--grund", t.grund);
     document.body.style.setProperty("--akzent", t.farbe);
     document.body.classList.toggle("breit", !!t.stammbaum);
@@ -183,6 +184,7 @@
         if (!versucht) {
           if (!(sj && sj.__karte)) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
           if (sj && sj.__kap) lauf.falsch.add(sj.__kap);   // „Zeig, was du kannst“: dieses Thema noch üben
+          if (sj && sj.__transfer) lauf.transferFalsch.add(lauf.pos);
           if (window.Koennen) Koennen.melde(lauf.t.lz, false);
           versucht = true;
           if (window.Lernkartei) Lernkartei.falsch(KARTEI, sj);
@@ -288,12 +290,15 @@
   // ---------- Ende ----------
   function beende() {
     if (lauf.t.lernstand) return beendeLernstand();
+    if (lauf.t.nachfrage) return beendeNachfrage();
     const { t, fehler } = lauf;
     const sterne = fehler <= 1 ? 3 : fehler <= 4 ? 2 : 1;
     const vorher = bestes(t.id);
     let gewinn = Math.max(0, sterne - vorher);
     if (vorher === 3 && sterne === 3) gewinn = 1;
-    const d = daten(); d.themen[t.id] = Math.max(vorher, sterne); speichere(d);
+    const d = daten(); d.themen[t.id] = Math.max(vorher, sterne);
+    planeNachfrage(d, t.id);
+    speichere(d);
     if (gewinn) S.gibSterne(gewinn);
     if (window.Lernfunde) Lernfunde.merke({ fach: KARTEI, art: "thema", e: t.e, text: `${t.name} – ${t.kurz}`, schluessel: "s:" + t.id });
     if (window.Charakter) { Charakter.gib("sachkunde", 2 + sterne * 2); Charakter.ereignis("sachkunde-thema"); }
@@ -321,12 +326,22 @@
     const kl = Math.max(2, klasseJetzt());
     return TH.filter(t => !t.lernstand && (t.lb || LB0) === lb && Math.max(2, t.stufe || t.kl || 2) === kl && passtLand(t) && t.schritte.some(x => x.typ === "wahl" || x.typ === "daumen"));
   }
+  // Transfer-Fragen für Lernbereich und Klasse (nur Sachunterricht, nicht in den Fach-Reitern)
+  function transferFragen(lb) {
+    if (FACH || !window.SU_TRANSFER) return [];
+    const kl = Math.max(2, klasseJetzt());
+    return window.SU_TRANSFER.filter(x => x.lb === lb && x.kl === kl && passtLand(x));
+  }
   function starteLernstand(lb) {
     const titel = (SU_LB.find(x => x[0] === lb) || [lb, lb])[1].replace(/^\S+\s/, "");
     // Wenige Themen im Lernbereich: bis zu drei Fragen je Thema, damit es etwa 8–10 Fragen werden
     const th = mische(lernstandThemen(lb)).slice(0, 10), je = Math.min(3, Math.ceil(8 / Math.max(1, th.length)));
-    const schritte = mische([].concat(...th.map(t => mische(t.schritte.filter(x => x.typ === "wahl" || x.typ === "daumen")).slice(0, je)
-      .map(x => Object.assign({}, x, { __kap: t.id, __lz: t.lz }))))).slice(0, 10);
+    // Ehrlich lernen (07.11.2026): bis zu 3 Transfer-Fragen (neue Situation, gleiche Idee) aus spiele/sachkunde/transfer.js kommen dazu
+    const tr = mische(transferFragen(lb)).slice(0, 3).map(x => { const t = TH.find(y => y.id === x.thema) || {};
+      return Object.assign({}, x, { __kap: t.id ? x.thema : "transfer", __lz: t.lz, __transfer: true }); });
+    const ausThemen = mische([].concat(...th.map(t => mische(t.schritte.filter(x => x.typ === "wahl" || x.typ === "daumen")).slice(0, je)
+      .map(x => Object.assign({}, x, { __kap: t.id, __lz: t.lz }))))).slice(0, 10 - tr.length);
+    const schritte = mische(ausThemen.concat(tr));
     const t = { id: "lernstand-" + lb, lernstand: lb, name: "Zeig, was du kannst", e: "🎯", farbe: "#7B55B8", grund: "#EFE6FF", lz: [], kurz: "",
       schritte: [{ typ: "info", titel: "Zeig, was du kannst", bild: "🎯", text: `Zeig mir, was du über „${titel}“ schon weißt, {name}! Das ist kein Test mit Noten – nur ein Blick, was schon klappt.`,
         ru: "Покажи, что ты уже знаешь! Это не контрольная с оценками — просто посмотрим, что уже получается." }].concat(schritte) };
@@ -335,16 +350,18 @@
   function beendeLernstand() {
     const { t } = lauf, je = {};
     t.schritte.forEach(x => { if (x.__kap) je[x.__kap] = !lauf.falsch.has(x.__kap); });
+    const trIdx = t.schritte.map((x, i) => x.__transfer ? i : -1).filter(i => i >= 0);
+    const transfer = { n: trIdx.length, richtig: trIdx.filter(i => !lauf.transferFalsch.has(i)).length };
     const i = TH.indexOf(t); if (i >= 0) TH.splice(i, 1);
-    const ids = Object.keys(je), gut = ids.filter(id => je[id]), ueben = ids.filter(id => !je[id]), name = (id) => (TH.find(x => x.id === id) || {}).name || id;
-    const d = daten(); d.lernstand = d.lernstand || {}; d.lernstand[`k${Math.max(2, klasseJetzt())}:${t.lernstand}`] = { am: heute(), n: ids.length, richtig: gut.length, je };
+    const ids = Object.keys(je), gut = ids.filter(id => je[id]), ueben = ids.filter(id => !je[id]), name = (id) => id === "transfer" ? "Neue Situationen" : (TH.find(x => x.id === id) || {}).name || id;
+    const d = daten(); d.lernstand = d.lernstand || {}; d.lernstand[`k${Math.max(2, klasseJetzt())}:${t.lernstand}`] = Object.assign({ am: heute(), n: ids.length, richtig: gut.length, je }, transfer.n ? { transfer } : {});
     speichere(d);
     if (window.Charakter) Charakter.gib("sachkunde", 3);
     $("ende-titel").textContent = "Danke fürs Zeigen!";
     $("ende-sterne").innerHTML = `<span style="animation-delay:180ms">🎯</span>`;
     $("ende-text").textContent = (gut.length ? `Das weißt du schon: ${gut.slice(0, 4).map(name).join(", ")}${gut.length > 4 ? " und mehr" : ""}. ` : "") +
       (ueben.length ? `Das schauen wir uns noch einmal an: ${ueben.slice(0, 3).map(name).join(", ")}.` : "Alles beim ersten Mal richtig – Ella ist stolz auf dich!");
-    $("ende-gewinn").textContent = "Das war kein Test mit Noten – nur ein Blick, was schon klappt.";
+    $("ende-gewinn").textContent = (transfer.n ? `Neue Situationen: ${transfer.richtig} von ${transfer.n} gleich richtig. ` : "") + "Das war kein Test mit Noten – nur ein Blick, was schon klappt.";
     const kn = $("ende-knoepfe"); kn.innerHTML = "";
     const knopf = (txt, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = txt; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
     const erste = ueben.length ? TH.findIndex(x => x.id === ueben[0]) : -1;
@@ -353,11 +370,73 @@
     zeige("ende"); S.ton("juhu");
   }
 
-  $("zur-liste").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); if (lauf && lauf.t.lernstand) { const i = TH.indexOf(lauf.t); if (i >= 0) TH.splice(i, 1); } lauf = null; zeige("liste"); zeichneListe(); });
+  // ---------- Ella fragt nach (Paket „Ehrlich lernen“, 07.11.2026) ----------
+  // Verteilte Wiederholung: Ein Sachthema, das zum ersten Mal geschafft ist, kommt nach 1, 7 und 30 Tagen als kurze Nachfrage
+  // mit 2 Fragen aus dem Thema wieder (Karte oben in der Themenliste). Vorhersehbar, ohne Sterne, ohne Frist: Wer nicht kommt, verliert nichts,
+  // die Nachfrage wartet. Ein Fehler heißt nur: morgen noch einmal dieselbe Stufe. Daten sachkunde.nachfrage = { "<thema>": { stufe, faellig, fertig? } }.
+  const ABSTAND = [1, 7, 30];
+  const plusTage = (tag, n) => { const [j, m, t] = tag.split("-").map(Number), d = new Date(j, m - 1, t + n); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; };
+  function planeNachfrage(d, id) {
+    if (FACH) return;
+    d.nachfrage = d.nachfrage || {};
+    if (!d.nachfrage[id]) d.nachfrage[id] = { stufe: 0, faellig: plusTage(heute(), ABSTAND[0]) };
+  }
+  const nachfrageFragen = (t) => t.schritte.filter(x => x.typ === "wahl" || x.typ === "daumen");
+  function faelligeNachfragen() {
+    if (FACH) return [];
+    const nf = daten().nachfrage || {}, h = heute();
+    return Object.entries(nf).filter(([id, x]) => !x.fertig && x.faellig <= h && TH.some(t => t.id === id && !t.lernstand && nachfrageFragen(t).length >= 2))
+      .sort((a, b) => a[1].faellig.localeCompare(b[1].faellig) || a[0].localeCompare(b[0])).map(([id]) => id);
+  }
+  function nachfrageKarte() {
+    const ids = faelligeNachfragen().slice(0, 3); if (!ids.length) return;
+    const k = document.createElement("section"); k.className = "nachfrage-karte"; k.id = "nachfrage";
+    const id0 = eintrag("Ella fragt nach: Weißt du es noch? Zwei kurze Fragen – ganz ohne Sterne.", "Элла спрашивает: помнишь ещё? Два коротких вопроса – без звёзд.");
+    k.innerHTML = `<div class="nachfrage-kopf"><span class="nachfrage-eule">${BI.eule("")}</span><p>${vt(id0)}${mini(id0)}</p></div><div class="nachfrage-knoepfe">` +
+      ids.map(id => { const t = TH.find(x => x.id === id); return `<button class="knopf nachfrage-knopf" data-id="${id}"><span class="emoji">${t.e}</span> ${t.name}</button>`; }).join("") + `</div>`;
+    k.querySelectorAll(".nachfrage-knopf").forEach(b => b.addEventListener("click", () => { S.ton("tipp"); starteNachfrage(b.dataset.id); }));
+    $("themen").appendChild(k);
+  }
+  function starteNachfrage(id) {
+    const t0 = TH.find(x => x.id === id), x = (daten().nachfrage || {})[id] || { stufe: 0 }, fr = nachfrageFragen(t0);
+    // vorhersehbar: je Stufe die nächsten zwei Fragen des Themas (keine Zufallsauswahl)
+    const w = [0, 1].map(k => fr[(x.stufe * 2 + k) % fr.length]).map(s => Object.assign({}, s, { __lz: t0.lz }));
+    const t = { id: "nachfrage-" + id, nachfrage: id, name: "Ella fragt nach", e: "🦉", farbe: t0.farbe, grund: t0.grund, lz: t0.lz, kurz: "",
+      schritte: [{ typ: "info", titel: `Weißt du es noch? ${t0.name}`, bild: t0.e, text: `Hallo {name}! Vor einer Weile hast du „${t0.name}“ entdeckt. Ich frage kurz nach: zwei Fragen.`,
+        ru: "Привет, {name}! Недавно ты изучал(а) эту тему. Я коротко спрошу: два вопроса." }].concat(w) };
+    TH.push(t); starte(TH.length - 1);
+  }
+  function beendeNachfrage() {
+    const { t, fehler } = lauf, id = t.nachfrage;
+    const i = TH.indexOf(t); if (i >= 0) TH.splice(i, 1);
+    const d = daten(); d.nachfrage = d.nachfrage || {}; const x = d.nachfrage[id] || { stufe: 0 };
+    let text;
+    if (fehler === 0) {
+      x.stufe++;
+      if (x.stufe >= ABSTAND.length) { x.fertig = true; delete x.faellig; text = "Super, du weißt es noch! Das sitzt jetzt richtig fest."; }
+      else { x.faellig = plusTage(heute(), ABSTAND[x.stufe]); text = `Super, du weißt es noch! Ella fragt in ${ABSTAND[x.stufe]} Tagen wieder nach.`; }
+    } else { x.faellig = plusTage(heute(), 1); text = "Nicht schlimm! Morgen fragt Ella noch einmal nach. Du kannst das Thema auch jetzt noch einmal anschauen."; }
+    d.nachfrage[id] = x; speichere(d);
+    if (window.Charakter) Charakter.gib("sachkunde", 1);
+    $("ende-titel").textContent = `Danke, ${name()}!`;
+    $("ende-sterne").innerHTML = `<span style="animation-delay:180ms">🦉</span>`;
+    $("ende-text").textContent = text;
+    $("ende-gewinn").textContent = "Nachfragen gibt keine Sterne – sie helfen nur dem Gedächtnis.";
+    const kn = $("ende-knoepfe"); kn.innerHTML = "";
+    const knopf = (txt, haupt, fn) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = txt; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
+    const j = TH.findIndex(y => y.id === id);
+    if (fehler && j >= 0) knopf(`Thema anschauen: ${TH[j].name}`, false, () => starte(j));
+    knopf("Zur Übersicht", true, () => { zeige("liste"); zeichneListe(); });
+    zeige("ende"); S.ton("juhu");
+  }
+
+  $("zur-liste").addEventListener("click", () => { SP.stopp(); S.ton("tipp"); if (lauf && (lauf.t.lernstand || lauf.t.nachfrage)) { const i = TH.indexOf(lauf.t); if (i >= 0) TH.splice(i, 1); } lauf = null; zeige("liste"); zeichneListe(); });
   $("ru-schalter").addEventListener("click", () => { const d = daten(); d.ru = !d.ru; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(`${HL().name}-Hilfe ist ${d.ru ? "an" : "aus"}.`); });
   $("ton-vorlesen").addEventListener("click", () => { const d = daten(); d.vorlesen = !d.vorlesen; speichere(d); S.ton("tipp"); zeichneListe(); S.meldung(d.vorlesen ? "Vorlesen ist an." : "Vorlesen ist aus."); });
 
   if (FACH) { const n = FS[FACH].name + (FACH === "religion" && KONF ? (KONF === "ev" ? " (evangelisch)" : " (katholisch)") : ""); document.title = n; const h = document.querySelector("#liste-ansicht h1"); if (h) h.textContent = n; }
   zeichneListe();
-  window.__sachkunde = { fach: FACH, themen: TH, starte, starteLernstand, lernstandThemen, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
+  // ?thema=<id> (07.11.2026): direkt ein Thema öffnen – z. B. aus den Jahreszeiten-Episoden auf der Insel
+  { const tq = new URLSearchParams(location.search).get("thema"), ti = tq ? TH.findIndex(t => t.id === tq) : -1; if (ti >= 0) starte(ti); }
+  window.__sachkunde = { fach: FACH, themen: TH, starte, starteLernstand, lernstandThemen, transferFragen, nachfrage: faelligeNachfragen, starteNachfrage, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
 })();

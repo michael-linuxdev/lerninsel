@@ -70,7 +70,7 @@
     const d = daten();
     $("sterne").textContent = S.sterne();
     $("robo-klein").innerHTML = robo("");
-    $("ton-vorlesen").textContent = d.vorlesen ? "🗣️" : "🔇";
+    $("ton-vorlesen").innerHTML = d.vorlesen ? '<span aria-hidden="true">🗣️</span><small aria-hidden="true">Stimme an</small>' : '<span aria-hidden="true">🔇</span><small aria-hidden="true">Stimme aus</small>';   // Paket 2: Beschriftung unter dem Symbol
     $("ru-schalter").hidden = !S.hilfeRu(); $("ru-schalter").textContent = HL().kurz; $("ru-schalter").classList.toggle("aus", !d.ru); $("ru-schalter").setAttribute("aria-pressed", d.ru);
     const fertig = L.filter(l => bestes(l.id) > 0).length;
     $("intro-text").textContent = fertig === 0 ? `Hallo ${name()}! Ich bin Pixel. Schaffe alle 6 Lektionen, dann bekommst du deinen Tablet-Führerschein.`

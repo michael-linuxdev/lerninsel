@@ -30,6 +30,9 @@
   .weg small { font-weight: 400; color: #4a6f8a; }
   .weg:active { transform: translateY(3px); }
   .weg[hidden] { display: none; }
+  /* Paket 2 (07.11.2026): Vorschule sieht nur Laute, Bilder und Nachspuren – der Rest liegt hinter „Mehr“ */
+  .wege.kurz .weg.mehr-weg { display: none; }
+  .was-hier-zeile { text-align: center; margin: 0 0 10px; } .was-hier-zeile .knopf { min-height: 48px; }
   .weg.tipp { box-shadow: 0 0 0 5px #3AA0E0, 0 7px 0 rgba(58,160,224,.22); }
   .stand { text-align: center; margin: 18px 0 0; font-size: 1.1rem; }
   @media (max-width: 640px) { .erzaehler .fipsi { width: 80px; height: 80px; } .blase { font-size: 1.1rem; } .wege { grid-template-columns: 1fr; } .weg { flex-direction: row; justify-content: flex-start; padding: 12px 18px; text-align: left; } .weg .emoji { font-size: 2.4rem; } }
@@ -108,21 +111,23 @@
 <body>
 
 <section class="ansicht" id="start-ansicht">
-  <div class="oben"><a class="knopf rund" href="../deutsch/?karte=1" aria-label="Zurück zu Fipsi">⬅️</a><h1>🔤 Lesen und Schreiben</h1></div>
+  <div class="oben"><a class="knopf rund" id="lesen-zurueck" href="../deutsch/?karte=1" aria-label="Zurück zu Fipsi">⬅️</a><h1>🔤 Lesen und Schreiben</h1><a class="knopf rund" href="../../" aria-label="Zur Startseite">🏠</a></div>
   <main>
     <div class="erzaehler"><div id="fipsi-start"></div><div class="blase" id="start-blase"></div><button class="ton" id="start-ton" aria-label="Vorlesen">🔊</button></div>
+    <p class="was-hier-zeile"><button class="knopf" id="was-hier" aria-label="Was gibt es hier? Alles vorlesen">🔊 Was gibt es hier?</button></p>
     <div class="wege" data-ausgleich>
       <button class="weg" id="weg-tafel"><span class="emoji">🔤</span>Buchstaben-Tafel<small>Ansehen und anhören</small></button>
       <button class="weg" id="weg-gleich"><span class="emoji">👂</span>Gleicher Anfang<small>Was klingt am Anfang gleich?</small></button>
       <button class="weg" id="weg-bild"><span class="emoji">🖼️</span>Finde das Bild<small>Was fängt mit dem Buchstaben an?</small></button>
       <button class="weg" id="weg-buchstabe"><span class="emoji">🅰️</span>Welcher Buchstabe?<small>Hör den Anfang und wähle</small></button>
-      <button class="weg" id="weg-silben"><span class="emoji">🌈</span>Silben lesen<small>Lies das Wort und finde das Bild</small></button>
-      <button class="weg" id="weg-texte"><span class="emoji">📖</span>Lesetexte<small>Kurze Geschichten mit Fragen</small></button>
+      <button class="weg mehr-weg" id="weg-silben"><span class="emoji">🌈</span>Silben lesen<small>Lies das Wort und finde das Bild</small></button>
+      <button class="weg mehr-weg" id="weg-texte"><span class="emoji">📖</span>Lesetexte<small>Kurze Geschichten mit Fragen</small></button>
       <button class="weg" id="weg-spuren"><span class="emoji">✍️</span>Buchstaben nachspuren<small>Mit dem Finger schreiben</small></button>
       <button class="weg" id="weg-name"><span class="emoji">🏷️</span>Mein Name<small>Deinen Namen nachspuren</small></button>
-      <button class="weg" id="weg-sas"><span class="emoji">✒️</span>Schreibschrift<small>Schulausgangsschrift: Buchstaben und Wörter</small></button>
-      <a class="weg" id="weg-vorlesen" href="../vorlesen/" style="text-decoration:none"><span class="emoji">🎙️</span>Laut vorlesen<small>Vorlesen, Lesetheater, Lesepass</small></a>
-      <button class="weg" id="weg-legen"><span class="emoji">🧩</span>Wörter legen<small>Hör das Wort und lege es</small></button>
+      <button class="weg mehr-weg" id="weg-sas"><span class="emoji">✒️</span>Schreibschrift<small>Schulausgangsschrift: Buchstaben und Wörter</small></button>
+      <a class="weg mehr-weg" id="weg-vorlesen" href="../vorlesen/" style="text-decoration:none"><span class="emoji">🎙️</span>Laut vorlesen<small>Vorlesen, Lesetheater, Lesepass</small></a>
+      <button class="weg mehr-weg" id="weg-legen"><span class="emoji">🧩</span>Wörter legen<small>Hör das Wort und lege es</small></button>
+      <button class="weg" id="weg-mehr" hidden aria-expanded="false"><span class="emoji">➕</span>Mehr<small>Lesen und Schreiben für die Schule</small></button>
     </div>
     <p class="stand" id="stand"></p>
   </main>
@@ -193,6 +198,7 @@
 <script src="../../shared/echtewelt.js"></script>
 <script src="../../shared/zeit.js" data-art="lernen"></script>
 <script src="../../shared/sprache.js"></script>
+<script src="../../shared/vorleser.js"></script>
 <script src="../../shared/figuren.js"></script>
 <script src="../../inhalte/woerter/bestand.js"></script>
 <script src="../../inhalte/woerter/d0.js"></script>

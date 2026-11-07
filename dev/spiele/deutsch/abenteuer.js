@@ -131,9 +131,32 @@
         }
         if (lb === schule) wk.prepend(g); else wk.appendChild(g);   // „gerade in der Schule“ steht oben
       });
+      zeigeFuerDich(klasse, kachel, schule);
     }
     $("schatz-titel").textContent = anzahl === 5 ? "Die Schatzkarte ist komplett!" : `Die Schatzkarte: ${anzahl} von 5 Teilen`;
     $("schatz").innerHTML = schatzkarte(gefunden);
+  }
+
+  // Paket 2 „Ohne Lesen bedienbar“ (07.11.2026): Vorschule, Kl. 1 und 2 sehen unter der Schatzkarte nur bis zu fünf passende Kacheln
+  // („Für dich“: Lesen und Schreiben für Vorschule/Kl. 1, dann noch nicht gespielte Kapitel der eigenen Klasse, „gerade in der Schule“ zuerst);
+  // „📚 Alle Kapitel“ öffnet die ganze Werkstatt (für diese Sitzung gemerkt). Ab Kl. 3 bleibt alles wie bisher.
+  let alleOffen = false; try { alleOffen = sessionStorage.getItem(S.vorsilbe + "deutsch-alle") === "1"; } catch (e) { }
+  function zeigeFuerDich(klasse, kachel, schule) {
+    const fd = $("werk-fuer-dich"), wk = $("werkstatt"), stufe = ((S.stufe && S.stufe()) || {}).code;
+    const kurz = klasse <= 2 && !alleOffen;
+    fd.hidden = !kurz; wk.hidden = kurz; fd.innerHTML = "";
+    if (!kurz) return;
+    const passend = W.map((k, i) => [k, i]).filter(([k]) => !(k.stufe && klasse < k.stufe - 1) && (k.stufe || 2) <= Math.max(2, klasse));
+    const wahl = passend.filter(([k]) => !bestes(k.id)).sort((a, b) => ((b[0].lb || "su") === schule) - ((a[0].lb || "su") === schule) || (a[0].stufe || 2) - (b[0].stufe || 2) || a[1] - b[1]);
+    const rest = passend.filter(x => !wahl.includes(x)).sort((a, b) => bestes(a[0].id) - bestes(b[0].id));
+    const lesenZuerst = ["vs", "1"].includes(stufe);
+    const liste = wahl.concat(rest).slice(0, lesenZuerst ? 4 : 5);
+    fd.innerHTML = `<h3>⭐ Für dich <button class="knopf klein-vorlesen" id="fuer-dich-hoer" aria-label="Was gibt es hier? Alles vorlesen">🔊</button></h3><div class="orte" data-ausgleich></div><button class="knopf werk-alle" id="werk-alle" aria-expanded="false">📚 Alle Kapitel (${passend.length})</button>`;
+    const orte = fd.querySelector(".orte");
+    if (lesenZuerst) { const l = wk.querySelector("#zu-lesen"); if (l) orte.appendChild(l); }   // dieselbe Kachel (eine id), sie zieht nur nach oben um
+    liste.forEach(([k, i]) => { const b = kachel(k, i); b.removeAttribute("data-id"); b.dataset.fuer = k.id; orte.appendChild(b); });
+    if (window.Vorleser) Vorleser.kacheln($("fuer-dich-hoer"), () => [...orte.children]);   // eigene Idee (Paket 2): Kacheln nacheinander vorlesen
+    $("werk-alle").addEventListener("click", () => { S.ton("tipp"); alleOffen = true; try { sessionStorage.setItem(S.vorsilbe + "deutsch-alle", "1"); } catch (e) { } zeichneKarte(); setTimeout(() => wk.scrollIntoView({ behavior: "smooth", block: "start" }), 50); });
   }
 
   // ---------- Kapitel ----------
@@ -649,7 +672,7 @@
     wo: { de: "Schau genau, wo das Ding im Bild ist.", ru: "Посмотри внимательно, где эта вещь на картинке.", status: E },
     hoertext: { de: "Hör den Text noch einmal an.", ru: "Послушай текст ещё раз.", status: E },
     blitz: { de: "Schau auf den Anfang und das Ende vom Wort.", ru: "Посмотри на начало и конец слова.", status: E },
-    bild: { de: "Hör noch einmal genau hin.", ru: "Послушай ещё раз внимательно.", status: E },
+    bild: { de: "Schau noch einmal genau hin.", ru: "Посмотри ещё раз внимательно.", status: E },   // Bild-Fragen: schauen, nicht hören (Hören nur bei „hoeren“)
     hoeren: { de: "Hör noch einmal genau hin.", ru: "Послушай ещё раз внимательно.", status: E },
     ordnen: { de: "Was passiert zuerst? Was danach?", ru: "Что происходит сначала? Что потом?", status: E },
     satz: { de: "Lies deinen Satz leise vor. Wer tut etwas? Was tut er?", ru: "Прочитай своё предложение про себя. Кто что делает?", status: E }
@@ -751,7 +774,22 @@
     }
     $("stimmen-info").textContent = info;
   }
-  $("einst-auf").addEventListener("click", () => { S.ton("tipp"); zeigeEinst(); $("einst").hidden = false; setTimeout(zeigeEinst, 600); });
+  // Paket 2 (07.11.2026): Die Einstellungen (Vorlesen, Hilfesprache aus) sind für Erwachsene – PIN wie im Elternbereich; eine offene
+  // Eltern-Sitzung (15 min) oder „Als Erwachsener spielen“ öffnet sie direkt
+  const pinHash = (t) => { let h = 5381; for (const c of "pin:" + t) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0; return h.toString(36); };   // wie spiele/eltern/eltern.js
+  const elternOffen = () => { try { return +sessionStorage.getItem(S.vorsilbe + "eltern") > Date.now(); } catch (e) { return false; } };
+  function einstOeffnen(mitPin) {
+    $("einst-pin").hidden = !mitPin; $("einst-inhalt").hidden = mitPin; $("einst").hidden = false;
+    if (mitPin) { $("einst-pin-feld").value = ""; $("einst-pin-fehler").textContent = ""; setTimeout(() => $("einst-pin-feld").focus(), 50); }
+    else { zeigeEinst(); setTimeout(zeigeEinst, 600); }
+  }
+  $("einst-auf").addEventListener("click", () => { S.ton("tipp"); einstOeffnen(!!S.pin() && !elternOffen() && !(S.erwachsen && S.erwachsen())); });
+  $("einst-pin-ok").addEventListener("click", () => {
+    if (pinHash($("einst-pin-feld").value.trim()) === S.pin()) { S.ton("tipp"); try { sessionStorage.setItem(S.vorsilbe + "eltern", String(Date.now() + 15 * 60000)); } catch (e) { } einstOeffnen(false); }
+    else { S.ton("nein"); $("einst-pin-fehler").textContent = "Die PIN stimmt nicht."; $("einst-pin-feld").value = ""; }
+  });
+  $("einst-pin-feld").addEventListener("keydown", (e) => { if (e.key === "Enter") $("einst-pin-ok").click(); });
+  $("einst-pin-zu").addEventListener("click", () => { S.ton("tipp"); $("einst").hidden = true; });
   $("einst-zu").addEventListener("click", () => { S.ton("tipp"); $("einst").hidden = true; zeichneKarte(); });
   $("sch-vorlesen").addEventListener("click", () => { setze("vorlesen", !daten().vorlesen); S.ton("tipp"); zeigeEinst(); });
   $("sch-ru").addEventListener("click", () => { setze("ru", !daten().ru); S.ton("tipp"); zeigeEinst(); });
@@ -761,5 +799,6 @@
   $("zur-karte").addEventListener("click", () => { SP.stopp(); if (aufnahmeEnde) { aufnahmeEnde(); aufnahmeEnde = null; } S.ton("tipp"); lauf = null; zeige("karte"); zeichneKarte(); });
 
   zeichneKarte();
+  if (window.Vorleser) { Vorleser.begleiter($("fipsi-klein"), () => $("karte-text").textContent); $("fipsi-klein").setAttribute("aria-label", "Fipsi: vorlesen"); }   // „Tipp auf mich!“
   window.__deutsch = { starte, pruefeText, starteLernstand, lernstandKapitel, schritt: (n) => { lauf.pos = n; lauf.gesperrt = false; lauf.versuche = 0; schritt(); }, get lauf() { return lauf; } };
 })();

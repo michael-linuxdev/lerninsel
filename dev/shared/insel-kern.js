@@ -307,6 +307,7 @@
       if (St.darfNeueEtappe() && e.faellig(st)) return e.szene;
     }
     for (const k of KAPITEL) if (St.kapitel() === k.n - 1 && St.darfNeueEtappe() && k.faellig()) return k.szene;
+    if (St.darfNeueEtappe()) return nebenszene();
     return null;
   }
   // Tutorial-Etappen E4–E8 (KONZEPT „Etappen“): Szene, Auslöser, „schon genutzt“ (für Kinder, die das schon kennen)
@@ -360,20 +361,81 @@
       faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 35 && tildaGenutzt() },
     // 09.11.2026: Kapitel 7 „Neue Ufer“ (KONZEPT: Pixel fährt zum Nachbar-Eiland) – Robo macht das Boot am Steg klar; dafür braucht es den Tablet-Führerschein
     { n: 7, szene: "neue-ufer", titel: "Neue Ufer", bedingung: "50 Lernfunde und der Tablet-Führerschein bei Robo Pixel",
-      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 50 && profi() }
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 50 && profi() },
+    // 07.11.2026 (Story-Review): Kapitel 8 „Fipsis Schatz“ – die Schatzkarte ist komplett; in der Truhe am Wegweiser liegt das Wörterbuch der Insel
+    { n: 8, szene: "fipsis-schatz", titel: "Fipsis Schatz", bedingung: "die ganze Schatzkarte bei Fipsi (alle fünf Teile)",
+      faellig: () => schatzkarteKomplett() },
+    // Finale „Die Insel ist wach“: alle Begleiter feiern, der letzte Nebel geht – danach geht es offen weiter (Jahreszeiten-Episoden)
+    { n: 9, szene: "insel-wach", titel: "Die Insel ist wach", bedingung: "70 Lernfunde",
+      faellig: () => (W.Lernfunde ? W.Lernfunde.gesamt() : 0) >= 70 }
   ];
+  // Fipsis Schatzkarte: die fünf Kapitel der Geschichte (spiele/deutsch/geschichte.js, ids gleich – prüft tests/inselkern.js)
+  const SCHATZKARTE = ["wald", "hof", "baeckerei", "strand", "schloss"];
+  const schatzkarteKomplett = () => { const k = ((S().lade("deutsch") || {}).kapitel) || {}; return SCHATZKARTE.every(id => (k[id] || 0) > 0); };
+  // Jahreszeiten-Episoden nach dem Finale (07.11.2026): je Jahreszeit und Jahr einmal eine kurze Szene mit einem Begleiter und ein Sachthema dazu (kein Zwang).
+  // Der Winter zählt zum Jahr, in dem er beginnt (Dezember 2026 und Februar 2027 = Winter 2026).
+  const JAHRESZEITEN = {
+    herbst: { wer: "eule", thema: "baeume", titel: "Bäume genau kennen" },
+    winter: { wer: "baer", thema: "wetter", titel: "Wetter beobachten" },
+    fruehling: { wer: "biber", thema: "pflanzen", titel: "Pflanzen wachsen" },
+    sommer: { wer: "papagei", thema: "wasser", titel: "Wasser" }
+  };
+  function jahreszeitJetzt() {
+    const q = W.location && W.location.search ? new URLSearchParams(W.location.search) : null, d = new Date(W.__jetzt || Date.now()), z = zeit(q, d);
+    const jahr = z.SAISON === "winter" && z.MONAT <= 2 ? d.getFullYear() - 1 : d.getFullYear();
+    return { saison: z.SAISON, szene: "jz-" + z.SAISON, merke: `jz-${z.SAISON}-${jahr}` };
+  }
+  // Nebenszenen (07.11.2026): kleine Szenen ohne Kapitel – höchstens eine am Tag, nach den Kapitel-Szenen; wer den Ort schon kennt, bekommt sie still
+  const tierstationGenutzt = () => { const d = S().lade("tierstation") || {}; return !!(d.gast || Object.keys(d.frei || {}).length); };
+  const NEBEN = [
+    { id: "brunis-station", faellig: () => ortOffen("tierstation"), genutzt: tierstationGenutzt },
+    { id: "tilda", faellig: () => W.Story.etappe("E9") && W.Story.kapitel() >= 3,
+      genutzt: () => { const d = S().lade("schach") || {}; return Object.keys(d.raetsel || {}).length > 0 || Object.keys(d.lektionen || {}).length > 0; } },
+    // Paulas Fest findet statt: nach der ersten Fahrt mit dem Rhythmus-Boot
+    { id: "paulas-feier", faellig: () => W.Story.kapitel() >= 4 && ((S().lade("rhythmus") || {}).runden || 0) > 0, genutzt: () => false }
+  ];
+  // Eigene Idee (07.11.2026): Feste aus Herkunftsländern als Episoden (KONZEPT „Episoden“) – für alle Kinder, ab Kapitel 1, je Jahr einmal,
+  // nur in den Festtagen; wer in der Zeit nicht kommt, verpasst nichts (keine Belohnung, nur eine kurze Szene in der Chronik).
+  const FESTE = [
+    { id: "fest-neujahr", von: "12-31", bis: "01-07", wer: "baer" },   // Neujahr mit Väterchen Frost (Russland, Ukraine, Bulgarien …)
+    { id: "fest-nouruz", von: "03-19", bis: "03-23", wer: "papagei" }   // Nouruz, Neujahr zum Frühlingsanfang (Iran, Afghanistan, Kurden …)
+  ];
+  function festJetzt() {
+    const d = new Date(W.__jetzt || Date.now()), md = `${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const f = FESTE.find(x => (x.von <= x.bis ? md >= x.von && md <= x.bis : md >= x.von || md <= x.bis)); if (!f) return null;
+    const jahr = f.von > f.bis && md <= f.bis ? d.getFullYear() - 1 : d.getFullYear();   // Neujahr 2026/27 zählt zu 2026
+    return { id: f.id, merke: `${f.id}-${jahr}`, wer: f.wer };
+  }
+  const NEBEN_IDS = () => NEBEN.map(n => n.id).concat(Object.keys(JAHRESZEITEN).map(j => "jz-" + j), FESTE.map(f => f.id));
+  function nebenszene() {
+    const St = W.Story, h = isoJetzt(), chr = St.chronik();
+    if (chr.some(x => x.d === h && NEBEN_IDS().concat(["insel-wach"]).includes(x.s))) return null;   // höchstens eine am Tag, nicht am Tag des Finales
+    for (const n of NEBEN) {
+      if (St.gesehen(n.id)) continue;
+      if (n.genutzt()) { St.merkeSzene(n.id, true); continue; }
+      if (n.faellig()) return n.id;
+    }
+    { const f = festJetzt(); if (f && St.kapitel() >= 1 && !St.gesehen(f.merke)) return f.id; }
+    if (St.kapitel() >= 9) { const j = jahreszeitJetzt(); if (!St.gesehen(j.merke)) return j.szene; }
+    return null;
+  }
   // Wörter für Fipsis Wegweiser: nur Wörter, die das Kind schon hatte (Lernkartei Deutsch, Lernfunde in Deutsch), höchstens n, ohne Dopplungen
   function wortSchilder(n = 3) {
     const aus = [], dazu = (w) => { w = String(w || "").trim(); if (/^[A-Za-zÄÖÜäöüß-]{2,14}$/.test(w) && !aus.some(x => x.toLowerCase() === w.toLowerCase())) aus.push(w); };
     const k = (S().lade("lernkartei") || {}).deutsch || [];
     k.slice().reverse().forEach(c => { const s = c.s || {}; dazu(s.wort || (typeof c.k === "string" && c.k.startsWith("wort|") ? c.k.slice(5) : "")); });
-    if (W.Lernfunde) W.Lernfunde.letzteTage(60).filter(f => f.fach === "deutsch").forEach(f => dazu(String(f.text || "").replace(/^Neues Wort: /, "").split(/[ ,–]/)[0]));
+    // (07.11.2026) Lernfunde tragen das Fach in f (vorher stand hier f.fach – Lernfunde kamen nie an); Wörter nach der, die, das
+    if (W.Lernfunde) W.Lernfunde.letzteTage(60).filter(f => (f.f || f.fach) === "deutsch").forEach(f => { const t = String(f.t || f.text || ""); (t.match(/\b(der|die|das) ([A-ZÄÖÜ][a-zäöüß-]+)/g) || []).forEach(x => dazu(x.split(" ")[1])); if (/^Neues Wort: /.test(t)) dazu(t.replace(/^Neues Wort: (der |die |das )?/, "").split(/[ ,–]/)[0]); });
     return aus.slice(0, n);
   }
   // Wer spricht in der Merkkisten-Szene? Fipsi (Deutsch) oder Ella (Sachunterricht)
   const merkkisteBei = () => (W.Lernkartei && W.Lernkartei.anzahlFaellig("deutsch") === 0 && W.Lernkartei.anzahlFaellig("sachkunde") > 0 ? "eule" : "fipsi");
   // nach dem Ende einer Story-Szene
-  function storyFertig(def) { const St = W.Story; if (!St || !def) return; if (def.etappe) St.etappeFertig(def.etappe); if (def.kapitel) St.setzeKapitel(def.kapitel); }
+  function storyFertig(def) {
+    const St = W.Story; if (!St || !def) return; if (def.etappe) St.etappeFertig(def.etappe); if (def.kapitel) St.setzeKapitel(def.kapitel);
+    if (def.jahreszeit) St.merkeSzene(jahreszeitJetzt().merke, true);
+    if (def.fest) { const f = festJetzt(); if (f && f.id === def.id) St.merkeSzene(f.merke, true); }   // je Fest und Jahr einmal   // je Jahreszeit und Jahr einmal (die Szene selbst steht einmal in der Chronik)
+  }
   // Soll beim Öffnen der Insel die Ankunft starten?
   const prologFaellig = (q) => !!(W.Story && !W.Story.etappe("E1") && (!q || (q.get("drinnen") !== "1" && !q.has("szene"))));
 
@@ -575,6 +637,16 @@
     if (P.lauf) ORTE.garten = { x: P.lauf[0], z: P.lauf[1], h: 1.2 };
     if (P.kart) ORTE.baeckerei = { x: P.kart[0], z: P.kart[1], h: 2.0 };
     if (P.bau) ORTE.tierstation = { x: P.bau[0], z: P.bau[1], h: 1.6 };
+    // Kapitel 8 „Fipsis Schatz“ (07.11.2026): Truhe neben Fipsis Wegweiser – quer zum Weg, auf der Seite mit mehr Platz zu den Bäumen.
+    // Kein Eintrag in P (sonst rückten Leuchtturm und Lager bestehender Welten), nur ein Ort für Zeigehand und 3D.
+    {
+      const [kx, kz] = P.kartenweg, [fx, fz] = P.fipsi, l = Math.hypot(kx - fx, kz - fz) || 1, nx = -(kz - fz) / l, nz = (kx - fx) / l;
+      const platz = (s) => { const x = kx + nx * 1.15 * s - (kx - fx) / l * 0.3, z = kz + nz * 1.15 * s - (kz - fz) / l * 0.3; return [x, z, Math.min(...WELT.baeume.map(b => Math.hypot(b.x - x, b.z - z)).concat([9]))]; };
+      const a = platz(1), b = platz(-1), [x, z] = a[2] >= b[2] ? a : b;
+      ORTE.schatz = { x, z, h: 0.9, dreh: Math.atan2(fx - x, fz - z) };
+    }
+    // Finale (Kapitel 9): alle Begleiter versammeln sich am Schachtisch bei Tilda
+    ORTE.fest = { x: P.schach[0], z: P.schach[1], h: 1.4 };
     return { WELT, P, ZX, ZX_GRENZE, bodenY, UFER, RMAX_LAUF, STEG, SU, PAKET_POS, HAUS_DREH, vorDerTuer, NEBEL, nachbarn, ORTE, WEGE };
   }
 
@@ -613,6 +685,7 @@
     if (id === "garten") return S().offen(k >= 1);
     if (id === "tierstation") return S().offen(k >= 2);
     if (id === "baeckerei") return S().offen(k >= 3);
+    if (id === "schatz") return k >= 8;   // Fipsis Truhe mit dem Wörterbuch der Insel (Kapitel 8)
     if (id === "lager") return S().offen(insel ? k >= 1 : k >= 7);   // Forscherlager: daheim ab Kapitel 1 (Karte der Heimatinsel), auf Nachbar-Eilanden ab Kapitel 7
     if (id === "boot") return S().offen(!insel || k >= 7);   // Reisen mit Robos Boot: ab Kapitel 7, auf einem Eiland immer (Rückfahrt)
     return true;
@@ -622,14 +695,14 @@
     const insel = lage.insel !== false;
     if (!ortOffen("lager", insel)) return insel
       ? blase("eule", "Das Forscherlager – noch zu", "Hier schlagen wir bald unser Forscherlager auf. Lern etwas Neues – wenn die erste Frucht am Wissensbaum wächst, geht es los!", "Скоро здесь будет наш лагерь исследователей. Он откроется с первым плодом на дереве знаний.")
-      : blase("eule", "Das Forscherlager – noch zu", "Dieses Eiland erforschen wir richtig, sobald Robos Boot bereit ist – in Kapitel 7. Lern weiter auf der Heimatinsel!", "Этот остров мы исследуем по-настоящему, когда лодка Робо будет готова – в главе 7.");
+      : blase("eule", "Das Forscherlager – noch zu", "Dieses Eiland erforschen wir richtig, sobald Robos Boot bereit ist – in Kapitel 7. Bis dahin: Was entdeckst du heute auf der Heimatinsel?", "Этот остров мы исследуем по-настоящему, когда лодка Робо будет готова – в главе 7.");
     return insel
       ? blase("eule", "Ellas Forscherlager", `Hallo ${name()}! Hier ist unser Forscherlager. Kannst du die Karte unserer Insel lesen? Dann finden wir jeden Ort!`, "Это наш лагерь исследователей. Умеешь читать карту острова? Тогда мы найдём любое место!", "../expedition/")
-      : blase("eule", "Ellas Forscherlager", `Ein neues Eiland, ${name()}! Schreib ins Forscher-Tagebuch, was du hier entdeckst – und lies die Karte.`, "Новый остров! Запиши в дневник исследователя, что ты здесь нашёл, и прочитай карту.", "../expedition/");
+      : blase("eule", "Ellas Forscherlager", `Ein neues Eiland, ${name()}! Schreib ins Forscher-Tagebuch, was du hier entdeckst – und lies die Karte.`, "Новый остров! Запиши в дневник исследователя, что ты здесь нашёл (нашла), и прочитай карту.", "../expedition/");
   }
   function bootAntwort(lage = {}) {
     const insel = lage.insel !== false;
-    if (!ortOffen("boot", insel)) return blase("robo", "Robos Boot", `Mit diesem Boot habe ich dich hergebracht, ${name()}. Bald fahren wir zusammen zu neuen Ufern – lern weiter!`, "На этой лодке я привёз тебя сюда. Скоро мы вместе отправимся к новым берегам – учись дальше!");
+    if (!ortOffen("boot", insel)) return blase("robo", "Robos Boot", `Mit diesem Boot habe ich dich hergebracht, ${name()}. Ich schraube noch am Motor – piep! Bald fahren wir zusammen zu neuen Ufern.`, "На этой лодке я привёз тебя сюда. Я ещё подкручиваю мотор – пип! Скоро мы вместе отправимся к новым берегам.");
     return Object.assign(insel
       ? blase("robo", "Robos Boot", `Piep! Mein Boot ist bereit, ${name()}. Wünsch dir ein Eiland – und wir fahren hin. Wir kommen immer zurück.`, "Пип! Моя лодка готова. Пожелай остров – и мы поплывём туда. Мы всегда возвращаемся.")
       : blase("robo", "Robos Boot", `Sollen wir weiterfahren, ${name()}? Nach Hause auf die Heimatinsel – oder zu einem anderen Eiland.`, "Поплывём дальше? Домой, на родной остров, – или на другой остров."), { extra: "reisen" });
@@ -689,8 +762,8 @@
   // Tildas Leuchtturm (07.11.2026): ab Kapitel 6 offen (Licht-Rätsel und Schatzkammer in der Höhle), vorher dunkel und ohne Ziel
   const leuchtturmOffen = () => !!(W.Story && S().offen(W.Story.kapitel() >= 6));
   function leuchtturmAntwort() {
-    if (!leuchtturmOffen()) return blase("tilda", "Der alte Leuchtturm", "Der Leuchtturm ist noch dunkel. Lern weiter – wenn es soweit ist, zeige ich dir den Weg hinein.",
-      "Маяк ещё тёмный. Учись дальше – когда придёт время, я покажу тебе дорогу.");
+    if (!leuchtturmOffen()) return blase("tilda", "Der alte Leuchtturm", "Der Leuchtturm ist noch dunkel. Ich denke noch gründlich nach, wie wir hineinkommen. Wenn es soweit ist, zeige ich dir den Weg.",
+      "Маяк ещё тёмный. Я ещё думаю, как нам туда попасть. Когда придёт время, я покажу тебе дорогу.");
     return blase("tilda", "Tildas Leuchtturm", `Hallo ${name()}! Unten in der Höhle lenken wir das Licht mit Spiegeln. Und meine Schatzkammer zeige ich dir auch!`,
       "Внизу в пещере мы направляем свет зеркалами. И свою сокровищницу я тебе тоже покажу!", "../leuchtturm/");
   }
@@ -736,6 +809,10 @@
         return blase("fipsi", "Fipsis Wegweiser", w.length ? `Auf den Schildern steht: ${w.join(", ")}. Lies die Wörter laut – du kennst sie schon!` : "Hier kommen bald Wörter hin, die du bei mir lernst. Komm in die Schatzkarte!",
           w.length ? "На табличках слова, которые ты уже знаешь. Прочитай их вслух!" : "Скоро здесь будут слова, которые ты выучишь у меня.", "../deutsch/");
       }
+      case "schatz": return blase("fipsi", "Fipsis Schatz", `Unser Schatz, ${name()}: das Wörterbuch der Insel! Darin stehen alle Wörter, die du bei mir gelernt hast – von A bis Z.`,
+        "Наше сокровище: словарь острова! В нём все слова, которые ты выучил(а) у меня – от А до Я.", "../album/#woerterbuch");
+      case "jahreszeit": { const j = jahreszeitJetzt(), x = JAHRESZEITEN[j.saison];
+        return blase(x.wer, x.titel, `Magst du mehr wissen? Bei Ella gibt es das Thema „${x.titel}“. Schau rein, wann du willst!`, "Хочешь узнать больше? У Эллы есть тема об этом. Загляни, когда захочешь!", "../sachkunde/?thema=" + x.thema); }
       case "station": return drachenOffen() ? drachenAntwort(lage.wetter) : wetterAntwort(lage.wetter);
       case "wissensbaum": return wissensbaumText();
       case "sonnenuhr": return { blase: [...sonnenuhrText(), null] };
@@ -749,7 +826,7 @@
       case "album": { const s = W.Sticker && W.Sticker.stand(); return blase("📒", "Dein Stickeralbum", s ? `Du hast schon ${s.hat} von ${s.gesamt} Stickern${s.neu ? ` – ${s.neu} neue warten auf dich` : ""}!` : "Hier sammelst du deine Sticker.", "Здесь ты собираешь наклейки.", "../album/?von=insel"); }
       case "bett": return blase("🛏️", "Dein Bett", lage.tier ? `Hier kuschelt ${lage.tier}, wenn es müde ist.` : "Ein gemütliches Bett. Mit dem Knopf „Einrichten“ machst du dein Zimmer schön.", "Уютная кровать.");
       case "schrank": return blase("👗", "Dein Kleiderschrank", "Such dir etwas Schönes zum Anziehen aus. Auf der Insel trägst du es dann!", "Выбери что-нибудь красивое из одежды!", "../anziehen/?von=insel");
-      case "spiegel": return blase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, was du gut kannst, und deine Pokale.", "Посмотри, как ты выросла!", "../ich/");
+      case "spiegel": return blase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, was du gut kannst, und deine Pokale.", "Посмотри, как ты вырос(ла)!", "../ich/");
       // Pinnwand: Lernfunde der letzten 7 Tage als Zettel (die Looks zeichnen sie aus pinnwandZettel())
       case "pinnwand": {
         const z = pinnwandZettel(), heute = z.filter(x => x.neu).length;
@@ -784,23 +861,23 @@
   }
   // Rhythmus-Boot (05.11.2026): Paulas Boot an der Ballon-Wiese, öffnet mit Kapitel 4 „Paulas Fest“
   function rhythmusAntwort() {
-    if (!(W.Story && S().offen(W.Story.kapitel() >= 4))) return blase("papagei", "Paulas Rhythmus-Boot – noch zu", "Hier baut Paula ein Boot für ihr Fest. Es fährt ab Kapitel 4 – lern weiter auf der Insel!", "Здесь Паула строит лодку для праздника. Она поплывёт в главе 4.");
+    if (!(W.Story && S().offen(W.Story.kapitel() >= 4))) return blase("papagei", "Paulas Rhythmus-Boot – noch zu", "Ich male noch am Boot für mein Fest. Es fährt ab Kapitel 4. Bis dahin: Was entdeckst du heute bei Ella?", "Здесь Паула строит лодку для праздника. Она поплывёт в главе 4.");
     return blase("papagei", "Paulas Rhythmus-Boot", `Hallo ${name()}! Wir paddeln zum Fest – im Rhythmus! Ich spiele vor, du paddelst nach.`, "Мы плывём на праздник – в ритме! Я играю, ты повторяешь.", "../rhythmus/");
   }
   // Wörter-Angeln (04.11.2026, NA-61): Fipsis Angelsteg am Schatz-Strand, öffnet mit Kapitel 2
   function angelnAntwort() {
-    if (!(W.Story && S().offen(W.Story.kapitel() >= 2))) return blase("fipsi", "Fipsis Angelsteg – noch zu", "Hier baut Fipsi einen Angelsteg. Er öffnet in Kapitel 2 – lern weiter bei Fipsi!", "Здесь Фипси строит причал для рыбалки. Он откроется в главе 2.");
+    if (!(W.Story && S().offen(W.Story.kapitel() >= 2))) return blase("fipsi", "Fipsis Angelsteg – noch zu", "Ich baue hier noch meinen Angelsteg. Er öffnet in Kapitel 2. Bis dahin: Welches Wort entdeckst du heute bei mir?", "Здесь Фипси строит причал для рыбалки. Он откроется в главе 2.");
     return blase("fipsi", "Fipsis Angelsteg", `Hallo ${name()}! Im Teich schwimmen Fische mit Bildern. Hilfst du mir, sie in den richtigen Eimer zu legen – der, die oder das?`, "В пруду плавают рыбы с картинками. Поможешь разложить их по вёдрам: der, die или das?", "../angeln/");
   }
   function tierstationAntwort() {
-    if (!ortOffen("tierstation")) return blase("🩹", "Tierpflege-Station – noch zu", "Bruni richtet hier eine Station für kranke Wildtiere ein. Sie öffnet in Kapitel 2 – lern weiter bei Fipsi!", "Станция для диких животных откроется в главе 2.");
+    if (!ortOffen("tierstation")) return blase("🩹", "Tierpflege-Station – noch zu", "Bruni richtet hier eine Station für kranke Wildtiere ein. Sie öffnet in Kapitel 2 – Fipsis Schatzkarte zeigt den Weg dorthin.", "Станция для диких животных откроется в главе 2.");
     const d = S().lade("tierstation") || {}, g = d.gast;
     const de = !g ? `Hallo ${name()}! Heute braucht wieder ein Tier Hilfe. Kommst du in die Station?`
       : g.ruht && g.ruht < isoJetzt() ? "Das Tier in der Station ist wieder fit! Wir können es auswildern." : g.ruht ? "Pssst – das Tier in der Station schläft und erholt sich." : "Ein Tier in der Station wartet auf deine Hilfe.";
     return blase("baer", "Brunis Tierpflege-Station", de, "Станция Бруни для животных.", "../tierstation/");
   }
   AKTION.garten = [["🌱", "Garten"], 2.6]; AKTION.baeckerei = [["🥨", "Bäckerei"], 2.6]; AKTION.tierstation = [["🩹", "Station"], 2.6];
-  AKTION.leuchtturm = [["💡", "Leuchtturm"], 2.4];
+  AKTION.leuchtturm = [["💡", "Leuchtturm"], 2.4]; AKTION.schatz = [["📖", "Öffnen"], 2.0];
   const aktionFuer = (id, insel = true) => (id === "boot" ? [ortOffen("boot", insel) ? ["⛵", "Boot"] : ["👀", "Ansehen"], 3.2] : id === "lager" ? [ortOffen("lager", insel) ? ["🧭", "Forschen"] : ["👀", "Ansehen"], 2.6] :
     id === "leuchtturm" && !leuchtturmOffen() ? [["👀", "Ansehen"], 2.4] : id === "station" && drachenOffen() ? [["🪁", "Drachen"], 1.9] : id === "truhe" && bald(id) ? [["🎣", "Angeln"], 1.9] : id === "ballons" && bald(id) ? [["🛶", "Boot"], 1.9] : bald(id) ? [["🚧", "Ansehen"], ["lauf", "kart", "bau"].includes(id) ? 2.4 : 1.9] : ["lauf", "kart", "bau"].includes(id) ? [istFrei(id) ? [SPIELE[id].e, "Spielen"] : ["🔒", "Ansehen"], 2.4] : AKTION[id] || [["👀", "Ansehen"], 1.9]);
 
@@ -813,6 +890,7 @@
     spielZeit, profi, schlaeftText, fuehrerscheinText, sonnenuhr, sonnenuhrText, nebelStufe,
     weihnachtsPaket, geburtstagsPaket, paketDa, oeffnePaket, naechsteStory, storyFertig, prologFaellig, FACH, freude, ETAPPEN, merkkisteBei,
     KAPITEL, WETTER_THEMEN, wortSchilder, tildaGenutzt, leuchtturmOffen, deutschFertig, matheFertig,
+    SCHATZKARTE, schatzkarteKomplett, JAHRESZEITEN, jahreszeitJetzt, NEBEN, nebenszene, FESTE, festJetzt,
     // Zimmer
     PLAETZE, MOEBEL, WANDFARBEN, zimmerDaten, besitzt, pinnwandZettel, wandPreis, standardWand, geschlecht,
     // Wetter

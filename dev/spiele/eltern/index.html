@@ -72,8 +72,13 @@
   .noch-zeile { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; margin: 10px 0 4px; padding: 12px; border-radius: 16px; background: #E3F7EF; }
   .noch-zeile label { display: grid; gap: 4px; font-weight: 600; font-size: .95rem; }
   .noch-zeile input { font: inherit; font-size: 1.2rem; width: 120px; padding: 8px 10px; border-radius: 12px; border: 3px solid #9ED9BF; }
-  .schalter-z { display: flex; gap: 10px; align-items: center; font-weight: 600; margin: 8px 0; }
-  .schalter-z input { width: 26px; height: 26px; }
+  /* Paket 2 (07.11.2026): Schalter mit Tippfläche ≥ 40 px, auch auf dem Handy (vorher 26 px bzw. 13 px breit) */
+  .schalter-z { display: flex; gap: 12px; align-items: center; font-weight: 600; margin: 8px 0; min-height: 44px; cursor: pointer; }
+  .schalter-z input { flex: none; width: 40px; height: 40px; min-width: 40px; margin: 0; accent-color: var(--pflaume, #3B1F63); }
+  .sprung { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr)); gap: 6px; margin: 0 0 12px; }
+  .sprung .knopf { min-height: 40px; font-size: .9rem; padding: 0 12px; }
+  .geburt-fehlt { margin-top: 8px; }
+  .eltern-teil .karte { scroll-margin-top: 84px; }   /* Sprungmarke: Karte nicht unter den festen Reitern */
   .woche-balken { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; height: 150px; margin: 14px 0 4px; align-items: end; }
   .tag-balken { display: grid; grid-template-rows: 1fr auto; height: 100%; text-align: center; }
   .saeulen { display: flex; gap: 3px; align-items: flex-end; justify-content: center; height: 100%; }
@@ -109,9 +114,7 @@
 <script src="../../shared/eigenes.js"></script>
 <script src="../../shared/echtewelt.js"></script>
 <script src="../../shared/zeit.js" data-art="eltern"></script>
-<script src="../mathe/aufgaben.js"></script>
-<script src="../mathe/fehler.js"></script>
-<!-- Fachdaten (~1,5 MB: Themen, Werkstatt, Lehrplan …) lädt eltern.js erst nach dem ersten Bild nach (FACHDATEN, 05.11.2026) -->
+<!-- Fachdaten (~1,9 MB: Matheweg-Aufgaben, Denkfehler, Themen, Werkstatt, Lehrplan …) lädt eltern.js erst nach dem ersten Bild nach (FACHDATEN, 05.11.2026; Mathe seit 07.11.2026) -->
 <script src="eltern.js"></script>
 </body>
 </html>

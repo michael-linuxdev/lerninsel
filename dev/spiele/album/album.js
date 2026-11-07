@@ -13,6 +13,9 @@
   // Inselchronik (NA-18): eigener Reiter hinter den Sticker-Seiten; #chronik öffnet ihn direkt
   const CHRONIK = ST.SEITEN.length, Sz = window.Szene, Sto = window.Story;
   if (location.hash === "#chronik") aktiv = CHRONIK;
+  // Wörterbuch der Insel (07.11.2026, Kapitel 8 „Fipsis Schatz“): eigener Reiter ab Kapitel 8, #woerterbuch öffnet ihn direkt
+  const WOERTERBUCH = CHRONIK + 1, mitWoerterbuch = !!(Sto && window.Woerterbuch && Sto.kapitel() >= 8);
+  if (location.hash === "#woerterbuch" && mitWoerterbuch) aktiv = WOERTERBUCH;
 
   const st = ST.stand();
   $("zaehler").textContent = `${st.hat} / ${st.gesamt}`;
@@ -38,7 +41,8 @@
     $("reiter").innerHTML = ST.SEITEN.map((s, i) => {
       const n = s.sticker.filter(([id]) => d.hat[id]).length, punkt = s.sticker.some(([id]) => neu.has(id));
       return `<button role="tab" aria-selected="${i === aktiv}" class="${i === aktiv ? "an" : ""}" data-i="${i}">${s.sticker[0][1]} ${s.name} ${n}/${s.sticker.length}${punkt ? '<span class="punkt"></span>' : ""}</button>`;
-    }).join("") + (Sz && Sto ? `<button role="tab" aria-selected="${aktiv === CHRONIK}" class="${aktiv === CHRONIK ? "an" : ""}" data-i="${CHRONIK}">📜 Inselchronik ${eintraege().length}</button>` : "");
+    }).join("") + (Sz && Sto ? `<button role="tab" aria-selected="${aktiv === CHRONIK}" class="${aktiv === CHRONIK ? "an" : ""}" data-i="${CHRONIK}">📜 Inselchronik ${eintraege().length}</button>` : "") +
+      (mitWoerterbuch ? `<button role="tab" aria-selected="${aktiv === WOERTERBUCH}" class="${aktiv === WOERTERBUCH ? "an" : ""}" data-i="${WOERTERBUCH}">📖 Wörterbuch</button>` : "");
   }
   // der aktive Reiter soll sichtbar sein (die Leiste ist breiter als der Bildschirm)
   // (04.11.2026) nur scrollen, wenn der gewählte Reiter nicht ganz zu sehen ist (offsetLeft zählte den Seitenrand mit – der erste Reiter war angeschnitten)
@@ -73,9 +77,20 @@
         return `<li data-s="${x.s}"><span class="nr">${i + 1}.</span><span class="kopf">${kopf}</span><span class="was"><b>${def.titel || x.s}</b><span>${datum(x.d)}</span></span><button class="knopf haupt" data-spiele="${x.s}" aria-label="${def.titel || x.s} ansehen">▶ Ansehen</button></li>`; }).join("")}</ol>`
         : `<p class="chronik-leer">Noch ist deine Chronik leer. Auf der Insel warten die ersten Geschichten auf dich!</p>`);
   }
+  // Jedes Wort ist ein Knopf: Antippen liest es mit Artikel vor (data-vorlesen). Farbe des Artikels wie in der Werkstatt üblich.
+  const ART_F = { der: "#2F86C8", die: "#D8404F", das: "#2E9C5A" };
+  function woerterbuch(el) {
+    const g = window.Woerterbuch.gruppen(), n = g.reduce((s, x) => s + x.woerter.length, 0), esc = S.esc;
+    el.style.background = "#FFF3E6";
+    el.innerHTML = `<h2>📖 Wörterbuch der Insel</h2><p class="klein">Fipsis Schatz: ${n === 1 ? "ein Wort" : `${n} Wörter`}, die du gelernt hast – von A bis Z. Tippe auf ein Wort, dann hörst du es.</p>` +
+      (n ? `<div class="wb">${g.map(x => `<section class="wb-gruppe"><h3>${x.buchstabe}</h3><div class="wb-woerter">${x.woerter.map(w =>
+        `<button class="wb-wort" data-vorlesen="de" data-sag="${esc((w.artikel ? w.artikel + " " : "") + w.wort)}">${w.e ? `<span class="wb-e">${esc(w.e)}</span>` : ""}${w.artikel ? `<i style="color:${ART_F[w.artikel]}">${w.artikel}</i> ` : ""}<b>${esc(w.wort)}</b></button>`).join("")}</div></section>`).join("")}</div>`
+        : `<p class="chronik-leer">Noch ist das Wörterbuch leer. Bei Fipsi lernst du die ersten Wörter!</p>`);
+  }
   function seite() {
     const el = $("seite");
     if (aktiv === CHRONIK) { chronik(el); return; }
+    if (aktiv === WOERTERBUCH && mitWoerterbuch) { woerterbuch(el); return; }
     const s = ST.SEITEN[aktiv];
     el.style.background = s.farbe;
     const voll = s.sticker.every(([id]) => d.hat[id]);
@@ -104,9 +119,10 @@
   $("reiter").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; aktiv = +b.dataset.i; reiter(); seite(); S.ton("tipp"); });
   $("seite").addEventListener("click", (e) => {
     const sp = e.target.closest("[data-spiele]"); if (sp) { S.ton("tipp"); Sz.spiele(sp.dataset.spiele, { chronik: false }); return; }
+    const wb = e.target.closest(".wb-wort"); if (wb) { S.ton("tipp"); if (SP && SP.sprich) SP.sprich(wb.dataset.sag, "de-DE"); return; }
     const b = e.target.closest(".st"); if (b) { S.ton("tipp"); gross(b.dataset.id); }
   });
   $("gross").addEventListener("click", (e) => { if (e.target.id === "gross") $("gross").hidden = true; });
   reiter(); seite(); zeigeReiter(); auswahl();
-  window.__album = { chronik: () => (Sto ? Sto.chronik() : []), eintraege: () => (Sto && Sz ? eintraege() : []), zeige: (i) => { aktiv = i; reiter(); seite(); }, CHRONIK, auswahl };
+  window.__album = { chronik: () => (Sto ? Sto.chronik() : []), eintraege: () => (Sto && Sz ? eintraege() : []), zeige: (i) => { aktiv = i; reiter(); seite(); }, CHRONIK, WOERTERBUCH, auswahl };
 })();
