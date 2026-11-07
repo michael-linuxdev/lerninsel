@@ -17,15 +17,23 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Danach in 
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
-**Letzte Sitzung (11.11.2026, Gerätedatum 07.11.)** – Auftrag „gesamtverantwortlich; Agenten reviewen Lerninhalte, Grafik, Leistung, UI/UX, Story“, danach „alles bauen, gern mit eigenen Ideen“:
-fünf Prüf-Agenten, sechs Pakete (Abschnitt 1), alle Tests grün. **Seit dem 08.11. gibt es keine iPad-Rückmeldung** – sie ist jetzt das Wichtigste, denn diesmal hat sich viel Sichtbares geändert.
-1. **Fragerunde (höchstens 4 Fragen):** iPad-Rückmeldung zur Liste in Abschnitt 1 (Fehler zuerst beheben, je mit Test). Prüfliste Russisch ausgefüllt? Welche Pakete aus Abschnitt 2?
+**Übergabe (12.11.2026, Gerätedatum 07.11.)** – auf Wunsch des Auftraggebers an eine neue, unabhängige Sitzung; die alte Sitzung arbeitet vorerst weiter.
+**Zuerst prüfen, was davon schon auf `main` liegt** (`git log --oneline -15`, PLAN-Einträge „Stand 12.11.2026“): die alte Sitzung baut gerade **Runde 2** (Abschnitt 2, Pakete G–J) mit fünf Agenten
+in lokalen Arbeitskopien – **nur was auf `main` gepusht ist, ist da**. Fehlt ein Paket aus G–J auf `main`, ist es noch nicht fertig: dann selbst bauen.
+1. **Fragerunde (höchstens 4 Fragen):** iPad-Rückmeldung (seit 08.11. keine – zwei große Runden sind auf echtem Safari ungetestet: Emojis als `<img>`, Update-Verhalten, Kamerafahrt, kurze Startseite).
+   Hat jemand mit dem Erprobungsmodus gespielt oder geprüft (Paket K)? Dann zuerst die Dateien auswerten.
 2. **Entschieden (nicht neu fragen):** 10.11.: „Namen schreiben“ bleibt „teilweise“; russische Hilfe automatisch nach Deutschstand; Kulissen wählt das Kind. 11.11.: kurze Startseite für Vorschule/Kl. 1
-   mit Eltern-Schalter „Alles zeigen“; Abdeckung streng (≥ 2 Übungen je Punkt, Zahlen dürfen sinken); Kamera fährt beim Betreten von weit heran; Story mit Finale (Kapitel 9), danach offen weiter.
-3. Danach selbstständig nach Abschnitt 2.
+   mit Eltern-Schalter „Alles zeigen“; Abdeckung streng (≥ 2 Übungen je Punkt, Zahlen dürfen sinken); Kamera fährt beim Betreten von weit heran; Story mit Finale, danach offen weiter.
+   **12.11.:** Noch spielt **kein Kind** die App – Reihenfolgen und Spielstände dürfen sich ändern („alles ist erlaubt“). **„Bennos Brücke“ = Kapitel 9, Finale „Die Insel ist wach“ = Kapitel 10** (letztes Kapitel,
+   danach Jahreszeiten/Feste). **Erprobungsmodus** (Paket K) wird gebaut; **eine Person kann mehrere Rollen gleichzeitig haben**.
+3. **Produktstand (Einschätzung 12.11.):** Umfang und Technik weit (≈ 90 % / 85 %), Lehrplan ≈ 70 % (Nebenfächer, Englisch „teilweise“ – Runde 2), aber **0 von 505 Inhalten von Menschen geprüft**,
+   Russisch/Sorbisch nur Entwürfe, **nie mit Kindern erprobt**, keine Impressum-/Datenschutzseite (rechtlich klären, falls öffentlich). Empfehlung: nach Runde 2 und Paket K **Prüf- und Erprobungsphase**
+   statt neuer großer Funktionen – iPad-Durchgang, 1–3 Kinder beobachten, Lehrkraft prüft Mathe/Deutsch Kl. 1–2, Russisch über die Prüfliste.
 4. **Technische Hinweise:** Nach der Ersteinrichtung kommt der Übergabe-Bildschirm – **Tests klicken nach `#e-ok` auch `#uebergabe-los`**, der Elternbereich braucht danach die PIN
    (`if (await p.$("#pin1")) …`). Emojis sind `<img>` (`.emo > img`), nicht mehr SVG. `sw.js` trägt `PRUEFSUMMEN` – immer `sh quellen/dev-bauen.sh` vor dem Push, sonst ist `offline` rot.
    Commits: Autor michael-linuxdev, Committer `Claude <noreply@anthropic.com>` (`git config user.name Claude; git config user.email noreply@anthropic.com`, Autor per `--author`), sonst „Unverified“.
+   CI-Zeitlimit 60 min (Lauf 115 grün nach Review-Runde). Viele Agenten parallel: je eigener Worktree, generierte Dateien (`dev/`, `spiele/welt3d/`, `ru-texte.js`, `icons.js`) nicht committen lassen,
+   beim Zusammenführen Testlisten in `tests/laufen.sh`/CI vereinen und neue Tests auf `#uebergabe-los` prüfen; Test-Haken-Objekte mit Gettern nie per `Object.assign` erweitern (`defineProperties`).
 
 ## 1. Stand (11.11.2026)
 **Neu (PLAN „Stand 11.11.2026“):** Paket 1 Sofort-Fehler (Inhaltsfehler, ehrliches Lob, Übergabe-Bildschirm), Paket 2 Ohne Lesen (kurze Startseite mit „Los!“, 🔊 im Matheweg, 🏠/⬅️-Regel),
@@ -279,6 +287,24 @@ Die Inhalte sind fertig. Optik, Story und Familienfunktionen sind ausgebaut. Zul
 - Muttersprachlerinnen und Muttersprachler für ru/uk; Silbenfarben der Schule.
 
 ## 2. Nächste Pakete (in dieser Reihenfolge)
+**Stand 12.11.2026 – Runde 2 (läuft in der alten Sitzung; auf `main` prüfen, was fertig ist):**
+- G. **Fächer ausbauen** I (Kunst, Musik, Werken) und II (Sport, Ethik, Religion ev/ka): Themen in `faecher.js`/`religion.js` so ausbauen, dass Inhaltspunkte ehrlich „ja“ werden (≥ 2 Übungen je Punkt);
+  reine Draußen-/Material-Punkte bleiben `aussen`/„teil“ mit Hinweis. Tests `faecher1`, `faecher2`. Stand vorher: Kunst 16/17, Musik 23/14, Werken 7/18, Sport 6/8, Ethik 16/27, Ev 26/19, Ka 17/42 (ja/teil).
+- H. **Englisch: Sprechen, Hören, Dialoge** – Schritt `dialog` (Figur fragt, Kind wählt Antwort und spricht nach), Nachsprechen mit Aufnahme (offline, Selbstvergleich, keine Spracherkennung),
+  Hörgeschichten mit Fragen; Sprech-/Hörpunkte neu bewerten (freies Sprechen bleibt „teil“). Test `englischsprechen`.
+- I. **Kapitel 9 „Bennos Brücke“** (vor dem Finale, das Kapitel 10 wird): Szene, Seite `spiele/bruecke/` (Länge, Maß, Bauplan je Stufe vs–4, Brücke wächst je Abschnitt), 3D-Ort am Ufer, Brücke wächst
+  aufs Wasser, fertig → begehbar; `Story.KAPITEL_ZAHL = 10`; Finale würdigt die Brücke. Test `bruecke`.
+- J. **`shared/icons.js` verkleinern** (2,7 MB / 764 KB gzip): SVG-Daten kompakter, in Gruppen nachladen, keine lange Aufgabe, Aussehen gleich (Pixel-Vergleich). Messwerte vorher/nachher.
+**Danach:**
+- K. **Erprobungsmodus** (Entscheidung 12.11.): neuer, immer sichtbarer Reiter im Elternbereich „🔍 Erprobung & Prüfen“ (PIN). Rollen **mehrfach wählbar**: Spieler/in, Lehrkraft (Fächer/Klassen wählbar),
+  Muttersprachler/in (Russisch und/oder Sorbisch), dazu ein Kürzel statt Name, kurzer Einwilligungstext für Eltern. Aufzeichnung nur bei eingeschaltetem Modus: Seiten/Verweildauer, jede Aufgabe
+  (Inhalt-ID, Antwort, richtig, Zeit, Hilfe/🔊 genutzt), Abbrüche, übersprungene Szenen, technische Fehler, Gerät/App-Version – **keine** eigenen Texte, Aufnahmen, Bilder. Schwebender Knopf „✍️ Melden“
+  (Fehler / unverständlich / zu schwer / zu leicht / schön / Idee + Text, Kontext automatisch). **Prüfleiste unter jeder Aufgabe** in den normalen Seiten je aktiver Rolle (fachlich 👍/✏️/❓, Russisch/Sorbisch
+  👍/✏️ bessere Fassung), Übersicht „was ist geprüft“ je Rolle/Fach/Klasse; die bisherigen Prüflisten Russisch/Sorbisch bleiben als Ansicht und schreiben in dieselbe Datei. Export „💾 Erprobung speichern“ →
+  `lerninsel-erprobung-<kürzel>-<datum>.json` (Teilen-Menü, nichts automatisch verschickt; Vorschau vor dem Teilen; kompakter Ringspeicher). Auswertung im Repo: `quellen/erprobung-auswerten.js <dateien…>`
+  → Bericht (Hänger, Fehlerquoten, Zeiten, Meldungen) und Übernahme der Prüfungen in `quellen/pruefstand.json` (an Prüfsumme des Inhalts gebunden). Test `erprobung` mit echtem Durchklicken.
+- L. Prüf- und Erprobungsphase (siehe Abschnitt 0, Punkt 3); Impressum/Datenschutz klären, falls öffentlich.
+
 **Stand 11.11.2026 – zuerst:**
 - A. iPad-Rückmeldung zu den sechs Paketen (Liste in Abschnitt 1) – Fehler zuerst, je mit Test.
 - B. Fachthemen Kunst, Musik, Werken, Sport, Ethik, Religion ausbauen (mindestens 2 Übungen je Inhaltspunkt; jetzt etwa zur Hälfte „teilweise“).

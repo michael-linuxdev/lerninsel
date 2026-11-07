@@ -2534,3 +2534,11 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
 - **Offen / nächstes:** (A) iPad-Rückmeldung zu allem (Liste in SESSION-PROMPT); (B) Fachthemen Kunst/Musik/Werken/Sport/Ethik/Religion auf ≥ 2 Übungen je Punkt ausbauen (jetzt „teil“);
   (C) Englisch: Sprechen/Redemittel (Mini-Dialoge, Nachsprechen mit Aufnahme); (D) Kapitel „Bennos Brücke“ (offener Faden); (E) `icons.js` verkleinern/teilen, Weitsicht der Kamerafahrt in „einfach“
   gegen das Budget messen; (F) russische Entwürfe der neuen Texte prüfen lassen; `docs/LEHRPLAN.md` Zahlen nachziehen.
+
+## Stand 12.11.2026 (Entscheidungen, Runde 2 gestartet, Übergabe)
+- **Entscheidungen des Auftraggebers:** Noch spielt kein Kind die App – Reihenfolgen dürfen sich ändern. **„Bennos Brücke“ wird Kapitel 9, das Finale „Die Insel ist wach“ Kapitel 10.**
+  Erprobungsmodus bauen (Nutzung aufzeichnen, Melden-Knopf, Prüfleiste für Lehrkräfte und Muttersprachler, alles in eine Datei); **ein Tester kann mehrere Rollen gleichzeitig haben**.
+- **Produktstand (Einschätzung):** Umfang ≈ 90 %, Technik ≈ 85 %, Lehrplan ≈ 70 %; aber 0 von 505 Inhalten von Menschen geprüft, Übersetzungen Entwürfe, nie mit Kindern erprobt,
+  keine Impressum-/Datenschutzseite. Heute gibt es Prüflisten nur für Russisch (Elternbereich, nur mit Hilfesprache Russisch) und Sorbisch (nur mit Sorbisch-Wahl), fachlich keine; Ergebnisse als kopierter Text.
+- **Runde 2 gestartet** (fünf Agenten, je eigener Worktree): Fächer I (Kunst/Musik/Werken), Fächer II (Sport/Ethik/Religion), Englisch Sprechen/Dialoge, Kapitel 9 Bennos Brücke, `icons.js` verkleinern.
+  Danach Paket K Erprobungsmodus. Übergabe für eine neue Sitzung in `docs/SESSION-PROMPT.md` (Abschnitt 0 und 2, Pakete G–L).
