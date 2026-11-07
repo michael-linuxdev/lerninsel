@@ -116,7 +116,7 @@
   </section>
 </main>
 <script src="../../shared/figuren.js"></script>
-<script src="../../shared/icons.js"></script>
+<script src="../../shared/icons-liste.js"></script>
 <script>
 (function () {
   const F = window.FigurenNeu, $ = (id) => document.getElementById(id);
@@ -134,11 +134,13 @@
     $("blase").innerHTML = F.svg("eule", v, "staunt") + `<div class="text">Mira, komm mal mit! Neben dem Wissensbaum ist ein Garten aufgewacht.</div>`;
   }
   document.querySelectorAll("[data-v]").forEach(b => b.addEventListener("click", () => { v = b.dataset.v; document.querySelectorAll("[data-v]").forEach(x => x.classList.toggle("an", x === b)); zeichne(); }));
-  fetch("emoji/probe.json").then(r => r.json()).then(l => {
+  fetch("emoji/probe.json").then(r => r.json()).then(l => { (window.__stilEmoji = () => {
     const zeile = (titel, fn) => `<tr><th>${titel}</th>${l.map(fn).join("")}</tr>`;
     $("emoji").innerHTML = zeile("Dein Gerät", ([e]) => `<td><span>${e}</span></td>`) + zeile("Lerninsel", ([, h]) => `<td>${(window.LERN_ICONS || {})[h] ? window.LERN_ICONS[h].replace("<svg ", '<svg width="44" height="44" ') : ""}</td>`);
-  });
+  })(); });
   zeichne();
+  // Noto-Bilder liegen seit 07.11.2026 in Häppchen (shared/icons/) – alle laden, dann die Äpfel neu zeichnen
+  LernIconsAlle("../../shared/icons/").then((I) => { window.LERN_ICONS = I; zeichne(); if (window.__stilEmoji) window.__stilEmoji(); });
   window.__stil = { zeichne, setze: (x) => { v = x; zeichne(); } };
 })();
 </script>

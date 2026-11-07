@@ -24,7 +24,7 @@ const GRENZE = {
   const ctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true, serviceWorkers: "block" });
   await ctx.addInitScript(() => {
     window.__jetzt = new Date(2026, 9, 25, 15, 0).getTime(); window.__elternAlle = sessionStorage.getItem("__alle") === "1";
-    requestAnimationFrame(() => { window.__iconsBeimErstenBild = !!window.LERN_ICONS; });
+    requestAnimationFrame(() => { window.__iconsBeimErstenBild = !!(window.LERN_ICONS_GELADEN && Object.keys(window.LERN_ICONS_GELADEN).length); });
     window.__lang = []; try { new PerformanceObserver(l => l.getEntries().forEach(e => window.__lang.push(Math.round(e.duration)))).observe({ type: "longtask", buffered: true }); } catch (e) { /* egal */ }
   });
   const p = await ctx.newPage();
@@ -45,7 +45,7 @@ const GRENZE = {
     if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.goto(BASIS + s, { waitUntil: "load" }); await p.waitForTimeout(3000); }
     const r = await p.evaluate(() => {
       const res = performance.getEntriesByType("resource"), fcp = (performance.getEntriesByType("paint").find(x => x.name === "first-contentful-paint") || {}).startTime || 0;
-      const icons = res.find(x => /shared\/icons\.js/.test(x.name));
+      const icons = res.filter(x => /shared\/icons\/[\w-]+\.js/.test(x.name)).sort((a, b) => a.startTime - b.startTime)[0];
       return { dom: document.getElementsByTagName("*").length, lang: Math.max(0, ...window.__lang), fcp: Math.round(fcp), dcl: Math.round(performance.getEntriesByType("navigation")[0].domContentLoadedEventEnd),
         iconsNach: icons && !window.__iconsBeimErstenBild ? Math.round(icons.startTime - fcp) : null, emoSvg: document.querySelectorAll(".emo svg").length, emo: document.querySelectorAll(".emo").length,
         qr: res.some(x => /qrcodegen\.js|spielstand\.js/.test(x.name)) };
@@ -57,7 +57,7 @@ const GRENZE = {
     erwarte(r.dom <= g.dom, `${s || "Startseite"}: ${r.dom} DOM-Knoten (≤ ${g.dom})`);
     erwarte(r.lang <= g.lang, `${s || "Startseite"}: längste lange Aufgabe ${r.lang} ms (≤ ${g.lang} ms bei Drossel 4)`);
     erwarte(r.emoSvg === 0 && r.emo > 0, `${s || "Startseite"}: ${r.emo} Emojis als <img>, kein Inline-SVG`);
-    erwarte(r.iconsNach !== null, `${s || "Startseite"}: Noto-Bilder (icons.js) erst nach dem ersten Bild geladen`);
+    erwarte(r.iconsNach !== null, `${s || "Startseite"}: Noto-Bilder (Häppchen shared/icons/) erst nach dem ersten Bild geladen`);
   }
   await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
   await p.evaluate(() => sessionStorage.removeItem("__alle"));
