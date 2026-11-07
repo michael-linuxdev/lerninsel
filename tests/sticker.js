@@ -31,7 +31,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
 
   await p.goto(BASIS + "spiele/album/"); await p.waitForTimeout(500);
   const karte = await p.evaluate(() => ({ sichtbar: !document.getElementById("auswahl").hidden, n: document.querySelectorAll("[data-wahl]").length, fehlend: Sticker.fehlend().length }));
-  erwarte(karte.sichtbar && karte.n === karte.fehlend && karte.n === 32, `Album zeigt die Auswahl mit allen ${karte.n} fehlenden Lern-Stickern`);
+  // 36 = 32 + vier neue Begleiter-Sticker (Biber Benno, Bärin Bruni, Papagei Paula, Schildkröte Tilda – Eine Welt, 07.11.2026)
+  erwarte(karte.sichtbar && karte.n === karte.fehlend && karte.n === 36, `Album zeigt die Auswahl mit allen ${karte.n} fehlenden Lern-Stickern`);
   if (BILDER) await p.screenshot({ path: `${BILDER}/sticker-auswahl.png` });
   await p.click('[data-wahl="rakete"]'); await p.waitForTimeout(300);
   d = await p.evaluate(() => ({ wahl: Sticker.wahl(), hat: Sticker.daten().hat, zu: document.getElementById("auswahl").hidden, an: document.querySelector('.st.hat[data-id="rakete"]') !== null }));

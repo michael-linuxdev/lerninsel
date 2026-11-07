@@ -65,6 +65,13 @@ const KONTUR = "rgb(59, 31, 99)";
         erwarte(l.rest > 50 && l.oy === "auto" && l.hoehe < l.innen * 0.7, `${name} ${lage}: sehr langer Text scrollt innen (${l.rest} px), Blase bleibt unter 70 % der Höhe`);
       }
     }
+    // (Eine Welt, 07.11.2026) Begleiter-Blasen auf den Fach-Startseiten (Benno, Fipsi, Ella) mit Kontur und Zipfel; Knöpfe mit Kontur-Umriss
+    for (const [pfad, sel] of [["spiele/mathe/", "#benno-text"], ["spiele/deutsch/", "#karte-text"], ["spiele/sachkunde/", "#intro-text"]]) {
+      await p.goto(BASIS + pfad); await p.waitForTimeout(600);
+      const b = await p.evaluate((sel) => { const e = document.querySelector(sel), c = getComputedStyle(e), z = getComputedStyle(e, "::before"), k = document.querySelector(".knopf"), kc = k ? getComputedStyle(k) : {};
+        return { kontur: c.borderTopColor, breite: c.borderTopWidth, zipfel: z.borderLeftColor, knopf: kc.outlineColor, quer: document.documentElement.scrollWidth <= innerWidth + 1 }; }, sel);
+      erwarte(b.kontur === KONTUR && b.breite === "3px" && b.zipfel === KONTUR && b.knopf === KONTUR && b.quer, `${pfad} ${lage}: Begleiter-Blase mit Kontur und Zipfel, Knöpfe mit Kontur`);
+    }
     await ctx.close();
   }
   await browser.close();

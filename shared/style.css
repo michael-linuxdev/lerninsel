@@ -26,11 +26,13 @@ html, body { margin: 0; height: 100%; }
 
 body {
   background: var(--himmel);
+  /* (Eine Welt, 07.11.2026) Wolken an den Rand gerückt (halb aus dem Bild) – vorher ragten sie als weiße Beulen hinter Karten hervor;
+     auf Seiten mit Karten- oder Kachelraster ganz weg (siehe unten, :has) */
   background-image:
-    radial-gradient(circle at 12% 18%, #fff 0 38px, transparent 39px),
-    radial-gradient(circle at 16% 20%, #fff 0 28px, transparent 29px),
-    radial-gradient(circle at 86% 12%, #fff 0 32px, transparent 33px),
-    radial-gradient(circle at 90% 15%, #fff 0 24px, transparent 25px);
+    radial-gradient(circle at 0% 3%, #fff 0 46px, transparent 47px),
+    radial-gradient(circle at 4% 0%, #fff 0 34px, transparent 35px),
+    radial-gradient(circle at 100% 97%, #fff 0 42px, transparent 43px),
+    radial-gradient(circle at 96% 100%, #fff 0 30px, transparent 31px);
   background-attachment: fixed;
   -webkit-user-select: none; user-select: none;
   overscroll-behavior: none;
@@ -157,3 +159,22 @@ svg.fig-klein [vector-effect] { vector-effect: none; }
    Kasten würde den Zipfel abschneiden). Die Hülle und der innere Teil teilen sich keine Kontur. */
 #blase.blase-innen, .blase-innen { border: 0; }
 
+
+/* ---------- Eine Welt (07.11.2026): Stil A überall gleich ----------
+   Eine Kontur-Farbe: --pflaume (Text, Haupt-Knöpfe) ist jetzt derselbe dunkle Ton wie die Kontur (#3B1F63 statt #4B2380).
+   Knöpfe, Türen und Karten bekommen die Kontur als outline (ändert weder Größe noch Seiten-Schatten, folgt der Rundung);
+   Knöpfe stehen auf einem festen Schatten im Kontur-Ton. Durchsichtige „leise“ Knöpfe bleiben ohne Kontur. */
+:root { --pflaume: #3B1F63; --kontur-dick: 2.5px; }
+.knopf, .tuer, .karte, .ich-knopf, .erst-dann, .heute-fuer-dich { outline: var(--kontur-dick) solid var(--kontur); outline-offset: calc(var(--kontur-dick) * -1); }
+.knopf { box-shadow: 0 5px 0 var(--kontur); }
+.knopf:active { box-shadow: 0 1px 0 var(--kontur); }
+.knopf.leise, #szene-weg, .knopf.name-aendern, .name-aendern { outline: 0; }
+/* Begleiter-Blase auf den Fach-Startseiten (Benno, Fipsi, Ella): Kontur, fester Schatten und ein Zipfel mit Kontur zur Figur links */
+.begleiter-blase { position: relative; background: #fff; border: 3px solid var(--kontur) !important; box-shadow: 0 5px 0 rgba(59, 31, 99, .22) !important; }
+.begleiter-blase::before { content: ""; position: absolute; left: -12px; top: 50%; width: 18px; height: 18px; margin-top: -9px; background: #fff;
+  border: 0 solid var(--kontur); border-left-width: 3px; border-bottom-width: 3px; border-right: 0 !important; transform: rotate(45deg); }
+/* Wolken nur auf Seiten ohne Karten-/Kachelraster */
+body:has(.karte, .lektionen, .kacheln, .schrank, .su-gruppe, .werk-gruppe) { background-image: none; }
+/* Lebendige Insel-Tür (Eine Welt, eigene Idee): Startseite zeigt die Tageszeit der Insel (shared/inseltuer.js) */
+.tuer.insel.nacht { background: linear-gradient(160deg, #3D4F8F, #1C2A55); }
+.tuer.insel.daemmer { background: linear-gradient(160deg, #FFB37A, #4FA35A 70%); }

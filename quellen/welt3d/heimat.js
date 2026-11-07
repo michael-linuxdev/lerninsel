@@ -108,6 +108,10 @@ const boden = [];
 // Feste Deko (Bäume, Steine, Blumen, Wegsteine) kommt erst in diese Gruppe und wird danach zu wenigen Meshes verschmolzen:
 // aus vielen hundert Zeichenaufrufen werden so ein paar wenige – wichtig für ältere Tablets (iPad 10 ruckelte bei „riesig“).
 const deko = new Group();
+// Regen (Eine Welt, 07.11.2026): Wegsteine und Steine haben eigene Materialien (userData.lebt → nicht in Vertex-Farben eingebacken, je 1 Zeichenaufruf),
+// damit sie bei Regen nass und dunkler werden können (machNass())
+const lebend = (f) => { const m = new MeshToonMaterial({ color: f, gradientMap: verlauf }); m.userData.lebt = true; return m; };
+const WEG_MAT = lebend("#D9CDB8"), STEIN_MAT = lebend(WELT.insel ? "#A7A9B8" : WELT.B.fels);
 if (!WELT.insel) {
   // Gelände: Ringe um die Mitte, Höhe aus der Welt, Farben je Höhe (Gras, Fels, Schneekuppen, Strand)
   const ringe = EINFACH ? Math.round(WELT.R * 1.4) : Math.round(WELT.R * 2), segs = EINFACH ? 64 : WELT.R > 16 ? 80 : 96, RA = WELT.R + 1.2;   // NA-29: etwas gröberes Gelände in „schön“
@@ -138,7 +142,7 @@ if (!WELT.insel) {
     t.rotation.x = -Math.PI / 2; t.position.set(WELT.see.x, -0.18, WELT.see.z); scene.add(t);
     block(WELT.see.x, WELT.see.z, WELT.see.r - 0.2);
   }
-  WELT.pfad.forEach(([x, z]) => { const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, 20), mat("#D9CDB8")); p.receiveShadow = true; setze(p, x, bodenY(x, z) + 0.03, z); deko.add(p); });
+  WELT.pfad.forEach(([x, z]) => { const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, 20), WEG_MAT); p.receiveShadow = true; setze(p, x, bodenY(x, z) + 0.03, z); deko.add(p); });
 }
 if (WELT.insel) {
   // Heimatinsel (Weg 3, 09.11.2026): Sand und Gras aus dem Radius der Welt (R = 19; vorher feste 15,2), Gras bis R − 3
@@ -149,7 +153,7 @@ if (WELT.insel) {
   g.receiveShadow = true; scene.add(g); boden.push(g, s);
   // Pfad vom Haus zum Platz in der Mitte und Trittstein-Wege zu Garten, Bäckerei, Tierstation und Leuchtturm (aus dem Kern)
   [...WELT.pfad, ...KI.WEGE.flat()].forEach(([x, z]) => {
-    const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, EINFACH ? 12 : 20), mat("#D9CDB8"));
+    const p = new Mesh(new CylinderGeometry(0.55, 0.6, 0.12, EINFACH ? 12 : 20), WEG_MAT);
     p.receiveShadow = true; setze(p, x, 0.28, z); deko.add(p);
   });
 }
@@ -169,7 +173,8 @@ if (!EINFACH) wasser.material.onBeforeCompile = (sh) => {
       #endif`)
     .replace("#include <begin_vertex>", "vec3 transformed = vec3(position); transformed.y += sin(wA) * 0.1 + cos(wB) * 0.1;");
 };
-{ const schaum = new Mesh(new TorusGeometry(WELT.R + (WELT.insel ? 0.7 : 0.9), 0.18, 8, 80), new MeshBasicMaterial({ color: "#EAFBFF" })); schaum.rotation.x = Math.PI / 2; schaum.position.y = -0.48; scene.add(schaum); }
+const SCHAUM_FARBE = NACHT ? "#7FA3DA" : DAEMMER ? "#FFE8D6" : "#EAFBFF";   // Schaum am Ufer: nachts bläulich statt grau (Eine Welt)
+{ const schaum = new Mesh(new TorusGeometry(WELT.R + (WELT.insel ? 0.7 : 0.9), 0.18, 8, 80), new MeshBasicMaterial({ color: SCHAUM_FARBE })); schaum.rotation.x = Math.PI / 2; schaum.position.y = -0.48; scene.add(schaum); }
 
 // ---------- Bäume (Farbe nach Jahreszeit), Steine, Blumen ----------
 // Leistungsbudget (NA-29): Welten mit vielen Bäumen bekommen gröbere Kronen; in „einfach“ haben Bäume keine Kontur.
@@ -214,7 +219,7 @@ function kaktus(x, z, k) {
 }
 WELT.baeume.forEach(({ x, z, k, i, typ }) => typ === "nadel" ? nadelbaum(x, z, k) : typ === "palme" ? palme(x, z, k) : typ === "kaktus" ? kaktus(x, z, k) : baum(x, z, k, i));
 WELT.steine.forEach(([x, z, r]) => {
-  const st = teil(kugel(r, 20, 14), WELT.insel ? "#A7A9B8" : WELT.B.fels); st.scale.y = 0.65; setze(st, x, bodenY(x, z) + r * 0.3, z); deko.add(st); block(x, z, r);
+  const st = teil(kugel(r, 20, 14), STEIN_MAT); st.scale.y = 0.65; setze(st, x, bodenY(x, z) + r * 0.3, z); deko.add(st); block(x, z, r);
 });
 // Blumen als InstancedMesh (Performance + Code-Qualität, 01.11.2026): weniger Objekte, kein späteres Verschmelzen nötig für die Stiele
 // Heimatinsel: zwei Blumenwiesen aus dem Kern (Weg 3, 09.11.2026; im Frühling dichter), eigene Welten: gestreute Blumen der Welt
@@ -432,7 +437,8 @@ let hausObj = null, prolog = null;   // prolog: läuft gerade die Ankunft (NA-11
 let tuerLicht = null;
 if ((NACHT || DAEMMER) && !EINFACH) {
   const { x, z } = KI.vorDerTuer();
-  tuerLicht = new PointLight("#FFD46B", NACHT ? 18 : 9, 9, 2); tuerLicht.position.set(x, bodenY(x, z) + 2.2, z); scene.add(tuerLicht);
+  // (Eine Welt, 07.11.2026) tiefer und schwächer: vorher glühte das ganze Dach orange, jetzt fällt das Licht auf Tür und Weg
+  tuerLicht = new PointLight("#FFD46B", NACHT ? 10 : 6, 7, 2); tuerLicht.position.set(x, bodenY(x, z) + 1.3, z); scene.add(tuerLicht);
 }
 
 // ---------- Wolken, Sterne, Schnee ----------
@@ -444,10 +450,19 @@ for (let i = 0; i < 5; i++) {
     w.add(setze(new Mesh(kugel(r, 18, 12), wm), x, y, z)));
   w.position.set(-30 + i * 15, 13 + (i % 2) * 2, -22 + (i % 3) * 7); scene.add(w); wolken.push(w); starr.push([w]);
 }
+// Nachthimmel (Eine Welt, 07.11.2026): Sterne als ein Points-Objekt mit fester Pixelgröße (vorher 0,5 Welteinheiten in 70 m Entfernung – unter
+// einem Pixel und zu hoch am Himmel, man sah keinen) und ein Mond aus zwei Scheiben; beides ohne Nebel, je ein Zeichenaufruf, auch in „einfach“
+let sterne = null, mond = null;
 if (NACHT) {
-  const pos = []; for (let i = 0; i < 300; i++) { const a = Math.random() * Math.PI * 2, h = 0.25 + Math.random() * 0.7; pos.push(Math.cos(a) * 70 * Math.cos(h), 70 * Math.sin(h), Math.sin(a) * 70 * Math.cos(h)); }
+  // Die Kamera schaut immer schräg nach unten: der „Himmel“ oben im Bild ist der Hintergrund hinter dem Meeresrand (70 m). Darum liegen die Sterne
+  // als Band jenseits des Meeres (Abstand 95–125, Höhe −24 … 26, unten dichter) – so stehen sie in der Weitsicht der Kamerafahrt oben im Bild
+  const pos = []; for (let i = 0; i < 360; i++) { const a = (i * 2.399963) % (Math.PI * 2), r = 95 + ((i * 0.381966) % 1) * 30, y = -24 + ((i * 0.618034) % 1) ** 1.3 * 50; pos.push(Math.cos(a) * r, y, Math.sin(a) * r); }
   const g = new BufferGeometry(); g.setAttribute("position", new Float32BufferAttribute(pos, 3));
-  const sterne = new Points(g, new PointsMaterial({ color: "#FFFFFF", size: 0.5, fog: false })); scene.add(sterne);
+  sterne = new Points(g, new PointsMaterial({ color: "#FFF6D8", size: 3, sizeAttenuation: false, fog: false })); scene.add(sterne);
+  mond = new Group();
+  mond.add(new Mesh(new CircleGeometry(4.6, 28), new MeshBasicMaterial({ color: "#FFF3C4", fog: false, side: DoubleSide })));
+  mond.add(setze(new Mesh(new CircleGeometry(4.9, 28), new MeshBasicMaterial({ color: "#3B1F63", fog: false, side: DoubleSide })), 0, 0, -0.3));   // Kontur
+  mond.position.set(-32, -10, -100); mond.lookAt(0, 12, 30); scene.add(mond);
 }
 let schnee = null;
 if (WINTERLICH && !EINFACH) {
@@ -460,8 +475,17 @@ if (WINTERLICH && !EINFACH) {
 // Cache 30 Minuten in localStorage; offline bleibt das Jahreszeiten-Wetter. Test: ?wetter=regen|schnee|nebel|wolken|gewitter|klar
 // Abruf, Cache und Texte im Insel-Kern; hier nur das Einfärben von Himmel, Licht, Wolken, Regen und Schnee.
 let wetter = null, regen = null, blitz = 0; const SONNE_BASIS = sonne.intensity;
+// Nasser Boden bei Regen und Gewitter (Eine Welt): Gras, Sand, Halme, Wegsteine und Steine dunkler – einmal, erst wenn die Welt gebaut ist
+let weltFertig = false, nassAn = false;
+function machNass() {
+  if (nassAn || !weltFertig || !wetter || !["regen", "gewitter"].includes(wetter.art)) return;
+  nassAn = true;
+  new Set(boden.map(b => b.material)).forEach(m => m.color && m.color.multiplyScalar(0.82));
+  if (halme) halme.material.color.multiplyScalar(0.82);
+  WEG_MAT.color.multiplyScalar(0.74); STEIN_MAT.color.multiplyScalar(0.7);
+}
 function wendeWetterAn(w) {
-  wetter = w; const art = w.art;
+  wetter = w; const art = w.art; machNass();
   sonne.intensity = SONNE_BASIS * ({ wolken: 0.7, nebel: 0.6, regen: 0.5, gewitter: 0.4, schnee: 0.75 }[art] || 1);
   const grau = { wolken: "#B7C7D3", nebel: "#C9D1D6", regen: "#8FA2B2", gewitter: "#6C7A8C", schnee: "#D5DEE6" }[art];
   if (grau && !NACHT) { scene.background = new Color(grau); scene.fog.color.set(grau); }
@@ -602,8 +626,9 @@ function figur(look) {
   const beine = [-0.15, 0.15].map(x => {
     const b = new Group(); b.position.set(x, 0.92, 0);
     if (!ohneBeine) {
-      b.add(setze(teil(new CapsuleGeometry(0.1, 0.62, 4, 12), haut), 0, -0.42, 0));
-      if (hose || shorts) { const h = teil(new CapsuleGeometry(0.12, shorts ? 0.18 : 0.66, 4, 12), unten); setze(h, 0, shorts ? -0.12 : -0.4, 0); b.add(h); }
+      // (Eine Welt, 07.11.2026) Beine schlanker (0,085 statt 0,1) und Hosenbeine enger – vorher wirkten sie klotzig
+      b.add(setze(teil(new CapsuleGeometry(0.085, 0.64, 4, 10), haut), 0, -0.42, 0));
+      if (hose || shorts) { const h = teil(new CapsuleGeometry(0.108, shorts ? 0.18 : 0.66, 4, 10), unten); setze(h, 0, shorts ? -0.12 : -0.4, 0); b.add(h); }
       // (Figuren 1, 07.11.2026) Schuh statt Kugel: flache Kapsel nach vorn mit dunkler Sohle
       const schuh = teil(new CapsuleGeometry(0.11, 0.16, 3, 10), schuhF, { dicke: 1.1 }); schuh.rotation.x = Math.PI / 2; schuh.scale.set(1, 1, 0.72); schuh.userData.art = "schuh";
       b.add(setze(schuh, 0, -0.86, 0.09));
@@ -613,10 +638,17 @@ function figur(look) {
   });
   // Arme (UX-Paket 2, 07.11.2026): Schulterkugel am Drehpunkt, Drehpunkt etwas weiter außen, Hand mit Daumen – vorher wuchsen die Arme
   // ohne Schulter aus der Brust und die Hände waren Fäustlinge
+  // (Eine Welt, 07.11.2026) Ärmellänge wie im Kleiderschrank (Puppe2.aermel): kurz = Ärmel bis über den Ellbogen, darunter Haut; ohne = Arm ganz in Hautfarbe.
+  // Vorher hatte die 3D-Figur immer lange Ärmel, im Kleiderschrank trug sie ein T-Shirt.
+  const aermel = window.Puppe2 && window.Puppe2.aermel ? window.Puppe2.aermel(look) : "lang";
   const arme = [-1, 1].map(s => {
     const a = new Group(); a.position.set(0.36 * s, 1.52, 0);
-    const schulter = teil(kugel(0.115, 12, 8), oben, { dicke: 1.08 }); schulter.userData.art = "schulter"; a.add(schulter);
-    a.add(setze(teil(new CapsuleGeometry(0.085, 0.5, 4, 12), oben), 0, -0.32, 0));
+    const schulter = teil(kugel(0.115, 12, 8), aermel === "ohne" ? haut : oben, { dicke: 1.08 }); schulter.userData.art = "schulter"; a.add(schulter);
+    if (aermel === "lang") a.add(setze(teil(new CapsuleGeometry(0.085, 0.5, 4, 12), oben), 0, -0.32, 0));
+    else {
+      a.add(setze(teil(new CapsuleGeometry(0.078, 0.5, 4, 10), haut), 0, -0.33, 0));
+      if (aermel === "kurz") { const ae = teil(new CapsuleGeometry(0.1, 0.12, 3, 10), oben, { dicke: 1.07 }); ae.userData.art = "aermel"; a.add(setze(ae, 0, -0.13, 0)); }
+    }
     const hand = teil(kugel(0.1, 12, 8), haut, { dicke: 1.12 }); hand.userData.art = "hand"; setze(hand, 0, -0.66, 0); a.add(hand);
     const daumen = teil(kugel(0.045, 8, 6), haut, { dicke: 1.1 }); daumen.userData.art = "daumen"; setze(daumen, -0.075 * s, 0.03, 0.06); hand.add(daumen);
     a.rotation.z = -ARM_WINKEL * s; koerper.add(a); return a;
@@ -629,10 +661,12 @@ function figur(look) {
   // Ohren und Nase (Figuren 1): klein, Hautfarbe – lassen das Gesicht als Gesicht lesen
   [-1, 1].forEach(s => { const o = teil(kugel(0.1, 10, 6), haut, { dicke: 1.08 }); o.userData.art = "ohr"; o.scale.set(0.6, 1, 0.8); kopf.add(setze(o, 0.56 * s, -0.02, 0.02)); });
   { const n = teil(kugel(0.05, 8, 6), haut, { umriss: false }); n.userData.art = "nase"; kopf.add(setze(n, 0, -0.05, 0.57)); }
-  const kappe = teil(new SphereGeometry(0.62, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.55), haarF, { dicke: 1.04 });
-  kappe.position.set(0, 0.04, -0.04); kappe.rotation.x = -0.35; kopf.add(kappe);
-  const haarteil = (geo, x, y, z, sx = 1, sy = 1, sz = 1) => { const m = teil(geo, haarF, { dicke: 1.06 }); m.scale.set(sx, sy, sz); kopf.add(setze(m, x, y, z)); return m; };
-  if (LANG.includes(haarId)) { haarteil(kugel(0.6, 16, 10), 0, -0.35, -0.22, 1.05, 1.1, 0.75); if (haarId === "locken") haarteil(kugel(0.66, 16, 10), 0, 0.05, -0.05, 1.08, 1, 1.05); }
+  // (Eine Welt, 07.11.2026) Haar runder: Kappe mit mehr Segmenten und etwas weiter über den Kopf gezogen, Hinterkopf als weiche Kugel –
+  // vorher wirkte die Frisur wie ein kantiger Helm (Toon-Licht zeigt jede Kante)
+  const kappe = teil(new SphereGeometry(0.63, EINFACH ? 16 : 24, EINFACH ? 10 : 14, 0, Math.PI * 2, 0, Math.PI * 0.58), haarF, { dicke: 1.035 });
+  kappe.position.set(0, 0.03, -0.05); kappe.rotation.x = -0.32; kappe.scale.set(1.02, 1, 1.02); kappe.userData.art = "kappe"; kopf.add(kappe);
+  const haarteil = (geo, x, y, z, sx = 1, sy = 1, sz = 1) => { const m = teil(geo, haarF, { dicke: 1.05 }); m.scale.set(sx, sy, sz); kopf.add(setze(m, x, y, z)); return m; };
+  if (LANG.includes(haarId)) { haarteil(kugel(0.6, 20, 12), 0, -0.33, -0.2, 1.04, 1.1, 0.78); if (haarId === "locken") haarteil(kugel(0.66, 16, 10), 0, 0.05, -0.05, 1.08, 1, 1.05); }
   else if (haarId === "zoepfe") [-1, 1].forEach(s => { haarteil(new CapsuleGeometry(0.12, 0.6, 4, 12), 0.55 * s, -0.55, -0.1); haarteil(kugel(0.08), 0.55 * s, -0.95, -0.1); });
   else if (haarId === "seitenzopf") haarteil(new CapsuleGeometry(0.14, 0.55, 4, 12), 0.58, -0.45, -0.15);
   else if (haarId === "pferd") haarteil(new CapsuleGeometry(0.14, 0.6, 4, 12), 0, -0.2, -0.68).rotation.x = 0.5;
@@ -684,8 +718,9 @@ function figur(look) {
   // (07.11.2026) gemeinsames Modul extras3d.js: alle Extras des Kleiderschranks, Dinge in der Hand werden gehalten
   extras3d(look, { kopf, koerper, arme, hand: -0.66, gross: 1.5, hals: 1.76, ruecken: 1.5, umhang: 1.05 }, { teil, kugel, setze, mat, verlauf });
   // Zählung der neuen Teile vor dem Verschmelzen (starr/verschmelzeLokal ersetzt die Einzelteile) – für den Test-Haken __heimat.figurInfo()
-  const info = { schulter: 0, daumen: 0, pony: 0, ohr: 0, nase: 0, schuh: 0, straehne: 0 }; f.traverse(o => { if (o.userData && o.userData.art in info) info[o.userData.art]++; });
+  const info = { schulter: 0, daumen: 0, pony: 0, ohr: 0, nase: 0, schuh: 0, straehne: 0, aermel: 0, kappe: 0 }; f.traverse(o => { if (o.userData && o.userData.art in info) info[o.userData.art]++; });
   info.halsFrei = Math.round(((kopf.position.y - 0.58 * 0.72 * 1.04) - (1.28 + 0.15 + 0.27)) * 100) / 100;   // Luft zwischen Rumpfoberkante und Kopfunterkante
+  info.aermelArt = aermel;
   f.userData = { koerper, beine, arme, kopf, info };
   return f;
 }
@@ -1398,7 +1433,7 @@ function reingehen() {
   draussenPos.copy(ich.position);
   ich.position.set(ZX, 0.25, 1.8); ich.rotation.y = 0;   // schaut ins Bild, damit man Gesicht und Anziehsachen sieht
   if (tier) tier.position.set(ZX + 1.2, 0.25, 2.6);
-  scene.background = new Color("#F7E3C6"); scene.fog.color.set("#F7E3C6"); wasser.visible = false; wolken.forEach(w => w.visible = false);
+  scene.background = new Color("#F7E3C6"); scene.fog.color.set("#F7E3C6"); wasser.visible = false; wolken.forEach(w => w.visible = false); if (sterne) sterne.visible = mond.visible = false;
   nebelDrinnen = true; nebelBand.visible = false; scene.fog.near = 32; scene.fog.far = 80;
   $("info").textContent = "Dein Zimmer. Kleiderschrank, Spiegel – oder richte es mit 🛋️ ein!";
   S.ton("tipp");
@@ -1408,7 +1443,7 @@ function rausgehen() {
   const { x: tx, z: tz, dreh: hr } = KI.vorDerTuer();
   ich.position.set(tx, bodenY(tx, tz), tz); ich.rotation.y = hr;
   if (tier) tier.position.set(tx + 1.1, bodenY(tx + 1.1, tz + 0.4), tz + 0.4);
-  scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true);
+  scene.background = new Color(HIMMEL); scene.fog.color.set(HIMMEL); wasser.visible = true; wolken.forEach(w => w.visible = true); if (sterne) sterne.visible = mond.visible = true;
   nebelDrinnen = false; wendeNebelAn();
   $("info").textContent = spielZeit() ? `Hallo ${name}!` : "🌱 Erst lernen: Geh zu Ella, Fipsi oder Benno.";
   if (wetter) { wendeWetterAn(wetter); zeigeWetterInfo(); }
@@ -1462,7 +1497,20 @@ function herzen(p) {
 // ---------- Steuerung ----------
 // Startkamera (UX 08.11.2026): etwas höher und weiter als früher (0,72 / 15), damit Bruni, Tilda und der Wegweiser nicht angeschnitten sind;
 // im Hochformat geht die Kamera zusätzlich ein Stück zurück (schmaler Blick), höchstens ×1,25
-const KAM = { neigung: 0.8, abstand: 17 };
+// (Eine Welt, 07.11.2026) Heimatinsel 18,5 statt 17: etwas mehr Insel im Bild, Figur bleibt gut erkennbar. Eigene (oft große, baumreiche) Welten bleiben bei 17 –
+// sonst sprengt „Wald, groß, Hügel“ in Stufe „einfach“ das Budget von 60 000 Dreiecken (gemessen 60 840)
+const KAM = { neigung: 0.8, abstand: WELT.insel ? 18.5 : 17 };
+// Kamerafahrt beim Betreten (Eine Welt, 07.11.2026, Entscheidung des Auftraggebers): die Kamera beginnt weit und hoch – ganze Insel mit Meer und Himmel –
+// und fährt in 2,5 s weich (ease-in-out) zur Startkamera. Antippen, Joystick, Tasten oder der Aktionsknopf überspringen sie sofort.
+// Zeitabhängig über die Uhr (nicht dt). Im automatischen Test (navigator.webdriver) nur mit ?fahrt=an, damit Tests, die sofort teleportieren
+// oder Bildschirmpunkte prüfen, nicht wackeln; ?fahrt=aus schaltet sie immer ab. Der Prolog fährt mit, statt eine eigene Fahrt zu beginnen.
+const EINFLUG = { neigung: 0.55, abstand: 34, dauer: 2500 };
+const einflugAn = q.get("fahrt") === "an" || (q.get("fahrt") !== "aus" && !navigator.webdriver && q.get("drinnen") !== "1");
+let fahrt = einflugAn ? { t0: null, dauer: Math.min(20000, +q.get("fahrtdauer") || EINFLUG.dauer),   // ?fahrtdauer=<ms> nur für Tests unter Swiftshader (langsame Bilder)
+   von: { ab: EINFLUG.abstand, nw: EINFLUG.neigung, gw: 0 }, art: "einflug" } : null;
+let letzteFahrt = null;   // für den Test-Haken: Verlauf des Abstands je Bild und wie die Fahrt endete
+const fahrtEnde = (wie) => { if (fahrt) letzteFahrt = { art: fahrt.art, ende: wie, verlauf: fahrt.verlauf || [] }; fahrt = null; };
+const fahrtUeberspringen = () => fahrtEnde("uebersprungen");
 const hochFaktor = () => (camera.aspect < 1 ? Math.min(1.25, 1 / Math.sqrt(camera.aspect)) : 1);
 let ziel = null, freiKamera = false, gieren = 0, neigung = KAM.neigung, abstand = KAM.abstand;
 const ray = new Raycaster(), zeiger = new Vector2(), fl = renderer.domElement, finger = new Map();
@@ -1470,7 +1518,7 @@ const ray = new Raycaster(), zeiger = new Vector2(), fl = renderer.domElement, f
 const eingabe = { x: 0, z: 0 }, RADIUS = 56, stick = $("stick"), knauf = $("knauf");
 let stickId = null, stickMitte = null, stickAktiv = false;
 const tasten = {};
-addEventListener("keydown", e => { tasten[e.key.toLowerCase()] = true; if (e.key === " ") { e.preventDefault(); springe(); } if (e.key === "Enter" || e.key.toLowerCase() === "e") { if (naechstes) { e.preventDefault(); aktion(); } } });
+addEventListener("keydown", e => { tasten[e.key.toLowerCase()] = true; if (fahrt && fahrt.art === "einflug" && !/^(shift|control|alt|meta|tab)$/i.test(e.key)) fahrtUeberspringen(); if (e.key === " ") { e.preventDefault(); springe(); } if (e.key === "Enter" || e.key.toLowerCase() === "e") { if (naechstes) { e.preventDefault(); aktion(); } } });
 // Springen: einfach immer, Doppelsprung als Belohnung (Entdecker-Mut) oder im Testmodus
 let hoehe = 0, vy = 0, spruenge = 0;
 const doppelErlaubt = () => S.offen(window.Charakter && window.Charakter.hat && window.Charakter.hat("doppelsprung"));
@@ -1503,10 +1551,11 @@ function aktion() {
   ich.rotation.y = Math.atan2(wp.x - ich.position.x, wp.z - ich.position.z); ziel = null; marke.visible = false;
   o.userData.tipp();
 }
-$("springen").addEventListener("pointerdown", e => { e.preventDefault(); e.stopPropagation(); aktion(); });
+$("springen").addEventListener("pointerdown", e => { e.preventDefault(); e.stopPropagation(); if (fahrt && fahrt.art === "einflug") fahrtUeberspringen(); aktion(); });
 addEventListener("keyup", e => { tasten[e.key.toLowerCase()] = false; });
 let unten = null, bewegt = false;
 fl.addEventListener("pointerdown", e => {
+  fahrtUeberspringen();
   fl.setPointerCapture(e.pointerId); finger.set(e.pointerId, { x: e.clientX, y: e.clientY });
   if (STEUERUNG === "joystick" && stickId === null && e.clientX < innerWidth * 0.55) { stickId = e.pointerId; stickMitte = { x: e.clientX, y: e.clientY }; stickAktiv = false; }
   unten = { x: e.clientX, y: e.clientY }; bewegt = false;
@@ -1760,10 +1809,14 @@ function bild() {
 
   blick.set(ich.position.x, 1.0 + grund + hoehe * 0.3, ich.position.z);
   let gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.7 : KAM.neigung, ab = drinnen && !freiKamera ? 10 : freiKamera ? abstand : abstand * hochFaktor();
-  if (fahrt && !drinnen) {   // Ankunft: Kamera schwebt von weit oben heran (zeitabhängig, nicht pro Bild)
-    const f = Math.min(1, (performance.now() - fahrt) / 3500), e = 1 - (1 - f) ** 3;
-    ab = MathUtils.lerp(30, ab, e); nw = MathUtils.lerp(1.15, nw, e); gw = MathUtils.lerp(-0.6, gw, e);
-    if (f >= 1) fahrt = null;
+  if (fahrt && drinnen) fahrtEnde("drinnen");
+  if (fahrt) {   // Einflug beim Betreten bzw. Ankunft im Prolog: Kamera schwebt von weit oben heran (zeitabhängig, nicht pro Bild)
+    if (fahrt.t0 == null) fahrt.t0 = performance.now();   // die Uhr beginnt mit dem ersten gezeichneten Bild (langsame Tablets übersetzen erst Shader)
+    const f = Math.min(1, (performance.now() - fahrt.t0) / fahrt.dauer);
+    const e = fahrt.art === "einflug" ? (f < 0.5 ? 4 * f ** 3 : 1 - (-2 * f + 2) ** 3 / 2) : 1 - (1 - f) ** 3;   // Einflug ease-in-out, Prolog wie bisher
+    ab = MathUtils.lerp(fahrt.von.ab * (fahrt.art === "einflug" ? hochFaktor() : 1), ab, e); nw = MathUtils.lerp(fahrt.von.nw, nw, e); gw = MathUtils.lerp(fahrt.von.gw, gw, e);
+    fahrt.anteil = f; if (!fahrt.verlauf) fahrt.verlauf = []; if (fahrt.verlauf.length < 600) fahrt.verlauf.push(Math.round(ab * 100) / 100);
+    if (f >= 1) fahrtEnde("fertig");
   }
   if (drinnen) blick.set(MathUtils.clamp(blick.x, ZX - 1.5, ZX + 1.5), blick.y, MathUtils.clamp(blick.z, -1.5, 1.2));
   camera.position.set(blick.x + Math.sin(gw) * Math.cos(nw) * ab, blick.y + Math.sin(nw) * ab, blick.z + Math.cos(gw) * Math.cos(nw) * ab);
@@ -1777,6 +1830,7 @@ function bild() {
   { const r = renderer.info.render, m = { zeichnungen: r.calls, dreiecke: r.triangles }; if (mitSchatten) MESSUNG.mit = m; else MESSUNG.ohne = m; }
   requestAnimationFrame(bild);
 }
+weltFertig = true; machNass();
 // Start (01.11.2026): Shader vorab übersetzen (ohne die Seite zu blockieren), dann erst zeichnen; bis dahin „Die Insel wacht auf …“
 {
   const los = () => { requestAnimationFrame(bild); requestAnimationFrame(() => requestAnimationFrame(() => { const l = $("insel-laedt"); if (l) l.hidden = true; })); };
@@ -1893,14 +1947,14 @@ if (MONAT === 12) {
 // Robo Pixel bringt das Kind mit dem Boot. Das Kind lernt Laufen (Joystick oder Tippen), läuft zum Haus und geht mit dem
 // Aktionsknopf hinein. Genau einmal je Kind (story.etappen.E1); Eltern können ihn überspringen oder neu starten,
 // das Kind kann ihn bei Pixel wiederholen. Bricht das Kind ab („Überspringen“), gilt E1 trotzdem als erledigt.
-let fahrt = null;
 function starteProlog(wiederholen) {
   const Sz = window.Szene, St = window.Story; if (!Sz || !St || prolog) return false;
   const def = Sz.def("prolog"); if (!def) return false;
   if (drinnen) rausgehen();
   $("blase").hidden = true; $("joy-hinweis").hidden = true;
   ich.position.set(STEG.x, 0, Math.min(RMAX_LAUF - 0.2, STEG.z0 + 1.4)); ich.position.y = bodenY(ich.position.x, ich.position.z); ich.rotation.y = Math.PI;
-  ziel = null; marke.visible = false; fahrt = performance.now();
+  ziel = null; marke.visible = false;
+  if (!fahrt || fahrt.art !== "einflug") fahrt = { t0: performance.now(), dauer: 3500, von: { ab: 30, nw: 1.15, gw: -0.6 }, art: "prolog" };   // Ankunft mit dem Boot (läuft schon der Einflug, fährt er weiter)
   prolog = { start: ich.position.clone() };
   const poll = (pruef, weiter) => { const id = setInterval(() => { if (pruef()) { clearInterval(id); weiter(); } }, 150); return () => clearInterval(id); };
   const b = def.blasen;
@@ -1917,7 +1971,7 @@ function starteProlog(wiederholen) {
   b[3].zeige = "#springen";
   b[3].bis = (weiter) => poll(() => drinnen, weiter);
   Sz.spiele(def, { chronik: !wiederholen }).then(() => {
-    prolog = null; fahrt = null;
+    prolog = null; if (fahrt && fahrt.art === "prolog") fahrtEnde("prolog");
     St.etappeFertig("E1");
   });
   return true;
@@ -2164,3 +2218,6 @@ const meldungenWarten = (() => {
 window.__heimat = { meldungen: () => ({ warten: meldungenWarten.warten(), ruhig: meldungenWarten.ruhig(), steuerung: meldungenWarten.steuerung() }), extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
 Object.assign(window.__heimat, { story: () => STORY_FX.info(), festPunkte: () => STORY_FX.festPunkte(), schatzTippen: () => STORY_FX.schatzTippen() });   // Story-Bogen (07.11.2026)
 Object.assign(window.__heimat, { leerlauf: () => gedrosselt });   // Paket 5: Insel im Leerlauf ~30 Bilder/s
+Object.assign(window.__heimat, { extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { fahrt = null; freiKamera = true; gieren = g; neigung = n; abstand = a; }, kamerafahrt: () => ({ laeuft: !!fahrt, art: fahrt ? fahrt.art : null, anteil: fahrt ? fahrt.anteil || 0 : 1, abstand: Math.round(camera.position.distanceTo(blick) * 10) / 10, ziel: Math.round(KAM.abstand * hochFaktor() * 10) / 10, letzte: letzteFahrt }), ueberspringen: fahrtUeberspringen, himmel: () => { const v = new Vector3(), drin = (x, y, z) => { v.set(x, y, z).project(camera); return Math.abs(v.x) < 1 && Math.abs(v.y) < 1 && v.z < 1; };
+    const a = sterne ? sterne.geometry.attributes.position : null; let n = 0; if (a && sterne.visible) for (let i = 0; i < a.count; i++) if (drin(a.getX(i), a.getY(i), a.getZ(i))) n++;
+    return { sterne: a ? a.count : 0, sterneImBild: n, mond: !!mond, mondImBild: !!(mond && mond.visible && drin(mond.position.x, mond.position.y, mond.position.z)), nass: nassAn, schaum: SCHAUM_FARBE }; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT });   // Eine Welt (07.11.2026): Kamerafahrt, Himmel, Figur
