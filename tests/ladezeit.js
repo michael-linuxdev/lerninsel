@@ -14,7 +14,7 @@ const GRENZE = {
   "": { dom: 1100, lang: 700 },
   "spiele/eltern/": { dom: 4500, lang: 1200 },
   "spiele/mathe/": { dom: 1000, lang: 700 },
-  "spiele/sachkunde/": { dom: 1000, lang: 900 }
+  "spiele/sachkunde/": { dom: 1000, lang: 700 }   // 900 → 700 (07.11.2026): Emoji-Bilder entstehen jetzt in Portionen (Häppchen, tests/icons.js)
 };
 
 (async () => {
