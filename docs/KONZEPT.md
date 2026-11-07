@@ -1,7 +1,7 @@
 # Lerninsel – Gesamtkonzept
 
 > Überarbeitet am 26.10.2026 (Neuausrichtung). Die Grundprinzipien sind unverändert.
-> Nachgezogen am 07.11.2026: Kapitelbogen so, wie er gebaut ist (Schwellen 1/5/10/15/25/35/50/Schatzkarte/70), neue Kapitel 8 „Fipsis Schatz“ und 9 „Die Insel ist wach“ (Finale), danach offen weiter mit Jahreszeiten-Episoden; „Robo“ statt „Pixel“.
+> Nachgezogen am 07.11.2026: Kapitelbogen so, wie er gebaut ist (Schwellen 1/5/10/15/25/35/50/Schatzkarte/55/70), neue Kapitel 8 „Fipsis Schatz“, 9 „Bennos Brücke“ (seit 07.11.2026 vor dem Finale) und 10 „Die Insel ist wach“ (Finale), danach offen weiter mit Jahreszeiten-Episoden; „Robo“ statt „Pixel“.
 > Neu: Story-Rahmen, Tutorial, Verzahnungs-Landkarte, Individualisierungs-Modell.
 > Verwandte Dokumente: [`LEHRPLAN.md`](LEHRPLAN.md) · [`SPRACHEN.md`](SPRACHEN.md) · [`GRAFIK.md`](GRAFIK.md) ·
 > [`MINISPIELE.md`](MINISPIELE.md) · [`PLAN.md`](PLAN.md) (Abschnitt „Neuausrichtung 26.10.2026“).
@@ -81,7 +81,7 @@ Jede Figur hat ein Fach, ein Problem in der Geschichte und eine Rolle im Tutoria
 | Robo (Robo Pixel) | Medienbildung | Fährmann und Funker: bringt das Kind, fährt später zu neuen Inseln | Ankunft, Bedienung, Spielzeit |
 | Eule Ella | Sachunterricht | Hüterin des Wissensbaums, kennt Natur und Wetter | erster Lernfund, Wissensbaum |
 | Fuchs Fipsi | Deutsch, DaZ | sucht seine Schatzkarte (Deutsch-Abenteuer) – die Karte zeigt neue Orte | Lernkartei, Wörter |
-| Biber Benno | Mathematik | backt in seiner Bäckerei (Kapitel 3); die Brücke zum Nachbar-Eiland bleibt ein offener Faden (später Kapitel „Bennos Brücke“) | Sterne, Zimmer, Bäckerei |
+| Biber Benno | Mathematik | backt in seiner Bäckerei (Kapitel 3) und baut mit dem Kind die Brücke zur Sandbank (Kapitel 9 „Bennos Brücke“) | Sterne, Zimmer, Bäckerei |
 | Bärin Bruni | Gefühle, Miteinander, Bewegung | hält die Inselgemeinschaft zusammen, hat ein bisschen Angst vor Stürmen (das Kind atmet mit ihr, Kapitel 5), pflegt Wildtiere | Wie geht's dir?, Pausen |
 | Papagei Paula | Kunst, Musik | will ein Inselfest feiern, aber niemand hat Bilder und Lieder | Atelier, Bühne |
 | Schildkröte Tilda | Denken, Schach, Rätsel | alt und weise, langsam, denkt gründlich; kennt den Weg zum Leuchtturm | stellt sich am Schachtisch vor (ab Kapitel 3), Schatzkammer, Rätsel |
@@ -108,12 +108,19 @@ Stand 07.11.2026 (so gebaut, `KAPITEL` in `shared/insel-kern.js`; die Schwellen 
 | 6 „Der Leuchtturm“ | 35 Funde + 3 Schach-Rätsel oder -Lektionen | Tilda führt zum Leuchtturm, Licht-Rätsel in der Höhle, nachts leuchtet die Insel | Schatzkammer in der Höhle |
 | 7 „Neue Ufer“ | 50 Funde + Tablet-Führerschein | Robo macht sein Boot am Steg klar; Fahrt zu Nachbar-Eilanden (eigene Welten), dort Ellas Forscherlager: Inselkarte, Forscher-Tagebuch | Karte, Himmelsrichtungen, Maßstab |
 | 8 „Fipsis Schatz“ | die ganze Schatzkarte (alle fünf Teile bei Fipsi) | Das Kreuz auf der Karte liegt am Wegweiser: eine Truhe mit dem **Wörterbuch der Insel** – alle Wörter des Kindes von A bis Z, jedes zum Anhören; neue Wörter kommen dazu, keines geht verloren | Deutsch: Lernkartei, Lernfunde, Schatzkarte |
-| 9 „Die Insel ist wach“ (Finale) | 70 Funde | Alle sieben Begleiter feiern am Schachtisch, der letzte Nebel zieht sichtbar weg. Ella: „Die Insel ist wach – und sie wächst weiter mit dir.“ **Kein Ende-Bildschirm**: die Insel bleibt, alles geht weiter | alles |
+| 9 „Bennos Brücke“ | 55 Funde + 5 Matheweg-Stationen | Benno will eine Brücke zu einer kleinen Sandbank im Meer bauen und braucht das Kind als Mess- und Rechen-Helfer. Auf dem Bauplatz (`spiele/bruecke/`) entsteht je Runde ein Brückenstück (Pfeiler, Balken, Bretter, Geländer); die 3D-Brücke wächst Stück für Stück aufs Wasser hinaus. Sind alle 8 Stücke fertig: kurze Abschluss-Szene, die Figur läuft über die Brücke auf die Sandbank | Mathe Größen: Länge ordnen/vergleichen/messen (Vorschule, Kl. 1), cm/m und Bretter zusammensetzen (Kl. 2), Umrechnen und Pfeiler im gleichen Abstand (Kl. 3), Maßstab, km/m, Tragkraft in kg/t (Kl. 4) |
+| 10 „Die Insel ist wach“ (Finale) | 70 Funde + 3 Brückenstücke | Alle sieben Begleiter feiern am Schachtisch, der letzte Nebel zieht sichtbar weg. Ella: „Die Insel ist wach – und sie wächst weiter mit dir.“ **Kein Ende-Bildschirm**: die Insel bleibt, alles geht weiter | alles |
 
 **Nach dem Finale geht es offen weiter (Entscheidung des Auftraggebers 07.11.2026):** Jahreszeiten-Episoden – je Jahreszeit und Jahr
 einmal eine kurze Szene mit einem Begleiter und ein Sachthema als Angebot (kein Zwang): Herbst Ella und die bunten Blätter („Bäume genau kennen“),
 Winter Bruni und der Schnee („Wetter beobachten“), Frühling Benno und die Frühblüher („Pflanzen wachsen“), Sommer Paula am Strand („Wasser“).
-Offene Fäden für spätere Kapitel: „Bennos Brücke“ zum Nachbar-Eiland, eine Englisch-Figur.
+Offene Fäden für spätere Kapitel: eine Englisch-Figur.
+
+**Bennos Brücke wird Kapitel 9 (Entscheidung des Auftraggebers 07.11.2026, noch spielt kein Kind):** Der offene Faden „Bennos Brücke“ (im ersten
+Entwurf Kapitel 3, gebaut wurde dort die Bäckerei) kommt vor das Finale; das Finale wird Kapitel 10 und bleibt das letzte Kapitel. Das Finale wartet
+nur, bis die Brücke **begonnen** ist (3 von 8 Stücken) – es soll nicht an einer unfertigen Brücke hängenbleiben; die Brücke darf danach in Ruhe fertig
+werden. Benno legt im Finale sein Brücken-Werkzeug weg und ruft alle zum Fest. Keine Fristen: jedes gebaute Stück bleibt stehen, Sterne nur für neue Stücke
+(höchstens 3 am Tag).
 
 **Nebenszenen** (ohne Kapitel, höchstens eine am Tag, nach den Kapitel-Szenen; wer den Ort schon kennt, bekommt sie still):
 „Brunis Station“ (ab Kapitel 2), „Tilda am Schachtisch“ (ab Kapitel 3 nach E9), „Das Inselfest“ (nach der ersten Bootsfahrt).

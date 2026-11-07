@@ -82,6 +82,9 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     const d4 = await p.evaluate(() => Spielwelt.lade("bruecke"));
     erwarte(d4.abschnitte === 4 && d4.fehlerfrei === 3 && (await sterne(p)) === s0 + 3 && /schon 3/.test(await p.textContent("#ende")), "vier Stücke an einem Tag: nur 3 ⭐ (vorhersehbar), das vierte Stück steht trotzdem");
     erwarte(await p.evaluate(() => { const a = __bruecke.aufgabenFuer("b", 123), b = __bruecke.aufgabenFuer("b", 123); return JSON.stringify(a) === JSON.stringify(b) && JSON.stringify(__bruecke.aufgabenFuer("b", 124)) !== JSON.stringify(a); }), "Aufgaben aus festem Zufall: gleiche Saat = gleiche Runde, nächste Runde anders");
+    // eigene Idee: Tildas Schatzkammer zeigt die Brückenstücke als Truhe
+    await p.goto(BASIS + "spiele/leuchtturm/#kammer"); await p.waitForSelector("#truhen");
+    erwarte(await p.evaluate(() => [...document.querySelectorAll("#truhen .truhe")].some(t => /Brückenstücke/.test(t.textContent) && t.querySelector("b").textContent === "4" && !t.classList.contains("zu"))), "Schatzkammer: Truhe „Brückenstücke“ mit 4");
     // nächster Tag: wieder ein Stern
     await p.evaluate(() => localStorage.setItem("__testJetzt", String(new Date(2026, 9, 26, 15, 0).getTime()))); await seite(p);
     const s4 = await sterne(p); await runde(p);

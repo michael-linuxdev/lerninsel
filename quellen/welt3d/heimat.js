@@ -349,7 +349,7 @@ function verschmelzeLokal(wurzel, ausnahmen = []) {
   deko.add(setze(teil(new CylinderGeometry(r, r + 0.35, 0.55, EINFACH ? 14 : 20), WINTERLICH ? "#E9EEF4" : "#F2D9A2", { umriss: DEKO_KONTUR }), x, BR_SAND - 0.28, z));
   deko.add(setze(teil(new CylinderGeometry(0.04, 0.05, 1.5, 6), "#9A6A3F"), x + 0.6, BR_SAND + 0.75, z - 0.4));
   { const f = teil(new ConeGeometry(0.22, 0.6, 3), "#FF6F61", { dicke: 1.1 }); f.rotation.z = -Math.PI / 2; f.scale.z = 0.3; deko.add(setze(f, x + 0.9, BR_SAND + 1.3, z - 0.4)); }
-  [[-0.8, 0.5, 0.32], [-0.3, 0.9, 0.2], [0.9, 0.7, 0.24]].forEach(([dx, dz, rs]) => { const st = teil(kugel(rs, 12, 8), STEIN_MAT); st.scale.y = 0.6; deko.add(setze(st, x + dx, BR_SAND + rs * 0.2, z + dz)); });
+  [[-0.8, 0.5, 0.32], [-0.3, 0.9, 0.2], [0.9, 0.7, 0.24]].forEach(([dx, dz, rs]) => { const st = teil(kugel(rs, 10, 6), STEIN_MAT, { umriss: DEKO_KONTUR }); st.scale.y = 0.6; deko.add(setze(st, x + dx, BR_SAND + rs * 0.2, z + dz)); });
 }
 const brueckeGr = new Group(); brueckeGr.position.set(BR.x0, 0, BR.z0); brueckeGr.rotation.y = -BR.a; scene.add(brueckeGr);
 let brBoden = [];
@@ -1264,7 +1264,7 @@ let baustelleSchloss = null;
   const [x, z, d] = P.bruecke; baustelle.position.set(x, bodenY(x, z), z); baustelle.rotation.y = d; scene.add(baustelle);
   // lokale Achsen: +z zur Inselmitte, Brücke liegt hinter der Baustelle (−z); Holz und Schild stehen seitlich, der Weg auf die Brücke bleibt frei
   const welt = (lx, lz) => [x + lx * Math.cos(d) + lz * Math.sin(d), z - lx * Math.sin(d) + lz * Math.cos(d)];
-  [[-1.25, 0.15, 0.13], [-1.25, 0.15, -0.13], [-1.25, 0.37, 0]].forEach(([lx, y, lz]) => { const s = teil(new CylinderGeometry(0.12, 0.12, 1.1, 8), "#B9732E"); s.rotation.x = Math.PI / 2; s.rotation.y = 0; baustelle.add(setze(s, lx, y, lz * 2.4)); });
+  [[-1.25, 0.15, 0.13], [-1.25, 0.15, -0.13], [-1.25, 0.37, 0]].forEach(([lx, y, lz]) => { const s = teil(new CylinderGeometry(0.12, 0.12, 1.1, 8), "#B9732E", { umriss: !EINFACH }); s.rotation.x = Math.PI / 2; s.rotation.y = 0; baustelle.add(setze(s, lx, y, lz * 2.4)); });
   const lx2 = 1.25; baustelle.add(setze(teil(new CylinderGeometry(0.05, 0.06, 1.5, 6), "#9A6A3F"), lx2, 0.75, 0));
   baustelle.add(setze(teil(new BoxGeometry(0.9, 0.55, 0.08), "#FFC83D", { dicke: 1.04 }), lx2, 1.45, 0.02));
   const schild = schildSprite("🌉"); schild.position.set(lx2, 1.45, 0.2); schild.scale.setScalar(0.5); baustelle.add(schild);
