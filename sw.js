@@ -48,6 +48,8 @@ const START = [
   "spiele/expedition/expedition.js",
   "spiele/leuchtturm/",
   "spiele/leuchtturm/leuchtturm.js",
+  "spiele/bruecke/",
+  "spiele/bruecke/bruecke.js",
   "spiele/tierstation/station.js",
   "shared/einrichten.js",
   "shared/spielstand.js",

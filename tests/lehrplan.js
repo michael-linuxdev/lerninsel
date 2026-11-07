@@ -77,7 +77,8 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder I
         else if (art === "werkstatt") assert.ok(w.WERKSTATT.some(k => k.id === id), `${p.id}: Werkstatt-Kapitel ${id} gibt es nicht`);
         else if (art === "echtewelt") assert.ok(echt.includes(`["${id}", `), `${p.id}: Echte-Welt-Aufgabe ${id} gibt es nicht`);
         else if (art === "leuchtturm") assert.strictEqual(id, "licht", `${p.id}: ${a}`);   // Tildas Licht-Rätsel (07.11.2026)
-        else if (art === "expedition") assert.strictEqual(id, "karte", `${p.id}: ${a}`);   // Ellas Forscherlager: Inselkarte lesen (09.11.2026)
+        else if (art === "expedition") assert.strictEqual(id, "karte", `${p.id}: ${a}`);
+        else if (art === "bruecke") assert.ok(["a", "b", "c", "d"].includes(id), `${p.id}: ${a}`);   // Bennos Brücke: Stufe a–d (07.11.2026)   // Ellas Forscherlager: Inselkarte lesen (09.11.2026)
         else assert.fail(`${p.id}: unbekannte Zuordnung ${a}`); });
       if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(mathe|werkstatt):/.test(a)), p.id + " ist „ja“ ohne Station");
     });
@@ -89,7 +90,7 @@ pruefe("Sachsen in voller Tiefe: Mathe Kl. 1/2, 3 und 4 vollständig – jeder I
     const m = { ja: 0, teil: 0, nein: 0, aussen: 0 }, ids2 = new Set();
     L.laender.sachsen.faecher.mathe.stufen[st].forEach(lb => { assert.ok(lb.punkte && lb.punkte.length >= 4, `Kl. ${st} ${lb.titel}`);
       lb.punkte.forEach(p => { assert.ok(!ids2.has(p.id) && p.kl === st, p.id); ids2.add(p.id); m[p.abdeckung]++;
-        p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id) : art === "expedition" ? id === "karte" : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
+        p.app.forEach(a => { const [art, id] = a.split(":"); assert.ok(art === "mathe" ? stationen.has(id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id) : art === "expedition" ? id === "karte" : art === "bruecke" ? ["a", "b", "c", "d"].includes(id) : art === "echtewelt" && echt.includes(`["${id}", `), `${p.id}: ${a}`); });
         if (p.abdeckung === "ja") assert.ok(p.app.some(a => /^(mathe|werkstatt):/.test(a)), p.id); }); });
     assert.strictEqual(ids2.size, zahl, "Kl. " + st); assert.deepStrictEqual(m, soll, "Kl. " + st);
   }  // Übergang 5: Lehrpläne Klasse 5 Oberschule und Gymnasium

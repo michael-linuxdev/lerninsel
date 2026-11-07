@@ -1277,6 +1277,8 @@ baueBruecke();
 // Sandbank antippbar (Text von Benno), nur ein kleiner unsichtbarer Treffer-Körper
 const sandbankTipp = new Group(); sandbankTipp.position.set(BR.sand.x, BR_SAND, BR.sand.z); scene.add(sandbankTipp);
 { const t = new Mesh(new CylinderGeometry(BR.sand.r, BR.sand.r, 0.6, 10), BRETT); t.position.y = 0.2; sandbankTipp.add(t); antippbar(sandbankTipp, () => zeigeAntwort(K.antwort("sandbank")), ...K.aktionFuer("sandbank")); }
+// Für die Brücken-Szenen: Figur an den Brückenkopf, Blick hinaus aufs Wasser (die Kamera folgt der Figur – so ist die Sandbank im Bild)
+function zurBaustelle() { if (drinnen) return; const [x, z] = BR.punkt(-1.7); ich.position.set(x, bodenY(x, z), z); ich.rotation.y = Math.atan2(BR.ux, BR.uz); ziel = null; marke.visible = false; }
 // nach der Szene „Bennos Brücke“: Schloss weg, Knopf „Bauen“
 function schalteBruecke() {
   if (baustelleSchloss && K.ortOffen("bruecke")) { baustelle.remove(baustelleSchloss); baustelleSchloss = null; }
@@ -2217,8 +2219,9 @@ function spieleStory(id) {
   // Blase 3 („… dann leuchtet der Turm“): Kapitel 6 schon hier merken (wie Kapitel 1 in „erste-frucht“), sonst bleibt die Lampe grau, weil
   // schalteLeuchtturm() nach K.leuchtturmOffen() geht und das Kapitel sonst erst mit der letzten Blase gespeichert würde (ab Kl. 2 sind es vier)
   if (id === "der-leuchtturm") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "schach" : "leuchtturm"); if (i === 2) x.beim = () => { St.setzeKapitel(6); schalteLeuchtturm(); }; });
-  if (id === "bennos-bruecke") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "sandbank" : "bruecke"); if (i === 1) x.beim = () => { St.setzeKapitel(9); schalteBruecke(); }; });   // Kapitel 9: Baustelle schon bei Blase 2 offen
-  if (id === "bruecke-fertig") b.forEach((x, i) => { x.zeige = I.ort(i === 1 ? "bruecke" : "sandbank"); });
+  // Kapitel 9: die Figur stellt sich an die Baustelle (Blick hinaus zur Sandbank, wie beim Fest am Schachtisch), Baustelle schon bei Blase 2 offen
+  if (id === "bennos-bruecke") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "sandbank" : "bruecke"); if (i === 0) x.beim = zurBaustelle; if (i === 1) x.beim = () => { St.setzeKapitel(9); schalteBruecke(); }; });
+  if (id === "bruecke-fertig") b.forEach((x, i) => { x.zeige = I.ort(i === 1 ? "bruecke" : "sandbank"); if (i === 0) x.beim = zurBaustelle; });
   if (id === "neue-ufer") b.forEach((x, i) => { x.zeige = I.ort(i === 0 ? "steg" : i === 2 ? "lager" : "boot"); if (i === 1) x.beim = () => { St.setzeKapitel(7); schalteBoot(); }; });   // Kapitel 7: Boot schon bei Blase 2 bereit
   if (storyBogen(id, b, I, St)) return;   // Sturm, Tilda, Bruni, Paulas Fest, Kapitel 8/9, Jahreszeiten (07.11.2026)
   storyLaeuft = true;

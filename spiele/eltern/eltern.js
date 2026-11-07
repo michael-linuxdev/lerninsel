@@ -885,6 +885,7 @@
         <p><b>Rhythmus-Boot (Musik):</b> ${(() => { const r = S.lade("rhythmus"); return r && r.runden ? `${r.runden} Fahrt${r.runden === 1 ? "" : "en"}, ${Object.keys(r.geschafft || {}).length} Rhythmen beim ersten Versuch nachgespielt` : "noch nicht gefahren (öffnet mit Kapitel 4)"; })()}</p>
         <p><b>Wetter-Drache (Sachunterricht):</b> ${(() => { const r = S.lade("wetterdrache"); if (!r) return "noch nicht besucht (öffnet mit Kapitel 5)"; const t = Object.keys(r.tagebuch || {}).length, f = Object.values(r.fluege || {}).reduce((a, b) => a + b, 0); return `${t} Tag${t === 1 ? "" : "e"} im Wettertagebuch, ${Object.keys(r.geschafft || {}).length} Wetter-Fragen beim ersten Versuch, ${f} Drachenflüge`; })()}</p>
         <p><b>Tildas Leuchtturm (Licht-Rätsel):</b> ${(() => { const r = S.lade("leuchtturm"); return r && r.runden ? `${Object.keys(r.geloest || {}).length} Licht-Rätsel gelöst, ${r.runden} Runde${r.runden === 1 ? "" : "n"}` : "noch nicht besucht (öffnet mit Kapitel 6)"; })()}</p>
+        <p id="eltern-bruecke"><b>Bennos Brücke (Längen, Maße, Bauplan):</b> ${(() => { const r = S.lade("bruecke"); return r && r.runden ? `${r.abschnitte || 0} von 8 Brückenstücken gebaut, ${r.runden} Runde${r.runden === 1 ? "" : "n"}, davon ${r.fehlerfrei || 0} ohne Fehler` : "noch nicht gebaut (öffnet mit Kapitel 9)"; })()}</p>
         <p><b>3D-Welt:</b> Ballon-Rekord ${(welt.ballon && welt.ballon.rekord) || 0} Punkte, Insel-Schatz ${(welt.insel && welt.insel.geschafft) || 0}× gefunden</p>
       </div>
       ${staerkenKarte()}`}

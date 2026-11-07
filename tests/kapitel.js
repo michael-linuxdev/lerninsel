@@ -172,7 +172,7 @@ const TAG = (d) => new Date(2026, 9, d, 15, 0).getTime();
     await weiter(p);
     erwarte(await p.evaluate(() => Story.kapitel() === 7 && __heimat.boot().aktion === "Boot"), "zweite Blase: Kapitel 7 gemerkt, Boot bereit");
     while (await p.evaluate(() => !!(window.__szene && __szene.aktuell()))) await weiter(p);
-    erwarte(await p.evaluate(() => Story.kapitel() === 7 && Story.chronik().some(x => x.s === "neue-ufer") && Story.KAPITEL_ZAHL === 9), "Kapitel 7 erreicht, Szene in der Chronik, KAPITEL_ZAHL = 9 (Finale, 07.11.2026)");
+    erwarte(await p.evaluate(() => Story.kapitel() === 7 && Story.chronik().some(x => x.s === "neue-ufer") && Story.KAPITEL_ZAHL === 10), "Kapitel 7 erreicht, Szene in der Chronik, KAPITEL_ZAHL = 10 (Bennos Brücke 9, Finale 10)");
     await ctx.close();
   }
 

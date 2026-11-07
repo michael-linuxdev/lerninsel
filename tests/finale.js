@@ -3,7 +3,7 @@
 // - Kapitel 5 „Der Sturm“: Bruni hat Angst, das Kind atmet mit ihr; während der Szene Sturm (dunkler Himmel, Regen), danach wie vorher
 // - Paulas Fest nach der ersten Bootsfahrt: Plakat an der Bühne
 // - Kapitel 8 „Fipsis Schatz“: Truhe am Wegweiser, „Öffnen“ → Wörterbuch der Insel im Album mit den eigenen Wörtern (Kapitel der Schatzkarte + Lernkartei)
-// - Kapitel 9 „Die Insel ist wach“: alle sieben Begleiter am Schachtisch sichtbar, der letzte Nebel geht; danach kein Ende-Bildschirm
+// - Kapitel 9 „Bennos Brücke“ (Szene), Kapitel 10 „Die Insel ist wach“: alle sieben Begleiter am Schachtisch sichtbar, der letzte Nebel geht; danach kein Ende-Bildschirm
 // - danach Jahreszeiten-Episode (Herbst, Winter per __testJetzt) mit Sachthema-Angebot; die Chronik zeigt alle neuen Szenen
 // Aufruf: sh tests/laufen.sh finale (allein laufen lassen, 3D)
 const { chromium } = require("playwright");
@@ -110,24 +110,32 @@ const TAG = (m, d) => new Date(m < 12 ? 2026 : 2027, m < 12 ? m : m - 12, d, 15,
   await bild(p, "finale-woerterbuch");
   await p.setViewportSize({ width: 820, height: 1180 }); await bild(p, "finale-woerterbuch-hoch"); await p.setViewportSize({ width: 1180, height: 820 });
 
-  // ---------- Kapitel 9 = Finale „Die Insel ist wach“ ----------
-  await tag(9, 25); await funde(70);
+  // ---------- Kapitel 9 „Bennos Brücke“ (07.11.2026: vor dem Finale; ausführlich in tests/bruecke.js) ----------
+  await tag(9, 24); await funde(56);
+  await p.evaluate(() => Spielwelt.speichere("mathe", { k2: { zahlen100: 1, plus100: 1, minus100: 1, einmaleins2: 1, laenge: 1 } }));
+  await p.goto(INSEL); await zeitFrei(); await warteSzene("bennos-bruecke");
+  a = await aktuell(); erwarte(a.wer === "biber" && /Sandbank/.test(a.text), "Kapitel 9: Benno zeigt die Sandbank");
+  await bisEnde(); await p.waitForTimeout(400);
+  erwarte(await p.evaluate(() => Story.kapitel() === 9 && InselKern.naechsteStory({}) !== "insel-wach"), "Kapitel 9 erreicht; das Finale wartet auf 70 Lernfunde und 3 Brückenstücke");
+
+  // ---------- Kapitel 10 = Finale „Die Insel ist wach“ ----------
+  await tag(9, 25); await funde(70); await p.evaluate(() => Spielwelt.speichere("bruecke", { abschnitte: 3, neu: {}, runden: 3, fehlerfrei: 1 }));
   await p.goto(INSEL); await zeitFrei(); await warteSzene("insel-wach");
   await p.waitForTimeout(700);
   a = await aktuell(); fx = await p.evaluate(() => __heimat.story());
   const punkte = await p.evaluate(() => __heimat.festPunkte()), tilda = await p.evaluate(() => Insel.ort("schach")());
-  erwarte(a.wer === "robo" && fx.fest.length === 6 && punkte.every(x => x.sichtbar) && tilda && tilda.sichtbar,
+  erwarte(a.wer === "biber" && /Brücken/.test(a.text) && fx.fest.length === 6 && punkte.every(x => x.sichtbar) && tilda && tilda.sichtbar,
     `Finale: alle sieben Begleiter am Schachtisch sichtbar (${fx.fest.join(", ")} + Tilda)`);
   erwarte(await p.evaluate(() => __heimat.nebel().band > 0), "der letzte Nebel liegt noch um die Insel");
   await bild(p, "finale-fest");
   await weiter(); await weiter();
   a = await aktuell(); erwarte(a.wer === "eule" && /Die Insel ist wach/.test(a.text), "Ella: „Die Insel ist wach – und sie wächst weiter mit dir.“");
   await p.waitForTimeout(4500);
-  erwarte(await p.evaluate(() => __heimat.nebel().band === 0 && Story.kapitel() === 9), "der letzte Nebel ist sichtbar verschwunden, Kapitel 9 erreicht");
+  erwarte(await p.evaluate(() => __heimat.nebel().band === 0 && Story.kapitel() === 10), "der letzte Nebel ist sichtbar verschwunden, Kapitel 10 erreicht");
   await bild(p, "finale-nebelweg");
   await bisEnde();
   await p.waitForTimeout(500);
-  erwarte(await p.evaluate(() => !__szene.aktuell() && !!document.querySelector("canvas") && Story.KAPITEL_ZAHL === 9 && InselKern.naechsteStory({}) === null), "danach geht es offen weiter: kein Ende-Bildschirm, die Insel bleibt, heute keine Episode mehr");
+  erwarte(await p.evaluate(() => !__szene.aktuell() && !!document.querySelector("canvas") && Story.KAPITEL_ZAHL === 10 && InselKern.naechsteStory({}) === null), "danach geht es offen weiter: kein Ende-Bildschirm, die Insel bleibt, heute keine Episode mehr");
 
   // ---------- Jahreszeiten-Episoden ----------
   await tag(10, 3);
@@ -157,7 +165,7 @@ const TAG = (m, d) => new Date(m < 12 ? 2026 : 2027, m < 12 ? m : m - 12, d, 15,
   // ---------- Chronik ----------
   await p.goto(BASIS + "spiele/album/#chronik"); await p.waitForTimeout(800);
   const chr = await p.evaluate(() => __album.eintraege().map(x => x.s));
-  const neu = ["brunis-station", "tilda", "der-sturm", "paulas-feier", "fipsis-schatz", "insel-wach", "jz-herbst", "fest-neujahr", "jz-winter"];
+  const neu = ["brunis-station", "tilda", "der-sturm", "paulas-feier", "fipsis-schatz", "bennos-bruecke", "insel-wach", "jz-herbst", "fest-neujahr", "jz-winter"];
   erwarte(neu.every(s => chr.includes(s)), `Inselchronik zeigt die neuen Szenen (${neu.filter(s => chr.includes(s)).length}/${neu.length})`);
   await p.click('[data-spiele="insel-wach"]'); await p.waitForTimeout(500);
   erwarte(await p.evaluate(() => __szene.aktuell() && __szene.aktuell().id === "insel-wach"), "das Finale lässt sich in der Chronik noch einmal ansehen");
