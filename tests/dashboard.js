@@ -43,7 +43,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       const t = await p.evaluate(() => {
         const da = (t) => !t.hidden && getComputedStyle(t).display !== "none" && t.getClientRects().length > 0;   // Paket 2: auch Türen in ausgeblendeten Reihen (kurze Startseite) zählen nicht
         const tueren = [...document.querySelectorAll(".tuer")].filter(da), r = (e) => e.getBoundingClientRect();
-        return { lern: [...document.querySelectorAll("#lernen .tuer")].filter(da).length, ohneBegleiter: tueren.filter(t => !t.classList.contains("insel") && !t.querySelector(".begleiter svg")).map(t => t.className),
+        return { lern: [...document.querySelectorAll("#lernen .tuer")].filter(da).length, ohneBegleiter: tueren.filter(t => !t.classList.contains("insel") && !t.querySelector(".begleiter svg, .begleiter img")).map(t => t.className),
           heute: (document.getElementById("heute-fuer-dich") || {}).textContent || "", alle: tueren.length, sichtbar: tueren.every(x => r(x).bottom <= innerHeight + 1 && r(x).height >= 100),
           name: document.querySelectorAll("#name span").length, farbig: new Set([...document.querySelectorAll("#name span")].map(s => s.style.color)).size };
       });
