@@ -29,7 +29,7 @@ const SEITEN = ["", "spiele/mathe/", "spiele/deutsch/", "spiele/sachkunde/", "sp
   p.on("console", m => { if (m.type() === "error" && !IGNORIEREN.test(m.text())) fehler.push(`Konsole: ${m.text()}`); });
   await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
   await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok"); await p.waitForSelector("#e-name");
-  await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "vs"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString())); await p.waitForTimeout(400);
+  await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "vs"); await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString())); await p.waitForTimeout(400);
 
   // (2a) echter Rechtsklick auf eine Kachel der Startseite: Menü unterdrückt, Seite bleibt
   await p.evaluate(() => { window.__kontext = []; addEventListener("contextmenu", e => window.__kontext.push(e.defaultPrevented), false); });
@@ -58,7 +58,8 @@ const SEITEN = ["", "spiele/mathe/", "spiele/deutsch/", "spiele/sachkunde/", "sp
   await p.click("#g-editor", { button: "right" }); await p.waitForTimeout(150);
   const ed = await p.evaluate(() => ({ k: window.__kontext, text: document.getElementById("g-editor").textContent }));
   erwarte(ed.k.length === 1 && ed.k[0] === false && /Einladung/.test(ed.text), `Präsentieren: im Texteditor bleibt das Menü (Einfügen, Auswahl) erlaubt (${JSON.stringify(ed.k)})`);
-  await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(800);
+  await p.goto(BASIS + "spiele/eltern/"); await p.waitForTimeout(400);
+  if (await p.$("#pin1")) { await p.fill("#pin1", "1234"); await p.click("#pin-ok"); await p.waitForTimeout(300); } await p.waitForTimeout(500);
   const feld = await p.evaluate(() => { const f = document.querySelector("input[type=text], input:not([type]), textarea"); return f ? f.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true })) : null; });
   erwarte(feld === true, "Elternbereich: Eingabefeld behält das Menü");
 

@@ -388,7 +388,22 @@
     // Hilfetext zu einem Feld: ht(o) → o.ru, ht(o, "warum") → o.warumRu (je nach gewählter Sprache)
     ht(o, feld) { const h = Spielwelt.hilfe(); if (!h || !o) return ""; const k = feld ? feld + h.code[0].toUpperCase() + h.code.slice(1) : h.code; return o[k] || ""; },
     // Feste Textpaare: [deutsch, russisch] (alt) oder { de, ru, uk } → [deutsch, hilfe]
-    paar(x) { const h = Spielwelt.hilfe(); if (Array.isArray(x)) return [x[0], h && h.code === "ru" ? x[1] || "" : ""]; return [x.de, h ? x[h.code] || "" : ""]; },
+    paar(x) { const h = Spielwelt.hilfe(); if (Array.isArray(x)) return [x[0], h && h.code === "ru" ? Spielwelt.ruDu(x[1] || "") : ""]; return [x.de, h ? (h.code === "ru" ? Spielwelt.ruDu(x[h.code] || "") : x[h.code] || "") : ""]; },
+    // Russisch spricht das Kind in der Vergangenheit je nach Geschlecht an (07.11.2026): Entwürfe schreiben beide Formen –
+    // „научился(-ась)“, „сделал(а)“, „приглашён(а)“, „вырос(ла)“, „нашёл (нашла)“. Mit der Ansprache Junge/Mädchen im Elternbereich
+    // steht nur die passende Form da, bei „keine Angabe“ bleiben beide. g = "m" | "w" | "n" (Standard: Ansprache des Kindes).
+    ruDu(t, g) {
+      if (!t) return t || "";
+      g = g || Spielwelt.kind().geschlecht;
+      if (g !== "m" && g !== "w") return t;
+      return String(t)
+        .replace(/([а-яё]{3,}) \(([а-яё]{3,})\)/gi, (x, m, w) => m.slice(0, 2).toLowerCase() === w.slice(0, 2).toLowerCase() ? (g === "m" ? m : w) : x)
+        .replace(/([а-яё]{3,})\((-?)([а-яё]{1,3})\)/gi, (x, wort, strich, endung) => {
+          if (g === "m") return wort;
+          if (strich) return /ся$/.test(wort) ? wort.slice(0, -2) + endung : wort + endung;   // научился(-ась) → научилась
+          return (wort + endung).replace(/ёна$/, "ена");                                        // приглашён(а) → приглашена
+        });
+    },
     setzeName(n) {
       const name = sauber(n); speichernFest(p => { p.name = name; });
       const e = haushalt.kinder.find(k => k.id === haushalt.aktiv); if (e && e.name !== name) { e.name = name; haushaltSpeichern(); }
@@ -529,6 +544,9 @@
   document.addEventListener("visibilitychange", () => { if (!document.hidden && Spielwelt._ctx && Spielwelt._ctx.state !== "running") Spielwelt._ctx.resume(); });
 
   window.Spielwelt = Spielwelt;
+  // Elternbereich verlassen = abmelden (07.11.2026): Öffnet sich irgendeine andere Seite der App, endet die Eltern-Anmeldung
+  // (sessionStorage <vorsilbe>eltern). Neuladen und Wege innerhalb von spiele/eltern/ halten sie (dort 15 Minuten).
+  if (!/\/spiele\/eltern\//.test(location.pathname)) { try { sessionStorage.removeItem(PRE + "eltern"); } catch (e) { /* egal */ } }
 
   if (TEST) {
     const banner = () => {

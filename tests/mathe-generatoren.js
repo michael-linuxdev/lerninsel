@@ -77,4 +77,50 @@ pruefe("Plus und Minus: 1000 Startzahlen je Station, Ergebnis auf zweitem Weg na
   }
   assert.ok(geprueft > 10000, "zu wenige Rechnungen geprüft: " + geprueft);
 });
+pruefe("Vierecke Kl. 3/4: Antwort passt zur gezeichneten Figur, kein falscher Name trifft geometrisch auch zu", () => {
+  // Eigenschaften direkt aus dem gezeichneten Pfad berechnen (unabhängig von den Tabellen in aufgaben.js)
+  const namenVon = (p) => {
+    const v = p.map((q, i) => { const w = p[(i + 1) % 4]; return [w[0] - q[0], w[1] - q[1]]; });
+    const laenge = v.map(x => Math.hypot(x[0], x[1])), gl = (a, b) => Math.abs(a - b) < 0.5;
+    const par = (a, b) => Math.abs(a[0] * b[1] - a[1] * b[0]) < 1e-6, recht = (a, b) => Math.abs(a[0] * b[0] + a[1] * b[1]) < 1e-6;
+    const paare = (par(v[0], v[2]) ? 1 : 0) + (par(v[1], v[3]) ? 1 : 0);
+    const r = new Set();
+    if (paare >= 1) r.add("Trapez");
+    if (paare === 2) r.add("Parallelogramm");
+    if ([0, 1, 2, 3].every(i => recht(v[i], v[(i + 1) % 4]))) r.add("Rechteck");
+    if (laenge.every(l => gl(l, laenge[0]))) r.add("Raute");
+    if (r.has("Rechteck") && r.has("Raute")) r.add("Quadrat");
+    if ((gl(laenge[0], laenge[1]) && gl(laenge[2], laenge[3])) || (gl(laenge[1], laenge[2]) && gl(laenge[3], laenge[0]))) r.add("Drachen");
+    if (!r.size) r.add("allgemeines Viereck");
+    return r;
+  };
+  let geprueft = 0;
+  for (const s of [...M.STATIONEN_K3, ...M.STATIONEN_K4].filter(s => s.id === "k3vierecke" || s.id === "k4vierecke")) {
+    for (let saat = 0; saat < 1500; saat++) {
+      const a = M.aufgabe(s.id, saat);
+      if (a.frage !== "Wie heißt das Viereck?") continue;
+      const zahlen = /d="M([^"]+)Z"/.exec(a.bild)[1].replace(/L/g, " ").trim().split(/\s+/).map(Number);
+      const punkte = [0, 2, 4, 6].map(i => [zahlen[i], zahlen[i + 1]]);
+      const passt = namenVon(punkte);
+      assert.ok(passt.has(a.antwort), `${s.id} (${saat}): Antwort ${a.antwort} passt nicht zur Figur (${[...passt]})`);
+      for (const o of a.optionen) if (o !== a.antwort) assert.ok(!passt.has(o), `${s.id} (${saat}): ${o} trifft auf ${a.antwort} auch zu`);
+      assert.ok(a.optionen.length >= 3, `${s.id}: zu wenige Optionen`);
+      assert.ok(!/nicht rechtwinklig/.test(a.hilfe) || !passt.has("Rechteck"), s.id + ": falscher Hinweis");
+      geprueft++;
+    }
+  }
+  assert.ok(geprueft > 300, "zu wenige Vierecke geprüft: " + geprueft);
+});
+pruefe("Nachbarhunderter Kl. 3: nie eine Zahl, die selbst ein Hunderter ist", () => {
+  let geprueft = 0;
+  for (let saat = 0; saat < 3000; saat++) {
+    const a = M.aufgabe("k3zahlen1000", saat), m = /liegt (\d+)\?/.exec(a.frage || "");
+    if (!m) continue;
+    assert.ok(+m[1] % 100 !== 0, `Startzahl ${saat}: ${a.frage}`);
+    const [u, o] = a.antwort.split(" und ").map(Number);
+    assert.ok(u < +m[1] && +m[1] < o && o - u === 100, a.frage + " → " + a.antwort);
+    geprueft++;
+  }
+  assert.ok(geprueft > 100, "zu wenige geprüft: " + geprueft);
+});
 console.log(`✅ Mathe-Generatoren: ${n} Prüfungen bestanden.`);

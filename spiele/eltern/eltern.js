@@ -7,6 +7,10 @@
   const SITZUNG_MIN = 15;
   const sitzungAn = () => { try { sessionStorage.setItem(SITZUNG, String(Date.now() + SITZUNG_MIN * 60000)); } catch (e) { /* egal */ } };
   const sitzungOffen = () => { try { return +sessionStorage.getItem(SITZUNG) > Date.now(); } catch (e) { return false; } };
+  // Abmelden (07.11.2026): nach der Ersteinrichtung (Übergabe) und beim Verlassen – das erledigt core.js auf jeder anderen Seite der App
+  const sitzungAus = () => { try { sessionStorage.removeItem(SITZUNG); } catch (e) { /* egal */ } };
+  // zurück aus dem Verlauf (bfcache): war die Anmeldung inzwischen beendet, wieder nach der PIN fragen
+  addEventListener("pageshow", (e) => { if (e.persisted && !sitzungOffen()) pinSeite(); });
   // „PIN vergessen?“: Zurücksetzen mit einer zufälligen Rechenaufgabe nach einer Wartezeit; die Eltern sehen danach einen Hinweis
   const PIN_ZURUECK = S.vorsilbe + "pin-zurueck", PIN_WARTEN = 60;
   const hash = (t) => { let h = 5381; for (const c of "pin:" + t) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0; return h.toString(36); };
@@ -177,9 +181,23 @@
         schuljahr: Number.isFinite(S.kind().schuljahr) && bearbeiten ? S.kind().schuljahr : S.schuljahrAm(),
         alter: +$("e-alter").value, stufe: $("e-stufe").value, klasse: S.STUFEN.find(x => x.code === $("e-stufe").value).klasse, geschlecht: $("e-geschlecht").value,
         hilfesprache: $("e-sprache").value, muttersprache: $("e-mutter").value, deutschstand: $("e-deutsch").value, hilfedosis: $("e-dosis").value, land: $("e-land").value, ort } }));
-      if (bearbeiten) { S.meldung("Gespeichert."); uebersicht(); } else location.href = "../../";
+      if (bearbeiten) { S.meldung("Gespeichert."); uebersicht(); } else uebergabe();
     });
     if (bearbeiten) $("e-zurueck").addEventListener("click", uebersicht);
+  }
+
+  // Übergabe nach der Ersteinrichtung (07.11.2026): Anmeldung endet sofort, das Kind kommt nur mit PIN zurück in den Elternbereich
+  function uebergabe() {
+    sitzungAus();
+    inhalt.innerHTML = `<div class="karte pin" id="uebergabe">
+      <p style="font-size:3rem;margin:0" aria-hidden="true">👍</p>
+      <h2>Fertig eingerichtet!</h2>
+      <p>Gib das Tablet jetzt deinem Kind.</p>
+      <p class="klein">Der Elternbereich ist wieder mit der PIN geschützt.</p>
+      <button class="knopf haupt" id="uebergabe-los">Los geht's</button>
+    </div>`;
+    $("uebergabe-los").addEventListener("click", () => { S.ton && S.ton("tipp"); location.href = "../../"; });
+    setTimeout(() => { const b = $("uebergabe-los"); if (b) b.focus(); }, 50);
   }
 
   // Ort für das Wetter (Open-Meteo Geocoding, ohne GPS)
@@ -928,7 +946,7 @@
     window.__eltern = Object.assign(window.__eltern || {}, { teil: zeigeTeil, fachdaten: ladeFachdaten, fachBereit: () => fachBereit });
     // Nach dem ersten Bild die Fachdaten still vorladen, damit die Reiter gleich bereit sind
     if (!fachBereit) setTimeout(ladeFachdaten, 300);
-    $("abmelden").addEventListener("click", () => { sessionStorage.removeItem(SITZUNG); location.href = "../ich/"; });
+    $("abmelden").addEventListener("click", () => { sitzungAus(); location.href = "../ich/"; });
   }
 
   // Test-Haken __elternAlle zeigt alle Teile untereinander: dann erst nach den Fachdaten zeichnen (wie früher alles auf einmal)

@@ -29,7 +29,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.waitForLoadState("load"); await p.waitForTimeout(300);
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
     await p.waitForSelector("#e-name", { timeout: 10000 });
-    await p.fill("#e-name", "Testkind"); await p.selectOption("#e-sprache", { index: 1 }); await p.click("#e-ok");
+    await p.fill("#e-name", "Testkind"); await p.selectOption("#e-sprache", { index: 1 }); await p.click("#e-ok"); await p.click("#uebergabe-los");
     await p.waitForURL(u => !/eltern/.test(u.toString()), { timeout: 5000 });
     for (const s of SEITEN) {
       const q = await neueSeite(ctx, `${s || "start"} (${lage})`);

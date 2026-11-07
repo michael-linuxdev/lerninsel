@@ -27,7 +27,7 @@ const NEU34 = ["w-sprachvielfalt", "w-rueckmeldung", "w-pro-kontra", "w-theater"
     await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", stufe);
-    await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     await p.goto(BASIS + "spiele/deutsch/"); await p.waitForTimeout(300);
     // Paket 2: Vorschule bis Kl. 2 sehen zuerst „Für dich“ (höchstens 5 Kacheln) – „📚 Alle Kapitel“ echt antippen
     if (await p.isVisible("#werk-alle")) { erwarte(await p.evaluate(() => document.querySelectorAll("#werk-fuer-dich .ort").length <= 5), "Werkstatt: zuerst höchstens 5 Kacheln „Für dich“"); await p.click("#werk-alle"); }

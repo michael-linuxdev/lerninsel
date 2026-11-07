@@ -698,7 +698,7 @@
       : blase("eule", "Das Forscherlager – noch zu", "Dieses Eiland erforschen wir richtig, sobald Robos Boot bereit ist – in Kapitel 7. Bis dahin: Was entdeckst du heute auf der Heimatinsel?", "Этот остров мы исследуем по-настоящему, когда лодка Робо будет готова – в главе 7.");
     return insel
       ? blase("eule", "Ellas Forscherlager", `Hallo ${name()}! Hier ist unser Forscherlager. Kannst du die Karte unserer Insel lesen? Dann finden wir jeden Ort!`, "Это наш лагерь исследователей. Умеешь читать карту острова? Тогда мы найдём любое место!", "../expedition/")
-      : blase("eule", "Ellas Forscherlager", `Ein neues Eiland, ${name()}! Schreib ins Forscher-Tagebuch, was du hier entdeckst – und lies die Karte.`, "Новый остров! Запиши в дневник исследователя, что ты здесь нашёл, и прочитай карту.", "../expedition/");
+      : blase("eule", "Ellas Forscherlager", `Ein neues Eiland, ${name()}! Schreib ins Forscher-Tagebuch, was du hier entdeckst – und lies die Karte.`, "Новый остров! Запиши в дневник исследователя, что ты здесь нашёл (нашла), и прочитай карту.", "../expedition/");
   }
   function bootAntwort(lage = {}) {
     const insel = lage.insel !== false;
@@ -826,7 +826,7 @@
       case "album": { const s = W.Sticker && W.Sticker.stand(); return blase("📒", "Dein Stickeralbum", s ? `Du hast schon ${s.hat} von ${s.gesamt} Stickern${s.neu ? ` – ${s.neu} neue warten auf dich` : ""}!` : "Hier sammelst du deine Sticker.", "Здесь ты собираешь наклейки.", "../album/?von=insel"); }
       case "bett": return blase("🛏️", "Dein Bett", lage.tier ? `Hier kuschelt ${lage.tier}, wenn es müde ist.` : "Ein gemütliches Bett. Mit dem Knopf „Einrichten“ machst du dein Zimmer schön.", "Уютная кровать.");
       case "schrank": return blase("👗", "Dein Kleiderschrank", "Such dir etwas Schönes zum Anziehen aus. Auf der Insel trägst du es dann!", "Выбери что-нибудь красивое из одежды!", "../anziehen/?von=insel");
-      case "spiegel": return blase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, was du gut kannst, und deine Pokale.", "Посмотри, как ты выросла!", "../ich/");
+      case "spiegel": return blase("🪞", "Der Spiegel", "Schau, wie du gewachsen bist: deine Fähigkeiten, was du gut kannst, und deine Pokale.", "Посмотри, как ты вырос(ла)!", "../ich/");
       // Pinnwand: Lernfunde der letzten 7 Tage als Zettel (die Looks zeichnen sie aus pinnwandZettel())
       case "pinnwand": {
         const z = pinnwandZettel(), heute = z.filter(x => x.neu).length;

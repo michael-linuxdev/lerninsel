@@ -22,7 +22,7 @@ const RU = /[а-яё]{3}/i;
     await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); if (sprache) { await p.selectOption("#e-sprache", sprache); await p.selectOption("#e-dosis", "immer"); }   // russische Hilfe sichtbar (sonst „automatisch“ nach Deutschstand)
-    await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     await p.evaluate(() => { for (let i = 0; i < 12; i++) Zeit.aufgabe(); Spielwelt.speichere("mathe", { weg: "k2" }); });
     await p.goto(BASIS + "spiele/mathe/"); await p.waitForTimeout(500);
     await p.evaluate(() => { window.__testSchnell = true; });

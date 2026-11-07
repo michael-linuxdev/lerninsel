@@ -25,7 +25,7 @@ const KONTUR = "rgb(59, 31, 99)";
     p.on("console", m => { if (m.type() === "error" && !IGNORIEREN.test(m.text())) fehler.push(`Konsole: ${m.text()}`); });
     await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok"); await p.waitForSelector("#e-name");
-    await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "3"); await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString())); await p.waitForTimeout(300);
+    await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "3"); await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString())); await p.waitForTimeout(300);
     await p.evaluate(() => { const e = Spielwelt.lade("eltern") || {}; e.sorbisch = Object.assign({}, e.sorbisch, { an: true }); Spielwelt.speichere("eltern", e); });
     return { ctx, p };
   }

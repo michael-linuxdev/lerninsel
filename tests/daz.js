@@ -24,7 +24,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira");
     await p.selectOption("#e-deutsch", deutschstand);
     if (sprache) { await p.selectOption("#e-sprache", sprache); await p.selectOption("#e-dosis", "immer"); }   // russische Hilfe sichtbar (sonst „automatisch“ nach Deutschstand)
-    await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     return { ctx, p };
   }
 

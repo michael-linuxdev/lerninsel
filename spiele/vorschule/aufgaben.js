@@ -39,7 +39,7 @@ window.VORSCHULE = [
   { id: "vs-vergleichen", bereich: "mathe", name: "Groß, schwer, lang", e: "⚖️", lz: ["ma.gm.01", "ma.rf.01"], aufgaben: [
     { frage: "Welches Tier ist am größten?", ru: "Какое животное самое большое?", optionen: ["🐘", "🐭", "🐱"], warum: "Der Elefant ist am größten." },
     { frage: "Was ist schwerer?", ru: "Что тяжелее?", optionen: ["🪨", "🪶", "🎈"], warum: "Der Stein ist schwerer als die Feder." },
-    { frage: "Wer ist länger: die Schlange oder der Wurm?", ru: "Кто длиннее: змея или червяк?", optionen: ["🐍", "🐛"], warum: "Die Schlange ist länger." },
+    { frage: "Wer ist länger: die Schlange oder der Wurm?", ru: "Кто длиннее: змея или червяк?", optionen: ["🐍", "🪱"], warum: "Die Schlange ist länger." },
     { frage: "Der Vogel sitzt oben im Baum. Zeig nach oben!", ru: "Птица сидит наверху на дереве. Покажи наверх!", optionen: ["⬆️", "⬇️", "➡️"], warum: "Oben ist da, wo der Himmel ist." },
     { frage: "Ordne von klein nach groß!", ru: "Расставь от маленького к большому!", typ: "ordnen", teile: ["🐜", "🐈", "🐘"], warum: "Ameise, Katze, Elefant." }] },
   { id: "vs-muster", bereich: "mathe", name: "Muster und Reihen", e: "🔁", lz: ["ma.ms.01"], aufgaben: [
@@ -52,9 +52,9 @@ window.VORSCHULE = [
   { id: "vs-reime", bereich: "sprache", name: "Was reimt sich?", e: "🎶", lz: ["de.su.01"], aufgaben: [
     { frage: "Was reimt sich auf Maus?", ru: "Что рифмуется со словом Maus (мышь)?", optionen: ["🏠", "🐟", "🚗"], warum: "Maus – Haus. Das klingt am Ende gleich!" },
     { frage: "Was reimt sich auf Hose?", ru: "Что рифмуется со словом Hose (брюки)?", optionen: ["🌹", "👟", "🧢"], warum: "Hose – Rose." },
-    { frage: "Was reimt sich auf Nase?", ru: "Что рифмуется со словом Nase (нос)?", optionen: ["🐇", "🐶", "🐦"], warum: "Nase – Hase." },
-    { frage: "Was reimt sich auf Bein?", ru: "Что рифмуется со словом Bein (нога)?", optionen: ["🪨", "🌳", "🍎"], warum: "Bein – Stein." },
-    { frage: "Was reimt sich auf Hand?", ru: "Что рифмуется со словом Hand (рука)?", optionen: ["🏖️", "🌙", "🍌"], warum: "Hand – Sand." }] },
+    { frage: "Was reimt sich auf Hund?", ru: "Что рифмуется со словом Hund (собака)?", optionen: ["👄", "🐱", "🌳"], warum: "Hund – Mund." },
+    { frage: "Was reimt sich auf Schwein?", ru: "Что рифмуется со словом Schwein (свинья)?", optionen: ["🦵", "🐄", "🍎"], warum: "Schwein – Bein." },
+    { frage: "Was reimt sich auf Socke?", ru: "Что рифмуется со словом Socke (носок)?", optionen: ["🔔", "🌙", "🍌"], warum: "Socke – Glocke." }] },
   { id: "vs-silben", bereich: "sprache", name: "Silben klatschen", e: "👏", lz: ["de.su.01"], aufgaben: [
     { frage: "Klatsch mit: Ba – na – ne. Wie oft hast du geklatscht?", ru: "Хлопай: Ба – на – не. Сколько раз ты хлопнул?", optionen: ["⚂", "⚁", "⚀"], sag: "Ba – na – ne", warum: "Ba-na-ne: dreimal klatschen." },
     { frage: "Klatsch mit: Hund. Wie oft hast du geklatscht?", ru: "Хлопай: Hund. Сколько раз?", optionen: ["⚀", "⚁", "⚂"], sag: "Hund", warum: "Hund: einmal klatschen." },
@@ -79,7 +79,7 @@ window.VORSCHULE = [
     { frage: "Wann blühen die ersten Blumen?", ru: "Когда расцветают первые цветы?", optionen: ["🌷", "⛄", "🍂"], warum: "Im Frühling." },
     { frage: "Wann fallen bunte Blätter von den Bäumen?", ru: "Когда с деревьев падают разноцветные листья?", optionen: ["🍂", "🌷", "☀️"], warum: "Im Herbst." },
     { frage: "Es regnet. Was ziehst du an?", ru: "Идёт дождь. Что ты наденешь?", optionen: ["🧥", "👙", "🩳"], warum: "Eine Regenjacke – und Gummistiefel!" },
-    { frage: "Was schwimmt auf dem Wasser?", ru: "Что плавает на воде?", optionen: ["🦆", "🪨", "🔑"], warum: "Die Ente schwimmt, Stein und Schlüssel gehen unter." }] },
+    { frage: "Wann ist es heiß und du gehst baden?", ru: "Когда жарко и можно купаться?", optionen: ["☀️", "⛄", "🍂"], warum: "Im Sommer." }] },
 
   // ---------- Körper und Gesundheit ----------
   { id: "vs-sinne", bereich: "koerper", name: "Meine Sinne", e: "🙂", lz: ["su.so.01"], aufgaben: [
@@ -92,7 +92,7 @@ window.VORSCHULE = [
     { frage: "Was ist gut für deine Zähne?", ru: "Что полезно для зубов?", optionen: ["🍎", "🍭", "🍬"], warum: "Obst und Gemüse – und danach Zähne putzen." },
     { frage: "Was brauchst du zum Zähneputzen?", ru: "Что нужно, чтобы почистить зубы?", optionen: ["🪥", "🍴", "🖍️"], warum: "Die Zahnbürste – zweimal am Tag." },
     { typ: "ordnen", frage: "Hände waschen: Was kommt zuerst? Tipp der Reihe nach.", ru: "Мытьё рук: что сначала? Нажимай по порядку.", teile: ["💧", "🧼", "🧻"], warum: "Nass machen, einseifen und abspülen, abtrocknen." },
-    { frage: "Wann wäschst du dir die Hände?", ru: "Когда ты моешь руки?", optionen: ["🍽️", "📺", "🛝"], warum: "Vor dem Essen – und nach der Toilette." },
+    { frage: "Wann wäschst du dir die Hände?", ru: "Когда ты моешь руки?", optionen: ["🍽️", "📺", "😴"], warum: "Vor dem Essen – und nach der Toilette." },
     { frage: "Was hält dich fit?", ru: "Что помогает быть здоровым?", optionen: ["🏃", "📱", "🍟"], warum: "Bewegung, Spielen draußen und genug Schlaf." }] },
 
   // ---------- Miteinander ----------

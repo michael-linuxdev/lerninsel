@@ -25,7 +25,7 @@ const feld = (n) => (8 - +n[1]) * 8 + (n.charCodeAt(0) - 97);
     await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", "3");
-    await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     return { ctx, p };
   }
   const tippe = async (p, n, warte = 60) => { await p.click(`#brett [data-i="${feld(n)}"]`); await p.waitForTimeout(warte); };

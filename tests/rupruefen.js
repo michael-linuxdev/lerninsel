@@ -19,7 +19,7 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); if (sprache) await p.selectOption("#e-sprache", sprache);
-    await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     return { ctx, p };
   }
   // Elternbereich: Link nur mit Hilfesprache Russisch

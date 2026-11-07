@@ -22,7 +22,7 @@ const NEU = ["w-reime", "w-einladung", "w-bildergeschichte", "w-gedicht-vortrage
     await p.goto(BASIS); await p.waitForURL(/eltern/); await p.waitForLoadState("load"); await p.waitForTimeout(300);
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", stufe);
-    await p.click("#e-ok"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
     await p.goto(BASIS + "spiele/deutsch/"); await p.waitForTimeout(500);
     return { ctx, p };
   }

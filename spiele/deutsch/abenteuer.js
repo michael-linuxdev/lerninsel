@@ -672,7 +672,7 @@
     wo: { de: "Schau genau, wo das Ding im Bild ist.", ru: "Посмотри внимательно, где эта вещь на картинке.", status: E },
     hoertext: { de: "Hör den Text noch einmal an.", ru: "Послушай текст ещё раз.", status: E },
     blitz: { de: "Schau auf den Anfang und das Ende vom Wort.", ru: "Посмотри на начало и конец слова.", status: E },
-    bild: { de: "Hör noch einmal genau hin.", ru: "Послушай ещё раз внимательно.", status: E },
+    bild: { de: "Schau noch einmal genau hin.", ru: "Посмотри ещё раз внимательно.", status: E },   // Bild-Fragen: schauen, nicht hören (Hören nur bei „hoeren“)
     hoeren: { de: "Hör noch einmal genau hin.", ru: "Послушай ещё раз внимательно.", status: E },
     ordnen: { de: "Was passiert zuerst? Was danach?", ru: "Что происходит сначала? Что потом?", status: E },
     satz: { de: "Lies deinen Satz leise vor. Wer tut etwas? Was tut er?", ru: "Прочитай своё предложение про себя. Кто что делает?", status: E }

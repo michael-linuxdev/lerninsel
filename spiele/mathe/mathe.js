@@ -462,7 +462,7 @@
   function starteRunde(nr) {
     const station = ST[nr];
     const liste = window.Mathe.runde(station.id, 10).map(a => Object.assign(a, { wieder: false, station: station.id }));
-    lauf = { nr, station, liste, pos: 0, fehler: 0, versuch: 0, ergebnis: [], eingabe: "", gesperrt: false };
+    lauf = { nr, station, liste, pos: 0, fehler: 0, wackel: 0, versuch: 0, ergebnis: [], eingabe: "", gesperrt: false };
     $("station-name").textContent = station.name;
     zeige("rechnen");
     erklaerKnopf(station.id);
@@ -670,6 +670,7 @@
 
     lauf.versuch++;
     if (lauf.versuch === 1 && !a.wieder) {
+      lauf.wackel = (lauf.wackel || 0) + 1; // ehrliche Rückmeldung am Ende: Aufgaben, die nicht beim ersten Versuch stimmten
       statistik(a, false);
       if (KN()) {
         KN().melde(lzVon(a.station), false);
@@ -846,7 +847,13 @@
 
     $("ende-titel").textContent = sterne === 3 ? "Super gemacht!" : sterne === 2 ? "Toll geschafft!" : "Geschafft!";
     $("ende-sterne").innerHTML = [1, 2, 3].map(n => `<span class="${n <= sterne ? "" : "leer"}" style="animation-delay:${n * 180}ms">⭐</span>`).join("");
-    $("ende-text").textContent = fehler === 0 ? "Alles beim ersten Mal richtig." : `${10 - fehler} von 10 Aufgaben beim ersten Mal richtig.`;
+    // Ehrlich loben (07.11.2026): „Alles beim ersten Mal richtig“ nur ohne jeden Fehlversuch
+    const wackel = Math.min(10, lauf.wackel || 0), mal = wackel === 1 ? "Einmal" : wackel === 2 ? "Zweimal" : wackel === 3 ? "Dreimal" : `${wackel}-mal`;
+    const [endeDe, endeRu] = wackel === 0 ? ["Alles beim ersten Mal richtig.", "Всё правильно с первого раза."]
+      : fehler === 0 ? [`Geschafft! ${mal} hast du nochmal hingeschaut – super.`, wackel === 1 ? "Готово! Один раз ты посмотрел(а) ещё раз – здорово." : `Готово! ${wackel} ${wackel < 5 ? "раза" : "раз"} ты посмотрел(а) ещё раз – здорово.`]
+      : [`${10 - wackel} von 10 Aufgaben beim ersten Mal richtig.`, `${10 - wackel} из 10 заданий правильно с первого раза.`];
+    $("ende-text").textContent = endeDe;
+    if (S.hilfe() && S.hilfe().code === "ru") { const z = document.createElement("span"); z.className = "ru"; z.style.display = "block"; z.textContent = S.ruDu ? S.ruDu(endeRu) : endeRu; $("ende-text").appendChild(z); }
     $("ende-gewinn").textContent = gewinn
       ? `+${gewinn} ${gewinn === 1 ? "Stern" : "Sterne"} für den Kleiderschrank. Du hast jetzt ${S.sterne()}.`
       : `Du hast ${S.sterne()} Sterne. Mit 3 Sternen hier gibt es noch mehr.`;
