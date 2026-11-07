@@ -53,6 +53,7 @@ const START = [
   "shared/geschenk.js",
   "shared/zeige.js",
   "shared/szene.js",
+  "shared/erprobung.js",
   "shared/szenen.js",
   "shared/insel-kern.js",
   "shared/garten.js",

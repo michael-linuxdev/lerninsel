@@ -132,6 +132,7 @@
   function starte(i, lernstand) {
     const k = lernstand || L[i];
     lauf = { i, k, schritte: k.schritte ? k.schritte : mitWiederholung(baue(k)), pos: 0, fehler: 0, falsch: new Set() };
+    if (window.Erprobung) Erprobung.runde("englisch:" + (k.lernstand ? "lernstand" : k.id), lauf.schritte.length);
     document.body.style.setProperty("--grund", k.grund); document.body.style.setProperty("--akzent", k.farbe);
     $("lektion-name").textContent = k.name;
     $("paula-gross").innerHTML = F.papagei("papagei");
@@ -223,6 +224,11 @@
     if (!s) return beende();
     lauf.versuche = 0; lauf.gesperrt = false;
     A.scrollTop = 0;
+    if (window.Erprobung) {   // Erprobungsmodus (Paket K): englisch:<lektion>, Schritt = Art + Wort (die Schritte entstehen je Lektion neu)
+      const q = k.lernstand && s.__kap ? (L.find(x => x.id === s.__kap) || k) : k;
+      Erprobung.zeige({ inhalt: "englisch:" + (q.lernstand ? "lernstand" : q.id), schritt: s.typ + (s.wort ? ":" + s.wort.en : s.__karte ? ":wiederholung" : ":" + lauf.pos), text: s.typ + ": " + ((s.wort && (s.wort.en + " = " + s.wort.de)) || s.text || s.frage || s.satz || ""),
+        fach: "englisch", klasse: q.stufe, daten: q.lernstand ? null : q, ru: s.ru || (s.wort && s.wort.ru) || "", el: A });
+    }
     switch (s.typ) {
       case "sag":
         blase(s.text, s.text, s.ru);
@@ -356,6 +362,7 @@
   // Gemeinsame Prüfung: richtig → loben, englisch vorsprechen, Erklärung zeigen, weiter. Falsch → nochmal (erster Fehler zählt).
   function antwort(knopf, richtig, englisch, erklaerung, danach) {   // danach: statt automatisch weiterzublättern (Dialog → Nachsprechen)
     if (lauf.gesperrt) return;
+    if (window.Erprobung) Erprobung.aufgabe({ antwort: knopf ? (knopf.getAttribute("aria-label") || knopf.textContent) : undefined, richtig, versuch: (lauf.versuche || 0) + 1 });
     const h = $("hinweis"), lz = lauf.k.lz;
     if (richtig) {
       lauf.gesperrt = true;
@@ -381,6 +388,7 @@
   function weiter() { if (aufnahmeEnde) aufnahmeEnde(); SP.stopp(); if (window.Lieder) Lieder.stopp(); lauf.pos++; schritt(); }
 
   function beende() {
+    if (window.Erprobung) Erprobung.rundeFertig({ fehler: lauf.fehler });
     if (lauf.k.lernstand) return beendeLernstand();
     if (lauf.k.lied) {   // Lied aus „Songs and rhymes“: kein Test, nur Mitmachen
       const d = daten(); d.lieder = d.lieder || {}; const neu = !d.lieder[lauf.k.lied]; d.lieder[lauf.k.lied] = 1; speichere(d);

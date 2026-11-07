@@ -57,6 +57,9 @@
   </div>
 </div>
 <script src="ru-texte.js"></script>
+<!-- Erprobungsmodus (Paket K): ✓/✗ landen zusätzlich in der Erprobungsdatei, wenn die Erprobung im Elternbereich an ist -->
+<script src="../../shared/config.js"></script>
+<script src="../../shared/erprobung.js"></script>
 <script>
 (function () {
   const KEY = "lerninsel-russisch-pruefung", $ = (id) => document.getElementById(id), SEITE = 40;
@@ -109,10 +112,15 @@
     const d = b.closest(".eintrag"), k = d.dataset.k;
     if (b.classList.contains("ok")) st[k] = { ok: true }; else st[k] = { ok: false, neu: (st[k] || {}).neu || "" };
     sichern();
+    erprobung(k, st[k]);
     d.querySelector(".ok").classList.toggle("an", st[k].ok === true); d.querySelector(".nein").classList.toggle("an", st[k].ok === false);
     const inp = d.querySelector("input"); inp.hidden = st[k].ok !== false; if (!inp.hidden) inp.focus();
     stand(); text();
   });
+  // Erprobungsmodus: jede Entscheidung (und jede fertig getippte bessere Fassung) als Prüfung „ru“ mit der Prüfsumme des russischen Texts
+  const erprobung = (k, v) => { const E = window.Erprobung, e = T.find(x => x.k === k); if (!E || !E.aktiv || !e) return;
+    E.pruefung({ rolle: "ru", urteil: v.ok ? "ok" : "aendern", korrektur: v.neu || undefined, inhalt: "ru-text:" + k, schritt: e.datei + ":" + e.zeile, text: e.de, ruText: e.ru, h: k }); };
+  $("liste").addEventListener("change", (ev) => { const i = ev.target; if (!i.matches(".eintrag input")) return; const k = i.closest(".eintrag").dataset.k; if (st[k]) erprobung(k, st[k]); });
   $("liste").addEventListener("input", (ev) => { const i = ev.target; if (!i.matches(".eintrag input")) return; const k = i.closest(".eintrag").dataset.k; st[k] = { ok: false, neu: i.value }; sichern(); text(); });
   function stand() { document.querySelectorAll("details.karte").forEach(d => { const g = gruppen.find(x => x.id === d.dataset.gruppe), l = g.eintraege.filter(passt), s = d.querySelector(".stand"),
     fertig = l.length && l.every(e => (st[e.k] || {}).ok === true); s.textContent = `${l.filter(e => st[e.k]).length}/${l.length}${fertig ? " ✓" : g.wichtig ? " · zuerst" : ""}`; s.className = "stand " + (fertig ? "fertig" : g.wichtig ? "wichtig" : ""); }); }
