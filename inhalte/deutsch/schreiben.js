@@ -74,6 +74,6 @@
     Inhalte.registriere(Object.assign({ id: "de.schreiben.spuren", titel: "Buchstaben nachspuren", lz: ["de.sc.02"], stufe: ["vs", "1"],
       aufgaben: Object.keys(S).length, lernkartei: false }, basis));
     Inhalte.registriere(Object.assign({ id: "de.schreiben.woerter", titel: "Wörter legen", lz: ["de.sc.03", "de.sc.05"], stufe: ["1", "2"],
-      aufgaben: 40, lernkartei: true }, basis));
+      aufgaben: 57, lernkartei: true }, basis));
   }
 })();

@@ -67,10 +67,10 @@
     ["Eine helle Jacke mit Reflektoren", "Светлую куртку со светоотражателями", "Genau! So sehen dich die Autofahrer früh.", "Точно! Так водители заметят тебя заранее."],
     ["Meine dunkle Lieblingsjacke – Hauptsache warm", "Мою тёмную любимую куртку – главное, тепло", "Warm ist gut, aber dunkle Kleidung sieht man im Nebel kaum. Hell und mit Reflektoren ist sicherer.", "Тепло – хорошо, но тёмную одежду в тумане почти не видно. Светлая и со светоотражателями – безопаснее."],
     ["Egal, die Autos haben ja Licht", "Неважно, у машин же есть фары", "Nein, im Nebel sehen Autofahrer dunkel gekleidete Kinder sehr spät.", "Нет, в тумане водители очень поздно замечают детей в тёмной одежде."]);
-  W("rz", 2, "schule-ort", "🗺️", "Auf einem Plan siehst du ein kleines Bild von einem Buch. Wo steht, was es bedeutet?", "На плане ты видишь маленькую картинку книги. Где написано, что она значит?",
-    ["In der Legende", "В легенде", "Richtig! Die Legende erklärt alle Zeichen – das Buch steht vielleicht für die Bücherei.", "Правильно! Легенда объясняет все знаки – книга, может быть, означает библиотеку."],
-    ["In der Windrose", "В розе ветров", "Nein, die Windrose zeigt die Himmelsrichtungen.", "Нет, роза ветров показывает стороны света."],
-    ["Das muss man raten", "Это надо угадать", "Nein, dafür gibt es die Legende.", "Нет, для этого есть легенда."]);
+  W("rz", 2, "schule-ort", "🗺️", "Im Tierpark hängt ein großer Plan. Darauf ist ein blauer Tropfen gemalt. Wie findest du heraus, was er bedeutet?", "В зоопарке висит большой план. На нём нарисована синяя капля. Как узнать, что она значит?",
+    ["Ich schaue in der Legende nach", "Посмотрю в легенде", "Richtig! Die Legende erklärt alle Zeichen – der Tropfen steht vielleicht für Trinkwasser.", "Правильно! Легенда объясняет все знаки – капля, может быть, означает питьевую воду."],
+    ["Ich schaue auf die Windrose", "Посмотрю на розу ветров", "Nein, die Windrose zeigt die Himmelsrichtungen.", "Нет, роза ветров показывает стороны света."],
+    ["Ein Tropfen heißt immer Regen", "Капля всегда означает дождь", "Nein, jedes Zeichen kann auf jedem Plan etwas anderes bedeuten. Dafür gibt es die Legende.", "Нет, на каждом плане знак может значить что-то своё. Для этого есть легенда."]);
   D("rz", 2, "schulweg", "🚸", "Der kürzeste Schulweg ist immer der sicherste.", "Самый короткий путь в школу – всегда самый безопасный.", false,
     "Stimmt nicht! Ein kleiner Umweg über eine Ampel oder einen Zebrastreifen ist oft sicherer.", "Неверно! Небольшой крюк через светофор или «зебру» часто безопаснее.");
   W("rz", 2, "schule-ort", "🚗", "Ein Fremder sagt: „Deine Mama schickt mich, steig ein.“ Was tust du?", "Незнакомец говорит: «Меня прислала твоя мама, садись». Что ты делаешь?",
@@ -109,7 +109,7 @@
     "Stimmt nicht! Farben gab es immer. Nur die Fotoapparate konnten sie damals noch nicht zeigen.", "Неверно! Цвета были всегда. Только фотоаппараты тогда ещё не могли их показать.");
   W("ex", 2, "frueher", "📻", "Wie haben Kinder früher Musik gehört, als es noch keine Handys gab?", "Как раньше дети слушали музыку, когда ещё не было мобильных?",
     ["Mit dem Radio oder mit Schallplatten", "По радио или с пластинок", "Richtig! Radio und Plattenspieler gab es schon bei den Großeltern.", "Правильно! Радио и проигрыватели были ещё у бабушек и дедушек."],
-    ["Mit dem Tablet", "С планшета", "Nein, Tablets gibt es erst seit ein paar Jahren.", "Нет, планшеты появились всего несколько лет назад."],
+    ["Mit dem Tablet", "С планшета", "Nein, Tablets gab es damals noch nicht.", "Нет, планшетов тогда ещё не было."],
     ["Gar nicht, Musik gab es damals nicht", "Никак, музыки тогда не было", "Doch! Musik gibt es schon sehr lange – man hat auch viel selbst gesungen.", "Была! Музыка существует очень давно – и много пели сами."]);
   D("ex", 2, "meine-schulzeit", "✏️", "Auch Fehler gehören zu meiner Lerngeschichte – aus ihnen habe ich viel gelernt.", "Ошибки тоже часть моей истории учёбы – на них я многому научился(-лась).", true,
     "Stimmt! Wer Fehler macht und es nochmal versucht, lernt dazu.", "Верно! Кто ошибается и пробует снова, тот учится.");
@@ -219,7 +219,7 @@
     ["Weil Kleidung von allein warm macht", "Потому что одежда сама греет", "Nein, Kleidung macht keine Wärme. Sie hält deine Körperwärme fest.", "Нет, одежда не производит тепло. Она удерживает тепло твоего тела."],
     ["Damit man dicker aussieht", "Чтобы выглядеть толще", "Darum geht es nicht. Die Luft zwischen den Schichten hält warm.", "Дело не в этом. Воздух между слоями сохраняет тепло."]);
   D("un", 4, "feuer", "🍳", "Brennendes Fett in der Pfanne löscht man mit Wasser.", "Горящий жир на сковороде тушат водой.", false,
-    "Stimmt nicht! Wasser auf brennendem Fett ist sehr gefährlich – es spritzt eine Stichflamme. Deckel drauf, Herd aus, Erwachsene holen, 112 rufen.", "Неверно! Вода на горящем жире очень опасна – вспыхивает пламя. Накрыть крышкой, выключить плиту, позвать взрослых, звонить 112.");
+    "Stimmt nicht! Wasser auf brennendem Fett ist sehr gefährlich – es entsteht eine Stichflamme. Deckel drauf, Herd aus, Erwachsene holen, 112 rufen.", "Неверно! Вода на горящем жире очень опасна – вспыхивает пламя. Накрыть крышкой, выключить плиту, позвать взрослых, звонить 112.");
   D("un", 4, "strom", "🔌", "Ein Draht aus Metall leitet Strom, ein Stab aus Holz nicht.", "Металлическая проволока проводит ток, а деревянная палочка – нет.", true,
     "Stimmt! Metalle sind Leiter. Holz und Kunststoff sind Nichtleiter.", "Верно! Металлы – проводники. Дерево и пластик – непроводники.");
 
@@ -233,7 +233,7 @@
     ["Gar keins, das ist nur Spaß", "Никакое, это просто шутка", "Nein! Auslachen tut weh. Kein Kind darf benachteiligt werden.", "Нет! Насмешки причиняют боль. Ни один ребёнок не должен подвергаться дискриминации."]);
   D("zl", 4, "stadt-frueher", "🏙️", "Städte bleiben immer so, wie sie sind – sie verändern sich nicht.", "Города всегда остаются такими, какие есть, – они не меняются.", false,
     "Stimmt nicht! Städte verändern sich ständig: Neue Häuser, Straßen und Berufe kommen dazu, alte verschwinden.", "Неверно! Города постоянно меняются: появляются новые дома, улицы и профессии, старые исчезают.");
-  D("zl", 4, "schule-frueher", "📏", "Früher wurden Kinder in der Schule oft streng bestraft – heute ist das verboten.", "Раньше детей в школе часто строго наказывали – сегодня это запрещено.", true,
+  D("zl", 4, "schule-frueher", "📏", "Früher wurden Kinder in der Schule oft geschlagen – heute ist das verboten.", "Раньше детей в школе часто били – сегодня это запрещено.", true,
     "Stimmt! Heute haben Kinder das Recht, ohne Gewalt zu lernen.", "Верно! Сегодня у детей есть право учиться без насилия.");
 
   W("pt", 4, "gewaesser", "🐸", "Ein Frosch legt seine Eier ins Wasser. Was schlüpft daraus?", "Лягушка откладывает икру в воду. Кто из неё вылупляется?",
@@ -276,7 +276,7 @@
     ["In der Mitte der Straße", "Посередине дороги", "Nein, du fährst am rechten Rand.", "Нет, ты едешь у правого края."]);
   W("rz", 4, "sachsen-entdecken", "🏞️", "Welcher Fluss fließt durch Meißen, Dresden und Pirna?", "Какая река течёт через Мейсен, Дрезден и Пирну?",
     ["Die Elbe", "Эльба", "Richtig! Die Elbe fließt quer durch Sachsen.", "Правильно! Эльба течёт через всю Саксонию."],
-    ["Die Spree", "Шпрее", "Die Spree fließt durch Bautzen und Berlin, aber nicht durch Dresden.", "Шпрее течёт через Будишин и Берлин, но не через Дрезден."],
+    ["Die Spree", "Шпрее", "Die Spree fließt durch Bautzen und Berlin, aber nicht durch Dresden.", "Шпрее течёт через Баутцен и Берлин, но не через Дрезден."],
     ["Der Rhein", "Рейн", "Nein, der Rhein fließt im Westen von Deutschland.", "Нет, Рейн течёт на западе Германии."]); nurSn();
   D("rz", 4, "sachsen", "🏛️", "Leipzig ist die Landeshauptstadt von Sachsen, weil es die größte Stadt ist.", "Лейпциг – столица Саксонии, потому что это самый большой город.", false,
     "Stimmt nicht! Leipzig ist zwar die größte Stadt, aber Landeshauptstadt ist Dresden.", "Неверно! Лейпциг хоть и самый большой город, но столица – Дрезден."); nurSn();

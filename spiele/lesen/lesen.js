@@ -32,8 +32,15 @@
       : esc(t)).join("")}</span>`;
   }
   const ohneTrenner = (t) => String(t).replace(/-/g, "");
-  // Wörter für „Silben lesen“: Nomen mit eindeutigem Bild, ein bis drei Silben, Klasse 1
+  // Bilder, die ein Kind leicht verwechselt: Wörter derselben Gruppe stehen nie zusammen zur Auswahl (Silben lesen, Anlaute)
+  const DOPPELBILDER = [["kind", "bruder", "schwester", "baby"], ["mama", "lehrerin", "oma"], ["papa", "lehrer", "opa", "arzt"],
+    ["durst", "saft", "tee", "milch"], ["regen", "wolke", "regenschirm", "wasser"], ["tasche", "schulranzen"], ["brot", "broetchen", "kuchen"],
+    ["hunger", "suppe", "reis", "gabel"], ["heft", "buch", "papier"], ["uhr", "pause"], ["sonne", "lampe"], ["nuss", "pilz"]].map(g => g.map(x => "w." + x));
+  const verwechselbar = (a, b) => a !== b && DOPPELBILDER.some(g => g.includes(a) && g.includes(b));
+  // Wörter für „Silben lesen“: Nomen mit eindeutigem Bild, ein bis drei Silben, Klasse 1 – ohne Wörter, die kein Bild klar zeigt
+  const OHNE_BILD = ["w.pause", "w.freund", "w.kopf", "w.papier"], OHNE_THEMA = ["sprechen", "gefuehle"];
   const SILBENWOERTER = W.alle().filter(w => w.wortart === "nomen" && w.silben.length >= 1 && w.silben.length <= 3 && w.stufe.includes("1"))
+    .filter(w => !OHNE_BILD.includes(w.id) && !(w.themen || []).some(t => OHNE_THEMA.includes(t)))
     .filter((w, i, l) => l.findIndex(x => x.bild === w.bild) === i);
 
   // NA-50: Antworten beim ersten Versuch je Lernziel melden
@@ -163,7 +170,7 @@
     let optionen, frage, ansage, buchstaben = false;
     if (lauf.modus === "silben") {
       // Lesen: nichts wird vorgelesen; der Ton-Knopf erscheint erst nach einem Fehlversuch (Hilfe)
-      const falsch = mische(SILBENWOERTER.filter(x => x.id !== w.id && x.bild !== w.bild && x.silben[0] !== w.silben[0])).slice(0, 2);
+      const falsch = mische(SILBENWOERTER.filter(x => x.id !== w.id && x.bild !== w.bild && x.silben[0] !== w.silben[0] && !verwechselbar(x.id, w.id))).slice(0, 2);
       optionen = mische([w].concat(falsch)).map(x => ({ id: x.id, w: x, zeige: x.bild }));
       lauf.richtig_i = optionen.findIndex(o => o.id === w.id);
       lauf.optionen = optionen; lauf.ansage = w.silben.join(" – ");
@@ -185,7 +192,7 @@
       // gleich: Partnerwort mit demselben Anlaut; bild: irgendein Wort mit dem Buchstaben
       const partner = mische(HOERBAR.find(x => x.b === b).w.filter(id => id !== z.wort))[0] || z.wort;
       const richtigesWort = lauf.modus === "gleich" ? partner : z.wort;
-      const falsch = andereBuchstaben(b, 2).map(x => mische(HOERBAR.find(y => y.b === x).w)[0]);
+      const falsch = andereBuchstaben(b, 2).map(x => { const l = mische(HOERBAR.find(y => y.b === x).w); return l.find(id => !verwechselbar(id, richtigesWort)) || l[0]; });
       optionen = mische([richtigesWort].concat(falsch)).map(id => ({ id, w: wort(id), zeige: wort(id).bild }));
       lauf.richtig_i = optionen.findIndex(o => o.id === richtigesWort);
       const namen = optionen.map(o => o.w.de);
@@ -530,9 +537,11 @@
   $("spuren-weiter").addEventListener("click", () => { if (spur && spur.i < spur.zeichen.length) spurNaechstes(); });
 
   // ---------- Wörter legen (NA-35) ----------
-  // Lautgetreue Bildwörter (jeder Laut ein Buchstabe): keine Doppelkonsonanten, kein ie/ch/ck/tz/ß/Dehnungs-h, 3–6 Buchstaben
+  // Lautgetreue Bildwörter (jeder Laut ein Buchstabe): keine Doppelkonsonanten, kein ie/ch/ck/tz/ß/Dehnungs-h, 3–6 Buchstaben,
+  // kein St/Sp am Anfang („Scht“), kein pf/ng, kein b/d/g am Ende (klingt wie p/t/k), kein C am Anfang, keine Fremdwörter
   const LEGEWOERTER = W.alle().filter(w => w.wortart === "nomen" && w.stufe.includes("1") && /^[A-Za-zÄÖÜäöü]{3,6}$/.test(w.de)
-    && !/(ie|ch|ck|tz|qu|ph|eu|äu|[aeiouäöü]h|([a-z])\2)/i.test(w.de) && !/[vxyß]/i.test(w.de))
+    && !/(ie|ch|ck|tz|qu|ph|eu|äu|[aeiouäöü]h|([a-z])\2)/i.test(w.de) && !/[vxyß]/i.test(w.de)
+    && !/^(st|sp|c)|pf|ng|[bdg]$/i.test(w.de) && !["w.orange", "w.clown"].includes(w.id))
     .filter((w, i, l) => l.findIndex(x => x.bild === w.bild) === i);
   let leg = null;
   function legenRunde() {
@@ -625,8 +634,8 @@
       ["Lies nochmal Silbe für Silbe.", "Прочитай ещё раз по слогам."], ["Lies nochmal im Text nach.", "Посмотри ещё раз в тексте."],
       ["Nomen schreibt man am Anfang groß!", "Существительные пишут с большой буквы!"], ["Hör nochmal genau hin.", "Послушай ещё раз внимательно."],
       ["3 von 10 gleich beim ersten Mal richtig.", "{0} из {1} правильно с первого раза."], ["3 von 10 Wörtern ohne Fehler gelegt.", "{0} из {1} слов собрано без ошибок."],
-      ["Du hast 6 Buchstaben geschrieben: {w}", "Ты написал букв: {0}."],
-      ["Du hast deinen Namen geschrieben: {w}. Schreib ihn auch mal mit einem Stift auf ein Blatt!", "Ты написал своё имя: {w0}. Напиши его ещё и карандашом на листе!"],
+      ["Du hast 6 Buchstaben geschrieben: {w}", "Ты написал(а) букв: {0}."],
+      ["Du hast deinen Namen geschrieben: {w}. Schreib ihn auch mal mit einem Stift auf ein Blatt!", "Ты написал(а) своё имя: {w0}. Напиши его ещё и карандашом на листе!"],
       ...Object.entries(LOB_RU).flatMap(([de, ru]) => [[`${de} Das ist dein Name: {w}.`, `${ru} Это твоё имя: {w0}.`], [`${de} Das ist {w}.`, `${ru} Это {w0}.`],
         [`${de} Ein schön verbundenes Wort!`, `${ru} Красиво связанное слово!`], [`${de} {w} wie {w}.`, `${ru} {w0} – как в слове «{w1}».`], [de, ru]])
     ]);

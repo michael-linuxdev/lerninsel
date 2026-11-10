@@ -133,7 +133,7 @@
     const [e, de, r, ziel] = erk.runden[erk.pos];
     const opts = [ziel, ...GEFUEHLE.map(g => g[0]).filter(x => x !== ziel).sort(() => Math.random() - 0.5).slice(0, 3)].sort(() => Math.random() - 0.5);
     $("erk-karte").innerHTML = `<p class="klein">${erk.pos + 1} von ${erk.runden.length}</p><div class="gross">${e}</div><p class="lage"></p>${ru(r) ? `<p class="lage-ru" lang="ru"></p>` : ""}
-      <p><b>Wie fühlt sich das Kind wohl?</b></p>${ruP("Что, наверное, чувствует ребёнок?")}<div class="faces">${opts.map(id => `<button class="face" data-g="${id}"><span class="e">${G[id][1]}</span>${G[id][2]}${ru(G[id][3]) ? `<small lang="ru">${G[id][3]}</small>` : ""}</button>`).join("")}</div><p class="erk-antwort" id="erk-antwort"></p>`;
+      <p><b>Wie fühlst du dich dann wohl?</b></p>${ruP("Что ты, наверное, тогда чувствуешь?")}<div class="faces">${opts.map(id => `<button class="face" data-g="${id}"><span class="e">${G[id][1]}</span>${G[id][2]}${ru(G[id][3]) ? `<small lang="ru">${G[id][3]}</small>` : ""}</button>`).join("")}</div><p class="erk-antwort" id="erk-antwort"></p>`;
     $("erk-karte").querySelector(".lage").textContent = de; if (ru(r)) $("erk-karte").querySelector(".lage-ru").textContent = r;
     sprich(de);
     let fertig = false;
@@ -300,7 +300,7 @@
     const k = $("hilfe-karte"), ps = k.querySelectorAll(":scope > p"), HR = [
       ["Sprich mit einem Erwachsenen, dem du vertraust: Mama, Papa, Oma, Opa, deine Lehrerin oder dein Lehrer. Du bist nicht allein.", "Поговори со взрослым, которому ты доверяешь: мамой, папой, бабушкой, дедушкой, учительницей или учителем. Ты не один."],
       ["Du kannst auch kostenlos bei der Nummer gegen Kummer anrufen: 116 111 (Montag bis Samstag, 14 bis 20 Uhr). Dort hört dir jemand zu – du musst deinen Namen nicht sagen.", "Ты можешь бесплатно позвонить на «Номер против печали» (Nummer gegen Kummer): 116 111 (с понедельника по субботу, с 14 до 20 часов). Там тебя выслушают – называть своё имя не нужно."],
-      ["Dein Körper gehört dir. Wenn dich etwas oder jemand komisch fühlen lässt, darfst du Nein sagen und es weitererzählen.", "Твоё тело принадлежит тебе. Если что-то или кто-то вызывает у тебя странное чувство, ты можешь сказать «нет» и рассказать об этом."]
+      ["Dein Körper gehört dir. Wenn sich etwas komisch anfühlt oder dir jemand ein komisches Gefühl macht, darfst du Nein sagen und es weitererzählen.", "Твоё тело принадлежит тебе. Если что-то или кто-то вызывает у тебя странное чувство, ты можешь сказать «нет» и рассказать об этом."]
     ];
     ps.forEach((p, i) => { if (HR[i]) p.insertAdjacentHTML("afterend", ruP(HR[i][1])); });   // [deutsch wie in index.html, russisch]
     const KURZ = ["Du kannst auch kostenlos die Nummer gegen Kummer anrufen: 116 111", "Ты можешь бесплатно позвонить на «Номер против печали»: 116 111"];

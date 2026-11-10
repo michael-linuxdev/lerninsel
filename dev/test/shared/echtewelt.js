@@ -52,7 +52,7 @@
     ["turm", "bewegung", "🧱", "Bau den höchsten Turm, den du schaffst – mit Bausteinen, Büchern oder Bechern.", "Построй самую высокую башню, какую сможешь.", 1],
     ["gefuehl", "gefuehle", "😊", "Erzähl jemandem: Was hat dich heute froh gemacht?", "Расскажи кому-нибудь: что тебя сегодня порадовало?", 1],
     ["danke", "gefuehle", "🙏", "Sag heute zu drei Menschen ganz bewusst „Danke“.", "Скажи сегодня трём людям «спасибо».", 1],
-    ["malen", "gefuehle", "🎨", "Mal ein Bild von deinem Tier oder deiner Welt auf der Insel.", "Нарисуй своего питомца или свой мир на острове.", 1]
+    ["malen", "gefuehle", "🎨", "Mal ein Bild von deinem Tier oder deiner Welt auf der Insel.", "Нарисуй своего питомца или свой мир на острове.", 1],
     // Kunst, Musik, Werken, Sport, Ethik (Lehrpläne Sachsen 2019, 28.10.2026): Praktisches, das die App nicht ersetzt
     ["farbkreis", "kunst", "🎨", "Misch mit Wasserfarben aus Rot, Gelb und Blau die Farben Orange, Grün und Lila und mal einen kleinen Farbkreis.", "Смешай акварелью из красного, жёлтого и синего оранжевый, зелёный и фиолетовый и нарисуй маленький цветовой круг.", 1],
     ["stempel", "kunst", "🥔", "Druck mit einem Korken, einer halben Kartoffel oder deinem Finger ein Muster auf Papier.", "Напечатай узор на бумаге пробкой, половинкой картошки или пальцем.", 1],

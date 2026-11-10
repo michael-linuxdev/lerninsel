@@ -51,8 +51,8 @@ window.LEKTIONEN = [
         warum: "Lieber nicht! Wenn der Saft umkippt, kann das Tablet kaputtgehen.", warumRu: "Лучше не надо! Если сок прольётся, планшет может сломаться." },
       { typ: "daumen", e: "🙌", satz: "Ich halte das Tablet mit beiden Händen fest, wenn ich es trage.", satzRu: "Когда я несу планшет, я крепко держу его двумя руками.", ok: true,
         warum: "Genau so! Dann fällt es nicht herunter.", warumRu: "Именно так! Тогда он не упадёт." },
-      { typ: "daumen", e: "☀️", satz: "Ich lasse das Tablet im Sommer im heißen Auto liegen.", satzRu: "Летом я оставляю планшет в горячей машине.", ok: false,
-        warum: "Zu viel Hitze schadet dem Tablet. Nimm es lieber mit.", warumRu: "Жара вредит планшету. Лучше возьми его с собой." },
+      { typ: "daumen", e: "☀️", satz: "Im Sommer nehme ich das Tablet aus dem heißen Auto mit.", satzRu: "Летом я забираю планшет из горячей машины с собой.", ok: true,
+        warum: "Genau! Zu viel Hitze schadet dem Tablet.", warumRu: "Точно! Жара вредит планшету." },
       { typ: "sag", e: "⏰", text: "Auch du brauchst Pausen. Wenn du lange auf den Bildschirm schaust, werden die Augen müde.",
         ru: "Тебе тоже нужны перерывы. Если долго смотреть на экран, глаза устают." },
       { typ: "wahl", e: "👀", frage: "Deine Augen sind müde. Was hilft?", ru: "Твои глаза устали. Что поможет?", optionen: [
@@ -106,7 +106,7 @@ window.LEKTIONEN = [
     schritte: [
       { typ: "sag", e: "🎭", text: "Im Internet sieht man nicht, wer wirklich schreibt. Jemand sagt vielleicht, er ist ein Kind, ist aber ein Erwachsener.",
         ru: "В интернете не видно, кто на самом деле пишет. Кто-то может сказать, что он ребёнок, а на самом деле это взрослый." },
-      { typ: "chat", von: "Lena_2017", nachricht: "Hi! Ich bin auch 8 😊 Schick mir mal ein Foto von dir!", nachrichtRu: "Привет! Мне тоже 8 😊 Пришли мне свою фотографию!",
+      { typ: "chat", von: "Lena_2017", nachricht: "Hi! Ich bin auch ein Kind 😊 Schick mir mal ein Foto von dir!", nachrichtRu: "Привет! Я тоже ребёнок 😊 Пришли мне свою фотографию!",
         frage: "Was machst du?", ru: "Что ты сделаешь?", optionen: [
         { t: "Nicht antworten und Mama oder Papa zeigen", ru: "Не отвечать и показать маме или папе", ok: true,
           warum: "Richtig! Fotos von dir schickst du nicht an Fremde. Zeig die Nachricht einem Erwachsenen.", warumRu: "Правильно! Свои фото ты не отправляешь незнакомым. Покажи сообщение взрослому." },
@@ -133,7 +133,7 @@ window.LEKTIONEN = [
     id: "werbung", lz: ["me.ar.01"], name: "Werbung und Kaufen", e: "🛒", farbe: "#E8A33D", grund: "#FFF1D9",
     schritte: [
       { typ: "sag", e: "📢", text: "In vielen Spielen und Videos gibt es Werbung. Werbung will, dass du etwas kaufst oder irgendwo hintippst.",
-        ru: "Во многих играх и видео есть реклама. Реклама хочет, чтобы ты что-нибудь купил или куда-нибудь нажал." },
+        ru: "Во многих играх и видео есть реклама. Реклама хочет, чтобы ты что-нибудь купил(а) или куда-нибудь нажал(а)." },
       { typ: "popup", text: "Beim Spielen geht plötzlich ein Werbefenster auf. Schließe es richtig!", ru: "Во время игры вдруг открывается окно с рекламой. Закрой его правильно!" },
       { typ: "daumen", e: "🎁", satz: "Da steht: Du hast gewonnen! Tippe hier! Das stimmt bestimmt.", satzRu: "Там написано: «Ты выиграл! Нажми здесь!» Это точно правда.", ok: false,
         warum: "Vorsicht! Solche Nachrichten sind fast immer Werbung oder ein Trick. Nicht antippen.", warumRu: "Осторожно! Такие сообщения почти всегда реклама или обман. Не нажимай." },
@@ -155,8 +155,8 @@ window.LEKTIONEN = [
     schritte: [
       { typ: "sag", e: "🕵️", text: "Nicht alles im Internet ist wahr. Bilder kann man verändern, und manche Geschichten sind erfunden.",
         ru: "Не всё в интернете правда. Картинки можно изменить, а некоторые истории выдуманы." },
-      { typ: "daumen", e: "🦈🛒", satz: "Ein Foto zeigt einen Hai im Supermarkt. Das ist bestimmt echt.", satzRu: "На фото акула в супермаркете. Это точно настоящее фото.", ok: false,
-        warum: "Wahrscheinlich nicht! Solche Bilder sind oft verändert. Frag nach, wenn du unsicher bist.", warumRu: "Скорее всего, нет! Такие картинки часто изменены. Спроси, если сомневаешься." },
+      { typ: "daumen", e: "🦈🛒", satz: "Ein Foto zeigt einen Hai im Supermarkt. Das Bild kann verändert sein.", satzRu: "На фото акула в супермаркете. Картинка может быть изменена.", ok: true,
+        warum: "Richtig! Solche Bilder sind oft verändert. Frag nach, wenn du unsicher bist.", warumRu: "Верно! Такие картинки часто изменены. Спроси, если сомневаешься." },
       { typ: "wahl", e: "📨", frage: "Du bekommst: Schick das an 10 Freunde, sonst passiert etwas Schlimmes! Was machst du?",
         ru: "Тебе пишут: «Отправь это 10 друзьям, иначе случится что-то плохое!» Что ты сделаешь?", optionen: [
         { t: "Nicht weiterschicken und einem Erwachsenen zeigen", ru: "Не пересылать и показать взрослому", ok: true,

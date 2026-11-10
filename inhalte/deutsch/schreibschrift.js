@@ -129,9 +129,9 @@
     return { striche: alle, links: Math.min(...xs) - 8, breite: Math.max(...xs) - Math.min(...xs) + 16 };
   }
   // Übungswörter: erst nur Kleinbuchstaben, dann Namenwörter mit Großbuchstaben (kommen dran, sobald ihre Buchstaben geübt sind)
-  const WOERTER = ["im", "in", "um", "nie", "mit", "rot", "gut", "und", "auf", "ich", "wir", "oma", "opa", "mama", "papa", "eis", "lila",
+  const WOERTER = ["im", "in", "um", "nie", "mit", "rot", "gut", "und", "auf", "ich", "wir", "am", "nun", "mal", "toll", "leise", "lila",
     "malen", "lesen", "rufen", "baden", "singen", "laufen", "spielen", "schreiben", "hallo", "danke", "bitte", "heute", "morgen", "blau", "grün", "süß", "klein",
-    "Oma", "Opa", "Mama", "Uhr", "Igel", "Hut", "Auto", "Ente", "Leo", "Maus", "Nase", "Rose", "Tor", "Kino", "Ball", "Baum", "Fisch", "Sonne",
+    "Oma", "Opa", "Mama", "Papa", "Uhr", "Igel", "Hut", "Auto", "Ente", "Leo", "Maus", "Nase", "Rose", "Tor", "Kino", "Ball", "Baum", "Fisch", "Sonne",
     "Dorf", "Garten", "Pferd", "Vogel", "Wald", "Zebra", "Juli", "Eis", "Quark", "Xaver", "Yak", "Clown", "Äpfel", "Öl", "Übung", "Sachsen"];
   window.SCHREIBSCHRIFT = { name: "Schulausgangsschrift", kurz: "SAS", buchstaben: Object.assign({}, B, G), reihe: "ilutenmrsaodcbhkfgjpqvwxyzäöüß".split("").concat("ILHUAMKRETNOCGSJDPBFVWZXYQÄÖÜ".split("")), woerter: WOERTER, baue };
 

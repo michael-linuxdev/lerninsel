@@ -84,10 +84,10 @@
     optionen: [`${t} °C`, `${t + 5} °C`, `${t - 10 < 0 ? t + 10 : t - 10} °C`], warum: `Lies ab, wo der rote Faden aufhört: ${t} Grad.`, warumRu: `Посмотри, где кончается красная полоска: ${t} градусов.` }));
   neu({ id: "wolken-regen", ab: "b", bild: () => himmel("wolken"), frage: "Dicke, dunkle Wolken ziehen auf. Was kommt wohl gleich?", ru: "Идут тёмные тучи. Что, наверное, будет?", optionen: ["Regen", "Sonne pur", "Ein Regenbogen ohne Regen"], warum: "Dunkle Wolken sind voller Wassertropfen.", warumRu: "Тёмные тучи полны капель воды." });
   [-4, 6, 14, 22].forEach(t => neu({ id: "thermo-c" + (t < 0 ? "m" + -t : t), ab: "c", bild: () => thermoBild(t, -10, 30, 2), frage: "Wie viel Grad zeigt das Thermometer?", ru: "Сколько градусов показывает термометр?",
-    optionen: [`${t} °C`, `${t + 2} °C`, `${-t === t ? t + 4 : -t} °C`].filter((x, i, l) => l.indexOf(x) === i).concat(t === 0 ? ["4 °C"] : []), warum: t < 0 ? `Unter der 0 zählt man nach unten: minus ${-t} Grad.` : `Jeder kleine Strich sind 2 Grad: ${t} Grad.`, warumRu: t < 0 ? `Ниже нуля считают вниз: минус ${-t} градусов.` : `Каждый маленький штрих – 2 градуса: ${t} градусов.` }));
+    optionen: [`${t} °C`, `${t + 2} °C`, `${-t === t ? t + 4 : -t} °C`].filter((x, i, l) => l.indexOf(x) === i).concat(t === 0 ? ["4 °C"] : []), warum: t < 0 ? `Unter der 0 zählt man nach unten: minus ${-t} Grad.` : `Jeder kleine Strich steht für 2 Grad: ${t} Grad.`, warumRu: t < 0 ? `Ниже нуля считают вниз: минус ${-t} градусов.` : `Каждый маленький штрих – 2 градуса: ${t} градусов.` }));
   [["osten", "Westen", "Osten"], ["norden", "Süden", "Norden"]].forEach(([nach, aus, falsch]) => neu({ id: "windsack-" + nach, ab: "c", bild: () => windsackBild(nach), frage: "Woher kommt der Wind?", ru: "Откуда дует ветер?",
     optionen: [`aus dem ${aus}`, `aus dem ${falsch}`, nach === "osten" ? "aus dem Norden" : "aus dem Westen"], warum: `Der Windsack zeigt dahin, wohin der Wind weht. Er kommt also aus dem ${aus}.`, warumRu: "Конус показывает, куда дует ветер. Значит, ветер дует с противоположной стороны." }));
-  [6, 14].forEach(mm => neu({ id: "regen-" + mm, ab: "c", bild: () => regenBild(mm), frage: "Wie viel Regen ist gefallen?", ru: "Сколько выпало дождя?", optionen: [`${mm} mm`, `${mm + 4} mm`, `${mm - 2} mm`], warum: `Jeder kleine Strich sind 2 mm. Das Wasser steht bei ${mm} mm.`, warumRu: `Каждый маленький штрих – 2 мм. Вода стоит на ${mm} мм.` }));
+  [6, 14].forEach(mm => neu({ id: "regen-" + mm, ab: "c", bild: () => regenBild(mm), frage: "Wie viel Regen ist gefallen?", ru: "Сколько выпало дождя?", optionen: [`${mm} mm`, `${mm + 4} mm`, `${mm - 2} mm`], warum: `Jeder kleine Strich steht für 2 mm. Das Wasser steht bei ${mm} mm.`, warumRu: `Каждый маленький штрих – 2 мм. Вода стоит на ${mm} мм.` }));
   neu({ id: "frost", ab: "c", bild: () => thermoBild(-2, -10, 30, 2), frage: "Unter 0 Grad wird Wasser zu …", ru: "Ниже 0 градусов вода превращается в …", optionen: ["Eis", "Dampf", "Saft"], warum: "Bei Frost gefriert Wasser zu Eis – Pfützen werden glatt.", warumRu: "В мороз вода замерзает в лёд – лужи становятся скользкими." });
   const fuerStufe = (st) => FRAGEN.filter(f => STUFEN.indexOf(f.ab) <= STUFEN.indexOf(st));
 
@@ -95,7 +95,7 @@
   function echtesWetter() {
     try { const w = JSON.parse(localStorage.getItem("lerninsel.wetter")), O = S.kind().ort; return w && O && w.lat === O.lat && w.lon === O.lon && Date.now() - w.zeit < 6 * 3600000 ? w : null; } catch (e) { return null; }
   }
-  const windStufe = (kmh) => (kmh < 6 ? 0 : kmh < 20 ? 1 : kmh < 39 ? 2 : 3);
+  const windStufe = (kmh) => (kmh < 6 ? 0 : kmh < 20 ? 1 : kmh < 62 ? 2 : 3);   // Sturm erst ab etwa 62 km/h (stürmischer Wind, Beaufort 8)
   const artAus = (a) => ({ klar: "sonne", heiter: "sonne", wolken: "wolken", nebel: "nebel", regen: "regen", schnee: "schnee", gewitter: "gewitter" })[a] || "wolken";
 
   // ---------- 1) Wettertagebuch ----------
@@ -160,15 +160,16 @@
     ella("Bevor der Drache fliegt, schauen wir genau aufs Wetter.", "Прежде чем запустить змея, посмотрим внимательно на погоду.");
     zeigeFrage();
   }
-  // Optionen in fester, aber wechselnder Reihenfolge (kein Zufall nötig)
-  const ordne = (opt, pos) => { const n = pos % opt.length; return opt.slice(n).concat(opt.slice(0, n)); };
+  // Optionen fest gemischt je Frage (Saat aus der Frage-ID): kein Muster nach Fragenummer, das ein Kind auswendig lernen könnte
+  const ordne = (opt, id) => { let h = 2166136261; for (const c of String(id)) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
+    const l = opt.slice(); for (let i = l.length - 1; i > 0; i--) { h = (Math.imul(h, 1664525) + 1013904223) >>> 0; const j = (h >>> 8) % (i + 1); [l[i], l[j]] = [l[j], l[i]]; } return l; };
   function zeigeFrage() {
     const f = lauf.liste[lauf.pos]; lauf.versuche = 0;
     $("bereich").innerHTML = `<section class="karte" id="fragekarte">
       <p class="stand">Frage ${lauf.pos + 1} von ${lauf.liste.length}</p>
       <div class="bild-rahmen">${f.bild()}</div>
       <p class="frage" id="frage">${esc(f.frage)}${ru(f.ru)} <button class="vorlesen klein" id="frage-hoer" aria-label="Frage vorlesen">🔊</button></p>
-      <div class="optionen" id="optionen">${ordne(f.optionen, lauf.pos).map(o => `<button class="wahl-knopf" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>
+      <div class="optionen" id="optionen">${ordne(f.optionen, f.id).map(o => `<button class="wahl-knopf" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>
       <p class="hinweis" id="hinweis" aria-live="polite"></p></section>`;
     $("frage-hoer").addEventListener("click", () => { if (SP) SP.sprich(f.frage + " " + f.optionen.join(", ")); });
     $("optionen").addEventListener("click", (e) => { const b = e.target.closest("[data-o]"); if (b && !b.disabled) antworte(b); });

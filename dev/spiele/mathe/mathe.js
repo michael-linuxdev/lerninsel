@@ -431,7 +431,7 @@
         $("eingabe").innerHTML = `<div class="wahl-tasten drei">${opt.map(o => `<button class="taste erklaer-wahl" data-e="${o}">${o}</button>`).join("")}</div>`;
         $("eingabe").querySelectorAll("[data-e]").forEach(b => b.addEventListener("click", () => {
           if (b.dataset.e === st.antwort) { S.ton("juhu"); $("luecke").textContent = st.antwort; $("luecke").className = "luecke richtig"; $("rueck").className = "rueck gut"; $("rueck").textContent = "Genau!"; knopfWeiter("Weiter ➜", weiter); }
-          else { S.ton("nein"); versuche++; b.style.background = "#FFE1DD"; b.disabled = true; $("rueck").className = "rueck nein"; $("rueck").textContent = versuche > 1 ? `Es ist ${st.antwort}. Schau noch einmal aufs Bild.` : "Fast – schau noch einmal genau hin."; if (versuche > 1) knopfWeiter("Weiter ➜", weiter); }
+          else { S.ton("nein"); versuche++; b.style.background = "#FFE1DD"; b.disabled = true; $("rueck").className = "rueck nein"; $("rueck").textContent = versuche > 1 ? `Es ist ${st.antwort}. Lies die Aufgabe noch einmal.` : "Fast – schau noch einmal genau hin."; if (versuche > 1) knopfWeiter("Weiter ➜", weiter); }
         }));
         return;
       }

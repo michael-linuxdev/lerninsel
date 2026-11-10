@@ -410,7 +410,7 @@
   // Eigene Idee (07.11.2026): Feste aus Herkunftsländern als Episoden (KONZEPT „Episoden“) – für alle Kinder, ab Kapitel 1, je Jahr einmal,
   // nur in den Festtagen; wer in der Zeit nicht kommt, verpasst nichts (keine Belohnung, nur eine kurze Szene in der Chronik).
   const FESTE = [
-    { id: "fest-neujahr", von: "12-31", bis: "01-07", wer: "baer" },   // Neujahr mit Väterchen Frost (Russland, Ukraine, Bulgarien …)
+    { id: "fest-neujahr", von: "12-31", bis: "01-07", wer: "baer" },   // Neujahr mit Väterchen Frost (Russland und einige Nachbarländer)
     { id: "fest-nouruz", von: "03-19", bis: "03-23", wer: "papagei" }   // Nouruz, Neujahr zum Frühlingsanfang (Iran, Afghanistan, Kurden …)
   ];
   function festJetzt() {

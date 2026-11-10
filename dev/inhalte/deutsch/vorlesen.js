@@ -16,7 +16,7 @@
     { id: "vt.06", stufe: "4", titel: "Die Wette", bild: "🏃",
       text: "„Ich wette, ich bin schneller als du!“, rief Finn und rannte los. Emil zögerte nicht lange und lief hinterher. Bis zur Laterne lagen sie gleichauf, doch dann stolperte Finn über eine Wurzel und fiel hin. Emil blieb sofort stehen. „Hast du dir wehgetan?“, fragte er und half ihm auf. Das Knie blutete ein bisschen. Langsam gingen die beiden nach Hause. „Und wer hat jetzt gewonnen?“, fragte Finn. Emil grinste: „Wir beide. Wir sind ja zusammen angekommen.“" },
     { id: "vt.07", stufe: "4", titel: "Warum der Mond seine Form ändert", bild: "🌓",
-      text: "Der Mond leuchtet nicht selbst. Er wird von der Sonne angestrahlt, so wie eine Kugel von einer Taschenlampe. Weil der Mond in etwa vier Wochen einmal um die Erde wandert, sehen wir die beleuchtete Seite jeden Abend ein wenig anders. Bei Neumond ist sie von uns abgewandt, und der Mond ist kaum zu sehen. Dann wächst die helle Sichel von Tag zu Tag, bis wir den runden Vollmond sehen. Danach nimmt der Mond wieder ab. Eine alte Merkhilfe sagt: Sieht der Mond aus wie ein „a“, nimmt er ab; sieht er aus wie ein „z“, nimmt er zu." },
+      text: "Der Mond leuchtet nicht selbst. Er wird von der Sonne angestrahlt, so wie eine Kugel von einer Taschenlampe. Weil der Mond in etwa vier Wochen einmal um die Erde wandert, sehen wir die beleuchtete Seite jeden Abend ein wenig anders. Bei Neumond ist sie von uns abgewandt, und der Mond ist kaum zu sehen. Dann wächst die helle Sichel von Tag zu Tag, bis wir den runden Vollmond sehen. Danach nimmt der Mond wieder ab. Eine alte Merkhilfe sagt: Sieht die Sichel aus wie der Bogen von einem geschriebenen „a“, nimmt der Mond ab; sieht sie aus wie der Bogen von einem alten geschriebenen „z“, nimmt er zu." },
     { id: "vt.08", stufe: "4", titel: "Das Klassenfest", bild: "🎉",
       text: "Die Klasse 4b plante ein Fest zum Ende des Schuljahres. Jede Gruppe bekam eine Aufgabe. Die erste Gruppe schrieb Einladungen an die Eltern, die zweite übte ein kleines Theaterstück, und die dritte kümmerte sich um das Essen. Es gab Streit, weil alle Pizza wollten, nur Aylin nicht. „Dann machen wir ein Büfett“, schlug Frau Weber vor, „jeder bringt etwas anderes mit.“ So kamen Pizza, Obstspieße, Salat und Kuchen auf den Tisch. Am Ende waren sich alle einig: Das war das beste Fest der ganzen Grundschulzeit." }
   ];
@@ -29,7 +29,7 @@
     { id: "th.02", stufe: "3", titel: "Im Fundbüro", bild: "🧤", rollen: [{ id: "f", name: "Frau Klein (Fundbüro)", e: "👩‍💼" }, { id: "k", name: "Kind", e: "🧒" }, { id: "h", name: "Hund", e: "🐶" }],
       zeilen: [["k", "Guten Tag! Ich habe meinen Handschuh verloren. Er ist rot und hat einen Stern."], ["f", "Guten Tag! Rote Handschuhe habe ich viele. Schauen wir mal."],
         ["f", "Ist es dieser hier?"], ["k", "Nein, der ist ja blau!"], ["h", "Wuff!"], ["f", "Und dieser?"], ["k", "Der hat keinen Stern."],
-        ["h", "Wuff! Wuff!"], ["k", "Was hat denn dein Hund?"], ["f", "Oh! Er sitzt auf etwas … Ein roter Handschuh mit Stern!"],
+        ["h", "Wuff! Wuff!"], ["k", "Was hat denn Ihr Hund?"], ["f", "Oh! Er sitzt auf etwas … Ein roter Handschuh mit Stern!"],
         ["k", "Das ist meiner! Danke, Hund!"], ["h", "Wuff!"], ["f", "Er sagt: Gern geschehen. Und pass gut auf deine Sachen auf!"]] },
     { id: "th.03", stufe: "3", titel: "Der Fuchs und der Rabe", bild: "🦊", rollen: [{ id: "e", name: "Erzählerin", e: "📖" }, { id: "f", name: "Fuchs", e: "🦊" }, { id: "r", name: "Rabe", e: "🐦‍⬛" }],
       zeilen: [["e", "Ein Rabe sitzt auf einem Ast. Im Schnabel hält er ein Stück Käse. Da kommt ein hungriger Fuchs vorbei."],
@@ -37,7 +37,7 @@
         ["e", "Der Rabe ist stolz und plustert sich auf."], ["f", "Wenn deine Stimme so schön ist wie deine Federn, dann bist du der König der Vögel. Sing doch einmal!"],
         ["r", "Kraah!"], ["e", "Da fällt der Käse herunter. Der Fuchs schnappt ihn sich."], ["f", "Danke! Merk dir: Wer anderen schmeichelt, will oft etwas von ihnen."],
         ["r", "Das merke ich mir! Nächstes Mal halte ich den Schnabel."]] },
-    { id: "th.04", stufe: "4", titel: "Streit um die Schaukel", bild: "🛝", rollen: [{ id: "a", name: "Ali", e: "👦" }, { id: "s", name: "Sophie", e: "👧" }, { id: "l", name: "Lehrer Herr Berg", e: "👨‍🏫" }],
+    { id: "th.04", stufe: "4", titel: "Streit um die Schaukel", bild: "🤝", rollen: [{ id: "a", name: "Ali", e: "👦" }, { id: "s", name: "Sophie", e: "👧" }, { id: "l", name: "Lehrer Herr Berg", e: "👨‍🏫" }],
       zeilen: [["a", "Ich war zuerst an der Schaukel!"], ["s", "Gar nicht! Ich warte schon die ganze Pause!"], ["a", "Du lügst!"], ["s", "Du schubst immer!"],
         ["l", "Stopp, ihr beiden. Holt erst einmal tief Luft."], ["l", "Ali, was ist passiert? Und Sophie, du hörst zu, ohne zu unterbrechen."],
         ["a", "Ich wollte schaukeln. Dann kam Sophie und hat gedrängelt."], ["l", "Danke. Sophie, jetzt du."], ["s", "Ich habe gewartet, und dann hat Ali sich vorgedrängelt."],

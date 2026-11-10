@@ -22,7 +22,7 @@
     { id: "kuerbis", name: "Kürbis", e: "🎃", tage: 5, ab: 2, farbe: "#F59A23", ru: "тыква",
       text: "Der Kürbis braucht lange und viel Platz. Im Herbst ist er reif.", textRu: "Тыкве нужно много времени и места. Осенью она созревает." },
     { id: "kartoffel", name: "Kartoffel", e: "🥔", tage: 4, ab: 3, farbe: "#C9A26B", ru: "картофель",
-      text: "Kartoffeln sind Knollen. Sie wachsen unter der Erde an den Wurzeln.", textRu: "Картофель – это клубни. Они растут под землёй." },
+      text: "Kartoffeln sind Knollen. Sie wachsen unter der Erde an dünnen Trieben der Pflanze.", textRu: "Картофель – это клубни. Они растут под землёй на тонких побегах растения." },
     { id: "mais", name: "Mais", e: "🌽", tage: 5, ab: 3, farbe: "#F2D04B", ru: "кукуруза",
       text: "Mais wird größer als du! Der Wind trägt den Blütenstaub von Pflanze zu Pflanze.", textRu: "Кукуруза вырастает выше тебя!" }
   ];

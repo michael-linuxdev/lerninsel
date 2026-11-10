@@ -20,7 +20,7 @@
     { start: [0, 4, 0], ziel: [0, 0], max: 2, schleife: true, text: "Ganz nach oben – mit nur 2 Bausteinen.", loesung: "4[v]" },
     { start: [0, 4, 1], ziel: [4, 0], max: 5, schleife: true, text: "Eine Treppe! Was wiederholt sich immer wieder? Höchstens 5 Bausteine.", loesung: "4[vlvr]" },
     { start: [0, 4, 0], ziel: [4, 4], steine: [[1, 4], [1, 3], [3, 4], [3, 3], [1, 1], [3, 1]], max: 9, schleife: true, text: "Hoch, rüber, runter – nutze Schleifen. Höchstens 9 Bausteine.", loesung: "2[v]r4[v]r2[v]" },
-    { start: [2, 2, 0], ziel: [2, 2], umweg: true, max: 6, schleife: true, text: "Fahr einmal im Quadrat um die Mitte und komm zurück zum Start. Höchstens 6 Bausteine.", loesung: "4[vrvr]" }
+    { start: [2, 2, 0], ziel: [2, 2], umweg: true, max: 6, schleife: true, text: "Fahr einmal im Quadrat und komm zurück zum Start. Höchstens 6 Bausteine.", loesung: "4[vr]" }
   ];
   // Level 13 (umweg): Ziel = Start, gilt erst nach mindestens vier Schritten
 

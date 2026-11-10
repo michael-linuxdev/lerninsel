@@ -701,7 +701,7 @@
           ["sn.sm3.2.03", "Erzählen und vortragen", "3", [], "nein"]
         ],
         3: [ // Für sich und andere schreiben (Za sebje a druhich pisać)
-          ["sn.sm3.3.01", "Texte planen, Geschichten aufbauen (Anfang, Höhepunkt, Schluss)", "3", ["sorbisch:sm-stawizna"], "teil", "Zu wenig Übung: „Prěnje, potom, skónčnje – Eine Geschichte ordnen“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
+          ["sn.sm3.3.01", "Texte planen, Geschichten aufbauen (Anfang, Höhepunkt, Schluss)", "3", ["sorbisch:sm-stawizna"], "teil", "Zu wenig Übung: „Najprjedy, potom, skónčnje – Eine Geschichte ordnen“ hat 3 Aufgaben für 2 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.sm3.3.02", "Texte überarbeiten und präsentieren", "3", ["praesentieren:gestalten"], "teil", "Überarbeiten und Präsentieren ohne sorbische Rechtschreibprüfung."]
         ],
         4: [ // Richtig schreiben (Prawje pisać)

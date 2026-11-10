@@ -57,7 +57,7 @@ window.ENGLISCH = [
       { en: "pig", de: "Schwein", ru: "свинья", e: "🐷" }, { en: "mouse", de: "Maus", ru: "мышь", e: "🐭" }],
     extra: [
       { typ: "lied", id: "macdonald", ru: "Пой вместе: «Old MacDonald had a farm»." },
-      { typ: "satz", de: "Bau den Satz: „Ich habe einen Hund.“", ru: "Составь предложение: «У меня есть собака».", woerter: ["I", "have", "a", "dog."], e: "🐶" },
+      { typ: "satz", de: "Bau den Satz: „Ich habe einen Hund.“", ru: "Составь предложение: «У меня есть собака».", woerter: ["I've", "got", "a", "dog."], e: "🐶" },
       { typ: "wahl", frage: "Welches Tier sagt „moo“?", ru: "Какое животное говорит «му»?", optionen: ["cow", "cat", "bird"], e: "🐮" }],
     ende: { de: "Prima! Welches Tier magst du am liebsten? Sag es auf Englisch!", ru: "Отлично! Какое животное тебе нравится больше всего? Скажи по-английски!" }
   },
@@ -133,7 +133,7 @@ window.ENGLISCH = [
       { en: "ruler", de: "Lineal", ru: "линейка", e: "📏" }, { en: "scissors", de: "Schere", ru: "ножницы", e: "✂️" }, { en: "schoolbag", de: "Schultasche", ru: "рюкзак", e: "🎒" },
       { en: "chair", de: "Stuhl", ru: "стул", e: "🪑" }, { en: "teacher", de: "Lehrerin/Lehrer", ru: "учитель", e: "🧑‍🏫" }],
     extra: [
-      { typ: "satz", de: "Bau den Satz: „Ich habe einen roten Stift.“", ru: "Составь предложение: «У меня есть красная ручка».", woerter: ["I", "have", "a", "red", "pen."], e: "🖊️" },
+      { typ: "satz", de: "Bau den Satz: „Ich habe einen roten Stift.“", ru: "Составь предложение: «У меня есть красная ручка».", woerter: ["I've", "got", "a", "red", "pen."], e: "🖊️" },
       { typ: "wahl", frage: "Womit misst du eine Linie?", ru: "Чем измеряют линию?", optionen: ["ruler", "scissors", "chair"], e: "📐" }],
     ende: { de: "Klasse! Zeig morgen beim Packen auf deine Sachen und sag die englischen Wörter.", ru: "Класс! Завтра, собирая рюкзак, показывай на вещи и называй их по-английски." }
   },
@@ -161,7 +161,7 @@ window.ENGLISCH = [
       { typ: "satz", de: "Bau den Satz: „Heute ist es sonnig.“", ru: "Составь предложение: «Сегодня солнечно».", woerter: ["It", "is", "sunny", "today."], e: "☀️" },
       { typ: "wahl", frage: "Es regnet und du nimmst einen Schirm. Wie ist das Wetter?", ru: "Идёт дождь, и ты берёшь зонтик. Какая погода?", optionen: ["rainy", "sunny", "hot"], e: "☂️" },
       { typ: "wahl", frage: "Draußen ist es neblig: Man sieht kaum etwas. Wie sagt man das?", ru: "На улице туман: почти ничего не видно. Как это сказать?", optionen: ["It's foggy.", "It's sunny.", "It's hot."], e: "🌫️" },
-      { typ: "wahl", frage: "„It's cold and snowy.“ Was ziehst du an?", ru: "«It's cold and snowy.» Что ты наденешь?", optionen: ["a warm jacket and a scarf", "a T-shirt and shorts", "a swimsuit"], e: "🧣", warum: "Bei Kälte und Schnee: warme Jacke, Mütze und Schal." }],
+      { typ: "wahl", frage: "„It's cold and snowy.“ Was ziehst du an?", ru: "«It's cold and snowy.» Что ты наденешь?", optionen: ["a warm jacket and a scarf", "a T-shirt and shorts", "a swimsuit"], e: "🧣", warum: "Bei Kälte und Schnee: warme Jacke und Schal." }],
     ende: { de: "Prima! Schau morgen aus dem Fenster und sag: „It is …“.", ru: "Отлично! Завтра посмотри в окно и скажи: «It is …»." }
   },
   {
@@ -185,13 +185,13 @@ window.ENGLISCH.push(
     intro: { de: "„How are you?“ heißt „Wie geht es dir?“. Heute lernst du, wie du auf Englisch sagst, wie du dich fühlst.", ru: "«How are you?» значит «Как дела?». Сегодня учимся говорить по-английски, как ты себя чувствуешь." },
     woerter: [
       { en: "happy", de: "fröhlich", ru: "радостный", e: "😄" }, { en: "sad", de: "traurig", ru: "грустный", e: "😢" },
-      { en: "tired", de: "müde", ru: "усталый", e: "🥱" }, { en: "hungry", de: "hungrig", ru: "голодный", e: "🍽️" },
+      { en: "tired", de: "müde", ru: "усталый", e: "🥱" }, { en: "hungry", de: "hungrig", ru: "голодный", e: "😋" },
       { en: "thirsty", de: "durstig", ru: "хочется пить", e: "🥤" }, { en: "angry", de: "wütend", ru: "сердитый", e: "😠" },
       { en: "scared", de: "ängstlich", ru: "испуганный", e: "😨" }, { en: "fine", de: "gut", ru: "хорошо", e: "👌" }],
     extra: [
       { typ: "satz", de: "Sag: „Ich bin hungrig.“", ru: "Скажи: «Я голоден».", woerter: ["I'm", "hungry."], e: "🍽️" },
       { typ: "wahl", frage: "Jemand sagt „Nice to meet you.“ Was antwortest du?", ru: "Тебе говорят «Nice to meet you.» Что ответишь?", optionen: ["Nice to meet you, too.", "Goodbye, I'm tired.", "I'm a dog."], e: "🤝", warum: "„Nice to meet you“ heißt „Schön, dich kennenzulernen“ – die Antwort: „Nice to meet you, too.“" },
-      { typ: "wahl", frage: "Du hast heute Geburtstag. Wie fühlst du dich?", ru: "У тебя сегодня день рождения. Как ты себя чувствуешь?", optionen: ["I'm happy.", "I'm sad.", "I'm angry."], e: "🎂" }],
+      { typ: "wahl", frage: "Du hast heute Geburtstag und freust dich sehr. Was sagst du?", ru: "У тебя сегодня день рождения, и ты очень рад(а). Что ты скажешь?", optionen: ["I'm happy.", "I'm sad.", "I'm angry."], e: "🎂" }],
     ende: { de: "Super! Frag heute jemanden „How are you?“ – und warte auf die Antwort.", ru: "Супер! Спроси сегодня кого-нибудь «How are you?» — и дождись ответа." }
   },
   {
@@ -219,7 +219,7 @@ window.ENGLISCH.push(
     extra: [
       { typ: "satz", de: "Frag: „Wie viel kostet das?“", ru: "Спроси: «Сколько это стоит?»", woerter: ["How", "much", "is", "it?"], e: "🏷️" },
       { typ: "satz", de: "Sag höflich: „Ich hätte gern den Ball, bitte.“", ru: "Скажи вежливо: «Я бы хотел мяч, пожалуйста».", woerter: ["I'd", "like", "the", "ball,", "please."], e: "⚽" },
-      { typ: "wahl", frage: "Du hast nicht genug Geld. Was sagst du?", ru: "У тебя не хватает денег. Что скажешь?", optionen: ["Sorry, I haven't got the money.", "Here you are.", "Happy birthday!"], e: "😕" },
+      { typ: "wahl", frage: "Du hast nicht genug Geld. Was sagst du?", ru: "У тебя не хватает денег. Что скажешь?", optionen: ["Sorry, I haven't got enough money.", "Here you are.", "Happy birthday!"], e: "😕" },
       { typ: "wahl", frage: "Die Verkäuferin gibt dir den Drachen: „Here you are.“ Was sagst du?", ru: "Продавщица даёт тебе змея: «Here you are.» Что скажешь?", optionen: ["Thank you!", "Goodbye, sad!", "How old are you?"], e: "🪁" }],
     ende: { de: "Super! Spiel mit deiner Familie Kaufladen – auf Englisch.", ru: "Супер! Поиграй с семьёй в магазин — по-английски." }
   },
@@ -230,7 +230,7 @@ window.ENGLISCH.push(
       { en: "maths", de: "Mathe", ru: "математика", e: "➗" }, { en: "English", de: "Englisch", ru: "английский", e: "🇬🇧" },
       { en: "German", de: "Deutsch", ru: "немецкий", e: "🇩🇪" }, { en: "art", de: "Kunst", ru: "рисование", e: "🎨" },
       { en: "music", de: "Musik", ru: "музыка", e: "🎵" }, { en: "PE", de: "Sport", ru: "физкультура", e: "🤸" },
-      { en: "science", de: "Sachunterricht", ru: "окружающий мир", e: "🔬" }, { en: "break", de: "Pause", ru: "перемена", e: "🍎" }],
+      { en: "science", de: "Sachunterricht", ru: "окружающий мир", e: "🔬" }, { en: "break", de: "Pause", ru: "перемена", e: "🛝" }],
     extra: [
       { typ: "wahl", frage: "Welcher Tag kommt nach Monday?", ru: "Какой день идёт после Monday?", optionen: ["Tuesday", "Thursday", "Sunday"], e: "📅", warum: "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Achtung: Tuesday und Thursday klingen ähnlich!" },
       { typ: "wahl", frage: "Die Uhr zeigt 9 Uhr. Was sagst du?", ru: "Часы показывают 9 часов. Что скажешь?", optionen: ["It's nine o'clock.", "It's nine years old.", "It's Monday."], e: "🕘" },
@@ -314,9 +314,9 @@ window.ENGLISCH.push(
   },
   {
     id: "en-london", lb: 9, stufe: 4, lz: ["en.ik.01", "en.ws.02"], name: "London – die Hauptstadt", e: "🎡", farbe: "#C2337A", grund: "#FDEAF3",
-    intro: { de: "London ist die Hauptstadt von England und Großbritannien. Durch die Stadt fließt die Themse, die roten Busse haben zwei Stockwerke, und der Glockenturm heißt Big Ben.", ru: "Лондон — столица Англии и Великобритании. Через город течёт Темза, красные автобусы двухэтажные, а часовая башня называется Биг-Бен." },
+    intro: { de: "London ist die Hauptstadt von England und vom Vereinigten Königreich. Durch die Stadt fließt die Themse, die roten Busse haben zwei Stockwerke, und die große Glocke im Uhrturm heißt Big Ben.", ru: "Лондон — столица Англии и Соединённого Королевства. Через город течёт Темза, красные автобусы двухэтажные, а большой колокол в часовой башне называется Биг-Бен." },
     woerter: [
-      { en: "Big Ben", de: "Big Ben (Glockenturm)", ru: "Биг-Бен", e: "🕰️" }, { en: "bridge", de: "Brücke", ru: "мост", e: "🌉" },
+      { en: "Big Ben", de: "Big Ben (Glocke im Uhrturm)", ru: "Биг-Бен", e: "🕰️" }, { en: "bridge", de: "Brücke", ru: "мост", e: "🌉" },
       { en: "double-decker", de: "Doppeldeckerbus", ru: "двухэтажный автобус", e: "🚌" }, { en: "river", de: "Fluss", ru: "река", e: "🏞️" },
       { en: "palace", de: "Palast", ru: "дворец", e: "🏰" }, { en: "taxi", de: "Taxi", ru: "такси", e: "🚕" },
       { en: "underground", de: "U-Bahn", ru: "метро", e: "🚇" }, { en: "London Eye", de: "Riesenrad London Eye", ru: "колесо обозрения London Eye", e: "🎡" }],
@@ -329,7 +329,7 @@ window.ENGLISCH.push(
   },
   {
     id: "en-cafe", lb: 4, stufe: 4, lz: ["en.sp.02", "en.ws.01"], name: "In the café – Bestellen", e: "☕", farbe: "#B5701A", grund: "#FFF1D9",
-    intro: { de: "Im Café oder Snackbar bestellst du höflich: „I'd like …, please.“ Typisch englisch sind fish and chips, Pfannkuchen und Tee.", ru: "В кафе вежливо заказывают: «I'd like…, please.» Типично английские — fish and chips, блины и чай." },
+    intro: { de: "Im Café oder in der Snackbar bestellst du höflich: „I'd like …, please.“ Typisch englisch sind fish and chips, Pfannkuchen und Tee.", ru: "В кафе вежливо заказывают: «I'd like…, please.» Типично английские — fish and chips, блины и чай." },
     woerter: [
       { en: "menu", de: "Speisekarte", ru: "меню", e: "📋" }, { en: "pancake", de: "Pfannkuchen", ru: "блин", e: "🥞" },
       { en: "chips", de: "Pommes", ru: "картошка фри", e: "🍟" }, { en: "fish", de: "Fisch", ru: "рыба", e: "🐟" },
@@ -347,7 +347,7 @@ window.ENGLISCH.push(
     woerter: [
       { en: "first", de: "erste", ru: "первый", e: "🥇" }, { en: "second", de: "zweite", ru: "второй", e: "🥈" },
       { en: "third", de: "dritte", ru: "третий", e: "🥉" }, { en: "Valentine's Day", de: "Valentinstag", ru: "День святого Валентина", e: "💝" },
-      { en: "Mother's Day", de: "Muttertag", ru: "День матери", e: "👩" }, { en: "Pancake Day", de: "Pfannkuchentag", ru: "Блинный день", e: "🥞" },
+      { en: "Mother's Day", de: "Muttertag", ru: "День матери", e: "💐" }, { en: "Pancake Day", de: "Pfannkuchentag", ru: "Блинный день", e: "🥞" },
       { en: "Thanksgiving", de: "Erntedankfest (USA)", ru: "День благодарения", e: "🦃" }, { en: "St Patrick's Day", de: "St.-Patricks-Tag (Irland)", ru: "День святого Патрика", e: "☘️" }],
     extra: [
       { typ: "wahl", frage: "Weihnachten ist am 25. Dezember. Wie sagt man das?", ru: "Рождество 25 декабря. Как это сказать?", optionen: ["the twenty-fifth of December", "twenty-five December", "December is twenty"], e: "🎄" },
@@ -393,8 +393,8 @@ window.ENGLISCH.push(
     id: "en-book", lb: 7, stufe: 4, lz: ["en.le.01", "en.hv.01"], name: "A picture book – Ein Bilderbuch", e: "📚", farbe: "#7B55B8", grund: "#EFE6FF",
     intro: { de: "Englische Bücher lesen – das geht schon! Achte auf die Bilder und auf Wörter, die du kennst.", ru: "Читать английские книги — это уже получится! Смотри на картинки и знакомые слова." },
     woerter: [
-      { en: "book", de: "Buch", ru: "книга", e: "📕" }, { en: "page", de: "Seite", ru: "страница", e: "📄" }, { en: "story", de: "Geschichte", ru: "история", e: "📖" },
-      { en: "library", de: "Bücherei", ru: "библиотека", e: "🏛️" }, { en: "to read", de: "lesen", ru: "читать", e: "👓" }, { en: "the end", de: "Ende", ru: "конец", e: "🔚" }],
+      { en: "book", de: "Buch", ru: "книга", e: "📕" }, { en: "page", de: "Seite", ru: "страница", e: "📄" }, { en: "story", de: "Geschichte", ru: "история", e: "🧚" },
+      { en: "library", de: "Bücherei", ru: "библиотека", e: "📚" }, { en: "to read", de: "lesen", ru: "читать", e: "👓" }, { en: "the end", de: "Ende", ru: "конец", e: "🔚" }],
     extra: [
       { typ: "buch", titel: "The Hungry Little Fox", ru: "Английская книжка с картинками: «Голодный лисёнок».", seiten: [
         { e: "🦊", en: "This is Fox. Fox is little and Fox is hungry.", de: "Das ist Fuchs. Fuchs ist klein und hungrig." },
@@ -425,7 +425,7 @@ window.ENGLISCH.push(
     id: "en-act", lb: 10, stufe: 3, lz: ["en.sp.02", "en.ik.01"], name: "Act it out! – Theater zu Festen", e: "🎭", farbe: "#E0574A", grund: "#FFECE8",
     intro: { de: "Wir spielen Theater auf Englisch: eine Szene an Halloween und eine Geburtstagsfeier. Sprich laut und spiel mit Gesicht und Händen!", ru: "Играем сценки на английском: Хэллоуин и день рождения. Говори громко и показывай жестами!" },
     woerter: [
-      { en: "costume", de: "Kostüm", ru: "костюм", e: "🧛" }, { en: "pumpkin", de: "Kürbis", ru: "тыква", e: "🎃" }, { en: "sweets", de: "Süßigkeiten", ru: "сладости", e: "🍬" },
+      { en: "costume", de: "Kostüm", ru: "костюм", e: "🦸" }, { en: "pumpkin", de: "Kürbis", ru: "тыква", e: "🎃" }, { en: "sweets", de: "Süßigkeiten", ru: "сладости", e: "🍬" },
       { en: "present", de: "Geschenk", ru: "подарок", e: "🎁" }, { en: "candle", de: "Kerze", ru: "свечка", e: "🕯️" }, { en: "party", de: "Feier", ru: "праздник", e: "🥳" }],
     extra: [
       { typ: "rolle", szene: "Halloween: Ein Kind klingelt an der Tür.", ru: "Хэллоуин: ребёнок звонит в дверь.", rollen: { a: "👵 Neighbour", b: "🧛 Kind" }, ich: "b", zeilen: [
@@ -441,8 +441,8 @@ window.ENGLISCH.push(
     id: "en-faces", lb: 1, stufe: 4, lz: ["en.sp.01", "en.sp.03"], name: "Faces and gestures – Mimik und Gesten", e: "🤷", farbe: "#2F86C8", grund: "#E1F3FF",
     intro: { de: "Beim Sprechen helfen Gesicht und Hände. Zeig mit, wenn du die Wörter hörst!", ru: "Лицо и руки помогают говорить. Показывай вместе со словами!" },
     woerter: [
-      { en: "happy", de: "fröhlich", ru: "весёлый", e: "😄" }, { en: "sad", de: "traurig", ru: "грустный", e: "😢" }, { en: "angry", de: "wütend", ru: "злой", e: "😠" },
-      { en: "surprised", de: "überrascht", ru: "удивлённый", e: "😮" }, { en: "scared", de: "ängstlich", ru: "испуганный", e: "😨" }, { en: "tired", de: "müde", ru: "усталый", e: "🥱" }],
+      { en: "to smile", de: "lächeln", ru: "улыбаться", e: "😊" }, { en: "to wave", de: "winken", ru: "махать рукой", e: "👋" }, { en: "to point", de: "zeigen", ru: "показывать", e: "👉" },
+      { en: "surprised", de: "überrascht", ru: "удивлённый", e: "😮" }, { en: "to shrug", de: "mit den Schultern zucken", ru: "пожимать плечами", e: "🤷" }, { en: "to clap", de: "klatschen", ru: "хлопать в ладоши", e: "👏" }],
     extra: [
       { typ: "wahl", frage: "Welche Geste passt zu „I don't know.“?", ru: "Какой жест подходит к «I don't know»?", optionen: ["🤷 Schultern hochziehen", "👋 winken", "👍 Daumen hoch"], e: "❓", warum: "„I don't know“ – dazu zuckt man mit den Schultern." },
       { typ: "wahl", frage: "Welche Geste passt zu „Come here, please!“?", ru: "Какой жест подходит к «Come here, please!»?", optionen: ["🫴 mit der Hand heranwinken", "🙅 Arme kreuzen", "😴 Augen zu"], e: "🙋", warum: "Mit der Hand heranwinken heißt: Komm her!" },
@@ -511,12 +511,12 @@ window.ENGLISCH.push(
       { typ: "dialog", wer: "tilda", e: "👕", kontext: "Am liebsten trägst du dein grünes T-Shirt.", frage: "What do you like to wear?", de: "Was ziehst du gern an?",
         optionen: ["I like to wear my green T-shirt.", "I like green apples.", "My T-shirt is cold."], ru: "Больше всего ты любишь носить зелёную футболку. " + RU_D, punkte: ["sn.en4.bc.02"] }],
     "en-weather": [
-      { typ: "hoergeschichte", wer: "eule", titel: "A cold day", e: "❄️", saetze: ["Brr! It's cold and snowy today.", "Ben puts on his warm jacket.", "He puts on his red scarf, too.", "But where is his cap?", "Oh, here it is – under the bed!"],
+      { typ: "hoergeschichte", wer: "eule", titel: "A cold day", e: "❄️", saetze: ["Brr! It's cold and snowy today.", "Ben puts on his warm jacket.", "He puts on his red scarf, too.", "But where is his woolly hat?", "Oh, here it is – under the bed!"],
         de: "Brr! Heute ist es kalt und es schneit. Ben zieht seine warme Jacke an. Er zieht auch seinen roten Schal an. Aber wo ist seine Mütze? Oh, hier ist sie – unter dem Bett!", ru: RU_G,
         fragen: [
           { frage: "What's the weather like?", de: "Wie ist das Wetter?", optionen: ["❄️", "☀️", "🌧️"], antwort: "It's cold and snowy.", ru: "Какая погода?", punkte: ["sn.en4.bc.02"] },
           { frage: "What colour is Ben's scarf?", de: "Welche Farbe hat Bens Schal?", optionen: ["🔴", "🔵", "🟢"], antwort: "It's red.", ru: "Какого цвета шарф у Бена?", punkte: ["sn.en4.bc.02"] },
-          { frage: "Where is the cap?", de: "Wo ist die Mütze?", optionen: ["🛏️", "🛋️", "🚪"], antwort: "It's under the bed.", ru: "Где шапка?" }] },
+          { frage: "Where is the woolly hat?", de: "Wo ist die Mütze?", optionen: ["🛏️", "🛋️", "🚪"], antwort: "It's under the bed.", ru: "Где шапка?" }] },
       { typ: "dialog", wer: "robo", e: "🌧️", kontext: "Draußen regnet es.", frage: "It's rainy. What do you need?", de: "Es regnet. Was brauchst du?",
         optionen: ["I need my jacket and my umbrella.", "I need my sunglasses.", "I need a swimsuit."], ru: "На улице дождь. " + RU_D, punkte: ["sn.en4.bc.02"] }],
     "en-home": [
@@ -595,7 +595,7 @@ window.ENGLISCH.push(
         { frage: "Here you are.", de: "Bitte schön.", kontext: "Du fragst, was die Fahrkarte kostet.", e: "🎫", optionen: ["How much is the ticket?", "How old is the ticket?", "Where is the ticket?"] },
         { frage: "It's twelve pounds.", de: "Sie kostet zwölf Pfund.", kontext: "Du bezahlst und bedankst dich.", e: "💷", optionen: ["Here you are. Thank you!", "Twelve, please. Goodbye, ticket!", "Happy birthday!"] }] },
       { typ: "dialog", wer: "baer", e: "🚉", kontext: "Du suchst den Bahnhof. Frag Bruni höflich nach dem Weg.", frage: "Hello! Can I help you?", de: "Hallo! Kann ich dir helfen?",
-        optionen: ["Excuse me, where is the station?", "Where are you, station?", "I'm the station, thank you."], ru: "Ты ищешь вокзал. Вежливо спроси Бруни дорогу. " + RU_D, punkte: ["sn.en3.tr.03"] }],
+        optionen: ["Yes, please. Where is the station?", "Where are you, station?", "I'm the station, thank you."], ru: "Ты ищешь вокзал. Вежливо спроси Бруни дорогу. " + RU_D, punkte: ["sn.en3.tr.03"] }],
     "en-london": [
       { typ: "hoergeschichte", wer: "papagei", titel: "The way to the museum", e: "🗺️", saetze: ["Excuse me, where is the museum?", "Go straight on.", "Then turn left.", "The museum is next to the park."],
         de: "Entschuldigung, wo ist das Museum? Geh geradeaus. Dann bieg links ab. Das Museum ist neben dem Park.", ru: "Послушай, как пройти к музею (🔊). Потом будут вопросы.",
