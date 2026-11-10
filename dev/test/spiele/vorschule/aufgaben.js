@@ -38,14 +38,14 @@ window.VORSCHULE = [
     { frage: "Was hat eckige Kanten wie ein Würfel?", ru: "У чего углы, как у кубика?", optionen: ["🎁", "⚽", "🍊"], warum: "Das Geschenkpaket hat Ecken und Kanten." }] },
   { id: "vs-vergleichen", bereich: "mathe", name: "Groß, schwer, lang", e: "⚖️", lz: ["ma.gm.01", "ma.rf.01"], aufgaben: [
     { frage: "Welches Tier ist am größten?", ru: "Какое животное самое большое?", optionen: ["🐘", "🐭", "🐱"], warum: "Der Elefant ist am größten." },
-    { frage: "Was ist schwerer?", ru: "Что тяжелее?", optionen: ["🪨", "🪶", "🎈"], warum: "Der Stein ist schwerer als die Feder." },
+    { frage: "Was ist am schwersten?", ru: "Что самое тяжёлое?", optionen: ["🪨", "🪶", "🎈"], warum: "Der Stein ist am schwersten." },
     { frage: "Wer ist länger: die Schlange oder der Wurm?", ru: "Кто длиннее: змея или червяк?", optionen: ["🐍", "🪱"], warum: "Die Schlange ist länger." },
     { frage: "Der Vogel sitzt oben im Baum. Zeig nach oben!", ru: "Птица сидит наверху на дереве. Покажи наверх!", optionen: ["⬆️", "⬇️", "➡️"], warum: "Oben ist da, wo der Himmel ist." },
     { frage: "Ordne von klein nach groß!", ru: "Расставь от маленького к большому!", typ: "ordnen", teile: ["🐜", "🐈", "🐘"], warum: "Ameise, Katze, Elefant." }] },
   { id: "vs-muster", bereich: "mathe", name: "Muster und Reihen", e: "🔁", lz: ["ma.ms.01"], aufgaben: [
-    { frage: "Rot, blau, rot, blau, rot … Was kommt als Nächstes?", ru: "Красный, синий, красный, синий, красный … Что дальше?", optionen: ["🔵", "🔴", "🟡"], sag: "🔴🔵🔴🔵🔴", warum: "Nach Rot kommt wieder Blau." },
-    { frage: "Sonne, Mond, Sonne, Mond … Was kommt als Nächstes?", ru: "Солнце, луна, солнце, луна … Что дальше?", optionen: ["☀️", "🌙", "⭐"], warum: "Nach dem Mond kommt wieder die Sonne." },
-    { frage: "Apfel, Apfel, Birne, Apfel, Apfel … Was kommt dann?", ru: "Яблоко, яблоко, груша, яблоко, яблоко … Что потом?", optionen: ["🍐", "🍎", "🍌"], warum: "Nach zwei Äpfeln kommt eine Birne." },
+    { frage: "🔴🔵🔴🔵🔴 Rot, blau, rot, blau, rot … Was kommt als Nächstes?", ru: "🔴🔵🔴🔵🔴 Красный, синий, красный, синий, красный … Что дальше?", optionen: ["🔵", "🔴", "🟡"], warum: "Nach Rot kommt wieder Blau." },
+    { frage: "☀️🌙☀️🌙 Sonne, Mond, Sonne, Mond … Was kommt als Nächstes?", ru: "☀️🌙☀️🌙 Солнце, луна, солнце, луна … Что дальше?", optionen: ["☀️", "🌙", "⭐"], warum: "Nach dem Mond kommt wieder die Sonne." },
+    { frage: "🍎🍎🍐🍎🍎 Apfel, Apfel, Birne, Apfel, Apfel … Was kommt dann?", ru: "🍎🍎🍐🍎🍎 Яблоко, яблоко, груша, яблоко, яблоко … Что потом?", optionen: ["🍐", "🍎", "🍌"], warum: "Nach zwei Äpfeln kommt eine Birne." },
     { frage: "Leg die Zahlen der Reihe nach: eins, zwei, drei!", ru: "Разложи числа по порядку: один, два, три!", typ: "ordnen", teile: ["⚀", "⚁", "⚂"], warum: "Eins, zwei, drei." }] },
 
   // ---------- Sprechen und Hören ----------
@@ -63,8 +63,8 @@ window.VORSCHULE = [
     { frage: "Welches Wort ist lang und hat drei Silben?", ru: "Какое слово длинное и имеет три слога?", optionen: ["🐘", "🐟", "🐝"], sag: "E – le – fant, Fisch, Bie – ne", warum: "E-le-fant hat drei Silben." }] },
   { id: "vs-geschichte", bereich: "sprache", name: "Bildergeschichten", e: "📖", lz: ["de.sz.01", "de.tm.01"], aufgaben: [
     { typ: "ordnen", frage: "Was passiert zuerst, dann, zum Schluss? Tipp die Bilder der Reihe nach an.", ru: "Что сначала, потом, в конце? Нажимай на картинки по порядку.", teile: ["🥚", "🐣", "🐔"], warum: "Erst das Ei, dann schlüpft das Küken, dann wird es ein Huhn." },
-    { typ: "ordnen", frage: "Wie wächst die Blume? Tipp der Reihe nach.", ru: "Как растёт цветок? Нажимай по порядку.", teile: ["🌰", "🌱", "🌻"], warum: "Samen, kleine Pflanze, Blume." },
-    { typ: "ordnen", frage: "Erst Regen, dann …? Tipp der Reihe nach.", ru: "Сначала дождь, потом …? Нажимай по порядку.", teile: ["☁️", "🌧️", "🌈"], warum: "Wolken, Regen, dann kommt die Sonne und ein Regenbogen." },
+    { typ: "ordnen", frage: "Wie wächst die Blume? Tipp der Reihe nach.", ru: "Как растёт цветок? Нажимай по порядку.", teile: ["🫘", "🌱", "🌻"], warum: "Samen, kleine Pflanze, Blume." },
+    { typ: "ordnen", frage: "Was kommt zuerst: Wolke, Regen oder Regenbogen? Tipp der Reihe nach.", ru: "Что сначала: туча, дождь или радуга? Нажимай по порядку.", teile: ["☁️", "🌧️", "🌈"], warum: "Wolken, Regen, dann kommt die Sonne und ein Regenbogen." },
     { frage: "Welches Bild passt zum Ende der Geschichte: Der Junge hat Geburtstag und pustet die Kerzen aus.", ru: "Какая картинка подходит к концу истории: мальчик задувает свечи на торте?", optionen: ["🎂", "🛏️", "🚿"], warum: "Der Geburtstagskuchen mit Kerzen." }] },
 
   // ---------- Natur entdecken ----------
@@ -75,7 +75,7 @@ window.VORSCHULE = [
     { frage: "Was braucht eine Pflanze zum Wachsen?", ru: "Что нужно растению, чтобы расти?", optionen: ["💧", "🍫", "📱"], warum: "Wasser – und Licht und Erde." },
     { frage: "Welches Tier macht „Muh“?", ru: "Какое животное говорит «Му»?", optionen: ["🐄", "🐑", "🐸"], sag: "Muh!", warum: "Die Kuh macht Muh." }] },
   { id: "vs-jahr", bereich: "natur", name: "Wetter und Jahreszeiten", e: "🌦️", lz: ["su.na.01", "su.hi.01"], aufgaben: [
-    { frage: "Wann baust du einen Schneemann? Im Frühling, Sommer, Herbst oder Winter?", ru: "Когда лепят снеговика?", optionen: ["⛄", "🌷", "☀️", "🍂"], warum: "Im Winter, wenn Schnee liegt." },
+    { frage: "Wann baust du einen Schneemann? Im Frühling, Sommer, Herbst oder Winter?", ru: "Когда лепят снеговика?", optionen: ["❄️", "🌷", "☀️", "🍂"], warum: "Im Winter, wenn Schnee liegt." },
     { frage: "Wann blühen die ersten Blumen?", ru: "Когда расцветают первые цветы?", optionen: ["🌷", "⛄", "🍂"], warum: "Im Frühling." },
     { frage: "Wann fallen bunte Blätter von den Bäumen?", ru: "Когда с деревьев падают разноцветные листья?", optionen: ["🍂", "🌷", "☀️"], warum: "Im Herbst." },
     { frage: "Es regnet. Was ziehst du an?", ru: "Идёт дождь. Что ты наденешь?", optionen: ["🧥", "👙", "🩳"], warum: "Eine Regenjacke – und Gummistiefel!" },
@@ -104,7 +104,7 @@ window.VORSCHULE = [
     { frage: "Du hast dich verletzt. Wer hilft dir?", ru: "Ты поранился. Кто тебе поможет?", optionen: ["🧑‍🏫", "🐈", "🧸"], warum: "Ein Erwachsener: Erzieherin, Lehrer, Mama, Papa." }] },
   { id: "vs-verkehr", bereich: "sozial", name: "Sicher über die Straße", e: "🚦", lz: ["su.ge.01"], aufgaben: [
     { frage: "Bei welcher Ampelfarbe darfst du gehen?", ru: "На какой свет светофора можно идти?", optionen: ["🟢", "🔴", "🟡"], warum: "Bei Grün darfst du gehen – bei Rot bleibst du stehen." },
-    { frage: "Wo gehst du am sichersten über die Straße?", ru: "Где безопаснее всего переходить дорогу?", optionen: ["🦓", "🚗", "🌳"], warum: "Am Zebrastreifen oder an der Ampel." },
+    { frage: "Wo gehst du am sichersten über die Straße?", ru: "Где безопаснее всего переходить дорогу?", optionen: ["🚸", "🚗", "🌳"], warum: "Dort, wo ein Übergang für Fußgänger ist: am Zebrastreifen oder an der Ampel." },
     { frage: "Was ziehst du im Dunkeln an, damit Autos dich sehen?", ru: "Что надеть в темноте, чтобы машины тебя видели?", optionen: ["🦺", "🕶️", "🎩"], warum: "Etwas Leuchtendes: Warnweste oder Reflektoren." },
     { frage: "Wohin schaust du, bevor du über die Straße gehst?", ru: "Куда ты смотришь, прежде чем перейти дорогу?", optionen: ["↔️", "⬆️", "⬇️"], warum: "Nach links, nach rechts und noch einmal nach links." }] },
 

@@ -18,8 +18,8 @@ window.THEMEN = [
     kurz: "Nikolaus, Weihnachtsmann, Santa Claus und Ded Moros",
     schritte: [
       { typ: "info", titel: "Bald ist Weihnachten!", bild: "baum",
-        text: "Hallo {name}, ich bin Ella! Weißt du, wer die Geschenke bringt? Das ist in jedem Land ein bisschen anders. Heute lernst du drei Geschenke-Bringer kennen.",
-        ru: "Привет, {name}, я Элла! Знаешь, кто приносит подарки? В каждой стране по-разному. Сегодня ты познакомишься с тремя, кто приносит подарки." },
+        text: "Hallo {name}, ich bin Ella! Weißt du, wer die Geschenke bringt? Das ist in jedem Land ein bisschen anders. Heute lernst du mehrere Geschenke-Bringer kennen.",
+        ru: "Привет, {name}, я Элла! Знаешь, кто приносит подарки? В каждой стране по-разному. Сегодня ты познакомишься с несколькими из тех, кто приносит подарки." },
       { typ: "info", titel: "Der Weihnachtsmann", bild: "weihnachtsmann",
         text: "In Deutschland kommt der Weihnachtsmann an Heiligabend, am 24. Dezember. Abends liegen die Geschenke unter dem Weihnachtsbaum.",
         ru: "В Германии Вайнахтсман (Weihnachtsmann) приходит в Сочельник, 24 декабря. Вечером подарки лежат под ёлкой.",
@@ -98,7 +98,7 @@ window.THEMEN = [
           { t: "Kommt an Neujahr", ru: "Приходит на Новый год", gruppe: "dm" },
           { t: "Seine Enkelin Snegurotschka hilft ihm", ru: "Ему помогает внучка Снегурочка", gruppe: "dm" },
           { t: "Rentiere ziehen seinen Schlitten", ru: "Его сани тянут олени", gruppe: "sc" },
-          { t: "Manchmal bringt statt ihm das Christkind die Geschenke", ru: "Иногда вместо него подарки приносит Кристкинд", gruppe: "wm" },
+          { t: "Manchmal bringt an seiner Stelle das Christkind die Geschenke", ru: "Иногда вместо него подарки приносит Кристкинд", gruppe: "wm" },
           { t: "Milch und Kekse warten auf ihn", ru: "Его ждут молоко и печенье", gruppe: "sc" },
           { t: "Fährt mit drei Pferden", ru: "Ездит на трёх лошадях", gruppe: "dm" }] },
       { typ: "info", titel: "Was alle drei gemeinsam haben", bild: "alle",
@@ -110,7 +110,7 @@ window.THEMEN = [
         { t: "Weihnachtsbaum", ru: "Ёлка", ok: false, warum: "Nein, der Baum heißt „Jolka“. Ded Moros heißt Großväterchen Frost.", warumRu: "Нет, дерево называется «ёлка»." }] },
       { typ: "info", titel: "Geschafft!", bild: "geschenk",
         text: "Toll, {name}! Jetzt kennst du den Weihnachtsmann, Santa Claus und Ded Moros. Erzähl doch deiner Familie, was du gelernt hast!",
-        ru: "Отлично, {name}! Теперь ты знаешь Вайнахтсмана, Санта-Клауса и Деда Мороза. Расскажи своей семье, что ты узнала!" }
+        ru: "Отлично, {name}! Теперь ты знаешь Вайнахтсмана, Санта-Клауса и Деда Мороза. Расскажи своей семье, что ты узнал(а)!" }
     ]
   },
   {
@@ -189,7 +189,7 @@ window.THEMEN = [
         ru: "Хильда — сестра бабушки Розы, двоюродная бабушка (Großtante). Её сын Том — двоюродный брат мамы. А дочь Тома Леа — троюродная сестра (Großcousine) Мии. У троюродных сестёр общие прабабушка и прадедушка!" },
       { typ: "baum", frage: "Tippe auf Mias Großcousine.", ru: "Нажми на троюродную сестру Мии.", ziel: "lea",
         warum: "Toll! Lea ist Mias Großcousine. Beide haben Uroma Anna und Uropa Karl als Urgroßeltern.", warumRu: "Здорово! Леа — троюродная сестра Мии. У обеих прабабушка Анна и прадедушка Карл." },
-      { typ: "zuordnen", frage: "Wie alt ist die Generation? Ordne zu, von Mia aus gesehen.", ru: "Какое это поколение? Распредели, если смотреть от Мии.",
+      { typ: "zuordnen", frage: "Welche Generation ist das? Ordne zu, von Mia aus gesehen.", ru: "Какое это поколение? Распредели, если смотреть от Мии.",
         gruppen: [{ id: "g0", name: "Gleiche Generation", ru: "Своё поколение", bild: "👧👦" }, { id: "g1", name: "Eine älter", ru: "На одно старше", bild: "👩👨" }, { id: "g2", name: "Zwei oder drei älter", ru: "На два-три старше", bild: "👵👴" }],
         dinge: [
           { t: "Max, der Bruder", ru: "Макс, брат", gruppe: "g0" },
@@ -280,7 +280,7 @@ window.THEMEN = [
           { t: "Eiche", ru: "Дуб", gruppe: "laub" }, { t: "Fichte", ru: "Ель", gruppe: "nadel" }, { t: "Ahorn", ru: "Клён", gruppe: "laub" },
           { t: "Kiefer", ru: "Сосна", gruppe: "nadel" }, { t: "Birke", ru: "Берёза", gruppe: "laub" }, { t: "Tanne", ru: "Пихта", gruppe: "nadel" },
           { t: "Kastanie", ru: "Каштан", gruppe: "laub" }] },
-      { typ: "wahl", frage: "Von welchem Baum kommt die Eichel?", ru: "С какого дерева жёлудь?", bild: "🌰", optionen: [
+      { typ: "wahl", frage: "Von welchem Baum kommt die Eichel?", ru: "С какого дерева жёлудь?", bild: "🌳", optionen: [
         { t: "Von der Eiche", ru: "С дуба", ok: true, warum: "Richtig! Eichhörnchen und Wildschweine fressen Eicheln gern.", warumRu: "Правильно! Белки и кабаны любят жёлуди." },
         { t: "Von der Fichte", ru: "С ели", ok: false, warum: "Die Fichte hat Zapfen. Die Eichel wächst an der Eiche.", warumRu: "У ели шишки. Жёлудь растёт на дубе." },
         { t: "Von der Birke", ru: "С берёзы", ok: false, warum: "Nein, die Eichel kommt von der Eiche.", warumRu: "Нет, жёлудь растёт на дубе." }] },
@@ -339,9 +339,9 @@ window.THEMEN = [
         { t: "Wenn ich dem Auto winke", ru: "Когда я помашу машине", ok: false, warum: "Winken reicht nicht. Warte, bis die Autos wirklich stehen.", warumRu: "Помахать недостаточно. Подожди, пока машины действительно остановятся." }] },
       { typ: "daumen", satz: "Wenn mein Ball auf die Straße rollt, bleibe ich am Rand stehen und schaue erst.", satzRu: "Если мой мяч выкатился на дорогу, я останавливаюсь у края и сначала смотрю.", bild: "⚽", ok: true,
         warum: "Stimmt! Ein Ball ist nicht so wichtig wie du. Erst schauen – oder einen Erwachsenen um Hilfe bitten.", warumRu: "Верно! Мяч не так важен, как ты. Сначала посмотри – или попроси взрослого помочь." },
-      { typ: "wahl", frage: "Du steigst aus dem Schulbus aus und musst über die Straße. Was machst du?", ru: "Ты выходишь из школьного автобуса и должен перейти улицу. Что ты делаешь?", bild: "🚌", optionen: [
+      { typ: "wahl", frage: "Du steigst aus dem Schulbus aus und musst über die Straße. Was machst du?", ru: "Ты выходишь из школьного автобуса и тебе нужно перейти улицу. Что ты делаешь?", bild: "🚌", optionen: [
         { t: "Warten, bis der Bus weg ist, dann schauen und gehen", ru: "Подождать, пока автобус уедет, потом посмотреть и идти", ok: true, warum: "Genau! Erst wenn der Bus weg ist, siehst du die Autos – und sie sehen dich.", warumRu: "Точно! Только когда автобус уехал, ты видишь машины – и они видят тебя." },
-        { t: "Gleich vor dem Bus über die Straße laufen", ru: "Сразу перебежать улицу перед автобусом", ok: false, warum: "Nein! Hinter dem Bus können Autos kommen, die dich nicht sehen.", warumRu: "Нет! За автобусом могут ехать машины, которые тебя не видят." },
+        { t: "Gleich vor dem Bus über die Straße laufen", ru: "Сразу перебежать улицу перед автобусом", ok: false, warum: "Nein! Autos, die am Bus vorbeifahren, sehen dich nicht.", warumRu: "Нет! Машины, которые объезжают автобус, тебя не видят." },
         { t: "Schnell hinter dem Bus hervorlaufen", ru: "Быстро выбежать из-за автобуса", ok: false, warum: "Nein! Der Bus versteckt dich. Die Autofahrer sehen dich erst im letzten Moment.", warumRu: "Нет! Автобус тебя закрывает. Водители увидят тебя только в последний момент." }] },
       { typ: "info", titel: "Geschafft!", bild: "🏫",
         text: "Super, {name}! Geh deinen Schulweg einmal mit einem Erwachsenen ab und zeig ihm die sicheren Stellen.",
@@ -382,7 +382,7 @@ window.THEMEN = [
         warum: "Stimmt! Mehr als die Hälfte deines Körpers ist Wasser. Darum musst du jeden Tag genug trinken.", warumRu: "Верно! Больше половины твоего тела – вода. Поэтому каждый день нужно пить достаточно." },
       { typ: "wahl", frage: "Du stellst einen Topf mit Wasser in die Gefriertruhe. Was passiert?", ru: "Ты ставишь кастрюлю с водой в морозилку. Что происходит?", bild: "🥶", optionen: [
         { t: "Das Wasser wird fest und zu Eis", ru: "Вода становится твёрдой и превращается в лёд", ok: true, warum: "Richtig! Wenn Wasser sehr kalt wird, gefriert es zu Eis.", warumRu: "Правильно! Когда вода очень холодная, она замерзает и становится льдом." },
-        { t: "Das Wasser wird zu Dampf", ru: "Вода превращается в пар", ok: false, warum: "Nein, Dampf entsteht, wenn Wasser sehr heiß wird. In der Kälte wird es zu Eis.", warumRu: "Нет, пар появляется, когда вода очень горячая. На холоде она становится льдом." },
+        { t: "Das Wasser wird zu Dampf", ru: "Вода превращается в пар", ok: false, warum: "Nein, Dampf entsteht vor allem, wenn Wasser heiß wird. In der Kälte wird es zu Eis.", warumRu: "Нет, пар появляется прежде всего тогда, когда вода горячая. На холоде она становится льдом." },
         { t: "Gar nichts, Wasser bleibt immer flüssig", ru: "Ничего, вода всегда остаётся жидкой", ok: false, warum: "Nein, Wasser kann fest, flüssig und gasförmig sein. In der Kälte wird es fest.", warumRu: "Нет, вода бывает твёрдой, жидкой и газообразной. На холоде она становится твёрдой." }] },
       { typ: "info", titel: "Geschafft!", bild: "🌊",
         text: "Toll, {name}! Lege zu Hause einen Eiswürfel auf einen Teller und schau, wie lange er braucht, bis er geschmolzen ist.",
@@ -402,7 +402,7 @@ window.THEMEN = [
       { typ: "zuordnen", frage: "Früher oder heute?", ru: "Раньше или сегодня?",
         gruppen: [{ id: "f", name: "Früher", ru: "Раньше", bild: "🕰️" }, { id: "h", name: "Heute", ru: "Сегодня", bild: "📱" }],
         dinge: [
-          { t: "Tafel und Kreide in jeder Klasse", ru: "Доска и мел в каждом классе", gruppe: "f" }, { t: "Wäsche mit dem Waschbrett waschen", ru: "Стирать бельё на стиральной доске", gruppe: "f" },
+          { t: "Schiefertafel und Griffel", ru: "Грифельная доска и грифель", gruppe: "f" }, { t: "Wäsche mit dem Waschbrett waschen", ru: "Стирать бельё на стиральной доске", gruppe: "f" },
           { t: "Briefe mit der Post schicken, um zu reden", ru: "Посылать письма, чтобы поговорить", gruppe: "f" }, { t: "Videoanruf mit dem Tablet", ru: "Видеозвонок с планшета", gruppe: "h" },
           { t: "Waschmaschine", ru: "Стиральная машина", gruppe: "h" }, { t: "Musik aus dem Handy", ru: "Музыка из телефона", gruppe: "h" }] },
       { typ: "daumen", satz: "Als Oma und Opa Kinder waren, hatten schon alle Kinder ein Handy.", satzRu: "Когда бабушка и дедушка были детьми, у всех детей уже был мобильный телефон.", bild: "🏃", ok: false,
@@ -422,7 +422,7 @@ window.THEMEN = [
         { t: "Das geht nicht, früher ist vorbei", ru: "Это невозможно, прошлое прошло", ok: false, warum: "Doch! Menschen, Fotos und alte Dinge erzählen uns, wie es früher war.", warumRu: "Возможно! Люди, фотографии и старые вещи рассказывают нам, как было раньше." }] },
       { typ: "wahl", frage: "Was gab es schon, als deine Großeltern Kinder waren?", ru: "Что уже было, когда твои бабушка и дедушка были детьми?", bild: "🕰️", optionen: [
         { t: "Ein Fahrrad", ru: "Велосипед", ok: true, warum: "Richtig! Fahrräder gibt es schon sehr lange – schon die Urgroßeltern sind damit gefahren.", warumRu: "Правильно! Велосипеды существуют очень давно – на них ездили ещё прабабушки и прадедушки." },
-        { t: "Ein Tablet", ru: "Планшет", ok: false, warum: "Nein, Tablets gibt es erst seit ein paar Jahren.", warumRu: "Нет, планшеты появились всего несколько лет назад." },
+        { t: "Ein Tablet", ru: "Планшет", ok: false, warum: "Nein, Tablets gab es damals noch nicht.", warumRu: "Нет, планшетов тогда ещё не было." },
         { t: "Ein Handy", ru: "Мобильный телефон", ok: false, warum: "Nein, damals gab es nur Telefone mit Kabel zu Hause.", warumRu: "Нет, тогда были только домашние телефоны с проводом." }] },
       { typ: "info", titel: "Geschafft!", bild: "📷",
         text: "Super, {name}! Frag einen Erwachsenen: Womit hast du gespielt, als du so alt warst wie ich?",
@@ -476,7 +476,7 @@ window.THEMEN = [
       { typ: "info", titel: "Ein Turm braucht einen festen Fuß", bild: "🗼",
         text: "Ein Turm steht sicher, wenn er unten breit ist und oben schmal. Schwere Steine kommen nach unten, leichte nach oben.",
         ru: "Башня стоит надёжно, если внизу она широкая, а наверху узкая. Тяжёлые камни — вниз, лёгкие — наверх." },
-      { typ: "wahl", frage: "Welcher Turm fällt am wenigsten um?", ru: "Какая башня падает меньше всего?", bild: "🧱", optionen: [
+      { typ: "wahl", frage: "Welcher Turm steht am sichersten?", ru: "Какая башня стоит устойчивее всего?", bild: "🧱", optionen: [
         { t: "Unten breit, oben schmal", ru: "Внизу широкая, наверху узкая", ok: true, warum: "Richtig! Ein breiter Fuß macht den Turm standfest.", warumRu: "Правильно! Широкое основание делает башню устойчивой." },
         { t: "Unten schmal, oben breit", ru: "Внизу узкая, наверху широкая", ok: false, warum: "Der kippt leicht um – oben ist zu viel Gewicht.", warumRu: "Она легко опрокинется — наверху слишком тяжело." },
         { t: "Ganz dünn und sehr hoch", ru: "Очень тонкая и очень высокая", ok: false, warum: "Der wackelt schon beim kleinsten Stoß.", warumRu: "Она качается от малейшего толчка." }] },
@@ -496,13 +496,13 @@ window.THEMEN = [
         { t: "Oben etwas Schweres darauflegen", ru: "Положить сверху что-то тяжёлое", ok: false, warum: "Nein, Schweres oben macht es noch wackeliger. Schweres gehört nach unten.", warumRu: "Нет, тяжёлое сверху делает её ещё неустойчивее. Тяжёлое кладут вниз." }] },
       { typ: "daumen", satz: "Bei einem Turm aus Bausteinen kommen die schweren Steine nach oben.", satzRu: "В башне из кубиков тяжёлые кубики кладут наверх.", bild: "🧱", ok: false,
         warum: "Stimmt nicht! Schwere Steine gehören nach unten, leichte nach oben. So kippt der Turm nicht.", warumRu: "Неверно! Тяжёлые кубики кладут вниз, лёгкие – наверх. Так башня не опрокинется." },
-      { typ: "wahl", frage: "Benno baut einen Damm. Wofür braucht er ihn?", ru: "Бенно строит плотину. Зачем она ему?", bild: "🦫", optionen: [
+      { typ: "wahl", frage: "Benno baut einen Damm. Wofür braucht er ihn?", ru: "Бенно строит плотину. Зачем она ему?", bild: "\uE104", optionen: [
         { t: "Er staut das Wasser, damit der Eingang zu seiner Burg unter Wasser liegt", ru: "Он запруживает воду, чтобы вход в его хатку был под водой", ok: true, warum: "Richtig! So kommen Feinde nicht hinein. Der Biber ist ein echter Baumeister.", warumRu: "Правильно! Так враги не попадут внутрь. Бобр – настоящий строитель." },
         { t: "Er will über den Bach laufen, wie über eine Brücke", ru: "Он хочет ходить через ручей, как по мосту", ok: false, warum: "Nein, der Biber schwimmt sehr gut. Der Damm staut das Wasser für seine Burg.", warumRu: "Нет, бобр отлично плавает. Плотина запруживает воду для его хатки." },
         { t: "Er sammelt dort Holz für den Winter zum Heizen", ru: "Он собирает там дрова на зиму для отопления", ok: false, warum: "Nein, Biber heizen nicht. Rinde und Zweige sind ihr Futter, der Damm staut das Wasser.", warumRu: "Нет, бобры не топят печку. Кора и ветки – их еда, а плотина запруживает воду." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦫",
-        text: "Super, {name}! Bau mit Bechern, Bauklötzen oder Papier einen Turm. Wie hoch schaffst du es? Auf der Insel wartet Bennos Bauplatz.",
-        ru: "Супер, {name}! Построй башню из стаканчиков, кубиков или бумаги. Насколько высокой она получится? На острове ждёт стройплощадка Бенно." }
+      { typ: "info", titel: "Geschafft!", bild: "\uE104",
+        text: "Super, {name}! Bau mit Bechern, Bauklötzen oder Papier einen Turm. Wie hoch schaffst du es? Auf der Insel baut auch Benno gern.",
+        ru: "Супер, {name}! Построй башню из стаканчиков, кубиков или бумаги. Насколько высокой она получится? На острове Бенно тоже любит строить." }
     ]
   },
   {
@@ -510,8 +510,8 @@ window.THEMEN = [
     kurz: "Samen, Keimen, Frühblüher",
     schritte: [
       { typ: "info", titel: "Aus klein wird groß", bild: "🌱",
-        text: "Hallo {name}! Jede große Pflanze war einmal ein kleiner Samen. Wenn er Wasser, Wärme und Licht bekommt, beginnt er zu keimen.",
-        ru: "Привет, {name}! Каждое большое растение когда-то было маленьким семечком. Когда оно получает воду, тепло и свет, оно начинает прорастать." },
+        text: "Hallo {name}! Jede große Pflanze war einmal ein kleiner Samen. Wenn er Wasser und Wärme bekommt, beginnt er zu keimen. Zum Wachsen braucht die Pflanze dann Licht.",
+        ru: "Привет, {name}! Каждое большое растение когда-то было маленьким семечком. Когда оно получает воду и тепло, оно начинает прорастать. Чтобы расти, растению потом нужен свет." },
       { typ: "info", titel: "Was braucht eine Pflanze?", bild: "☀️",
         text: "Pflanzen brauchen Wasser, Licht, Luft und Erde. Ohne Licht werden sie blass und dünn.",
         ru: "Растениям нужны вода, свет, воздух и земля. Без света они становятся бледными и тонкими.",
@@ -521,8 +521,8 @@ window.THEMEN = [
         { t: "Die Blüte", ru: "Цветок", ok: false, warum: "Nein, die Blüte kommt ganz zum Schluss.", warumRu: "Нет, цветок появляется в самом конце." },
         { t: "Die Frucht", ru: "Плод", ok: false, warum: "Nein, Früchte wachsen erst, wenn die Pflanze groß ist.", warumRu: "Нет, плоды появляются, когда растение уже большое." }] },
       { typ: "info", titel: "Frühblüher", bild: "🌷",
-        text: "Schneeglöckchen, Krokusse und Tulpen blühen schon im Frühling, wenn die Bäume noch keine Blätter haben. Ihre Kraft haben sie in einer Zwiebel unter der Erde gespeichert.",
-        ru: "Подснежники, крокусы и тюльпаны цветут уже весной, когда на деревьях ещё нет листьев. Силу они запасли в луковице под землёй." },
+        text: "Schneeglöckchen, Krokusse und Tulpen blühen schon im Frühling, wenn die Bäume noch keine Blätter haben. Ihre Kraft haben sie in einer Zwiebel oder Knolle unter der Erde gespeichert.",
+        ru: "Подснежники, крокусы и тюльпаны цветут уже весной, когда на деревьях ещё нет листьев. Силу они запасли в луковице или клубне под землёй." },
       { typ: "daumen", satz: "Eine Bohne keimt auch auf feuchter Watte.", satzRu: "Фасоль прорастает и на влажной вате.", bild: "🫘", ok: true,
         warum: "Stimmt! Probier es aus: Leg eine Bohne auf feuchte Watte und halte sie ein paar Tage feucht.", warumRu: "Верно! Попробуй: положи фасолину на влажную вату и держи её влажной несколько дней." },
       { typ: "wahl", frage: "Warum können Schneeglöckchen schon blühen, wenn es noch kalt ist?", ru: "Почему подснежники могут цвести, когда ещё холодно?", bild: "🌷", optionen: [
@@ -536,7 +536,7 @@ window.THEMEN = [
           { t: "Sonnenblume", ru: "Подсолнух", gruppe: "nein" }, { t: "Mohn", ru: "Мак", gruppe: "nein" }] },
       { typ: "daumen", satz: "Eine Pflanze im dunklen Schrank wächst besonders grün und kräftig.", satzRu: "Растение в тёмном шкафу растёт особенно зелёным и крепким.", bild: "🌱", ok: false,
         warum: "Stimmt nicht! Ohne Licht werden Pflanzen blass, dünn und lang. Sie brauchen Licht zum Wachsen.", warumRu: "Неверно! Без света растения становятся бледными, тонкими и вытянутыми. Им нужен свет для роста." },
-      { typ: "wahl", frage: "Du hast Kresse gesät. Was brauchen die Samen zum Keimen?", ru: "Ты посеял кресс-салат. Что нужно семенам, чтобы прорасти?", bild: "💧", optionen: [
+      { typ: "wahl", frage: "Du hast Bohnen in die Erde gesteckt. Was brauchen die Samen zum Keimen?", ru: "Ты посадил(а) фасоль в землю. Что нужно семенам, чтобы прорасти?", bild: "💧", optionen: [
         { t: "Wasser und Wärme", ru: "Вода и тепло", ok: true, warum: "Richtig! Mit Wasser und Wärme beginnt der Samen zu keimen. Danach braucht die Pflanze Licht.", warumRu: "Правильно! С водой и теплом семечко начинает прорастать. Потом растению нужен свет." },
         { t: "Dünger, sonst keimt nichts", ru: "Удобрение, иначе ничего не прорастёт", ok: false, warum: "Nein, zum Keimen reicht die Kraft im Samen. Wichtig sind Wasser und Wärme.", warumRu: "Нет, для прорастания хватает силы в самом семечке. Важны вода и тепло." },
         { t: "Kälte und Trockenheit", ru: "Холод и сухость", ok: false, warum: "Nein, im Kalten und Trockenen bleibt der Samen einfach liegen.", warumRu: "Нет, в холоде и сухости семечко просто лежит." }] },
@@ -559,16 +559,16 @@ window.THEMEN = [
         dinge: [
           { t: "Regenbogen", ru: "Радуга", gruppe: "a" }, { t: "Ampel ist rot", ru: "Красный свет светофора", gruppe: "a" },
           { t: "Vogelgezwitscher", ru: "Пение птиц", gruppe: "o" }, { t: "Klingel", ru: "Звонок", gruppe: "o" },
-          { t: "Frisches Brot", ru: "Свежий хлеб", gruppe: "n" }, { t: "Rauch", ru: "Дым", gruppe: "n" }] },
+          { t: "Frisches Brot", ru: "Свежий хлеб", gruppe: "n" }, { t: "Es riecht verbrannt", ru: "Пахнет горелым", gruppe: "n" }] },
       { typ: "wahl", frage: "Womit fühlst du, ob etwas heiß oder kalt ist?", ru: "Чем ты чувствуешь, горячее что-то или холодное?", bild: "✋", optionen: [
         { t: "Mit der Haut", ru: "Кожей", ok: true, warum: "Richtig! In der Haut sitzen viele kleine Fühler für Wärme, Kälte, Druck und Schmerz.", warumRu: "Правильно! В коже много маленьких датчиков тепла, холода, давления и боли." },
         { t: "Mit den Ohren", ru: "Ушами", ok: false, warum: "Mit den Ohren hörst du. Wärme und Kälte fühlt die Haut.", warumRu: "Ушами ты слышишь. Тепло и холод чувствует кожа." },
         { t: "Mit den Augen", ru: "Глазами", ok: false, warum: "Nicht sicher! Ein heißer Topf sieht oft genauso aus wie ein kalter. Ob etwas heiß oder kalt ist, fühlst du mit der Haut – vorsichtig!", warumRu: "Не наверняка! Горячая кастрюля часто выглядит так же, как холодная. Горячее или холодное, чувствуешь кожей – осторожно!" }] },
-      { typ: "daumen", satz: "Wenn die Nase verstopft ist, schmeckt das Essen nach weniger.", satzRu: "Когда нос заложен, еда кажется менее вкусной.", bild: "🤧", ok: true,
+      { typ: "daumen", satz: "Wenn die Nase verstopft ist, schmeckt das Essen fad.", satzRu: "Когда нос заложен, еда кажется менее вкусной.", bild: "🤧", ok: true,
         warum: "Stimmt! Riechen und Schmecken arbeiten zusammen. Mit Schnupfen schmeckt vieles fad.", warumRu: "Верно! Обоняние и вкус работают вместе. При насморке многое кажется пресным." },
       { typ: "daumen", satz: "Man darf ruhig direkt in die Sonne schauen.", satzRu: "В солнце можно смотреть прямо.", bild: "☀️", ok: false,
         warum: "Nein! Das helle Sonnenlicht kann die Augen schwer verletzen. Auch laute Musik direkt am Ohr schadet den Ohren.", warumRu: "Нет! Яркий солнечный свет может сильно повредить глаза. Громкая музыка прямо у уха тоже вредит ушам." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Probier mit geschlossenen Augen: Erkennst du Dinge nur durch Tasten, Riechen oder Hören?",
         ru: "Здорово, {name}! Попробуй с закрытыми глазами: узнаешь ли ты вещи только на ощупь, по запаху или по звуку?" }
     ]
@@ -594,7 +594,7 @@ window.THEMEN = [
         warum: "Stimmt! Würmer, Asseln und Pilze zerlegen Laub. So entsteht guter Boden für neue Pflanzen.", warumRu: "Верно! Черви, мокрицы и грибы разлагают листья. Так появляется хорошая почва для новых растений." },
       { typ: "daumen", satz: "Im Wald darf man laut sein und Müll liegen lassen.", satzRu: "В лесу можно шуметь и оставлять мусор.", bild: "🦌", ok: false,
         warum: "Nein! Im Wald sind wir Gäste: leise sein, auf den Wegen bleiben, Müll wieder mitnehmen.", warumRu: "Нет! В лесу мы гости: ведём себя тихо, остаёмся на тропинках, мусор забираем с собой." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Geh mal in den Wald oder auf eine Wiese und zähle, wie viele Tiere du entdeckst.",
         ru: "Супер, {name}! Сходи в лес или на луг и посчитай, сколько животных ты увидишь." }
     ]
@@ -615,14 +615,14 @@ window.THEMEN = [
         { t: "Im Osten", ru: "На востоке", ok: true, warum: "Genau! Im Osten geht sie auf, mittags steht sie bei uns im Süden, im Westen geht sie unter.", warumRu: "Точно! На востоке оно встаёт, в полдень у нас оно на юге, на западе садится." },
         { t: "Im Westen", ru: "На западе", ok: false, warum: "Im Westen geht die Sonne abends unter. Auf geht sie im Osten.", warumRu: "На западе солнце садится вечером. Встаёт оно на востоке." },
         { t: "Im Norden", ru: "На севере", ok: false, warum: "Im Norden steht die Sonne bei uns nie. Sie geht im Osten auf.", warumRu: "На севере у нас солнца не бывает. Оно встаёт на востоке." }] },
-      { typ: "daumen", satz: "Die Nadel eines Kompasses zeigt immer nach Süden.", satzRu: "Стрелка компаса всегда показывает на юг.", bild: "🗺️", ok: false,
-        warum: "Stimmt nicht! Die Kompassnadel zeigt nach Norden. Dann weißt du auch, wo Süden, Osten und Westen sind. Auf den meisten Landkarten ist Norden oben.", warumRu: "Неверно! Стрелка компаса показывает на север. Тогда понятно, где юг, восток и запад. На большинстве карт север наверху." },
+      { typ: "daumen", satz: "Auf den meisten Landkarten ist Süden oben.", satzRu: "На большинстве карт юг наверху.", bild: "🗺️", ok: false,
+        warum: "Stimmt nicht! Auf den meisten Landkarten ist Norden oben. Dann ist Süden unten, Osten rechts und Westen links.", warumRu: "Неверно! На большинстве карт север наверху. Тогда юг внизу, восток справа, а запад слева." },
       { typ: "zuordnen", frage: "Norden ist oben. Wo liegt das?", ru: "Север наверху. Где это находится?",
-        gruppen: [{ id: "o", name: "Rechts = Osten", ru: "Справа = восток", bild: "➡️" }, { id: "w", name: "Links = Westen", ru: "Слева = запад", bild: "⬅️" }],
+        gruppen: [{ id: "o", name: "Osten", ru: "Восток", bild: "🧭" }, { id: "w", name: "Westen", ru: "Запад", bild: "🧭" }],
         dinge: [
           { t: "Wo die Sonne aufgeht", ru: "Где встаёт солнце", gruppe: "o" }, { t: "Rechte Kartenseite", ru: "Правая сторона карты", gruppe: "o" },
           { t: "Wo die Sonne untergeht", ru: "Где садится солнце", gruppe: "w" }, { t: "Linke Kartenseite", ru: "Левая сторона карты", gruppe: "w" }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Prima, {name}! Stell dich morgens so hin, dass die Sonne vor dir ist. Dann schaust du nach Osten – wo ist Norden?",
         ru: "Отлично, {name}! Встань утром так, чтобы солнце было перед тобой. Тогда ты смотришь на восток — где север?" }
     ]
@@ -647,7 +647,7 @@ window.THEMEN = [
         warum: "Stimmt! Ein Schiff ist innen hohl und voller Luft. Es drückt so viel Wasser weg, dass das Wasser es trägt.", warumRu: "Верно! Корабль внутри пустой и полон воздуха. Он вытесняет столько воды, что вода его держит." },
       { typ: "daumen", satz: "Alles, was schwer ist, geht unter.", satzRu: "Всё тяжёлое тонет.", bild: "🪵", ok: false,
         warum: "Nein! Ein dicker Baumstamm ist sehr schwer und schwimmt trotzdem. Ein kleiner Nagel ist leicht und sinkt.", warumRu: "Нет! Толстое бревно очень тяжёлое и всё равно плавает. Маленький гвоздь лёгкий и тонет." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Klasse, {name}! Probier es mit einer Schüssel Wasser aus: Schätze erst, dann teste. Frag vorher, was du ins Wasser legen darfst.",
         ru: "Класс, {name}! Попробуй с миской воды: сначала угадай, потом проверь. Спроси заранее, что можно класть в воду." }
     ]
@@ -672,7 +672,7 @@ window.THEMEN = [
         warum: "Nein! Nie verstecken. Raus aus dem Raum, Tür zumachen, Erwachsene rufen und 112 wählen. Bei Rauch tief am Boden bleiben.", warumRu: "Нет! Никогда не прячься. Выйди из комнаты, закрой дверь, позови взрослых и набери 112. При дыме держись низко у пола." },
       { typ: "daumen", satz: "Ein Rauchmelder piept laut, wenn es nach Rauch riecht, und kann Leben retten.", satzRu: "Дымовой датчик громко пищит, если есть дым, и может спасти жизнь.", bild: "🚨", ok: true,
         warum: "Stimmt! Er weckt alle auf, auch nachts. Frag zu Hause, wo eure Rauchmelder hängen.", warumRu: "Верно! Он будит всех, даже ночью. Спроси дома, где висят ваши дымовые датчики." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Gut gemacht, {name}! Streichhölzer und Feuerzeuge sind nur für Erwachsene. Übt zu Hause: Wie kommt ihr schnell nach draußen?",
         ru: "Молодец, {name}! Спички и зажигалки — только для взрослых. Потренируйтесь дома: как быстро выйти на улицу?" }
     ]
@@ -686,8 +686,8 @@ window.THEMEN = [
         text: "Hallo {name}! Wenn du in die Pedale trittst, dreht sich vorn ein Zahnrad. Die Kette überträgt die Kraft auf das Zahnrad am Hinterrad – und das Rad dreht sich.",
         ru: "Привет, {name}! Когда ты крутишь педали, спереди вращается зубчатое колесо. Цепь передаёт силу на зубчатое колесо у заднего колеса — и оно крутится." },
       { typ: "info", titel: "Ist mein Fahrrad sicher?", bild: "🔦",
-        text: "Ein sicheres Fahrrad hat zwei Bremsen, eine Klingel, vorn ein weißes und hinten ein rotes Licht und Rückstrahler, die im Dunkeln leuchten.",
-        ru: "У безопасного велосипеда две тормоза, звонок, спереди белый и сзади красный фонарь и катафоты, которые светятся в темноте.",
+        text: "Ein sicheres Fahrrad hat zwei Bremsen, eine Klingel, vorn ein weißes und hinten ein rotes Licht und Rückstrahler, die im Scheinwerferlicht aufleuchten.",
+        ru: "У безопасного велосипеда два тормоза, звонок, спереди белый и сзади красный фонарь и катафоты, которые отражают свет фар.",
         fakten: [["2 Bremsen 🛑", "2 тормоза 🛑"], ["Klingel 🔔", "Звонок 🔔"], ["Licht vorn weiß, hinten rot 💡", "Фонарь спереди белый, сзади красный 💡"], ["Rückstrahler ✨", "Катафоты ✨"]] },
       { typ: "zuordnen", frage: "Was gehört zu einem verkehrssicheren Fahrrad?", ru: "Что нужно безопасному велосипеду?",
         gruppen: [{ id: "j", name: "Muss dran sein", ru: "Обязательно", bild: "✅" }, { id: "n", name: "Nur Schmuck", ru: "Только украшение", bild: "🎀" }],
@@ -696,19 +696,19 @@ window.THEMEN = [
           { t: "Wimpel", ru: "Флажок", gruppe: "n" }, { t: "Glitzer-Aufkleber", ru: "Блестящие наклейки", gruppe: "n" }, { t: "Bunte Lenkerbänder", ru: "Цветные ленточки на руле", gruppe: "n" }] },
       { typ: "wahl", frage: "Du willst nach links abbiegen. Was machst du vorher?", ru: "Ты хочешь повернуть налево. Что ты делаешь сначала?", bild: "↩️", optionen: [
         { t: "Umschauen und den linken Arm ausstrecken", ru: "Оглянуться и вытянуть левую руку", ok: true, warum: "Richtig! Erst nach hinten schauen, dann Zeichen geben. Wenn es zu schwierig ist: absteigen und schieben.", warumRu: "Правильно! Сначала оглянуться, потом подать знак. Если трудно — слезть и вести велосипед." },
-        { t: "Einfach schnell rüberfahren", ru: "Просто быстро проехать", ok: false, warum: "Gefährlich! Die Autos wissen nicht, was du vorhast. Immer umschauen und Zeichen geben.", warumRu: "Опасно! Машины не знают, что ты задумал. Всегда оглядывайся и подавай знак." },
+        { t: "Einfach schnell rüberfahren", ru: "Просто быстро проехать", ok: false, warum: "Gefährlich! Die Autos wissen nicht, was du vorhast. Immer umschauen und Zeichen geben.", warumRu: "Опасно! Машины не знают, что ты собираешься делать. Всегда оглядывайся и подавай знак." },
         { t: "Laut klingeln", ru: "Громко позвонить", ok: false, warum: "Die Klingel warnt andere, zeigt aber nicht die Richtung. Dafür streckst du den Arm aus.", warumRu: "Звонок предупреждает, но не показывает направление. Для этого вытягивают руку." }] },
       { typ: "daumen", satz: "Den Fahrradhelm braucht man nur bei langen Fahrten.", satzRu: "Велошлем нужен только в дальних поездках.", bild: "⛑️", ok: false,
         warum: "Stimmt nicht! Die meisten Stürze passieren auf kurzen Wegen, zum Beispiel vor dem Haus. Der Helm gehört bei jeder Fahrt auf den Kopf.", warumRu: "Неверно! Большинство падений случается на коротких путях, например возле дома. Шлем нужно надевать в каждой поездке." },
       { typ: "daumen", satz: "Kinder bis 8 Jahre fahren mit dem Fahrrad auf dem Gehweg.", satzRu: "Дети до 8 лет ездят на велосипеде по тротуару.", bild: "🚸", ok: true,
         warum: "Stimmt! Bis 8 Jahre müssen Kinder auf dem Gehweg fahren, bis 10 dürfen sie es. Fußgänger haben dort Vorrang.", warumRu: "Верно! До 8 лет дети обязаны ездить по тротуару, до 10 — могут. Пешеходы там главнее." },
-      { typ: "wahl", frage: "Was gehört zu einem verkehrssicheren Fahrrad?", ru: "Что нужно безопасному велосипеду?", bild: "🚲", optionen: [
+      { typ: "wahl", frage: "Du prüfst dein Rad vor der Fahrt. Was muss alles dran sein?", ru: "Ты проверяешь велосипед перед поездкой. Что на нём обязательно должно быть?", bild: "🚲", optionen: [
         { t: "Zwei Bremsen, Licht vorn und hinten, Klingel und Reflektoren", ru: "Два тормоза, фары спереди и сзади, звонок и светоотражатели", ok: true, warum: "Genau! Prüf das vor jeder Fahrt kurz nach.", warumRu: "Точно! Проверяй это коротко перед каждой поездкой." },
         { t: "Eine Bremse reicht, wenn man langsam fährt", ru: "Одного тормоза хватит, если ехать медленно", ok: false, warum: "Nein, ein Fahrrad braucht zwei Bremsen, die unabhängig voneinander funktionieren.", warumRu: "Нет, велосипеду нужны два тормоза, которые работают независимо друг от друга." },
         { t: "Licht braucht man nur im Winter", ru: "Фары нужны только зимой", ok: false, warum: "Nein, Licht brauchst du immer, wenn es dämmert oder dunkel ist – auch im Sommer.", warumRu: "Нет, свет нужен всегда, когда смеркается или темно, – и летом тоже." }] },
       { typ: "daumen", satz: "Mit Kopfhörern auf den Ohren fährt man genauso sicher Fahrrad.", satzRu: "В наушниках на велосипеде так же безопасно.", bild: "🎧", ok: false,
         warum: "Stimmt nicht! Mit Kopfhörern hörst du Autos und Klingeln viel schlechter.", warumRu: "Неверно! В наушниках ты гораздо хуже слышишь машины и звонки." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Prüf mit einem Erwachsenen dein Fahrrad: Bremsen, Klingel, Licht. In Klasse 4 gibt es oft die Radfahrprüfung.",
         ru: "Супер, {name}! Проверь со взрослым свой велосипед: тормоза, звонок, фонари. В 4 классе часто бывает экзамен по езде на велосипеде." }
     ]
@@ -726,7 +726,7 @@ window.THEMEN = [
         { t: "Nie im Haushalt helfen müssen", ru: "Никогда не помогать по дому", ok: false, warum: "Nein, das ist kein Kinderrecht. In der Familie hilft jeder mit. Kinderrechte sind zum Beispiel: lernen, spielen, gesund sein, geschützt werden.", warumRu: "Нет, это не право ребёнка. В семье помогает каждый. Права ребёнка – это, например, учиться, играть, быть здоровым, быть защищённым." },
         { t: "Immer bestimmen, was alle tun", ru: "Всегда решать, что делают все", ok: false, warum: "Nein. Kinder dürfen ihre Meinung sagen und werden gehört – aber andere haben auch Rechte.", warumRu: "Нет. Дети могут высказывать мнение, и их слушают — но у других тоже есть права." }] },
       { typ: "daumen", satz: "Kinderrechte gelten nur für Kinder, die brav sind.", satzRu: "Права ребёнка действуют только для послушных детей.", bild: "🤝", ok: false,
-        warum: "Stimmt nicht! Kinderrechte gelten für alle Kinder – immer. Wenn dir jemand wehtut oder Angst macht, darfst du dir Hilfe holen.", warumRu: "Неверно! Права ребёнка действуют для всех детей – всегда. Если тебе делают больно или пугают, ты можешь позвать на помощь." },
+        warum: "Stimmt nicht! Kinderrechte gelten für alle Kinder – immer. Wenn dir jemand wehtut oder Angst macht, darfst du dir Hilfe holen: bei einem Erwachsenen, dem du vertraust, oder bei der Nummer gegen Kummer 116 111.", warumRu: "Неверно! Права ребёнка действуют для всех детей – всегда. Если тебе делают больно или пугают, ты можешь попросить о помощи: у взрослого, которому доверяешь, или по телефону доверия 116 111." },
       { typ: "zuordnen", frage: "Brauche ich das zum Leben oder wünsche ich es mir nur?", ru: "Это нужно для жизни или это просто желание?",
         gruppen: [{ id: "b", name: "Brauche ich", ru: "Нужно", bild: "🏠" }, { id: "w", name: "Wunsch", ru: "Желание", bild: "🎁" }],
         dinge: [
@@ -736,7 +736,7 @@ window.THEMEN = [
         { t: "4 Wochen lang sparen", ru: "Копить 4 недели", ok: true, warum: "Genau! 4 · 2 € = 8 €. Sparen braucht Geduld – dafür kaufst du dir selbst etwas, das du wirklich willst.", warumRu: "Точно! 4 · 2 € = 8 €. Копить нужно терпение — зато ты сам купишь то, что действительно хочешь." },
         { t: "Jede Woche Süßigkeiten kaufen", ru: "Каждую неделю покупать сладости", ok: false, warum: "Dann ist das Geld jede Woche weg und das Buch kommt nie.", warumRu: "Тогда деньги каждую неделю заканчиваются, и книги не будет." },
         { t: "Gar nichts, das klappt nie", ru: "Ничего, это не получится", ok: false, warum: "Doch! In 4 Wochen hast du 8 € gespart.", warumRu: "Получится! За 4 недели ты накопишь 8 €." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Am 20. September ist in Deutschland Weltkindertag, in vielen Ländern feiert man am 1. Juni den Kindertag.",
         ru: "Здорово, {name}! 20 сентября в Германии Всемирный день детей, а во многих странах День защиты детей празднуют 1 июня." }
     ]
@@ -761,9 +761,9 @@ window.THEMEN = [
         warum: "Stimmt! Das heißt Mehrheit. Wichtig ist trotzdem, dass man den anderen zuhört.", warumRu: "Верно! Это называется большинство. Но всё равно важно слушать других." },
       { typ: "daumen", satz: "Kinder können in ihrem Ort nicht mitreden.", satzRu: "Дети не могут ничего решать в своём городе.", bild: "💬", ok: false,
         warum: "Doch! Im Klassenrat, im Schülerrat und in manchen Orten im Kinder- und Jugendparlament. Man kann auch Briefe an die Bürgermeisterin schreiben.", warumRu: "Могут! В совете класса, школьном совете, а в некоторых городах — в детском и молодёжном парламенте. Можно и написать письмо бургомистру." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Prima, {name}! Was würdest du in deinem Ort verbessern? Überleg dir einen Vorschlag und erzähl ihn deiner Familie oder deiner Klasse.",
-        ru: "Отлично, {name}! Что бы ты улучшил в своём городе? Придумай предложение и расскажи семье или классу." }
+        ru: "Отлично, {name}! Что бы ты улучшил(а) в своём городе? Придумай предложение и расскажи семье или классу." }
     ]
   },
   // ---------- NA-34 Teil 5: Korn und Brot, Wetterkarte, Strom ----------
@@ -789,7 +789,7 @@ window.THEMEN = [
         warum: "Stimmt nicht! Die Kartoffeln wachsen unter der Erde. Oben an der Pflanze hängen nur kleine grüne Beeren – und die sind giftig.", warumRu: "Неверно! Картофель растёт под землёй. Наверху у растения только маленькие зелёные ягоды – и они ядовиты." },
       { typ: "daumen", satz: "Vollkornbrot enthält das ganze Korn mit der Schale.", satzRu: "Цельнозерновой хлеб содержит всё зерно вместе с оболочкой.", bild: "🍞", ok: true,
         warum: "Stimmt! Darum macht es lange satt und ist besonders gesund.", warumRu: "Верно! Поэтому он надолго насыщает и особенно полезен." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Vom Feld bis zum Brötchen arbeiten viele Menschen zusammen. Auf der Insel backt Benno auch gern.",
         ru: "Здорово, {name}! От поля до булочки вместе работают много людей. На острове Бенно тоже любит печь." }
     ]
@@ -814,7 +814,7 @@ window.THEMEN = [
         warum: "Stimmt! Dann gibt es Frost und manchmal Glätte auf den Wegen.", warumRu: "Верно! Тогда бывает мороз, а иногда гололёд." },
       { typ: "daumen", satz: "Ein Pfeil auf der Wetterkarte zeigt, wohin der Wind weht.", satzRu: "Стрелка на карте погоды показывает, куда дует ветер.", bild: "💨", ok: true,
         warum: "Stimmt! Der Pfeil zeigt die Richtung, in die der Wind weht. Westwind kommt aus dem Westen, der Pfeil zeigt nach Osten.", warumRu: "Верно! Стрелка показывает, куда дует ветер. Западный ветер дует с запада, стрелка показывает на восток." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Schau heute mit deiner Familie den Wetterbericht an. Auf der Insel ändert sich das Wetter übrigens auch.",
         ru: "Супер, {name}! Посмотри сегодня с семьёй прогноз погоды. На острове погода тоже меняется." }
     ]
@@ -839,7 +839,7 @@ window.THEMEN = [
         warum: "Stimmt! Strom aus der Steckdose ist lebensgefährlich. Nie etwas hineinstecken, kaputte Kabel nicht anfassen.", warumRu: "Верно! Ток из розетки опасен для жизни. Ничего туда не вставляй и не трогай повреждённые провода." },
       { typ: "daumen", satz: "Elektrische Geräte darf man mit nassen Händen ruhig anfassen.", satzRu: "Электроприборы можно трогать мокрыми руками.", bild: "💧", ok: false,
         warum: "Nein! Wasser leitet Strom. Föhn und Radio gehören nie in die Nähe der Badewanne.", warumRu: "Нет! Вода проводит ток. Фен и радио никогда не должны быть рядом с ванной." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Klasse, {name}! Strom kann man sparen: Licht aus, wenn du den Raum verlässt. Das schont auch die Umwelt.",
         ru: "Класс, {name}! Электричество можно экономить: выключай свет, когда выходишь из комнаты. Это бережёт и природу." }
     ]
@@ -869,7 +869,7 @@ window.THEMEN = [
         warum: "Nein! Dein Körper macht die Wärme. Der Pullover hält sie fest, damit sie nicht so schnell wegwandert.", warumRu: "Нет! Тепло вырабатывает твоё тело. Свитер удерживает его, чтобы оно не уходило так быстро." },
       { typ: "daumen", satz: "Häuser werden gedämmt, damit man weniger heizen muss.", satzRu: "Дома утепляют, чтобы меньше топить.", bild: "🏠", ok: true,
         warum: "Stimmt! Dämmung in Wänden, Dach und Fenstern spart Energie und schont die Umwelt.", warumRu: "Верно! Утепление стен, крыши и окон экономит энергию и бережёт природу." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Ausprobieren mit einem Erwachsenen: Zwei Gläser mit warmem Wasser, eines in einen Schal gewickelt. Fühl nach 20 Minuten – welches ist wärmer geblieben?",
         ru: "Супер, {name}! Попробуй вместе со взрослым: два стакана тёплой воды, один завернуть в шарф. Через 20 минут потрогай — какой остался теплее?" }
     ]
@@ -899,7 +899,7 @@ window.THEMEN = [
         { t: "Müll wieder mitnehmen", ru: "Забирать мусор с собой", ok: true, warum: "Genau! Müll im Wasser schadet Fischen und Vögeln.", warumRu: "Точно! Мусор в воде вредит рыбам и птицам." },
         { t: "Steine ins Wasser werfen", ru: "Бросать камни в воду", ok: false, warum: "Das stört die Tiere und kann Nester am Ufer zerstören.", warumRu: "Это пугает животных и может разрушить гнёзда на берегу." },
         { t: "Die Uferpflanzen ausreißen", ru: "Вырывать растения на берегу", ok: false, warum: "Uferpflanzen sind Verstecke und Futter für viele Tiere.", warumRu: "Прибрежные растения — укрытие и корм для многих животных." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Klasse, {name}! Wenn du an einem Bach bist: leise sein, gut beobachten und nichts mitnehmen außer deinem Müll.",
         ru: "Класс, {name}! Когда будешь у ручья: веди себя тихо, внимательно наблюдай и ничего не забирай, кроме своего мусора." }
     ]
@@ -925,13 +925,13 @@ window.THEMEN = [
         dinge: [
           { t: "Vielleicht schwimmt der Apfel.", ru: "Может быть, яблоко плавает.", gruppe: "v" }, { t: "Ich glaube, das Eis schmilzt schnell.", ru: "Думаю, лёд быстро растает.", gruppe: "v" },
           { t: "Der Nagel ist untergegangen.", ru: "Гвоздь утонул.", gruppe: "b" }, { t: "Nach 10 Minuten ist das Eis geschmolzen.", ru: "Через 10 минут лёд растаял.", gruppe: "b" }] },
-      { typ: "daumen", satz: "Wenn meine Vermutung falsch war, habe ich schlecht geforscht.", satzRu: "Если моё предположение оказалось неверным, я плохо исследовал.", bild: "🙂", ok: false,
+      { typ: "daumen", satz: "Wenn meine Vermutung falsch war, habe ich schlecht geforscht.", satzRu: "Если моё предположение оказалось неверным, я плохо исследовал(а).", bild: "🙂", ok: false,
         warum: "Nein! Auch eine falsche Vermutung bringt dich weiter. Das Ergebnis zeigt, wie es wirklich ist.", warumRu: "Нет! Даже неверное предположение полезно. Результат показывает, как на самом деле." },
       { typ: "daumen", satz: "Bei Versuchen mit Feuer oder heißem Wasser ist immer ein Erwachsener dabei.", satzRu: "При опытах с огнём или горячей водой всегда рядом взрослый.", bild: "⚠️", ok: true,
         warum: "Stimmt! Sicherheit geht vor. Und mit Strom aus der Steckdose wird nie experimentiert.", warumRu: "Верно! Безопасность прежде всего. А с током из розетки опыты не проводят никогда." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Schreib beim nächsten Versuch alles auf: Frage, Vermutung, was du gemacht und gesehen hast – und dein Ergebnis.",
-        ru: "Супер, {name}! В следующий раз записывай всё: вопрос, предположение, что ты делал и видел — и свой результат." }
+        ru: "Супер, {name}! В следующий раз записывай всё: вопрос, предположение, что ты делал(а) и видел(а) — и свой результат." }
     ]
   },
   {
@@ -959,7 +959,7 @@ window.THEMEN = [
         dinge: [
           { t: "Mit Helm Rad fahren", ru: "Кататься на велосипеде в шлеме", gruppe: "s" }, { t: "Schuhe gut zubinden", ru: "Хорошо завязать шнурки", gruppe: "s" },
           { t: "Am nassen Beckenrand rennen", ru: "Бегать по мокрому бортику бассейна", gruppe: "g" }, { t: "Auf hohe Regale klettern", ru: "Залезать на высокие полки", gruppe: "g" }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Frag deine Familie, wo bei euch der Verbandskasten ist. Viele Unfälle kann man vermeiden, wenn man vorher kurz nachdenkt.",
         ru: "Здорово, {name}! Спроси у семьи, где у вас аптечка. Многих несчастных случаев можно избежать, если сначала немного подумать." }
     ]
@@ -971,13 +971,13 @@ window.THEMEN = [
       { typ: "info", titel: "Wo steht das Wissen?", bild: "📚",
         text: "Hallo {name}! Wissen findest du in Sachbüchern, im Lexikon, in Kinder-Nachrichten und auf Kinderseiten im Internet. Kinder-Suchmaschinen zeigen nur Seiten, die für Kinder geprüft sind.",
         ru: "Привет, {name}! Знания можно найти в научно-популярных книгах, в энциклопедии, в детских новостях и на детских сайтах. Детские поисковики показывают только проверенные для детей страницы.",
-        fakten: [["Gute Suchwörter sind kurz: „Igel Winterschlaf“.", "Хорошие слова для поиска короткие: «ёж зимняя спячка»."], ["Schreib auf, woher du dein Wissen hast.", "Записывай, откуда ты узнал информацию."]] },
+        fakten: [["Gute Suchwörter sind kurz: „Igel Winterschlaf“.", "Хорошие слова для поиска короткие: «ёж зимняя спячка»."], ["Schreib auf, woher du dein Wissen hast.", "Записывай, откуда у тебя информация."]] },
       { typ: "wahl", frage: "Du willst wissen, wie lange Igel Winterschlaf halten. Wo suchst du am besten?", ru: "Ты хочешь узнать, сколько длится зимняя спячка ежей. Где лучше искать?", bild: "🦔", optionen: [
         { t: "Im Tierbuch oder mit einer Kinder-Suchmaschine", ru: "В книге о животных или в детском поисковике", ok: true, warum: "Richtig! Dort stehen geprüfte Sachinformationen für Kinder.", warumRu: "Правильно! Там проверенная информация для детей." },
         { t: "In einem Werbeprospekt", ru: "В рекламном проспекте", ok: false, warum: "Werbung will etwas verkaufen – Sachwissen über Igel findest du dort nicht.", warumRu: "Реклама хочет что-то продать — знаний о ежах там нет." },
         { t: "Einen Fremden im Chat fragen", ru: "Спросить незнакомца в чате", ok: false, warum: "Fremden im Netz schreibst du nicht. Frag lieber Familie oder Lehrerin.", warumRu: "Незнакомцам в интернете не пишут. Лучше спроси семью или учительницу." }] },
       { typ: "wahl", frage: "Woran erkennst du Werbung?", ru: "Как узнать рекламу?", bild: "📢", optionen: [
-        { t: "Sie will, dass du etwas kaufst", ru: "Она хочет, чтобы ты что-то купил", ok: true, warum: "Genau! Oft steht „Anzeige“ oder „Werbung“ dabei.", warumRu: "Точно! Часто там написано «Anzeige» или «Werbung»." },
+        { t: "Sie will, dass du etwas kaufst", ru: "Она хочет, чтобы ты что-то купил(а)", ok: true, warum: "Genau! Oft steht „Anzeige“ oder „Werbung“ dabei.", warumRu: "Точно! Часто там написано «Anzeige» или «Werbung»." },
         { t: "Sie erklärt etwas genau", ru: "Она что-то подробно объясняет", ok: false, warum: "Erklären tun Sachtexte. Werbung will vor allem verkaufen.", warumRu: "Объясняют научные тексты. Реклама хочет прежде всего продать." },
         { t: "Sie steht immer in Büchern", ru: "Она всегда в книгах", ok: false, warum: "Werbung gibt es überall: im Fernsehen, im Internet, auf Plakaten.", warumRu: "Реклама есть везде: по телевизору, в интернете, на плакатах." }] },
       { typ: "daumen", satz: "Alles, was im Internet steht, ist wahr.", satzRu: "Всё, что написано в интернете, — правда.", bild: "🌐", ok: false,
@@ -989,7 +989,7 @@ window.THEMEN = [
           { t: "Video: „Unglaublich! Klick hier!“", ru: "Видео: «Невероятно! Жми сюда!»", gruppe: "v" }, { t: "Kettenbrief im Chat", ru: "Письмо-цепочка в чате", gruppe: "v" }] },
       { typ: "daumen", satz: "Zum Suchen brauchst du nur Suchwörter – deinen Namen und deine Adresse gibst du nicht ein.", satzRu: "Для поиска нужны только ключевые слова – своё имя и адрес ты не вводишь.", bild: "🔒", ok: true,
         warum: "Stimmt! Für die Suche reichen ein paar Suchwörter, zum Beispiel „Igel Winterschlaf“. Persönliche Daten bleiben geheim.", warumRu: "Верно! Для поиска хватает нескольких слов, например «ёж зимняя спячка». Личные данные остаются в секрете." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Prima, {name}! Für einen Vortrag: zwei gute Quellen suchen, Stichworte aufschreiben und sagen, woher du es weißt.",
         ru: "Отлично, {name}! Для доклада: найди два хороших источника, запиши ключевые слова и скажи, откуда ты это знаешь." }
     ]
@@ -1019,7 +1019,7 @@ window.THEMEN = [
         { t: "Ins Hausaufgabenheft", ru: "В дневник для домашних заданий", ok: true, warum: "Richtig! Dann vergisst du nichts und kannst planen, was wann dran ist.", warumRu: "Правильно! Тогда ничего не забудешь и сможешь планировать." },
         { t: "Ich merke sie mir einfach", ru: "Просто запоминаю", ok: false, warum: "Bei vielen Fächern vergisst man leicht etwas. Aufschreiben ist sicherer.", warumRu: "Когда предметов много, легко что-то забыть. Записывать надёжнее." },
         { t: "Auf die Hand", ru: "На руке", ok: false, warum: "Das wäscht sich ab. Ein Heft oder Planer ist besser.", warumRu: "Это смоется. Лучше тетрадь или планер." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Probier diese Woche eine Sache aus: jeden Tag kurz üben oder dich selbst abfragen. Merkst du einen Unterschied?",
         ru: "Здорово, {name}! Попробуй на этой неделе что-то одно: каждый день немного заниматься или проверять себя. Заметишь разницу?" }
     ]
@@ -1049,7 +1049,7 @@ window.THEMEN = [
         dinge: [
           { t: "Eine Klassenlehrerin für fast alles", ru: "Одна учительница почти по всем предметам", gruppe: "g" }, { t: "Sachunterricht", ru: "Природоведение", gruppe: "g" },
           { t: "Viele verschiedene Lehrkräfte", ru: "Много разных учителей", gruppe: "n" }, { t: "Biologie und Geschichte", ru: "Биология и история", gruppe: "n" }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Prima, {name}! Viele Schulen haben einen Tag der offenen Tür. Schau dir die Schule vorher mit deiner Familie an.",
         ru: "Отлично, {name}! Во многих школах бывает день открытых дверей. Посмотри школу заранее вместе с семьёй." }
     ]
@@ -1086,7 +1086,7 @@ window.THEMEN = [
         { t: "Sie pumpt das Blut durch den Körper", ru: "Они качают кровь по телу", ok: false, warum: "Nein, das Pumpen macht das Herz. Die Lunge holt den Sauerstoff aus der Luft.", warumRu: "Нет, кровь качает сердце. Лёгкие забирают кислород из воздуха." }] },
       { typ: "daumen", satz: "Wenn du schläfst, macht dein Herz Pause.", satzRu: "Когда ты спишь, твоё сердце отдыхает и не бьётся.", bild: "❤️", ok: false,
         warum: "Stimmt nicht! Das Herz schlägt immer, im Schlaf nur langsamer. Es ist ein Muskel, den du mit Bewegung trainierst.", warumRu: "Неверно! Сердце бьётся всегда, во сне только медленнее. Это мышца, которую ты тренируешь движением." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Jeden Tag eine Stunde Bewegung hält Herz und Lunge fit.",
         ru: "Супер, {name}! Час движения каждый день держит сердце и лёгкие в форме." }
     ]
@@ -1096,8 +1096,8 @@ window.THEMEN = [
     kurz: "Pubertät: Körper und Gefühle verändern sich, Hygiene, darüber reden",
     schritte: [
       { typ: "info", titel: "Der Körper verändert sich", bild: "🌱",
-        text: "Hallo {name}! Irgendwann zwischen etwa 9 und 16 Jahren beginnt die Pubertät. Der Körper wird langsam erwachsen. Das passiert bei jedem Kind zu einer anderen Zeit – früher oder später ist beides normal.",
-        ru: "Привет, {name}! Примерно между 9 и 16 годами начинается половое созревание. Тело постепенно становится взрослым. У каждого это происходит в своё время — раньше или позже, оба варианта нормальны.",
+        text: "Hallo {name}! Irgendwann zwischen etwa 8 und 14 Jahren beginnt die Pubertät. Der Körper wird langsam erwachsen. Das passiert bei jedem Kind zu einer anderen Zeit – früher oder später ist beides normal.",
+        ru: "Привет, {name}! Примерно между 8 и 14 годами начинается половое созревание. Тело постепенно становится взрослым. У каждого это происходит в своё время — раньше или позже, оба варианта нормальны.",
         fakten: [["Man wächst schneller, bei Jungen wird die Stimme tiefer.", "Растёшь быстрее, у мальчиков голос становится ниже."], ["Man schwitzt mehr, die Haut kann Pickel bekommen.", "Больше потеешь, на коже могут появляться прыщики."]] },
       { typ: "wahl", frage: "Du schwitzt nach dem Sport mehr als früher. Was hilft?", ru: "После спорта ты потеешь больше, чем раньше. Что поможет?", bild: "🚿", optionen: [
         { t: "Duschen und frische Sachen anziehen", ru: "Принять душ и надеть чистую одежду", ok: true, warum: "Genau! Regelmäßig waschen und ein Deo helfen. Das gehört jetzt einfach dazu.", warumRu: "Точно! Помогают регулярное мытьё и дезодорант. Теперь это просто часть жизни." },
@@ -1113,7 +1113,7 @@ window.THEMEN = [
         { t: "Mit einem Fremden im Internet", ru: "С незнакомцем в интернете", ok: false, warum: "Fremden im Netz erzählst du nichts Persönliches. Frag lieber jemanden, den du kennst.", warumRu: "Незнакомцам в интернете ничего личного не рассказывают. Лучше спроси того, кого знаешь." }] },
       { typ: "daumen", satz: "Mein Körper gehört mir. Ich darf Nein sagen, wenn mich jemand anfassen will und ich das nicht möchte.", satzRu: "Моё тело принадлежит мне. Я могу сказать «нет», если кто-то хочет меня трогать, а я не хочу.", bild: "✋", ok: true,
         warum: "Stimmt! Und du darfst es immer einem Erwachsenen erzählen, dem du vertraust.", warumRu: "Верно! И об этом всегда можно рассказать взрослому, которому ты доверяешь." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Größer werden ist spannend. Frag ruhig nach, wenn dich etwas beschäftigt.",
         ru: "Здорово, {name}! Взрослеть интересно. Спрашивай, если тебя что-то волнует." }
     ]
@@ -1136,12 +1136,12 @@ window.THEMEN = [
           { t: "Mit Freunden reden", ru: "Поговорить с друзьями", gruppe: "h" }, { t: "Rausgehen und sich bewegen", ru: "Выйти на улицу и подвигаться", gruppe: "h" },
           { t: "Stundenlang am Handy bleiben", ru: "Часами сидеть в телефоне", gruppe: "s" }, { t: "Süßes statt Abendessen", ru: "Сладкое вместо ужина", gruppe: "s" }] },
       { typ: "daumen", satz: "Wenn ich merke, dass ich nicht mehr vom Spiel loskomme, darf ich Hilfe holen.", satzRu: "Если я замечаю, что не могу оторваться от игры, я могу попросить о помощи.", bild: "🎮", ok: true,
-        warum: "Stimmt! Ein Erwachsener kann helfen, Pausen festzulegen. Darum hat auch diese App feste Spielzeiten.", warumRu: "Верно! Взрослый поможет договориться о перерывах. Поэтому и в этом приложении есть время для игр." },
+        warum: "Stimmt! Ein Erwachsener, dem du vertraust, kann helfen, Pausen festzulegen. Darum hat auch diese App feste Spielzeiten. Reden kannst du auch mit der Nummer gegen Kummer: 116 111.", warumRu: "Верно! Взрослый, которому ты доверяешь, поможет договориться о перерывах. Поэтому и в этом приложении есть время для игр. Поговорить можно и по телефону доверия: 116 111." },
       { typ: "daumen", satz: "Wer Nein sagt, verliert alle Freunde.", satzRu: "Кто говорит «нет», теряет всех друзей.", bild: "🤝", ok: false,
         warum: "Nein! Gute Freunde respektieren dein Nein. Oft sagen andere dann auch mutig Nein.", warumRu: "Нет! Хорошие друзья уважают твоё «нет». Часто другие тогда тоже смело говорят «нет»." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
-        text: "Stark, {name}! Übe mit deiner Familie einen Satz zum Neinsagen, zum Beispiel: „Nein danke, das will ich nicht.“",
-        ru: "Сильно, {name}! Потренируй с семьёй фразу для отказа, например: «Нет, спасибо, я не хочу»." }
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
+        text: "Stark, {name}! Übe mit deiner Familie einen Satz zum Neinsagen, zum Beispiel: „Nein danke, das will ich nicht.“ Wenn dich etwas bedrückt: Sprich mit einem Menschen, dem du vertraust, oder ruf die Nummer gegen Kummer an: 116 111.",
+        ru: "Сильно, {name}! Потренируй с семьёй фразу для отказа, например: «Нет, спасибо, я не хочу». Если тебя что-то тревожит: поговори с человеком, которому доверяешь, или позвони по телефону доверия: 116 111." }
     ]
   },
   {
@@ -1171,7 +1171,7 @@ window.THEMEN = [
         { t: "etwa 100 km", ru: "около 100 км", ok: true, warum: "Richtig! 10 · 10 km = 100 km. In echt sind es rund 100 km Luftlinie.", warumRu: "Правильно! 10 · 10 км = 100 км. В реальности около 100 км по прямой." },
         { t: "etwa 10 km", ru: "около 10 км", ok: false, warum: "Jeder Zentimeter sind 10 km. 10 cm sind also 10 · 10 km = 100 km.", warumRu: "Каждый сантиметр — 10 км. Значит, 10 см — это 10 · 10 км = 100 км." },
         { t: "etwa 1000 km", ru: "около 1000 км", ok: false, warum: "Das wäre viel zu weit – so weit ist es bis nach Italien. 10 cm sind 100 km.", warumRu: "Это слишком далеко — это как до Италии. 10 см — это 100 км." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Klasse, {name}! Such auf einer Karte deinen Wohnort. Wie weit ist es bis Dresden?",
         ru: "Класс, {name}! Найди на карте свой город. Как далеко до Дрездена?" }
     ]
@@ -1208,7 +1208,7 @@ window.THEMEN.push(
         { t: "Den Fehler anschauen und herausfinden, wie es richtig geht", ru: "Посмотреть на ошибку и понять, как правильно", ok: true, warum: "Genau! Aus Fehlern lernt man. Ein anderes Kind kann ihr auch helfen.", warumRu: "Точно! На ошибках учатся. Другой ребёнок тоже может помочь." },
         { t: "Das Heft schnell zuklappen und nicht mehr hinschauen", ru: "Быстро закрыть тетрадь и больше не смотреть", ok: false, warum: "Dann bleibt der Fehler. Wer hinschaut, lernt dazu.", warumRu: "Тогда ошибка останется. Кто смотрит, тот учится." },
         { t: "Ab jetzt nur noch leichte Aufgaben machen", ru: "Теперь делать только лёгкие задания", ok: false, warum: "Nein, auch schwierige Aufgaben lernt man – Schritt für Schritt.", warumRu: "Нет, и трудные задания можно освоить – шаг за шагом." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Ein Tipp zum Merken: Jeder lernt anders – manche mit Bildern, manche durch Sprechen, manche durch Bewegung. Probier aus, was dir hilft!",
         ru: "Отлично, {name}! Совет: каждый учится по-своему — кто-то с картинками, кто-то проговаривая, кто-то в движении. Попробуй, что помогает тебе!" }
     ]
@@ -1241,7 +1241,7 @@ window.THEMEN.push(
         { t: "Nachts lange wach bleiben", ru: "Долго не спать ночью", ok: false, warum: "Dann bist du am nächsten Tag müde. Genug Schlaf ist wichtig.", warumRu: "Тогда на следующий день будешь уставшим. Сон важен." }] },
       { typ: "daumen", satz: "Bananen wachsen nicht in Deutschland. Sie haben einen langen Weg hinter sich.", satzRu: "Бананы не растут в Германии. Они проделали долгий путь.", bild: "🍌", ok: true,
         warum: "Stimmt! Bananen kommen mit dem Schiff aus warmen Ländern. Äpfel, Möhren und Erdbeeren wachsen auch bei uns. Fair gehandelte Waren sorgen dafür, dass die Bauern gerecht bezahlt werden.", warumRu: "Верно! Бананы привозят на кораблях из тёплых стран. Яблоки, морковь и клубника растут и у нас. Товары «справедливой торговли» помогают честно платить фермерам." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Und noch ein Tipp: Gerade sitzen, beide Füße auf dem Boden – das tut deinem Rücken gut.",
         ru: "Супер, {name}! Ещё совет: сиди прямо, обе ноги на полу — это полезно для спины." }
     ]
@@ -1251,8 +1251,8 @@ window.THEMEN.push(
     kurz: "Körperteile richtig benennen, Nein sagen, Hilfe holen",
     schritte: [
       { typ: "info", titel: "Jungen und Mädchen", bild: "🧒👧",
-        text: "Jungen und Mädchen haben vieles gemeinsam – und ein paar Unterschiede. Jungen haben einen Penis, Mädchen haben eine Scheide (Vulva). Das sind die richtigen Namen. Es ist gut, sie zu kennen.",
-        ru: "У мальчиков и девочек много общего — и несколько различий. У мальчиков есть пенис, у девочек — влагалище (вульва). Это правильные названия. Хорошо их знать." },
+        text: "Jungen und Mädchen haben vieles gemeinsam – und ein paar Unterschiede. Jungen haben einen Penis, Mädchen haben außen eine Vulva und innen die Scheide. Das sind die richtigen Namen. Es ist gut, sie zu kennen.",
+        ru: "У мальчиков и девочек много общего — и несколько различий. У мальчиков есть пенис, у девочек снаружи вульва, а внутри — влагалище. Это правильные названия. Хорошо их знать." },
       { typ: "daumen", satz: "Die Körperstellen, die die Badehose oder der Badeanzug bedeckt, sind privat.", satzRu: "Места, которые закрывают плавки или купальник, — личные.", bild: "🩱", ok: true,
         warum: "Stimmt! Niemand darf dich dort einfach anfassen oder Fotos davon machen. Ausnahme: Ärztin oder Arzt, wenn deine Eltern dabei sind.", warumRu: "Верно! Никто не имеет права просто так трогать тебя там или фотографировать. Исключение: врач, когда рядом родители." },
       { typ: "wahl", frage: "Jemand will dich anfassen und du fühlst dich unwohl. Was darfst du tun?", ru: "Кто-то хочет тебя трогать, и тебе неприятно. Что ты можешь сделать?", bild: "✋", optionen: [
@@ -1271,7 +1271,7 @@ window.THEMEN.push(
         { t: "Eltern, Lehrerin, Vertrauensperson – oder der Nummer gegen Kummer: 116 111", ru: "Родителям, учительнице, доверенному человеку — или по номеру 116 111", ok: true, warum: "Richtig! Die Nummer gegen Kummer ist kostenlos und du musst deinen Namen nicht sagen.", warumRu: "Правильно! Телефон доверия бесплатный, и называть имя не нужно." },
         { t: "Niemandem", ru: "Никому", ok: false, warum: "Doch! Du bist nicht allein. Erzähl es jemandem, dem du vertraust, oder ruf 116 111 an.", warumRu: "Нет! Ты не один. Расскажи тому, кому доверяешь, или позвони 116 111." },
         { t: "Nur einem Fremden im Internet", ru: "Только незнакомцу в интернете", ok: false, warum: "Lieber nicht. Erzähl es einer Vertrauensperson oder ruf die Nummer gegen Kummer an.", warumRu: "Лучше не надо. Расскажи доверенному человеку или позвони по телефону доверия." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Gut gemacht, {name}! Merk dir: Mein Körper gehört mir. Ich darf Nein sagen. Und ich darf mir immer Hilfe holen – Nummer gegen Kummer: 116 111.",
         ru: "Молодец, {name}! Запомни: моё тело принадлежит мне. Я могу сказать «нет». И я всегда могу попросить помощи — телефон доверия: 116 111." }
     ]
@@ -1301,7 +1301,7 @@ window.THEMEN.push(
         { t: "Weihnachten", ru: "Рождество", gruppe: "winter" }] },
       { typ: "daumen", satz: "Die Natur verändert sich jedes Jahr wieder in derselben Reihenfolge.", satzRu: "Природа каждый год меняется в одном и том же порядке.", bild: "🔄", ok: true,
         warum: "Stimmt! Frühling, Sommer, Herbst, Winter – das ist der Jahreskreis. Im Kalender kannst du sehen, wann eine neue Jahreszeit beginnt.", warumRu: "Верно! Весна, лето, осень, зима — это годовой круг. В календаре видно, когда начинается новое время года." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Beobachte einen Baum vor deinem Fenster das ganze Jahr: Mach jeden Monat ein Bild – wie verändert er sich?",
         ru: "Отлично, {name}! Наблюдай за деревом у окна весь год: каждый месяц рисуй его — как оно меняется?" }
     ]
@@ -1334,7 +1334,7 @@ window.THEMEN.push(
         { t: "Messen, wie hoch er ist", ru: "Измерить высоту", ok: false, warum: "Bäume wachsen verschieden schnell. Die Jahresringe verraten das Alter.", warumRu: "Деревья растут с разной скоростью. Возраст показывают кольца." }] },
       { typ: "daumen", satz: "Die Eiche hat glatte, graue Rinde.", satzRu: "У дуба гладкая серая кора.", bild: "🌳", ok: false,
         warum: "Stimmt nicht! Glatte, graue Rinde hat die Buche. Die Eiche hat eine dicke, rissige Rinde und Blätter mit gebuchtetem Rand.", warumRu: "Неверно! Гладкая серая кора у бука. У дуба толстая кора с трещинами и листья с волнистым краем." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Sammle beim nächsten Spaziergang Blätter und Früchte, kleb sie auf und schreib den Baumnamen dazu – so entsteht deine Baumsammlung.",
         ru: "Супер, {name}! На следующей прогулке собери листья и плоды, наклей их и подпиши название дерева — получится твоя коллекция." }
     ]
@@ -1361,15 +1361,15 @@ window.THEMEN.push(
         { t: "Bohnen in die Erde legen", ru: "Класть фасоль в землю", gruppe: "saeen" },
         { t: "Gießen und Unkraut zupfen", ru: "Поливать и полоть", gruppe: "pflegen" },
         { t: "Reife Tomaten pflücken", ru: "Срывать спелые помидоры", gruppe: "ernten" }] },
-      { typ: "daumen", satz: "Harke und Spaten legt man mit den Zinken nach oben auf den Boden.", satzRu: "Грабли и лопату кладут на землю зубьями вверх.", bild: "🧑‍🌾", ok: false,
+      { typ: "daumen", satz: "Harke und Grabegabel legt man mit den Zinken nach oben auf den Boden.", satzRu: "Грабли и вилы кладут на землю зубьями вверх.", bild: "🧑‍🌾", ok: false,
         warum: "Nein! Sonst tritt jemand drauf und verletzt sich. Gartengeräte immer mit den Zinken nach unten ablegen oder anlehnen.", warumRu: "Нет! Иначе кто-то наступит и поранится. Садовые инструменты кладут зубьями вниз или прислоняют." },
       { typ: "daumen", satz: "Aus Äpfeln kann man Apfelmus, Saft oder Kuchen machen.", satzRu: "Из яблок можно сделать пюре, сок или пирог.", bild: "🥧", ok: true,
         warum: "Stimmt! So kann man Obst verarbeiten und länger aufbewahren.", warumRu: "Верно! Так фрукты перерабатывают и дольше хранят." },
       { typ: "wahl", frage: "Zu welchem Obst gehört die Kirsche?", ru: "К какому виду фруктов относится вишня?", bild: "🍒", optionen: [
-        { t: "Steinobst – innen ist ein harter Kern", ru: "Косточковые – внутри твёрдая косточка", ok: true, warum: "Richtig! Kirsche, Pflaume und Pfirsich haben einen Stein.", warumRu: "Правильно! У вишни, сливы и персика есть косточка." },
+        { t: "Steinobst – innen ist ein harter Stein", ru: "Косточковые – внутри твёрдая косточка", ok: true, warum: "Richtig! Kirsche, Pflaume und Pfirsich haben einen Stein.", warumRu: "Правильно! У вишни, сливы и персика есть косточка." },
         { t: "Kernobst, wie der Apfel", ru: "Семечковые, как яблоко", ok: false, warum: "Nein, Kernobst hat ein Kerngehäuse mit vielen kleinen Kernen. Die Kirsche hat einen harten Stein.", warumRu: "Нет, у семечковых есть сердцевина с множеством семечек. У вишни – твёрдая косточка." },
         { t: "Beerenobst, weil sie klein und rund ist", ru: "Ягоды, потому что она маленькая и круглая", ok: false, warum: "Klein und rund heißt nicht Beere. Die Kirsche hat einen Stein, darum ist sie Steinobst.", warumRu: "Маленькая и круглая – не значит ягода. У вишни косточка, поэтому она косточковая." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Prima, {name}! Säe doch Kresse auf feuchter Watte. Nach ein paar Tagen kannst du sie ernten und aufs Brot streuen.",
         ru: "Отлично, {name}! Посей кресс-салат на влажной вате. Через несколько дней его можно срезать и посыпать на хлеб." }
     ]
@@ -1399,7 +1399,7 @@ window.THEMEN.push(
         warum: "Stimmt! Spatzen leben gern in der Nähe von Menschen und baden sogar im Sand.", warumRu: "Верно! Воробьи любят жить рядом с людьми и даже купаются в песке." },
       { typ: "daumen", satz: "Kleine Tiere darf ich fangen und in ein Glas ohne Luftlöcher stecken.", satzRu: "Маленьких животных можно ловить и сажать в банку без дырок.", bild: "🫙", ok: false,
         warum: "Nein! Beobachte sie lieber vorsichtig mit der Becherlupe und lass sie danach wieder frei, wo du sie gefunden hast.", warumRu: "Нет! Лучше осторожно наблюдай через лупу-стаканчик и потом отпусти там, где нашёл." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Wenn viele verschiedene Tiere leben, nennt man das Artenvielfalt. Eine wilde Ecke mit Blumen im Garten hilft ihnen.",
         ru: "Отлично, {name}! Когда живёт много разных животных, это называется биоразнообразием. Дикий уголок с цветами в саду им помогает." }
     ]
@@ -1428,7 +1428,7 @@ window.THEMEN.push(
         { t: "Auf der Weide mit viel Platz und Gras", ru: "На пастбище с простором и травой", ok: true, warum: "Richtig! Auf der Weide können sie laufen und fressen. Im Winter stehen sie im Stall. Manche Kühe leben in sehr großen Ställen mit wenig Platz – darüber sprechen viele Menschen.", warumRu: "Правильно! На пастбище они могут ходить и есть траву. Зимой стоят в хлеву. Некоторые коровы живут в очень больших фермах с малым местом — об этом многие спорят." },
         { t: "In einem dunklen, engen Raum", ru: "В тёмной тесной комнате", ok: false, warum: "Nein. Kühe brauchen Platz, Licht und frisches Futter.", warumRu: "Нет. Коровам нужны простор, свет и свежий корм." },
         { t: "Allein in einem kleinen Stall, da ist es ruhig", ru: "Одной в маленьком хлеву, там спокойно", ok: false, warum: "Nein, Kühe leben gern in der Herde und brauchen Platz, Licht und Gras. Allein im engen Stall geht es ihnen nicht gut.", warumRu: "Нет, коровы любят жить в стаде, им нужны простор, свет и трава. Одной в тесном хлеву им плохо." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Prima, {name}! Ein Tier ist kein Spielzeug. Wer eins möchte, überlegt mit der Familie gut, ob alle genug Zeit und Platz dafür haben.",
         ru: "Отлично, {name}! Животное — не игрушка. Кто хочет питомца, обдумывает с семьёй, хватит ли у всех времени и места." }
     ]
@@ -1462,7 +1462,7 @@ window.THEMEN.push(
         warum: "Richtig! Reflektoren werfen das Scheinwerferlicht zurück. Darum trägt man im Herbst und Winter Leuchtstreifen.", warumRu: "Правильно! Светоотражатели отражают свет фар. Поэтому осенью и зимой носят светящиеся полоски." },
       { typ: "daumen", satz: "Mit Sonnencreme, Mütze und Sonnenbrille schützt du dich im Sommer.", satzRu: "Кремом от солнца, кепкой и очками ты защищаешься летом.", bild: "🧴", ok: true,
         warum: "Stimmt! Sonnenlicht ist gut, aber zu viel schadet Haut und Augen. Nie direkt in die Sonne schauen!", warumRu: "Верно! Солнце полезно, но слишком много вредит коже и глазам. Никогда не смотри прямо на солнце!" },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Probier zu Hause Schattenspiele mit der Taschenlampe: Kannst du einen Hasen an die Wand zaubern?",
         ru: "Супер, {name}! Попробуй дома театр теней с фонариком: сможешь показать зайца на стене?" }
     ]
@@ -1480,7 +1480,7 @@ window.THEMEN.push(
         { t: "Das Glas ist innen ganz glatt", ru: "Стакан внутри совсем гладкий", ok: false, warum: "Nein, auch an glattem Glas läuft Wasser hoch, wenn Platz da ist. Hier ist der Platz schon voll – mit Luft.", warumRu: "Нет, вода поднимается и по гладкому стеклу, если есть место. Здесь место уже занято – воздухом." }] },
       { typ: "daumen", satz: "Ein Fallschirm fällt langsam, weil die Luft ihn bremst.", satzRu: "Парашют падает медленно, потому что воздух его тормозит.", bild: "🪂", ok: true,
         warum: "Stimmt! Das nennt man Luftwiderstand. Auf dem Fahrrad spürst du ihn als Fahrtwind.", warumRu: "Верно! Это сопротивление воздуха. На велосипеде ты чувствуешь его как встречный ветер." },
-      { typ: "daumen", satz: "Eine leere Flasche ist wirklich leer – da ist gar nichts drin.", satzRu: "Пустая бутылка действительно пустая – в ней совсем ничего нет.", bild: "☀️", ok: false,
+      { typ: "daumen", satz: "Eine leere Flasche ist wirklich leer – da ist gar nichts drin.", satzRu: "Пустая бутылка действительно пустая – в ней совсем ничего нет.", bild: "🫙", ok: false,
         warum: "Stimmt nicht! In einer „leeren“ Flasche ist Luft. Das merkst du, wenn du sie unter Wasser drückst: Es blubbern Luftblasen heraus.", warumRu: "Неверно! В «пустой» бутылке есть воздух. Это видно, если опустить её под воду: выходят пузырьки воздуха." },
       { typ: "zuordnen", frage: "Wind kann nützen und schaden. Ordne zu!", ru: "Ветер может помогать и вредить. Распредели!", gruppen: [
         { id: "nutzen", name: "Nutzen", ru: "Польза", bild: "🌬️" }, { id: "gefahr", name: "Gefahr", ru: "Опасность", bild: "🌪️" }], dinge: [
@@ -1494,7 +1494,7 @@ window.THEMEN.push(
         { t: "Donner", ru: "Гром", ok: false, warum: "Donner kommt vom Gewitter. Deine zurückkommende Stimme ist ein Echo.", warumRu: "Гром бывает при грозе. Твой вернувшийся голос — эхо." }] },
       { typ: "daumen", satz: "Erst sieht man den Blitz, dann hört man den Donner, weil Licht schneller ist als Schall.", satzRu: "Сначала видна молния, потом слышен гром, потому что свет быстрее звука.", bild: "⛈️", ok: true,
         warum: "Stimmt! Zähl die Sekunden zwischen Blitz und Donner – je weniger, desto näher ist das Gewitter.", warumRu: "Верно! Считай секунды между молнией и громом — чем меньше, тем ближе гроза." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Bau aus zwei Bechern und einer Schnur ein Dosentelefon – der Schall reist dann durch die Schnur.",
         ru: "Отлично, {name}! Сделай телефон из двух стаканчиков и нитки — звук побежит по нитке." }
     ]
@@ -1524,7 +1524,7 @@ window.THEMEN.push(
         { t: "Am Montag", ru: "В понедельник", ok: false, warum: "12 °C ist weniger als 15 °C. Dienstag war am wärmsten.", warumRu: "12 °C меньше 15 °C. Теплее всего было во вторник." }] },
       { typ: "daumen", satz: "Die Wettervorhersage im Radio oder in der App sagt, wie das Wetter morgen wahrscheinlich wird.", satzRu: "Прогноз по радио или в приложении говорит, какая погода, вероятно, будет завтра.", bild: "📻", ok: true,
         warum: "Richtig! „Wahrscheinlich“ – manchmal kommt es anders. Vergleich die Vorhersage mit deiner eigenen Beobachtung!", warumRu: "Правильно! «Вероятно» — иногда бывает иначе. Сравни прогноз со своим наблюдением!" },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Prima, {name}! Führ eine Woche lang eine Wettertabelle: jeden Morgen ein Zeichen und die Temperatur. Auf der Insel kannst du das Wetter auch sehen.",
         ru: "Отлично, {name}! Веди неделю таблицу погоды: каждое утро значок и температура. Погоду можно увидеть и на острове." }
     ]
@@ -1556,7 +1556,7 @@ window.THEMEN.push(
         { t: "Giftig – nicht anfassen, Erwachsenen geben", ru: "Ядовито — не трогать, отдать взрослым", ok: true, warum: "Richtig! Solche Flaschen gehören verschlossen und für Kinder unerreichbar aufbewahrt.", warumRu: "Правильно! Такие бутылки хранят закрытыми и недоступными для детей." },
         { t: "Man darf es benutzen, wenn man vorsichtig ist", ru: "Можно пользоваться, если осторожно", ok: false, warum: "Nein! Der Totenkopf heißt: giftig. Nicht anfassen und sofort einem Erwachsenen geben.", warumRu: "Нет! Череп означает: ядовито. Не трогать и сразу отдать взрослому." },
         { t: "Besonders lecker", ru: "Особенно вкусно", ok: false, warum: "Nein! Das Zeichen heißt: giftig.", warumRu: "Нет! Знак означает «ядовито»." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Mach mit einem Erwachsenen den Salz-Versuch: Salzwasser in eine Schale, ans Fenster stellen und jeden Tag nachsehen.",
         ru: "Супер, {name}! Сделай со взрослым опыт с солью: солёную воду в миску, на окно, и смотри каждый день." }
     ]
@@ -1576,7 +1576,7 @@ window.THEMEN.push(
         { id: "arzt", name: "Arztpraxis", ru: "Врач", bild: "🩺" }, { id: "biblio", name: "Bibliothek", ru: "Библиотека", bild: "📚" }, { id: "rathaus", name: "Rathaus", ru: "Ратуша", bild: "🏛️" }], dinge: [
         { t: "Ich habe Halsschmerzen", ru: "У меня болит горло", gruppe: "arzt" },
         { t: "Ich suche ein Buch über Pferde", ru: "Ищу книгу о лошадях", gruppe: "biblio" },
-        { t: "Ich brauche einen Kinderausweis", ru: "Нужен детский паспорт", gruppe: "rathaus" }] },
+        { t: "Ich brauche einen Ausweis", ru: "Мне нужно удостоверение личности", gruppe: "rathaus" }] },
       { typ: "wahl", frage: "Auf einem Ortsplan ist die Kirche als Kreuz eingezeichnet. Wo steht, was die Zeichen bedeuten?", ru: "На плане посёлка церковь отмечена крестиком. Где написано, что значат значки?", bild: "🗺️", optionen: [
         { t: "In der Legende", ru: "В легенде (условных обозначениях)", ok: true, warum: "Richtig! Die Legende erklärt alle Zeichen eines Plans.", warumRu: "Правильно! Легенда объясняет все значки плана." },
         { t: "In der Windrose", ru: "В розе ветров", ok: false, warum: "Nein, die Windrose zeigt die Himmelsrichtungen. Was die Zeichen bedeuten, steht in der Legende.", warumRu: "Нет, роза ветров показывает стороны света. Что значат знаки, написано в легенде." },
@@ -1589,7 +1589,7 @@ window.THEMEN.push(
         { t: "Auf der Fahrbahn", ru: "На проезжей части", ok: false, warum: "Nein! Nie auf die Fahrbahn. Warte mit Abstand.", warumRu: "Нет! Никогда на дорогу. Жди на расстоянии." }] },
       { typ: "daumen", satz: "Ein freundlicher Fremder bietet an, mich mit dem Auto nach Hause zu fahren. Ich steige ein.", satzRu: "Дружелюбный незнакомец предлагает отвезти меня домой. Я сажусь в машину.", bild: "🚗", ok: false,
         warum: "Nein! Geh nie mit Fremden mit und steig nie zu ihnen ins Auto. Lauf weg und erzähl es einem Erwachsenen, dem du vertraust.", warumRu: "Нет! Никогда не уходи с незнакомцами и не садись к ним в машину. Убеги и расскажи взрослому, которому доверяешь." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Mal eine Wegskizze von deiner Schule nach Hause: Welche wichtigen Orte kommen unterwegs vorbei?",
         ru: "Отлично, {name}! Нарисуй схему пути от школы домой: какие важные места по дороге?" }
     ]
@@ -1623,7 +1623,7 @@ window.THEMEN.push(
         { t: "Ein besonders schönes Erlebnis, zum Beispiel ein Ausflug oder Fest", ru: "Особенно хорошее событие, например экскурсия или праздник", ok: true, warum: "Genau! An Höhepunkte erinnert man sich gern.", warumRu: "Точно! Яркие моменты вспоминают с удовольствием." },
         { t: "Der höchste Raum im Schulhaus", ru: "Самая высокая комната в школе", ok: false, warum: "Nein, gemeint ist kein Ort, sondern ein besonders schönes Erlebnis.", warumRu: "Нет, имеется в виду не место, а особенно хорошее событие." },
         { t: "Ein Tag, an dem nichts passiert ist", ru: "День, когда ничего не случилось", ok: false, warum: "Nein, ein Höhepunkt ist etwas Besonderes, an das du dich gern erinnerst.", warumRu: "Нет, яркий момент – это что-то особенное, что приятно вспомнить." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Wunderbar, {name}! Mach dir mit deiner Familie eine Schatzkiste: das erste Lesebuch-Blatt, ein schönes Bild, ein Foto vom ersten Schultag.",
         ru: "Чудесно, {name}! Сделай с семьёй шкатулку-сокровищницу: первый лист из букваря, красивый рисунок, фото первого школьного дня." }
     ]
@@ -1636,9 +1636,9 @@ window.THEMEN.push(
     kurz: "Andere Länder, Feste und Gewohnheiten – und was uns verbindet",
     schritte: [
       { typ: "info", titel: "Viele Kulturen", bild: "🌍",
-        text: "Kinder auf der ganzen Welt spielen, lernen und feiern – aber oft auf unterschiedliche Weise. Vielleicht kommen Kinder in deiner Klasse aus anderen Ländern. Auf dem Globus und im Atlas findest du, wo diese Länder liegen.",
-        ru: "Дети по всему миру играют, учатся и празднуют — но часто по-разному. Может быть, в твоём классе есть дети из других стран. На глобусе и в атласе можно найти, где эти страны." },
-      { typ: "zuordnen", frage: "Welches Fest gehört zu wem?", ru: "Какой праздник чей?", gruppen: [
+        text: "Kinder auf der ganzen Welt spielen, lernen und feiern – aber oft auf unterschiedliche Weise. Vielleicht kommen Kinder in deiner Klasse aus anderen Ländern. Auf dem Globus und im Atlas findest du, wo diese Länder liegen. Manche Feste feiern das Licht in der dunklen Zeit. Andere feiert man, wenn eine Fastenzeit zu Ende ist – so wie Ostern nach der Fastenzeit oder das Zuckerfest nach dem Fastenmonat Ramadan.",
+        ru: "Дети по всему миру играют, учатся и празднуют — но часто по-разному. Может быть, в твоём классе есть дети из других стран. На глобусе и в атласе можно найти, где эти страны. Одни праздники — это праздники света в тёмное время года. Другие отмечают, когда заканчивается пост, — как Пасху после Великого поста или Ураза-байрам после месяца поста Рамадан." },
+      { typ: "zuordnen", frage: "Lichterfest oder Fest nach dem Fasten?", ru: "Праздник огней или праздник после поста?", gruppen: [
         { id: "licht", name: "Lichterfeste", ru: "Праздники огней", bild: "🪔" }, { id: "fasten", name: "Fest nach dem Fasten", ru: "Праздник после поста", bild: "🌙" }], dinge: [
         { t: "Diwali (Hinduismus)", ru: "Дивали (индуизм)", gruppe: "licht" },
         { t: "Chanukka (Judentum)", ru: "Ханука (иудаизм)", gruppe: "licht" },
@@ -1656,7 +1656,7 @@ window.THEMEN.push(
         { t: "Es fragen, wie man in seiner Sprache „Hallo“ sagt", ru: "Спросить, как на его языке «привет»", ok: true, warum: "Toll! So zeigst du Interesse und das Kind fühlt sich willkommen.", warumRu: "Здорово! Так ты показываешь интерес, и ребёнку приятно." },
         { t: "Es nicht beachten", ru: "Не обращать внимания", ok: false, warum: "Lieber nicht. Jeder möchte dazugehören.", warumRu: "Лучше не надо. Каждый хочет быть своим." },
         { t: "Über seine Kleidung lachen", ru: "Смеяться над его одеждой", ok: false, warum: "Nein, das verletzt. Sei neugierig und freundlich.", warumRu: "Нет, это обидно. Будь любопытным и дружелюбным." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Such mit deiner Familie auf dem Globus ein Land, das du nicht kennst, und finde drei Dinge darüber heraus.",
         ru: "Супер, {name}! Найди с семьёй на глобусе незнакомую страну и узнай о ней три вещи." }
     ]
@@ -1684,7 +1684,7 @@ window.THEMEN.push(
         { t: "Ältere Menschen befragen, alte Fotos und Gegenstände im Museum ansehen", ru: "Расспросить пожилых, посмотреть старые фото и вещи в музее", ok: true, warum: "Genau! Das sind Quellen. Mit ihnen kann man die Vergangenheit erforschen.", warumRu: "Точно! Это источники. С ними можно исследовать прошлое." },
         { t: "Raten", ru: "Угадывать", ok: false, warum: "Besser sind echte Quellen: Menschen, Fotos, Museen.", warumRu: "Лучше настоящие источники: люди, фото, музеи." },
         { t: "Einen Zeichentrickfilm schauen", ru: "Посмотреть мультфильм", ok: false, warum: "Filme sind oft ausgedacht. Echte Quellen sind besser.", warumRu: "Фильмы часто выдуманы. Настоящие источники лучше." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Prima, {name}! Frag Oma oder Opa: Womit habt ihr als Kinder gespielt, und wie sah euer Dorf oder eure Stadt aus?",
         ru: "Отлично, {name}! Спроси бабушку или дедушку: во что вы играли в детстве и как выглядела ваша деревня или город?" }
     ]
@@ -1711,7 +1711,7 @@ window.THEMEN.push(
         { t: "Beim Lesen gutes Licht", ru: "Хороший свет при чтении", gruppe: "auge" },
         { t: "Kopfhörer nicht zu laut", ru: "Наушники не слишком громко", gruppe: "ohr" },
         { t: "Gehörschutz bei Lärm", ru: "Защита ушей при шуме", gruppe: "ohr" }] },
-      { typ: "wahl", frage: "Wie lesen blinde Menschen?", ru: "Как читают слепые люди?", bild: "⠃", optionen: [
+      { typ: "wahl", frage: "Wie lesen blinde Menschen?", ru: "Как читают слепые люди?", bild: "📖", optionen: [
         { t: "Mit den Fingern in Blindenschrift (Punkte zum Ertasten)", ru: "Пальцами по шрифту Брайля (точки на ощупь)", ok: true, warum: "Genau! Andere Sinne helfen aus. Ein Blindenhund oder ein weißer Stock helfen beim Gehen. Gehörlose sprechen oft in Gebärdensprache.", warumRu: "Точно! Помогают другие чувства. При ходьбе помогают собака-поводырь или белая трость. Глухие часто говорят на жестовом языке." },
         { t: "Gar nicht", ru: "Никак", ok: false, warum: "Doch! Mit der Blindenschrift ertasten sie die Buchstaben.", warumRu: "Читают! Шрифтом Брайля на ощупь." },
         { t: "Mit einer Lupe", ru: "С лупой", ok: false, warum: "Eine Lupe hilft Menschen, die schlecht sehen. Blinde lesen mit den Fingern.", warumRu: "Лупа помогает тем, кто плохо видит. Слепые читают пальцами." }] },
@@ -1719,19 +1719,19 @@ window.THEMEN.push(
         { t: "Hinten im Auge, auf der Netzhaut", ru: "В задней части глаза, на сетчатке", ok: true, warum: "Richtig! Die Netzhaut schickt das Bild über den Sehnerv ans Gehirn.", warumRu: "Правильно! Сетчатка передаёт изображение по зрительному нерву в мозг." },
         { t: "Vorn auf der Pupille", ru: "Спереди, на зрачке", ok: false, warum: "Nein, durch die Pupille fällt das Licht nur hinein. Das Bild entsteht hinten auf der Netzhaut.", warumRu: "Нет, через зрачок свет только попадает внутрь. Изображение возникает сзади на сетчатке." },
         { t: "Im Augenlid", ru: "В веке", ok: false, warum: "Nein, das Lid schützt das Auge. Das Bild entsteht auf der Netzhaut.", warumRu: "Нет, веко защищает глаз. Изображение возникает на сетчатке." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Wenn du einen Menschen mit Behinderung triffst: Frag freundlich, ob er Hilfe möchte – und hilf nur, wenn er Ja sagt.",
         ru: "Отлично, {name}! Если встретишь человека с инвалидностью: вежливо спроси, нужна ли помощь, — и помогай, только если он скажет «да»." }
     ]
   },
   {
     id: "getreide", lb: "pt", stufe: 3, lz: ["su.na.08"], name: "Getreide genau", e: "🌾", farbe: "#E8A33D", grund: "#FFF1D9",
-    kurz: "Weizen, Roggen, Gerste, Hafer, Mais – Ähre, Rispe, Kolben, Brot wertschätzen",
+    kurz: "Weizen, Roggen, Gerste, Hafer, Mais – Ähre, Rispe, Kolben, die Kartoffel, Brot wertschätzen",
     schritte: [
       { typ: "info", titel: "Fünf Getreidearten", bild: "🌾",
         text: "Weizen, Roggen und Gerste tragen ihre Körner in einer Ähre. Beim Hafer hängen die Körner an einer lockeren Rispe. Der Mais hat einen dicken Kolben. Getreide ist eine der ältesten Kulturpflanzen der Menschen.",
         ru: "У пшеницы, ржи и ячменя зёрна в колосе. У овса зёрна висят на рыхлой метёлке. У кукурузы толстый початок. Зерновые — одни из древнейших культур человека.",
-        fakten: [["Ähre: Weizen, Roggen, Gerste", "Колос: пшеница, рожь, ячмень"], ["Rispe: Hafer", "Метёлка: овёс"], ["Kolben: Mais 🌽", "Початок: кукуруза 🌽"]] },
+        fakten: [["Ähre: Weizen, Roggen, Gerste", "Колос: пшеница, рожь, ячмень"], ["Rispe: Hafer", "Метёлка: овёс"], ["Kolben: Mais 🌽", "Початок: кукуруза 🌽"], ["Kein Getreide, aber auch wichtig auf dem Feld: die Kartoffel 🥔", "Не зерновая культура, но тоже важна на поле: картофель 🥔"]] },
       { typ: "zuordnen", frage: "Ähre, Rispe oder Kolben?", ru: "Колос, метёлка или початок?", gruppen: [
         { id: "aehre", name: "Ähre", ru: "Колос", bild: "🌾" }, { id: "rispe", name: "Rispe", ru: "Метёлка", bild: "🌿" }, { id: "kolben", name: "Kolben", ru: "Початок", bild: "🌽" }], dinge: [
         { t: "Weizen", ru: "Пшеница", gruppe: "aehre" },
@@ -1752,7 +1752,7 @@ window.THEMEN.push(
         { t: "Nichts", ru: "Ничего", ok: false, warum: "Doch! Nichts verschwenden ist ein guter Anfang.", warumRu: "Можно! Ничего не тратить зря — хорошее начало." }] },
       { typ: "daumen", satz: "Wer Brot vom Vortag wegwirft, obwohl es noch gut ist, verschwendet Lebensmittel.", satzRu: "Кто выбрасывает вчерашний хлеб, хотя он ещё хороший, тот тратит еду впустую.", bild: "🍞", ok: true,
         warum: "Stimmt! Aus altem Brot kann man Toast, Brösel oder Arme Ritter machen.", warumRu: "Верно! Из чёрствого хлеба можно сделать тосты, сухари или гренки." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Schau beim nächsten Spaziergang an einem Feld: Ist es Weizen, Gerste oder Mais?",
         ru: "Супер, {name}! На следующей прогулке посмотри на поле: это пшеница, ячмень или кукуруза?" }
     ]
@@ -1783,7 +1783,7 @@ window.THEMEN.push(
         warum: "Stimmt! Darum lassen viele Gemeinden Blühstreifen stehen – das schützt Bienen und Schmetterlinge.", warumRu: "Верно! Поэтому многие общины оставляют цветущие полосы — это защищает пчёл и бабочек." },
       { typ: "daumen", satz: "Geschützte Wildblumen darf man in großen Sträußen pflücken.", satzRu: "Охраняемые дикие цветы можно собирать большими букетами.", bild: "💐", ok: false,
         warum: "Nein! Geschützte Pflanzen bleiben stehen. Fotografiere sie lieber oder zeichne sie.", warumRu: "Нет! Охраняемые растения не рвут. Лучше сфотографируй или нарисуй их." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Prima, {name}! Leg auf einer Wiese einen Reifen hin und zähl, wie viele verschiedene Pflanzen und Tiere du darin findest.",
         ru: "Отлично, {name}! Положи на лугу обруч и посчитай, сколько разных растений и животных внутри." }
     ]
@@ -1813,7 +1813,7 @@ window.THEMEN.push(
         warum: "Stimmt nicht! Das ist kein Rauch. Der unsichtbare Wasserdampf kühlt ab und wird zu winzigen Wassertröpfchen – die sehen wir als kleine Wolke.", warumRu: "Неверно! Это не дым. Невидимый водяной пар остывает и превращается в крошечные капельки воды – их мы видим как облачко." },
       { typ: "daumen", satz: "Wenn es durch den Klimawandel wärmer wird, verändert sich auch der Wasserkreislauf: Es gibt mehr Trockenheit und mehr Starkregen.", satzRu: "Если из-за изменения климата становится теплее, меняется и круговорот воды: больше засухи и ливней.", bild: "🌡️", ok: true,
         warum: "Richtig! Darum ist es wichtig, Wasser zu schützen und sparsam damit umzugehen.", warumRu: "Правильно! Поэтому важно беречь воду и расходовать её экономно." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Mal den Wasserkreislauf als Kreis mit Pfeilen: Meer → Wolke → Regen → Fluss → Meer.",
         ru: "Отлично, {name}! Нарисуй круговорот воды кругом со стрелками: море → облако → дождь → река → море." }
     ]
@@ -1844,7 +1844,7 @@ window.THEMEN.push(
         { t: "1 cm auf der Karte sind 1 km in Wirklichkeit", ru: "1 см на карте — 1 км в реальности", ok: true, warum: "Richtig! 100 000 cm sind 1 km. Das ist der Maßstab.", warumRu: "Правильно! 100 000 см — это 1 км. Это масштаб." },
         { t: "Die Karte ist 100 000-mal größer als die Wirklichkeit", ru: "Карта в 100 000 раз больше действительности", ok: false, warum: "Nein, umgekehrt: Die Wirklichkeit ist 100 000-mal größer. 1 cm auf der Karte sind 100 000 cm, also 1 km.", warumRu: "Нет, наоборот: действительность в 100 000 раз больше. 1 см на карте – это 100 000 см, то есть 1 км." },
         { t: "1 cm auf der Karte sind 100 m in Wirklichkeit", ru: "1 см на карте – это 100 м на местности", ok: false, warum: "Nicht ganz: 100 000 cm sind 1000 m, also 1 km.", warumRu: "Не совсем: 100 000 см – это 1000 м, то есть 1 км." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Zeichne einen Grundriss von deinem Zimmer mit Bett, Tisch und Schrank – und vergiss den Nordpfeil nicht.",
         ru: "Супер, {name}! Нарисуй план своей комнаты с кроватью, столом и шкафом — и не забудь стрелку севера." }
     ]
@@ -1871,7 +1871,7 @@ window.THEMEN.push(
         { t: "Auf einer Karte von Sachsen nachsehen oder die Eltern fragen", ru: "Посмотреть на карте Саксонии или спросить родителей", ok: true, warum: "Genau! Oft steht es auch auf dem Autokennzeichen: PIR, BZ, MEI, ERZ …", warumRu: "Точно! Часто это видно и на автомобильном номере: PIR, BZ, MEI, ERZ…" },
         { t: "Gar nicht", ru: "Никак", ok: false, warum: "Doch! Eine Karte oder deine Eltern helfen.", warumRu: "Можно! Помогут карта или родители." },
         { t: "Der Landkreis heißt immer so wie meine Stadt", ru: "Район всегда называется так же, как мой город", ok: false, warum: "Nicht immer! Pirna liegt zum Beispiel im Landkreis Sächsische Schweiz-Osterzgebirge. Schau auf einer Karte nach oder frag deine Eltern.", warumRu: "Не всегда! Пирна, например, находится в районе Саксонская Швейцария – Восточные Рудные горы. Посмотри на карте или спроси родителей." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Finde mit deiner Familie heraus: Wie heißt eure Kreisstadt, welcher Fluss fließt durch euren Landkreis, und welche Sage erzählt man sich dort?",
         ru: "Отлично, {name}! Узнай с семьёй: как называется ваш районный центр, какая река течёт через район и какую легенду там рассказывают?" }
     ]
@@ -1898,7 +1898,7 @@ window.THEMEN.push(
         { t: "Dass Schule unwichtig ist", ru: "Что школа не важна", ok: false, warum: "Im Gegenteil: Sie nehmen den Weg auf sich, weil Schule wichtig ist.", warumRu: "Наоборот: они идут так далеко, потому что школа важна." }] },
       { typ: "daumen", satz: "Früher saßen in einer Klasse weniger Kinder als heute.", satzRu: "Раньше в классе сидело меньше детей, чем сегодня.", bild: "✒️", ok: false,
         warum: "Stimmt nicht! Früher saßen oft 50 Kinder in einer Klasse, in festen Holzbänken.", warumRu: "Неверно! Раньше в классе часто сидело 50 детей, за неподвижными деревянными партами." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Mach ein kleines Interview mit Oma oder Opa: Wie war eure Schule? Was war streng, was war schön?",
         ru: "Супер, {name}! Возьми маленькое интервью у бабушки или дедушки: какой была ваша школа? Что было строгим, что приятным?" }
     ]
@@ -1928,7 +1928,7 @@ window.THEMEN.push(
         { t: "Nur Bilder nutzen, die man nutzen darf, und angeben, woher sie sind", ru: "Брать только разрешённые картинки и указывать источник", ok: true, warum: "Genau! Bilder gehören dem, der sie gemacht hat – das ist das Urheberrecht.", warumRu: "Точно! Картинка принадлежит автору — это авторское право." },
         { t: "Einfach nehmen und als eigenes ausgeben", ru: "Просто взять и выдать за своё", ok: false, warum: "Nein! Das verletzt das Urheberrecht.", warumRu: "Нет! Это нарушает авторское право." },
         { t: "Ein Foto von der Klassenkameradin ohne Fragen nehmen", ru: "Взять фото одноклассницы без спроса", ok: false, warum: "Nein! Fotos von Menschen nur mit deren Erlaubnis – das ist ihr Persönlichkeitsrecht.", warumRu: "Нет! Фото людей — только с их разрешения." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Stark, {name}! Schreib eine Woche lang auf, welche Medien du nutzt und wie lange – das ist dein Medientagebuch.",
         ru: "Сильно, {name}! Неделю записывай, какими медиа пользуешься и сколько времени, — это твой медиадневник." }
     ]
@@ -1956,7 +1956,7 @@ window.THEMEN.push(
         { t: "Mehr Radwege, Bäume und Spielplätze", ru: "Больше велодорожек, деревьев и площадок", ok: true, warum: "Super Idee! Kinder dürfen mitbestimmen – zum Beispiel im Kinder- und Jugendparlament.", warumRu: "Отличная идея! Дети могут участвовать — например, в детском парламенте." },
         { t: "Alle Parks zu Parkplätzen machen", ru: "Все парки превратить в парковки", ok: false, warum: "Dann fehlt Platz zum Spielen und für die Natur.", warumRu: "Тогда не будет места для игр и природы." },
         { t: "Gar nichts ändern", ru: "Ничего не менять", ok: false, warum: "Städte verändern sich immer. Gut, wenn wir mitdenken!", warumRu: "Города всегда меняются. Хорошо, когда мы участвуем!" }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Vergleich ein altes Foto deiner Straße oder Stadt mit heute: Was ist geblieben, was ist neu?",
         ru: "Отлично, {name}! Сравни старое фото своей улицы или города с сегодняшним: что осталось, что новое?" }
     ]
@@ -1978,7 +1978,7 @@ window.THEMEN.push(
         { t: "Ein Fuchs", ru: "Лиса", ok: false, warum: "Füchse haben Pfoten mit Ballen und Krallen. Zwei Hufhälften gehören zum Reh.", warumRu: "У лисы лапы с подушечками и когтями. Две половинки копыта — у косули." },
         { t: "Ein Eichhörnchen", ru: "Белка", ok: false, warum: "Eichhörnchen haben kleine Pfoten mit Fingern. Das war ein Reh.", warumRu: "У белки маленькие лапки с пальцами. Это была косуля." }] },
       { typ: "daumen", satz: "Ein zahmes Wildtier oder ein totes Tier im Wald darf man anfassen.", satzRu: "Ручное дикое или мёртвое животное в лесу можно трогать.", bild: "🦊", ok: false,
-        warum: "Nein! Wildtiere, die zutraulich wirken, können krank sein – zum Beispiel an Tollwut. Abstand halten und Erwachsenen Bescheid sagen.", warumRu: "Нет! Дикие животные, которые кажутся ручными, могут быть больны, например бешенством. Держись подальше и скажи взрослым." },
+        warum: "Nein! Wildtiere, die zutraulich wirken, können krank sein, zum Beispiel an Räude oder Staupe. Manche übertragen auch Würmer. Abstand halten und Erwachsenen Bescheid sagen.", warumRu: "Нет! Дикие животные, которые кажутся ручными, могут быть больны, например чесоткой или чумкой. Некоторые переносят и глистов. Держись подальше и скажи взрослым." },
       { typ: "zuordnen", frage: "Was gibt uns der Wald – und was schadet ihm?", ru: "Что даёт нам лес — и что ему вредит?", gruppen: [
         { id: "gibt", name: "Der Wald gibt uns", ru: "Лес даёт нам", bild: "🌳" }, { id: "schadet", name: "Das schadet dem Wald", ru: "Это вредит лесу", bild: "⚠️" }], dinge: [
         { t: "Saubere Luft und Holz", ru: "Чистый воздух и древесину", gruppe: "gibt" },
@@ -1988,16 +1988,16 @@ window.THEMEN.push(
       { typ: "daumen", satz: "Pilze und Beeren aus dem Wald darf man nur essen, wenn ein Erwachsener, der sich auskennt, sie sicher bestimmt hat.", satzRu: "Грибы и ягоды из леса можно есть, только если знающий взрослый точно их определил.", bild: "🍄", ok: true,
         warum: "Stimmt! Manche Pilze und Beeren sind sehr giftig und sehen essbaren ähnlich.", warumRu: "Верно! Некоторые грибы и ягоды очень ядовиты и похожи на съедобные." },
       { typ: "wahl", frage: "Ein Fuchs kommt ganz zahm auf dich zu. Was tust du?", ru: "Лиса подходит к тебе совсем без страха. Что ты делаешь?", bild: "🦊", optionen: [
-        { t: "Abstand halten, weggehen und einem Erwachsenen erzählen", ru: "Держаться подальше, уйти и рассказать взрослому", ok: true, warum: "Richtig! Ein zahmes Wildtier kann krank sein, zum Beispiel Tollwut haben.", warumRu: "Правильно! Ручное дикое животное может быть больным, например бешенством." },
+        { t: "Abstand halten, weggehen und einem Erwachsenen erzählen", ru: "Держаться подальше, уйти и рассказать взрослому", ok: true, warum: "Richtig! Ein zahmes Wildtier kann krank sein, zum Beispiel Räude oder Staupe haben.", warumRu: "Правильно! Ручное дикое животное может быть больным, например чесоткой или чумкой." },
         { t: "Ihn streicheln, er ist ja freundlich", ru: "Погладить её, она же дружелюбная", ok: false, warum: "Nein! Wildtiere sind normalerweise scheu. Ist eins zahm, kann es krank sein.", warumRu: "Нет! Дикие животные обычно пугливы. Если животное ручное, оно может быть больным." },
         { t: "Ihm etwas zu essen geben", ru: "Дать ей поесть", ok: false, warum: "Nein, Wildtiere füttert man nicht. Halte Abstand und sag einem Erwachsenen Bescheid.", warumRu: "Нет, диких животных не кормят. Держись подальше и скажи взрослому." }] },
       { typ: "daumen", satz: "Der Wald gibt uns Holz, saubere Luft und ist Zuhause für viele Tiere.", satzRu: "Лес даёт нам древесину, чистый воздух и является домом для многих животных.", bild: "🌳", ok: true,
         warum: "Stimmt! Darum ist es wichtig, den Wald zu schützen.", warumRu: "Верно! Поэтому важно беречь лес." },
       { typ: "wahl", frage: "Woran erkennst du am ehesten, dass ein Wildschwein im Wald war?", ru: "По чему легче всего понять, что в лесу был кабан?", bild: "🐗", optionen: [
         { t: "Am aufgewühlten Boden", ru: "По взрытой земле", ok: true, warum: "Genau! Wildschweine wühlen mit der Schnauze nach Wurzeln und Würmern.", warumRu: "Точно! Кабаны роют землю рылом в поисках корней и червей." },
-        { t: "An abgenagten Tannenzapfen", ru: "По обгрызенным шишкам", ok: false, warum: "Die nagt das Eichhörnchen ab. Wildschweine wühlen den Boden auf.", warumRu: "Шишки грызёт белка. Кабаны взрывают землю." },
+        { t: "An abgenagten Fichtenzapfen", ru: "По обгрызенным шишкам", ok: false, warum: "Die nagt das Eichhörnchen ab. Wildschweine wühlen den Boden auf.", warumRu: "Шишки грызёт белка. Кабаны взрывают землю." },
         { t: "An einem großen Nest im Baum", ru: "По большому гнезду на дереве", ok: false, warum: "Nein, Wildschweine leben am Boden. Sie wühlen ihn auf.", warumRu: "Нет, кабаны живут на земле. Они её взрывают." }] },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Geh mit deiner Familie in den Wald und sucht Spuren: Trittsiegel, angeknabberte Zapfen, Wühlstellen von Wildschweinen.",
         ru: "Супер, {name}! Сходите с семьёй в лес и поищите следы: отпечатки копыт, обгрызенные шишки, места, где рылись кабаны." }
     ]
@@ -2007,8 +2007,8 @@ window.THEMEN.push(
     kurz: "Humus, Kompost, kleine Bodentiere, Grundwasser und wie man Boden pflegt",
     schritte: [
       { typ: "info", titel: "Was ist im Boden?", bild: "🟫",
-        text: "Boden besteht aus Sand, Lehm, Steinchen, Wasser, Luft – und Humus. Humus ist die dunkle Erde, die aus verrotteten Blättern und Pflanzen entsteht. Darin leben unzählige kleine Tiere: In einer Handvoll Boden mehr Lebewesen als Menschen auf der Erde!",
-        ru: "Почва состоит из песка, глины, камешков, воды, воздуха — и перегноя. Перегной — тёмная земля из перегнивших листьев и растений. В ней живёт бесчисленное множество маленьких животных: в горсти земли больше живых существ, чем людей на Земле!" },
+        text: "Boden besteht aus Sand, Lehm, Steinchen, Wasser, Luft – und Humus. Humus ist die dunkle Erde, die aus verrotteten Blättern und Pflanzen entsteht. Darin leben unzählige winzige Lebewesen: In einer Handvoll Boden mehr Lebewesen als Menschen auf der Erde!",
+        ru: "Почва состоит из песка, глины, камешков, воды, воздуха — и перегноя. Перегной — тёмная земля из перегнивших листьев и растений. В ней живёт бесчисленное множество крошечных живых существ: в горсти земли больше живых существ, чем людей на Земле!" },
       { typ: "wahl", frage: "Wer macht aus alten Blättern neue Erde?", ru: "Кто превращает старые листья в новую землю?", bild: "🍂", optionen: [
         { t: "Regenwürmer, Asseln und winzige Lebewesen", ru: "Черви, мокрицы и крошечные существа", ok: true, warum: "Richtig! Sie fressen und zersetzen die Blätter. So entsteht Humus.", warumRu: "Правильно! Они едят и разлагают листья. Так образуется перегной." },
         { t: "Die Sonne allein", ru: "Только солнце", ok: false, warum: "Die Arbeit machen Bodentiere wie Regenwürmer und Asseln.", warumRu: "Работу делают почвенные животные — черви и мокрицы." },
@@ -2027,7 +2027,7 @@ window.THEMEN.push(
         warum: "Stimmt! Darum dürfen Öl, Farbe oder Gift nie in den Boden gelangen.", warumRu: "Верно! Поэтому масло, краска или яд никогда не должны попадать в почву." },
       { typ: "daumen", satz: "Regenwürmer schaden dem Boden, weil sie Löcher hineingraben.", satzRu: "Дождевые черви вредят почве, потому что роют в ней ходы.", bild: "🌱", ok: false,
         warum: "Stimmt nicht! Regenwürmer lockern den Boden. Durch ihre Gänge kommen Luft und Wasser hinein, und ihr Kot macht die Erde fruchtbar.", warumRu: "Неверно! Дождевые черви рыхлят почву. По их ходам туда попадают воздух и вода, а их помёт делает землю плодородной." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Toll, {name}! Heb einen Stein im Garten an und schau, wer darunter wohnt – danach den Stein vorsichtig zurücklegen.",
         ru: "Отлично, {name}! Подними камень в саду и посмотри, кто под ним живёт, — потом осторожно положи камень обратно." }
     ]
@@ -2056,7 +2056,7 @@ window.THEMEN.push(
         { t: "Halloween", ru: "Хэллоуин", ok: false, warum: "Halloween kommt aus Irland und Amerika. Sorbisch ist die Vogelhochzeit.", warumRu: "Хэллоуин из Ирландии и Америки. Сорбский — птичья свадьба." }] },
       { typ: "daumen", satz: "In ganz Sachsen sprechen alle Menschen genau gleich.", satzRu: "Во всей Саксонии все люди говорят совершенно одинаково.", bild: "🗣️", ok: false,
         warum: "Stimmt nicht! Je nach Gegend klingt es anders – zum Beispiel Erzgebirgisch oder Vogtländisch. In der Lausitz sprechen manche auch Sorbisch.", warumRu: "Неверно! В разных местах говорят по-разному – например, по-рудногорски или по-фогтландски. В Лужице некоторые говорят и по-сорбски." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Wunderbar, {name}! Such dir eine Sehenswürdigkeit in Sachsen aus und halte einen kleinen Vortrag darüber – mit Bild und drei Stichwörtern.",
         ru: "Чудесно, {name}! Выбери достопримечательность Саксонии и сделай о ней маленький доклад — с картинкой и тремя ключевыми словами." }
     ]
@@ -2081,11 +2081,11 @@ window.THEMEN.push(
         { t: "Umschauen nach hinten", ru: "Оглянуться назад", ok: true, warum: "Genau! Dann: Handzeichen links, zur Mitte einordnen, Gegenverkehr vorlassen, nochmal umschauen und abbiegen.", warumRu: "Точно! Потом: знак рукой налево, перестроиться к середине, пропустить встречных, ещё раз оглянуться и повернуть." },
         { t: "Sofort abbiegen", ru: "Сразу повернуть", ok: false, warum: "Viel zu gefährlich! Erst umschauen und Handzeichen geben.", warumRu: "Слишком опасно! Сначала оглянись и подай знак." },
         { t: "Klingeln und losfahren", ru: "Позвонить и ехать", ok: false, warum: "Nein. Erst umschauen, Zeichen geben, einordnen.", warumRu: "Нет. Сначала оглянуться, подать знак, перестроиться." }] },
-      { typ: "daumen", satz: "Ein parkendes Auto überholt man links mit genug Abstand – erst nach dem Umschauen.", satzRu: "Припаркованную машину объезжают слева с достаточным расстоянием — только оглянувшись.", bild: "🚗", ok: true,
+      { typ: "daumen", satz: "An einem parkenden Auto fährt man links mit genug Abstand vorbei – erst nach dem Umschauen.", satzRu: "Припаркованную машину объезжают слева с достаточным расстоянием — только оглянувшись.", bild: "🚗", ok: true,
         warum: "Stimmt! Achte auch darauf, dass sich keine Autotür öffnet.", warumRu: "Верно! Следи и за тем, чтобы не открылась дверь машины." },
       { typ: "daumen", satz: "Mit dem Handy in der Hand Rad zu fahren ist in Ordnung, wenn man langsam fährt.", satzRu: "Ехать на велосипеде с телефоном в руке можно, если ехать медленно.", bild: "📱", ok: false,
         warum: "Nein! Beim Radfahren braucht man beide Augen und Hände für den Verkehr. Handy ist verboten.", warumRu: "Нет! На велосипеде нужны оба глаза и руки для дороги. Телефон запрещён." },
-      { typ: "info", titel: "Geschafft!", bild: "🦉",
+      { typ: "info", titel: "Geschafft!", bild: "\uE102",
         text: "Super, {name}! Üb mit einem Erwachsenen auf einem ruhigen Platz: einhändig fahren für das Handzeichen, umschauen ohne zu wackeln, sicher bremsen.",
         ru: "Супер, {name}! Потренируйся со взрослым на тихой площадке: ехать одной рукой для знака, оглядываться не виляя, уверенно тормозить." }
     ]

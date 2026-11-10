@@ -18,7 +18,7 @@
     { id: "w.loewe", de: "Löwe", artikel: "der", mehrzahl: "Löwen", silben: "Lö-we", bild: "🦁", themen: ["tiere"], ru: "лев", uk: "лев" },
     { id: "w.leiter", de: "Leiter", artikel: "die", mehrzahl: "Leitern", silben: "Lei-ter", bild: "🪜", themen: ["zuhause"], ru: "лестница", uk: "драбина" },
     { id: "w.nest", de: "Nest", artikel: "das", mehrzahl: "Nester", silben: "Nest", bild: "🪺", themen: ["natur"], ru: "гнездо", uk: "гніздо" },
-    { id: "w.nuss", de: "Nuss", artikel: "die", mehrzahl: "Nüsse", silben: "Nuss", bild: "🌰", themen: ["essen"], ru: "орех", uk: "горіх" },
+    { id: "w.nuss", de: "Nuss", artikel: "die", mehrzahl: "Nüsse", silben: "Nuss", bild: "🥜", themen: ["essen"], ru: "орех", uk: "горіх" },
     { id: "w.orange", de: "Orange", artikel: "die", mehrzahl: "Orangen", silben: "O-ran-ge", bild: "🍊", themen: ["essen"], ru: "апельсин", uk: "апельсин" },
     { id: "w.pinsel", de: "Pinsel", artikel: "der", mehrzahl: "Pinsel", silben: "Pin-sel", bild: "🖌️", themen: ["schule"], ru: "кисточка", uk: "пензлик" },
     { id: "w.pilz", de: "Pilz", artikel: "der", mehrzahl: "Pilze", silben: "Pilz", bild: "🍄", themen: ["natur"], ru: "гриб", uk: "гриб" },

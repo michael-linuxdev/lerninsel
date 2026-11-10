@@ -1,5 +1,5 @@
 // Bewegungspause zum Mitmachen (07.11.2026): Schritt-Typ „bewegung“ in den Sach- und Fachthemen.
-// { typ: "bewegung", frage, ru, uebungen: [{ pose, text, ru, sek }] } – je Übung ein Zeigebild (Strichfigur in Stil A, zwei Bilder im Wechsel),
+// { typ: "bewegung", frage, ru, uebungen: [{ pose, text, ru, sek }] } – je Übung ein Zeigebild (Strichfigur in Stil A, zwei Bilder im Wechsel; beim Flamingo nur ein Wechsel zur Halbzeit),
 // ein vorlesbarer Satz und ein Zähler. „Geschafft!“ wird erst nach Ablauf der Zeit frei, „Überspringen“ geht immer (ohne Nachteil – nicht jedes
 // Kind kann jede Übung). Die App sieht das Kind nicht: Der Schritt zählt nicht als Übungsaufgabe (tests/lehrplan.js) und gibt keine Fehler.
 // Test-Haken: window.__bewegung (posen, svg); window.__testSchnell = true lässt eine Sekunde in 40 ms vergehen.
@@ -33,6 +33,8 @@
   let uhren = [];
   const stopp = () => { uhren.forEach(clearInterval); uhren = []; };
   const takt = () => (window.__testSchnell ? 40 : 1000);
+  const RUHIG = { flamingo: true };   // Haltungen zum ruhigen Stehen: das Zeigebild wechselt nur einmal zur Halbzeit (Beinwechsel)
+  const sekunden = (n) => (n === 1 ? "Sekunde" : "Sekunden");
 
   // h = Helfer der Seite: { eintrag, vt, mini, blase, weiterKnopf, aufWeiter, ton, ht }
   function zeige(A, s, h) {
@@ -50,14 +52,17 @@
       const tid = h.eintrag(u.text, h.ht(u));
       A.innerHTML = `<div class="zaehler">Übung ${k + 1} von ${liste.length}</div><div class="bew-bild" data-pose="${u.pose}">${svg(u.pose, 0)}</div>` +
         `<p class="satz-gross bew-text">${h.vt(tid)}${h.mini(tid)}</p>` +
-        `<div class="bew-knoepfe"><button class="knopf haupt" id="bew-weiter" disabled>Noch <span id="bew-n">${rest}</span> Sekunden</button>` +
+        `<div class="bew-knoepfe"><button class="knopf haupt" id="bew-weiter" disabled>Noch <span id="bew-n">${rest}</span> <span id="bew-e">${sekunden(rest)}</span></button>` +
         `<button class="knopf" id="bew-ueberspringen">⏭️ Überspringen</button></div>`;
       const weiterB = A.querySelector("#bew-weiter"), bildEl = A.querySelector(".bew-bild");
-      uhren.push(setInterval(() => { bild++; bildEl.innerHTML = svg(u.pose, bild); }, window.__testSchnell ? 60 : 800));
-      uhren.push(setInterval(() => {
-        rest--; const n = A.querySelector("#bew-n"); if (n) n.textContent = rest;
-        if (rest <= 0) { clearInterval(uhren[1]); weiterB.disabled = false; weiterB.textContent = "Geschafft! ➡️"; h.ton("tipp"); }
-      }, takt()));
+      const halb = Math.floor(rest / 2);
+      if (!RUHIG[u.pose]) uhren.push(setInterval(() => { bild++; bildEl.innerHTML = svg(u.pose, bild); }, window.__testSchnell ? 60 : 800));
+      const zaehlUhr = setInterval(() => {
+        rest--; const n = A.querySelector("#bew-n"), e = A.querySelector("#bew-e"); if (n) n.textContent = rest; if (e) e.textContent = sekunden(rest);
+        if (RUHIG[u.pose] && rest === halb) bildEl.innerHTML = svg(u.pose, 1);
+        if (rest <= 0) { clearInterval(zaehlUhr); weiterB.disabled = false; weiterB.textContent = "Geschafft! ➡️"; h.ton("tipp"); }
+      }, takt());
+      uhren.push(zaehlUhr);
       weiterB.addEventListener("click", () => { h.ton("tipp"); k++; naechste(); });
       A.querySelector("#bew-ueberspringen").addEventListener("click", () => { k++; naechste(); });
     };

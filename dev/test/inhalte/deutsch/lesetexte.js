@@ -68,7 +68,7 @@
       fragen: [{ frage: "Wer hat Geburtstag?", optionen: [{ t: "Oma", e: "👵" }, { t: "Mia", e: "👧" }, { t: "Papa", e: "👨" }] },
         { frage: "Was macht Mia für Oma?", optionen: [{ t: "Sie malt ein Bild.", e: "🎨" }, { t: "Sie singt ein Lied.", e: "🎤" }, { t: "Sie kauft Blumen.", e: "💐" }] }] },
     { id: "lt.16", stufe: "2", titel: "An der Ampel", bild: "🚦", lz: ["de.le.05", "su.ge.02"],
-      text: "An der Am-pel ist es rot. Ben bleibt ste-hen. Erst bei Grün geht er ü-ber die Stra-ße. Er schaut nach links und nach rechts.",
+      text: "An der Am-pel ist es rot. Ben bleibt ste-hen. Bei Grün schaut er nach links und nach rechts. Dann geht er ü-ber die Stra-ße.",
       fragen: [{ frage: "Was macht Ben bei Rot?", optionen: [{ t: "Er bleibt stehen.", e: "🛑" }, { t: "Er rennt los.", e: "🏃" }, { t: "Er hüpft.", e: "🦘" }] },
         { frage: "Wann geht Ben über die Straße?", optionen: [{ t: "bei Grün", e: "🟢" }, { t: "bei Rot", e: "🔴" }, { t: "sofort", e: "⚡" }] }] },
     { id: "lt.17", stufe: "2", titel: "Ein Kartenteil", bild: "🗺️", lz: ["de.le.05"],
@@ -99,6 +99,6 @@
       stufe: ["1", "2"], laender: null, aufgaben: fragen, aufgabenJe: Object.assign({ "de.tm.02": fragen }, je), lernkartei: false, quelle: "spiele/lesen/" });
     // „Silben lesen“: Bildwörter aus dem Wortschatz-Kern in Silbenbögen (spiele/lesen/, Lernkartei „silbenwort“)
     Inhalte.registriere({ id: "de.lesen.silben", fach: "deutsch", titel: "Silben lesen", lz: ["de.le.03", "de.su.02"], stufe: ["1"], laender: null,
-      aufgaben: 80, lernkartei: true, quelle: "spiele/lesen/" });
+      aufgaben: 128, lernkartei: true, quelle: "spiele/lesen/" });
   }
 })();

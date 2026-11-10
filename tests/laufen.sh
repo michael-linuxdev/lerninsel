@@ -10,6 +10,7 @@ if [ "$TEST" = "rauchtest" ]; then
   node tests/inselkern.js || exit 1
   node tests/lehrplan.js || exit 1
   node tests/inhalte.js || exit 1
+  node tests/inhaltsfehler.js || exit 1
   node tests/wortschatz.js || exit 1
   node tests/koennen.js || exit 1
   node tests/mathe-generatoren.js || exit 1

@@ -288,7 +288,7 @@
     S.ton("juhu");
     if (a.art === "zahl") male();
     const teil = TEILE[lauf.pos];
-    $("hinweis").className = "hinweis gut"; $("hinweis").innerHTML = esc(`Genau! Die ${teil[0]} sind dran.`) + ru(`Точно! ${teil[1][0].toUpperCase() + teil[1].slice(1)} на месте.`);
+    $("hinweis").className = "hinweis gut"; $("hinweis").innerHTML = esc(`Genau! Die ${teil[0]} sind fertig.`) + ru(`Точно! ${teil[1][0].toUpperCase() + teil[1].slice(1)} на месте.`);
     lauf.pos++; zeigePlan(); lauf.pos--;
     lauf.timer = setTimeout(weiter, window.__testSchnell ? 120 : 1600);
   }

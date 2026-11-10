@@ -48,27 +48,31 @@
   // ---------- Zufall (Startzahl aus aufgaben.js, sonst Math.random) ----------
   const r = (zz, a, b) => a + Math.floor(zz() * (b - a + 1));
 
+  // (11.11.2026) Eltern-Wahl „Ergänzen“ gilt auch für die Hinweise; „schriftlich“ = dreistellige Rechnung (dort gibt es die kleine 1)
+  const minusArt = () => { try { return (((W.Spielwelt.lade("eltern") || {}).mathe || {}).minus) === "ergaenzen" ? "ergaenzen" : "abziehen"; } catch (e) { return "abziehen"; } };
+  const schriftlich = (o) => o.a >= 100 || o.b >= 100;
+  const ergaenzt = (o) => schriftlich(o) && minusArt() === "ergaenzen";
   // ---------- Katalog ----------
   const KATALOG = [
     { id: "op", name: "Rechenzeichen verwechselt",
       erkenne: (o, w) => (o.op === "+" && o.a > o.b && w === o.a - o.b) || (o.op === M && w === o.a + o.b) || (o.op === "·" && o.a && o.b && w === o.a + o.b && o.a * o.b !== o.a + o.b) || (o.op === ":" && w === o.a * o.b),
       kurz: (o) => `Schau aufs Zeichen: Da steht ${o.op === "·" ? "mal" : o.op === ":" ? "geteilt" : o.op === "+" ? "plus" : "minus"}.`,
       lang: (o) => [`Da steht ${({ "+": "plus", [M]: "minus", "·": "mal", ":": "geteilt" })[o.op]}, nicht ${({ "+": "minus", [M]: "plus", "·": "plus", ":": "mal" })[o.op]}.`,
-        `${o.a} ${o.op} ${o.b} heißt: ${({ "+": "dazutun", [M]: "wegnehmen", "·": `${o.b}-mal die ${o.a}`, ":": `${o.a} in ${o.b} gleiche Teile` })[o.op]}.`,
+        o.op === ":" ? `${o.a} : ${o.b} heißt: Wie oft passt die ${o.b} in die ${o.a}?` : `${o.a} ${o.op} ${o.b} heißt: ${({ "+": "dazutun", [M]: "wegnehmen", "·": `${o.a}-mal die ${o.b}` })[o.op]}.`,
         `Darum: ${o.a} ${o.op} ${o.b} = ${o.c}.`],
       kontrast: (o, zz) => { const a = r(zz, 12, 40), b = r(zz, 2, 9); return zr(zz() < 0.5 ? "+" : M, a, b, "Lies zuerst das Rechenzeichen."); } },
     { id: "kleinvongross", name: "Kleinere von der größeren Ziffer abgezogen",
       erkenne: (o, w) => o.op === M && hatBorgen(o.a, o.b) && w === kleinVonGross(o.a, o.b) && w !== o.c,
-      kurz: (o) => { const x = stellen(o.a)[0], y = stellen(o.b)[0]; return x < y ? `${x} ${M} ${y} geht nicht. Umdrehen darfst du nicht – tausch einen Zehner.` : "Oben reicht es nicht? Dann tausch einen von links."; },
+      kurz: (o) => { const x = stellen(o.a)[0], y = stellen(o.b)[0]; if (ergaenzt(o)) return x < y ? `Von ${y} bis ${x} geht nicht. Zähl bis ${x + 10} und schreib unten links eine kleine 1.` : "Reicht es oben nicht? Dann zähl bis zur Zahl mit 10 mehr."; return x < y ? `${x} ${M} ${y} geht nicht. Umdrehen darfst du nicht – tausch einen Zehner.` : "Oben reicht es nicht? Dann tausch einen von links."; },
       lang: (o) => [`Du hast oben und unten umgedreht.`,
-        `Weg kommt immer die untere Zahl. Reicht es nicht, tauschst du einen Zehner in 10 Einzelne.`,
+        ergaenzt(o) ? `Zähl immer von unten nach oben. Reicht es nicht, zählst du bis zur Zahl mit 10 mehr. Dann schreibst du unten links eine kleine 1.` : `Weg kommt immer die untere Zahl. Reicht es nicht, tauschst du einen Zehner in 10 Einzelne.`,
         `Darum: ${o.a} ${M} ${o.b} = ${o.c}.`],
-      kontrast: (o, zz) => { let a, b; do { a = r(zz, 3, 9) * 10 + r(zz, 0, 6); b = r(zz, 1, 5) * 10 + r(zz, 1, 9); } while (b % 10 <= a % 10 || b >= a); return zr(M, a, b, `Bei den Einern reicht ${a % 10} nicht: tausche einen Zehner in 10 Einer.`); } },
+      kontrast: (o, zz) => { let a, b; do { a = r(zz, 3, 9) * 10 + r(zz, 0, 6); b = r(zz, 1, 5) * 10 + r(zz, 1, 9); } while (b % 10 <= a % 10 || b >= a); return zr(M, a, b, `Bei den Einzelnen reicht ${a % 10} nicht: Tausch einen Zehner in 10 Einzelne.`); } },
     { id: "borgen", name: "Geborgt, aber nicht abgezogen",
       erkenne: (o, w) => o.op === M && hatBorgen(o.a, o.b) && w === borgenVergessen(o.a, o.b) && w !== o.c && w !== kleinVonGross(o.a, o.b),
-      kurz: () => "Du hast einen Zehner getauscht – dann ist links einer weniger.",
-      lang: (o) => [`Den Zehner hast du dir geholt.`,
-        `Links fehlt er dann. Dort ist einer weniger.`,
+      kurz: (o) => ergaenzt(o) ? "Denk an die kleine 1 unten. Sie zählt links mit." : "Du hast einen Zehner getauscht – dann ist links einer weniger.",
+      lang: (o) => [ergaenzt(o) ? `Du hast bis zur Zahl mit 10 mehr gezählt.` : `Den Zehner hast du dir geholt.`,
+        ergaenzt(o) ? `Dafür steht unten links eine kleine 1. Sie zählt dort mit.` : `Links fehlt er dann. Dort ist einer weniger.`,
         `Darum: ${o.a} ${M} ${o.b} = ${o.c}.`],
       kontrast: (o, zz) => KATALOG[1].kontrast(o, zz) },
     { id: "uebertrag", name: "Übertrag vergessen",
@@ -77,12 +81,12 @@
       lang: (o) => { const x = stellen(o.a)[0], y = stellen(o.b)[0]; return [x + y >= 10 ? `${x} und ${y} sind ${x + y}.` : "Irgendwo kommt 10 oder mehr heraus.",
         `Aus 10 Einzelnen machst du einen Zehner. Er wandert nach links.`,
         `Darum: ${o.a} + ${o.b} = ${o.c}.`]; },
-      kontrast: (o, zz) => { let a, b; do { a = r(zz, 1, 6) * 10 + r(zz, 3, 9); b = r(zz, 1, 3) * 10 + r(zz, 3, 9); } while ((a % 10) + (b % 10) <= 10 || a + b > 100); return zr("+", a, b, `${a % 10} + ${b % 10} ist mehr als 9: Denk an den Übertrag.`); } },
+      kontrast: (o, zz) => { let a, b; do { a = r(zz, 1, 6) * 10 + r(zz, 3, 9); b = r(zz, 1, 3) * 10 + r(zz, 3, 9); } while ((a % 10) + (b % 10) <= 10 || a + b > 100); return zr("+", a, b, `${a % 10} + ${b % 10} ist mehr als 9: Ein Zehner wandert nach links.`); } },
     { id: "uebertragdoppelt", name: "Zehner zweimal gezählt",
       erkenne: (o, w) => o.op === "+" && hatUebertrag(o.a, o.b) && w === o.c + 10,
-      kurz: () => "Die kleine 1 zählst du nur einmal.",
+      kurz: (o) => schriftlich(o) ? "Die kleine 1 zählst du nur einmal." : "Den neuen Zehner zählst du nur einmal.",
       lang: (o) => [`Du hast einen Zehner zu viel.`,
-        `Die kleine 1 kommt nur einmal dazu.`,
+        schriftlich(o) ? `Die kleine 1 kommt nur einmal dazu.` : `Der neue Zehner kommt nur einmal dazu.`,
         `Darum: ${o.a} + ${o.b} = ${o.c}.`],
       kontrast: (o, zz) => KATALOG[3].kontrast(o, zz) },
     { id: "stellenwert", name: "Einer zu den Zehnern gerechnet",
@@ -91,7 +95,7 @@
       lang: (o) => [`Die ${o.b} sind keine Zehner.`,
         `${o.a} hat ${Math.floor(o.a / 10)} Zehner und ${o.a % 10} Einzelne. Die ${o.b} kommt zu den Einzelnen.`,
         `Darum: ${o.a} ${o.op} ${o.b} = ${o.c}.`],
-      kontrast: (o, zz) => { const a = r(zz, 2, 8) * 10 + r(zz, 1, 4), b = r(zz, 2, 5); return zr(zz() < 0.5 ? "+" : M, a, b, "Einer zu den Einern, Zehner zu den Zehnern."); } },
+      kontrast: (o, zz) => { const a = r(zz, 2, 8) * 10 + r(zz, 1, 4), b = r(zz, 2, 5); return zr(zz() < 0.5 ? "+" : M, a, b, "Einzelne zu den Einzelnen, Zehner zu den Zehnern."); } },
     { id: "zaehlen", name: "Beim Zählen die Startzahl mitgezählt",
       erkenne: (o, w) => o.b <= 10 && ((o.op === "+" && w === o.c - 1) || (o.op === M && w === o.c + 1)),
       kurz: (o) => `Bei der ${o.a} bist du schon. Zähl ab der ${o.op === "+" ? o.a + 1 : o.a - 1}.`,
@@ -101,11 +105,11 @@
       kontrast: (o, zz) => { const op = zz() < 0.6 ? "+" : M, b = r(zz, 2, 5), a = r(zz, 4, 14) + (op === M ? b : 0); return zr(op, a, b, `Zähle ${b} Schritte – der erste Schritt geht schon weg von der Startzahl.`); } },
     { id: "malreihe", name: "Eine Reihe daneben",
       erkenne: (o, w) => o.op === "·" && o.a && o.b && w > 0 && w !== o.c && (w === o.c + o.a || w === o.c - o.a || w === o.c + o.b || w === o.c - o.b),
-      kurz: (o) => `Fast! Ein Schritt zu viel oder zu wenig. Zähl nach: ${o.b}-mal die ${o.a}.`,
+      kurz: (o) => `Fast! Ein Schritt zu viel oder zu wenig. Zähl nach: ${o.a}-mal die ${o.b}.`,
       lang: (o) => [`Du bist einen Schritt verrutscht.`,
-        `${o.a} · ${o.b} heißt: ${o.b}-mal die ${o.a}.`,
-        `Zähl in ${o.a}er-Schritten. Dann: ${o.a} · ${o.b} = ${o.c}.`],
-      kontrast: (o, zz) => { const a = o.a > 1 && o.a <= 10 ? o.a : r(zz, 3, 9), b = r(zz, 3, 9); return zr("·", a, b, `${b}-mal die ${a}: Zähle die Schritte genau.`); } },
+        `${o.a} · ${o.b} heißt: ${o.a}-mal die ${o.b}.`,
+        `Zähl in ${o.b}er-Schritten. Dann: ${o.a} · ${o.b} = ${o.c}.`],
+      kontrast: (o, zz) => { const a = o.a > 1 && o.a <= 10 ? o.a : r(zz, 3, 9), b = r(zz, 3, 9); return zr("·", a, b, `${a}-mal die ${b}: Zähle die Schritte genau.`); } },
     // (04.11.2026) Einmaleins und Geteilt: mal 0, geteilt mit minus verwechselt, eine Gruppe daneben
     { id: "malnull", name: "Mal 0 nicht als „keinmal“ verstanden",
       erkenne: (o, w) => o.op === "·" && (o.a === 0 || o.b === 0) && w !== 0 && (w === o.a + o.b || w === 1),
@@ -124,7 +128,9 @@
     { id: "geteiltreihe", name: "Geteilt: eine Gruppe daneben",
       erkenne: (o, w) => o.op === ":" && w > 0 && (w === o.c + 1 || w === o.c - 1),
       kurz: (o) => `Fast! Zähl nach: Wie oft passt die ${o.b} in die ${o.a}?`,
-      lang: (o) => [`Du bist eine Gruppe verrutscht.`,
+      lang: (o) => o.c > 10 ? [`Du bist eine Gruppe verrutscht.`,
+        `Mach die Probe mit mal: ${o.c} · ${o.b} = ${o.a}.`,
+        `Also ${o.a} : ${o.b} = ${o.c}.`] : [`Du bist eine Gruppe verrutscht.`,
         `Zähl in ${o.b}er-Schritten: ${Array.from({ length: Math.min(o.c, 10) }, (_, i) => o.b * (i + 1)).join(", ")}.`,
         `Das sind ${o.c} Schritte. Also ${o.a} : ${o.b} = ${o.c}.`],
       kontrast: (o, zz) => { const b = o.b > 1 && o.b <= 10 ? o.b : r(zz, 2, 9), q = r(zz, 3, 9); return zr(":", b * q, b, `Zähl in ${b}er-Schritten bis ${b * q}.`); } }
@@ -152,7 +158,7 @@
     kontrast: (o, zz) => {
       let a, b, op, c;
       do { op = o.op === M ? M : "+"; a = r(zz, 12, 80); b = r(zz, 3, 19); if (op === M) { const t = a; a = Math.max(t, b) + 20; } c = op === "+" ? a + b : a - b; } while (!dreht(c));
-      return zr(op, a, b, "Erst die Zehner hinschreiben, dann die Einer.");
+      return zr(op, a, b, "Erst die Zehner hinschreiben, dann die Einzelnen.");
     } });
   // Uhr (04.11.2026): Zeiger vertauscht, Stunde daneben (bei halb/Viertel ist der kurze Zeiger schon über die Zahl hinaus)
   const uhrText = (h, m) => `${((h - 1 + 12) % 12) + 1}:${String(m).padStart(2, "0")}`;
@@ -367,8 +373,8 @@
       return { ok: false, hinweis: `${s.x} + ${s.y}${s.ein ? " + 1" : ""} = ${s.summe}. Was schreibst du bei den ${st} hin?` };
     }
     const oben = s.x - s.ein;
-    if (s.aus && w === Math.abs(oben - s.y)) return { ok: false, fv: "kleinvongross", hinweis: `Oben ${oben}, unten ${s.y}. Umdrehen geht nicht. Tausch einen ${STELLE1[s.i + 1] || "Zehner"}: ${oben + 10} ${M} ${s.y}.` };
-    if (s.ein && w === s.ziffer + 1) return { ok: false, fv: "borgen", hinweis: art === "ergaenzen" ? `Denk an die kleine 1 unten: von ${s.y + 1} bis ${s.x}${s.x < s.y + 1 ? " (+10)" : ""}.` : `Du hast vorhin einen ${st1} getauscht. Oben steht jetzt nur noch ${oben}.` };
+    if (s.aus && w === Math.abs(oben - s.y)) return { ok: false, fv: "kleinvongross", hinweis: art === "ergaenzen" ? `Von ${s.y + s.ein} bis ${s.x} geht nicht. Zähl bis ${s.x + 10} und schreib unten links eine kleine 1.` : `Oben ${oben}, unten ${s.y}. Umdrehen geht nicht. Tausch einen ${STELLE1[s.i + 1] || "Zehner"}: ${oben + 10} ${M} ${s.y}.` };
+    if (s.ein && w === s.ziffer + 1) return { ok: false, fv: "borgen", hinweis: art === "ergaenzen" ? `Denk an die kleine 1 unten: von ${s.y + 1} bis ${s.aus ? s.x + 10 : s.x}.` : oben < 0 ? `Du hast vorhin einen ${st1} getauscht. Oben steht aber eine 0. Tausch erst einen von links.` : `Du hast vorhin einen ${st1} getauscht. Oben steht jetzt nur noch ${oben}.` };
     const satz = art === "ergaenzen" ? `Von ${s.y + s.ein} bis ${s.aus ? s.x + 10 : s.x} sind es ${s.ziffer}.` : `${s.aus ? oben + 10 : oben} ${M} ${s.y} = ${s.ziffer}.`;
     return { ok: false, hinweis: `Bei den ${st}: ${satz.replace(/\.$/, "")}. Versuch es nochmal.` };
   }

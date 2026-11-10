@@ -108,7 +108,7 @@
     { id: "s.d0.09", de: "Bitte langsam.", bild: "🐢", woerter: ["w.bitte"], ru: "Помедленнее, пожалуйста.", uk: "Повільніше, будь ласка." },
     { id: "s.d0.10", de: "Ich bin müde.", bild: "😴", woerter: ["w.muede"], ru: "Я хочу спать.", uk: "Я хочу спати." },
     { id: "s.d0.11", de: "Mir ist kalt.", bild: "🥶", woerter: ["w.kalt"], ru: "Мне холодно.", uk: "Мені холодно." },
-    { id: "s.d0.12", de: "Mein Bauch tut weh.", bild: "🤕", woerter: [], ru: "У меня болит живот.", uk: "У мене болить живіт." },
+    { id: "s.d0.12", de: "Mein Bauch tut weh.", bild: "🤢", woerter: [], ru: "У меня болит живот.", uk: "У мене болить живіт." },
     { id: "s.d0.13", de: "Ich bin krank.", bild: "🤒", woerter: ["w.krank"], ru: "Я болею.", uk: "Я хворію." },
     { id: "s.d0.14", de: "Wo ist meine Mama?", bild: "👩", woerter: ["w.mama"], ru: "Где моя мама?", uk: "Де моя мама?" },
     { id: "s.d0.15", de: "Ja, bitte.", bild: "👍", woerter: ["w.ja", "w.bitte"], ru: "Да, пожалуйста.", uk: "Так, будь ласка." },

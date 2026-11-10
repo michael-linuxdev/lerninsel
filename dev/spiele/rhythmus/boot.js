@@ -23,7 +23,7 @@
   const RHYTHMEN = {
     a: ["ta ta ta ta", "ta ta ti ta", "ti ta ti ta", "ta ti ti ta", "ti ti ta ta", "ta ti ta ta", "ti ti ti ta", "ta ta ta ti"],
     b: ["ta sch ta ta", "ti ta sch ta", "ta ti sch ta", "ti ti ta sch", "ta sch ti ta", "sch ta ti ta", "ti sch ti ta", "ta ta sch ti"],
-    c: ["taa ta ta", "ta ta taa", "ti ti taa", "taa ti ta", "ta sch ti ta", "taa ti ti", "ti taa ta", "ta ti taa"]
+    c: ["taa ta ta", "ta ta taa", "ti ti taa", "taa ti ta", "ta taa ta", "taa ti ti", "ti taa ta", "ta ti taa"]
   };
   const stufeFuer = (code) => (["vs", "1"].includes(code) ? "a" : code === "2" ? "b" : "c");
   const stufe = () => window.__rhythmusStufe || stufeFuer(((S.stufe && S.stufe()) || {}).code || "2");
@@ -61,15 +61,15 @@
 
   // ---------- Klang ----------
   let ac = null;
-  function klang(hoch, wann = 0) {
+  function klang(hoch, wann = 0, lang = 0) {   // lang = Haltedauer in Sekunden (Ta-a klingt hörbar länger als Ta + Pause)
     if (S.profil && S.profil.ton === false) return;
     try {
       const A = window.AudioContext || window.webkitAudioContext; if (!A) return;
       ac = ac || new A(); if (ac.state === "suspended") ac.resume();
       const t = ac.currentTime + wann, o = ac.createOscillator(), g = ac.createGain();
       o.type = "triangle"; o.frequency.setValueAtTime(hoch ? 880 : 520, t); o.frequency.exponentialRampToValueAtTime(hoch ? 440 : 260, t + 0.12);
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.5, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-      o.connect(g).connect(ac.destination); o.start(t); o.stop(t + 0.18);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.5, t + 0.005); if (lang > 0.2) g.gain.setValueAtTime(0.4, t + lang - 0.12); g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(0.15, lang));
+      o.connect(g).connect(ac.destination); o.start(t); o.stop(t + Math.max(0.18, lang + 0.03));
     } catch (e) { /* ohne Ton geht es auch */ }
   }
   // Vorspielen: Klang je Einsatz, Karte leuchtet im Takt mit; fertig() danach
@@ -79,7 +79,7 @@
     teile(r).forEach((k, i) => { bau.push({ i, ab: t }); t += B[k].lang; });
     const zeit = window.__testSchnell ? 60 : BEAT;
     const timer = [];
-    e.forEach(x => klang(x === 0, x * zeit / 1000));
+    { let ab = 0; teile(r).forEach(k => { B[k].ein.forEach(x => klang(ab + x === 0, (ab + x) * zeit / 1000, k === "taa" ? 1.7 * zeit / 1000 : 0)); ab += B[k].lang; }); }
     // jeder Klang lässt die Vorlage kurz aufleuchten (auch ohne Ton sichtbar)
     e.forEach(x => timer.push(setTimeout(() => { if (!el) return; el.classList.add("puls"); setTimeout(() => el.classList.remove("puls"), Math.min(140, zeit * 0.4)); }, x * zeit)));
     bau.forEach(({ i, ab }) => timer.push(setTimeout(() => { if (!el) return; el.querySelectorAll(".baustein").forEach(b => b.classList.toggle("an", +b.dataset.i === i)); $("paula-fig").classList.toggle("wipp"); }, ab * zeit)));
@@ -175,8 +175,8 @@
     if (erg.ok) return richtig(r);
     lauf.versuche++; S.ton("nein");
     if (window.Koennen && lauf.versuche === 1) Koennen.melde(["mu.ma.01"], false);
-    const tipp = erg.grund === "wenig" ? ["Da fehlt noch ein Schlag. Zähl die Punkte auf der Karte mit.", "Не хватает удара. Посчитай точки на карточке."]
-      : erg.grund === "viel" ? ["Das war ein Schlag zu viel. Zähl die Punkte auf der Karte mit.", "Это был лишний удар. Посчитай точки на карточке."]
+    const tipp = erg.grund === "wenig" ? (stufe() === "c" ? ["Da fehlt noch ein Schlag. Zähl die Noten auf der Karte mit.", "Не хватает удара. Посчитай ноты на карточке."] : ["Da fehlt noch ein Schlag. Zähl die Punkte auf der Karte mit.", "Не хватает удара. Посчитай точки на карточке."])
+      : erg.grund === "viel" ? (stufe() === "c" ? ["Das war ein Schlag zu viel. Zähl die Noten auf der Karte mit.", "Это был лишний удар. Посчитай ноты на карточке."] : ["Das war ein Schlag zu viel. Zähl die Punkte auf der Karte mit.", "Это был лишний удар. Посчитай точки на карточке."])
       : ["Fast! Ti-ti ist schnell, Ta ist langsam. Hör noch einmal hin.", "Почти! Ти-ти – быстро, Та – медленно. Послушай ещё раз."];
     if (lauf.versuche >= 2) return loesung(r, tipp);
     $("hinweis").className = "hinweis nein"; $("hinweis").innerHTML = esc(tipp[0]) + ru(tipp[1]);
@@ -231,7 +231,7 @@
     $("spiel").hidden = true;
     paula(`Wir sind beim Fest angekommen, ${S.profil.name || "du"}! Alle tanzen zu deinem Rhythmus.`, "Мы приплыли на праздник! Все танцуют под твой ритм.");
     $("ende").innerHTML = `<h2>🎉 Angekommen!</h2>
-      <p>${lauf.ersteRichtig} von ${lauf.liste.length} Rhythmen gleich beim ersten Mal richtig.${lauf.sterne ? ` ${lauf.sterne} neue ${lauf.sterne === 1 ? "Rhythmus" : "Rhythmen"}: +${lauf.sterne} ⭐` : ""}</p>
+      <p>${lauf.ersteRichtig} von ${lauf.liste.length} Rhythmen gleich beim ersten Mal richtig.${lauf.sterne ? ` ${lauf.sterne === 1 ? "1 neuer Rhythmus" : lauf.sterne + " neue Rhythmen"}: +${lauf.sterne} ⭐` : ""}</p>
       <div class="ende-knoepfe"><button class="knopf haupt" id="nochmal">🛶 Noch eine Fahrt</button><a class="knopf" href="../welt3d/heimat.html">🏝️ Zur Insel</a></div>`;
     $("ende").hidden = false;
     $("nochmal").addEventListener("click", () => { S.ton("tipp"); starte(); });

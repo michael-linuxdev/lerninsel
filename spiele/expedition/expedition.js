@@ -105,7 +105,8 @@
   // f = { id, ab, frage, ru, optionen: [richtig, …], warum, warumRu, lz, markiert? }
   function fragen() {
     const F = [], grosse = ORTE.filter(o => !["steg", "station", "truhe", "ballons"].includes(o.id) || o.id === "steg");
-    const neu = (f) => F.push(f);
+    const gross = (t) => t && !/^[xyхуXY] = /.test(t) ? t.charAt(0).toUpperCase() + t.slice(1) : t;
+    const neu = (f) => { f.warum = gross(f.warum); f.warumRu = gross(f.warumRu); F.push(f); };   // Erklärungen beginnen mit dem Ortsnamen („der Garten …“) – Satzanfang groß
     const haus = ort("haus"), steg = ort("steg");
     // Stufe a: oben/unten und links/rechts (deutlich entfernt von der Mitte), „ganz oben / ganz unten“
     grosse.filter(o => Math.abs(o.z) > R * 0.3).slice(0, 6).forEach(o => neu({ id: "ou-" + o.id, ab: "a", lz: ["ma.rf.02"], markiert: { ort: o.id },
@@ -134,7 +135,7 @@
     const paare = [[haus, steg], [haus, ort("eule")], [haus, ort("lager")], [steg, ort("leuchtturm")], [ort("lager"), haus], [ort("fipsi"), ort("biber")]].filter(([a, b]) => a && b);
     paare.forEach(([a, b]) => { const r4 = richtung(a, b, false), r8 = richtung(a, b, true);
       if (r4) neu({ id: `richtung-${a.id}-${b.id}`, ab: "b", lz: ["su.ge.03"], frage: `Du gehst ${von(a)} ${zu(b)}. In welche Himmelsrichtung?`, ru: `Ты идёшь от ${a.r} к ${b.r}. В какую сторону света?`,
-        optionen: [RICHTUNG[r4][0], ...["N", "O", "S", "W"].filter(x => x !== r4).slice(0, 2).map(x => RICHTUNG[x][0])], warum: `${b.name} liegt im ${RICHTUNG[r4][0]} von ${a.name}.`, warumRu: `${b.r} находится на ${RICHTUNG[r4][1]} от ${a.r}.` });
+        optionen: [RICHTUNG[r4][0], ...["N", "O", "S", "W"].filter(x => x !== r4).slice(0, 2).map(x => RICHTUNG[x][0])], warum: `${b.name} liegt im ${RICHTUNG[r4][0]} ${von(a)}.`, warumRu: `${b.r} находится на ${RICHTUNG[r4][1]} от ${a.r}.` });
       else if (r8 && r8.length === 2) neu({ id: `richtung8-${a.id}-${b.id}`, ab: "c", lz: ["su.ge.03"], frage: `Du gehst ${von(a)} ${zu(b)}. Welche Himmelsrichtung ist das?`, ru: `Ты идёшь от ${a.r} к ${b.r}: какая это сторона света?`,
         optionen: [RICHTUNG[r8][0], RICHTUNG[r8[0]][0], RICHTUNG[r8[1]][0]], warum: `Es geht nach ${RICHTUNG[r8[0]][0]} und nach ${RICHTUNG[r8[1]][0]} zugleich: ${RICHTUNG[r8][0]}.`, warumRu: `Одновременно на ${RICHTUNG[r8[0]][1]} и на ${RICHTUNG[r8[1]][1]}: ${RICHTUNG[r8][1]}.` }); });
     // Stufe c: Maßstab
@@ -194,14 +195,16 @@
       "Это карта острова. Север – вверху. Сориентируешься?");
     zeigeFrage();
   }
-  const ordne = (opt, pos) => { const n = pos % opt.length; return opt.slice(n).concat(opt.slice(0, n)); };
+  // Antworten fest gemischt je Frage (Saat aus Frage-ID und Eiland): kein Muster nach Fragenummer
+  const ordne = (opt, id) => { let h = 2166136261; for (const c of String(id)) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
+    const l = opt.slice(); for (let i = l.length - 1; i > 0; i--) { h = (Math.imul(h, 1664525) + 1013904223) >>> 0; const j = (h >>> 8) % (i + 1); [l[i], l[j]] = [l[j], l[i]]; } return l; };
   function zeigeFrage() {
     const f = lauf.liste[lauf.pos]; lauf.versuche = 0;
     $("bereich").innerHTML = `<section class="karte" id="fragekarte">
       <p class="stand">Frage ${lauf.pos + 1} von ${lauf.liste.length} · ${eilandE} ${esc(eilandName)}</p>
       ${kartenBild(f.markiert)}${legende()}
       <p class="frage" id="frage">${esc(f.frage)}${ru(f.ru)} <button class="vorlesen klein" id="frage-hoer" aria-label="Frage vorlesen">🔊</button></p>
-      <div class="optionen" id="optionen">${ordne(f.optionen, lauf.pos).map(o => `<button class="wahl-knopf" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>
+      <div class="optionen" id="optionen">${ordne(f.optionen, f.id).map(o => `<button class="wahl-knopf" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>
       <p class="hinweis" id="hinweis" aria-live="polite"></p></section>`;
     $("frage-hoer").addEventListener("click", () => { if (SP) SP.sprich(f.frage + " " + f.optionen.map(o => o.replace(/[-]/g, "")).join(", ")); });
     $("optionen").addEventListener("click", (e) => { const b = e.target.closest("[data-o]"); if (b && !b.disabled) antworte(b); });

@@ -81,7 +81,7 @@
     { wer: "robo", text: { de: "Spiel eine Runde! Wenn die Sonne untergeht, ist die Spielzeit für heute vorbei – morgen geht es weiter.", ru: "Сыграй раунд! Когда солнце сядет, время игры на сегодня закончится – завтра продолжим.", status: E } }
   ] });
   else Sz.registriere("spielorte", { titel: "Der Insel-Garten", etappe: "E6", blasen: [
-    { wer: "eule", text: { de: "{name}, komm mal mit! Neben dem Wissensbaum ist ein Garten aufgewacht.", ru: "{name}, пойдём! Рядом с деревом знаний проснулся сад.", status: E } },
+    { wer: "eule", text: { de: "{name}, komm mal mit! Im Süden der Insel ist ein Garten aufgewacht.", ru: "{name}, пойдём! На юге острова проснулся сад.", status: E } },
     { wer: "eule", text: { de: "Hier säst du Samen und gießt sie jeden Tag einmal. Dann wachsen sie.", ru: "Здесь ты сеешь семена и поливаешь их раз в день. Тогда они растут.", status: E } },
     { wer: "eule", text: { de: "Keine Sorge: Deine Pflanzen werden nie welk. Sie warten auf dich.", ru: "Не волнуйся: твои растения никогда не завянут. Они ждут тебя.", status: E } }
   ] });
@@ -201,12 +201,12 @@
 
   // Eigene Idee (07.11.2026): Feste aus Herkunftsländern als Episoden – kurz, sachlich, für alle Kinder; Kinder aus diesen Ländern erkennen ihr Fest wieder
   Sz.registriere("fest-neujahr", { titel: "Neujahr mit Väterchen Frost", fest: true, blasen: [
-    { wer: "baer", text: { de: "{name}, in vielen Ländern ist Neujahr ein großes Fest – zum Beispiel in Russland, der Ukraine und Bulgarien.", ru: "{name}, во многих странах Новый год – большой праздник, например в России, Украине и Болгарии.", status: E } },
+    { wer: "baer", text: { de: "{name}, in vielen Ländern ist Neujahr ein großes Fest – zum Beispiel in Russland und in einigen Nachbarländern.", ru: "{name}, во многих странах Новый год – большой праздник, например в России и в некоторых соседних странах.", status: E } },
     { wer: "baer", text: { de: "Dort bringt Väterchen Frost die Geschenke – mit seiner Enkelin, dem Schneemädchen. Sie liegen unter dem Tannenbaum!", ru: "Там подарки приносит Дед Мороз со своей внучкой Снегурочкой. Под ёлку!", status: E } },
     { wer: "papagei", text: { de: "Feiert ihr auch Neujahr? Erzähl jemandem, den du lieb hast, wie ihr feiert!", ru: "А вы тоже празднуете Новый год? Расскажи кому-нибудь, кого ты любишь, как вы празднуете!", status: E } }
   ] });
   Sz.registriere("fest-nouruz", { titel: "Nouruz – Neujahr im Frühling", fest: true, blasen: [
-    { wer: "papagei", text: { de: "{name}, jetzt beginnt der Frühling! Viele Familien feiern heute Nouruz – das heißt „neuer Tag“.", ru: "{name}, начинается весна! Многие семьи празднуют сегодня Навруз – это значит «новый день».", status: E } },
+    { wer: "papagei", text: { de: "{name}, jetzt beginnt der Frühling! Viele Familien feiern in diesen Tagen Nouruz – das heißt „neuer Tag“.", ru: "{name}, начинается весна! Многие семьи празднуют в эти дни Навруз – это значит «новый день».", status: E } },
     { wer: "papagei", text: { de: "Nouruz feiert man zum Beispiel im Iran, in Afghanistan und bei den Kurden. Es ist dort Neujahr.", ru: "Навруз празднуют, например, в Иране, Афганистане и у курдов. Там это Новый год.", status: E } },
     { wer: "biber", text: { de: "Man putzt das Haus, deckt einen schönen Tisch und besucht die Familie. Kennst du jemanden, der Nouruz feiert?", ru: "Убирают дом, накрывают красивый стол и навещают родных. Ты знаешь кого-нибудь, кто празднует Навруз?", status: E } }
   ] });

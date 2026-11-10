@@ -23,8 +23,8 @@ window.GESCHICHTE = [
       { typ: "artikel", e: "🦔", wort: "Igel", richtig: "der", ru: "ёж" },
       { typ: "artikel", e: "🌳", wort: "Baum", richtig: "der", ru: "дерево" },
       { typ: "luecke", e: "🍄", satz: "Der Pilz ist ___.", optionen: ["rot", "blau", "grün"], ru: "Гриб красный." },
-      { typ: "wort", e: "🦊", frage: "Wer bin ich?", optionen: ["der Fuchs", "der Hund", "die Katze"], ru: "Кто я?" },
-      { typ: "satz", e: "🦊", woerter: ["Der", "Fuchs", "ist", "rot."], ru: "Лиса рыжая." },
+      { typ: "wort", e: "\uE103", frage: "Wer bin ich?", optionen: ["der Fuchs", "der Hund", "die Katze"], ru: "Кто я?" },
+      { typ: "satz", e: "\uE103", woerter: ["Der", "Fuchs", "ist", "rot."], ru: "Лиса рыжая." },
       { typ: "sag", text: "Super! Schau mal, unter dem Baum liegt etwas. Das erste Kartenteil!", ru: "Супер! Смотри, под деревом что-то лежит. Первая часть карты!" }
     ]
   },
@@ -58,13 +58,13 @@ window.GESCHICHTE = [
       { typ: "artikel", e: "🍰", wort: "Kuchen", richtig: "der", ru: "торт" },
       { typ: "artikel", e: "🍎", wort: "Apfel", richtig: "der", ru: "яблоко" },
       { typ: "artikel", e: "🍌", wort: "Banane", richtig: "die", ru: "банан" },
-      { typ: "sag", text: "Beim Einkaufen sagt man: Ich möchte …, bitte.", ru: "Когда что-то покупают, говорят: Ich möchte …, bitte. (Я бы хотела …, пожалуйста.)" },
-      { typ: "luecke", e: "🥨", satz: "Ich ___ eine Brezel, bitte.", optionen: ["möchte", "möchten", "möchtest"], ru: "Я бы хотела брецель, пожалуйста." },
+      { typ: "sag", text: "Beim Einkaufen sagt man: Ich möchte …, bitte.", ru: "Когда что-то покупают, говорят: Ich möchte …, bitte. (Я бы хотел(а) …, пожалуйста.)" },
+      { typ: "luecke", e: "🥨", satz: "Ich ___ eine Brezel, bitte.", optionen: ["möchte", "möchten", "möchtest"], ru: "Я бы хотел(а) брецель, пожалуйста." },
       { typ: "luecke", e: "💶", satz: "Das kostet zwei Euro. Hier, ___!", optionen: ["bitte", "hallo", "tschüss"], ru: "Это стоит два евро. Вот, пожалуйста!" },
       { typ: "luecke", e: "😊", satz: "Vielen ___!", optionen: ["Dank", "Danke", "Danken"], ru: "Большое спасибо!" },
       { typ: "hoeren", sag: "Ich esse einen Apfel.", ru: "Я ем яблоко.",
         optionen: [{ e: "🍎", t: "der Apfel" }, { e: "🍌", t: "die Banane" }, { e: "🥕", t: "die Karotte" }] },
-      { typ: "satz", e: "🍞", woerter: ["Ich", "möchte", "ein", "Brot."], ru: "Я бы хотела хлеб." },
+      { typ: "satz", e: "🍞", woerter: ["Ich", "möchte", "ein", "Brot."], ru: "Я бы хотел(а) хлеб." },
       { typ: "sag", text: "Die Bäckerin lächelt und gibt dir etwas: das dritte Kartenteil!", ru: "Пекарь улыбается и даёт тебе что-то: третья часть карты!" }
     ]
   },
@@ -99,9 +99,9 @@ window.GESCHICHTE = [
         optionen: [{ e: "😴", t: "müde" }, { e: "😄", t: "fröhlich" }, { e: "😮", t: "überrascht" }] },
       { typ: "hoeren", sag: "Der König trägt eine Krone.", ru: "Король носит корону.",
         optionen: [{ e: "🤴", t: "der König" }, { e: "👸", t: "die Königin" }, { e: "🧙", t: "der Zauberer" }] },
-      { typ: "satz", e: "😊", woerter: ["Ich", "bin", "sehr", "glücklich."], ru: "Я очень счастлива." },
+      { typ: "satz", e: "😊", woerter: ["Ich", "bin", "sehr", "glücklich."], ru: "Я очень счастлив(а)." },
       { typ: "satz", e: "🗺️", woerter: ["Wir", "haben", "die", "Karte", "gefunden."], ru: "Мы нашли карту." },
-      { typ: "sag", text: "Du hast alle fünf Teile gefunden! Danke, {name}! Du bist super!", ru: "Ты нашла все пять частей! Спасибо, {name}! Ты супер!" }
+      { typ: "sag", text: "Du hast alle fünf Teile gefunden! Danke, {name}! Du bist super!", ru: "Ты нашёл (нашла) все пять частей! Спасибо, {name}! Ты супер!" }
     ]
   }
 ];

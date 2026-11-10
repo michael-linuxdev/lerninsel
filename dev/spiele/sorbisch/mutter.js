@@ -52,9 +52,9 @@ window.SORBISCH_MUTTER = [
       { typ: "sag", so: "Strowić, prosyć, so dźakować a so zamołwić – to je zdwórliwe.", text: "Grüßen, bitten, danken, sich entschuldigen: So sind wir höflich zueinander.", ru: "Здороваться, просить, благодарить, извиняться — так мы вежливы друг с другом." },
       { typ: "wahl", frage: "Du hast aus Versehen jemanden angerempelt. Was sagst du?", ru: "Ты нечаянно толкнул кого-то. Что ты скажешь?", optionen: ["Wodaj!", "Dźakuju so!", "Dobru nóc!"], e: "😬", warum: "„Wodaj!“ heißt „Entschuldige!“." },
       { typ: "wahl", frage: "Du bekommst ein Geschenk. Was sagst du?", ru: "Тебе дарят подарок. Что ты скажешь?", optionen: ["Wutrobny dźak!", "Wodaj!", "Božemje!"], e: "🎁", warum: "„Wutrobny dźak!“ heißt „Herzlichen Dank!“." },
-      { typ: "wahl", frage: "Im katholischen Teil der Lausitz grüßen sich viele Menschen mit …", ru: "В католической части Лужицы многие здороваются словами …", optionen: ["Pomhaj Bóh!", "Dobru nóc!", "Wjesołe hody!"], e: "⛪", warum: "„Pomhaj Bóh!“ ist ein alter sorbischer Gruß; man antwortet „Zapłać Bóh!“." },
+      { typ: "wahl", frage: "Ein alter sorbischer Gruß ist …", ru: "Старинное лужицкое приветствие — …", optionen: ["Pomhaj Bóh!", "Dobru nóc!", "Wjesołe hody!"], e: "⛪", warum: "„Pomhaj Bóh!“ ist ein alter sorbischer Gruß; man antwortet „Wjerš pomazy!“." },
       { typ: "wahl", frage: "Deine Freundin hat Geburtstag. Was wünschst du?", ru: "У подруги день рождения. Что ты пожелаешь?", optionen: ["Wšo najlěpše k narodninam!", "Wodaj!", "Dobre ranje!"], e: "🎂", warum: "„Wšo najlěpše k narodninam!“ heißt „Alles Gute zum Geburtstag!“." },
-      { typ: "sag", so: "Wulkotnje! Hraj z swójbu: Štó dźensa najwjace króć „prošu“ a „dźakuju so“ praji?", text: "Toll! Spielt in der Familie: Wer sagt heute am öftesten „bitte“ und „danke“?", ru: "Отлично! Поиграйте в семье: кто сегодня чаще всех скажет «пожалуйста» и «спасибо»?", letzte: true }]
+      { typ: "sag", so: "Wulkotnje! Hraj ze swójbu: Štó dźensa najwjace króć „prošu“ a „dźakuju so“ praji?", text: "Toll! Spielt in der Familie: Wer sagt heute am öftesten „bitte“ und „danke“?", ru: "Отлично! Поиграйте в семье: кто сегодня чаще всех скажет «пожалуйста» и «спасибо»?", letzte: true }]
   },
   {
     id: "sm-preprosenje", lb: 3, stufe: 1, lz: ["sm.sc.01"], name: "Přeprošenje – Eine Einladung schreiben", e: "💌", farbe: "#C2185B", grund: "#FCE4EF", mutter: true,
@@ -78,7 +78,7 @@ window.SORBISCH_MUTTER = [
     id: "sm-mica", lb: 5, stufe: 1, lz: ["sm.le.01"], name: "Mica – Ein kleiner Lesetext", e: "🐈‍⬛", farbe: "#2471A3", grund: "#E6F1FA", mutter: true,
     schritte: [
       { typ: "sag", so: "Čitaj tekst a wotmołw na prašenja.", text: "Lies den Text und beantworte die Fragen. Du kannst den Text immer wieder lesen.", ru: "Прочитай текст и ответь на вопросы. Текст можно перечитывать." },
-      { typ: "textfrage", titel: "Mica", text: "Mica je mała kóčka. Wona je čorna a ma běłe łapki. Mica rady spi na łožu. Rano pije mloko.", so: "Kajka je Mica?", frage: "Welche Farbe hat Mica?", ru: "Какого цвета Мица?", optionen: ["čorna", "běła", "bruna"], warum: "„Wona je čorna“ – sie ist schwarz." },
+      { typ: "textfrage", titel: "Mica", text: "Mica je mała kóčka. Wona je čorna a ma běłe łapki. Mica rady spi na łožu. Rano pije mloko.", so: "Kajku barbu ma Mica?", frage: "Welche Farbe hat Mica?", ru: "Какого цвета Мица?", optionen: ["čorna", "běła", "bruna"], warum: "„Wona je čorna“ – sie ist schwarz." },
       { typ: "textfrage", titel: "Mica", text: "Mica je mała kóčka. Wona je čorna a ma běłe łapki. Mica rady spi na łožu. Rano pije mloko.", so: "Hdźe Mica rady spi?", frage: "Wo schläft Mica gern?", ru: "Где Мица любит спать?", optionen: ["na łožu", "na blidźe", "w kuchni"], warum: "„Mica rady spi na łožu“ – auf dem Bett." },
       { typ: "textfrage", titel: "Mica", text: "Mica je mała kóčka. Wona je čorna a ma běłe łapki. Mica rady spi na łožu. Rano pije mloko.", so: "Što Mica rano pije?", frage: "Was trinkt Mica am Morgen?", ru: "Что Мица пьёт утром?", optionen: ["mloko", "wodu", "čaj"], warum: "„Rano pije mloko“ – Milch." },
       { typ: "sag", so: "Jara derje! Moluj Micu.", text: "Sehr gut! Mal Mica, wie sie auf dem Bett schläft.", ru: "Очень хорошо! Нарисуй Мицу, как она спит на кровати.", letzte: true }]
@@ -90,7 +90,7 @@ window.SORBISCH_MUTTER = [
       { typ: "wahl", so: "Štó bydli we wodźe?", frage: "Wer wohnt im Wasser?", ru: "Кто живёт в воде?", optionen: ["wódny muž", "připołdnica", "lutki"], e: "🌊", warum: "Der Wassermann – „wódny muž“ – wohnt im Teich." },
       { typ: "wahl", so: "Štó chodźi připołdnju po polu?", frage: "Wer geht mittags über das Feld?", ru: "Кто ходит в полдень по полю?", optionen: ["připołdnica", "wódny muž", "Kašpork"], e: "🌾", warum: "Die Mittagsfrau – „připołdnica“." },
       { typ: "wahl", frage: "Im Kasperletheater spielt eine lustige Figur mit Zipfelmütze. Wie heißt der Kasper auf Sorbisch?", ru: "В кукольном театре играет весёлый персонаж в колпаке. Как по-лужицки Касперле?", optionen: ["Kašpork", "Krabat", "Mica"], e: "🎭", warum: "Der Kasper heißt „Kašpork“." },
-      { typ: "sag", so: "Wulkotnje! Hraj z łopješkami abo z pupkami małe dźiwadło.", text: "Toll! Spiel mit Handpuppen oder Kuscheltieren ein kleines Theaterstück.", ru: "Отлично! Сыграй с куклами или мягкими игрушками маленький спектакль.", letzte: true }]
+      { typ: "sag", so: "Wulkotnje! Hraj z klankami abo z plyšowymi zwěrjatkami małe dźiwadło.", text: "Toll! Spiel mit Handpuppen oder Kuscheltieren ein kleines Theaterstück.", ru: "Отлично! Сыграй с куклами или мягкими игрушками маленький спектакль.", letzte: true }]
   },
 
   // ---------- Klasse 3 ----------
@@ -100,17 +100,17 @@ window.SORBISCH_MUTTER = [
       { typ: "sag", so: "W rozmołwje so słowa jimamy, druhim připosłuchamy a damy jim wurěčeć.", text: "Im Gespräch melden wir uns, hören zu, schauen den anderen an und lassen ihn ausreden.", ru: "В разговоре мы поднимаем руку, слушаем, смотрим на собеседника и даём ему договорить." },
       { typ: "wahl", frage: "Ein anderes Kind erzählt noch. Was machst du?", ru: "Другой ребёнок ещё рассказывает. Что ты делаешь?", optionen: ["Dam jemu wurěčeć.", "Skočim jemu do rěče.", "Hladam z wokna."], e: "👂", warum: "„Dam jemu wurěčeć“ – ich lasse ihn ausreden." },
       { typ: "wahl", frage: "Du willst im Kreis etwas sagen. Was machst du?", ru: "Ты хочешь что-то сказать в кругу. Что ты делаешь?", optionen: ["So słowa jimam.", "Wołam najhłośišo.", "Mjelču cyły dźeń."], e: "✋", warum: "„So słowa jimam“ – ich melde mich." },
-      { typ: "wahl", frage: "Du hast etwas nicht verstanden. Was sagst du?", ru: "Ты что-то не понял. Что ты скажешь?", optionen: ["Móžeš to hišće raz prajić?", "To je dołhowčasne.", "Božemje!"], e: "🤔", warum: "Nachfragen ist gut: „Kannst du das noch einmal sagen?“" },
+      { typ: "wahl", frage: "Du hast etwas nicht verstanden. Was sagst du?", ru: "Ты что-то не понял. Что ты скажешь?", optionen: ["Móžeš to hišće raz prajić?", "To je wostudłe.", "Božemje!"], e: "🤔", warum: "Nachfragen ist gut: „Kannst du das noch einmal sagen?“" },
       { typ: "sag", so: "Jara derje! Wumolujće swoje rozmołwne prawidła na plakat.", text: "Sehr gut! Malt eure Gesprächsregeln auf ein Plakat.", ru: "Очень хорошо! Нарисуйте свои правила разговора на плакате.", letzte: true }]
   },
   {
-    id: "sm-stawizna", lb: 3, stufe: 3, lz: ["sm.sc.01"], name: "Prěnje, potom, skónčnje – Eine Geschichte ordnen", e: "📚", farbe: "#CB4335", grund: "#FBE9E7", mutter: true,
+    id: "sm-stawizna", lb: 3, stufe: 3, lz: ["sm.sc.01"], name: "Najprjedy, potom, skónčnje – Eine Geschichte ordnen", e: "📚", farbe: "#CB4335", grund: "#FBE9E7", mutter: true,
     schritte: [
-      { typ: "sag", so: "Stawizna ma započatk, srjedź a kónc. Słowa „prěnje“, „potom“ a „skónčnje“ pomhaja.", text: "Eine Geschichte hat Anfang, Mitte und Schluss. Wörter wie „zuerst“, „dann“ und „zum Schluss“ helfen.", ru: "У истории есть начало, середина и конец. Помогают слова «сначала», «потом» и «наконец»." },
+      { typ: "sag", so: "Stawizna ma započatk, srjedź a kónc. Słowa „najprjedy“, „potom“ a „skónčnje“ pomhaja.", text: "Eine Geschichte hat Anfang, Mitte und Schluss. Wörter wie „zuerst“, „dann“ und „zum Schluss“ helfen.", ru: "У истории есть начало, середина и конец. Помогают слова «сначала», «потом» и «наконец»." },
       { typ: "satz", de: "Ordne den Morgen: aufstehen, waschen, frühstücken, zur Schule gehen.", ru: "Упорядочи утро: встать, умыться, позавтракать, пойти в школу.", woerter: ["Stanu.", "Myju so.", "Snědam.", "Du do šule."], e: "🌅" },
-      { typ: "wahl", frage: "Mit welchem Wort beginnt der Schluss einer Geschichte?", ru: "Каким словом начинается конец истории?", optionen: ["skónčnje", "prěnje", "potom"], e: "🏁", warum: "„skónčnje“ heißt „zum Schluss / endlich“." },
+      { typ: "wahl", frage: "Mit welchem Wort beginnt der Schluss einer Geschichte?", ru: "Каким словом начинается конец истории?", optionen: ["skónčnje", "najprjedy", "potom"], e: "🏁", warum: "„skónčnje“ heißt „zum Schluss / endlich“." },
       { typ: "wahl", frage: "Was macht eine Geschichte spannend?", ru: "Что делает историю интересной?", optionen: ["Eine Überraschung in der Mitte", "Immer derselbe Satz", "Gar kein Ende"], e: "😮", warum: "In der Mitte passiert etwas Überraschendes – das ist der Höhepunkt." },
-      { typ: "sag", so: "Wulkotnje! Napisaj stawiznu z prěnje – potom – skónčnje.", text: "Toll! Schreib eine eigene kleine Geschichte mit zuerst – dann – zum Schluss.", ru: "Отлично! Напиши свою маленькую историю: сначала — потом — наконец.", letzte: true }]
+      { typ: "sag", so: "Wulkotnje! Napisaj stawiznu z najprjedy – potom – skónčnje.", text: "Toll! Schreib eine eigene kleine Geschichte mit zuerst – dann – zum Schluss.", ru: "Отлично! Напиши свою маленькую историю: сначала — потом — наконец.", letzte: true }]
   },
   {
     id: "sm-zwuki", lb: 4, stufe: 3, lz: ["sm.rs.01"], name: "Dub abo dup? – Wörter verlängern", e: "🌳", farbe: "#1E8449", grund: "#E5F5EA", mutter: true,
@@ -155,7 +155,7 @@ window.SORBISCH_MUTTER = [
     id: "sm-dual", lb: 6, stufe: 3, lz: ["sm.su.01"], name: "Dwě ruce – Der Dual", e: "✌️", farbe: "#117A65", grund: "#E3F4EF", mutter: true,
     schritte: [
       { typ: "sag", so: "Serbšćina ma za dwě wěcy swójsku formu: dual. Jedna ruka – dwě ruce – tři ruki.", text: "Sorbisch hat eine besondere Form für genau zwei Dinge: den Dual. Das gibt es im Deutschen nicht!", ru: "В лужицком есть особая форма для двух предметов — двойственное число. В немецком такого нет!" },
-      { typ: "wahl", so: "jedna noha – dwě …", frage: "ein Bein – zwei …", ru: "одна нога — две …", optionen: ["nozy", "nohi", "noha"], e: "🦵", warum: "dwě nozy – Dual." },
+      { typ: "wahl", so: "jedna noha – dwě …", frage: "ein Bein – zwei …", ru: "одна нога — две …", optionen: ["noze", "nohi", "noha"], e: "🦵", warum: "dwě noze – Dual." },
       { typ: "wahl", so: "jedna kóčka – dwě …", frage: "eine Katze – zwei …", ru: "одна кошка — две …", optionen: ["kóčce", "kóčki", "kóčka"], e: "🐈", warum: "dwě kóčce – Dual." },
       { typ: "wahl", so: "jedyn bratr – dwaj …", frage: "ein Bruder – zwei …", ru: "один брат — два …", optionen: ["bratraj", "bratřa", "bratr"], e: "👬", warum: "dwaj bratraj – Dual." },
       { typ: "wahl", so: "jedna kniha – dwě …", frage: "ein Buch – zwei …", ru: "одна книга — две …", optionen: ["knize", "knihi", "kniha"], e: "📚", warum: "dwě knize – Dual." },
@@ -211,9 +211,9 @@ window.SORBISCH_MUTTER = [
     id: "sm-krabat", lb: 5, stufe: 4, lz: ["sm.le.01", "sm.ku.01"], name: "Krabat – Eine sorbische Sage lesen", e: "🧙", farbe: "#4A235A", grund: "#F0E6F5", mutter: true,
     schritte: [
       { typ: "sag", so: "Čitaj powěsć wo Krabaće.", text: "Lies die Sage von Krabat und beantworte die Fragen.", ru: "Прочитай предание о Крабате и ответь на вопросы." },
-      { typ: "textfrage", titel: "Krabat", text: "Krabat je chudy hólc. Wón dźěła w młynje w Čornym Chołmcu. Mišter młyna je zły kuzłar. Hólcy wuknu tam kuzłać a so do hawronow přeměnjeć. Krabat je mudry a skónčnje mištra dobudźe.", so: "Hdźe Krabat dźěła?", frage: "Wo arbeitet Krabat?", ru: "Где работает Крабат?", optionen: ["w młynje", "w šuli", "na polu"], warum: "In der Mühle – „w młynje“." },
-      { typ: "textfrage", titel: "Krabat", text: "Krabat je chudy hólc. Wón dźěła w młynje w Čornym Chołmcu. Mišter młyna je zły kuzłar. Hólcy wuknu tam kuzłać a so do hawronow přeměnjeć. Krabat je mudry a skónčnje mištra dobudźe.", so: "Do čeho so hólcy přeměnjeja?", frage: "In was verwandeln sich die Jungen?", ru: "В кого превращаются мальчики?", optionen: ["do hawronow", "do psow", "do rybow"], warum: "In Raben – „hawrony“." },
-      { typ: "textfrage", titel: "Krabat", text: "Krabat je chudy hólc. Wón dźěła w młynje w Čornym Chołmcu. Mišter młyna je zły kuzłar. Hólcy wuknu tam kuzłać a so do hawronow přeměnjeć. Krabat je mudry a skónčnje mištra dobudźe.", so: "Kajki je Krabat?", frage: "Wie ist Krabat?", ru: "Какой Крабат?", optionen: ["mudry", "zły", "mały"], warum: "„Krabat je mudry“ – klug." },
+      { typ: "textfrage", titel: "Krabat", text: "Krabat je chudy hólc. Wón dźěła w młynje w Čornym Chołmcu. Mišter młyna je zły kuzłar. Hólcy wuknu tam kuzłać a so do rapakow přeměnjeć. Krabat je mudry a skónčnje mištra dobudźe.", so: "Hdźe Krabat dźěła?", frage: "Wo arbeitet Krabat?", ru: "Где работает Крабат?", optionen: ["w młynje", "w šuli", "na polu"], warum: "In der Mühle – „w młynje“." },
+      { typ: "textfrage", titel: "Krabat", text: "Krabat je chudy hólc. Wón dźěła w młynje w Čornym Chołmcu. Mišter młyna je zły kuzłar. Hólcy wuknu tam kuzłać a so do rapakow přeměnjeć. Krabat je mudry a skónčnje mištra dobudźe.", so: "Do čeho so hólcy přeměnjeja?", frage: "In was verwandeln sich die Jungen?", ru: "В кого превращаются мальчики?", optionen: ["do rapakow", "do psow", "do rybow"], warum: "In Raben – „hawrony“." },
+      { typ: "textfrage", titel: "Krabat", text: "Krabat je chudy hólc. Wón dźěła w młynje w Čornym Chołmcu. Mišter młyna je zły kuzłar. Hólcy wuknu tam kuzłać a so do rapakow přeměnjeć. Krabat je mudry a skónčnje mištra dobudźe.", so: "Kajki je Krabat?", frage: "Wie ist Krabat?", ru: "Какой Крабат?", optionen: ["mudry", "zły", "mały"], warum: "„Krabat je mudry“ – klug." },
       { typ: "sag", so: "Jara derje! W Čornym Chołmcu (Schwarzkollm) móžeš Krabatowy młyn wopytać.", text: "Sehr gut! In Schwarzkollm kannst du die Krabatmühle besuchen.", ru: "Очень хорошо! В Шварцколме можно побывать на мельнице Крабата.", letzte: true }]
   },
   {
@@ -241,15 +241,15 @@ window.SORBISCH_MUTTER = [
       { typ: "wahl", frage: "„woda“ (Sorbisch) heißt auf Tschechisch …", ru: "«woda» (лужицкий) по-чешски …", optionen: ["voda", "water", "eau"], e: "💧", warum: "woda – voda – woda (Polnisch) – вода (Russisch)." },
       { typ: "wahl", frage: "„dom“ (Haus) heißt auf Polnisch …", ru: "«dom» (дом) по-польски …", optionen: ["dom", "house", "maison"], e: "🏠", warum: "Im Polnischen auch „dom“, im Russischen „дом“." },
       { typ: "wahl", frage: "Welche Sprache ist mit Sorbisch verwandt?", ru: "Какой язык родственен лужицкому?", optionen: ["Tschechisch", "Englisch", "Französisch"], e: "🇨🇿", warum: "Tschechisch ist – wie Sorbisch – eine westslawische Sprache." },
-      { typ: "sag", so: "Wulkotnje! Hdyž do Čěskeje abo Pólskeje jědźeš, budźeš wjele słowow zrozumić.", text: "Toll! Wenn du nach Tschechien oder Polen fährst, verstehst du schon viele Wörter.", ru: "Отлично! Если поедешь в Чехию или Польшу, многие слова уже поймёшь.", letzte: true }]
+      { typ: "sag", so: "Wulkotnje! Hdyž do Čěskeje abo Pólskeje jědźeš, zrozumiš hižo wjele słowow.", text: "Toll! Wenn du nach Tschechien oder Polen fährst, verstehst du schon viele Wörter.", ru: "Отлично! Если поедешь в Чехию или Польшу, многие слова уже поймёшь.", letzte: true }]
   },
   {
     id: "sm-swjedzen", lb: 7, stufe: 4, lz: ["sm.ku.01"], name: "Serbski swjedźeń – Ein sorbisches Fest", e: "🎉", farbe: "#C0392B", grund: "#FDECEA", mutter: true,
     schritte: [
-      { typ: "sag", so: "Na serbskim swjedźenju so spěwa, rejuje a mnozy nosydźa serbsku drastu.", text: "Auf einem sorbischen Fest wird gesungen und getanzt, und viele tragen die sorbische Tracht.", ru: "На лужицком празднике поют, танцуют, и многие надевают лужицкий национальный костюм." },
+      { typ: "sag", so: "Na serbskim swjedźenju so spěwa, rejuje a mnozy noša serbsku drastu.", text: "Auf einem sorbischen Fest wird gesungen und getanzt, und viele tragen die sorbische Tracht.", ru: "На лужицком празднике поют, танцуют, и многие надевают лужицкий национальный костюм." },
       { typ: "wahl", frage: "Wie heißt die Tracht auf Sorbisch?", ru: "Как по-лужицки национальный костюм?", optionen: ["drasta", "čapka", "kniha"], e: "👗", warum: "„drasta“ heißt Tracht (und Kleidung)." },
       { typ: "wahl", frage: "Was macht man auf einem Fest gemeinsam?", ru: "Что делают вместе на празднике?", optionen: ["spěwać a rejować", "spać a mjelčeć", "ličić a pisać"], e: "💃", warum: "Singen und tanzen – „spěwać a rejować“." },
       { typ: "satz", de: "Bau den Satz: „Wir feiern ein sorbisches Fest.“", ru: "Составь: «Мы празднуем лужицкий праздник».", woerter: ["Swjećimy", "serbski", "swjedźeń."], e: "🎶" },
-      { typ: "sag", so: "Jara derje! Plańće w swojej rjadowni mały serbski swjedźeń.", text: "Sehr gut! Plant in eurer Klasse ein kleines sorbisches Fest mit Liedern und Spielen.", ru: "Очень хорошо! Спланируйте в классе маленький лужицкий праздник с песнями и играми.", letzte: true }]
+      { typ: "sag", so: "Jara derje! Planujće w swojej rjadowni mały serbski swjedźeń.", text: "Sehr gut! Plant in eurer Klasse ein kleines sorbisches Fest mit Liedern und Spielen.", ru: "Очень хорошо! Спланируйте в классе маленький лужицкий праздник с песнями и играми.", letzte: true }]
   }
 ];

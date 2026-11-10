@@ -29,7 +29,7 @@
     ["bKa8 wKc6 wRb7 wRh1", "Zwei Türme arbeiten zusammen."],
     ["bKh1 bPh2 wKf2 wNe4", "Der Springer hat das letzte Wort."],
     ["bKe8 bPd7 bPe7 bPf7 bQd8 bBf8 wQh5 wBc4 wKe1", "Wo ist Schwarz schwach? Schau auf f7!"],
-    ["bKh8 bPh7 bPg7 wRf1 wBd4 wKg1", "Der Läufer passt auf – der Turm schlägt zu."]
+    ["bKh8 bPh7 bPg7 wRf1 wBd4 wKg1", "Der König ist hinter seinen Bauern eingesperrt – der Turm setzt matt."]
   ];
 
   // ---------- Brett ----------
@@ -82,7 +82,7 @@
     fertig = true; zeichne();
     const gewinner = st === "matt" ? R.gegner(amZug) : null;
     let text = st === "matt" ? (modus === "zwei" ? `Schachmatt! ${gewinner === R.WEISS ? "Weiß" : "Schwarz"} gewinnt!` : gewinner === R.WEISS ? "Schachmatt! Du hast gewonnen! 🎉" : "Schachmatt – diesmal hat Tilda gewonnen. Verlieren gehört dazu – nochmal?")
-      : st === "patt" ? "Patt – unentschieden! Der König kann nicht ziehen, steht aber nicht im Schach." : "Unentschieden – nur noch die Könige sind übrig.";
+      : st === "patt" ? "Patt – unentschieden! Wer am Zug ist, kann keinen Zug mehr machen, steht aber nicht im Schach." : "Unentschieden – nur noch die Könige sind übrig.";
     tilda(text); sprich(text); S.ton(gewinner === R.WEISS || modus === "zwei" ? "juhu" : "tipp");
     if (modus === "ki" && gewinner === R.WEISS) {
       const d = daten(), neu = !d.siege[kiStufe]; d.siege[kiStufe] = (d.siege[kiStufe] || 0) + 1; speichere(d);
@@ -220,7 +220,7 @@
       ["Tilda denkt nach …", "Тильда думает …"], ["Tilda überlegt …", "Тильда размышляет …"],
       ["Schachmatt! Weiß gewinnt!", "Мат! Белые выиграли!"], ["Schachmatt! Schwarz gewinnt!", "Мат! Чёрные выиграли!"], ["Schachmatt! Du hast gewonnen!", "Мат! Ты выиграл!"],
       ["Schachmatt – diesmal hat Tilda gewonnen. Verlieren gehört dazu – nochmal?", "Мат – на этот раз выиграла Тильда. Проигрывать – тоже часть игры. Ещё раз?"],
-      ["Patt – unentschieden! Der König kann nicht ziehen, steht aber nicht im Schach.", "Пат – ничья! Король не может ходить, но шаха нет."],
+      ["Patt – unentschieden! Wer am Zug ist, kann keinen Zug mehr machen, steht aber nicht im Schach.", "Пат – ничья! У того, чей ход, нет ни одного хода, но шаха нет."],
       ["Unentschieden – nur noch die Könige sind übrig.", "Ничья – остались только короли."],
       ["Du bist dran! Bauern ziehen geradeaus und schlagen schräg.", "Твой ход! Пешки ходят прямо, а бьют наискосок."],
       ["Geschafft! Dein Bauer ist angekommen – dafür gibt es einen Stern.", "Получилось! Твоя пешка дошла – за это звезда."], ["Geschafft! Dein Bauer ist angekommen!", "Получилось! Твоя пешка дошла!"],

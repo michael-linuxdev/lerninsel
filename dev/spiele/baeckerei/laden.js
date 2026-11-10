@@ -15,10 +15,10 @@
     vs: [["broetchen", 100], ["brezel", 200], ["muffin", 300]],
     a: [["broetchen", 100], ["brezel", 200], ["muffin", 300], ["brot", 400], ["kuchen", 500]],
     b: [["broetchen", 100], ["brezel", 200], ["croissant", 300], ["brot", 400], ["kuchen", 600], ["kekse", 800], ["torte", 1500]],
-    c: [["broetchen", 45], ["brezel", 80], ["croissant", 120], ["muffin", 195], ["kuchen", 240], ["brot", 350], ["torte", 1890]]
+    c: [["broetchen", 50], ["brezel", 80], ["croissant", 120], ["muffin", 200], ["kuchen", 250], ["brot", 350], ["torte", 1800]]   // (11.11.2026) im Kopf rechenbar: Vielfache von 10 ct
   };
   const NAME = {
-    broetchen: ["Brötchen", "Brötchen", "🥯", "булочка"], brezel: ["Brezel", "Brezeln", "🥨", "крендель"], muffin: ["Muffin", "Muffins", "🧁", "маффин"],
+    broetchen: ["Brötchen", "Brötchen", "🥖", "булочка"], brezel: ["Brezel", "Brezeln", "🥨", "крендель"], muffin: ["Muffin", "Muffins", "🧁", "маффин"],
     brot: ["Brot", "Brote", "🍞", "хлеб"], kuchen: ["Stück Kuchen", "Stück Kuchen", "🍰", "кусок пирога"], croissant: ["Croissant", "Croissants", "🥐", "круассан"],
     kekse: ["Dose Kekse", "Dosen Kekse", "🍪", "коробка печенья"], torte: ["Torte", "Torten", "🎂", "торт"]
   };
@@ -34,7 +34,7 @@
 
   // Bestellung: 1–3 Sorten, je 1–3 Stück; Summe passend zur Stufe (vs ≤ 5 €, a ≤ 10 €, b ≤ 100 €, c ≤ 20 €)
   function bestellung() {
-    const st = stufe(), max = { vs: 500, a: 1000, b: 10000, c: 2000 }[st], sorten = st === "vs" ? 1 + zufall(2) : 1 + zufall(3);
+    const st = stufe(), max = { vs: 500, a: 1000, b: 10000, c: 2000 }[st], sorten = st === "vs" || st === "c" ? 1 + zufall(2) : 1 + zufall(3);   // Kl. 3 rechnet mit Komma: höchstens zwei Sorten
     for (let v = 0; v < 50; v++) {
       const w = misch(WAREN[st]).slice(0, sorten).map(([id]) => ({ id, n: 1 + zufall(st === "vs" ? 2 : 3) }));
       const summe = w.reduce((s, x) => s + x.n * preis(x.id), 0);
@@ -42,7 +42,8 @@
     }
     return { waren: [{ id: WAREN[st][0][0], n: 1 }], summe: WAREN[st][0][1] };
   }
-  const bestellText = (w) => { const t = w.map(x => `${x.n === 1 && !/Stück/.test(NAME[x.id][0]) ? (["Brot", "Croissant", "Muffin", "Brötchen"].includes(NAME[x.id][0]) ? "ein" : "eine") : zahlwort(x.n)} ${x.n === 1 ? NAME[x.id][0] : NAME[x.id][1]}`); return t.length > 1 ? t.slice(0, -1).join(", ") + " und " + t[t.length - 1] : t[0]; };
+  // (11.11.2026) Akkusativ: „Ich möchte einen Muffin“
+  const bestellText = (w) => { const t = w.map(x => `${x.n === 1 && !/Stück/.test(NAME[x.id][0]) ? (NAME[x.id][0] === "Muffin" ? "einen" : ["Brot", "Croissant", "Brötchen"].includes(NAME[x.id][0]) ? "ein" : "eine") : zahlwort(x.n)} ${x.n === 1 ? NAME[x.id][0] : NAME[x.id][1]}`); return t.length > 1 ? t.slice(0, -1).join(", ") + " und " + t[t.length - 1] : t[0]; };
   const bestellEmoji = (w) => w.map(x => NAME[x.id][2].repeat(x.n)).join(" ");
 
   let lauf = null;

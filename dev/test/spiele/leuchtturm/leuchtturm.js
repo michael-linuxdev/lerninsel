@@ -202,7 +202,7 @@
   }
 
   // ---------- Schatzkammer ----------
-  const zahl = (o) => Object.values(o || {}).filter(x => x).length;
+  const zahl = (o) => typeof o === "number" ? o : Object.values(o || {}).filter(x => x).length;   // (11.11.2026) Zähler wie baeckerei.tage sind Zahlen
   function schaetze() {
     const L = (k) => S.lade(k) || {}, m = L("mathe");
     const mathe = ["k1", "k2", "k3", "k4", "k5"].reduce((n, w) => n + zahl(m[w]), 0);

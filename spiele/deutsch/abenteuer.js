@@ -230,7 +230,7 @@
         const t = mitName(s.text);
         blase(t, t, S.ht(s));
         // Paket D1: Gedicht oder Reim zeilenweise zeigen, mit eigenem Vorlese-Knopf
-        A.innerHTML = (s.gedicht ? gedichtHtml(s) + (SP.verfuegbar() ? `<button class="knopf" id="gedicht-hoeren">🔊 Gedicht anhören</button>` : "")
+        A.innerHTML = (s.gedicht ? gedichtHtml(s) + (SP.verfuegbar() ? `<button class="knopf" id="gedicht-hoeren">🔊 ${s.art === "text" ? "Text" : "Gedicht"} anhören</button>` : "")
           : `<div class="gross-emoji" aria-hidden="true">${k.ort}</div>`) + `<button class="knopf weiter" id="weiter">Weiter</button>`;
         if ($("gedicht-hoeren")) $("gedicht-hoeren").addEventListener("click", () => SP.sprich(s.gedicht.filter(Boolean).join(" … "), "de-DE"));
         $("weiter").addEventListener("click", () => { S.ton("tipp"); weiter(); });
@@ -288,7 +288,15 @@
         if (s.typ === "wort") { blase(s.frage, s.frage, S.ht(s)); oben = `<div class="gross-emoji" aria-hidden="true">${s.e}</div>`; }
         else if (s.typ === "luecke") { blase(luecke(s.satz), sprechbar(s.satz), S.ht(s)); oben = s.e ? `<div class="gross-emoji" aria-hidden="true">${s.e}</div>` : ""; }
         else { blase(luecke(s.satz), sprechbar(s.satz), S.ht(s)); oben = szene(s.ding, s.lage, s.ding2); }
-        A.innerHTML = oben + `<div class="optionen texte">` + opts.map((o, n) => `<button class="option" data-n="${n}">${o.t}</button>`).join("") + `</div>` + hinweis;
+        // Fragen zu einem Lesetext (zumText): Der Text lässt sich noch einmal aufklappen; im Lernstand (ohne den Text davor) steht er gleich da
+        const lt = textZu(s, k, lauf.pos), ltOffen = !!(lt && s.__kap);
+        const wieder = lt ? `<button class="klein-knopf" id="text-nochmal" aria-expanded="${ltOffen}">📄 Text noch einmal lesen</button><div id="text-wieder"${ltOffen ? "" : " hidden"}>${gedichtHtml(lt)}</div>` : "";
+        if (ltOffen) A.classList.add("lang");
+        A.innerHTML = oben + wieder + `<div class="optionen texte">` + opts.map((o, n) => `<button class="option" data-n="${n}">${o.t}</button>`).join("") + `</div>` + hinweis;
+        if (lt) $("text-nochmal").addEventListener("click", () => {
+          const w = $("text-wieder"); w.hidden = !w.hidden; $("text-nochmal").setAttribute("aria-expanded", String(!w.hidden));
+          A.classList.toggle("lang", !w.hidden); A.scrollTop = 0; S.ton("tipp");
+        });
         A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
           const o = opts[+b.dataset.n];
           antwort(b, o.richtig, () => {
@@ -472,6 +480,14 @@
   }
 
   // ---------- Paket D1: frei schreiben und sich selbst aufnehmen ----------
+  // Lesetext zu einer Frage: der letzte Text (sag mit gedicht, art "text") davor – im Lernstand im Kapitel der Aufgabe gesucht
+  function textZu(s, k, pos) {
+    if (!s.zumText) return null;
+    let liste = k.schritte, i = pos;
+    if (s.__kap) { const o = W.find(x => x.id === s.__kap); if (!o) return null; liste = o.schritte; i = liste.findIndex(x => x.satz === s.satz); }
+    for (; i >= 0; i--) if (liste[i].gedicht && liste[i].art === "text") return liste[i];
+    return null;
+  }
   const gedichtHtml = (s) => `<div class="gedicht">${s.titel ? `<b>${s.titel}</b>` : ""}${s.gedicht.map(z => z ? `<span>${z}</span>` : `<span class="leer"></span>`).join("")}</div>`;
   const bildfolgeHtml = (s) => `<div class="bildfolge" aria-hidden="true">${s.bilder.map((b, n) => `<div><span class="nr">${n + 1}</span>${b}</div>`).join("")}</div>`;
   // Einfache Prüfung ohne KI: Länge, Satzzahl, Großschreibung am Satzanfang, Satzzeichen am Ende, Pflichtwörter. Ergebnis: Liste von Punkten.

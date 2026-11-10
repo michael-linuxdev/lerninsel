@@ -2606,3 +2606,34 @@ Erste Erprobungsdatei (Tester „M“, iPad hoch und quer, Home-Bildschirm-App, 
   gilt wie im Vorbild 6 Stunden; weil hier Kinder spielen, schaltet „Ausblenden“ der Karte „Home-Bildschirm“ im Elternbereich den Hinweis dauerhaft ab. Nie in der installierten App, nie am Computer. Russisch (Entwurf) nur mit Hilfesprache.
   Test `installhinweis`. Auf echtem Safari noch ungeprüft.
 
+
+## Stand 14.11.2026 (vollständige Inhaltsprüfung und Korrektur aller Fundstellen; Gerätedatum 10.11.)
+**Auftrag:** „Prüfe die Lerninhalte vollständig", danach „Alle beheben". Alle Lerninhalte (Mathe-Stationen aller Wege, Erklär-Einheiten, Denkfehler, Deutsch-Werkstatt, Lesen/Wortschatz, Vorschule,
+Sachunterricht, weitere Fächer, Religion, Englisch, Sorbisch, Insel-Lernorte, Echte Welt, Szenen, Schach, Robo, Gefühle) wurden Zeile für Zeile gelesen, die Mathe-Generatoren zusätzlich über > 40 000
+erzeugte Aufgaben nachgerechnet (keine falsche Lösung). Geprüft aus Fachwissen, **nicht** gegen externe Quellen – das ersetzt keine Prüfung durch Menschen (Prüfstand bleibt Stufe 0).
+
+**Erledigt (rund 40 Fehler, 60 fragliche Stellen, viele Kleinigkeiten):**
+- **Technisch kaputt:** fehlendes Komma in `shared/echtewelt.js` (Ideen „malen"/„farbkreis" fehlten); Landkreis-Themen lieferten `fakten` als Text statt als Paare (Anzeige nur Einzelbuchstaben) –
+  Vorlage in `landkreise.js` neu (eigener Daumen-Satz je Kreis, gesperrte Ablenker, echtes Russisch); Schatzkammer-Truhe „Tage in der Bäckerei" zählte immer 0.
+- **Falsche/mehrdeutige Lösungen:** Werkstatt („vorliest", „gehört ___ Jungen", „Im Sommer ___", Würfelsatz, mehrdeutiges `ordnen`), Erklär-Einheit „Teilen mit Rest" (jetzt 17 : 4), Mathe: Bandornament
+  (symmetrische Form), „doppelt so groß", `k1daten` (Gleichstand), `k1legen` (Rechteck), `tabelle2`, `k5teiler`, `kombinieren2`; Hilfen (Nim, Rest 0, Kreuznetz, Rechenbrett, Zählreihe bei großem Ergebnis).
+- **Sprache:** Satzbausteine mit festem Artikel (Kasus) in sechs Mathe-Stationen, Einzahl/Mehrzahl („1 Tag"), „Thomas", Schreibschrift-Wörter (Nomen groß), Expedition („vom Haus"), Bäckerei, Rhythmus.
+- **Einheitlich:** „a · b heißt a-mal die b" überall; eigene Hinweise für Eltern-Wahl „Ergänzen"; Zahlenraum Kl. 2 bis 100 (Euro, Rechenwege), „Zahlen bis 20" ohne Zehnerschritte.
+- **Bilder:** Raute, allgemeines Viereck, stumpfes Dreieck deutlich; Wegeskizze mit Bogen; Polen-Beschriftung; Emojis, die die Lösung zeigten, neutral; Begleiter in Sachthemen/Fipsis Geschichte als
+  `Figuren.ZEICHEN` statt Emoji (die Anzeige ersetzte 🦉/🦫/🦊 nicht).
+- **Sensibel:** 116 111 und Vertrauenspersonen in `nein-sagen` und `kinderrechte`; „Vulva (außen), Scheide (innen)"; Pubertät „etwa 8 bis 14"; Neujahrs-Szene ohne Ukraine/Bulgarien.
+- **Sorbisch (weiter Entwurf):** žonop, křiwa wěža, woheń, róžownik, ličby, wopica, nós, Dual noze, „Wjerš pomazy!", zrudny, stólc, sněhakować, šćipać, zmij, Błóta, rapak, noša, Planujće, klanki, najprjedy,
+  křižerjo einheitlich, beide Geschlechtsformen. **Für Muttersprachler offen:** Alphabet-Reihenfolge (ć), „Wólbnowinowatosće", „Ja sym wosom lět", „Kak so tebi wjedźe".
+- **Listen:** „Wörter legen" wirklich lautgetreu (57 Wörter), „Silben lesen" ohne abstrakte Wörter (128), Liste verwechselbarer Bilder für Ablenker.
+- **Werkstatt-Format neu:** `sag` mit `art: "text"` (Knopf „Text anhören"), Fragen mit `zumText: true` zeigen „📄 Text noch einmal lesen" (im Lernstand steht der Text offen da).
+- **Wetter:** „Sturm" erst ab 62 km/h. Antworten in Expedition und Wetter-Drache fest je Frage gemischt (vorher nach Fragenummer gedreht).
+- **Test:** `node tests/inhaltsfehler.js` (62 Prüfungen in `tests/inhaltsfehler/*.js`, je Bereich ein Modul; läuft in `tests/laufen.sh`).
+
+**Entscheidungen (vom Auftraggeber: „Alle beheben"; im Einzelnen von der Sitzung getroffen):** Neujahrs-Szene „in Russland und in einigen Nachbarländern"; Bäckerei Stufe c mit glatten Preisen
+und höchstens zwei Sorten; Brötchen-Bild 🥖; `kombinieren2` immer 2 Hosen; Uhr-Hilfe nennt beide Sprechweisen; `lb` von en-numbers2/en-weather bleibt (so im Profil).
+
+**Bewusst nicht geändert:** Erklär-Einheit `k1plus20` zeigt nur Plus (fester Ablauf im Test); 112-Frage in drei Themen (gewollte Wiederholung); Bilder ohne besseres Noto-Emoji (Gabel, Jaguar, Mütze,
+Lampe, Ähre, Öl, Überraschung, Rehkitz, Uhr ⏰ – `tests/wortschatz.js` schreibt es fest); Dublette `w-satzzeichen`/`w-satzarten` (beide im Lehrplan zugeordnet).
+
+**Offen / nächstes Paket:** Russische Entwürfe der neuen Sätze (≈ 200 in den Mathe-Tabellen, dazu Landkreise) brauchen die Prüfliste; Sorbisch zum Muttersprachler; Anlaut-Bilder für Ä/Ö/Ü, Gabel, Jaguar,
+Mütze als eigene Zeichnungen; den längeren Ta-a-Ton am Gerät anhören. Danach weiter wie in „Stand 13.11.2026".

@@ -348,7 +348,7 @@
       { typ: "machen", text: "Jetzt du: Mach die 10 voll. Tipp die blauen Punkte an.", art: "dazu", a: 34, b: 6 },
       { typ: "ergaenzen", text: "Jetzt rechnest du: Wie viele fehlen bis zur 60?", frage: "57 + ? = 60", antwort: "3", optionen: ["3", "7", "13"] },
       { typ: "gegenbeispiel", text: "Robo rechnet: 36 + 4 = 30. Stimmt das?", stimmt: false, fv: "uebertrag", warum: "6 und 4 machen die 10 voll. Daraus wird ein Zehner. Also 40." },
-      { typ: "geschichte", text: "Ergänzen heißt: Wie viele fehlen, bis die 10 voll ist?", bilder: [
+      { typ: "geschichte", text: "Ergänzen heißt: Wie viele fehlen bis zum Ziel? Mach erst die 10 voll.", bilder: [
         { satz: "Schau, wie viele schon da sind.", bild: F({ z: 3, rot: 4 }) },
         { satz: "Füll die 10 auf.", bild: F({ z: 3, rot: 4, blau: 6 }) },
         { satz: "Zähl, wie viele du dazugetan hast.", bild: F({ z: 4, neu: true }) }] }
@@ -417,7 +417,7 @@
       { typ: "zeigen", text: "Runde 347 auf Zehner.", bilder: [
         { satz: "347 liegt zwischen 340 und 350.", bild: () => runden(347) },
         { satz: "Schau auf die letzte Zahl: 7.", bild: () => runden(347, { einer: true }) },
-        { satz: "7 ist näher an 350.", bild: () => runden(347, { einer: true, pfeil: true }) },
+        { satz: "Mit der 7 ist 347 näher an 350.", bild: () => runden(347, { einer: true, pfeil: true }) },
         { satz: "Also ist 347 ungefähr 350. Ab 5 geht es hoch.", bild: () => runden(347, { pfeil: true }) }] },
       { typ: "machen", text: "Jetzt du: 342 – welcher Zehner ist näher? Tipp ihn an.", art: "runden", a: 342, b: 1 },
       { typ: "ergaenzen", text: "Runde 265 auf Zehner. Bei 5 geht es hoch.", frage: "265 ist ungefähr ?", antwort: "270", optionen: ["260", "270", "300"] },
@@ -450,7 +450,7 @@
       { typ: "machen", text: "Jetzt du: Verdopple die 3. Tipp die blauen Punkte an.", art: "dazu", a: 3, b: 3 },
       { typ: "ergaenzen", text: "Jetzt rechnest du: das Doppelte von 5.", frage: "5 + 5 = ?", antwort: "10", optionen: ["10", "15", "6"] },
       { typ: "gegenbeispiel", text: "Robo rechnet: 4 + 4 = 7. Stimmt das?", stimmt: false, fv: "zaehlen", warum: "Robo hat die 4 mitgezählt. 4 und noch einmal 4 sind 8." },
-      { typ: "geschichte", text: "Doppelt heißt: zweimal gleich viele.", bilder: [
+      { typ: "geschichte", text: "Doppelt heißt: zweimal gleich viele. Die Hälfte ist einer der zwei gleichen Teile.", bilder: [
         { satz: "Erst einmal.", bild: F({ rot: 4 }) },
         { satz: "Noch einmal genauso viele.", bild: F({ rot: 4, warten: 4 }) },
         { satz: "Alle zusammen zählen.", bild: F({ rot: 4, blau: 4 }) }] }
@@ -493,7 +493,7 @@
         { satz: "Also 17 : 5 = 3 Rest 2.", bild: () => reihen(5, 3, 3, 2) }] },
       { typ: "machen", text: "Jetzt du: 14 : 4. Tipp auf ➕, bis es nicht mehr reicht.", art: "gruppen", a: 3, b: 4, rest: 2 },
       { typ: "ergaenzen", text: "Jetzt rechnest du: 23 : 5. Vier Reihen sind 20.", frage: "23 : 5 = 4 Rest ?", antwort: "3", optionen: ["3", "4", "5"] },
-      { typ: "gegenbeispiel", text: "Robo teilt 15 durch 4. Er sagt: „3 Reihen, Rest 5.“ Stimmt das?", stimmt: false, fv: "geteiltreihe", warum: "Mit 5 übrig passt noch eine Reihe mit 4 hinein. Richtig sind 3 Reihen und Rest 3." },
+      { typ: "gegenbeispiel", text: "Robo teilt 17 durch 4. Er sagt: „3 Reihen, Rest 5.“ Stimmt das?", stimmt: false, fv: "geteiltreihe", warum: "5 ist mehr als eine Reihe. Es passt noch eine Reihe mit 4 hinein. Richtig sind 4 Reihen und Rest 1." },
       { typ: "geschichte", text: "Der Rest ist immer kleiner als eine ganze Reihe.", bilder: [
         { satz: "Reihen legen.", bild: () => reihen(5, 2, 3) },
         { satz: "Bis keine ganze Reihe mehr passt.", bild: () => reihen(5, 3, 3) },
@@ -566,7 +566,7 @@
       { satz: "Die 2 sind 2 Zehner. Darum endet die Zeile einen Platz weiter links.", bild: () => schriftMalMehr(234, 26, 1, 0) },
       { satz: "Dann mit der 6: 234 · 6 = 1404. Diese Zeile endet ganz rechts.", bild: () => schriftMalMehr(234, 26, 2, 1) },
       { satz: "Zum Schluss zusammenzählen: 4680 + 1404 = 6084.", bild: () => schriftMalMehr(234, 26, 3) }] },
-    { typ: "machen", text: "Jetzt du: Bau die erste Zeile: 468.", art: "bauen", a: 468 },
+    { typ: "machen", text: "Jetzt du: Rechne 234 · 2. Bau das Ergebnis für die erste Zeile.", art: "bauen", a: 468 },
     { typ: "ergaenzen", text: "Jetzt rechnest du: 312 · 23. Erst die Zeile mit der 2.", frage: "312 · 2 = ?", antwort: "624", optionen: ["624", "634", "6240"] },
     { typ: "gegenbeispiel", text: "Robo rechnet: 234 · 26 = 1872. Stimmt das?", stimmt: false, fv: "verrueckt", warum: "Robo hat die erste Zeile nicht eingerückt. Richtig ist 4680 + 1404 = 6084." },
     { typ: "geschichte", text: "Jede Zahl unten bekommt eine Zeile. Jede Zeile rückt weiter. Dann zusammenzählen.", bilder: [
