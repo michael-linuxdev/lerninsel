@@ -108,7 +108,13 @@
     sprich(ohneTags(texte[id].de));
   }
   const weiterKnopf = (text = "Weiter") => `<button class="knopf weiter" id="weiter">${text}</button>`;
-  function aufWeiter() { const w = $("weiter"); if (w) w.addEventListener("click", () => { S.ton("tipp"); weiter(); }); }
+  // zeig (Erprobung 10.11.2026): Erscheint „Weiter“ erst nach einer Antwort, rollt die Aufgabenkarte so weit, dass der Knopf zu sehen ist
+  // (im Querformat lag er sonst unter dem Rand der Karte – „Ergebnis und Erklärung da, kein Weiter-Knopf“).
+  function aufWeiter(zeig = true) {
+    const w = $("weiter"); if (!w) return;
+    w.addEventListener("click", () => { S.ton("tipp"); weiter(); });
+    if (zeig && w.scrollIntoView) requestAnimationFrame(() => { try { w.scrollIntoView({ block: "nearest" }); } catch (e) { /* alt */ } });
+  }
   function weiter() { SP.stopp(); aufraeumen(); lauf.pos++; schritt(); }
   let aufraeumer = [];
   function aufraeumen() { aufraeumer.forEach(f => f()); aufraeumer = []; }
@@ -161,7 +167,7 @@
       case "sag":
         blase(s.text, S.ht(s));
         A.innerHTML = `<div class="gross-emoji" aria-hidden="true">${s.e || l.e}</div>` + weiterKnopf();
-        aufWeiter(); break;
+        aufWeiter(false); break;
 
       case "wahl": case "chat": {
         const opts = mische(s.optionen);
@@ -371,20 +377,47 @@
       <g transform="translate(656 372)"><circle r="32" fill="#FFC83D" stroke="${D}" stroke-width="4"/><text y="12" text-anchor="middle" font-size="32">⭐</text></g>
     </svg>`;
   }
-  function zeigeFuehrerschein() { $("urkunde").innerHTML = fuehrerscheinSvg(); zeige("fs"); }
+  // „Als Bild speichern“ (Erprobung 10.11.2026: ging auf dem iPad als Home-Bildschirm-App nicht): Das Bild wird schon beim Anzeigen
+  // vorbereitet, damit „Teilen“ direkt im Antippen starten kann (Safari erlaubt navigator.share nur unmittelbar nach dem Tippen –
+  // vorher lagen Bild-Laden und toBlob dazwischen). Geht Teilen nicht: Download; als Home-Bildschirm-App (dort gibt es keinen Download)
+  // erscheint das Bild groß mit dem Hinweis „gedrückt halten“ (data-kontext="an" erlaubt dort das Safari-Menü).
+  let fsBild = null, fsWartet = null;
+  const fsName = () => `${(name() || "mein").toLowerCase().replace(/[^a-z0-9äöüß-]+/gi, "-")}-tablet-fuehrerschein.png`;
+  function bereiteBild() {
+    fsBild = null;
+    return fsWartet = new Promise(fertig => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const c = document.createElement("canvas"); c.width = 1440; c.height = 840;
+          c.getContext("2d").drawImage(img, 0, 0, 1440, 840);
+          c.toBlob(blob => { fsBild = blob; fertig(blob); }, "image/png");
+        } catch (e) { fertig(null); }
+      };
+      img.onerror = () => fertig(null);
+      img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(fuehrerscheinSvg());
+    });
+  }
+  const alsApp = () => typeof window.__standalone === "boolean" ? window.__standalone : !!navigator.standalone || !!(window.matchMedia && matchMedia("(display-mode: standalone)").matches);
+  function bildOhneTeilen(blob) {
+    const url = URL.createObjectURL(blob);
+    if (!alsApp()) { const a = document.createElement("a"); a.href = url; a.download = fsName(); a.click(); S.meldung("Das Bild liegt jetzt bei deinen Downloads."); return "download"; }
+    $("fs-bild-gross").src = url; $("fs-halten").hidden = false; return "halten";
+  }
+  function speichereBild(blob) {
+    if (!blob) { S.meldung("Das Bild konnte nicht erstellt werden. Mach ein Bildschirmfoto!"); return Promise.resolve("fehler"); }
+    let datei = null; try { datei = new File([blob], fsName(), { type: "image/png" }); } catch (e) { /* altes Safari */ }
+    if (datei && navigator.canShare && navigator.canShare({ files: [datei] }))
+      return navigator.share({ files: [datei] }).then(() => "geteilt", e => e && e.name === "AbortError" ? "abgebrochen" : bildOhneTeilen(blob));
+    return Promise.resolve(bildOhneTeilen(blob));
+  }
+  let fsLetztes = null;
+  function zeigeFuehrerschein() { $("urkunde").innerHTML = fuehrerscheinSvg(); $("fs-halten").hidden = true; zeige("fs"); bereiteBild(); }
   $("fs-bild").addEventListener("click", () => {
-    const img = new Image();
-    img.onload = () => {
-      const c = document.createElement("canvas"); c.width = 1440; c.height = 840;
-      c.getContext("2d").drawImage(img, 0, 0, 1440, 840);
-      c.toBlob(async blob => {
-        const datei = new File([blob], `${name().toLowerCase()}-tablet-fuehrerschein.png`, { type: "image/png" });
-        if (navigator.canShare && navigator.canShare({ files: [datei] })) { try { await navigator.share({ files: [datei] }); return; } catch (e) { if (e.name === "AbortError") return; } }
-        const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = datei.name; a.click();
-      }, "image/png");
-    };
-    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(fuehrerscheinSvg());
+    S.ton("tipp");
+    (fsBild ? speichereBild(fsBild) : (fsWartet || bereiteBild()).then(speichereBild)).then(wie => { fsLetztes = wie; });
   });
+  $("fs-halten-zu").addEventListener("click", () => { $("fs-halten").hidden = true; });
   $("fs-zurueck").addEventListener("click", () => { S.ton("tipp"); zeige("liste"); zeichneListe(); });
   $("fs-zeigen").addEventListener("click", () => { S.ton("tipp"); zeigeFuehrerschein(); });
   $("zur-liste").addEventListener("click", () => { SP.stopp(); aufraeumen(); S.ton("tipp"); lauf = null; zeige("liste"); zeichneListe(); });
@@ -394,5 +427,5 @@
   zeichneListe();
   // Aus „Meine Ecke“: direkt den Führerschein zeigen – aber nur, wenn das Kind ihn wirklich hat
   if (location.hash === "#fuehrerschein" && daten().fuehrerschein) zeigeFuehrerschein();
-  window.__medien = { starte, get lauf() { return lauf; } };
+  window.__medien = { starte, get lauf() { return lauf; }, bild: () => ({ bereit: !!fsBild, groesse: fsBild ? fsBild.size : 0, letztes: fsLetztes, halten: !$("fs-halten").hidden }), bildFertig: () => fsWartet, fuehrerscheinSvg };
 })();

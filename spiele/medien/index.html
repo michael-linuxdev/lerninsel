@@ -147,6 +147,10 @@
   .ende-knoepfe .knopf { min-height: 62px; font-size: 1.3rem; }
   #fs-ansicht > div { width: min(760px, 100%); }
   #urkunde svg { width: min(720px, 100%); height: auto; display: block; margin: 0 auto 16px; border-radius: 18px; box-shadow: 0 12px 0 rgba(0,0,0,.1); }
+  #fs-halten { position: fixed; inset: 0; z-index: 30; background: rgba(40,30,80,.72); display: grid; align-content: center; justify-items: center; gap: 14px; padding: 18px; }
+  #fs-halten[hidden] { display: none; }
+  #fs-halten p { margin: 0; background: #fff; border-radius: 18px; padding: 12px 18px; font-size: 1.25rem; font-weight: 600; text-align: center; }
+  #fs-bild-gross { width: min(720px, 100%); height: auto; border-radius: 14px; background: #fff; -webkit-touch-callout: default; -webkit-user-select: auto; user-select: auto; pointer-events: auto; }
   .fs-knoepfe { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   /* Paket 2 (07.11.2026): Symbol mit kurzer Beschriftung darunter (Handy: nur Symbol, Name über aria-label) */
   .knopf.rund.mit-text { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: auto; min-width: 64px; padding: 4px 8px; border-radius: 20px; line-height: 1.05; }
@@ -202,6 +206,11 @@
     <div class="fs-knoepfe">
       <button class="knopf" id="fs-bild">⬇️ Als Bild speichern</button>
       <button class="knopf haupt" id="fs-zurueck">Zur Übersicht</button>
+    </div>
+    <div id="fs-halten" hidden role="dialog" aria-label="Bild sichern">
+      <p>👆 Halte das Bild gedrückt. Dann tippe auf „In Fotos sichern“.</p>
+      <img id="fs-bild-gross" alt="Dein Tablet-Führerschein" data-kontext="an">
+      <button class="knopf haupt" id="fs-halten-zu">Fertig</button>
     </div>
   </div>
 </section>

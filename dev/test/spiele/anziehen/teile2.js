@@ -119,7 +119,17 @@
       const rumpfStueck = stueck(T.rumpf, [[M.rumpf(art.saum || 322, art.ausschnitt || 0)]], c, innen, saumQuer(art.saum || 322) +
         (art.buendchen ? strich(`M108 ${(art.saum || 322) - 9} C130 ${(art.saum || 322) - 5} 170 ${(art.saum || 322) - 5} 192 ${(art.saum || 322) - 9}`, KF, 1.4, 0.5) : ""));
       const aermel = ohne ? "" : stueck(T.armL, [M.armL(bis)], c, aermelInnen(false), saumArm(bis, false, art.buendchen)) + stueck(T.armR, [M.armR(bis)], c, aermelInnen(true), saumArm(bis, true, art.buendchen));
-      return kapuze + rumpfStueck + aermel + traeger + kragen;
+      // Naht statt Kontur (Erprobung 10.11.2026: „Kontur zwischen Armen und Oberkörper hässlich“): Über dem Rumpf wird die dicke Ärmel-Kontur
+      // vom Rumpfstoff überdeckt; an ihrer Stelle bleibt eine feine Naht. Außen behält der Ärmel seine Kontur.
+      let naht = "";
+      if (!ohne) {
+        const m = maske([[M.rumpf(art.saum || 322, art.ausschnitt || 0)]]), leib = neu(), n = dunkel(c, 0.4);
+        naht = m.def + `<mask id="${leib}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="380" height="640"><path d="${T.rumpf}" fill="#fff" stroke="#fff" stroke-width="${2 * WEIT}" stroke-linejoin="round"/></mask>` +
+          `<g class="aermel-naht" mask="url(#${m.id})"><g mask="url(#${leib})"><path d="${T.rumpf}" fill="${c}" stroke="${c}" stroke-width="${2 * WEIT}" stroke-linejoin="round"/>${innen}` +
+          `<path d="${T.armL}" fill="none" stroke="${n}" stroke-width="1.6" opacity=".5"/><path d="${T.armR}" fill="none" stroke="${n}" stroke-width="1.6" opacity=".5"/>` +
+          saumQuer(art.saum || 322) + `</g></g>`;
+      }
+      return kapuze + rumpfStueck + aermel + naht + traeger + kragen;
     };
   }
   const OBEN = {

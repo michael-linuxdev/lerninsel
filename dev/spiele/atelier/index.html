@@ -38,7 +38,7 @@
   .leinwand-rahmen { background: #9A6A3F; padding: 10px; border-radius: 18px; box-shadow: 0 6px 0 rgba(0,0,0,.15); }
   #leinwand { display: block; width: 640px; height: 480px; background: #fff; border-radius: 8px; touch-action: none; }
   .aktionen { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .aktionen .knopf { min-height: 54px; margin: 0; }
+  .aktionen .knopf { min-height: 54px; margin: 0; padding-left: 14px; padding-right: 14px; }   /* sechs Knöpfe in einer Zeile (10.11.2026: 💾 Speichern) */
   .werkzeug { background: #fff; border-radius: 22px; padding: 12px; display: grid; gap: 12px; box-shadow: 0 6px 0 rgba(0,0,0,.08); }
   .reihe { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .farbe { width: 38px; height: 38px; border-radius: 50%; box-shadow: inset 0 0 0 3px rgba(0,0,0,.15); padding: 0; }
@@ -101,6 +101,7 @@
   .leinwand-rahmen { position: relative; }
   .leinwand-rahmen.spiegel::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; border-left: 3px dashed rgba(123,85,184,.55); pointer-events: none; }
   #spiegeln[aria-pressed="true"] { background: #EADFFF; box-shadow: inset 0 0 0 3px #7B55B8; }
+  #speichern.gespeichert { background: #CFF3E4; }
 </style>
 </head>
 <body>
@@ -131,7 +132,8 @@
           <button class="knopf" id="zurueck-schritt">↩️ Rückgängig</button>
           <button class="knopf" id="spiegeln" aria-pressed="false">🦋 Spiegeln</button>
           <button class="knopf" id="neu">🧽 Neu</button>
-          <button class="knopf haupt" id="fertig">✅ Fertig – aufhängen</button>
+          <button class="knopf" id="speichern">💾 Speichern</button>
+          <button class="knopf haupt" id="fertig" aria-label="Fertig – aufhängen">✅ Fertig</button>
         </div>
       </div>
       <div class="werkzeug">

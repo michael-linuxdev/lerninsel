@@ -2178,6 +2178,9 @@
       const a = aufgabe(station, neueSaat());
       const schluessel = a.text + "|" + (a.frage || "") + "|" + a.antwort + "|" + (a.bild || "").length;
       if (gesehen.has(schluessel)) continue;
+      // Kurze Runden (Einstufungstest: 2 je Station) fragen bei Auswahl-Aufgaben nicht zweimal dieselbe Antwort ab
+      // (Erprobung 10.11.2026: „80 ? 80“ und „63 ? 63“ – zweimal „=“ prüft das Vergleichen nicht)
+      if (anzahl <= 3 && a.art === "wahl" && (a.optionen || []).length >= anzahl && versuche < 200 && liste.some(b => b.antwort === a.antwort)) continue;
       gesehen.add(schluessel); liste.push(a);
     }
     return liste;

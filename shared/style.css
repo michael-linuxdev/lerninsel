@@ -42,6 +42,7 @@ body {
 /* iPad-Meldung 08.11.2026: Gedrückthalten einer Kachel öffnete Safaris Link-Vorschau („Öffnen“, „Zur Leseliste“, „Link kopieren“, „Teilen“).
    Für Kinder aus: kein Callout, kein Ziehen von Links und Bildern. Eingabefelder behalten Auswahl, Lupe und Einfügen. Gegenstück in core.js (contextmenu, dragstart). */
 a, button, img, svg, [role="button"], .tuer, .knopf { -webkit-touch-callout: none; -webkit-user-drag: none; }
+[data-kontext="an"] { -webkit-touch-callout: default; }   /* z. B. das Führerschein-Bild zum „In Fotos sichern“ (10.11.2026) */
 input, textarea, select, [contenteditable="true"], [contenteditable=""] { -webkit-touch-callout: default; -webkit-user-select: text; user-select: text; }
 
 button {
@@ -94,8 +95,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 /* NA-60 Teil 2: Vorschule und Klasse 1 lesen größer (weniger Blasen, größere Schrift) */
 .szene.jung .szene-text { font-size: clamp(1.3rem, 1.6vw + .8rem, 1.6rem); line-height: 1.3; }
 .szene-hilfe { margin: 8px 0 0; font-size: 1.2rem; line-height: 1.35; color: #5a4a7a; background: var(--himmel); border-radius: 14px; padding: 8px 12px; }
-.szene-hilfe.entwurf { outline: 3px dashed #E8A33D; }
-.szene-hilfe.entwurf::after { content: " (Entwurf, ungeprüft)"; font-size: .8rem; color: #B06F00; }
+/* Erprobung 10.11.2026: der Zusatz „(Entwurf, ungeprüft)“ und der gestrichelte Rand störten im Bild – der Prüfstatus steht im Elternbereich
+   (Prüfliste Russisch) und in der Prüfleiste des Erprobungsmodus, nicht in der Sprechblase des Kindes. Die Klasse .entwurf bleibt (Tests, Prüfleiste). */
 .szene-hilfe[dir="rtl"] { text-align: right; }
 .szene-knoepfe { grid-column: 1 / -1; display: flex; gap: 10px; justify-content: flex-end; align-items: center; flex-wrap: wrap; margin-top: 10px; }
 .szene-knoepfe [hidden] { display: none; }

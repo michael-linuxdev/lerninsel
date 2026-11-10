@@ -93,9 +93,12 @@
 
   // ---------- Anzeige für Belohnungen (oben, blockiert nicht) ----------
   const schlange = []; let zeigt = false;
-  function hinweis(titel, text, farbe = "#4B2380") {
-    schlange.push({ titel, text, farbe }); if (!zeigt) naechster();
+  // ziel (Erprobung 10.11.2026): Weg ab der Startseite, z. B. "spiele/album/" – Antippen der Meldung führt dorthin (sonst schließt Antippen nur)
+  function hinweis(titel, text, farbe = "#4B2380", ziel = "") {
+    schlange.push({ titel, text, farbe, ziel }); if (!zeigt) naechster();
   }
+  const wurzel = () => { const k = document.querySelector('script[src*="shared/core.js"]'); return k ? k.getAttribute("src").replace(/shared\/core\.js.*$/, "") : "./"; };
+  let hinweisZiel = "";
   function naechster() {
     const h = schlange.shift(); if (!h) { zeigt = false; return; }
     zeigt = true;
@@ -106,9 +109,9 @@
         "max-width:min(560px,calc(100vw - 24px));border:0;border-radius:24px;padding:14px 22px;color:#fff;text-align:left;" +
         "font:500 1.1rem Fredoka,sans-serif;box-shadow:0 8px 0 rgba(0,0,0,.18);transition:transform .35s cubic-bezier(.3,1.4,.5,1);cursor:pointer";
       document.body.appendChild(el);
-      el.addEventListener("click", () => schliesse());
+      el.addEventListener("click", () => { const z = hinweisZiel; schliesse(); if (z) location.href = wurzel() + z; });
     }
-    el.style.background = h.farbe;
+    el.style.background = h.farbe; hinweisZiel = h.ziel || ""; el.dataset.ziel = hinweisZiel;
     el.innerHTML = `<b style="display:block;font-size:1.35rem;font-weight:700">${h.titel}</b>${h.text}`;
     requestAnimationFrame(() => { el.style.transform = "translate(-50%,0)"; });
     S.ton("juhu");
@@ -132,7 +135,7 @@
       if (b.sterne) S.gibSterne(b.sterne);
       if (b.frei) S.schalteFrei(b.frei, 0);
       if (b.vorteil && !d.vorteile.includes(b.vorteil)) d.vorteile.push(b.vorteil);
-      hinweis(`${f.icon} ${f.name}: Stufe ${s}!`, belohnungsText(b), f.farbe);
+      hinweis(`${f.icon} ${f.name}: Stufe ${s}!`, belohnungsText(b), f.farbe, "spiele/ich/#kann");   // Erprobung 10.11.2026: Antippen → Meine Ecke „Mein Können“
     }
     speichere(d);
   }

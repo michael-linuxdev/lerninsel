@@ -140,11 +140,15 @@
     const hoehe = (Math.ceil(knoten.length / spalten) - 1) * dy + 170;
     karte.style.height = hoehe + "px";
 
+    // Kehren am Rand (Erprobung 10.11.2026: „Mathepfad links und rechts abgeschnitten“): Der Bogen reicht höchstens so weit hinaus, dass das
+    // 30 px breite Band noch ganz im Bild liegt (eine Bézier-Kurve reicht 0,75 × Kontrollabstand über die Station hinaus).
+    const rand = Math.max(0, (karte.parentElement.clientWidth - breite) / 2), bogenMax = Math.max(40, Math.min(dx * 0.9, (dx / 2 + rand - 22) / 0.75));
+    karte.dataset.bogen = Math.round(bogenMax * 0.75 + 15);   // so weit reicht das Band über die Randstation hinaus (Test)
     let d = `M${pos[0][0]} ${pos[0][1]}`;
     for (let i = 1; i < pos.length; i++) {
       const [x0, y0] = pos[i - 1], [x1, y1] = pos[i];
       if (y0 === y1) d += ` L${x1} ${y1}`;
-      else { const bogen = x0 > breite / 2 ? dx * 0.9 : -dx * 0.9; d += ` C${x0 + bogen} ${y0} ${x1 + bogen} ${y1} ${x1} ${y1}`; }
+      else { const bogen = x0 > breite / 2 ? bogenMax : -bogenMax; d += ` C${x0 + bogen} ${y0} ${x1 + bogen} ${y1} ${x1} ${y1}`; }
     }
     const jetzt = jetztIndex();
     zeigeEinstufungAngebot();
@@ -252,6 +256,7 @@
     $("erklaer-ja").addEventListener("click", () => { S.ton("tipp"); erklaere(station.id, () => starteRunde(nr)); });
     $("erklaer-nein").addEventListener("click", () => { S.ton("tipp"); starteRunde(nr); });
   }
+  let erklaerAufraeumen = () => {};   // Zuhörer der letzten Erklär-Einheit (falls sie mittendrin verlassen wurde)
   // Erklär-Einheit Schritt für Schritt; fertig() danach (z. B. die Runde starten oder zur Aufgabe zurück)
   function erklaere(id, fertig) {
     // Kindgerecht (03.11.2026): zeigen (Schritt für Schritt) → machen (selbst tippen) → ergänzen → Robos Fehler → Bildergeschichte.
@@ -267,7 +272,8 @@
     function schritt() {
       const st = schritte[i]; versuche = 0;
       $("punkte").innerHTML = schritte.map((_, k) => `<span class="punkt${k < i ? " gut" : k === i ? " jetzt" : ""}"></span>`).join("");
-      const kopf = `<p class="erklaer-titel">💡 ${titel}</p>`;
+      // ⬅️ (Erprobung 10.11.2026): einen Erklär-Schritt zurück – auch durch Wischen nach rechts über die Tafel
+      const kopf = `<p class="erklaer-titel">${i > 0 ? `<button class="knopf rund erklaer-zurueck" id="erklaer-zurueck" aria-label="Einen Schritt zurück">⬅️</button>` : ""}💡 ${titel}</p>`;
       const letzter = i === schritte.length - 1;
       // A „Schritt für Schritt“ und C „Bildergeschichte“
       if (st.typ === "zeigen") {
@@ -444,11 +450,21 @@
         }));
       }
     }
+    const tafel = $("tafel");
+    const zurueck = () => { if (i > 0) { S.ton("tipp"); if (window.Sprache) Sprache.stopp(); i--; schritt(); } };
+    const aufKlick = (e) => { if (e.target.closest && e.target.closest("#erklaer-zurueck")) zurueck(); };
+    let wischStart = null;
+    const aufStart = (e) => { const t = e.changedTouches ? e.changedTouches[0] : e; wischStart = { x: t.clientX, y: t.clientY }; };
+    const aufEnde = (e) => { if (!wischStart) return; const t = e.changedTouches ? e.changedTouches[0] : e, dx = t.clientX - wischStart.x, dy = t.clientY - wischStart.y; wischStart = null;
+      if (dx > 90 && Math.abs(dy) < 60) zurueck(); };
+    tafel.addEventListener("click", aufKlick); tafel.addEventListener("touchstart", aufStart, { passive: true }); tafel.addEventListener("touchend", aufEnde, { passive: true });
+    const aufraeumen = () => { tafel.removeEventListener("click", aufKlick); tafel.removeEventListener("touchstart", aufStart); tafel.removeEventListener("touchend", aufEnde); };
+    erklaerAufraeumen(); erklaerAufraeumen = aufraeumen;
     function weiter() {
       i++;
       if (i < schritte.length) return schritt();
       const d = daten(); d.erklaert = d.erklaert || {}; d.erklaert[id] = 1; S.speichere("mathe", d);
-      lauf = alt; fertig();
+      aufraeumen(); lauf = alt; fertig();
     }
     schritt();
   }
@@ -622,7 +638,8 @@
     const E = window.Erprobung; if (!E) return;
     if (!lauf._erp) { lauf._erp = true; E.runde(lauf.training ? "mathe:training" : lauf.einstufung ? "mathe:einstufung" : lauf.lernstand ? `mathe:lernstand-${WEG}-${lauf.lernstand}` : "mathe:" + (lauf.station.id || ""), lauf.liste.length); }
     E.zeige({ inhalt: "mathe:" + a.station, schritt: a.saat != null ? "saat " + a.saat : null, text: [a.frage, a.text].filter(Boolean).join(" · "), fach: "mathe",
-      klasse: WEG === "k1" && (S.stufe() || {}).code === "vs" ? "vs" : WEG.slice(1), daten: ST.find(s => s.id === a.station), el: document.querySelector("#rechnen-ansicht .rechnen") });
+      klasse: WEG === "k1" && (S.stufe() || {}).code === "vs" ? "vs" : WEG.slice(1), daten: ST.find(s => s.id === a.station), el: document.querySelector("#rechnen-ansicht .rechnen"),
+      loesung: a.antwort == null ? "" : String(a.antwort) + (a.einheit ? " " + a.einheit : "") });
   }
 
   function aktualisiereLuecke() {

@@ -39,6 +39,9 @@
     const b = el && el.closest && el.closest("button, a, [role=button], [data-vorlesen], .wort, .karte-wort");
     if (!b) return false;
     if (b.hasAttribute("data-vorlesen")) return true;
+    // Erprobung 10.11.2026: Knöpfe der Hilfesprache („RU“ neben Antworten, in Sprechblasen der Insel) zeigen die Übersetzung und lesen sie vor –
+    // sie zählen als Vorlese-Knopf (vorher blieb die russische Stimme stumm, weil „RU“ keine Vorlese-Beschriftung ist)
+    if (/^\s*(RU|UK|AR|TR|PL|FA|HSB)\s*$/.test(b.textContent || "")) return true;
     const t = (b.getAttribute("aria-label") || "") + " " + (b.getAttribute("title") || "") + " " + (b.textContent || "").slice(0, 40);
     return /[🔊🔈🔉]/u.test(t) || VORLESE_TEXT.test(t);
   };
@@ -91,6 +94,10 @@
   const pruefsumme = (t) => { let h = 2166136261; for (const c of t) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; } return h.toString(36); };
   function ruDosiere(el) {
     const d = dosis(); if (d === "immer") return;
+    // Erprobung 10.11.2026: Knöpfe mit lang="ru" (der „RU“-Knopf neben Antworten in Tablet-Führerschein und Sachunterricht) sind selbst die
+    // Hilfe auf Knopfdruck – sie wurden hier mit versteckt, darum fehlte die russische Sprachausgabe bei den Antworten. Zeilen .ru-text
+    // schaltet ihre Seite über genau diese Knöpfe selbst (hidden), sie brauchen kein zweites Verstecken.
+    if (el.matches('button, a, input, select, textarea, label, .ru-text')) return;
     const t = (el.textContent || "").trim(); if (!t || el.dataset.ruText === t) return;
     el.dataset.ruText = t;
     let b = el.previousElementSibling; if (!(b && b.classList.contains("ru-auf"))) b = null;

@@ -160,7 +160,9 @@
   });
   $("fertig").addEventListener("click", () => { S.ton("tipp"); sichern(); });
 
-  async function sichern() {
+  // 💾 Speichern (Erprobung 10.11.2026: „Speichern-Button fehlt“): hebt das Bild auf und bleibt beim Malen – „Fertig“ speichert und hängt es auf
+  $("speichern").addEventListener("click", () => { S.ton("tipp"); sichern(true); });
+  async function sichern(weitermalen) {
     const k = document.createElement("canvas"); k.width = 800; k.height = 600; k.getContext("2d").drawImage(cv, 0, 0, 800, 600);
     const url = k.toDataURL("image/jpeg", 0.82);
     let id = null; try { id = await B.speichere({ id: bildId, url, auftrag: aktiverAuftrag ? aktiverAuftrag[0] : "" }); } catch (e) { id = null; }
@@ -170,6 +172,7 @@
     if (window.Ereignisse) window.Ereignisse.melde("bild", { id: String(id), neu });
     const d = lade(), wand = d.wand.length < B.WAND && !d.wand.includes(id);
     if (wand) B.setzeWand(id, true);
+    if (weitermalen) { S.meldung("💾 Gespeichert! Dein Bild liegt in deiner Galerie."); const b = $("speichern"); b.classList.add("gespeichert"); setTimeout(() => b.classList.remove("gespeichert"), 1500); return; }
     frage(wand ? "Wunderschön! Dein Bild hängt jetzt auch in deinem Zimmer auf der Insel. 🖼️" : "Wunderschön! Dein Bild ist in deiner Galerie.", [["🖼️ Galerie ansehen", () => zeige("galerie")], ["🖌️ Noch ein Bild", () => zeige("start")]]);
     sprich("Wunderschön!");
   }

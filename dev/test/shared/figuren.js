@@ -43,7 +43,11 @@
       : `<path d="M${mx - 12} ${mundY} Q${mx} ${mundY + 12} ${mx + 12} ${mundY}" fill="${opt.mundFuell || "none"}" stroke="${D}" stroke-width="4" stroke-linecap="round"/>`;
     return auge(x1) + auge(x2) + (opt.ohneMund ? "" : mund);   // keine rosa Wangen (Wunsch des Auftraggebers 01.11.2026)
   }
-  const svg = (s, inhalt) => `<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>${s.defs.join("")}</defs>${s.schatten}${inhalt}</svg>`;
+  // Doppelte Attribute entfernen (Erprobung 10.11.2026): Die Kontur hängt stroke-width="5" an, manche Teile nennen danach noch eine eigene Breite.
+  // Im HTML gilt still die erste – als eigenständiges SVG-Bild (Tablet-Führerschein „Als Bild speichern“, Canvas) ist das aber ungültiges XML,
+  // das Bild lud nie. Die erste Angabe bleibt, das Aussehen ändert sich nicht.
+  const ohneDoppelte = (t) => t.replace(/<[a-zA-Z][^>]*>/g, (tag) => { const da = new Set(); return tag.replace(/\s([a-zA-Z:-]+)="[^"]*"/g, (m, n) => (da.has(n) ? "" : (da.add(n), m))); });
+  const svg = (s, inhalt) => ohneDoppelte(`<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>${s.defs.join("")}</defs>${s.schatten}${inhalt}</svg>`);
 
   const FIGUREN = {
     robo(stil, a) { const s = bau(stil); return svg(s, `

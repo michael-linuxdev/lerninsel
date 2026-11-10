@@ -294,7 +294,9 @@
     if (typeof lage.paket === "string" && lage.paket.startsWith("geburtstag-") && !St.gesehen(lage.paket)) return "geburtstag";
     if (lage.paket && !(typeof lage.paket === "string" && (lage.paket === "qr" || lage.paket.startsWith("geburtstag-"))) && !St.gesehen("weihnachtspaket")) return "weihnachtspaket";
     if (!St.etappe("E2")) {
-      if (frei) St.etappeFertig("E2");
+      // Erprobung 10.11.2026: Wer zuerst gelernt hat, sieht statt „Erst lernen“ gleich „Die Sonne geht auf“ – damit ist E2 erklärt
+      // (vorher blieb E2 offen und Robo sagte den Satz alle 5 Sekunden neu)
+      if (frei || St.gesehen("sonne")) St.etappeFertig("E2");
       else if (St.darfNeueEtappe()) return st.spielen ? "sonne" : "erst-lernen";
     }
     if (St.etappe("E2") && st.spielen && !frei && !St.gesehen("sonne")) return "sonne";
@@ -775,10 +777,28 @@
   function wissensbaumText() {
     const L = W.Lernfunde, b = L.baum(), h = L.heute();
     const de = b.summe === 0 ? "Hier wächst dein Wissensbaum. Mit allem, was du Neues lernst, wird er größer!"
-      : `Schon ${b.summe} ${b.summe === 1 ? "Ding" : "Dinge"} gelernt!` + (h.length ? ` Heute ${h.length === 1 ? "hängt eine neue Frucht" : `hängen ${h.length} neue Früchte`} dran: ${h.slice(-2).map(x => x.t.replace(/^Neues Wort: /, "")).join(" · ")}`
+      : `Schon ${b.summe} ${b.summe === 1 ? "Ding" : "Dinge"} gelernt!` + (h.length ? ` Heute ${h.length === 1 ? "hängt eine neue Frucht" : `hängen ${h.length} neue Früchte`} dran: ${h.slice(-2).map(x => x.t.replace(/^Neues Wort: /, "")).join(" · ")}.`
         : " Heute ist noch keine Frucht dazugekommen. Lern etwas Neues, dann wächst eine!") + (b.naechste ? ` Noch ${b.naechste - b.summe} bis der Baum wieder wächst.` : "");
     const ru = b.summe === 0 ? "Здесь растёт твоё дерево знаний. Чем больше ты узнаёшь, тем больше оно становится!" : `Ты уже узнаёшь так много: ${b.summe}! Каждая новая вещь — новый плод.`;
     return blase("🌳", "Dein Wissensbaum", de, ru, "../ich/");
+  }
+  // Erprobung 10.11.2026 (Idee des Testers): Wissensbaum und Pinnwand öffnen ein eigenes Fenster mit antippbaren Einzelheiten
+  // (jede Frucht, jeder Zettel = ein Lernfund der letzten 7 Tage). Liefert nur Daten; das Fenster zeichnet der Look.
+  function fenster(id) {
+    const L = W.Lernfunde, kz = (t) => String(t || "").replace(/^Neues Wort: /, "");
+    const eintrag = (f, neu) => ({ e: f.e || "⭐", t: f.t, kurz: kz(f.t), neu: !!neu, gold: f.a === "gemeistert", farbe: fruchtFarbe(f) });
+    const funde = L ? L.letzteTage(7) : [], heute = L ? L.heute().length : 0, eintraege = funde.map((f, i) => eintrag(f, i < heute));
+    if (id === "pinnwand") {
+      const a = antwort("pinnwand").blase, n = eintraege.length;
+      return { id, e: "📌", titel: a[1], ziel: a[4], knopf: "Meine Ecke", eintraege,
+        text: n ? `Diese Woche ${n === 1 ? "hängt 1 Zettel" : `hängen ${n} Zettel`} hier. Tipp einen an!` : a[2],
+        ru: n ? S().paar(["", "На этой неделе здесь висят твои листочки. Нажми на один!"])[1] : a[3] };
+    }
+    if (id === "wissensbaum") {
+      const a = wissensbaumText().blase, b = L ? L.baum() : { summe: 0, naechste: null };
+      return { id, e: "🌳", titel: a[1], ziel: a[4], knopf: "Meine Ecke", eintraege, text: a[2], ru: a[3], stand: { summe: b.summe, naechste: b.naechste } };
+    }
+    return null;
   }
   // Lernfund von heute für einen Nachbarn (oder null)
   const fundFuer = (e) => { const fach = FACH[e]; return W.Lernfunde && fach ? W.Lernfunde.heuteFach(fach) : null; };
@@ -939,7 +959,7 @@
 
   W.InselKern = {
     // Stationen
-    SPIELE, istFrei, baumStufe, antwort, ortOffen, NEU_FERTIG, nachbarAntwort, fundFuer, aktionFuer, FRUCHT, fruchtFarbe, spieleMelodie,
+    SPIELE, istFrei, baumStufe, antwort, fenster, ortOffen, NEU_FERTIG, nachbarAntwort, fundFuer, aktionFuer, FRUCHT, fruchtFarbe, spieleMelodie,
     // Welt
     BIOME, GROESSEN, HUEGEL, STANDARD, FARBEN, blumenwiesen, erzeuge, neuerSeed, wunsch, zeit, erstelle,
     // Regeln und Zustände

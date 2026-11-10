@@ -2571,3 +2571,30 @@ Auftrag: „Du bist gesamtverantwortlich für die Lerninsel. Baue sie unentwegt 
   **Regeln (Entscheidung):** Stufe 2 nur durch Rolle Lehrkraft mit aktueller Prüfsumme, letztes Urteil je Schritt, kein offenes ✏️/❓ – Werkstatt/Sachthemen/Fächer/Vorschule alle Schritte 👍, Mathe ≥ 5 Aufgaben 👍,
   Englisch ≥ 6 Schritte 👍; Stufe 3 = Stufe 2 + eine fertige Runde in einer Datei mit Spieler/in und „Ein Kind spielt“; Stufen werden nie gesenkt; Russisch/Sorbisch nur im Bericht (Korrekturen arbeitet Claude von Hand ein).
 - **Offen:** Teilen über das iPad-Menü ungetestet (Download geprüft); in Mathe zählt jede kurz geöffnete Station als Abbruch (rauscht im Bericht). Tests `erprobung`, `erprobung-auswerten` (Node).
+
+## Stand 13.11.2026 (Rückmeldung aus der ersten Erprobung, Datei „M“ vom 10.11.2026)
+Erste Erprobungsdatei (Tester „M“, iPad hoch und quer, Home-Bildschirm-App, Hauptseite, Kl. 2 mit Hilfesprache Russisch, alle Rollen): 22 Meldungen, alle bearbeitet. Tests `rueckmeldung` (Seiten) und `rueckmeldung3d` (Insel).
+- **Fehler mit gefundener Ursache:**
+  - *„Als Bild speichern“ (Tablet-Führerschein) ging nicht:* Die Begleiter-Zeichnungen (`shared/figuren.js`) trugen doppelte Attribute (`stroke-width` zweimal) – im HTML unsichtbar, als eigenständiges SVG-Bild
+    ungültig, das Bild lud nie. Jetzt ohne Doppelte (Aussehen gleich). Dazu: Bild wird beim Anzeigen vorbereitet, Teilen startet direkt im Antippen; ohne Teilen Download, als Home-Bildschirm-App Bild zum Gedrückthalten.
+  - *Russische Sprachausgabe bei den Antworten fehlte:* Das Ausschleichen (NA-54) versteckte auch den „RU“-Knopf neben den Antworten (er trägt `lang="ru"`), und „RU“-Knöpfe galten nicht als Vorlese-Knopf
+    (seit „Vorlesen nur auf Knopfdruck“ blieb die Stimme stumm). Beides in `shared/sprache.js` behoben – gilt auch für Sachunterricht und die Insel-Sprechblase.
+  - *Robo sagt immer wieder „Die Sonne ist aufgegangen“:* Wer vor „Erst lernen“ schon gelernt hatte, sah die Szene „sonne“, aber Etappe E2 blieb offen → alle 5 s neu. E2 gilt jetzt mit der Szene als erledigt (heilt alte Stände).
+  - *Im Zimmer reden Robo und Paula gleichzeitig:* Solange draußen eine Story-Szene läuft, bleibt die Haustür zu und Stationen antworten nicht (`szeneSpricht()`; Ausnahmen Ankunft und „Sterne“).
+  - *Sachunterricht: Erklärung da, kein „Weiter“:* Im Querformat nahm die Prüfleiste der Aufgabenkarte die Höhe, „Weiter“ lag unter dem Kartenrand. Leiste steht quer jetzt links unter der Figur, „Weiter“ wird ins Bild gerollt.
+  - *Matheweg hoch:* Band der Kehren ragte links/rechts hinaus (Bogen jetzt nach Platz begrenzt); Lernbereichs-Kacheln ohne Abstand nach unten (jetzt 40 px), Marke „gerade in der Schule“ bricht um.
+  - *Afro verdeckt in 3D das Gesicht* (Kugel nach hinten/oben, vorn flacher), *Koteletten bei „lang“/„Bob“* (Strähnen vor den Wangen entfernt), *Kontur zwischen Arm und Oberkörper* (feine Naht statt Kontur).
+  - *„(Entwurf, ungeprüft)“ im Szenenbild:* Zusatz und gestrichelter Rand entfernt (Prüfstatus steht im Elternbereich und in der Prüfleiste).
+- **Nicht nachstellbar:** „Fachlich prüfen funktioniert erst nach der Ergebniskontrolle“ – die Prüfleiste nahm im Test auch vor der Antwort Urteile an (im Protokoll des Testers später ebenfalls).
+  **Entscheidung:** als „man kann erst nach dem Lösen beurteilen“ gelesen – die Leiste zeigt Lehrkräften jetzt die **erwartete Antwort** (`Erprobung.zeige({ loesung })`, Mathe und Sachunterricht), steht über dem unteren
+  Sicherheitsrand, und der zuletzt getippte Knopf ist markiert. Beim nächsten Durchgang nachfragen, was genau nicht ging.
+- **Ideen umgesetzt:** Abzeichen „Tablet-Profi“ → Führerschein; Meldung „Neuer Sticker“/„Sticker aussuchen“ → Album; „Rechen-Kraft: Stufe …“ (und jede Stufen-Meldung) → Meine Ecke „Mein Können“
+  (`Charakter.hinweis(titel, text, farbe, ziel)`); Atelier „💾 Speichern“ (bleibt beim Malen; „✅ Fertig“ hängt auf); Erklär-Einheiten mit ⬅️ und Wischen nach rechts; **Wissensbaum und Pinnwand als eigenes Fenster**
+  nach kurzer Kamerafahrt (0,6 s), jede Frucht/jeder Zettel antippbar mit 🔊 (`K.fenster(id)`, `zeigeFenster`).
+- **Entscheidungen des Auftraggebers:** Kamera-Standard **„frei“** (wer „fest“ wählt, behält es; im Zimmer beginnt sie wie „fest“); Tipp auf „Rechen-Kraft“ → Mein Können.
+  **Zimmertür entfernt** („Tür ist vor der Pinnwand. raus damit“ – ersetzt die Tür aus UX-Paket 5; hinaus über „🚪 Nach draußen“ oder nach vorn laufen; kein Eltern-Schalter, weil reine Deko mit doppelter Funktion).
+- **Aus dem Protokoll zusätzlich:** Einstufungstest fragte zweimal „=“ ab → kurze Runden ohne doppelte Antwort; Zuordnen zählte jedes Teil als Aufgabe („7 von 6“) → je Schritt einmal;
+  Auswertung nimmt je Schritt das letzte Urteil (Vorschläge mit Text bleiben). „90 + ? = 100“ mit Antwort „1“ war vermutlich ein Vertipper (✓ liegt neben 0), keine zu frühe Auswertung.
+- **Offen / nächstes:** „Es haben 6 gefehlt (Präteritum)“ – Korrekturwunsch unklar, vom Auftraggeber zurückgestellt. Antippen einer Stufen-Meldung mitten in einer Mathe-Runde verlässt die Runde (bewusst, beobachten).
+  iPad: „Als Bild speichern“, RU-Stimme, Fenster und freie Kamera auf echtem Safari prüfen.
+

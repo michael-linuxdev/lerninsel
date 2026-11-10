@@ -44,7 +44,7 @@ const GRAFIK_KEY = "lerninsel.grafik";
 const lies = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 // Insel-Einstellungen (Grafik, Steuerung, Kamera) werden pro Kind bei den Eltern-Daten gemerkt.
 // Eltern legen im Elternbereich fest, ob das Kind die Knöpfe überhaupt sieht (kindDarf). Alte Tablet-Werte dienen als Startwert.
-const EIN = Object.assign({ grafik: lies(GRAFIK_KEY) === "einfach" ? "einfach" : lies(GRAFIK_KEY) === "schoen" ? "schoen" : (S.grafikStandard ? S.grafikStandard() : "schoen"), steuerung: lies("lerninsel.steuerung") === "tippen" ? "tippen" : "joystick", kamera: "fest", kindDarf: true },
+const EIN = Object.assign({ grafik: lies(GRAFIK_KEY) === "einfach" ? "einfach" : lies(GRAFIK_KEY) === "schoen" ? "schoen" : (S.grafikStandard ? S.grafikStandard() : "schoen"), steuerung: lies("lerninsel.steuerung") === "tippen" ? "tippen" : "joystick", kamera: "frei", kindDarf: true },
   (S.lade("eltern") || {}).insel || {});
 function merkeEin(k, v) { EIN[k] = v; const e = S.lade("eltern") || {}; e.insel = Object.assign({}, e.insel || {}, { [k]: v }); S.speichere("eltern", e); }
 const EINFACH = EIN.grafik === "einfach";
@@ -113,6 +113,7 @@ function spielOrt(fn) {
   sprechblase(...K.schlaeftText(), null);
 }
 // aktion = Beschriftung des Aktionsknopfs, wenn die Figur nah davor steht; nah = Reichweite
+const fensterTipp = {};   // Test-Haken: Wissensbaum und Pinnwand antippen (Fenster, Erprobung 10.11.2026)
 function antippbar(obj, fn, aktion = ["👀", "Ansehen"], nah = 1.9) { Object.assign(obj.userData, { tipp: fn, aktion, nah }); tippbar.push(obj); }
 
 // ---------- Insel und Wasser ----------
@@ -726,7 +727,14 @@ function figur(look) {
   else if (!KURZ.includes(haarId)) [-1, 1].forEach(s => haarteil(kugel(0.2), 0.6 * s, -0.05, -0.1));
   if (haarId === "bob") haarteil(kugel(0.62), 0, -0.12, -0.12, 1.04, 0.75, 0.9);
   if (haarId === "schulterlang") haarteil(kugel(0.62), 0, -0.3, -0.16, 1.06, 0.95, 0.85);
-  if (haarId === "afro") haarteil(kugel(0.74), 0, 0.18, -0.08, 1.05, 0.95, 1);
+  // Afro (Erprobung 10.11.2026: verdeckte das Gesicht): Kugel nach hinten und oben gerückt, vorn flacher – Stirn und Augen bleiben frei
+  let afroVorn = null;
+  if (haarId === "afro") {
+    const m = haarteil(kugel(0.72), 0, 0.3, -0.2, 1.06, 0.95, 0.85);
+    // wie weit die Kugel (mit Kontur-Hülle 1,05) an der Augenbraue (x 0,2 / y 0,14) nach vorn reicht – das Gesicht liegt bei z ≈ 0,52
+    const R = 0.72 * 1.05, dx = 0.2 / (R * m.scale.x), dy = (0.14 - m.position.y) / (R * m.scale.y);
+    afroVorn = Math.round((m.position.z + R * m.scale.z * Math.sqrt(Math.max(0, 1 - dx * dx - dy * dy))) * 100) / 100;
+  }
   const bedeckt = ["cap", "hut", "entdeckerhut", "muetze", "weihnachtsmuetze", "piratenhut"].some(id => (look.extras || {})[id]);   // Spitzen und Locken oben nicht durch den Hut stechen lassen
   if (haarId === "igel" && !bedeckt) for (let i = 0; i < 7; i++) { const w = (i / 6 - 0.5) * 1.6; const z = haarteil(new ConeGeometry(0.11, 0.3, 8), Math.sin(w) * 0.4, 0.6 - Math.abs(w) * 0.12, Math.cos(w) * 0.1 - 0.05); z.rotation.z = -w * 0.5; }
   if ((haarId === "wuschel" || haarId === "kurzlocken") && !bedeckt) { const r = haarId === "wuschel" ? 0.22 : 0.17; [[-0.36, 0.4], [-0.12, 0.55], [0.12, 0.55], [0.36, 0.4], [0, 0.42]].forEach(([x, y]) => haarteil(kugel(r), x, y, 0.2)); }
@@ -770,7 +778,7 @@ function figur(look) {
   // Zählung der neuen Teile vor dem Verschmelzen (starr/verschmelzeLokal ersetzt die Einzelteile) – für den Test-Haken __heimat.figurInfo()
   const info = { schulter: 0, daumen: 0, pony: 0, ohr: 0, nase: 0, schuh: 0, straehne: 0, aermel: 0, kappe: 0 }; f.traverse(o => { if (o.userData && o.userData.art in info) info[o.userData.art]++; });
   info.halsFrei = Math.round(((kopf.position.y - 0.58 * 0.72 * 1.04) - (1.28 + 0.15 + 0.27)) * 100) / 100;   // Luft zwischen Rumpfoberkante und Kopfunterkante
-  info.aermelArt = aermel;
+  info.aermelArt = aermel; info.afroVorn = afroVorn;
   f.userData = { koerper, beine, arme, kopf, info };
   return f;
 }
@@ -1062,7 +1070,7 @@ const wissen = (() => {
     const v = PL[i], r = 1.0 * k + 0.06; setze(m, v.x * r, 2.15 * k + v.y * r, v.z * r); m.scale.setScalar(0.001); m.userData.verz = 0.6 + i * 0.35; g.add(m);
     return m;
   });
-  antippbar(g, () => zeigeAntwort(K.antwort("wissensbaum")), ...K.aktionFuer("wissensbaum"));
+  antippbar(g, fensterTipp.wissensbaum = () => zeigeFenster("wissensbaum", new Vector3(g.position.x, g.position.y + 2.0 * k, g.position.z), { ab: 8.5 + 1.5 * k }), ...K.aktionFuer("wissensbaum"));
   starr.push([g, [...fruechte, ...g.children.filter(c => c.userData.licht !== undefined)]]);
   return {
     info, fruechte,
@@ -1402,7 +1410,7 @@ WAND_HINTEN.userData.lebt = WAND_SEITE.userData.lebt = true;   // Farbe ändert 
     const wand = new Group(); wand.position.set(4.06, 1.95, 0.9); wand.rotation.y = -Math.PI / 2; zimmer.add(wand); zimmerEigen.push(wand); starr.push([wand]);
     wand.add(teil(new BoxGeometry(1.72, 1.1, 0.06), "#8A5A34", { dicke: 1.03 }));
     wand.add(setze(new Mesh(new PlaneGeometry(1.6, 1.0), new MeshBasicMaterial({ map: tex })), 0, 0, 0.035));
-    antippbar(wand, () => zeigeAntwort(K.antwort("pinnwand")), ["📌", "Ansehen"], 1.9);
+    antippbar(wand, fensterTipp.pinnwand = () => zeigeFenster("pinnwand", wand.getWorldPosition(new Vector3()), { ab: 4.6, gw: -1.05, nw: 0.25 }), ["📌", "Ansehen"], 1.9);
   }
   // Atelier: Staffelei mit dem neuesten Bild und bis zu drei gemalten Bildern als Poster an den Wänden (shared/bilder.js)
   {
@@ -1439,13 +1447,8 @@ WAND_HINTEN.userData.lebt = WAND_SEITE.userData.lebt = true;   // Farbe ändert 
   topf.add(setze(teil(new CylinderGeometry(0.3, 0.22, 0.45, 16), "#E2604F"), 0, 0.22, 0));
   [[0, 0.75, 0, 0.35], [0.2, 0.95, 0.1, 0.25], [-0.18, 0.9, -0.05, 0.25]].forEach(([x, y, z, r]) => topf.add(setze(teil(kugel(r), "#5DBB5A"), x, y, z)));
   block(ZX + 3.4, 2.4, 0.5);
-  // Zimmertür (UX-Paket 5, 07.11.2026): sichtbare Tür nach draußen an der rechten Wand, antippbar wie der Knopf „Nach draußen“ – vorher gab es nur den Knopf
-  zimmerTuer = new Group(); zimmerTuer.position.set(4.02, 0.25, 0.7); zimmer.add(zimmerTuer); zimmerEigen.push(zimmerTuer); starr.push([zimmerTuer]);
-  zimmerTuer.add(setze(teil(new BoxGeometry(0.12, 2.2, 1.1), "#9A6A3F", { dicke: 1.03 }), 0, 1.1, 0));
-  zimmerTuer.add(setze(teil(new BoxGeometry(0.05, 0.75, 0.5), "#C98F55", { dicke: 1.02 }), -0.07, 1.5, 0));
-  zimmerTuer.add(setze(teil(new BoxGeometry(0.05, 0.55, 0.5), "#C98F55", { dicke: 1.02 }), -0.07, 0.6, 0));
-  zimmerTuer.add(setze(teil(kugel(0.07), "#FFC83D", { dicke: 1.15 }), -0.12, 1.05, 0.36));
-  antippbar(zimmerTuer, rausgehen, ["🚪", "Nach draußen"], 2.4);
+  // Die Zimmertür (07.11.2026) stand vor der Pinnwand und ist seit der Erprobung 10.11.2026 wieder weg (Wunsch des Testers);
+  // hinaus geht es über den Knopf „🚪 Nach draußen“ oder nach vorn aus dem Zimmer laufen.
 }
 // ---------- Zimmer einrichten: Möbel mit Sternen kaufen und auf Plätze stellen ----------
 // Plätze, Möbel (Name, Preis, Text) und Wandfarben aus dem Kern; hier nur das 3D-Aussehen je Möbel-id
@@ -1505,8 +1508,13 @@ window.Einrichten.verbinde({
 const laden = (text) => window.Einrichten.oeffne(text);
 $("einrichten").addEventListener("click", () => laden());
 
-let draussenPos = new Vector3(), besuche = 0;
+let draussenPos = new Vector3(), besuche = 0, aussenKamera = null;
+// Erprobung 10.11.2026: Läuft draußen gerade eine Story-Szene (z. B. Robo an der Sonnenuhr), bleibt die Tür zu, bis sie fertig ist –
+// sonst stand das Kind im Zimmer, während Robo draußen weitersprach. Ausnahmen: Ankunft (endet im Zimmer) und „Sterne“ (führt hinein).
+function szeneSpricht() { const Sz = window.Szene; if (!Sz || !Sz.laeuft || prolog) return false; const a = Sz.aktuell(); return !(a && a.id === "sterne"); }
 function reingehen() {
+  if (szeneSpricht()) return;
+  if (freiKamera) { aussenKamera = { gieren, neigung, abstand }; gieren = 0; neigung = 0.7; abstand = 10; }   // freie Kamera: im Zimmer wie „fest“ beginnen
   drinnen = true; besuche++; $("raus").hidden = false; $("einrichten").hidden = false; $("blase").hidden = true;
   draussenPos.copy(ich.position);
   ich.position.set(ZX, 0.25, 1.8); ich.rotation.y = 0;   // schaut ins Bild, damit man Gesicht und Anziehsachen sieht
@@ -1518,6 +1526,7 @@ function reingehen() {
 }
 function rausgehen() {
   drinnen = false; $("raus").hidden = true; $("einrichten").hidden = true; window.Einrichten.zu();
+  if (aussenKamera) { if (freiKamera) ({ gieren, neigung, abstand } = aussenKamera); aussenKamera = null; }
   const { x: tx, z: tz, dreh: hr } = KI.vorDerTuer();
   ich.position.set(tx, bodenY(tx, tz), tz); ich.rotation.y = hr;
   if (tier) tier.position.set(tx + 1.1, bodenY(tx + 1.1, tz + 0.4), tz + 0.4);
@@ -1552,11 +1561,53 @@ function sprechblase(e, titel, text, ru, ziel, extra) {
 }
 // Antwort einer Station aus dem Insel-Kern zeigen ({ blase: [e, titel, text, hilfe, ziel], extra })
 function zeigeAntwort(a) {
-  if (!a) return;
+  if (!a || szeneSpricht()) return;   // nie zwei Figuren gleichzeitig: die Szene hat das Wort
   const extra = a.extra === "prolog" ? ["🔁 Wie ging das nochmal?", () => starteProlog(true)]
     : a.extra === "reisen" ? ["⛵ Losfahren", () => spielOrt(() => { $("welt").hidden = false; weltListe(); })] : null;   // Kapitel 7: Robos Boot öffnet die Welt-Liste
   sprechblase(...a.blase, extra);
 }
+// ---------- Fenster für Wissensbaum und Pinnwand (Erprobung 10.11.2026) ----------
+// Antippen → die Kamera fährt kurz heran (0,6 s, zeitabhängig) → Fenster mit den Lernfunden zum Antippen (Text groß, 🔊 liest vor).
+// Schließen fährt die Kamera zurück. Daten aus K.fenster(id).
+let nah = null, fensterT = null, fensterDaten = null, fensterWahl = -1;
+function zeigeFenster(id, punkt, kam) {
+  if (szeneSpricht()) return;
+  const d = K.fenster(id); if (!d) return;
+  $("blase").hidden = true; if (SP && SP.stopp) SP.stopp();
+  nah = Object.assign({ t0: performance.now(), dauer: 600, punkt, zu: false }, kam);
+  clearTimeout(fensterT); fensterT = setTimeout(() => fensterAuf(d), 600);
+}
+function fensterAuf(d) {
+  fensterDaten = d; fensterWahl = -1;
+  $("fenster-titel").textContent = `${d.e} ${d.titel}`; $("fenster-text").textContent = d.text;
+  const hl = S.hilfe && S.hilfe(), ru = $("fenster-ru"); ru.textContent = d.ru || ""; ru.hidden = !(d.ru && hl); if (hl) { ru.lang = hl.code; ru.dir = hl.rtl ? "rtl" : "ltr"; }
+  const st = $("fenster-stand"); st.hidden = !(d.stand && d.stand.naechste);
+  if (!st.hidden) { const von = d.stand.naechste; st.innerHTML = `<span class="fenster-balken"><span style="width:${Math.round(Math.min(1, d.stand.summe / von) * 100)}%"></span></span><span>${d.stand.summe} von ${von}</span>`; }
+  $("fenster-liste").className = "fenster-liste " + d.id;
+  $("fenster-liste").innerHTML = d.eintraege.map((f, i) => `<button type="button" class="fenster-eintrag${f.neu ? " neu" : ""}${f.gold ? " gold" : ""}" data-i="${i}" style="--f:${f.farbe}" aria-label="${S.esc(f.kurz)}"><span class="e">${S.esc(f.e)}</span><span class="t">${S.esc(f.kurz)}</span></button>`).join("");
+  $("fenster-detail").hidden = true;
+  const los = $("fenster-los"); los.hidden = !d.ziel; los.textContent = d.knopf || "Los!";
+  $("fenster").hidden = false; S.ton("tipp");
+}
+function fensterWaehle(i) {
+  const f = fensterDaten && fensterDaten.eintraege[i]; if (!f) return;
+  fensterWahl = i;
+  $("fenster-liste").querySelectorAll(".fenster-eintrag").forEach((b, n) => b.classList.toggle("an", n === i));
+  $("fenster-detail-e").textContent = f.e; $("fenster-detail-t").textContent = f.t + (f.gold ? " 💪" : "") + (f.neu ? " – von heute!" : "");
+  $("fenster-detail").hidden = false; S.ton("tipp");
+}
+function fensterZu() {
+  clearTimeout(fensterT); if (SP && SP.stopp) SP.stopp();
+  $("fenster").hidden = true; fensterDaten = null;
+  if (nah && !nah.zu) nah = Object.assign({}, nah, { t0: performance.now(), dauer: 400, zu: true });
+}
+$("fenster-zu").addEventListener("click", fensterZu);
+$("fenster").addEventListener("click", (e) => { if (e.target === $("fenster")) fensterZu(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("fenster").hidden) fensterZu(); });
+$("fenster-liste").addEventListener("click", (e) => { const b = e.target.closest(".fenster-eintrag"); if (b) fensterWaehle(+b.dataset.i); });
+$("fenster-hoeren").addEventListener("click", () => { const f = fensterDaten && fensterDaten.eintraege[fensterWahl]; if (f && SP && SP.sprich) SP.sprich(f.t, "de-DE"); });
+$("fenster-vorlesen").addEventListener("click", () => { if (fensterDaten && SP && SP.sprich) SP.sprich(fensterDaten.text, "de-DE"); });
+$("fenster-los").addEventListener("click", () => { if (fensterDaten && fensterDaten.ziel) location.href = fensterDaten.ziel; });
 $("blase-zu").addEventListener("click", () => { $("blase").hidden = true; if (SP && SP.stopp) SP.stopp(); });
 $("blase-los").addEventListener("click", () => { if (blaseZiel) location.href = blaseZiel; });
 $("blase-extra").addEventListener("click", () => { $("blase").hidden = true; if (SP && SP.stopp) SP.stopp(); if (blaseExtra) blaseExtra[1](); });
@@ -1712,7 +1763,7 @@ function zeigeKamera() { const k = $("kamera"); k.classList.toggle("an", freiKam
 freiKamera = EIN.kamera === "frei"; zeigeKamera();
 $("kamera").addEventListener("click", () => {
   freiKamera = !freiKamera; zeigeKamera(); merkeEin("kamera", freiKamera ? "frei" : "fest");
-  if (!freiKamera) { gieren = 0; neigung = KAM.neigung; abstand = KAM.abstand; }
+  if (!freiKamera) { gieren = 0; neigung = KAM.neigung; abstand = KAM.abstand; aussenKamera = null; }
 });
 // Eltern können die Einstellungs-Knöpfe ausblenden (Erwachsene sehen sie immer)
 if (!EIN.kindDarf && !(S.erwachsen && S.erwachsen())) ["grafik", "steuerung", "kamera"].forEach(id => { $(id).hidden = true; });
@@ -1886,7 +1937,7 @@ function bild() {
   wolken.forEach((w, i) => { w.position.x += dt * (0.4 + i * 0.1); if (w.position.x > 40) w.position.x = -40; });
 
   blick.set(ich.position.x, 1.0 + grund + hoehe * 0.3, ich.position.z);
-  let gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.7 : KAM.neigung, ab = drinnen && !freiKamera ? 10 : freiKamera ? abstand : abstand * hochFaktor();
+  let gw = freiKamera ? gieren : 0, nw = freiKamera ? neigung : drinnen ? 0.7 : KAM.neigung, ab = drinnen ? (freiKamera ? abstand : 10) : abstand * hochFaktor();   // Hochformat: auch die freie Kamera steht etwas weiter weg
   if (fahrt && drinnen) fahrtEnde("drinnen");
   if (fahrt) {   // Einflug beim Betreten bzw. Ankunft im Prolog: Kamera schwebt von weit oben heran (zeitabhängig, nicht pro Bild)
     if (fahrt.t0 == null) fahrt.t0 = performance.now();   // die Uhr beginnt mit dem ersten gezeichneten Bild (langsame Tablets übersetzen erst Shader)
@@ -1897,6 +1948,12 @@ function bild() {
     if (f >= 1) fahrtEnde("fertig");
   }
   if (drinnen) blick.set(MathUtils.clamp(blick.x, ZX - 1.5, ZX + 1.5), blick.y, MathUtils.clamp(blick.z, -1.5, 1.2));
+  if (nah) {   // kurze Fahrt zu Wissensbaum oder Pinnwand (und beim Schließen zurück)
+    const f = Math.min(1, (performance.now() - nah.t0) / nah.dauer), e = 1 - (1 - f) ** 3, k = nah.zu ? 1 - e : e;
+    blick.lerp(nah.punkt, k); ab = MathUtils.lerp(ab, nah.ab, k);
+    if (nah.gw != null) gw = MathUtils.lerp(gw, nah.gw, k); if (nah.nw != null) nw = MathUtils.lerp(nw, nah.nw, k);
+    nah.anteil = k; if (nah.zu && f >= 1) nah = null;
+  }
   camera.position.set(blick.x + Math.sin(gw) * Math.cos(nw) * ab, blick.y + Math.sin(nw) * ab, blick.z + Math.cos(gw) * Math.cos(nw) * ab);
   camera.lookAt(blick);
   sonne.position.set(ich.position.x + 10, 18, ich.position.z + 8); sonne.target.position.copy(ich.position);
@@ -2297,7 +2354,7 @@ const meldungenWarten = (() => {
   setInterval(tick, 300);
   return { warten: () => schlange.length, ruhig: () => ruhig() || document.body.classList.contains("ankunft-ruhe"), steuerung: () => !document.body.classList.contains("ankunft-ruhe-2") };
 })();
-window.__heimat = { meldungen: () => ({ warten: meldungenWarten.warten(), ruhig: meldungenWarten.ruhig(), steuerung: meldungenWarten.steuerung() }), extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
+window.__heimat = { meldungen: () => ({ warten: meldungenWarten.warten(), ruhig: meldungenWarten.ruhig(), steuerung: meldungenWarten.steuerung() }), extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { freiKamera = true; gieren = g; neigung = n; abstand = a; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer && zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT };
 Object.assign(window.__heimat, { story: () => STORY_FX.info(), festPunkte: () => STORY_FX.festPunkte(), schatzTippen: () => STORY_FX.schatzTippen() });   // Story-Bogen (07.11.2026)
 Object.assign(window.__heimat, { leerlauf: () => gedrosselt });
 // Bennos Brücke (Kapitel 9): Stand der 3D-Brücke, neu bauen (n Abschnitte, ohne Angabe aus dem Spielstand), Baustelle antippen
@@ -2312,4 +2369,12 @@ Object.assign(window.__heimat, {
 });   // Paket 5: Insel im Leerlauf ~30 Bilder/s
 Object.defineProperties(window.__heimat, Object.getOwnPropertyDescriptors({ extras3d: EXTRAS_3D, ecken: (o) => { let n = 0; (o || ich).traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }, armEcken: () => ich.userData.arme.map(a => { let n = 0; a.traverse(x => { if (x.isMesh) n += x.geometry.attributes.position.count; }); return n; }), figuren: () => ({ nachbarn: NACHBARN.map(n => ({ e: n.e, x: n.x, z: n.z, dreh: n.dreh })).concat([{ e: "paula", x: P.buehne[0], z: P.buehne[1], dreh: P.buehne[2] }, { e: "tilda", x: P.schach[0], z: P.schach[1], dreh: P.schach[2] }]), tier: tier ? { x: tier.position.x, z: tier.position.z } : null }), teile: teileZaehlen, bildschirm, sonnenuhr, su: SU, get paket() { return paket ? { x: paket.position.x, z: paket.position.z } : null; }, oeffnePaket, lichter: () => (lichter ? lichter.count : 0), nebel: () => ({ stufe: nebelJetzt, near: scene.fog.near, far: scene.fog.far, band: nebelBand.visible ? nebelBand.scale.x : 0 }), naechsteStory, prolog: (w) => starteProlog(!!w), get imProlog() { return !!prolog; }, steg: STEG,  wissen: () => wissen, zeichnungen: () => renderer.info.render.calls, info: () => Object.assign(messe(renderer, scene), MESSUNG.ohne || {}, { mitSchatten: MESSUNG.mit, einfach: EINFACH, sparen, drinnen }), get sparen() { return sparen; }, blick: (g, n, a) => { fahrt = null; freiKamera = true; gieren = g; neigung = n; abstand = a; }, kamerafahrt: () => ({ laeuft: !!fahrt, art: fahrt ? fahrt.art : null, anteil: fahrt ? fahrt.anteil || 0 : 1, abstand: Math.round(camera.position.distanceTo(blick) * 10) / 10, ziel: Math.round(KAM.abstand * hochFaktor() * 10) / 10, letzte: letzteFahrt }), ueberspringen: fahrtUeberspringen, himmel: () => { const v = new Vector3(), drin = (x, y, z) => { v.set(x, y, z).project(camera); return Math.abs(v.x) < 1 && Math.abs(v.y) < 1 && v.z < 1; };
     const a = sterne ? sterne.geometry.attributes.position : null; let n = 0; if (a && sterne.visible) for (let i = 0; i < a.count; i++) if (drin(a.getX(i), a.getY(i), a.getZ(i))) n++;
-    return { sterne: a ? a.count : 0, sterneImBild: n, mond: !!mond, mondImBild: !!(mond && mond.visible && drin(mond.position.x, mond.position.y, mond.position.z)), nass: nassAn, schaum: SCHAUM_FARBE }; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT }));   // Eine Welt (07.11.2026): Kamerafahrt, Himmel, Figur (Getter mitnehmen)
+    return { sterne: a ? a.count : 0, sterneImBild: n, mond: !!mond, mondImBild: !!(mond && mond.visible && drin(mond.position.x, mond.position.y, mond.position.z)), nass: nassAn, schaum: SCHAUM_FARBE }; }, ich, tier, wasser, get kartenweg() { return kartenweg; }, zimmerTuer: () => (zimmerTuer ? { x: zimmerTuer.position.x, z: zimmerTuer.position.z, tipp: !!zimmerTuer.userData.tipp } : null), tuerTippen: () => zimmerTuer && zimmerTuer.userData.tipp(), hud: () => ({ blatt: !$("einstellungen-blatt").hidden, leiste: [...document.querySelectorAll(".leiste > *")].filter(k => !k.hidden && k.offsetParent !== null && !k.classList.contains("platz")).map(k => k.id || k.textContent.trim()), hinweis: !$("joy-hinweis").hidden, wahlen: ["welt-knopf", "grafik", "steuerung", "kamera"].filter(id => !$(id).hidden) }), lampen: () => ({ n: LATERNEN.length, an: NACHT || DAEMMER, licht: tuerLicht ? tuerLicht.intensity : 0, augenweiss: WEISS_AUGE.type }), figurInfo: () => { const s = new Vector3(), h = new Vector3(); return Object.assign({}, ich.userData.info, { haende: ich.userData.arme.map(a => { a.updateMatrixWorld(true); a.getWorldPosition(s); a.localToWorld(h.set(0, -0.66, 0)); return Math.round((h.x - s.x) * 100) / 100; }) }); }, leuchtturm: () => ({ x: leuchtturm.position.x, z: leuchtturm.position.z, lampe: "#" + lampeMat.color.getHexString(), strahl: lichtStrahl.visible }), lager: () => ({ x: lager.position.x, z: lager.position.z, offen: K.ortOffen("lager", WELT.insel), aktion: lager.userData.aktion[1], schloss: lager.children.some(c => c.isSprite) }), boot: () => ({ x: boot.position.x, z: boot.position.z, aktion: boot.userData.aktion[1], nah: boot.userData.nah }), bootTippen: () => boot.userData.tipp(), lagerTippen: () => lager.userData.tipp(), insel: WELT.insel, wege: KI.WEGE.length, reingehen, rausgehen, get drinnen() { return drinnen; }, get besuche() { return besuche; }, get ziel() { return ziel; }, laufeZu: (x, z) => { ziel = new Vector3(x, 0.25, z); markiere(ziel); }, tippe: (i) => NACHBARN[i].obj.userData.tipp(), station: () => station.userData.tipp(), get wetter() { return wetter; }, laden: () => laden(), zimmerDaten, get rennt() { return rennt; }, get aktion() { return naechstes ? naechstes.userData.aktion[1] : null; }, druecke: () => aktion(), get tanzt() { return performance.now() < tanzBis; }, SAISON, NACHT }));   // Eine Welt (07.11.2026): Kamerafahrt, Himmel, Figur (Getter mitnehmen)
+// Erprobung 10.11.2026: Fenster (Wissensbaum, Pinnwand), Kamera, Tür während einer Szene
+Object.defineProperties(window.__heimat, Object.getOwnPropertyDescriptors({
+  fenster: () => ({ offen: !$("fenster").hidden, id: fensterDaten ? fensterDaten.id : null, eintraege: fensterDaten ? fensterDaten.eintraege.length : 0, wahl: fensterWahl,
+    detail: $("fenster-detail").hidden ? null : $("fenster-detail-t").textContent, nah: nah ? { anteil: nah.anteil || 0, zu: nah.zu } : null }),
+  fensterTippen: (id) => fensterTipp[id] && fensterTipp[id](), fensterZu,
+  kamera: () => ({ frei: freiKamera, gieren, neigung, abstand, x: camera.position.x, y: camera.position.y, z: camera.position.z }),
+  szeneSpricht
+}));

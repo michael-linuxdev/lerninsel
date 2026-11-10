@@ -147,7 +147,10 @@
     o = o || {};
     jetzt = { inhalt: sauber(o.inhalt, 80), schritt: o.schritt == null ? null : sauber(o.schritt, 40), text: sauber(ohneNamen(String(o.text || "").replace(/<[^>]*>/g, " ")), 120),
       fach: o.fach || "", klasse: String(o.klasse || klasseKind() || ""), h: o.daten ? pruefsumme(o.daten) : (o.h || ""), ab: Date.now(), hilfe: new Set(),
-      ru: o.ru, hsb: !!o.hsb, el: o.el || null, bereich: o.bereich || null };
+      ru: o.ru, hsb: !!o.hsb, el: o.el || null, bereich: o.bereich || null,
+      // loesung (Erprobung 10.11.2026): die erwartete Antwort – steht für Lehrkräfte in der Prüfleiste, damit sie fachlich prüfen können,
+      // ohne die Aufgabe erst lösen zu müssen (Meldung „Fachlich prüfen funktioniert erst nach der Ergebniskontrolle“). Nicht im Log.
+      loesung: o.loesung == null ? "" : sauber(String(o.loesung).replace(/<[^>]*>/g, " "), 120) };
     if (o.el && einstellungen().an) leiste(o.el);
     if (document.getElementById("erp-melden")) platziereBald();
   }
@@ -157,7 +160,8 @@
     const e = merke({ art: "aufgabe", inhalt: sauber(o.inhalt || a.inhalt, 80), schritt: o.schritt != null ? sauber(o.schritt, 40) : a.schritt, text: o.text != null ? sauber(o.text, 120) : a.text,
       antwort: o.antwort == null ? undefined : sauber(o.antwort, 60), richtig: !!o.richtig, versuch: o.versuch || 1, ms: a.ab ? Date.now() - a.ab : null,
       hilfe: a.hilfe && a.hilfe.size ? [...a.hilfe] : undefined, fach: a.fach || undefined, klasse: a.klasse || undefined, h: a.h || undefined });
-    if (runde && (o.versuch || 1) === 1) runde.beantwortet++;
+    // je Schritt nur einmal zählen (Zuordnen meldet jedes Teil einzeln – sonst „7 von 6 beantwortet“)
+    if (runde && (o.versuch || 1) === 1 && !a.gezaehlt) { runde.beantwortet++; a.gezaehlt = true; }
     if (o.richtig && a.ab) a.ab = Date.now();
     return e;
   }
@@ -206,6 +210,7 @@
       `<button type="button" data-u="ok" aria-label="${name}: passt">👍 passt</button><button type="button" data-u="aendern" aria-label="${name}: ${besser}">✏️ ${besser}</button>` +
       (mitUnklar ? `<button type="button" data-u="unklar" aria-label="${name}: unklar">❓ unklar</button>` : "") + `<span class="erp-ok" aria-live="polite"></span></div>`;
     leisteEl.innerHTML = `<div class="erp-kopf">🔍 ${esc(a.inhalt || "Aufgabe")}${a.schritt != null ? ` · ${esc(a.schritt)}` : ""}</div>` +
+      (fach && a.loesung ? `<div class="erp-loesung">Erwartete Antwort: <b>${esc(a.loesung)}</b></div>` : "") +
       (fach ? zeile("fach", "Fachlich", true, "ändern") : "") + (ru ? zeile("ru", "Russisch", false, "besser so") : "") + (hsb ? zeile("hsb", "Sorbisch", false, "besser so") : "") +
       `<div class="erp-korr" hidden><label>Vorschlag oder Frage <textarea maxlength="500" rows="2"></textarea></label><button type="button" class="erp-speichern">Speichern</button></div>`;
     if (el.nextSibling !== leisteEl) el.after(leisteEl);
@@ -328,8 +333,10 @@
 .erp-hinweis{min-height:1.2em;margin:6px 0;color:#A3322A;font-weight:600}
 .erp-knoepfe{display:flex;gap:10px;justify-content:flex-end}.erp-knoepfe .erp-los{background:#2FA37C;color:#fff}
 @media (max-width:520px){.erp-kats{grid-template-columns:repeat(2,1fr)}}
-.erp-leiste{margin:10px auto 0;max-width:760px;width:100%;box-sizing:border-box;background:#EEF6FF;border:2px dashed #3B1F63;border-radius:14px;padding:6px 10px;font:500 14px Fredoka,system-ui,sans-serif;color:#3B1F63;text-align:left}
-.erp-leiste[hidden]{display:none}.erp-kopf{font-size:12px;opacity:.8;margin-bottom:4px;overflow-wrap:anywhere}
+.erp-leiste{margin:10px auto max(0px,env(safe-area-inset-bottom));max-width:760px;width:100%;box-sizing:border-box;background:#EEF6FF;border:2px dashed #3B1F63;border-radius:14px;padding:6px 10px;font:500 14px Fredoka,system-ui,sans-serif;color:#3B1F63;text-align:left}
+.erp-leiste[hidden]{display:none}.erp-loesung{font-size:13px;margin:2px 0 4px}.erp-loesung b{background:#FFF1C2;border-radius:6px;padding:0 6px}
+@media (orientation:landscape){.buehne:has(>.erp-leiste){grid-template-rows:minmax(0,1fr) auto}.buehne:has(>.erp-leiste)>.erzaehler{grid-column:1;grid-row:1}.buehne:has(>.erp-leiste)>.aufgabe{grid-column:2;grid-row:1/span 2}.buehne>.erp-leiste{grid-column:1;grid-row:2;margin:0}}
+.erp-zeile button.an{background:#3B1F63;color:#fff}.erp-kopf{font-size:12px;opacity:.8;margin-bottom:4px;overflow-wrap:anywhere}
 .erp-zeile{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}.erp-zeile[hidden]{display:none}.erp-name{font-weight:700;min-width:70px}
 .erp-zeile button,.erp-korr button{min-height:40px;min-width:44px;padding:0 10px;border:2px solid #3B1F63;border-radius:999px;background:#fff;color:#3B1F63;font:inherit;font-weight:600;cursor:pointer}
 .erp-zeile button.an{background:#3B1F63;color:#fff}.erp-ok{font-size:12px;color:#1F6E52}

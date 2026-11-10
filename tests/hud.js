@@ -46,7 +46,7 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     erwarte(h.blatt && h.wahlen.includes("welt-knopf") && h.wahlen.includes("kamera") && lage && (await p.getAttribute("#einstellungen", "aria-expanded")) === "true", `${art}: ⚙️ öffnet das Blatt mit ${h.wahlen.length} Wahlen (${h.wahlen.join(", ")}), im Bild`);
     await bild(p, `hud-${art.replace(" ", "-")}-auf`);
     await p.click("#kamera"); await p.waitForTimeout(150);
-    erwarte(/frei/.test(await p.textContent("#kamera")), `${art}: Kamera auf „frei“ umgeschaltet`);
+    erwarte(/fest/.test(await p.textContent("#kamera")), `${art}: Kamera von „frei“ (Standard seit 10.11.2026) auf „fest“ umgeschaltet`);
     await p.click("#kamera"); await p.waitForTimeout(150);
     await p.keyboard.press("Escape"); await p.waitForTimeout(150);
     erwarte(!(await p.evaluate(() => __heimat.hud().blatt)), `${art}: Escape schließt das Blatt`);
@@ -58,13 +58,13 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     erwarte(!(await p.evaluate(() => __heimat.hud().hinweis)), `${art}: nach dem ersten Schieben ist der Steuerungs-Hinweis weg`);
     await insel(p);
     erwarte(!(await p.evaluate(() => __heimat.hud().hinweis)), `${art}: nach dem Neuladen bleibt er weg`);
-    // Zimmer (UX-Paket 5): sichtbare Tür nach draußen, antippbar
+    // Zimmer: die Tür vor der Pinnwand ist seit der Erprobung 10.11.2026 weg – hinaus mit dem Knopf „Nach draußen“
     await p.evaluate(() => __heimat.reingehen()); await p.waitForTimeout(600);
-    const t = await p.evaluate(() => Object.assign({ drinnen: __heimat.drinnen }, __heimat.zimmerTuer()));
-    erwarte(t.drinnen && t.tipp && t.x > 3.5, `${art}: im Zimmer gibt es eine antippbare Tür an der rechten Wand`);
+    const t = await p.evaluate(() => ({ drinnen: __heimat.drinnen, tuer: __heimat.zimmerTuer(), raus: !document.getElementById("raus").hidden }));
+    erwarte(t.drinnen && t.tuer === null && t.raus, `${art}: im Zimmer keine Tür vor der Pinnwand, Knopf „Nach draußen“ sichtbar`);
     await bild(p, `hud-${art.replace(" ", "-")}-zimmer`);
-    await p.evaluate(() => __heimat.tuerTippen()); await p.waitForTimeout(600);
-    erwarte(!(await p.evaluate(() => __heimat.drinnen)), `${art}: Tür antippen führt nach draußen`);
+    await p.click("#raus"); await p.waitForTimeout(600);
+    erwarte(!(await p.evaluate(() => __heimat.drinnen)), `${art}: „Nach draußen“ führt hinaus`);
     await ctx.close();
   }
   await browser.close();

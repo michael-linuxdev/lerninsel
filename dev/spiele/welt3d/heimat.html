@@ -69,6 +69,33 @@
     #einrichten { bottom: max(176px, calc(env(safe-area-inset-bottom) + 166px)); }
   }
   /* Meine Welt: Wünsche-Assistent und gespeicherte Welten */
+  /* Fenster für Wissensbaum und Pinnwand (Erprobung 10.11.2026): unten, damit man oben sieht, wohin die Kamera gefahren ist */
+  #fenster { position: fixed; inset: 0; z-index: 6; display: flex; align-items: flex-end; justify-content: center; padding: 14px; padding-bottom: max(14px, env(safe-area-inset-bottom)); background: rgba(40,30,80,.18); }
+  #fenster[hidden] { display: none; }
+  .fenster-karte { background: #fff; border: 3px solid var(--kontur, #3B1F63); border-radius: 28px; padding: 14px 18px 16px; width: min(720px, 100%); max-height: min(62dvh, 560px); overflow-y: auto; box-shadow: 0 8px 0 var(--kontur, #3B1F63); color: var(--pflaume); display: grid; gap: 10px; }
+  .fenster-karte h2 { margin: 0; font-size: 1.4rem; }
+  .fenster-zeile { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+  .fenster-zeile p, #fenster-ru { margin: 0; font-size: 1.15rem; font-weight: 500; line-height: 1.35; }
+  #fenster-ru { background: #FFF6D6; color: #7A4A10; border-radius: 12px; padding: 6px 10px; font-size: 1rem; }
+  #fenster-ru[hidden], #fenster-stand[hidden], #fenster-detail[hidden], #fenster-los[hidden] { display: none; }
+  #fenster-vorlesen, #fenster-hoeren, #fenster-zu { min-width: 52px; min-height: 52px; padding: 0 10px; font-size: 1.3rem; }
+  #fenster-stand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .fenster-balken { flex: 1; height: 16px; border-radius: 999px; background: #EFEAF8; overflow: hidden; }
+  .fenster-balken > span { display: block; height: 100%; background: #5DBB5A; border-radius: 999px; }
+  .fenster-liste { display: flex; flex-wrap: wrap; gap: 10px; }
+  .fenster-liste:empty { display: none; }
+  .fenster-eintrag { display: inline-flex; align-items: center; gap: 8px; min-height: 56px; max-width: 100%; padding: 6px 14px 6px 8px; border-radius: 999px; background: #F6F2FF; border: 3px solid var(--f, #D9D2EC); font: inherit; font-weight: 600; font-size: 1.05rem; color: var(--pflaume); text-align: left; }
+  .fenster-eintrag > .e { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--f, #D9D2EC); font-size: 1.4rem; }
+  .fenster-eintrag > .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 22ch; }
+  .fenster-liste.pinnwand .fenster-eintrag { border-radius: 10px; background: #FFF9D9; transform: rotate(-1deg); }
+  .fenster-liste.pinnwand .fenster-eintrag:nth-child(even) { transform: rotate(1.2deg); }
+  .fenster-liste.pinnwand .fenster-eintrag > .e { border-radius: 8px; background: transparent; }
+  .fenster-eintrag.neu { box-shadow: 0 0 0 3px #FFC83D; }
+  .fenster-eintrag.an { background: #FFE08A; }
+  #fenster-detail { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; background: #FFF6D6; border-radius: 20px; padding: 12px 14px; }
+  #fenster-detail-e { font-size: 2.6rem; line-height: 1; }
+  #fenster-detail-t { margin: 0; font-size: 1.3rem; font-weight: 600; line-height: 1.3; }
+  #fenster-los { justify-self: center; min-height: 56px; padding: 0 28px; font-size: 1.2rem; }
   #welt { position: fixed; inset: 0; z-index: 6; background: rgba(40,30,80,.55); display: grid; place-items: center; padding: 14px; }
   .welt-karte { background: #fff; border-radius: 28px; padding: 18px 20px; width: min(760px, 100%); max-height: calc(100dvh - 28px); overflow-y: auto; box-shadow: 0 12px 0 rgba(0,0,0,.15); color: var(--pflaume); }
   .welt-karte h2 { margin: 0; font-size: 1.6rem; }
@@ -137,6 +164,17 @@
   <div class="laden-kopf"><h2 id="laden-titel">🛋️ Zimmer einrichten</h2><button class="knopf" id="laden-zu" aria-label="Schließen">✖</button></div>
   <p id="laden-text"></p>
   <div id="laden-liste"></div>
+</div>
+<div id="fenster" hidden role="dialog" aria-labelledby="fenster-titel">
+  <div class="fenster-karte">
+    <div class="laden-kopf"><h2 id="fenster-titel"></h2><button class="knopf" id="fenster-zu" aria-label="Schließen">✖</button></div>
+    <div class="fenster-zeile"><p id="fenster-text"></p><button class="knopf" id="fenster-vorlesen" aria-label="Vorlesen">🔊</button></div>
+    <p id="fenster-ru" class="ru" lang="ru" hidden></p>
+    <div id="fenster-stand" hidden></div>
+    <div id="fenster-liste" class="fenster-liste"></div>
+    <div id="fenster-detail" hidden><span id="fenster-detail-e"></span><p id="fenster-detail-t"></p><button class="knopf" id="fenster-hoeren" aria-label="Vorlesen">🔊</button></div>
+    <button class="knopf haupt" id="fenster-los"></button>
+  </div>
 </div>
 <div id="welt" hidden role="dialog" aria-label="Meine Welt">
   <div class="welt-karte">

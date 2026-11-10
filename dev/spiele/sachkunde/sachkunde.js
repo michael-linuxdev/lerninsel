@@ -155,7 +155,13 @@
     sprich(texte[id].de);
   }
   const weiterKnopf = (text = "Weiter") => `<button class="knopf weiter" id="weiter">${text}</button>`;
-  function aufWeiter() { const w = $("weiter"); if (w) w.addEventListener("click", () => { S.ton("tipp"); weiter(); }); }
+  // zeig (Erprobung 10.11.2026): Erscheint „Weiter“ erst nach einer Antwort, rollt die Aufgabenkarte so weit, dass der Knopf zu sehen ist
+  // (im Querformat lag er sonst unter dem Rand der Karte – „Ergebnis und Erklärung da, kein Weiter-Knopf“).
+  function aufWeiter(zeig = true) {
+    const w = $("weiter"); if (!w) return;
+    w.addEventListener("click", () => { S.ton("tipp"); weiter(); });
+    if (zeig && w.scrollIntoView) requestAnimationFrame(() => { try { w.scrollIntoView({ block: "nearest" }); } catch (e) { /* alt */ } });
+  }
   function weiter() { SP.stopp(); if (window.Klang) Klang.stopp(); lauf.pos++; schritt(); }
   function erklaere(el, art, de, ru) {
     const id = eintrag(de, ru);
@@ -203,7 +209,9 @@
     const quelle = s.__kap ? (alle.find(x => x.id === s.__kap) || orig) : orig, idx = quelle.schritte ? quelle.schritte.indexOf(s) : -1;
     Erprobung.zeige({ inhalt: (quelle.fach ? "faecher:" : "sachkunde:") + quelle.id, schritt: idx >= 0 ? idx : s.__karte ? "wiederholung" : s.__transfer ? "transfer" : s.typ,
       text: s.typ + ": " + (s.frage || s.satz || s.titel || s.text || ""), fach: quelle.fach || "sachkunde", klasse: quelle.stufe || quelle.kl || "", daten: quelle.lernstand || quelle.nachfrage ? null : quelle,
-      ru: S.ht(s) || S.ht(s, "satz") || "", el: A });
+      ru: S.ht(s) || S.ht(s, "satz") || "", el: A,
+      loesung: s.typ === "wahl" ? (s.optionen || []).filter(o => o.ok).map(o => o.t).join(" / ") : s.typ === "daumen" ? (s.ok ? "👍 stimmt" : "👎 stimmt nicht")
+        : s.typ === "zuordnen" ? (s.dinge || []).map(d => `${d.t} → ${d.gruppe}`).join(", ") : "" });
   }
   const bildVon = (s) => s.baum ? BI.stammbaum(lauf.t.stammbaum, s.baum) : BI.bild(s.bild);
 
@@ -221,7 +229,7 @@
         blase(s.text, S.ht(s));
         const fakten = (s.fakten || []).map(([de, ru]) => { const id = eintrag(de, ru); return `<li>${vt(id)}${mini(id)}</li>`; }).join("");
         A.innerHTML = `<h2 style="margin:0">${mitName(s.titel)}</h2>` + bildVon(s) + (fakten ? `<ul class="fakten">${fakten}</ul>` : "") + weiterKnopf(lauf.pos === t.schritte.length - 1 ? "Fertig!" : "Weiter");
-        aufWeiter(); break;
+        aufWeiter(false); break;
       }
       case "wahl": {
         const opts = mische(s.optionen);

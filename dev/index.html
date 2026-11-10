@@ -97,6 +97,7 @@
   .name-aendern { outline: 0; font-size: 1rem; min-height: 44px; margin-top: 10px; box-shadow: none; background: transparent; text-decoration: underline; text-underline-offset: 4px; }
   .abzeichen { display: inline-flex; align-items: center; gap: .4em; padding: 4px 12px; border-radius: 999px; background: #fff; font-weight: 600; font-size: .95rem; box-shadow: var(--schatten); }
   .abzeichen[hidden] { display: none; }
+  a.abzeichen { color: inherit; text-decoration: none; min-height: 40px; border: 2px solid var(--kontur, #3B1F63); }   /* Erprobung 10.11.2026: Antippen zeigt den Tablet-Führerschein */
 
   /* Reihe: Meine Ecke, Mein Tier, Erst lernen – dann spielen */
   .reihe { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 12px; align-items: stretch; }
@@ -260,7 +261,7 @@
   <div class="kopf">
     <header class="hallo">
       <h1 class="name" id="name" aria-label=""></h1>
-      <span class="abzeichen" id="abzeichen" hidden>🪪 Tablet-Profi</span>
+      <a class="abzeichen" id="abzeichen" href="spiele/medien/#fuehrerschein" aria-label="Tablet-Profi: Tablet-Führerschein ansehen" hidden>🪪 Tablet-Profi</a>
     </header>
     <a class="heute-fuer-dich" id="heute-fuer-dich" hidden></a>
     <div class="leiste">

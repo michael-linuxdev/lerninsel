@@ -36,6 +36,19 @@ zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, t
    CI-Zeitlimit 60 min (Lauf 115 grün nach Review-Runde). Viele Agenten parallel: je eigener Worktree, generierte Dateien (`dev/`, `spiele/welt3d/`, `ru-texte.js`, `icons.js`) nicht committen lassen,
    beim Zusammenführen Testlisten in `tests/laufen.sh`/CI vereinen und neue Tests auf `#uebergabe-los` prüfen; Test-Haken-Objekte mit Gettern nie per `Object.assign` erweitern (`defineProperties`).
 
+## 1. Stand (13.11.2026 – Rückmeldung der ersten Erprobung)
+**Neu (PLAN „Stand 13.11.2026 (Rückmeldung aus der ersten Erprobung …)“):** alle 22 Meldungen der Datei „M“ bearbeitet – Führerschein-Bild speichern, russische Stimme bei Antworten, Robo-Wiederholung,
+Tür zu während einer Szene, „Weiter“ im Sachunterricht quer, Matheweg hoch, Figur (Afro, Strähnen, Ärmelnaht), Fenster für Wissensbaum/Pinnwand, Kamera-Standard „frei“, Zimmertür weg, Meldungen führen weiter,
+Atelier „💾 Speichern“, Erklär-Einheit ⬅️, erwartete Antwort in der Prüfleiste. Tests `rueckmeldung`, `rueckmeldung3d`.
+**Im iPad testen (Hauptseite bzw. /dev, als Home-Bildschirm-App):**
+1. Tablet-Führerschein → eine Lektion mit Antworten: „RU“ neben jeder Antwort antippen – Text und russische Stimme? Startseite: „🪪 Tablet-Profi“ antippen → Führerschein → „⬇️ Als Bild speichern“: kommt das Teilen-Menü („Bild sichern“)?
+2. Insel: steht die Kamera „frei“ (mit einem Finger rechts drehen, zwei Finger zoomen)? Wissensbaum antippen → kurze Fahrt → Fenster, eine Frucht antippen, 🔊. Ins Zimmer → Pinnwand ebenso; keine Tür mehr davor.
+3. Insel mit neuem Kind, das schon gelernt hat: Robo sagt „Die Sonne ist aufgegangen“ nur einmal; währenddessen bleibt die Haustür zu.
+4. Sachunterricht quer mit Erprobung (Lehrkraft): Prüfleiste links unter Ella mit „Erwartete Antwort“, nach der Antwort ist „Weiter“ zu sehen.
+5. Matheweg hoch: Band ganz im Bild, Kacheln unten mit Abstand; eine neue Station → Erklär-Einheit: ⬅️ oder nach rechts wischen.
+6. Kleiderschrank: Frisuren „lang“, „Bob“, „Afro“ (auch auf der Insel) und ein T-Shirt ansehen. Atelier: „💾 Speichern“.
+**Offen:** Was genau ging bei „Fachlich prüfen erst nach der Ergebniskontrolle“ nicht (nicht nachstellbar)? Korrekturwunsch „Es haben 6 gefehlt (Präteritum)“ – zurückgestellt.
+
 ## 1. Stand (12.11.2026)
 **Neu (PLAN „Stand 12.11.2026 (Runde 2 fertig …)“):** Kunst/Musik/Werken und Sport/Ethik/Religion ohne „teilweise“ (Draußen-Punkte 🌍), „Hör genau hin!“ mit Klängen, Bewegungspause; Englisch mit Dialogen,
 Rollenspielen, Hörgeschichten und Nachsprechen (Aufnahme nur mit Eltern-Schalter); **Kapitel 9 „Bennos Brücke“** (Bauseite + wachsende 3D-Brücke), Finale = Kapitel 10; Emoji-Bilder in 24 Häppchen.

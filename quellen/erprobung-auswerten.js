@@ -126,13 +126,18 @@ function bericht(dateien, opt = {}) {
 
   // Korrekturen
   t += "## Korrekturvorschläge (je Datei:Inhalt)\n\n";
-  const korr = art("pruefung").filter(e => e.urteil !== "ok");
+  // Je Datei, Rolle, Inhalt und Schritt zählt das letzte Urteil (Erprobung 10.11.2026: 👍/✏️/👍 nacheinander getippt ergab drei Einträge);
+  // ein früherer Eintrag mit geschriebenem Vorschlag geht dabei nie verloren.
+  const urteile = (() => { const letzte = new Map(), mitText = [];
+    art("pruefung").slice().sort((a, b) => a.t - b.t).forEach(e => { const k = [wer(e), e.rolle, e.inhalt, e.schritt, e.h || ""].join("|"), alt = letzte.get(k); if (alt && alt.korrektur) mitText.push(alt); letzte.set(k, e); });
+    return mitText.concat([...letzte.values()]).sort((a, b) => a.t - b.t); })();
+  const korr = urteile.filter(e => e.urteil !== "ok");
   if (!korr.length) t += "_keine_\n";
   Object.entries(gruppiere(korr, e => wer(e) + ":" + e.inhalt)).forEach(([k, l]) => {
     t += `### ${k}\n\n` + l.map(e => `- **${ROLLE[e.rolle] || e.rolle} ${e.urteil === "unklar" ? "❓ unklar" : "✏️ ändern"}**${e.schritt != null ? ` (Schritt ${e.schritt})` : ""}${e.text ? ` – Aufgabe: „${md(e.text)}“` : ""}` +
       `${e.ruText ? ` – Text: „${md(e.ruText)}“` : ""}${e.de ? ` – Deutsch: „${md(e.de)}“` : ""}\n  → ${e.korrektur ? `„${md(e.korrektur)}“` : "_(ohne Vorschlag)_"} · Prüfsumme ${e.rolle === "fach" ? zustand(e) : (e.h || "–")}`).join("\n") + "\n\n";
   });
-  const ok = gruppiere(art("pruefung").filter(e => e.urteil === "ok"), e => e.rolle);
+  const ok = gruppiere(urteile.filter(e => e.urteil === "ok"), e => e.rolle);
   t += "## Bestätigt (👍)\n\n" + tabelle(["Rolle", "Urteile", "Inhalte", "Prüfer"], Object.entries(ok).map(([r, l]) => [ROLLE[r] || r, l.length, new Set(l.map(e => e.inhalt)).size, [...new Set(l.map(wer))].join(", ")]));
   const ruOk = (ok.ru || []).concat(ok.hsb || []).filter(e => /^(ru|hsb)-text:/.test(e.inhalt));
   if (ruOk.length) t += "\nAus den Prüflisten als richtig bestätigt (Schlüssel): " + [...new Set(ruOk.map(e => e.inhalt))].join(" ") + "\n";

@@ -50,8 +50,8 @@
   function speichere(d) { S.speichere("sticker", d); }
   function melde(st, neu) {
     const C = window.Charakter, titel = neu ? `🌟 Neuer Sticker: ${st.e} ${st.name}` : `${st.e} ${st.name} – schon da!`;
-    const text = neu ? "Er klebt jetzt in deinem Stickeralbum." : "Doppelte Sticker kannst du bald tauschen.";
-    if (C && C.hinweis) C.hinweis(titel, text, "#C2337A"); else if (S.meldung) S.meldung(titel);
+    const text = neu ? "Er klebt jetzt in deinem Stickeralbum. 👉 Tipp hier zum Ansehen." : "Doppelte Sticker kannst du bald tauschen.";
+    if (C && C.hinweis) C.hinweis(titel, text, "#C2337A", "spiele/album/");   // Erprobung 10.11.2026: Antippen öffnet das Album else if (S.meldung) S.meldung(titel);
   }
   function gib(id, d0) {
     const st = ALLE[id]; if (!st) return false;
@@ -89,8 +89,8 @@
     d.aufgaben++;
     if (d.aufgaben >= PRO_STICKER && d.heute < MAX_TAG && fehlend(d).length > d.wahl) {
       d.aufgaben = 0; d.heute++; d.wahl++;
-      const C2 = window.Charakter, t = "🎁 Du darfst dir einen Sticker aussuchen!", x = "Öffne dein Stickeralbum und such dir einen aus.";
-      if (C2 && C2.hinweis) C2.hinweis(t, x, "#C2337A"); else if (S.meldung) S.meldung(t);
+      const C2 = window.Charakter, t = "🎁 Du darfst dir einen Sticker aussuchen!", x = "Tipp hier: Dein Stickeralbum geht auf.";
+      if (C2 && C2.hinweis) C2.hinweis(t, x, "#C2337A", "spiele/album/"); else if (S.meldung) S.meldung(t);
     }
     speichere(d);
   }
