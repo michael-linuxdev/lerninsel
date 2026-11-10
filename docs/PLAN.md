@@ -2606,3 +2606,9 @@ Erste Erprobungsdatei (Tester „M“, iPad hoch und quer, Home-Bildschirm-App, 
   gilt wie im Vorbild 6 Stunden; weil hier Kinder spielen, schaltet „Ausblenden“ der Karte „Home-Bildschirm“ im Elternbereich den Hinweis dauerhaft ab. Nie in der installierten App, nie am Computer. Russisch (Entwurf) nur mit Hilfesprache.
   Test `installhinweis`. Auf echtem Safari noch ungeprüft.
 
+
+## Stand 10.11.2026 (iPad-Meldung: Noten-Schild über Paula abgeschnitten)
+- **Fehler:** Im frühen Spielstand (Nebelrand sichtbar) war das 🎵-Schild über Paulas Bühne oben abgeschnitten, ebenso blasse 🔒-Schilder vor dem Horizont.
+  Ursache: Die Schilder zeichnen ohne Tiefentest; das Nebelband über dem Wasser (`renderOrder = 2`) wurde danach gezeichnet und überdeckte sie.
+- **Behoben:** `schildSprite()` in `quellen/welt3d/heimat.js` setzt `renderOrder = 3` (nach dem Band) und `userData.schild`; Test-Haken `__heimat.schilder()`,
+  geprüft in `tests/hud.js` (iPad quer und Handy). Kein zusätzlicher Zeichenaufruf.

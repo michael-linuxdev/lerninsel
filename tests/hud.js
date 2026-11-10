@@ -38,6 +38,9 @@ process.on("unhandledRejection", (e) => { console.log("❌ Abbruch: " + e.messag
     erwarte(h.hinweis && await p.evaluate(() => !!document.querySelector("#joy-hinweis .hand") && getComputedStyle(document.querySelector("#joy-hinweis .hand")).animationName === "schieben"), `${art}: Steuerungs-Hinweis mit bewegtem Zeichen`);
     const zeile = await p.evaluate(() => { const k = [...document.querySelectorAll(".leiste > *:not(.platz)")].map(e => e.getBoundingClientRect()); return { eine: new Set(k.map(r => Math.round(r.top))).size === 1, imBild: k.every(r => r.right <= innerWidth && r.left >= 0) }; });
     erwarte(zeile.eine && zeile.imBild, `${art}: Leiste in einer Zeile im Bild`);
+    // iPad-Meldung 10.11.2026: das Noten-Schild über Paula war oben abgeschnitten – das Nebelband (renderOrder 2) überdeckte die Schilder ohne Tiefentest
+    const sch = await p.evaluate(() => __heimat.schilder());
+    erwarte(sch.n >= 1 && sch.ordnung.every(o => o > sch.band), `${art}: ${sch.n} Schilder (🎵, 🔒 …) zeichnen nach dem Nebelband (${[...new Set(sch.ordnung)].join(",")} > ${sch.band})`);
     await bild(p, `hud-${art.replace(" ", "-")}-zu`);
     // Blatt öffnen
     await p.click("#einstellungen"); await p.waitForTimeout(200);
