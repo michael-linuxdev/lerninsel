@@ -2600,4 +2600,9 @@ Erste Erprobungsdatei (Tester „M“, iPad hoch und quer, Home-Bildschirm-App, 
 - **Neues App-Icon (Wunsch des Auftraggebers):** Insel mit Wissensbaum (drei Früchte = Fächerfarben), Sonne, Wolke, Meer – Stil A mit Kontur `#3B1F63`; ersetzt den Kleiderbügel aus der Anfangszeit.
   Quelle `quellen/app-icon/icon-inhalt.svg`, gebaut mit `node quellen/app-icon/bauen.js [vorschau-ordner]` → `icons/icon.svg` (runde Ecken, Favicon), `icon-180/192/512.png` (vollflächig; iOS/Android runden selbst,
   Wichtiges im mittleren 80-%-Kreis für „maskable“). Vorschau `docs/app-icon-vorschau.png`. Auf dem iPad erscheint es erst, wenn die App vom Home-Bildschirm entfernt und neu hinzugefügt wird.
+- **Installations-Hinweis wie im Repo `idlegame` (Wunsch des Auftraggebers):** `shared/installhinweis.js` – auf Tablet und Handy im Browser erscheint auf der Startseite und im Elternbereich (dort landet der erste Besuch)
+  ein Vollbild-Hinweis „Zuerst die App installieren“ (überschrieben „Für Erwachsene“): erkanntes Gerät und Browser, passende Schritte (11 Anleitungen: Safari, Chrome, Firefox, Edge, Samsung, Opera, In-App-Browser …),
+  Gründe, iOS-Warnung (die App hat einen eigenen Speicher) und wie der Spielstand mitkommt; Android zeigt „📲 Jetzt installieren“, sobald der Browser es anbietet. **Entscheidungen:** „Ohne Installation im Browser weiter“
+  gilt wie im Vorbild 6 Stunden; weil hier Kinder spielen, schaltet „Ausblenden“ der Karte „Home-Bildschirm“ im Elternbereich den Hinweis dauerhaft ab. Nie in der installierten App, nie am Computer. Russisch (Entwurf) nur mit Hilfesprache.
+  Test `installhinweis`. Auf echtem Safari noch ungeprüft.
 
