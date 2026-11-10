@@ -2597,4 +2597,7 @@ Erste Erprobungsdatei (Tester „M“, iPad hoch und quer, Home-Bildschirm-App, 
   Auswertung nimmt je Schritt das letzte Urteil (Vorschläge mit Text bleiben). „90 + ? = 100“ mit Antwort „1“ war vermutlich ein Vertipper (✓ liegt neben 0), keine zu frühe Auswertung.
 - **Offen / nächstes:** „Es haben 6 gefehlt (Präteritum)“ – Korrekturwunsch unklar, vom Auftraggeber zurückgestellt. Antippen einer Stufen-Meldung mitten in einer Mathe-Runde verlässt die Runde (bewusst, beobachten).
   iPad: „Als Bild speichern“, RU-Stimme, Fenster und freie Kamera auf echtem Safari prüfen.
+- **Neues App-Icon (Wunsch des Auftraggebers):** Insel mit Wissensbaum (drei Früchte = Fächerfarben), Sonne, Wolke, Meer – Stil A mit Kontur `#3B1F63`; ersetzt den Kleiderbügel aus der Anfangszeit.
+  Quelle `quellen/app-icon/icon-inhalt.svg`, gebaut mit `node quellen/app-icon/bauen.js [vorschau-ordner]` → `icons/icon.svg` (runde Ecken, Favicon), `icon-180/192/512.png` (vollflächig; iOS/Android runden selbst,
+  Wichtiges im mittleren 80-%-Kreis für „maskable“). Vorschau `docs/app-icon-vorschau.png`. Auf dem iPad erscheint es erst, wenn die App vom Home-Bildschirm entfernt und neu hinzugefügt wird.
 
