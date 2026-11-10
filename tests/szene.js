@@ -88,7 +88,10 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await i.click("#szene-weiter", { force: true }); await i.waitForTimeout(800);
     const haus = await i.evaluate(() => { const p = Insel.ort("haus")(); const r = document.querySelector(".zeige-ring"); const rr = r && r.getBoundingClientRect();
       return { p, ring: rr ? { x: rr.left + rr.width / 2, y: rr.top + rr.height / 2 } : null, rand: r && r.classList.contains("rand"), a: __szene.aktuell() }; });
-    if (haus.p && haus.p.sichtbar) erwarte(haus.a && haus.a.zeigt && haus.ring && Math.abs(haus.ring.x - haus.p.x) < 3 && Math.abs(haus.ring.y - haus.p.y) < 3, `Insel: Leuchten liegt auf dem Haus (${lage})`);
+    // „sichtbar“ erlaubt 5 % über den Rand; liegt der Punkt knapp außerhalb des Fensters (Hochformat), zeigt die Hand vom Rand aus dorthin
+    const imFenster = haus.p && haus.p.sichtbar && await i.evaluate((q) => q.x >= 0 && q.y >= 0 && q.x <= innerWidth && q.y <= innerHeight, haus.p);
+    if (haus.p && haus.p.sichtbar && !imFenster) erwarte(haus.a && haus.a.zeigt && haus.rand, `Insel: Haus knapp außerhalb des Fensters – Hand zeigt vom Rand dorthin (${lage})`);
+    if (imFenster) erwarte(haus.a && haus.a.zeigt && haus.ring && Math.abs(haus.ring.x - haus.p.x) < 3 && Math.abs(haus.ring.y - haus.p.y) < 3, `Insel: Leuchten liegt auf dem Haus (${lage})`);
     else erwarte(haus.a && haus.a.zeigt && haus.ring && haus.ring.x > 0 && haus.ring.x < b && haus.ring.y > 0 && haus.ring.y < h && haus.rand, `Insel: Haus außerhalb des Bildes → Pfeil am Rand zeigt die Richtung (${lage})`);
     await bild(i, `szene-insel-${lage}`);
     await i.click("#szene-weiter", { force: true }); await i.click("#szene-weiter", { force: true }); await i.waitForTimeout(200);

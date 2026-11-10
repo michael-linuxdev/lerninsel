@@ -445,7 +445,8 @@
   const merkkisteBei = () => (W.Lernkartei && W.Lernkartei.anzahlFaellig("deutsch") === 0 && W.Lernkartei.anzahlFaellig("sachkunde") > 0 ? "eule" : "fipsi");
   // nach dem Ende einer Story-Szene
   function storyFertig(def) {
-    const St = W.Story; if (!St || !def) return; if (def.etappe) St.etappeFertig(def.etappe); if (def.kapitel) St.setzeKapitel(def.kapitel);
+    const St = W.Story; if (!St || !def) return; if (def.etappe) St.etappeFertig(def.etappe);
+    if (def.id === "sonne") St.etappeFertig("E2"); if (def.kapitel) St.setzeKapitel(def.kapitel);
     if (def.jahreszeit) St.merkeSzene(jahreszeitJetzt().merke, true);
     if (def.fest) { const f = festJetzt(); if (f && f.id === def.id) St.merkeSzene(f.merke, true); }   // je Fest und Jahr einmal   // je Jahreszeit und Jahr einmal (die Szene selbst steht einmal in der Chronik)
   }
