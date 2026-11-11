@@ -364,7 +364,7 @@ window.WERKSTATT = [
       { typ: "luecke", e: "👵", satz: "Nach der Anrede „Liebe Oma“ steht ein ___.", optionen: ["Komma", "Fragezeichen", "Ausrufezeichen und Smiley"], ru: "После обращения «Liebe Oma» ставится запятая." },
       { typ: "verbessern", e: "✏️", frage: "In der Anrede ist ein Fehler. Tippe das Wort an!", satz: "lieber Tom, wie geht es dir?", falsch: "lieber", optionen: ["Lieber", "Liber", "Leiber"], tipp: "Richtig! Die Anrede beginnt groß.", ru: "В обращении ошибка: первое слово пишется с большой буквы." },
       { typ: "luecke", e: "👩‍🏫", satz: "An die Lehrerin schreibst du höflich: „Können ___ mir bitte helfen?“", optionen: ["Sie", "du", "ihr"], ru: "Учительнице пишут вежливо: «Können Sie mir bitte helfen?»" },
-      { typ: "luecke", e: "🤝", satz: "Ein passender Gruß am Ende: „Viele ___“", optionen: ["Grüße", "Hallo", "Tschüss Anfang"], ru: "Подходящее прощание в конце: «Viele Grüße»." },
+      { typ: "luecke", e: "🤝", satz: "Ein passender Gruß am Ende: „Viele ___“", optionen: ["Grüße", "Hallo", "Tschüss"], ru: "Подходящее прощание в конце: «Viele Grüße»." },
       { typ: "ordnen", e: "🎉", frage: "Ordne die Einladung!", teile: ["Liebe Jana,", "ich lade dich zu meinem Geburtstag ein.", "Wir feiern am Samstag um 15 Uhr bei mir zu Hause.", "Bitte sag mir bis Freitag Bescheid.", "Dein Paul"], ru: "Расставь приглашение по порядку." },
       { typ: "sag", text: "Prima, {name}! Mit Ort, Datum, Anrede, Text, Gruß und Namen ist dein Brief komplett.", ru: "Отлично! С местом, датой, обращением, текстом, прощанием и именем твоё письмо готово." }
     ]
@@ -392,7 +392,7 @@ window.WERKSTATT = [
       { typ: "ordnen", e: "🐟", frage: "Jetzt wird es knifflig: erster und zweiter Buchstabe sind gleich!", teile: ["Bach", "Ball", "Bank", "Baum"], ru: "Теперь сложно: первая и вторая буквы одинаковые. Смотри на третью." },
       { typ: "luecke", e: "🏃", satz: "„lief“ findest du im Wörterbuch unter ___.", optionen: ["laufen", "lief", "Lauf"], ru: "«lief» ищут в словаре под словом «laufen» (неопределённая форма)." },
       { typ: "luecke", e: "🌳", satz: "„Bäume“ findest du im Wörterbuch unter ___.", optionen: ["Baum", "Bäume", "bäumen"], ru: "«Bäume» ищут под словом «Baum» (единственное число)." },
-      { typ: "luecke", e: "🌡️", satz: "„kälter“ findest du im Wörterbuch unter ___.", optionen: ["kalt", "kälter", "Kälte am"], ru: "«kälter» ищут под словом «kalt» (основная форма)." },
+      { typ: "luecke", e: "🌡️", satz: "„kälter“ findest du im Wörterbuch unter ___.", optionen: ["kalt", "kälter", "Kälte"], ru: "«kälter» ищут под словом «kalt» (основная форма)." },
       { typ: "luecke", e: "📘", satz: "Welches Wort steht im Wörterbuch weiter vorn? ___", optionen: ["Maus", "Mund", "Mutter"], ru: "Какое слово стоит в словаре раньше? «Maus»." },
       { typ: "sag", text: "Klasse, {name}! Verben suchst du in der Grundform, Nomen in der Einzahl und Wiewörter in der Grundstufe.", ru: "Класс! Глаголы ищут в неопределённой форме, существительные — в единственном числе, прилагательные — в основной форме." }
     ]

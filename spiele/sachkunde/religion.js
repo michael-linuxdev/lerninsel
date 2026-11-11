@@ -55,7 +55,7 @@
     kurz: "Jona läuft weg, der Sturm, im Bauch des Fisches, Jona betet, keine Angst mehr", schritte: [
       info("Jona läuft weg", "🐳", "Die Bibel erzählt: Gott schickt Jona in die große Stadt Ninive. Jona will nicht. Er steigt auf ein Schiff und fährt in die andere Richtung. Da kommt ein großer Sturm.",
         "Библия рассказывает: Бог посылает Иону в большой город Ниневию. Иона не хочет. Он садится на корабль и плывёт в другую сторону. И тут начинается сильная буря."),
-      wahl("Was passiert mit Jona nach der Geschichte?", "Что происходит с Ионой по этой истории?", "🌊",
+      wahl("Wie geht die Geschichte von Jona weiter?", "Как продолжается история Ионы?", "🌊",
         ["Ein großer Fisch verschluckt ihn – im Bauch des Fisches betet Jona", "Его проглатывает большая рыба – во чреве рыбы Иона молится", "Richtig! Nach drei Tagen kommt Jona wieder an Land.", "Правильно! Через три дня Иона снова оказывается на суше."],
         ["Er schwimmt allein nach Hause", "Он один доплывает домой", "Nein – ein großer Fisch rettet ihn, erzählt die Bibel.", "Нет – его спасает большая рыба, рассказывает Библия."],
         ["Er bleibt für immer auf dem Schiff", "Он навсегда остаётся на корабле", "Nein – die Seeleute werfen ihn ins Meer, dann kommt der Fisch.", "Нет – моряки бросают его в море, и тогда появляется рыба."]),

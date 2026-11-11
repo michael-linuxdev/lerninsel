@@ -63,7 +63,7 @@
     ["Reicht es nicht? Tausch den Zehner.", "Не хватает? Разменяй десяток."],
     ["Bis zur {0} muss die {1} voll werden.", "До {0} нужно дополнить {1}."],
     ["{0} Punkte machen die {1} voll.", "{0} точек дополняют до {1}."],
-    ["Jetzt sind es {0}. Es fehlen also {1}.", "Теперь их {0}. Значит, не хватало {1}."],
+    ["Jetzt sind es {0}. Es haben also {1} gefehlt.", "Теперь их {0}. Значит, не хватало {1}."],
     ["Jetzt du: Mach die {0} voll. Tipp die blauen Punkte an.", "Теперь ты: дополни до {0}. Нажми на синие точки."],
     ["Jetzt rechnest du: Wie viele fehlen bis zur {0}?", "Теперь считаешь ты: сколько не хватает до {0}?"],
     ["{0} und {1} machen die {2} voll. Daraus wird ein Zehner. Also {3}.", "{0} и {1} дополняют до {2}. Из этого получается десяток. Значит, {3}."],

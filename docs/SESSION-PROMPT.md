@@ -51,7 +51,7 @@ Atelier „💾 Speichern“, Erklär-Einheit ⬅️, erwartete Antwort in der P
 4. Sachunterricht quer mit Erprobung (Lehrkraft): Prüfleiste links unter Ella mit „Erwartete Antwort“, nach der Antwort ist „Weiter“ zu sehen.
 5. Matheweg hoch: Band ganz im Bild, Kacheln unten mit Abstand; eine neue Station → Erklär-Einheit: ⬅️ oder nach rechts wischen.
 6. Kleiderschrank: Frisuren „lang“, „Bob“, „Afro“ (auch auf der Insel) und ein T-Shirt ansehen. Atelier: „💾 Speichern“.
-**Offen:** Was genau ging bei „Fachlich prüfen erst nach der Ergebniskontrolle“ nicht (nicht nachstellbar)? Korrekturwunsch „Es haben 6 gefehlt (Präteritum)“ – zurückgestellt.
+**Offen:** Was genau ging bei „Fachlich prüfen erst nach der Ergebniskontrolle“ nicht (nicht nachstellbar)? Korrekturwunsch „Es haben 6 gefehlt“ ist seit der Nachlese vom 14.11. umgesetzt (Erklär-Einheit „Ergänzen“; PLAN „Stand 14.11.2026 (Nachlese …)“).
 
 ## 1. Stand (12.11.2026)
 **Neu (PLAN „Stand 12.11.2026 (Runde 2 fertig …)“):** Kunst/Musik/Werken und Sport/Ethik/Religion ohne „teilweise“ (Draußen-Punkte 🌍), „Hör genau hin!“ mit Klängen, Bewegungspause; Englisch mit Dialogen,

@@ -2637,3 +2637,12 @@ Lampe, Ähre, Öl, Überraschung, Rehkitz, Uhr ⏰ – `tests/wortschatz.js` sch
 
 **Offen / nächstes Paket:** Russische Entwürfe der neuen Sätze (≈ 200 in den Mathe-Tabellen, dazu Landkreise) brauchen die Prüfliste; Sorbisch zum Muttersprachler; Anlaut-Bilder für Ä/Ö/Ü, Gabel, Jaguar,
 Mütze als eigene Zeichnungen; den längeren Ta-a-Ton am Gerät anhören. Danach weiter wie in „Stand 13.11.2026".
+
+### Stand 14.11.2026 (Nachlese – zweite, unabhängige Durchsicht der Lerninhalte)
+- Parallel zur Inhaltsprüfung oben hat eine zweite Sitzung alle 509 Inhalte des Prüfstands gelesen (Mathe: 10 046 erzeugte Aufgaben nachgerechnet, **0 falsche Ergebnisse**; alle anderen Bereiche
+  vollständig gelesen, Fakten geprüft). Fast alle Befunde deckten sich mit der ersten Durchsicht und waren schon behoben – die beiden Durchsichten bestätigen sich gegenseitig.
+- **Zusätzlich behoben (8 Stellen):** Erklär-Einheit „Ergänzen“: „Es fehlen also 6“ → „Es haben also 6 gefehlt“ (das war der zurückgestellte Korrekturwunsch des Testers „M“: nach dem Auffüllen fehlt nichts mehr);
+  Denkfehler `verrueckt` griff bei 10 · 10 = 10; Hilfe `doppelt` („Hälfte von 0 ist 0 …“ bei einstelligen Zahlen); `k3rest` „fehlen noch 1“; verstümmelte Ablenker „Kälte am“ und „Tschüss Anfang“ in der Werkstatt;
+  Kunst `ku-farbauftrag` („… mit dem Flachpinsel“ verriet die Gruppe „Pinsel“); Religion `re-jona` („nach der Geschichte“ → „Wie geht die Geschichte von Jona weiter?“). Test: Modul `tests/inhaltsfehler/nachlese.js`.
+- **Ohne Befund in beiden Durchsichten:** Musik, Werken, Sport, Ethik; Religion und Englisch nur sprachliche Kleinigkeiten.
+- **Offen (klein):** Englisch „Big Ben (Glockenturm)“ – genau genommen die Glocke; „cap“ steht in der Wintergeschichte für Mütze. Prüfstand unverändert: eine maschinelle Durchsicht ersetzt keine Lehrkraft (Stufe 2).

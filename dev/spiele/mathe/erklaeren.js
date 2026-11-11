@@ -344,7 +344,7 @@
         { satz: "34 sind 3 Zehner und 4 Einzelne.", bild: F({ z: 3, rot: 4 }) },
         { satz: "Bis zur 40 muss die 10 voll werden.", bild: F({ z: 3, rot: 4, warten: 6 }) },
         { satz: "6 Punkte machen die 10 voll.", bild: F({ z: 3, rot: 4, blau: 6 }) },
-        { satz: "Jetzt sind es 40. Es fehlen also 6.", bild: F({ z: 4, neu: true }) }] },
+        { satz: "Jetzt sind es 40. Es haben also 6 gefehlt.", bild: F({ z: 4, neu: true }) }] },
       { typ: "machen", text: "Jetzt du: Mach die 10 voll. Tipp die blauen Punkte an.", art: "dazu", a: 34, b: 6 },
       { typ: "ergaenzen", text: "Jetzt rechnest du: Wie viele fehlen bis zur 60?", frage: "57 + ? = 60", antwort: "3", optionen: ["3", "7", "13"] },
       { typ: "gegenbeispiel", text: "Robo rechnet: 36 + 4 = 30. Stimmt das?", stimmt: false, fv: "uebertrag", warum: "6 und 4 machen die 10 voll. Daraus wird ein Zehner. Also 40." },

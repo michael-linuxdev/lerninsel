@@ -145,7 +145,7 @@
   const dreht = (c) => c >= 13 && c < 100 && c % 10 !== 0 && Math.floor(c / 10) !== c % 10;
   // (06.11.2026) Mal mehrstellig: Teilergebnisse ohne Einrücken addiert (234 · 26 → 468 + 1404 = 1872 statt 4680 + 1404)
   KATALOG.push({ id: "verrueckt", name: "Mal mehrstellig: Zeilen nicht eingerückt",
-    erkenne: (o, w) => o.op === "·" && o.a >= 10 && o.b >= 10 && w === ohneEinruecken(o) && w !== o.c,
+    erkenne: (o, w) => o.op === "·" && o.a >= 10 && o.b >= 10 && !(o.a === 10 && o.b === 10) && w === ohneEinruecken(o) && w !== o.c,
     kurz: () => "Jede neue Zeile rückt einen Platz weiter nach rechts.",
     lang: (o) => { const z = zeilen(o); return ["Du hast die Zeilen nicht eingerückt.",
       `${o.a} · ${z[0].d} heißt hier ${o.a} · ${z[0].d * 10 ** z[0].k} = ${z[0].wert * 10 ** z[0].k}.`,

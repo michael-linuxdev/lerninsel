@@ -65,7 +65,7 @@
       daumen("Vincent van Gogh hat die Farbe oft ganz dick aufgetragen – man kann die Pinselstriche sehen.", "Винсент Ван Гог часто наносил краску очень толсто – видны мазки кисти.", "🌻", true,
         "Stimmt! Seine Sonnenblumen und Sternenhimmel sind voller dicker, bewegter Striche.", "Верно! Его подсолнухи и звёздное небо полны толстых, подвижных мазков."),
       zuordnen("Welches Werkzeug passt?", "Какой инструмент подходит?", [["pinsel", "Pinsel", "Кисть", "🖌️"], ["finger", "Finger", "Палец", "☝️"]],
-        [["Feine Linie für Katzenhaare", "Тонкая линия для кошачьей шерсти", "pinsel"], ["Große Fläche mit dem Flachpinsel", "Большая площадь плоской кистью", "pinsel"], ["Ein Abdruck deiner Fingerkuppe als Marienkäfer", "Отпечаток подушечки пальца – божья коровка", "finger"], ["Mit Fingerfarbe einen Regenbogen wischen", "Провести радугу пальчиковыми красками", "finger"]]),
+        [["Feine Linie für Katzenhaare", "Тонкая линия для кошачьей шерсти", "pinsel"], ["Großer blauer Himmel", "Большое синее небо", "pinsel"], ["Ein Abdruck deiner Fingerkuppe als Marienkäfer", "Отпечаток подушечки пальца – божья коровка", "finger"], ["Mit Fingerfarbe einen Regenbogen wischen", "Провести радугу пальчиковыми красками", "finger"]]),
       ende("Klasse, {name}! Probier mal, ein Bild nur aus Tupfen zu malen – wie Seurat.", "Класс, {name}! Попробуй нарисовать картину только из точек – как Сёра.")
     ] });
   ku({ id: "ku-linie", lb: "ku1", kl: 2, lz: ["ku.ge.02"], name: "Punkt, Linie, Muster", e: "〰️", farbe: "#7B55B8", grund: "#F1EAFF",

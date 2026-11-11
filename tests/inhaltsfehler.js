@@ -3,7 +3,7 @@
 //   node tests/inhaltsfehler.js
 const path = require("path");
 const wurzel = path.join(__dirname, "..");
-const TEILE = ["mathe-stationen", "mathe-erklaeren", "deutsch", "sachunterricht", "faecher", "sprachen-orte"];
+const TEILE = ["mathe-stationen", "mathe-erklaeren", "deutsch", "sachunterricht", "faecher", "sprachen-orte", "nachlese"];
 let n = 0;
 for (const t of TEILE) {
   try {
