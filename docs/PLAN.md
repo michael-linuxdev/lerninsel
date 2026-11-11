@@ -2646,3 +2646,16 @@ Mütze als eigene Zeichnungen; den längeren Ta-a-Ton am Gerät anhören. Danach
   Kunst `ku-farbauftrag` („… mit dem Flachpinsel“ verriet die Gruppe „Pinsel“); Religion `re-jona` („nach der Geschichte“ → „Wie geht die Geschichte von Jona weiter?“). Test: Modul `tests/inhaltsfehler/nachlese.js`.
 - **Ohne Befund in beiden Durchsichten:** Musik, Werken, Sport, Ethik; Religion und Englisch nur sprachliche Kleinigkeiten.
 - **Offen (klein):** Englisch „Big Ben (Glockenturm)“ – genau genommen die Glocke; „cap“ steht in der Wintergeschichte für Mütze. Prüfstand unverändert: eine maschinelle Durchsicht ersetzt keine Lehrkraft (Stufe 2).
+
+### Stand 14.11.2026 (zweite Erprobungsdatei „ohne“, 11.11. – neun Meldungen)
+- **Datei:** `lerninsel-erprobung-ohne-2026-11-11.json` (iPad quer als Home-Bildschirm-App, 1180 × 788; Rollen Spieler/Lehrkraft/RU/HSB; 75 Aufgaben, 78 Prüf-Urteile – alle „ok“, 9 Meldungen). Auswertung mit `quellen/erprobung-auswerten.js`.
+- **Behoben (je mit Prüfung in `tests/erprobung2.js`):**
+  - *Matheweg:* Benno ragte über die runde Ecke der Tafel → steht jetzt innen auf dem unteren Rand, 30 px nach rechts gerückt.
+  - *Mein Tier:* Ei-Hinweis „Jede geschaffte Tagesaufgabe …“ war auf der Wiese kaum zu lesen → weißes Schild mit Kontur, größer, Umbruch nach dem ersten Satz. Seite scrollte bei 788 px Höhe → das Bild richtet sich auch nach der Höhe (`100dvh`).
+  - *Startseite:* Tier-Bild mit zu fetter Kontur → Klasse `fig-klein` wie bei der Kinderfigur (Konturen wachsen mit).
+  - *Meine Ecke:* Karte „Gemeinsam“ war rechts unten zu versteckt → links unter den Tagesaufgaben. „Ab jetzt rechnest du mit Fahrzeuge“ → ganzer Satz je Thema (`KULISSE_SATZ`: „mit Tieren“, „mit Fahrzeugen“, „mit Bildern aus dem Weltraum/aus der Natur“).
+- **Ideen umgesetzt:** Elternbereich: Karte **„Heute noch spielen dürfen“ als erste im Überblick** (`#spielzeit-karte`: Knöpfe 20/35/60 Minuten `.sz-knopf`, eigene Zahl `#sz-min` + `#sz-ok`; die Zeile in „Zeit & Regeln“ bleibt).
+  Meldung „+1 Leckerli für …“ führt beim Antippen zu Mein Tier.
+- **Ohne Änderung:** „Die Meldung ist falsch, ist aber schon gefixt“ (Doppelte von 7) – der Tester lief noch auf einem älteren Stand; in der Inhaltsprüfung behoben.
+- **Entscheidung:** Kein `--pruefstand` aus dieser Datei – sie stammt vom älteren App-Stand (Prüfsummen passen nicht mehr), und das Kürzel „ohne“ nennt keine prüfende Person.
+- **Aus dem Protokoll:** Einstufung 26 Aufgaben fehlerfrei in 2:44 min; im Elternbereich einmal „Bild hing über 1 s“ (beobachten). Fehlversuche nur bei „Doppelte von 36“, „51 + ? = 60“ und zwei Landkreis-Fragen – unauffällig.

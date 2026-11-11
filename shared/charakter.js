@@ -195,7 +195,7 @@
     speichere(d);
     if (LECKERLI[name]) {
       const t = tierGib(LECKERLI[name], 0);
-      if (t && t.phase === "tier") hinweis(`🍪 +${LECKERLI[name]} Leckerli`, `für ${t.name || "dein Tier"}`, "#E8A33D");
+      if (t && t.phase === "tier") hinweis(`🍪 +${LECKERLI[name]} Leckerli`, `für ${t.name || "dein Tier"}`, "#E8A33D", "spiele/tier/");   // (Erprobung 11.11.) Antippen führt zum Tier
     }
     const liste = aufgaben();
     liste.forEach(a => {

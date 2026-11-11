@@ -68,8 +68,11 @@
     $("ei-bild").innerHTML = `<svg viewBox="${VB}">${T.zeichneEi(d.ei, risse)}</svg>`;
     $("waerme").innerHTML = [...Array(P.WAERME_ZIEL)].map((_, i) => `<span class="${i < d.waerme ? "an" : ""}">🔥</span>`).join("");
     $("ei-text").textContent = bereit ? (risse ? "Es knackt! Weiter tippen!" : "Das Ei ist ganz warm. Tippe darauf – es schlüpft!") : heuteGewaermt ? "Das Ei fühlt sich schon wärmer an." : "Tippe auf das Ei, um es zu wärmen!";
-    $("ei-hilfe").textContent = bereit ? "" : "Jede geschaffte Tagesaufgabe wärmt das Ei. Einmal am Tag darfst du es auch selbst wärmen.";
-    setzeRu($("ei-text"), ruVon($("ei-text").textContent)); setzeRu($("ei-hilfe"), ruVon($("ei-hilfe").textContent));
+    // (Erprobung 11.11.) Hinweis als helles Schild, größer, mit Umbruch nach dem ersten Satz – auf der Wiese war er kaum zu lesen
+    const hilfe = bereit ? "" : "Jede geschaffte Tagesaufgabe wärmt das Ei. Einmal am Tag darfst du es auch selbst wärmen.";
+    $("ei-hilfe").hidden = !hilfe;
+    $("ei-hilfe").innerHTML = hilfe.replace(". ", ".<br>");
+    setzeRu($("ei-text"), ruVon($("ei-text").textContent)); setzeRu($("ei-hilfe"), ruVon(hilfe));
   }
   $("ei-bild").addEventListener("click", () => {
     const d = P.lade();

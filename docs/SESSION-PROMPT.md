@@ -40,6 +40,11 @@ Das war eine Prüfung aus Fachwissen – der Prüfstand bleibt bei Stufe 0 (kein
    CI-Zeitlimit 60 min (Lauf 115 grün nach Review-Runde). Viele Agenten parallel: je eigener Worktree, generierte Dateien (`dev/`, `spiele/welt3d/`, `ru-texte.js`, `icons.js`) nicht committen lassen,
    beim Zusammenführen Testlisten in `tests/laufen.sh`/CI vereinen und neue Tests auf `#uebergabe-los` prüfen; Test-Haken-Objekte mit Gettern nie per `Object.assign` erweitern (`defineProperties`).
 
+## 1. Stand (14.11.2026 – zweite Erprobungsdatei)
+**Neu (PLAN „Stand 14.11.2026 (zweite Erprobungsdatei …)“):** neun Meldungen der Datei „ohne“ bearbeitet – Benno an der Tafel, Mein Tier (Ei-Hinweis lesbar, kein Scrollen bei 788 px Höhe), Tier-Kontur auf der Startseite,
+„Gemeinsam“ links, Kulissen-Satz, Spielzeit-Karte als erste im Elternbereich (20/35/60 Minuten), Leckerli-Meldung führt zum Tier. Test `erprobung2`. Dazu die Nachlese der Inhaltsprüfung (`tests/inhaltsfehler/nachlese.js`).
+**Im iPad testen (Home-Bildschirm-App, quer):** Mein Tier mit Ei und mit Tier – scrollt nichts mehr? Startseite: Kontur des Tiers wie bei der Figur? Elternbereich → Überblick: „35 Minuten“ antippen. Meine Ecke → Meine Sachen → „Fahrzeuge“.
+
 ## 1. Stand (13.11.2026 – Rückmeldung der ersten Erprobung)
 **Neu (PLAN „Stand 13.11.2026 (Rückmeldung aus der ersten Erprobung …)“):** alle 22 Meldungen der Datei „M“ bearbeitet – Führerschein-Bild speichern, russische Stimme bei Antworten, Robo-Wiederholung,
 Tür zu während einer Szene, „Weiter“ im Sachunterricht quer, Matheweg hoch, Figur (Afro, Strähnen, Ärmelnaht), Fenster für Wissensbaum/Pinnwand, Kamera-Standard „frei“, Zimmertür weg, Meldungen führen weiter,

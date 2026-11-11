@@ -373,6 +373,22 @@
   // ---------- Zeit-Regeln ----------
   const Z = window.Zeit;
   const minText = (sek) => `${Math.round(sek / 60)} min`;
+  // (Erprobung 11.11., Idee) Die häufigste Handlung zuerst: „Heute noch spielen dürfen“ steht oben im Überblick – drei Knöpfe oder eigene Zahl.
+  // Die Zeile in „Zeit & Regeln“ bleibt (gleiche Wirkung über Z.noch).
+  function spielzeitKarte() {
+    if (!Z) return "";
+    const st = Z.status(), rest = Math.round(st.rest / 60);
+    return `<div class="karte" id="spielzeit-karte">
+      <h2>🎮 Heute noch spielen dürfen</h2>
+      <p id="sz-stand">${rest ? `Gerade: noch <b>${rest} Minuten</b> Spielzeit.` : "Gerade: keine Spielzeit frei."}${st.ruhe ? " Es ist Ruhezeit." : ""}</p>
+      <div class="sz-zeile">
+        ${[20, 35, 60].map(m => `<button class="knopf haupt sz-knopf" data-min="${m}">${m} Minuten</button>`).join("")}
+        <label class="sz-frei">oder<input id="sz-min" type="number" inputmode="numeric" min="0" max="240" step="5" value="${rest}" aria-label="Minuten"></label>
+        <button class="knopf" id="sz-ok">Festlegen</button>
+      </div>
+      <p class="klein">Gilt sofort, auch wenn heute noch nicht gelernt wurde. 0 = für heute Schluss. Die Ruhezeit gilt weiter.</p>
+    </div>`;
+  }
   function zeitKarte() {
     if (!Z) return "";
     const r = Z.regeln(), st = Z.status(), e = Z.empfehlung(S.kind().alter);
@@ -673,10 +689,13 @@
     });
     $("z-empf").addEventListener("click", () => { Z.setzeRegeln(Z.empfehlung(S.kind().alter)); S.meldung("Empfehlung übernommen."); uebersicht(); });
     $("z-extra").addEventListener("click", () => { Z.extra(10); S.meldung("Heute 10 Minuten extra."); uebersicht(); });
-    $("z-noch-ok").addEventListener("click", () => {
-      const st = Z.noch(parseInt($("z-noch").value, 10) || 0), m = Math.round(st.rest / 60);
-      S.meldung(m ? `Heute noch ${m} Minuten Spielzeit.` : "Für heute keine Spielzeit mehr."); uebersicht();
-    });
+    const setzeNoch = (min) => { const st = Z.noch(Math.max(0, Math.min(240, min || 0))), m = Math.round(st.rest / 60);
+      S.meldung(m ? `Heute noch ${m} Minuten Spielzeit.` : "Für heute keine Spielzeit mehr."); uebersicht(); };
+    $("z-noch-ok").addEventListener("click", () => setzeNoch(parseInt($("z-noch").value, 10)));
+    if ($("sz-ok")) {
+      $("sz-ok").addEventListener("click", () => setzeNoch(parseInt($("sz-min").value, 10)));
+      document.querySelectorAll(".sz-knopf").forEach(b => b.addEventListener("click", () => setzeNoch(+b.dataset.min)));
+    }
   }
 
   const heuteIso = () => { const d = new Date(window.__jetzt || Date.now()); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
@@ -921,6 +940,7 @@
         <button role="tab" data-teil="ueberblick" class="an">📊 Überblick</button><button role="tab" data-teil="lernstand">📘 Lernstand</button><button role="tab" data-teil="schule">🏫 Wie in der Schule</button><button role="tab" data-teil="zeit">⏰ Zeit & Regeln</button><button role="tab" data-teil="kinder">👨‍👩‍👧 Kinder & Gerät</button><button role="tab" data-teil="erprobung">🔍 Erprobung & Prüfen</button>
       </nav>
       <section class="eltern-teil" data-teil="ueberblick" role="tabpanel">
+      ${spielzeitKarte()}
       ${(() => { let z = 0; try { z = +localStorage.getItem(PIN_ZURUECK); } catch (e) { /* egal */ } return z ? `<div class="karte" id="pin-hinweis"><h2>🔑 Die PIN wurde neu festgelegt</h2>
         <p>Am ${new Date(z).toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" })} wurde die PIN über „PIN vergessen?“ zurückgesetzt. Wart ihr das nicht, legt bitte eine neue PIN fest (unten bei „Kinder und PIN“).</p>
         <button class="knopf" id="pin-hinweis-ok">Verstanden</button></div>` : ""; })()}

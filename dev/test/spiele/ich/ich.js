@@ -331,6 +331,8 @@
   // ---------- NA-53 Interessen-Kulissen (10.11.2026): Lieblingsbilder wählen – der Matheweg zeigt dann Mengen mit diesen Bildern ----------
   const KULISSEN_WAHL = [["", "🎨", "Bunt gemischt", "Всё вперемешку"], ["tiere", "🐶", "Tiere", "Животные"], ["fahrzeuge", "🚗", "Fahrzeuge", "Транспорт"],
     ["weltraum", "🚀", "Weltraum", "Космос"], ["natur", "🌻", "Natur", "Природа"]];
+  // (Erprobung 11.11.) Meldung nach der Wahl als ganzer Satz je Thema – „mit Fahrzeuge“ war der falsche Fall
+  const KULISSE_SATZ = { tiere: "Ab jetzt rechnest du mit Tieren!", fahrzeuge: "Ab jetzt rechnest du mit Fahrzeugen!", weltraum: "Ab jetzt rechnest du mit Bildern aus dem Weltraum!", natur: "Ab jetzt rechnest du mit Bildern aus der Natur!" };
   function kulissen() {
     const el = $("kulissen"); if (!el) return;
     const jetzt = (S.lade("interessen") || {}).thema || "", ruAn = S.hilfe && S.hilfe() && S.hilfe().code === "ru";
@@ -340,7 +342,7 @@
   if ($("kulissen")) {
     $("kulissen").addEventListener("click", (e) => { const b = e.target.closest("[data-kulisse]"); if (!b) return;
       S.speichere("interessen", Object.assign({}, S.lade("interessen") || {}, { thema: b.dataset.kulisse, am: S.heute() })); S.ton("juhu"); kulissen();
-      if (S.meldung) S.meldung(b.dataset.kulisse ? `Ab jetzt rechnest du mit ${b.textContent.trim().replace(/[^A-Za-zÄÖÜäöüß ]/g, "").trim()}!` : "Ab jetzt sind die Bilder wieder bunt gemischt."); });
+      if (S.meldung) S.meldung(KULISSE_SATZ[b.dataset.kulisse] || "Ab jetzt sind die Bilder wieder bunt gemischt."); });
     $("kulisse-hoeren").addEventListener("click", () => { if (window.Sprache) Sprache.sprich("Welche Bilder möchtest du beim Rechnen sehen? Tiere, Fahrzeuge, Weltraum, Natur oder bunt gemischt?"); });
     kulissen();
   }
