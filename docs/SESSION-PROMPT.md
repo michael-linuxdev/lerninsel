@@ -42,7 +42,7 @@ Das war eine Prüfung aus Fachwissen – der Prüfstand bleibt bei Stufe 0 (kein
 
 ## 1. Stand (14.11.2026 – zweite Erprobungsdatei)
 **Neu (PLAN „Stand 14.11.2026 (zweite Erprobungsdatei …)“):** neun Meldungen der Datei „ohne“ bearbeitet – Benno an der Tafel, Mein Tier (Ei-Hinweis lesbar, kein Scrollen bei 788 px Höhe), Tier-Kontur auf der Startseite,
-„Gemeinsam“ links, Kulissen-Satz, Spielzeit-Karte als erste im Elternbereich (20/35/60 Minuten), Leckerli-Meldung führt zum Tier. Test `erprobung2`. Dazu die Nachlese der Inhaltsprüfung (`tests/inhaltsfehler/nachlese.js`).
+„Gemeinsam“ links, Kulissen-Satz, Spielzeit-Karte als erste im Elternbereich (20/35/60 Minuten), Leckerli-Meldung führt zum Tier. Test `erprobung2`. Prüfstand: die Urteile des Auftraggebers zählen als fachliche Prüfung – 4 von 509 auf Stufe 2 (Mathe `ergaenzen`, `formen`, `gerade`, `plus100`); für mehr je Station mindestens 5 Aufgaben mit 👍 prüfen und im Erprobungsmodus ein Kürzel eintragen. Dazu die Nachlese der Inhaltsprüfung (`tests/inhaltsfehler/nachlese.js`).
 **Im iPad testen (Home-Bildschirm-App, quer):** Mein Tier mit Ei und mit Tier – scrollt nichts mehr? Startseite: Kontur des Tiers wie bei der Figur? Elternbereich → Überblick: „35 Minuten“ antippen. Meine Ecke → Meine Sachen → „Fahrzeuge“.
 
 ## 1. Stand (13.11.2026 – Rückmeldung der ersten Erprobung)

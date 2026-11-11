@@ -1,1 +1,26 @@
-{}
+{
+ "mathe:ergaenzen": {
+  "stufe": 2,
+  "pruefer": "ohne",
+  "am": "2026-11-11",
+  "hash": "e47fdcd7119b"
+ },
+ "mathe:formen": {
+  "stufe": 2,
+  "pruefer": "ohne",
+  "am": "2026-11-11",
+  "hash": "c464fd033885"
+ },
+ "mathe:gerade": {
+  "stufe": 2,
+  "pruefer": "ohne",
+  "am": "2026-11-11",
+  "hash": "ba0c7099e2de"
+ },
+ "mathe:plus100": {
+  "stufe": 2,
+  "pruefer": "ohne",
+  "am": "2026-11-11",
+  "hash": "cfa55034d002"
+ }
+}

@@ -2657,5 +2657,7 @@ Mütze als eigene Zeichnungen; den längeren Ta-a-Ton am Gerät anhören. Danach
 - **Ideen umgesetzt:** Elternbereich: Karte **„Heute noch spielen dürfen“ als erste im Überblick** (`#spielzeit-karte`: Knöpfe 20/35/60 Minuten `.sz-knopf`, eigene Zahl `#sz-min` + `#sz-ok`; die Zeile in „Zeit & Regeln“ bleibt).
   Meldung „+1 Leckerli für …“ führt beim Antippen zu Mein Tier.
 - **Ohne Änderung:** „Die Meldung ist falsch, ist aber schon gefixt“ (Doppelte von 7) – der Tester lief noch auf einem älteren Stand; in der Inhaltsprüfung behoben.
-- **Entscheidung:** Kein `--pruefstand` aus dieser Datei – sie stammt vom älteren App-Stand (Prüfsummen passen nicht mehr), und das Kürzel „ohne“ nennt keine prüfende Person.
+- **Entscheidung des Auftraggebers (nachträglich):** Die „ok“-Urteile zählen als erste fachliche Prüfung durch ihn selbst → `--pruefstand` übernommen. Nach den Regeln (aktuelle Prüfsumme, mindestens 5 Aufgaben je Station)
+  wurden **vier Mathe-Stationen Stufe 2**: `ergaenzen`, `formen`, `gerade`, `plus100` (Prüfer-Kürzel „ohne“). Nicht übernommen: `doppelt` (Inhalt seitdem geändert), 11 Stationen mit 2–4 geprüften Aufgaben, `landkreis` (5 von 6 Schritten).
+  Stand: 4 von 509 von einem Menschen geprüft.
 - **Aus dem Protokoll:** Einstufung 26 Aufgaben fehlerfrei in 2:44 min; im Elternbereich einmal „Bild hing über 1 s“ (beobachten). Fehlversuche nur bei „Doppelte von 36“, „51 + ? = 60“ und zwei Landkreis-Fragen – unauffällig.
