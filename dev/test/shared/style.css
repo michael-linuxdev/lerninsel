@@ -179,3 +179,13 @@ body:has(.karte, .lektionen, .kacheln, .schrank, .su-gruppe, .werk-gruppe) { bac
 /* Lebendige Insel-Tür (Eine Welt, eigene Idee): Startseite zeigt die Tageszeit der Insel (shared/inseltuer.js) */
 .tuer.insel.nacht { background: linear-gradient(160deg, #3D4F8F, #1C2A55); }
 .tuer.insel.daemmer { background: linear-gradient(160deg, #FFB37A, #4FA35A 70%); }
+
+/* Gegen das Durchraten (shared/raten.js, 13.11.2026): Antwortknöpfe ruhen kurz (Anlauf, Denkpause nach einem Fehler) */
+.raten-warte { pointer-events: none !important; opacity: .45; filter: saturate(.6); transition: opacity .2s; }
+.raten-pause { max-width: 560px; width: 100%; box-sizing: border-box; margin: 8px auto 0; padding: 8px 14px 10px; border-radius: 16px; background: #FFF6D8; border: 3px solid var(--kontur, #3B1F63); font-size: 1.05rem; font-weight: 600; line-height: 1.3; text-align: left; }
+.raten-pause.lang { background: #FFE9C2; font-size: 1.15rem; }
+.raten-pause .raten-text { display: block; }
+.raten-pause small { display: block; font-weight: 500; opacity: .85; }
+.raten-bahn { display: block; height: 8px; margin-top: 6px; border-radius: 4px; background: rgba(59, 31, 99, .15); overflow: hidden; }
+.raten-balken { display: block; height: 100%; width: 100%; border-radius: 4px; background: var(--kontur, #3B1F63); transform-origin: left center; animation: raten-ablauf 3s linear forwards; }
+@keyframes raten-ablauf { from { transform: scaleX(1); } to { transform: scaleX(0); } }

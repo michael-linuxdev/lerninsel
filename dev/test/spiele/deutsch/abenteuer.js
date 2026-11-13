@@ -177,8 +177,10 @@
   // Paket D1: Aufnahme-Schritte nur, wenn die Eltern es erlaubt haben und das Gerät aufnehmen kann – sonst still weglassen
   const ohneAufnahme = (k) => window.Eigenes && Eigenes.darfAufnehmen() ? k : Object.assign({}, k, { schritte: k.schritte.filter(x => x.typ !== "aufnehmen") });
   function starte(i, liste = G) {
-    const k = liste[i].lernstand ? liste[i] : mitWiederholung(ohneAufnahme(liste[i]));
-    lauf = { i, k, liste, werk: liste !== G, pos: 0, fehler: 0, stufe: 0, falsch: new Set() };
+    const k0 = liste[i].lernstand ? liste[i] : mitWiederholung(ohneAufnahme(liste[i]));
+    const k = k0.lernstand ? k0 : Object.assign({}, k0, { schritte: k0.schritte.slice() });   // Kopie: falsch beantwortete Aufgaben kommen hinten noch einmal (nochmalSpaeter)
+    lauf = { i, k, liste, werk: liste !== G, pos: 0, fehler: 0, stufe: 0, falsch: new Set(), nochmal: 0 };
+    if (window.Raten) Raten.runde();
     document.body.style.setProperty("--grund", k.grund);
     document.body.style.setProperty("--akzent", k.farbe);
     $("kapitel-name").textContent = k.name;
@@ -477,6 +479,8 @@
       case "schreiben": schreibSchritt(s, A, hinweis); break;
       case "aufnehmen": aufnahmeSchritt(s, A, hinweis); break;
     }
+    // Gegen das Durchraten (13.11.2026, shared/raten.js): Antwortknöpfe sind erst kurz nach dem Erscheinen antippbar
+    if (window.Raten) { const ks = A.querySelectorAll(".option, .vb-wort"); if (ks.length) Raten.frage(ks, { zaehlt: !s.__nochmal }); else Raten.weg(); }
   }
 
   // ---------- Paket D1: frei schreiben und sich selbst aufnehmen ----------
@@ -637,15 +641,26 @@
   }
 
   // Gemeinsame Prüfung: richtig → loben, vorlesen, weiter. Falsch → nochmal, nach 2 Fehlern Lösung zeigen.
+  // Gegen das Durchraten (13.11.2026): Eine beim ersten Mal falsch beantwortete Auswahl-Aufgabe kommt am Ende des Kapitels noch einmal
+  // (neu gemischt, höchstens 4, jede nur einmal) – nicht in „Zeig, was du kannst“ und nicht bei Lernkartei-Karten.
+  const NOCHMAL_INTRO = { typ: "sag", __nochmal: true, text: "Ein paar Aufgaben waren knifflig, {name}. Die schauen wir uns noch einmal an. Lies in Ruhe!",
+    ru: "Некоторые задания были трудными, {name}. Посмотрим на них ещё раз. Читай спокойно!" };
+  function nochmalSpaeter(s) {
+    if (!window.Raten || !s || s.__nochmal || s.__karte || lauf.k.lernstand || lauf.nochmal >= 4) return;
+    if (!lauf.nochmal) lauf.k.schritte.push(NOCHMAL_INTRO);
+    lauf.nochmal++;
+    lauf.k.schritte.push(Object.assign({}, s, { __nochmal: true }));
+  }
   function antwort(knopf, richtig, beiRichtig, beiFalsch, zeigeLoesung) {
     if (lauf.gesperrt) return;
     if (window.Erprobung) Erprobung.aufgabe({ antwort: knopf ? (knopf.getAttribute("aria-label") || knopf.textContent) : undefined, richtig, versuch: lauf.versuche + 1 });
     const h = $("hinweis");
     const schrittJetzt = lauf.k.schritte[lauf.pos];
+    const nochmal = !!(schrittJetzt && schrittJetzt.__nochmal);
     if (richtig) {
-      lauf.gesperrt = true;
+      lauf.gesperrt = true; if (window.Raten) Raten.richtig();
       if (lauf.versuche === 0 && window.Charakter) Charakter.gib("deutsch", 1);
-      if (lauf.versuche === 0 && window.Koennen) Koennen.melde(lzSchritt(schrittJetzt), true);
+      if (lauf.versuche === 0 && window.Koennen && !nochmal) Koennen.melde(lzSchritt(schrittJetzt), true);
       if (knopf) knopf.classList.add("richtig");
       document.querySelectorAll(".option").forEach(o => o.disabled = true);
       h.className = "hinweis gut"; h.textContent = LOB[Math.floor(Math.random() * LOB.length)];
@@ -662,10 +677,11 @@
     }
     lauf.versuche++;
     if (lauf.versuche === 1) {
-      if (!(schrittJetzt && schrittJetzt.__karte)) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
+      if (!(schrittJetzt && schrittJetzt.__karte) && !nochmal) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
       if (schrittJetzt && schrittJetzt.__kap) lauf.falsch.add(schrittJetzt.__kap);   // „Zeig, was du kannst“: dieses Kapitel noch üben
-      if (window.Lernkartei) Lernkartei.falsch("deutsch", schrittJetzt);
-      if (window.Koennen) Koennen.melde(lzSchritt(schrittJetzt), false);
+      if (window.Lernkartei && !nochmal) Lernkartei.falsch("deutsch", schrittJetzt);
+      if (window.Koennen && !nochmal) Koennen.melde(lzSchritt(schrittJetzt), false);
+      if (knopf) nochmalSpaeter(schrittJetzt);
     }
     S.ton("nein");
     if (knopf) { knopf.classList.add("falsch"); knopf.disabled = true; }
@@ -687,6 +703,7 @@
     h.textContent = tipp ? `Fast! ${tipp.de}` : "Fast! Versuch es nochmal.";
     if (tipp && S.ht(tipp)) h.insertAdjacentHTML("beforeend", `<br><small lang="ru">${S.esc ? S.esc(S.ht(tipp)) : S.ht(tipp)}</small>`);
     beiFalsch && beiFalsch();
+    if (window.Raten && knopf) Raten.fehler({ knoepfe: $("aufgabe").querySelectorAll(".option, .vb-wort"), nach: h });
   }
   // Tipps je Schritt-Art mit russischer Hilfe (Entwurf, nur sichtbar, wenn die Hilfesprache gewählt ist)
   const E = { ru: "entwurf" };
@@ -714,6 +731,8 @@
     if (window.Erprobung) Erprobung.rundeFertig({ fehler: lauf.fehler });
     if (lauf.k.lernstand) return beendeLernstand();
     const { k, i, fehler } = lauf;
+    if (window.Raten && Raten.bilanz().ueben) return beendeUeben();
+    if (window.Raten) Raten.erledigt("deutsch", k.id);
     const sterne = fehler <= 1 ? 3 : fehler <= 3 ? 2 : 1;
     const vorher = bestes(k.id);
     let gewinn = Math.max(0, sterne - vorher);
@@ -743,6 +762,23 @@
     zeige("ende"); S.ton("juhu");
   }
 
+  // Ehrliches Ende (13.11.2026): Waren die meisten Aufgaben beim ersten Mal falsch (Raten.bilanz().ueben), gilt das Kapitel noch nicht als
+  // geschafft – keine Sterne in diesem Durchgang, ein früheres Ergebnis bleibt; der Elternbereich zeigt es (Daten `raten`).
+  function beendeUeben() {
+    const { k, i, liste, werk } = lauf;
+    Raten.merke("deutsch", k.id, k.name);
+    if (window.Charakter) Charakter.gib("deutsch", 1);
+    $("ende-titel").textContent = "Das üben wir noch einmal";
+    $("ende-teil").innerHTML = `<div class="gross-emoji">🔎</div>`;
+    $("ende-sterne").innerHTML = "";
+    $("ende-text").textContent = "Viele Aufgaben waren beim ersten Mal noch nicht richtig. Lies oder hör dir alles in Ruhe an – dann findest du die Antworten.";
+    $("ende-gewinn").textContent = "Die Sterne warten auf dich. Nichts ist verloren.";
+    const kn = $("ende-knoepfe"); kn.innerHTML = "";
+    const knopf = (t, haupt, fn, id) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = t; if (id) b.id = id; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
+    knopf(`🔁 Noch einmal: ${k.name}`, true, () => starte(i, liste), "nochmal-thema");
+    knopf(werk ? "Zur Werkstatt" : "Zur Schatzkarte", false, () => { zeige("karte"); zeichneKarte(); });
+    zeige("ende"); S.ton("tipp");
+  }
 
   // ---------- Schuljahr Deutsch (28.10.2026): „Zeig, was du kannst“ je Lernbereich ----------
   // Eine Aufgabe aus jedem Kapitel des Lernbereichs für die eigene Klasse (höchstens 10), ohne Sterne und ohne Noten; Ergebnis je Kapitel

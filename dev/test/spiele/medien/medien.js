@@ -94,7 +94,8 @@
   let lauf = null;
   function starte(i) {
     const l = L[i];
-    lauf = { i, l, pos: 0, fehler: 0 };
+    lauf = { i, l: Object.assign({}, l, { schritte: l.schritte.slice() }), pos: 0, fehler: 0, nochmal: 0 };   // Kopie: falsch beantwortete Fragen kommen hinten noch einmal
+    if (window.Raten) Raten.runde();
     document.body.style.setProperty("--grund", l.grund);
     document.body.style.setProperty("--akzent", l.farbe);
     $("lektion-name").textContent = l.name;
@@ -136,22 +137,35 @@
   }
 
   // Auswahl mit Erklärung (wahl, daumen, chat)
+  // Gegen das Durchraten (13.11.2026, shared/raten.js): beim ersten Mal falsch beantwortete Fragen kommen am Ende der Lektion noch einmal
+  const NOCHMAL_INTRO = { typ: "sag", __nochmal: true, e: "🔎",
+    text: "Ein paar Fragen waren knifflig, {name}. Die schauen wir uns noch einmal an. Lies in Ruhe!",
+    ru: "Некоторые вопросы были трудными, {name}. Посмотрим на них ещё раз. Читай спокойно!" };
+  function nochmalSpaeter(s) {
+    if (!window.Raten || !s || s.__nochmal || lauf.nochmal >= 4) return;
+    if (!lauf.nochmal) lauf.l.schritte.push(NOCHMAL_INTRO);
+    lauf.nochmal++;
+    lauf.l.schritte.push(Object.assign({}, s, { __nochmal: true }));
+  }
   function auswahl(container, optionen) {
     const warum = document.createElement("div"); warum.className = "warum"; warum.hidden = true;
     let versucht = false;
     container.after(warum);
+    const sj = lauf.l.schritte[lauf.pos];
+    if (window.Raten) Raten.frage(container.querySelectorAll(".option"), { zaehlt: !(sj && sj.__nochmal) });
     container.querySelectorAll(".option").forEach((b, n) => b.addEventListener("click", () => {
       const o = optionen[n];
       if (o.ok) {
-        b.classList.add("richtig");
+        b.classList.add("richtig"); if (window.Raten) Raten.richtig();
         if (!versucht && window.Charakter) Charakter.gib("tablet", 1);
         container.querySelectorAll(".option").forEach(x => x.disabled = true);
         S.ton("juhu"); erklaere(warum, "gut", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
         warum.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
       } else {
-        if (!versucht) { lauf.fehler++; versucht = true; }
+        if (!versucht) { if (!(sj && sj.__nochmal)) lauf.fehler++; versucht = true; nochmalSpaeter(sj); }
         b.classList.add("falsch"); b.disabled = true;
         S.ton("nein"); erklaere(warum, "nein", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
+        if (window.Raten) Raten.fehler({ knoepfe: container.querySelectorAll(".option"), nach: warum });
       }
     }));
   }
@@ -202,16 +216,18 @@
           A.innerHTML = `<div class="zaehler">${k + 1} von ${dinge.length}</div><div class="sortier-karte"><span class="e">${d.e}</span>${vt(did)}${mini(did)}</div>` +
             `<div class="sortier-knoepfe"><button class="option" data-seite="links">${s.links}${ruBtn(S.ht(s, "links"))}</button><button class="option" data-seite="rechts">${s.rechts}${ruBtn(S.ht(s, "rechts"))}</button></div><div class="warum" hidden></div>`;
           sprich(d.t);
+          if (window.Raten) Raten.frage(A.querySelectorAll(".option"), { teil: k > 0 });
           A.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
             const w = A.querySelector(".warum");
             if (b.dataset.seite === d.seite) {
-              b.classList.add("richtig"); S.ton("juhu"); A.querySelectorAll(".option").forEach(x => x.disabled = true);
+              b.classList.add("richtig"); S.ton("juhu"); if (window.Raten) Raten.richtig(); A.querySelectorAll(".option").forEach(x => x.disabled = true);
               setTimeout(() => { k++; zeichne(); }, 800);
             } else {
               if (!versucht) { lauf.fehler++; versucht = true; }
               b.classList.add("falsch"); b.disabled = true; S.ton("nein");
               const [de, ru] = d.seite === "rechts" ? S.paar(T.geheim) : S.paar(T.darfSagen);
               erklaere(w, "nein", de, ru);
+              if (window.Raten) Raten.fehler({ knoepfe: A.querySelectorAll(".option"), nach: w });
             }
           }));
         };
@@ -327,8 +343,26 @@
   }
 
   // ---------- Ende ----------
+  // Ehrliches Ende (13.11.2026): Waren die meisten Fragen beim ersten Mal falsch, gilt die Lektion noch nicht als geschafft –
+  // keine Sterne in diesem Durchgang, ein früheres Ergebnis bleibt; der Elternbereich zeigt es (Daten `raten`).
+  function beendeUeben() {
+    const { l, i } = lauf;
+    Raten.merke("tablet", l.id, l.name);
+    if (window.Charakter) Charakter.gib("tablet", 1);
+    $("ende-titel").textContent = "Das üben wir noch einmal";
+    $("ende-sterne").innerHTML = `<span style="animation-delay:180ms">🔎</span>`;
+    $("ende-text").textContent = "Viele Fragen waren beim ersten Mal noch nicht richtig. Lies oder hör dir alles in Ruhe an – dann findest du die Antworten.";
+    $("ende-gewinn").textContent = "Die Sterne warten auf dich. Nichts ist verloren.";
+    const kn = $("ende-knoepfe"); kn.innerHTML = "";
+    const knopf = (t, haupt, fn, id) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = t; if (id) b.id = id; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
+    knopf(`🔁 Noch einmal: ${l.name}`, true, () => starte(i), "nochmal-thema");
+    knopf("Zur Übersicht", false, () => { zeige("liste"); zeichneListe(); });
+    zeige("ende"); S.ton("tipp");
+  }
   function beende() {
     const { l, i, fehler } = lauf;
+    if (window.Raten && Raten.bilanz().ueben) return beendeUeben();
+    if (window.Raten) Raten.erledigt("tablet", l.id);
     const sterne = fehler <= 1 ? 3 : fehler <= 3 ? 2 : 1;
     const vorher = bestes(l.id);
     let gewinn = Math.max(0, sterne - vorher);

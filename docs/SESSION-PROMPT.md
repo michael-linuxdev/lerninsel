@@ -17,6 +17,11 @@ Kurzreferenz der Datenformate (in Claude Code ist sie schon geladen). Danach in 
 zuerst beheben, je mit Test) → selbstständig in größeren Schritten bauen, testen, pushen → am Ende `docs/PLAN.md` („Stand …“) und diese Datei aktualisieren.
 
 ## 0. Auftrag für die nächste Sitzung
+**Stand 13.11.2026: gegen das Durchraten** (PLAN „Stand 13.11.2026 (gegen das Durchraten …)“; Test `raten`) – ein Kind hat im Sachunterricht, in Deutsch und im Führerschein geraten statt gelesen.
+Jetzt: Anlauf, Denkpause nach Fehlern, „Langsam“ bei schnellen Fehlern, falsche Fragen kommen wieder, „Das üben wir noch einmal“ statt „geschafft“, Karte im Elternbereich (`shared/raten.js`).
+**In der Fragerunde nachfragen:** Liest das Kind jetzt? Passen die Zeiten (1,2 s / 3 s / 6 s)? Stört die Pause ein Kind, das ehrlich überlegt? Auch in Englisch/Sorbisch/Vorschule nötig?
+Offen: Erklärungen zu falschen Antworten verraten oft die Lösung – bei Bedarf zu Hinweisen umschreiben.
+
 **Stand 14.11.2026 (Gerätedatum 10.11.): vollständige Inhaltsprüfung** – alle Lerninhalte wurden durchgesehen und alle Fundstellen behoben (PLAN „Stand 14.11.2026“; Test `node tests/inhaltsfehler.js`).
 Offen daraus: neue russische Entwürfe über die Prüfliste prüfen lassen, Sorbisch zum Muttersprachler (vier Stellen ausdrücklich offen), eigene Zeichnungen für mehrdeutige Anlaut-Bilder, Ta-a-Ton am Gerät anhören.
 Das war eine Prüfung aus Fachwissen – der Prüfstand bleibt bei Stufe 0 (kein Mensch hat geprüft).

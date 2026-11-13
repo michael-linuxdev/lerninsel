@@ -41,9 +41,9 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
       if (lage.ende) break;
       if (!(await passt(p))) breit = true;
       if (lage.weiter) { await p.click("#weiter"); await p.waitForTimeout(60); continue; }
-      schritte++;
+      if (!lage.schritt.__nochmal) schritte++;   // 13.11.: eine falsch beantwortete Frage kommt am Ende noch einmal (shared/raten.js) – nicht doppelt zählen
       if (lage.typ === "wahl") {
-        if (lage.schritt.klang) {
+        if (lage.schritt.klang && !lage.schritt.__nochmal) {
           hoerSchritte++;
           if (!lage.klang) knopfOk = false;
           else {

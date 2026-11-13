@@ -138,8 +138,10 @@
   }
 
   function starte(i) {
-    const t = TH[i].lernstand || TH[i].nachfrage ? TH[i] : mitWiederholung(TH[i]);
-    lauf = { i, t, pos: 0, fehler: 0, falsch: new Set(), transferFalsch: new Set() };
+    const t0 = TH[i].lernstand || TH[i].nachfrage ? TH[i] : mitWiederholung(TH[i]);
+    const t = t0.lernstand || t0.nachfrage ? t0 : Object.assign({}, t0, { schritte: t0.schritte.slice() });   // Kopie: falsch beantwortete Fragen werden hinten angehängt (nochmalSpaeter)
+    lauf = { i, t, pos: 0, fehler: 0, falsch: new Set(), transferFalsch: new Set(), nochmal: 0 };
+    if (window.Raten) Raten.runde();
     document.body.style.setProperty("--grund", t.grund);
     document.body.style.setProperty("--akzent", t.farbe);
     document.body.classList.toggle("breit", !!t.stammbaum);
@@ -172,17 +174,30 @@
     const id = eintrag(de, ru);
     return `<div class="option-zeile"><button class="option">${vt(id)}</button>${mini(id)}</div>`;
   }
+  // Gegen das Durchraten (13.11.2026, shared/raten.js): Eine beim ersten Mal falsch beantwortete Frage kommt am Ende des Themas noch einmal
+  // (neu gemischt, höchstens 4, jede nur einmal) – nicht in „Zeig, was du kannst“, der Nachfrage und bei Lernkartei-Karten.
+  const NOCHMAL_INTRO = { typ: "info", __nochmal: true, titel: "Noch einmal hinschauen", bild: "🔎",
+    text: "Ein paar Fragen waren knifflig, {name}. Die schauen wir uns noch einmal an. Lies in Ruhe!",
+    ru: "Некоторые вопросы были трудными, {name}. Посмотрим на них ещё раз. Читай спокойно!" };
+  function nochmalSpaeter(s) {
+    if (!window.Raten || !s || s.__nochmal || s.__karte || lauf.t.lernstand || lauf.t.nachfrage || lauf.nochmal >= 4) return;
+    if (!lauf.nochmal) lauf.t.schritte.push(NOCHMAL_INTRO);
+    lauf.nochmal++;
+    lauf.t.schritte.push(Object.assign({}, s, { __nochmal: true }));
+  }
   function auswahl(container, optionen) {
     const warum = document.createElement("div"); warum.className = "warum"; warum.hidden = true;
     let versucht = false;
     container.after(warum);
+    const s0 = lauf.t.schritte[lauf.pos];
+    if (window.Raten) Raten.frage(container.querySelectorAll(".option"), { zaehlt: !(s0 && s0.__nochmal) });
     container.querySelectorAll(".option").forEach((b, n) => b.addEventListener("click", () => {
       const o = optionen[n];
       const sj = lauf.t.schritte[lauf.pos];
       if (window.Erprobung && !b.disabled) Erprobung.aufgabe({ antwort: o.t || b.getAttribute("aria-label") || b.textContent, richtig: !!o.ok });
       if (o.ok) {
-        b.classList.add("richtig");
-        if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde((sj && sj.__lz) || lauf.t.lz, true);
+        b.classList.add("richtig"); if (window.Raten) Raten.richtig();
+        if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen && !(sj && sj.__nochmal)) Koennen.melde((sj && sj.__lz) || lauf.t.lz, true);
         if (!versucht && sj && sj.__karte && window.Lernkartei && Lernkartei.richtig(KARTEI, sj) && window.Lernfunde)
           { const t = loesungText(sj); Lernfunde.merke({ fach: KARTEI, art: "gemeistert", e: "💪", text: t.length > 64 ? t : `${t} – jetzt weißt du es!`, schluessel: "sk:" + t, melden: true }); }
         container.querySelectorAll(".option").forEach(x => x.disabled = true);
@@ -190,15 +205,17 @@
         warum.insertAdjacentHTML("afterend", weiterKnopf()); aufWeiter();
       } else {
         if (!versucht) {
-          if (!(sj && sj.__karte)) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
+          if (!(sj && (sj.__karte || sj.__nochmal))) lauf.fehler++;   // Wiederholungen zählen nicht gegen die Sterne
           if (sj && sj.__kap) lauf.falsch.add(sj.__kap);   // „Zeig, was du kannst“: dieses Thema noch üben
           if (sj && sj.__transfer) lauf.transferFalsch.add(lauf.pos);
-          if (window.Koennen) Koennen.melde(lauf.t.lz, false);
+          if (window.Koennen && !(sj && sj.__nochmal)) Koennen.melde(lauf.t.lz, false);
           versucht = true;
-          if (window.Lernkartei) Lernkartei.falsch(KARTEI, sj);
+          if (window.Lernkartei && !(sj && sj.__nochmal)) Lernkartei.falsch(KARTEI, sj);
+          nochmalSpaeter(sj);
         }
         b.classList.add("falsch"); b.disabled = true;
         S.ton("nein"); erklaere(warum, "nein", o.warum, o.hilfe !== undefined ? o.hilfe : S.ht(o, "warum"));
+        if (window.Raten) Raten.fehler({ knoepfe: container.querySelectorAll(".option"), nach: warum });
       }
     }));
   }
@@ -258,12 +275,13 @@
         A.innerHTML = BI.stammbaum(t.stammbaum, [], true) + `<div class="warum" hidden></div>`;
         A.querySelector(".stammbaum").classList.add("gross");
         let versucht = false, fertig = false;
+        if (window.Raten) Raten.frage(A.querySelectorAll(".person"));
         A.querySelectorAll(".person").forEach(g => g.addEventListener("click", () => {
           if (fertig) return;
           const id = g.dataset.id, w = A.querySelector(".warum");
           if (window.Erprobung) Erprobung.aufgabe({ antwort: (P[id] || {}).name || id, richtig: id === s.ziel });
           if (id === s.ziel) {
-            fertig = true; S.ton("juhu");
+            fertig = true; S.ton("juhu"); if (window.Raten) Raten.richtig();
             if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde(lauf.t.lz, true);
             A.querySelector(".stammbaum").outerHTML = BI.stammbaum(t.stammbaum, [id]);
             A.querySelector(".stammbaum").classList.add("gross");
@@ -273,6 +291,7 @@
             if (!versucht) { lauf.fehler++; versucht = true; if (window.Koennen) Koennen.melde(lauf.t.lz, false); }
             S.ton("nein"); g.classList.add("falsch");
             erklaere(w, "nein", `Das ist nicht die richtige Person. ${P[id].wer}`, S.ht(P[id], "wer") ? S.paar({ de: "", ru: "Это не тот человек." })[1] + " " + S.ht(P[id], "wer") : "");
+            if (window.Raten) Raten.fehler({ knoepfe: A.querySelectorAll(".person"), nach: w });
           }
         }));
         break;
@@ -297,17 +316,19 @@
           A.innerHTML = `<div class="zaehler">${k + 1} von ${dinge.length}</div><div class="sortier-karte">${vt(did)}${mini(did)}</div>` +
             `<div class="gruppen">${gruppen}</div><div class="warum" hidden></div>`;
           sprich(d.t);
+          if (window.Raten) Raten.frage(A.querySelectorAll(".gruppen .option"), { teil: k > 0 });
           A.querySelectorAll(".gruppen .option").forEach(b => b.addEventListener("click", () => {
             const w = A.querySelector(".warum");
             if (window.Erprobung) Erprobung.aufgabe({ antwort: d.t + " → " + b.dataset.g, richtig: b.dataset.g === d.gruppe });
             if (b.dataset.g === d.gruppe) {
-              b.classList.add("richtig"); S.ton("juhu"); A.querySelectorAll(".gruppen .option").forEach(x => x.disabled = true);
+              b.classList.add("richtig"); S.ton("juhu"); if (window.Raten) Raten.richtig(); A.querySelectorAll(".gruppen .option").forEach(x => x.disabled = true);
               if (!versucht && window.Charakter) Charakter.gib("sachkunde", 1); if (!versucht && window.Koennen) Koennen.melde(lauf.t.lz, true);
               setTimeout(() => { k++; zeichne(); }, 800);
             } else {
               if (!versucht) { lauf.fehler++; versucht = true; if (window.Koennen) Koennen.melde(lauf.t.lz, false); }
               b.classList.add("falsch"); b.disabled = true; S.ton("nein");
               erklaere(w, "nein", ...S.paar(T.zuordnenFalsch));
+              if (window.Raten) Raten.fehler({ knoepfe: A.querySelectorAll(".gruppen .option"), nach: w });
             }
           }));
         };
@@ -322,6 +343,8 @@
     if (lauf.t.lernstand) return beendeLernstand();
     if (lauf.t.nachfrage) return beendeNachfrage();
     const { t, fehler } = lauf;
+    if (window.Raten && Raten.bilanz().ueben) return beendeUeben();
+    if (window.Raten) Raten.erledigt(KARTEI, t.id);
     const sterne = fehler <= 1 ? 3 : fehler <= 4 ? 2 : 1;
     const vorher = bestes(t.id);
     let gewinn = Math.max(0, sterne - vorher);
@@ -344,6 +367,22 @@
     zeige("ende"); S.ton("juhu");
   }
 
+  // Ehrliches Ende (13.11.2026): Waren die meisten Fragen beim ersten Mal falsch (Raten.bilanz().ueben), gilt das Thema noch nicht als
+  // geschafft – keine Sterne in diesem Durchgang, ein früheres Ergebnis bleibt; der Elternbereich zeigt es (Daten `raten`).
+  function beendeUeben() {
+    const { t, i } = lauf;
+    Raten.merke(KARTEI, t.id, t.name);
+    if (window.Charakter) Charakter.gib("sachkunde", 1);
+    $("ende-titel").textContent = "Das üben wir noch einmal";
+    $("ende-sterne").innerHTML = `<span style="animation-delay:180ms">🔎</span>`;
+    $("ende-text").textContent = "Viele Fragen waren beim ersten Mal noch nicht richtig. Lies oder hör dir alles in Ruhe an – dann findest du die Antworten.";
+    $("ende-gewinn").textContent = "Die Sterne warten auf dich. Nichts ist verloren.";
+    const kn = $("ende-knoepfe"); kn.innerHTML = "";
+    const knopf = (txt, haupt, fn, id) => { const b = document.createElement("button"); b.className = "knopf" + (haupt ? " haupt" : ""); b.textContent = txt; if (id) b.id = id; b.addEventListener("click", () => { S.ton("tipp"); fn(); }); kn.appendChild(b); };
+    knopf(`🔁 Noch einmal: ${t.name}`, true, () => starte(i), "nochmal-thema");
+    knopf("Zur Übersicht", false, () => { zeige("liste"); zeichneListe(); });
+    zeige("ende"); S.ton("tipp");
+  }
 
   // ---------- Schuljahr SU (28.10.2026): „Zeig, was du kannst“ je Lernbereich ----------
   // Eine Wahl- oder Daumen-Frage aus jedem Thema des Lernbereichs für die eigene Klasse (höchstens 10), ohne Sterne; Ergebnis in

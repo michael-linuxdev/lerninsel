@@ -544,6 +544,19 @@
       <h3>Sachunterricht, Kunst, Musik, Werken, Sport, Ethik – „Zeig, was du kannst“</h3>${lernstandListe("sachkunde", Object.assign({}, SU_LB, ...Object.values(window.FACH_SEITEN || {}).map(f => Object.fromEntries(f.lb.map(([id, t]) => [id, `${f.name}: ${t.replace(/^\S+\s/, "")}`])))), (window.THEMEN || []).concat(window.FACH_THEMEN || []), "lernstand-sachkunde")}
     </div>`;
   }
+  // Gegen das Durchraten (13.11.2026, shared/raten.js): Runden, in denen die meisten Fragen beim ersten Mal falsch waren – sie gelten noch
+  // nicht als geschafft (Daten `raten.offen`); die Karte erscheint nur, wenn es solche Runden gibt.
+  function ratenKarte() {
+    const offen = ((S.lade("raten") || {}).offen || []), fach = { deutsch: "Deutsch", tablet: "Tablet-Führerschein", sachkunde: "Sachunterricht", religion: "Religion" };
+    if (!offen.length) return "";
+    const name = (b) => fach[b] || ((window.FACH_SEITEN || {})[b] || {}).name || b, datum = (t) => { const [, m, d] = String(t || "").split("-"); return d ? `${+d}.${+m}.` : ""; };
+    return `<div class="karte" id="raten-karte">
+        <h2>🔎 Noch einmal üben</h2>
+        <p class="klein">Bei diesen Inhalten waren die meisten Antworten beim ersten Mal falsch. Sie gelten noch nicht als geschafft, Sterne gibt es erst im nächsten Durchgang – das Kind sieht „Das üben wir noch einmal“.
+          Viele sehr schnelle Fehlversuche sprechen dafür, dass geraten statt gelesen wurde. Dann hilft: einmal gemeinsam lesen oder vorlesen lassen (🔊).</p>
+        <ul class="liste" id="raten-liste">${offen.map(e => `<li><b>${S.esc(name(e.b))}:</b> ${S.esc(e.name)} – ${e.fehler} von ${e.fragen} Fragen beim ersten Mal falsch${e.schnell ? `, ${e.schnell}-mal sehr schnell getippt` : ""} <span class="klein">(${datum(e.am)})</span></li>`).join("")}</ul>
+      </div>`;
+  }
   function schuljahrKnoepfe() {
     $("sj-speichern").addEventListener("click", () => {
       const e = S.lade("eltern") || {};
@@ -981,7 +994,8 @@
       </div>
       </section>
       <section class="eltern-teil" data-teil="lernstand" role="tabpanel" hidden>
-      ${!fachBereit ? ladeKarte : `${lehrplanKarte(mathe)}
+      ${!fachBereit ? ladeKarte : `${ratenKarte()}
+      ${lehrplanKarte(mathe)}
       <div class="karte">
         <h2>Fähigkeiten</h2>
         <table><tr><th>Fähigkeit</th><th class="r">Stufe</th><th class="r">Punkte</th><th>Wächst durch</th></tr>

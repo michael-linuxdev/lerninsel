@@ -66,6 +66,7 @@ shared/einrichten.js    Zimmer einrichten (Laden für Möbel und Wandfarben)
 shared/insel-kern.js    Insel-Kern: Welt, Orte, Nachbarn, Stationen, Story-Auswahl (Etappen, Kapitel), Pakete, Zimmer-Daten, Wetter
 shared/geschenk.js      QR-Geschenke: signierte Codes prüfen und einlösen (Generator: quellen/geschenk-erzeugen.js, Schlüssel nie im Repo)
 shared/sprache.js       Vorlesen mit den Stimmen des Geräts (nur auf Knopfdruck)
+shared/raten.js         Gegen das Durchraten: Anlauf, Denkpause nach Fehlern, „Das üben wir noch einmal“ (Sachunterricht, Führerschein, Deutsch)
 shared/charakter.js     Fähigkeiten, Stufen, Belohnungen, Tagesaufgaben je Klasse, Kalender
 shared/zeit.js          Erst lernen, dann spielen (Lern- und Spielzeit, Ruhezeit, Ferien)
 shared/koennen.js       Können je Lernziel und Empfehlungen

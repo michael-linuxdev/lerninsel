@@ -2661,3 +2661,33 @@ Mütze als eigene Zeichnungen; den längeren Ta-a-Ton am Gerät anhören. Danach
   wurden **vier Mathe-Stationen Stufe 2**: `ergaenzen`, `formen`, `gerade`, `plus100` (Prüfer-Kürzel „ohne“). Nicht übernommen: `doppelt` (Inhalt seitdem geändert), 11 Stationen mit 2–4 geprüften Aufgaben, `landkreis` (5 von 6 Schritten).
   Stand: 4 von 509 von einem Menschen geprüft.
 - **Aus dem Protokoll:** Einstufung 26 Aufgaben fehlerfrei in 2:44 min; im Elternbereich einmal „Bild hing über 1 s“ (beobachten). Fehlversuche nur bei „Doppelte von 36“, „51 + ? = 60“ und zwei Landkreis-Fragen – unauffällig.
+
+## Stand 13.11.2026 (gegen das Durchraten – Beobachtung des Auftraggebers beim Zuschauen)
+
+**Beobachtung:** Ein Kind hat gespielt, der Auftraggeber hat zugeschaut. Im Sachunterricht, teils auch in Deutsch und im Tablet-Führerschein wurde
+nicht gelesen, sondern so lange getippt, bis die richtige Antwort kam. **Ursache im Code:** Ein Fehler kostete nichts – der falsche Knopf wurde grau,
+der nächste war sofort antippbar (bei drei Antworten höchstens zwei Tipper), die Erklärung ließ sich überspringen, am Ende stand immer „geschafft“
+mit mindestens einem Stern. Raten war der schnellste Weg. Laut Auftraggeber kann das Kind lesen – es fehlte nicht die Hilfe, sondern der Grund zu lesen.
+
+- **Erledigt (Wahl des Auftraggebers: alle vier Maßnahmen):** neuer gemeinsamer Baustein `shared/raten.js` (`window.Raten`) für Sachunterricht und
+  Fächer, Tablet-Führerschein und Deutsch (Abenteuer und Werkstatt):
+  1. **Anlauf:** Antwortknöpfe sind erst 1,2 s nach dem Erscheinen der Frage antippbar (blass, `pointer-events: none`).
+  2. **Denkpause:** Nach einer falschen Antwort ruhen die übrigen Knöpfe 3 s; unter der Erklärung bzw. dem Tipp läuft ein Balken „👀 Erst lesen, dann weiter.“
+  3. **Rate-Bremse:** Zwei sehr schnelle Fehler hintereinander (< 2 s nach dem Freiwerden; „richtig“ nach einem Fehler unterbricht die Reihe nicht) →
+     6 s Pause mit „🐢 Langsam, {name}! Erst lesen oder anhören, dann tippen.“
+  4. **Fehler kommen wieder:** Eine beim ersten Mal falsch beantwortete Auswahl-Frage kommt am Ende des Themas/Kapitels noch einmal (neu gemischt,
+     höchstens 4, jede einmal, nach der Karte „Noch einmal hinschauen“); zählt nicht erneut gegen Sterne, Können und Lernkartei.
+  5. **Ehrliches Ende:** Waren mindestens 3 Fragen und mindestens die Hälfte beim ersten Mal falsch, heißt es „Das üben wir noch einmal“ – keine Sterne
+     in diesem Durchgang, der Inhalt gilt noch nicht als geschafft (kein Lernfund, keine Tagesaufgabe, keine Nachfrage, im Führerschein kein Schlüssel),
+     ein früheres Ergebnis bleibt, Knopf „🔁 Noch einmal“. Der Elternbereich zeigt im Reiter „Lernstand“ die Karte „🔎 Noch einmal üben“
+     (`raten.offen`, höchstens 12) mit „x von y beim ersten Mal falsch, z-mal sehr schnell getippt“; sie verschwindet, sobald der Inhalt ordentlich geschafft ist.
+- **Entscheidungen:** Keine Strafe, kein Verlust (nichts wird abgezogen, nichts geht verloren, keine Frist) – Raten wird nur langsamer als Nachdenken.
+  Eine Zuordnen-/Sortier-Aufgabe zählt als eine Frage. „Zeig, was du kannst“ und „Ella fragt nach“ bekommen Anlauf und Denkpause, aber keine
+  Wiederholung und kein geändertes Ende. Im automatischen Browser sind alle Zeiten 0 (die übrigen Tests bleiben schnell); echte Zeiten mit `window.__ratenEcht`.
+  Mathe (Zahleneingabe), Englisch, Sorbisch und Vorschule sind nicht umgestellt – dort wurde es nicht beobachtet.
+- **Test:** `raten` (echte, verkürzte Zeiten: Anlauf, Denkpause, „Langsam“, Wiederholung, durchgeraten → „Das üben wir noch einmal“, Elternkarte,
+  zweiter Durchgang in Ruhe → geschafft; alle drei Seiten; Handy mit Russisch), in der CI.
+- **Offen / beobachten:** Wirkt es beim Kind (liest es jetzt, oder wartet es nur die Pause ab)? Sind 1,2 s / 3 s / 6 s richtig? Die Erklärung zur
+  falschen Antwort verrät oft die Lösung („Nein, … nimmt den Schornstein“) – erst die Wiederholung am Ende zeigt, ob gelesen wurde; bei Bedarf Erklärungen
+  zu Hinweisen umschreiben (Inhaltsarbeit, viele Themen). Englisch/Sorbisch/Vorschule bei Bedarf über denselben Baustein anschließen.
+- **Nächstes Paket:** Rückmeldung vom iPad abwarten; sonst weiter mit der Prüf- und Erprobungsphase (SESSION-PROMPT).
