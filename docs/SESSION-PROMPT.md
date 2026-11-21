@@ -40,6 +40,12 @@ Das war eine Prüfung aus Fachwissen – der Prüfstand bleibt bei Stufe 0 (kein
    CI-Zeitlimit 60 min (Lauf 115 grün nach Review-Runde). Viele Agenten parallel: je eigener Worktree, generierte Dateien (`dev/`, `spiele/welt3d/`, `ru-texte.js`, `icons.js`) nicht committen lassen,
    beim Zusammenführen Testlisten in `tests/laufen.sh`/CI vereinen und neue Tests auf `#uebergabe-los` prüfen; Test-Haken-Objekte mit Gettern nie per `Object.assign` erweitern (`defineProperties`).
 
+## 1. Stand (21.11.2026 – sensible Themen ausgeblendet)
+**Neu (PLAN „Stand 21.11.2026“):** Sachthemen „Mein Körper gehört mir“ und „Ich werde größer“ (Pubertät) sind für Kinder standardmäßig aus; Eltern schalten sie unter
+„Wie in der Schule“ frei (`#su-sensibel`). Lehrplan-Punkte dazu „teilweise“. Test `sensibel`. Hilfe-Hinweise (116 111) bleiben überall.
+**Im iPad testen (/dev):** Sachunterricht Kl. 2 und Kl. 4 – die beiden Themen fehlen; Elternbereich → „Wie in der Schule“ → Haken setzen, Speichern → Themen da; Haken weg → wieder weg.
+**Offene Frage:** Auch Sucht („Stark sein – Nein sagen“) oder Ethik „Abschied“ hinter den Schalter?
+
 ## 1. Stand (14.11.2026 – zweite Erprobungsdatei)
 **Neu (PLAN „Stand 14.11.2026 (zweite Erprobungsdatei …)“):** neun Meldungen der Datei „ohne“ bearbeitet – Benno an der Tafel, Mein Tier (Ei-Hinweis lesbar, kein Scrollen bei 788 px Höhe), Tier-Kontur auf der Startseite,
 „Gemeinsam“ links, Kulissen-Satz, Spielzeit-Karte als erste im Elternbereich (20/35/60 Minuten), Leckerli-Meldung führt zum Tier. Test `erprobung2`. Prüfstand: die Urteile des Auftraggebers zählen als fachliche Prüfung – 4 von 509 auf Stufe 2 (Mathe `ergaenzen`, `formen`, `gerade`, `plus100`); für mehr je Station mindestens 5 Aufgaben mit 👍 prüfen und im Erprobungsmodus ein Kürzel eintragen. Dazu die Nachlese der Inhaltsprüfung (`tests/inhaltsfehler/nachlese.js`).

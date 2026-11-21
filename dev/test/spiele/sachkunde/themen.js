@@ -12,6 +12,9 @@
 // lb (Schuljahr SU, 28.10.2026): Lernbereich – "zl" Zusammen leben · "kg" Körper und Gesundheit · "pt" Pflanzen und Tiere · "un" Unbelebte Natur ·
 //   "rz" Raum und Zeit · "ex" Forschen, Medien, Schuljahre; die Themenliste ist danach gruppiert. kl: Klasse, zu der ein Thema ohne stufe gehört
 //   (nur für „Wiederholen aus früheren Klassen“, ändert die Sichtbarkeit nicht).
+// sensibel: true (21.11.2026, Entscheidung des Auftraggebers): Thema zu Körper/Pubertät – für Kinder ausgeblendet, bis die Eltern
+//   im Elternbereich (Schalter #su-sensibel = eltern.sachkunde.sensibel) es freigeben. Prüfen mit window.SU_SENSIBEL_AN().
+window.SU_SENSIBEL_AN = () => !!((((window.Spielwelt && Spielwelt.lade("eltern")) || {}).sachkunde || {}).sensibel);
 window.THEMEN = [
   {
     id: "geschenkebringer", lb: "zl", kl: 2, lz: ["su.so.04"], name: "Wer bringt die Geschenke?", e: "🎅", farbe: "#D7263D", grund: "#FFEDEF",
@@ -1092,7 +1095,7 @@ window.THEMEN = [
     ]
   },
   {
-    id: "gross-werden", lb: "kg", stufe: 4, lz: ["su.na.02"], name: "Ich werde größer", e: "🌱", farbe: "#2E9C5A", grund: "#E3F7EF",
+    id: "gross-werden", sensibel: true, lb: "kg", stufe: 4, lz: ["su.na.02"], name: "Ich werde größer", e: "🌱", farbe: "#2E9C5A", grund: "#E3F7EF",
     kurz: "Pubertät: Körper und Gefühle verändern sich, Hygiene, darüber reden",
     schritte: [
       { typ: "info", titel: "Der Körper verändert sich", bild: "🌱",
@@ -1247,7 +1250,7 @@ window.THEMEN.push(
     ]
   },
   {
-    id: "mein-koerper", lb: "kg", kl: 2, lz: ["su.na.02"], name: "Mein Körper gehört mir", e: "🙋", farbe: "#C2337A", grund: "#FDEAF3",
+    id: "mein-koerper", sensibel: true, lb: "kg", kl: 2, lz: ["su.na.02"], name: "Mein Körper gehört mir", e: "🙋", farbe: "#C2337A", grund: "#FDEAF3",
     kurz: "Körperteile richtig benennen, Nein sagen, Hilfe holen",
     schritte: [
       { typ: "info", titel: "Jungen und Mädchen", bild: "🧒👧",

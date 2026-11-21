@@ -537,6 +537,8 @@
         ${Object.entries(window.FACH_SEITEN || {}).map(([f, x]) => `<label>${x.name}${auswahl("fs-" + f, Object.fromEntries(x.lb.map(([id, t]) => [id, t.replace(/^\S+\s/, "")])), (e[f] || {}).schule || "", "Keine Angabe")}</label>`).join("")}
         <label>Mein Kind hat in der Schule${auswahl("et-unterricht", { ev: "Evangelische Religion", ka: "Katholische Religion" }, (e.ethik || {}).unterricht === "ethik" ? "" : (e.ethik || {}).unterricht || "", "Ethik")}</label></div>
       <p class="klein" id="religion-hinweis">${["ev", "ka"].includes((e.ethik || {}).unterricht) ? `Bei Eule Ella gibt es jetzt den Reiter „Religion“ mit den Themen nach dem sächsischen Lehrplan ${(e.ethik || {}).unterricht === "ev" ? "Evangelische" : "Katholische"} Religion. Ethik bleibt zusätzlich sichtbar. Im Lehrplan unten steht Religion statt Ethik.` : "Ethik ist voreingestellt. Hat Ihr Kind evangelische oder katholische Religion, wählen Sie das hier."}</p>
+      <label class="schalter-z"><input type="checkbox" id="su-sensibel" ${(e.sachkunde || {}).sensibel ? "checked" : ""}> Sachunterricht: Themen zu Körper und Pubertät zeigen („Mein Körper gehört mir“, Kl. 1/2; „Ich werde größer“, Kl. 4)</label>
+      <p class="klein" id="su-sensibel-hinweis">Standard: aus. Diese Themen bespricht meist die Schule oder die Familie. Eingeschaltet sieht euer Kind sie bei Eule Ella – sachlich, mit Hinweis auf Vertrauenspersonen und die Nummer gegen Kummer (116 111).</p>
       <p class="klein">Der gewählte Lernbereich steht in der Wörter-Werkstatt bzw. bei Eule Ella (auch Kunst, Musik, Werken, Sport, Ethik) ganz oben und ist markiert. Alles andere bleibt offen.
         Mit „Zeig, was du kannst“ (je Lernbereich) zeigt das Kind ohne Noten und ohne Sterne, was schon sitzt – hier seht ihr das Ergebnis.</p>
       <div class="knoepfe"><button class="knopf haupt" id="sj-speichern">Speichern</button></div>
@@ -548,7 +550,7 @@
     $("sj-speichern").addEventListener("click", () => {
       const e = S.lade("eltern") || {};
       e.deutsch = Object.assign({}, e.deutsch || {}, { schule: $("d-schule").value });
-      e.sachkunde = Object.assign({}, e.sachkunde || {}, { schule: $("su-schule").value }, $("su-landkreis") ? { landkreis: $("su-landkreis").value } : {});
+      e.sachkunde = Object.assign({}, e.sachkunde || {}, { schule: $("su-schule").value, sensibel: $("su-sensibel").checked }, $("su-landkreis") ? { landkreis: $("su-landkreis").value } : {});
       Object.keys(window.FACH_SEITEN || {}).forEach(f => { e[f] = Object.assign({}, e[f] || {}, { schule: $("fs-" + f).value }); });
       e.ethik = Object.assign({}, e.ethik || {}, { unterricht: $("et-unterricht").value || "ethik" });
       S.speichere("eltern", e); S.meldung("Gespeichert.");

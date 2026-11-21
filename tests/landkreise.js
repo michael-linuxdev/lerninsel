@@ -19,6 +19,8 @@ const IGNORIEREN = /fonts\.g|ERR_TUNNEL|ERR_CONNECTION|net::ERR|Failed to load r
     await p.fill("#pin1", "1234"); await p.fill("#pin2", "1234"); await p.click("#pin-ok");
     await p.waitForSelector("#e-name"); await p.fill("#e-name", "Mira"); await p.selectOption("#e-stufe", stufe);
     await p.click("#e-ok"); await p.click("#uebergabe-los"); await p.waitForURL(u => !/eltern/.test(u.toString()));
+    // Themen zu Körper/Pubertät sind seit 21.11.2026 standardmäßig aus (Eltern-Schalter #su-sensibel) – dieser Test klickt sie mit durch
+    await p.evaluate(() => { const e = Spielwelt.lade("eltern") || {}; e.sachkunde = Object.assign({}, e.sachkunde || {}, { sensibel: true }); Spielwelt.speichere("eltern", e); });
     await p.goto(BASIS + "spiele/sachkunde/"); await p.waitForSelector("#themen .su-gruppe");
     return { ctx, p };
   }

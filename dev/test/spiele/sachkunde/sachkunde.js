@@ -8,6 +8,13 @@
   const passtKonf = (t) => !t.konf || !KONF || t.konf.includes(KONF);
   // Landkreis-Themen (spiele/sachkunde/landkreise.js): der von den Eltern gewählte Kreis plus das Sachsen-Quiz
   const LKW = (((S.lade("eltern") || {}).sachkunde) || {}).landkreis || "";
+  // Sensible Themen (Körper, Pubertät; 21.11.2026) nur nach Freigabe der Eltern – sonst fehlen sie in Liste, ?thema=, Lernstand, Nachfrage, Transfer, Kartei
+  // (TH behält Reihenfolge und Länge, weil starte(i) mit dem Index arbeitet; sichtbar über offen(t))
+  const SENSIBEL_AN = !!(window.SU_SENSIBEL_AN && window.SU_SENSIBEL_AN());
+  const VERSTECKT = (window.THEMEN || []).filter(t => t.sensibel && !SENSIBEL_AN);
+  const VERSTECKT_IDS = new Set(VERSTECKT.map(t => t.id));
+  const offen = (t) => !VERSTECKT_IDS.has(t.id);
+  const VERSTECKT_SCHRITTE = new Set([].concat(...VERSTECKT.map(t => t.schritte.map(x => JSON.stringify(x)))));
   const TH = FACH ? (window.FACH_THEMEN || []).filter(t => t.fach === FACH && passtKonf(t))
     : window.THEMEN.concat((window.LANDKREIS_THEMEN || []).filter(t => t.id === "lk-sachsen" || t.landkreis === LKW));
   const KARTEI = FACH || "sachkunde";   // Lernkartei und Lernfunde je Fach
@@ -74,7 +81,7 @@
     $("eule-klein").innerHTML = BI.eule("");
     $("ton-vorlesen").textContent = d.vorlesen ? "🗣️" : "🔇";
     $("ru-schalter").hidden = !S.hilfeRu(); $("ru-schalter").textContent = HL().kurz; $("ru-schalter").classList.toggle("aus", !d.ru); $("ru-schalter").setAttribute("aria-pressed", d.ru);
-    const fertig = TH.filter(t => bestes(t.id) > 0).length;
+    const fertig = TH.filter(t => offen(t) && bestes(t.id) > 0).length;
     reiter();
     const religion = FACH === "ethik" && ["ev", "ka"].includes((((S.lade("eltern") || {}).ethik) || {}).unterricht);   // Eltern-Wahl: Kind hat Religion statt Ethik
     $("intro-text").textContent = fertig === 0 ? (FACH ? `Hallo ${name()}! ${religion ? "Du hast in der Schule Religion – die Religionsthemen findest du oben unter „Religion“. Hier in Ethik gibt es noch mehr zum Nachdenken: Feste, Religionen und unser Miteinander." : FS[FACH].intro}` : `Hallo ${name()}! Ich bin Eule Ella. Mit mir entdeckst du spannende Dinge über die Welt.`)
@@ -97,7 +104,7 @@
     const stufeVon = (t) => Math.max(2, t.stufe || t.kl || 2);
     const schule = (((S.lade("eltern") || {})[FACH || "sachkunde"] || {}).schule) || "";   // Eltern-Einstellung „gerade in der Schule“ (Lernbereich)
     SU_LB.forEach(([lb, titel]) => {
-      const alle = TH.map((t, i) => [t, i]).filter(([t]) => (t.lb || LB0) === lb
+      const alle = TH.map((t, i) => [t, i]).filter(([t]) => offen(t) && (t.lb || LB0) === lb
         && !(t.stufe && klasse < t.stufe - 1)                   // NA-39: Übergangs-Themen (stufe 5) erst ab Klasse 4 zeigen
         && !(t.land && (S.land() || {}).code !== t.land))       // Heimatkunde nur für Kinder aus diesem Bundesland
         .sort((a, b) => stufeVon(a[0]) - stufeVon(b[0]) || a[1] - b[1]);
@@ -124,7 +131,7 @@
   function mitWiederholung(t) {
     if (!window.Lernkartei) return t;
     const eigene = new Set(t.schritte.map(x => JSON.stringify(x)));
-    const karten = Lernkartei.faellige(KARTEI, 3).filter(x => { const y = Object.assign({}, x); delete y.__karte; return !eigene.has(JSON.stringify(y)); });
+    const karten = Lernkartei.faellige(KARTEI, 3).filter(x => { const y = Object.assign({}, x); delete y.__karte; const j = JSON.stringify(y); return !eigene.has(j) && !VERSTECKT_SCHRITTE.has(j); });
     if (!karten.length) return t;
     const intro = { typ: "info", titel: "Kurz wiederholen", bild: "🔁",
       text: "Hallo {name}! Bevor wir anfangen, schauen wir uns kurz an, was letztes Mal knifflig war.",
@@ -354,13 +361,13 @@
   const passtLand = (t) => !(t.land && (S.land() || {}).code !== t.land);
   function lernstandThemen(lb) {
     const kl = Math.max(2, klasseJetzt());
-    return TH.filter(t => !t.lernstand && (t.lb || LB0) === lb && Math.max(2, t.stufe || t.kl || 2) === kl && passtLand(t) && t.schritte.some(x => x.typ === "wahl" || x.typ === "daumen"));
+    return TH.filter(t => offen(t) && !t.lernstand && (t.lb || LB0) === lb && Math.max(2, t.stufe || t.kl || 2) === kl && passtLand(t) && t.schritte.some(x => x.typ === "wahl" || x.typ === "daumen"));
   }
   // Transfer-Fragen für Lernbereich und Klasse (nur Sachunterricht, nicht in den Fach-Reitern)
   function transferFragen(lb) {
     if (FACH || !window.SU_TRANSFER) return [];
     const kl = Math.max(2, klasseJetzt());
-    return window.SU_TRANSFER.filter(x => x.lb === lb && x.kl === kl && passtLand(x));
+    return window.SU_TRANSFER.filter(x => x.lb === lb && x.kl === kl && passtLand(x) && !VERSTECKT_IDS.has(x.thema));
   }
   function starteLernstand(lb) {
     const titel = (SU_LB.find(x => x[0] === lb) || [lb, lb])[1].replace(/^\S+\s/, "");
@@ -415,7 +422,7 @@
   function faelligeNachfragen() {
     if (FACH) return [];
     const nf = daten().nachfrage || {}, h = heute();
-    return Object.entries(nf).filter(([id, x]) => !x.fertig && x.faellig <= h && TH.some(t => t.id === id && !t.lernstand && nachfrageFragen(t).length >= 2))
+    return Object.entries(nf).filter(([id, x]) => !x.fertig && x.faellig <= h && TH.some(t => t.id === id && offen(t) && !t.lernstand && nachfrageFragen(t).length >= 2))
       .sort((a, b) => a[1].faellig.localeCompare(b[1].faellig) || a[0].localeCompare(b[0])).map(([id]) => id);
   }
   function nachfrageKarte() {
@@ -467,6 +474,6 @@
   if (FACH) { const n = FS[FACH].name + (FACH === "religion" && KONF ? (KONF === "ev" ? " (evangelisch)" : " (katholisch)") : ""); document.title = n; const h = document.querySelector("#liste-ansicht h1"); if (h) h.textContent = n; }
   zeichneListe();
   // ?thema=<id> (07.11.2026): direkt ein Thema öffnen – z. B. aus den Jahreszeiten-Episoden auf der Insel
-  { const tq = new URLSearchParams(location.search).get("thema"), ti = tq ? TH.findIndex(t => t.id === tq) : -1; if (ti >= 0) starte(ti); }
-  window.__sachkunde = { fach: FACH, themen: TH, starte, starteLernstand, lernstandThemen, transferFragen, nachfrage: faelligeNachfragen, starteNachfrage, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
+  { const tq = new URLSearchParams(location.search).get("thema"), ti = tq ? TH.findIndex(t => t.id === tq && offen(t)) : -1; if (ti >= 0) starte(ti); }
+  window.__sachkunde = { fach: FACH, themen: TH, versteckt: [...VERSTECKT_IDS], starte, starteLernstand, lernstandThemen, transferFragen, nachfrage: faelligeNachfragen, starteNachfrage, schritt: (n) => { lauf.pos = n; schritt(); }, get lauf() { return lauf; } };
 })();

@@ -56,7 +56,7 @@ pruefe("Sachsen: alle 45 Lernbereiche (Mathe, Deutsch 2025, Sachunterricht) habe
 pruefe("Kompatibilität: LEHRPLAN.fuer liefert dasselbe wie vorher (Stand 07.11.2026 nach „Ehrlich lernen“: 32 gut, 13 teilweise)", () => {
   const n = { ja: 0, teil: 0, nein: 0 };
   [2, 3, 4].forEach(k => ["mathe", "deutsch", "sachkunde"].forEach(f => L.fuer("sachsen", f, k).forEach(x => n[x.abdeckung]++)));
-  assert.deepStrictEqual({ ...n }, { ja: 32, teil: 13, nein: 0 });   // 07.11.2026 „Ehrlich lernen“: strengere Regel für „ja“
+  assert.deepStrictEqual({ ...n }, { ja: 31, teil: 14, nein: 0 });   // 21.11.2026: SU 4 Körper „teil“ (Pubertät ausgeblendet); 07.11.2026 „Ehrlich lernen“: strengere Regel für „ja“
   assert.strictEqual(L.fuer("sachsen", "mathe", 1), L.fuer("sachsen", "mathe", 2), "Kl. 1 und 2 teilen sich „1/2“");
   assert.strictEqual(L.fuer("bayern", "mathe", 2).length, 0);
   assert.strictEqual(L.laender.sachsen.name, "Sachsen");
@@ -147,7 +147,7 @@ pruefe("Sachsen in voller Tiefe: Sachunterricht Kl. 1/2, 3 und 4 (Pflicht-Lernbe
     return art === "sachkunde" ? w.THEMEN.concat(w.LANDKREIS_THEMEN).some(t => t.id === id) : art === "werkstatt" ? w.WERKSTATT.some(k => k.id === id)
       : art === "medien" ? w.LEKTIONEN.some(k => k.id === id) : art === "mathe" ? stationen.has(id) : art === "echtewelt" ? echt.includes(`["${id}", `)
       : art === "praesentieren" ? ["folien"].includes(id) : art === "wetterdrache" ? id === "alle" : art === "expedition" ? id === "karte" : false; };   // wetterdrache:alle = Ellas Wetter-Drache (06.11.2026), expedition:karte = Ellas Forscherlager (09.11.2026)
-  const ids = new Set(), soll = { "1/2": [47, { ja: 43, teil: 3, nein: 0, aussen: 1 }], "3": [24, { ja: 22, teil: 1, nein: 0, aussen: 1 }], "4": [28, { ja: 27, teil: 0, nein: 0, aussen: 1 }] };   // 07.11.2026 „Ehrlich lernen“: vorher 46/23/27 „ja“
+  const ids = new Set(), soll = { "1/2": [47, { ja: 41, teil: 5, nein: 0, aussen: 1 }], "3": [24, { ja: 22, teil: 1, nein: 0, aussen: 1 }], "4": [28, { ja: 26, teil: 1, nein: 0, aussen: 1 }] };   // 07.11.2026 „Ehrlich lernen“: vorher 46/23/27 „ja“
   const kl = { "1/2": ["1", "2", "1/2"], "3": ["3"], "4": ["4"] };
   Object.entries(soll).forEach(([st, [zahl, verteilung]]) => {
     const n = { ja: 0, teil: 0, nein: 0, aussen: 0 }; let z = 0;
@@ -300,7 +300,7 @@ pruefe("Vorschule (Sächsischer Bildungsplan): 7 Bereiche, jeder Punkt zugeordne
     assert.ok(!a.aufgaben.some(x => x.optionen && x.optionen[0] === a.e), a.id + ": Symbol im Kopf verrät eine Antwort"); a.lz.forEach(id => assert.ok(K.ziel(id), a.id + ": " + id));
     a.aufgaben.forEach(x => { assert.ok(x.frage && x.ru, a.id + ": Frage/ru"); if (x.typ === "ordnen") assert.ok(x.teile.length >= 3 && new Set(x.teile).size === x.teile.length, a.id);
       else assert.ok(x.optionen.length >= 2 && new Set(x.optionen).size === x.optionen.length, a.id); }); });
-  assert.deepStrictEqual(m, { ja: 22, teil: 2, nein: 0, aussen: 5 });   // teil: Bildergeschichten erzählen (mündlich), Namen schreiben (Entscheidung des Auftraggebers 10.11.: „Mein Name“ ist Nachspuren mit dem Finger, kein Schreiben mit dem Stift)
+  assert.deepStrictEqual(m, { ja: 21, teil: 3, nein: 0, aussen: 5 });   // teil: „Mein Körper gehört mir“ (ausgeblendet, 21.11.2026), Bildergeschichten erzählen (mündlich), Namen schreiben (Entscheidung des Auftraggebers 10.11.: „Mein Name“ ist Nachspuren mit dem Finger, kein Schreiben mit dem Stift)
 });
 
 pruefe("Ehrlich lernen (07.11.2026): ein Inhaltspunkt ist „ja“ nur mit mindestens 2 echten Übungsschritten für sich; jeder „teil“-Punkt sagt im Hinweis, was fehlt", () => {

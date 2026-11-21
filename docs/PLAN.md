@@ -2661,3 +2661,18 @@ Mütze als eigene Zeichnungen; den längeren Ta-a-Ton am Gerät anhören. Danach
   wurden **vier Mathe-Stationen Stufe 2**: `ergaenzen`, `formen`, `gerade`, `plus100` (Prüfer-Kürzel „ohne“). Nicht übernommen: `doppelt` (Inhalt seitdem geändert), 11 Stationen mit 2–4 geprüften Aufgaben, `landkreis` (5 von 6 Schritten).
   Stand: 4 von 509 von einem Menschen geprüft.
 - **Aus dem Protokoll:** Einstufung 26 Aufgaben fehlerfrei in 2:44 min; im Elternbereich einmal „Bild hing über 1 s“ (beobachten). Fehlversuche nur bei „Doppelte von 36“, „51 + ? = 60“ und zwei Landkreis-Fragen – unauffällig.
+
+### Stand 21.11.2026 (Sensible Themen ausgeblendet)
+- **Auftrag:** „Sensible Themen raus“. Fragerunde ergab: nur **Pubertät und Körper** – Sachthemen „Mein Körper gehört mir“ (`mein-koerper`, Kl. 1/2) und
+  „Ich werde größer“ (`gross-werden`, Pubertät, Kl. 4). Sucht („Stark sein – Nein sagen“), Ethik (Geheimnisse, Abschied) und die Gefühle-Seite bleiben.
+- **Umsetzung (nach CLAUDE.md „nichts entfernen“):** Feld `sensibel: true` an beiden Themen; `spiele/sachkunde/sachkunde.js` blendet sie ohne Freigabe aus
+  (Kachel, Zähler, `?thema=`, „Zeig, was du kannst“, „Ella fragt nach“, Transfer-Fragen, alte Lernkartei-Karten daraus). Die Themenliste `TH` behält Reihenfolge
+  und Länge (`starte(i)` arbeitet mit dem Index). Eltern-Schalter in „Wie in der Schule“: `#su-sensibel` → `eltern.sachkunde.sensibel` (Standard aus), Test-Haken
+  `__sachkunde.versteckt`. Inhalte, Übersetzungen und Prüfungen in `inhaltsfehler` bleiben unverändert.
+- **Hilfe-Hinweise bleiben** (116 111, Vertrauenspersonen in Gefühle, Werkstatt, Religion, Medien, Ethik).
+- **Lehrplan ehrlich:** `sn.su12.kg.06`, `sn.su12.kg.07`, `sn.su4.kg.01` und Vorschule `sn.vs.1.03` jetzt „teil“ mit Hinweis auf den Schalter; damit SU Kl. 4
+  „Mein Körper und meine Gesundheit“ „teilweise“ (Zählung in `tests/lehrplan.js`: Lernbereiche 31/14, SU-Punkte 1/2 41/5, 4 26/1, Vorschule 21/3).
+  Bewusst einfach: auch mit eingeschaltetem Schalter bleibt die Anzeige „teilweise“ (der Hinweis erklärt es).
+- **Tests:** neu `tests/sensibel.js` (auch in CI); `sachkunde`, `sachkundevoll`, `landkreise` schalten die Themen per Spielstand frei, weil sie sie durchklicken.
+- **Offen:** Soll später auch „Stark sein – Nein sagen“ (Sucht) oder Ethik „Glück, Zeit und Abschied“ hinter den Schalter? (vom Auftraggeber diesmal nicht gewählt).
+

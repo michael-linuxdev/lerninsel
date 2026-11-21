@@ -155,8 +155,8 @@
           ["sn.su12.kg.03", "Gesunde Ernährung: Grundnahrungsmittel, genug trinken, Kräuter, Werbung kritisch sehen", "1/2", ["sachkunde:gesund-essen", "sachkunde:gesundheit"], "ja"],
           ["sn.su12.kg.04", "Ernährung, Bewegung, Ruhe und Schlaf hängen zusammen", "1/2", ["sachkunde:gesund-essen"], "teil", "Zu wenig Übung: „Essen, trinken, bewegen“ hat 6 Aufgaben für 4 Inhaltspunkte – es fehlen eigene Aufgaben zu diesem Punkt."],
           ["sn.su12.kg.05", "Ein gesundes Frühstück; Obst und Gemüse von nah und fern, fairer Handel", "1/2", ["sachkunde:gesund-essen", "sachkunde:gesundheit"], "ja"],
-          ["sn.su12.kg.06", "Körperteile von Jungen und Mädchen mit den richtigen Namen kennen, Intimsphäre", "1/2", ["sachkunde:mein-koerper"], "ja"],
-          ["sn.su12.kg.07", "Schutz vor Missbrauch: Nein sagen, gute und schlechte Geheimnisse, Hilfe holen (Nummer gegen Kummer)", "1/2", ["sachkunde:mein-koerper"], "ja"],
+          ["sn.su12.kg.06", "Körperteile von Jungen und Mädchen mit den richtigen Namen kennen, Intimsphäre", "1/2", ["sachkunde:mein-koerper"], "teil", "Thema „Mein Körper gehört mir“ ist in der App standardmäßig ausgeblendet (Entscheidung 21.11.2026); die Eltern können es im Elternbereich unter „Wie in der Schule“ einschalten. Sonst bespricht es die Schule oder die Familie."],
+          ["sn.su12.kg.07", "Schutz vor Missbrauch: Nein sagen, gute und schlechte Geheimnisse, Hilfe holen (Nummer gegen Kummer)", "1/2", ["sachkunde:mein-koerper"], "teil", "Thema „Mein Körper gehört mir“ ist in der App standardmäßig ausgeblendet (Entscheidung 21.11.2026); die Eltern können es im Elternbereich unter „Wie in der Schule“ einschalten. Sonst bespricht es die Schule oder die Familie."],
           ["sn.su12.kg.08", "Erste Hilfe bei kleinen Verletzungen: Verbrennung, Wunde, Nasenbluten", "1/2", ["sachkunde:erstehilfe", "sachkunde:gesundheit"], "ja"],
           ["sn.su12.kg.09", "Unfälle vermeiden in Schule, Wohnung und Wohngebiet; Notruf und Rettungskette", "1/2", ["sachkunde:erstehilfe"], "ja"]
         ],
@@ -253,7 +253,7 @@
           ["sn.su4.zl.08", "Veränderungen in der Stadt, Zukunft mitgestalten", "4", ["sachkunde:stadt-frueher", "sachkunde:gemeinde"], "ja"]
         ],
         2: [
-          ["sn.su4.kg.01", "Pubertät, Hygiene, Schutz vor sexueller Gewalt, gegenseitige Achtung", "4", ["sachkunde:gross-werden"], "ja"],
+          ["sn.su4.kg.01", "Pubertät, Hygiene, Schutz vor sexueller Gewalt, gegenseitige Achtung", "4", ["sachkunde:gross-werden"], "teil", "Thema „Ich werde größer“ ist in der App standardmäßig ausgeblendet (Entscheidung 21.11.2026); die Eltern können es im Elternbereich unter „Wie in der Schule“ einschalten. Sonst bespricht es die Schule oder die Familie."],
           ["sn.su4.kg.02", "Atmung und Herzschlag, Puls in Ruhe und nach Anstrengung", "4", ["sachkunde:herz-lunge"], "ja"],
           ["sn.su4.kg.03", "Sucht: Ursachen, Wirkung, Vorbeugung", "4", ["sachkunde:nein-sagen"], "ja"]
         ],
@@ -1551,7 +1551,7 @@
     { nr: 1, titel: "Somatische Bildung: Körper, Gesundheit, Bewegung", punkte: [
       ["sn.vs.1.01", "Den eigenen Körper und die Sinne kennen", "vs", ["vorschule:vs-sinne", "sachkunde:sinne"], "ja"],
       ["sn.vs.1.02", "Gesund essen und trinken, Hygiene, Zähne pflegen", "vs", ["vorschule:vs-gesund", "sachkunde:gesund-essen"], "ja"],
-      ["sn.vs.1.03", "Mein Körper gehört mir: Grenzen setzen, Hilfe holen", "vs", ["sachkunde:mein-koerper"], "ja"],
+      ["sn.vs.1.03", "Mein Körper gehört mir: Grenzen setzen, Hilfe holen", "vs", ["sachkunde:mein-koerper"], "teil", "Thema „Mein Körper gehört mir“ ist in der App standardmäßig ausgeblendet (Entscheidung 21.11.2026); die Eltern können es im Elternbereich unter „Wie in der Schule“ einschalten. Sonst bespricht es die Schule oder die Familie."],
       ["sn.vs.1.04", "Bewegung, Gleichgewicht, Grob- und Feinmotorik", "vs", ["gefuehle:alle", "echtewelt:balance", "echtewelt:huepfen", "lesen:spuren"], "aussen"]
     ].map(zuPunkt) },
     { nr: 2, titel: "Soziale Bildung: Gefühle, Miteinander, Sicherheit", punkte: [
